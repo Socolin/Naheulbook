@@ -1,0 +1,32 @@
+<input *ngIf="fieldName.indexOf('.') == -1"
+       style="border:none;
+              background:none;
+              border-radius:0;
+              padding:0;
+              font-size:16px;
+              text-align:center;
+              border-bottom:1px solid #C1C1C1;
+              height:22px;
+              -webkit-box-shadow: none;
+              box-shadow: none;"
+       class="form-control"
+       type="text"
+       [(ngModel)]="monster[fieldName]"
+       (change)="updateMonsterField()"
+/>
+<input *ngIf="fieldName.indexOf('.') !== -1"
+       style="border:none;
+              background:none;
+              border-radius:0;
+              padding:0;
+              font-size:16px;
+              text-align:center;
+              border-bottom:1px solid #C1C1C1;
+              height:22px;
+              -webkit-box-shadow: none;
+              box-shadow: none;"
+       class="form-control"
+       type="text"
+       [(ngModel)]="monster[fieldName.split('.')[0]][fieldName.split('.')[1]]"
+       (change)="updateMonsterField()"
+/>

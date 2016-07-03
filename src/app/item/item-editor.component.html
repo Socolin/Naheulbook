@@ -1,0 +1,298 @@
+<form class="form-horizontal">
+	<div class="form-group">
+		<label for="inputName" class="col-sm-2 control-label">Nom</label>
+		<div class="col-sm-4 col-md-5">
+			<input id="inputName" [(ngModel)]="item.name" type="text" class="form-control"/>
+		</div>
+		<label for="inputRelic" class="col-xs-8 col-sm-1 control-label">Relique</label>
+		<div class="col-xs-4 col-sm-1">
+			<input id="inputRelic" type="checkbox" [(ngModel)]="item.relic" class="form-control">
+		</div>
+		<label class="col-xs-4 col-sm-1 col-md-1 control-label">Sexe</label>
+		<div class="col-xs-8 col-sm-3 col-md-2 btn-group" data-toggle="buttons">
+			<button class="btn btn-primary" (click)="item.sex = null" [class.active]="!item.sex">?</button>
+			<button class="btn btn-primary" (click)="item.sex = 'h'" [class.active]="item.sex=='h'">H</button>
+			<button class="btn btn-primary" (click)="item.sex = 'f'" [class.active]="item.sex=='f'">F</button>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="inputDescription" class="col-sm-2 control-label">Description</label>
+		<div class="col-sm-4 col-md-6">
+			<input id="inputDescription" [(ngModel)]="item.description" type="text" class="form-control" />
+		</div>
+		<label for="inputQuantifiable" class="col-xs-8 col-md-1 col-sm-2 control-label">Quantifiable</label>
+		<div class="col-sm-1 col-xs-4">
+			<input id="inputQuantifiable" type="checkbox" [(ngModel)]="item.quantifiable" class="form-control">
+		</div>
+		<label for="inputContainer" class="col-xs-8 col-md-1 col-sm-2 control-label">Conteneur</label>
+		<div class="col-sm-1 col-xs-4">
+			<input id="inputContainer" type="checkbox" [(ngModel)]="item.container" class="form-control">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="inputNote" class="col-sm-2 control-label">Note</label>
+		<div class="col-sm-10">
+			<input id="inputNote" [(ngModel)]="item.note" type="text" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="inputPrice" class="col-sm-2 control-label">Prix</label>
+		<div class="col-sm-2">
+			<input id="inputPrice" [(ngModel)]="item.price" type="number" class="form-control"/>
+		</div>
+		<div class="col-sm-8 btn-group" data-toggle="buttons">
+			<button class="btn btn-warning" (click)="item.price = 0">0</button>
+			<button class="btn btn-warning" (click)="item.price = item.price + 50">+50</button>
+			<button class="btn btn-warning" (click)="item.price = item.price - 50">-50</button>
+			<button class="btn btn-warning" (click)="item.price = item.price + 100">+100</button>
+			<button class="btn btn-warning" (click)="item.price = item.price - 100">-100</button>
+			<button class="btn btn-warning" (click)="item.price = item.price + 500">+500</button>
+			<button class="btn btn-warning" (click)="item.price = item.price - 500">-500</button>
+			<button class="btn btn-warning" (click)="item.price = item.price + 1000">+1000</button>
+			<button class="btn btn-warning" (click)="item.price = item.price - 1000">-1000</button>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Type</label>
+		<div class="col-sm-10 btn-group" data-toggle="buttons">
+			<button *ngFor="let section of itemSections" class="btn btn-primary" (click)="selectedSection = section" [class.active]="selectedSection && selectedSection.id == section.id">{{type.name}}</button>
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="selectedSection">
+		<label class="col-sm-2 control-label">Categorie</label>
+		<div class="col-sm-10 btn-group" data-toggle="buttons">
+			<button *ngFor="let category of selectedSection.categories" class="btn btn-primary" (click)="item.category = category" [class.active]="item.category && item.category.id == category.id">{{category.name}}</button>
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="slots && slots.length">
+		<label class="col-sm-2 control-label">Slots</label>
+		<div class="col-sm-8 btn-group" data-toggle="buttons">
+			<button *ngFor="let slot of slots"
+					class="btn" 
+					(click)="toggleSlot(slot)"
+					[class.active]="isInSlot(slot)"
+					[class.btn-primary]="!isInSlot(slot)"
+					[class.btn-success]="isInSlot(slot)">
+						{{slot.name}}
+			</button>
+		</div>
+		<label class="col-sm-1 control-label">NbSlot</label>
+		<div class="col-sm-1 btn-group" data-toggle="buttons">
+			<button class="btn btn-info" (click)="item.slotCount = 1" [class.active]="item.slotCount == 1">1</button>
+			<button class="btn btn-info" (click)="item.slotCount = 2" [class.active]="item.slotCount == 2">2</button>
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="hasSpecial('CAN_HAVE_MIN_LEVEL')">
+		<label for="inputLevel" class="col-sm-2 control-label">Niveau requis</label>
+		<div class="col-sm-8 btn-group" data-toggle="buttons">
+			<button class="btn btn-info" (click)="item.level = null" [class.active]="!item.level">0</button>
+			<button *ngFor="let lvl of form.levels" class="btn btn-info" (click)="item.level = lvl" [class.active]="item.level == lvl">{{lvl}}</button>
+		</div>
+		<div class="col-sm-2">
+			<input id="inputLevel" [(ngModel)]="item.level" type="number" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="skills">
+		<label for="inputSkill" class="col-sm-2 control-label">Competences</label>
+		<div class="col-sm-4">
+			<div *ngIf="item.skills">
+				<div *ngFor="let skill of item.skills">
+					<span>{{skill.name}}</span>
+					<span><button class="btn btn-danger glyphicon glyphicon-remove" (click)="removeSkill(skill.id)"></button></span>
+				</div>
+			</div>
+			<div>
+				<select id="inputSkill" [(ngModel)]="selectedSkill" (change)=addSkill($event.target.value)>
+					 <option></option>
+					 <option *ngFor="let skill of skills" [value]="skill.id" >{{skill.name}}</option>
+				</select>
+			</div>
+		</div>
+		<label for="inputUnskill" class="col-sm-2 control-label">Competences annulees</label>
+		<div class="col-sm-4">
+			<div *ngIf="item.skills">
+				<div *ngFor="let skill of item.unskills">
+					<span>{{skill.name}}</span>
+					<span><button class="btn btn-danger glyphicon glyphicon-remove" (click)="removeUnskill(skill.id)"></button></span>
+				</div>
+			</div>
+			<div>
+				<select id="inputUnskill" [(ngModel)]="selectedSkill" (change)=addUnskill($event.target.value)>
+					 <option></option>
+					 <option *ngFor="let skill of skills" [value]="skill.id" >{{skill.name}}</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="hasSpecial('DICE_DROP')">
+		<label for="inputDiceDrop" class="col-sm-2 control-label">Dé</label>
+		<div class="col-sm-2">
+			<input id="inputDiceDrop" [(ngModel)]="item.diceDrop" type="number" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="hasSpecial('HAVE_CHARGE')">
+		<label for="inputCharge" class="col-sm-2 control-label">Charges</label>
+		<div class="col-sm-2">
+			<input id="inputCharge" [(ngModel)]="item.charge" type="number" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="inputDuration" class="col-sm-2 control-label">Durée</label>
+		<div class="col-sm-4">
+			<input id="inputDuration" [(ngModel)]="item.duration" type="text" class="form-control" />
+		</div>
+		<label for="inputWeight" class="col-sm-2 control-label">Poids</label>
+		<div class="col-sm-4">
+			<input id="inputWeight" [(ngModel)]="item.weight" type="number" step="0.01" class="form-control" />
+		</div>
+	</div>
+
+
+	<div class="form-group" *ngIf="hasSpecial('HAVE_PROTECTION')">
+		<label for="inputProtection" class="col-sm-2 control-label">Protection</label>
+		<div class="col-sm-5 btn-group" data-toggle="buttons">
+			<button class="btn btn-primary" (click)="item.protection = null" [class.active]="!item.protection">0</button>
+			<button *ngFor="let p of form.protection" class="btn btn-primary" (click)="item.protection = p" [class.active]="item.protection == p">{{p}}</button>
+		</div>
+		<div class="col-sm-5">
+			<input id="inputProtection" [(ngModel)]="item.protection" type="number" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="hasSpecial('HAVE_PROTECTION')">
+		<label for="inputMagicProtection" class="col-sm-2 control-label">Protection magique</label>
+		<div class="col-sm-5 btn-group" data-toggle="buttons">
+			<button class="btn btn-success" (click)="item.magicProtection = null" [class.active]="!item.magicProtection">0</button>
+			<button *ngFor="let p of form.protection" class="btn btn-success" (click)="item.magicProtection = p" [class.active]="item.magicProtection == p">{{p}}</button>
+		</div>
+		<div class="col-sm-5">
+			<input id="inputMagicProtection" [(ngModel)]="item.magicProtection" type="number" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="hasSpecial('HAVE_PROTECTION')">
+		<label for="inputProtectionAgainstMagic" class="col-sm-2 control-label">Protection dégâts magiques ou mystiques</label>
+		<div class="col-sm-5 btn-group" data-toggle="buttons">
+			<button class="btn btn-success" (click)="item.protectionAgainstMagic = null" [class.active]="!item.protectionAgainstMagic">0</button>
+			<button *ngFor="let p of form.protection" class="btn btn-success" (click)="item.protectionAgainstMagic = p" [class.active]="item.protectionAgainstMagic == p">{{p}}</button>
+		</div>
+		<div class="col-sm-2">
+			<input id="inputProtectionAgainstMagic" [(ngModel)]="item.protectionAgainstMagic" type="number" class="form-control" />
+		</div>
+		<label for="inputProtectionAgainstType" class="col-sm-1 control-label">Type</label>
+		<div class="col-sm-2">
+			<input id="inputProtectionAgainstType" [(ngModel)]="item.protectionAgainstType" type="text" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="hasSpecial('CAN_BE_THROWABLE')">
+		<label for="inputThrowable" class="col-xs-8 col-sm-2 control-label">Lançable</label>
+		<div class="col-xs-4 col-sm-10">
+			<input id="inputThrowable" type="checkbox" [(ngModel)]="item.throwable" class="form-control">
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="hasSpecial('HAVE_DAMAGE')">
+		<label for="inputDamageDiceCount" class="col-sm-2 control-label">Nombre de dé de dégat</label>
+		<div class="col-sm-5 btn-group" data-toggle="buttons">
+			<button class="btn btn-primary" (click)="item.damageDiceCount = null" [class.active]="!item.damageDiceCount">0</button>
+			<button *ngFor="let d of form.dices" class="btn btn-primary" (click)="item.damageDiceCount = d" [class.active]="item.damageDiceCount == d">{{d}}</button>
+		</div>
+		<div class="col-sm-5">
+			<input id="inputDamageDiceCount" [(ngModel)]="item.damageDiceCount" type="number" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="hasSpecial('HAVE_DAMAGE')">
+		<label for="inputDamage" class="col-sm-2 control-label">Dégat</label>
+		<div class="col-sm-5 btn-group" data-toggle="buttons">
+			<button *ngFor="let d of form.damage" class="btn btn-danger" (click)="item.damage = d" [class.active]="item.damage == d">{{d}}</button>
+		</div>
+		<div class="col-sm-5">
+			<input id="inputDamage" [(ngModel)]="item.damage" type="number" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="inputAvailableLocation" class="col-sm-2 control-label">Possibilités de récolte</label>
+		<div class="col-sm-10">
+			<input id="inputAvailableLocation" [(ngModel)]="item.availableLocation" type="text" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="inputLoad" class="col-sm-2 control-label">Encombrement</label>
+		<div class="col-sm-10">
+			<input id="inputLoad" [(ngModel)]="item.space" type="text" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="hasSpecial('HAVE_DAMAGE')">
+		<label for="inputDamageType" class="col-sm-2 control-label">DamageType</label>
+		<div class="col-sm-10">
+			<input id="inputDamageType" [(ngModel)]="item.damageType" type="text" class="form-control" />
+		</div>
+	</div>
+	<div class="form-group" *ngIf="hasSpecial('CAN_HAVE_MODIFIER')">
+		<label class="col-sm-2 control-label">Modificateur</label>
+		<div class="col-sm-10">
+			<modifiers-editor [options]="['job','origin','special']" [(modifiers)]="item.modifiers"></modifiers-editor>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Modificateur de competences</label>
+		<div class="col-sm-10">
+			<skill-modifiers-editor [(modifiers)]="item.skillModifiers"></skill-modifiers-editor>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Prerequis</label>
+		<div class="col-sm-10">
+			<stat-requirements-editor [(requirements)]="item.requirements"></stat-requirements-editor>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Effet</label>
+		<div class="col-sm-10">
+			<div *ngIf="item.effect">
+				{{item.effect.name}}
+				<button class="btn btn-danger glyphicon glyphicon-remove" (click)="item.effect = null"></button>
+			</div>
+			
+			<div *ngIf="!item.effect">
+				<input #searchEffectInput (keyup)="searchEffect(searchEffectInput.value)" type="text" class="form-control" />
+			</div>
+			<div *ngIf="!item.effect" class="list-group">
+			  <button *ngFor="let effect of filteredEffects" type="button" (click)="item.effect = effect" class="list-group-item">{{effect.name}}</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group" *ngIf="hasSpecial('CAN_HAVE_RUPTURE')">
+		<label class="col-sm-2 control-label">Rupture</label>
+		<div class="col-sm-10 btn-group" data-toggle="buttons">
+			<button class="btn btn-success" (click)="item.rupture = null" [class.active]="!item.rupture">non</button>
+			<button class="btn btn-success" (click)="item.rupture = 2" [class.active]="item.rupture == 2">1 à 2</button>
+			<button class="btn btn-warning" (click)="item.rupture = 3" [class.active]="item.rupture == 3">1 à 3</button>
+			<button class="btn btn-warning" (click)="item.rupture = 4" [class.active]="item.rupture == 4">1 à 4</button>
+			<button class="btn btn-danger" (click)="item.rupture = 5" [class.active]="item.rupture == 5">1 à 5</button>
+			<button class="btn btn-danger" (click)="item.rupture = 6" [class.active]="item.rupture == 6">Toujours</button>
+		</div>
+	</div>
+	<div *ngIf="selectedSection && item.category">
+		<item-element [items]="[item]" [type]="selectedSection" [restrictCategory]="item.category"></item-element>
+	</div>
+</form>

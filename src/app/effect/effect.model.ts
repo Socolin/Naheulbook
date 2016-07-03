@@ -1,0 +1,16 @@
+import {StatModifier} from "../shared";
+
+export class EffectCategory {
+    id: number;
+    name: string;
+}
+
+export class Effect {
+    id: number;
+    name: string;
+    description: string;
+    dice: number;
+    modifiers: StatModifier[] = [];
+    duration: string;
+    category: number;
+}

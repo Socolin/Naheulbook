@@ -1,0 +1,37 @@
+<ul class="nav nav-pills">
+	<template ngFor let-category [ngForOf]="categories">
+		<li role="presentation" [class.active]="selectedCategory && selectedCategory.id == category.id">
+			<a href="#" (click)="selectCategory(category)">{{category.name}}</a>
+		</li>
+	</template>
+</ul>
+
+<div *ngIf="selectedCategory" class="">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<p>{{selectedCategory.note}}</p>
+		</div>
+	</div>
+</div>
+<table *ngIf="selectedCategory" class="table table-striped table-condensed">
+	<thead>
+		<tr>
+			<th *ngIf="editable"></th>
+			<th>Nom</th>
+			<th>Description</th>
+			<th class="col-xs-2 col-sm-2 col-md-1">Effet</th>
+			<th>Durée</th>
+			<th *ngIf="selectedCategory.diceCount">{{selectedCategory.diceCount}}D{{selectedCategory.diceSize}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let effect of effects">
+			<td *ngIf="editable" (click)=editEffect(effect)><span class="glyphicon glyphicon-edit"></span></td>
+			<td>{{effect.name}}</td>
+			<td>{{effect.description}}</td>
+			<td><div *ngFor="let modifier of effect.modifiers">{{modifier | modifier}}</div></td>
+			<td>{{effect.duration}}</td>
+			<td *ngIf="selectedCategory.diceCount">{{effect.dice}}</td>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,120 @@
+<h4>
+	<span *ngIf="item.quantity">{{item.quantity}}</span> 
+	<span *ngIf="!editing">{{item.name}}</span>
+	<span *ngIf="editing"><input  class="form-control" [(ngModel)]="itemEditName" /></span>
+</h4>
+<div>
+	<span *ngIf="item.template.relic" class="label label-primary">Relique</span> 
+	<span *ngIf="character.sex == 'Homme'"> 
+		<span *ngIf="item.template.sex == 'h'" class="label label-success">Homme uniq.</span>
+		<span *ngIf="item.template.sex == 'f'" class="label label-danger">Femme uniq.</span>
+	</span>
+	<span *ngIf="character.sex == 'Femme'">
+		<span *ngIf="item.template.sex == 'h'" class="label label-danger">Homme uniq.</span>
+		<span *ngIf="item.template.sex == 'f'" class="label label-success">Femme uniq.</span>
+	</span>
+	<span *ngIf="item.template.level && character.level < item.template.level" class="label label-danger">Level: {{item.template.level}}</span> 
+	<span *ngIf="item.template.level && character.level >= item.template.level" class="label label-success">Level: {{item.template.level}}</span> 
+	<span *ngIf="item.template.throwable" class="label label-info">Prévue pour le jet</span> 
+</div>
+<div style="padding-top:5px; padding-bottom:5px">
+	<small><span class="label label-default">{{item.template.category.typeDetail.name}}</span> <span class="label label-default">{{item.template.category.name}}</span></small>
+</div>
+<div>
+	<span *ngIf="!editing">{{item.description}}</span>
+	<span *ngIf="editing"><input class="form-control" [(ngModel)]="itemEditDescription" /></span>
+</div>
+<div *ngIf="item.template.slots?.length > 0">
+	Slot: 
+	<span *ngFor="let slot of item.template.slots" class="label label-primary">{{slot.name}}</span> 
+</div>
+<div *ngIf="item.template.note">Note: {{item.template.note}}</div>
+
+<div *ngIf="item.template.quantifiable" class="row">
+	<div class="col-xs-6">
+		Quantité: {{item.quantity}}
+	</div>
+	<div class="col-xs-6">
+		<input class="col-xs-4 form-control input-sm" type="text" [(ngModel)]="quantityModifier" (blur)="updateQuantity()"/>
+		<div style="height:0; width: 0; overflow: hidden;"><input type="text"/></div>
+	</div>
+</div>
+<div *ngIf="item.template.damage || item.template.damageDiceCount">
+	<span class="ra ra-broadsword ra-lg"></span>
+	<span *ngIf="item.template.damageDiceCount">{{item.template.damageDiceCount}}<span class="ra ra-perspective-dice-random"></span></span>
+	<span *ngIf="item.template.damageDiceCount && item.template.damage>0">+</span>
+	<span *ngIf="item.template.damage">{{item.template.damage}}</span>
+	<span *ngIf="item.template.damageType">({{item.template.damageType}})</span>
+	<div style="margin-left: 20px">
+	<span *ngIf="characterStats.PI > 0" class="text-info">+{{characterStats.PI}} (Bonus personnage)</span>
+	<span *ngIf="characterStats.PI < 0" class="text-warning">{{characterStats.PI}} (Malus personnage)</span>
+	</div>
+</div>
+
+<div *ngIf="item.template.protection || item.template.magicProtection || item.template.protectionAgainstMagic">
+	<span class="ra ra-shield ra-lg"></span>
+	<span *ngIf="item.template.protection">{{item.template.protection}}</span>
+	<span *ngIf="item.template.protection && item.template.magicProtection">+</span>
+	<span *ngIf="item.template.magicProtection">{{item.template.magicProtection}} (magique)</span>
+	<span *ngIf="(item.template.protection || item.template.magicProtection) && item.template.protectionAgainstMagic">/</span>
+	<span *ngIf="item.template.protectionAgainstMagic">{{item.template.protectionAgainstMagic}}
+		<span *ngIf="item.template.protectionAgainstType">(contre {{item.template.protectionAgainstType}})</span>
+		<span *ngIf="!item.template.protectionAgainstType">(contre mag./myst.)</span>
+	</span>
+
+</div>
+<div *ngIf="item.template.charge">
+	Charges: {{item.charge}} / {{item.template.charge}}
+	<button (click)="itemAction.next({action: 'use_charge'})" class="btn btn-success">Utiliser</button>
+</div>
+
+<div *ngIf="item.template.description">{{item.template.description}}</div>
+<div *ngIf="item.template.weight">
+	Poid:
+	<span *ngIf="item.template.weight < 1">{{(item.template.weight * 1000)}}g</span>
+	<span *ngIf="item.template.weight >= 1">{{(item.template.weight)}}Kg</span>
+	<span *ngIf="item.quantity">Total: {{item.quantity * item.template.weight}}Kg</span>
+</div>
+<div *ngIf="item.template.space">Encombrement: {{item.template.space}}</div>
+ 
+<div *ngIf="item.template.rupture">
+	<span class="ra ra-broken-shield ra-lg"></span> 1 à {{item.template.rupture}}
+</div>
+<div *ngIf="item.template.duration">Durée: {{item.template.duration}}</div>
+
+<div *ngIf="modifiers && modifiers.length">
+	<div *ngFor="let modifier of modifiers">
+		<span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
+		<span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
+		{{modifier.stat}}<span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
+		<span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_THROW') != -1">(lancer)</span>
+		<span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE') != -1">(c.a.c)</span>
+		<span *ngIf="modifier.special && modifier.special.indexOf('DONT_AFFECT_MAGIEPSY') != -1">(NoMagPsy)</span>
+		<span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE_STAFF') != -1">(c.a.c Baton)</span>
+		<span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_PR_FOR_ELEMENTS') != -1">(element)</span>
+		<span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_DISCRETION') != -1">(discretion)</span>
+		<span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_DANSE') != -1">(danse)</span>
+		<span *ngIf="modifier.special && modifier.special.indexOf('ONLY_IF_NOTHING_ON') != -1">(si rien au dessus)</span>
+	</div>
+</div>
+
+<ul>
+	<li *ngFor="let skill of item.template.skills">Donne la compétence "{{skill.name}}"</li>
+	<li *ngFor="let skill of item.template.unskills">Annule "{{skill.name}}"</li>
+	<li *ngFor="let modifier of item.template.skillModifiers">{{modifier.skill.name}} <span *ngIf="modifier.value > 0">+</span>{{modifier.value}} </li>
+</ul>
+
+
+<div *ngFor="let requirement of item.template.requirements">
+	<span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
+	<span *ngIf="requirement.Max">Max {{requirement.stat}}: {{requirement.max}}</span>
+</div>
+
+<span *ngIf="item.template.slots?.length > 0">
+	<button *ngIf="item.equiped == null" class="btn btn-success" (click)="itemAction.next({action: 'equip'})">Equip</button>
+	<button *ngIf="item.equiped != null" class="btn btn-danger" (click)="itemAction.next({action: 'unequip'})">Unequip</button>
+</span>
+
+<button class="btn glyphicon glyphicon-pencil" [class.btn-primary]="editing" [class.btn-default]="editing" (click)="editItem()"></button>
+
+<button class="pull-right btn btn-danger glyphicon glyphicon-trash" (click)="itemAction.next({action: 'delete'})"></button>

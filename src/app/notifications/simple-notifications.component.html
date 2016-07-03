@@ -1,0 +1,11 @@
+<div style="position: fixed; right:0px; bottom: 0px">
+    <template ngFor let-notification [ngForOf]="_notifications.notifications">
+        <div class="alert"
+             [class.alert-danger]="notification.type==='error'"
+             [class.alert-info]="notification.type==='info'"
+             [class.alert-success]="notification.type==='success'">
+            <span><strong>{{notification.title}}</strong></span>
+            <span>{{notification.message}}</span>
+        </div>
+    </template>
+</div>

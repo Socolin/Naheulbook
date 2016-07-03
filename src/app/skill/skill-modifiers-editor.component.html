@@ -1,0 +1,40 @@
+<div *ngIf="modifiers && modifiers.length > 0" class="row">
+	<div class="col-md-2">
+		<button class="btn btn-danger glyphicon glyphicon-remove" (click)="clear()"></button>
+	</div>
+</div>
+<div *ngFor="let modifier of modifiers; let i=index" class="row" [class.bg-success]="modifier.value > 0" [class.bg-danger]="modifier.value < 0">
+	<div class="col-sm-5">
+		<button class="btn btn-warning glyphicon glyphicon-remove" (click)="removeModifier(i)"></button>
+	</div>
+	<div *ngIf="modifier.value > 0" class="col-sm-4">{{modifier.skill.name}} +{{modifier.value}}</div>
+	<div *ngIf="modifier.value < 0" class="col-sm-4">{{modifier.skill.name}} {{modifier.value}}</div>
+</div>
+<div class="row">
+	<div class="col-sm-12 btn-group" data-toggle="buttons">
+		<select [(ngModel)] ="selectedSkill">
+			<option *ngFor="let skill of skills" [attr.value]="skill.id">{{skill.name}}</option>
+		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-8 btn-group" data-toggle="buttons">
+		<button class="btn btn-info" (click)="setValue(-5)" [class.active]="value == -5">-5</button>
+		<button class="btn btn-info" (click)="setValue(-4)" [class.active]="value == -4">-4</button>
+		<button class="btn btn-info" (click)="setValue(-3)" [class.active]="value == -3">-3</button>
+		<button class="btn btn-info" (click)="setValue(-2)" [class.active]="value == -2">-2</button>
+		<button class="btn btn-info" (click)="setValue(-1)" [class.active]="value == -1">-1</button>
+		<button class="btn btn-info" (click)="setValue(null)" [class.active]="!value">0</button>
+		<button class="btn btn-info" (click)="setValue(1)" [class.active]="value == 1">1</button>
+		<button class="btn btn-info" (click)="setValue(2)" [class.active]="value == 2">2</button>
+		<button class="btn btn-info" (click)="setValue(3)" [class.active]="value == 3">3</button>
+		<button class="btn btn-info" (click)="setValue(4)" [class.active]="value == 4">4</button>
+		<button class="btn btn-info" (click)="setValue(5)" [class.active]="value == 5">5</button>
+	</div>
+	<div class="col-sm-2">
+		<input type="number" class="form-control" [(ngModel)]="value" />
+	</div>
+		<div class="col-sm-2">
+		<button class="btn btn-primary" (click)="addModifier()" >Add</button>
+	</div>
+</div>

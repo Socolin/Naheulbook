@@ -1,0 +1,101 @@
+<div *ngIf="items && type">
+	<table border=1 class="col-sm-12">
+		<tr>
+			<td *ngFor="let header of headers">{{header}}</td>
+		</tr>
+		<tbody *ngFor="let category of type.categories">
+			<tr *ngIf="!restrictCategory || restrictCategory.id == category.id">
+				<td [attr.colspan]="headers.length" class="category-header">{{category.name}}</td>
+			</tr>
+			<tr *ngFor="let item of itemsByCategory[category.id]" [hidden]="isHidden(item)">
+				<td *ngIf="editable" (click)=editItem(item)><span class="glyphicon glyphicon-edit"></span></td>
+				<td (click)="item.showDetail = !item.showDetail">
+					{{item.name}}
+					<span *ngIf="item.level">(niveau {{item.level}})</span>
+					<span *ngIf="item.relic">(relique)</span>
+					<span *ngIf="item.sex == 'h'">(homme uniq.)</span>
+					<span *ngIf="item.sex == 'f'">(femme uniq.)</span>
+					<span *ngIf="item.showDetail">
+						<span *ngIf="item.description"><br><b>Description:</b>{{item.description}}</span>
+						<span *ngIf="item.space"><br><b>Encombrement:</b>{{item.space}}</span>
+						<span *ngIf="item.availableLocation"><br><b>Possibilités de récolte:</b>{{item.availableLocation}}</span>
+					</span>
+				</td>
+				<td><span *ngIf="!item.price">***</span><span *ngIf="item.price">{{item.price|number}}</span></td>
+				<td *ngIf="hasSpecial('HAVE_DAMAGE')">
+					<span *ngIf="item.damageDiceCount">{{item.damageDiceCount}}D</span><span *ngIf="item.damageDiceCount && item.damage>0">+</span><span *ngIf="item.damage">{{item.damage}}</span>
+					<span *ngIf="item.damageType">({{item.damageType}})</span> 
+				</td>
+				<td *ngIf="hasSpecial('HAVE_CHARGE')">
+					<span *ngIf="item.charge">{{item.charge}}</span>
+				</td>
+				<td *ngIf="hasSpecial('HAVE_PROTECTION')">
+					<span *ngIf="item.protection">{{item.protection}}</span>
+					<span *ngIf="item.protection && item.magicProtection">+</span>
+					<span *ngIf="item.magicProtection">{{item.magicProtection}} (magique)</span>
+					<span *ngIf="(item.protection || item.magicProtection) && item.protectionAgainstMagic">/</span>
+					<span *ngIf="item.protectionAgainstMagic">{{item.protectionAgainstMagic}}
+						<span *ngIf="item.protectionAgainstType">(contre {{item.protectionAgainstType}})</span>
+						<span *ngIf="!item.protectionAgainstType">(contre mag./myst.)</span>
+					</span>
+				</td>
+				<td *ngIf="hasSpecial('CAN_HAVE_MODIFIER') && item.modifiers && item.modifiers.length">
+					<span *ngFor="let modifier of item.modifiers">
+						<span *ngIf="modifier.value < 0">
+							<span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
+							<span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
+							{{modifier.stat}}{{modifier.value}}
+							<span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_THROW') != -1">*</span>
+							<span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE') != -1">(c.a.c)</span>
+							<span *ngIf="modifier.special && modifier.special.indexOf('DONT_AFFECT_MAGIEPSY') != -1">(NoMagPsy)</span>
+						</span>
+					</span>
+				</td>
+				<td *ngIf="hasSpecial('CAN_HAVE_MODIFIER') && item.modifiers && item.modifiers.length">
+					<span *ngFor="let modifier of item.modifiers">
+						<span *ngIf="modifier.value > 0">
+							<span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
+							<span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
+							{{modifier.stat}}+{{modifier.value}}
+							<span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_THROW') != -1">*</span>
+							<span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE') != -1">(c.a.c)</span>
+							<span *ngIf="modifier.special && modifier.special.indexOf('DONT_AFFECT_MAGIEPSY') != -1">(NoMagPsy)</span>
+						</span>
+					</span>
+				</td>
+				<td *ngIf="hasSpecial('CAN_HAVE_MODIFIER') && (!item.modifiers || !item.modifiers.length)" colspan=2>
+					<span *ngIf="item.throwable">
+						Lançable
+					</span>
+					{{item.note}}
+				</td>
+				<td *ngIf="hasSpecial('CAN_HAVE_RUPTURE')" class="rupture-{{item.rupture}}">
+					<span *ngIf="item.rupture > 1">1 à {{item.rupture}}</span>
+					<span *ngIf="!item.rupture">Non</span>
+				</td>
+				<td *ngIf="hasSpecial('DICE_DROP')">
+					{{item.diceDrop}}
+				</td>
+				<td *ngIf="(item.note || item.throwable) && !(hasSpecial('CAN_HAVE_MODIFIER') && (!item.modifiers || !item.modifiers.length))">
+					<span *ngIf="item.throwable">
+						Lançable
+					</span>
+					{{item.note}}
+				</td>
+				<td *ngIf="item.duration || (item.skills && item.skills.length) || (item.requirements && item.requirements.length) || (item.skillModifiers && item.skillModifiers.length) || (item.unskills && item.unskills.length)">
+					<ul>
+						<li *ngIf="item.duration"><b>Durée</b>: {{item.duration}}</li>
+						<li *ngFor="let skill of item.skills">Donne la compétence "{{skill.name}}"</li>
+						<li *ngFor="let skill of item.unskills">Annule "{{skill.name}}"</li>
+						<li *ngFor="let modifier of item.skillModifiers">{{modifier.skill.name}} <span *ngIf="modifier.value > 0">+</span>{{modifier.value}} </li>
+						<li *ngFor="let requirement of item.requirements">
+							<span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
+							<span *ngIf="requirement.Max">Max {{requirement.stat}}: {{requirement.max}}</span>
+						</li>
+					</ul>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+

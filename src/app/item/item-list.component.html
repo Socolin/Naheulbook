@@ -1,0 +1,209 @@
+<ul class="nav nav-pills">
+    <template ngFor let-section [ngForOf]="itemSections">
+        <li role="presentation"
+            (click)="selectSection(section)"
+            [class.active]="selectedSection && selectedSection.id == section.id">
+            <a href="#">{{section.name}}</a>
+        </li>
+    </template>
+</ul>
+
+<div *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
+	<div class="panel-body">
+		<p>{{selectedSection.note}}</p>
+	</div>
+</div>
+
+<div clas="row">
+	<div *ngIf="hasSpecial('DICE_DROP')" class="cold-md-2">
+		<input class="input-lg form-control" placeholder="dice" [(ngModel)]="filter.dice" type=number min=1 max=100>
+	</div>
+	<input class="input-lg form-control" placeholder="Filtre" [(ngModel)]="filter.name" type="text">
+</div>
+<template ngFor let-category [ngForOf]="selectedSection?.categories">
+	<div *ngIf="itemsByCategory && isItemVisibleInList(itemsByCategory[category.id])">
+		<div class="row">
+			<div class="col-xs-12">
+				<h3>
+					{{category.name}}
+				</h3>
+				<p>
+					{{category.note}}
+				</p>
+			</div>
+		</div>		
+		<template [ngIf]="itemsByCategory">
+			<template ngFor let-item [ngForOf]="itemsByCategory[category.id]">
+				<template [ngIf]="isVisible(item)">
+					<div class="item-element">
+						<div class="row">
+							<div class="col-xs-12">
+								<h4>
+									<span *ngIf="editable" (click)=editItem(item)><span class="glyphicon glyphicon-edit"></span></span>
+									{{item.name}}
+									<span *ngIf="item.level" class="label label-info">Niveau {{item.level}}</span>
+									<span *ngIf="item.relic" class="label label-info">Relique</span>
+									<span *ngIf="item.sex == 'h'" class="label label-info">Homme uniq.</span>
+									<span *ngIf="item.sex == 'f'" class="label label-info">Femme uniq.</span>
+								</h4>
+							</div>
+						</div>
+						<!-- Dice drop -->
+						<div *ngIf="item.diceDrop">
+							<span class="ra ra-perspective-dice-random ra-lg">{{item.diceDrop}}</span>
+						</div>
+	
+						<!-- Throwable -->
+						<div *ngIf="item.throwable">
+							<span class="label label-primary">Arme prévue pour le jet</span>
+						</div>
+		
+						<!-- Slots -->
+						<div *ngIf="item.slots?.length > 0">
+							<span class="item-section">
+								Slot:
+							</span>
+
+                            <template ngFor let-slot [ngForOf]="item.slots">
+                                <span class="label label-primary">{{slot.name}}</span>
+                            </template>
+                        </div>
+		
+						<!-- Description -->
+						<div *ngIf="item.description">
+							<span class="item-section">
+								Description:
+							</span>
+							{{item.description}}
+						</div>
+						
+						
+						<!-- Note -->
+						<div *ngIf="item.note">
+							<span class="item-section">
+								Note:
+							</span>
+							{{item.note}}
+						</div>
+						
+						<!-- Encombrement -->
+						<div *ngIf="item.space">
+							<span class="item-section">
+								Encombrement:
+							</span>
+							{{item.space}}
+						</div>
+			
+						<!-- Possibilités de récolte -->
+						<div *ngIf="item.availableLocation">
+							<span class="item-section">
+								Possibilités de récolte:
+							</span>
+							{{item.availableLocation}}
+						</div>
+						
+						<!-- Prix/Charge/Durée -->
+						<div class="row">
+							<div *ngIf="item.price" class="col-xs-6 col-sm-3">
+								<span class="item-section">Prix:</span>
+								<template [ngIf]="item.price >= 1">
+									{{item.price | number}} P.O.
+								</template>
+			
+								<template [ngIf]="item.price < 1 && item.price >= 0.1">
+									{{item.price * 10}} P.A.
+								</template>
+			
+								<template [ngIf]="item.price < 0.1">
+									{{item.price * 100}} P.C.
+								</template>
+							</div>
+							<div *ngIf="item.duration" class="col-xs-6 col-sm-3">
+								<span class="item-section">Durée:</span>
+								{{item.duration}}
+							</div>
+							<div *ngIf="item.charge" class="col-xs-6 col-sm-3">
+								<span class="item-section">Charge:</span>
+								{{item.charge}}
+							</div>
+						</div>
+	
+						<div *ngIf="item.weight">
+							<span class="item-section">
+								Poid:
+							</span>
+							<span *ngIf="item.weight < 1">{{(item.weight * 1000)}}g</span>
+							<span *ngIf="item.weight >= 1">{{(item.weight)}}Kg</span>
+						</div>
+			
+						<!-- Degat -->
+						<div class="row" *ngIf="item.damage || item.damageDiceCount">
+							<div class="col-xs-12">
+								<span class="ra ra-broadsword ra-lg"></span>
+								<span *ngIf="item.damageDiceCount">{{item.damageDiceCount}}<span class="ra ra-perspective-dice-random"></span></span>
+								<span *ngIf="item.damageDiceCount && item.damage>0">+</span>
+								<span *ngIf="item.damage">{{item.damage}}</span>
+								<span *ngIf="item.damageType">({{item.damageType}})</span>
+							</div>
+						</div>
+			
+						<!-- Protection -->
+						<div *ngIf="item.protection || item.magicProtection || item.protectionAgainstMagic">
+							<span class="ra ra-shield ra-lg"></span>
+							<span *ngIf="item.protection">{{item.protection}}</span>
+							<span *ngIf="item.protection && item.magicProtection">+</span>
+							<span *ngIf="item.magicProtection">{{item.magicProtection}} (magique)</span>
+							<span *ngIf="(item.protection || item.magicProtection) && item.protectionAgainstMagic">/</span>
+							<span *ngIf="item.protectionAgainstMagic">{{item.protectionAgainstMagic}}
+								<span *ngIf="item.protectionAgainstType">(contre {{item.protectionAgainstType}})</span>
+								<span *ngIf="!item.protectionAgainstType">(contre mag./myst.)</span>
+							</span>
+						</div>
+		
+						<!-- Rupture -->
+						<div class="row" *ngIf="item.rupture">
+							<div class="col-xs-12">
+								<span class="ra ra-broken-shield ra-lg"></span>
+								1 à {{item.rupture}}
+							</div>
+						</div>
+						
+						<!-- Modificateurs -->
+						<template [ngIf]="item.modifiers && item.modifiers.length">
+                            <template ngFor let-modifier [ngForOf]="item.modifiers">
+                                <div>
+                                    <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
+                                    <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
+                                    {{modifier | modifier}}
+                                </div>
+                            </template>
+						</template>
+			
+						<!-- Compétences ajouté/annulé -->
+						<template ngFor let-skill [ngForOf]="item.skills">
+							<div>Donne la compétence "{{skill.name}}"</div>
+						</template>
+						<template ngFor let-skill [ngForOf]="item.unskills">
+							<div>Annule la compétence "{{skill.name}}"</div>
+						</template>
+						<template ngFor let-modifier [ngForOf]="item.skillModifiers">
+							<div>
+								{{modifier.skill.name}} <span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
+							</div>
+						</template>
+
+
+						<!-- Prérequis -->
+						<template ngFor let-requirement [ngForOf]="item.requirements">
+							<div>
+								<span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
+								<span *ngIf="requirement.Max">Max {{requirement.stat}}: {{requirement.max}}</span>
+							</div>
+						</template>
+					</div>
+				</template>
+			</template>
+		</template>
+		<hr>
+	</div>
+</template>

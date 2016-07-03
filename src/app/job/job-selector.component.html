@@ -1,0 +1,16 @@
+<a href="#" class="list-group-item" (click)="selectJob(null)">
+	<h4 class="list-group-item-heading">Aucun</h4>
+</a>
+<div *ngFor="let job of jobs">
+	<a href="#" class="list-group-item" [class.active]="isSelected(job)" [class.hidden]="!isVisible(job)" [class.disabled]="!isVisible(job) || !isAvailable(job)" (click)="selectJob(job)">
+		<h4 class="list-group-item-heading">{{job.name}}</h4>
+		<p class="list-group-item-text" *ngIf="isVisible(job) && !isAvailable(job)">
+			<span *ngFor="let req of job.requirements">
+				<span *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min" class="text-danger">{{req.stat|uppercase}} &ge; {{req.min}}</span>
+				<span *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max" class="text-danger">{{req.stat|uppercase}} &le; {{req.max}}</span>
+				<span *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min" class="text-success">{{req.stat|uppercase}} &ge; {{req.min}}</span>
+				<span *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max" class="text-success">{{req.stat|uppercase}} &le; {{req.max}}</span>
+			</span>
+		</p>
+	</a>
+</div>

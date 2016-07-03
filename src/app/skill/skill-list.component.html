@@ -1,0 +1,7 @@
+<input class="form-control input-lg" (keydown.esc)="filter=null" [(ngModel)]="filter" placeholder="filter"/>
+<div *ngFor="let skill of skills; let lastSkill=last">
+	<div *ngIf="isFiltered(skill)">
+		<skill [skill]="skill"></skill>
+		<hr [hidden]="lastSkill" />
+	</div>
+</div>

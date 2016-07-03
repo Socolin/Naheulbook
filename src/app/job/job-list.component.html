@@ -1,0 +1,6 @@
+<div class="jobs">
+	<div *ngFor="let job of jobs; let last=last">
+		<job [job]="job"></job>
+		<hr *ngIf="!last">
+	</div>
+</div>

@@ -1,0 +1,322 @@
+<div *ngIf="(step <= 1)" class="row">
+	<div class="col-xs-4 col-sm-2">
+		<input class="input-lg form-control" [(ngModel)]="cou" (change)="updateStat()" type="number" min=0 placeholder="Courage" />
+		<div class="text-center">Courage</div>
+	</div>
+	<div class="col-xs-4 col-sm-2">
+		<input class="input-lg form-control" [(ngModel)]="int" (change)="updateStat()" type="number" min=0 placeholder="Intéligence" />
+		<div class="text-center">Inteligence</div>
+	</div>
+	<div class="col-xs-4 col-sm-2">
+		<input class="input-lg form-control" [(ngModel)]="cha" (change)="updateStat()" type="number" min=0 placeholder="Charisme" />
+		<div class="text-center">Charisme</div>
+	</div>
+	<div class="col-xs-4 col-sm-2">
+		<input class="input-lg form-control" [(ngModel)]="ad" (change)="updateStat()" type="number" min=0 placeholder="Addresse" />
+		<div class="text-center">Addresse</div>
+	</div>
+	<div class="col-xs-4 col-sm-2">
+		<input class="input-lg form-control" [(ngModel)]="fo" (change)="updateStat()" type="number" min=0 placeholder="Force" />
+		<div class="text-center">Force</div>
+	</div>
+	<div class="col-xs-4 col-sm-2">
+		<button type="submit" (click)="rollStats()" class="btn-block btn btn-default"><span class="ra ra-perspective-dice-random ra-3x"></span></button>
+	</div>
+</div>
+<div *ngIf="(step > 1)" class="row">
+	<div class="col-sm-12">
+		<h3>
+			Statistique:
+		</h3>
+		<div class="row">
+			<span class="col-sm-2 col-xs-6">Courage: {{cou}}</span>
+			<span class="col-sm-2 col-xs-6">Intéligence: {{int}}</span>
+			<span class="col-sm-2 col-xs-6">Charisme: {{cha}}</span>
+			<span class="col-sm-2 col-xs-6">Adresse: {{ad}}</span>
+			<span class="col-sm-2 col-xs-6">Force: {{fo}}</span>
+			<span class="col-sm-2 col-xs-6"><button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(0)"></button></span>
+		</div>
+	</div>
+</div>
+
+<div *ngIf="(step == 1)" class="row">
+	<div class="col-xs-12">
+		<h3>Origine</h3>
+	</div>
+	<origin-selector class="col-sm-12" [selectedOrigin]="selectedOrigin" (originChange)="onSelectOrigin($event)" [cou]="cou" [int]="int" [cha]="cha" [ad]="ad" [fo]="fo">Loading...</origin-selector>
+</div>
+<div *ngIf="(step > 1)" class="row">
+	<div class="col-sm-12">
+		<h3>
+			Origine: {{selectedOrigin.name}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(1)"></button>
+		</h3>
+	</div>
+</div>
+
+<div *ngIf="(step == 2)" class="row">
+	<div class="col-xs-12">
+		<h3>Métier</h3>
+	</div>
+	<job-selector class="col-sm-12" [selectedOrigin]="selectedOrigin" (jobChange)="onSelectJob($event)" [cou]="cou" [int]="int" [cha]="cha" [ad]="ad" [fo]="fo">Loading...</job-selector>
+</div>
+<div *ngIf="(step > 2)" class="row">
+	<div class="col-sm-12">
+		<h3 *ngIf="selectedJob">
+			Métier: {{selectedJob.name}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(2)"></button>
+		</h3>
+		<h3 *ngIf="!selectedJob">
+			Métier: Aucun <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(2)"></button>
+		</h3>
+	</div>
+</div>
+
+
+<div *ngIf="(step == 3)" class="row">
+	<div class="col-xs-12">
+		<h3>Compétences</h3>
+	</div>
+	<skill-selector class="col-sm-12" [selectedOrigin]="selectedOrigin" [selectedJob]="selectedJob" (skillsSelected)="onSelectSkills($event)">Loading...</skill-selector>
+</div>
+<div *ngIf="(step > 3)" class="row">
+	<div class="col-sm-12">
+		<h3>
+			Compétences choisis:
+			<button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(3)"></button>
+		</h3>
+		<ul>
+			<li *ngFor="let skill of selectedSkills">{{skill.name}}</li>
+		</ul>
+	</div>
+</div>
+
+<div *ngIf="(step == 4)" class="row">
+	<div class="col-xs-12">
+		<h3>Fortune</h3>
+	</div>
+	<div class="col-sm-2">
+		<input class="input-lg form-control" [(ngModel)]="money" (change)="updateMoney()" type="number" min=0 placeholder="Fortune" />
+	</div>
+	<div *ngIf="has2MoneyRoll()" class="col-sm-2">
+		<input class="input-lg form-control" [(ngModel)]="money2" (change)="updateMoney()" type="number" min=0 placeholder="Fortune 2" />
+	</div>
+	<div class="col-sm-2">
+		<button type="submit" (click)="rollMoney()" class="btn btn-default"><span class="ra ra-perspective-dice-random ra-3x"></span></button>
+	</div>
+	<div class="col-sm-2">
+		Fortune: {{(money + money2) * 10}} PO
+	</div>
+	<div *ngIf="money && (!has2MoneyRoll() || money2)" class="col-sm-2">
+		<input type="submit" (click)="validMondey()" class="btn-block btn btn-default btn-lg" value="Valid" />
+	</div>
+</div>
+<div *ngIf="(step > 4)" class="row">
+	<div class="col-sm-12">
+		<h3>Fortune: {{(money + money2) * 10}} PO <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(4)"></button></h3>
+	</div>
+</div>
+
+
+<div *ngIf="(step == 5)" class="row">
+	<div class="col-xs-12">
+		<h3>Truc spéciaux</h3>
+	</div>
+	<div *ngIf="hasSuperBourin()" class="col-sm-12">
+		<h3>SUPER-BOURRIN</h3>
+		<p>
+			a le droit de retrancher jusqu'à 3 points à son score de base en ATTAQUE et/ou en PARADE
+			pour en faire un bonus de dégâts (au corps à corps, toutes armes confondues). Ainsi il peut avoir +3 en dégâts en plus de ses
+			autres bonus de FORCE, mais son côté bourrin le rend maladroit. Le bonus est à choisir en début de carrière et ne pourra
+			être modifié par la suite.
+		</p>
+		<div class="col-sm-2">
+			<input class="input-lg form-control" [(ngModel)]="superBourrinValue" (change)="updateSuperBourrin()" type="number" min=0 max=3 />
+		</div>
+	</div>
+ 
+	<div *ngIf="hasMove1PointStat()" class="col-sm-12">
+		<h3>Deplacement d'un point de stat</h3>
+		<p>
+			En raison de sa polyvalence, au niveau 1 le Ranger peut choisir de soustraire 1 point d'une CARAC pour l'ajouter à une
+			autre (INT, CHA, COU, FO, AD)
+		</p>
+		<div class="col-sm-2">
+			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['cou']" (change)="updateMove1PointStat" type="number" min=-1 max=1 />
+		</div>
+		<div class="col-sm-2">
+			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['int']" (change)="updateMove1PointStat" type="number" min=-1 max=1 />
+		</div>
+		<div class="col-sm-2">
+			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['cha']" (change)="updateMove1PointStat" type="number" min=-1 max=1 />
+		</div>
+		<div class="col-sm-2">
+			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['ad']" (change)="updateMove1PointStat" type="number" min=-1 max=1 />
+		</div>
+		<div class="col-sm-2">
+			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['fo']" (change)="updateMove1PointStat" type="number" min=-1 max=1 />
+		</div>
+	</div>
+	<div *ngIf="hasChangeAtPrd()">
+		<h3>Deplacement d'un point de d'attaque et de parade</h3>
+		<p>Peut choisir au niveau 1 d'échanger 1 point d'ATTAQUE avec 1 point de PARADE, ou inversement</p>
+		<div class="col-sm-2">
+			AT <input class="input-lg form-control" [(ngModel)]="changeAtPrdValue" (change)="updateChangeAtPrd()" type="number" min=-1 max=1 />
+		</div>
+		<div class="col-sm-2">
+			PRD <input class="input-lg form-control" [(ngModel)]="-changeAtPrdValue" (change)="updateChangeAtPrd()" type="number" min=-1 max=1 readonly/>
+		</div>
+	</div>
+	<div *ngIf="hasRemoveAttOrPrdToIntOrCha()" class="col-sm-12">
+		<h3>Marchand</h3>
+		<p>
+			En raison de son érudition, au niveau 1 le marchand doit retirer 1 point à l'attaque ou à la parade, qu'il pourra ajouter au
+			choix à l'intelligence ou au charisme
+		</p>
+
+		<div>
+			<div class="btn-group" data-toggle="buttons">
+				<button class="btn btn-primary" (click)="setremoveAttOrPrdToIntOrChaRemoveStat('AT')" [class.active]="removeAttOrPrdToIntOrChaRemoveStat == 'AT'">
+					AT
+				</button>
+				<button class="btn btn-primary" (click)="setremoveAttOrPrdToIntOrChaRemoveStat('PRD')" [class.active]="removeAttOrPrdToIntOrChaRemoveStat == 'PRD'">
+					PRD
+				</button>
+			</div>
+		</div>
+		<div>
+			<div class="btn-group" data-toggle="buttons">
+				<button class="btn btn-primary" (click)="setRemoveAttOrPrdToIntOrChaAddStat('INT')" [class.active]="removeAttOrPrdToIntOrChaAddStat == 'INT'">
+					INT
+				</button>
+				<button class="btn btn-primary" (click)="setRemoveAttOrPrdToIntOrChaAddStat('CHA')" [class.active]="removeAttOrPrdToIntOrChaAddStat == 'CHA'">
+					CHA
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div *ngIf="hasRemoveAttOrPrdToIntOrAd()" class="col-sm-12">
+		<h3>Ingenieur</h3>
+		<p>
+			En raison de sa spécialisation technique, au niveau 1 l'ingénieur doit retirer 1 point à l'attaque ou à la parade, qu'il pourra
+			ajouter au choix à l'intelligence ou à l'adresse
+		</p>
+
+		<div>
+			<div class="btn-group" data-toggle="buttons">
+				<button class="btn btn-primary" (click)="setremoveAttOrPrdToIntOrAdRemoveStat('AT')" [class.active]="removeAttOrPrdToIntOrAdRemoveStat == 'AT'">
+					AT
+				</button>
+				<button class="btn btn-primary" (click)="setremoveAttOrPrdToIntOrAdRemoveStat('PRD')" [class.active]="removeAttOrPrdToIntOrAdRemoveStat == 'PRD'">
+					PRD
+				</button>
+			</div>
+		</div>
+		<div>
+			<div class="btn-group" data-toggle="buttons">
+				<button class="btn btn-primary" (click)="setRemoveAttOrPrdToIntOrAdAddStat('INT')" [class.active]="removeAttOrPrdToIntOrAdAddStat == 'INT'">
+					INT
+				</button>
+				<button class="btn btn-primary" (click)="setRemoveAttOrPrdToIntOrAdAddStat('AD')" [class.active]="removeAttOrPrdToIntOrAdAddStat == 'AD'">
+					AD
+				</button>
+			</div>
+		</div>
+	</div>
+	
+	<div *ngIf="isStatModificationValid()" class="col-sm-2">
+		<input type="submit" (click)="setStep(6)" class="btn-block btn btn-default btn-lg" value="Suite" />
+	</div>
+</div>
+<div *ngIf="(step > 5)" class="row">
+	<div *ngIf="hasSuperBourin()" class="col-sm-12">
+		<h3>SUPER-BOURRIN: -{{superBourrinValue}} AT et +{{superBourrinValue}} Dégâts <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
+	</div>
+	<div *ngIf="hasMove1PointStat()" class="col-sm-12">
+		<h3>Modification de stat:
+			COU: {{move1PointStatValues['cou']}}
+		 	INT: {{move1PointStatValues['int']}} 
+		 	CHA: {{move1PointStatValues['cha']}} 
+		 	AD: {{move1PointStatValues['ad']}} 
+		 	FO: {{move1PointStatValues['fo']}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
+	</div>
+	<div *ngIf="hasChangeAtPrd()" class="col-sm-12">
+		<h3>Deplacement d'un point de d'attaque et de parade AT:{{changeAtPrdValue}} PRD:{{-changeAtPrdValue}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
+	</div>
+	<div *ngIf="hasRemoveAttOrPrdToIntOrCha()" class="col-sm-12">
+		<h3>Marchand {{removeAttOrPrdToIntOrChaRemoveStat}}:-1 {{removeAttOrPrdToIntOrChaAddStat}}:+1 <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
+	</div>
+	<div *ngIf="hasRemoveAttOrPrdToIntOrAd()" class="col-sm-12">
+		<h3>Ingenieur {{removeAttOrPrdToIntOrAdRemoveStat}}:-1 {{removeAttOrPrdToIntOrAdAddStat}}:+1 <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
+	</div>
+</div>
+
+
+<div *ngIf="(step == 6)" class="row">
+	<div class="col-sm-12">
+		<h3>Selection specialite</h3>
+		<div *ngFor="let speciality of selectedJob.specialities" class="selectable" (click)="selectSpeciality(speciality)">
+			<h3>{{speciality.name}}</h3>
+			<p>{{speciality.description}}</p>
+		</div>
+	</div>
+</div>
+<div *ngIf="(step > 6 && selectedSpeciality != null)" class="row">
+	<div class="col-sm-12">
+		<h3>Specialite: {{selectedSpeciality.name}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(6)"></button></h3>
+	</div>
+</div>
+
+
+<div *ngIf="(step == 7)" class="row">
+	<div class="col-sm-12">
+		<h3>Nom</h3>
+		<div class="col-sm-4">
+			<input class="input-lg form-control" [(ngModel)]="name" placeholder="Nom" />
+		</div>
+		<div class="col-sm-4">
+			<div class="btn-group btn-group-justified" role="group">
+				<a href="#" class="btn btn-primary" (click)="selectSex('Homme')" [class.active]="sex=='Homme'">
+					Homme
+				</a>
+				<a href="#" class="btn btn-primary" (click)="selectSex('Femme')" [class.active]="sex=='Femme'">
+					Femme
+				</a>
+			</div>
+		</div>
+		<div class="col-sm-4" *ngIf="name && sex">
+			<input type="submit" (click)="validName()" class="btn-block btn btn-default btn-lg" value="Valider" />
+		</div>
+	</div>
+</div>
+<div *ngIf="(step > 7)" class="row">
+	<div class="col-sm-12">
+		<h3>Nom: {{name}}  <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(7)"></button></h3>
+	</div>
+</div>
+
+<div *ngIf="(step == 8)" class="row">
+	<div class="col-sm-12">
+		<h3>Points de destin</h3>
+	</div>
+	<div class="col-sm-4">
+		<input class="input-lg form-control" [(ngModel)]="fatePoint" placeholder="Point de destin" />
+	</div>
+	<div class="col-sm-2">
+		<button (click)="rollFatePoint()" class="btn-block btn btn-default"><span class="ra ra-perspective-dice-random ra-3x"></span></button>
+	</div>
+	<div class="col-sm-2" *ngIf="fatePoint != null">
+		<input type="submit" (click)="validFatePoint()" class="btn-block btn btn-default btn-lg" value="Valid" />
+	</div>
+</div>
+<div *ngIf="(step > 8)" class="row">
+	<div class="col-sm-12">
+		<h3>Points de destin: {{fatePoint}}  <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(8)"></button></h3>
+	</div>
+</div>
+
+<div *ngIf="(step == 9)" class="row">
+	<div class="col-sm-12">
+		<h3>Confirmation</h3>
+		<button class="btn btn-primary" (click)="createCharacter()">Creer</button>
+	</div>
+</div>

@@ -1,0 +1,15 @@
+<div>
+	<div *ngIf="successMessage" class="alert alert-success" role="alert">
+		{{successMessage}}
+	</div>
+
+</div>
+<div *ngIf="item">
+	<item-editor [(item)]="item"></item-editor>
+	<form class="form-horizontal">
+		<div class="form-group">
+			<button class="col-sm-6 btn btn-primary" (click)="edit(false)" [disabled]="saving">Editer</button>
+			<button class="col-sm-6 btn btn-primary" (click)="edit(true)" [disabled]="saving">Editer && Editer suivant</button>
+		</div>
+	</form>
+</div>

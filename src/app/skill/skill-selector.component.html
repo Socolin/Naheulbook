@@ -1,0 +1,15 @@
+<div *ngIf="selectedSkills.length == skillCount" class="list-group">
+	<div *ngFor="let skill of skills">
+		<a *ngIf="isSelected(skill)" href="#" class="list-group-item active" (click)="selectSkill(skill)">
+			<h4 class="list-group-item-heading">{{skill.name}}</h4>
+			<p class="list-group-item-text">{{skill.description}}</p>
+		</a>
+	</div>
+</div>
+
+<div *ngIf="selectedSkills.length < skillCount" class="list-group">
+	<a *ngFor="let skill of skills" href="#" class="list-group-item" [class.active]="isSelected(skill)" (click)="selectSkill(skill)">
+		<h4 class="list-group-item-heading">{{skill.name}}</h4>
+		<p class="list-group-item-text">{{skill.description}}</p>
+	</a>
+</div>

@@ -1,0 +1,14 @@
+<div *ngFor="let origin of origins">
+	<a href="#" class="list-group-item" [class.active]="isSelected(origin)" [class.disabled]="!isAvailable(origin)" (click)="selectOrigin(origin)">
+		<h4 class="list-group-item-heading">{{origin.name}}</h4>
+		<p class="list-group-item-text" *ngIf="!isAvailable(origin)">
+			<span *ngFor="let req of origin.requirements">
+				<span *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min" class="text-danger">{{req.stat|uppercase}} &ge; {{req.min}}</span>
+				<span *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max" class="text-danger">{{req.stat|uppercase}} &le; {{req.max}}</span>
+				<span *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min" class="text-success">{{req.stat|uppercase}} &ge; {{req.min}}</span>
+				<span *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max" class="text-success">{{req.stat|uppercase}} &le; {{req.max}}</span>
+			</span>
+		</p>
+		<p class="list-group-item-text" *ngIf="isAvailable(origin)" [innerHTML]="origin.description"></p>
+	</a>
+</div>

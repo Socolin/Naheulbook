@@ -1,0 +1,15 @@
+<div>
+	<div *ngFor="let category of categories; let lastCategory=last">
+		<h3>{{category.name}}
+			<span *ngIf="category.difficulty == 'low'" class="label label-info">Bas niveau</span>
+			<span *ngIf="category.difficulty == 'medium'" class="label label-warning">Niveau intermédiaire</span>
+			<span *ngIf="category.difficulty == 'high'" class="label label-danger">Haut niveau</span>
+		</h3>
+		<div style="padding-bottom: 5px; margin-left: 10px; padding-left: 24px; padding-top: 5px; border-left: 1px solid #E2D7D7">
+			<div *ngFor="let monster of monsterByCategory[category.id]; let last=last">
+				<monster-template [monster]="monster"></monster-template>
+			</div>
+		</div>
+		<hr>
+	</div>
+</div>

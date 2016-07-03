@@ -1,0 +1,75 @@
+<div (click)=toggleFold($event)>
+    <h3>
+        <span class="glyphicon" [class.glyphicon-chevron-right]="folded"
+              [class.glyphicon-chevron-down]="!folded"></span>
+        {{origin.name}}
+    </h3>
+</div>
+<div [hidden]="folded"
+     style="padding-bottom: 5px; margin-left: 10px; padding-left: 24px; padding-top: 5px; border-left: 1px solid #E2D7D7">
+    <div *ngIf="origin.requirements.length > 0">
+        <b>Critères: </b>
+	<span *ngFor="let requirement of origin.requirements; let lastReq=last">
+		<span *ngIf="requirement.min">
+			{{requirement.stat}} minimum: {{requirement.min}}
+		</span>
+		<span *ngIf="requirement.max">
+			{{requirement.stat}} maximum: {{requirement.max}}
+		</span>
+		<span *ngIf="!lastReq"> et </span>
+	</span>
+    </div>
+
+    <p>{{origin.advantage}}</p>
+
+    <p [innerHTML]="origin.description"></p>
+
+    <p *ngIf="origin.size">
+        <b>Taille</b>: {{origin.size}}
+    </p>
+
+    <div *ngIf="origin.bonuses && origin.bonuses.length">
+        <b>Bonus:</b>
+        <ul>
+            <li *ngFor="let bonus of origin.bonuses">{{bonus.description}}</li>
+        </ul>
+    </div>
+
+    <div *ngIf="origin.skills.length > 0">
+        Compétences de naissance:
+        <ul>
+            <li *ngFor="let skill of origin.skills">
+                {{skill.name}}
+            </li>
+        </ul>
+    </div>
+
+    <div *ngIf="origin.availableSkills.length > 0">
+        Compétences au choix:
+        <ul>
+            <li *ngFor="let skill of origin.availableSkills">
+                {{skill.name}}
+            </li>
+        </ul>
+    </div>
+
+
+    <div *ngIf="origin.restricts.length > 0">
+        Restrictions:
+        <ul>
+            <li *ngFor="let restrict of origin.restricts; let lastRes=last">
+                {{restrict.text}}
+            </li>
+        </ul>
+    </div>
+
+    <div *ngIf="origin.infos.length > 0">
+        <div *ngFor="let info of origin.infos; let lastInfo=last" class="origin-info">
+            <b>
+                {{info.title}}:
+            </b>
+		<span [innerHTML]="info.description">
+		</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<i [style.color]="'#' + element.color" [class.ra-player]="!element.isMonster" [class.ra-monster-skull]="element.isMonster" class="ra ra-3x" (click)="showSelector = !showSelector"></i>
+<div *ngIf="showSelector" style="position: relative">
+	<div style="position: absolute; top: -26; left: 56; background-color: white; border:1px solid gray; width:194px">
+		<template ngFor let-color [ngForOf]="colors">
+			<div style="float:left; width: 48px; height: 48px">
+				<i [style.color]=color
+					[class.ra-player]="!element.isMonster"
+					[class.ra-monster-skull]="element.isMonster"
+					class="ra ra-3x"
+					(click)="showSelector = !showSelector"
+					(click)="onColorChange.next(color);showSelector = false;">
+				</i>
+			</div>
+		</template>
+	</div>
+</div>

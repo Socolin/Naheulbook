@@ -1,0 +1,9 @@
+<div class="characters">
+	<div *ngIf="!characters || characters.length == 0">Vous ne possedez aucun personnage.</div>
+	<div class="list-group">
+		<a href="#" *ngFor="let character of characters" (click)="selectCharacter(character)" class="list-group-item">
+			<h4 class="list-group-item-heading">{{character.name}} - lvl {{character.level}}</h4>
+			<p class="list-group-item-text">{{character.origin}} {{character.job}}</p>
+		</a>
+	</div>
+</div>
