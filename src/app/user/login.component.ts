@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
     logout() {
         this._loginService.logout().subscribe(() => {
             this._router.navigate(['']);
+            this._notification.info('Déconnexion', 'Vous êtes a present déconnecté');
         });
 
         return false;

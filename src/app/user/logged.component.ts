@@ -1,22 +1,28 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
-import {NotificationsService} from '../notifications';
+import {Subscription} from 'rxjs/Rx';
 
+import {NotificationsService} from '../notifications';
 import {LoginService} from './login.service';
 
 @Component({
     moduleId: module.id,
     templateUrl: 'logged.component.html',
 })
-export class LoggedComponent implements OnInit {
+export class LoggedComponent implements OnInit, OnDestroy {
+    private subscribtion: Subscription;
 
     constructor(private _loginService: LoginService
         , private _notification: NotificationsService
         , private _router: Router) {
     }
 
+    ngOnDestroy() {
+        this.subscribtion.unsubscribe();
+    }
+
     ngOnInit() {
-        this._router.routerState.queryParams.subscribe(params => {
+        this.subscribtion = this._router.routerState.queryParams.subscribe(params => {
             if (params.hasOwnProperty('state')) {
                 let state = decodeURIComponent(params['state']).split(':', 2);
                 let app = state[0];
@@ -28,7 +34,7 @@ export class LoggedComponent implements OnInit {
                             , token
                             , window.location.origin + window.location.pathname).subscribe(
                             () => {
-                                this._router.navigate(['/character/list'], {queryParams: {}});
+                                this._router.navigateByUrl('/character/list');
                             }
                         );
                     }

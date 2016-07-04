@@ -1,15 +1,16 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 import {LoginService} from './login.service';
+import {User} from './user.model';
 
 @Component({
     selector: 'user-profile',
     moduleId: module.id,
     templateUrl: 'user-profile.component.html'
 })
-export class UserProfileComponent {
-    public profile: Object;
+export class UserProfileComponent implements OnInit {
+    public profile: User;
 
     constructor(private _notification: NotificationsService
         , private loginService: LoginService) {
