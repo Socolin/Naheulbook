@@ -6,9 +6,11 @@ import {User} from './user.model';
 
 @Injectable()
 export class LoginService {
-    public loggedUser: ReplaySubject<User> = new ReplaySubject<User>(1);
+    private internalLoggedUser: ReplaySubject<User> = new ReplaySubject<User>(1);
+    public loggedUser: Observable<User>;
 
     constructor(private _http: Http) {
+        this.loggedUser = this.internalLoggedUser.share();
     }
 
     getLoginToken(app: string): Observable<{loginToken: string, appKey: string}> {
@@ -24,24 +26,22 @@ export class LoginService {
             }))
             .map(res => res.json())
             .subscribe(user => {
-                this.loggedUser.next(user);
+                this.internalLoggedUser.next(user);
             });
 
         return this.loggedUser;
     }
 
     logout() {
-        if (!this.loggedUser || this.loggedUser.isUnsubscribed) {
-            this.loggedUser = new ReplaySubject<User>(1);
-        }
-
-        this._http.get('/api/user/logout')
+        let logout = this._http.get('/api/user/logout')
             .map(res => res.json())
-            .subscribe(() => {
-                this.loggedUser.next(null);
-            });
+            .share();
 
-        return this.loggedUser;
+        logout.subscribe(() => {
+            this.internalLoggedUser.next(null);
+        });
+
+        return logout;
     }
 
     checkLogged() {
@@ -50,7 +50,7 @@ export class LoginService {
             .share();
 
         checkLogged.subscribe(user => {
-            this.loggedUser.next(user);
+            this.internalLoggedUser.next(user);
         });
 
         return checkLogged;

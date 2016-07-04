@@ -39,8 +39,10 @@ export class LoginComponent implements OnInit {
     }
 
     logout() {
-        this._loginService.logout();
-        this._router.navigate(['']);
+        this._loginService.logout().subscribe(() => {
+            this._router.navigate(['']);
+        });
+
         return false;
     }
 

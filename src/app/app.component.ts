@@ -52,11 +52,12 @@ export class IndexComponent implements OnInit {
         if (this.loggedUser) {
             return this.loggedUser.admin;
         }
-        this._loginService.checkLogged().subscribe(
+        let subscription = this._loginService.loggedUser.subscribe(
             user => {
+                subscription.unsubscribe();
                 this.loggedUser = user;
-                if (!user || !user.admin) {
-                    this._notifications.error('Acces interdit', 'Page réserver a l\'administration');
+                if (user === null) {
+                    this._notifications.error('Acces interdit', 'Vous devez vous authentifier');
                     this._router.navigate(['']);
                 }
             }
@@ -67,19 +68,19 @@ export class IndexComponent implements OnInit {
         if (this.loggedUser) {
             return true;
         }
-        this._loginService.checkLogged().subscribe(
+        let subscription = this._loginService.loggedUser.subscribe(
             user => {
+                subscription.unsubscribe();
                 this.loggedUser = user;
                 if (user === null) {
                     this._notifications.error('Acces interdit', 'Vous devez vous authentifier');
                     this._router.navigate(['']);
                 }
-            }
-        );
+            });
     }
 
     ngOnInit() {
-        this._loginService.checkLogged().subscribe(user => {
+        this._loginService.loggedUser.subscribe(user => {
             this.loggedUser = user;
         });
     }
