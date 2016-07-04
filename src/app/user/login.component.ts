@@ -21,11 +21,10 @@ export class LoginComponent implements OnInit {
     redirectToFbLogin() {
         this._loginService.getLoginToken('facebook').subscribe(authInfos => {
             let state = 'facebook:' + authInfos.loginToken;
-            let redirectUrl = 'https://www.facebook.com/dialog/oauth?client_id=' + authInfos.appKey
+            window.location.href = 'https://www.facebook.com/dialog/oauth?client_id=' + authInfos.appKey
                 + '&state=' + state
                 + '&response_type=code'
                 + '&redirect_uri=' + window.location.origin + '/logged';
-            window.location.href = redirectUrl;
         });
     }
 
@@ -52,5 +51,6 @@ export class LoginComponent implements OnInit {
                 this.user = user;
             }
         );
+        this._loginService.checkLogged();
     }
 }
