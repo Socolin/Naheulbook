@@ -11,8 +11,8 @@ export class LoginService {
     constructor(private _http: Http) {
     }
 
-    getLoginToken(): Observable<string> {
-        return this._http.get('/api/user/loginToken')
+    getLoginToken(app: string): Observable<{loginToken: string, appKey: string}> {
+        return this._http.post('/api/user/loginToken', JSON.stringify({app: app}))
             .map(res => res.json());
     }
 

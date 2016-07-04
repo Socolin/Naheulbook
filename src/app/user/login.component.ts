@@ -12,7 +12,6 @@ import {User} from './user.model';
 })
 export class LoginComponent implements OnInit {
     private user: User;
-    private fbAppKey: string = '780527738745692';
 
     constructor(private _loginService: LoginService
         , private _router: Router
@@ -20,9 +19,9 @@ export class LoginComponent implements OnInit {
     }
 
     redirectToFbLogin() {
-        this._loginService.getLoginToken().subscribe(loginToken => {
-            let state = 'facebook:' + loginToken;
-            let redirectUrl = 'https://www.facebook.com/dialog/oauth?client_id=' + this.fbAppKey
+        this._loginService.getLoginToken('facebook').subscribe(authInfos => {
+            let state = 'facebook:' + authInfos.loginToken;
+            let redirectUrl = 'https://www.facebook.com/dialog/oauth?client_id=' + authInfos.appKey
                 + '&state=' + state
                 + '&response_type=code'
                 + '&redirect_uri=' + window.location.origin + '/logged';
