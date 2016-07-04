@@ -26,7 +26,7 @@ export class EffectListComponent {
         , private _effectService: EffectService) {
     }
 
-    isOverlay() : boolean {
+    isOverlay(): boolean {
         return this._route.snapshot.url.length == 0 || this._route.snapshot.url[0].path !== 'database';
     }
 
@@ -41,10 +41,6 @@ export class EffectListComponent {
 
     editEffect(effect: Effect) {
         this._router.navigate(['/edit-effect', effect.id]);
-    }
-
-    updateEditable() {
-        this.editable = this._loginService.isAdmin;
     }
 
     loadCategory(categoryId: number): void {
@@ -81,7 +77,14 @@ export class EffectListComponent {
                     this.loadCategory(id);
                 });
             }
-            this.updateEditable();
-        })
+        });
+        this._loginService.loggedUser.subscribe(
+            user => {
+                this.editable = user && user.admin;
+            },
+            err => {
+                this.editable = false;
+                console.log(err);
+            });
     }
 }

@@ -28,7 +28,7 @@ export class UserProfileComponent {
     }
 
     ngOnInit() {
-        this.loginService.checkLogged().subscribe(user => {
+        this.loginService.loggedUser.subscribe(user => {
             this.profile = user;
         });
     }

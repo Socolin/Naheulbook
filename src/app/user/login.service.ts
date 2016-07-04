@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Response, Http} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
+import {Observable, ReplaySubject} from 'rxjs/Rx';
 
 import {User} from './user.model';
 
 @Injectable()
 export class LoginService {
-    public loggedUser: User = null;
+    public loggedUser: ReplaySubject<User> = new ReplaySubject<User>(1);
 
     constructor(private _http: Http) {
     }
@@ -17,48 +17,51 @@ export class LoginService {
     }
 
     doFBLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
-        let login = this._http.post('/api/user/fblogin', JSON.stringify({
+        this._http.post('/api/user/fblogin', JSON.stringify({
                 code: code,
                 loginToken: loginToken,
                 redirectUri: redirectUri
             }))
-            .share()
-            .map(res => res.json());
-        login.subscribe(user => {
-           this.loggedUser = user;
-        });
+            .map(res => res.json())
+            .subscribe(user => {
+                this.loggedUser.next(user);
+            });
 
-        return login;
+        return this.loggedUser;
     }
 
     logout() {
-        let logout = this._http.get('/api/user/logout')
-            .share()
-            .map(res => res.json());
-        logout.subscribe(() => {
-            this.loggedUser = null;
-        });
+        if (!this.loggedUser || this.loggedUser.isUnsubscribed) {
+            this.loggedUser = new ReplaySubject<User>(1);
+        }
 
-        return logout;
+        this._http.get('/api/user/logout')
+            .map(res => res.json())
+            .subscribe(() => {
+                this.loggedUser.next(null);
+            });
+
+        return this.loggedUser;
     }
 
     checkLogged() {
-        let logged = this._http.get('/api/user/logged')
-            .share()
-            .map(res => res.json());
-        logged.subscribe(user => {
-            this.loggedUser = user;
+        let checkLogged = this._http.get('/api/user/logged')
+            .map(res => res.json())
+            .share();
+
+        checkLogged.subscribe(user => {
+            this.loggedUser.next(user);
         });
 
-        return logged;
+        return checkLogged;
     }
 
-    updateProfile(profile): Observable<Response> {
+    updateProfile(profile): Observable < Response > {
         return this._http.post('/api/user/updateProfile', JSON.stringify(profile))
             .map(res => res.json());
     }
 
-    searchUser(filter: string): Observable<Object[]> {
+    searchUser(filter: string): Observable < Object[] > {
         return this._http.post('/api/user/searchUser', JSON.stringify({filter: filter}))
             .map(res => res.json());
     }

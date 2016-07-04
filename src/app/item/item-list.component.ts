@@ -116,10 +116,6 @@ export class ItemListComponent {
         }
     }
 
-    updateEditable() {
-        this.editable = this._loginService.isAdmin;
-    }
-
     editItem(item: ItemTemplate) {
         this._router.navigate(['/edit-item', item.id]);
     }
@@ -134,9 +130,9 @@ export class ItemListComponent {
         });
 
         this._jobService.getJobList().subscribe(jobs => {
-            var jobsName = {};
+            let jobsName = {};
             for (let i = 0; i < jobs.length; i++) {
-                var job = jobs[i];
+                let job = jobs[i];
                 jobsName[job.id] = job.name;
             }
             this.jobsName = jobsName;
@@ -144,13 +140,20 @@ export class ItemListComponent {
 
         this._originService.getOriginList().subscribe(origins => {
             let originsName = {};
-            for (var i = 0; i < origins.length; i++) {
-                var origin = origins[i];
+            for (let i = 0; i < origins.length; i++) {
+                let origin = origins[i];
                 originsName[origin.id] = origin.name;
             }
             this.originsName = originsName;
         });
-        this.updateEditable();
+        this._loginService.loggedUser.subscribe(
+            user => {
+                this.editable = user && user.admin;
+            },
+            err => {
+                this.editable = false;
+                console.log(err);
+            });
     }
 }
 

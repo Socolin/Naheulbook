@@ -18,11 +18,13 @@
 						<li><a [routerLink]="['/database/origins']">Origines</a></li>
 						<li><a [routerLink]="['/database/jobs']">Metiers</a></li>
 						<li><a [routerLink]="['/database/items']">Objets</a></li>
+						<li *ngIf="loggedUser && loggedUser.admin"><a [routerLink]="['/create-item']">Créer un objet</a></li>
 						<li><a [routerLink]="['/database/effects']">Effets</a></li>
+						<li *ngIf="loggedUser && loggedUser.admin"><a [routerLink]="['/create-effect']">Créer un effet</a></li>
 						<li><a [routerLink]="['/database/monsters']">Bestiaire</a></li>
 					</ul>
 				</li>
-				<li *ngIf="loginService.loggedUser" class="dropdown">
+				<li *ngIf="loggedUser" class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Personnage <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a [routerLink]="['/character/create']">Créer</a></li>

@@ -1,11 +1,11 @@
 
 <ul class="nav navbar-nav navbar-right">
-	<li *ngIf="!_loginService.loggedUser"><a (click)="login()">Login</a></li>
-	<li *ngIf="_loginService.loggedUser"><a (click)="logout()">Logout</a></li>
+	<li *ngIf="!user"><a (click)="login()">Login</a></li>
+	<li *ngIf="user"><a (click)="logout()">Logout</a></li>
 </ul>
-<p *ngIf="_loginService.loggedUser" class="navbar-text navbar-right">
+<p *ngIf="user" class="navbar-text navbar-right">
 	Logged in as
 	<a href="#" (click)=viewProfile()>
-		{{_loginService.loggedUser.displayName}}
+		{{user.displayName}}
 	</a>
 </p>
