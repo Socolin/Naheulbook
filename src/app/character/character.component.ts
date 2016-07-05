@@ -785,8 +785,9 @@ export class CharacterComponent {
         this.stats['MPSY'] = Math.round((this.stats['INT'] + (this.stats['CHA'] - this.stats['CHA_WITHOUT_MAGIEPSY'])) / 2);
         this.stats['RESM'] += Math.round((this.stats['COU'] + this.stats['INT'] + this.stats['FO']) / 3);
         this.addDetails('Base', {
-            MPHYS: "<sup>(" + this.stats['INT'] + " + " + this.stats['AD '] + ")</sup>&frasl;<sub>2</sub>",
-            MPSY: "<sup>(" + this.stats['INT'] + " + " + (this.stats['CHA'] - this.stats['CHA_WITHOUT_MAGIEPSY']) + ")</sup>&frasl;<sub>2</sub>",
+            MPHYS: "<sup>(" + this.stats['INT'] + " + " + this.stats['AD'] + ")</sup>&frasl;<sub>2</sub>",
+            MPSY: "<sup>(" + this.stats['INT'] + " + " + (this.stats['CHA'] - this.stats['CHA_WITHOUT_MAGIEPSY'])
+            + ")</sup>&frasl;<sub>2</sub>",
             RESM: "<sup>(" + this.stats['COU'] + " + " + this.stats['INT'] + " + " + this.stats['FO'] + ")</sup>&frasl;<sub>3</sub>",
         });
 
