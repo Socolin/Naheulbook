@@ -187,7 +187,7 @@
 									</td>
 								</tr>
 								<tr [class.even_row]="i % 2 == 0" (click)="selectedCombatRow = i" [class.combat_row_selected]="selectedCombatRow == i">
-									<td style="border:0;" colspan=3><target-selector [fighter]=fighter.target [targets]=charAndMonsters (onTargetChange)='changeTarget(fighter, $event)'></target-selector></td>
+									<td style="border:0;" colspan=3><target-selector [element]=fighter.target [targets]=charAndMonsters (onTargetChange)='changeTarget(fighter, $event)'></target-selector></td>
 									<td style="border:0;" colspan=1>Note</td>
 									<td style="border:0;" colspan=6><monster-editable-field [monster]="fighter" [monsterFieldName]="'note'" [fieldName]="'note'"></monster-editable-field></td>
 								</tr>

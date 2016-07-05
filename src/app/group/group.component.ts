@@ -1,11 +1,11 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, Output, OnInit, OnChanges} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {HTTP_PROVIDERS} from '@angular/http';
 
 import {NotificationsService} from '../notifications';
 
 import {Group, GroupService, CharacterInviteInfo} from '../group';
-import {Character, CharacterService, CharacterColorSelector, CharacterComponent} from '../character';
+import {Character, CharacterService, CharacterColorSelectorComponent, CharacterComponent} from '../character';
 import {Monster, MonsterService, MonsterTemplate} from '../monster';
 
 import {LoginService} from '../user';
@@ -28,7 +28,12 @@ import {MonsterEditableFieldComponent} from './monster-editable-field.component'
                 {{element.name}}
             </span>
             <div *ngIf="showSelector" style="position: relative">
-                <div style="position: absolute; max-width:340px; left:35px; top: -15px; background-color: white; border: 1px solid gray;">
+                <div style="position: absolute;
+                            max-width:340px;
+                            left: 35px;
+                            top: -15px;
+                            background-color: white;
+                            border: 1px solid gray;">
                     <template ngFor let-target [ngForOf]="targets">
                         <div style="display:inline-block; padding-right:10px">
                             <div (click)=onTargetChange.next(target)>
@@ -46,14 +51,12 @@ import {MonsterEditableFieldComponent} from './monster-editable-field.component'
                 </div>
             </div>
         </div>
-    `,
-    inputs: ['element', 'targets'],
-    outputs: ['onTargetChange']
+    `
 })
 export class TargetSelectorComponent {
-    public element: Object;
-    public targets: Object[];
-    private onTargetChange: EventEmitter<any> = new EventEmitter<any>();
+    @Input() element: Object;
+    @Input() targets: Object[];
+    @Output() onTargetChange: EventEmitter<any> = new EventEmitter<any>();
     private showSelector: boolean = false;
 }
 
@@ -63,7 +66,7 @@ export class TargetSelectorComponent {
     templateUrl: 'group.component.html',
     directives: [CharacterComponent
         , MonsterEditableFieldComponent
-        , CharacterColorSelector
+        , CharacterColorSelectorComponent
         , TargetSelectorComponent
         , EffectListComponent
         , SkillListComponent],
@@ -77,7 +80,7 @@ export class TargetSelectorComponent {
     `],
     providers: [HTTP_PROVIDERS, CharacterService, GroupService, MonsterService]
 })
-export class GroupComponent {
+export class GroupComponent implements OnInit, OnChanges {
     public group: Group;
     public newMonster: Monster = new Monster();
     public selectedCharacter: Character;
@@ -302,7 +305,7 @@ export class GroupComponent {
                 this.group.invited.push(res);
                 for (let i = 0; i < this.filteredInvitePlayers.length; i++) {
                     let char = this.filteredInvitePlayers[i];
-                    if (char.id == res.id) {
+                    if (char.id === res.id) {
                         this.filteredInvitePlayers.splice(i, 1);
                         break;
                     }
@@ -351,7 +354,10 @@ export class GroupComponent {
         }
     }
 
-    changeColor(element, color) {
+    changeColor(element: Fighter, color: string) {
+        if (color.indexOf('#') === 0) {
+            color = color.substring(1);
+        }
         if (element.isMonster) {
             this._groupService.updateMonster(element.id, 'color', color)
                 .subscribe(
@@ -563,6 +569,6 @@ export class GroupComponent {
                     }
                 );
             }
-        )
+        );
     }
 }

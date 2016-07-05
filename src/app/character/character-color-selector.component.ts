@@ -1,14 +1,14 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
+    moduleId: module.id,
     selector: 'character-color-selector',
-    templateUrl: 'app/character/character-color-selector.component.html',
-    inputs: ["element"],
-    outputs: ['onColorChange']
+    templateUrl: 'character-color-selector.component.html'
 })
-export class CharacterColorSelector {
-    public element: Object;
-    private onColorChange: EventEmitter<string> = new EventEmitter<string>();
+export class CharacterColorSelectorComponent {
+    @Input() element: Object;
+    @Output() onColorChange: EventEmitter<string> = new EventEmitter<string>();
+
     private showSelector = false;
     private colors: string[] = [
         "ffcc00", "ff6600",

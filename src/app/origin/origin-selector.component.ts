@@ -1,26 +1,25 @@
-import {Component, Input, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, OnChanges} from '@angular/core';
 
 import {Origin} from "./origin.model";
 import {StatRequirement} from "../shared/stat-requirement.model";
 import {OriginService} from "./origin.service";
 
 @Component({
+    moduleId: module.id,
     selector: 'origin-selector',
-    templateUrl: 'app/origin/origin-selector.component.html',
-    inputs: ['selectedOrigin'],
-    outputs: ['originChange'],
+    templateUrl: 'origin-selector.component.html'
 })
-export class OriginSelectorComponent {
+export class OriginSelectorComponent implements OnInit, OnChanges {
     @Input('cou') cou: number;
     @Input('cha') cha: number;
     @Input('int') int: number;
     @Input('ad') ad: number;
     @Input('fo') fo: number;
 
-    private originChange: EventEmitter<Origin> = new EventEmitter<Origin>();
-    public selectedOrigin: Origin = null;
-    public origins: Origin[] = [];
+    @Input() selectedOrigin: Origin = null;
+    @Output() originChange: EventEmitter<Origin> = new EventEmitter<Origin>();
 
+    public origins: Origin[] = [];
     public invalidStats: Object;
     public stats: Object;
 
@@ -30,7 +29,7 @@ export class OriginSelectorComponent {
     }
 
     isSelected(origin: Origin) {
-        return this.selectedOrigin && this.selectedOrigin.id == origin.id;
+        return this.selectedOrigin && this.selectedOrigin.id === origin.id;
     }
 
     updateInvalidStats(origin: Origin) {
@@ -38,8 +37,8 @@ export class OriginSelectorComponent {
         if (!origin.requirements) {
             return invalids;
         }
-        for (var i = 0; i < origin.requirements.length; i++) {
-            var req: StatRequirement;
+        for (let i = 0; i < origin.requirements.length; i++) {
+            let req: StatRequirement;
             req = origin.requirements[i];
             let statName = req.stat.toLowerCase();
             let statValue = this[statName];
@@ -57,7 +56,7 @@ export class OriginSelectorComponent {
 
     isAvailable(origin: Origin) {
         if (this.selectedOrigin) {
-            return (this.selectedOrigin.id == origin.id);
+            return (this.selectedOrigin.id === origin.id);
         }
         return !(this.invalidStats[origin.id] && this.invalidStats[origin.id].length);
     }

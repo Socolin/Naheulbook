@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import {SkillComponent} from './skill.component';
 import {Skill} from "./skill.model";
@@ -7,12 +7,12 @@ import {SkillService} from "./skill.service";
 import {removeDiacritics} from "../shared";
 
 @Component({
+    moduleId: module.id,
     selector: 'skill-list',
-    templateUrl: 'app/skill/skill-list.component.html',
-    styleUrls: ['/styles/skill-list.css'],
+    templateUrl: 'skill-list.component.html',
     directives: [SkillComponent]
 })
-export class SkillListComponent {
+export class SkillListComponent implements OnInit {
     public skills: Skill[];
     public filter: string;
 

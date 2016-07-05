@@ -1,15 +1,15 @@
-import {Component} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 
 import {Skill} from "./skill.model";
 import {SkillService} from "./skill.service";
 
 @Component({
+    moduleId: module.id,
     selector: 'skill-modifiers-editor',
-    templateUrl: 'app/skill/skill-modifiers-editor.component.html',
-    inputs: ["modifiers"],
+    templateUrl: 'skill-modifiers-editor.component.html',
 })
-export class SkillModifiersEditorComponent {
-    public modifiers: Object[];
+export class SkillModifiersEditorComponent implements OnInit {
+    @Input() modifiers: any[];
     public selectedSkill: number;
     public value: number;
     public skills: Skill[];
@@ -33,9 +33,9 @@ export class SkillModifiersEditorComponent {
 
     addModifier() {
         if (this.value && this.selectedSkill) {
-            var skill = null;
-            for (var i in this.skills) {
-                var s = this.skills[i];
+            let skill = null;
+            for (let i = 0; i < this.skills.length; i++) {
+                let s = this.skills[i];
                 if (s.id === this.selectedSkill) {
                     skill = s;
                     break;

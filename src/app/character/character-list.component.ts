@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {Router} from '@angular/router';
 
@@ -11,7 +11,7 @@ import {CharacterResume} from "./character.model";
     templateUrl: 'app/character/character-list.component.html',
     providers: [HTTP_PROVIDERS, CharacterService]
 })
-export class CharacterListComponent {
+export class CharacterListComponent implements OnInit {
     public characters: CharacterResume[];
 
     constructor(private _router: Router

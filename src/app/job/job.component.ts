@@ -1,15 +1,14 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 import {Job} from "./job.model";
 
 @Component({
+    moduleId: module.id,
     selector: 'job',
-    templateUrl: 'app/job/job.component.html',
-    styleUrls: ['/styles/job.css'],
-    inputs: ['job']
+    templateUrl: 'job.component.html'
 })
 export class JobComponent {
-    public job: Job;
+    @Input() job: Job;
     public folded: boolean;
 
     constructor() {

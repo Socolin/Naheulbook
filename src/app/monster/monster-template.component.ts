@@ -1,12 +1,12 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 import {MonsterTemplate} from "./monster.model";
 
 @Component({
+    moduleId: module.id,
     selector: 'monster-template',
-    templateUrl: 'app/monster/monster-template.component.html',
-    inputs: ['monster']
+    templateUrl: 'monster-template.component.html'
 })
 export class MonsterTemplateComponent {
-    public monster: MonsterTemplate;
+    @Input() monster: MonsterTemplate;
 }

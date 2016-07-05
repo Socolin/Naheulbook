@@ -1,10 +1,10 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {NotificationsService} from '../notifications';
 
 import {Skill, SkillSelectorComponent} from '../skill';
 import {Effect, EffectService} from '../effect';
-import {ItemService, ItemTemplate, ItemDetailComponent} from '../item';
+import {ItemService, ItemTemplate} from '../item';
 import {
     ModifierPipe,
     formatModifierValue,
@@ -19,6 +19,7 @@ import {SpecialitySelectorComponent} from './speciality-selector.component';
 import {CharacterService} from "./character.service";
 import {Character, CharacterModifier} from "./character.model";
 import {IMetadata} from '../shared/misc.model';
+import {ItemDetailComponent} from './item-detail.component';
 
 @Component({
     selector: 'bag-item-view',
@@ -64,9 +65,9 @@ import {IMetadata} from '../shared/misc.model';
     `,
     inputs: ['items', 'selectedItem', 'end', 'ends', 'level'],
     outputs: ['itemSelected'],
-    directives: [BagItemView],
+    directives: [BagItemViewComponent],
 })
-export class BagItemView {
+export class BagItemViewComponent implements OnInit {
     public items: Item[];
     private itemSelected: EventEmitter<Item> = new EventEmitter<Item>();
     private level: number = 0;
@@ -137,11 +138,15 @@ interface SkillDetail {
         }
         `
     ],
-    inputs: ['id'],
-    directives: [BagItemView, SkillSelectorComponent, SpecialitySelectorComponent, ItemDetailComponent, ModifiersEditorComponent]
+    directives: [BagItemViewComponent
+        , SkillSelectorComponent
+        , SpecialitySelectorComponent
+        , ItemDetailComponent
+        , ModifiersEditorComponent
+    ]
 })
-export class CharacterComponent {
-    public id: number;
+export class CharacterComponent implements OnInit {
+    @Input() id: number;
     public character: Character;
     public stats: {[statName: string]: number};
     public skills: SkillDetail[];

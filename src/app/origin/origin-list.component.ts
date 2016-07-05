@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 
@@ -12,7 +12,7 @@ import {OriginService} from "./origin.service";
     styleUrls: ['/styles/origin-list.css'],
     directives: [OriginComponent],
 })
-export class OriginListComponent {
+export class OriginListComponent implements OnInit {
     public origins: Origin[];
 
     constructor(private _originService: OriginService

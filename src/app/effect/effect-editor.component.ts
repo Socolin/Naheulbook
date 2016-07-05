@@ -1,21 +1,21 @@
-import {Component} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 import {PlusMinusPipe, ModifiersEditorComponent} from "../shared";
 import {EffectService} from "./effect.service";
+import {Effect, EffectCategory} from './effect.model';
 
 @Component({
     selector: 'effect-editor',
     templateUrl: 'app/effect/effect-editor.component.html',
-    inputs: ["effect"],
     pipes: [PlusMinusPipe],
     directives: [ModifiersEditorComponent]
 })
-export class EffectEditorComponent {
-    public categories: any[];
-    public effect: Object;
+export class EffectEditorComponent implements OnInit {
+    @Input() effect: Effect;
+    public categories: EffectCategory[];
 
     constructor(private _effectService: EffectService) {
-        this.effect = {};
+        this.effect = new Effect();
     }
 
     ngOnInit() {

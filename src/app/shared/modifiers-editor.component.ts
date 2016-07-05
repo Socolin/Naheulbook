@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 import {ModifierPipe} from "./modifier.pipe";
 import {Stat} from "./stat.model";
@@ -10,15 +10,17 @@ import {OriginService} from "../origin/origin.service";
 import {JobService} from "../job/job.service";
 
 @Component({
+    moduleId: module.id,
     selector: 'modifiers-editor',
-    templateUrl: 'app/shared/modifiers-editor.component.html',
-    inputs: ["modifiers","options"],
+    templateUrl: 'modifiers-editor.component.html',
     pipes: [ModifierPipe],
 })
-export class ModifiersEditorComponent {
+export class ModifiersEditorComponent implements OnInit {
+    @Input() modifiers: ItemStatModifier[];
+    @Input() options: string[] = [];
+
     public stats: Stat[];
-    public modifiers: ItemStatModifier[];
-    public options: string[] = [];
+
     public specialsValue: string[] = [];
     public selectedStat: Stat;
     public selectedType: StatModificationOperand = 'ADD';
@@ -53,7 +55,7 @@ export class ModifiersEditorComponent {
     toggleSpecial(i: number, v: string) {
         if (this.modifiers[i].special) {
             let idx = this.modifiers[i].special.indexOf(v);
-            if (idx == -1) {
+            if (idx === -1) {
                 this.modifiers[i].special.push(v);
             } else {
                 this.modifiers[i].special.splice(idx, 1);

@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {Router} from '@angular/router'
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
 
@@ -10,7 +10,7 @@ import {Group} from './group.model';
     moduleId: module.id,
     templateUrl: 'group-list.component.html'
 })
-export class GroupListComponent {
+export class GroupListComponent implements OnInit {
     public groups: Object[];
 
     constructor(private _characterService: CharacterService

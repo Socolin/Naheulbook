@@ -41,7 +41,7 @@ export class CharacterService {
         if (!this.stats || this.stats.isUnsubscribed) {
             this.stats = new ReplaySubject<Stat[]>(1);
 
-            this._http.get('/api/skill/list')
+            this._http.get('/api/character/stats')
                 .map(res => res.json())
                 .subscribe(
                     stats => {

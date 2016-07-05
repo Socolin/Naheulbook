@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router'
+import {Component, OnInit} from '@angular/core';
+import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from '../notifications';
 
 import {ItemEditorComponent} from "./item-editor.component";
@@ -7,11 +7,12 @@ import {ItemTemplate} from "./item-template.model";
 import {ItemService} from "./item.service";
 
 @Component({
+    moduleId: module.id,
     selector: 'edit-item',
-    templateUrl: 'app/item/edit-item.component.html',
+    templateUrl: 'edit-item.component.html',
     directives: [ItemEditorComponent]
 })
-export class EditItemComponent {
+export class EditItemComponent implements OnInit {
     private item: ItemTemplate;
     private saving: boolean = false;
     private successMessage: string;

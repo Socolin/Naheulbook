@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input, OnInit, OnChanges} from '@angular/core';
 import {NotificationsService} from '../notifications';
 
 import {ItemTemplate, ItemSection, ItemSlot} from "../item";
@@ -9,18 +9,21 @@ import {ItemElementComponent} from "./item-element.component";
 import {ItemService} from "./item.service";
 
 @Component({
+    moduleId: module.id,
     selector: 'item-editor',
-    templateUrl: 'app/item/item-editor.component.html',
-    inputs: ["item"],
+    templateUrl: 'item-editor.component.html',
     directives: [ModifiersEditorComponent, ItemElementComponent, SkillModifiersEditorComponent, StatRequirementsEditorComponent]
 })
-export class ItemEditorComponent {
+export class ItemEditorComponent implements OnInit, OnChanges {
+    @Input() item: ItemTemplate;
+
     public skills: Skill[] = [];
     public sections: ItemSection[];
     public selectedSection: ItemSection;
     public slots: ItemSlot[];
-    public item: ItemTemplate;
     public form: {levels: number[], protection: number[], damage: number[], dices: number[]};
+
+    private filteredEffects: Effect[];
 
     constructor(private _itemService: ItemService
         , private _effectService: EffectService
@@ -32,12 +35,12 @@ export class ItemEditorComponent {
             protection: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             damage: [-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             dices: [1, 2, 3, 4, 5, 6]
-        }
+        };
     }
 
     hasSpecial(token: string) {
         if (this.selectedSection) {
-            if (this.selectedSection.special.indexOf(token) != -1) {
+            if (this.selectedSection.special.indexOf(token) !== -1) {
                 return true;
             }
         }
@@ -46,8 +49,8 @@ export class ItemEditorComponent {
 
     getSkillById(skillId: number): IMetadata {
         for (let i = 0; i < this.skills.length; i++) {
-            var skill = this.skills[i];
-            if (skill.id == skillId) {
+            let skill = this.skills[i];
+            if (skill.id === skillId) {
                 return skill;
             }
         }
@@ -65,8 +68,8 @@ export class ItemEditorComponent {
     removeSkill(skillId: number) {
         if (this.item.skills) {
             for (let i = 0; i < this.item.skills.length; i++) {
-                var skill = this.item.skills[i];
-                if (skill.id == skillId) {
+                let skill = this.item.skills[i];
+                if (skill.id === skillId) {
                     this.item.skills.splice(i, 1);
                     break;
                 }
@@ -85,8 +88,8 @@ export class ItemEditorComponent {
     removeUnskill(skillId: number) {
         if (this.item.unskills) {
             for (let i = 0; i < this.item.unskills.length; i++) {
-                var skill = this.item.unskills[i];
-                if (skill.id == skillId) {
+                let skill = this.item.unskills[i];
+                if (skill.id === skillId) {
                     this.item.unskills.splice(i, 1);
                     break;
                 }
@@ -99,7 +102,7 @@ export class ItemEditorComponent {
             return false;
         }
         for (let i = 0; i < this.item.slots.length; i++) {
-            if (this.item.slots[i].id == slot.id) {
+            if (this.item.slots[i].id === slot.id) {
                 return true;
             }
         }
@@ -112,7 +115,7 @@ export class ItemEditorComponent {
         }
         if (this.isInSlot(slot)) {
             for (let i = 0; i < this.item.slots.length; i++) {
-                if (this.item.slots[i].id == slot.id) {
+                if (this.item.slots[i].id === slot.id) {
                     this.item.slots.splice(i, 1);
                     break;
                 }
@@ -120,7 +123,7 @@ export class ItemEditorComponent {
         } else {
             this.item.slots.push(slot);
         }
-        if (this.item.slots.length == 0) {
+        if (this.item.slots.length === 0) {
             this.item.slotCount = null;
         } else {
             if (!this.item.slotCount) {
@@ -128,8 +131,6 @@ export class ItemEditorComponent {
             }
         }
     }
-
-    private filteredEffects: Effect[];
 
     searchEffect(filterName) {
         this._effectService.searchEffect(filterName).subscribe(
@@ -146,8 +147,8 @@ export class ItemEditorComponent {
     ngOnChanges() {
         if (this.item.category && this.sections) {
             for (let i = 0; i < this.sections.length; i++) {
-                var t = this.sections[i];
-                if (t.id == this.item.category.type) {
+                let t = this.sections[i];
+                if (t.id === this.item.category.type) {
                     this.selectedSection = t;
                     break;
                 }

@@ -1,5 +1,5 @@
-import {Component, SimpleChanges} from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router'
+import {Component, SimpleChanges, Input, OnInit, OnChanges} from '@angular/core';
+import {Router, ActivatedRoute} from '@angular/router';
 
 import {ModifierPipe} from "../shared";
 import {LoginService} from "../user";
@@ -8,17 +8,18 @@ import {EffectService} from "./effect.service";
 import {EffectCategory, Effect} from "./effect.model";
 
 @Component({
+    moduleId: module.id,
     selector: 'effect-list',
-    templateUrl: 'app/effect/effect-list.component.html',
-    inputs: ["inputCategoryId"],
+    templateUrl: 'effect-list.component.html',
     pipes: [ModifierPipe]
 })
-export class EffectListComponent {
+export class EffectListComponent implements OnInit, OnChanges {
+    @Input() inputCategoryId: number = 1;
+
     public selectedCategory: EffectCategory;
     public categories: EffectCategory[];
     public effects: Effect[] = [];
     public editable: boolean = false;
-    public inputCategoryId: number = 1;
 
     constructor(private _router: Router
         , private _route: ActivatedRoute
@@ -27,7 +28,7 @@ export class EffectListComponent {
     }
 
     isOverlay(): boolean {
-        return this._route.snapshot.url.length == 0 || this._route.snapshot.url[0].path !== 'database';
+        return this._route.snapshot.url.length === 0 || this._route.snapshot.url[0].path !== 'database';
     }
 
     selectCategory(category: EffectCategory): boolean {
@@ -47,7 +48,7 @@ export class EffectListComponent {
         if (categoryId) {
             for (let i = 0; i < this.categories.length; i++) {
                 let category = this.categories[i];
-                if (category.id == categoryId) {
+                if (category.id === categoryId) {
                     this.selectedCategory = category;
                     this._effectService.getEffects(categoryId).subscribe(
                         effects => {

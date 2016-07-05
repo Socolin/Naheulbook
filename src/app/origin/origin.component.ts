@@ -1,13 +1,13 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Origin} from "./origin.model";
 
 @Component({
+    moduleId: module.id,
     selector: 'origin',
-    templateUrl: 'app/origin/origin.component.html',
-    inputs: ['origin']
+    templateUrl: 'origin.component.html',
 })
 export class OriginComponent {
-    public origin: Origin;
+    @Input() origin: Origin;
     public folded: boolean;
 
     constructor() {

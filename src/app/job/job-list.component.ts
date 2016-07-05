@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NotificationsService} from '../notifications';
 
 import {JobComponent} from "./job.component";
@@ -6,12 +6,12 @@ import {Job} from "./job.model";
 import {JobService} from "./job.service";
 
 @Component({
+    moduleId: module.id,
     selector: 'job-list',
-    templateUrl: 'app/job/job-list.component.html',
-    styleUrls: ['/styles/job-list.css'],
+    templateUrl: 'job-list.component.html',
     directives: [JobComponent]
 })
-export class JobListComponent {
+export class JobListComponent implements OnInit {
     public jobs: Job[];
 
     constructor(private _jobService: JobService

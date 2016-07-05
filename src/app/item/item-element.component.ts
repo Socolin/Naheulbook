@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
-import {Router} from '@angular/router'
-import {ItemTemplate, ItemSection} from "./item-template.model";
+import {Component, Input, OnInit, OnChanges} from '@angular/core';
+import {Router} from '@angular/router';
+import {ItemTemplate, ItemSection, ItemCategory} from "./item-template.model";
 
 import {OriginService} from "../origin";
 import {JobService} from "../job";
@@ -8,21 +8,23 @@ import {Item} from "../character";
 
 
 @Component({
+    moduleId: module.id,
     selector: 'item-element',
-    templateUrl: 'app/item/item-element.component.html',
-    inputs: ['items', 'type', 'restrictCategory', 'filter', 'editable'],
+    templateUrl: 'item-element.component.html',
+    styleUrls: ['item-element.component.css']
 })
-export class ItemElementComponent {
-    public items: ItemTemplate[];
+export class ItemElementComponent implements OnInit, OnChanges {
+    @Input() items: ItemTemplate[];
+    @Input() restrictCategory: ItemCategory;
+    @Input() type: ItemSection;
+    @Input() editable: boolean;
+    @Input() filter: {dice: number};
+
     public itemsByCategory: Object;
-    public restrictCategory: Object;
-    public type: ItemSection;
     public originsName: {[originId: number]: string};
     public jobsName: {[jobId: number]: string};
     public headers: string[];
     public columnsCount: number;
-    public editable: boolean;
-    public filter: {dice: number};
 
     constructor(private router: Router, private originService: OriginService, private jobService: JobService) {
         this.filter = {dice: null};
@@ -67,7 +69,7 @@ export class ItemElementComponent {
 
         let itemsByCategory = {};
         for (let i = 0; i < this.items.length; i++) {
-            var item = this.items[i];
+            let item = this.items[i];
             if (!itemsByCategory[item.category.id]) {
                 itemsByCategory[item.category.id] = [];
             }
@@ -79,7 +81,7 @@ export class ItemElementComponent {
     isHidden(item: ItemTemplate) {
         if (this.hasSpecial('DICE_DROP')) {
             if (this.filter.dice) {
-                return item.diceDrop != this.filter.dice;
+                return item.diceDrop !== this.filter.dice;
             }
         }
         return false;
@@ -87,7 +89,7 @@ export class ItemElementComponent {
 
     hasSpecial(token: string) {
         if (this.type) {
-            if (this.type.special.indexOf(token) != -1) {
+            if (this.type.special.indexOf(token) !== -1) {
                 return true;
             }
         }
@@ -96,9 +98,9 @@ export class ItemElementComponent {
 
     ngOnInit() {
         this.jobService.getJobList().subscribe(jobs => {
-            var jobsName: {[jobId: number]: string} = {};
+            let jobsName: {[jobId: number]: string} = {};
             for (let i = 0; i < jobs.length; i++) {
-                var job = jobs[i];
+                let job = jobs[i];
                 jobsName[job.id] = job.name;
             }
             this.jobsName = jobsName;
@@ -106,7 +108,7 @@ export class ItemElementComponent {
         this.originService.getOriginList().subscribe(origins => {
             let originsName: {[originId: number]: string} = {};
             for (let i = 0; i < origins.length; i++) {
-                var origin = origins[i];
+                let origin = origins[i];
                 originsName[origin.id] = origin.name;
             }
             this.originsName = originsName;

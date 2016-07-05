@@ -1,17 +1,16 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 import {Speciality} from './speciality.model';
 
 @Component({
     selector: 'speciality-selector',
-    templateUrl: 'app/character/speciality-selector.component.html',
-    inputs: ['specialities', 'knownSpecialities'],
-    outputs: ['specialityChange']
+    templateUrl: 'app/character/speciality-selector.component.html'
 })
 export class SpecialitySelectorComponent {
-    private specialityChange: EventEmitter<Speciality> = new EventEmitter<Speciality>();
-    public specialities: Speciality[];
-    public knownSpecialities: Speciality[];
+    @Input() specialities: Speciality[];
+    @Input() knownSpecialities: Speciality[];
+    @Output() specialityChange: EventEmitter<Speciality> = new EventEmitter<Speciality>();
+
     public selectedSpeciality: Speciality;
 
     selectSpeciality(speciality: Speciality) {
@@ -23,15 +22,15 @@ export class SpecialitySelectorComponent {
         if (this.knownSpecialities && this.knownSpecialities.length > 0) {
             if (speciality.specials) {
                 for (let i = 0; i < speciality.specials.length; i++) {
-                    var special = speciality.specials[i];
+                    let special = speciality.specials[i];
                     if (special.token === 'ONE_SPECIALITY') {
                         return false;
                     }
                 }
             }
             for (let i = 0; i < this.knownSpecialities.length; i++) {
-                var spe = this.knownSpecialities[i];
-                if (spe.id == speciality.id) {
+                let spe = this.knownSpecialities[i];
+                if (spe.id === speciality.id) {
                     return false;
                 }
             }

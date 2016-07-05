@@ -1,16 +1,17 @@
-import {Component} from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router'
-import {NotificationsService} from '../notifications'
+import {Component, OnInit} from '@angular/core';
+import {Router, ActivatedRoute} from '@angular/router';
+import {NotificationsService} from '../notifications';
 
 import {EffectEditorComponent} from './effect-editor.component';
 import {EffectService} from "./effect.service";
 
 @Component({
-    templateUrl: 'app/effect/edit-effect.component.html',
+    moduleId: module.id,
+    templateUrl: 'edit-effect.component.html',
     providers: [EffectService],
     directives: [EffectEditorComponent]
 })
-export class EditEffectComponent {
+export class EditEffectComponent implements OnInit {
     public effect: Object;
     public errorMessage: string;
 

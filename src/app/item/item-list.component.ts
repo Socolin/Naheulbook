@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {LoginService} from "../user";
@@ -24,14 +24,14 @@ import {removeDiacritics, ModifierPipe} from "../shared";
         `
     ]
 })
-export class ItemListComponent {
+export class ItemListComponent implements OnInit {
     public itemSections: ItemSection[];
     public items: ItemTemplate[] = [];
     public itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
     public selectedSection: ItemSection;
     public filter: {name: string, dice: number};
-    public originsName: Object;
-    public jobsName: Object;
+    public originsName: {[originId: number]: string};
+    public jobsName: {[jobId: number]: string};
     public editable: boolean = true;
 
     constructor(private _router: Router
@@ -53,10 +53,10 @@ export class ItemListComponent {
 
     isVisible(item) {
         if (item.diceDrop && this.filter && this.filter.dice) {
-            return item.diceDrop == this.filter.dice;
+            return item.diceDrop === this.filter.dice;
         }
         if (this.filter && this.filter.name) {
-            var cleanFilter = removeDiacritics(this.filter.name).toLowerCase();
+            let cleanFilter = removeDiacritics(this.filter.name).toLowerCase();
             return removeDiacritics(item.name).toLowerCase().indexOf(cleanFilter) > -1;
         }
         return true;
@@ -95,7 +95,7 @@ export class ItemListComponent {
 
     hasSpecial(token: string) {
         if (this.selectedSection) {
-            if (this.selectedSection.special.indexOf(token) != -1) {
+            if (this.selectedSection.special.indexOf(token) !== -1) {
                 return true;
             }
         }
@@ -103,13 +103,13 @@ export class ItemListComponent {
     }
 
     selectSectionById(sectionId: number) {
-        if (this.selectedSection && this.selectedSection.id == sectionId) {
+        if (this.selectedSection && this.selectedSection.id === sectionId) {
             return;
         }
 
         for (let i = 0; i < this.itemSections.length; i++) {
-            var section = this.itemSections[i];
-            if (section.id == sectionId) {
+            let section = this.itemSections[i];
+            if (section.id === sectionId) {
                 this.loadSection(section);
                 break;
             }
@@ -130,7 +130,7 @@ export class ItemListComponent {
         });
 
         this._jobService.getJobList().subscribe(jobs => {
-            let jobsName = {};
+            let jobsName: {[jobId: number]: string} = {};
             for (let i = 0; i < jobs.length; i++) {
                 let job = jobs[i];
                 jobsName[job.id] = job.name;
@@ -139,7 +139,7 @@ export class ItemListComponent {
         });
 
         this._originService.getOriginList().subscribe(origins => {
-            let originsName = {};
+            let originsName: {[originId: number]: string} = {};
             for (let i = 0; i < origins.length; i++) {
                 let origin = origins[i];
                 originsName[origin.id] = origin.name;

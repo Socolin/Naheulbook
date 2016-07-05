@@ -1,4 +1,4 @@
-import {Component, Input, EventEmitter} from '@angular/core';
+import {Component, Input, EventEmitter, Output, OnInit, OnChanges} from '@angular/core';
 
 import {Origin} from '../origin';
 import {StatRequirement} from '../shared';
@@ -6,21 +6,21 @@ import {Job} from "./job.model";
 import {JobService} from "./job.service";
 
 @Component({
+    moduleId: module.id,
     selector: 'job-selector',
-    templateUrl: 'app/job/job-selector.component.html',
-    inputs: ['selectedJob', 'selectedOrigin'],
-    outputs: ['jobChange']
+    templateUrl: 'job-selector.component.html'
 })
-export class JobSelectorComponent {
+export class JobSelectorComponent implements OnInit, OnChanges {
     @Input('cou') cou: string;
     @Input('cha') cha: string;
     @Input('int') int: string;
     @Input('ad') ad: string;
     @Input('fo') fo: string;
 
-    private jobChange: EventEmitter<Job> = new EventEmitter<Job>();
-    public selectedJob: Job;
-    public selectedOrigin: Origin;
+    @Output() jobChange: EventEmitter<Job> = new EventEmitter<Job>();
+    @Input() selectedJob: Job;
+    @Input() selectedOrigin: Origin;
+
     public jobs: Job[] = [];
     private stats: any;
 
@@ -31,15 +31,15 @@ export class JobSelectorComponent {
     }
 
     isSelected(job: Job) {
-        return this.selectedJob && this.selectedJob.id == job.id;
+        return this.selectedJob && this.selectedJob.id === job.id;
     }
 
     isVisible(job: Job) {
         if (this.selectedOrigin) {
             if (job.originsWhitelist && job.originsWhitelist.length > 0) {
-                var found = false;
-                for (var i = 0; i < job.originsWhitelist.length; i++) {
-                    if (job.originsWhitelist[i].id == this.selectedOrigin.id) {
+                let found = false;
+                for (let i = 0; i < job.originsWhitelist.length; i++) {
+                    if (job.originsWhitelist[i].id === this.selectedOrigin.id) {
                         found = true;
                     }
                 }
@@ -49,8 +49,8 @@ export class JobSelectorComponent {
             }
 
             if (job.originsBlacklist && job.originsBlacklist.length > 0) {
-                for (var i = 0; i < job.originsBlacklist.length; i++) {
-                    if (job.originsBlacklist[i].id == this.selectedOrigin.id) {
+                for (let i = 0; i < job.originsBlacklist.length; i++) {
+                    if (job.originsBlacklist[i].id === this.selectedOrigin.id) {
                         return false;
                     }
                 }
@@ -69,7 +69,7 @@ export class JobSelectorComponent {
             if (job.isMagic) {
                 if (this.selectedOrigin.restrictsTokens) {
                     for (let i = 0; i < this.selectedOrigin.restrictsTokens.length; i++) {
-                        if (this.selectedOrigin.restrictsTokens[i] == 'NO_MAGIC') {
+                        if (this.selectedOrigin.restrictsTokens[i] === 'NO_MAGIC') {
                             invalids.push({stat: 'MAGIC'});
                         }
                     }
@@ -78,8 +78,8 @@ export class JobSelectorComponent {
         }
 
         if (job.requirements) {
-            for (var i = 0; i < job.requirements.length; i++) {
-                var req: StatRequirement;
+            for (let i = 0; i < job.requirements.length; i++) {
+                let req: StatRequirement;
                 req = job.requirements[i];
                 let statName = req.stat.toLowerCase();
                 let statValue = this[statName];
@@ -99,7 +99,7 @@ export class JobSelectorComponent {
 
     isAvailable(job: Job) {
         if (this.selectedJob) {
-            return (this.selectedJob.id == job.id);
+            return (this.selectedJob.id === job.id);
         }
         return !(this.invalidStats[job.id] && this.invalidStats[job.id].length);
     }

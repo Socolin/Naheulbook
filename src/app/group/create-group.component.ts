@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Router} from '@angular/router'
+import {Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
 
@@ -24,7 +24,7 @@ export class CreateGroupComponent {
             },
             err => {
                 console.log(err);
-                if (err.status == 500) {
+                if (err.status === 500) {
                     this._notification.error("Erreur", "Erreur serveur");
                 } else {
                     this._notification.error("Erreur", "Erreur requête");

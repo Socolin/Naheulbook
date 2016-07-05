@@ -15,29 +15,29 @@ import {Speciality} from "./speciality.model";
     directives: [OriginSelectorComponent, JobSelectorComponent, SkillSelectorComponent]
 })
 export class CreateCharacterComponent {
+    public step: number;
+
     constructor(private _router: Router
         , private _notification: NotificationsService
         , private _characterService: CharacterService) {
         this.setStep(0);
     }
 
-    public step: number;
-
     setStep(step: number) {
-        if (step == 1) {
+        if (step === 1) {
             this.selectedOrigin = null;
         }
-        if (step == 2) {
+        if (step === 2) {
             this.selectedJob = null;
         }
-        if (step == 3) {
+        if (step === 3) {
             this.selectedSkills = null;
         }
-        if (step == 4) {
+        if (step === 4) {
             this.money = 0;
             this.money2 = 0;
         }
-        if (step == 5) {
+        if (step === 5) {
             this.modifiedStat = {};
             if (this.hasStatModification()) {
                 this.superBourrinValue = 0;
@@ -49,16 +49,16 @@ export class CreateCharacterComponent {
                 step = 6;
             }
         }
-        if (step == 6) {
+        if (step === 6) {
             this.initSelectSpeciality();
             if (!this.hasSpeciality()) {
                 step = 7;
             }
         }
-        if (step == 7) {
+        if (step === 7) {
             this.name = null;
         }
-        if (step == 8) {
+        if (step === 8) {
             this.fatePoint = null;
         }
 
@@ -70,7 +70,7 @@ export class CreateCharacterComponent {
     public bonuses: string[];
 
     hasBonus(bonus: string) {
-        return this.bonuses && this.bonuses.indexOf(bonus) != -1;
+        return this.bonuses && this.bonuses.indexOf(bonus) !== -1;
     }
 
     // Step 0: Statistics
@@ -117,7 +117,7 @@ export class CreateCharacterComponent {
         this.selectedOrigin = origin;
         this.bonuses = [];
         if (origin.bonuses) {
-            for (var i = 0; i < origin.bonuses.length; i++) {
+            for (let i = 0; i < origin.bonuses.length; i++) {
                 this.bonuses.push(origin.bonuses[i].token);
             }
         }
@@ -130,7 +130,7 @@ export class CreateCharacterComponent {
 
     onSelectJob(job) {
         if (job != null && job.bonuses) {
-            for (var i = 0; i < job.bonuses.length; i++) {
+            for (let i = 0; i < job.bonuses.length; i++) {
                 this.bonuses.push(job.bonuses[i].token);
             }
         }
@@ -244,22 +244,22 @@ export class CreateCharacterComponent {
     }
 
     isMove1PointStatValid() {
-        var foundNegative = 0;
-        var foundPositive = 0;
-        for (var i in this.move1PointStatValues) {
-            var value = this.move1PointStatValues[i];
-            if (value == 1) {
+        let foundNegative = 0;
+        let foundPositive = 0;
+        for (let i in this.move1PointStatValues) {
+            let value = this.move1PointStatValues[i];
+            if (value === 1) {
                 foundPositive++;
-            } else if (value == -1) {
+            } else if (value === -1) {
                 foundNegative++;
-            } else if (value != 0) {
+            } else if (value !== 0) {
                 return false;
             }
         }
-        if (foundNegative == 0 && foundPositive == 0) {
+        if (foundNegative === 0 && foundPositive === 0) {
             return true;
         }
-        if (foundNegative == 1 && foundPositive == 1) {
+        if (foundNegative === 1 && foundPositive === 1) {
             return true;
         }
         return false;
@@ -267,8 +267,8 @@ export class CreateCharacterComponent {
 
     updateMove1PointStat() {
         if (this.isMove1PointStatValid()) {
-            for (var i in this.move1PointStatValues) {
-                var value = this.move1PointStatValues[i];
+            for (let i in this.move1PointStatValues) {
+                let value = this.move1PointStatValues[i];
                 if (value != 0) {
                     this.modifiedStat['MOVE_1_POINT_STAT'][i] = value;
                     this.modifiedStat['MOVE_1_POINT_STAT'].name = "Polyvalence ranger";
@@ -315,8 +315,8 @@ export class CreateCharacterComponent {
     }
 
     isRemoveAttOrPrdToIntOrChaValid() {
-        return (this.removeAttOrPrdToIntOrChaRemoveStat == 'AT' || this.removeAttOrPrdToIntOrChaRemoveStat == 'PRD')
-            && (this.removeAttOrPrdToIntOrChaAddStat == 'INT' || this.removeAttOrPrdToIntOrChaAddStat == 'CHA');
+        return (this.removeAttOrPrdToIntOrChaRemoveStat === 'AT' || this.removeAttOrPrdToIntOrChaRemoveStat === 'PRD')
+            && (this.removeAttOrPrdToIntOrChaAddStat === 'INT' || this.removeAttOrPrdToIntOrChaAddStat === 'CHA');
     }
 
     initRemoveAttOrPrdToIntOrCha() {
@@ -352,8 +352,8 @@ export class CreateCharacterComponent {
     }
 
     isRemoveAttOrPrdToIntOrAdValid() {
-        return (this.removeAttOrPrdToIntOrAdRemoveStat == 'AT' || this.removeAttOrPrdToIntOrAdRemoveStat == 'PRD')
-            && (this.removeAttOrPrdToIntOrAdAddStat == 'INT' || this.removeAttOrPrdToIntOrAdAddStat == 'AD');
+        return (this.removeAttOrPrdToIntOrAdRemoveStat === 'AT' || this.removeAttOrPrdToIntOrAdRemoveStat === 'PRD')
+            && (this.removeAttOrPrdToIntOrAdAddStat === 'INT' || this.removeAttOrPrdToIntOrAdAddStat === 'AD');
     }
 
     initRemoveAttOrPrdToIntOrAd() {
@@ -427,7 +427,7 @@ export class CreateCharacterComponent {
     // Step 9: Confirm
 
     createCharacter() {
-        var creationData = {};
+        let creationData = {};
         creationData['name'] = this.name;
         creationData['stats'] = {};
         creationData['stats']['COU'] = this.cou;

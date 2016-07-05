@@ -5,8 +5,9 @@ import {ItemEditorComponent} from "./item-editor.component";
 import {ItemTemplate} from "./item-template.model";
 
 @Component({
+    moduleId: module.id,
     selector: 'create-item',
-    templateUrl: 'app/item/create-item.component.html',
+    templateUrl: 'create-item.component.html',
     providers: [ItemService],
     directives: [ItemEditorComponent]
 })
