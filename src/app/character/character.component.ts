@@ -24,7 +24,7 @@ import {Character, CharacterModifier} from "./character.model";
     template: `
         <template ngFor let-item [ngForOf]="items"  let-indexItem="index" let-lastItem="last">
             <template ngFor let-l [ngForOf]="ends" let-i="index" let-last="last">
-                <div style="float:left;margin-bottom:-1">
+                <div style="float:left;margin-bottom:-1px">
                     <template [ngIf]="lastItem && last">
                         <img src="/img/tree-top-left.png"/>
                     </template>
@@ -42,12 +42,22 @@ import {Character, CharacterModifier} from "./character.model";
                     </template>
                 </div>
             </template>
-            <a href="#" class="list-group-item" [style.margin-left]="(level * 20) + 'px'" (click)="selectItem(item)" [class.active]="selectedItem && selectedItem.id == item.id">
+            <a href="#" class="list-group-item"
+                [style.margin-left]="(level * 20) + 'px'"
+                (click)="selectItem(item)"
+                [class.active]="selectedItem && selectedItem.id == item.id">
                 <span *ngIf="item.quantity">{{item.quantity}}</span>
-                {{item.name}} 
+                {{item.name}}
             </a>
             <template [ngIf]="item.content">
-                <bag-item-view [ends]="ends" [level]="level + 1" [end]="lastItem ? 1 : 0" [items]="item.content" [selectedItem]="selectedItem" (itemSelected)="selectItem($event)"></bag-item-view>
+                <bag-item-view
+                    [ends]="ends"
+                    [level]="level + 1"
+                    [end]="lastItem ? 1 : 0"
+                    [items]="item.content"
+                    [selectedItem]="selectedItem"
+                    (itemSelected)="selectItem($event)">
+                </bag-item-view>
             </template>
         </template>
     `,
