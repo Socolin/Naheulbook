@@ -18,6 +18,7 @@ import {Item} from "./item.model";
 import {SpecialitySelectorComponent} from './speciality-selector.component';
 import {CharacterService} from "./character.service";
 import {Character, CharacterModifier} from "./character.model";
+import {IMetadata} from '../shared/misc.model';
 
 @Component({
     selector: 'bag-item-view',
@@ -109,6 +110,12 @@ class LevelUpInfo {
     speciality: any;
 }
 
+interface SkillDetail {
+    from: string[];
+    skill: Skill;
+    canceled?: boolean;
+}
+
 @Component({
     selector: 'character',
     templateUrl: 'app/character/character.component.html',
@@ -137,7 +144,7 @@ export class CharacterComponent {
     public id: number;
     public character: Character;
     public stats: {[statName: string]: number};
-    public skills: {from: string[], skill: Skill, canceled?: boolean}[];
+    public skills: SkillDetail[];
     public containers: Object[];
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
     public details: StatisticDetail;
@@ -177,7 +184,7 @@ export class CharacterComponent {
 
         this._characterService.loadHistory(this.character.id, this.historyPage).subscribe(
             res => {
-                if (res.length == 0) {
+                if (res.length === 0) {
                     this.loadMore = false;
                     return;
                 }
@@ -191,7 +198,7 @@ export class CharacterComponent {
                     l.date = new Date(l.date);
 
                     let day = l.date.toString().substring(0, 15);
-                    if (!this.currentDay || day != this.currentDay) {
+                    if (!this.currentDay || day !== this.currentDay) {
                         this.currentDay = day;
                         logs = [];
                         this.history.push({logs: logs, date: l.date});
@@ -214,19 +221,19 @@ export class CharacterComponent {
         if (this.evEditField == null) {
             return;
         }
-        if (this.evEditField == 'max') {
+        if (this.evEditField === 'max') {
             this.changeCharacterStat('ev', this.stats['EV']);
             this.evEditField = null;
             return;
         }
-        if (isNaN(parseInt(this.evEditField))) {
+        if (isNaN(parseInt(this.evEditField, 10))) {
             this.evEditField = null;
             return;
         }
-        if (this.evEditField.lastIndexOf('+', 0) == 0 || this.evEditField.lastIndexOf('-', 0) == 0) {
-            this.changeCharacterStat('ev', this.character.ev + parseInt(this.evEditField));
+        if (this.evEditField.lastIndexOf('+', 0) === 0 || this.evEditField.lastIndexOf('-', 0) === 0) {
+            this.changeCharacterStat('ev', this.character.ev + parseInt(this.evEditField, 10));
         } else {
-            this.changeCharacterStat('ev', parseInt(this.evEditField));
+            this.changeCharacterStat('ev', parseInt(this.evEditField, 10));
         }
         this.evEditField = null;
     }
@@ -237,19 +244,19 @@ export class CharacterComponent {
         if (this.eaEditField == null) {
             return;
         }
-        if (this.eaEditField == 'max') {
+        if (this.eaEditField === 'max') {
             this.changeCharacterStat('ea', this.stats['EA']);
             this.eaEditField = null;
             return;
         }
-        if (isNaN(parseInt(this.eaEditField))) {
+        if (isNaN(parseInt(this.eaEditField, 10))) {
             this.eaEditField = null;
             return;
         }
-        if (this.eaEditField.lastIndexOf('+', 0) == 0 || this.eaEditField.lastIndexOf('-', 0) == 0) {
-            this.changeCharacterStat('ea', this.character.ea + parseInt(this.eaEditField));
+        if (this.eaEditField.lastIndexOf('+', 0) === 0 || this.eaEditField.lastIndexOf('-', 0) === 0) {
+            this.changeCharacterStat('ea', this.character.ea + parseInt(this.eaEditField, 10));
         } else {
-            this.changeCharacterStat('ea', parseInt(this.eaEditField));
+            this.changeCharacterStat('ea', parseInt(this.eaEditField, 10));
         }
         this.eaEditField = null;
     }
@@ -284,11 +291,11 @@ export class CharacterComponent {
         }
         if (this.character.specialities) {
             for (let i = 0; i < this.character.specialities.length; i++) {
-                var speciality = this.character.specialities[i];
+                let speciality = this.character.specialities[i];
                 if (speciality.specials) {
                     for (let j = 0; j < speciality.specials.length; j++) {
-                        var special = speciality.specials[j];
-                        if (special.token == token) {
+                        let special = speciality.specials[j];
+                        if (special.token === token) {
                             return true;
                         }
                     }
@@ -303,8 +310,8 @@ export class CharacterComponent {
     }
 
     getLevelForXp(): number {
-        var level = 1;
-        var xp = this.character.experience;
+        let level = 1;
+        let xp = this.character.experience;
         while (xp >= level * 100) {
             xp -= level * 100;
             level++;
@@ -317,7 +324,7 @@ export class CharacterComponent {
         this.levelUpInfo.EVorEA = 'EV';
         this.levelUpInfo.EVorEAValue = null;
         this.levelUpInfo.targetLevelUp = this.character.level + 1;
-        if (this.levelUpInfo.targetLevelUp % 2 == 0) {
+        if (this.levelUpInfo.targetLevelUp % 2 === 0) {
             this.levelUpInfo.statToUp = 'FO';
         }
         else {
@@ -327,7 +334,7 @@ export class CharacterComponent {
 
     rollLevelUp() {
         var diceLevelUp = this.character.origin.diceEVLevelUp;
-        if (this.levelUpInfo.EVorEA == 'EV') {
+        if (this.levelUpInfo.EVorEA === 'EV') {
             if (this.characterHasToken('LEVELUP_DICE_EV_-1')) {
                 this.levelUpInfo.EVorEAValue = Math.max(1, Math.ceil(Math.random() * diceLevelUp) - 1);
                 return;
@@ -343,15 +350,15 @@ export class CharacterComponent {
     }
 
     levelUpShouldSelectSkill() {
-        return this.levelUpInfo.targetLevelUp == 3
-            || this.levelUpInfo.targetLevelUp == 6
-            || this.levelUpInfo.targetLevelUp == 10;
+        return this.levelUpInfo.targetLevelUp === 3
+            || this.levelUpInfo.targetLevelUp === 6
+            || this.levelUpInfo.targetLevelUp === 10;
     }
 
     levelUpShouldSelectSpeciality() {
         return this.characterHasToken('SELECT_SPECIALITY_LVL_5_10')
             && !this.characterHasToken('ONE_SPECIALITY')
-            && (this.levelUpInfo.targetLevelUp == 5 || this.levelUpInfo.targetLevelUp == 10);
+            && (this.levelUpInfo.targetLevelUp === 5 || this.levelUpInfo.targetLevelUp === 10);
     }
 
     levelUpSelectSpeciality(speciality) {
@@ -410,29 +417,29 @@ export class CharacterComponent {
     }
 
     getDetailCategoryForStat(statName: string) {
-        if (statName == 'EV' || statName == 'EA') {
+        if (statName === 'EV' || statName === 'EA') {
             return 'evea';
         }
-        if (statName == 'AT' || statName == 'PRD' || statName == 'PR' || statName == 'PR_MAGIC') {
+        if (statName === 'AT' || statName === 'PRD' || statName === 'PR' || statName === 'PR_MAGIC') {
             return 'atprd';
         }
-        if (statName == 'COU'
-            || statName == 'FO'
-            || statName == 'AD'
-            || statName == 'CHA'
-            || statName == 'INT') {
+        if (statName === 'COU'
+            || statName === 'FO'
+            || statName === 'AD'
+            || statName === 'CHA'
+            || statName === 'INT') {
             return 'stat';
         }
-        if (statName == 'MV'
-            || statName == 'THROW_MODIFIER'
-            || statName == 'DISCRETION_MODIFIER'
-            || statName == 'DANSE_MODIFIER'
-            || statName == 'PI') {
+        if (statName === 'MV'
+            || statName === 'THROW_MODIFIER'
+            || statName === 'DISCRETION_MODIFIER'
+            || statName === 'DANSE_MODIFIER'
+            || statName === 'PI') {
             return 'other';
         }
-        if (statName == 'RESM'
-            || statName == 'MPSY'
-            || statName == 'MPHYS') {
+        if (statName === 'RESM'
+            || statName === 'MPSY'
+            || statName === 'MPHYS') {
             return 'magic';
         }
         return 'unk';
@@ -444,14 +451,17 @@ export class CharacterComponent {
             if (!data.hasOwnProperty(i)) {
                 continue;
             }
-            var category = this.getDetailCategoryForStat(i);
+            let category = this.getDetailCategoryForStat(i);
             if (!this.details[category]) {
                 this.details[category] = [];
             }
             categories[category] = 1;
         }
-        for (var i in categories) {
-            if (i == 'evea') {
+        for (let i in categories) {
+            if (!categories.hasOwnProperty(i)) {
+                continue;
+            }
+            if (i === 'evea') {
                 this.details.evea.push({
                     name: name,
                     data: {
@@ -460,7 +470,7 @@ export class CharacterComponent {
                     }
                 });
             }
-            if (i == 'atprd') {
+            if (i === 'atprd') {
                 this.details.atprd.push({
                     name: name,
                     data: {
@@ -471,7 +481,7 @@ export class CharacterComponent {
                     }
                 });
             }
-            if (i == 'stat') {
+            if (i === 'stat') {
                 this.details.stat.push({
                     name: name,
                     data: {
@@ -483,7 +493,7 @@ export class CharacterComponent {
                     }
                 });
             }
-            if (i == 'other') {
+            if (i === 'other') {
                 this.details.other.push({
                     name: name,
                     data: {
@@ -495,7 +505,7 @@ export class CharacterComponent {
                     }
                 });
             }
-            if (i == 'magic') {
+            if (i === 'magic') {
                 this.details.magic.push({
                     name: name,
                     data: {
@@ -509,24 +519,24 @@ export class CharacterComponent {
     }
 
     // Concatenate modifiers like [-2 PRD] and [+2 PRD for dwarf]
-    cleanItemModifiers(item: Item) {
-        var cleanModifiers: ItemStatModifier[] = [];
+    cleanItemModifiers(item: Item): ItemStatModifier[] {
+        let cleanModifiers: ItemStatModifier[] = [];
         if (item.template.modifiers) {
             for (let i = 0; i < item.template.modifiers.length; i++) {
                 let modifier = item.template.modifiers[i];
-                if (modifier.job && modifier.job != this.character.job.id) {
+                if (modifier.job && modifier.job !== this.character.job.id) {
                     continue;
                 }
-                if (modifier.origin && modifier.origin != this.character.origin.id) {
+                if (modifier.origin && modifier.origin !== this.character.origin.id) {
                     continue;
                 }
                 let newModifier = JSON.parse(JSON.stringify(modifier));
                 for (let j = 0; j < cleanModifiers.length; j++) {
                     let newMod = cleanModifiers[j];
-                    if (newModifier.stat == newMod.stat
-                        && newModifier.type == newMod.type
-                        && (!newModifier.special || newModifier.special.length == 0)
-                        && (!newMod.special || newMod.special.length == 0)) {
+                    if (newModifier.stat === newMod.stat
+                        && newModifier.type === newMod.type
+                        && (!newModifier.special || newModifier.special.length === 0)
+                        && (!newMod.special || newMod.special.length === 0)) {
                         newMod.value += newModifier.value;
                         newModifier = null;
                         break;
@@ -597,31 +607,32 @@ export class CharacterComponent {
             let detailData = {};
             if (speciality.modifiers) {
                 for (let j = 0; j < speciality.modifiers.length; j++) {
-                    var modifier = speciality.modifiers[j];
+                    let modifier = speciality.modifiers[j];
                     this.stats[modifier.stat] += modifier.value;
                     detailData[modifier.stat] = modifier.value;
                 }
             }
             this.addDetails('Specialite: ' + speciality.name, detailData);
         }
+
         for (let i = 0; i < this.character.modifiers.length; i++) {
             let modifier = this.character.modifiers[i];
             let detailData = {};
             for (let j = 0; j < modifier.values.length; j++) {
-                var value = modifier.values[j];
-                if (value.type == 'ADD') {
+                let value = modifier.values[j];
+                if (value.type === 'ADD') {
                     this.stats[value.stat] += value.value;
                 }
-                else if (value.type == 'SET') {
+                else if (value.type === 'SET') {
                     this.stats[value.stat] = value.value;
                 }
-                else if (value.type == 'DIV') {
+                else if (value.type === 'DIV') {
                     this.stats[value.stat] /= value.value;
                 }
-                else if (value.type == 'MUL') {
+                else if (value.type === 'MUL') {
                     this.stats[value.stat] *= value.value;
                 }
-                else if (value.type == 'PERCENTAGE') {
+                else if (value.type === 'PERCENTAGE') {
                     this.stats[value.stat] *= (value.value / 100);
                 }
                 detailData[value.stat] = formatModifierValue(value);
@@ -658,7 +669,7 @@ export class CharacterComponent {
                 let slot = item.template.slots[s];
                 for (let i2 = 0; i2 < this.itemsBySlots[slot.id].length; i2++) {
                     let item2 = this.itemsBySlots[slot.id][i2];
-                    if (item2.id == item.id) {
+                    if (item2.id === item.id) {
                         continue;
                     }
                     if (item.equiped < item2.equiped) {
@@ -669,12 +680,12 @@ export class CharacterComponent {
             }
 
             let cleanModifiers = this.cleanItemModifiers(item);
-            for (let m in cleanModifiers) {
+            for (let m = 0; m < cleanModifiers.length; m++) {
                 let modifier = cleanModifiers[m];
-                if (modifier.job && modifier.job != this.character.job.id) {
+                if (modifier.job && modifier.job !== this.character.job.id) {
                     continue;
                 }
-                if (modifier.origin && modifier.origin != this.character.origin.id) {
+                if (modifier.origin && modifier.origin !== this.character.origin.id) {
                     continue;
                 }
                 let affectStats = true;
@@ -695,13 +706,13 @@ export class CharacterComponent {
                         affectStats = false;
                     }
                     if (modifier.special.indexOf("AFFECT_ONLY_MELEE") >= 0) {
-                        //FIXME
+                        // FIXME
                     }
                     if (modifier.special.indexOf("AFFECT_ONLY_MELEE_STAFF") >= 0) {
-                        //FIXME
+                        // FIXME
                     }
                     if (modifier.special.indexOf("AFFECT_PR_FOR_ELEMENTS") >= 0) {
-                        //FIXME
+                        // FIXME
                     }
                     if (modifier.special.indexOf("AFFECT_DISCRETION") >= 0) {
                         overrideStatName = 'DISCRETION_MODIFIER';
@@ -711,19 +722,19 @@ export class CharacterComponent {
                     }
                 }
                 if (affectStats) {
-                    if (modifier.type == 'ADD') {
+                    if (modifier.type === 'ADD') {
                         this.stats[overrideStatName] += modifier.value;
                     }
-                    else if (modifier.type == 'SET') {
+                    else if (modifier.type === 'SET') {
                         this.stats[overrideStatName] = modifier.value;
                     }
-                    else if (modifier.type == 'DIV') {
+                    else if (modifier.type === 'DIV') {
                         this.stats[overrideStatName] /= modifier.value;
                     }
-                    else if (modifier.type == 'MUL') {
+                    else if (modifier.type === 'MUL') {
                         this.stats[overrideStatName] *= modifier.value;
                     }
-                    else if (modifier.type == 'PERCENTAGE') {
+                    else if (modifier.type === 'PERCENTAGE') {
                         this.stats[overrideStatName] *= (modifier.value / 100);
                     }
                     if (modifications[overrideStatName] == null) {
@@ -760,20 +771,20 @@ export class CharacterComponent {
             let effect = this.character.effects[i];
             let detailData = {};
             for (let j = 0; j < effect.modifiers.length; j++) {
-                var modifier = effect.modifiers[j];
-                if (modifier.type == 'ADD') {
+                let modifier = effect.modifiers[j];
+                if (modifier.type === 'ADD') {
                     this.stats[modifier.stat] += modifier.value;
                 }
-                else if (modifier.type == 'SET') {
+                else if (modifier.type === 'SET') {
                     this.stats[modifier.stat] = modifier.value;
                 }
-                else if (modifier.type == 'DIV') {
+                else if (modifier.type === 'DIV') {
                     this.stats[modifier.stat] /= modifier.value;
                 }
-                else if (modifier.type == 'MUL') {
+                else if (modifier.type === 'MUL') {
                     this.stats[modifier.stat] *= modifier.value;
                 }
-                else if (modifier.type == 'PERCENTAGE') {
+                else if (modifier.type === 'PERCENTAGE') {
                     this.stats[modifier.stat] *= (modifier.value / 100);
                 }
                 detailData[modifier.stat] = formatModifierValue(modifier);
@@ -802,8 +813,8 @@ export class CharacterComponent {
 
 
         if (this.character.job) {
-            for (var i in this.character.job.skills) {
-                var skill = this.character.job.skills[i];
+            for (let i = 0; i < this.character.job.skills.length; i++) {
+                let skill = this.character.job.skills[i];
                 this.skills.push({
                     skill: JSON.parse(JSON.stringify(skill)),
                     from: [this.character.job.name]
@@ -828,13 +839,13 @@ export class CharacterComponent {
             return a.skill.name.localeCompare(b.skill.name);
         });
 
-        var prevSkill = null;
+        let prevSkill: SkillDetail = null;
         for (let i = 0; i < this.skills.length; i++) {
             let skill = this.skills[i];
             if (skill.skill.id in canceledSkills) {
                 skill.canceled = canceledSkills[skill.skill.id];
             }
-            if (prevSkill && skill.skill.id == prevSkill.skill.id) {
+            if (prevSkill && skill.skill.id === prevSkill.skill.id) {
                 prevSkill.from.push(skill.from[0]);
                 this.skills.splice(i, 1);
                 i--;
@@ -847,7 +858,7 @@ export class CharacterComponent {
             let skill = this.skills[i];
             if (!skill.canceled && skill.skill.effects && skill.skill.effects.length > 0) {
                 let detailData = {};
-                for (var j = 0; j < skill.skill.effects.length; j++) {
+                for (let j = 0; j < skill.skill.effects.length; j++) {
                     let modifier = skill.skill.effects[j];
                     this.stats[modifier.stat] += modifier.value;
                     detailData[modifier.stat] = modifier.value;
@@ -937,7 +948,7 @@ export class CharacterComponent {
             res => {
                 for (let i = 0; i < this.character.effects.length; i++) {
                     let e = this.character.effects[i];
-                    if (e.id == res.id) {
+                    if (e.id === res.id) {
                         this.character.effects.splice(i, 1);
                         break;
                     }
@@ -982,7 +993,7 @@ export class CharacterComponent {
             res => {
                 for (let i = 0; i < this.character.modifiers.length; i++) {
                     let e = this.character.modifiers[i];
-                    if (e.id == res.id) {
+                    if (e.id === res.id) {
                         this.character.modifiers.splice(i, 1);
                         break;
                     }
@@ -1012,7 +1023,7 @@ export class CharacterComponent {
     public itemAddQuantity: number;
 
     updateFilterItem() {
-        if (this.selectedInventoryTab == 'add') {
+        if (this.selectedInventoryTab === 'add') {
             this.updateFilterAddItem();
         }
     }
@@ -1038,7 +1049,7 @@ export class CharacterComponent {
         if (item.quantifiable) {
             this.itemAddQuantity = 1;
         } else {
-            delete this.itemAddQuantity;
+            this.itemAddQuantity = null;
         }
         return false;
     }
@@ -1049,24 +1060,29 @@ export class CharacterComponent {
     }
 
     isAddItemSelected(item) {
-        return this.selectedAddItem && this.selectedAddItem.id == item.id;
+        return this.selectedAddItem && this.selectedAddItem.id === item.id;
     }
 
     addItem() {
         if (this.character) {
-            this._itemService.addItem(this.character.id, this.selectedAddItem.id, this.itemAddCustomName, this.itemAddCustomDescription, this.itemAddQuantity).subscribe(
-                res => {
-                    this.character.items.push(res);
-                    this.selectedItem = res;
-                    this.updateInventory();
-                    this.updateStats();
-                    this.itemFilterName = "";
-                    delete this.selectedAddItem;
-                    delete this.itemAddCustomName;
-                    delete this.itemAddCustomDescription;
-                    delete this.itemAddQuantity;
-                }
-            );
+            this._itemService.addItem(this.character.id
+                , this.selectedAddItem.id
+                , this.itemAddCustomName
+                , this.itemAddCustomDescription
+                , this.itemAddQuantity)
+                .subscribe(
+                    res => {
+                        this.character.items.push(res);
+                        this.selectedItem = res;
+                        this.updateInventory();
+                        this.updateStats();
+                        this.itemFilterName = "";
+                        this.selectedAddItem = null;
+                        this.itemAddCustomName = null;
+                        this.itemAddCustomDescription = null;
+                        this.itemAddQuantity = null;
+                    }
+                );
         }
     }
 
@@ -1082,7 +1098,7 @@ export class CharacterComponent {
         if (!this.itemFilterName) {
             return true;
         }
-        var cleanFilter = removeDiacritics(this.itemFilterName).toLowerCase();
+        let cleanFilter = removeDiacritics(this.itemFilterName).toLowerCase();
         if (removeDiacritics(item.name).toLowerCase().indexOf(cleanFilter) > -1) {
             return true;
         }
@@ -1092,13 +1108,13 @@ export class CharacterComponent {
         return false;
     }
 
-    itemAction(event, item: Item) {
+    itemAction(event: any, item: Item) {
         if (!this.character) {
             return false;
         }
-        if (event.action == 'equip' || event.action == 'unequip') {
+        if (event.action === 'equip' || event.action === 'unequip') {
             let level = 0;
-            if (event.action == 'equip') {
+            if (event.action === 'equip') {
                 level = 1;
                 if (event.level != null) {
                     level = event.level;
@@ -1116,12 +1132,12 @@ export class CharacterComponent {
                 }
             );
         }
-        else if (event.action == 'delete') {
+        else if (event.action === 'delete') {
             this._itemService.deleteItem(item.id).subscribe(
                 deletedItem => {
                     for (let i = 0; i < this.character.items.length; i++) {
                         let it = this.character.items[i];
-                        if (it.id == deletedItem.id) {
+                        if (it.id === deletedItem.id) {
                             this.character.items.splice(i, 1);
                             break;
                         }
@@ -1136,13 +1152,14 @@ export class CharacterComponent {
                 }
             );
         }
-        else if (event.action == 'update_quantity') {
+        else if (event.action === 'update_quantity') {
             let quantity = item.quantity;
+            let inputQuantity = event.quantity as string;
 
-            if (event.quantity.startsWith('+') || event.quantity.startsWith('-')) {
-                quantity = quantity + parseInt(event.quantity);
+            if (inputQuantity.indexOf('+') === 0 || inputQuantity.indexOf('-') === 0) {
+                quantity = quantity + parseInt(inputQuantity, 10);
             } else {
-                quantity = parseInt(event.quantity);
+                quantity = parseInt(inputQuantity, 10);
             }
 
             this._itemService.updateQuantity(item.id, quantity).subscribe(
@@ -1157,7 +1174,7 @@ export class CharacterComponent {
                 }
             );
         }
-        else if (event.action == 'use_charge') {
+        else if (event.action === 'use_charge') {
             this._itemService.updateCharge(item.id, item.charge - 1).subscribe(
                 res => {
                     item.charge = res.charge;
@@ -1170,7 +1187,7 @@ export class CharacterComponent {
                 }
             );
         }
-        else if (event.action == 'move_to_container') {
+        else if (event.action === 'move_to_container') {
             this._itemService.moveToContainer(item.id, event.container).subscribe(
                 res => {
                     if (!res || !res.id) {
@@ -1186,7 +1203,7 @@ export class CharacterComponent {
                 }
             );
         }
-        else if (event.action == 'edit_item_name') {
+        else if (event.action === 'edit_item_name') {
             let data = {
                 name: event.name,
                 description: event.description
@@ -1240,7 +1257,7 @@ export class CharacterComponent {
                 }
             }
 
-            for (var s in item.template.slots) {
+            for (let s = 0; s < item.template.slots.length; s++) {
                 let slot = item.template.slots[s];
                 if (!itemsBySlotsAll[slot.id]) {
                     itemsBySlotsAll[slot.id] = [];
@@ -1281,14 +1298,14 @@ export class CharacterComponent {
         for (let i = 0; i < slots.length; i++) {
             let slot = slots[i];
             itemsBySlots[slot.id].sort(function (a: Item, b: Item) {
-                if (a.equiped == b.equiped) {
+                if (a.equiped === b.equiped) {
                     return 0;
                 }
                 if (a.equiped < b.equiped) {
                     return 1;
                 }
                 return -1;
-            })
+            });
         }
 
         this.itemsEquiped = equiped;
@@ -1306,7 +1323,7 @@ export class CharacterComponent {
             res => {
                 for (let i = 0; i < this.character.invites.length; i++) {
                     let e = this.character.invites[i];
-                    if (e.id == res.group.id) {
+                    if (e.id === res.group.id) {
                         this.character.invites.splice(i, 1);
                         break;
                     }
@@ -1325,7 +1342,7 @@ export class CharacterComponent {
         return false;
     }
 
-    acceptInvite(group) {
+    acceptInvite(group: IMetadata) {
         this._characterService.joinGroup(this.character.id, group.id).subscribe(
             res => {
                 this.character.invites = [];
