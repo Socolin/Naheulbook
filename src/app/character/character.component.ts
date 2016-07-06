@@ -20,6 +20,7 @@ import {CharacterService} from "./character.service";
 import {Character, CharacterModifier} from "./character.model";
 import {IMetadata} from '../shared/misc.model';
 import {ItemDetailComponent} from './item-detail.component';
+import {EffectCategory} from '../effect/effect.model';
 
 @Component({
     selector: 'bag-item-view',
@@ -918,6 +919,8 @@ export class CharacterComponent implements OnInit {
     // Effect
     private selectedEffect: Effect;
     private filteredEffects: Effect[];
+    private effectCategories: EffectCategory[];
+    private effectCategoriesById: {[categoryId: number]: EffectCategory};
     private effectFilterName: string;
     private selectedModifier: CharacterModifier;
 
@@ -993,7 +996,7 @@ export class CharacterComponent implements OnInit {
         }
     }
 
-    removeModifier(modifiers) {
+    removeModifier(modifiers: CharacterModifier) {
         this._characterService.removeModifier(this.character.id, modifiers.id).subscribe(
             res => {
                 for (let i = 0; i < this.character.modifiers.length; i++) {
@@ -1013,7 +1016,7 @@ export class CharacterComponent implements OnInit {
         );
     }
 
-    selectModifier(modifier) {
+    selectModifier(modifier: CharacterModifier) {
         this.selectedEffect = null;
         this.selectedModifier = modifier;
     }
@@ -1367,6 +1370,13 @@ export class CharacterComponent implements OnInit {
     }
 
     ngOnInit() {
+        this._effectService.getCategoryList().subscribe(
+            categories => {
+                this.effectCategories = categories;
+                this.effectCategoriesById = {};
+                categories.map(c => this.effectCategoriesById[c.id] = c);
+            });
+
         this._route.params.subscribe(
             param => {
                 let id = this.id;

@@ -36,7 +36,7 @@
 			</li>
 			<template ngFor let-character [ngForOf]="group.characters">
 				<li role="presentation">
-					<a class="bg-info" *ngIf="character.active" href="#character_{{character.id}}" [attr.aria-controls]="'character_' + character.id" role="tab" data-toggle="tab">
+					<a [class.bg-warning]="character.isNpc" [class.bg-info]="!character.isNpc" *ngIf="character.active" href="#character_{{character.id}}" [attr.aria-controls]="'character_' + character.id" role="tab" data-toggle="tab">
 						{{character.name}}
 					</a>
 				</li>

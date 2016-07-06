@@ -16,7 +16,7 @@ export interface CharacterResume {
 
 export class CharacterModifier {
     name: string;
-    values: StatModifier[];
+    values: StatModifier[] = [];
     permanent: boolean;
     duration: string;
     id: number;
