@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {LoginService} from "../user";
@@ -9,6 +9,7 @@ import {ItemElementComponent} from './item-element.component';
 import {ItemSection, ItemTemplate} from "./item-template.model";
 import {ItemService} from "./item.service";
 import {removeDiacritics, ModifierPipe} from "../shared";
+import {Subscription} from 'rxjs/Rx';
 
 @Component({
     templateUrl: 'app/item/item-list.component.html',
@@ -24,15 +25,16 @@ import {removeDiacritics, ModifierPipe} from "../shared";
         `
     ]
 })
-export class ItemListComponent implements OnInit {
-    public itemSections: ItemSection[];
-    public items: ItemTemplate[] = [];
-    public itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
-    public selectedSection: ItemSection;
-    public filter: {name: string, dice: number};
-    public originsName: {[originId: number]: string};
-    public jobsName: {[jobId: number]: string};
-    public editable: boolean = true;
+export class ItemListComponent implements OnInit, OnDestroy {
+    private itemSections: ItemSection[];
+    private items: ItemTemplate[] = [];
+    private itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
+    private selectedSection: ItemSection;
+    private filter: {name: string, dice: number};
+    private originsName: {[originId: number]: string};
+    private jobsName: {[jobId: number]: string};
+    private editable: boolean = true;
+    private sub: Subscription;
 
     constructor(private _router: Router
         , private _loginService: LoginService
@@ -123,7 +125,7 @@ export class ItemListComponent implements OnInit {
     ngOnInit() {
         this._itemService.getSectionsList().subscribe(sections => {
             this.itemSections = sections;
-            this._router.routerState.queryParams.subscribe(params => {
+            this.sub = this._router.routerState.queryParams.subscribe(params => {
                 let id = +params['id'];
                 this.selectSectionById(id);
             });
@@ -154,6 +156,12 @@ export class ItemListComponent implements OnInit {
                 this.editable = false;
                 console.log(err);
             });
+    }
+
+    ngOnDestroy() {
+        if (this.sub) {
+            this.sub.unsubscribe();
+        }
     }
 }
 

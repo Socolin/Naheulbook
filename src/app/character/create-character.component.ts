@@ -237,7 +237,7 @@ export class CreateCharacterComponent {
     /// END SUPER_BOURRIN
 
     /// MOVE_1_POINT_STAT
-    public move1PointStatValues: Object;
+    public move1PointStatValues: {[statName: string]: number};
 
     hasMove1PointStat() {
         return this.hasBonus('MOVE_1_POINT_STAT');
@@ -247,6 +247,9 @@ export class CreateCharacterComponent {
         let foundNegative = 0;
         let foundPositive = 0;
         for (let i in this.move1PointStatValues) {
+            if (!this.move1PointStatValues.hasOwnProperty(i)) {
+                continue;
+            }
             let value = this.move1PointStatValues[i];
             if (value === 1) {
                 foundPositive++;
@@ -268,8 +271,11 @@ export class CreateCharacterComponent {
     updateMove1PointStat() {
         if (this.isMove1PointStatValid()) {
             for (let i in this.move1PointStatValues) {
+                if (!this.move1PointStatValues.hasOwnProperty(i)) {
+                    continue;
+                }
                 let value = this.move1PointStatValues[i];
-                if (value != 0) {
+                if (value !== 0) {
                     this.modifiedStat['MOVE_1_POINT_STAT'][i] = value;
                     this.modifiedStat['MOVE_1_POINT_STAT'].name = "Polyvalence ranger";
                 } else {
@@ -457,9 +463,22 @@ export class CreateCharacterComponent {
 
         creationData['fatePoint'] = this.fatePoint;
 
+
+        if (this._router.routerState.snapshot.queryParams.hasOwnProperty('isNpc')) {
+            creationData['isNpc'] = this._router.routerState.snapshot.queryParams['isNpc'];
+        }
+        if (this._router.routerState.snapshot.queryParams.hasOwnProperty('groupId')) {
+            creationData['groupId'] = +this._router.routerState.snapshot.queryParams['groupId'];
+        }
+
         this._characterService.createCharacter(creationData).subscribe(
             res => {
-                this._router.navigate(['/character/detail', res.id]);
+                if (this._router.routerState.snapshot.queryParams.hasOwnProperty('groupId')) {
+                    this._router.navigate(['/character/group'
+                        , +this._router.routerState.snapshot.queryParams['groupId']]);
+                } else {
+                    this._router.navigate(['/character/detail', res.id]);
+                }
             },
             err => {
                 this._notification.error("Erreur", "Erreur serveur");
@@ -467,6 +486,5 @@ export class CreateCharacterComponent {
             }
         );
     }
-
 }
 

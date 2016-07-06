@@ -89,7 +89,7 @@
 			<div role="tabpanel" class="list-group tab-pane active" id="characters">
 				<div class="col-xl-4 col-md-5 col-sm-6">
 					<template ngFor let-character [ngForOf]="group.characters">
-						<div class="list-group-item">
+						<div *ngIf="!character.isNpc" class="list-group-item">
 							<h3>
 								{{character.name}} - Lvl{{character.level}}
 								<span class="pull-right">
@@ -121,24 +121,24 @@
 					</template>
 				</div>
 				<div class="col-xl-4 col-md-5 col-sm-6">
-					<template ngFor let-npc [ngForOf]="group.npcs">
-						<div class="list-group-item">
-							<h3>
-								{{npc.name}} - Lvl{{npc.level}}
-								<span class="pull-right">
+                    <template ngFor let-character [ngForOf]="group.characters">
+                        <div *ngIf="character.isNpc" class="list-group-item">
+                            <h3>
+                                {{character.name}} - Lvl{{character.level}}
+                                <span class="pull-right">
 									<button
-											class="btn glyphicon glyphicon-off"
-											[class.btn-success]="npc.active"
-											[class.btn-danger]="!npc.active"
-											(click)="toggleActiveCharacter(character)">
+                                        class="btn glyphicon glyphicon-off"
+                                        [class.btn-success]="character.active"
+                                        [class.btn-danger]="!character.active"
+                                        (click)="toggleActiveCharacter(character)">
 									</button>
 								</span>
-							</h3>
-							<div>
-								{{npc.origin.name}} <span *ngIf="npc.job"> - {{npc.job.name}} </span>
-							</div>
-						</div>
-					</template>
+                            </h3>
+                            <div>
+                                {{character.origin.name}} <span *ngIf="character.job"> - {{character.job.name}} </span>
+                            </div>
+                        </div>
+                    </template>
 					<a href="#" (click)="createNpc()" class="list-group-item">
 						Ajouter un npc
 					</a>

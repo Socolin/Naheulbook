@@ -57,7 +57,7 @@ export class IndexComponent implements OnInit {
                 subscription.unsubscribe();
                 this.loggedUser = user;
                 if (user === null) {
-                    this._notifications.error('Acces interdit', 'Vous devez vous authentifier');
+                    this._notifications.error('Accès interdit', 'Vous devez vous authentifier');
                     this._router.navigate(['']);
                 }
             }
@@ -73,7 +73,7 @@ export class IndexComponent implements OnInit {
                 subscription.unsubscribe();
                 this.loggedUser = user;
                 if (user === null) {
-                    this._notifications.error('Acces interdit', 'Vous devez vous authentifier');
+                    this._notifications.error('Accès interdit', 'Vous devez vous authentifier');
                     this._router.navigate(['']);
                 }
             });

@@ -1,5 +1,6 @@
-import {Component, SimpleChanges, Input, OnInit, OnChanges} from '@angular/core';
+import {Component, SimpleChanges, Input, OnInit, OnChanges, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs/Rx';
 
 import {ModifierPipe} from "../shared";
 import {LoginService} from "../user";
@@ -13,13 +14,14 @@ import {EffectCategory, Effect} from "./effect.model";
     templateUrl: 'effect-list.component.html',
     pipes: [ModifierPipe]
 })
-export class EffectListComponent implements OnInit, OnChanges {
+export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputCategoryId: number = 1;
 
-    public selectedCategory: EffectCategory;
-    public categories: EffectCategory[];
-    public effects: Effect[] = [];
-    public editable: boolean = false;
+    private selectedCategory: EffectCategory;
+    private categories: EffectCategory[];
+    private effects: Effect[] = [];
+    private editable: boolean = false;
+    private sub: Subscription;
 
     constructor(private _router: Router
         , private _route: ActivatedRoute
@@ -73,7 +75,7 @@ export class EffectListComponent implements OnInit, OnChanges {
             if (this.isOverlay()) {
                 this.loadCategory(this.inputCategoryId);
             } else {
-                this._router.routerState.queryParams.subscribe(params => {
+                this.sub = this._router.routerState.queryParams.subscribe(params => {
                     let id = +params['id'];
                     this.loadCategory(id);
                 });
@@ -87,5 +89,11 @@ export class EffectListComponent implements OnInit, OnChanges {
                 this.editable = false;
                 console.log(err);
             });
+    }
+
+    ngOnDestroy() {
+        if (this.sub) {
+            this.sub.unsubscribe();
+        }
     }
 }

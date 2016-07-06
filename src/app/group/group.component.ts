@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output, OnInit, OnChanges} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HTTP_PROVIDERS} from '@angular/http';
 
 import {NotificationsService} from '../notifications';
@@ -90,6 +90,7 @@ export class GroupComponent implements OnInit, OnChanges {
     private selectedCombatRow: number = 0;
 
     constructor(private _route: ActivatedRoute
+        , private _router: Router
         , private _loginService: LoginService
         , private _groupService: GroupService
         , private _notification: NotificationsService
@@ -397,7 +398,7 @@ export class GroupComponent implements OnInit, OnChanges {
                     console.log(err);
                     this._notification.error("Erreur", "Erreur serveur");
                 }
-            )
+            );
         } else {
             this.filteredUsers = [];
         }
@@ -448,7 +449,7 @@ export class GroupComponent implements OnInit, OnChanges {
                 } else if (cou1 < cou2) {
                     return 1;
                 } else {
-                    let ad1 = first.stats.ad
+                    let ad1 = first.stats.ad;
                     let ad2 = second.stats.ad;
 
                     if (ad1 > ad2) {
@@ -547,6 +548,11 @@ export class GroupComponent implements OnInit, OnChanges {
                 }
             }
         );
+    }
+
+    createNpc() {
+        this._router.navigate(['/character/create'], {queryParams: {isNpc: true, groupId: this.group.id}});
+        return false;
     }
 
     ngOnInit() {
