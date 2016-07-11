@@ -19,7 +19,7 @@
                 <h4>Cartes</h4>
                 <ul>
                     <template ngFor let-map [ngForOf]="maps">
-                        <li>{{map.name}}</li>
+                        <li><a href="/data/images/maps/{{map.file}}">{{map.name}}</a></li>
                     </template>
                 </ul>
             </div>
