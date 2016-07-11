@@ -1,0 +1,10 @@
+<span style="position: relative">
+    <span style="position: absolute; top: 15px; left: 10px; z-index: 100;">
+        <div class="list-group" >
+            <template ngFor let-item [ngForOf]="values">
+                <a href="#" class="list-group-item" (click)="selectValue(item)">{{item.text}}</a>
+            </template>
+        </div>
+    </span>
+    <input class="form-control" [(ngModel)]="value" (ngModelChange)="updateList()" (click)="updateList()"/>
+</span>

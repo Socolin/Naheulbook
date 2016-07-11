@@ -10,7 +10,7 @@ import {MonsterListComponent} from './monster';
 import {CreateGroupComponent, GroupListComponent, GroupComponent} from './group';
 import {UserProfileComponent} from './user';
 import {LoggedComponent} from './user/logged.component';
-
+import {LocationListComponent, EditLocationComponent} from './location';
 
 export const routes: RouterConfig = [
     {
@@ -50,6 +50,10 @@ export const routes: RouterConfig = [
         component: EditItemComponent,
     },
     {
+        path: 'edit-location/:id',
+        component: EditLocationComponent,
+    },
+    {
         path: 'edit-effect/:id',
         component: EditEffectComponent,
     },
@@ -80,6 +84,10 @@ export const routes: RouterConfig = [
     {
         path: 'database/monsters',
         component: MonsterListComponent
+    },
+    {
+        path: 'database/locations',
+        component: LocationListComponent
     },
     {
         path: 'create-group',

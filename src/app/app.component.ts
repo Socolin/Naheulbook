@@ -11,6 +11,7 @@ import {OriginService} from './origin';
 import {SkillService} from './skill';
 import {CharacterService} from './character';
 import {User} from './user';
+import {LocationService} from './location/location.service';
 
 @Component({
     selector: 'index',
@@ -26,6 +27,7 @@ import {User} from './user';
         , OriginService
         , SkillService
         , CharacterService
+        , LocationService
     ],
 })
 export class IndexComponent implements OnInit {
@@ -54,7 +56,9 @@ export class IndexComponent implements OnInit {
         }
         let subscription = this._loginService.loggedUser.subscribe(
             user => {
-                subscription.unsubscribe();
+                if (subscription) {
+                    subscription.unsubscribe();
+                }
                 this.loggedUser = user;
                 if (user === null) {
                     this._notifications.error('Accès interdit', 'Vous devez vous authentifier');

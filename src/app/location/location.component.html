@@ -1,0 +1,31 @@
+<div>
+    <div (click)="toggleFolded()">
+        <h3>
+            <span class="glyphicon" [class.glyphicon-chevron-right]="folded"
+                  [class.glyphicon-chevron-down]="!folded"></span>
+            {{location.name}}
+            <span *ngIf="editable" (click)="editLocation()"><span class="glyphicon glyphicon-edit"></span></span>
+        </h3>
+    </div>
+    <div style="padding-left:10px; margin-left: 10px;border-left: 1px solid lightgrey">
+        <div [hidden]="folded">
+            <div *ngIf="location?.data?.description">
+                <h4>Description</h4>
+                <div [innerHTML]="location.data.description | textFormatter">
+
+                </div>
+            </div>
+            <div *ngIf="maps && maps.length">
+                <h4>Cartes</h4>
+                <ul>
+                    <template ngFor let-map [ngForOf]="maps">
+                        <li>{{map.name}}</li>
+                    </template>
+                </ul>
+            </div>
+        </div>
+        <template ngFor let-son [ngForOf]="location.sons">
+            <location [editable]="editable" [location]="son"></location>
+        </template>
+    </div>
+</div>

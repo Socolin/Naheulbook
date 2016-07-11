@@ -1,0 +1,6 @@
+<template [ngIf]="!rootLocation">
+    Loading...
+</template>
+<template [ngIf]="rootLocation">
+    <location [editable]="editable" [location]="rootLocation"></location>
+</template>

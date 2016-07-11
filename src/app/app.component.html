@@ -22,6 +22,7 @@
 						<li><a [routerLink]="['/database/effects']">Effets</a></li>
 						<li *ngIf="loggedUser && loggedUser.admin"><a [routerLink]="['/create-effect']">Créer un effet</a></li>
 						<li><a [routerLink]="['/database/monsters']">Bestiaire</a></li>
+						<li><a [routerLink]="['/database/locations']">Cartographie</a></li>
 					</ul>
 				</li>
 				<li *ngIf="loggedUser" class="dropdown">
