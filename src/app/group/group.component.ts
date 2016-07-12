@@ -13,7 +13,7 @@ import {EffectListComponent} from '../effect';
 import {SkillListComponent} from '../skill';
 import {Fighter} from './group.model';
 import {MonsterEditableFieldComponent} from './monster-editable-field.component';
-
+import {ValueEditorComponent} from '../shared';
 
 
 @Component({
@@ -69,6 +69,7 @@ export class TargetSelectorComponent {
         , CharacterColorSelectorComponent
         , TargetSelectorComponent
         , EffectListComponent
+        , ValueEditorComponent
         , SkillListComponent],
     styles: [`
         .even_row {
@@ -512,9 +513,10 @@ export class GroupComponent implements OnInit, OnChanges {
     }
 
     public historyNewEntryText: string = null;
+    public historyNewEntryGm: boolean = false;
 
     addLog() {
-        this._groupService.addLog(this.group.id, this.historyNewEntryText).subscribe(
+        this._groupService.addLog(this.group.id, this.historyNewEntryText, this.historyNewEntryGm).subscribe(
             () => {
                 this.historyNewEntryText = null;
                 this._notification.success("Historique", "Entrée ajoutée");
@@ -560,8 +562,12 @@ export class GroupComponent implements OnInit, OnChanges {
             params => {
                 let id = +params['id'];
                 this._characterService.getGroup(id).subscribe(
-                    res => {
-                        this.group = res;
+                    group => {
+                        if (!group.data) {
+                            group.data = {};
+                        }
+
+                        this.group = group;
                         this.updateOrder();
                     },
                     err => {

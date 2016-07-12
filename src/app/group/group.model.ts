@@ -4,6 +4,7 @@ import {Character} from '../character';
 export interface Group {
     id: number;
     name: string;
+    data: any;
     monsters: Monster[];
     invited: CharacterInviteInfo[];
     invites: CharacterInviteInfo[];

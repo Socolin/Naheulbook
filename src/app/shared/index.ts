@@ -11,3 +11,4 @@ export * from './plus-minus.pipe';
 export * from './modifiers-editor.component';
 export * from './textarea-autosize.directive';
 export * from './text-formatter.pipe';
+export * from './value-editor.component';

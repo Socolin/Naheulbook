@@ -38,9 +38,10 @@ export class GroupService {
         })).map(res => res.json());
     }
 
-    addLog(groupId: number, info): Observable<Object> {
+    addLog(groupId: number, info: string, is_gm: boolean): Observable<Object> {
         return this._http.post('/api/group/addLog', JSON.stringify({
             groupId: groupId,
+            is_gm: is_gm,
             info: info
         })).map(res => res.json());
     }

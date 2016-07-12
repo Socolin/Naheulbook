@@ -11,9 +11,7 @@
         <div [hidden]="folded">
             <div *ngIf="location?.data?.description">
                 <h4>Description</h4>
-                <div [innerHTML]="location.data.description | textFormatter">
-
-                </div>
+                <div [innerHTML]="location.data.description | textFormatter"></div>
             </div>
             <div *ngIf="maps && maps.length">
                 <h4>Cartes</h4>
