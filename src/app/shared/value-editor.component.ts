@@ -14,6 +14,7 @@ export class ValueEditorComponent implements OnChanges {
     private newValue: number = 0;
     private displayEditor: boolean = false;
     private xOffset: number = 0;
+    private yOffset: number = 0;
 
     constructor(private _renderer: Renderer
         , private _elementRef: ElementRef) {
@@ -27,8 +28,8 @@ export class ValueEditorComponent implements OnChanges {
         }
         let rect = element.getBoundingClientRect();
         element.hidden = h;
-        bbox.bottom = Math.min(bbox.bottom, rect.bottom);
-        bbox.top = Math.max(bbox.top, rect.top);
+        bbox.bottom = Math.max(bbox.bottom, rect.bottom);
+        bbox.top = Math.min(bbox.top, rect.top);
         bbox.right = Math.max(bbox.right, rect.right);
         bbox.left = Math.min(bbox.left, rect.left);
     }
@@ -51,6 +52,16 @@ export class ValueEditorComponent implements OnChanges {
         else if (bbox.left < 0) {
             this.xOffset = -bbox.left;
         }
+
+        console.log(bbox);
+        this.yOffset = 0;
+        if (bbox.bottom > window.innerHeight) {
+            this.yOffset = window.innerHeight - bbox.bottom;
+        }
+        else if (bbox.top < 0) {
+            this.yOffset = -bbox.top;
+        }
+
         this.displayEditor = !this.displayEditor;
     }
 

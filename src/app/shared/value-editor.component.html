@@ -1,6 +1,6 @@
 <span style="position: relative">
     <span (click)="showEditor()" style="font-size: larger">{{value}}<span *ngIf="maxValue">/{{maxValue}}</span></span>
-    <div [hidden]="!displayEditor" style="position: absolute; bottom: 15px; z-index: 100" [style.left]="(40 + xOffset)+ 'px'">
+    <div [hidden]="!displayEditor" style="position: absolute; z-index: 100" [style.bottom]="(15 - yOffset) + 'px'" [style.left]="(40 + xOffset)+ 'px'">
         <div class="form-control input-lg"
              style="padding-top: 10px; width: 60px; text-align: center; font-size: large; font-weight: bold">
             {{valueDelta}}
