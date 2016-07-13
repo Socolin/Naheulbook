@@ -134,33 +134,17 @@
 		 <div role="tabpanel" class="tab-pane" id="tab-combat_{{character.id}}">
 			<!-- Start of combat tab -->
 			<div class="row" style="font-size: medium;">
-				<div class="col-sm-6">
-					<div class="row">
-						<div class="col-xs-7" [class.bg-danger]="character.ev > stats.EV">
-							<span class="glyphicon glyphicon-heart text-danger" style="font-size: 1.3em;"></span> {{character.ev}} / {{stats.EV}}
-						</div>
-						<div class="col-xs-5">
-							<div class="form-group">
-								<input class="form-control input-sm" type="text" [(ngModel)]="evEditField" (blur)="modifyEv()" />
-							</div>
-							<div style="height: 0; width: 0; overflow: hidden;">
-								<input type="text" />
-							</div>
-						</div>
-					</div>
+				<div class="col-xs-6">
+                    <div [class.bg-danger]="character.ev > stats.EV" style="text-align: center">
+                        <span class="glyphicon glyphicon-heart text-danger" style="font-size: 1.3em;"></span>
+                        <value-editor [value]="character.ev" [maxValue]="stats.EV" (onChange)="changeCharacterStat('ev', $event)"></value-editor>
+                    </div>
 				</div>
-				<div class="col-sm-6">
-					<div class="row" *ngIf="character.ea != null">
-						<div class="col-xs-7" [class.bg-danger]="character.ea > stats.EA">
-							<span class="glyphicon glyphicon-star text-info" style="font-size: 1.3em;"></span> {{character.ea}} / {{stats.EA}}
-						</div>
-						<div class="col-xs-5">
-							<div class="form-group">
-								<input class="form-control input-sm" type="text" [(ngModel)]="eaEditField" (blur)="modifyEa()" />
-								<div style="height: 0; width: 0; overflow: hidden;">
-									<input type="text" />
-								</div>
-							</div>
+				<div class="col-xs-6">
+					<div *ngIf="character.ea != null">
+						<div [class.bg-danger]="character.ea > stats.EA" style="text-align: center">
+							<span class="glyphicon glyphicon-star text-info" style="font-size: 1.3em;"></span>
+                            <value-editor [value]="character.ea" [maxValue]="stats.EA" (onChange)="changeCharacterStat('ea', $event)"></value-editor>
 						</div>
 					</div>
 				</div>

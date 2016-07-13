@@ -114,10 +114,11 @@
                         <h3>Informations</h3>
                         <div>
                             Mankdebol:
-                            <value-editor [value]="group.data.mankdebol"></value-editor>
+                            <value-editor [value]="group.data.mankdebol" (onChange)="changeGroupValue('mankdebol', $event)"></value-editor>
                         </div>
                         <div>
-                            Débilibeuk: {{group.data.debilibeuk || 0}}
+                            Débilibeuk:
+                            <value-editor [value]="group.data.debilibeuk" (onChange)="changeGroupValue('debilibeuk', $event)"></value-editor>
                         </div>
                         <div>
                             Date: {{group.data.date}}
@@ -1669,7 +1670,7 @@
             <td>Tempête électrique</td>
             <td>Une tempête électrique de grande ampleur touche la zone, causant 1 D6 BL ignorant l'armure à chaque
                 assaut, touchant tout le monde. Mieux vaut prendre la fuite rapidement ! Rayon de 50 m,
-                environnement détruit à moins qu'il ne s'agisse de pierre.
+                environnement détruit à moins qu'il ne s'agissvalue de pierre.
             </td>
             <td>98</td>
         </tr>

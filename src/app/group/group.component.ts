@@ -557,6 +557,24 @@ export class GroupComponent implements OnInit, OnChanges {
         return false;
     }
 
+    changeGroupValue(key: string, value: any) {
+        this._groupService.editGroupValue(this.group.id, key, value).subscribe(
+            () => {
+                if (key === 'debilibeuk') {
+                    this._notification.info('Debilibeuk', this.group.data[key] + ' -> ' + value);
+                    this.group.data[key] = value;
+                } else if (key === 'mankdebol') {
+                    this._notification.info('Mankdebol', this.group.data[key] + ' -> ' + value);
+                    this.group.data[key] = value;
+                }
+            },
+            err => {
+                console.log(err);
+                this._notification.error('Erreur', 'Erreur serveur');
+            }
+        );
+    }
+
     ngOnInit() {
         this._route.params.subscribe(
             params => {

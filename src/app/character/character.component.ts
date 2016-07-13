@@ -11,7 +11,8 @@ import {
     removeDiacritics,
     ModifiersEditorComponent,
     PlusMinusPipe,
-    ItemStatModifier
+    ItemStatModifier,
+    ValueEditorComponent
 } from "../shared";
 
 import {Item} from "./item.model";
@@ -144,6 +145,7 @@ interface SkillDetail {
         , SpecialitySelectorComponent
         , ItemDetailComponent
         , ModifiersEditorComponent
+        , ValueEditorComponent
     ]
 })
 export class CharacterComponent implements OnInit {
@@ -219,52 +221,6 @@ export class CharacterComponent implements OnInit {
         );
         this.historyPage++;
         return false;
-    }
-
-    private evEditField: string;
-
-    modifyEv() {
-        if (this.evEditField == null) {
-            return;
-        }
-        if (this.evEditField === 'max') {
-            this.changeCharacterStat('ev', this.stats['EV']);
-            this.evEditField = null;
-            return;
-        }
-        if (isNaN(parseInt(this.evEditField, 10))) {
-            this.evEditField = null;
-            return;
-        }
-        if (this.evEditField.lastIndexOf('+', 0) === 0 || this.evEditField.lastIndexOf('-', 0) === 0) {
-            this.changeCharacterStat('ev', this.character.ev + parseInt(this.evEditField, 10));
-        } else {
-            this.changeCharacterStat('ev', parseInt(this.evEditField, 10));
-        }
-        this.evEditField = null;
-    }
-
-    private eaEditField: string;
-
-    modifyEa() {
-        if (this.eaEditField == null) {
-            return;
-        }
-        if (this.eaEditField === 'max') {
-            this.changeCharacterStat('ea', this.stats['EA']);
-            this.eaEditField = null;
-            return;
-        }
-        if (isNaN(parseInt(this.eaEditField, 10))) {
-            this.eaEditField = null;
-            return;
-        }
-        if (this.eaEditField.lastIndexOf('+', 0) === 0 || this.eaEditField.lastIndexOf('-', 0) === 0) {
-            this.changeCharacterStat('ea', this.character.ea + parseInt(this.eaEditField, 10));
-        } else {
-            this.changeCharacterStat('ea', parseInt(this.eaEditField, 10));
-        }
-        this.eaEditField = null;
     }
 
     setStatBonusAD(id: number, stat: string) {

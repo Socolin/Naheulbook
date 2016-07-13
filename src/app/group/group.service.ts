@@ -45,4 +45,12 @@ export class GroupService {
             info: info
         })).map(res => res.json());
     }
+
+    editGroupValue(groupId: number, key: string, value: any): Observable<Object> {
+        return this._http.post('/api/group/edit', JSON.stringify({
+            groupId: groupId,
+            key: key,
+            value: value
+        })).map(res => res.json());
+    }
 }
