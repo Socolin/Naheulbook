@@ -53,7 +53,6 @@ export class ValueEditorComponent implements OnChanges {
             this.xOffset = -bbox.left;
         }
 
-        console.log(bbox);
         this.yOffset = 0;
         if (bbox.bottom > window.innerHeight) {
             this.yOffset = window.innerHeight - bbox.bottom;

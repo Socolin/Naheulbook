@@ -101,10 +101,9 @@
 						<div class="col-sm-5 col-xs-5">
 							<strong>Point de destins</strong>
 						</div>
-						<div class="col-sm-2 col-xs-2">{{character.fatePoint}}</div>
-						<div class="col-sm-1 col-xs-1" *ngIf="character.fatePoint">
-							<button type="button" class="btn-xs btn btn-danger glyphicon glyphicon-minus" (click)="useFatePoint()"></button>
-						</div>
+						<div class="col-sm-5 col-xs-5">
+                            <value-editor [value]=character.fatePoint (onChange)="changeCharacterStat('fatePoint', $event)"></value-editor>
+                        </div>
 					</div>
 					<div class="row">
 						<div class="col-sm-5 col-xs-5">
@@ -121,11 +120,26 @@
 						<div class="col-sm-5 col-xs-5">
 							<strong>Experience</strong>
 						</div>
-						<div class="col-sm-2 col-xs-2">{{character.experience|number}}</div>
-						<div class="col-sm-1 col-xs-1">
-							<button type="button" class="btn-xs btn btn-primary glyphicon glyphicon-plus" data-toggle="modal" data-target="#modalAddXP"></button>
-						</div>
+						<div class="col-sm-2 col-xs-2">
+                            <value-editor [value]=character.experience (onChange)="changeCharacterStat('experience', $event)"></value-editor>
+                        </div>
 					</div>
+                    <div *ngIf="character.gmData" class="row">
+                        <div class="col-sm-5 col-xs-5">
+                            <strong>Debilibeuk</strong>
+                        </div>
+                        <div class="col-sm-5 col-xs-5">
+                            <value-editor [value]=character.gmData.debilibeuk (onChange)="changeGmData('debilibeuk', $event)"></value-editor>
+                        </div>
+                    </div>
+                    <div *ngIf="character.gmData" class="row">
+                        <div class="col-sm-5 col-xs-5">
+                            <strong>Mankdebol</strong>
+                        </div>
+                        <div class="col-sm-5 col-xs-5">
+                            <value-editor [value]=character.gmData.mankdebol (onChange)="changeGmData('mankdebol', $event)"></value-editor>
+                        </div>
+                    </div>
 				</div>
 			</div>
 			<!-- End of infos tab -->
@@ -654,6 +668,12 @@
 						<template [ngSwitchCase]="'EVENT_RP'">
 							{{log.info}}
 						</template>
+                        <template [ngSwitchCase]="'MANKDEBOL'">
+							Mankdebol: {{log.data.new}} -> {{log.data.new}}
+						</template>
+						<template [ngSwitchCase]="'DEBILIBEUK'">
+							Debilibeuk: {{log.data.old}} -> {{log.data.new}}
+						</template>
 						<template ngSwitchDefault>{{log.action}}: {{log.info}}</template>
 					</span>
 					</template>
@@ -704,6 +724,12 @@
 						<template [ngSwitchCase]="'MODIFY_EA'">
 							Modification EA: {{log.info}}
 						</template>
+						<template [ngSwitchCase]="'MANKDEBOL'">
+							Mankdebol: {{log.data.new}} -> {{log.data.new}}
+						</template>
+						<template [ngSwitchCase]="'DEBILIBEUK'">
+							Debilibeuk: {{log.data.old}} -> {{log.data.new}}
+						</template>
 						<template ngSwitchDefault>{{log.action}}</template>
 					</span>
 					</template>
@@ -717,35 +743,6 @@
 	 </div>
 
 	<div>
-		<!-- Experience modal -->
-		<div class="modal fade" id="modalAddXP" tabindex="-1" role="dialog" aria-labelledby="modalAddXPLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" id="modalAddXPLabel">Ajouter de l'experience</h4>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-sm-2">
-								<span>Experience: </span>
-							</div>
-							<div class="col-sm-10">
-								<input class="form-control" type="number" [(ngModel)]="experience" />
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button (click)="changeCharacterStat('experience', character.experience + experience)" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
 
 		<!-- Effect modal -->
 		<div class="modal fade" id="modalAddEffect" tabindex="-1" role="dialog" aria-labelledby="modalAddEffectLabel">

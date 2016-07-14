@@ -49,6 +49,7 @@ export class Character {
     };
     statsCache: any;
     color: string;
+    gmData: any;
     group: IMetadata;
     invites: IMetadata[];
 

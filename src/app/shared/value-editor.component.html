@@ -1,8 +1,11 @@
 <span style="position: relative">
-    <span (click)="showEditor()" style="font-size: larger">{{value}}<span *ngIf="maxValue">/{{maxValue}}</span></span>
-    <div [hidden]="!displayEditor" style="position: absolute; z-index: 100" [style.bottom]="(15 - yOffset) + 'px'" [style.left]="(40 + xOffset)+ 'px'">
+    <span (click)="showEditor()" style="font-size: larger">
+        {{value|number}}<span *ngIf="maxValue">/{{maxValue}}</span>
+    </span>
+    <div [hidden]="!displayEditor" style="position: absolute; z-index: 100" [style.bottom]="(15 - yOffset) + 'px'"
+         [style.left]="(40 + xOffset)+ 'px'">
         <div class="form-control input-lg"
-             style="padding-top: 10px; width: 60px; text-align: center; font-size: large; font-weight: bold">
+             style="padding-top: 10px; padding-left:0; padding-right:0; width: 60px; text-align: center; font-size: large; font-weight: bold">
             {{valueDelta}}
         </div>
         <div style="position: absolute; left:-120px; bottom: 0px">
@@ -13,8 +16,10 @@
         </div>
         <div style="position: absolute; left:0px; bottom: 0px">
             <div style="position: relative; left:-60px; bottom: 46px">
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-info" (click)="changeValue('-5')">-5</button>
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-info" (click)="changeValue('-1')">-1</button>
+                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-info"
+                        (click)="changeValue('-5')">-5</button>
+                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-info"
+                        (click)="changeValue('-1')">-1</button>
             </div>
             <div style="position: absolute; left:60px; bottom: 46px">
                 <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-primary"

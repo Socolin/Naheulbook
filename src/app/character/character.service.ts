@@ -68,6 +68,14 @@ export class CharacterService {
         })).map(res => res.json());
     }
 
+    changeGmData(characterId: number, key: string, value: any): Observable<{key: string, value: any}> {
+        return this._http.post('/api/character/updateGmData', JSON.stringify({
+            characterId: characterId,
+            key: key,
+            value: value
+        })).map(res => res.json());
+    }
+
     addEffect(characterId: number, effectId: number): Observable<Effect> {
         return this._http.post('/api/character/addEffect', JSON.stringify({
             characterId: characterId,

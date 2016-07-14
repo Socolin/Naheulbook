@@ -178,6 +178,19 @@ export class CharacterComponent implements OnInit {
         );
     }
 
+    changeGmData(key: string, value: any) {
+        this._characterService.changeGmData(this.character.id, key, value).subscribe(
+            change => {
+                this._notification.info("Modification", key + ": " + this.character.gmData[change.key] + ' -> ' + change.value);
+                this.character.gmData[change.key] = change.value;
+            },
+            err => {
+                console.log(err);
+                this._notification.error("Erreur", "Erreur serveur");
+            }
+        );
+    }
+
     public historyPage: number = 0;
     public currentDay: string = null;
     public history;
