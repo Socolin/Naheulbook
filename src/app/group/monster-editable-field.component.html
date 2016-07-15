@@ -1,4 +1,4 @@
-<input *ngIf="fieldName.indexOf('.') == -1"
+<input *ngIf="!isDataField"
        style="border:none;
               background:none;
               border-radius:0;
@@ -14,7 +14,7 @@
        [(ngModel)]="monster[fieldName]"
        (change)="updateMonsterField()"
 />
-<input *ngIf="fieldName.indexOf('.') !== -1"
+<input *ngIf="isDataField"
        style="border:none;
               background:none;
               border-radius:0;
@@ -27,6 +27,6 @@
               box-shadow: none;"
        class="form-control"
        type="text"
-       [(ngModel)]="monster[fieldName.split('.')[0]][fieldName.split('.')[1]]"
+       [(ngModel)]="monster.data[fieldName]"
        (change)="updateMonsterField()"
 />

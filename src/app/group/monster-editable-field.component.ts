@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {GroupService} from './group.service';
 import {NotificationsService} from '../notifications';
-import {Fighter} from './group.model';
+import {Monster} from '../monster/monster.model';
 
 @Component({
     moduleId: module.id,
@@ -9,9 +9,10 @@ import {Fighter} from './group.model';
     templateUrl: 'monster-editable-field.component.html'
 })
 export class MonsterEditableFieldComponent implements OnChanges {
-    @Input() monster: Fighter;
+    @Input() monster: Monster;
+    @Input() isDataField: boolean;
     @Input() fieldName: string;
-    @Input() monsterFieldName: string;
+
     private oldValue: string;
 
     constructor(private _groupService: GroupService
@@ -19,24 +20,21 @@ export class MonsterEditableFieldComponent implements OnChanges {
     }
 
     getValue(): string {
-        let value = null;
-        if (this.fieldName.indexOf('.') === -1) {
-            value = this.monster[this.fieldName];
+        if (this.isDataField) {
+            return this.monster.data[this.fieldName];
         } else {
-            let s = this.fieldName.split('.');
-            value = this.monster[s[0]][s[1]];
+            return this.monster[this.fieldName];
         }
-        return value;
     }
 
     updateMonsterField() {
-        this._groupService.updateMonster(this.monster.id, this.monsterFieldName, this.getValue())
+        this._groupService.updateMonster(this.monster.id, this.fieldName, this.getValue())
             .subscribe(
                 res => {
-                    this._notification.info('Monstre: ' + res.name
-                        , 'Modification: ' + this.monsterFieldName.toUpperCase() + ': '
-                        + this.oldValue + ' -> ' + res[this.monsterFieldName]);
-                    this.oldValue = res[this.monsterFieldName];
+                    this._notification.info('Monstre: ' + this.monster.name
+                        , 'Modification: ' + this.fieldName.toUpperCase() + ': '
+                        + this.oldValue + ' -> ' + res.value);
+                    this.oldValue = res.value;
                 },
                 err => {
                     console.log(err);

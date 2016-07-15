@@ -1,6 +1,4 @@
-export class Monster {
-    id: number;
-    name: string;
+class MonsterData {
     at: number;
     prd: number;
     ev: number;
@@ -8,18 +6,25 @@ export class Monster {
     pr: string;
     dmg: string;
     cou: number;
-    resm: number;
-    classeXP: number;
-    note: string;
-    dead: string;
     chercheNoise: boolean;
+    resm: number;
+    xp: number;
+    note: string;
+    color: string;
+    number: string;
+};
+
+export class Monster {
+    id: number;
+    name: string;
+    data: MonsterData = new MonsterData();
+    dead: string;
     target: {
         id: number;
         isMonster: number;
         name: string;
         color: string;
     };
-    color: string;
 }
 
 export interface MonsterTemplateData {

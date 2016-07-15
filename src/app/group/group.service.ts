@@ -17,7 +17,7 @@ export class GroupService {
         })).map(res => res.json());
     }
 
-    updateMonster(monsterId: number, fieldName: string, value: any): Observable<Monster> {
+    updateMonster(monsterId: number, fieldName: string, value: any): Observable<{value: string, fieldName: string}> {
         return this._http.post('/api/group/updateMonster', JSON.stringify({
             fieldName: fieldName,
             value: value,

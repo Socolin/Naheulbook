@@ -120,11 +120,13 @@
                         <h3>Informations</h3>
                         <div>
                             Mankdebol:
-                            <value-editor [value]="group.data.mankdebol" (onChange)="changeGroupValue('mankdebol', $event)"></value-editor>
+                            <value-editor [value]="group.data.mankdebol"
+                                          (onChange)="changeGroupValue('mankdebol', $event)"></value-editor>
                         </div>
                         <div>
                             Débilibeuk:
-                            <value-editor [value]="group.data.debilibeuk" (onChange)="changeGroupValue('debilibeuk', $event)"></value-editor>
+                            <value-editor [value]="group.data.debilibeuk"
+                                          (onChange)="changeGroupValue('debilibeuk', $event)"></value-editor>
                         </div>
                         <div>
                             Date: {{group.data.date}}
@@ -215,50 +217,79 @@
                             <tr style="border-bottom-width:0" [class.even_row]="i % 2 == 0"
                                 (click)="selectedCombatRow = i" [class.combat_row_selected]="selectedCombatRow == i">
                                 <td rowspan=2>
-                                    <character-color-selector [element]="fighter"
-                                                              (onColorChange)='changeColor(fighter, $event)'></character-color-selector>
+                                    <monster-color-selector [monster]="fighter.monster"></monster-color-selector>
                                 </td>
                                 <td>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'name'"
-                                                            [fieldName]="'name'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=false
+                                        [fieldName]="'name'">
+                                    </monster-editable-field>
                                 </td>
                                 <td>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'at'"
-                                                            [fieldName]="'stats.at'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=true
+                                        [fieldName]="'at'">
+                                    </monster-editable-field>
                                 </td>
                                 <td>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'prd'"
-                                                            [fieldName]="'stats.prd'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=true
+                                        [fieldName]="'prd'">
+                                    </monster-editable-field>
                                 </td>
                                 <td>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'ev'"
-                                                            [fieldName]="'stats.ev'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=true
+                                        [fieldName]="'ev'">
+                                    </monster-editable-field>
                                 </td>
                                 <td>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'ea'"
-                                                            [fieldName]="'stats.ea'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=true
+                                        [fieldName]="'ea'">
+                                    </monster-editable-field>
                                 </td>
                                 <td>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'pr'"
-                                                            [fieldName]="'stats.pr'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=true
+                                        [fieldName]="'pr'">
+                                    </monster-editable-field>
                                 </td>
                                 <td>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'resm'"
-                                                            [fieldName]="'stats.resm'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=true
+                                        [fieldName]="'resm'">
+                                    </monster-editable-field>
                                 </td>
                                 <td>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'dmg'"
-                                                            [fieldName]="'stats.dmg'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=true
+                                        [fieldName]="'dmg'">
+                                    </monster-editable-field>
                                 </td>
                                 <td>
                                     <span *ngIf="fighter.chercheNoise" style="position:relative"><span
                                         style="left:10px; float:right; position:absolute;">*</span></span>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'cou'"
-                                                            [fieldName]="'stats.cou'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=true
+                                        [fieldName]="'cou'">
+                                    </monster-editable-field>
                                 </td>
                                 <td>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'classeXP'"
-                                                            [fieldName]="'stats.classeXP'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=true
+                                        [fieldName]="'xp'">
+                                    </monster-editable-field>
                                 </td>
                                 <td rowspan=2>
                                     <button class="btn btn-danger glyphicon glyphicon-trash"
@@ -273,8 +304,11 @@
                                 </td>
                                 <td style="border:0;" colspan=1>Note</td>
                                 <td style="border:0;" colspan=6>
-                                    <monster-editable-field [monster]="fighter" [monsterFieldName]="'note'"
-                                                            [fieldName]="'note'"></monster-editable-field>
+                                    <monster-editable-field
+                                        [monster]="fighter.monster"
+                                        [isDataField]=true
+                                        [fieldName]="'note'">
+                                    </monster-editable-field>
                                 </td>
                             </tr>
                         </template>
@@ -311,7 +345,7 @@
                 </table>
 
                 <div>
-                    <h3>Monstre morts</h3>
+                    <h3>Monstres morts</h3>
                     <table class="table table-striped table-condensed text-center">
                         <thead>
                         <th class="text-center">Nom</th>
@@ -323,7 +357,7 @@
                         <th class="text-center">RESM</th>
                         <th class="text-center">Damage</th>
                         <th class="text-center">COU</th>
-                        <th class="text-center">Classe-XP</th>
+                        <th class="text-center">XP</th>
                         <th class="text-center">Notes</th>
                         <th></th>
                         </thead>
@@ -331,15 +365,15 @@
                         <template ngFor let-element [ngForOf]="deadMonsters">
                             <tr>
                                 <td>{{element.name}}</td>
-                                <td>{{element.at}}</td>
-                                <td>{{element.prd}}</td>
-                                <td>{{element.ev}}</td>
-                                <td>{{element.ea}}</td>
-                                <td>{{element.pr}}</td>
-                                <td>{{element.resm}}</td>
-                                <td>{{element.dmg}}</td>
-                                <td>{{element.cou}}<span *ngIf="element.chercheNoise">*</span></td>
-                                <td>{{element.classeXP}}</td>
+                                <td>{{element.data.at}}</td>
+                                <td>{{element.data.prd}}</td>
+                                <td>{{element.data.ev}}</td>
+                                <td>{{element.data.ea}}</td>
+                                <td>{{element.data.pr}}</td>
+                                <td>{{element.data.resm}}</td>
+                                <td>{{element.data.dmg}}</td>
+                                <td>{{element.data.cou}}<span *ngIf="element.data.chercheNoise">*</span></td>
+                                <td>{{element.data.xp}}</td>
                                 <td>{{element.note}}</td>
                             </tr>
                         </template>
@@ -374,64 +408,64 @@
                             <label for="inputMonsteAt" class="col-xs-1 control-label">AT</label>
                             <div class="col-xs-3">
                                 <input type="number" class="form-control" id="inputMonsteAt"
-                                       [(ngModel)]="newMonster.at">
+                                       [(ngModel)]="newMonster.data.at">
                             </div>
                             <label for="inputMonsterPrd" class="col-xs-1 control-label">PRD</label>
                             <div class="col-xs-3">
                                 <input type="number" class="form-control" id="inputMonsterPrd"
-                                       [(ngModel)]="newMonster.prd">
+                                       [(ngModel)]="newMonster.data.prd">
                             </div>
                             <label for="inputMonsterPR" class="col-xs-1 control-label">PR</label>
                             <div class="col-xs-3">
-                                <input type="text" class="form-control" id="inputMonsterPR" [(ngModel)]="newMonster.pr">
+                                <input type="text" class="form-control" id="inputMonsterPR" [(ngModel)]="newMonster.data.pr">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputMonsterEV" class="col-xs-1 control-label">EV</label>
                             <div class="col-xs-3">
                                 <input type="number" class="form-control" id="inputMonsterEV"
-                                       [(ngModel)]="newMonster.ev">
+                                       [(ngModel)]="newMonster.data.ev">
                             </div>
                             <label for="inputMonsterEA" class="col-xs-1 control-label">EA</label>
                             <div class="col-xs-3">
                                 <input type="number" class="form-control" id="inputMonsterEA"
-                                       [(ngModel)]="newMonster.ea">
+                                       [(ngModel)]="newMonster.data.ea">
                             </div>
                             <label for="inputMonsterResm" class="col-xs-1 control-label">RESM</label>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control" id="inputMonsterResm"
-                                       [(ngModel)]="newMonster.resm">
+                                       [(ngModel)]="newMonster.data.resm">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputMonsterDmg" class="col-xs-1 control-label">DMG</label>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control" id="inputMonsterDmg"
-                                       [(ngModel)]="newMonster.dmg">
+                                       [(ngModel)]="newMonster.data.dmg">
                             </div>
-                            <label for="inputMonsterXp" class="col-xs-1 control-label">classeXP</label>
+                            <label for="inputMonsterXp" class="col-xs-1 control-label">XP</label>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control" id="inputMonsterXp"
-                                       [(ngModel)]="newMonster.classeXP">
+                                       [(ngModel)]="newMonster.data.xp">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputMonsterCou" class="col-xs-1 control-label">COU</label>
                             <div class="col-xs-3">
                                 <input type="number" class="form-control" id="inputMonsterCou"
-                                       [(ngModel)]="newMonster.cou">
+                                       [(ngModel)]="newMonster.data.cou">
                             </div>
                             <label for="inputMonsterNoise" class="col-xs-3 control-label">Chercher des noises</label>
                             <div class="col-xs-1">
                                 <input type="checkbox" class="form-control" id="inputMonsterNoise"
-                                       [(ngModel)]="newMonster.chercheNoise">
+                                       [(ngModel)]="newMonster.data.chercheNoise">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputMonsterNote" class="col-xs-1 control-label">Note</label>
                             <div class="col-xs-11">
                                 <input type="text" class="form-control" id="inputMonsterNote"
-                                       [(ngModel)]="newMonster.note">
+                                       [(ngModel)]="newMonster.data.note">
                             </div>
                         </div>
                         <div class="form-group">

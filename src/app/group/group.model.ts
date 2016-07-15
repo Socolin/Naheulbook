@@ -33,7 +33,7 @@ export class Fighter {
         dmg: string;
         cou: number;
         resm: number;
-        classeXP: number;
+        xp: number;
     };
     note: string;
     target: {
@@ -54,22 +54,23 @@ export class Fighter {
         f.monster = monster;
         f.isMonster = true;
         f.active = 1;
+        console.log(monster);
         f.stats = {
-            at: monster.at,
+            at: monster.data.at,
             ad: 10, // FIXME: this is used to compute fight order
-            prd: monster.prd,
-            ev: monster.ev,
-            ea: monster.ea,
-            pr: monster.pr,
-            dmg: monster.dmg,
-            cou: monster.cou,
-            resm: monster.resm,
-            classeXP: monster.classeXP,
+            prd: monster.data.prd,
+            ev: monster.data.ev,
+            ea: monster.data.ea,
+            pr: monster.data.pr,
+            dmg: monster.data.dmg,
+            cou: monster.data.cou,
+            resm: monster.data.resm,
+            xp: monster.data.xp,
         };
-        f.chercheNoise = monster.chercheNoise;
+        f.chercheNoise = monster.data.chercheNoise;
         f.target = monster.target;
-        f.note = monster.note;
-        f.color = monster.color;
+        f.note = monster.data.note;
+        f.color = monster.data.color;
         return f;
     }
 
@@ -91,7 +92,7 @@ export class Fighter {
             dmg: '',
             cou: character.statsCache.COU,
             resm: character.statsCache.RESM,
-            classeXP: null,
+            xp: null,
         };
         f.target = character.target;
         f.color = character.color;

@@ -6,7 +6,7 @@ import {NotificationsService} from '../notifications';
 
 import {Group, GroupService, CharacterInviteInfo} from '../group';
 import {Character, CharacterService, CharacterColorSelectorComponent, CharacterComponent} from '../character';
-import {Monster, MonsterService, MonsterTemplate} from '../monster';
+import {Monster, MonsterService, MonsterTemplate, MonsterColorSelectorComponent} from '../monster';
 
 import {LoginService} from '../user';
 import {EffectListComponent} from '../effect';
@@ -67,6 +67,7 @@ export class TargetSelectorComponent {
     directives: [CharacterComponent
         , MonsterEditableFieldComponent
         , CharacterColorSelectorComponent
+        , MonsterColorSelectorComponent
         , TargetSelectorComponent
         , EffectListComponent
         , ValueEditorComponent
@@ -238,20 +239,20 @@ export class GroupComponent implements OnInit, OnChanges {
     selectMonsterInAutocompleteList(monster: MonsterTemplate) {
         this.monsterAutocompleteShow = false;
         this.newMonster.name = monster.name;
-        this.newMonster.at = monster.data.at;
-        this.newMonster.prd = monster.data.prd;
-        this.newMonster.ev = monster.data.ev;
-        this.newMonster.ea = 0;
-        this.newMonster.pr = monster.data.pr;
-        this.newMonster.cou = monster.data.cou;
-        this.newMonster.dmg = monster.data.dmg;
-        this.newMonster.classeXP = monster.data.xp;
+        this.newMonster.data.at = monster.data.at;
+        this.newMonster.data.prd = monster.data.prd;
+        this.newMonster.data.ev = monster.data.ev;
+        this.newMonster.data.ea = 0;
+        this.newMonster.data.pr = monster.data.pr;
+        this.newMonster.data.cou = monster.data.cou;
+        this.newMonster.data.dmg = monster.data.dmg;
+        this.newMonster.data.xp = monster.data.xp;
         if (monster.data.resm) {
-            this.newMonster.resm = monster.data.resm;
+            this.newMonster.data.resm = monster.data.resm;
         } else {
-            this.newMonster.resm = 0;
+            this.newMonster.data.resm = 0;
         }
-        this.newMonster.note = monster.data.note;
+        this.newMonster.data.note = monster.data.note;
         return false;
     }
 
@@ -330,8 +331,8 @@ export class GroupComponent implements OnInit, OnChanges {
         if (element.isMonster) {
             this._groupService.updateMonster(element.id, 'target', {id: target.id, isMonster: target.isMonster})
                 .subscribe(
-                    res => {
-                        element.target = res.target;
+                    () => {
+                        element.target = target;
                         this._notification.info("Monstre", "Cible changée");
                     },
                     err => {
