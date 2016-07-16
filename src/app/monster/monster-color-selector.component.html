@@ -1,14 +1,51 @@
-<i [style.color]="'#' + monster.data.color" class="ra ra-monster-skull ra-3x" (click)="showSelector = !showSelector"></i>
+<div style="position: relative; text-align: left">
+    <i style="position: absolute;"
+       [style.color]="'#' + monster.data.color" class="ra ra-monster-skull ra-3x"
+       (click)="showSelector = !showSelector"></i>
+    <span *ngIf="monster.data.number"
+          (click)="showSelector = !showSelector"
+          style="
+                width: 40px;
+                text-align: center;
+                position: absolute;
+                font-size: 40px;
+                opacity: 0.75;
+                color: rgba(255, 255, 255, 1);
+                text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+                ">{{monster.data.number}}
+    </span>
+</div>
+
 <div *ngIf="showSelector" style="position: relative">
-    <div style="position: absolute; top: -26; left: 56; background-color: white; border:1px solid gray; width:194px">
-        <template ngFor let-color [ngForOf]="colors">
-            <div style="float:left; width: 48px; height: 48px">
-                <i [style.color]=color
-                   class="ra ra-monster-skull ra-3x"
-                   (click)="showSelector = !showSelector"
-                   (click)="changeColor(color);showSelector = false;">
-                </i>
-            </div>
-        </template>
+    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;" (click)="showSelector = false;">
     </div>
+    <div
+        style="position: absolute; top: -26; left: 56; background-color: white; border:1px solid gray; height: 194px; width:386px; z-index: 100">
+        <div style="width: 192px">
+            <template ngFor let-color [ngForOf]="colors">
+                <div style="float:left; width: 48px; height: 48px">
+                    <i [style.color]=color
+                       class="ra ra-monster-skull ra-3x"
+                       (click)="showSelector = !showSelector"
+                       (click)="changeColor(color);showSelector = false;">
+                    </i>
+                </div>
+            </template>
+        </div>
+        <div style="display:inline-block; width: 192px">
+            <template ngFor let-number [ngForOf]="numbers">
+                <div style="float:left; width: 48px; height: 48px"
+                     (click)="changeNumber(number);showSelector = false;">
+                    <span *ngIf="number"
+                          style="
+                                text-align: center;
+                                font-size: 40px;
+                                 color: white;
+                                 text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+                                ">{{number}}</span>
+                </div>
+            </template>
+        </div>
+    </div>
+
 </div>

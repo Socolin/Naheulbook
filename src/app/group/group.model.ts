@@ -29,6 +29,8 @@ export class Fighter {
         prd: number;
         ev: number;
         ea: number;
+        maxEv: number;
+        maxEa: number;
         pr: string;
         dmg: string;
         cou: number;
@@ -54,13 +56,15 @@ export class Fighter {
         f.monster = monster;
         f.isMonster = true;
         f.active = 1;
-        console.log(monster);
+
         f.stats = {
             at: monster.data.at,
             ad: 10, // FIXME: this is used to compute fight order
             prd: monster.data.prd,
             ev: monster.data.ev,
             ea: monster.data.ea,
+            maxEv: monster.data.ev,
+            maxEa: monster.data.ea,
             pr: monster.data.pr,
             dmg: monster.data.dmg,
             cou: monster.data.cou,
@@ -86,8 +90,10 @@ export class Fighter {
             at: character.statsCache.AT,
             ad: character.statsCache.AD,
             prd: character.statsCache.PRD,
-            ev: character.statsCache.EV,
-            ea: character.statsCache.EA,
+            ev: character.ev,
+            maxEv: character.statsCache.EV,
+            ea: character.ea,
+            maxEa:  character.statsCache.EA,
             pr: character.statsCache.PR,
             dmg: '',
             cou: character.statsCache.COU,

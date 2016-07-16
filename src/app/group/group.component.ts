@@ -19,15 +19,18 @@ import {ValueEditorComponent} from '../shared';
 @Component({
     selector: 'target-selector',
     template: `
-        <div style='width:100%;height:100%;text-align:left' (click)="showSelector = !showSelector">
-            <i class="ra ra-targeted ra-lg"></i>
-            <span *ngIf="element">
+        <div style='width:100%;height:100%;text-align:left'>
+            <i class="ra ra-targeted ra-lg" (click)="showSelector = !showSelector"></i>
+            <span *ngIf="element" (click)="showSelector = !showSelector">
                 <i [style.color]="'#' + element.color"  
                 [class.ra-player]="!element.isMonster" 
                 [class.ra-monster-skull]="element.isMonster" class="ra ra-lg"></i>
                 {{element.name}}
             </span>
             <div *ngIf="showSelector" style="position: relative">
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;"
+                     (click)="showSelector = false;">
+                </div>
                 <div style="position: absolute;
                             max-width:340px;
                             left: 35px;
@@ -36,7 +39,7 @@ import {ValueEditorComponent} from '../shared';
                             border: 1px solid gray;">
                     <template ngFor let-target [ngForOf]="targets">
                         <div style="display:inline-block; padding-right:10px">
-                            <div (click)=onTargetChange.next(target)>
+                            <div (click)="onTargetChange.next(target); showSelector=false">
                                 <i [style.color]="'#' + target.color"
                                    [class.ra-player]="!target.isMonster"
                                    [class.ra-monster-skull]="target.isMonster"

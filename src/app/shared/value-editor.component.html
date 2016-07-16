@@ -2,19 +2,28 @@
     <span (click)="showEditor()" style="font-size: larger">
         {{value|number}}<span *ngIf="maxValue">/{{maxValue}}</span>
     </span>
-    <div [hidden]="!displayEditor" style="position: absolute; z-index: 100" [style.bottom]="(15 - yOffset) + 'px'"
+    <div *ngIf="displayEditor" style="position: absolute; z-index: 100" [style.bottom]="(15 - yOffset) + 'px'"
          [style.left]="(40 + xOffset)+ 'px'">
+        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;"
+             (click)="displayEditor = false;">
+        </div>
         <div class="form-control input-lg"
-             style="padding-top: 10px; padding-left:0; padding-right:0; width: 60px; text-align: center; font-size: large; font-weight: bold">
+             style="border: 1px solid #999;
+                    position: absolute;
+                    bottom: 0;
+                    width: 60px;
+                    text-align: center;
+                    font-size: large;
+                    font-weight: bold;">
             {{valueDelta}}
         </div>
-        <div style="position: absolute; left:-120px; bottom: 0px">
+        <div style="position: absolute; left:-120px; bottom: 0; z-index: 100">
             <div class="form-control input-lg"
                  style="padding-left:0; padding-right:0; padding-top: 10px; width: 120px; font-size: 14px;text-align: center; font-weight: bold">
                 {{value}} <span *ngIf="maxValue">/{{maxValue}}</span> -> {{newValue}} <span *ngIf="maxValue">/{{maxValue}}</span>
             </div>
         </div>
-        <div style="position: absolute; left:0px; bottom: 0px">
+        <div style="position: absolute; left:0; bottom: 0; z-index: 100">
             <div style="position: relative; left:-60px; bottom: 46px">
                 <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-info"
                         (click)="changeValue('-5')">-5</button>
@@ -36,10 +45,6 @@
             <div style="position: absolute; left:60px; bottom: -46px">
                 <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-success glyphicon glyphicon-ok"
                         (click)="commitValue()"></button>
-            </div>
-            <div style="position: absolute; left:-120px; bottom: 46px">
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-danger glyphicon glyphicon-remove"
-                        (click)="showEditor()"></button>
             </div>
         </div>
     </div>

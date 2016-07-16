@@ -11,8 +11,8 @@ class MonsterData {
     xp: number;
     note: string;
     color: string;
-    number: string;
-};
+    number: number;
+}
 
 export class Monster {
     id: number;

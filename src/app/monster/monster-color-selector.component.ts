@@ -25,9 +25,14 @@ export class MonsterColorSelectorComponent {
         "999966", "595959",
         "000000",
     ].map(color => '#' + color);
+    private numbers: number[];
 
     constructor(private _groupService: GroupService
         , private _notification: NotificationsService) {
+        this.numbers = [];
+        for (let i = 0; i < 16; i++) {
+            this.numbers.push(i);
+        }
     }
 
     changeColor(color: string) {
@@ -38,6 +43,20 @@ export class MonsterColorSelectorComponent {
             .subscribe(
                 () => {
                     this.monster.data.color = color;
+                    this._notification.info("Monstre", "Couleur changé");
+                },
+                err => {
+                    console.log(err);
+                    this._notification.error("Erreur", "Erreur serveur");
+                }
+            );
+    }
+
+    changeNumber(number: number) {
+        this._groupService.updateMonster(this.monster.id, 'number', number)
+            .subscribe(
+                () => {
+                    this.monster.data.number = number;
                     this._notification.info("Monstre", "Couleur changé");
                 },
                 err => {
