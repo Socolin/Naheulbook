@@ -2,28 +2,29 @@
     <span (click)="showEditor()" style="font-size: larger">
         {{value|number}}<span *ngIf="maxValue">/{{maxValue}}</span>
     </span>
-    <div *ngIf="displayEditor" style="position: absolute; z-index: 100" [style.bottom]="(15 - yOffset) + 'px'"
+    <div [hidden]="!displayEditor" style="position: absolute; z-index: 100" [style.bottom]="(15 - yOffset) + 'px'"
          [style.left]="(40 + xOffset)+ 'px'">
-        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;"
+        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;z-index: -1"
              (click)="displayEditor = false;">
         </div>
         <div class="form-control input-lg"
-             style="border: 1px solid #999;
-                    position: absolute;
-                    bottom: 0;
+             style="padding-top: 10px;
+                    padding-left:0;
+                    padding-right:0;
                     width: 60px;
                     text-align: center;
+                    z-index: 0;
                     font-size: large;
-                    font-weight: bold;">
+                    font-weight: bold">
             {{valueDelta}}
         </div>
-        <div style="position: absolute; left:-120px; bottom: 0; z-index: 100">
+        <div style="position: absolute; left:-120px; bottom: 0px">
             <div class="form-control input-lg"
                  style="padding-left:0; padding-right:0; padding-top: 10px; width: 120px; font-size: 14px;text-align: center; font-weight: bold">
                 {{value}} <span *ngIf="maxValue">/{{maxValue}}</span> -> {{newValue}} <span *ngIf="maxValue">/{{maxValue}}</span>
             </div>
         </div>
-        <div style="position: absolute; left:0; bottom: 0; z-index: 100">
+        <div style="position: absolute; left:0px; bottom: 0px">
             <div style="position: relative; left:-60px; bottom: 46px">
                 <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-info"
                         (click)="changeValue('-5')">-5</button>

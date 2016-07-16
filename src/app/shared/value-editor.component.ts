@@ -27,6 +27,7 @@ export class ValueEditorComponent implements OnChanges {
             this.computeEditorBoundingBox(element.children[i], bbox);
         }
         let rect = element.getBoundingClientRect();
+        console.log(rect);
         element.hidden = h;
         bbox.bottom = Math.max(bbox.bottom, rect.bottom);
         bbox.top = Math.min(bbox.top, rect.top);
@@ -35,6 +36,11 @@ export class ValueEditorComponent implements OnChanges {
     }
 
     showEditor() {
+        if (this.displayEditor) {
+            this.displayEditor = false;
+            return;
+        }
+
         let bbox: ClientRect = {
             bottom: 0,
             height: 0,
@@ -45,7 +51,6 @@ export class ValueEditorComponent implements OnChanges {
         };
         this.computeEditorBoundingBox(this._elementRef.nativeElement, bbox);
 
-        this.xOffset = 0;
         if (bbox.right > window.innerWidth) {
             this.xOffset = window.innerWidth - bbox.right;
         }
@@ -53,7 +58,6 @@ export class ValueEditorComponent implements OnChanges {
             this.xOffset = -bbox.left;
         }
 
-        this.yOffset = 0;
         if (bbox.bottom > window.innerHeight) {
             this.yOffset = window.innerHeight - bbox.bottom;
         }
@@ -61,7 +65,7 @@ export class ValueEditorComponent implements OnChanges {
             this.yOffset = -bbox.top;
         }
 
-        this.displayEditor = !this.displayEditor;
+        this.displayEditor = true;
     }
 
     commitValue() {
