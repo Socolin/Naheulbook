@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, OnInit, OnChanges} from '@angular/core';
+import {Component, OnInit, OnChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HTTP_PROVIDERS} from '@angular/http';
 
@@ -14,54 +14,7 @@ import {SkillListComponent} from '../skill';
 import {Fighter} from './group.model';
 import {MonsterEditableFieldComponent} from './monster-editable-field.component';
 import {ValueEditorComponent} from '../shared';
-
-
-@Component({
-    selector: 'target-selector',
-    template: `
-        <div style='width:100%;height:100%;text-align:left'>
-            <i class="ra ra-targeted ra-lg" (click)="showSelector = !showSelector"></i>
-            <span *ngIf="element" (click)="showSelector = !showSelector">
-                <i [style.color]="'#' + element.color"  
-                [class.ra-player]="!element.isMonster" 
-                [class.ra-monster-skull]="element.isMonster" class="ra ra-lg"></i>
-                {{element.name}}
-            </span>
-            <div *ngIf="showSelector" style="position: relative">
-                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;"
-                     (click)="showSelector = false;">
-                </div>
-                <div style="position: absolute;
-                            max-width:340px;
-                            left: 35px;
-                            top: -15px;
-                            background-color: white;
-                            border: 1px solid gray;">
-                    <template ngFor let-target [ngForOf]="targets">
-                        <div style="display:inline-block; padding-right:10px">
-                            <div (click)="onTargetChange.next(target); showSelector=false">
-                                <i [style.color]="'#' + target.color"
-                                   [class.ra-player]="!target.isMonster"
-                                   [class.ra-monster-skull]="target.isMonster"
-                                   class="ra ra-3x">
-                                </i>
-                            </div>
-                            <div>
-                                {{target.name}}
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </div>
-        </div>
-    `
-})
-export class TargetSelectorComponent {
-    @Input() element: Object;
-    @Input() targets: Object[];
-    @Output() onTargetChange: EventEmitter<any> = new EventEmitter<any>();
-    private showSelector: boolean = false;
-}
+import {TargetSelectorComponent} from './target-selector.component';
 
 
 @Component({

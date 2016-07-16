@@ -1,0 +1,89 @@
+<div style='width:100%;height:100%;text-align:left'>
+    <i class="ra ra-targeted ra-lg" (click)="showSelector = !showSelector"></i>
+    <div *ngIf="element" style="display:inline-block; position: relative" (click)="showSelector = !showSelector">
+        <div style="display: inline-block; width: 20px; height: 12px">
+            <i [style.color]="'#' + element.color"
+               [class.ra-player]="!element.isMonster"
+               [class.ra-monster-skull]="element.isMonster"
+               style="position: absolute"
+               class="ra ra-lg"></i>
+            <span *ngIf="element.number"
+                  style="position: absolute;
+                  color: white;
+                  text-shadow: 2px    0       0 #000
+                              , -2px  0       0 #000
+                              , 0     2px     0 #000
+                              , 0     -2px    0 #000
+                              , 1px   1px     0 #000
+                              , -1px  -1px    0 #000
+                              , 1px   -1px    0 #000
+                              , -1px  1px     0 #000;
+                  font-size:16px; width:20px; text-align: center">
+                {{element.number}}
+            </span>
+        </div>
+        {{element.name}}
+    </div>
+    <div *ngIf="showSelector" style="position: relative">
+        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;"
+             (click)="showSelector = false;">
+        </div>
+        <div style="z-index: 100;
+                    position: absolute;
+                    max-width:340px;
+                    left: 35px;
+                    top: -15px;
+                    background-color: white;
+                    border: 1px solid gray;">
+            <template ngFor let-target [ngForOf]="targets">
+                <div style="display: inline-block; width: 48px; height: 48px" (click)="onTargetChange.emit(target); showSelector = false;">
+                    <i [style.color]="'#' + target.color"
+                       [class.ra-player]="!target.isMonster"
+                       [class.ra-monster-skull]="target.isMonster"
+                       style="position: absolute"
+                       class="ra ra-3x"></i>
+                    <span *ngIf="target.number"
+                        style="position: absolute;
+                            color: white;
+                            text-align: center;
+                            font-size: 40px;
+                            text-shadow: 2px    0       0 #000
+                                        , -2px  0       0 #000
+                                        , 0     2px     0 #000
+                                        , 0     -2px    0 #000
+                                        , 1px   1px     0 #000
+                                        , -1px  -1px    0 #000
+                                        , 1px   -1px    0 #000
+                                        , -1px  1px     0 #000;
+                            width:48px; text-align: center">
+                        {{target.number}}
+                    </span>
+                </div>
+            </template>
+        </div>
+    </div>
+    <!--
+    <span *ngIf="element" (click)="showSelector = !showSelector">
+        <span *ngIf="element.number"
+              style="
+        width: 40px;
+        text-align: center;
+        position: absolute;
+        font-size: 40px;
+        opacity: 0.75;
+        color: rgba(255, 255, 255, 1);
+        text-shadow: 2px 0 0 #000
+        , -2px 0 0 #000
+        , 0 2px 0 #000
+        , 0 -2px 0 #000
+        , 1px 1px #000
+        , -1px -1px 0 #000
+        , 1px -1px 0 #000
+        , -1px 1px 0 #000;
+        ">{{element.number}}
+        </span>
+        {{element.name}}
+        </span>
+
+        -->
+</div>

@@ -22,6 +22,7 @@ export class Fighter {
     id: number;
     active: number;
     color: string;
+    number: number;
     name: string;
     stats: {
         at: number;
@@ -75,6 +76,7 @@ export class Fighter {
         f.target = monster.target;
         f.note = monster.data.note;
         f.color = monster.data.color;
+        f.number= monster.data.number;
         return f;
     }
 
@@ -102,6 +104,7 @@ export class Fighter {
         };
         f.target = character.target;
         f.color = character.color;
+        f.number= 0;
         return f;
     }
 }
