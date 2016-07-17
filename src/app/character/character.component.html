@@ -680,16 +680,19 @@
 					<template [ngIf]="!log.isGroup">
 					<span [ngSwitch]="log.action">
 						<template [ngSwitchCase]="'EQUIP'">
-							Equipe: {{log.item.data.name}}
+							Equipe: {{log.item.name}}
 						</template>
 						<template [ngSwitchCase]="'UNEQUIP'">
-							Désquipe: {{log.item.data.name}}
+							Désquipe: {{log.item.name}}
 						</template>
 						<template [ngSwitchCase]="'ADD_ITEM'">
-							Ajout de l'objet: {{log.item.data.name}}
+							Ajout de l'objet: {{log.item.name}}
+						</template>
+						<template [ngSwitchCase]="'READ_BOOK'">
+							Lecture du livre: {{log.item.name}}
 						</template>
 						<template [ngSwitchCase]="'DELETE_ITEM'">
-							Suppression de l'objet: {{log.item.data.name}}
+							Suppression de l'objet: {{log.item.name}}
 						</template>
 						<template [ngSwitchCase]="'APPLY_EFFECT'">
 							Ajout de l'effet: {{log.effect.name}}
@@ -701,10 +704,10 @@
 							Suppression du modificateur: {{log.modifier.name}}
 						</template>
 						<template [ngSwitchCase]="'CHANGE_QUANTITY'">
-							Modification quantite: {{log.item.data.name}} {{log.info}}
+							Modification quantité: {{log.item.name}} {{log.info}}
 						</template>
 						<template [ngSwitchCase]="'USE_CHARGE'">
-							Utilisation de charge: {{log.item.data.name}} {{log.info}}
+							Utilisation de charge: {{log.item.name}} {{log.info}}
 						</template>
 						<template [ngSwitchCase]="'REMOVE_EFFECT'">
 							Suppression de l'effet: {{log.effect.name}}
