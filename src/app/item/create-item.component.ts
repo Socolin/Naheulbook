@@ -37,9 +37,9 @@ export class CreateItemComponent {
                 this.successMessage = "Objet créé: " + item.name;
                 this.lastItem = item;
                 this.item = new ItemTemplate();
-                this.item.price = this.lastItem.price;
-                if (this.lastItem.diceDrop) {
-                    this.item.diceDrop = this.lastItem.diceDrop + 1;
+                this.item.data.price = this.lastItem.data.price;
+                if (this.lastItem.data.diceDrop) {
+                    this.item.data.diceDrop = this.lastItem.data.diceDrop + 1;
                 }
             },
             error => {

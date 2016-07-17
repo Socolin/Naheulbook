@@ -81,7 +81,7 @@ export class ItemElementComponent implements OnInit, OnChanges {
     isHidden(item: ItemTemplate) {
         if (this.hasSpecial('DICE_DROP')) {
             if (this.filter.dice) {
-                return item.diceDrop !== this.filter.dice;
+                return item.data.diceDrop !== this.filter.dice;
             }
         }
         return false;
