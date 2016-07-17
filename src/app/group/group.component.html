@@ -131,8 +131,14 @@
                         <div>
                             Date: {{group.data.date}}
                         </div>
-                        <div>
-                            Lieu:
+                        <div class="row">
+                            <div class="col-xs-4">
+                                Lieu:
+                            </div>
+                            <div class="col-xs-8">
+                                <autocomplete-input [value]="group.location.name" (onSelect)="changeGroupLocation($event)"
+                                                    [(callback)]="autocompleteLocationsCallback"></autocomplete-input>
+                            </div>
                         </div>
                     </div>
                 </div>

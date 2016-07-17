@@ -1,6 +1,5 @@
 import {Component, OnInit, OnChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {HTTP_PROVIDERS} from '@angular/http';
 
 import {NotificationsService} from '../notifications';
 
@@ -13,8 +12,9 @@ import {EffectListComponent} from '../effect';
 import {SkillListComponent} from '../skill';
 import {Fighter} from './group.model';
 import {MonsterEditableFieldComponent} from './monster-editable-field.component';
-import {ValueEditorComponent} from '../shared';
+import {ValueEditorComponent, AutocompleteInputComponent, AutocompleteValue} from '../shared';
 import {TargetSelectorComponent} from './target-selector.component';
+import {LocationService, Location} from '../location';
 
 
 @Component({
@@ -27,6 +27,7 @@ import {TargetSelectorComponent} from './target-selector.component';
         , TargetSelectorComponent
         , EffectListComponent
         , ValueEditorComponent
+        , AutocompleteInputComponent
         , SkillListComponent],
     styles: [`
         .even_row {
@@ -36,7 +37,7 @@ import {TargetSelectorComponent} from './target-selector.component';
             background-color: #e3e3e3!important;
         }
     `],
-    providers: [HTTP_PROVIDERS, CharacterService, GroupService, MonsterService]
+    providers: [CharacterService, GroupService]
 })
 export class GroupComponent implements OnInit, OnChanges {
     public group: Group;
@@ -45,12 +46,14 @@ export class GroupComponent implements OnInit, OnChanges {
     public filteredInvitePlayers: CharacterInviteInfo[] = [];
     public charAndMonsters: Fighter[] = [];
     public deadMonsters: Monster[] = [];
+    private autocompleteLocationsCallback: Function;
     private selectedCombatRow: number = 0;
 
     constructor(private _route: ActivatedRoute
         , private _router: Router
         , private _loginService: LoginService
         , private _groupService: GroupService
+        , private _locationService: LocationService
         , private _notification: NotificationsService
         , private _monsterService: MonsterService
         , private _characterService: CharacterService) {
@@ -532,6 +535,25 @@ export class GroupComponent implements OnInit, OnChanges {
         );
     }
 
+    changeGroupLocation(location: Location) {
+        this._groupService.editGroupValue(this.group.id, 'location', location).subscribe(
+            () => {
+                this._notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
+                this.group.location = location;
+            },
+            err => {
+                console.log(err);
+                this._notification.error("Erreur", "Erreur serveur");
+            }
+        );
+    }
+
+    updateLocationListAutocomplete(filter: string) {
+        return this._locationService.searchLocations(filter).map(
+            list => list.map(e => new AutocompleteValue(e, e.name))
+        );
+    }
+
     ngOnInit() {
         this._route.params.subscribe(
             params => {
@@ -557,5 +579,7 @@ export class GroupComponent implements OnInit, OnChanges {
                 );
             }
         );
+        this.autocompleteLocationsCallback = this.updateLocationListAutocomplete.bind(this);
+
     }
 }

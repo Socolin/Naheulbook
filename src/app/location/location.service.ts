@@ -92,4 +92,9 @@ export class LocationService {
         return this._http.post('/api/location/listMapImages', JSON.stringify({filter: filter}))
             .map(res => res.json());
     }
+
+    searchLocations(filter: string): Observable<Location[]> {
+        return this._http.post('/api/location/search', JSON.stringify({filter: filter}))
+            .map(res => res.json());
+    }
 }

@@ -12,6 +12,7 @@ import {SkillService} from './skill';
 import {CharacterService} from './character';
 import {User} from './user';
 import {LocationService} from './location/location.service';
+import {MonsterService} from './monster';
 
 @Component({
     selector: 'index',
@@ -28,6 +29,7 @@ import {LocationService} from './location/location.service';
         , SkillService
         , CharacterService
         , LocationService
+        , MonsterService
     ],
 })
 export class IndexComponent implements OnInit {

@@ -8,8 +8,7 @@ import {MonsterService} from "./monster.service";
     moduleId: module.id,
     selector: 'monster-list',
     templateUrl: 'monster-list.component.html',
-    directives: [MonsterTemplateComponent],
-    providers: [MonsterService]
+    directives: [MonsterTemplateComponent]
 })
 export class MonsterListComponent implements OnInit {
     public monsters: MonsterTemplate[];

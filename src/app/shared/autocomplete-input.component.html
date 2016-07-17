@@ -1,5 +1,8 @@
 <span style="position: relative">
-    <span style="position: absolute; top: 15px; left: 10px; z-index: 100;">
+    <div  *ngIf="values" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"
+         (click)="values = null;">
+    </div>
+    <span *ngIf="values" style="position: absolute; top: 25px; left: 10px; z-index: 100;">
         <div class="list-group" >
             <template ngFor let-item [ngForOf]="values">
                 <a href="#" class="list-group-item" (click)="selectValue(item)">{{item.text}}</a>

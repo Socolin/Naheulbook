@@ -1,10 +1,12 @@
 import {Monster} from '../monster';
 import {Character} from '../character';
+import {Location} from '../location';
 
 export interface Group {
     id: number;
     name: string;
     data: any;
+    location: Location;
     monsters: Monster[];
     invited: CharacterInviteInfo[];
     invites: CharacterInviteInfo[];

@@ -12,3 +12,5 @@ export * from './modifiers-editor.component';
 export * from './textarea-autosize.directive';
 export * from './text-formatter.pipe';
 export * from './value-editor.component';
+export * from './autocomplete-input.component';
+
