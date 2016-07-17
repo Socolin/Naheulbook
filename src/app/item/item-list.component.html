@@ -9,8 +9,7 @@
 </ul>
 
 <div *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
-	<div class="panel-body">
-		<p>{{selectedSection.note}}</p>
+	<div class="panel-body" [innerHTML]="selectedSection.note|textFormatter">
 	</div>
 </div>
 

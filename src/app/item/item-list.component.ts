@@ -1,5 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
+import {Subscription} from 'rxjs/Rx';
 
 import {LoginService} from "../user";
 import {OriginService} from "../origin";
@@ -8,13 +9,12 @@ import {JobService} from "../job";
 import {ItemElementComponent} from './item-element.component';
 import {ItemSection, ItemTemplate} from "./item-template.model";
 import {ItemService} from "./item.service";
-import {removeDiacritics, ModifierPipe} from "../shared";
-import {Subscription} from 'rxjs/Rx';
+import {removeDiacritics, ModifierPipe, TextFormatterPipe} from "../shared";
 
 @Component({
     moduleId: module.id,
     templateUrl: 'item-list.component.html',
-    pipes: [ModifierPipe],
+    pipes: [ModifierPipe, TextFormatterPipe],
     directives: [ItemElementComponent],
     styles: [
         `.item-section {

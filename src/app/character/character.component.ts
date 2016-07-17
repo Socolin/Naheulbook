@@ -635,6 +635,25 @@ export class CharacterComponent implements OnInit {
         this.stats['DISCRETION_MODIFIER'] = 0;
         this.stats['DANSE_MODIFIER'] = 0;
         this.stats['CHA_WITHOUT_MAGIEPSY'] = 0;
+        for (let i = 0; i < this.character.items.length; i++) {
+            let item = this.character.items[i];
+
+            if (!item.data.equiped && item.data.readCount) {
+                if (item.data.readCount >= 7) {
+                    for (let u = 0; u < item.template.unskills.length; u++) {
+                        let skill = item.template.unskills[u];
+                        canceledSkills[skill.id] = item;
+                    }
+                    for (let u = 0; u < item.template.skills.length; u++) {
+                        let skillMD = item.template.skills[u];
+                        this.skills.push({
+                            skillDef: this.skillsById[skillMD.id],
+                            from: [item.data.name]
+                        });
+                    }
+                }
+            }
+        }
         for (let i = 0; i < this.itemsEquiped.length; i++) {
             let item = this.itemsEquiped[i];
             if (item.template.data.charge) {
