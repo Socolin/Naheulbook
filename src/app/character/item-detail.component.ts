@@ -1,9 +1,11 @@
 import {Component, EventEmitter, Input, Output, OnChanges} from '@angular/core';
 import {Item} from './item.model';
 import {Character} from './character.model';
+import {ValueEditorComponent} from '../shared';
 
 @Component({
     moduleId: module.id,
+    directives: [ValueEditorComponent],
     selector: 'item-detail',
     templateUrl: 'item-detail.component.html'
 })
@@ -51,25 +53,14 @@ export class ItemDetailComponent implements OnChanges {
         }
     }
 
-    updateQuantity() {
-        if (isNaN(parseInt(this.quantityModifier, 10))) {
-            this.quantityModifier = null;
-            return;
-        }
-
-        this.itemAction.emit({action: 'update_quantity', quantity: this.quantityModifier});
-        this.quantityModifier = null;
-        return false;
-    }
-
     editItem() {
         this.editing = !this.editing;
         if (this.editing) {
-            this.itemEditName = this.item.name;
-            this.itemEditDescription = this.item.description;
+            this.itemEditName = this.item.data.name;
+            this.itemEditDescription = this.item.data.description;
         } else {
-            if (this.itemEditName !== this.item.name
-                || this.itemEditDescription !== this.item.description) {
+            if (this.itemEditName !== this.item.data.name
+                || this.itemEditDescription !== this.item.data.description) {
                 this.itemAction.emit({
                     action: 'edit_item_name',
                     name: this.itemEditName,

@@ -11,7 +11,7 @@
 				<td *ngIf="editable" (click)=editItem(item)><span class="glyphicon glyphicon-edit"></span></td>
 				<td (click)="item.showDetail = !item.showDetail">
 					{{item.name}}
-					<span *ngIf="item.requireLevel">(niveau {{item.requireLevel}})</span>
+					<span *ngIf="item.requireLevel">(niveau {{item.data.requireLevel}})</span>
 					<span *ngIf="item.relic">(relique)</span>
 					<span *ngIf="item.sex == 'h'">(homme uniq.)</span>
 					<span *ngIf="item.sex == 'f'">(femme uniq.)</span>

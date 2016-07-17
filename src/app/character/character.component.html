@@ -218,7 +218,7 @@
 						<template ngFor let-item [ngForOf]="itemsBySlotsAll[1]" let-i="index" let-last="last">
 						<button type="button" class="list-group-item btn btn-default" (click)="selectItem(item)" [class.btn-primary]="selectedItem && selectedItem.id == item.id"
 							[class.active]="selectedItem && selectedItem.id == item.id">
-							<span *ngIf="item.equiped != null" class="glyphicon glyphicon-ok"></span> {{item.name}}
+							<span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span> {{item.data.name}}
 						</button>
 						</template>
 					</div>
@@ -461,10 +461,10 @@
 						<div class="col-sm-12">
 							<div class="list-group" style="height:300px; overflow-y: auto">
 								<a href="#" *ngFor="let item of character.items" class="list-group-item" (click)="selectItem(item)" [class.active]="selectedItem && selectedItem.id == item.id" [class.hidden]="!isItemFilteredByName(item)">
-									<span *ngIf="item.equiped != null" class="glyphicon glyphicon-ok"></span>
-									<span *ngIf="item.equiped == null && !item.container" class="glyphicon glyphicon-exclamation-sign"></span>
-									<span *ngIf="item.quantity">{{item.quantity}}</span>
-									{{item.name}}
+									<span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span>
+									<span *ngIf="item.data.equiped == null && !item.container" class="glyphicon glyphicon-exclamation-sign"></span>
+									<span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
+									{{item.data.name}}
 								</a>
 							</div>
 						</div>
@@ -536,8 +536,8 @@
 											(click)="selectItem(item)"
 											[class.btn-primary]="selectedItem && selectedItem.id == item.id"
 											[class.active]="selectedItem && selectedItem.id == item.id">
-										<span *ngIf="item.quantity">{{item.quantity}}</span>
-											{{item.name}}
+										<span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
+											{{item.data.name}}
 										</button>
 										<button *ngIf="i > 0 && itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="itemAction({action: 'equip', level: 1}, item)">
 											<span style="font-family: 'Glyphicons Halflings'">&#57491;</span>
@@ -558,7 +558,7 @@
 					<div class="bg-info">
 						<item-detail [character]="character" [item]="selectedItem" [characterStats]="stats" (itemAction)="itemAction($event, selectedItem)"></item-detail>
 					</div>
-					<div *ngIf="containers && !selectedItem.equiped">
+					<div *ngIf="containers && !selectedItem.data.equiped">
 						<template [ngIf]="selectedItem.container">
 							Dans: {{selectedItem.container.name}}
 							<button class="btn btn-danger"  (click)="itemAction({action: 'move_to_container', container: null}, selectedItem)">Retirer</button>
@@ -568,7 +568,7 @@
 							<div class="list-group">
 								<template ngFor let-item [ngForOf]="containers" let-i="index" let-last="last">
 									<a href="#" class="list-group-item" (click)="itemAction({action: 'move_to_container', container: item.id}, selectedItem)">
-										{{item.name}}
+										{{item.data.name}}
 									</a>
 								</template>
 							</div>
@@ -680,16 +680,16 @@
 					<template [ngIf]="!log.isGroup">
 					<span [ngSwitch]="log.action">
 						<template [ngSwitchCase]="'EQUIP'">
-							Equipe: {{log.item.name}}
+							Equipe: {{log.item.data.name}}
 						</template>
 						<template [ngSwitchCase]="'UNEQUIP'">
-							Désquipe: {{log.item.name}}
+							Désquipe: {{log.item.data.name}}
 						</template>
 						<template [ngSwitchCase]="'ADD_ITEM'">
-							Ajout de l'objet: {{log.item.name}}
+							Ajout de l'objet: {{log.item.data.name}}
 						</template>
 						<template [ngSwitchCase]="'DELETE_ITEM'">
-							Suppression de l'objet: {{log.item.name}}
+							Suppression de l'objet: {{log.item.data.name}}
 						</template>
 						<template [ngSwitchCase]="'APPLY_EFFECT'">
 							Ajout de l'effet: {{log.effect.name}}
@@ -701,10 +701,10 @@
 							Suppression du modificateur: {{log.modifier.name}}
 						</template>
 						<template [ngSwitchCase]="'CHANGE_QUANTITY'">
-							Modification quantite: {{log.item.name}} {{log.info}}
+							Modification quantite: {{log.item.data.name}} {{log.info}}
 						</template>
 						<template [ngSwitchCase]="'USE_CHARGE'">
-							Utilisation de charge: {{log.item.name}} {{log.info}}
+							Utilisation de charge: {{log.item.data.name}} {{log.info}}
 						</template>
 						<template [ngSwitchCase]="'REMOVE_EFFECT'">
 							Suppression de l'effet: {{log.effect.name}}

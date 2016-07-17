@@ -123,6 +123,12 @@ export class ItemService {
         })).map(res => res.json());
     }
 
+    readBook(itemId: number): Observable<Item> {
+        return this._http.post('/api/item/readBook', JSON.stringify({
+            itemId: itemId,
+        })).map(res => res.json());
+    }
+
     updateCharge(itemId: number, charge): Observable<Item> {
         return this._http.post('/api/item/updateCharge', JSON.stringify({
             itemId: itemId,

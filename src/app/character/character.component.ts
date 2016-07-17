@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {NotificationsService} from '../notifications';
 
@@ -51,8 +51,8 @@ import {SkillService} from '../skill';
                 [style.margin-left]="(level * 20) + 'px'"
                 (click)="selectItem(item)"
                 [class.active]="selectedItem && selectedItem.id == item.id">
-                <span *ngIf="item.quantity">{{item.quantity}}</span>
-                {{item.name}}
+                <span *ngIf="item.data.quantity">{{item.quantity}}</span>
+                {{item.data.name}}
             </a>
             <template [ngIf]="item.content">
                 <bag-item-view
@@ -66,16 +66,15 @@ import {SkillService} from '../skill';
             </template>
         </template>
     `,
-    inputs: ['items', 'selectedItem', 'end', 'ends', 'level'],
-    outputs: ['itemSelected'],
     directives: [BagItemViewComponent],
 })
 export class BagItemViewComponent implements OnInit {
-    public items: Item[];
-    private itemSelected: EventEmitter<Item> = new EventEmitter<Item>();
-    private level: number = 0;
-    public ends: number[] = [];
-    public end: number;
+    @Input() items: Item[];
+    @Input() selectedItem: Item;
+    @Input() level: number = 0;
+    @Input() end: number;
+    @Input() ends: number[] = [];
+    @Output() itemSelected: EventEmitter<Item> = new EventEmitter<Item>();
 
     selectItem(item) {
         this.itemSelected.emit(item);
@@ -86,7 +85,6 @@ export class BagItemViewComponent implements OnInit {
         this.ends = JSON.parse(JSON.stringify(this.ends));
         if (this.end != null) {
             this.ends.push(this.end);
-            console.log(this.ends);
         }
     }
 }
@@ -651,7 +649,7 @@ export class CharacterComponent implements OnInit {
                 let skillMD = item.template.skills[u];
                 this.skills.push({
                     skillDef: this.skillsById[skillMD.id],
-                    from: [item.name]
+                    from: [item.data.name]
                 });
             }
             let somethingOver = false;
@@ -662,7 +660,7 @@ export class CharacterComponent implements OnInit {
                     if (item2.id === item.id) {
                         continue;
                     }
-                    if (item.equiped < item2.equiped) {
+                    if (item.data.equiped < item2.equiped) {
                         somethingOver = true;
                         break;
                     }
@@ -741,7 +739,7 @@ export class CharacterComponent implements OnInit {
                 modifications['PR_MAGIC'] = item.template.data.magicProtection;
                 this.stats['PR_MAGIC'] += item.template.data.magicProtection;
             }
-            this.addDetails(item.name, modifications);
+            this.addDetails(item.data.name, modifications);
         }
 
         if (this.stats['AD'] > 12 && this.character.statBonusAD) {
@@ -825,7 +823,7 @@ export class CharacterComponent implements OnInit {
                 if (item) {
                     this.skills.push({
                         skillDef: this.skillsById[skillMD.skillId],
-                        from: ["Appris:" + item.name]
+                        from: ["Appris:" + item.data.name]
                     });
                 }
             }
@@ -1102,7 +1100,7 @@ export class CharacterComponent implements OnInit {
             return true;
         }
         let cleanFilter = removeDiacritics(this.itemFilterName).toLowerCase();
-        if (removeDiacritics(item.name).toLowerCase().indexOf(cleanFilter) > -1) {
+        if (removeDiacritics(item.data.name).toLowerCase().indexOf(cleanFilter) > -1) {
             return true;
         }
         if (removeDiacritics(item.template.name).toLowerCase().indexOf(cleanFilter) > -1) {
@@ -1125,7 +1123,7 @@ export class CharacterComponent implements OnInit {
             }
             this._itemService.equipItem(item.id, level).subscribe(
                 res => {
-                    item.equiped = res.equiped;
+                    item.data.equiped = res.data.equiped;
                     this.updateInventory();
                     this.updateStats();
                 },
@@ -1156,18 +1154,22 @@ export class CharacterComponent implements OnInit {
             );
         }
         else if (event.action === 'update_quantity') {
-            let quantity = item.quantity;
-            let inputQuantity = event.quantity as string;
-
-            if (inputQuantity.indexOf('+') === 0 || inputQuantity.indexOf('-') === 0) {
-                quantity = quantity + parseInt(inputQuantity, 10);
-            } else {
-                quantity = parseInt(inputQuantity, 10);
-            }
-
-            this._itemService.updateQuantity(item.id, quantity).subscribe(
+            this._itemService.updateQuantity(item.id, event.quantity).subscribe(
                 res => {
-                    item.quantity = res.quantity;
+                    item.data.quantity = res.data.quantity;
+                    this.updateInventory();
+                    this.updateStats();
+                },
+                err => {
+                    console.log(err);
+                    this._notification.error("Erreur", "Erreur serveur");
+                }
+            );
+        }
+        else if (event.action === 'read_skill_book') {
+            this._itemService.readBook(item.id).subscribe(
+                res => {
+                    item.data.readCount = res.data.readCount;
                     this.updateInventory();
                     this.updateStats();
                 },
@@ -1178,9 +1180,9 @@ export class CharacterComponent implements OnInit {
             );
         }
         else if (event.action === 'use_charge') {
-            this._itemService.updateCharge(item.id, item.charge - 1).subscribe(
+            this._itemService.updateCharge(item.id, item.data.charge - 1).subscribe(
                 res => {
-                    item.charge = res.charge;
+                    item.data.charge = res.data.charge;
                     this.updateInventory();
                     this.updateStats();
                 },
@@ -1251,9 +1253,9 @@ export class CharacterComponent implements OnInit {
 
         for (let i = 0; i < this.character.items.length; i++) {
             let item = this.character.items[i];
-            if (item.equiped != null || item.container != null) {
+            if (item.data.equiped != null || item.container != null) {
                 if (item.template.data.container) {
-                    if (item.equiped) {
+                    if (item.data.equiped) {
                         topLevelContainers.push(item);
                     }
                     containers.push(item);
@@ -1267,7 +1269,7 @@ export class CharacterComponent implements OnInit {
                 }
                 itemsBySlotsAll[slot.id].push(item);
 
-                if (!item.equiped) {
+                if (!item.data.equiped) {
                     continue;
                 }
 
@@ -1279,7 +1281,7 @@ export class CharacterComponent implements OnInit {
                 }
                 itemsBySlots[slot.id].push(item);
             }
-            if (item.equiped != null) {
+            if (item.data.equiped != null) {
                 equiped.push(item);
             } else {
                 if (item.container) {
@@ -1301,10 +1303,10 @@ export class CharacterComponent implements OnInit {
         for (let i = 0; i < slots.length; i++) {
             let slot = slots[i];
             itemsBySlots[slot.id].sort(function (a: Item, b: Item) {
-                if (a.equiped === b.equiped) {
+                if (a.data.equiped === b.data.equiped) {
                     return 0;
                 }
-                if (a.equiped < b.equiped) {
+                if (a.data.equiped < b.data.equiped) {
                     return 1;
                 }
                 return -1;
