@@ -1,16 +1,16 @@
-import {Component} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 import {Stat} from "./stat.model";
 import {CharacterService} from "../character/character.service";
 
 @Component({
     selector: 'stat-requirements-editor',
-    templateUrl: 'app/shared/stat-requirements-editor.component.html',
-    inputs: ["requirements"],
+    moduleId: module.id,
+    templateUrl: 'stat-requirements-editor.component.html',
 })
-export class StatRequirementsEditorComponent {
+export class StatRequirementsEditorComponent implements OnInit {
     public stats: Stat[];
-    public requirements: Object[];
+    @Input() requirements: Object[];
     public selectedStat: Stat;
     public minValue: number;
     public maxValue: number;

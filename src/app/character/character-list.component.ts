@@ -8,7 +8,8 @@ import {CharacterResume} from "./character.model";
 
 @Component({
     selector: 'character-list',
-    templateUrl: 'app/character/character-list.component.html',
+    moduleId: module.id,
+    templateUrl: 'character-list.component.html',
     providers: [HTTP_PROVIDERS, CharacterService]
 })
 export class CharacterListComponent implements OnInit {

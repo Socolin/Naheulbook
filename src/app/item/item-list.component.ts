@@ -12,7 +12,8 @@ import {removeDiacritics, ModifierPipe} from "../shared";
 import {Subscription} from 'rxjs/Rx';
 
 @Component({
-    templateUrl: 'app/item/item-list.component.html',
+    moduleId: module.id,
+    templateUrl: 'item-list.component.html',
     pipes: [ModifierPipe],
     directives: [ItemElementComponent],
     styles: [
@@ -119,7 +120,9 @@ export class ItemListComponent implements OnInit, OnDestroy {
     }
 
     editItem(item: ItemTemplate) {
-        this._router.navigate(['/edit-item', item.id]);
+        this.sub.unsubscribe();
+        this.sub = null;
+        this._router.navigate(['/edit-item', item.id], {queryParams: {}});
     }
 
     ngOnInit() {

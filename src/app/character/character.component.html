@@ -432,7 +432,7 @@
 					<div>
 						<ul>
 							<li *ngFor="let skill of skills">
-								<span [class.canceled]="skill.canceled">{{skill.skill.name}}</span> (<span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>)
+								<span [class.canceled]="skill.canceled">{{skill?.skillDef?.name}}</span> (<span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>)
 							</li>
 						</ul>
 					</div>

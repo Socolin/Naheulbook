@@ -4,7 +4,6 @@ import {Origin} from "../origin";
 import {Job} from "../job";
 import {StatModifier, IMetadata} from "../shared";
 import {Effect} from "../effect";
-import {Skill} from '../skill/skill.model';
 
 export interface CharacterResume {
     id: number;
@@ -22,6 +21,12 @@ export class CharacterModifier {
     id: number;
 }
 
+
+export class CharacterSkill {
+    skillId: number;
+    itemId: number;
+}
+
 export class Character {
     id: number;
     name: string;
@@ -34,7 +39,7 @@ export class Character {
     active: number;
     fatePoint: number;
     items: Item[];
-    skills: Skill[];
+    skills: CharacterSkill[];
     effects: Effect[];
     stats: {[statName: string]: number};
     modifiers: CharacterModifier[];
@@ -74,7 +79,7 @@ export class Character {
         }
         for (let i = 0; i < character.skills.length; i++) {
             let skill = character.skills[i];
-            if (skill.id === skillId) {
+            if (skill.skillId === skillId) {
                 return true;
             }
         }

@@ -8,7 +8,8 @@ import {OriginService} from "./origin.service";
 
 @Component({
     selector: 'origin-list',
-    templateUrl: 'app/origin/origin-list.component.html',
+    moduleId: module.id,
+    templateUrl: 'origin-list.component.html',
     styleUrls: ['/styles/origin-list.css'],
     directives: [OriginComponent],
 })

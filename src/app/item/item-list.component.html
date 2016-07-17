@@ -31,7 +31,7 @@
 					{{category.note}}
 				</p>
 			</div>
-		</div>		
+		</div>
 		<template [ngIf]="itemsByCategory">
 			<template ngFor let-item [ngForOf]="itemsByCategory[category.id]">
 				<template [ngIf]="isVisible(item)">
@@ -41,23 +41,23 @@
 								<h4>
 									<span *ngIf="editable" (click)=editItem(item)><span class="glyphicon glyphicon-edit"></span></span>
 									{{item.name}}
-									<span *ngIf="item.level" class="label label-info">Niveau {{item.level}}</span>
-									<span *ngIf="item.relic" class="label label-info">Relique</span>
-									<span *ngIf="item.sex == 'h'" class="label label-info">Homme uniq.</span>
-									<span *ngIf="item.sex == 'f'" class="label label-info">Femme uniq.</span>
+									<span *ngIf="item.data.requireLevel" class="label label-info">Niveau {{item.data.requireLevel}}</span>
+									<span *ngIf="item.data.relic" class="label label-info">Relique</span>
+									<span *ngIf="item.data.sex == 'h'" class="label label-info">Homme uniq.</span>
+									<span *ngIf="item.data.sex == 'f'" class="label label-info">Femme uniq.</span>
 								</h4>
 							</div>
 						</div>
 						<!-- Dice drop -->
-						<div *ngIf="item.diceDrop">
-							<span class="ra ra-perspective-dice-random ra-lg">{{item.diceDrop}}</span>
+						<div *ngIf="item.data.diceDrop">
+							<span class="ra ra-perspective-dice-random ra-lg">{{item.data.diceDrop}}</span>
 						</div>
-	
+
 						<!-- Throwable -->
-						<div *ngIf="item.throwable">
+						<div *ngIf="item.data.throwable">
 							<span class="label label-primary">Arme prévue pour le jet</span>
 						</div>
-		
+
 						<!-- Slots -->
 						<div *ngIf="item.slots?.length > 0">
 							<span class="item-section">
@@ -68,106 +68,106 @@
                                 <span class="label label-primary">{{slot.name}}</span>
                             </template>
                         </div>
-		
+
 						<!-- Description -->
-						<div *ngIf="item.description">
+						<div *ngIf="item.data.description">
 							<span class="item-section">
 								Description:
 							</span>
-							{{item.description}}
+							{{item.data.description}}
 						</div>
-						
-						
+
+
 						<!-- Note -->
-						<div *ngIf="item.note">
+						<div *ngIf="item.data.note">
 							<span class="item-section">
 								Note:
 							</span>
-							{{item.note}}
+							{{item.data.note}}
 						</div>
-						
+
 						<!-- Encombrement -->
-						<div *ngIf="item.space">
+						<div *ngIf="item.data.space">
 							<span class="item-section">
 								Encombrement:
 							</span>
-							{{item.space}}
+							{{item.data.space}}
 						</div>
-			
+
 						<!-- Possibilités de récolte -->
-						<div *ngIf="item.availableLocation">
+						<div *ngIf="item.data.availableLocation">
 							<span class="item-section">
 								Possibilités de récolte:
 							</span>
-							{{item.availableLocation}}
+							{{item.data.availableLocation}}
 						</div>
-						
+
 						<!-- Prix/Charge/Durée -->
 						<div class="row">
-							<div *ngIf="item.price" class="col-xs-6 col-sm-3">
+							<div *ngIf="item.data.price" class="col-xs-6 col-sm-3">
 								<span class="item-section">Prix:</span>
-								<template [ngIf]="item.price >= 1">
-									{{item.price | number}} P.O.
+								<template [ngIf]="item.data.price >= 1">
+									{{item.data.price | number}} P.O.
 								</template>
-			
-								<template [ngIf]="item.price < 1 && item.price >= 0.1">
-									{{item.price * 10}} P.A.
+
+								<template [ngIf]="item.data.price < 1 && item.data.price >= 0.1">
+									{{item.data.price * 10}} P.A.
 								</template>
-			
-								<template [ngIf]="item.price < 0.1">
-									{{item.price * 100}} P.C.
+
+								<template [ngIf]="item.data.price < 0.1">
+									{{item.data.price * 100}} P.C.
 								</template>
 							</div>
-							<div *ngIf="item.duration" class="col-xs-6 col-sm-3">
+							<div *ngIf="item.data.duration" class="col-xs-6 col-sm-3">
 								<span class="item-section">Durée:</span>
-								{{item.duration}}
+								{{item.data.duration}}
 							</div>
-							<div *ngIf="item.charge" class="col-xs-6 col-sm-3">
+							<div *ngIf="item.data.charge" class="col-xs-6 col-sm-3">
 								<span class="item-section">Charge:</span>
-								{{item.charge}}
+								{{item.data.charge}}
 							</div>
 						</div>
-	
-						<div *ngIf="item.weight">
+
+						<div *ngIf="item.data.weight">
 							<span class="item-section">
 								Poid:
 							</span>
-							<span *ngIf="item.weight < 1">{{(item.weight * 1000)}}g</span>
-							<span *ngIf="item.weight >= 1">{{(item.weight)}}Kg</span>
+							<span *ngIf="item.data.weight < 1">{{(item.data.weight * 1000)}}g</span>
+							<span *ngIf="item.data.weight >= 1">{{(item.data.weight)}}Kg</span>
 						</div>
-			
+
 						<!-- Degat -->
-						<div class="row" *ngIf="item.damage || item.damageDiceCount">
+						<div class="row" *ngIf="item.data.bonusDamage || item.data.damageDice">
 							<div class="col-xs-12">
 								<span class="ra ra-broadsword ra-lg"></span>
-								<span *ngIf="item.damageDiceCount">{{item.damageDiceCount}}<span class="ra ra-perspective-dice-random"></span></span>
-								<span *ngIf="item.damageDiceCount && item.damage>0">+</span>
-								<span *ngIf="item.damage">{{item.damage}}</span>
-								<span *ngIf="item.damageType">({{item.damageType}})</span>
+								<span *ngIf="item.data.damageDice">{{item.data.damageDice}}<span class="ra ra-perspective-dice-random"></span></span>
+								<span *ngIf="item.data.damageDice && item.data.bonusDamage>0">+</span>
+								<span *ngIf="item.data.bonusDamage">{{item.data.bonusDamage}}</span>
+								<span *ngIf="item.data.damageType">({{item.data.damageType}})</span>
 							</div>
 						</div>
-			
+
 						<!-- Protection -->
-						<div *ngIf="item.protection || item.magicProtection || item.protectionAgainstMagic">
+						<div *ngIf="item.data.protection || item.data.magicProtection || item.data.protectionAgainstMagic">
 							<span class="ra ra-shield ra-lg"></span>
-							<span *ngIf="item.protection">{{item.protection}}</span>
-							<span *ngIf="item.protection && item.magicProtection">+</span>
-							<span *ngIf="item.magicProtection">{{item.magicProtection}} (magique)</span>
-							<span *ngIf="(item.protection || item.magicProtection) && item.protectionAgainstMagic">/</span>
-							<span *ngIf="item.protectionAgainstMagic">{{item.protectionAgainstMagic}}
-								<span *ngIf="item.protectionAgainstType">(contre {{item.protectionAgainstType}})</span>
-								<span *ngIf="!item.protectionAgainstType">(contre mag./myst.)</span>
+							<span *ngIf="item.data.protection">{{item.data.protection}}</span>
+							<span *ngIf="item.data.protection && item.data.magicProtection">+</span>
+							<span *ngIf="item.data.magicProtection">{{item.data.magicProtection}} (magique)</span>
+							<span *ngIf="(item.data.protection || item.data.magicProtection) && item.data.protectionAgainstMagic">/</span>
+							<span *ngIf="item.data.protectionAgainstMagic">{{item.data.protectionAgainstMagic}}
+								<span *ngIf="item.data.protectionAgainstType">(contre {{item.data.protectionAgainstType}})</span>
+								<span *ngIf="!item.data.protectionAgainstType">(contre mag./myst.)</span>
 							</span>
 						</div>
-		
+
 						<!-- Rupture -->
-						<div class="row" *ngIf="item.rupture">
+						<div class="row" *ngIf="item.data.rupture">
 							<div class="col-xs-12">
 								<span class="ra ra-broken-shield ra-lg"></span>
-								1 à {{item.rupture}}
+								1 à {{item.data.rupture}}
 							</div>
 						</div>
-						
+
 						<!-- Modificateurs -->
 						<template [ngIf]="item.modifiers && item.modifiers.length">
                             <template ngFor let-modifier [ngForOf]="item.modifiers">
@@ -178,7 +178,7 @@
                                 </div>
                             </template>
 						</template>
-			
+
 						<!-- Compétences ajouté/annulé -->
 						<template ngFor let-skill [ngForOf]="item.skills">
 							<div>Donne la compétence "{{skill.name}}"</div>

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
@@ -9,6 +9,20 @@ export class SkillService {
     private skills: ReplaySubject<Skill[]>;
 
     constructor(private _http: Http) {
+    }
+
+    getSkill(skillId: number): Observable<Skill> {
+        let skill: EventEmitter<Skill> = new EventEmitter<Skill>();
+        this.getSkills().subscribe(skills => {
+            for (let i = 0; i < skills.length; i++) {
+                if (skills[i].id === skillId) {
+                    skill.emit(skills[i]);
+                    return;
+                }
+            }
+            skill.emit(null);
+        });
+        return skill;
     }
 
     getSkills(): Observable<Skill[]> {

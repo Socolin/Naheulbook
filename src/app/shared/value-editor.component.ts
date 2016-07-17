@@ -27,7 +27,6 @@ export class ValueEditorComponent implements OnChanges {
             this.computeEditorBoundingBox(element.children[i], bbox);
         }
         let rect = element.getBoundingClientRect();
-        console.log(rect);
         element.hidden = h;
         bbox.bottom = Math.max(bbox.bottom, rect.bottom);
         bbox.top = Math.min(bbox.top, rect.top);
@@ -69,7 +68,6 @@ export class ValueEditorComponent implements OnChanges {
     }
 
     commitValue() {
-        console.log(this.valueDelta);
         this.displayEditor = false;
         this.onChange.emit(this.newValue);
         this.valueDelta = null;

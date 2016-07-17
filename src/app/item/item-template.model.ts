@@ -13,40 +13,44 @@ export class ItemCategory {
     name: string;
     description: string;
     note: string;
+    type: any;
 }
 export class ItemSlot {
     id: number;
     name: string;
     techName: string;
 }
-export class ItemTemplate {
-    id: number;
-    name: string;
+export class ItemTemplateData {
     description: string;
     note: string;
     diceDrop: number;
     price: number;
-    category: any;
-    modifiers: ItemStatModifier[] = [];
-    skills: IMetadata[];
-    unskills: IMetadata[];
     container: boolean;
-    slots: ItemSlot[];
-    slotCount: number;
     throwable: boolean;
     rupture: number;
     level: number;
-    damageDiceCount: number;
+    damageDice: number;
     damageType: any;
-    damage: any;
+    bonusDamage: number;
     magicProtection: number;
     protection: number;
     protectionAgainstMagic: any;
     protectionAgainstType: any;
     charge: any;
-    skillModifiers: any[];
     availableLocation: string;
     relic: boolean;
     sex: string;
     quantifiable: boolean;
+    skillBook: boolean;
+}
+export class ItemTemplate {
+    id: number;
+    name: string;
+    category: ItemCategory;
+    data: ItemTemplateData;
+    modifiers: ItemStatModifier[] = [];
+    skills: IMetadata[];
+    unskills: IMetadata[];
+    slots: ItemSlot[];
+    skillModifiers: any[];
 }

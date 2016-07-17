@@ -5,8 +5,9 @@ import {EffectService} from "./effect.service";
 import {Effect, EffectCategory} from './effect.model';
 
 @Component({
+    moduleId: module.id,
     selector: 'effect-editor',
-    templateUrl: 'app/effect/effect-editor.component.html',
+    templateUrl: 'effect-editor.component.html',
     pipes: [PlusMinusPipe],
     directives: [ModifiersEditorComponent]
 })

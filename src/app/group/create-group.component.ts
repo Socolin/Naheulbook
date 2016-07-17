@@ -6,7 +6,8 @@ import {NotificationsService} from '../notifications';
 import {CharacterService} from "../character";
 
 @Component({
-    templateUrl: 'app/group/create-group.component.html',
+    moduleId: module.id,
+    templateUrl: 'create-group.component.html',
     providers: [CharacterService]
 })
 export class CreateGroupComponent {

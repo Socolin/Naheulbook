@@ -4,7 +4,8 @@ import {Skill} from "./skill.model";
 
 @Component({
     selector: 'skill',
-    templateUrl: 'app/skill/skill.component.html'
+    moduleId: module.id,
+    templateUrl: 'skill.component.html'
 })
 export class SkillComponent {
     @Input() skill: Skill;

@@ -1,21 +1,21 @@
 <h4>
-	<span *ngIf="item.quantity">{{item.quantity}}</span> 
+	<span *ngIf="item.quantity">{{item.quantity}}</span>
 	<span *ngIf="!editing">{{item.name}}</span>
 	<span *ngIf="editing"><input  class="form-control" [(ngModel)]="itemEditName" /></span>
 </h4>
 <div>
-	<span *ngIf="item.template.relic" class="label label-primary">Relique</span> 
-	<span *ngIf="character.sex == 'Homme'"> 
-		<span *ngIf="item.template.sex == 'h'" class="label label-success">Homme uniq.</span>
-		<span *ngIf="item.template.sex == 'f'" class="label label-danger">Femme uniq.</span>
+	<span *ngIf="item.template.data.relic" class="label label-primary">Relique</span>
+	<span *ngIf="character.sex == 'Homme'">
+		<span *ngIf="item.template.data.sex == 'h'" class="label label-success">Homme uniq.</span>
+		<span *ngIf="item.template.data.sex == 'f'" class="label label-danger">Femme uniq.</span>
 	</span>
 	<span *ngIf="character.sex == 'Femme'">
-		<span *ngIf="item.template.sex == 'h'" class="label label-danger">Homme uniq.</span>
-		<span *ngIf="item.template.sex == 'f'" class="label label-success">Femme uniq.</span>
+		<span *ngIf="item.template.data.sex == 'h'" class="label label-danger">Homme uniq.</span>
+		<span *ngIf="item.template.data.sex == 'f'" class="label label-success">Femme uniq.</span>
 	</span>
-	<span *ngIf="item.template.level && character.level < item.template.level" class="label label-danger">Level: {{item.template.level}}</span> 
-	<span *ngIf="item.template.level && character.level >= item.template.level" class="label label-success">Level: {{item.template.level}}</span> 
-	<span *ngIf="item.template.throwable" class="label label-info">Prévue pour le jet</span> 
+	<span *ngIf="item.template.data.requireLevel && character.level < item.template.data.requireLevel" class="label label-danger">Level: {{item.template.data.requireLevel}}</span>
+	<span *ngIf="item.template.data.requireLevel && character.level >= item.template.data.requireLevel" class="label label-success">Level: {{item.template.data.requireLevel}}</span>
+	<span *ngIf="item.template.data.throwable" class="label label-info">Prévue pour le jet</span>
 </div>
 <div style="padding-top:5px; padding-bottom:5px">
 	<small><span class="label label-default">{{item.template.category.typeDetail.name}}</span> <span class="label label-default">{{item.template.category.name}}</span></small>
@@ -25,12 +25,12 @@
 	<span *ngIf="editing"><input class="form-control" [(ngModel)]="itemEditDescription" /></span>
 </div>
 <div *ngIf="item.template.slots?.length > 0">
-	Slot: 
-	<span *ngFor="let slot of item.template.slots" class="label label-primary">{{slot.name}}</span> 
+	Slot:
+	<span *ngFor="let slot of item.template.slots" class="label label-primary">{{slot.name}}</span>
 </div>
-<div *ngIf="item.template.note">Note: {{item.template.note}}</div>
+<div *ngIf="item.template.data.note">Note: {{item.template.data.note}}</div>
 
-<div *ngIf="item.template.quantifiable" class="row">
+<div *ngIf="item.template.data.quantifiable" class="row">
 	<div class="col-xs-6">
 		Quantité: {{item.quantity}}
 	</div>
@@ -39,48 +39,48 @@
 		<div style="height:0; width: 0; overflow: hidden;"><input type="text"/></div>
 	</div>
 </div>
-<div *ngIf="item.template.damage || item.template.damageDiceCount">
+<div *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
 	<span class="ra ra-broadsword ra-lg"></span>
-	<span *ngIf="item.template.damageDiceCount">{{item.template.damageDiceCount}}<span class="ra ra-perspective-dice-random"></span></span>
-	<span *ngIf="item.template.damageDiceCount && item.template.damage>0">+</span>
-	<span *ngIf="item.template.damage">{{item.template.damage}}</span>
-	<span *ngIf="item.template.damageType">({{item.template.damageType}})</span>
+	<span *ngIf="item.template.data.damageDice">{{item.template.data.damageDice}}<span class="ra ra-perspective-dice-random"></span></span>
+	<span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
+	<span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
+	<span *ngIf="item.template.data.damageType">({{item.template.data.damageType}})</span>
 	<div style="margin-left: 20px">
 	<span *ngIf="characterStats.PI > 0" class="text-info">+{{characterStats.PI}} (Bonus personnage)</span>
 	<span *ngIf="characterStats.PI < 0" class="text-warning">{{characterStats.PI}} (Malus personnage)</span>
 	</div>
 </div>
 
-<div *ngIf="item.template.protection || item.template.magicProtection || item.template.protectionAgainstMagic">
+<div *ngIf="item.template.data.protection || item.template.data.magicProtection || item.template.data.protectionAgainstMagic">
 	<span class="ra ra-shield ra-lg"></span>
-	<span *ngIf="item.template.protection">{{item.template.protection}}</span>
-	<span *ngIf="item.template.protection && item.template.magicProtection">+</span>
-	<span *ngIf="item.template.magicProtection">{{item.template.magicProtection}} (magique)</span>
-	<span *ngIf="(item.template.protection || item.template.magicProtection) && item.template.protectionAgainstMagic">/</span>
-	<span *ngIf="item.template.protectionAgainstMagic">{{item.template.protectionAgainstMagic}}
-		<span *ngIf="item.template.protectionAgainstType">(contre {{item.template.protectionAgainstType}})</span>
-		<span *ngIf="!item.template.protectionAgainstType">(contre mag./myst.)</span>
+	<span *ngIf="item.template.data.protection">{{item.template.data.protection}}</span>
+	<span *ngIf="item.template.data.protection && item.template.data.magicProtection">+</span>
+	<span *ngIf="item.template.data.magicProtection">{{item.template.data.magicProtection}} (magique)</span>
+	<span *ngIf="(item.template.data.protection || item.template.data.magicProtection) && item.template.data.protectionAgainstMagic">/</span>
+	<span *ngIf="item.template.data.protectionAgainstMagic">{{item.template.data.protectionAgainstMagic}}
+		<span *ngIf="item.template.data.protectionAgainstType">(contre {{item.template.data.protectionAgainstType}})</span>
+		<span *ngIf="!item.template.data.protectionAgainstType">(contre mag./myst.)</span>
 	</span>
 
 </div>
-<div *ngIf="item.template.charge">
-	Charges: {{item.charge}} / {{item.template.charge}}
+<div *ngIf="item.template.data.charge">
+	Charges: {{item.charge}} / {{item.template.data.charge}}
 	<button (click)="itemAction.next({action: 'use_charge'})" class="btn btn-success">Utiliser</button>
 </div>
 
-<div *ngIf="item.template.description">{{item.template.description}}</div>
-<div *ngIf="item.template.weight">
+<div *ngIf="item.template.data.description">{{item.template.data.description}}</div>
+<div *ngIf="item.template.data.weight">
 	Poid:
-	<span *ngIf="item.template.weight < 1">{{(item.template.weight * 1000)}}g</span>
-	<span *ngIf="item.template.weight >= 1">{{(item.template.weight)}}Kg</span>
-	<span *ngIf="item.quantity">Total: {{item.quantity * item.template.weight}}Kg</span>
+	<span *ngIf="item.template.data.weight < 1">{{(item.template.data.weight * 1000)}}g</span>
+	<span *ngIf="item.template.data.weight >= 1">{{(item.template.data.weight)}}Kg</span>
+	<span *ngIf="item.quantity">Total: {{item.quantity * item.template.data.weight}}Kg</span>
 </div>
-<div *ngIf="item.template.space">Encombrement: {{item.template.space}}</div>
- 
-<div *ngIf="item.template.rupture">
-	<span class="ra ra-broken-shield ra-lg"></span> 1 à {{item.template.rupture}}
+<div *ngIf="item.template.data.space">Encombrement: {{item.template.data.space}}</div>
+
+<div *ngIf="item.template.data.rupture">
+	<span class="ra ra-broken-shield ra-lg"></span> 1 à {{item.template.data.rupture}}
 </div>
-<div *ngIf="item.template.duration">Durée: {{item.template.duration}}</div>
+<div *ngIf="item.template.data.duration">Durée: {{item.template.data.duration}}</div>
 
 <div *ngIf="modifiers && modifiers.length">
 	<div *ngFor="let modifier of modifiers">
@@ -114,6 +114,7 @@
 	<button *ngIf="item.equiped == null" class="btn btn-success" (click)="itemAction.next({action: 'equip'})">Equip</button>
 	<button *ngIf="item.equiped != null" class="btn btn-danger" (click)="itemAction.next({action: 'unequip'})">Unequip</button>
 </span>
+<button *ngIf="item.template.data.skillBook" class="btn btn-success" (click)="itemAction.next({action: 'read'})">Lire</button>
 
 <button class="btn glyphicon glyphicon-pencil" [class.btn-primary]="editing" [class.btn-default]="editing" (click)="editItem()"></button>
 

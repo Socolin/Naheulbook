@@ -22,6 +22,7 @@ import {Character, CharacterModifier} from "./character.model";
 import {IMetadata} from '../shared/misc.model';
 import {ItemDetailComponent} from './item-detail.component';
 import {EffectCategory} from '../effect/effect.model';
+import {SkillService} from '../skill';
 
 @Component({
     selector: 'bag-item-view',
@@ -115,13 +116,14 @@ class LevelUpInfo {
 
 interface SkillDetail {
     from: string[];
-    skill: Skill;
+    skillDef: Skill;
     canceled?: boolean;
 }
 
 @Component({
     selector: 'character',
-    templateUrl: 'app/character/character.component.html',
+    moduleId: module.id,
+    templateUrl: 'character.component.html',
     pipes: [PlusMinusPipe, ModifierPipe],
     styles: [
         `.canceled {
@@ -157,10 +159,12 @@ export class CharacterComponent implements OnInit {
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
     public details: StatisticDetail;
     public selectedItem: Item;
+    public skillsById: {[skillID: number]: Skill};
 
     constructor(private _route: ActivatedRoute
         , private _itemService: ItemService
         , private _effectService: EffectService
+        , private _skillService: SkillService
         , private _notification: NotificationsService
         , private _characterService: CharacterService) {
     }
@@ -253,13 +257,13 @@ export class CharacterComponent implements OnInit {
 
     characterHasToken(token: string) {
         if (this.character.origin.specials) {
-            if (this.character.origin.specials.indexOf(token) != -1) {
+            if (this.character.origin.specials.indexOf(token) !== -1) {
                 return true;
             }
         }
         if (this.character.job) {
             if (this.character.job.specials) {
-                if (this.character.job.specials.indexOf(token) != -1) {
+                if (this.character.job.specials.indexOf(token) !== -1) {
                     return true;
                 }
             }
@@ -308,7 +312,7 @@ export class CharacterComponent implements OnInit {
     }
 
     rollLevelUp() {
-        var diceLevelUp = this.character.origin.diceEVLevelUp;
+        let diceLevelUp = this.character.origin.diceEVLevelUp;
         if (this.levelUpInfo.EVorEA === 'EV') {
             if (this.characterHasToken('LEVELUP_DICE_EV_-1')) {
                 this.levelUpInfo.EVorEAValue = Math.max(1, Math.ceil(Math.random() * diceLevelUp) - 1);
@@ -525,6 +529,17 @@ export class CharacterComponent implements OnInit {
         return cleanModifiers;
     }
 
+
+    public getItemById(itemId: number): Item {
+        for (let i = 0; i < this.character.items.length; i++) {
+            let item = this.character.items[i];
+            if (item.id === itemId) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public countInOtherTab: number = 0;
 
     updateStats() {
@@ -624,7 +639,7 @@ export class CharacterComponent implements OnInit {
         this.stats['CHA_WITHOUT_MAGIEPSY'] = 0;
         for (let i = 0; i < this.itemsEquiped.length; i++) {
             let item = this.itemsEquiped[i];
-            if (item.template.charge) {
+            if (item.template.data.charge) {
                 continue;
             }
             let modifications = {};
@@ -633,9 +648,9 @@ export class CharacterComponent implements OnInit {
                 canceledSkills[skill.id] = item;
             }
             for (let u = 0; u < item.template.skills.length; u++) {
-                let skill = item.template.skills[u];
+                let skillMD = item.template.skills[u];
                 this.skills.push({
-                    skill: JSON.parse(JSON.stringify(skill)),
+                    skillDef: this.skillsById[skillMD.id],
                     from: [item.name]
                 });
             }
@@ -718,13 +733,13 @@ export class CharacterComponent implements OnInit {
                     modifications[overrideStatName] = formatModifierValue(modifier);
                 }
             }
-            if (item.template.protection) {
-                modifications['PR'] = item.template.protection;
-                this.stats['PR'] += item.template.protection;
+            if (item.template.data.protection) {
+                modifications['PR'] = item.template.data.protection;
+                this.stats['PR'] += item.template.data.protection;
             }
-            if (item.template.magicProtection) {
-                modifications['PR_MAGIC'] = item.template.magicProtection;
-                this.stats['PR_MAGIC'] += item.template.magicProtection;
+            if (item.template.data.magicProtection) {
+                modifications['PR_MAGIC'] = item.template.data.magicProtection;
+                this.stats['PR_MAGIC'] += item.template.data.magicProtection;
             }
             this.addDetails(item.name, modifications);
         }
@@ -789,38 +804,49 @@ export class CharacterComponent implements OnInit {
 
         if (this.character.job) {
             for (let i = 0; i < this.character.job.skills.length; i++) {
-                let skill = this.character.job.skills[i];
+                let skillMD = this.character.job.skills[i];
                 this.skills.push({
-                    skill: JSON.parse(JSON.stringify(skill)),
+                    skillDef: this.skillsById[skillMD.id],
                     from: [this.character.job.name]
                 });
             }
         }
         for (let i = 0; i < this.character.origin.skills.length; i++) {
-            let skill = this.character.origin.skills[i];
+            let skillMD = this.character.origin.skills[i];
             this.skills.push({
-                skill: JSON.parse(JSON.stringify(skill)),
+                skillDef: this.skillsById[skillMD.id],
                 from: [this.character.origin.name]
             });
         }
         for (let i = 0; i < this.character.skills.length; i++) {
-            let skill = this.character.skills[i];
-            this.skills.push({
-                skill: JSON.parse(JSON.stringify(skill)),
-                from: ["Choisi"]
-            });
+            let skillMD = this.character.skills[i];
+            if (skillMD.itemId) {
+                let item = this.getItemById(skillMD.itemId);
+                if (item) {
+                    this.skills.push({
+                        skillDef: this.skillsById[skillMD.skillId],
+                        from: ["Appris:" + item.name]
+                    });
+                }
+            }
+            else {
+                this.skills.push({
+                    skillDef: this.skillsById[skillMD.skillId],
+                    from: ["Choisi"]
+                });
+            }
         }
         this.skills.sort(function (a, b) {
-            return a.skill.name.localeCompare(b.skill.name);
+            return a.skillDef.name.localeCompare(b.skillDef.name);
         });
 
         let prevSkill: SkillDetail = null;
         for (let i = 0; i < this.skills.length; i++) {
             let skill = this.skills[i];
-            if (skill.skill.id in canceledSkills) {
-                skill.canceled = canceledSkills[skill.skill.id];
+            if (skill.skillDef.id in canceledSkills) {
+                skill.canceled = canceledSkills[skill.skillDef.id];
             }
-            if (prevSkill && skill.skill.id === prevSkill.skill.id) {
+            if (prevSkill && skill.skillDef.id === prevSkill.skillDef.id) {
                 prevSkill.from.push(skill.from[0]);
                 this.skills.splice(i, 1);
                 i--;
@@ -831,14 +857,14 @@ export class CharacterComponent implements OnInit {
 
         for (let i = 0; i < this.skills.length; i++) {
             let skill = this.skills[i];
-            if (!skill.canceled && skill.skill.effects && skill.skill.effects.length > 0) {
+            if (!skill.canceled && skill.skillDef.effects && skill.skillDef.effects.length > 0) {
                 let detailData = {};
-                for (let j = 0; j < skill.skill.effects.length; j++) {
-                    let modifier = skill.skill.effects[j];
+                for (let j = 0; j < skill.skillDef.effects.length; j++) {
+                    let modifier = skill.skillDef.effects[j];
                     this.stats[modifier.stat] += modifier.value;
                     detailData[modifier.stat] = modifier.value;
                 }
-                this.addDetails(skill.skill.name, detailData);
+                this.addDetails(skill.skillDef.name, detailData);
             }
         }
 
@@ -1023,7 +1049,7 @@ export class CharacterComponent implements OnInit {
     selectAddItem(item: ItemTemplate) {
         this.selectedAddItem = item;
         this.itemAddCustomName = item.name;
-        if (item.quantifiable) {
+        if (item.data.quantifiable) {
             this.itemAddQuantity = 1;
         } else {
             this.itemAddQuantity = null;
@@ -1226,7 +1252,7 @@ export class CharacterComponent implements OnInit {
         for (let i = 0; i < this.character.items.length; i++) {
             let item = this.character.items[i];
             if (item.equiped != null || item.container != null) {
-                if (item.template.container) {
+                if (item.template.data.container) {
                     if (item.equiped) {
                         topLevelContainers.push(item);
                     }
@@ -1352,27 +1378,40 @@ export class CharacterComponent implements OnInit {
                 if (!this.id) {
                     id = +param['id'];
                 }
-
-                this._characterService.getCharacter(id).subscribe(
-                    character => {
-                        this.character = character;
-                        try {
-                            this.updateInventory();
-                            this.updateStats();
-                        } catch (e) {
-                            console.log(e.stack);
-                            this._notification.error("Erreur", "Erreur JS");
+                this._skillService.getSkills().subscribe(
+                    skills => {
+                        this.skillsById = {};
+                        for (let i = 0; i < skills.length; i++) {
+                            let skill = skills[i];
+                            this.skillsById[skill.id] = skill;
                         }
+
+                        this._characterService.getCharacter(id).subscribe(
+                            character => {
+                                this.character = character;
+                                try {
+                                    this.updateInventory();
+                                    this.updateStats();
+                                } catch (e) {
+                                    console.log(e.stack);
+                                    this._notification.error("Erreur", "Erreur JS");
+                                }
+                            },
+                            err => {
+                                try {
+                                    let errJson = err.json();
+                                    this._notification.error("Erreur", errJson.error_code, {timeOut: -1});
+                                } catch (e) {
+                                    console.log(e);
+                                    console.log(err);
+                                    this._notification.error("Erreur", "Erreur");
+                                }
+                            }
+                        );
                     },
                     err => {
-                        try {
-                            let errJson = err.json();
-                            this._notification.error("Erreur", errJson.error_code, {timeOut: -1});
-                        } catch (e) {
-                            console.log(e);
-                            console.log(err);
-                            this._notification.error("Erreur", "Erreur");
-                        }
+                        console.log(err);
+                        this._notification.error("Erreur", "Erreur");
                     }
                 );
             }

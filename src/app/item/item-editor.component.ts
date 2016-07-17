@@ -38,15 +38,6 @@ export class ItemEditorComponent implements OnInit, OnChanges {
         };
     }
 
-    hasSpecial(token: string) {
-        if (this.selectedSection) {
-            if (this.selectedSection.special.indexOf(token) !== -1) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     getSkillById(skillId: number): IMetadata {
         for (let i = 0; i < this.skills.length; i++) {
             let skill = this.skills[i];
@@ -123,13 +114,6 @@ export class ItemEditorComponent implements OnInit, OnChanges {
         } else {
             this.item.slots.push(slot);
         }
-        if (this.item.slots.length === 0) {
-            this.item.slotCount = null;
-        } else {
-            if (!this.item.slotCount) {
-                this.item.slotCount = 1;
-            }
-        }
     }
 
     searchEffect(filterName) {
@@ -152,42 +136,6 @@ export class ItemEditorComponent implements OnInit, OnChanges {
                     this.selectedSection = t;
                     break;
                 }
-            }
-        }
-        if (this.selectedSection) {
-            if (!this.hasSpecial('CAN_HAVE_MIN_LEVEL')) {
-                this.item.level = null;
-            }
-            if (!this.hasSpecial('CAN_BE_THROWABLE')) {
-                this.item.throwable = null;
-            }
-            if (!this.hasSpecial('CAN_HAVE_RUPTURE')) {
-                this.item.rupture = null;
-            }
-            if (!this.hasSpecial('HAVE_DAMAGE')) {
-                this.item.damageDiceCount = null;
-                this.item.damageType = null;
-                this.item.damage = null;
-            }
-            if (!this.hasSpecial('HAVE_PROTECTION')) {
-                this.item.magicProtection = null;
-                this.item.protection = null;
-                this.item.protectionAgainstMagic = null;
-                this.item.protectionAgainstType = null;
-            }
-            if (!this.hasSpecial('CAN_HAVE_MODIFIER')) {
-                this.item.modifiers = null;
-                this.item.modifiers = [];
-            } else {
-                if (this.item.modifiers == null) {
-                    this.item.modifiers = [];
-                }
-            }
-            if (!this.hasSpecial('DICE_DROP')) {
-                this.item.diceDrop = null;
-            }
-            if (!this.hasSpecial('HAVE_CHARGE')) {
-                this.item.charge = null;
             }
         }
     }

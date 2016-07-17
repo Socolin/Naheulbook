@@ -11,7 +11,8 @@ import {Speciality} from "./speciality.model";
 
 @Component({
     selector: 'create-character',
-    templateUrl: 'app/character/create-character.component.html',
+    moduleId: module.id,
+    templateUrl: 'create-character.component.html',
     directives: [OriginSelectorComponent, JobSelectorComponent, SkillSelectorComponent]
 })
 export class CreateCharacterComponent {

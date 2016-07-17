@@ -11,7 +11,7 @@
 				<td *ngIf="editable" (click)=editItem(item)><span class="glyphicon glyphicon-edit"></span></td>
 				<td (click)="item.showDetail = !item.showDetail">
 					{{item.name}}
-					<span *ngIf="item.level">(niveau {{item.level}})</span>
+					<span *ngIf="item.requireLevel">(niveau {{item.requireLevel}})</span>
 					<span *ngIf="item.relic">(relique)</span>
 					<span *ngIf="item.sex == 'h'">(homme uniq.)</span>
 					<span *ngIf="item.sex == 'f'">(femme uniq.)</span>
@@ -23,8 +23,8 @@
 				</td>
 				<td><span *ngIf="!item.price">***</span><span *ngIf="item.price">{{item.price|number}}</span></td>
 				<td *ngIf="hasSpecial('HAVE_DAMAGE')">
-					<span *ngIf="item.damageDiceCount">{{item.damageDiceCount}}D</span><span *ngIf="item.damageDiceCount && item.damage>0">+</span><span *ngIf="item.damage">{{item.damage}}</span>
-					<span *ngIf="item.damageType">({{item.damageType}})</span> 
+					<span *ngIf="item.damageDice">{{item.damageDice}}D</span><span *ngIf="item.damageDice && item.bonusDamage>0">+</span><span *ngIf="item.bonusDamage">{{item.bonusDamage}}</span>
+					<span *ngIf="item.damageType">({{item.damageType}})</span>
 				</td>
 				<td *ngIf="hasSpecial('HAVE_CHARGE')">
 					<span *ngIf="item.charge">{{item.charge}}</span>

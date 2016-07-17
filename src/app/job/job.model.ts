@@ -1,10 +1,7 @@
 import {StatRequirement} from "../shared/stat-requirement.model";
 import {Speciality} from "../character";
+import {IMetadata} from '../shared/misc.model';
 
-interface JobSkill {
-    id: number;
-    name: string;
-}
 interface JobRestrict {
     text: string;
 }
@@ -35,9 +32,9 @@ export interface Job {
     }>;
     parentJob: Job;
     requirements: Array<StatRequirement>;
-    skills: Array<JobSkill>;
+    skills: Array<IMetadata>;
     restricts: Array<JobRestrict>;
-    availableSkills: Array<JobSkill>;
+    availableSkills: Array<IMetadata>;
     bonuses: Array<JobBonus>;
     specialities: Array<Speciality>;
     specials: string[];
