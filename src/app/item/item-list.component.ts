@@ -55,8 +55,8 @@ export class ItemListComponent implements OnInit, OnDestroy {
     }
 
     isVisible(item) {
-        if (item.diceDrop && this.filter && this.filter.dice) {
-            return item.diceDrop === this.filter.dice;
+        if (item.data.diceDrop && this.filter && this.filter.dice) {
+            return item.data.diceDrop === this.filter.dice;
         }
         if (this.filter && this.filter.name) {
             let cleanFilter = removeDiacritics(this.filter.name).toLowerCase();
