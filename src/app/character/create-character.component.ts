@@ -42,10 +42,10 @@ export class CreateCharacterComponent {
             this.modifiedStat = {};
             if (this.hasStatModification()) {
                 this.superBourrinValue = 0;
-                this.move1PointStatValues = {'cou': 0, 'int': 0, 'cha': 0, 'ad': 0, 'fo': 0};
                 this.initChangeAtPrd();
                 this.initRemoveAttOrPrdToIntOrCha();
                 this.initRemoveAttOrPrdToIntOrAd();
+                this.initMove1PointStatValues();
             } else {
                 step = 6;
             }
@@ -240,6 +240,11 @@ export class CreateCharacterComponent {
     /// MOVE_1_POINT_STAT
     public move1PointStatValues: {[statName: string]: number};
 
+    initMove1PointStatValues() {
+        this.move1PointStatValues = {'cou': 0, 'int': 0, 'cha': 0, 'ad': 0, 'fo': 0};
+        this.modifiedStat['MOVE_1_POINT_STAT'] = {};
+    }
+
     hasMove1PointStat() {
         return this.hasBonus('MOVE_1_POINT_STAT');
     }
@@ -277,10 +282,10 @@ export class CreateCharacterComponent {
                 }
                 let value = this.move1PointStatValues[i];
                 if (value !== 0) {
-                    this.modifiedStat['MOVE_1_POINT_STAT'][i] = value;
+                    this.modifiedStat['MOVE_1_POINT_STAT'][i.toUpperCase()] = value;
                     this.modifiedStat['MOVE_1_POINT_STAT'].name = "Polyvalence ranger";
                 } else {
-                    delete this.modifiedStat['MOVE_1_POINT_STAT'][i];
+                    delete this.modifiedStat['MOVE_1_POINT_STAT'][i.toUpperCase()];
                 }
             }
         }

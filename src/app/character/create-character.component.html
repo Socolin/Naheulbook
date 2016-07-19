@@ -132,7 +132,7 @@
 			<input class="input-lg form-control" [(ngModel)]="superBourrinValue" (change)="updateSuperBourrin()" type="number" min=0 max=3 />
 		</div>
 	</div>
- 
+
 	<div *ngIf="hasMove1PointStat()" class="col-sm-12">
 		<h3>Deplacement d'un point de stat</h3>
 		<p>
@@ -140,19 +140,19 @@
 			autre (INT, CHA, COU, FO, AD)
 		</p>
 		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['cou']" (change)="updateMove1PointStat" type="number" min=-1 max=1 />
+			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['cou']" (change)="updateMove1PointStat()" type="number" min=-1 max=1 />
 		</div>
 		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['int']" (change)="updateMove1PointStat" type="number" min=-1 max=1 />
+			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['int']" (change)="updateMove1PointStat()" type="number" min=-1 max=1 />
 		</div>
 		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['cha']" (change)="updateMove1PointStat" type="number" min=-1 max=1 />
+			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['cha']" (change)="updateMove1PointStat()" type="number" min=-1 max=1 />
 		</div>
 		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['ad']" (change)="updateMove1PointStat" type="number" min=-1 max=1 />
+			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['ad']" (change)="updateMove1PointStat()" type="number" min=-1 max=1 />
 		</div>
 		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['fo']" (change)="updateMove1PointStat" type="number" min=-1 max=1 />
+			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['fo']" (change)="updateMove1PointStat()" type="number" min=-1 max=1 />
 		</div>
 	</div>
 	<div *ngIf="hasChangeAtPrd()">
@@ -222,7 +222,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div *ngIf="isStatModificationValid()" class="col-sm-2">
 		<input type="submit" (click)="setStep(6)" class="btn-block btn btn-default btn-lg" value="Suite" />
 	</div>
@@ -234,9 +234,9 @@
 	<div *ngIf="hasMove1PointStat()" class="col-sm-12">
 		<h3>Modification de stat:
 			COU: {{move1PointStatValues['cou']}}
-		 	INT: {{move1PointStatValues['int']}} 
-		 	CHA: {{move1PointStatValues['cha']}} 
-		 	AD: {{move1PointStatValues['ad']}} 
+		 	INT: {{move1PointStatValues['int']}}
+		 	CHA: {{move1PointStatValues['cha']}}
+		 	AD: {{move1PointStatValues['ad']}}
 		 	FO: {{move1PointStatValues['fo']}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
 	</div>
 	<div *ngIf="hasChangeAtPrd()" class="col-sm-12">
