@@ -39,6 +39,7 @@ const barrels: string[] = [
     'app/monster',
     'app/notifications',
     'app/origin',
+    'app/quest',
     'app/skill',
     'app/user',
     /** @cli-barrel */

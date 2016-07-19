@@ -13,6 +13,7 @@ import {CharacterService} from './character';
 import {User} from './user';
 import {LocationService} from './location/location.service';
 import {MonsterService} from './monster';
+import {QuestService} from './quest';
 
 @Component({
     selector: 'index',
@@ -28,6 +29,7 @@ import {MonsterService} from './monster';
         , OriginService
         , SkillService
         , CharacterService
+        , QuestService
         , LocationService
         , MonsterService
     ],

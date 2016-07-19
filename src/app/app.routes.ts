@@ -11,6 +11,7 @@ import {CreateGroupComponent, GroupListComponent, GroupComponent} from './group'
 import {UserProfileComponent} from './user';
 import {LoggedComponent} from './user/logged.component';
 import {LocationListComponent, EditLocationComponent} from './location';
+import {QuestListComponent, CreateQuestTemplateComponent} from './quest';
 
 export const routes: RouterConfig = [
     {
@@ -90,6 +91,10 @@ export const routes: RouterConfig = [
         component: LocationListComponent
     },
     {
+        path: 'database/quests',
+        component: QuestListComponent
+    },
+    {
         path: 'create-group',
         component: CreateGroupComponent
     },
@@ -104,6 +109,10 @@ export const routes: RouterConfig = [
     {
         path: 'create-item',
         component: CreateItemComponent
+    },
+    {
+        path: 'create-quest',
+        component: CreateQuestTemplateComponent
     }
 ];
 
