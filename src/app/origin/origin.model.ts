@@ -1,4 +1,5 @@
 import {StatRequirement} from "../shared/stat-requirement.model";
+import {Skill} from '../skill/skill.model';
 
 export interface OriginInfo {
     title: string;
@@ -6,10 +7,6 @@ export interface OriginInfo {
 }
 export interface OriginRestrict {
     text: string;
-}
-export interface OriginSkill {
-    id: number;
-    name: string;
 }
 export interface OriginBonus {
     token: string;
@@ -20,10 +17,8 @@ export interface Origin {
     name: string;
     description: string;
     advantage: string;
-    baseEv: number;
-    baseAT: number;
     basePRD: number;
-    baseEV : number;
+    baseEV: number;
     size: string;
     bonusAT: number;
     bonusPRD: number;
@@ -32,8 +27,8 @@ export interface Origin {
     infos: OriginInfo[];
     restricts: OriginRestrict[];
     restrictsTokens: string[];
-    skills: OriginSkill[];
-    availableSkills: OriginSkill[];
+    skills: Skill[];
+    availableSkills: Skill[];
     bonuses: OriginBonus[];
     specials: string[];
     diceEVLevelUp: number;

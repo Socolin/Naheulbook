@@ -1,7 +1,9 @@
-import {Component, EventEmitter, Input, Output, OnChanges} from '@angular/core';
+import {Component, EventEmitter, Input, Output, OnChanges, OnInit} from '@angular/core';
 import {Item} from './item.model';
 import {Character} from './character.model';
 import {ValueEditorComponent} from '../shared';
+import {ItemService} from '../item/item.service';
+import {ItemCategory} from '../item/item-template.model';
 
 @Component({
     moduleId: module.id,
@@ -9,19 +11,23 @@ import {ValueEditorComponent} from '../shared';
     selector: 'item-detail',
     templateUrl: 'item-detail.component.html'
 })
-export class ItemDetailComponent implements OnChanges {
+export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() item: Item;
     @Input() character: Character;
     @Input() characterStats: any[];
 
     @Output() itemAction: EventEmitter<any> = new EventEmitter<any>();
 
+    public itemCategoriesById: {[categoryId: number]: ItemCategory};
     public quantityModifier: string;
     public modifiers: any[];
 
     public itemEditName: string;
     public itemEditDescription: string;
     public editing: boolean;
+
+    constructor(private _itemService: ItemService) {
+    }
 
     ngOnChanges() {
         this.modifiers = [];
@@ -68,5 +74,17 @@ export class ItemDetailComponent implements OnChanges {
                 });
             }
         }
+    }
+
+    ngOnInit() {
+
+        this._itemService.getCategoriesById().subscribe(
+            categoriesById => {
+                this.itemCategoriesById = categoriesById;
+            },
+            err => {
+                console.log(err);
+            }
+        );
     }
 }

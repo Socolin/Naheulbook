@@ -3,6 +3,9 @@ import {StatModifier} from "../shared";
 export class EffectCategory {
     id: number;
     name: string;
+    diceSize: number;
+    diceCount: number;
+    nore: string;
 }
 
 export class Effect {

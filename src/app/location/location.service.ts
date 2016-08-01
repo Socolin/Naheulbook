@@ -3,14 +3,16 @@ import {Http} from '@angular/http';
 import {Observable, ReplaySubject} from 'rxjs/Rx';
 
 import {Location, Map} from './location.model';
+import {JsonService} from '../shared/json-service';
 
 @Injectable()
-export class LocationService {
+export class LocationService extends JsonService {
 
     private locations: ReplaySubject<Location[]>;
     private locationsTree: ReplaySubject<Location[]>;
 
-    constructor(private _http: Http) {
+    constructor(http: Http) {
+        super(http);
     }
 
     getLocationsTree(): Observable<Location[]> {
@@ -61,17 +63,17 @@ export class LocationService {
     }
 
     getLocation(locationId: number): Observable<Location> {
-        return this._http.post('/api/location/detail', JSON.stringify({locationId: locationId}))
+        return this.postJson('/api/location/detail', {locationId: locationId})
             .map(res => res.json());
     }
 
     getMaps(locationId: number): Observable<Map[]> {
-        return this._http.post('/api/location/maps', JSON.stringify({locationId: locationId}))
+        return this.postJson('/api/location/maps', {locationId: locationId})
             .map(res => res.json());
     }
 
     editLocation(location: Location, maps: Map[]): Observable<any> {
-        return this._http.post('/api/location/edit', JSON.stringify({location: location, maps: maps}))
+        return this.postJson('/api/location/edit', {location: location, maps: maps})
             .map(res => res.json());
     }
 
@@ -81,20 +83,20 @@ export class LocationService {
     }
 
     addLocation(locationName: string, parentId: number): Observable<Location> {
-        return this._http.post('/api/location/create', JSON.stringify({
+        return this.postJson('/api/location/create', {
                 parentId: parentId,
                 locationName: locationName
-            }))
+            })
             .map(res => res.json());
     }
 
     listMapImages(filter: string): Observable<string[]> {
-        return this._http.post('/api/location/listMapImages', JSON.stringify({filter: filter}))
+        return this.postJson('/api/location/listMapImages', {filter: filter})
             .map(res => res.json());
     }
 
     searchLocations(filter: string): Observable<Location[]> {
-        return this._http.post('/api/location/search', JSON.stringify({filter: filter}))
+        return this.postJson('/api/location/search', {filter: filter})
             .map(res => res.json());
     }
 }

@@ -1,27 +1,32 @@
 import {StatRequirement} from "../shared/stat-requirement.model";
 import {Speciality} from "../character";
 import {IMetadata} from '../shared/misc.model';
+import {Skill} from '../skill/skill.model';
 
 interface JobRestrict {
     text: string;
 }
+
 interface JobBonus {
     token: string;
     description: string;
 }
 
 export interface Job {
-    id: number;
-    name: string;
-    description: string;
-    baseEV: number;
-    factorEV: number;
-    bonusEV: number;
-    baseEA: number;
-    diceEaLevelUp: number;
+    availableSkills: Array<Skill>;
     baseAT: number;
+    baseEa: number;
+    baseEv: number;
     basePRD: number;
+    bonuses: Array<JobBonus>;
+    bonusEv: number;
+    description: string;
+    diceEaLevelUp: number;
+    factorEv: number;
+    id: number;
+    information: string;
     isMagic: boolean;
+    name: string;
     originsBlacklist: Array<{
         id: number,
         name: string
@@ -31,12 +36,10 @@ export interface Job {
         name: string
     }>;
     parentJob: Job;
+    parentJobId: number;
     requirements: Array<StatRequirement>;
-    skills: Array<IMetadata>;
     restricts: Array<JobRestrict>;
-    availableSkills: Array<IMetadata>;
-    bonuses: Array<JobBonus>;
+    skills: Array<Skill>;
     specialities: Array<Speciality>;
     specials: string[];
-    diceEALevelUp: number;
 }

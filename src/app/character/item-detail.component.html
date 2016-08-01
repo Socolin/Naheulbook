@@ -17,8 +17,8 @@
 	<span *ngIf="item.template.data.requireLevel && character.level >= item.template.data.requireLevel" class="label label-success">Level: {{item.template.data.requireLevel}}</span>
 	<span *ngIf="item.template.data.throwable" class="label label-info">Prévue pour le jet</span>
 </div>
-<div style="padding-top:5px; padding-bottom:5px">
-	<small><span class="label label-default">{{item.template.category.typeDetail.name}}</span> <span class="label label-default">{{item.template.category.name}}</span></small>
+<div style="padding-top:5px; padding-bottom:5px" *ngIf="itemCategoriesById">
+	<small><span class="label label-default">{{itemCategoriesById[item.template.category].type.name}}</span> <span class="label label-default">{{itemCategoriesById[item.template.category].name}}</span></small>
 </div>
 <div>
 	<span *ngIf="!editing">{{item.data.description}}</span>

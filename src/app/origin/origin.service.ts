@@ -3,28 +3,46 @@ import {Http} from '@angular/http';
 import {Observable, ReplaySubject} from 'rxjs/Rx';
 
 import {Origin} from "./origin.model";
+import {SkillService} from '../skill/skill.service';
+import {Skill} from '../skill/skill.model';
 
 @Injectable()
 export class OriginService {
     private origins: ReplaySubject<Origin[]>;
 
-    constructor(private _http: Http) {
+    constructor(private _http: Http
+        , private _skillService: SkillService) {
     }
 
     getOriginList(): Observable<Origin[]> {
         if (!this.origins || this.origins.isUnsubscribed) {
             this.origins = new ReplaySubject<Origin[]>(1);
 
-            this._http.get('/api/origin/list')
-                .map(res => res.json())
-                .subscribe(
-                    origins => {
-                        this.origins.next(origins);
-                    },
-                    error => {
-                        this.origins.error(error);
+            Observable.forkJoin(
+                this._skillService.getSkillsById(),
+                this._http.get('/api/origin/list').map(res => res.json())
+            ).subscribe(
+                res => {
+                    let skillsById: {[skillId: number]: Skill} = res[0];
+                    let origins: Origin[] = res[1];
+                    for (let i = 0; i < origins.length; i++) {
+                        let origin = origins[i];
+                        for (let s = 0; s < origin.skills.length; s++) {
+                            let skill = origin.skills[s];
+                            origin.skills[s] = skillsById[skill.id];
+                        }
+                        for (let s = 0; s < origin.availableSkills.length; s++) {
+                            let skill = origin.availableSkills[s];
+                            origin.availableSkills[s] = skillsById[skill.id];
+                        }
                     }
-                );
+                    this.origins.next(origins);
+                    this.origins.complete();
+                },
+                error => {
+                    this.origins.error(error);
+                }
+            );
         }
         return this.origins;
     }

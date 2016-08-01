@@ -7,33 +7,97 @@ import {Character, CharacterResume, CharacterModifier} from "./character.model";
 import {Effect} from "../effect";
 import {IMetadata, HistoryEntry} from "../shared";
 import {CharacterInviteInfo, Group} from "../group";
-
+import {JsonService} from '../shared/json-service';
+import {Job, JobService} from '../job';
+import {Origin, OriginService} from '../origin';
+import {Skill, SkillService} from '../skill';
 
 @Injectable()
-export class CharacterService {
-    constructor(private _http: Http) {
+export class CharacterService extends JsonService {
+    constructor(http: Http
+        , private _jobService: JobService
+        , private _skillService: SkillService
+        , private _originService: OriginService) {
+        super(http);
     }
 
     getCharacter(id: number): Observable<Character> {
-        return this._http.post('/api/character/detail', JSON.stringify({
-            id: id
-        })).map(res => res.json());
+        return Observable.forkJoin(
+            this._jobService.getJobList(),
+            this._originService.getOriginList(),
+            this._skillService.getSkills(),
+            this.postJson('/api/character/detail', {id: id}).map(res => res.json())
+        ).map((requiredData: [Job[], Origin[], Skill[], Character]) => {
+                let jobs: Job[] = requiredData[0];
+                let origins: Origin[] = requiredData[1];
+                let skills: Skill[] = requiredData[2];
+                let character: Character = requiredData[3];
+
+                for (let j = 0; j < jobs.length; j++) {
+                    let job = jobs[j];
+                    if (job.id === character.jobId) {
+                        character.job = job;
+                        break;
+                    }
+                }
+                for (let j = 0; j < origins.length; j++) {
+                    let origin = origins[j];
+                    if (origin.id === character.originId) {
+                        character.origin = origin;
+                        break;
+                    }
+                }
+                for (let i = 0; i < character.skills.length; i++) {
+                    let characterSkill = character.skills[i];
+                    for (let j = 0; j < skills.length; j++) {
+                        let skill = skills[j];
+                        if (skill.id === characterSkill.id) {
+                            character.skills[i] = skill;
+                            break;
+                        }
+                    }
+                }
+                for (let i = 0; i < character.items.length; i++) {
+                    let item = character.items[i];
+                    for (let k = 0; k < item.template.skills.length; k++) {
+                        let itemSkill = item.template.skills[k];
+                        for (let j = 0; j < skills.length; j++) {
+                            let skill = skills[j];
+                            if (skill.id === itemSkill.id) {
+                                item.template.skills[k] = skill;
+                                break;
+                            }
+                        }
+                    }
+                    for (let k = 0; k < item.template.unskills.length; k++) {
+                        let itemSkill = item.template.unskills[k];
+                        for (let j = 0; j < skills.length; j++) {
+                            let skill = skills[j];
+                            if (skill.id === itemSkill.id) {
+                                item.template.unskills[k] = skill;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return character;
+            }
+        );
     }
 
     setStatBonusAD(id: number, stat: string): Observable<Response> {
-        return this._http.post('/api/character/setStatBonusAD', JSON.stringify({
+        return this.postJson('/api/character/setStatBonusAD', {
             id: id,
             stat: stat
-        }));
+        });
     }
 
     LevelUp(id: number, levelUpInfo: Object): Observable<Response> {
-        return this._http.post('/api/character/levelUp', JSON.stringify({
+        return this.postJson('/api/character/levelUp', {
             id: id,
             levelUpInfo: levelUpInfo
-        }));
+        });
     }
-
 
     private stats: ReplaySubject<Stat[]>;
 
@@ -56,108 +120,135 @@ export class CharacterService {
     }
 
     loadList(): Observable<CharacterResume[]> {
-        return this._http.get('/api/character/list')
-            .map(res => res.json());
+        return Observable.forkJoin(
+            this._jobService.getJobList(),
+            this._originService.getOriginList(),
+            this._http.get('/api/character/list').map(res => res.json())
+        ).map((requiredData: [Job[], Origin[], CharacterResume[]]) => {
+                let jobs = requiredData[0];
+                let origins = requiredData[1];
+                let characters = requiredData[2];
+
+                for (let i = 0; i < characters.length; i++) {
+                    let character = characters[i];
+                    for (let j = 0; j < jobs.length; j++) {
+                        let job = jobs[j];
+                        if (job.id === character.jobId) {
+                            character.job = job.name;
+                            break;
+                        }
+                    }
+                    for (let j = 0; j < origins.length; j++) {
+                        let origin = origins[j];
+                        if (origin.id === character.originId) {
+                            character.origin = origin.name;
+                            break;
+                        }
+                    }
+                }
+                return characters;
+            }
+        );
     }
 
     changeCharacterStat(characterId: number, stat: string, value: any): Observable<{stat: string, value: any}> {
-        return this._http.post('/api/character/update', JSON.stringify({
+        return this.postJson('/api/character/update', {
             characterId: characterId,
             stat: stat,
             value: value
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     changeGmData(characterId: number, key: string, value: any): Observable<{key: string, value: any}> {
-        return this._http.post('/api/character/updateGmData', JSON.stringify({
+        return this.postJson('/api/character/updateGmData', {
             characterId: characterId,
             key: key,
             value: value
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     addEffect(characterId: number, effectId: number): Observable<Effect> {
-        return this._http.post('/api/character/addEffect', JSON.stringify({
+        return this.postJson('/api/character/addEffect', {
             characterId: characterId,
             effectId: effectId,
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     removeEffect(characterId: number, effectId: number): Observable<Effect> {
-        return this._http.post('/api/character/removeEffect', JSON.stringify({
+        return this.postJson('/api/character/removeEffect', {
             characterId: characterId,
             effectId: effectId,
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     addModifier(characterId: number, modifier: CharacterModifier): Observable<CharacterModifier> {
-        return this._http.post('/api/character/addModifier', JSON.stringify({
+        return this.postJson('/api/character/addModifier', {
             characterId: characterId,
             modifier: modifier,
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     removeModifier(characterId: number, modifierId: number): Observable<CharacterModifier> {
-        return this._http.post('/api/character/removeModifier', JSON.stringify({
+        return this.postJson('/api/character/removeModifier', {
             characterId: characterId,
             modifierId: modifierId,
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     loadHistory(characterId, page): Observable<HistoryEntry[]> {
-        return this._http.post('/api/character/history', JSON.stringify({
+        return this.postJson('/api/character/history', {
             characterId: characterId,
             page: page
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     searchPlayersForInvite(name: string, groupId: number): Observable<CharacterInviteInfo[]> {
-        return this._http.post('/api/character/searchForInvite', JSON.stringify({
+        return this.postJson('/api/character/searchForInvite', {
             name: name,
             groupId: groupId
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     cancelInvite(characterId: number, groupId: number): Observable<{group: IMetadata; character: IMetadata}> {
-        return this._http.post('/api/character/cancelInvite', JSON.stringify({
+        return this.postJson('/api/character/cancelInvite', {
             characterId: characterId,
             groupId: groupId
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     inviteCharacter(groupId: number, characterId: number): Observable<CharacterInviteInfo> {
-        return this._http.post('/api/character/invite', JSON.stringify({
+        return this.postJson('/api/character/invite', {
             characterId: characterId,
             groupId: groupId,
             fromGroup: 1
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     askJoinGroup(groupId: number, characterId: number): Observable<CharacterInviteInfo> {
-        return this._http.post('/api/character/invite', JSON.stringify({
+        return this.postJson('/api/character/invite', {
             characterId: characterId,
             groupId: groupId,
             fromGroup: 0
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     getGroup(groupId): Observable<Group> {
-        return this._http.post('/api/character/groupDetail', JSON.stringify({
+        return this.postJson('/api/character/groupDetail', {
             groupId: groupId
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     createGroup(name): Observable<Group> {
-        return this._http.post('/api/character/createGroup', JSON.stringify({
+        return this.postJson('/api/character/createGroup', {
             name: name
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     joinGroup(characterId, groupId): Observable<{group: IMetadata; character: IMetadata}> {
-        return this._http.post('/api/character/joinGroup', JSON.stringify({
+        return this.postJson('/api/character/joinGroup', {
             characterId: characterId,
             groupId: groupId
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     listGroups(): Observable<Object[]> {
@@ -165,13 +256,13 @@ export class CharacterService {
     }
 
     saveStatsCache(characterId, stats): Observable<Object> {
-        return this._http.post('/api/character/saveStatsCache', JSON.stringify({
+        return this.postJson('/api/character/saveStatsCache', {
             id: characterId,
             stats: stats
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
     createCharacter(creationData): Observable<{id: number}> {
-        return this._http.post('/api/character/create', JSON.stringify(creationData)).map(res => res.json());
+        return this.postJson('/api/character/create', creationData).map(res => res.json());
     }
 }

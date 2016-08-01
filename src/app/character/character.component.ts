@@ -23,6 +23,8 @@ import {IMetadata} from '../shared/misc.model';
 import {ItemDetailComponent} from './item-detail.component';
 import {EffectCategory} from '../effect/effect.model';
 import {SkillService} from '../skill';
+import {Observable} from 'rxjs';
+import {ItemCategory} from '../item/item-template.model';
 
 @Component({
     selector: 'bag-item-view',
@@ -157,7 +159,6 @@ export class CharacterComponent implements OnInit {
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
     public details: StatisticDetail;
     public selectedItem: Item;
-    public skillsById: {[skillID: number]: Skill};
 
     constructor(private _route: ActivatedRoute
         , private _itemService: ItemService
@@ -317,7 +318,7 @@ export class CharacterComponent implements OnInit {
                 return;
             }
         } else {
-            diceLevelUp = this.character.job.diceEALevelUp;
+            diceLevelUp = this.character.job.diceEaLevelUp;
         }
         this.levelUpInfo.EVorEAValue = Math.ceil(Math.random() * diceLevelUp);
     }
@@ -572,22 +573,22 @@ export class CharacterComponent implements OnInit {
             }
         }
         if (this.character.job) {
-            if (this.character.job.baseEV) {
-                this.stats['EV'] = this.character.job.baseEV;
+            if (this.character.job.baseEv) {
+                this.stats['EV'] = this.character.job.baseEv;
                 this.addDetails('Métiers (changement de la valeur de base)', {EV: this.character.origin.baseEV});
             }
-            if (this.character.job.factorEV) {
-                this.stats['EV'] *= this.character.job.factorEV;
+            if (this.character.job.factorEv) {
+                this.stats['EV'] *= this.character.job.factorEv;
                 this.stats['EV'] = Math.round(this.stats['EV']);
-                this.addDetails('Métiers (% de vie)', {EV: (Math.round((1 - this.character.job.factorEV) * 100)) + '%'});
+                this.addDetails('Métiers (% de vie)', {EV: (Math.round((1 - this.character.job.factorEv) * 100)) + '%'});
             }
-            if (this.character.job.bonusEV) {
-                this.stats['EV'] += this.character.job.bonusEV;
-                this.addDetails('Métiers (bonus de EV)', {EV: this.character.job.bonusEV});
+            if (this.character.job.bonusEv) {
+                this.stats['EV'] += this.character.job.bonusEv;
+                this.addDetails('Métiers (bonus de EV)', {EV: this.character.job.bonusEv});
             }
-            if (this.character.job.baseEA) {
-                this.addDetails('Métiers (EA de base)', {EA: this.character.job.baseEA});
-                this.stats['EA'] = this.character.job.baseEA;
+            if (this.character.job.baseEa) {
+                this.addDetails('Métiers (EA de base)', {EA: this.character.job.baseEa});
+                this.stats['EA'] = this.character.job.baseEa;
             }
         }
         for (let i = 0; i < this.character.specialities.length; i++) {
@@ -645,9 +646,8 @@ export class CharacterComponent implements OnInit {
                         canceledSkills[skill.id] = item;
                     }
                     for (let u = 0; u < item.template.skills.length; u++) {
-                        let skillMD = item.template.skills[u];
                         this.skills.push({
-                            skillDef: this.skillsById[skillMD.id],
+                            skillDef: item.template.skills[u],
                             from: [item.data.name]
                         });
                     }
@@ -665,9 +665,8 @@ export class CharacterComponent implements OnInit {
                 canceledSkills[skill.id] = item;
             }
             for (let u = 0; u < item.template.skills.length; u++) {
-                let skillMD = item.template.skills[u];
                 this.skills.push({
-                    skillDef: this.skillsById[skillMD.id],
+                    skillDef: item.template.skills[u],
                     from: [item.data.name]
                 });
             }
@@ -821,37 +820,26 @@ export class CharacterComponent implements OnInit {
 
         if (this.character.job) {
             for (let i = 0; i < this.character.job.skills.length; i++) {
-                let skillMD = this.character.job.skills[i];
+                let skill = this.character.job.skills[i];
                 this.skills.push({
-                    skillDef: this.skillsById[skillMD.id],
+                    skillDef: skill,
                     from: [this.character.job.name]
                 });
             }
         }
         for (let i = 0; i < this.character.origin.skills.length; i++) {
-            let skillMD = this.character.origin.skills[i];
+            let skill = this.character.origin.skills[i];
             this.skills.push({
-                skillDef: this.skillsById[skillMD.id],
+                skillDef: skill,
                 from: [this.character.origin.name]
             });
         }
         for (let i = 0; i < this.character.skills.length; i++) {
-            let skillMD = this.character.skills[i];
-            if (skillMD.itemId) {
-                let item = this.getItemById(skillMD.itemId);
-                if (item) {
-                    this.skills.push({
-                        skillDef: this.skillsById[skillMD.skillId],
-                        from: ["Appris:" + item.data.name]
-                    });
-                }
-            }
-            else {
-                this.skills.push({
-                    skillDef: this.skillsById[skillMD.skillId],
-                    from: ["Choisi"]
-                });
-            }
+            let skill = this.character.skills[i];
+            this.skills.push({
+                skillDef: skill,
+                from: ["Choisi"]
+            });
         }
         this.skills.sort(function (a, b) {
             return a.skillDef.name.localeCompare(b.skillDef.name);
@@ -1217,7 +1205,7 @@ export class CharacterComponent implements OnInit {
                     if (!res || !res.id) {
                         item.container = null;
                     } else {
-                        item.container = res;
+                        item.container = res.id;
                     }
                     this.updateInventory();
                 },
@@ -1304,10 +1292,10 @@ export class CharacterComponent implements OnInit {
                 equiped.push(item);
             } else {
                 if (item.container) {
-                    if (!content[item.container.id]) {
-                        content[item.container.id] = [];
+                    if (!content[item.container]) {
+                        content[item.container] = [];
                     }
-                    content[item.container.id].push(item);
+                    content[item.container].push(item);
                 }
             }
         }
@@ -1399,36 +1387,18 @@ export class CharacterComponent implements OnInit {
                 if (!this.id) {
                     id = +param['id'];
                 }
-                this._skillService.getSkills().subscribe(
-                    skills => {
-                        this.skillsById = {};
-                        for (let i = 0; i < skills.length; i++) {
-                            let skill = skills[i];
-                            this.skillsById[skill.id] = skill;
+                Observable.forkJoin(
+                    this._characterService.getCharacter(id)
+                ).subscribe(
+                    res => {
+                        this.character = res[0];
+                        try {
+                            this.updateInventory();
+                            this.updateStats();
+                        } catch (e) {
+                            console.log(e.stack);
+                            this._notification.error("Erreur", "Erreur JS");
                         }
-
-                        this._characterService.getCharacter(id).subscribe(
-                            character => {
-                                this.character = character;
-                                try {
-                                    this.updateInventory();
-                                    this.updateStats();
-                                } catch (e) {
-                                    console.log(e.stack);
-                                    this._notification.error("Erreur", "Erreur JS");
-                                }
-                            },
-                            err => {
-                                try {
-                                    let errJson = err.json();
-                                    this._notification.error("Erreur", errJson.error_code, {timeOut: -1});
-                                } catch (e) {
-                                    console.log(e);
-                                    console.log(err);
-                                    this._notification.error("Erreur", "Erreur");
-                                }
-                            }
-                        );
                     },
                     err => {
                         console.log(err);

@@ -132,7 +132,7 @@ export class ItemEditorComponent implements OnInit, OnChanges {
         if (this.item.category && this.sections) {
             for (let i = 0; i < this.sections.length; i++) {
                 let t = this.sections[i];
-                if (t.id === this.item.category.type) {
+                if (t.id === this.item.category) {
                     this.selectedSection = t;
                     break;
                 }

@@ -85,10 +85,10 @@ export class ItemListComponent implements OnInit, OnDestroy {
             let itemsBySection: {[categoryId: number]: ItemTemplate[]} = {};
             for (let i = 0; i < items.length; i++) {
                 let item = items[i];
-                if (!itemsBySection[item.category.id]) {
-                    itemsBySection[item.category.id] = [];
+                if (!itemsBySection[item.category]) {
+                    itemsBySection[item.category] = [];
                 }
-                itemsBySection[item.category.id].push(item);
+                itemsBySection[item.category].push(item);
             }
             this.items = items;
             this.itemsByCategory = itemsBySection;

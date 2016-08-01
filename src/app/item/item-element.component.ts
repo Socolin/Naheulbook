@@ -70,10 +70,10 @@ export class ItemElementComponent implements OnInit, OnChanges {
         let itemsByCategory = {};
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
-            if (!itemsByCategory[item.category.id]) {
-                itemsByCategory[item.category.id] = [];
+            if (!itemsByCategory[item.category]) {
+                itemsByCategory[item.category] = [];
             }
-            itemsByCategory[item.category.id].push(item);
+            itemsByCategory[item.category].push(item);
         }
         this.itemsByCategory = itemsByCategory;
     }

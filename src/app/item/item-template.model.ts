@@ -1,5 +1,6 @@
 import {ItemStatModifier} from "../shared/stat-modifier.model";
 import {IMetadata} from "../shared/misc.model";
+import {Skill} from '../skill/skill.model';
 
 export class ItemSection {
     id: number;
@@ -43,14 +44,21 @@ export class ItemTemplateData {
     quantifiable: boolean;
     skillBook: boolean;
 }
+// FIXME: Is this used and checked ?
+export class ItemRequirement {
+    stat: string;
+    min: number;
+    max: number;
+}
 export class ItemTemplate {
     id: number;
     name: string;
-    category: ItemCategory;
+    category: number;
     data: ItemTemplateData;
     modifiers: ItemStatModifier[] = [];
-    skills: IMetadata[];
-    unskills: IMetadata[];
+    skills: Skill[];
+    unskills: Skill[];
     slots: ItemSlot[];
+    requirements: any[];
     skillModifiers: any[];
 }

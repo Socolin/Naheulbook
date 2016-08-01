@@ -5,6 +5,8 @@ import {Router} from '@angular/router';
 import {NotificationsService} from '../notifications';
 import {CharacterService} from "./character.service";
 import {CharacterResume} from "./character.model";
+import {JobService} from '../job/job.service';
+import {OriginService} from '../origin/origin.service';
 
 @Component({
     selector: 'character-list',
@@ -17,6 +19,8 @@ export class CharacterListComponent implements OnInit {
 
     constructor(private _router: Router
         , private _characterService: CharacterService
+        , private _jobService: JobService
+        , private _originService: OriginService
         , private _notification: NotificationsService) {
     }
 
@@ -27,8 +31,8 @@ export class CharacterListComponent implements OnInit {
 
     loadCharacterList() {
         this._characterService.loadList().subscribe(
-            res => {
-                this.characters = res;
+            characters => {
+                this.characters = characters;
             },
             err => {
                 console.log(err);

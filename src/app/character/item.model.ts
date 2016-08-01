@@ -11,7 +11,7 @@ export class ItemData {
 export class Item {
     id: number;
     data: ItemData;
-    container: Item;
+    container: number;
     template: ItemTemplate;
     // Generated field
     content: Item[];
