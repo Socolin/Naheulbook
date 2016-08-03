@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
+import {Observable} from 'rxjs';
+
 import {NotificationsService} from '../notifications';
 
 import {Skill, SkillSelectorComponent} from '../skill';
@@ -23,8 +25,6 @@ import {IMetadata} from '../shared/misc.model';
 import {ItemDetailComponent} from './item-detail.component';
 import {EffectCategory} from '../effect/effect.model';
 import {SkillService} from '../skill';
-import {Observable} from 'rxjs';
-import {ItemCategory} from '../item/item-template.model';
 
 @Component({
     selector: 'bag-item-view',

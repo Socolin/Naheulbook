@@ -3,7 +3,7 @@ import {NotificationsService} from '../notifications';
 
 import {ItemTemplate, ItemSection, ItemSlot} from "../item";
 import {Effect, EffectService} from "../effect";
-import {IMetadata, ModifiersEditorComponent, StatRequirementsEditorComponent} from "../shared";
+import {ModifiersEditorComponent, StatRequirementsEditorComponent} from "../shared";
 import {Skill, SkillService, SkillModifiersEditorComponent} from "../skill";
 import {ItemElementComponent} from "./item-element.component";
 import {ItemService} from "./item.service";
@@ -38,7 +38,7 @@ export class ItemEditorComponent implements OnInit, OnChanges {
         };
     }
 
-    getSkillById(skillId: number): IMetadata {
+    getSkillById(skillId: number): Skill {
         for (let i = 0; i < this.skills.length; i++) {
             let skill = this.skills[i];
             if (skill.id === skillId) {

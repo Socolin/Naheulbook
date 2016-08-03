@@ -680,19 +680,19 @@
 					<template [ngIf]="!log.isGroup">
 					<span [ngSwitch]="log.action">
 						<template [ngSwitchCase]="'EQUIP'">
-							Equipe: {{log.item.name}}
+							Equipe: {{log.item.data.name}}
 						</template>
 						<template [ngSwitchCase]="'UNEQUIP'">
-							Désquipe: {{log.item.name}}
+							Désquipe: {{log.item.data.name}}
 						</template>
 						<template [ngSwitchCase]="'ADD_ITEM'">
-							Ajout de l'objet: {{log.item.name}}
+							Ajout de l'objet: {{log.item.data.name}}
 						</template>
 						<template [ngSwitchCase]="'READ_BOOK'">
-							Lecture du livre: {{log.item.name}}
+							Lecture du livre: {{log.item.data.name}}
 						</template>
 						<template [ngSwitchCase]="'DELETE_ITEM'">
-							Suppression de l'objet: {{log.item.name}}
+							Suppression de l'objet: {{log.item.data.name}}
 						</template>
 						<template [ngSwitchCase]="'APPLY_EFFECT'">
 							Ajout de l'effet: {{log.effect.name}}
@@ -704,10 +704,10 @@
 							Suppression du modificateur: {{log.modifier.name}}
 						</template>
 						<template [ngSwitchCase]="'CHANGE_QUANTITY'">
-							Modification quantité: {{log.item.name}} {{log.info}}
+							Modification quantité: {{log.item.data.name}} {{log.info}}
 						</template>
 						<template [ngSwitchCase]="'USE_CHARGE'">
-							Utilisation de charge: {{log.item.name}} {{log.info}}
+							Utilisation de charge: {{log.item.data.name}} {{log.info}}
 						</template>
 						<template [ngSwitchCase]="'REMOVE_EFFECT'">
 							Suppression de l'effet: {{log.effect.name}}
@@ -831,7 +831,7 @@
 							Augmentation de {{levelUpInfo.EVorEA}} de <span *ngIf="levelUpInfo.EVorEA == 'EV'">1d{{character.origin.diceEVLevelUp}} <span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')"> -1 </span>
 							</span>
 							<div>
-								<span *ngIf="levelUpInfo.EVorEA == 'EA'">1d{{character.job.diceEALevelUp}}</span> Nombre de {{levelUpInfo.EVorEA}} a augmente: <input [(ngModel)]="levelUpInfo.EVorEAValue" type="number" />
+								<span *ngIf="levelUpInfo.EVorEA == 'EA'">1d{{character.job.diceEaLevelUp}}</span> Nombre de {{levelUpInfo.EVorEA}} a augmente: <input [(ngModel)]="levelUpInfo.EVorEAValue" type="number" />
 								<button class="btn btn-primary" (click)="rollLevelUp()">Roll</button>
 							</div>
 						</div>
