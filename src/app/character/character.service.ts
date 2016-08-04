@@ -257,15 +257,15 @@ export class CharacterService extends JsonService {
         return this.postJson('/api/character/invite', {
             characterId: characterId,
             groupId: groupId,
-            fromGroup: 1
+            fromGroup: true
         }).map(res => res.json());
     }
 
-    askJoinGroup(groupId: number, characterId: number): Observable<CharacterInviteInfo> {
+    askJoinGroup(groupId: number, characterId: number): Observable<IMetadata> {
         return this.postJson('/api/character/invite', {
             characterId: characterId,
             groupId: groupId,
-            fromGroup: 0
+            fromGroup: false
         }).map(res => res.json());
     }
 

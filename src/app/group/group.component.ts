@@ -498,21 +498,7 @@ export class GroupComponent implements OnInit, OnChanges {
     }
 
     refreshData() {
-        this._characterService.getGroup(this.group.id).subscribe(
-            res => {
-                this.group = res;
-                this.updateOrder();
-            },
-            err => {
-                try {
-                    let errJson = err.json();
-                    this._notification.error("Erreur", errJson.error_code, {timeOut: -1});
-                } catch (e) {
-                    console.log(err.stack);
-                    this._notification.error("Erreur", "Erreur");
-                }
-            }
-        );
+        this.loadGroup(this.group.id);
     }
 
     createNpc() {
@@ -557,66 +543,70 @@ export class GroupComponent implements OnInit, OnChanges {
         );
     }
 
+    loadGroup(id: number) {
+        this._characterService.getGroup(id).subscribe(
+            group => {
+                if (!group.data) {
+                    group.data = {};
+                }
+                this.group = group;
+
+                let toLoad: Observable<Character>[] = [];
+                for (let i = 0; i < group.characters.length; i++) {
+                    let char = group.characters[i];
+                    toLoad.push(this._characterService.getCharacter(char.id));
+                }
+                Observable.forkJoin(toLoad).subscribe((characters: Character[]) => {
+                    this.characters = characters;
+                    let charactersId: number[] = [];
+                    for (let i = 0; i < group.invited.length; i++) {
+                        charactersId.push(group.invited[i].id);
+                    }
+                    for (let i = 0; i < group.invites.length; i++) {
+                        charactersId.push(group.invites[i].id);
+                    }
+                    this._characterService.loadCharactersResume(charactersId).subscribe(
+                        (characterInvite: CharacterResume[]) => {
+                            for (let i = 0; i < group.invited.length; i++) {
+                                let char = group.invited[i];
+                                for (let j = 0; j < characterInvite.length; j++) {
+                                    let c = characterInvite[j];
+                                    if (c.id === char.id) {
+                                        group.invited[i] = c;
+                                    }
+                                }
+                            }
+                            for (let i = 0; i < group.invites.length; i++) {
+                                let char = group.invites[i];
+                                for (let j = 0; j < characterInvite.length; j++) {
+                                    let c = characterInvite[j];
+                                    if (c.id === char.id) {
+                                        group.invites[i] = c;
+                                    }
+                                }
+                            }
+                            this.updateOrder();
+                        }
+                    );
+                });
+            },
+            err => {
+                try {
+                    let errJson = err.json();
+                    this._notification.error("Erreur", errJson.error_code, {timeOut: -1});
+                } catch (e) {
+                    console.log(err.stack);
+                    this._notification.error("Erreur", "Erreur");
+                }
+            }
+        );
+    }
+
     ngOnInit() {
         this._route.params.subscribe(
             params => {
                 let id = +params['id'];
-                this._characterService.getGroup(id).subscribe(
-                    group => {
-                        if (!group.data) {
-                            group.data = {};
-                        }
-                        this.group = group;
-
-                        let toLoad: Observable<Character>[] = [];
-                        for (let i = 0; i < group.characters.length; i++) {
-                            let char = group.characters[i];
-                            toLoad.push(this._characterService.getCharacter(char.id));
-                        }
-                        Observable.forkJoin(toLoad).subscribe((characters: Character[]) => {
-                            this.characters = characters;
-                            let charactersId: number[] = [];
-                            for (let i = 0; i < group.invited.length; i++) {
-                                charactersId.push(group.invited[i].id);
-                            }
-                            for (let i = 0; i < group.invites.length; i++) {
-                                charactersId.push(group.invites[i].id);
-                            }
-                            this._characterService.loadCharactersResume(charactersId).subscribe(
-                                (characterInvite: CharacterResume[]) => {
-                                    for (let i = 0; i < group.invited.length; i++) {
-                                        let char = group.invited[i];
-                                        for (let j = 0; j < characterInvite.length; j++) {
-                                            let c = characterInvite[j];
-                                            if (c.id === char.id) {
-                                                group.invited[i] = c;
-                                            }
-                                        }
-                                    }
-                                    for (let i = 0; i < group.invites.length; i++) {
-                                        let char = group.invites[i];
-                                        for (let j = 0; j < characterInvite.length; j++) {
-                                            let c = characterInvite[j];
-                                            if (c.id === char.id) {
-                                                group.invites[i] = c;
-                                            }
-                                        }
-                                    }
-                                    this.updateOrder();
-                                }
-                            );
-                        });
-                    },
-                    err => {
-                        try {
-                            let errJson = err.json();
-                            this._notification.error("Erreur", errJson.error_code, {timeOut: -1});
-                        } catch (e) {
-                            console.log(err.stack);
-                            this._notification.error("Erreur", "Erreur");
-                        }
-                    }
-                );
+                this.loadGroup(id);
             }
         );
         this.autocompleteLocationsCallback = this.updateLocationListAutocomplete.bind(this);

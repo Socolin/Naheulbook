@@ -530,6 +530,7 @@
                                [class.active]="selectedInviteCharacter && character.id == selectedInviteCharacter.id">
                                 <h4 class="list-group-item-heading">{{character.name}}</h4>
                                 <p class="list-group-item-text">{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
+                                <p class="list-group-item-text">Joueur: {{character.owner}}
                                 </p>
                             </a>
                         </template>
