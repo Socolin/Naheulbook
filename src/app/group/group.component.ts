@@ -16,6 +16,7 @@ import {ValueEditorComponent, AutocompleteInputComponent, AutocompleteValue} fro
 import {TargetSelectorComponent} from './target-selector.component';
 import {LocationService, Location} from '../location';
 import {Observable} from 'rxjs';
+import {CharacterResume} from '../character/character.model';
 
 
 @Component({
@@ -565,6 +566,7 @@ export class GroupComponent implements OnInit, OnChanges {
                         if (!group.data) {
                             group.data = {};
                         }
+                        this.group = group;
 
                         let toLoad: Observable<Character>[] = [];
                         for (let i = 0; i < group.characters.length; i++) {
@@ -572,9 +574,37 @@ export class GroupComponent implements OnInit, OnChanges {
                             toLoad.push(this._characterService.getCharacter(char.id));
                         }
                         Observable.forkJoin(toLoad).subscribe((characters: Character[]) => {
-                           this.characters = characters;
-                            this.group = group;
-                            this.updateOrder();
+                            this.characters = characters;
+                            let charactersId: number[] = [];
+                            for (let i = 0; i < group.invited.length; i++) {
+                                charactersId.push(group.invited[i].id);
+                            }
+                            for (let i = 0; i < group.invites.length; i++) {
+                                charactersId.push(group.invites[i].id);
+                            }
+                            this._characterService.loadCharactersResume(charactersId).subscribe(
+                                (characterInvite: CharacterResume[]) => {
+                                    for (let i = 0; i < group.invited.length; i++) {
+                                        let char = group.invited[i];
+                                        for (let j = 0; j < characterInvite.length; j++) {
+                                            let c = characterInvite[j];
+                                            if (c.id === char.id) {
+                                                group.invited[i] = c;
+                                            }
+                                        }
+                                    }
+                                    for (let i = 0; i < group.invites.length; i++) {
+                                        let char = group.invites[i];
+                                        for (let j = 0; j < characterInvite.length; j++) {
+                                            let c = characterInvite[j];
+                                            if (c.id === char.id) {
+                                                group.invites[i] = c;
+                                            }
+                                        }
+                                    }
+                                    this.updateOrder();
+                                }
+                            );
                         });
                     },
                     err => {

@@ -125,6 +125,37 @@ export class CharacterService extends JsonService {
         return this.stats;
     }
 
+    loadCharactersResume(list: number[]): Observable<CharacterResume[]> {
+        return Observable.forkJoin(
+            this._jobService.getJobList(),
+            this._originService.getOriginList(),
+            this.postJson('/api/character/resumeList', list).map(res => res.json())
+        ).map((requiredData: [Job[], Origin[], CharacterResume[]]) => {
+                let jobs = requiredData[0];
+                let origins = requiredData[1];
+                let characters = requiredData[2];
+
+                for (let i = 0; i < characters.length; i++) {
+                    let character = characters[i];
+                    for (let j = 0; j < jobs.length; j++) {
+                        let job = jobs[j];
+                        if (job.id === character.jobId) {
+                            character.job = job.name;
+                            break;
+                        }
+                    }
+                    for (let j = 0; j < origins.length; j++) {
+                        let origin = origins[j];
+                        if (origin.id === character.originId) {
+                            character.origin = origin.name;
+                            break;
+                        }
+                    }
+                }
+                return characters;
+            }
+        );
+    }
     loadList(): Observable<CharacterResume[]> {
         return Observable.forkJoin(
             this._jobService.getJobList(),
