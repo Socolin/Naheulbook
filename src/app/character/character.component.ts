@@ -4,16 +4,14 @@ import {Observable} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
 
-import {Skill, SkillSelectorComponent} from '../skill';
+import {SkillSelectorComponent} from '../skill';
 import {Effect, EffectService} from '../effect';
 import {ItemService, ItemTemplate} from '../item';
 import {
     ModifierPipe,
-    formatModifierValue,
     removeDiacritics,
     ModifiersEditorComponent,
     PlusMinusPipe,
-    ItemStatModifier,
     ValueEditorComponent
 } from "../shared";
 
@@ -91,20 +89,6 @@ export class BagItemViewComponent implements OnInit {
     }
 }
 
-class StatisticDetail {
-    evea: any[];
-    atprd: any[];
-    stat: any[];
-    magic: any[];
-    other: any[];
-    show: {
-        evea: boolean;
-        atprd: boolean;
-        stat: boolean;
-        other: boolean;
-        magic: boolean;
-    };
-}
 class LevelUpInfo {
     EVorEA: string = 'EV';
     EVorEAValue: number;
@@ -112,12 +96,6 @@ class LevelUpInfo {
     statToUp: string;
     skill: any;
     speciality: any;
-}
-
-interface SkillDetail {
-    from: string[];
-    skillDef: Skill;
-    canceled?: boolean;
 }
 
 @Component({
@@ -152,12 +130,8 @@ interface SkillDetail {
 })
 export class CharacterComponent implements OnInit {
     @Input() id: number;
-    public character: Character;
-    public stats: {[statName: string]: number};
-    public skills: SkillDetail[];
-    public containers: Object[];
+    @Input() character: Character;
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
-    public details: StatisticDetail;
     public selectedItem: Item;
 
     constructor(private _route: ActivatedRoute
@@ -244,7 +218,7 @@ export class CharacterComponent implements OnInit {
             this._characterService.setStatBonusAD(id, stat).subscribe(
                 res => {
                     this.character.statBonusAD = stat;
-                    this.updateStats();
+                    this.character.update();
                 },
                 err => {
                     console.log(err);
@@ -365,9 +339,9 @@ export class CharacterComponent implements OnInit {
     levelUp() {
         if (this.character) {
             this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(
-                res => {
-                    this.character = res.json();
-                    this.updateStats();
+                character => {
+                    character.update();
+                    this.character = character;
                 },
                 err => {
                     console.log(err);
@@ -376,158 +350,6 @@ export class CharacterComponent implements OnInit {
             );
         }
     }
-
-    initDetails() {
-        let details: StatisticDetail = {
-            evea: [],
-            atprd: [],
-            stat: [],
-            magic: [],
-            other: [],
-            show: {
-                evea: false, atprd: false, stat: false, other: false, magic: false
-            }
-        };
-        if (this.details && this.details.show) {
-            details.show = this.details.show;
-        }
-        this.details = details;
-    }
-
-    getDetailCategoryForStat(statName: string) {
-        if (statName === 'EV' || statName === 'EA') {
-            return 'evea';
-        }
-        if (statName === 'AT' || statName === 'PRD' || statName === 'PR' || statName === 'PR_MAGIC') {
-            return 'atprd';
-        }
-        if (statName === 'COU'
-            || statName === 'FO'
-            || statName === 'AD'
-            || statName === 'CHA'
-            || statName === 'INT') {
-            return 'stat';
-        }
-        if (statName === 'MV'
-            || statName === 'THROW_MODIFIER'
-            || statName === 'DISCRETION_MODIFIER'
-            || statName === 'DANSE_MODIFIER'
-            || statName === 'PI') {
-            return 'other';
-        }
-        if (statName === 'RESM'
-            || statName === 'MPSY'
-            || statName === 'MPHYS') {
-            return 'magic';
-        }
-        return 'unk';
-    }
-
-    addDetails(name: string, data: {[statName: string]: any}) {
-        let categories: {[categoryName: string]: any} = {};
-        for (let i in data) {
-            if (!data.hasOwnProperty(i)) {
-                continue;
-            }
-            let category = this.getDetailCategoryForStat(i);
-            if (!this.details[category]) {
-                this.details[category] = [];
-            }
-            categories[category] = 1;
-        }
-        for (let i in categories) {
-            if (!categories.hasOwnProperty(i)) {
-                continue;
-            }
-            if (i === 'evea') {
-                this.details.evea.push({
-                    name: name,
-                    data: {
-                        EV: data['EV'],
-                        EA: data['EA']
-                    }
-                });
-            }
-            if (i === 'atprd') {
-                this.details.atprd.push({
-                    name: name,
-                    data: {
-                        AT: data['AT'],
-                        PRD: data['PRD'],
-                        PR: data['PR'],
-                        PR_MAGIC: data['PR_MAGIC']
-                    }
-                });
-            }
-            if (i === 'stat') {
-                this.details.stat.push({
-                    name: name,
-                    data: {
-                        COU: data['COU']
-                        , FO: data['FO']
-                        , CHA: data['CHA']
-                        , AD: data['AD']
-                        , INT: data['INT']
-                    }
-                });
-            }
-            if (i === 'other') {
-                this.details.other.push({
-                    name: name,
-                    data: {
-                        MV: data['MV']
-                        , THROW_MODIFIER: data['THROW_MODIFIER']
-                        , DISCRETION_MODIFIER: data['DISCRETION_MODIFIER']
-                        , DANSE_MODIFIER: data['DANSE_MODIFIER']
-                        , PI: data['PI']
-                    }
-                });
-            }
-            if (i === 'magic') {
-                this.details.magic.push({
-                    name: name,
-                    data: {
-                        MPHYS: data['MPHYS']
-                        , MPSY: data['MPSY']
-                        , RESM: data['RESM']
-                    }
-                });
-            }
-        }
-    }
-
-    // Concatenate modifiers like [-2 PRD] and [+2 PRD for dwarf]
-    cleanItemModifiers(item: Item): ItemStatModifier[] {
-        let cleanModifiers: ItemStatModifier[] = [];
-        if (item.template.modifiers) {
-            for (let i = 0; i < item.template.modifiers.length; i++) {
-                let modifier = item.template.modifiers[i];
-                if (modifier.job && modifier.job !== this.character.job.id) {
-                    continue;
-                }
-                if (modifier.origin && modifier.origin !== this.character.origin.id) {
-                    continue;
-                }
-                let newModifier = JSON.parse(JSON.stringify(modifier));
-                for (let j = 0; j < cleanModifiers.length; j++) {
-                    let newMod = cleanModifiers[j];
-                    if (newModifier.stat === newMod.stat
-                        && newModifier.type === newMod.type
-                        && (!newModifier.special || newModifier.special.length === 0)
-                        && (!newMod.special || newMod.special.length === 0)) {
-                        newMod.value += newModifier.value;
-                        newModifier = null;
-                        break;
-                    }
-                }
-                if (newModifier) {
-                    cleanModifiers.push(newModifier);
-                }
-            }
-        }
-        return cleanModifiers;
-    }
-
 
     public getItemById(itemId: number): Item {
         for (let i = 0; i < this.character.items.length; i++) {
@@ -540,372 +362,6 @@ export class CharacterComponent implements OnInit {
     }
 
     public countInOtherTab: number = 0;
-
-    updateStats() {
-        this.initDetails();
-        this.stats = JSON.parse(JSON.stringify(this.character.stats));
-        this.addDetails('Jet de dé initial', this.character.stats);
-        this.stats['AT'] = 8;
-        this.stats['PRD'] = 10;
-        this.stats['MV'] = 100;
-        this.stats['PR'] = 0;
-        this.stats['PR_MAGIC'] = 0;
-        this.stats['RESM'] = 0;
-        this.stats['PI'] = 0;
-        if (this.character.origin.speedModifier) {
-            this.stats['MV'] += this.character.origin.speedModifier;
-            if (this.character.origin.speedModifier > 0) {
-                this.addDetails('Origine', {MV: '+' + this.character.origin.speedModifier + '%'});
-            } else {
-                this.addDetails('Origine', {MV: this.character.origin.speedModifier + '%'});
-            }
-        }
-        this.addDetails('Valeurs initial', {AT: 8, PRD: 10});
-        this.stats['EV'] = this.character.origin.baseEV;
-        this.stats['EA'] = null;
-        this.addDetails('Origine', {EV: this.character.origin.baseEV});
-
-        if (this.character.origin) {
-            this.stats['AT'] += this.character.origin.bonusAT;
-            this.stats['PRD'] += this.character.origin.bonusPRD;
-            if (this.character.origin.bonusAT || this.character.origin.bonusPRD) {
-                this.addDetails('Origine', {AT: this.character.origin.bonusAT, PRD: this.character.origin.bonusPRD});
-            }
-        }
-        if (this.character.job) {
-            if (this.character.job.baseEv) {
-                this.stats['EV'] = this.character.job.baseEv;
-                this.addDetails('Métiers (changement de la valeur de base)', {EV: this.character.origin.baseEV});
-            }
-            if (this.character.job.factorEv) {
-                this.stats['EV'] *= this.character.job.factorEv;
-                this.stats['EV'] = Math.round(this.stats['EV']);
-                this.addDetails('Métiers (% de vie)', {EV: (Math.round((1 - this.character.job.factorEv) * 100)) + '%'});
-            }
-            if (this.character.job.bonusEv) {
-                this.stats['EV'] += this.character.job.bonusEv;
-                this.addDetails('Métiers (bonus de EV)', {EV: this.character.job.bonusEv});
-            }
-            if (this.character.job.baseEa) {
-                this.addDetails('Métiers (EA de base)', {EA: this.character.job.baseEa});
-                this.stats['EA'] = this.character.job.baseEa;
-            }
-        }
-        for (let i = 0; i < this.character.specialities.length; i++) {
-            let speciality = this.character.specialities[i];
-            let detailData = {};
-            if (speciality.modifiers) {
-                for (let j = 0; j < speciality.modifiers.length; j++) {
-                    let modifier = speciality.modifiers[j];
-                    this.stats[modifier.stat] += modifier.value;
-                    detailData[modifier.stat] = modifier.value;
-                }
-            }
-            this.addDetails('Specialite: ' + speciality.name, detailData);
-        }
-
-        for (let i = 0; i < this.character.modifiers.length; i++) {
-            let modifier = this.character.modifiers[i];
-            let detailData = {};
-            for (let j = 0; j < modifier.values.length; j++) {
-                let value = modifier.values[j];
-                if (value.type === 'ADD') {
-                    this.stats[value.stat] += value.value;
-                }
-                else if (value.type === 'SET') {
-                    this.stats[value.stat] = value.value;
-                }
-                else if (value.type === 'DIV') {
-                    this.stats[value.stat] /= value.value;
-                }
-                else if (value.type === 'MUL') {
-                    this.stats[value.stat] *= value.value;
-                }
-                else if (value.type === 'PERCENTAGE') {
-                    this.stats[value.stat] *= (value.value / 100);
-                }
-                detailData[value.stat] = formatModifierValue(value);
-            }
-            this.addDetails(modifier.name, detailData);
-        }
-
-        let canceledSkills = {};
-        this.skills = [];
-
-        this.stats['THROW_MODIFIER'] = 0;
-        this.stats['DISCRETION_MODIFIER'] = 0;
-        this.stats['DANSE_MODIFIER'] = 0;
-        this.stats['CHA_WITHOUT_MAGIEPSY'] = 0;
-        for (let i = 0; i < this.character.items.length; i++) {
-            let item = this.character.items[i];
-
-            if (!item.data.equiped && item.data.readCount) {
-                if (item.data.readCount >= 7) {
-                    for (let u = 0; u < item.template.unskills.length; u++) {
-                        let skill = item.template.unskills[u];
-                        canceledSkills[skill.id] = item;
-                    }
-                    for (let u = 0; u < item.template.skills.length; u++) {
-                        this.skills.push({
-                            skillDef: item.template.skills[u],
-                            from: [item.data.name]
-                        });
-                    }
-                }
-            }
-        }
-        for (let i = 0; i < this.itemsEquiped.length; i++) {
-            let item = this.itemsEquiped[i];
-            if (item.template.data.charge) {
-                continue;
-            }
-            let modifications = {};
-            for (let u = 0; u < item.template.unskills.length; u++) {
-                let skill = item.template.unskills[u];
-                canceledSkills[skill.id] = item;
-            }
-            for (let u = 0; u < item.template.skills.length; u++) {
-                this.skills.push({
-                    skillDef: item.template.skills[u],
-                    from: [item.data.name]
-                });
-            }
-            let somethingOver = false;
-            for (let s = 0; s < item.template.slots.length; s++) {
-                let slot = item.template.slots[s];
-                for (let i2 = 0; i2 < this.itemsBySlots[slot.id].length; i2++) {
-                    let item2 = this.itemsBySlots[slot.id][i2];
-                    if (item2.id === item.id) {
-                        continue;
-                    }
-                    if (item.data.equiped < item2.equiped) {
-                        somethingOver = true;
-                        break;
-                    }
-                }
-            }
-
-            let cleanModifiers = this.cleanItemModifiers(item);
-            for (let m = 0; m < cleanModifiers.length; m++) {
-                let modifier = cleanModifiers[m];
-                if (modifier.job && modifier.job !== this.character.job.id) {
-                    continue;
-                }
-                if (modifier.origin && modifier.origin !== this.character.origin.id) {
-                    continue;
-                }
-                let affectStats = true;
-                let overrideStatName = modifier.stat;
-                if (modifier.special) {
-                    if (modifier.special.indexOf("ONLY_IF_NOTHING_ON") >= 0) {
-                        if (somethingOver) {
-                            continue;
-                        }
-                    }
-                    if (modifier.special.indexOf("AFFECT_ONLY_THROW") >= 0) {
-                        overrideStatName = 'THROW_MODIFIER';
-                    }
-                    if (modifier.special.indexOf("DONT_AFFECT_MAGIEPSY") >= 0) {
-                        this.stats[overrideStatName] += modifier.value;
-                        this.stats['CHA_WITHOUT_MAGIEPSY'] += modifier.value;
-                        modifications[overrideStatName] = modifier.value + '(!MPsy)';
-                        affectStats = false;
-                    }
-                    if (modifier.special.indexOf("AFFECT_ONLY_MELEE") >= 0) {
-                        // FIXME
-                    }
-                    if (modifier.special.indexOf("AFFECT_ONLY_MELEE_STAFF") >= 0) {
-                        // FIXME
-                    }
-                    if (modifier.special.indexOf("AFFECT_PR_FOR_ELEMENTS") >= 0) {
-                        // FIXME
-                    }
-                    if (modifier.special.indexOf("AFFECT_DISCRETION") >= 0) {
-                        overrideStatName = 'DISCRETION_MODIFIER';
-                    }
-                    if (modifier.special.indexOf("AFFECT_ONLY_DANSE") >= 0) {
-                        overrideStatName = 'DANSE_MODIFIER';
-                    }
-                }
-                if (affectStats) {
-                    if (modifier.type === 'ADD') {
-                        this.stats[overrideStatName] += modifier.value;
-                    }
-                    else if (modifier.type === 'SET') {
-                        this.stats[overrideStatName] = modifier.value;
-                    }
-                    else if (modifier.type === 'DIV') {
-                        this.stats[overrideStatName] /= modifier.value;
-                    }
-                    else if (modifier.type === 'MUL') {
-                        this.stats[overrideStatName] *= modifier.value;
-                    }
-                    else if (modifier.type === 'PERCENTAGE') {
-                        this.stats[overrideStatName] *= (modifier.value / 100);
-                    }
-                    if (modifications[overrideStatName] == null) {
-                        modifications[overrideStatName] = 0;
-                    }
-                    modifications[overrideStatName] = formatModifierValue(modifier);
-                }
-            }
-            if (item.template.data.protection) {
-                modifications['PR'] = item.template.data.protection;
-                this.stats['PR'] += item.template.data.protection;
-            }
-            if (item.template.data.magicProtection) {
-                modifications['PR_MAGIC'] = item.template.data.magicProtection;
-                this.stats['PR_MAGIC'] += item.template.data.magicProtection;
-            }
-            this.addDetails(item.data.name, modifications);
-        }
-
-        if (this.stats['AD'] > 12 && this.character.statBonusAD) {
-            this.stats[this.character.statBonusAD] += 1;
-            let detailData = {};
-            detailData[this.character.statBonusAD] = 1;
-            this.addDetails('Bonus AD > 12', detailData);
-        }
-        if (this.stats['AD'] < 9 && this.character.statBonusAD) {
-            this.stats[this.character.statBonusAD] -= 1;
-            let detailData = {};
-            detailData[this.character.statBonusAD] = -1;
-            this.addDetails('Malus AD < 9', detailData);
-        }
-
-        for (let i = 0; i < this.character.effects.length; i++) {
-            let effect = this.character.effects[i];
-            let detailData = {};
-            for (let j = 0; j < effect.modifiers.length; j++) {
-                let modifier = effect.modifiers[j];
-                if (modifier.type === 'ADD') {
-                    this.stats[modifier.stat] += modifier.value;
-                }
-                else if (modifier.type === 'SET') {
-                    this.stats[modifier.stat] = modifier.value;
-                }
-                else if (modifier.type === 'DIV') {
-                    this.stats[modifier.stat] /= modifier.value;
-                }
-                else if (modifier.type === 'MUL') {
-                    this.stats[modifier.stat] *= modifier.value;
-                }
-                else if (modifier.type === 'PERCENTAGE') {
-                    this.stats[modifier.stat] *= (modifier.value / 100);
-                }
-                detailData[modifier.stat] = formatModifierValue(modifier);
-            }
-            this.addDetails(effect.name, detailData);
-        }
-
-        this.stats['MPHYS'] = Math.round((this.stats['INT'] + this.stats['AD']) / 2);
-        this.stats['MPSY'] = Math.round((this.stats['INT'] + (this.stats['CHA'] - this.stats['CHA_WITHOUT_MAGIEPSY'])) / 2);
-        this.stats['RESM'] += Math.round((this.stats['COU'] + this.stats['INT'] + this.stats['FO']) / 3);
-        this.addDetails('Base', {
-            MPHYS: "<sup>(" + this.stats['INT'] + " + " + this.stats['AD'] + ")</sup>&frasl;<sub>2</sub>",
-            MPSY: "<sup>(" + this.stats['INT'] + " + " + (this.stats['CHA'] - this.stats['CHA_WITHOUT_MAGIEPSY'])
-            + ")</sup>&frasl;<sub>2</sub>",
-            RESM: "<sup>(" + this.stats['COU'] + " + " + this.stats['INT'] + " + " + this.stats['FO'] + ")</sup>&frasl;<sub>3</sub>",
-        });
-
-        if (this.stats['FO'] > 12) {
-            this.stats['PI'] += (this.stats['FO'] - 12);
-            this.addDetails('Bonus FO > 12', {'PI': this.stats['FO'] - 12});
-        }
-        if (this.stats['FO'] < 9) {
-            this.stats['PI'] += (this.stats['FO'] - 9);
-            this.addDetails('Malus FO < 9', {'PI': this.stats['FO'] - 9});
-        }
-
-
-        if (this.character.job) {
-            for (let i = 0; i < this.character.job.skills.length; i++) {
-                let skill = this.character.job.skills[i];
-                this.skills.push({
-                    skillDef: skill,
-                    from: [this.character.job.name]
-                });
-            }
-        }
-        for (let i = 0; i < this.character.origin.skills.length; i++) {
-            let skill = this.character.origin.skills[i];
-            this.skills.push({
-                skillDef: skill,
-                from: [this.character.origin.name]
-            });
-        }
-        for (let i = 0; i < this.character.skills.length; i++) {
-            let skill = this.character.skills[i];
-            this.skills.push({
-                skillDef: skill,
-                from: ["Choisi"]
-            });
-        }
-        this.skills.sort(function (a, b) {
-            return a.skillDef.name.localeCompare(b.skillDef.name);
-        });
-
-        let prevSkill: SkillDetail = null;
-        for (let i = 0; i < this.skills.length; i++) {
-            let skill = this.skills[i];
-            if (skill.skillDef.id in canceledSkills) {
-                skill.canceled = canceledSkills[skill.skillDef.id];
-            }
-            if (prevSkill && skill.skillDef.id === prevSkill.skillDef.id) {
-                prevSkill.from.push(skill.from[0]);
-                this.skills.splice(i, 1);
-                i--;
-            } else {
-                prevSkill = skill;
-            }
-        }
-
-        for (let i = 0; i < this.skills.length; i++) {
-            let skill = this.skills[i];
-            if (!skill.canceled && skill.skillDef.effects && skill.skillDef.effects.length > 0) {
-                let detailData = {};
-                for (let j = 0; j < skill.skillDef.effects.length; j++) {
-                    let modifier = skill.skillDef.effects[j];
-                    this.stats[modifier.stat] += modifier.value;
-                    detailData[modifier.stat] = modifier.value;
-                }
-                this.addDetails(skill.skillDef.name, detailData);
-            }
-        }
-
-        if (this.character.ev == null) {
-            this.character.ev = this.stats['EV'];
-        }
-        if (this.character.ea == null && this.stats['EA'] != null) {
-            this.character.ea = this.stats['EA'];
-        }
-
-        let statToZero = ['CHA', 'FO', 'COU', 'INT', 'AD', 'AT', 'PRD', 'MPHYS', 'MPSY', 'RESM'];
-        for (let i = 0; i < statToZero.length; i++) {
-            if (this.stats[statToZero[i]] < 0) {
-                this.stats[statToZero[i]] = 0;
-            }
-        }
-
-        this.countInOtherTab = 0;
-        if (this.stats['AD'] > 12) {
-            this.countInOtherTab++;
-        }
-        if (this.stats['AD'] < 9) {
-            this.countInOtherTab++;
-        }
-        if (this.stats['INT'] > 12) {
-            this.countInOtherTab++;
-        }
-        this._characterService.saveStatsCache(this.character.id, this.stats).subscribe(
-            () => {
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
-            }
-        );
-    }
 
     useFatePoint() {
         if (this.character && this.character.fatePoint) {
@@ -942,7 +398,7 @@ export class CharacterComponent implements OnInit {
         this._characterService.addEffect(this.character.id, effect.id).subscribe(
             res => {
                 this.character.effects.push(res);
-                this.updateStats();
+                this.character.update();
             },
             err => {
                 console.log(err);
@@ -962,7 +418,7 @@ export class CharacterComponent implements OnInit {
                     }
                 }
                 this.selectedEffect = null;
-                this.updateStats();
+                this.character.update();
             },
             err => {
                 console.log(err);
@@ -985,7 +441,7 @@ export class CharacterComponent implements OnInit {
             this._characterService.addModifier(this.character.id, this.customAddModifier).subscribe(
                 res => {
                     this.character.modifiers.push(res);
-                    this.updateStats();
+                    this.character.update();
                     this.customAddModifier = new CharacterModifier();
                 },
                 err => {
@@ -1007,7 +463,7 @@ export class CharacterComponent implements OnInit {
                     }
                 }
                 this.selectedModifier = null;
-                this.updateStats();
+                this.character.update();
             },
             err => {
                 console.log(err);
@@ -1082,8 +538,7 @@ export class CharacterComponent implements OnInit {
                     res => {
                         this.character.items.push(res);
                         this.selectedItem = res;
-                        this.updateInventory();
-                        this.updateStats();
+                        this.character.update();
                         this.itemFilterName = "";
                         this.selectedAddItem = null;
                         this.itemAddCustomName = null;
@@ -1131,8 +586,7 @@ export class CharacterComponent implements OnInit {
             this._itemService.equipItem(item.id, level).subscribe(
                 res => {
                     item.data.equiped = res.data.equiped;
-                    this.updateInventory();
-                    this.updateStats();
+                    this.character.update();
                 },
                 err => {
                     console.log(err);
@@ -1151,8 +605,7 @@ export class CharacterComponent implements OnInit {
                         }
                     }
                     this.selectedItem = null;
-                    this.updateInventory();
-                    this.updateStats();
+                    this.character.update();
                 },
                 err => {
                     console.log(err);
@@ -1164,8 +617,7 @@ export class CharacterComponent implements OnInit {
             this._itemService.updateQuantity(item.id, event.quantity).subscribe(
                 res => {
                     item.data.quantity = res.data.quantity;
-                    this.updateInventory();
-                    this.updateStats();
+                    this.character.update();
                 },
                 err => {
                     console.log(err);
@@ -1177,8 +629,7 @@ export class CharacterComponent implements OnInit {
             this._itemService.readBook(item.id).subscribe(
                 res => {
                     item.data.readCount = res.data.readCount;
-                    this.updateInventory();
-                    this.updateStats();
+                    this.character.update();
                 },
                 err => {
                     console.log(err);
@@ -1190,8 +641,7 @@ export class CharacterComponent implements OnInit {
             this._itemService.updateCharge(item.id, item.data.charge - 1).subscribe(
                 res => {
                     item.data.charge = res.data.charge;
-                    this.updateInventory();
-                    this.updateStats();
+                    this.character.update();
                 },
                 err => {
                     console.log(err);
@@ -1207,7 +657,7 @@ export class CharacterComponent implements OnInit {
                     } else {
                         item.container = res.id;
                     }
-                    this.updateInventory();
+                    this.character.update();
                 },
                 err => {
                     console.log(err);
@@ -1228,8 +678,7 @@ export class CharacterComponent implements OnInit {
                             item[key] = res[key];
                         }
                     }
-                    this.updateInventory();
-                    this.updateStats();
+                    this.character.update();
                 },
                 err => {
                     console.log(err);
@@ -1241,91 +690,6 @@ export class CharacterComponent implements OnInit {
             console.log(event);
         }
         return false;
-    }
-
-    public itemsBySlots = {};
-    public itemsBySlotsAll = {};
-    public itemsEquiped: Item[] = [];
-    public itemSlots = [];
-    public topLevelContainers = [];
-
-    updateInventory() {
-        let itemsBySlots = {};
-        let itemsBySlotsAll = {};
-        let equiped = [];
-        let slots = [];
-        let containers = [];
-        let topLevelContainers = [];
-        let content: {[itemId: number]: Item[]} = {};
-
-        for (let i = 0; i < this.character.items.length; i++) {
-            let item = this.character.items[i];
-            if (item.data.equiped != null || item.container != null) {
-                if (item.template.data.container) {
-                    if (item.data.equiped) {
-                        topLevelContainers.push(item);
-                    }
-                    containers.push(item);
-                }
-            }
-
-            for (let s = 0; s < item.template.slots.length; s++) {
-                let slot = item.template.slots[s];
-                if (!itemsBySlotsAll[slot.id]) {
-                    itemsBySlotsAll[slot.id] = [];
-                }
-                itemsBySlotsAll[slot.id].push(item);
-
-                if (!item.data.equiped) {
-                    continue;
-                }
-
-                if (!itemsBySlots[slot.id]) {
-                    itemsBySlots[slot.id] = [];
-                }
-                if (!itemsBySlots[slot.id].length) {
-                    slots.push(slot);
-                }
-                itemsBySlots[slot.id].push(item);
-            }
-            if (item.data.equiped != null) {
-                equiped.push(item);
-            } else {
-                if (item.container) {
-                    if (!content[item.container]) {
-                        content[item.container] = [];
-                    }
-                    content[item.container].push(item);
-                }
-            }
-        }
-
-        for (let i = 0; i < this.character.items.length; i++) {
-            let item = this.character.items[i];
-            if (item.id in content) {
-                item.content = content[item.id];
-            }
-        }
-
-        for (let i = 0; i < slots.length; i++) {
-            let slot = slots[i];
-            itemsBySlots[slot.id].sort(function (a: Item, b: Item) {
-                if (a.data.equiped === b.data.equiped) {
-                    return 0;
-                }
-                if (a.data.equiped < b.data.equiped) {
-                    return 1;
-                }
-                return -1;
-            });
-        }
-
-        this.itemsEquiped = equiped;
-        this.itemSlots = slots;
-        this.itemsBySlots = itemsBySlots;
-        this.itemsBySlotsAll = itemsBySlotsAll;
-        this.containers = containers;
-        this.topLevelContainers = topLevelContainers;
     }
 
     // Group
@@ -1381,31 +745,34 @@ export class CharacterComponent implements OnInit {
                 categories.map(c => this.effectCategoriesById[c.id] = c);
             });
 
-        this._route.params.subscribe(
-            param => {
-                let id = this.id;
-                if (!this.id) {
-                    id = +param['id'];
-                }
-                Observable.forkJoin(
-                    this._characterService.getCharacter(id)
-                ).subscribe(
-                    res => {
-                        this.character = res[0];
-                        try {
-                            this.updateInventory();
-                            this.updateStats();
-                        } catch (e) {
-                            console.log(e.stack);
-                            this._notification.error("Erreur", "Erreur JS");
-                        }
-                    },
-                    err => {
-                        console.log(err);
-                        this._notification.error("Erreur", "Erreur");
+        if (this.character) {
+            this.character.update();
+        } else {
+            this._route.params.subscribe(
+                param => {
+                    let id = this.id;
+                    if (!this.id) {
+                        id = +param['id'];
                     }
-                );
-            }
-        );
+                    Observable.forkJoin(
+                        this._characterService.getCharacter(id)
+                    ).subscribe(
+                        res => {
+                            this.character = res[0];
+                            try {
+                                this.character.update();
+                            } catch (e) {
+                                console.log(e.stack);
+                                this._notification.error("Erreur", "Erreur JS");
+                            }
+                        },
+                        err => {
+                            console.log(err);
+                            this._notification.error("Erreur", "Erreur");
+                        }
+                    );
+                }
+            );
+        }
     }
 }

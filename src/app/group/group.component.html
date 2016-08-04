@@ -45,7 +45,7 @@
                     Historique
                 </a>
             </li>
-            <template ngFor let-character [ngForOf]="group.characters">
+            <template ngFor let-character [ngForOf]="characters">
                 <li role="presentation">
                     <a [class.bg-warning]="character.isNpc" [class.bg-info]="!character.isNpc" *ngIf="character.active"
                        href="#character_{{character.id}}" [attr.aria-controls]="'character_' + character.id" role="tab"
@@ -58,10 +58,10 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-            <template ngFor let-character [ngForOf]="group.characters">
+            <template ngFor let-character [ngForOf]="characters">
                 <div *ngIf="character.active" role="tabpanel" class="list-group tab-pane"
                      id="character_{{character.id}}">
-                    <character [id]="character.id"></character>
+                    <character [character]="character"></character>
                 </div>
             </template>
             <div role="tabpanel" class="tab-pane" id="tab-history">
@@ -143,7 +143,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-5 col-sm-6">
-                    <template ngFor let-character [ngForOf]="group.characters">
+                    <template ngFor let-character [ngForOf]="characters">
                         <div *ngIf="!character.isNpc" class="list-group-item">
                             <h3>
                                 {{character.name}} - Lvl{{character.level}}
@@ -176,7 +176,7 @@
                     </template>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-6">
-                    <template ngFor let-character [ngForOf]="group.characters">
+                    <template ngFor let-character [ngForOf]="characters">
                         <div *ngIf="character.isNpc" class="list-group-item">
                             <h3>
                                 {{character.name}} - Lvl{{character.level}}

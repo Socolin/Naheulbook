@@ -15,6 +15,7 @@ import {MonsterEditableFieldComponent} from './monster-editable-field.component'
 import {ValueEditorComponent, AutocompleteInputComponent, AutocompleteValue} from '../shared';
 import {TargetSelectorComponent} from './target-selector.component';
 import {LocationService, Location} from '../location';
+import {Observable} from 'rxjs';
 
 
 @Component({
@@ -41,6 +42,7 @@ import {LocationService, Location} from '../location';
 })
 export class GroupComponent implements OnInit, OnChanges {
     public group: Group;
+    public characters: Character[] = [];
     public newMonster: Monster = new Monster();
     public selectedCharacter: Character;
     public filteredInvitePlayers: CharacterInviteInfo[] = [];
@@ -368,8 +370,8 @@ export class GroupComponent implements OnInit, OnChanges {
     updateOrder() {
         let deadMonsters = [];
         let charAndMonsters: Fighter[] = [];
-        for (let i = 0; i < this.group.characters.length; i++) {
-            let character = this.group.characters[i];
+        for (let i = 0; i < this.characters.length; i++) {
+            let character = this.characters[i];
             if (character.active) {
                 let fighter = Fighter.createFromCharacter(character);
                 fighter.chercheNoise = Character.hasChercherDesNoises(character);
@@ -564,8 +566,16 @@ export class GroupComponent implements OnInit, OnChanges {
                             group.data = {};
                         }
 
-                        this.group = group;
-                        this.updateOrder();
+                        let toLoad: Observable<Character>[] = [];
+                        for (let i = 0; i < group.characters.length; i++) {
+                            let char = group.characters[i];
+                            toLoad.push(this._characterService.getCharacter(char.id));
+                        }
+                        Observable.forkJoin(toLoad).subscribe((characters: Character[]) => {
+                           this.characters = characters;
+                            this.group = group;
+                            this.updateOrder();
+                        });
                     },
                     err => {
                         try {

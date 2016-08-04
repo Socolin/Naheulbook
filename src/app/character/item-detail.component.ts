@@ -14,7 +14,6 @@ import {ItemCategory} from '../item/item-template.model';
 export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() item: Item;
     @Input() character: Character;
-    @Input() characterStats: any[];
 
     @Output() itemAction: EventEmitter<any> = new EventEmitter<any>();
 

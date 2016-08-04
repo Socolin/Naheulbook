@@ -31,8 +31,13 @@ export class CharacterService extends JsonService {
                 let jobs: Job[] = requiredData[0];
                 let origins: Origin[] = requiredData[1];
                 let skills: Skill[] = requiredData[2];
-                let character: Character = requiredData[3];
-
+                let character = new Character();
+                let characterData = requiredData[3];
+                for (let propName in characterData) {
+                    if (characterData.hasOwnProperty(propName)) {
+                        character[propName] = characterData[propName];
+                    }
+                }
                 for (let j = 0; j < jobs.length; j++) {
                     let job = jobs[j];
                     if (job.id === character.jobId) {
@@ -80,6 +85,7 @@ export class CharacterService extends JsonService {
                         }
                     }
                 }
+                character.update();
                 return character;
             }
         );
@@ -92,11 +98,11 @@ export class CharacterService extends JsonService {
         });
     }
 
-    LevelUp(id: number, levelUpInfo: Object): Observable<Response> {
+    LevelUp(id: number, levelUpInfo: Object): Observable<Character> {
         return this.postJson('/api/character/levelUp', {
             id: id,
             levelUpInfo: levelUpInfo
-        });
+        }).map(res => res.json());
     }
 
     private stats: ReplaySubject<Stat[]>;

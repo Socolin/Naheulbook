@@ -10,7 +10,7 @@ export interface Group {
     monsters: Monster[];
     invited: CharacterInviteInfo[];
     invites: CharacterInviteInfo[];
-    characters: Character[];
+    characters: {id: number}[];
 }
 
 export interface CharacterInviteInfo {
@@ -78,7 +78,7 @@ export class Fighter {
         f.target = monster.target;
         f.note = monster.data.note;
         f.color = monster.data.color;
-        f.number= monster.data.number;
+        f.number = monster.data.number;
         return f;
     }
 
@@ -91,17 +91,17 @@ export class Fighter {
         f.active = character.active;
 
         f.stats = {
-            at: character.statsCache.AT,
-            ad: character.statsCache.AD,
-            prd: character.statsCache.PRD,
+            at: character.computedData.stats['AT'],
+            ad: character.computedData.stats['AD'],
+            prd: character.computedData.stats['PRD'],
             ev: character.ev,
-            maxEv: character.statsCache.EV,
+            maxEv: character.computedData.stats['EV'],
             ea: character.ea,
-            maxEa:  character.statsCache.EA,
-            pr: character.statsCache.PR,
+            maxEa:  character.computedData.stats['EA'],
+            pr: character.computedData.stats['PR'] + ' (' + character.computedData.stats['PR_MAGIC'] + ')',
             dmg: '',
-            cou: character.statsCache.COU,
-            resm: character.statsCache.RESM,
+            cou: character.computedData.stats['COU'],
+            resm: character.computedData.stats['RESM'],
             xp: null,
         };
         f.target = character.target;
