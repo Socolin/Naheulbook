@@ -96,6 +96,7 @@ export class GroupComponent implements OnInit, OnChanges {
         this._characterService.changeCharacterStat(character.id, 'active', !character.active).subscribe(
             change => {
                 character.active = change.value;
+                this.updateOrder();
             },
             err => {
                 console.log(err);
@@ -181,20 +182,12 @@ export class GroupComponent implements OnInit, OnChanges {
         );
     }
 
-
-    private monsterAutocompleteList: MonsterTemplate[] = [];
     private monsterAutocompleteShow = false;
+    private autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
 
-    onMonsterNameChange(name) {
-        this._monsterService.searchMonster(name).subscribe(
-            res => {
-                this.monsterAutocompleteList = res;
-                this.monsterAutocompleteShow = true;
-            },
-            err => {
-                console.log(err.stack);
-                this._notification.error("Erreur", "Erreur");
-            }
+    updateMonsterListAutocomplete(filter: string) {
+        return this._monsterService.searchMonster(filter).map(
+            list => list.map(e => new AutocompleteValue(e, e.name))
         );
     }
 
@@ -294,7 +287,8 @@ export class GroupComponent implements OnInit, OnChanges {
             this._groupService.updateMonster(element.id, 'target', {id: target.id, isMonster: target.isMonster})
                 .subscribe(
                     () => {
-                        element.target = target;
+                        element.changeTarget(target);
+                        element.updateTarget(this.charAndMonsters);
                         this._notification.info("Monstre", "Cible changée");
                     },
                     err => {
@@ -308,7 +302,8 @@ export class GroupComponent implements OnInit, OnChanges {
                 isMonster: target.isMonster
             }).subscribe(
                 change => {
-                    element.target = change.value;
+                    element.changeTarget(change.value);
+                    element.updateTarget(this.charAndMonsters);
                     this._notification.info("Joueur", "Cible changée");
                 },
                 err => {
@@ -327,7 +322,8 @@ export class GroupComponent implements OnInit, OnChanges {
             this._groupService.updateMonster(element.id, 'color', color)
                 .subscribe(
                     () => {
-                        element.color = color;
+                        element.changeColor(color);
+                        this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
                         this._notification.info("Monstre", "Couleur changé");
                     },
                     err => {
@@ -338,7 +334,8 @@ export class GroupComponent implements OnInit, OnChanges {
         } else {
             this._characterService.changeCharacterStat(element.id, 'color', color).subscribe(
                 change => {
-                    element.color = change.value;
+                    element.changeColor(change.value);
+                    this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
                     this._notification.info("Joueur", "Couleur changée");
                 },
                 err => {
@@ -426,6 +423,7 @@ export class GroupComponent implements OnInit, OnChanges {
                 }
             }
         });
+        charAndMonsters.forEach(f => f.updateTarget(charAndMonsters));
         this.charAndMonsters = charAndMonsters;
         this.deadMonsters = deadMonsters;
     }

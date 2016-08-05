@@ -212,9 +212,7 @@ export class Character {
     user: Object;
     target: {
         id: number;
-        isMonster: number;
-        name: string;
-        color: string;
+        isMonster: boolean;
     };
     color: string;
     gmData: any;

@@ -3,10 +3,12 @@ import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 
 import {MonsterTemplate} from "./monster.model";
+import {JsonService} from '../shared/json-service';
 
 @Injectable()
-export class MonsterService {
-    constructor(private _http: Http) {
+export class MonsterService extends JsonService {
+    constructor(http: Http) {
+        super(http);
     }
 
     getMonsterList(): Observable<MonsterTemplate[]> {
@@ -14,9 +16,9 @@ export class MonsterService {
     }
 
     searchMonster(name): Observable<MonsterTemplate[]> {
-        return this._http.post('/api/monster/searchMonster', JSON.stringify({
+        return this.postJson('/api/monster/searchMonster', {
             name: name
-        })).map(res => res.json());
+        }).map(res => res.json());
     }
 
 }

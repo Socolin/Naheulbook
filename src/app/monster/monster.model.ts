@@ -21,9 +21,7 @@ export class Monster {
     dead: string;
     target: {
         id: number;
-        isMonster: number;
-        name: string;
-        color: string;
+        isMonster: boolean;
     };
 }
 

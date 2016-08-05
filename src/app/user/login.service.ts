@@ -64,7 +64,7 @@ export class LoginService extends JsonService {
     }
 
     searchUser(filter: string): Observable <Object[]> {
-        return this._http.post('/api/user/searchUser', JSON.stringify({filter: filter}))
+        return this.postJson('/api/user/searchUser', {filter: filter})
             .map(res => res.json());
     }
 }

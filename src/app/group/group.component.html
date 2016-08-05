@@ -396,18 +396,10 @@
                 <div>
                     <form class="form-horizontal">
                         <div class="form-group">
-                            <label for="inputMonsterName" class="col-xs-1 control-label">Nom</label>
+                            <label class="col-xs-1 control-label">Nom</label>
                             <div class="col-xs-11">
-                                <input type="text" class="form-control" id="inputMonsterName"
-                                       [(ngModel)]="newMonster.name" (ngModelChange)=onMonsterNameChange($event)>
-                                <div style="position:relative;z-index:10">
-                                    <div style="position:absolute" *ngIf="monsterAutocompleteShow" class="list-group">
-                                        <a href="#" *ngFor="let monster of monsterAutocompleteList"
-                                           class="list-group-item" (click)=selectMonsterInAutocompleteList(monster)>
-                                            {{monster.name}}
-                                        </a>
-                                    </div>
-                                </div>
+                                <autocomplete-input [value]="newMonster.name" (onSelect)="selectMonsterInAutocompleteList($event)"
+                                                    [(callback)]="autocompleteMonsterListCallback"></autocomplete-input>
                             </div>
                         </div>
                         <div class="form-group">
