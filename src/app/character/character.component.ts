@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {Observable} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
 
@@ -23,6 +23,8 @@ import {IMetadata} from '../shared/misc.model';
 import {ItemDetailComponent} from './item-detail.component';
 import {EffectCategory} from '../effect/effect.model';
 import {SkillService} from '../skill';
+import {WebSocketService} from '../shared/websocket.service';
+import {WsMessage} from '../shared/websocket.model';
 
 @Component({
     selector: 'bag-item-view',
@@ -126,19 +128,23 @@ class LevelUpInfo {
         , ItemDetailComponent
         , ModifiersEditorComponent
         , ValueEditorComponent
-    ]
+    ],
+    providers: [WebSocketService]
 })
-export class CharacterComponent implements OnInit {
+export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
     @Input() character: Character;
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
     public selectedItem: Item;
+    private socket: Subject<WsMessage>;
+    private socketSub: Subscription;
 
     constructor(private _route: ActivatedRoute
         , private _itemService: ItemService
         , private _effectService: EffectService
         , private _skillService: SkillService
         , private _notification: NotificationsService
+        , private _webSocketService: WebSocketService
         , private _characterService: CharacterService) {
     }
 
@@ -737,6 +743,27 @@ export class CharacterComponent implements OnInit {
         return false;
     }
 
+    registerWS() {
+        this.socket = this._webSocketService.connect("ws://naheulbouc.fr/ws/test");
+        this.socketSub = this.socket.subscribe(
+            res => {
+                console.log(res);
+            },
+            err => {
+                console.log(err);
+            },
+            () => {
+                console.log('character.endws');
+            }
+        );
+        this.socket.next({opcode: "LISTEN_CHARACTER", id: this.character.id, type: 'character', data: null});
+    }
+
+    ngOnDestroy() {
+        if (this.socketSub) {
+            this.socketSub.unsubscribe();
+        }
+    }
     ngOnInit() {
         this._effectService.getCategoryList().subscribe(
             categories => {
@@ -747,6 +774,7 @@ export class CharacterComponent implements OnInit {
 
         if (this.character) {
             this.character.update();
+            this.registerWS();
         } else {
             this._route.params.subscribe(
                 param => {
@@ -754,17 +782,10 @@ export class CharacterComponent implements OnInit {
                     if (!this.id) {
                         id = +param['id'];
                     }
-                    Observable.forkJoin(
-                        this._characterService.getCharacter(id)
-                    ).subscribe(
-                        res => {
-                            this.character = res[0];
-                            try {
-                                this.character.update();
-                            } catch (e) {
-                                console.log(e.stack);
-                                this._notification.error("Erreur", "Erreur JS");
-                            }
+                    this._characterService.getCharacter(id).subscribe(
+                        character => {
+                            this.character = character;
+                            this.registerWS();
                         },
                         err => {
                             console.log(err);

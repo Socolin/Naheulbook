@@ -1,4 +1,5 @@
 import {ItemTemplate} from "../item";
+import {IMetadata} from '../shared/misc.model';
 
 export class ItemData {
     name: string;
@@ -15,4 +16,5 @@ export class Item {
     template: ItemTemplate;
     // Generated field
     content: Item[];
+    containerInfo: IMetadata;
 }

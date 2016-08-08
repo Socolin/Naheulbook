@@ -261,9 +261,11 @@ export class Character {
         let containers = [];
         let topLevelContainers = [];
         let content: {[itemId: number]: Item[]} = {};
+        let itemsById: {[itemId: number]: Item} = {};
 
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
+            itemsById[item.id] = item;
             if (item.data.equiped != null || item.container != null) {
                 if (item.template.data.container) {
                     if (item.data.equiped) {
@@ -306,6 +308,12 @@ export class Character {
 
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
+            if (item.container) {
+                item.containerInfo = {
+                    name: itemsById[item.container].data.name,
+                    id: itemsById[item.container].id
+                };
+            }
             if (item.id in content) {
                 item.content = content[item.id];
             }
@@ -333,7 +341,6 @@ export class Character {
     }
 
     private updateStats() {
-        this.computedData.init();
         this.computedData.stats = JSON.parse(JSON.stringify(this.stats));
         this.computedData.details.add('Jet de dé initial', this.stats);
         this.computedData.stats['AT'] = 8;
@@ -712,6 +719,7 @@ export class Character {
     }
 
     public update() {
+        this.computedData.init();
         this.updateInventory();
         this.updateStats();
     }
