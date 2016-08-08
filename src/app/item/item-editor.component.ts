@@ -141,6 +141,9 @@ export class ItemEditorComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        if (!this.item) {
+            this.item = new ItemTemplate();
+        }
         this._itemService.getSectionsList().subscribe(sections => {
             this.sections = sections;
             this.ngOnChanges();

@@ -51,7 +51,7 @@ import {SkillService} from '../skill';
                 [style.margin-left]="(level * 20) + 'px'"
                 (click)="selectItem(item)"
                 [class.active]="selectedItem && selectedItem.id == item.id">
-                <span *ngIf="item.data.quantity">{{item.quantity}}</span>
+                <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
                 {{item.data.name}}
             </a>
             <template [ngIf]="item.content">

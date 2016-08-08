@@ -96,7 +96,7 @@ export class ItemService extends JsonService {
         if (!this.slots || this.slots.isUnsubscribed) {
             this.slots = new ReplaySubject<ItemSlot[]>(1);
 
-            this._http.get('/api/item/slot/list')
+            this._http.get('/api/item/slotList')
                 .map(res => res.json())
                 .subscribe(
                     categoryList => {

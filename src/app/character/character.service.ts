@@ -292,13 +292,6 @@ export class CharacterService extends JsonService {
         return this._http.get('/api/character/listGroups').map(res => res.json());
     }
 
-    saveStatsCache(characterId, stats): Observable<Object> {
-        return this.postJson('/api/character/saveStatsCache', {
-            id: characterId,
-            stats: stats
-        }).map(res => res.json());
-    }
-
     createCharacter(creationData): Observable<{id: number}> {
         return this.postJson('/api/character/create', creationData).map(res => res.json());
     }

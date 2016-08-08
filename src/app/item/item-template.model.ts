@@ -54,7 +54,7 @@ export class ItemTemplate {
     id: number;
     name: string;
     category: number;
-    data: ItemTemplateData;
+    data: ItemTemplateData = new ItemTemplateData();
     modifiers: ItemStatModifier[] = [];
     skills: Skill[];
     unskills: Skill[];
