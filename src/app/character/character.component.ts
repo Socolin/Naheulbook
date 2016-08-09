@@ -145,46 +145,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         , private _characterService: CharacterService) {
     }
 
-    onChangeCharacterStat(change: any) {
-        if (this.character[change.stat] !== change.value) {
-            if (this.inGroupTab) {
-                this._notification.info(this.character.name
-                    , change.stat.toUpperCase() + ": " + this.character[change.stat] + ' -> ' + change.value
-                    , {isCharacter: true, color: this.character.color}
-                );
-            } else {
-                this._notification.info("Modification"
-                    , change.stat.toUpperCase() + ": " + this.character[change.stat] + ' -> ' + change.value
-                );
-            }
-            this.character[change.stat] = change.value;
-            this.character.update();
-        }
-    }
-
-    changeCharacterStat(stat: string, value: any) {
-        this._characterService.changeCharacterStat(this.character.id, stat, value).subscribe(
-            this.onChangeCharacterStat.bind(this),
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
-            }
-        );
-    }
-
-    changeGmData(key: string, value: any) {
-        this._characterService.changeGmData(this.character.id, key, value).subscribe(
-            change => {
-                this._notification.info("Modification", key + ": " + this.character.gmData[change.key] + ' -> ' + change.value);
-                this.character.gmData[change.key] = change.value;
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
-            }
-        );
-    }
-
     public historyPage: number = 0;
     public currentDay: string = null;
     public history;
@@ -220,26 +180,88 @@ export class CharacterComponent implements OnInit, OnDestroy {
                     }
                     logs.push(l);
                 }
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
             }
         );
         this.historyPage++;
         return false;
     }
 
+    notifyChange(message: string) {
+        if (this.inGroupTab) {
+            this._notification.info(this.character.name
+                , message
+                , {isCharacter: true, color: this.character.color}
+            );
+        } else {
+            this._notification.info("Modification", message);
+        }
+    }
+
+    registerWS() {
+        this._webSocketService.register('character', this.character).subscribe(
+            res => {
+                switch (res.opcode) {
+                    case "update":
+                        this.onChangeCharacterStat(res.data);
+                        break;
+                    case "statBonusAd":
+                        this.onSetStatBonusAD(res.data);
+                        break;
+                    case "levelUp":
+                        this.onLevelUp(res.data);
+                        break;
+                }
+            }
+        );
+    }
+
+    changeCharacterStat(stat: string, value: any) {
+        this._characterService.changeCharacterStat(this.character.id, stat, value).subscribe(
+            this.onChangeCharacterStat.bind(this)
+        );
+    }
+
+    onChangeCharacterStat(change: any) {
+        if (this.character[change.stat] !== change.value) {
+            this.notifyChange(change.stat.toUpperCase() + ": " + this.character[change.stat] + ' -> ' + change.value);
+            this.character[change.stat] = change.value;
+            this.character.update();
+        }
+    }
+
     setStatBonusAD(id: number, stat: string) {
         if (this.character) {
             this._characterService.setStatBonusAD(id, stat).subscribe(
-                res => {
-                    this.character.statBonusAD = stat;
-                    this.character.update();
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
+                this.onSetStatBonusAD.bind(this)
+            );
+        }
+    }
+
+    onSetStatBonusAD(bonusStat: any) {
+        if (this.character.statBonusAD !== bonusStat) {
+            this.notifyChange("Stat bonus/malus AD défini sur " + bonusStat);
+            this.character.statBonusAD = bonusStat;
+            this.character.update();
+        }
+    }
+
+    levelUp() {
+        if (this.character) {
+            this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(
+                this.onLevelUp.bind(this)
+            );
+        }
+    }
+
+    onLevelUp(result: any) {
+        if (this.character.level !== result.level) {
+            this.notifyChange("Levelup ! " + this.character.level + '->' + result.level);
+            this.character.level = result.level;
+            this._characterService.getCharacter(result.id).subscribe(
+                character => {
+                    character.onUpdate = this.character.onUpdate;
+                    this.character = character;
+                    character.update();
                 }
             );
         }
@@ -272,6 +294,15 @@ export class CharacterComponent implements OnInit, OnDestroy {
             }
         }
         return false;
+    }
+
+    changeGmData(key: string, value: any) {
+        this._characterService.changeGmData(this.character.id, key, value).subscribe(
+            change => {
+                this._notification.info("Modification", key + ": " + this.character.gmData[change.key] + ' -> ' + change.value);
+                this.character.gmData[change.key] = change.value;
+            }
+        );
     }
 
     canLevelUp(): boolean {
@@ -353,21 +384,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return true;
     }
 
-    levelUp() {
-        if (this.character) {
-            this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(
-                character => {
-                    character.update();
-                    this.character = character;
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
-                }
-            );
-        }
-    }
-
     public getItemById(itemId: number): Item {
         for (let i = 0; i < this.character.items.length; i++) {
             let item = this.character.items[i];
@@ -376,17 +392,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
             }
         }
         return null;
-    }
-
-    public countInOtherTab: number = 0;
-
-    useFatePoint() {
-        if (this.character && this.character.fatePoint) {
-            let ok = confirm("Utiliser un point de destin");
-            if (ok) {
-                this.changeCharacterStat('fatePoint', this.character.fatePoint - 1);
-            }
-        }
     }
 
     // Effect
@@ -752,19 +757,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
             }
         );
         return false;
-    }
-
-    registerWS() {
-        this._webSocketService.register('character', this.character).subscribe(
-            res => {
-                switch (res.opcode) {
-                    case "update": {
-                        this.onChangeCharacterStat(res.data);
-                        break;
-                    }
-                }
-            }
-        );
     }
 
     ngOnDestroy() {

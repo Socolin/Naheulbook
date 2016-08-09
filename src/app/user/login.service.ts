@@ -4,13 +4,14 @@ import {Observable, ReplaySubject} from 'rxjs/Rx';
 
 import {User} from './user.model';
 import {JsonService} from '../shared/json-service';
+import {NotificationsService} from '../notifications/notifications.service';
 
 @Injectable()
 export class LoginService extends JsonService {
     public loggedUser: ReplaySubject<User> = new ReplaySubject<User>(1);
 
-    constructor(http: Http) {
-        super(http);
+    constructor(http: Http, notification: NotificationsService) {
+        super(http, notification);
     }
 
     getLoginToken(app: string): Observable<{loginToken: string, appKey: string}> {

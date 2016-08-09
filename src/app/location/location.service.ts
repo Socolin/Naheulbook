@@ -4,6 +4,7 @@ import {Observable, ReplaySubject} from 'rxjs/Rx';
 
 import {Location, Map} from './location.model';
 import {JsonService} from '../shared/json-service';
+import {NotificationsService} from '../notifications/notifications.service';
 
 @Injectable()
 export class LocationService extends JsonService {
@@ -11,8 +12,8 @@ export class LocationService extends JsonService {
     private locations: ReplaySubject<Location[]>;
     private locationsTree: ReplaySubject<Location[]>;
 
-    constructor(http: Http) {
-        super(http);
+    constructor(http: Http, notification: NotificationsService) {
+        super(http, notification);
     }
 
     getLocationsTree(): Observable<Location[]> {

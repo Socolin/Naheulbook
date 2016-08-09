@@ -5,11 +5,12 @@ import {Observable} from 'rxjs/Rx'
 import {HistoryEntry} from "../shared";
 import {Monster} from "../monster";
 import {JsonService} from '../shared/json-service';
+import {NotificationsService} from '../notifications/notifications.service';
 
 @Injectable()
 export class GroupService extends JsonService{
-    constructor(http: Http) {
-        super(http);
+    constructor(http: Http, notification: NotificationsService) {
+        super(http, notification);
     }
 
     createMonster(groupId: number, monster): Observable<Monster> {

@@ -4,14 +4,15 @@ import {Observable, ReplaySubject} from 'rxjs/Rx';
 
 import {Effect, EffectCategory} from './effect.model';
 import {JsonService} from '../shared/json-service';
+import {NotificationsService} from '../notifications/notifications.service';
 
 @Injectable()
 export class EffectService extends JsonService {
     private effectsByCategory: {[categoryId: number]: ReplaySubject<Effect[]>} = {};
     private effectCategoryList: ReplaySubject<EffectCategory[]>;
 
-    constructor(http: Http) {
-        super(http);
+    constructor(http: Http, notification: NotificationsService) {
+        super(http, notification);
     }
 
     getCategoryList(): Observable<EffectCategory[]> {

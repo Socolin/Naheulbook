@@ -6,6 +6,7 @@ import {ItemTemplate, ItemSection, ItemSlot} from '../item';
 import {Item} from "../character";
 import {JsonService} from '../shared/json-service';
 import {ItemCategory} from './item-template.model';
+import {NotificationsService} from '../notifications/notifications.service';
 
 @Injectable()
 export class ItemService extends JsonService {
@@ -13,8 +14,8 @@ export class ItemService extends JsonService {
     private itemSections: ReplaySubject<ItemSection[]>;
     private slots: ReplaySubject<ItemSlot[]>;
 
-    constructor(http: Http) {
-        super(http);
+    constructor(http: Http, notification: NotificationsService) {
+        super(http, notification);
     }
 
     getSectionsList(): Observable<ItemSection[]> {

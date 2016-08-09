@@ -11,22 +11,24 @@ import {JsonService} from '../shared/json-service';
 import {Job, JobService} from '../job';
 import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
+import {NotificationsService} from '../notifications/notifications.service';
 
 @Injectable()
 export class CharacterService extends JsonService {
     constructor(http: Http
+        , notification: NotificationsService
         , private _jobService: JobService
         , private _skillService: SkillService
         , private _originService: OriginService) {
-        super(http);
+        super(http, notification);
     }
 
-    getCharacter(id: number): Observable<Character> {
+    private handleCharacterAsResponse(url: string, data: any): Observable<Character> {
         return Observable.forkJoin(
             this._jobService.getJobList(),
             this._originService.getOriginList(),
             this._skillService.getSkills(),
-            this.postJson('/api/character/detail', {id: id}).map(res => res.json())
+            this.postJson(url, data).map(res => res.json())
         ).map((requiredData: [Job[], Origin[], Skill[], Character]) => {
                 let jobs: Job[] = requiredData[0];
                 let origins: Origin[] = requiredData[1];
@@ -91,14 +93,18 @@ export class CharacterService extends JsonService {
         );
     }
 
-    setStatBonusAD(id: number, stat: string): Observable<Response> {
+    getCharacter(id: number): Observable<Character> {
+        return this.handleCharacterAsResponse('/api/character/detail', {id: id});
+    }
+
+    setStatBonusAD(id: number, stat: string): Observable<string> {
         return this.postJson('/api/character/setStatBonusAD', {
             id: id,
             stat: stat
-        });
+        }).map(res => res.json());
     }
 
-    LevelUp(id: number, levelUpInfo: Object): Observable<Character> {
+    LevelUp(id: number, levelUpInfo: Object): Observable<any> {
         return this.postJson('/api/character/levelUp', {
             id: id,
             levelUpInfo: levelUpInfo
