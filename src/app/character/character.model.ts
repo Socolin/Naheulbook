@@ -1,3 +1,4 @@
+import {EventEmitter} from '@angular/core';
 import {Speciality} from './speciality.model';
 import {Item} from "./item.model";
 import {Origin} from "../origin";
@@ -218,7 +219,9 @@ export class Character {
     gmData: any;
     group: IMetadata;
     invites: IMetadata[];
+
     computedData: CharacterComputedData = new CharacterComputedData();
+    onUpdate: EventEmitter<Character> = new EventEmitter<Character>();
 
 
     // Concatenate modifiers like [-2 PRD] and [+2 PRD for dwarf]
@@ -722,6 +725,7 @@ export class Character {
         this.computedData.init();
         this.updateInventory();
         this.updateStats();
+        this.onUpdate.emit(this);
     }
 
     static hasChercherDesNoises(character: Character): boolean {

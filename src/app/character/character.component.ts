@@ -24,7 +24,6 @@ import {ItemDetailComponent} from './item-detail.component';
 import {EffectCategory} from '../effect/effect.model';
 import {SkillService} from '../skill';
 import {WebSocketService} from '../shared/websocket.service';
-import {WsMessage} from '../shared/websocket.model';
 
 @Component({
     selector: 'bag-item-view',
@@ -128,16 +127,13 @@ class LevelUpInfo {
         , ItemDetailComponent
         , ModifiersEditorComponent
         , ValueEditorComponent
-    ],
-    providers: [WebSocketService]
+    ]
 })
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
     @Input() character: Character;
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
     public selectedItem: Item;
-    private socket: Subject<WsMessage>;
-    private socketSub: Subscription;
 
     constructor(private _route: ActivatedRoute
         , private _itemService: ItemService
@@ -148,12 +144,17 @@ export class CharacterComponent implements OnInit, OnDestroy {
         , private _characterService: CharacterService) {
     }
 
+    onChangeCharacterStat(change: any) {
+        if (this.character[change.stat] !== change.value) {
+            this._notification.info("Modification", change.stat.toUpperCase() + ": " + this.character[change.stat] + ' -> ' + change.value);
+            this.character[change.stat] = change.value;
+            this.character.update();
+        }
+    }
+
     changeCharacterStat(stat: string, value: any) {
         this._characterService.changeCharacterStat(this.character.id, stat, value).subscribe(
-            change => {
-                this._notification.info("Modification", stat.toUpperCase() + ": " + this.character[change.stat] + ' -> ' + change.value);
-                this.character[change.stat] = change.value;
-            },
+            this.onChangeCharacterStat.bind(this),
             err => {
                 console.log(err);
                 this._notification.error("Erreur", "Erreur serveur");
@@ -744,26 +745,24 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     registerWS() {
-        this.socket = this._webSocketService.connect("ws://naheulbouc.fr/ws/test");
-        this.socketSub = this.socket.subscribe(
+        this._webSocketService.register('character', this.character).subscribe(
             res => {
-                console.log(res);
-            },
-            err => {
-                console.log(err);
-            },
-            () => {
-                console.log('character.endws');
+                switch (res.opcode) {
+                    case "update": {
+                        this.onChangeCharacterStat(res.data);
+                        break;
+                    }
+                }
             }
         );
-        this.socket.next({opcode: "LISTEN_CHARACTER", id: this.character.id, type: 'character', data: null});
     }
 
     ngOnDestroy() {
-        if (this.socketSub) {
-            this.socketSub.unsubscribe();
+        if (this.character) {
+            this._webSocketService.unregister('character', this.character.id);
         }
     }
+
     ngOnInit() {
         this._effectService.getCategoryList().subscribe(
             categories => {
@@ -773,7 +772,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
             });
 
         if (this.character) {
-            this.character.update();
             this.registerWS();
         } else {
             this._route.params.subscribe(

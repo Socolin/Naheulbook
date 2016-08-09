@@ -4,3 +4,8 @@ export interface WsMessage {
     id: number;
     data: any;
 }
+
+export interface WsEvent {
+    opcode: string;
+    data: any;
+}

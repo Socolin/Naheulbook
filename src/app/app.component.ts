@@ -14,6 +14,7 @@ import {User} from './user';
 import {LocationService} from './location/location.service';
 import {MonsterService} from './monster';
 import {QuestService} from './quest';
+import {WebSocketService} from './shared/websocket.service';
 
 @Component({
     selector: 'index',
@@ -32,6 +33,7 @@ import {QuestService} from './quest';
         , QuestService
         , LocationService
         , MonsterService
+        , WebSocketService
     ],
 })
 export class IndexComponent implements OnInit {

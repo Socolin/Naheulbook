@@ -556,6 +556,14 @@ export class GroupComponent implements OnInit, OnChanges {
                 }
                 Observable.forkJoin(toLoad).subscribe((characters: Character[]) => {
                     this.characters = characters;
+                    for (let i = 0; i < this.characters.length; i++) {
+                        let character = this.characters[i];
+                        character.onUpdate.subscribe(c => {
+                            // FIXME: Copy reference may not be the best ?
+                            this.characters[i] = c;
+                            this.updateOrder();
+                        });
+                    }
                     let charactersId: number[] = [];
                     for (let i = 0; i < group.invited.length; i++) {
                         charactersId.push(group.invited[i].id);
