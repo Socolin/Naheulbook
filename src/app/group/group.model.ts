@@ -71,6 +71,15 @@ export class Fighter {
         this.updateSource();
     }
 
+    changeNumber(number: number) {
+        if (this.isMonster) {
+            this.monster.data.number = number;
+        } else {
+            return;
+        }
+        this.updateSource();
+    }
+
     updateSource(source?: any) {
         if (source == null) {
             if (this.isMonster) {

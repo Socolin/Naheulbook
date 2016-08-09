@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {EventEmitter, Component, Input, Output} from '@angular/core';
 
 import {GroupService} from '../group/group.service';
 import {NotificationsService} from '../notifications';
@@ -12,6 +12,8 @@ import {Monster} from './monster.model';
 })
 export class MonsterColorSelectorComponent {
     @Input() monster: Monster;
+    @Output() onColorChange: EventEmitter<string> = new EventEmitter<string>();
+    @Output() onNumberChange: EventEmitter<number> = new EventEmitter<number>();
 
     private showSelector = false;
     private colors: string[] = [
@@ -39,31 +41,11 @@ export class MonsterColorSelectorComponent {
         if (color.indexOf('#') === 0) {
             color = color.substring(1);
         }
-        this._groupService.updateMonster(this.monster.id, 'color', color)
-            .subscribe(
-                () => {
-                    this.monster.data.color = color;
-                    this._notification.info("Monstre", "Couleur changé");
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
-                }
-            );
+        this.onColorChange.emit(color);
     }
 
     changeNumber(number: number) {
-        this._groupService.updateMonster(this.monster.id, 'number', number)
-            .subscribe(
-                () => {
-                    this.monster.data.number = number;
-                    this._notification.info("Monstre", "Couleur changé");
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
-                }
-            );
+        this.onNumberChange.emit(number);
     }
 
 }

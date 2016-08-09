@@ -321,8 +321,8 @@ export class GroupComponent implements OnInit, OnChanges {
         if (element.isMonster) {
             this._groupService.updateMonster(element.id, 'color', color)
                 .subscribe(
-                    () => {
-                        element.changeColor(color);
+                    res => {
+                        element.changeColor(res.value);
                         this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
                         this._notification.info("Monstre", "Couleur changé");
                     },
@@ -343,6 +343,23 @@ export class GroupComponent implements OnInit, OnChanges {
                     this._notification.error("Erreur", "Erreur serveur");
                 }
             );
+        }
+    }
+
+    changeNumber(element: Fighter, number: number) {
+        if (element.isMonster) {
+            this._groupService.updateMonster(element.id, 'number', number)
+                .subscribe(
+                    res => {
+                        element.changeNumber(res.value);
+                        this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
+                        this._notification.info("Monstre", "Couleur changé");
+                    },
+                    err => {
+                        console.log(err);
+                        this._notification.error("Erreur", "Erreur serveur");
+                    }
+                );
         }
     }
 

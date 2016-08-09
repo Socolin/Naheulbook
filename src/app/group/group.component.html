@@ -223,7 +223,9 @@
                             <tr style="border-bottom-width:0" [class.even_row]="i % 2 == 0"
                                 (click)="selectedCombatRow = i" [class.combat_row_selected]="selectedCombatRow == i">
                                 <td rowspan=2>
-                                    <monster-color-selector [monster]="fighter.monster"></monster-color-selector>
+                                    <monster-color-selector [monster]="fighter.monster"
+                                                            (onNumberChange)='changeNumber(fighter, $event)'
+                                                            (onColorChange)='changeColor(fighter, $event)'></monster-color-selector>
                                 </td>
                                 <td>
                                     <monster-editable-field

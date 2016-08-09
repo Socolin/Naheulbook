@@ -20,7 +20,7 @@ export class GroupService extends JsonService{
         }).map(res => res.json());
     }
 
-    updateMonster(monsterId: number, fieldName: string, value: any): Observable<{value: string, fieldName: string}> {
+    updateMonster(monsterId: number, fieldName: string, value: any): Observable<{value: any, fieldName: string}> {
         return this.postJson('/api/group/updateMonster', {
             fieldName: fieldName,
             value: value,
