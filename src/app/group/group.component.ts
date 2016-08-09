@@ -93,7 +93,7 @@ export class GroupComponent implements OnInit, OnChanges {
     }
 
     toggleActiveCharacter(character) {
-        this._characterService.changeCharacterStat(character.id, 'active', !character.active).subscribe(
+        this._characterService.changeGmData(character.id, 'active', !character.active).subscribe(
             change => {
                 character.active = change.value;
                 this.updateOrder();
@@ -106,7 +106,7 @@ export class GroupComponent implements OnInit, OnChanges {
     }
 
     takeOwnership(character) {
-        this._characterService.changeCharacterStat(character.id, 'owner', 0).subscribe(
+        this._characterService.changeGmData(character.id, 'owner', 0).subscribe(
             change => {
                 character.user = change.value;
                 this._notification.success("Modification personnage", "Ce personnage vous appartient a présent");
@@ -120,7 +120,7 @@ export class GroupComponent implements OnInit, OnChanges {
 
     setOwnership(user) {
         let character = this.selectedCharacter;
-        this._characterService.changeCharacterStat(character.id, 'owner', user.id).subscribe(
+        this._characterService.changeGmData(character.id, 'owner', user.id).subscribe(
             change => {
                 character.user = change.value;
                 this._notification.success("Modification personnage", "Ce personnage a changé de propriétaire");
@@ -297,7 +297,7 @@ export class GroupComponent implements OnInit, OnChanges {
                     }
                 );
         } else {
-            this._characterService.changeCharacterStat(element.id, 'target', {
+            this._characterService.changeGmData(element.id, 'target', {
                 id: target.id,
                 isMonster: target.isMonster
             }).subscribe(
@@ -332,7 +332,7 @@ export class GroupComponent implements OnInit, OnChanges {
                     }
                 );
         } else {
-            this._characterService.changeCharacterStat(element.id, 'color', color).subscribe(
+            this._characterService.changeGmData(element.id, 'color', color).subscribe(
                 change => {
                     element.changeColor(change.value);
                     this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));

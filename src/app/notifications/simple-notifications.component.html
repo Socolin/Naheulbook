@@ -4,7 +4,13 @@
              [class.alert-danger]="notification.type==='error'"
              [class.alert-info]="notification.type==='info'"
              [class.alert-success]="notification.type==='success'">
-            <span><strong>{{notification.title}}</strong></span>
+            <i *ngIf="notification.data?.isCharacter" [style.color]="'#' + notification.data.color"
+                  class="ra ra-player ra-lg">
+            </i>
+            <span>
+                <strong>{{notification.title}}</strong>
+            </span>
+
             <span>{{notification.message}}</span>
         </div>
     </template>

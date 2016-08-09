@@ -134,6 +134,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     @Input() character: Character;
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
     public selectedItem: Item;
+    private inGroupTab: boolean = false;
 
     constructor(private _route: ActivatedRoute
         , private _itemService: ItemService
@@ -146,7 +147,16 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     onChangeCharacterStat(change: any) {
         if (this.character[change.stat] !== change.value) {
-            this._notification.info("Modification", change.stat.toUpperCase() + ": " + this.character[change.stat] + ' -> ' + change.value);
+            if (this.inGroupTab) {
+                this._notification.info(this.character.name
+                    , change.stat.toUpperCase() + ": " + this.character[change.stat] + ' -> ' + change.value
+                    , {isCharacter: true, color: this.character.color}
+                );
+            } else {
+                this._notification.info("Modification"
+                    , change.stat.toUpperCase() + ": " + this.character[change.stat] + ' -> ' + change.value
+                );
+            }
             this.character[change.stat] = change.value;
             this.character.update();
         }
@@ -772,6 +782,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
             });
 
         if (this.character) {
+            this.inGroupTab = true;
             this.registerWS();
         } else {
             this._route.params.subscribe(

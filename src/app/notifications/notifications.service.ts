@@ -15,21 +15,21 @@ export class NotificationsService {
         }, 5100);
     }
 
-    error(title: string, message: string, err?: any) {
-        this.addNotification(new Notification('error', title, message));
+    error(title: string, message: string, err?: any, data?: any) {
+        this.addNotification(new Notification('error', title, message, data));
         console.log('ERROR: ' + title + ':' + message);
         if (err) {
             console.log(err);
         }
     }
 
-    success(title: string, message: string) {
-        this.addNotification(new Notification('success', title, message));
+    success(title: string, message: string, data?: any) {
+        this.addNotification(new Notification('success', title, message, data));
         console.log('SUCCESS: ' + title + ':' + message);
     }
 
-    info(title: string, message: string) {
-        this.addNotification(new Notification('info', title, message));
+    info(title: string, message: string, data?: any) {
+        this.addNotification(new Notification('info', title, message, data));
         console.log('INFO: ' + title + ':' + message);
     }
 
