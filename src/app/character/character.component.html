@@ -669,10 +669,10 @@
 							{{log.info}}
 						</template>
                         <template [ngSwitchCase]="'MANKDEBOL'">
-							Mankdebol: {{log.data.new}} -> {{log.data.new}}
+							Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
 						</template>
 						<template [ngSwitchCase]="'DEBILIBEUK'">
-							Debilibeuk: {{log.data.old}} -> {{log.data.new}}
+							Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
 						</template>
 						<template ngSwitchDefault>{{log.action}}: {{log.info}}</template>
 					</span>
@@ -728,10 +728,10 @@
 							Modification EA: {{log.info}}
 						</template>
 						<template [ngSwitchCase]="'MANKDEBOL'">
-							Mankdebol: {{log.data.new}} -> {{log.data.new}}
+							Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
 						</template>
 						<template [ngSwitchCase]="'DEBILIBEUK'">
-							Debilibeuk: {{log.data.old}} -> {{log.data.new}}
+							Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
 						</template>
 						<template ngSwitchDefault>{{log.action}}</template>
 					</span>

@@ -269,7 +269,7 @@ export class Character {
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
             itemsById[item.id] = item;
-            if (item.data.equiped != null || item.container != null) {
+            if (item.data.equiped || item.container != null) {
                 if (item.template.data.container) {
                     if (item.data.equiped) {
                         topLevelContainers.push(item);
@@ -297,7 +297,7 @@ export class Character {
                 }
                 itemsBySlots[slot.id].push(item);
             }
-            if (item.data.equiped != null) {
+            if (item.data.equiped) {
                 equiped.push(item);
             } else {
                 if (item.container) {
@@ -725,7 +725,7 @@ export class Character {
         this.computedData.init();
         this.updateInventory();
         this.updateStats();
-        this.onUpdate.emit(this);
+        this.onUpdate.emit(this);''
     }
 
     static hasChercherDesNoises(character: Character): boolean {

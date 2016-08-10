@@ -97,10 +97,6 @@ export class GroupComponent implements OnInit, OnChanges {
             change => {
                 character.active = change.value;
                 this.updateOrder();
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
             }
         );
     }
@@ -110,10 +106,6 @@ export class GroupComponent implements OnInit, OnChanges {
             change => {
                 character.user = change.value;
                 this._notification.success("Modification personnage", "Ce personnage vous appartient a présent");
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
             }
         );
     }
@@ -124,10 +116,6 @@ export class GroupComponent implements OnInit, OnChanges {
             change => {
                 character.user = change.value;
                 this._notification.success("Modification personnage", "Ce personnage a changé de propriétaire");
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
             }
         );
     }
@@ -290,10 +278,6 @@ export class GroupComponent implements OnInit, OnChanges {
                         element.changeTarget(target);
                         element.updateTarget(this.charAndMonsters);
                         this._notification.info("Monstre", "Cible changée");
-                    },
-                    err => {
-                        console.log(err);
-                        this._notification.error("Erreur", "Erreur serveur");
                     }
                 );
         } else {
@@ -305,10 +289,6 @@ export class GroupComponent implements OnInit, OnChanges {
                     element.changeTarget(change.value);
                     element.updateTarget(this.charAndMonsters);
                     this._notification.info("Joueur", "Cible changée");
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
                 }
             );
         }
@@ -325,10 +305,6 @@ export class GroupComponent implements OnInit, OnChanges {
                         element.changeColor(res.value);
                         this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
                         this._notification.info("Monstre", "Couleur changé");
-                    },
-                    err => {
-                        console.log(err);
-                        this._notification.error("Erreur", "Erreur serveur");
                     }
                 );
         } else {
@@ -337,10 +313,6 @@ export class GroupComponent implements OnInit, OnChanges {
                     element.changeColor(change.value);
                     this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
                     this._notification.info("Joueur", "Couleur changée");
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
                 }
             );
         }
@@ -354,10 +326,6 @@ export class GroupComponent implements OnInit, OnChanges {
                         element.changeNumber(res.value);
                         this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
                         this._notification.info("Monstre", "Couleur changé");
-                    },
-                    err => {
-                        console.log(err);
-                        this._notification.error("Erreur", "Erreur serveur");
                     }
                 );
         }
@@ -371,10 +339,6 @@ export class GroupComponent implements OnInit, OnChanges {
             this._loginService.searchUser(this.filterSearchUser).subscribe(
                 res => {
                     this.filteredUsers = res;
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
                 }
             );
         } else {
@@ -499,10 +463,6 @@ export class GroupComponent implements OnInit, OnChanges {
                 this.historyNewEntryText = null;
                 this._notification.success("Historique", "Entrée ajoutée");
                 this.loadHistory(0);
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
             }
         );
         return false;
@@ -544,10 +504,6 @@ export class GroupComponent implements OnInit, OnChanges {
             () => {
                 this._notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
                 this.group.location = location;
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
             }
         );
     }

@@ -99,10 +99,10 @@
 									Avance temps: {{log.info}}
 								</template>
 								<template [ngSwitchCase]="'DEBILIBEUK'">
-									Débilibeuk: {{log.data.old}} -> {{log.data.new}}
+									Débilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
 								</template>
 								<template [ngSwitchCase]="'MANKDEBOL'">
-									Mankdebol: {{log.data.old}} -> {{log.data.new}}
+									Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
 								</template>
 								<template ngSwitchDefault>{{log.action}}</template>
 							</span>

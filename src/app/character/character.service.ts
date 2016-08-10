@@ -87,7 +87,12 @@ export class CharacterService extends JsonService {
                         }
                     }
                 }
-                character.update();
+                try {
+                    character.update();
+                } catch (e) {
+                    console.log(e, e.stack);
+                    throw e;
+                }
                 return character;
             }
         );

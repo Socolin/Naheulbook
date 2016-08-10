@@ -210,6 +210,21 @@ export class CharacterComponent implements OnInit, OnDestroy {
                     case "levelUp":
                         this.onLevelUp(res.data);
                         break;
+                    case "addEffect":
+                        this.onAddEffect(res.data);
+                        break;
+                    case "removeEffect":
+                        this.onRemoveEffect(res.data);
+                        break;
+                    case "addModifier":
+                        this.onAddModifier(res.data);
+                        break;
+                    case "removeModifier":
+                        this.onRemoveModifier(res.data);
+                        break;
+                    case "equipItem":
+                        this.onEquipItem(res.data);
+                        break;
                 }
             }
         );
@@ -418,35 +433,39 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     addEffect(effect) {
         this._characterService.addEffect(this.character.id, effect.id).subscribe(
-            res => {
-                this.character.effects.push(res);
-                this.character.update();
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
-            }
+            this.onAddEffect.bind(this)
         );
     }
 
-    removeEffect(effect) {
-        this._characterService.removeEffect(this.character.id, effect.id).subscribe(
-            res => {
-                for (let i = 0; i < this.character.effects.length; i++) {
-                    let e = this.character.effects[i];
-                    if (e.id === res.id) {
-                        this.character.effects.splice(i, 1);
-                        break;
-                    }
-                }
-                this.selectedEffect = null;
-                this.character.update();
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
+    onAddEffect(effect: Effect) {
+        for (let i = 0; i < this.character.effects.length; i++) {
+            if (this.character.effects[i].id === effect.id) {
+                return;
             }
+        }
+
+        this.notifyChange('Ajout de l\'effet: ' + effect.name);
+        this.character.effects.push(effect);
+        this.character.update();
+    }
+
+    removeEffect(effect) {
+        this.selectedEffect = null;
+        this._characterService.removeEffect(this.character.id, effect.id).subscribe(
+            this.onRemoveEffect.bind(this)
         );
+    }
+
+    onRemoveEffect(effect: Effect) {
+        for (let i = 0; i < this.character.effects.length; i++) {
+            let e = this.character.effects[i];
+            if (e.id === effect.id) {
+                this.notifyChange('Suppression de l\'effetde: ' + effect.name);
+                this.character.effects.splice(i, 1);
+                this.character.update();
+                return;
+            }
+        }
     }
 
     selectEffect(effect) {
@@ -461,37 +480,40 @@ export class CharacterComponent implements OnInit, OnDestroy {
     addCustomModifier() {
         if (this.customAddModifier.name) {
             this._characterService.addModifier(this.character.id, this.customAddModifier).subscribe(
-                res => {
-                    this.character.modifiers.push(res);
-                    this.character.update();
-                    this.customAddModifier = new CharacterModifier();
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
-                }
+                this.onAddModifier.bind(this)
             );
         }
     }
 
-    removeModifier(modifiers: CharacterModifier) {
-        this._characterService.removeModifier(this.character.id, modifiers.id).subscribe(
-            res => {
-                for (let i = 0; i < this.character.modifiers.length; i++) {
-                    let e = this.character.modifiers[i];
-                    if (e.id === res.id) {
-                        this.character.modifiers.splice(i, 1);
-                        break;
-                    }
-                }
-                this.selectedModifier = null;
-                this.character.update();
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
+    onAddModifier(modifier: CharacterModifier) {
+        for (let i = 0; i < this.character.modifiers.length; i++) {
+            if (this.character.modifiers[i].id === modifier.id) {
+                return;
             }
+        }
+        this.character.modifiers.push(modifier);
+        this.character.update();
+        this.customAddModifier = new CharacterModifier();
+        this.notifyChange('Ajout du modificateur: ' + modifier.name);
+    }
+
+    removeModifier(modifier: CharacterModifier) {
+        this.selectedModifier = null;
+        this._characterService.removeModifier(this.character.id, modifier.id).subscribe(
+            this.onRemoveModifier.bind(this)
         );
+    }
+
+    onRemoveModifier(modifier: CharacterModifier) {
+        for (let i = 0; i < this.character.modifiers.length; i++) {
+            let e = this.character.modifiers[i];
+            if (e.id === modifier.id) {
+                this.character.modifiers.splice(i, 1);
+                this.character.update();
+                this.notifyChange('Suppression du modificateur: ' + modifier.name);
+                return;
+            }
+        }
     }
 
     selectModifier(modifier: CharacterModifier) {
@@ -593,6 +615,25 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    onEquipItem(it: Item) {
+        for (let i = 0; i < this.character.items.length; i++) {
+            let item = this.character.items[i];
+            if (item.id === it.id) {
+                if (item.data.equiped === it.data.equiped) {
+                    return;
+                }
+                item.data.equiped = it.data.equiped;
+                if (it.data.equiped) {
+                    this.notifyChange('Equipe ' + item.data.name);
+                } else {
+                    this.notifyChange('Déséquipe ' + item.data.name);
+                }
+                this.character.update();
+                return;
+            }
+        }
+    }
+
     itemAction(event: any, item: Item) {
         if (!this.character) {
             return false;
@@ -606,14 +647,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 }
             }
             this._itemService.equipItem(item.id, level).subscribe(
-                res => {
-                    item.data.equiped = res.data.equiped;
-                    this.character.update();
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
-                }
+                this.onEquipItem.bind(this)
             );
         }
         else if (event.action === 'delete') {
