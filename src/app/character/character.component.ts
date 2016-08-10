@@ -225,6 +225,12 @@ export class CharacterComponent implements OnInit, OnDestroy {
                     case "equipItem":
                         this.onEquipItem(res.data);
                         break;
+                    case "addItem":
+                        this.onAddItem(res.data);
+                        break;
+                    case "deleteItem":
+                        this.onDeleteItem(res.data);
+                        break;
                 }
             }
         );
@@ -571,6 +577,18 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return this.selectedAddItem && this.selectedAddItem.id === item.id;
     }
 
+    onAddItem(item: Item) {
+        for (let i = 0; i < this.character.items.length; i++) {
+            if (this.character.items[i].id == item.id) {
+                return;
+            }
+        }
+
+        this.notifyChange("Ajout de l'objet: " + item.data.name);
+        this.character.items.push(item);
+        this.character.update();
+    }
+
     addItem() {
         if (this.character) {
             this._itemService.addItem(this.character.id
@@ -579,10 +597,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 , this.itemAddCustomDescription
                 , this.itemAddQuantity)
                 .subscribe(
-                    res => {
-                        this.character.items.push(res);
-                        this.selectedItem = res;
-                        this.character.update();
+                    item => {
+                        this.onAddItem(item);
+                        this.selectedItem = item;
                         this.itemFilterName = "";
                         this.selectedAddItem = null;
                         this.itemAddCustomName = null;
@@ -634,6 +651,18 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
+    onDeleteItem(item: Item) {
+        for (let i = 0; i < this.character.items.length; i++) {
+            let it = this.character.items[i];
+            if (it.id === item.id) {
+                this.character.items.splice(i, 1);
+                this.character.update();
+                this.notifyChange("Suppression de l'objet: " + item.data.name);
+                break;
+            }
+        }
+    }
+
     itemAction(event: any, item: Item) {
         if (!this.character) {
             return false;
@@ -653,15 +682,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
         else if (event.action === 'delete') {
             this._itemService.deleteItem(item.id).subscribe(
                 deletedItem => {
-                    for (let i = 0; i < this.character.items.length; i++) {
-                        let it = this.character.items[i];
-                        if (it.id === deletedItem.id) {
-                            this.character.items.splice(i, 1);
-                            break;
-                        }
-                    }
+                    this.onDeleteItem(deletedItem);
                     this.selectedItem = null;
-                    this.character.update();
                 },
                 err => {
                     console.log(err);
