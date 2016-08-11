@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {Subject, Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
 
@@ -579,7 +578,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     onAddItem(item: Item) {
         for (let i = 0; i < this.character.items.length; i++) {
-            if (this.character.items[i].id == item.id) {
+            if (this.character.items[i].id === item.id) {
                 return;
             }
         }
