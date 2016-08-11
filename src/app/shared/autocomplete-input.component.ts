@@ -28,6 +28,10 @@ export class AutocompleteInputComponent {
         return false;
     }
 
+    close() {
+        this.values = null;
+    }
+
     updateList() {
         this.callback(this.value).subscribe(
             values => {

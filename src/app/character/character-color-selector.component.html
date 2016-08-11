@@ -1,18 +1,13 @@
-<i [style.color]="'#' + element.color" [class.ra-player]="!element.isMonster" [class.ra-monster-skull]="element.isMonster" class="ra ra-3x" (click)="showSelector = !showSelector"></i>
+<i [style.color]="'#' + character.color" class="ra ra-player ra-3x" (click)="toggleSelector()"></i>
 <div *ngIf="showSelector" style="position: relative">
-    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;" (click)="showSelector = false;">
+    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;" (click)="hideSelector()">
     </div>
 	<div style="position: absolute; top: -26px; left: 56px; background-color: white; border:1px solid gray; width:194px; z-index: 100">
-		<template ngFor let-color [ngForOf]="colors">
-			<div style="float:left; width: 48px; height: 48px">
-				<i [style.color]=color
-					[class.ra-player]="!element.isMonster"
-					[class.ra-monster-skull]="element.isMonster"
-					class="ra ra-3x"
-					(click)="showSelector = !showSelector"
-					(click)="onColorChange.next(color);showSelector = false;">
-				</i>
-			</div>
-		</template>
+        <div *ngFor="let color of colors" style="float:left; width: 48px; height: 48px">
+            <i [style.color]=color
+                class="ra ra-3x ra-player"
+                (click)="changeColor(color)">
+            </i>
+        </div>
 	</div>
 </div>

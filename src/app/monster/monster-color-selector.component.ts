@@ -29,8 +29,7 @@ export class MonsterColorSelectorComponent {
     ].map(color => '#' + color);
     private numbers: number[];
 
-    constructor(private _groupService: GroupService
-        , private _notification: NotificationsService) {
+    constructor() {
         this.numbers = [];
         for (let i = 0; i < 16; i++) {
             this.numbers.push(i);

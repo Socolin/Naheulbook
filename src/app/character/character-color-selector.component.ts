@@ -1,5 +1,6 @@
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Character} from "./character.model";
 
 @Component({
     moduleId: module.id,
@@ -7,7 +8,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
     templateUrl: 'character-color-selector.component.html'
 })
 export class CharacterColorSelectorComponent {
-    @Input() element: Object;
+    @Input() character: Character;
     @Output() onColorChange: EventEmitter<string> = new EventEmitter<string>();
 
     private showSelector = false;
@@ -22,4 +23,17 @@ export class CharacterColorSelectorComponent {
         "999966", "595959",
         "000000",
     ].map(color => '#' + color);
+
+    toggleSelector() {
+        this.showSelector = !this.showSelector;
+    }
+
+    hideSelector() {
+        this.showSelector = false;
+    }
+
+    changeColor(color: string) {
+        this.onColorChange.emit(color);
+        this.showSelector = false;
+    }
 }

@@ -84,6 +84,10 @@ export class GroupComponent implements OnInit, OnChanges {
         return false;
     }
 
+    selectComatRow(i: number) {
+        this.selectedCombatRow = i;
+    }
+
     private effectsCategoryId = 1;
 
     showEffects(categoryId) {

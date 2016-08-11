@@ -221,7 +221,7 @@
                     <template ngFor let-fighter [ngForOf]="charAndMonsters" let-i=index>
                         <template [ngIf]="fighter.isMonster">
                             <tr style="border-bottom-width:0" [class.even_row]="i % 2 == 0"
-                                (click)="selectedCombatRow = i" [class.combat_row_selected]="selectedCombatRow == i">
+                                (click)="selectComatRow(i)" [class.combat_row_selected]="selectedCombatRow == i">
                                 <td rowspan=2>
                                     <monster-color-selector [monster]="fighter.monster"
                                                             (onNumberChange)='changeNumber(fighter, $event)'
@@ -324,7 +324,7 @@
                             <tr [class.even_row]="i % 2 == 0" (click)="selectedCombatRow = i"
                                 [class.combat_row_selected]="selectedCombatRow == i">
                                 <td rowspan=2>
-                                    <character-color-selector [element]="fighter"
+                                    <character-color-selector [character]="fighter.character"
                                                               (onColorChange)='changeColor(fighter, $event)'></character-color-selector>
                                 </td>
                                 <td>{{fighter.name}}</td>
