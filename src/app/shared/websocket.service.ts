@@ -12,7 +12,14 @@ export class WebSocketService {
 
     public register(type: string, element: any): Subject<WsEvent> {
         if (!this.webSocket) {
-            this.create("ws://naheulbouc.fr/ws/listen");
+            let loc = window.location;
+            let uri;
+            if (loc.protocol === "https:") {
+                uri = "wss:";
+            } else {
+                uri = "ws:";
+            }
+            this.create(uri + "//naheulbouc.fr/ws/listen");
         }
 
         if (!(type in this.registeredElements)) {
