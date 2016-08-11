@@ -124,7 +124,7 @@
                             <value-editor [value]=character.experience (onChange)="changeCharacterStat('experience', $event)"></value-editor>
                         </div>
 					</div>
-                    <div *ngIf="character.gmData" class="row">
+                    <div *ngIf="inGroupTab" class="row">
                         <div class="col-sm-5 col-xs-5">
                             <strong>Debilibeuk</strong>
                         </div>
@@ -132,7 +132,7 @@
                             <value-editor [value]=character.gmData.debilibeuk (onChange)="changeGmData('debilibeuk', $event)"></value-editor>
                         </div>
                     </div>
-                    <div *ngIf="character.gmData" class="row">
+                    <div *ngIf="inGroupTab" class="row">
                         <div class="col-sm-5 col-xs-5">
                             <strong>Mankdebol</strong>
                         </div>
