@@ -19,7 +19,8 @@ export class WebSocketService {
             } else {
                 uri = "ws:";
             }
-            this.create(uri + "//naheulbouc.fr/ws/listen");
+
+            this.create(uri + "//" + window.location.hostname + "/ws/listen");
         }
 
         if (!(type in this.registeredElements)) {
