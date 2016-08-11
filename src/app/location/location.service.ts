@@ -23,7 +23,7 @@ export class LocationService extends JsonService {
             this._http.get('/api/location/list')
                 .map(res => res.json())
                 .subscribe(
-                    locations => {
+                    (locations: Location[]) => {
                         let locationsById = {};
                         locations.forEach(l => {
                             l.sons = [];

@@ -1,4 +1,4 @@
-export interface IMetadata{
+export interface IMetadata {
     id: number;
     name: string;
 }

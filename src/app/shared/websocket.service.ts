@@ -1,4 +1,4 @@
-import {Injectable, EventEmitter} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Subject, Observable, Observer} from 'rxjs/Rx';
 
 import {WsMessage, WsEvent} from './websocket.model';

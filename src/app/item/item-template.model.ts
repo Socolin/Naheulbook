@@ -1,6 +1,5 @@
 import {ItemStatModifier} from "../shared/stat-modifier.model";
-import {IMetadata} from "../shared/misc.model";
-import {Skill} from '../skill/skill.model';
+import {Skill} from '../skill';
 
 export class ItemSection {
     id: number;

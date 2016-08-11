@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Response, Http} from '@angular/http';
+import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
 import {Stat} from "../shared/stat.model";

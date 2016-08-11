@@ -725,7 +725,7 @@ export class Character {
         this.computedData.init();
         this.updateInventory();
         this.updateStats();
-        this.onUpdate.emit(this);''
+        this.onUpdate.emit(this);
     }
 
     static hasChercherDesNoises(character: Character): boolean {

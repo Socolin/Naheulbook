@@ -2,7 +2,7 @@
 <div *ngIf="showSelector" style="position: relative">
     <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;" (click)="showSelector = false;">
     </div>
-	<div style="position: absolute; top: -26; left: 56; background-color: white; border:1px solid gray; width:194px; z-index: 100">
+	<div style="position: absolute; top: -26px; left: 56px; background-color: white; border:1px solid gray; width:194px; z-index: 100">
 		<template ngFor let-color [ngForOf]="colors">
 			<div style="float:left; width: 48px; height: 48px">
 				<i [style.color]=color

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Rx'
+import {Observable} from 'rxjs/Rx';
 
 import {HistoryEntry} from "../shared";
 import {Monster} from "../monster";
@@ -8,7 +8,7 @@ import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications/notifications.service';
 
 @Injectable()
-export class GroupService extends JsonService{
+export class GroupService extends JsonService {
     constructor(http: Http, notification: NotificationsService) {
         super(http, notification);
     }
