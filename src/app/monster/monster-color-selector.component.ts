@@ -17,21 +17,15 @@ export class MonsterColorSelectorComponent {
 
     private showSelector = false;
     private colors: string[] = [
-        "ffcc00", "ff6600",
-        "ff3300", "990033",
-        "ff3399", "cc33ff",
-        "0099cc", "0033cc",
-        "009999", "00cc66",
-        "006600",
-        "669900", "996633",
-        "999966", "595959",
-        "000000",
+        "ffcc00", "ff6600", "990033", "ff99ff",
+        "660066", "0066ff", "00802b", "666666",
+        "000000", "dddddd"
     ].map(color => '#' + color);
     private numbers: number[];
 
     constructor() {
         this.numbers = [];
-        for (let i = 0; i < 16; i++) {
+        for (let i = 0; i < 12; i++) {
             this.numbers.push(i);
         }
     }
