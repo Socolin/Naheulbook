@@ -13,22 +13,6 @@ export class JobService {
         , private _skillService: SkillService) {
     }
 
-    getJobById(jobId: number): Observable<Job> {
-        let observable: EventEmitter<Job> = new EventEmitter<Job>();
-
-        this.getJobList().subscribe(jobs => {
-            for (let i = 0; i < jobs.length; i++) {
-                let job = jobs[i];
-                if (job.id === jobId) {
-                    observable.emit(job);
-                    return;
-                }
-            }
-            observable.error('Invalid job id: ' + jobId);
-        });
-        return observable;
-    }
-
     getJobList(): Observable<Job[]> {
         if (!this.jobs || this.jobs.isUnsubscribed) {
             this.jobs = new ReplaySubject<Job[]>(1);

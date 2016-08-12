@@ -103,8 +103,8 @@ class LevelUpInfo {
     moduleId: module.id,
     templateUrl: 'character.component.html',
     pipes: [PlusMinusPipe, ModifierPipe],
-    styles: [
-        `.canceled {
+    styles: [`
+        .canceled {
             text-decoration: line-through;
         }
         .table-stats > td {
@@ -138,7 +138,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     constructor(private _route: ActivatedRoute
         , private _itemService: ItemService
         , private _effectService: EffectService
-        , private _skillService: SkillService
         , private _notification: NotificationsService
         , private _webSocketService: WebSocketService
         , private _characterService: CharacterService) {
@@ -352,6 +351,10 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
+    setLevelUpStatToUp(stat: string) {
+        this.levelUpInfo.statToUp = stat;
+    }
+
     rollLevelUp() {
         let diceLevelUp = this.character.origin.diceEVLevelUp;
         if (this.levelUpInfo.EVorEA === 'EV') {
@@ -402,16 +405,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
             }
         }
         return true;
-    }
-
-    public getItemById(itemId: number): Item {
-        for (let i = 0; i < this.character.items.length; i++) {
-            let item = this.character.items[i];
-            if (item.id === itemId) {
-                return item;
-            }
-        }
-        return null;
     }
 
     // Effect
@@ -613,7 +606,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this.selectedItem = item;
         return false;
     }
-
 
     public itemFilterName: string;
 

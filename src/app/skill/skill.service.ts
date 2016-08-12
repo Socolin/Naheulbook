@@ -12,20 +12,6 @@ export class SkillService {
     constructor(private _http: Http) {
     }
 
-    getSkill(skillId: number): Observable<Skill> {
-        let skill: EventEmitter<Skill> = new EventEmitter<Skill>();
-        this.getSkills().subscribe(skills => {
-            for (let i = 0; i < skills.length; i++) {
-                if (skills[i].id === skillId) {
-                    skill.emit(skills[i]);
-                    return;
-                }
-            }
-            skill.emit(null);
-        });
-        return skill;
-    }
-
     getSkillsById(): Observable<{[skillId: number]: Skill}> {
         if (!this.skillsById || this.skillsById.isUnsubscribed) {
             this.skillsById = new ReplaySubject<{[skillId: number]: Skill}>(1);
