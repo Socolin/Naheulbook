@@ -14,6 +14,7 @@ import {ItemCategory} from '../item/item-template.model';
 export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() item: Item;
     @Input() character: Character;
+    @Input() gmView: boolean;
 
     @Output() itemAction: EventEmitter<any> = new EventEmitter<any>();
 
@@ -76,7 +77,6 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     ngOnInit() {
-
         this._itemService.getCategoriesById().subscribe(
             categoriesById => {
                 this.itemCategoriesById = categoriesById;

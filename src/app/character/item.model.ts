@@ -8,10 +8,11 @@ export class ItemData {
     charge: number;
     equiped: number;
     readCount: number;
+    notIdentified: boolean;
 }
 export class Item {
     id: number;
-    data: ItemData;
+    data: ItemData = new ItemData();
     container: number;
     template: ItemTemplate;
     // Generated field

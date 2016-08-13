@@ -1,0 +1,59 @@
+<div *ngIf="character" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;" (click)="close()">
+</div>
+<div *ngIf="character" style="position: absolute; top: 0; left: 0; width: 100%;">
+    <div style="position: relative; background: white" class="container">
+        <form action="" method="post" class="form-horizontal" role="form">
+            <div class="form-group">
+                <legend>Ajouter un objet a {{character.name}}</legend>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-10">
+                    <div class="btn-group btn-group-lg" role="group">
+                        <button type="button" [class.active]="!newItem.data.notIdentified" (click)="setItemIdentified()" class="btn btn-default">Identifie</button>
+                        <button type="button" [class.active]="newItem.data.notIdentified" (click)="setItemNotIdentified()" class="btn btn-default">Non-identifie</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Template</label>
+                <div class="col-sm-10">
+                    <autocomplete-input [value]="newItem.template?.name" (onSelect)="selectItemTemplate($event, newItemName)"
+                                        [(callback)]="autocompleteItemCallback"></autocomplete-input>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="newItemName" class="col-sm-2 control-label">Nom</label>
+                <div class="col-sm-10">
+                    <input #newItemName type="text" [(ngModel)]="newItem.data.name" class="form-control" id="newItemName" placeholder="Nom">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="newItemDescription" class="col-sm-2 control-label">Description</label>
+                <div class="col-sm-10">
+                    <input type="text" [(ngModel)]="newItem.data.description" class="form-control" id="newItemDescription" placeholder="Description">
+                </div>
+            </div>
+
+            <div class="form-group" *ngIf="newItem.template?.data?.quantifiable">
+                <label for="newItemQuantity" class="col-sm-2 control-label">Quantité</label>
+                <div class="col-sm-10">
+                    <input type="number" [(ngModel)]="newItem.data.quantity" class="form-control" id="newItemQuantity" placeholder="Quantité">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <button (click)=addItem() class="btn btn-primary">Ajouter</button>
+                    <button (click)=close() class="btn btn-danger">Annuler</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

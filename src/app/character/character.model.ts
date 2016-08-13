@@ -200,6 +200,7 @@ export class Character {
     jobId: number;
     job: Job;
     level: number;
+    sex: string;
     experience: number;
     active: number;
     fatePoint: number;
@@ -458,6 +459,10 @@ export class Character {
         for (let i = 0; i < this.computedData.itemsEquiped.length; i++) {
             let item = this.computedData.itemsEquiped[i];
             if (item.template.data.charge) {
+                continue;
+            }
+            if (item.template.data.requireLevel > this.level) {
+                // FIXME: Check if we should ignore this item or do something else.
                 continue;
             }
             let modifications = {};

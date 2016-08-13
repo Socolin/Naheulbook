@@ -337,7 +337,7 @@
                                 <td></td>
                                 <td>{{fighter.stats.cou}}<span *ngIf="fighter.chercheNoise">*</span></td>
                                 <td></td>
-                                <td></td>
+                                <td><button class="btn btn-success glyphicon glyphicon-plus" (click)="addItemTo(fighter.character)"></button></td>
                             </tr>
                             <tr [class.even_row]="i % 2 == 0" (click)="selectedCombatRow = i"
                                 [class.combat_row_selected]="selectedCombatRow == i">
@@ -570,7 +570,7 @@
     </div>
 </div>
 
-
+<create-item [character]="addItemTarget" (onAddItem)="onItemAdded()"></create-item>
 <!-- Static data -->
 
 <div class="row" *ngIf="group" [hidden]="currentPanel != 'critic'">

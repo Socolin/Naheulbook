@@ -14,7 +14,7 @@ import {
     ValueEditorComponent
 } from "../shared";
 
-import {Item} from "./item.model";
+import {Item, ItemData} from "./item.model";
 import {SpecialitySelectorComponent} from './speciality-selector.component';
 import {CharacterService} from "./character.service";
 import {Character, CharacterModifier} from "./character.model";
@@ -227,6 +227,15 @@ export class CharacterComponent implements OnInit, OnDestroy {
                         break;
                     case "deleteItem":
                         this.onDeleteItem(res.data);
+                        break;
+                    case "identifyItem":
+                        this.onIdentifyItem(res.data);
+                        break;
+                    case "useCharge":
+                        this.onUseItemCharge(res.data);
+                        break;
+                    case "changeContainer":
+                        this.onChangeContainer(res.data);
                         break;
                 }
             }
@@ -582,11 +591,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     addItem() {
         if (this.character) {
+            let itemData = new ItemData();
+            itemData['name'] = this.itemAddCustomName;
+            itemData['description'] = this.itemAddCustomDescription;
+            itemData['quantity'] = this.itemAddQuantity;
             this._itemService.addItem(this.character.id
                 , this.selectedAddItem.id
-                , this.itemAddCustomName
-                , this.itemAddCustomDescription
-                , this.itemAddQuantity)
+                , itemData)
                 .subscribe(
                     item => {
                         this.onAddItem(item);
@@ -653,6 +664,41 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
+    onUseItemCharge(item: Item) {
+        for (let i = 0; i < this.character.items.length; i++) {
+            let it = this.character.items[i];
+            if (it.id === item.id) {
+                it.data.charge = item.data.charge;
+                this.character.update();
+                this.notifyChange("Utilisation d'une charge de l'objet: " + item.data.name);
+                break;
+            }
+        }
+    }
+
+    onChangeContainer(item: Item) {
+        for (let i = 0; i < this.character.items.length; i++) {
+            let it = this.character.items[i];
+            if (it.id === item.id) {
+                it.container = item.container;
+                this.character.update();
+                break;
+            }
+        }
+    }
+
+    onIdentifyItem(item: Item) {
+        for (let i = 0; i < this.character.items.length; i++) {
+            let it = this.character.items[i];
+            if (it.id === item.id) {
+                it.data.notIdentified = item.data.notIdentified;
+                this.character.update();
+                this.notifyChange("Identification de l'objet: " + item.data.name);
+                break;
+            }
+        }
+    }
+
     itemAction(event: any, item: Item) {
         if (!this.character) {
             return false;
@@ -674,10 +720,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 deletedItem => {
                     this.onDeleteItem(deletedItem);
                     this.selectedItem = null;
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
                 }
             );
         }
@@ -686,10 +728,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 res => {
                     item.data.quantity = res.data.quantity;
                     this.character.update();
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
                 }
             );
         }
@@ -698,39 +736,22 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 res => {
                     item.data.readCount = res.data.readCount;
                     this.character.update();
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
                 }
+            );
+        }
+        else if (event.action === 'identify') {
+            this._itemService.identify(item.id).subscribe(
+                this.onIdentifyItem.bind(this)
             );
         }
         else if (event.action === 'use_charge') {
             this._itemService.updateCharge(item.id, item.data.charge - 1).subscribe(
-                res => {
-                    item.data.charge = res.data.charge;
-                    this.character.update();
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
-                }
+                this.onUseItemCharge.bind(this)
             );
         }
         else if (event.action === 'move_to_container') {
             this._itemService.moveToContainer(item.id, event.container).subscribe(
-                res => {
-                    if (!res || !res.id) {
-                        item.container = null;
-                    } else {
-                        item.container = res.id;
-                    }
-                    this.character.update();
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
-                }
+                this.onChangeContainer.bind(this)
             );
         }
         else if (event.action === 'edit_item_name') {

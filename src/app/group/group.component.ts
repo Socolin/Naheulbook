@@ -17,6 +17,7 @@ import {TargetSelectorComponent} from './target-selector.component';
 import {LocationService, Location} from '../location';
 import {Observable} from 'rxjs';
 import {CharacterResume} from '../character/character.model';
+import {CreateItemComponent} from "./create-item.component";
 
 
 @Component({
@@ -30,7 +31,8 @@ import {CharacterResume} from '../character/character.model';
         , EffectListComponent
         , ValueEditorComponent
         , AutocompleteInputComponent
-        , SkillListComponent],
+        , SkillListComponent
+        , CreateItemComponent],
     styles: [`
         .even_row {
             background-color: #f9f9f9;
@@ -177,7 +179,10 @@ export class GroupComponent implements OnInit, OnChanges {
     private monsterAutocompleteShow = false;
     private autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
 
-    updateMonsterListAutocomplete(filter: string) {
+    updateMonsterListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
+        if (filter === '') {
+            return Observable.from([]);
+        }
         return this._monsterService.searchMonster(filter).map(
             list => list.map(e => new AutocompleteValue(e, e.name))
         );
@@ -516,6 +521,14 @@ export class GroupComponent implements OnInit, OnChanges {
         return this._locationService.searchLocations(filter).map(
             list => list.map(e => new AutocompleteValue(e, e.name))
         );
+    }
+
+    private addItemTarget: Character;
+    addItemTo(character: Character) {
+        this.addItemTarget = character;
+    }
+    onItemAdded() {
+        this.addItemTarget = null;
     }
 
     loadGroup(id: number) {

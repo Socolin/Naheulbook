@@ -93,6 +93,9 @@ export class ItemService extends JsonService {
     }
 
     searchItem(filter): Observable<ItemTemplate[]> {
+        if (!filter) {
+            return Observable.from([]);
+        }
         return this.postJson('/api/item/search', {filter: filter})
             .map(res => res.json());
     }
@@ -127,15 +130,11 @@ export class ItemService extends JsonService {
 
     addItem(characterId: number
         , itemTemplateId: number
-        , itemCustomName: string
-        , itemCustomDescription: string
-        , itemQuantity): Observable<Item> {
+        , itemData: ItemData): Observable<Item> {
         return this.postJson('/api/item/add', {
             itemTemplateId: itemTemplateId,
             characterId: characterId,
-            itemCustomName: itemCustomName,
-            itemQuantity: itemQuantity,
-            itemCustomDescription: itemCustomDescription
+            itemData: itemData
         }).map(res => res.json());
     }
 
@@ -162,6 +161,12 @@ export class ItemService extends JsonService {
 
     readBook(itemId: number): Observable<Item> {
         return this.postJson('/api/item/readBook', {
+            itemId: itemId,
+        }).map(res => res.json());
+    }
+
+    identify(itemId: number): Observable<Item> {
+        return this.postJson('/api/item/identify', {
             itemId: itemId,
         }).map(res => res.json());
     }
