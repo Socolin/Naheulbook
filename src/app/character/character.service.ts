@@ -12,15 +12,17 @@ import {Job, JobService} from '../job';
 import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
 import {NotificationsService} from '../notifications/notifications.service';
+import {LoginService} from "../user/login.service";
 
 @Injectable()
 export class CharacterService extends JsonService {
     constructor(http: Http
         , notification: NotificationsService
+        , loginService: LoginService
         , private _jobService: JobService
         , private _skillService: SkillService
         , private _originService: OriginService) {
-        super(http, notification);
+        super(http, notification, loginService);
     }
 
     private handleCharacterAsResponse(url: string, data: any): Observable<Character> {

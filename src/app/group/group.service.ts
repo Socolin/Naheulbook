@@ -6,12 +6,16 @@ import {HistoryEntry} from "../shared";
 import {Monster} from "../monster";
 import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications/notifications.service';
+import {LoginService} from "../user/login.service";
 
 @Injectable()
 export class GroupService extends JsonService {
-    constructor(http: Http, notification: NotificationsService) {
-        super(http, notification);
+    constructor(http: Http
+        , notification: NotificationsService
+        , loginService: LoginService) {
+        super(http, notification, loginService);
     }
+
 
     createMonster(groupId: number, monster): Observable<Monster> {
         return this.postJson('/api/group/createMonster', {

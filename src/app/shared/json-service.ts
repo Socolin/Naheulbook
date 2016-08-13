@@ -1,10 +1,12 @@
 import {Http, Headers, Response} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 import {NotificationsService} from '../notifications/notifications.service';
+import {LoginService} from "../user/login.service";
 
 export class JsonService {
     constructor(protected _http: Http
-        , private _notification: NotificationsService) {
+        , private _notification: NotificationsService
+        , private _loginService: LoginService) {
     }
 
     postJson(url: string, data: any): Observable<Response> {
@@ -18,6 +20,9 @@ export class JsonService {
             if (err.status) {
                 if (err.status === 401) {
                     this._notification.error("Erreur", "Vous devez vous identifier.");
+                    if (this._loginService) {
+                        this._loginService.loggedUser = null;
+                    }
                 }
                 else if (err.status >= 500) {
                     this._notification.error("Erreur", "Erreur serveur");

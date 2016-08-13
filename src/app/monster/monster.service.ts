@@ -5,11 +5,14 @@ import {Observable} from 'rxjs/Rx';
 import {MonsterTemplate} from "./monster.model";
 import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications/notifications.service';
+import {LoginService} from "../user/login.service";
 
 @Injectable()
 export class MonsterService extends JsonService {
-    constructor(http: Http, notification: NotificationsService) {
-        super(http, notification);
+    constructor(http: Http
+        , notification: NotificationsService
+        , loginService: LoginService) {
+        super(http, notification, loginService);
     }
 
     getMonsterList(): Observable<MonsterTemplate[]> {

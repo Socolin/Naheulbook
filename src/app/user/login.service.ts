@@ -10,8 +10,9 @@ import {NotificationsService} from '../notifications/notifications.service';
 export class LoginService extends JsonService {
     public loggedUser: ReplaySubject<User> = new ReplaySubject<User>(1);
 
-    constructor(http: Http, notification: NotificationsService) {
-        super(http, notification);
+    constructor(http: Http
+        , notification: NotificationsService) {
+        super(http, notification, null);
     }
 
     getLoginToken(app: string): Observable<{loginToken: string, appKey: string}> {
