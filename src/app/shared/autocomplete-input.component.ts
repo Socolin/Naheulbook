@@ -20,6 +20,7 @@ export class AutocompleteInputComponent {
     @Input() value: string;
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
     private values: AutocompleteValue[];
+    private preSelectedValueIndex: number;
 
     selectValue(value: any) {
         this.onSelect.emit(value.value);
@@ -32,10 +33,38 @@ export class AutocompleteInputComponent {
         this.values = null;
     }
 
+    onKey(event: KeyboardEvent) {
+        console.log(event, event.keyCode);
+        if (event.keyCode === 27) {
+            this.close();
+        }
+        else if (event.keyCode === 38) {
+            if (this.preSelectedValueIndex > 0)
+                this.preSelectedValueIndex--;
+        }
+        else if (event.keyCode === 40) {
+            if (this.preSelectedValueIndex < this.values.length) {
+                this.preSelectedValueIndex++;
+            }
+        }
+        else if (event.keyCode === 13) {
+            if (this.preSelectedValueIndex >= 0 && this.preSelectedValueIndex < this.values.length) {
+                this.selectValue(this.values[this.preSelectedValueIndex]);
+            }
+        }
+        else {
+            return;
+        }
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+    }
+
     updateList() {
         this.callback(this.value).subscribe(
             values => {
                 this.values = values;
+                this.preSelectedValueIndex = 0;
             },
             err => {
                 console.log(err);

@@ -4,10 +4,10 @@
     </div>
     <span *ngIf="values" style="position: absolute; top: 25px; left: 10px; z-index: 100; display: table">
         <div class="list-group" style="display: table-row">
-            <template ngFor let-item [ngForOf]="values">
-                <a href="#" class="list-group-item" (click)="selectValue(item)">{{item.text}}</a>
+            <template ngFor let-item [ngForOf]="values" let-i="index">
+                <a href="#" class="list-group-item" [class.active]="preSelectedValueIndex == i" (click)="selectValue(item)">{{item.text}}</a>
             </template>
         </div>
     </span>
-    <input class="form-control" [(ngModel)]="value" (ngModelChange)="updateList()" (click)="updateList()" autocomplete="false"/>
+    <input class="form-control" (keydown)="onKey($event)" [(ngModel)]="value" (ngModelChange)="updateList()" (click)="updateList()" autocomplete="false"/>
 </span>
