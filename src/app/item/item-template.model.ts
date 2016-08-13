@@ -28,7 +28,6 @@ export class ItemTemplateData {
     container: boolean;
     throwable: boolean;
     rupture: number;
-    level: number;
     damageDice: number;
     damageType: any;
     bonusDamage: number;
@@ -38,10 +37,14 @@ export class ItemTemplateData {
     protectionAgainstType: any;
     charge: any;
     availableLocation: string;
+    requireLevel: number;
     relic: boolean;
     sex: string;
     quantifiable: boolean;
     skillBook: boolean;
+    weight: number;
+    duration: string;
+    space: string;
 }
 // FIXME: Is this used and checked ?
 export class ItemRequirement {
