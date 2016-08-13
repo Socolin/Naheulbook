@@ -1,8 +1,5 @@
 import {EventEmitter, Component, Input, Output} from '@angular/core';
 
-import {GroupService} from '../group/group.service';
-import {NotificationsService} from '../notifications';
-
 import {Monster} from './monster.model';
 
 @Component({

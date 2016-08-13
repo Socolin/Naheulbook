@@ -21,7 +21,6 @@ import {Character, CharacterModifier} from "./character.model";
 import {IMetadata} from '../shared/misc.model';
 import {ItemDetailComponent} from './item-detail.component';
 import {EffectCategory} from '../effect/effect.model';
-import {SkillService} from '../skill';
 import {WebSocketService} from '../shared/websocket.service';
 
 @Component({
