@@ -21,7 +21,7 @@ export class JsonService {
                 if (err.status === 401) {
                     this._notification.error("Erreur", "Vous devez vous identifier.");
                     if (this._loginService) {
-                        this._loginService.loggedUser = null;
+                        this._loginService.loggedUser.next(null);
                     }
                 }
                 else if (err.status >= 500) {

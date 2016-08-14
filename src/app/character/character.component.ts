@@ -854,10 +854,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
                         character => {
                             this.character = character;
                             this.registerWS();
-                        },
-                        err => {
-                            console.log(err);
-                            this._notification.error("Erreur", "Erreur");
                         }
                     );
                 }
