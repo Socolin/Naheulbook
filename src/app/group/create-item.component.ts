@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, SimpleChanges, OnChanges} from '@angular/core';
 import {Observable} from "rxjs";
 
 import {ItemService} from "../item/item.service";
@@ -13,14 +13,20 @@ import {ItemTemplate} from "../item/item-template.model";
     templateUrl: 'create-item.component.html',
     directives: [AutocompleteInputComponent]
 })
-export class CreateItemComponent {
+export class CreateItemComponent implements OnChanges {
     @Input() character: Character;
     @Output() onAddItem: EventEmitter<Item> = new EventEmitter<Item>();
 
+    private mode: string = 'normal';
     private newItem: Item = new Item();
+    private gemOption: any = {};
     private autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
 
     constructor(private _itemService: ItemService) {
+    }
+
+    static getRandomInt(min: number, max: number): number {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     close() {
@@ -30,6 +36,9 @@ export class CreateItemComponent {
     }
 
     addItem() {
+        if (this.mode === 'gem') {
+            this.newItem.data.ug = this.gemOption['ug'];
+        }
         this._itemService.addItem(this.character.id, this.newItem.template.id, this.newItem.data).subscribe();
         this.onAddItem.emit(this.newItem);
         this.newItem = new Item();
@@ -60,5 +69,58 @@ export class CreateItemComponent {
 
     setItemIdentified() {
         delete this.newItem.data.notIdentified;
+    }
+
+    setMode(m: string) {
+        let oldItem = this.newItem;
+        this.newItem = new Item();
+        this.newItem.data.notIdentified = oldItem.data.notIdentified;
+        this.mode = m;
+        if (this.mode === 'gem') {
+            let type = CreateItemComponent.getRandomInt(1, 2);
+            if (type == 1) {
+                this.setGemOption('type', 'raw');
+            } else {
+                this.setGemOption('type', 'cut');
+            }
+            this.setGemOption('ug', 1);
+            this.setGemOption('number', CreateItemComponent.getRandomInt(1, 20));
+        }
+    }
+
+    setGemRandomUg(dice: number) {
+        this.setGemOption('ug', CreateItemComponent.getRandomInt(1, dice));
+    }
+
+
+    setGemOption(optName: string, value: any) {
+        this.gemOption[optName] = value;
+        this.updateGem();
+        return false;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
+        if ('gemOption' in changes) {
+            this.updateGem();
+        }
+    }
+
+    updateGem() {
+        if (this.gemOption['type'] && this.gemOption['number']) {
+
+            this._itemService.getGem(this.gemOption['type'], this.gemOption['number']).subscribe(
+                itemTemplate => {
+                    this.newItem.template = itemTemplate;
+                    if (this.newItem.data.notIdentified) {
+                        this.newItem.data.name = "Pierre précieuse";
+                    } else {
+                        this.newItem.data.name = itemTemplate.name;
+                    }
+                    this.newItem.data.description = itemTemplate.data.description;
+                    this.newItem.data.quantity = 1;
+                }
+            );
+        }
     }
 }

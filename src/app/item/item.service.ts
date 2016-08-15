@@ -184,4 +184,11 @@ export class ItemService extends JsonService {
             itemData: itemData
         }).map(res => res.json());
     }
+
+    getGem(type: string, dice: number): Observable<ItemTemplate> {
+        return this.postJson('/api/item/getGem', {
+            type: type,
+            dice: dice
+        }).map(res => res.json());
+    }
 }

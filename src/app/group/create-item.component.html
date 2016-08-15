@@ -1,4 +1,5 @@
-<div *ngIf="character" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;" (click)="close()">
+<div *ngIf="character" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;"
+     (click)="close()">
 </div>
 <div *ngIf="character" style="position: absolute; top: 0; left: 0; width: 100%;">
     <div style="position: relative; background: white" class="container">
@@ -13,8 +14,66 @@
                 </div>
                 <div class="col-sm-10">
                     <div class="btn-group btn-group-lg" role="group">
-                        <button type="button" [class.active]="!newItem.data.notIdentified" (click)="setItemIdentified()" class="btn btn-default">Identifie</button>
-                        <button type="button" [class.active]="newItem.data.notIdentified" (click)="setItemNotIdentified()" class="btn btn-default">Non-identifie</button>
+                        <button type="button" [class.active]="!newItem.data.notIdentified" (click)="setItemIdentified()"
+                                class="btn btn-default">Identifie
+                        </button>
+                        <button type="button" [class.active]="newItem.data.notIdentified"
+                                (click)="setItemNotIdentified()" class="btn btn-default">Non-identifie
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-10">
+                    <div class="btn-group btn-group-lg" role="group">
+                        <button type="button" [class.active]="mode === 'normal'" (click)="setMode('normal')"
+                                class="btn btn-default">Normal
+                        </button>
+                        <button type="button" [class.active]="mode === 'gem'" (click)="setMode('gem')"
+                                class="btn btn-default">Pierre precieuse
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="mode == 'gem'">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Type</label>
+                    <div class="col-sm-10">
+                        <div class="btn-group btn-group-lg" role="group">
+                            <button type="button" [class.active]="gemOption['type'] == 'raw'"
+                                    (click)="setGemOption('type','raw')" class="btn btn-default">Brut
+                            </button>
+                            <button type="button" [class.active]="gemOption['type'] == 'cut'"
+                                    (click)="setGemOption('type','cut')" class="btn btn-default">Taillé
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="gemUG" class="col-sm-2 control-label">U.G.</label>
+                    <div class="col-sm-3">
+                        <input type="number" [(ngModel)]="gemOption['ug']" class="form-control" id="gemUG"
+                               placeholder="U.G.">
+                    </div>
+                    <div class="col-sm-7">
+                        <button class="btn btn-primary" (click)="setGemRandomUg(2)">D2</button>
+                        <button class="btn btn-primary" (click)="setGemRandomUg(4)">D4</button>
+                        <button class="btn btn-primary" (click)="setGemRandomUg(6)">D6</button>
+                        <button class="btn btn-primary" (click)="setGemRandomUg(10)">D10</button>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="gemNumber" class="col-sm-2 control-label">d20</label>
+                    <div class="col-sm-10">
+                        <input type="number" [(ngModel)]="gemOption['number']" class="form-control" id="gemNumber"
+                               placeholder="d20">
                     </div>
                 </div>
             </div>
@@ -22,7 +81,8 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">Template</label>
                 <div class="col-sm-10">
-                    <autocomplete-input [value]="newItem.template?.name" (onSelect)="selectItemTemplate($event, newItemName)"
+                    <autocomplete-input [value]="newItem.template?.name"
+                                        (onSelect)="selectItemTemplate($event, newItemName)"
                                         [(callback)]="autocompleteItemCallback"></autocomplete-input>
                 </div>
             </div>
@@ -30,21 +90,24 @@
             <div class="form-group">
                 <label for="newItemName" class="col-sm-2 control-label">Nom</label>
                 <div class="col-sm-10">
-                    <input #newItemName type="text" [(ngModel)]="newItem.data.name" class="form-control" id="newItemName" placeholder="Nom">
+                    <input #newItemName type="text" [(ngModel)]="newItem.data.name" class="form-control"
+                           id="newItemName" placeholder="Nom">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="newItemDescription" class="col-sm-2 control-label">Description</label>
                 <div class="col-sm-10">
-                    <input type="text" [(ngModel)]="newItem.data.description" class="form-control" id="newItemDescription" placeholder="Description">
+                    <input type="text" [(ngModel)]="newItem.data.description" class="form-control"
+                           id="newItemDescription" placeholder="Description">
                 </div>
             </div>
 
             <div class="form-group" *ngIf="newItem.template?.data?.quantifiable">
                 <label for="newItemQuantity" class="col-sm-2 control-label">Quantité</label>
                 <div class="col-sm-10">
-                    <input type="number" [(ngModel)]="newItem.data.quantity" class="form-control" id="newItemQuantity" placeholder="Quantité">
+                    <input type="number" [(ngModel)]="newItem.data.quantity" class="form-control"
+                           id="newItemQuantity" placeholder="Quantité">
                 </div>
             </div>
 
@@ -54,6 +117,7 @@
                     <button (click)=close() class="btn btn-danger">Annuler</button>
                 </div>
             </div>
+
         </form>
     </div>
 </div>

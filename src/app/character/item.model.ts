@@ -6,6 +6,7 @@ export class ItemData {
     description: string;
     quantity: number;
     charge: number;
+    ug: number;
     equiped: number;
     readCount: number;
     notIdentified: boolean;
