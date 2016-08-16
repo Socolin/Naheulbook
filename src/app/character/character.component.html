@@ -722,10 +722,10 @@
 							Utilisation d'un point de destin
 						</template>
 						<template [ngSwitchCase]="'MODIFY_EV'">
-							Modification EV: {{log.info}}
+							Modification EV: {{log.data.oldValue}} -> {{log.data.newValue}}
 						</template>
 						<template [ngSwitchCase]="'MODIFY_EA'">
-							Modification EA: {{log.info}}
+							Modification EA: {{log.data.oldValue}} -> {{log.data.newValue}}
 						</template>
 						<template [ngSwitchCase]="'MANKDEBOL'">
 							Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
