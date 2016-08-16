@@ -704,8 +704,8 @@
 							Suppression du modificateur: {{log.modifier.name}}
 						</template>
 						<template [ngSwitchCase]="'CHANGE_QUANTITY'">
-							Modification quantité: {{log.item.data.name}} {{log.info}}
-						</template>
+							Modification quantité: {{log.item.data.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
+  						</template>
 						<template [ngSwitchCase]="'USE_CHARGE'">
 							Utilisation de charge: {{log.item.data.name}} {{log.info}}
 						</template>
