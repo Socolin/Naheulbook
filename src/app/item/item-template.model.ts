@@ -45,6 +45,7 @@ export class ItemTemplateData {
     weight: number;
     duration: string;
     space: string;
+    useUG: boolean;
 }
 // FIXME: Is this used and checked ?
 export class ItemRequirement {
