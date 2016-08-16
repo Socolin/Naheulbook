@@ -237,6 +237,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
                     case "changeContainer":
                         this.onChangeContainer(res.data);
                         break;
+                    case "updateItemName":
+                        this.onUpdateItemName(res.data);
+                        break;
                 }
             }
         );
@@ -699,6 +702,17 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
+    onUpdateItemName(item: Item) {
+        for (let i = 0; i < this.character.items.length; i++) {
+            let it = this.character.items[i];
+            if (it.id === item.id) {
+                it.data = item.data;
+                this.character.update();
+                break;
+            }
+        }
+    }
+
     itemAction(event: any, item: Item) {
         if (!this.character) {
             return false;
@@ -760,19 +774,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 description: event.description
             };
             this._itemService.updateItem(item.id, data).subscribe(
-                res => {
-
-                    for (let key in res) {
-                        if (item.hasOwnProperty(key) && res.hasOwnProperty(key)) {
-                            item[key] = res[key];
-                        }
-                    }
-                    this.character.update();
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
-                }
+                this.onUpdateItemName.bind(this)
             );
         }
         else {
