@@ -131,6 +131,12 @@ export class ItemService extends JsonService {
     addItem(characterId: number
         , itemTemplateId: number
         , itemData: ItemData): Observable<Item> {
+        if (itemData.quantity) {
+            itemData.quantity = +itemData.quantity;
+        } else {
+            delete itemData['quantity'];
+        }
+
         return this.postJson('/api/item/add', {
             itemTemplateId: itemTemplateId,
             characterId: characterId,
