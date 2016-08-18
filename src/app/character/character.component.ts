@@ -14,7 +14,7 @@ import {
     ValueEditorComponent
 } from "../shared";
 
-import {Item, ItemData} from "./item.model";
+import {Item, ItemData, PartialItem} from "./item.model";
 import {SpecialitySelectorComponent} from './speciality-selector.component';
 import {CharacterService} from "./character.service";
 import {Character, CharacterModifier} from "./character.model";
@@ -636,7 +636,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    onEquipItem(it: Item) {
+    onEquipItem(it: PartialItem) {
         for (let i = 0; i < this.character.items.length; i++) {
             let item = this.character.items[i];
             if (item.id === it.id) {
@@ -655,7 +655,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
-    onDeleteItem(item: Item) {
+    onDeleteItem(item: PartialItem) {
         for (let i = 0; i < this.character.items.length; i++) {
             let it = this.character.items[i];
             if (it.id === item.id) {
@@ -667,7 +667,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
-    onUseItemCharge(item: Item) {
+    onUseItemCharge(item: PartialItem) {
         for (let i = 0; i < this.character.items.length; i++) {
             let it = this.character.items[i];
             if (it.id === item.id) {
@@ -679,7 +679,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
-    onChangeContainer(item: Item) {
+    onChangeContainer(item: PartialItem) {
         for (let i = 0; i < this.character.items.length; i++) {
             let it = this.character.items[i];
             if (it.id === item.id) {
@@ -690,7 +690,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
-    onIdentifyItem(item: Item) {
+    onIdentifyItem(item: PartialItem) {
         for (let i = 0; i < this.character.items.length; i++) {
             let it = this.character.items[i];
             if (it.id === item.id) {
@@ -702,7 +702,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
-    onUpdateItemName(item: Item) {
+    onUpdateItemName(item: PartialItem) {
         for (let i = 0; i < this.character.items.length; i++) {
             let it = this.character.items[i];
             if (it.id === item.id) {

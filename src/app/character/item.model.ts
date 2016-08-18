@@ -20,3 +20,9 @@ export class Item {
     content: Item[];
     containerInfo: IMetadata;
 }
+
+export class PartialItem {
+    id: number;
+    data: ItemData = new ItemData();
+    container: number;
+}

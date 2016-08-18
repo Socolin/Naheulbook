@@ -53,15 +53,22 @@ export class ItemRequirement {
     min: number;
     max: number;
 }
+class PartialSkill {
+    id: number;
+}
+export class ItemSkillModifier {
+    skill: number|Skill;
+    value: number;
+}
 export class ItemTemplate {
     id: number;
     name: string;
     category: number;
     data: ItemTemplateData = new ItemTemplateData();
     modifiers: ItemStatModifier[] = [];
-    skills: Skill[];
-    unskills: Skill[];
+    skills: PartialSkill[]|Skill[];
+    unskills: PartialSkill[]|Skill[];
     slots: ItemSlot[];
     requirements: any[];
-    skillModifiers: any[];
+    skillModifiers: ItemSkillModifier[];
 }
