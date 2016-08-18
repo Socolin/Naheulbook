@@ -814,15 +814,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
             res => {
                 this.character.invites = [];
                 this.character.group = res.group;
-            },
-            err => {
-                try {
-                    let errJson = err.json();
-                    this._notification.error("Erreur", errJson.error_code);
-                } catch (e) {
-                    console.log(err.stack);
-                    this._notification.error("Erreur", "Erreur");
-                }
             }
         );
         return false;
