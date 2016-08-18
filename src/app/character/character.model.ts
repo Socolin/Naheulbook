@@ -224,7 +224,6 @@ export class Character {
     computedData: CharacterComputedData = new CharacterComputedData();
     onUpdate: EventEmitter<Character> = new EventEmitter<Character>();
 
-
     // Concatenate modifiers like [-2 PRD] and [+2 PRD for dwarf]
     private cleanItemModifiers(item: Item): ItemStatModifier[] {
         let cleanModifiers: ItemStatModifier[] = [];
