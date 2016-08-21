@@ -197,49 +197,56 @@ export class CharacterComponent implements OnInit, OnDestroy {
     registerWS() {
         this._webSocketService.register('character', this.character).subscribe(
             res => {
-                switch (res.opcode) {
-                    case "update":
-                        this.onChangeCharacterStat(res.data);
-                        break;
-                    case "statBonusAd":
-                        this.onSetStatBonusAD(res.data);
-                        break;
-                    case "levelUp":
-                        this.onLevelUp(res.data);
-                        break;
-                    case "addEffect":
-                        this.onAddEffect(res.data);
-                        break;
-                    case "removeEffect":
-                        this.onRemoveEffect(res.data);
-                        break;
-                    case "addModifier":
-                        this.onAddModifier(res.data);
-                        break;
-                    case "removeModifier":
-                        this.onRemoveModifier(res.data);
-                        break;
-                    case "equipItem":
-                        this.onEquipItem(res.data);
-                        break;
-                    case "addItem":
-                        this.onAddItem(res.data);
-                        break;
-                    case "deleteItem":
-                        this.onDeleteItem(res.data);
-                        break;
-                    case "identifyItem":
-                        this.onIdentifyItem(res.data);
-                        break;
-                    case "useCharge":
-                        this.onUseItemCharge(res.data);
-                        break;
-                    case "changeContainer":
-                        this.onChangeContainer(res.data);
-                        break;
-                    case "updateItemName":
-                        this.onUpdateItemName(res.data);
-                        break;
+                try {
+                    switch (res.opcode) {
+                        case "update":
+                            this.onChangeCharacterStat(res.data);
+                            break;
+                        case "statBonusAd":
+                            this.onSetStatBonusAD(res.data);
+                            break;
+                        case "levelUp":
+                            this.onLevelUp(res.data);
+                            break;
+                        case "addEffect":
+                            this.onAddEffect(res.data);
+                            break;
+                        case "removeEffect":
+                            this.onRemoveEffect(res.data);
+                            break;
+                        case "addModifier":
+                            this.onAddModifier(res.data);
+                            break;
+                        case "removeModifier":
+                            this.onRemoveModifier(res.data);
+                            break;
+                        case "equipItem":
+                            this.onEquipItem(res.data);
+                            break;
+                        case "addItem":
+                            this.onAddItem(res.data);
+                            break;
+                        case "deleteItem":
+                            this.onDeleteItem(res.data);
+                            break;
+                        case "identifyItem":
+                            this.onIdentifyItem(res.data);
+                            break;
+                        case "useCharge":
+                            this.onUseItemCharge(res.data);
+                            break;
+                        case "changeContainer":
+                            this.onChangeContainer(res.data);
+                            break;
+                        case "updateItemName":
+                            this.onUpdateItemName(res.data);
+                            break;
+                    }
+                }
+                catch (err) {
+                    this._notification.error("Erreur", "Erreur WS");
+                    this._characterService.postJson('/api/debug/report', err).subscribe();
+                    console.log(err);
                 }
             }
         );

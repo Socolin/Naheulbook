@@ -25,16 +25,20 @@ export class JsonService {
                     }
                 }
                 else if (err.status >= 500) {
+                    this.postJson('/api/debug/report', err).subscribe();
                     this._notification.error("Erreur", "Erreur serveur");
                 }
                 else if (err.status >= 400) {
+                    this.postJson('/api/debug/report', err).subscribe();
                     this._notification.error("Erreur", "Erreur javascript");
                 }
                 else {
+                    this.postJson('/api/debug/report', err).subscribe();
                     this._notification.error("Erreur", "Erreur inconnu");
                 }
             }
             else {
+                this.postJson('/api/debug/report', err).subscribe();
                 this._notification.error("Erreur", "Erreur inconnu");
             }
             console.log(err);
