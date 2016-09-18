@@ -1,5 +1,5 @@
 <span style="position: relative">
-    <span (click)="showEditor()" style="font-size: larger">
+    <span (click)="showEditor()" style="font-size: larger; color: magenta; border: 1px dashed gray;">
         {{value|number}}<span *ngIf="maxValue">/{{maxValue}}</span>
     </span>
     <div [hidden]="!displayEditor" style="position: absolute; z-index: 100" [style.bottom]="(15 - yOffset) + 'px'"
