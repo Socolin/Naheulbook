@@ -469,12 +469,13 @@ export class CreateCharacterComponent {
 
         creationData['fatePoint'] = this.fatePoint;
 
-
         if (this._router.routerState.snapshot.queryParams.hasOwnProperty('isNpc')) {
             creationData['isNpc'] = this._router.routerState.snapshot.queryParams['isNpc'];
         }
         if (this._router.routerState.snapshot.queryParams.hasOwnProperty('groupId')) {
             creationData['groupId'] = +this._router.routerState.snapshot.queryParams['groupId'];
+        } else {
+            creationData['groupId'] = null;
         }
 
         this._characterService.createCharacter(creationData).subscribe(

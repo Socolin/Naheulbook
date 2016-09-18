@@ -29,6 +29,9 @@
 </div>
 <div *ngIf="!item.data.notIdentified || gmView">
     <div>
+        <span *ngIf="item.template.name !== item.data.name">Nom reel: {{item.template.name}}</span>
+    </div>
+    <div>
         <span *ngIf="item.template.data.relic" class="label label-primary">Relique</span>
         <template [ngIf]="character.sex == 'Homme'">
             <span *ngIf="item.template.data.sex == 'h'" class="label label-success">Homme uniq.</span>
@@ -95,6 +98,7 @@
     </div>
 
     <div *ngIf="item.template.data.description">{{item.template.data.description}}</div>
+    <div *ngIf="item.data.description">{{item.data.description}}</div>
     <div *ngIf="item.template.data.weight && !item.template.data.useUG">
         Poids:
         <span *ngIf="item.template.data.weight < 1">{{(item.template.data.weight * 1000)}}g</span>
