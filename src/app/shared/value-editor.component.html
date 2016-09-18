@@ -37,6 +37,12 @@
                 <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-primary"
                         (click)="changeValue('+1')">+1</button>
             </div>
+            <div style="position: absolute; left:-120px; bottom: 46px">
+                <button style="display: block; width: 60px; font-weight: bold" class="btn btn-lg btn-primary"
+                        (click)="changeValue('+50')">+50</button>
+                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-primary"
+                        (click)="changeValue('-50')">-50</button>
+            </div>
             <div style="position: absolute; left:0; bottom: 46px">
                 <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-default"
                         (click)="changeValue('max')" [disabled]="!maxValue">Max</button>
@@ -44,7 +50,7 @@
                         (click)="changeValue('zero')">0</button>
             </div>
             <div style="position: absolute; left:60px; bottom: -46px">
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-success glyphicon glyphicon-ok"
+                <button style="width: 120px; height: 93px; font-weight: bold" class="btn btn-lg btn-success glyphicon glyphicon-ok"
                         (click)="commitValue()"></button>
             </div>
         </div>

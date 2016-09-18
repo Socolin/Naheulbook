@@ -241,6 +241,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
                         case "updateItemName":
                             this.onUpdateItemName(res.data);
                             break;
+                        case "changeQuantity":
+                            this.onUpdateQuantity(res.data);
+                            break;
                     }
                 }
                 catch (err) {
@@ -701,6 +704,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         for (let i = 0; i < this.character.items.length; i++) {
             let it = this.character.items[i];
             if (it.id === item.id) {
+                it.data.name = item.data.name;
                 it.data.notIdentified = item.data.notIdentified;
                 this.character.update();
                 this.notifyChange("Identification de l'objet: " + item.data.name);
@@ -715,6 +719,20 @@ export class CharacterComponent implements OnInit, OnDestroy {
             if (it.id === item.id) {
                 it.data = item.data;
                 this.character.update();
+                break;
+            }
+        }
+    }
+
+    onUpdateQuantity(item: PartialItem) {
+        for (let i = 0; i < this.character.items.length; i++) {
+            let it = this.character.items[i];
+            if (it.id === item.id) {
+                if (it.data.quantity !== item.data.quantity) {
+                    this.notifyChange("Modification de la quantité de l'objet: " + item.data.name + ": " + item.data.quantity + " ->" + it.data.quantity);
+                    it.data.quantity = item.data.quantity;
+                    this.character.update();
+                }
                 break;
             }
         }
@@ -747,8 +765,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         else if (event.action === 'update_quantity') {
             this._itemService.updateQuantity(item.id, event.quantity).subscribe(
                 res => {
-                    item.data.quantity = res.data.quantity;
-                    this.character.update();
+                    this.onUpdateQuantity(res);
                 }
             );
         }
