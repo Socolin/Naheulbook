@@ -630,8 +630,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    public itemFilterName: string;
-
+    private itemFilterName: string;
     isItemFilteredByName(item: Item): boolean {
         if (!this.itemFilterName) {
             return true;
@@ -644,6 +643,47 @@ export class CharacterComponent implements OnInit, OnDestroy {
             return true;
         }
         return false;
+    }
+
+    private sortType = 'none';
+    sortInventory(type: string) {
+        if (type === 'not_identified_first') {
+            this.sortType = type;
+            this.character.items.sort((a, b) =>
+                {
+                    if (a.data.notIdentified && b.data.notIdentified) {
+                        return 0;
+                    }
+                    if (a.data.notIdentified) {
+                        return -1;
+                    }
+                    if (b.data.notIdentified) {
+                        return 1;
+                    }
+                    return a.data.name.localeCompare(b.data.name);
+                }
+            );
+
+        }
+        else {
+            if (this.sortType !== 'asc') {
+                this.sortType = 'asc';
+                this.character.items.sort((a, b) =>
+                    {
+                        return a.data.name.localeCompare(b.data.name);
+                    }
+                );
+            }
+            else {
+                this.sortType = 'desc';
+                this.character.items.sort((a, b) =>
+                    {
+                        return 2 - a.data.name.localeCompare(b.data.name);
+                    }
+                );
+            }
+            this.character.update();
+        }
     }
 
     onEquipItem(it: PartialItem) {

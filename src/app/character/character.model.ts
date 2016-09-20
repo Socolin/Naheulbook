@@ -261,7 +261,7 @@ export class Character {
         let itemsBySlotsAll = {};
         let equiped = [];
         let slots = [];
-        let containers = [];
+        let containers: Item[] = [];
         let topLevelContainers = [];
         let content: {[itemId: number]: Item[]} = {};
         let itemsById: {[itemId: number]: Item} = {};
@@ -333,6 +333,24 @@ export class Character {
                 }
                 return -1;
             });
+        }
+
+        for (let i = 0; i < containers.length; i++) {
+            let container = containers[i];
+            if (container.content) {
+                container.content.sort((a, b) => {
+                    if (a.template.data.container === b.template.data.container) {
+                        return 0;
+                    }
+                    if (a.template.data.container) {
+                        return -1;
+                    }
+                    if (b.template.data.container) {
+                        return 1;
+                    }
+                    return 0;
+                });
+            }
         }
 
         this.computedData.itemsEquiped = equiped;
