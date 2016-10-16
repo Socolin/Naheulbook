@@ -1,17 +1,14 @@
 import {Component, Input, Output, EventEmitter, SimpleChanges, OnChanges} from '@angular/core';
 import {Observable} from "rxjs";
 
-import {ItemService} from "../item/item.service";
-import {Character} from "../character/character.model";
-import {Item} from "../character/item.model";
-import {AutocompleteInputComponent, AutocompleteValue} from "../shared/autocomplete-input.component";
-import {ItemTemplate} from "../item/item-template.model";
+import {ItemService} from "../item";
+import {Character, Item} from "../character";
+import {AutocompleteValue} from "../shared";
+import {ItemTemplate} from "../item";
 
 @Component({
-    moduleId: module.id,
     selector: 'create-item',
     templateUrl: 'create-item.component.html',
-    directives: [AutocompleteInputComponent]
 })
 export class CreateItemComponent implements OnChanges {
     @Input() character: Character;

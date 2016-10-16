@@ -3,36 +3,20 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
 
-import {Group, GroupService, CharacterInviteInfo} from '../group';
-import {Character, CharacterService, CharacterColorSelectorComponent, CharacterComponent} from '../character';
-import {Monster, MonsterService, MonsterTemplate, MonsterColorSelectorComponent} from '../monster';
+import {Group, CharacterInviteInfo} from '.';
+import {GroupService} from './group.service';
+import {Character, CharacterService, CharacterResume} from '../character';
+import {Monster, MonsterService, MonsterTemplate} from '../monster';
 
 import {LoginService} from '../user';
-import {EffectListComponent} from '../effect';
-import {SkillListComponent} from '../skill';
 import {Fighter} from './group.model';
-import {MonsterEditableFieldComponent} from './monster-editable-field.component';
-import {ValueEditorComponent, AutocompleteInputComponent, AutocompleteValue} from '../shared';
-import {TargetSelectorComponent} from './target-selector.component';
+import {AutocompleteValue} from '../shared';
 import {LocationService, Location} from '../location';
 import {Observable} from 'rxjs';
-import {CharacterResume} from '../character/character.model';
-import {CreateItemComponent} from "./create-item.component";
 
 
 @Component({
-    moduleId: module.id,
     templateUrl: 'group.component.html',
-    directives: [CharacterComponent
-        , MonsterEditableFieldComponent
-        , CharacterColorSelectorComponent
-        , MonsterColorSelectorComponent
-        , TargetSelectorComponent
-        , EffectListComponent
-        , ValueEditorComponent
-        , AutocompleteInputComponent
-        , SkillListComponent
-        , CreateItemComponent],
     styles: [`
         .even_row {
             background-color: #f9f9f9;
@@ -41,7 +25,6 @@ import {CreateItemComponent} from "./create-item.component";
             background-color: #e3e3e3!important;
         }
     `],
-    providers: [CharacterService, GroupService]
 })
 export class GroupComponent implements OnInit, OnChanges {
     public group: Group;

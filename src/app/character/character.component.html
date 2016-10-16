@@ -225,7 +225,7 @@
 				</div>
 				<div class="col-sm-6" *ngIf="selectedItem">
 					<div class="bg-info">
-						<item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem" [characterStats]="stats" (itemAction)="itemAction($event, selectedItem)"></item-detail>
+						<item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem" (itemAction)="itemAction($event, selectedItem)"></item-detail>
 					</div>
 				</div>
 			</div>

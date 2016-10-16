@@ -1,15 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationsService} from '../notifications';
 
-import {JobComponent} from "./job.component";
 import {Job} from "./job.model";
 import {JobService} from "./job.service";
 
 @Component({
-    moduleId: module.id,
     selector: 'job-list',
-    templateUrl: 'job-list.component.html',
-    directives: [JobComponent]
+    templateUrl: 'job-list.component.html'
 })
 export class JobListComponent implements OnInit {
     public jobs: Job[];

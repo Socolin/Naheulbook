@@ -3,7 +3,6 @@ import {Component, Input} from '@angular/core';
 import {Job} from "./job.model";
 
 @Component({
-    moduleId: module.id,
     selector: 'job',
     templateUrl: 'job.component.html'
 })

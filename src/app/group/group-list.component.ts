@@ -3,11 +3,10 @@ import {Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
 
-import {CharacterService} from '../character';
+import {CharacterService} from '../character/character.service';
 import {Group} from './group.model';
 
 @Component({
-    moduleId: module.id,
     templateUrl: 'group-list.component.html'
 })
 export class GroupListComponent implements OnInit {

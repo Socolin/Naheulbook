@@ -11,7 +11,6 @@ export class AutocompleteValue {
 }
 
 @Component({
-    moduleId: module.id,
     selector: 'autocomplete-input',
     templateUrl: 'autocomplete-input.component.html'
 })

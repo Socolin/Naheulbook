@@ -1,15 +1,12 @@
 import {Component} from '@angular/core';
 
 import {ItemService} from "./item.service";
-import {ItemEditorComponent} from "./item-editor.component";
 import {ItemTemplate} from "./item-template.model";
 
 @Component({
-    moduleId: module.id,
     selector: 'create-item',
     templateUrl: 'create-item.component.html',
     providers: [ItemService],
-    directives: [ItemEditorComponent]
 })
 export class CreateItemComponent {
     public item: ItemTemplate = new ItemTemplate();

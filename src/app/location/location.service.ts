@@ -4,8 +4,8 @@ import {Observable, ReplaySubject} from 'rxjs/Rx';
 
 import {Location, Map} from './location.model';
 import {JsonService} from '../shared/json-service';
-import {NotificationsService} from '../notifications/notifications.service';
-import {LoginService} from "../user/login.service";
+import {NotificationsService} from '../notifications';
+import {LoginService} from "../user";
 
 @Injectable()
 export class LocationService extends JsonService {
@@ -20,7 +20,7 @@ export class LocationService extends JsonService {
     }
 
     getLocationsTree(): Observable<Location[]> {
-        if (!this.locationsTree || this.locationsTree.isUnsubscribed) {
+        if (!this.locationsTree) {
             this.locationsTree = new ReplaySubject<Location[]>(1);
 
             this._http.get('/api/location/list')
@@ -49,7 +49,7 @@ export class LocationService extends JsonService {
     }
 
     getLocations(): Observable<Location[]> {
-        if (!this.locations || this.locations.isUnsubscribed) {
+        if (!this.locations) {
             this.locations = new ReplaySubject<Location[]>(1);
 
             this._http.get('/api/location/list')

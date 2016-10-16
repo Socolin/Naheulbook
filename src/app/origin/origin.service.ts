@@ -1,21 +1,20 @@
-import {Injectable} from '@angular/core';
+import {Injectable, forwardRef, Inject} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable, ReplaySubject} from 'rxjs/Rx';
 
 import {Origin} from "./origin.model";
-import {SkillService} from '../skill/skill.service';
-import {Skill} from '../skill/skill.model';
+import {Skill, SkillService} from '../skill';
 
 @Injectable()
 export class OriginService {
     private origins: ReplaySubject<Origin[]>;
 
     constructor(private _http: Http
-        , private _skillService: SkillService) {
+        , @Inject(forwardRef(()  => SkillService)) private _skillService: SkillService) {
     }
 
     getOriginList(): Observable<Origin[]> {
-        if (!this.origins || this.origins.isUnsubscribed) {
+        if (!this.origins) {
             this.origins = new ReplaySubject<Origin[]>(1);
 
             Observable.forkJoin(

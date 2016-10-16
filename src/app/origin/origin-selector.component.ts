@@ -1,11 +1,10 @@
 import {Component, Input, Output, EventEmitter, OnInit, OnChanges} from '@angular/core';
 
 import {Origin} from "./origin.model";
-import {StatRequirement} from "../shared/stat-requirement.model";
+import {StatRequirement} from "../shared";
 import {OriginService} from "./origin.service";
 
 @Component({
-    moduleId: module.id,
     selector: 'origin-selector',
     templateUrl: 'origin-selector.component.html'
 })

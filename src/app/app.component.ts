@@ -1,28 +1,24 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES, NavigationStart} from '@angular/router';
-import {HTTP_PROVIDERS} from '@angular/http';
-import {SimpleNotificationsComponent, NotificationsService} from './notifications';
+import {Router, NavigationStart} from '@angular/router';
+import {NotificationsService} from './notifications';
 
-import {LoginService, LoginComponent} from './user';
+import {LoginService} from './user';
 import {EffectService} from './effect';
 import {ItemService} from './item';
-import {JobService} from './job';
+import {JobService} from './job/job.service';
 import {OriginService} from './origin';
 import {SkillService} from './skill';
-import {CharacterService} from './character';
+import {CharacterService} from './character/character.service';
 import {User} from './user';
-import {LocationService} from './location/location.service';
+import {LocationService} from './location';
 import {MonsterService} from './monster';
 import {QuestService} from './quest';
 import {WebSocketService} from './shared/websocket.service';
 
 @Component({
-    selector: 'index',
-    moduleId: module.id,
+    selector: 'app-root',
     templateUrl: 'app.component.html',
-    directives: [SimpleNotificationsComponent, LoginComponent, ROUTER_DIRECTIVES],
     providers: [LoginService
-        , HTTP_PROVIDERS
         , NotificationsService
         , EffectService
         , ItemService
@@ -36,7 +32,7 @@ import {WebSocketService} from './shared/websocket.service';
         , WebSocketService
     ],
 })
-export class IndexComponent implements OnInit {
+export class AppComponent implements OnInit {
     public loggedUser: User;
 
     constructor(private _loginService: LoginService

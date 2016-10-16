@@ -2,7 +2,6 @@ import {Component, Input} from '@angular/core';
 import {Origin} from "./origin.model";
 
 @Component({
-    moduleId: module.id,
     selector: 'origin',
     templateUrl: 'origin.component.html',
 })

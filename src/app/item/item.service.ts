@@ -6,11 +6,11 @@ import {ItemTemplate, ItemSection, ItemSlot} from '../item';
 import {Item} from "../character";
 import {JsonService} from '../shared/json-service';
 import {ItemCategory} from './item-template.model';
-import {NotificationsService} from '../notifications/notifications.service';
-import {ItemData, PartialItem} from "../character/item.model";
-import {LoginService} from "../user/login.service";
-import {SkillService} from "../skill/skill.service";
-import {Skill} from "../skill/skill.model";
+import {NotificationsService} from '../notifications';
+import {ItemData, PartialItem} from "../character";
+import {LoginService} from "../user";
+import {SkillService} from "../skill";
+import {Skill} from "../skill";
 
 @Injectable()
 export class ItemService extends JsonService {
@@ -26,7 +26,7 @@ export class ItemService extends JsonService {
     }
 
     getSectionsList(): Observable<ItemSection[]> {
-        if (!this.itemSections || this.itemSections.isUnsubscribed) {
+        if (!this.itemSections) {
             this.itemSections = new ReplaySubject<ItemSection[]>(1);
 
             this._http.get('/api/item/categorylist')
@@ -85,7 +85,7 @@ export class ItemService extends JsonService {
     }
 
     getItems(section: ItemSection): Observable<ItemTemplate[]> {
-        if (!(section.id in this.itemBySection) || this.itemBySection[section.id].isUnsubscribed) {
+        if (!(section.id in this.itemBySection)) {
 
             this.itemBySection[section.id] = new ReplaySubject<ItemTemplate[]>(1);
             Observable.forkJoin(
@@ -128,7 +128,7 @@ export class ItemService extends JsonService {
     }
 
     getSlots(): Observable<ItemSlot[]> {
-        if (!this.slots || this.slots.isUnsubscribed) {
+        if (!this.slots) {
             this.slots = new ReplaySubject<ItemSlot[]>(1);
 
             this._http.get('/api/item/slotList')

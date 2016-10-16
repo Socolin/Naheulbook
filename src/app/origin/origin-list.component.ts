@@ -3,15 +3,11 @@ import {Component, OnInit} from '@angular/core';
 import {NotificationsService} from '../notifications';
 
 import {Origin} from "./origin.model";
-import {OriginComponent} from './origin.component';
 import {OriginService} from "./origin.service";
 
 @Component({
     selector: 'origin-list',
-    moduleId: module.id,
     templateUrl: 'origin-list.component.html',
-    styleUrls: ['/styles/origin-list.css'],
-    directives: [OriginComponent],
 })
 export class OriginListComponent implements OnInit {
     public origins: Origin[];

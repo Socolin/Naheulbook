@@ -1,7 +1,6 @@
 import {Component, Input, Output, EventEmitter, Renderer, ElementRef, OnChanges} from '@angular/core';
 
 @Component({
-    moduleId: module.id,
     selector: 'value-editor',
     templateUrl: 'value-editor.component.html',
 })

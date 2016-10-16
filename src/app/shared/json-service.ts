@@ -1,7 +1,7 @@
 import {Http, Headers, Response} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
-import {NotificationsService} from '../notifications/notifications.service';
-import {LoginService} from "../user/login.service";
+import {NotificationsService} from '../notifications';
+import {LoginService} from "../user";
 
 export class JsonService {
     constructor(protected _http: Http

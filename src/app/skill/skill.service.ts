@@ -13,7 +13,7 @@ export class SkillService {
     }
 
     getSkillsById(): Observable<{[skillId: number]: Skill}> {
-        if (!this.skillsById || this.skillsById.isUnsubscribed) {
+        if (!this.skillsById) {
             this.skillsById = new ReplaySubject<{[skillId: number]: Skill}>(1);
 
             this.getSkills().subscribe(
@@ -35,7 +35,7 @@ export class SkillService {
     }
 
     getSkills(): Observable<Skill[]> {
-        if (!this.skills || this.skills.isUnsubscribed) {
+        if (!this.skills) {
             this.skills = new ReplaySubject<Skill[]>(1);
 
             this._http.get('/api/skill/list')

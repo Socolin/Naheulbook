@@ -3,7 +3,6 @@ import {EventEmitter, Component, Input, Output} from '@angular/core';
 import {Monster} from './monster.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'monster-color-selector',
     templateUrl: 'monster-color-selector.component.html'
 })

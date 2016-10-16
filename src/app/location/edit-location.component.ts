@@ -3,13 +3,10 @@ import {Router, ActivatedRoute} from '@angular/router';
 
 import {Location, Map} from "./location.model";
 import {LocationService} from './location.service';
-import {LocationEditorComponent} from './location-editor.component';
 import {NotificationsService} from '../notifications';
 
 @Component({
-    moduleId: module.id,
     templateUrl: 'edit-location.component.html',
-    directives: [LocationEditorComponent]
 })
 export class EditLocationComponent implements OnInit {
     private location: Location;

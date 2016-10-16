@@ -1,14 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 
-import {MonsterTemplateComponent} from './monster-template.component';
 import {MonsterTemplate, MonsterTemplateCategory} from "./monster.model";
 import {MonsterService} from "./monster.service";
 
 @Component({
-    moduleId: module.id,
     selector: 'monster-list',
     templateUrl: 'monster-list.component.html',
-    directives: [MonsterTemplateComponent]
 })
 export class MonsterListComponent implements OnInit {
     public monsters: MonsterTemplate[];

@@ -1,26 +1,19 @@
-import {Component, EventEmitter, Input, OnInit, Output, OnDestroy} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, OnDestroy, Inject, forwardRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 import {NotificationsService} from '../notifications';
 
-import {SkillSelectorComponent} from '../skill';
 import {Effect, EffectService} from '../effect';
 import {ItemService, ItemTemplate} from '../item';
 import {
-    ModifierPipe,
     removeDiacritics,
-    ModifiersEditorComponent,
-    PlusMinusPipe,
-    ValueEditorComponent
 } from "../shared";
 
 import {Item, ItemData, PartialItem} from "./item.model";
-import {SpecialitySelectorComponent} from './speciality-selector.component';
 import {CharacterService} from "./character.service";
 import {Character, CharacterModifier} from "./character.model";
-import {IMetadata} from '../shared/misc.model';
-import {ItemDetailComponent} from './item-detail.component';
-import {EffectCategory} from '../effect/effect.model';
+import {IMetadata} from '../shared';
+import {EffectCategory} from '../effect';
 import {WebSocketService} from '../shared/websocket.service';
 
 @Component({
@@ -65,7 +58,6 @@ import {WebSocketService} from '../shared/websocket.service';
             </template>
         </template>
     `,
-    directives: [BagItemViewComponent],
 })
 export class BagItemViewComponent implements OnInit {
     @Input() items: Item[];
@@ -99,9 +91,7 @@ class LevelUpInfo {
 
 @Component({
     selector: 'character',
-    moduleId: module.id,
     templateUrl: 'character.component.html',
-    pipes: [PlusMinusPipe, ModifierPipe],
     styles: [`
         .canceled {
             text-decoration: line-through;
@@ -119,13 +109,6 @@ class LevelUpInfo {
         }
         `
     ],
-    directives: [BagItemViewComponent
-        , SkillSelectorComponent
-        , SpecialitySelectorComponent
-        , ItemDetailComponent
-        , ModifiersEditorComponent
-        , ValueEditorComponent
-    ]
 })
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
@@ -135,7 +118,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     private inGroupTab: boolean = false;
 
     constructor(private _route: ActivatedRoute
-        , private _itemService: ItemService
+        , @Inject(forwardRef(()  => ItemService)) private _itemService: ItemService
         , private _effectService: EffectService
         , private _notification: NotificationsService
         , private _webSocketService: WebSocketService

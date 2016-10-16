@@ -2,20 +2,16 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
 
-import {LoginService} from "../user";
-import {OriginService} from "../origin";
-import {JobService} from "../job";
+import {LoginService} from "../user/login.service";
+import {OriginService} from "../origin/origin.service";
+import {JobService} from "../job/job.service";
 
-import {ItemElementComponent} from './item-element.component';
 import {ItemSection, ItemTemplate} from "./item-template.model";
 import {ItemService} from "./item.service";
-import {removeDiacritics, ModifierPipe, TextFormatterPipe} from "../shared";
+import {removeDiacritics} from "../shared";
 
 @Component({
-    moduleId: module.id,
     templateUrl: 'item-list.component.html',
-    pipes: [ModifierPipe, TextFormatterPipe],
-    directives: [ItemElementComponent],
     styles: [
         `.item-section {
             font-weight: bold;
@@ -128,7 +124,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this._itemService.getSectionsList().subscribe(sections => {
             this.itemSections = sections;
-            this.sub = this._router.routerState.queryParams.subscribe(params => {
+            this.sub = this._router.routerState.root.queryParams.subscribe(params => {
                 let id = +params['id'];
                 this.selectSectionById(id);
             });

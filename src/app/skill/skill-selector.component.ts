@@ -1,17 +1,13 @@
 import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
 
-import {SkillComponent} from './skill.component';
-
 import {Job} from '../job';
 import {Origin} from '../origin';
 import {Skill} from "./skill.model";
 import {SkillService} from "./skill.service";
 
 @Component({
-    moduleId: module.id,
     selector: 'skill-selector',
     templateUrl: 'skill-selector.component.html',
-    directives: [SkillComponent]
 })
 export class SkillSelectorComponent implements OnInit {
     // Inputs

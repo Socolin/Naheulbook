@@ -3,10 +3,8 @@ import {Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
 
-import {CharacterService} from "../character";
-
+import {CharacterService} from "../character/character.service";
 @Component({
-    moduleId: module.id,
     templateUrl: 'create-group.component.html',
     providers: [CharacterService]
 })

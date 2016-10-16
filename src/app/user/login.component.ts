@@ -7,7 +7,6 @@ import {User} from './user.model';
 
 @Component({
     selector: 'login',
-    moduleId: module.id,
     templateUrl: 'login.component.html',
 })
 export class LoginComponent implements OnInit {

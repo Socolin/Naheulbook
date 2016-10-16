@@ -2,17 +2,14 @@ import {Component, SimpleChanges, Input, OnInit, OnChanges, OnDestroy} from '@an
 import {Router, ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
 
-import {ModifierPipe} from "../shared";
 import {LoginService} from "../user";
 
 import {EffectService} from "./effect.service";
 import {EffectCategory, Effect} from "./effect.model";
 
 @Component({
-    moduleId: module.id,
     selector: 'effect-list',
     templateUrl: 'effect-list.component.html',
-    pipes: [ModifierPipe]
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputCategoryId: number = 1;
@@ -75,7 +72,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
             if (this.isOverlay()) {
                 this.loadCategory(this.inputCategoryId);
             } else {
-                this.sub = this._router.routerState.queryParams.subscribe(params => {
+                this.sub = this._router.routerState.root.queryParams.subscribe(params => {
                     let id = +params['id'];
                     this.loadCategory(id);
                 });

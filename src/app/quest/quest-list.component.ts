@@ -4,7 +4,6 @@ import {QuestTemplate} from "./quest.model";
 import {QuestService} from "./quest.service";
 
 @Component({
-    moduleId: module.id,
     selector: 'quest-list',
     templateUrl: 'quest-list.component.html'
 })

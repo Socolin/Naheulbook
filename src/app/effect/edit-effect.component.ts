@@ -2,14 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from '../notifications';
 
-import {EffectEditorComponent} from './effect-editor.component';
 import {EffectService} from "./effect.service";
 
 @Component({
-    moduleId: module.id,
     templateUrl: 'edit-effect.component.html',
     providers: [EffectService],
-    directives: [EffectEditorComponent]
 })
 export class EditEffectComponent implements OnInit {
     public effect: Object;

@@ -1,19 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {ModifierPipe} from "./modifier.pipe";
 import {Stat} from "./stat.model";
 import {ItemStatModifier, StatModificationOperand} from "./stat-modifier.model";
-import {Origin} from "../origin/origin.model";
-import {Job} from "../job/job.model";
-import {CharacterService} from "../character/character.service";
-import {OriginService} from "../origin/origin.service";
-import {JobService} from "../job/job.service";
-
+import {Origin, OriginService} from "../origin";
+import {Job} from "../job";
+import {JobService} from "../job";
+import {CharacterService} from "../character";
 @Component({
-    moduleId: module.id,
     selector: 'modifiers-editor',
-    templateUrl: 'modifiers-editor.component.html',
-    pipes: [ModifierPipe],
+    templateUrl: 'modifiers-editor.component.html'
 })
 export class ModifiersEditorComponent implements OnInit {
     @Input() modifiers: ItemStatModifier[];

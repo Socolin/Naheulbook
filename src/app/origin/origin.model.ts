@@ -1,5 +1,5 @@
-import {StatRequirement} from "../shared/stat-requirement.model";
-import {Skill} from '../skill/skill.model';
+import {StatRequirement} from "../shared";
+import {Skill} from '../skill';
 
 export interface OriginInfo {
     title: string;

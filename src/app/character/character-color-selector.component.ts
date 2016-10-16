@@ -3,7 +3,6 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Character} from "./character.model";
 
 @Component({
-    moduleId: module.id,
     selector: 'character-color-selector',
     templateUrl: 'character-color-selector.component.html'
 })

@@ -42,10 +42,10 @@ export interface MonsterTemplateCategory {
     id: number;
     name: string;
 }
+
 export interface MonsterTemplate {
     id: number;
     name: string;
     data: MonsterTemplateData;
     type: MonsterTemplateCategory;
 }
-

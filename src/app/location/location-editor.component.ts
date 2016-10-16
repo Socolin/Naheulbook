@@ -2,15 +2,11 @@ import {Component, Input, OnInit} from '@angular/core';
 
 import {Location, Map} from "./location.model";
 import {LocationService} from './location.service';
-import {AutocompleteInputComponent, AutocompleteValue} from '../shared/autocomplete-input.component';
+import {AutocompleteValue} from '../shared';
 import {NotificationsService} from '../notifications';
-import {TextareaAutosizeDirective, TextFormatterPipe} from '../shared';
 
 @Component({
-    moduleId: module.id,
     selector: 'location-editor',
-    pipes: [TextFormatterPipe],
-    directives: [AutocompleteInputComponent, TextareaAutosizeDirective],
     templateUrl: 'location-editor.component.html'
 })
 export class LocationEditorComponent implements OnInit {

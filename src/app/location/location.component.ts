@@ -3,14 +3,10 @@ import {Router} from '@angular/router';
 
 import {Location, Map} from "./location.model";
 import {LocationService} from './location.service';
-import {TextFormatterPipe} from '../shared';
 
 @Component({
-    moduleId: module.id,
     selector: 'location',
     templateUrl: 'location.component.html',
-    pipes: [TextFormatterPipe],
-    directives: [LocationComponent]
 })
 export class LocationComponent {
     @Input() location: Location;

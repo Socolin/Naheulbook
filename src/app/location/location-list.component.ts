@@ -3,14 +3,11 @@ import {NotificationsService} from '../notifications';
 
 import {Location} from "./location.model";
 import {LocationService} from "./location.service";
-import {LocationComponent} from './location.component';
 import {LoginService} from '../user';
 
 @Component({
-    moduleId: module.id,
     selector: 'location-list',
-    templateUrl: 'location-list.component.html',
-    directives: [LocationComponent]
+    templateUrl: 'location-list.component.html'
 })
 export class LocationListComponent implements OnInit {
     private locations: Location[];

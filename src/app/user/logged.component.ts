@@ -6,7 +6,6 @@ import {NotificationsService} from '../notifications';
 import {LoginService} from './login.service';
 
 @Component({
-    moduleId: module.id,
     templateUrl: 'logged.component.html',
 })
 export class LoggedComponent implements OnInit, OnDestroy {
@@ -22,7 +21,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscribtion = this._router.routerState.queryParams.subscribe(params => {
+        this.subscribtion = this._router.routerState.root.queryParams.subscribe(params => {
             if (params.hasOwnProperty('state')) {
                 let state = decodeURIComponent(params['state']).split(':', 2);
                 let app = state[0];

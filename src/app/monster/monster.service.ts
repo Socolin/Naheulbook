@@ -4,8 +4,8 @@ import {Observable} from 'rxjs/Rx';
 
 import {MonsterTemplate} from "./monster.model";
 import {JsonService} from '../shared/json-service';
-import {NotificationsService} from '../notifications/notifications.service';
-import {LoginService} from "../user/login.service";
+import {NotificationsService} from '../notifications';
+import {LoginService} from "../user";
 
 @Injectable()
 export class MonsterService extends JsonService {

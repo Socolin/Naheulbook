@@ -1,5 +1,7 @@
 export * from './character.model';
 export * from './item.model';
+export * from './item-detail.component';
+export * from './speciality-selector.component';
 export * from './speciality.model';
 
 export * from './character.service';

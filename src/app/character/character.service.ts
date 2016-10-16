@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
+import {Injectable, forwardRef, Inject} from '@angular/core';
 import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
-import {Stat} from "../shared/stat.model";
+import {Stat} from "../shared";
 import {Character, CharacterResume, CharacterModifier} from "./character.model";
 import {Effect} from "../effect";
 import {IMetadata, HistoryEntry} from "../shared";
@@ -11,8 +11,8 @@ import {JsonService} from '../shared/json-service';
 import {Job, JobService} from '../job';
 import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
-import {NotificationsService} from '../notifications/notifications.service';
-import {LoginService} from "../user/login.service";
+import {NotificationsService} from '../notifications';
+import {LoginService} from '../user';
 
 @Injectable()
 export class CharacterService extends JsonService {
@@ -20,8 +20,8 @@ export class CharacterService extends JsonService {
         , notification: NotificationsService
         , loginService: LoginService
         , private _jobService: JobService
-        , private _skillService: SkillService
-        , private _originService: OriginService) {
+        , @Inject(forwardRef(()  => SkillService)) private _skillService: SkillService
+        , @Inject(forwardRef(()  => OriginService)) private _originService: OriginService) {
         super(http, notification, loginService);
     }
 
@@ -121,7 +121,7 @@ export class CharacterService extends JsonService {
     private stats: ReplaySubject<Stat[]>;
 
     getStats(): Observable<Stat[]> {
-        if (!this.stats || this.stats.isUnsubscribed) {
+        if (!this.stats) {
             this.stats = new ReplaySubject<Stat[]>(1);
 
             this._http.get('/api/character/stats')

@@ -2,18 +2,16 @@ import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {NotificationsService} from '../notifications';
 
-import {Origin, OriginSelectorComponent} from '../origin';
-import {Job, JobSelectorComponent} from '../job';
-import {Skill, SkillSelectorComponent} from '../skill';
+import {Origin} from '../origin';
+import {Job} from '../job';
+import {Skill} from '../skill';
 
 import {CharacterService} from "./character.service";
 import {Speciality} from "./speciality.model";
 
 @Component({
     selector: 'create-character',
-    moduleId: module.id,
     templateUrl: 'create-character.component.html',
-    directives: [OriginSelectorComponent, JobSelectorComponent, SkillSelectorComponent]
 })
 export class CreateCharacterComponent {
     public step: number;
@@ -469,20 +467,20 @@ export class CreateCharacterComponent {
 
         creationData['fatePoint'] = this.fatePoint;
 
-        if (this._router.routerState.snapshot.queryParams.hasOwnProperty('isNpc')) {
-            creationData['isNpc'] = this._router.routerState.snapshot.queryParams['isNpc'];
+        if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('isNpc')) {
+            creationData['isNpc'] = this._router.routerState.snapshot.root.queryParams['isNpc'];
         }
-        if (this._router.routerState.snapshot.queryParams.hasOwnProperty('groupId')) {
-            creationData['groupId'] = +this._router.routerState.snapshot.queryParams['groupId'];
+        if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
+            creationData['groupId'] = +this._router.routerState.snapshot.root.queryParams['groupId'];
         } else {
             creationData['groupId'] = null;
         }
 
         this._characterService.createCharacter(creationData).subscribe(
             res => {
-                if (this._router.routerState.snapshot.queryParams.hasOwnProperty('groupId')) {
+                if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
                     this._router.navigate(['/character/group'
-                        , +this._router.routerState.snapshot.queryParams['groupId']]);
+                        , +this._router.routerState.snapshot.root.queryParams['groupId']]);
                 } else {
                     this._router.navigate(['/character/detail', res.id]);
                 }

@@ -4,7 +4,6 @@ import {Skill} from "./skill.model";
 import {SkillService} from "./skill.service";
 
 @Component({
-    moduleId: module.id,
     selector: 'skill-modifiers-editor',
     templateUrl: 'skill-modifiers-editor.component.html',
 })

@@ -8,8 +8,6 @@ import {QuestTemplate} from './quest.model';
 import {QuestEditorComponent} from './quest-editor.component';
 
 @Component({
-    moduleId: module.id,
-    directives: [QuestEditorComponent],
     templateUrl: 'create-quest-template.component.html'
 })
 export class CreateQuestTemplateComponent {

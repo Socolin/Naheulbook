@@ -5,13 +5,9 @@ import {NotificationsService} from '../notifications';
 
 import {QuestService} from "./quest.service";
 import {QuestTemplate} from './quest.model';
-import {TextFormatterPipe, TextareaAutosizeDirective} from '../shared';
 
 @Component({
-    moduleId: module.id,
     selector: 'quest-editor',
-    pipes: [TextFormatterPipe],
-    directives: [TextareaAutosizeDirective],
     templateUrl: 'quest-editor.component.html'
 })
 export class QuestEditorComponent {

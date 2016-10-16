@@ -2,15 +2,12 @@ import {Component} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 import {EffectService} from "./effect.service";
-import {EffectEditorComponent} from "./effect-editor.component";
 import {Effect} from "./effect.model";
 
 @Component({
-    moduleId: module.id,
     selector: 'create-effect',
     templateUrl: 'create-effect.component.html',
     providers: [EffectService],
-    directives: [EffectEditorComponent]
 })
 export class CreateEffectComponent {
     public effect: Effect = new Effect();

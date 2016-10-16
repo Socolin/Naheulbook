@@ -1,4 +1,4 @@
-import {provideRouter, RouterConfig} from '@angular/router';
+import {Routes} from "@angular/router";
 
 import {CreateCharacterComponent, CharacterComponent, CharacterListComponent} from './character';
 import {CreateItemComponent, EditItemComponent, ItemListComponent} from './item';
@@ -8,12 +8,11 @@ import {SkillListComponent} from './skill';
 import {JobListComponent} from './job';
 import {MonsterListComponent} from './monster';
 import {CreateGroupComponent, GroupListComponent, GroupComponent} from './group';
-import {UserProfileComponent} from './user';
-import {LoggedComponent} from './user/logged.component';
+import {UserProfileComponent, LoggedComponent} from './user';
 import {LocationListComponent, EditLocationComponent} from './location';
 import {QuestListComponent, CreateQuestTemplateComponent} from './quest';
 
-export const routes: RouterConfig = [
+export const routes: Routes = [
     {
         path: '',
         component: SkillListComponent
@@ -114,8 +113,4 @@ export const routes: RouterConfig = [
         path: 'create-quest',
         component: CreateQuestTemplateComponent
     }
-];
-
-export const APP_ROUTER_PROVIDERS = [
-    provideRouter(routes)
 ];

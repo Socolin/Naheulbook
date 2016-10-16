@@ -3,16 +3,12 @@ import {NotificationsService} from '../notifications';
 
 import {ItemTemplate, ItemSection, ItemSlot} from "../item";
 import {Effect, EffectService} from "../effect";
-import {ModifiersEditorComponent, StatRequirementsEditorComponent} from "../shared";
-import {Skill, SkillService, SkillModifiersEditorComponent} from "../skill";
-import {ItemElementComponent} from "./item-element.component";
+import {Skill, SkillService} from "../skill";
 import {ItemService} from "./item.service";
 
 @Component({
-    moduleId: module.id,
     selector: 'item-editor',
-    templateUrl: 'item-editor.component.html',
-    directives: [ModifiersEditorComponent, ItemElementComponent, SkillModifiersEditorComponent, StatRequirementsEditorComponent]
+    templateUrl: 'item-editor.component.html'
 })
 export class ItemEditorComponent implements OnInit, OnChanges {
     @Input() item: ItemTemplate;

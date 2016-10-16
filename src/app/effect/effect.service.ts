@@ -4,8 +4,8 @@ import {Observable, ReplaySubject} from 'rxjs/Rx';
 
 import {Effect, EffectCategory} from './effect.model';
 import {JsonService} from '../shared/json-service';
-import {NotificationsService} from '../notifications/notifications.service';
-import {LoginService} from "../user/login.service";
+import {NotificationsService} from '../notifications';
+import {LoginService} from "../user";
 
 @Injectable()
 export class EffectService extends JsonService {
@@ -19,7 +19,7 @@ export class EffectService extends JsonService {
     }
 
     getCategoryList(): Observable<EffectCategory[]> {
-        if (!this.effectCategoryList || this.effectCategoryList.isUnsubscribed) {
+        if (!this.effectCategoryList) {
             this.effectCategoryList = new ReplaySubject<EffectCategory[]>(1);
 
             this._http.get('/api/effect/categoryList')
@@ -37,7 +37,7 @@ export class EffectService extends JsonService {
     }
 
     getEffects(categoryId: number): Observable<Effect[]> {
-        if (!(categoryId in this.effectsByCategory) || this.effectsByCategory[categoryId].isUnsubscribed) {
+        if (!(categoryId in this.effectsByCategory)) {
             this.effectsByCategory[categoryId] = new ReplaySubject<Effect[]>(1);
             this.postJson('/api/effect/list', {
                 categoryId: categoryId

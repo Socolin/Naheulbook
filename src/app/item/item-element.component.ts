@@ -3,12 +3,11 @@ import {Router} from '@angular/router';
 import {ItemTemplate, ItemSection, ItemCategory} from "./item-template.model";
 
 import {OriginService} from "../origin";
-import {JobService} from "../job";
+import {JobService} from "../job/job.service";
 import {Item} from "../character";
 
 
 @Component({
-    moduleId: module.id,
     selector: 'item-element',
     templateUrl: 'item-element.component.html',
     styleUrls: ['item-element.component.css']

@@ -4,7 +4,6 @@ import {Speciality} from './speciality.model';
 
 @Component({
     selector: 'speciality-selector',
-    moduleId: module.id,
     templateUrl: 'speciality-selector.component.html'
 })
 export class SpecialitySelectorComponent {

@@ -1,13 +1,9 @@
-import {Component, EventEmitter, Input, Output, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, Output, OnChanges, OnInit, forwardRef, Inject} from '@angular/core';
 import {Item} from './item.model';
 import {Character} from './character.model';
-import {ValueEditorComponent} from '../shared';
-import {ItemService} from '../item/item.service';
-import {ItemCategory} from '../item/item-template.model';
+import {ItemService, ItemCategory} from '../item';
 
 @Component({
-    moduleId: module.id,
-    directives: [ValueEditorComponent],
     selector: 'item-detail',
     templateUrl: 'item-detail.component.html'
 })
@@ -26,7 +22,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public itemEditDescription: string;
     public editing: boolean;
 
-    constructor(private _itemService: ItemService) {
+    constructor(@Inject(forwardRef(() => ItemService)) private _itemService: ItemService) {
     }
 
     ngOnChanges() {

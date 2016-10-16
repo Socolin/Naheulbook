@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, forwardRef, Inject} from '@angular/core';
 import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
@@ -10,11 +10,11 @@ export class JobService {
     private jobs: ReplaySubject<Job[]>;
 
     constructor(private _http: Http
-        , private _skillService: SkillService) {
+        , @Inject(forwardRef(()  => SkillService)) private _skillService: SkillService) {
     }
 
     getJobList(): Observable<Job[]> {
-        if (!this.jobs || this.jobs.isUnsubscribed) {
+        if (!this.jobs || this.jobs) {
             this.jobs = new ReplaySubject<Job[]>(1);
 
             Observable.forkJoin(

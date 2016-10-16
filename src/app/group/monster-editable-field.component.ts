@@ -1,10 +1,9 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {GroupService} from './group.service';
 import {NotificationsService} from '../notifications';
-import {Monster} from '../monster/monster.model';
+import {Monster} from '../monster';
 
 @Component({
-    moduleId: module.id,
     selector: 'monster-editable-field',
     templateUrl: 'monster-editable-field.component.html'
 })

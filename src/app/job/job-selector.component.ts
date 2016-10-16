@@ -6,7 +6,6 @@ import {Job} from "./job.model";
 import {JobService} from "./job.service";
 
 @Component({
-    moduleId: module.id,
     selector: 'job-selector',
     templateUrl: 'job-selector.component.html'
 })
