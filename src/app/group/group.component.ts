@@ -163,6 +163,7 @@ export class GroupComponent implements OnInit, OnChanges {
     private autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
 
     updateMonsterListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
+        this.newMonster.name = filter;
         if (filter === '') {
             return Observable.from([]);
         }
