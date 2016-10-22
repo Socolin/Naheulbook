@@ -366,6 +366,12 @@ export class Character {
         this.computedData.details.add('Jet de dé initial', this.stats);
         this.computedData.stats['AT'] = 8;
         this.computedData.stats['PRD'] = 10;
+        if (this.job && this.job.baseAT) {
+            this.computedData.stats['AT'] = this.job.baseAT;
+        }
+        if (this.job && this.job.basePRD) {
+            this.computedData.stats['PRD'] = this.job.basePRD;
+        }
         this.computedData.stats['MV'] = 100;
         this.computedData.stats['PR'] = 0;
         this.computedData.stats['PR_MAGIC'] = 0;
@@ -379,7 +385,7 @@ export class Character {
                 this.computedData.details.add('Origine', {MV: this.origin.speedModifier + '%'});
             }
         }
-        this.computedData.details.add('Valeurs initial', {AT: 8, PRD: 10});
+        this.computedData.details.add('Valeurs initial', {AT: this.computedData.stats['AT'], PRD: this.computedData.stats['PRD']});
         this.computedData.stats['EV'] = this.origin.baseEV;
         this.computedData.stats['EA'] = null;
         this.computedData.details.add('Origine', {EV: this.origin.baseEV});
