@@ -1,5 +1,5 @@
 <template [ngIf]="location">
-    <form action="" method="post" class="form-horizontal" role="form">
+    <div action="" method="post" class="form-horizontal" role="form">
 
         <div class="form-group">
             <legend>Editeur de lieu</legend>
@@ -48,7 +48,7 @@
                     </div>
                 </template>
                 <div class="col-xs-12">
-                    <form class="form-inline" role="form">
+                    <div class="form-inline" role="form">
 
                         <div class="form-group">
                             <input type="text" [(ngModel)]="newMap.name" class="form-control" placeholder="Nom">
@@ -59,10 +59,10 @@
                             </label>
                             <button class="btn btn-primary" (click)="addMap()">Ajouter</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
 
-    </form>
+    </div>
 </template>

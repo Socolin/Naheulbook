@@ -1,5 +1,5 @@
 import {NgModule}      from '@angular/core';
-import {SimpleNotificationsComponent} from "./";
+import {SimpleNotificationsComponent, NotificationsService} from "./";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 
@@ -7,6 +7,9 @@ import {FormsModule} from "@angular/forms";
     imports: [
         CommonModule,
         FormsModule,
+    ],
+    providers: [
+        NotificationsService,
     ],
     declarations: [
         SimpleNotificationsComponent,

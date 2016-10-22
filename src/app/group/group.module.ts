@@ -8,6 +8,7 @@ import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import {CharacterModule} from "../character/character.module";
 import {MonsterModule} from "../monster/monster.module";
+import {NotificationsModule} from "../notifications/notifications.module";
 
 @NgModule({
     imports: [
@@ -16,6 +17,7 @@ import {MonsterModule} from "../monster/monster.module";
         SharedModule,
         CharacterModule,
         MonsterModule,
+        NotificationsModule,
     ],
     declarations: [
         CreateItemComponent,

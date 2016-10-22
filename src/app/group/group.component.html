@@ -396,11 +396,12 @@
 
                 </div>
                 <div>
-                    <form class="form-horizontal">
+                    <div class="form-horizontal">
                         <div class="form-group">
                             <label class="col-xs-1 control-label">Nom</label>
                             <div class="col-xs-11">
-                                <autocomplete-input [value]="newMonster.name" (onSelect)="selectMonsterInAutocompleteList($event)"
+                                <autocomplete-input [value]="newMonster.name"
+                                                    (onSelect)="selectMonsterInAutocompleteList($event)"
                                                     [(callback)]="autocompleteMonsterListCallback"></autocomplete-input>
                             </div>
                         </div>
@@ -474,7 +475,7 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="invites">
