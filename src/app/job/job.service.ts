@@ -14,7 +14,7 @@ export class JobService {
     }
 
     getJobList(): Observable<Job[]> {
-        if (!this.jobs || this.jobs) {
+        if (!this.jobs) {
             this.jobs = new ReplaySubject<Job[]>(1);
 
             Observable.forkJoin(
