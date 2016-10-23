@@ -474,6 +474,14 @@ export class GroupComponent implements OnInit, OnChanges {
         this.loadGroup(this.group.id);
     }
 
+    startCombat() {
+        this.changeGroupValue('inCombat', true);
+    }
+
+    endCombat() {
+        this.changeGroupValue('inCombat', false);
+    }
+
     createNpc() {
         this._router.navigate(['/character/create'], {queryParams: {isNpc: true, groupId: this.group.id}});
         return false;
@@ -487,6 +495,9 @@ export class GroupComponent implements OnInit, OnChanges {
                     this.group.data[key] = value;
                 } else if (key === 'mankdebol') {
                     this._notification.info('Mankdebol', this.group.data[key] + ' -> ' + value);
+                    this.group.data[key] = value;
+                } else if (key === 'inCombat') {
+                    this._notification.info('Mod combat: ', this.group.data[key] + ' -> ' + value);
                     this.group.data[key] = value;
                 }
             },
@@ -533,6 +544,7 @@ export class GroupComponent implements OnInit, OnChanges {
                     let char = group.characters[i];
                     toLoad.push(this._characterService.getCharacter(char.id));
                 }
+
                 Observable.forkJoin(toLoad).subscribe((characters: Character[]) => {
                     this.characters = characters;
                     for (let i = 0; i < this.characters.length; i++) {

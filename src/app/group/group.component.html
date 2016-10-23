@@ -1,6 +1,8 @@
 <div class="row" *ngIf="group">
     <div class="col-xs-12">
         <button class="btn btn-default pull-right glyphicon glyphicon-refresh" (click)="refreshData()"></button>
+        <button *ngIf="!group.data.inCombat" class="btn btn-default pull-right btn-success" (click)="startCombat()">Debut combat</button>
+        <button *ngIf="group.data.inCombat" class="btn btn-default pull-right btn-danger" (click)="endCombat()">Fin combat</button>
         <button class="btn btn-default pull-right" (click)="toggleDisplayPanel('critic')"
                 [class.btn-primary]="currentPanel=='critic'">Critique
         </button>
