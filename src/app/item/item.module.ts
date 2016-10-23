@@ -4,6 +4,7 @@ import {CommonModule} from "@angular/common";
 import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import {SkillModule} from "../skill/skill.module";
+import {ItemService} from "./item.service";
 
 @NgModule({
     imports: [
@@ -19,6 +20,9 @@ import {SkillModule} from "../skill/skill.module";
         ItemElementComponent,
         ItemListComponent,
     ],
+    providers: [
+        ItemService,
+    ]
 })
 export class ItemModule {
 }

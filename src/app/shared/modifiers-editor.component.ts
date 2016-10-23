@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, forwardRef, Inject} from '@angular/core';
 
 import {Stat} from "./stat.model";
 import {ItemStatModifier, StatModificationOperand} from "./stat-modifier.model";
@@ -23,7 +23,9 @@ export class ModifiersEditorComponent implements OnInit {
     public origins: Origin[];
     public jobs: Job[];
 
-    constructor(private characterService: CharacterService, private originService: OriginService, private jobService: JobService) {
+    constructor(@Inject(forwardRef(()  => CharacterService)) private characterService: CharacterService
+        , private originService: OriginService
+        , private jobService: JobService) {
         this.modifiers = [];
         this.specialsValue = [
             'AFFECT_ONLY_THROW'

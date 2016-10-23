@@ -3,34 +3,11 @@ import {Router, NavigationStart} from '@angular/router';
 import {NotificationsService} from './notifications';
 
 import {LoginService} from './user';
-import {EffectService} from './effect';
-import {ItemService} from './item';
-import {JobService} from './job/job.service';
-import {OriginService} from './origin';
-import {SkillService} from './skill';
-import {CharacterService} from './character/character.service';
 import {User} from './user';
-import {LocationService} from './location';
-import {MonsterService} from './monster';
-import {QuestService} from './quest';
-import {WebSocketService} from './shared/websocket.service';
 
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
-    providers: [LoginService
-        , NotificationsService
-        , EffectService
-        , ItemService
-        , JobService
-        , OriginService
-        , SkillService
-        , CharacterService
-        , QuestService
-        , LocationService
-        , MonsterService
-        , WebSocketService
-    ],
 })
 export class AppComponent implements OnInit {
     public loggedUser: User;

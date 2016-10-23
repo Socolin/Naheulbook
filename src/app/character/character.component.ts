@@ -232,7 +232,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
                         case "updateEffect":
                             this.onUpdateEffect(res.data);
                             break;
-                        case "updateModifier":
+                        case "updaModifier":
                             this.onUpdateModifier(res.data);
                             break;
                         default:

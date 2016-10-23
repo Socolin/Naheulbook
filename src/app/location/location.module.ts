@@ -5,6 +5,7 @@ import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 
 import {EditLocationComponent, LocationComponent, LocationEditorComponent, LocationListComponent} from "./";
+import {LocationService} from "./location.service";
 
 @NgModule({
     imports: [
@@ -18,6 +19,9 @@ import {EditLocationComponent, LocationComponent, LocationEditorComponent, Locat
         LocationEditorComponent,
         LocationListComponent,
     ],
+    providers: [
+        LocationService,
+    ]
 })
 export class LocationModule {
 }
