@@ -138,10 +138,15 @@ export class GroupComponent implements OnInit, OnChanges {
                 this.newMonster = new Monster();
                 this.group.monsters.push(monster);
                 this.updateOrder();
-            },
-            err => {
-                console.log(err.stack);
-                this._notification.error("Erreur", "Erreur");
+            }
+        );
+    }
+
+    addMonsterNew() {
+        this._groupService.createMonster(this.group.id, this.newMonster).subscribe(
+            monster => {
+                this.group.monsters.push(new Monster(monster));
+                this.updateOrder();
             }
         );
     }

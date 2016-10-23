@@ -12,6 +12,15 @@ class MonsterData {
     note: string;
     color: string;
     number: number;
+
+
+    constructor(monsterData?: MonsterData) {
+        if (monsterData) {
+            for (let key in monsterData) {
+                this[key] = monsterData[key];
+            }
+        }
+    }
 }
 
 export class Monster {
@@ -23,6 +32,21 @@ export class Monster {
         id: number;
         isMonster: boolean;
     };
+
+    constructor(monster?: Monster) {
+        if (monster) {
+            this.id = monster.id;
+            this.name = monster.name;
+            this.data = new MonsterData(monster.data);
+            this.dead = monster.dead;
+            if (monster.target) {
+                this.target = {
+                    id: monster.target.id,
+                    isMonster: monster.target.isMonster
+                };
+            }
+        }
+    }
 }
 
 export interface MonsterTemplateData {
