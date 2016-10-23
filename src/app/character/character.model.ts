@@ -22,11 +22,23 @@ export interface CharacterResume {
     level: number;
 }
 
+export class CharacterEffect {
+    id: number;
+    effect: Effect;
+    active: boolean;
+    reusable: boolean;
+    currentCombatCount: number;
+}
+
 export class CharacterModifier {
     name: string;
     values: StatModifier[] = [];
     permanent: boolean;
     duration: string;
+    active: boolean;
+    combatCount: number;
+    currentCombatCount: number;
+    reusable: boolean;
     id: number;
 }
 
@@ -173,6 +185,10 @@ class CharacterComputedData {
         this.topLevelContainers = [];
         this.containers = [];
         this.skills = [];
+        this.nonReusableEffects = [];
+        this.reusableEffects = [];
+        this.nonReusableModifiers = [];
+        this.reusableModifiers = [];
     }
 
     stats: {[statName: string]: number} = {};
@@ -187,7 +203,13 @@ class CharacterComputedData {
     itemSlots = [];
     topLevelContainers = [];
 
+    nonReusableEffects: CharacterEffect[] = [];
+    reusableEffects: CharacterEffect[] = [];
+    nonReusableModifiers: CharacterModifier[] = [];
+    reusableModifiers: CharacterModifier[] = [];
+
     countExceptionalStats: number = 0;
+    countActiveEffect: number = 0;
 }
 
 export class Character {
@@ -206,7 +228,7 @@ export class Character {
     fatePoint: number;
     items: Item[];
     skills: Skill[];
-    effects: Effect[];
+    effects: CharacterEffect[];
     stats: {[statName: string]: number};
     modifiers: CharacterModifier[];
     specialities: Speciality[];
@@ -362,6 +384,7 @@ export class Character {
     }
 
     private updateStats() {
+        this.computedData.countActiveEffect = 0;
         this.computedData.stats = JSON.parse(JSON.stringify(this.stats));
         this.computedData.details.add('Jet de dé initial', this.stats);
         this.computedData.stats['AT'] = 8;
@@ -431,6 +454,21 @@ export class Character {
 
         for (let i = 0; i < this.modifiers.length; i++) {
             let modifier = this.modifiers[i];
+            if (modifier.reusable) {
+                this.computedData.reusableModifiers.push(modifier);
+            }
+            else {
+                if (modifier.active) {
+                    this.computedData.nonReusableModifiers.push(modifier);
+                }
+            }
+
+            if (!modifier.active) {
+                continue;
+            }
+            if (!modifier.permanent) {
+                this.computedData.countActiveEffect++
+            }
             let detailData = {};
             for (let j = 0; j < modifier.values.length; j++) {
                 let value = modifier.values[j];
@@ -603,7 +641,18 @@ export class Character {
         }
 
         for (let i = 0; i < this.effects.length; i++) {
-            let effect = this.effects[i];
+            let characterEffect = this.effects[i];
+            let effect = characterEffect.effect;
+            if (characterEffect.reusable) {
+                this.computedData.reusableEffects.push(characterEffect);
+            }
+            else {
+                this.computedData.nonReusableEffects.push(characterEffect);
+            }
+            if (!characterEffect.active) {
+                continue;
+            }
+            this.computedData.countActiveEffect++;
             let detailData = {};
             for (let j = 0; j < effect.modifiers.length; j++) {
                 let modifier = effect.modifiers[j];

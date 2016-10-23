@@ -34,7 +34,7 @@
 		<li role="presentation">
 			<a href="#tab-effects_{{character.id}}" aria-controls="tab-effects" role="tab" data-toggle="tab">
 				Effets
-				<span class="badge">{{character.effects.length}}</span>
+				<span class="badge">{{character.computedData.countActiveEffect}}</span>
 			</a>
 		</li>
 		<li role="presentation">
@@ -591,31 +591,52 @@
 			<!-- Start of effects tab -->
 			<div class="row">
 				<div class="col-sm-6">
+                    <h4>Effets activable</h4>
+                    <div class="list-group">
+                        <template ngFor let-characterEffect [ngForOf]="character.computedData.reusableEffects" let-i="index" let-last="last">
+                            <a href="#" class="list-group-item" (click)="selectEffect(characterEffect)" [class.active]="selectedEffect == characterEffect">
+                                <button [class.btn-danger]="!characterEffect.active" [class.btn-success]="characterEffect.active" (click)="toggleReusableEffect(characterEffect)" class="btn btn-danger glyphicon glyphicon-off"></button>
+                                {{characterEffect.effect.name}}
+                                <span *ngIf="characterEffect.effect.combatCount" class="badge" style="font-size: 24px"><span class="ra ra-sword"></span>{{characterEffect.currentCombatCount}}</span>
+                            </a>
+                        </template>
+                        <template ngFor let-modifier [ngForOf]="character.computedData.reusableModifiers" let-i="index" let-last="last">
+                            <a href="#" *ngIf="!modifier.permanent" (click)="selectModifier(modifier)" type="button" class="list-group-item" [class.active]="selectedModifier == modifier">
+                                <button [class.btn-danger]="!modifier.active" [class.btn-success]="modifier.active" (click)="toggleReusableModifier(modifier)" class="btn btn-danger glyphicon glyphicon-off"></button>
+                                {{modifier.name}}
+                                <span *ngIf="modifier.combatCount" class="badge" style="font-size: 24px"><span class="ra ra-sword"></span>{{modifier.currentCombatCount}}</span>
+                            </a>
+                        </template>
+                        <button (click)="selectEffect(effect)" type="button" class="list-group-item" data-toggle="modal" data-target="#modalAddEffect">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </div>
+                    <h4>Effets</h4>
 					<div class="list-group">
-						<template ngFor let-effect [ngForOf]="character.effects" let-i="index" let-last="last">
-							<button (click)="selectEffect(effect)" type="button" class="list-group-item">
-								{{effect.name}}
-							</button>
-						</template>
-						<template ngFor let-modifier [ngForOf]="character.modifiers" let-i="index" let-last="last">
-							<button *ngIf="!modifier.permanent" (click)="selectModifier(modifier)" type="button" class="list-group-item">
-								{{modifier.name}}
-							</button>
-						</template>
-						<button (click)="selectEffect(effect)" type="button" class="list-group-item" data-toggle="modal" data-target="#modalAddEffect">
-							<span class="glyphicon glyphicon-plus"></span>
-						</button>
+                        <template ngFor let-characterEffect [ngForOf]="character.computedData.nonReusableEffects" let-i="index" let-last="last">
+                            <button (click)="selectEffect(characterEffect)" type="button" class="list-group-item" [class.active]="selectedEffect == characterEffect">
+                                {{characterEffect.effect.name}}
+                            </button>
+                        </template>
+                        <template ngFor let-modifier [ngForOf]="character.computedData.nonReusableModifiers" let-i="index" let-last="last">
+                            <button *ngIf="!modifier.permanent" (click)="selectModifier(modifier)" type="button" class="list-group-item" [class.active]="selectedModifier == modifier">
+                                {{modifier.name}}
+                            </button>
+                        </template>
+                        <button (click)="selectEffect(effect)" type="button" class="list-group-item" data-toggle="modal" data-target="#modalAddEffect">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
 					</div>
 				</div>
 				<div class="col-sm-6 bg-info">
 					<div *ngIf="selectedEffect">
 						<button type="button" class="glyphicon glyphicon-trash btn btn-danger pull-right" (click)="removeEffect(selectedEffect)"></button>
-						<h4>{{selectedEffect.name}}
-							<span class="label label-default">{{selectedEffect.category.name}}</span>
+						<h4>{{selectedEffect.effect.name}}
+							<span class="label label-default">{{selectedEffect.effect.category.name}}</span>
 						</h4>
-						<p>{{selectedEffect.description}}</p>
-						<p *ngIf="selectedEffect.duration">Durée: {{selectedEffect.duration}}</p>
-						<div *ngFor="let modifier of selectedEffect.modifiers">
+                        <p>{{selectedEffect.effect.description}}</p>
+						<p *ngIf="selectedEffect.effect.duration">Durée: {{selectedEffect.effect.duration}}</p>
+						<div *ngFor="let modifier of selectedEffect.effect.modifiers">
 							{{modifier | modifier}}
 						</div>
 					</div>
@@ -681,6 +702,12 @@
 						<template [ngSwitchCase]="'DEBILIBEUK'">
 							Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
 						</template>
+						<template [ngSwitchCase]="'END_COMBAT'">
+							Fin de combat
+						</template>
+						<template [ngSwitchCase]="'START_COMBAT'">
+							Debut d'un combat
+						</template>
 						<template ngSwitchDefault>{{log.action}}: {{log.info}}</template>
 					</span>
 					</template>
@@ -703,6 +730,18 @@
 						</template>
 						<template [ngSwitchCase]="'APPLY_EFFECT'">
 							Ajout de l'effet: {{log.effect.name}}
+						</template>
+						<template [ngSwitchCase]="'ACTIVE_EFFECT'">
+							Activation de l'effet: {{log.effect.name}}
+						</template>
+						<template [ngSwitchCase]="'DISABLE_EFFECT'">
+							Desactivation de l'effet: {{log.effect.name}}
+						</template>
+						<template [ngSwitchCase]="'ACTIVE_MODIFIER'">
+							Activation du modificateur: {{log.modifier.name}}
+						</template>
+						<template [ngSwitchCase]="'DISABLE_MODIFIER'">
+							Desactivation du modificateur: {{log.modifier.name}}
 						</template>
 						<template [ngSwitchCase]="'APPLY_MODIFIER'">
 							Ajout du modificateur: {{log.modifier.name}}
@@ -770,16 +809,23 @@
 							<li role="presentation"><a href="#tab-addeffect-custom" aria-controls="tab-addeffect-custom" role="tab" data-toggle="tab">Custom</a></li>
 						</ul>
 						<div class="tab-content">
-							<div role="tabpanel" class="tab-pane active" id="tab-addeffect-predefined">
-								<div class="row">
+                            <div role="tabpanel" class="tab-pane active" id="tab-addeffect-predefined">
+								<div class="form-group row">
 									<label class="col-sm-2 control-label">Effet</label>
 									<div class="col-sm-10">
-										<input class="form-control" type="text" [(ngModel)]="effectFilterName" (ngModelChange)="updateFilterEffect()" />
+                                        <autocomplete-input [value]="effectFilterName" (onSelect)="selectEffectInAutocompleteList($event)"
+                                                            [(callback)]="autocompleteEffectListCallback"></autocomplete-input>
 									</div>
 								</div>
-								<div *ngIf="filteredEffects" class="list-group">
-									<button *ngFor="let effect of filteredEffects" type="button" class="list-group-item" (click)="addEffect(effect)" data-dismiss="modal">{{effectCategoriesById[effect.category].name}}: {{effect.name}}</button>
-								</div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label">Ré-utilisable</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="checkbox" [(ngModel)]="newEffectReusable" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <button type="button" class="btn btn-primary" (click)="addEffect(preSelectedEffect, newEffectReusable)" data-dismiss="modal">Ajouter</button>
+                                </div>
 							</div>
 							<div role="tabpanel" class="tab-pane" id="tab-addeffect-custom">
 								<div class="form-group row">
@@ -790,10 +836,26 @@
 								</div>
 								<div class="form-group row">
 									<label class="col-sm-2 control-label">Durée</label>
-									<div class="col-sm-10">
-										<input class="form-control" type="text" [(ngModel)]="customAddModifier.duration" />
-									</div>
+									<div class="col-sm-2">
+                                        <input class="form-control" type="checkbox" [(ngModel)]="newModifierCombatCount">
+                                    </div>
+                                    <div *ngIf="!newModifierCombatCount" class="col-sm-8">
+                                        <input class="form-control" type="text" [(ngModel)]="customAddModifier.duration" />
+                                    </div>
+                                    <div *ngIf="newModifierCombatCount" class="col-sm-8">
+                                        <div class="input-group input-group-lg">
+                                            <input class="form-control" type="number" [(ngModel)]="customAddModifier.combatCount" />
+                                            <span class="input-group-addon" id="sizing-addon1">combat(s)</span>
+                                        </div>
+                                    </div>
 								</div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label">Ré-utilisable</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="checkbox" [(ngModel)]="customAddModifier.reusable" />
+                                    </div>
+                                </div>
 								<div class="form-group row">
 									<label class="col-sm-2 control-label">Modificateur</label>
 									<div class="col-sm-10">

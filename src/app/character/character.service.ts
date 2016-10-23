@@ -3,7 +3,7 @@ import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
 import {Stat} from "../shared";
-import {Character, CharacterResume, CharacterModifier} from "./character.model";
+import {Character, CharacterResume, CharacterModifier, CharacterEffect} from "./character.model";
 import {Effect} from "../effect";
 import {IMetadata, HistoryEntry} from "../shared";
 import {CharacterInviteInfo, Group} from "../group";
@@ -217,17 +217,26 @@ export class CharacterService extends JsonService {
         }).map(res => res.json());
     }
 
-    addEffect(characterId: number, effectId: number): Observable<Effect> {
+    addEffect(characterId: number, effectId: number, reusable: boolean): Observable<CharacterEffect> {
         return this.postJson('/api/character/addEffect', {
             characterId: characterId,
             effectId: effectId,
+            reusable: reusable,
+            active: true,
         }).map(res => res.json());
     }
 
-    removeEffect(characterId: number, effectId: number): Observable<Effect> {
+    removeEffect(characterId: number, charEffect: CharacterEffect): Observable<Effect> {
         return this.postJson('/api/character/removeEffect', {
             characterId: characterId,
-            effectId: effectId,
+            charEffectId: charEffect.id,
+        }).map(res => res.json());
+    }
+
+    toggleEffect(characterId: number, charEffect: CharacterEffect): Observable<Effect> {
+        return this.postJson('/api/character/toggleEffect', {
+            characterId: characterId,
+            charEffectId: charEffect.id,
         }).map(res => res.json());
     }
 
@@ -240,6 +249,13 @@ export class CharacterService extends JsonService {
 
     removeModifier(characterId: number, modifierId: number): Observable<CharacterModifier> {
         return this.postJson('/api/character/removeModifier', {
+            characterId: characterId,
+            modifierId: modifierId,
+        }).map(res => res.json());
+    }
+
+    toggleModifier(characterId: number, modifierId: number): Observable<CharacterModifier> {
+        return this.postJson('/api/character/toggleModifier', {
             characterId: characterId,
             modifierId: modifierId,
         }).map(res => res.json());

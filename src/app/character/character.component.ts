@@ -11,10 +11,12 @@ import {
 
 import {Item, ItemData, PartialItem} from "./item.model";
 import {CharacterService} from "./character.service";
-import {Character, CharacterModifier} from "./character.model";
+import {Character, CharacterModifier, CharacterEffect} from "./character.model";
 import {IMetadata} from '../shared';
 import {EffectCategory} from '../effect';
 import {WebSocketService} from '../shared/websocket.service';
+import {Observable} from "rxjs";
+import {AutocompleteValue} from "../shared/autocomplete-input.component";
 
 @Component({
     selector: 'bag-item-view',
@@ -227,6 +229,14 @@ export class CharacterComponent implements OnInit, OnDestroy {
                         case "changeQuantity":
                             this.onUpdateQuantity(res.data);
                             break;
+                        case "updateEffect":
+                            this.onUpdateEffect(res.data);
+                            break;
+                        case "updateModifier":
+                            this.onUpdateModifier(res.data);
+                            break;
+                        default:
+                            console.log("Unhandled websocket opcode: " + res.opcode);
                     }
                 }
                 catch (err) {
@@ -412,57 +422,62 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     // Effect
-    private selectedEffect: Effect;
-    private filteredEffects: Effect[];
-    private effectCategories: EffectCategory[];
-    private effectCategoriesById: {[categoryId: number]: EffectCategory};
-    private effectFilterName: string;
+    private selectedEffect: CharacterEffect;
     private selectedModifier: CharacterModifier;
 
-    updateFilterEffect() {
-        if (this.effectFilterName) {
-            this._effectService.searchEffect(this.effectFilterName).subscribe(
-                effects => {
-                    this.filteredEffects = effects;
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
-                }
-            );
+    private preSelectedEffect: Effect;
+    private newEffectReusable: boolean;
+
+    private effectFilterName: string;
+    private effectCategories: EffectCategory[];
+    private effectCategoriesById: {[categoryId: number]: EffectCategory};
+    private autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
+
+    updateEffectListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
+        this.effectFilterName = filter;
+        if (filter === '') {
+            return Observable.from([]);
         }
+        return this._effectService.searchEffect(filter).map(
+            list => list.map(e => new AutocompleteValue(e, this.effectCategoriesById[e.category].name + ': ' + e.name))
+        );
     }
 
-    addEffect(effect) {
-        this._characterService.addEffect(this.character.id, effect.id).subscribe(
+    selectEffectInAutocompleteList(effect: Effect) {
+        this.preSelectedEffect = effect;
+    }
+
+
+    addEffect(effect: Effect, reusable: boolean) {
+        this._characterService.addEffect(this.character.id, effect.id, reusable).subscribe(
             this.onAddEffect.bind(this)
         );
     }
 
-    onAddEffect(effect: Effect) {
+    onAddEffect(charEffect: CharacterEffect) {
         for (let i = 0; i < this.character.effects.length; i++) {
-            if (this.character.effects[i].id === effect.id) {
+            if (this.character.effects[i].id === charEffect.id) {
                 return;
             }
         }
 
-        this.notifyChange('Ajout de l\'effet: ' + effect.name);
-        this.character.effects.push(effect);
+        this.notifyChange('Ajout de l\'effet: ' + charEffect.effect.name);
+        this.character.effects.push(charEffect);
         this.character.update();
     }
 
-    removeEffect(effect) {
+    removeEffect(charEffect: CharacterEffect) {
         this.selectedEffect = null;
-        this._characterService.removeEffect(this.character.id, effect.id).subscribe(
+        this._characterService.removeEffect(this.character.id, charEffect).subscribe(
             this.onRemoveEffect.bind(this)
         );
     }
 
-    onRemoveEffect(effect: Effect) {
+    onRemoveEffect(charEffect: CharacterEffect) {
         for (let i = 0; i < this.character.effects.length; i++) {
             let e = this.character.effects[i];
-            if (e.id === effect.id) {
-                this.notifyChange('Suppression de l\'effetde: ' + effect.name);
+            if (e.id === charEffect.id) {
+                this.notifyChange('Suppression de l\'effetde: ' + charEffect.effect.name);
                 this.character.effects.splice(i, 1);
                 this.character.update();
                 return;
@@ -470,17 +485,54 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
-    selectEffect(effect) {
+    selectEffect(charEffect: CharacterEffect) {
         this.selectedModifier = null;
-        this.selectedEffect = effect;
+        this.selectedEffect = charEffect;
+        return false;
     }
+
+    toggleReusableEffect(charEffect: CharacterEffect) {
+        this._characterService.toggleEffect(this.character.id, charEffect).subscribe(
+            this.onUpdateEffect.bind(this)
+        );
+    }
+
+    onUpdateEffect(charEffect: CharacterEffect) {
+        for (let i = 0; i < this.character.effects.length; i++) {
+            if (this.character.effects[i].id === charEffect.id) {
+                if (this.character.effects[i].active === charEffect.active
+                    && this.character.effects[i].currentCombatCount === charEffect.currentCombatCount) {
+                    return;
+                }
+                if (!this.character.effects[i].active && charEffect.active) {
+                    this.notifyChange('Activation de l\'effet: ' + charEffect.effect.name);
+                } else if (this.character.effects[i].active && !charEffect.active){
+                    this.notifyChange('Désactivation de l\'effet: ' + charEffect.effect.name);
+                } else {
+                    this.notifyChange('Mis à jour de l\'effet: ' + charEffect.effect.name);
+                }
+
+                this.character.effects[i].active = charEffect.active;
+                this.character.effects[i].currentCombatCount = charEffect.currentCombatCount ;
+                break;
+            }
+        }
+        this.character.update();
+    }
+
 
     // Custom modifier
 
+    private newModifierCombatCount: boolean;
     public customAddModifier: CharacterModifier = new CharacterModifier();
 
     addCustomModifier() {
         if (this.customAddModifier.name) {
+            if (!this.newModifierCombatCount) {
+                this.customAddModifier.combatCount = null;
+            } else {
+                this.customAddModifier.duration = null;
+            }
             this._characterService.addModifier(this.character.id, this.customAddModifier).subscribe(
                 this.onAddModifier.bind(this)
             );
@@ -521,7 +573,37 @@ export class CharacterComponent implements OnInit, OnDestroy {
     selectModifier(modifier: CharacterModifier) {
         this.selectedEffect = null;
         this.selectedModifier = modifier;
+        return false;
     }
+
+    toggleReusableModifier(modifier: CharacterModifier) {
+        this._characterService.toggleModifier(this.character.id, modifier.id).subscribe(
+            this.onUpdateModifier.bind(this)
+        );
+    }
+
+    onUpdateModifier(modifier: CharacterModifier) {
+        for (let i = 0; i < this.character.modifiers.length; i++) {
+            if (this.character.modifiers[i].id === modifier.id) {
+                if (this.character.modifiers[i].active === modifier.active
+                    && this.character.modifiers[i].currentCombatCount === modifier.currentCombatCount) {
+                    return;
+                }
+                if (!this.character.modifiers[i].active && modifier.active) {
+                    this.notifyChange('Activation de l\'effet: ' + modifier.name);
+                } else if (this.character.modifiers[i].active && !modifier.active) {
+                    this.notifyChange('Désactivation de l\'effet: ' + modifier.name);
+                } else {
+                    this.notifyChange('Mis à jour de l\'effet: ' + modifier.name);
+                }
+                this.character.modifiers[i].active = modifier.active;
+                this.character.modifiers[i].currentCombatCount = modifier.currentCombatCount;
+                break;
+            }
+        }
+        this.character.update();
+    }
+
 
     // Inventory
 

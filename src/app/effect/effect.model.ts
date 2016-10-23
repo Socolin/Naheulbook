@@ -13,6 +13,7 @@ export class Effect {
     name: string;
     description: string;
     dice: number;
+    combatCount: number;
     modifiers: StatModifier[] = [];
     duration: string;
     category: number;
