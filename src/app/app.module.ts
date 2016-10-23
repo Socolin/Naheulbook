@@ -1,4 +1,4 @@
-import {NgModule}      from '@angular/core';
+import {NgModule, ErrorHandler}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule}  from '@angular/router';
 
@@ -19,6 +19,8 @@ import {SharedModule} from "./shared/shared.module";
 import {SkillModule} from "./skill/skill.module";
 import {UserModule} from "./user/user.module";
 
+import {WebSocketService} from './shared/websocket.service';
+import NhbkErrorHandler from "./nhbk-error-handler";
 
 @NgModule({
     imports: [
@@ -44,6 +46,13 @@ import {UserModule} from "./user/user.module";
     ],
     bootstrap: [
         AppComponent
+    ],
+    providers: [
+        WebSocketService
+        , {
+            provide: ErrorHandler,
+            useClass: NhbkErrorHandler
+        }
     ]
 })
 export class AppModule {
