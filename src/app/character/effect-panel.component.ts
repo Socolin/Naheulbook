@@ -48,12 +48,12 @@ export class ModifierDetailComponent {
             width: 20vw;
             overflow: hidden;
             touch-action: none;
-            -webkit-transition: width 1s; /* Safari */
+            -webkit-transition: width 0.5s; /* Safari */
             transition: width 1s;
         }
         .effect-detail-swipe {
             width: 90vw;
-            -webkit-transition: width 1s; /* Safari */
+            -webkit-transition: width 0.5s; /* Safari */
             transition: width 1s;
         }
         `
