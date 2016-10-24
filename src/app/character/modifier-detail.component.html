@@ -1,0 +1,12 @@
+<div>
+    <h4>
+        <button type="button" class="glyphicon glyphicon-trash btn btn-danger pull-right" (click)="onRemove.emit(characterModifier)"></button>
+        {{characterModifier.name}}
+    </h4>
+    <p *ngIf="characterModifier.duration">Durée: {{characterModifier.duration}}</p>
+    <p *ngIf="characterModifier.combatCount">Durée: {{characterModifier.combatCount}} combat</p>
+    <p *ngIf="characterModifier.currentCombatCount">Actif encore {{characterModifier.currentCombatCount}} combat</p>
+    <div *ngFor="let modifier of characterModifier.values">
+        {{modifier | modifier}}
+    </div>
+</div>

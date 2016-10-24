@@ -17,6 +17,7 @@ import {EffectCategory} from '../effect';
 import {WebSocketService} from '../shared/websocket.service';
 import {Observable} from "rxjs";
 import {AutocompleteValue} from "../shared/autocomplete-input.component";
+import {CharacterWebsocketService} from "./character-websocket.service";
 
 @Component({
     selector: 'bag-item-view',
@@ -94,6 +95,7 @@ class LevelUpInfo {
 @Component({
     selector: 'character',
     templateUrl: 'character.component.html',
+    providers: [CharacterWebsocketService],
     styles: [`
         .canceled {
             text-decoration: line-through;
@@ -123,7 +125,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         , @Inject(forwardRef(()  => ItemService)) private _itemService: ItemService
         , private _effectService: EffectService
         , private _notification: NotificationsService
-        , private _webSocketService: WebSocketService
+        , private _characterWebsocketService: CharacterWebsocketService
         , private _characterService: CharacterService) {
     }
 
@@ -180,73 +182,21 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     registerWS() {
-        this._webSocketService.register('character', this.character).subscribe(
-            res => {
-                try {
-                    switch (res.opcode) {
-                        case "update":
-                            this.onChangeCharacterStat(res.data);
-                            break;
-                        case "statBonusAd":
-                            this.onSetStatBonusAD(res.data);
-                            break;
-                        case "levelUp":
-                            this.onLevelUp(res.data);
-                            break;
-                        case "addEffect":
-                            this.onAddEffect(res.data);
-                            break;
-                        case "removeEffect":
-                            this.onRemoveEffect(res.data);
-                            break;
-                        case "addModifier":
-                            this.onAddModifier(res.data);
-                            break;
-                        case "removeModifier":
-                            this.onRemoveModifier(res.data);
-                            break;
-                        case "equipItem":
-                            this.onEquipItem(res.data);
-                            break;
-                        case "addItem":
-                            this.onAddItem(res.data);
-                            break;
-                        case "deleteItem":
-                            this.onDeleteItem(res.data);
-                            break;
-                        case "identifyItem":
-                            this.onIdentifyItem(res.data);
-                            break;
-                        case "useCharge":
-                            this.onUseItemCharge(res.data);
-                            break;
-                        case "changeContainer":
-                            this.onChangeContainer(res.data);
-                            break;
-                        case "updateItemName":
-                            this.onUpdateItemName(res.data);
-                            break;
-                        case "changeQuantity":
-                            this.onUpdateQuantity(res.data);
-                            break;
-                        case "updateEffect":
-                            this.onUpdateEffect(res.data);
-                            break;
-                        case "updaModifier":
-                            this.onUpdateModifier(res.data);
-                            break;
-                        default:
-                            console.log("Unhandled websocket opcode: " + res.opcode);
-                    }
-                }
-                catch (err) {
-                    this._notification.error("Erreur", "Erreur WS");
-                    this._characterService.postJson('/api/debug/report', err).subscribe();
-                    console.log(err);
-                }
-            }
-        );
-    }
+        this._characterWebsocketService.register(this.character);
+        this._characterWebsocketService.registerNotifyFunction(this.notifyChange.bind(this));
+
+        this._characterWebsocketService.registerPacket("update").subscribe(this.onChangeCharacterStat.bind(this));
+        this._characterWebsocketService.registerPacket("statBonusAd").subscribe(this.onSetStatBonusAD.bind(this));
+        this._characterWebsocketService.registerPacket("levelUp").subscribe(this.onLevelUp.bind(this));
+        this._characterWebsocketService.registerPacket("equipItem").subscribe(this.onEquipItem.bind(this));
+        this._characterWebsocketService.registerPacket("addItem").subscribe(this.onAddItem.bind(this));
+        this._characterWebsocketService.registerPacket("deleteItem").subscribe(this.onDeleteItem.bind(this));
+        this._characterWebsocketService.registerPacket("identifyItem").subscribe(this.onIdentifyItem.bind(this));
+        this._characterWebsocketService.registerPacket("useCharge").subscribe(this.onUseItemCharge.bind(this));
+        this._characterWebsocketService.registerPacket("changeContainer").subscribe(this.onChangeContainer.bind(this));
+        this._characterWebsocketService.registerPacket("updateItemName").subscribe(this.onUpdateItemName.bind(this));
+        this._characterWebsocketService.registerPacket("changeQuantity").subscribe(this.onUpdateQuantity.bind(this));
+       }
 
     changeCharacterStat(stat: string, value: any) {
         this._characterService.changeCharacterStat(this.character.id, stat, value).subscribe(
@@ -420,190 +370,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
         return true;
     }
-
-    // Effect
-    private selectedEffect: CharacterEffect;
-    private selectedModifier: CharacterModifier;
-
-    private preSelectedEffect: Effect;
-    private newEffectReusable: boolean;
-
-    private effectFilterName: string;
-    private effectCategories: EffectCategory[];
-    private effectCategoriesById: {[categoryId: number]: EffectCategory};
-    private autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
-
-    updateEffectListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
-        this.effectFilterName = filter;
-        if (filter === '') {
-            return Observable.from([]);
-        }
-        return this._effectService.searchEffect(filter).map(
-            list => list.map(e => new AutocompleteValue(e, this.effectCategoriesById[e.category].name + ': ' + e.name))
-        );
-    }
-
-    selectEffectInAutocompleteList(effect: Effect) {
-        this.preSelectedEffect = effect;
-    }
-
-
-    addEffect(effect: Effect, reusable: boolean) {
-        this._characterService.addEffect(this.character.id, effect.id, reusable).subscribe(
-            this.onAddEffect.bind(this)
-        );
-    }
-
-    onAddEffect(charEffect: CharacterEffect) {
-        for (let i = 0; i < this.character.effects.length; i++) {
-            if (this.character.effects[i].id === charEffect.id) {
-                return;
-            }
-        }
-
-        this.notifyChange('Ajout de l\'effet: ' + charEffect.effect.name);
-        this.character.effects.push(charEffect);
-        this.character.update();
-    }
-
-    removeEffect(charEffect: CharacterEffect) {
-        this.selectedEffect = null;
-        this._characterService.removeEffect(this.character.id, charEffect).subscribe(
-            this.onRemoveEffect.bind(this)
-        );
-    }
-
-    onRemoveEffect(charEffect: CharacterEffect) {
-        for (let i = 0; i < this.character.effects.length; i++) {
-            let e = this.character.effects[i];
-            if (e.id === charEffect.id) {
-                this.notifyChange('Suppression de l\'effetde: ' + charEffect.effect.name);
-                this.character.effects.splice(i, 1);
-                this.character.update();
-                return;
-            }
-        }
-    }
-
-    selectEffect(charEffect: CharacterEffect) {
-        this.selectedModifier = null;
-        this.selectedEffect = charEffect;
-        return false;
-    }
-
-    toggleReusableEffect(charEffect: CharacterEffect) {
-        this._characterService.toggleEffect(this.character.id, charEffect).subscribe(
-            this.onUpdateEffect.bind(this)
-        );
-    }
-
-    onUpdateEffect(charEffect: CharacterEffect) {
-        for (let i = 0; i < this.character.effects.length; i++) {
-            if (this.character.effects[i].id === charEffect.id) {
-                if (this.character.effects[i].active === charEffect.active
-                    && this.character.effects[i].currentCombatCount === charEffect.currentCombatCount) {
-                    return;
-                }
-                if (!this.character.effects[i].active && charEffect.active) {
-                    this.notifyChange('Activation de l\'effet: ' + charEffect.effect.name);
-                } else if (this.character.effects[i].active && !charEffect.active){
-                    this.notifyChange('Désactivation de l\'effet: ' + charEffect.effect.name);
-                } else {
-                    this.notifyChange('Mis à jour de l\'effet: ' + charEffect.effect.name);
-                }
-
-                this.character.effects[i].active = charEffect.active;
-                this.character.effects[i].currentCombatCount = charEffect.currentCombatCount ;
-                break;
-            }
-        }
-        this.character.update();
-    }
-
-
-    // Custom modifier
-
-    private newModifierCombatCount: boolean;
-    public customAddModifier: CharacterModifier = new CharacterModifier();
-
-    addCustomModifier() {
-        if (this.customAddModifier.name) {
-            if (!this.newModifierCombatCount) {
-                this.customAddModifier.combatCount = null;
-            } else {
-                this.customAddModifier.duration = null;
-            }
-            this._characterService.addModifier(this.character.id, this.customAddModifier).subscribe(
-                this.onAddModifier.bind(this)
-            );
-        }
-    }
-
-    onAddModifier(modifier: CharacterModifier) {
-        for (let i = 0; i < this.character.modifiers.length; i++) {
-            if (this.character.modifiers[i].id === modifier.id) {
-                return;
-            }
-        }
-        this.character.modifiers.push(modifier);
-        this.character.update();
-        this.customAddModifier = new CharacterModifier();
-        this.notifyChange('Ajout du modificateur: ' + modifier.name);
-    }
-
-    removeModifier(modifier: CharacterModifier) {
-        this.selectedModifier = null;
-        this._characterService.removeModifier(this.character.id, modifier.id).subscribe(
-            this.onRemoveModifier.bind(this)
-        );
-    }
-
-    onRemoveModifier(modifier: CharacterModifier) {
-        for (let i = 0; i < this.character.modifiers.length; i++) {
-            let e = this.character.modifiers[i];
-            if (e.id === modifier.id) {
-                this.character.modifiers.splice(i, 1);
-                this.character.update();
-                this.notifyChange('Suppression du modificateur: ' + modifier.name);
-                return;
-            }
-        }
-    }
-
-    selectModifier(modifier: CharacterModifier) {
-        this.selectedEffect = null;
-        this.selectedModifier = modifier;
-        return false;
-    }
-
-    toggleReusableModifier(modifier: CharacterModifier) {
-        this._characterService.toggleModifier(this.character.id, modifier.id).subscribe(
-            this.onUpdateModifier.bind(this)
-        );
-    }
-
-    onUpdateModifier(modifier: CharacterModifier) {
-        for (let i = 0; i < this.character.modifiers.length; i++) {
-            if (this.character.modifiers[i].id === modifier.id) {
-                if (this.character.modifiers[i].active === modifier.active
-                    && this.character.modifiers[i].currentCombatCount === modifier.currentCombatCount) {
-                    return;
-                }
-                if (!this.character.modifiers[i].active && modifier.active) {
-                    this.notifyChange('Activation de l\'effet: ' + modifier.name);
-                } else if (this.character.modifiers[i].active && !modifier.active) {
-                    this.notifyChange('Désactivation de l\'effet: ' + modifier.name);
-                } else {
-                    this.notifyChange('Mis à jour de l\'effet: ' + modifier.name);
-                }
-                this.character.modifiers[i].active = modifier.active;
-                this.character.modifiers[i].currentCombatCount = modifier.currentCombatCount;
-                break;
-            }
-        }
-        this.character.update();
-    }
-
 
     // Inventory
 
@@ -950,18 +716,11 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         if (this.character) {
-            this._webSocketService.unregister('character', this.character.id);
+            this._characterWebsocketService.unregister();
         }
     }
 
     ngOnInit() {
-        this._effectService.getCategoryList().subscribe(
-            categories => {
-                this.effectCategories = categories;
-                this.effectCategoriesById = {};
-                categories.map(c => this.effectCategoriesById[c.id] = c);
-            });
-
         if (this.character) {
             this.inGroupTab = true;
             this.registerWS();

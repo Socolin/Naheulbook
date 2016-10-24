@@ -15,6 +15,7 @@ import {SkillModule} from "../skill/skill.module";
 import {OriginModule} from "../origin/origin.module";
 import {JobModule} from "../job/job.module";
 import {EffectModule} from "../effect/effect.module";
+import {EffectPanelComponent, ModifierDetailComponent, EffectDetailComponent} from "./effect-panel.component";
 
 @NgModule({
     imports: [
@@ -34,6 +35,9 @@ import {EffectModule} from "../effect/effect.module";
         , CreateCharacterComponent
         , ItemDetailComponent
         , SpecialitySelectorComponent
+        , EffectPanelComponent
+        , EffectDetailComponent
+        , ModifierDetailComponent
     ],
     exports: [
         CharacterComponent
