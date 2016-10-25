@@ -1,87 +1,15 @@
-import {Component, EventEmitter, Input, OnInit, Output, OnDestroy, Inject, forwardRef} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 import {NotificationsService} from '../notifications';
 
-import {Effect, EffectService} from '../effect';
-import {ItemService, ItemTemplate} from '../item';
-import {
-    removeDiacritics,
-} from "../shared";
-
-import {Item, ItemData, PartialItem} from "./item.model";
 import {CharacterService} from "./character.service";
-import {Character, CharacterModifier, CharacterEffect} from "./character.model";
+import {Character} from "./character.model";
 import {IMetadata} from '../shared';
-import {EffectCategory} from '../effect';
-import {WebSocketService} from '../shared/websocket.service';
-import {Observable} from "rxjs";
-import {AutocompleteValue} from "../shared/autocomplete-input.component";
 import {CharacterWebsocketService} from "./character-websocket.service";
-
-@Component({
-    selector: 'bag-item-view',
-    template: `
-        <template ngFor let-item [ngForOf]="items"  let-indexItem="index" let-lastItem="last">
-            <template ngFor let-l [ngForOf]="ends" let-i="index" let-last="last">
-                <div style="float:left;margin-bottom:-1px">
-                    <template [ngIf]="lastItem && last">
-                        <img src="/img/tree-top-left.png"/>
-                    </template>
-                    <template [ngIf]="!lastItem && last">
-                        <img src="/img/tree-top-bot-left.png"/>
-                    </template>
-                    
-                    <template [ngIf]="!last">
-                        <template [ngIf]="ends[i + 1]">
-                            <img src="/img/tree-empty.png"/>
-                        </template>
-                        <template [ngIf]="!ends[i + 1]">
-                            <img src="/img/tree-top-bot.png"/>
-                        </template>
-                    </template>
-                </div>
-            </template>
-            <a href="#" class="list-group-item"
-                [style.margin-left]="(level * 20) + 'px'"
-                (click)="selectItem(item)"
-                [class.active]="selectedItem && selectedItem.id == item.id">
-                <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
-                {{item.data.name}}
-            </a>
-            <template [ngIf]="item.content">
-                <bag-item-view
-                    [ends]="ends"
-                    [level]="level + 1"
-                    [end]="lastItem ? 1 : 0"
-                    [items]="item.content"
-                    [selectedItem]="selectedItem"
-                    (itemSelected)="selectItem($event)">
-                </bag-item-view>
-            </template>
-        </template>
-    `,
-})
-export class BagItemViewComponent implements OnInit {
-    @Input() items: Item[];
-    @Input() selectedItem: Item;
-    @Input() level: number = 0;
-    @Input() end: number;
-    @Input() ends: number[] = [];
-    @Output() itemSelected: EventEmitter<Item> = new EventEmitter<Item>();
-
-    selectItem(item) {
-        this.itemSelected.emit(item);
-        return false;
-    }
-
-    ngOnInit() {
-        this.ends = JSON.parse(JSON.stringify(this.ends));
-        if (this.end != null) {
-            this.ends.push(this.end);
-        }
-    }
-}
+import {SwipeService} from "./swipe.service";
+import {ItemActionService} from "./item-action.service";
+import {Item} from "./item.model";
 
 class LevelUpInfo {
     EVorEA: string = 'EV';
@@ -95,7 +23,7 @@ class LevelUpInfo {
 @Component({
     selector: 'character',
     templateUrl: 'character.component.html',
-    providers: [CharacterWebsocketService],
+    providers: [CharacterWebsocketService, SwipeService, ItemActionService],
     styles: [`
         .canceled {
             text-decoration: line-through;
@@ -118,15 +46,14 @@ export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
     @Input() character: Character;
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
-    public selectedItem: Item;
     private inGroupTab: boolean = false;
+    private selectedItem: Item;
 
     constructor(private _route: ActivatedRoute
-        , @Inject(forwardRef(()  => ItemService)) private _itemService: ItemService
-        , private _effectService: EffectService
         , private _notification: NotificationsService
         , private _characterWebsocketService: CharacterWebsocketService
-        , private _characterService: CharacterService) {
+        , private _characterService: CharacterService
+        , private _itemActionService: ItemActionService) {
     }
 
     public historyPage: number = 0;
@@ -188,14 +115,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this._characterWebsocketService.registerPacket("update").subscribe(this.onChangeCharacterStat.bind(this));
         this._characterWebsocketService.registerPacket("statBonusAd").subscribe(this.onSetStatBonusAD.bind(this));
         this._characterWebsocketService.registerPacket("levelUp").subscribe(this.onLevelUp.bind(this));
-        this._characterWebsocketService.registerPacket("equipItem").subscribe(this.onEquipItem.bind(this));
-        this._characterWebsocketService.registerPacket("addItem").subscribe(this.onAddItem.bind(this));
-        this._characterWebsocketService.registerPacket("deleteItem").subscribe(this.onDeleteItem.bind(this));
-        this._characterWebsocketService.registerPacket("identifyItem").subscribe(this.onIdentifyItem.bind(this));
-        this._characterWebsocketService.registerPacket("useCharge").subscribe(this.onUseItemCharge.bind(this));
-        this._characterWebsocketService.registerPacket("changeContainer").subscribe(this.onChangeContainer.bind(this));
-        this._characterWebsocketService.registerPacket("updateItemName").subscribe(this.onUpdateItemName.bind(this));
-        this._characterWebsocketService.registerPacket("changeQuantity").subscribe(this.onUpdateQuantity.bind(this));
        }
 
     changeCharacterStat(stat: string, value: any) {
@@ -369,313 +288,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
             }
         }
         return true;
-    }
-
-    // Inventory
-
-    public selectedInventoryTab: string = 'all';
-    public filteredItems: ItemTemplate[] = [];
-    public itemAddCustomName: string;
-    public itemAddCustomDescription: string;
-    public selectedAddItem: ItemTemplate;
-    public itemAddQuantity: number;
-
-    updateFilterItem() {
-        if (this.selectedInventoryTab === 'add') {
-            this.updateFilterAddItem();
-        }
-    }
-
-    updateFilterAddItem() {
-        if (this.itemFilterName) {
-            this._itemService.searchItem(this.itemFilterName).subscribe(
-                items => {
-                    this.filteredItems = items;
-                    this.selectedAddItem = null;
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error("Erreur", "Erreur serveur");
-                }
-            );
-        }
-    }
-
-    selectAddItem(item: ItemTemplate) {
-        this.selectedAddItem = item;
-        this.itemAddCustomName = item.name;
-        if (item.data.quantifiable) {
-            this.itemAddQuantity = 1;
-        } else {
-            this.itemAddQuantity = null;
-        }
-        return false;
-    }
-
-    unselectAddItem() {
-        this.selectedAddItem = null;
-        return false;
-    }
-
-    isAddItemSelected(item) {
-        return this.selectedAddItem && this.selectedAddItem.id === item.id;
-    }
-
-    onAddItem(item: Item) {
-        for (let i = 0; i < this.character.items.length; i++) {
-            if (this.character.items[i].id === item.id) {
-                return;
-            }
-        }
-
-        this.notifyChange("Ajout de l'objet: " + item.data.name);
-        this.character.items.push(item);
-        this.character.update();
-    }
-
-    addItem() {
-        if (this.character) {
-            let itemData = new ItemData();
-            itemData['name'] = this.itemAddCustomName;
-            itemData['description'] = this.itemAddCustomDescription;
-            itemData['quantity'] = this.itemAddQuantity;
-            this._itemService.addItem(this.character.id
-                , this.selectedAddItem.id
-                , itemData)
-                .subscribe(
-                    item => {
-                        this.onAddItem(item);
-                        this.selectedItem = item;
-                        this.itemFilterName = "";
-                        this.selectedAddItem = null;
-                        this.itemAddCustomName = null;
-                        this.itemAddCustomDescription = null;
-                        this.itemAddQuantity = null;
-                    }
-                );
-        }
-    }
-
-    selectItem(item: Item) {
-        this.selectedItem = item;
-        return false;
-    }
-
-    private itemFilterName: string;
-    isItemFilteredByName(item: Item): boolean {
-        if (!this.itemFilterName) {
-            return true;
-        }
-        let cleanFilter = removeDiacritics(this.itemFilterName).toLowerCase();
-        if (removeDiacritics(item.data.name).toLowerCase().indexOf(cleanFilter) > -1) {
-            return true;
-        }
-        if (removeDiacritics(item.template.name).toLowerCase().indexOf(cleanFilter) > -1) {
-            return true;
-        }
-        return false;
-    }
-
-    private sortType = 'none';
-    sortInventory(type: string) {
-        if (type === 'not_identified_first') {
-            this.sortType = type;
-            this.character.items.sort((a, b) =>
-                {
-                    if (a.data.notIdentified && b.data.notIdentified) {
-                        return 0;
-                    }
-                    if (a.data.notIdentified) {
-                        return -1;
-                    }
-                    if (b.data.notIdentified) {
-                        return 1;
-                    }
-                    return a.data.name.localeCompare(b.data.name);
-                }
-            );
-
-        }
-        else {
-            if (this.sortType !== 'asc') {
-                this.sortType = 'asc';
-                this.character.items.sort((a, b) =>
-                    {
-                        return a.data.name.localeCompare(b.data.name);
-                    }
-                );
-            }
-            else {
-                this.sortType = 'desc';
-                this.character.items.sort((a, b) =>
-                    {
-                        return 2 - a.data.name.localeCompare(b.data.name);
-                    }
-                );
-            }
-            this.character.update();
-        }
-    }
-
-    onEquipItem(it: PartialItem) {
-        for (let i = 0; i < this.character.items.length; i++) {
-            let item = this.character.items[i];
-            if (item.id === it.id) {
-                if (item.data.equiped === it.data.equiped) {
-                    return;
-                }
-                item.data.equiped = it.data.equiped;
-                if (it.data.equiped) {
-                    this.notifyChange('Equipe ' + item.data.name);
-                } else {
-                    this.notifyChange('Déséquipe ' + item.data.name);
-                }
-                this.character.update();
-                return;
-            }
-        }
-    }
-
-    onDeleteItem(item: PartialItem) {
-        for (let i = 0; i < this.character.items.length; i++) {
-            let it = this.character.items[i];
-            if (it.id === item.id) {
-                this.character.items.splice(i, 1);
-                this.character.update();
-                this.notifyChange("Suppression de l'objet: " + item.data.name);
-                break;
-            }
-        }
-    }
-
-    onUseItemCharge(item: PartialItem) {
-        for (let i = 0; i < this.character.items.length; i++) {
-            let it = this.character.items[i];
-            if (it.id === item.id) {
-                it.data.charge = item.data.charge;
-                this.character.update();
-                this.notifyChange("Utilisation d'une charge de l'objet: " + item.data.name);
-                break;
-            }
-        }
-    }
-
-    onChangeContainer(item: PartialItem) {
-        for (let i = 0; i < this.character.items.length; i++) {
-            let it = this.character.items[i];
-            if (it.id === item.id) {
-                it.container = item.container;
-                this.character.update();
-                break;
-            }
-        }
-    }
-
-    onIdentifyItem(item: PartialItem) {
-        for (let i = 0; i < this.character.items.length; i++) {
-            let it = this.character.items[i];
-            if (it.id === item.id) {
-                it.data.name = item.data.name;
-                it.data.notIdentified = item.data.notIdentified;
-                this.character.update();
-                this.notifyChange("Identification de l'objet: " + item.data.name);
-                break;
-            }
-        }
-    }
-
-    onUpdateItemName(item: PartialItem) {
-        for (let i = 0; i < this.character.items.length; i++) {
-            let it = this.character.items[i];
-            if (it.id === item.id) {
-                it.data = item.data;
-                this.character.update();
-                break;
-            }
-        }
-    }
-
-    onUpdateQuantity(item: PartialItem) {
-        for (let i = 0; i < this.character.items.length; i++) {
-            let it = this.character.items[i];
-            if (it.id === item.id) {
-                if (it.data.quantity !== item.data.quantity) {
-                    this.notifyChange("Modification de la quantité de l'objet: " + item.data.name + ": " + item.data.quantity + " ->" + it.data.quantity);
-                    it.data.quantity = item.data.quantity;
-                    this.character.update();
-                }
-                break;
-            }
-        }
-    }
-
-    itemAction(event: any, item: Item) {
-        if (!this.character) {
-            return false;
-        }
-        if (event.action === 'equip' || event.action === 'unequip') {
-            let level = 0;
-            if (event.action === 'equip') {
-                level = 1;
-                if (event.level != null) {
-                    level = event.level;
-                }
-            }
-            this._itemService.equipItem(item.id, level).subscribe(
-                this.onEquipItem.bind(this)
-            );
-        }
-        else if (event.action === 'delete') {
-            this._itemService.deleteItem(item.id).subscribe(
-                deletedItem => {
-                    this.onDeleteItem(deletedItem);
-                    this.selectedItem = null;
-                }
-            );
-        }
-        else if (event.action === 'update_quantity') {
-            this._itemService.updateQuantity(item.id, event.quantity).subscribe(
-                res => {
-                    this.onUpdateQuantity(res);
-                }
-            );
-        }
-        else if (event.action === 'read_skill_book') {
-            this._itemService.readBook(item.id).subscribe(
-                res => {
-                    item.data.readCount = res.data.readCount;
-                    this.character.update();
-                }
-            );
-        }
-        else if (event.action === 'identify') {
-            this._itemService.identify(item.id).subscribe(
-                this.onIdentifyItem.bind(this)
-            );
-        }
-        else if (event.action === 'use_charge') {
-            this._itemService.updateCharge(item.id, item.data.charge - 1).subscribe(
-                this.onUseItemCharge.bind(this)
-            );
-        }
-        else if (event.action === 'move_to_container') {
-            this._itemService.moveToContainer(item.id, event.container).subscribe(
-                this.onChangeContainer.bind(this)
-            );
-        }
-        else if (event.action === 'edit_item_name') {
-            let data = {
-                name: event.name,
-                description: event.description
-            };
-            this._itemService.updateItem(item.id, data).subscribe(
-                this.onUpdateItemName.bind(this)
-            );
-        }
-        else {
-            console.log(event);
-        }
-        return false;
     }
 
     // Group

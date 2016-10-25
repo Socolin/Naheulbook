@@ -5,7 +5,7 @@ import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 
 import {
-    BagItemViewComponent, SpecialitySelectorComponent, ItemDetailComponent, CharacterComponent,
+    SpecialitySelectorComponent, ItemDetailComponent, CharacterComponent,
     CharacterColorSelectorComponent, CharacterListComponent, CreateCharacterComponent
 } from "./";
 import {
@@ -15,7 +15,12 @@ import {SkillModule} from "../skill/skill.module";
 import {OriginModule} from "../origin/origin.module";
 import {JobModule} from "../job/job.module";
 import {EffectModule} from "../effect/effect.module";
-import {EffectPanelComponent, ModifierDetailComponent, EffectDetailComponent} from "./effect-panel.component";
+import {
+    EffectPanelComponent, ModifierDetailComponent, EffectDetailComponent
+} from "./effect-panel.component";
+import {InventoryPanelComponent} from "./inventory-panel.component";
+import {SwipableItemDetail} from "./swipable-item-detail.component";
+import {BagItemViewComponent} from "./bag-item-view.component";
 
 @NgModule({
     imports: [
@@ -36,6 +41,8 @@ import {EffectPanelComponent, ModifierDetailComponent, EffectDetailComponent} fr
         , ItemDetailComponent
         , SpecialitySelectorComponent
         , EffectPanelComponent
+        , SwipableItemDetail
+        , InventoryPanelComponent
         , EffectDetailComponent
         , ModifierDetailComponent
     ],

@@ -61,7 +61,7 @@
         <div class="col-xs-6">
             Quantité:
             <value-editor [value]="item.data.quantity"
-                          (onChange)="itemAction.emit({action: 'update_quantity', quantity: $event})"></value-editor>
+                          (onChange)="_itemActionService.onAction('update_quantity', item, {quantity: $event})"></value-editor>
         </div>
     </div>
     <div *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
@@ -94,7 +94,7 @@
     </div>
     <div *ngIf="item.template.data.charge">
         Charges: {{item.data.charge}} / {{item.template.data.charge}}
-        <button (click)="itemAction.next({action: 'use_charge'})" class="btn btn-success">Utiliser</button>
+        <button (click)="_itemActionService.onAction('use_charge', item)" class="btn btn-success">Utiliser</button>
     </div>
 
     <div *ngIf="item.template.data.description">{{item.template.data.description}}</div>
@@ -152,20 +152,36 @@
 
 <span *ngIf="item.template.slots?.length > 0">
     <button *ngIf="!item.data.equiped" class="btn btn-success"
-            (click)="itemAction.emit({action: 'equip'})">Equip</button>
-    <button *ngIf="item.data.equiped" class="btn btn-danger" (click)="itemAction.emit({action: 'unequip'})">Unequip</button>
+            (click)="_itemActionService.onAction('equip', item)">Equip</button>
+    <button *ngIf="item.data.equiped" class="btn btn-danger" (click)="_itemActionService.onAction('unequip', item)">Unequip</button>
 </span>
 
 <button *ngIf="item.template.data.skillBook" class="btn btn-success"
-        (click)="itemAction.emit({action: 'read_skill_book'})">Lire
+        (click)="_itemActionService.onAction('read_skill_book', item)">Lire
 </button>
 
 <button class="btn glyphicon glyphicon-pencil" [class.btn-primary]="editing" [class.btn-default]="editing"
         (click)="editItem()"></button>
 
 <button *ngIf="gmView && item.data.notIdentified" class="btn btn-warning"
-        (click)="itemAction.emit({action: 'identify'})">Identifier</button>
+        (click)="_itemActionService.onAction('identify', item)">Identifier</button>
 
 <button class="pull-right btn btn-danger glyphicon glyphicon-trash"
-        (click)="itemAction.emit({action: 'delete'})"></button>
+        (click)="_itemActionService.onAction('delete', item)"></button>
 
+<div *ngIf="character.computedData.containers && !item.data.equiped">
+    <template [ngIf]="item.container">
+        Dans: {{item.containerInfo.name}}
+        <button class="btn btn-danger"  (click)="_itemActionService.onAction('move_to_container', item, {container: null})">Retirer</button>
+    </template>
+    <template [ngIf]="!item.container">
+        <h4>Ranger dans</h4>
+        <div class="list-group">
+            <template ngFor let-container [ngForOf]="character.computedData.containers" let-i="index" let-last="last">
+                <a href="#" class="list-group-item" (click)="_itemActionService.onAction('move_to_container', item, {container: container.id})">
+                    {{container.data.name}}
+                </a>
+            </template>
+        </div>
+    </template>
+</div>

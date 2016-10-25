@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output, OnChanges, OnInit, forwardRef, I
 import {Item} from './item.model';
 import {Character} from './character.model';
 import {ItemService, ItemCategory} from '../item';
+import {ItemActionService} from "./item-action.service";
 
 @Component({
     selector: 'item-detail',
@@ -22,7 +23,8 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public itemEditDescription: string;
     public editing: boolean;
 
-    constructor(@Inject(forwardRef(() => ItemService)) private _itemService: ItemService) {
+    constructor(@Inject(forwardRef(() => ItemService)) private _itemService: ItemService
+        , private _itemActionService: ItemActionService) {
     }
 
     ngOnChanges() {
@@ -63,8 +65,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         } else {
             if (this.itemEditName !== this.item.data.name
                 || this.itemEditDescription !== this.item.data.description) {
-                this.itemAction.emit({
-                    action: 'edit_item_name',
+                this._itemActionService.onAction('edit_item_name', this.item, {
                     name: this.itemEditName,
                     description: this.itemEditDescription
                 });

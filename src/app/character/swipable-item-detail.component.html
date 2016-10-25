@@ -1,0 +1,9 @@
+<div
+    class="item-detail visible-xs"
+    [class.item-detail-swipe]="_swipeService.swipedLeft"
+    (swipeleft)="_swipeService.onSwipeLeft($event)"
+    (swiperight)="_swipeService.onSwipeRight($event)">
+    <div class="item-detail-swipe-container bg-info">
+        <item-detail [gmView]="gmView" [character]="character" [item]="item"></item-detail>
+    </div>
+</div>

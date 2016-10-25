@@ -216,16 +216,19 @@
 				<div class="col-sm-6">
 					<div class="list-group" *ngIf="character.computedData.itemsBySlotsAll[1]">
 						<template ngFor let-item [ngForOf]="character.computedData.itemsBySlotsAll[1]" let-i="index" let-last="last">
-						<button type="button" class="list-group-item btn btn-default" (click)="selectItem(item)" [class.btn-primary]="selectedItem && selectedItem.id == item.id"
+						<button type="button" class="list-group-item btn btn-default" (click)="selectedItem = item" [class.btn-primary]="selectedItem && selectedItem.id == item.id"
 							[class.active]="selectedItem && selectedItem.id == item.id">
 							<span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span> {{item.data.name}}
+                            <template [ngIf]="item === selectedItem">
+                                <swipable-item-detail [gmView]="inGroupTab"  [character]="character" [item]="item"></swipable-item-detail>
+                            </template>
 						</button>
 						</template>
 					</div>
 				</div>
-				<div class="col-sm-6" *ngIf="selectedItem">
+				<div class="col-sm-6 hidden-xs" *ngIf="selectedItem">
 					<div class="bg-info">
-						<item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem" (itemAction)="itemAction($event, selectedItem)"></item-detail>
+						<item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
 					</div>
 				</div>
 			</div>
@@ -442,149 +445,7 @@
 		 </div>
 		 <div role="tabpanel" class="tab-pane" id="tab-inventory_{{character.id}}">
 			<!-- Start of inventory tab -->
-			<div class="row" style="min-height: 350px">
-				<div class="col-sm-6">
-					<div class="row-fluid">
-						<ul class="nav nav-pills">
-							<li role="presentation" [class.active]="selectedInventoryTab=='all'"><a (click)="selectedInventoryTab = 'all'">Tout</a></li>
-							<li role="presentation" [class.active]="selectedInventoryTab=='bags'"><a (click)="selectedInventoryTab = 'bags'">Sacs</a></li>
-							<li role="presentation" [class.active]="selectedInventoryTab=='equiped'"><a (click)="selectedInventoryTab = 'equiped'">Equipé</a></li>
-							<li role="presentation" [class.active]="selectedInventoryTab=='add'"><a (click)="selectedInventoryTab = 'add';updateFilterItem()" class="glyphicon glyphicon-plus"></a></li>
-						</ul>
-					</div>
-					<div class="row">
-						<div class="form-group col-xs-8">
-							<input class="form-control" (keydown.esc)="itemFilterName=null" [(ngModel)]="itemFilterName" (ngModelChange)="updateFilterItem()" placeholder="filter"/>
-						</div>
-                        <div class="form-group col-xs-2">
-                            <button class="btn btn-primary glyphicon" [class.glyphicon-sort]="sortType !== 'asc' && sortType != 'desc'" [class.glyphicon-sort-by-alphabet]="sortType == 'asc'"  [class.glyphicon-sort-by-alphabet-alt]="sortType == 'desc'" (click)="sortInventory()"></button>
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <button class="btn btn-primary glyphicon glyphicon-sort-by-attributes" (click)="sortInventory('not_identified_first')"></button>
-                        </div>
-					</div>
-					<div *ngIf="selectedInventoryTab=='all'" class="row">
-						<div class="col-sm-12">
-							<div class="list-group" style="height:300px; overflow-y: auto">
-								<a href="#" *ngFor="let item of character.items" class="list-group-item" (click)="selectItem(item)" [class.active]="selectedItem && selectedItem.id == item.id" [class.hidden]="!isItemFilteredByName(item)">
-                                    <span *ngIf="item.data.notIdentified" class="glyphicon glyphicon-question-sign"></span>
-                                    <span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span>
-									<span *ngIf="item.data.equiped == null && !item.container" class="glyphicon glyphicon-exclamation-sign"></span>
-									<span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
-									{{item.data.name}}
-								</a>
-							</div>
-						</div>
-					</div>
-					<div *ngIf="selectedInventoryTab=='bags'" class="row">
-						<div class="col-sm-12" *ngIf="character.computedData.topLevelContainers">
-							<div class="list-group" style="height:300px; overflow-y: auto">
-								<bag-item-view [items]="character.computedData.topLevelContainers" [selectedItem]="selectedItem" (itemSelected)="selectItem($event)">Loading</bag-item-view>
-							</div>
-						</div>
-					</div>
-					<div *ngIf="selectedInventoryTab=='add'" class="row">
-						<div class="list-group" *ngIf="!selectedAddItem">
-							<a href="#" *ngFor="let item of filteredItems" (click)="selectAddItem(item)" [class.active]="isAddItemSelected(item)" class="list-group-item"> {{item.name}} </a>
-						</div>
-
-						<div *ngIf="selectedAddItem">
-							<div class="row-fluid">
-								<div class="list-group">
-									<a href="#" (click)="unselectAddItem()" class="list-group-item active">
-										<span class="glyphicon glyphicon-remove"></span> {{selectedAddItem.name}}
-									</a>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-2">
-									<span>Nom: </span>
-								</div>
-								<div class="col-sm-10">
-									<input class="form-control" type="text" [(ngModel)]="itemAddCustomName" />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-2">
-									<span>Description: </span>
-								</div>
-								<div class="col-sm-10">
-									<input class="form-control" type="text" [(ngModel)]="itemAddCustomDescription" />
-								</div>
-							</div>
-							<div class="row" *ngIf="selectedAddItem.data.quantifiable">
-								<div class="col-sm-2">
-									<span>Quantité: </span>
-								</div>
-								<div class="col-sm-10">
-									<input class="form-control" type="text" [(ngModel)]="itemAddQuantity" />
-								</div>
-							</div>
-							<div>
-								<button (click)="addItem()" type="button" class="btn btn-primary" data-dismiss="modal">Ajouter</button>
-							</div>
-						</div>
-					</div>
-
-					<div class="row-fluid" *ngIf="selectedInventoryTab=='equiped'" >
-						<div *ngFor="let slot of character.computedData.itemSlots">
-							{{slot.name}}:
-							<div class="list-group">
-								<template ngFor let-item [ngForOf]="character.computedData.itemsBySlots[slot.id]" let-i="index" let-last="last">
-								<div class="row">
-									<div class="btn-group col-xs-12" role="group">
-										<button type="button" class="btn btn-default"
-											[class.col-xs-8]="character.computedData.itemsBySlots[slot.id].length > 2 && (i && !last)"
-											[class.col-xs-10]="character.computedData.itemsBySlots[slot.id].length == 2 || (character.computedData.itemsBySlots[slot.id].length > 2 && (i == 0 || last))"
-											[class.col-xs-12]="character.computedData.itemsBySlots[slot.id].length == 1"
-											[class.col-md-10]="character.computedData.itemsBySlots[slot.id].length > 2 && (i && !last)"
-											[class.col-md-11]="character.computedData.itemsBySlots[slot.id].length == 2 || (character.computedData.itemsBySlots[slot.id].length > 2 && (i == 0 || last))"
-											[class.col-md-12]="character.computedData.itemsBySlots[slot.id].length == 1"
-											(click)="selectItem(item)"
-											[class.btn-primary]="selectedItem && selectedItem.id == item.id"
-											[class.active]="selectedItem && selectedItem.id == item.id">
-										<span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
-											{{item.data.name}}
-										</button>
-										<button *ngIf="i > 0 && character.computedData.itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="itemAction({action: 'equip', level: 1}, item)">
-											<span style="font-family: 'Glyphicons Halflings'">&#57491;</span>
-										</button>
-										<button *ngIf="!last && character.computedData.itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="itemAction({action: 'equip', level: -1}, item)">
-											<span style="font-family: 'Glyphicons Halflings'">&#57492;</span>
-										</button>
-									</div>
-								</div>
-								</template>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="col-sm-6" *ngIf="selectedItem">
-					<div class="bg-info">
-						<item-detail [gmView]="inGroupTab"  [character]="character" [item]="selectedItem" (itemAction)="itemAction($event, selectedItem)"></item-detail>
-					</div>
-					<div *ngIf="character.computedData.containers && !selectedItem.data.equiped">
-						<template [ngIf]="selectedItem.container">
-							Dans: {{selectedItem.containerInfo.name}}
-							<button class="btn btn-danger"  (click)="itemAction({action: 'move_to_container', container: null}, selectedItem)">Retirer</button>
-						</template>
-						<template [ngIf]="!selectedItem.container">
-							<h4>Ranger dans</h4>
-							<div class="list-group">
-								<template ngFor let-item [ngForOf]="character.computedData.containers" let-i="index" let-last="last">
-									<a href="#" class="list-group-item" (click)="itemAction({action: 'move_to_container', container: item.id}, selectedItem)">
-										{{item.data.name}}
-									</a>
-								</template>
-							</div>
-						</template>
-					</div>
-				</div>
-
-
-			</div>
+            <inventory-panel [character]="character"></inventory-panel>
 			<!-- End of inventory tab -->
 		 </div>
 		 <div role="tabpanel" class="tab-pane" id="tab-effects_{{character.id}}">

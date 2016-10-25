@@ -7,7 +7,6 @@ import {Observable} from "rxjs";
 import {CharacterWebsocketService} from "./character-websocket.service";
 import {AutocompleteValue} from "../shared/autocomplete-input.component";
 
-
 @Component({
     selector: 'effect-detail',
     templateUrl: 'effect-detail.component.html',
@@ -43,18 +42,16 @@ export class ModifierDetailComponent {
             top: 10px;
             right: -17px;
             color: #555;
-            white-space: nowrap;
             z-index: 100;
             width: 20vw;
-            overflow: hidden;
             touch-action: none;
             -webkit-transition: width 0.5s; /* Safari */
-            transition: width 1s;
+            transition: width 0.5s;
         }
         .effect-detail-swipe {
             width: 90vw;
             -webkit-transition: width 0.5s; /* Safari */
-            transition: width 1s;
+            transition: width 0.5s;
         }
         `
     ],
