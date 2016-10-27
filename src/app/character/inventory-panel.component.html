@@ -23,6 +23,11 @@
             <div class="col-sm-12">
                 <div class="list-group" style="height:400px">
                     <a href="#" *ngFor="let item of character.items" class="list-group-item" (click)="selectItem(item)" [class.active]="selectedItem && selectedItem.id == item.id" [class.hidden]="!isItemFilteredByName(item)">
+                        <span style="position: relative;padding-right: 25px">
+                            <span style="position: absolute; top: -15px; left: -10px">
+                                <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                            </span>
+                        </span>
                         <span *ngIf="item.data.notIdentified" class="glyphicon glyphicon-question-sign"></span>
                         <span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span>
                         <span *ngIf="item.data.equiped == null && !item.container" class="glyphicon glyphicon-exclamation-sign"></span>

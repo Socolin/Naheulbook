@@ -1,10 +1,12 @@
 import {ItemTemplate} from "../item";
 import {IMetadata} from '../shared/misc.model';
+import {IconDescription} from "../shared/icon.model";
 
 export class ItemData {
     name: string;
     description: string;
     quantity: number;
+    icon: IconDescription;
     charge: number;
     ug: number;
     equiped: number;

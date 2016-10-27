@@ -5,7 +5,9 @@ import {
     AutocompleteInputComponent, ModifierPipe, ModifiersEditorComponent, PlusMinusPipe,
     StatRequirementsEditorComponent, TextareaAutosizeDirective, TextFormatterPipe, ValueEditorComponent
 } from "./";
+import {IconSelectorComponent} from "./icon-selector.component";
 import {IconService} from "./icon.service";
+import {IconComponent} from "./icon.component";
 
 @NgModule({
     imports: [
@@ -21,6 +23,8 @@ import {IconService} from "./icon.service";
         TextareaAutosizeDirective,
         TextFormatterPipe,
         ValueEditorComponent,
+        IconSelectorComponent,
+        IconComponent,
     ],
     exports: [
         AutocompleteInputComponent,
@@ -31,6 +35,8 @@ import {IconService} from "./icon.service";
         TextareaAutosizeDirective,
         TextFormatterPipe,
         ValueEditorComponent,
+        IconSelectorComponent,
+        IconComponent,
     ],
     providers: [
         IconService,

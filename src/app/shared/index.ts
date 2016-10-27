@@ -13,4 +13,7 @@ export * from './textarea-autosize.directive';
 export * from './text-formatter.pipe';
 export * from './value-editor.component';
 export * from './autocomplete-input.component';
+export * from './icon.component';
+export * from './icon.service';
+export * from './icon-selector.component';
 

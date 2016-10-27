@@ -370,5 +370,14 @@ export class InventoryPanelComponent implements OnInit {
                 this.onDeleteItem.bind(this)
             );
         });
+
+        this._itemActionService.registerAction('change_icon').subscribe((event: {item: Item, data: any})=> {
+            let eventData = event.data;
+            let item = event.item;
+            item.data.icon = eventData.icon;
+            this._itemService.updateItem(item.id, item.data).subscribe(
+                this.onUpdateItemName.bind(this)
+            );
+        });
     }
 }

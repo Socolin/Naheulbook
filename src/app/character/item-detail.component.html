@@ -1,8 +1,17 @@
 <h4>
-    <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
-        <span *ngIf="item.data.notIdentified" class="label label-danger">Non identifié</span>
-    <span *ngIf="!editing">{{item.data.name}}</span>
-    <span *ngIf="editing"><input class="form-control" [(ngModel)]="itemEditName"/></span>
+    <icon-selector [icon]="item.data.icon" (onChange)="_itemActionService.onAction('change_icon', item, {icon: $event})"></icon-selector>
+    <span style="vertical-align: top;" *ngIf="item.data.quantity">
+        {{item.data.quantity}}
+    </span>
+    <span style="vertical-align: top;" *ngIf="item.data.notIdentified" class="label label-danger">
+        Non identifié
+    </span>
+    <span style="vertical-align: top;" *ngIf="!editing">
+        {{item.data.name}}
+    </span>
+    <span *ngIf="editing">
+        <input class="form-control" [(ngModel)]="itemEditName"/>
+    </span>
 </h4>
 <div *ngIf="item.data.notIdentified && !gmView">
     <div *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">

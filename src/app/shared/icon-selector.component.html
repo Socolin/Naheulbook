@@ -1,0 +1,36 @@
+<div style="position: relative; display: inline-block">
+    <span (click)="showSelector($event)"><icon [size]="'32px'" [icon]="icon"></icon></span>
+    <div *ngIf="viewSelector" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;" (click)="hideSelector($event)"></div>
+    <div *ngIf="viewSelector" style="position: absolute; width: 40vw; background: whitesmoke; z-index: 100" >
+        <div class="btn-group">
+            <button class="btn btn-primary" [class.active]="tab=='icon'" (click)="selectTab('icon')">Icone</button>
+            <button class="btn btn-primary" [class.active]="tab=='color'" (click)="selectTab('color')">Couleur</button>
+            <button class="btn btn-primary" [class.active]="tab=='rotation'" (click)="selectTab('rotation')">Rotation</button>
+        </div>
+        <div *ngIf="tab == 'icon'">
+            <input class="input-lg" type="text" [(ngModel)]="filter" (ngModelChange)="updateFiltered()"/>
+            <button class="btn" (click)="selectRandom()"><span class="ra ra-perspective-dice-random ra-3x"></span></button>
+            <div>
+                Icone actuel: {{icon.name}}
+            </div>
+            <div style="font-size: 60px; ">
+                <template ngFor let-iconName [ngForOf]="filteredIcons">
+                    <span class="game-icon" [ngClass]="'game-icon-' + iconName" (click)="selectIcon(iconName)"></span>
+                </template>
+            </div>
+        </div>
+        <div *ngIf="tab == 'color'">
+            <div style="font-size: 32px; ">
+                <template ngFor let-color [ngForOf]="colors">
+                    <span class="game-icon" [ngClass]="'game-icon-' + icon.name" (click)="selectColor(color)" [style.color]="color"></span>
+                </template>
+            </div>
+        </div>
+        <div *ngIf="tab == 'rotation'">
+            <span (click)="selectRotation(0)"><icon [size]="'32px'" [icon]="iconRot0"></icon></span>
+            <span (click)="selectRotation(90)"><icon [size]="'32px'" [icon]="iconRot90"></icon></span>
+            <span (click)="selectRotation(180)"><icon [size]="'32px'" [icon]="iconRot180"></icon></span>
+            <span (click)="selectRotation(280)"><icon [size]="'32px'" [icon]="iconRot280"></icon></span>
+        </div>
+    </div>
+</div>
