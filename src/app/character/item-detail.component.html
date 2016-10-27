@@ -86,19 +86,23 @@
         <span
             *ngIf="(item.template.data.protection || item.template.data.magicProtection) && item.template.data.protectionAgainstMagic">/</span>
         <span *ngIf="item.template.data.protectionAgainstMagic">{{item.template.data.protectionAgainstMagic}}
-		<span
-            *ngIf="item.template.data.protectionAgainstType">(contre {{item.template.data.protectionAgainstType}})</span>
-		<span *ngIf="!item.template.data.protectionAgainstType">(contre mag./myst.)</span>
-	</span>
-
+            <span
+                *ngIf="item.template.data.protectionAgainstType">(contre {{item.template.data.protectionAgainstType}})</span>
+            <span *ngIf="!item.template.data.protectionAgainstType">(contre mag./myst.)</span>
+        </span>
     </div>
+
     <div *ngIf="item.template.data.charge">
         Charges: {{item.data.charge}} / {{item.template.data.charge}}
         <button (click)="_itemActionService.onAction('use_charge', item)" class="btn btn-success">Utiliser</button>
     </div>
 
+
     <div *ngIf="item.template.data.description">{{item.template.data.description}}</div>
-    <div *ngIf="item.data.description">{{item.data.description}}</div>
+    <div>
+        <span *ngIf="!editing">{{item.data.description}}</span>
+        <span *ngIf="editing"><input class="form-control" [(ngModel)]="itemEditDescription"/></span>
+    </div>
     <div *ngIf="item.template.data.weight && !item.template.data.useUG">
         Poids:
         <span *ngIf="item.template.data.weight < 1">{{(item.template.data.weight * 1000)}}g</span>
