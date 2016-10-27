@@ -5,6 +5,7 @@ import {
     AutocompleteInputComponent, ModifierPipe, ModifiersEditorComponent, PlusMinusPipe,
     StatRequirementsEditorComponent, TextareaAutosizeDirective, TextFormatterPipe, ValueEditorComponent
 } from "./";
+import {IconService} from "./icon.service";
 
 @NgModule({
     imports: [
@@ -30,6 +31,9 @@ import {
         TextareaAutosizeDirective,
         TextFormatterPipe,
         ValueEditorComponent,
+    ],
+    providers: [
+        IconService,
     ]
 })
 export class SharedModule {
