@@ -97,7 +97,6 @@ export class CreateItemComponent implements OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
         if ('gemOption' in changes) {
             this.updateGem();
         }

@@ -15,7 +15,6 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() gmView: boolean;
 
     public itemCategoriesById: {[categoryId: number]: ItemCategory};
-    public quantityModifier: string;
     public modifiers: any[];
 
     public itemEditName: string;
@@ -96,9 +95,6 @@ export class ItemDetailComponent implements OnChanges, OnInit {
             categoriesById => {
                 this.itemCategoriesById = categoriesById;
             },
-            err => {
-                console.log(err);
-            }
         );
     }
 }
