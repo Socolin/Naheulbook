@@ -81,6 +81,18 @@ export class GroupComponent implements OnInit, OnChanges {
         return false;
     }
 
+    activeAllCharacter(active: boolean) {
+        for(let i = 0; i < this.characters.length; i++) {
+            let character = this.characters[i];
+            this._characterService.changeGmData(character.id, 'active', active).subscribe(
+                change => {
+                    character.active = change.value;
+                    this.updateOrder();
+                }
+            );
+        }
+    }
+
     toggleActiveCharacter(character) {
         this._characterService.changeGmData(character.id, 'active', !character.active).subscribe(
             change => {

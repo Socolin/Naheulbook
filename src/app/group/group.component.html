@@ -151,6 +151,19 @@
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-5 col-sm-6">
+                    <div>
+                        <h3>
+                            Joueurs
+                            <button
+                                class="btn glyphicon glyphicon-off btn-danger pull-right"
+                                (click)="activeAllCharacter(false)">
+                            </button>
+                            <button
+                                class="btn glyphicon glyphicon-off btn-success pull-right"
+                                (click)="activeAllCharacter(true)">
+                            </button>
+                        </h3>
+                    </div>
                     <template ngFor let-character [ngForOf]="characters">
                         <div *ngIf="!character.isNpc" class="list-group-item">
                             <h3>
