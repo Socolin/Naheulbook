@@ -46,6 +46,3 @@ export class MonsterEditableFieldComponent implements OnChanges {
         this.oldValue = this.getValue();
     }
 }
-/**
- * Created by socolin on 03/07/16.
- */
