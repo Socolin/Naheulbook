@@ -147,20 +147,14 @@ export class GroupComponent implements OnInit, OnChanges {
     addMonster() {
         this._groupService.createMonster(this.group.id, this.newMonster).subscribe(
             monster => {
-                this.newMonster = new Monster();
                 this.group.monsters.push(monster);
                 this.updateOrder();
             }
         );
     }
 
-    addMonsterNew() {
-        this._groupService.createMonster(this.group.id, this.newMonster).subscribe(
-            monster => {
-                this.group.monsters.push(new Monster(monster));
-                this.updateOrder();
-            }
-        );
+    cleanMonster() {
+        this.newMonster = new Monster();
     }
 
     killMonster(monster: Monster) {
