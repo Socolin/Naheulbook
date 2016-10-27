@@ -19,9 +19,9 @@
                 <button class="btn btn-primary glyphicon glyphicon-sort-by-attributes" (click)="sortInventory('not_identified_first')"></button>
             </div>
         </div>
-        <div *ngIf="selectedInventoryTab=='all'" class="row">
+        <div *ngIf="selectedInventoryTab=='all'" class="row overflow-item-list">
             <div class="col-sm-12">
-                <div class="list-group" style="height:300px;">
+                <div class="list-group" style="height:400px">
                     <a href="#" *ngFor="let item of character.items" class="list-group-item" (click)="selectItem(item)" [class.active]="selectedItem && selectedItem.id == item.id" [class.hidden]="!isItemFilteredByName(item)">
                         <span *ngIf="item.data.notIdentified" class="glyphicon glyphicon-question-sign"></span>
                         <span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span>
@@ -35,9 +35,9 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="selectedInventoryTab=='bags'" class="row">
+        <div *ngIf="selectedInventoryTab=='bags'" class="row overflow-item-list" style="height:400px;">
             <div class="col-sm-12" *ngIf="character.computedData.topLevelContainers">
-                <div class="list-group" style="height:300px;">
+                <div class="list-group">
                     <bag-item-view [items]="character.computedData.topLevelContainers" [character]="character" [gmView]="inGroupTab" [selectedItem]="selectedItem" (itemSelected)="selectItem($event)">Loading</bag-item-view>
                 </div>
             </div>
