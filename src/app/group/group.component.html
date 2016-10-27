@@ -106,6 +106,12 @@
 								<template [ngSwitchCase]="'MANKDEBOL'">
 									Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
 								</template>
+                                <template [ngSwitchCase]="'END_COMBAT'">
+                                    Fin de combat
+                                </template>
+                                <template [ngSwitchCase]="'START_COMBAT'">
+                                    Debut d'un combat
+                                </template>
 								<template ngSwitchDefault>{{log.action}}</template>
 							</span>
                             </div>
