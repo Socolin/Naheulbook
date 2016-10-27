@@ -338,7 +338,7 @@
                                 <td>{{fighter.name}}</td>
                                 <td>{{fighter.stats.at}}</td>
                                 <td>{{fighter.stats.prd}}</td>
-                                <td>{{fighter.stats.ev}}/{{fighter.stats.maxEv}}</td>
+                                <td [class.text-danger]="fighter.stats.ev < 4">{{fighter.stats.ev}}/{{fighter.stats.maxEv}}</td>
                                 <td>{{fighter.stats.ea}}/{{fighter.stats.maxEa}}</td>
                                 <td>{{fighter.stats.pr}}</td>
                                 <td>{{fighter.stats.resm}}</td>
