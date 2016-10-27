@@ -167,6 +167,23 @@
 <button class="btn glyphicon glyphicon-pencil" [class.btn-primary]="editing" [class.btn-default]="editing"
         (click)="editItem()"></button>
 
+<button *ngIf="!givingItem" class="btn btn-primary" (click)="startGiveItem()">Donner...</button>
+<div *ngIf="givingItem">
+    <span *ngIf="giveDestination == null">Loading...</span>
+    <div *ngIf="giveDestination" class="list-group">
+        <template ngFor let-destination [ngForOf]="giveDestination">
+            <button (click)="_itemActionService.onAction('give', item, {characterId: destination.id}); givingItem = false"
+                    [class.list-group-item-info]="destination.isNpc"
+                    class="list-group-item">
+                {{destination.name}}
+            </button>
+        </template>
+        <button class="list-group-item list-group-item-danger" (click)="givingItem = false">
+            Annuler
+        </button>
+    </div>
+</div>
+
 <button *ngIf="gmView && item.data.notIdentified" class="btn btn-warning"
         (click)="_itemActionService.onAction('identify', item)">Identifier</button>
 

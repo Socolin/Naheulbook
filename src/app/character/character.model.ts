@@ -22,6 +22,12 @@ export interface CharacterResume {
     level: number;
 }
 
+export interface CharacterGiveDestination {
+    id: number;
+    name: string;
+    isNpc: boolean;
+}
+
 export class CharacterEffect {
     id: number;
     effect: Effect;

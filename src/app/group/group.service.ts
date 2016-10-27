@@ -7,6 +7,7 @@ import {Monster} from "../monster";
 import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications/notifications.service';
 import {LoginService} from "../user/login.service";
+import {CharacterGiveDestination} from "../character/character.model";
 
 @Injectable()
 export class GroupService extends JsonService {
@@ -58,6 +59,12 @@ export class GroupService extends JsonService {
             groupId: groupId,
             key: key,
             value: value
+        }).map(res => res.json());
+    }
+
+    listActiveCharactersInGroup(characterId: number): Observable<CharacterGiveDestination[]> {
+        return this.postJson('/api/group/listActiveCharacters', {
+            characterId: characterId
         }).map(res => res.json());
     }
 }

@@ -1,8 +1,9 @@
-import {Component, EventEmitter, Input, Output, OnChanges, OnInit, forwardRef, Inject} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, forwardRef, Inject, SimpleChanges} from '@angular/core';
 import {Item} from './item.model';
-import {Character} from './character.model';
+import {Character, CharacterGiveDestination} from './character.model';
 import {ItemService, ItemCategory} from '../item';
 import {ItemActionService} from "./item-action.service";
+import {GroupService} from "../group/group.service";
 
 @Component({
     selector: 'item-detail',
@@ -13,8 +14,6 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() character: Character;
     @Input() gmView: boolean;
 
-    @Output() itemAction: EventEmitter<any> = new EventEmitter<any>();
-
     public itemCategoriesById: {[categoryId: number]: ItemCategory};
     public quantityModifier: string;
     public modifiers: any[];
@@ -23,11 +22,21 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public itemEditDescription: string;
     public editing: boolean;
 
+    public givingItem: boolean = false;
+    public giveDestination: CharacterGiveDestination[];
+
     constructor(@Inject(forwardRef(() => ItemService)) private _itemService: ItemService
-        , private _itemActionService: ItemActionService) {
+        , private _itemActionService: ItemActionService
+        , private _groupService: GroupService) {
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
+        if ('item' in changes
+            && changes['item'].previousValue
+            && changes['item'].currentValue
+            && changes['item'].currentValue['id'] != changes['item'].previousValue['id']) {
+            this.givingItem = false;
+        }
         this.modifiers = [];
         if (this.item && this.item.template.modifiers) {
             for (let i = 0; i < this.item.template.modifiers.length; i++) {
@@ -71,6 +80,15 @@ export class ItemDetailComponent implements OnChanges, OnInit {
                 });
             }
         }
+    }
+
+    startGiveItem() {
+        this.givingItem = true;
+        this._groupService.listActiveCharactersInGroup(this.character.id).subscribe(
+            characters => {
+                this.giveDestination = characters;
+            }
+        );
     }
 
     ngOnInit() {

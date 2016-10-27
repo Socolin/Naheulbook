@@ -1,4 +1,4 @@
-import {Input, OnInit, Component, Inject, forwardRef, Output, EventEmitter} from "@angular/core";
+import {Input, OnInit, Component, Inject, forwardRef} from "@angular/core";
 import {Character} from "./character.model";
 import {CharacterWebsocketService} from "./character-websocket.service";
 import {ItemService} from "../item/item.service";
@@ -360,6 +360,14 @@ export class InventoryPanelComponent implements OnInit {
             };
             this._itemService.updateItem(item.id, data).subscribe(
                 this.onUpdateItemName.bind(this)
+            );
+        });
+
+        this._itemActionService.registerAction('give').subscribe((event: {item: Item, data: any})=> {
+            let eventData = event.data;
+            let item = event.item;
+            this._itemService.giveItem(item.id, eventData.characterId).subscribe(
+                this.onDeleteItem.bind(this)
             );
         });
     }
