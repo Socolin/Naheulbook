@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {NotificationsService} from '../notifications';
 
 import {Origin} from '../origin';
 import {Job} from '../job';
@@ -15,9 +14,9 @@ import {Speciality} from "./speciality.model";
 })
 export class CreateCharacterComponent {
     public step: number;
+    public creating: boolean = false;
 
     constructor(private _router: Router
-        , private _notification: NotificationsService
         , private _characterService: CharacterService) {
         this.setStep(0);
     }
@@ -437,6 +436,7 @@ export class CreateCharacterComponent {
     // Step 9: Confirm
 
     createCharacter() {
+        this.creating = true;
         let creationData = {};
         creationData['name'] = this.name;
         creationData['stats'] = {};
@@ -485,9 +485,8 @@ export class CreateCharacterComponent {
                     this._router.navigate(['/character/detail', res.id]);
                 }
             },
-            err => {
-                this._notification.error("Erreur", "Erreur serveur");
-                console.log(err);
+            () => {
+                this.creating = false;
             }
         );
     }

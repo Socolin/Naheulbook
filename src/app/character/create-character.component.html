@@ -317,6 +317,6 @@
 <div *ngIf="(step == 9)" class="row">
 	<div class="col-sm-12">
 		<h3>Confirmation</h3>
-		<button class="btn btn-primary" (click)="createCharacter()">Creer</button>
+		<button [disabled]="creating" class="btn btn-primary" (click)="createCharacter()">Creer</button>
 	</div>
 </div>
