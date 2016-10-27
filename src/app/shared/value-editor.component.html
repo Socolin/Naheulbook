@@ -24,6 +24,12 @@
                 {{value}} <span *ngIf="maxValue">/{{maxValue}}</span> -> {{newValue}} <span *ngIf="maxValue">/{{maxValue}}</span>
             </div>
         </div>
+        <div *ngIf="title" style="position: absolute; left:-120px; bottom: 138px">
+            <div class="form-control input-sm"
+                 style="padding-left:0; padding-right:0; width: 240px; font-size: 14px;text-align: center; font-weight: bold">
+                {{title}}
+            </div>
+        </div>
         <div style="position: absolute; left:0; bottom: 0">
             <div style="position: relative; left:-60px; bottom: 46px">
                 <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-info"

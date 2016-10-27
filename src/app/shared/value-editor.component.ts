@@ -7,6 +7,7 @@ import {Component, Input, Output, EventEmitter, Renderer, ElementRef, OnChanges}
 export class ValueEditorComponent implements OnChanges {
     @Input() value: number;
     @Input() maxValue: number;
+    @Input() title: string;
     @Output() onChange: EventEmitter<number> = new EventEmitter<number>();
 
     private valueDelta: string;

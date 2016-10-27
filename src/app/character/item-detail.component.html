@@ -60,7 +60,7 @@
     <div *ngIf="item.template.data.quantifiable" class="row">
         <div class="col-xs-6">
             Quantité:
-            <value-editor [value]="item.data.quantity"
+            <value-editor [title]="'Quantité'" [value]="item.data.quantity"
                           (onChange)="_itemActionService.onAction('update_quantity', item, {quantity: $event})"></value-editor>
         </div>
     </div>
