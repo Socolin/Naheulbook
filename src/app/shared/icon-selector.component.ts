@@ -5,7 +5,21 @@ import {IconDescription} from "./icon.model";
 
 @Component({
     selector: 'icon-selector',
-    templateUrl: 'icon-selector.component.html'
+    templateUrl: 'icon-selector.component.html',
+    styles: [`
+        .selector-tab-content {
+            background: whitesmoke;
+        }
+        .selector-panel {
+            position: absolute; 
+            width: 80vw; 
+            z-index: 100;
+        }
+        @media screen and (min-width: 768px) {
+            .selector-panel{
+                width: 40vw; 
+            }
+        }`],
 })
 export class IconSelectorComponent implements OnInit, OnChanges {
     @Input() icon: IconDescription;
