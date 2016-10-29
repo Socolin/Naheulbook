@@ -9,19 +9,23 @@
             </ul>
         </div>
         <div class="row">
-            <div class="form-group col-xs-8">
-                <input class="form-control" (keydown.esc)="itemFilterName=null" [(ngModel)]="itemFilterName" (ngModelChange)="updateFilterItem()" placeholder="filter"/>
-            </div>
-            <div class="form-group col-xs-2">
-                <button class="btn btn-primary glyphicon" [class.glyphicon-sort]="sortType !== 'asc' && sortType != 'desc'" [class.glyphicon-sort-by-alphabet]="sortType == 'asc'"  [class.glyphicon-sort-by-alphabet-alt]="sortType == 'desc'" (click)="sortInventory()"></button>
-            </div>
-            <div class="form-group col-xs-2">
-                <button class="btn btn-primary glyphicon glyphicon-sort-by-attributes" (click)="sortInventory('not_identified_first')"></button>
+            <div class="form-group col-xs-12">
+                <div class="input-group">
+                    <input class="form-control" (keydown.esc)="itemFilterName=null"
+                           [(ngModel)]="itemFilterName"
+                           (ngModelChange)="updateFilterItem()"
+                           placeholder="Filtre"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary glyphicon" [class.glyphicon-list]="iconMode" [class.glyphicon-th-large]="!iconMode" (click)="toggleIconMode()"></button>
+                        <button class="btn btn-primary glyphicon" [class.glyphicon-sort]="sortType !== 'asc' && sortType != 'desc'" [class.glyphicon-sort-by-alphabet]="sortType == 'asc'"  [class.glyphicon-sort-by-alphabet-alt]="sortType == 'desc'" (click)="sortInventory()"></button>
+                        <button class="btn btn-primary glyphicon glyphicon-sort-by-attributes" (click)="sortInventory('not_identified_first')"></button>
+                    </span>
+                </div>
             </div>
         </div>
         <div *ngIf="selectedInventoryTab=='all'" class="row overflow-item-list">
             <div class="col-sm-12">
-                <div class="list-group" style="height:400px">
+                <div *ngIf="!iconMode" class="list-group" style="height:400px">
                     <a href="#" *ngFor="let item of character.items" class="list-group-item" (click)="selectItem(item)" [class.active]="selectedItem && selectedItem.id == item.id" [class.hidden]="!isItemFilteredByName(item)">
                         <span style="position: relative;padding-right: 25px">
                             <span style="position: absolute; top: -15px; left: -10px">
@@ -38,12 +42,22 @@
                         </template>
                     </a>
                 </div>
+                <div *ngIf="iconMode" class="list-group" style="height:400px">
+                    <template ngFor let-item [ngForOf]="character.items">
+                        <div [class.bg-info]="item === selectedItem" style="display: inline-block" (click)="selectItem(item)">
+                            <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                        </div>
+                        <template [ngIf]="item === selectedItem">
+                            <swipable-item-detail [gmView]="inGroupTab" [character]="character" [item]="item"></swipable-item-detail>
+                        </template>
+                    </template>
+                </div>
             </div>
         </div>
         <div *ngIf="selectedInventoryTab=='bags'" class="row overflow-item-list" style="height:400px;">
             <div class="col-sm-12" *ngIf="character.computedData.topLevelContainers">
                 <div class="list-group">
-                    <bag-item-view [items]="character.computedData.topLevelContainers" [character]="character" [gmView]="inGroupTab" [selectedItem]="selectedItem" (itemSelected)="selectItem($event)">Loading</bag-item-view>
+                    <bag-item-view [iconMode]="iconMode" [items]="character.computedData.topLevelContainers" [character]="character" [gmView]="inGroupTab" [selectedItem]="selectedItem" (itemSelected)="selectItem($event)">Loading</bag-item-view>
                 </div>
             </div>
         </div>
@@ -99,7 +113,7 @@
                     <template ngFor let-item [ngForOf]="character.computedData.itemsBySlots[slot.id]" let-i="index" let-last="last">
                         <div class="row">
                             <div class="btn-group col-xs-12" role="group">
-                                <button type="button" class="btn btn-default"
+                                <button type="button" style="text-align: left;" class="btn btn-default"
                                         [class.col-xs-8]="character.computedData.itemsBySlots[slot.id].length > 2 && (i && !last)"
                                         [class.col-xs-10]="character.computedData.itemsBySlots[slot.id].length == 2 || (character.computedData.itemsBySlots[slot.id].length > 2 && (i == 0 || last))"
                                         [class.col-xs-12]="character.computedData.itemsBySlots[slot.id].length == 1"
@@ -109,6 +123,11 @@
                                         (click)="selectItem(item)"
                                         [class.btn-primary]="selectedItem && selectedItem.id == item.id"
                                         [class.active]="selectedItem && selectedItem.id == item.id">
+                                    <span style="position: relative;padding-right: 25px">
+                                        <span style="position: absolute; top: -15px; left: -10px">
+                                            <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                                        </span>
+                                    </span>
                                     <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
                                     {{item.data.name}}
                                 </button>

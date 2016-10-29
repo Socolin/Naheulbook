@@ -8,8 +8,6 @@ import {removeDiacritics} from "../shared/remove_diacritics";
 import {SwipeService} from "./swipe.service";
 import {ItemActionService} from "./item-action.service";
 
-
-
 @Component({
     selector: 'inventory-panel',
     templateUrl: 'inventory-panel.component.html',
@@ -34,6 +32,8 @@ export class InventoryPanelComponent implements OnInit {
     public selectedAddItem: ItemTemplate;
     public itemAddQuantity: number;
 
+    public iconMode: boolean = false;
+
     constructor(
         @Inject(forwardRef(()  => ItemService)) private _itemService: ItemService
         , private _characterWebsocketService: CharacterWebsocketService
@@ -45,6 +45,10 @@ export class InventoryPanelComponent implements OnInit {
         if (this.selectedInventoryTab === 'add') {
             this.updateFilterAddItem();
         }
+    }
+
+    toggleIconMode() {
+        this.iconMode = !this.iconMode;
     }
 
     updateFilterAddItem() {

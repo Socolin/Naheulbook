@@ -1,37 +1,35 @@
-<template ngFor let-item [ngForOf]="items"  let-indexItem="index" let-lastItem="last">
-    <template ngFor let-l [ngForOf]="ends" let-i="index" let-last="last">
-        <div style="float:left;margin-bottom:-1px">
-            <template [ngIf]="lastItem && last">
-                <img src="/img/tree-top-left.png"/>
-            </template>
-            <template [ngIf]="!lastItem && last">
-                <img src="/img/tree-top-bot-left.png"/>
-            </template>
-
-            <template [ngIf]="!last">
-                <template [ngIf]="ends[i + 1]">
-                    <img src="/img/tree-empty.png"/>
+<template [ngIf]="iconMode">
+    <div href="#" class="list-group-item"
+       [style.margin-left]="(level * 20) + 'px'">
+        <template ngFor let-item [ngForOf]="itemsContained"  let-indexItem="index" let-lastItem="last">
+            <div style="display: inline-block; height: 32px" [class.bg-info]="item == selectedItem" (click)="selectItem(item)">
+                <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                <template [ngIf]="item == selectedItem">
+                    <swipable-item-detail [gmView]="gmView" [character]="character" [item]="item"></swipable-item-detail>
                 </template>
-                <template [ngIf]="!ends[i + 1]">
-                    <img src="/img/tree-top-bot.png"/>
-                </template>
-            </template>
-        </div>
-    </template>
-    <a href="#" class="list-group-item"
-       [style.margin-left]="(level * 20) + 'px'"
-       (click)="selectItem(item)"
-       [class.active]="selectedItem && selectedItem.id == item.id">
-        <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
-        {{item.data.name}}
-        <template [ngIf]="item == selectedItem">
-            <swipable-item-detail [gmView]="gmView" [character]="character" [item]="item"></swipable-item-detail>
+            </div>
         </template>
-    </a>
-    <template [ngIf]="item.content">
+    </div>
+    <template ngFor let-item [ngForOf]="itemsContainer"  let-indexItem="index" let-lastItem="last">
+        <a href="#" class="list-group-item"
+           [style.margin-left]="(level * 20) + 'px'"
+           (click)="selectItem(item)"
+           [class.active]="selectedItem && selectedItem.id == item.id">
+            <span style="position: relative;padding-right: 25px">
+                <span style="position: absolute; top: -15px; left: -10px">
+                    <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                </span>
+            </span>
+            <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
+            {{item.data.name}}
+            <template [ngIf]="item == selectedItem">
+                <swipable-item-detail [gmView]="gmView" [character]="character" [item]="item"></swipable-item-detail>
+            </template>
+        </a>
         <bag-item-view
             [ends]="ends"
             [level]="level + 1"
+            [iconMode]="iconMode"
             [end]="lastItem ? 1 : 0"
             [items]="item.content"
             [character]="character"
@@ -39,5 +37,56 @@
             [selectedItem]="selectedItem"
             (itemSelected)="selectItem($event)">
         </bag-item-view>
+    </template>
+</template>
+<template [ngIf]="!iconMode">
+    <template ngFor let-item [ngForOf]="items"  let-indexItem="index" let-lastItem="last">
+        <template ngFor let-l [ngForOf]="ends" let-i="index" let-last="last">
+            <div style="float:left;margin-bottom:-1px">
+                <template [ngIf]="lastItem && last">
+                    <img src="/img/tree-top-left.png"/>
+                </template>
+                <template [ngIf]="!lastItem && last">
+                    <img src="/img/tree-top-bot-left.png"/>
+                </template>
+
+                <template [ngIf]="!last">
+                    <template [ngIf]="ends[i + 1]">
+                        <img src="/img/tree-empty.png"/>
+                    </template>
+                    <template [ngIf]="!ends[i + 1]">
+                        <img src="/img/tree-top-bot.png"/>
+                    </template>
+                </template>
+            </div>
+        </template>
+        <a href="#" class="list-group-item"
+           [style.margin-left]="(level * 20) + 'px'"
+           (click)="selectItem(item)"
+           [class.active]="selectedItem && selectedItem.id == item.id">
+            <span style="position: relative;padding-right: 25px">
+                <span style="position: absolute; top: -15px; left: -10px">
+                    <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                </span>
+            </span>
+            <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
+            {{item.data.name}}
+            <template [ngIf]="item == selectedItem">
+                <swipable-item-detail [gmView]="gmView" [character]="character" [item]="item"></swipable-item-detail>
+            </template>
+        </a>
+        <template [ngIf]="item.content">
+            <bag-item-view
+                [ends]="ends"
+                [level]="level + 1"
+                [iconMode]="iconMode"
+                [end]="lastItem ? 1 : 0"
+                [items]="item.content"
+                [character]="character"
+                [gmView]="gmView"
+                [selectedItem]="selectedItem"
+                (itemSelected)="selectItem($event)">
+            </bag-item-view>
+        </template>
     </template>
 </template>
