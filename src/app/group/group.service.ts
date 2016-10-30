@@ -8,8 +8,8 @@ import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications/notifications.service';
 import {LoginService} from "../user/login.service";
 import {CharacterGiveDestination} from "../character/character.model";
-import {NhbkDateOffset, NhbkDate} from "../shared/date.model";
 import {GroupData} from "./group.model";
+import {NhbkDateOffset} from "../date/date.model";
 
 @Injectable()
 export class GroupService extends JsonService {
