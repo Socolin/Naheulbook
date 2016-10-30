@@ -3,6 +3,7 @@ import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 
 import {SharedModule} from "../shared/shared.module";
+import {DateModule} from "../date/date.module";
 
 import {
     EffectEditorComponent, CreateEffectComponent, EffectListComponent, EditEffectComponent,
@@ -14,6 +15,7 @@ import {
         CommonModule,
         FormsModule,
         SharedModule,
+        DateModule,
     ],
     declarations: [
         EffectEditorComponent,

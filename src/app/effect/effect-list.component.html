@@ -30,7 +30,11 @@
 			<td>{{effect.name}}</td>
 			<td>{{effect.description}}</td>
 			<td><div *ngFor="let modifier of effect.modifiers">{{modifier | modifier}}</div></td>
-			<td>{{effect.duration}}</td>
+			<td>
+                <span *ngIf="effect.duration">{{effect.duration}}</span>
+                <span *ngIf="effect.timeDuration"><span class="ra ra-clockwork"></span>{{effect.timeDuration | nhbkDuration}}</span>
+                <span *ngIf="effect.combatCount">{{effect.combatCount}} combats</span>
+            </td>
 			<td *ngIf="selectedCategory.diceCount">{{effect.dice}}</td>
 		</tr>
 	</tbody>

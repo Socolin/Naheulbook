@@ -33,7 +33,6 @@ export class AutocompleteInputComponent {
     }
 
     onKey(event: KeyboardEvent) {
-        console.log(event, event.keyCode);
         if (event.keyCode === 27) {
             this.close();
         }
