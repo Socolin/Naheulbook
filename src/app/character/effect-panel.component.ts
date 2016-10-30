@@ -6,6 +6,8 @@ import {CharacterService} from "./character.service";
 import {Observable} from "rxjs";
 import {CharacterWebsocketService} from "./character-websocket.service";
 import {AutocompleteValue} from "../shared/autocomplete-input.component";
+import {NhbkDateOffset} from "../date/date.model";
+import {dateOffset2TimeDuration} from "../date/util";
 
 @Component({
     selector: 'effect-detail',
@@ -150,16 +152,20 @@ export class EffectPanelComponent implements OnInit {
         return false;
     }
 
-    toggleReusableEffect(charEffect: CharacterEffect) {
+    toggleReusableEffect(charEffect: CharacterEffect, event: Event) {
         this._characterService.toggleEffect(this.character.id, charEffect).subscribe(
             this.onUpdateEffect.bind(this)
         );
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        event.stopPropagation();
     }
 
     onUpdateEffect(charEffect: CharacterEffect) {
         for (let i = 0; i < this.character.effects.length; i++) {
             if (this.character.effects[i].id === charEffect.id) {
                 if (this.character.effects[i].active === charEffect.active
+                    && this.character.effects[i].currentTimeDuration === charEffect.currentTimeDuration
                     && this.character.effects[i].currentCombatCount === charEffect.currentCombatCount) {
                     return;
                 }
@@ -173,6 +179,7 @@ export class EffectPanelComponent implements OnInit {
 
                 this.character.effects[i].active = charEffect.active;
                 this.character.effects[i].currentCombatCount = charEffect.currentCombatCount;
+                this.character.effects[i].currentTimeDuration = charEffect.currentTimeDuration;
                 break;
             }
         }
@@ -180,17 +187,29 @@ export class EffectPanelComponent implements OnInit {
     }
 
 
-// Custom modifier
+    // Custom modifier
 
-    private newModifierCombatCount: boolean;
+    private newModifierDurationType: string = 'custom';
     public customAddModifier: CharacterModifier = new CharacterModifier();
+    private customAddModifierDateOffset: NhbkDateOffset = new NhbkDateOffset();
+
+    setCustomAddModifierTimeDuration(dateOffset: NhbkDateOffset) {
+        this.customAddModifier.timeDuration= dateOffset2TimeDuration(dateOffset);
+    }
 
     addCustomModifier() {
         if (this.customAddModifier.name) {
-            if (!this.newModifierCombatCount) {
+            if (this.newModifierDurationType == 'custom') {
+                this.customAddModifier.timeDuration= null;
                 this.customAddModifier.combatCount = null;
-            } else {
+            } else if (this.newModifierDurationType == 'combat') {
+                this.customAddModifier.timeDuration= null;
                 this.customAddModifier.duration = null;
+            } else if (this.newModifierDurationType == 'time') {
+                this.customAddModifier.combatCount = null;
+                this.customAddModifier.duration = null;
+            } else {
+                throw new Error("Invalid newModifierDurationType: " + this.newModifierDurationType);
             }
             this._characterService.addModifier(this.character.id, this.customAddModifier).subscribe(
                 this.onAddModifier.bind(this)
@@ -239,16 +258,20 @@ export class EffectPanelComponent implements OnInit {
         return false;
     }
 
-    toggleReusableModifier(modifier: CharacterModifier) {
+    toggleReusableModifier(modifier: CharacterModifier, event: Event) {
         this._characterService.toggleModifier(this.character.id, modifier.id).subscribe(
             this.onUpdateModifier.bind(this)
         );
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        event.stopPropagation();
     }
 
     onUpdateModifier(modifier: CharacterModifier) {
         for (let i = 0; i < this.character.modifiers.length; i++) {
             if (this.character.modifiers[i].id === modifier.id) {
                 if (this.character.modifiers[i].active === modifier.active
+                    && this.character.modifiers[i].currentTimeDuration === modifier.currentTimeDuration
                     && this.character.modifiers[i].currentCombatCount === modifier.currentCombatCount) {
                     return;
                 }
@@ -261,6 +284,7 @@ export class EffectPanelComponent implements OnInit {
                 }
                 this.character.modifiers[i].active = modifier.active;
                 this.character.modifiers[i].currentCombatCount = modifier.currentCombatCount;
+                this.character.modifiers[i].currentTimeDuration = modifier.currentTimeDuration;
                 break;
             }
         }

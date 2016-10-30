@@ -9,6 +9,7 @@ import {FormsModule} from "@angular/forms";
 import {CharacterModule} from "../character/character.module";
 import {MonsterModule} from "../monster/monster.module";
 import {NotificationsModule} from "../notifications/notifications.module";
+import {DateModule} from "../date/date.module";
 
 @NgModule({
     imports: [
@@ -18,6 +19,7 @@ import {NotificationsModule} from "../notifications/notifications.module";
         CharacterModule,
         MonsterModule,
         NotificationsModule,
+        DateModule,
     ],
     declarations: [
         CreateItemComponent,

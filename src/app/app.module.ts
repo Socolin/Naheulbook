@@ -21,6 +21,7 @@ import {UserModule} from "./user/user.module";
 
 import {WebSocketService} from './shared/websocket.service';
 import NhbkErrorHandler from "./nhbk-error-handler";
+import {DateModule} from "./date/date.module";
 
 @NgModule({
     imports: [
@@ -40,6 +41,7 @@ import NhbkErrorHandler from "./nhbk-error-handler";
         SharedModule,
         SkillModule,
         UserModule,
+        DateModule,
     ],
     declarations: [
         AppComponent

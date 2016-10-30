@@ -112,6 +112,14 @@
                                 <template [ngSwitchCase]="'START_COMBAT'">
                                     Debut d'un combat
                                 </template>
+                                <template [ngSwitchCase]="'ADD_TIME'">
+                                    Modification du temps: {{log.data.offset | nhbkDuration}}
+                                </template>
+                                <template [ngSwitchCase]="'CHANGE_DATE'">
+                                    Modification de la date
+                                    <div *ngIf="log.data.oldValue" style="padding-left: 20px">Ancienne date: <date [date]="log.data.oldValue"></date></div>
+                                    <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
+                                </template>
 								<template ngSwitchDefault>{{log.action}}</template>
 							</span>
                             </div>
@@ -126,24 +134,41 @@
                 <div class="col-lg-4 col-md-3 col-sm-6">
                     <div>
                         <h3>Informations</h3>
-                        <div>
-                            Mankdebol:
-                            <value-editor [value]="group.data.mankdebol" [title]="'Mankdebol du groupe'"
-                                          (onChange)="changeGroupValue('mankdebol', $event)"></value-editor>
-                        </div>
-                        <div>
-                            Débilibeuk:
-                            <value-editor [value]="group.data.debilibeuk" [title]="'Débilibeuk du groupe'"
-                                          (onChange)="changeGroupValue('debilibeuk', $event)"></value-editor>
-                        </div>
-                        <div>
-                            Date: {{group.data.date}}
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-3 col-md-4">
+                                <strong>Mankdebol</strong>
+                            </div>
+                            <div class="col-xs-8 col-sm-9 col-md-8">
+                                <value-editor [value]="group.data.mankdebol" [title]="'Mankdebol du groupe'"
+                                              (onChange)="changeGroupValue('mankdebol', $event)"></value-editor>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-4">
-                                Lieu:
+                            <div class="col-xs-4 col-sm-3 col-md-4">
+                                <strong>Débilibeuk</strong>
                             </div>
-                            <div class="col-xs-8">
+                            <div class="col-xs-8 col-sm-9 col-md-8">
+                                <value-editor [value]="group.data.debilibeuk" [title]="'Débilibeuk du groupe'"
+                                              (onChange)="changeGroupValue('debilibeuk', $event)"></value-editor>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-3 col-md-4">
+                                <strong>Date</strong>
+                            </div>
+                            <div class="pull-right col-xs-8 col-sm-9 col-md-8">
+                                <date-selector [date]="group.data.date" (onChange)="changeGroupValue('date', $event)"></date-selector>
+                                <date-modifier (onChange)="addTime($event)"></date-modifier>
+                            </div>
+                            <div class="col-xs-8 col-sm-9 col-md-8 col-xs-offset-4 col-sm-offset-3 col-md-offset-4">
+                                <date [date]="group.data.date"></date>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-3 col-md-4">
+                                <strong>Lieu</strong>
+                            </div>
+                            <div class="col-xs-8 col-sm-9 col-md-8">
                                 <autocomplete-input [value]="group.location.name" (onSelect)="changeGroupLocation($event)"
                                                     [(callback)]="autocompleteLocationsCallback"></autocomplete-input>
                             </div>

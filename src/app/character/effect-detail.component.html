@@ -7,6 +7,8 @@
     <p *ngIf="characterEffect.effect.duration">Durée: {{characterEffect.effect.duration}}</p>
     <p *ngIf="characterEffect.effect.combatCount">Durée: {{characterEffect.effect.combatCount}} combat</p>
     <p *ngIf="characterEffect.currentCombatCount">Actif encore {{characterEffect.currentCombatCount}} combat</p>
+    <p *ngIf="characterEffect.effect.timeDuration">Durée: {{characterEffect.effect.timeDuration | nhbkDuration}}</p>
+    <p *ngIf="characterEffect.currentTimeDuration">Actif encore {{characterEffect.currentTimeDuration | nhbkDuration}}</p>
 
     <div *ngFor="let modifier of characterEffect.effect.modifiers">
         {{modifier | modifier}}

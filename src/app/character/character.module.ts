@@ -21,6 +21,7 @@ import {
 import {InventoryPanelComponent} from "./inventory-panel.component";
 import {SwipableItemDetail} from "./swipable-item-detail.component";
 import {BagItemViewComponent} from "./bag-item-view.component";
+import {DateModule} from "../date/date.module";
 
 @NgModule({
     imports: [
@@ -31,6 +32,7 @@ import {BagItemViewComponent} from "./bag-item-view.component";
         OriginModule,
         JobModule,
         EffectModule,
+        DateModule,
     ],
     declarations: [
         BagItemViewComponent

@@ -509,6 +509,14 @@
 						<template [ngSwitchCase]="'START_COMBAT'">
 							Debut d'un combat
 						</template>
+                        <template [ngSwitchCase]="'ADD_TIME'">
+                            Modification du temps: {{log.data.offset | nhbkDuration}}
+                        </template>
+                        <template [ngSwitchCase]="'CHANGE_DATE'">
+                            Modification de la date
+                            <div *ngIf="log.data.oldValue" style="padding-left: 20px">Ancienne date: <date [date]="log.data.oldValue"></date></div>
+                            <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
+                        </template>
 						<template ngSwitchDefault>{{log.action}}: {{log.info}}</template>
 					</span>
 					</template>

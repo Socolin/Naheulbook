@@ -1,0 +1,64 @@
+<button class="btn btn-default glyphicon glyphicon-edit" (click)="openSelector()"></button>
+<div *ngIf="show" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 120">
+    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black; z-index: 100" (click)="closeSelector()"></div>
+    <div class="modal-dialog" style="z-index: 140">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="closeSelector()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Selection de la date</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="hour">Heure</label>
+                        <div class="col-sm-10">
+                            <input type="number" min="0" max="23" step="1" class="form-control" id="hour" [(ngModel)]="date.hour">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="minute">Minute</label>
+                        <div class="col-sm-10">
+                            <input type="number" min="0" max="59" step="1" class="form-control" id="minute" [(ngModel)]="date.minute">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="relativeDay">Jour</label>
+                        <div class="col-sm-10">
+                            <input type="number" min="1" step="1" class="form-control" id="relativeDay" [(ngModel)]="relativeDay">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Periode</label>
+                        <div class="col-sm-10">
+                            <div class="dropdown">
+                                <button class="form-control" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{currentCalendarDate?.name}}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dLabel">
+                                    <template ngFor let-cDate [ngForOf]="calendar">
+                                        <li>
+                                            <a href="#" (click)="setCurrentCalendarDate(cDate)">
+                                                {{cDate.name}}
+                                            </a>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="year">Annee</label>
+                        <div class="col-sm-10">
+                            <input type="number" min="0" step="1" class="form-control" id="year" [(ngModel)]="date.year">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" (click)="closeSelector()">Fermer</button>
+                <button type="button" class="btn btn-primary" (click)="validDate()">Valider</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

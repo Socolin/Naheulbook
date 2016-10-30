@@ -8,6 +8,8 @@ import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications/notifications.service';
 import {LoginService} from "../user/login.service";
 import {CharacterGiveDestination} from "../character/character.model";
+import {NhbkDateOffset, NhbkDate} from "../shared/date.model";
+import {GroupData} from "./group.model";
 
 @Injectable()
 export class GroupService extends JsonService {
@@ -54,11 +56,18 @@ export class GroupService extends JsonService {
         }).map(res => res.json());
     }
 
-    editGroupValue(groupId: number, key: string, value: any): Observable<Object> {
+    editGroupValue(groupId: number, key: string, value: any): Observable<GroupData> {
         return this.postJson('/api/group/edit', {
             groupId: groupId,
             key: key,
             value: value
+        }).map(res => res.json());
+    }
+
+    addTime(groupId: number, dateOffset: NhbkDateOffset): Observable<GroupData> {
+        return this.postJson('/api/group/addTime', {
+            groupId: groupId,
+            dateOffset: dateOffset
         }).map(res => res.json());
     }
 

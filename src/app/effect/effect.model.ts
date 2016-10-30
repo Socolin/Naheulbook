@@ -17,4 +17,5 @@ export class Effect {
     modifiers: StatModifier[] = [];
     duration: string;
     category: number;
+    timeDuration: number;
 }

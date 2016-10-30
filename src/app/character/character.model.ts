@@ -34,9 +34,11 @@ export class CharacterEffect {
     active: boolean;
     reusable: boolean;
     currentCombatCount: number;
+    currentTimeDuration: number;
 }
 
 export class CharacterModifier {
+    id: number;
     name: string;
     values: StatModifier[] = [];
     permanent: boolean;
@@ -45,7 +47,8 @@ export class CharacterModifier {
     combatCount: number;
     currentCombatCount: number;
     reusable: boolean;
-    id: number;
+    timeDuration: number;
+    currentTimeDuration: number;
 }
 
 interface SkillDetail {

@@ -1,5 +1,6 @@
 import {Component, OnInit, OnChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Observable} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
 
@@ -12,8 +13,7 @@ import {LoginService} from '../user';
 import {Fighter} from './group.model';
 import {AutocompleteValue} from '../shared';
 import {LocationService, Location} from '../location';
-import {Observable} from 'rxjs';
-
+import {NhbkDateOffset} from "../date";
 
 @Component({
     templateUrl: 'group.component.html',
@@ -495,21 +495,25 @@ export class GroupComponent implements OnInit, OnChanges {
 
     changeGroupValue(key: string, value: any) {
         this._groupService.editGroupValue(this.group.id, key, value).subscribe(
-            () => {
+            data => {
                 if (key === 'debilibeuk') {
                     this._notification.info('Debilibeuk', this.group.data[key] + ' -> ' + value);
-                    this.group.data[key] = value;
                 } else if (key === 'mankdebol') {
                     this._notification.info('Mankdebol', this.group.data[key] + ' -> ' + value);
-                    this.group.data[key] = value;
                 } else if (key === 'inCombat') {
-                    this._notification.info('Mod combat: ', this.group.data[key] + ' -> ' + value);
-                    this.group.data[key] = value;
+                    this._notification.info('Mode combat: ', this.group.data[key] + ' -> ' + value);
+                } else if (key === 'date') {
+                    this._notification.info('Date', 'Date changé');
                 }
-            },
-            err => {
-                console.log(err);
-                this._notification.error('Erreur', 'Erreur serveur');
+                this.group.data = data;
+            }
+        );
+    }
+
+    addTime(dateOffset: NhbkDateOffset) {
+        this._groupService.addTime(this.group.id, dateOffset).subscribe(
+            data => {
+                this.group.data = data;
             }
         );
     }
