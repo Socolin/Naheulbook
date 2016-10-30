@@ -158,7 +158,7 @@
                             </div>
                             <div class="pull-right col-xs-8 col-sm-9 col-md-8">
                                 <date-selector [date]="group.data.date" (onChange)="changeGroupValue('date', $event)"></date-selector>
-                                <date-modifier (onChange)="addTime($event)"></date-modifier>
+                                <date-modifier *ngIf="group.data.date" (onChange)="addTime($event)"></date-modifier>
                             </div>
                             <div class="col-xs-8 col-sm-9 col-md-8 col-xs-offset-4 col-sm-offset-3 col-md-offset-4">
                                 <date [date]="group.data.date"></date>

@@ -19,6 +19,9 @@ export class DateComponent implements OnInit, OnChanges {
     }
 
     updateCurrentCalendar() {
+        if (!this.date) {
+            return;
+        }
         if (this.date.minute < 10) {
             this.minute = "0" + this.date.minute.toString();
         }
