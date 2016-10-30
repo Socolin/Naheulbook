@@ -35,7 +35,6 @@ export class EditLocationComponent implements OnInit {
     }
 
     editLocation() {
-        console.log(this.location);
         this._locationService.editLocation(this.location, this.maps).subscribe(
             () => {
                 this._locationService.clearLocations();

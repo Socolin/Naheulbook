@@ -26,7 +26,6 @@ export class LocationEditorComponent implements OnInit {
     }
 
     addMap() {
-        console.log(this.newMap);
         if (!this.newMap.name || !this.newMap.file) {
             this._notification.error('Erreur', 'Nom ou fichier manquant');
             return;
