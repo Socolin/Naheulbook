@@ -66,8 +66,14 @@ export class EffectPanelComponent implements OnInit {
 
     private preSelectedEffect: Effect;
     private newEffectReusable: boolean;
+    private newEffectCustomDuration: boolean = false;
+    private newEffectTimeDuration: number = null;
+    private newEffectDuration: string = null;
+    private newEffectTimeDurationDate: NhbkDateOffset = new NhbkDateOffset();
+    private newEffectCombatCount: number = null;
 
     private effectFilterName: string;
+    private newEffectDurationType: string = 'custom';
     private effectCategoriesById: {[categoryId: number]: EffectCategory};
     private autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
 
@@ -90,11 +96,51 @@ export class EffectPanelComponent implements OnInit {
 
     selectEffectInAutocompleteList(effect: Effect) {
         this.preSelectedEffect = effect;
+        this.newEffectCustomDuration = false;
+        if (effect) {
+            if (effect.combatCount) {
+                this.newEffectDurationType = 'combat';
+                this.newEffectTimeDuration = null;
+                this.newEffectDuration = null;
+                this.newEffectCombatCount = effect.combatCount;
+            }
+            else if (effect.timeDuration) {
+                this.newEffectDurationType = 'time';
+                this.newEffectTimeDuration = effect.timeDuration;
+                this.newEffectDuration = null;
+                this.newEffectCombatCount = null;
+            }
+            else {
+                this.newEffectDurationType = 'custom';
+                this.newEffectTimeDuration = null;
+                this.newEffectDuration = '';
+                this.newEffectCombatCount = null;
+            }
+        }
     }
 
 
+    setNewEffectTimeDuration(dateOffset: NhbkDateOffset) {
+        this.newEffectTimeDuration = dateOffset2TimeDuration(dateOffset);
+        this.newEffectTimeDurationDate = dateOffset;
+    }
+
     addEffect(effect: Effect, reusable: boolean) {
-        this._characterService.addEffect(this.character.id, effect.id, reusable).subscribe(
+        let data = {
+            reusable: reusable
+        };
+        if (this.newEffectCustomDuration) {
+            if (this.newEffectDurationType === 'combat') {
+                data['combatCount'] = this.newEffectCombatCount;
+            }
+            else if (this.newEffectDurationType === 'time') {
+                data['timeDuration'] = this.newEffectTimeDuration;
+            }
+            else if (this.newEffectDurationType === 'custom') {
+                data['duration'] = this.newEffectDuration;
+            }
+        }
+        this._characterService.addEffect(this.character.id, effect.id, data).subscribe(
             this.onAddEffect.bind(this)
         );
     }

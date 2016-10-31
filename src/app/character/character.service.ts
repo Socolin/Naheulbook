@@ -217,11 +217,11 @@ export class CharacterService extends JsonService {
         }).map(res => res.json());
     }
 
-    addEffect(characterId: number, effectId: number, reusable: boolean): Observable<CharacterEffect> {
+    addEffect(characterId: number, effectId: number, data: any): Observable<CharacterEffect> {
         return this.postJson('/api/character/addEffect', {
             characterId: characterId,
             effectId: effectId,
-            reusable: reusable,
+            data: data,
             active: true,
         }).map(res => res.json());
     }
