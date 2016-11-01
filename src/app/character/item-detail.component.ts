@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, forwardRef, Inject, SimpleChanges} from '@angular/core';
-import {Item} from './item.model';
+import {Item, ItemModifier} from './item.model';
 import {Character, CharacterGiveDestination} from './character.model';
 import {ItemService, ItemCategory} from '../item';
 import {ItemActionService} from "./item-action.service";
@@ -23,6 +23,9 @@ export class ItemDetailComponent implements OnChanges, OnInit {
 
     public givingItem: boolean = false;
     public giveDestination: CharacterGiveDestination[];
+
+    public addingModifier: boolean = false;
+    public newModifier: ItemModifier;
 
     constructor(@Inject(forwardRef(() => ItemService)) private _itemService: ItemService
         , private _itemActionService: ItemActionService
@@ -88,6 +91,47 @@ export class ItemDetailComponent implements OnChanges, OnInit {
                 this.giveDestination = characters;
             }
         );
+    }
+
+    startAddModifier() {
+        this.newModifier = new ItemModifier();
+        this.addingModifier = true;
+    }
+
+    stopAddModifier() {
+        this.addingModifier = false;
+    }
+
+    addModifier() {
+        this.addingModifier = false;
+        if (this.item.modifiers === null) {
+            this.item.modifiers = [];
+        }
+        this.newModifier.active = true;
+        this.newModifier.currentDuration = this.newModifier.duration;
+        this.item.modifiers.push(this.newModifier);
+        this._itemActionService.onAction('update_modifiers', this.item);
+        this.newModifier = new ItemModifier();
+    }
+
+    removeModifier(index: number) {
+        if (this.item.modifiers) {
+            this.item.modifiers.splice(index, 1);
+            if (this.item.modifiers.length == 0) {
+                this.item.modifiers = null;
+            }
+            this._itemActionService.onAction('update_modifiers', this.item);
+        }
+    }
+
+    toggleModifier(index: number) {
+        if (this.item.modifiers) {
+            this.item.modifiers[index].active = !this.item.modifiers[index].active;
+            if (this.item.modifiers[index].active) {
+                this.item.modifiers[index].currentDuration = this.item.modifiers[index].duration;
+            }
+            this._itemActionService.onAction('update_modifiers', this.item);
+        }
     }
 
     ngOnInit() {

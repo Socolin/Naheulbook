@@ -561,6 +561,37 @@ export class Character {
                 }
             }
 
+            if (item.modifiers) {
+                for (let i = 0; i < item.modifiers.length; i++) {
+                    let modifier = item.modifiers[i];
+                    if (!modifier.active) {
+                        continue;
+                    }
+                    this.computedData.countActiveEffect++;
+                    let detailData = {};
+                    for (let j = 0; j < modifier.values.length; j++) {
+                        let mod = modifier.values[j];
+                        if (mod.type === 'ADD') {
+                            this.computedData.stats[mod.stat] += mod.value;
+                        }
+                        else if (mod.type === 'SET') {
+                            this.computedData.stats[mod.stat] = mod.value;
+                        }
+                        else if (mod.type === 'DIV') {
+                            this.computedData.stats[mod.stat] /= mod.value;
+                        }
+                        else if (mod.type === 'MUL') {
+                            this.computedData.stats[mod.stat] *= mod.value;
+                        }
+                        else if (mod.type === 'PERCENTAGE') {
+                            this.computedData.stats[mod.stat] *= (mod.value / 100);
+                        }
+                        detailData[mod.stat] = formatModifierValue(mod);
+                    }
+                    this.computedData.details.add(item.data.name + '/' + modifier.name, detailData);
+                }
+            }
+
             let cleanModifiers = this.cleanItemModifiers(item);
             for (let m = 0; m < cleanModifiers.length; m++) {
                 let modifier = cleanModifiers[m];

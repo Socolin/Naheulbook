@@ -4,23 +4,23 @@
 	</div>
 </div>
 <div *ngFor="let modifier of modifiers; let i=index" class="row" [class.bg-success]="modifier.value > 0" [class.bg-danger]="modifier.value < 0">
-	<div class="col-sm-1">
+	<div class="col-xs-1">
 		<button class="btn btn-warning glyphicon glyphicon-remove" (click)="removeModifier(i)"></button>
 	</div>
-	<div class="col-sm-2">{{modifier | modifier}}</div>
-	<div *ngIf="options.indexOf('job') != -1" class="col-sm-2">
+	<div class="col-xs-2">{{modifier | modifier}}</div>
+	<div *ngIf="options.indexOf('job') != -1" class="col-xs-2">
 		<select #jobSelector [(ngModel)] ="modifier.job">
 			<option></option>
 			<option *ngFor="let job of jobs" [attr.value]="job.id">{{job.name}}</option>
 		</select>
 	</div>
-	<div *ngIf="options.indexOf('origin') != -1" class="col-sm-3">
+	<div *ngIf="options.indexOf('origin') != -1" class="col-xs-3">
 		<select #originSelector [(ngModel)] ="modifier.origin">
 			<option></option>
 			<option *ngFor="let origin of origins" [attr.value]="origin.id">{{origin.name}}</option>
 		</select>
 	</div>
-	<div *ngIf="options.indexOf('special') != -1"  class="col-sm-3">
+	<div *ngIf="options.indexOf('special') != -1"  class="col-xs-3">
 		<div *ngIf="!modifier.special" (click)="modifier.special = []">Add special</div>
 		<div *ngIf="modifier.special" (click)="modifier.special = null">Remove special</div>
 		<div *ngIf="modifier.special">

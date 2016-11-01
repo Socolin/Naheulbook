@@ -267,6 +267,17 @@ export class InventoryPanelComponent implements OnInit {
         }
     }
 
+    onUpdateModifiers(item: PartialItem) {
+        for (let i = 0; i < this.character.items.length; i++) {
+            let it = this.character.items[i];
+            if (it.id === item.id) {
+                it.modifiers = item.modifiers;
+                this.character.update();
+                break;
+            }
+        }
+    }
+
     onUpdateQuantity(item: PartialItem) {
         for (let i = 0; i < this.character.items.length; i++) {
             let it = this.character.items[i];
@@ -290,6 +301,7 @@ export class InventoryPanelComponent implements OnInit {
         this._characterWebsocketService.registerPacket("changeContainer").subscribe(this.onChangeContainer.bind(this));
         this._characterWebsocketService.registerPacket("updateItemName").subscribe(this.onUpdateItemName.bind(this));
         this._characterWebsocketService.registerPacket("changeQuantity").subscribe(this.onUpdateQuantity.bind(this));
+        this._characterWebsocketService.registerPacket("updateItemModifiers").subscribe(this.onUpdateModifiers.bind(this));
 
         this._itemActionService.registerAction('equip').subscribe((event: {item: Item, data: any})=> {
             let eventData = event.data;
@@ -381,6 +393,13 @@ export class InventoryPanelComponent implements OnInit {
             item.data.icon = eventData.icon;
             this._itemService.updateItem(item.id, item.data).subscribe(
                 this.onUpdateItemName.bind(this)
+            );
+        });
+
+        this._itemActionService.registerAction('update_modifiers').subscribe((event: {item: Item, data: any})=> {
+            let item = event.item;
+            this._itemService.updateItemModifiers(item.id, item.modifiers).subscribe(
+                this.onUpdateModifiers.bind(this)
             );
         });
     }

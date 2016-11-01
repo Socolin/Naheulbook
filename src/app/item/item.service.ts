@@ -11,6 +11,7 @@ import {ItemData, PartialItem} from "../character";
 import {LoginService} from "../user";
 import {SkillService} from "../skill";
 import {Skill} from "../skill";
+import {ItemModifier} from "../character/item.model";
 
 @Injectable()
 export class ItemService extends JsonService {
@@ -236,6 +237,13 @@ export class ItemService extends JsonService {
         return this.postJson('/api/item/updateItem', {
             itemId: itemId,
             itemData: itemData
+        }).map(res => res.json());
+    }
+
+    updateItemModifiers(itemId: number, modifiers: ItemModifier[]): Observable<PartialItem> {
+        return this.postJson('/api/item/updateItemModifiers', {
+            itemId: itemId,
+            modifiers: modifiers
         }).map(res => res.json());
     }
 

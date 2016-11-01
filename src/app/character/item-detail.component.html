@@ -146,6 +146,43 @@
         </div>
     </div>
 
+    <div *ngIf="item.modifiers">
+        <div *ngFor="let modifier of item.modifiers; let i = index" style="border-radius: 8px; background-color: #aae8aa">
+            <h4>
+                {{modifier.name}}
+                <span class="badge" *ngIf="modifier.currentDuration && modifier.durationType === 'combat'">
+                    <span class="ra ra-sword"></span>{{modifier.currentDuration}}
+                </span>
+                <span class="badge" *ngIf="modifier.currentDuration && modifier.durationType === 'time'">
+                    <span class="ra ra-clockwork"></span>{{modifier.currentDuration | nhbkDuration}}
+                </span>
+                <button class="btn btn-danger glyphicon glyphicon-trash" (click)="removeModifier(i)"></button>
+            </h4>
+            <div *ngIf="modifier.reusable">
+                <button (click)="toggleModifier(i)"
+                        class="glyphicon glyphicon-off btn"
+                        [class.btn-success]="modifier.active"
+                        [class.btn-danger]="!modifier.active">
+                </button>
+            </div>
+            <div *ngIf="!modifier.currentDuration">
+                <span *ngIf="modifier.durationType === 'combat'">
+                    <span class="ra ra-sword"></span>{{modifier.duration}}
+                </span>
+                <span *ngIf="modifier.durationType === 'time'">
+                    <span class="ra ra-clockwork"></span>{{modifier.duration | nhbkDuration}}
+                </span>
+            </div>
+            <div *ngIf="modifier.durationType === 'custom'">
+                Duree: {{modifier.currentDuration}}
+            </div>
+            <div *ngFor="let value of modifier.values">
+                {{value | modifier}}
+            </div>
+            <hr>
+        </div>
+    </div>
+
     <ul>
         <li *ngFor="let skill of item.template.skills">Donne la compétence "{{skill.name}}"</li>
         <li *ngFor="let skill of item.template.unskills">Annule "{{skill.name}}"</li>
@@ -190,6 +227,22 @@
         </button>
     </div>
 </div>
+
+
+<button *ngIf="!addingModifier" class="btn btn-primary" (click)="startAddModifier()">Ajouter Modificateur</button>
+<div *ngIf="addingModifier" style="margin-top: 5px; margin-bottom: 5px; padding-bottom:5px; border-top: 1px solid gray; border-bottom: 1px solid gray">
+    <h3>Ajouter un modificateur</h3>
+    <div>
+        <modifier-editor [modifier]="newModifier"></modifier-editor>
+    </div>
+    <button class="btn btn-success" (click)="addModifier()">
+        Ajouter modificateur
+    </button>
+    <button class="btn btn-danger" (click)="stopAddModifier()">
+        Annuler
+    </button>
+</div>
+
 
 <button *ngIf="gmView && item.data.notIdentified" class="btn btn-warning"
         (click)="_itemActionService.onAction('identify', item)">Identifier</button>

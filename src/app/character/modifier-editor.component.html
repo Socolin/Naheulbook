@@ -1,0 +1,70 @@
+<div class="form-horizontal">
+    <div class="row-fluid">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Nom</label>
+            <div class="col-sm-9">
+                <input class="form-control" type="text" [(ngModel)]="modifier.name"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-9 control-label">Ré-utilisable</label>
+            <div class="col-xs-3">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" (click)="modifier.reusable = true" [class.active]="modifier.reusable">Oui</button>
+                    <button type="button" class="btn btn-primary" (click)="modifier.reusable = false" [class.active]="!modifier.reusable">Non</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Durée</label>
+            <div class="col-sm-9">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary"
+                            (click)="setDurationType('combat')"
+                            [class.active]="modifier.durationType === 'combat'">
+                        Nombre de combat
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            (click)="setDurationType('time')"
+                            [class.active]="modifier.durationType === 'time'">
+                        Temps
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            (click)="setDurationType('custom')"
+                            [class.active]="modifier.durationType === 'custom'">
+                        Autre
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="modifier.durationType == 'custom'" class="col-sm-push-3 col-sm-9">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon">Durée</span>
+                    <input class="form-control" type="text" [(ngModel)]="modifier.duration"/>
+                </div>
+            </div>
+            <div *ngIf="modifier.durationType == 'time'" class="col-sm-push-3 col-sm-9">
+                <div class="input-group">
+                    <span class="input-group-addon">Temps</span>
+                    <span class="input-group-addon">{{modifier.duration | nhbkDuration}}</span>
+                    <span class="input-group-addon">
+                        <date-modifier [resetOnChange]=false
+                                       [dateOffset]="durationDateOffset"
+                                       (onChange)="setTimeDuration($event)"></date-modifier>
+                    </span>
+                </div>
+            </div>
+            <div *ngIf="modifier.durationType == 'combat'" class="col-sm-push-3 col-sm-9">
+                <div class="input-group input-group-lg">
+                    <input class="form-control" type="number" min="0" [(ngModel)]="modifier.duration"/>
+                    <span class="input-group-addon">combat(s)</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Modificateur</label>
+            <div class="col-sm-9">
+                <modifiers-editor [(modifiers)]="modifier.values"></modifiers-editor>
+            </div>
+        </div>
+    </div>
+</div>
