@@ -9,7 +9,7 @@ export class JsonService {
         , private _loginService: LoginService) {
     }
 
-    postJson(url: string, data: any): Observable<Response> {
+    postJson(url: string, data?: any): Observable<Response> {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
 

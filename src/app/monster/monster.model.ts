@@ -13,7 +13,6 @@ class MonsterData {
     color: string;
     number: number;
 
-
     constructor(monsterData?: MonsterData) {
         if (monsterData) {
             for (let key in monsterData) {
@@ -48,18 +47,27 @@ export class Monster {
         }
     }
 }
-
+export class TraitInfo {
+    constructor(id: number, level: number) {
+        this.traitId = id;
+        this.level = level;
+    }
+    traitId: number;
+    level: number;
+}
 export interface MonsterTemplateData {
     at: number;
+    prd: number;
+    ev: number;
+    ea: number;
     cou: number;
     dmg: string;
-    ev: number;
     note: string;
     pr: string;
-    prd: number;
     resm: number;
     xp: number;
     special: boolean;
+    traits: TraitInfo[];
 }
 export interface MonsterTemplateCategory {
     difficulty: string;
@@ -72,4 +80,11 @@ export interface MonsterTemplate {
     name: string;
     data: MonsterTemplateData;
     type: MonsterTemplateCategory;
+}
+
+export interface MonsterTrait {
+    id: number;
+    name: string;
+    description: string;
+    levels?: string[];
 }

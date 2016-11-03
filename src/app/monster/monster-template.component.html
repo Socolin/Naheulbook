@@ -1,33 +1,48 @@
 <div>
-	<div>
-		<h4>{{monster.name}}</h4>
-	</div>
-	<div *ngIf="monster.data.special">{{monster.data.note}}</div>
-	<div class="row">
-		<div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
-			<strong>AT:</strong> {{monster.data.at}}
-		</div>
-		<div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
-			<strong>PRD:</strong> {{monster.data.prd}}
-		</div>
-		<div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
-			<strong>EV:</strong> {{monster.data.ev}}
-		</div>
-		<div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
-			<strong>PR:</strong> {{monster.data.pr}}
-		</div>
-		<div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
-			<strong>COU:</strong> {{monster.data.cou}}
-		</div>
-		<div class="col-xs-4 col-sm-2 col-md-2 col-lg-2" *ngIf="!monster.data.special">
-			<strong>Degat:</strong> {{monster.data.dmg}}
-		</div>
-		<div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
-			<strong>XP:</strong> {{monster.data.xp}}
-		</div>
-		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-6" *ngIf="!monster.data.special">
-			<strong>Note</strong>: {{monster.data.note}}
-		</div>
-	</div>
+    <div>
+        <h4><span class="glyphicon glyphicon-edit" (click)="editMonster()"></span>{{monster.name}}</h4>
+    </div>
+    <div *ngIf="editing">
+        <monster-editor [monster]="monster"></monster-editor>
+        <button class="btn btn-danger" (click)="editing=false">Annuler</button>
+        <button class="btn btn-success" (click)="saveMonster(monster)">Valider</button>
+    </div>
+    <div *ngIf="!editing">
+        <div *ngIf="monster.data.special">{{monster.data.note}}</div>
+        <div class="row">
+            <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
+                <strong>AT:</strong> {{monster.data.at}}
+            </div>
+            <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
+                <strong>PRD:</strong> {{monster.data.prd}}
+            </div>
+            <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
+                <strong>EV:</strong> {{monster.data.ev}}
+            </div>
+            <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
+                <strong>PR:</strong> {{monster.data.pr}}
+            </div>
+            <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
+                <strong>COU:</strong> {{monster.data.cou}}
+            </div>
+            <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2" *ngIf="!monster.data.special">
+                <strong>Degat:</strong> {{monster.data.dmg}}
+            </div>
+            <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
+                <strong>XP:</strong> {{monster.data.xp}}
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6" *ngIf="!monster.data.special">
+                <strong>Note</strong>: {{monster.data.note}}
+            </div>
+        </div>
+        <div *ngIf="traisById && monster.data.traits" class="row">
+            <div class="col-sm-3 col-xs-4">
+                <strong>Traits</strong>
+            </div>
+            <div *ngFor="let trait of monster.data.traits" class="col-xs-4 col-sm-3">
+                {{traisById[trait.traitId].name}}
+            </div>
+        </div>
+    </div>
 </div>
 

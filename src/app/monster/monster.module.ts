@@ -5,6 +5,7 @@ import {FormsModule} from "@angular/forms";
 import {MonsterColorSelectorComponent, MonsterListComponent, MonsterTemplateComponent, MonsterService} from "./";
 
 import {SharedModule} from "../shared/shared.module";
+import {MonsterEditorComponent} from "./monster-editor.component";
 
 @NgModule({
     imports: [
@@ -16,6 +17,7 @@ import {SharedModule} from "../shared/shared.module";
         MonsterColorSelectorComponent,
         MonsterListComponent,
         MonsterTemplateComponent,
+        MonsterEditorComponent,
     ],
     providers: [
         MonsterService,

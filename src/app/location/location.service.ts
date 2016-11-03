@@ -57,6 +57,7 @@ export class LocationService extends JsonService {
                 .subscribe(
                     locations => {
                         this.locations.next(locations);
+                        this.locations.complete();
                     },
                     error => {
                         this.locations.error(error);
