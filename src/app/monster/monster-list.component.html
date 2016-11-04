@@ -1,4 +1,10 @@
 <div>
+    <button *ngIf="!newMonster" class="glyphicon glyphicon-plus btn btn-success" (click)="startAddMonster()"></button>
+    <div *ngIf="newMonster">
+        <monster-editor [monster]="newMonster"></monster-editor>
+        <button class="btn btn-danger" (click)="cancelAddMonster()">Annuler</button>
+        <button [disabled]="!newMonster.type || !newMonster.name" class="btn btn-success" (click)="addMonster()">Ajouter</button>
+    </div>
 	<div *ngFor="let category of categories; let lastCategory=last">
 		<h3>{{category.name}}
 			<span *ngIf="category.difficulty == 'low'" class="label label-info">Bas niveau</span>

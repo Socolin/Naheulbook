@@ -1,21 +1,40 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
 
 import {MonsterTemplate, MonsterTemplateCategory, MonsterTrait, TraitInfo} from "./monster.model";
 import {MonsterService} from "./monster.service";
 import {Observable} from "rxjs";
+import {AutocompleteValue} from "../shared/autocomplete-input.component";
+import {ItemTemplate} from "../item/item-template.model";
+import {ItemService} from "../item/item.service";
 
 @Component({
     selector: 'monster-editor',
     templateUrl: 'monster-editor.component.html',
 })
-export class MonsterEditorComponent implements OnInit {
+export class MonsterEditorComponent implements OnInit, OnChanges {
     @Input() monster: MonsterTemplate;
     public categories: MonsterTemplateCategory[] = [];
+    public defenseStat: string = 'PRD';
+
     public traits: MonsterTrait[] = [];
     public simpleTraits: MonsterTrait[] = [];
     public powerTraits: MonsterTrait[] = [];
 
-    constructor(private _monsterService: MonsterService) {
+    private autocompleteItemCallback: Function = this.updateAutocompleteItem.bind(this);
+    private newItem: ItemTemplate;
+
+    constructor(private _monsterService: MonsterService
+        , private _itemService: ItemService) {
+    }
+
+    selectItemTemplate(itemTemplate: ItemTemplate, input) {
+
+    }
+
+    updateAutocompleteItem(filter: string) {
+        return this._itemService.searchItem(filter).map(
+            list => list.map(e => new AutocompleteValue(e, e.name))
+        );
     }
 
     hasTrait(trait: MonsterTrait): TraitInfo {
@@ -71,6 +90,38 @@ export class MonsterEditorComponent implements OnInit {
             }
         } else {
             traits.push(new TraitInfo(trait.id, 1));
+        }
+    }
+
+    selectCategory(category: any) {
+        let categoryId = category.target.value;
+        for (let i = 0; i < this.categories.length; i++) {
+            let c = this.categories[i];
+            if (c.id == categoryId) {
+                this.monster.type = c;
+                break;
+            }
+        }
+    }
+
+    setDefenseStat(stat: string) {
+        if (stat === 'PRD') {
+            this.monster.data.prd = null;
+        }
+        if (stat === 'ESQ') {
+            this.monster.data.esq = null;
+        }
+        this.defenseStat = stat;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('monster' in changes) {
+            if (this.monster.data.prd) {
+                this.setDefenseStat('PRD');
+            }
+            else {
+                this.setDefenseStat('ESQ');
+            }
         }
     }
 

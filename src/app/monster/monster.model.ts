@@ -55,9 +55,10 @@ export class TraitInfo {
     traitId: number;
     level: number;
 }
-export interface MonsterTemplateData {
+export class MonsterTemplateData {
     at: number;
     prd: number;
+    esq: number;
     ev: number;
     ea: number;
     cou: number;
@@ -69,13 +70,17 @@ export interface MonsterTemplateData {
     special: boolean;
     traits: TraitInfo[];
 }
-export interface MonsterTemplateCategory {
+export class MonsterTemplateCategory {
     difficulty: string;
     id: number;
     name: string;
 }
 
-export interface MonsterTemplate {
+export class MonsterTemplate {
+    constructor() {
+        this.data = new MonsterTemplateData();
+    }
+
     id: number;
     name: string;
     data: MonsterTemplateData;
