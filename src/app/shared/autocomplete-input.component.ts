@@ -41,12 +41,17 @@ export class AutocompleteInputComponent {
                 this.preSelectedValueIndex--;
         }
         else if (event.keyCode === 40) {
-            if (this.preSelectedValueIndex < this.values.length) {
+            if (this.values && this.preSelectedValueIndex < this.values.length) {
                 this.preSelectedValueIndex++;
             }
         }
         else if (event.keyCode === 13) {
-            if (this.preSelectedValueIndex >= 0 && this.preSelectedValueIndex < this.values.length) {
+            if (this.values && this.preSelectedValueIndex >= 0 && this.preSelectedValueIndex < this.values.length) {
+                this.selectValue(this.values[this.preSelectedValueIndex]);
+            }
+        }
+        else if (event.keyCode === 9) {
+            if (this.values && this.preSelectedValueIndex >= 0 && this.preSelectedValueIndex < this.values.length) {
                 this.selectValue(this.values[this.preSelectedValueIndex]);
             }
         }

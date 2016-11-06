@@ -24,6 +24,21 @@ export class EditLocationComponent implements OnInit {
             location => {
                 this._locationService.clearLocations();
                 this._notifications.success("Cartographie", "Lieu ajotuer");
+                this.location.sons.push(location);
+                this.newLocationName = null;
+            },
+            err => {
+                console.log(err);
+                this._notifications.error("Erreur", "Erreur serveur");
+            }
+        );
+    }
+
+    addLocationAndEdit() {
+        this._locationService.addLocation(this.newLocationName, this.location.id).subscribe(
+            location => {
+                this._locationService.clearLocations();
+                this._notifications.success("Cartographie", "Lieu ajotuer");
                 this._router.navigate(["/edit-location", location.id]);
                 this.newLocationName = null;
             },

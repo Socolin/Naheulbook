@@ -6,6 +6,9 @@ import {Observable} from "rxjs";
 import {AutocompleteValue} from "../shared/autocomplete-input.component";
 import {ItemTemplate} from "../item/item-template.model";
 import {ItemService} from "../item/item.service";
+import {LocationService} from "../location/location.service";
+import {Location} from "../location/location.model";
+import {removeDiacritics} from "../shared/remove_diacritics";
 
 @Component({
     selector: 'monster-editor',
@@ -14,27 +17,71 @@ import {ItemService} from "../item/item.service";
 export class MonsterEditorComponent implements OnInit, OnChanges {
     @Input() monster: MonsterTemplate;
     public categories: MonsterTemplateCategory[] = [];
+    public locations: Location[] = [];
+    public locationsById: {[id: number]:  Location} = null;
     public defenseStat: string = 'PRD';
+    public locationSearchName: string;
 
     public traits: MonsterTrait[] = [];
     public simpleTraits: MonsterTrait[] = [];
     public powerTraits: MonsterTrait[] = [];
 
+    private autocompleteLocationsCallback: Function = this.updateAutocompleteLocation.bind(this);
     private autocompleteItemCallback: Function = this.updateAutocompleteItem.bind(this);
     private newItem: ItemTemplate;
 
     constructor(private _monsterService: MonsterService
+        , private _locationService: LocationService
         , private _itemService: ItemService) {
     }
 
-    selectItemTemplate(itemTemplate: ItemTemplate, input) {
+    selectItemTemplate(itemTemplate: ItemTemplate) {
 
     }
 
-    updateAutocompleteItem(filter: string) {
+    updateAutocompleteItem(filter: string): Observable<AutocompleteValue[]> {
         return this._itemService.searchItem(filter).map(
             list => list.map(e => new AutocompleteValue(e, e.name))
         );
+    }
+
+    removeLocation(locationId: number) {
+        let index = this.monster.locations.indexOf(locationId);
+        if (index !== -1) {
+            this.monster.locations.splice(index, 1);
+        }
+    }
+
+    selectLocation(location: Location) {
+        if (!this.monster.locations) {
+            this.monster.locations = [];
+        }
+        if (this.monster.locations.indexOf(location.id) == -1) {
+            this.monster.locations.push(location.id);
+        }
+        this.locationSearchName = "";
+    }
+
+    updateAutocompleteLocation(filter: string) {
+        return Observable.create((function (observer) {
+            let result = [];
+            if (!filter) {
+                observer.next(result);
+                return;
+            }
+            let cleanFilter = removeDiacritics(filter.toLowerCase());
+            if (cleanFilter.length === 0) {
+                observer.next(result);
+                return;
+            }
+            for (let i = 0; i < this.locations.length; i++) {
+                let location = this.locations[i];
+                if (location.name.toLowerCase().replace(" ","").indexOf(cleanFilter) !== -1) {
+                    result.push(new AutocompleteValue(location, location.name));
+                }
+            }
+            observer.next(result);
+        }).bind(this));
     }
 
     hasTrait(trait: MonsterTrait): TraitInfo {
@@ -127,10 +174,18 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         Observable.forkJoin(this._monsterService.getMonsterCategories()
+            , this._locationService.getLocations()
             , this._monsterService.getMonsterTraits()).subscribe(
             res => {
                 this.categories = res[0];
-                this.traits = res[1];
+                this.locations = res[1];
+                let locationsById = {};
+                for (let i = 0; i < this.locations.length; i++) {
+                    let loc = this.locations[i];
+                    locationsById[loc.id] = loc;
+                }
+                this.locationsById = locationsById;
+                this.traits = res[2];
                 let simpleTraits = [];
                 let powerTraits = [];
                 for (let i = 0; i < this.traits.length; i++) {

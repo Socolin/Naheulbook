@@ -85,6 +85,7 @@ export class MonsterTemplate {
     name: string;
     data: MonsterTemplateData;
     type: MonsterTemplateCategory;
+    locations: number[];
 }
 
 export interface MonsterTrait {
