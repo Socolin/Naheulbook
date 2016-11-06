@@ -36,7 +36,7 @@ export class MonsterListComponent implements OnInit {
                 this.sortMonsterByCategory();
                 this._notifications.success("Monstre", "Monstre créée");
             }
-        )
+        );
         this.newMonster = null;
     }
 
