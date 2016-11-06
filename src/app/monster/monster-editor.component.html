@@ -1,12 +1,12 @@
 <div *ngIf="monster" class="form-horizontal">
     <div class="form-group">
         <label for="name" class="col-sm-1 control-label">Nom</label>
-        <div class="col-sm-8">
+        <div class="col-sm-9">
             <input type="text" class="form-control" id="name" placeholder="Nom" [(ngModel)]="monster.name">
         </div>
-        <label for="xp" class="col-sm-1 col-xs-4 control-label">XP</label>
-        <div class="col-sm-2 col-xs-8">
-            <input type="number" class="form-control" id="xp" placeholder="XP" [(ngModel)]="monster.data.xp">
+        <div class="col-sm-2 col-xs-4 control-label btn-group">
+            <button class="btn btn-default" [class.btn-info]="defenseStat === 'PRD'" (click)="setDefenseStat('PRD')">PRD</button>
+            <button class="btn btn-default" [class.btn-info]="defenseStat === 'ESQ'" (click)="setDefenseStat('ESQ')">ESQ</button>
         </div>
     </div>
     <div class="form-group">
@@ -14,34 +14,41 @@
         <div class="col-sm-2 col-xs-8">
             <input type="number" class="form-control" id="at" placeholder="AT" [(ngModel)]="monster.data.at">
         </div>
-        <div class="col-sm-2 col-xs-4 control-label btn-group">
-            <button class="btn btn-default" [class.btn-info]="defenseStat === 'PRD'" (click)="setDefenseStat('PRD')">PRD</button>
-            <button class="btn btn-default" [class.btn-info]="defenseStat === 'ESQ'" (click)="setDefenseStat('ESQ')">ESQ</button>
-        </div>
+        <label for="prd" class="col-sm-1 col-xs-4 control-label">{{defenseStat}}</label>
         <div *ngIf="defenseStat === 'PRD'" class="col-sm-2 col-xs-8">
             <input type="number" class="form-control" id="prd" placeholder="PRD" [(ngModel)]="monster.data.prd">
         </div>
         <div *ngIf="defenseStat === 'ESQ'" class="col-sm-2 col-xs-8">
             <input type="number" class="form-control" id="esq" placeholder="ESQ" [(ngModel)]="monster.data.esq">
         </div>
-        <label for="dmg" class="col-sm-1 control-label">Degats</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" id="dmg" placeholder="Degats" [(ngModel)]="monster.data.dmg">
+        <label for="ev" class="col-sm-1 col-xs-4 control-label">EV</label>
+        <div class="col-sm-2 col-xs-8">
+            <input type="number" class="form-control" id="ev" placeholder="EV" [(ngModel)]="monster.data.ev">
         </div>
-    </div>
-    <div class="form-group">
         <label for="pr" class="col-sm-1 col-xs-4 control-label">PR</label>
         <div class="col-sm-2 col-xs-8">
             <input type="text" class="form-control" id="pr" placeholder="PR" [(ngModel)]="monster.data.pr">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="cou" class="col-sm-1 col-xs-4 control-label">COU</label>
+        <div class="col-sm-2 col-xs-8">
+            <input type="text" class="form-control" id="cou" placeholder="COU" [(ngModel)]="monster.data.cou">
         </div>
         <label for="resm" class="col-sm-1 col-xs-4 control-label">RESM</label>
         <div class="col-sm-2 col-xs-8">
             <input type="number" class="form-control" id="resm" placeholder="RESM" [(ngModel)]="monster.data.resm">
         </div>
-        <label for="ev" class="col-sm-1 col-xs-4 control-label">EV</label>
-        <div class="col-sm-2 col-xs-8">
-            <input type="number" class="form-control" id="ev" placeholder="EV" [(ngModel)]="monster.data.ev">
+        <label for="dmg" class="col-sm-1 control-label">Degats</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="dmg" placeholder="Degats" [(ngModel)]="monster.data.dmg">
         </div>
+        <label for="xp" class="col-sm-1 col-xs-4 control-label">XP</label>
+        <div class="col-sm-2 col-xs-8">
+            <input type="number" class="form-control" id="xp" placeholder="XP" [(ngModel)]="monster.data.xp">
+        </div>
+    </div>
+    <div class="form-group">
         <label for="ea" class="col-sm-1 col-xs-4 control-label">EA</label>
         <div class="col-sm-2 col-xs-8">
             <input type="number" class="form-control" id="ea" placeholder="EA" [(ngModel)]="monster.data.ea">
