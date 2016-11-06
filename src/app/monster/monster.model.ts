@@ -79,6 +79,7 @@ export class MonsterTemplateCategory {
 export class MonsterTemplate {
     constructor() {
         this.data = new MonsterTemplateData();
+        this.locations = [];
     }
 
     id: number;
