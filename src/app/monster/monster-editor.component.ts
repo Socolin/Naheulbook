@@ -153,10 +153,10 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
 
     setDefenseStat(stat: string) {
         if (stat === 'PRD') {
-            this.monster.data.prd = null;
+            this.monster.data.esq = null;
         }
         if (stat === 'ESQ') {
-            this.monster.data.esq = null;
+            this.monster.data.prd = null;
         }
         this.defenseStat = stat;
     }
