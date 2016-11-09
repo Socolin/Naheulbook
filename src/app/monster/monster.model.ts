@@ -1,3 +1,4 @@
+import {PartialItemTemplate} from "../item/item-template.model";
 class MonsterData {
     at: number;
     prd: number;
@@ -75,17 +76,26 @@ export class MonsterTemplateCategory {
     id: number;
     name: string;
 }
+export class MonsterSimpleInventory {
+    id: number;
+    itemTemplate: PartialItemTemplate;
+    minCount: number;
+    maxCount: number;
+    chance: number;
+}
 
 export class MonsterTemplate {
     constructor() {
         this.data = new MonsterTemplateData();
         this.locations = [];
+        this.simpleInventory = [];
     }
 
     id: number;
     name: string;
     data: MonsterTemplateData;
     type: MonsterTemplateCategory;
+    simpleInventory: MonsterSimpleInventory[];
     locations: number[];
 }
 

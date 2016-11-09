@@ -17,13 +17,19 @@ export class AutocompleteValue {
 export class AutocompleteInputComponent {
     @Input() callback: Function;
     @Input() value: string;
+    @Input() clearOnSelect: boolean = false;
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
     private values: AutocompleteValue[];
     private preSelectedValueIndex: number;
 
     selectValue(value: any) {
         this.onSelect.emit(value.value);
-        this.value = value.text;
+        if (this.clearOnSelect) {
+            this.value = "";
+        }
+        else {
+            this.value = value.text;
+        }
         this.values = null;
         return false;
     }

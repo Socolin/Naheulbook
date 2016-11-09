@@ -35,12 +35,22 @@
                 <strong>Note</strong>: {{monster.data.note}}
             </div>
         </div>
-        <div *ngIf="traisById && monster.data.traits" class="row">
+        <div *ngIf="traisById && monster.data.traits && monster.data.traits.length" class="row">
             <div class="col-sm-3 col-xs-4">
                 <strong>Traits</strong>
             </div>
             <div *ngFor="let trait of monster.data.traits" class="col-xs-4 col-sm-3">
                 {{traisById[trait.traitId].name}}
+            </div>
+        </div>
+        <div *ngIf="monster.simpleInventory && monster.simpleInventory.length" class="row">
+            <div class="col-sm-3 col-xs-4">
+                <strong>Inventaire</strong>
+            </div>
+            <div class="col-xs-8 col-sm-9">
+                <div *ngFor="let inventory of monster.simpleInventory">
+                    {{inventory.itemTemplate.name}}
+                </div>
             </div>
         </div>
     </div>

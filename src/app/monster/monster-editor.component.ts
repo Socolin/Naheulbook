@@ -1,6 +1,9 @@
 import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
 
-import {MonsterTemplate, MonsterTemplateCategory, MonsterTrait, TraitInfo} from "./monster.model";
+import {
+    MonsterTemplate, MonsterTemplateCategory, MonsterTrait, TraitInfo,
+    MonsterSimpleInventory
+} from "./monster.model";
 import {MonsterService} from "./monster.service";
 import {Observable} from "rxjs";
 import {AutocompleteValue} from "../shared/autocomplete-input.component";
@@ -27,8 +30,10 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     public powerTraits: MonsterTrait[] = [];
 
     private autocompleteLocationsCallback: Function = this.updateAutocompleteLocation.bind(this);
+
     private autocompleteItemCallback: Function = this.updateAutocompleteItem.bind(this);
     private newItem: ItemTemplate;
+    private newItemData: any = {};
 
     constructor(private _monsterService: MonsterService
         , private _locationService: LocationService
@@ -36,13 +41,34 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     }
 
     selectItemTemplate(itemTemplate: ItemTemplate) {
-
+        this.newItem = itemTemplate;
+        this.newItemData.minCount = 1;
+        this.newItemData.maxCount = 1;
+        this.newItemData.chance = 1;
     }
 
     updateAutocompleteItem(filter: string): Observable<AutocompleteValue[]> {
         return this._itemService.searchItem(filter).map(
             list => list.map(e => new AutocompleteValue(e, e.name))
         );
+    }
+
+    addItemSimpleInventory() {
+        let inventoryItem = new MonsterSimpleInventory();
+        inventoryItem.itemTemplate = this.newItem;
+        inventoryItem.minCount = this.newItemData.minCount = 0;
+        inventoryItem.maxCount = this.newItemData.maxCount = 0;
+        inventoryItem.chance = this.newItemData.chance = 1;
+
+        if (!this.monster.simpleInventory) {
+            this.monster.simpleInventory = [];
+        }
+        this.monster.simpleInventory.push(inventoryItem);
+        this.newItem = null;
+    }
+
+    removeItemSimpleInventory(index: number) {
+        this.monster.simpleInventory.splice(index, 1);
     }
 
     removeLocation(locationId: number) {

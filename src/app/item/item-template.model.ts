@@ -69,3 +69,9 @@ export class ItemTemplate {
     requirements: any[];
     skillModifiers: ItemSkillModifier[];
 }
+
+export class PartialItemTemplate {
+    id: number;
+    name: string;
+}
+
