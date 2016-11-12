@@ -19,6 +19,13 @@ export class GroupService extends JsonService {
         super(http, notification, loginService);
     }
 
+    /* Monster */
+
+    loadMonsters(groupId: number): Observable<Monster[]> {
+        return this.postJson('/api/group/loadMonsters', {
+            groupId: groupId
+        }).map(res => res.json());
+    }
 
     createMonster(groupId: number, monster): Observable<Monster> {
         return this.postJson('/api/group/createMonster', {
@@ -41,6 +48,14 @@ export class GroupService extends JsonService {
         }).map(res => res.json());
     }
 
+    deleteMonster(monsterId: number): Observable<any> {
+        return this.postJson('/api/group/deleteMonster', {
+            monsterId: monsterId
+        }).map(res => res.json());
+    }
+
+    /* History */
+
     loadHistory(groupId: number, page: number): Observable<HistoryEntry[]> {
         return this.postJson('/api/group/history', {
             groupId: groupId,
@@ -55,6 +70,8 @@ export class GroupService extends JsonService {
             info: info
         }).map(res => res.json());
     }
+
+    /* Misc */
 
     editGroupValue(groupId: number, key: string, value: any): Observable<GroupData> {
         return this.postJson('/api/group/edit', {

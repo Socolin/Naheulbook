@@ -1,0 +1,309 @@
+<table class="table table-condensed text-center">
+    <thead>
+    <tr>
+        <th></th>
+        <th class="text-center">Nom</th>
+        <th class="text-center">AT</th>
+        <th class="text-center">PRD</th>
+        <th class="text-center">EV</th>
+        <th class="text-center">EA</th>
+        <th class="text-center">PR</th>
+        <th class="text-center">RESM</th>
+        <th class="text-center">PI</th>
+        <th class="text-center">COU</th>
+        <th class="text-center">Classe-XP</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <template ngFor let-fighter [ngForOf]="charAndMonsters" let-i=index>
+        <template [ngIf]="fighter.isMonster">
+            <tr style="border-bottom-width:0" [class.even_row]="i % 2 == 0"
+                (click)="selectCombatRow(i)" [class.combat_row_selected]="selectedCombatRow == i">
+                <td rowspan=2>
+                    <monster-color-selector [monster]="fighter.monster"
+                                            (onNumberChange)='changeNumber(fighter, $event)'
+                                            (onColorChange)='changeColor(fighter, $event)'></monster-color-selector>
+                </td>
+                <td>
+                    <monster-editable-field
+                        [monster]="fighter.monster"
+                        [isDataField]=false
+                        [fieldName]="'name'">
+                    </monster-editable-field>
+                </td>
+                <td>
+                    <value-editor [value]="fighter.monster.data.at"
+                                  [title]="'AT'"
+                                  (onChange)="updateMonsterField(fighter.monster, 'at', $event)">
+                    </value-editor>
+                </td>
+                <td>
+                    <value-editor [value]="fighter.monster.data.prd"
+                                  [title]="'AT'"
+                                  (onChange)="updateMonsterField(fighter.monster, 'prd', $event)">
+                    </value-editor>
+                </td>
+                <td>
+                    <value-editor [value]="fighter.monster.data.ev"
+                                  [maxValue]="fighter.monster.data.maxEv"
+                                  [title]="'EV Monstre'"
+                                  (onChange)="updateMonsterField(fighter.monster, 'ev', $event)">
+                    </value-editor>
+                </td>
+                <td>
+                    <value-editor [value]="fighter.monster.data.ea"
+                                  [maxValue]="fighter.monster.data.maxEa"
+                                  [title]="'EA Monstre'"
+                                  (onChange)="updateMonsterField(fighter.monster, 'ea', $event)">
+                    </value-editor>
+                </td>
+                <td>
+                    <monster-editable-field
+                        [monster]="fighter.monster"
+                        [isDataField]=true
+                        [fieldName]="'pr'">
+                    </monster-editable-field>
+                </td>
+                <td>
+                    <monster-editable-field
+                        [monster]="fighter.monster"
+                        [isDataField]=true
+                        [fieldName]="'resm'">
+                    </monster-editable-field>
+                </td>
+                <td>
+                    <monster-editable-field
+                        [monster]="fighter.monster"
+                        [isDataField]=true
+                        [fieldName]="'dmg'">
+                    </monster-editable-field>
+                </td>
+                <td>
+                                    <span *ngIf="fighter.chercheNoise" style="position:relative"><span
+                                        style="left:10px; float:right; position:absolute;">*</span></span>
+                    <monster-editable-field
+                        [monster]="fighter.monster"
+                        [isDataField]=true
+                        [fieldName]="'cou'">
+                    </monster-editable-field>
+                </td>
+                <td>
+                    <monster-editable-field
+                        [monster]="fighter.monster"
+                        [isDataField]=true
+                        [fieldName]="'xp'">
+                    </monster-editable-field>
+                </td>
+                <td rowspan=3>
+                    <button class="btn btn-danger game-icon game-icon-skull-crossed-bones"
+                            (click)=killMonster(fighter.monster)></button>
+                    <button class="btn btn-danger glyphicon glyphicon-trash"
+                            (click)=deleteMonster(fighter.monster)></button>
+                </td>
+            </tr>
+            <tr [class.even_row]="i % 2 == 0" (click)="selectedCombatRow = i"
+                [class.combat_row_selected]="selectedCombatRow == i">
+                <td style="border:0;" colspan=3>
+                    <target-selector [element]=fighter.target [targets]=charAndMonsters
+                                     (onTargetChange)='changeTarget(fighter, $event)'></target-selector>
+                </td>
+                <td style="border:0;" colspan=1>Note</td>
+                <td style="border:0;" colspan=6>
+                    <monster-editable-field
+                        [monster]="fighter.monster"
+                        [isDataField]=true
+                        [fieldName]="'note'">
+                    </monster-editable-field>
+                </td>
+            </tr>
+            <tr [class.combat_row_selected]="selectedCombatRow == i" class="text-left" (click)="selectedCombatRow = i">
+                <td style="border:0;">
+                    <button class="btn btn-primary glyphicon glyphicon-plus-sign" (click)="fighter.monster.viewInventory = !fighter.monster.viewInventory" *ngIf="fighter.monster.items?.length"></button>
+                </td>
+                <td style="border:0;" colspan="10">
+                    <div class="row">
+                        <div *ngFor="let item of fighter.monster.items">
+                            <div *ngIf="fighter.monster.viewInventory || itemHasSlot(item.template, 'WEAPON')">
+                                {{item.data.name}}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </template>
+        <template [ngIf]="!fighter.isMonster">
+            <tr [class.even_row]="i % 2 == 0" (click)="selectedCombatRow = i"
+                [class.combat_row_selected]="selectedCombatRow == i">
+                <td rowspan=2>
+                    <character-color-selector [character]="fighter.character"
+                                              (onColorChange)='changeColor(fighter, $event)'>
+                    </character-color-selector>
+                </td>
+                <td>{{fighter.name}}</td>
+                <td>{{fighter.stats.at}}</td>
+                <td>{{fighter.stats.prd}}</td>
+                <td [class.text-danger]="fighter.stats.ev < 4">{{fighter.stats.ev}}/{{fighter.stats.maxEv}}</td>
+                <td>{{fighter.stats.ea}}/{{fighter.stats.maxEa}}</td>
+                <td>{{fighter.stats.pr}}</td>
+                <td>{{fighter.stats.resm}}</td>
+                <td></td>
+                <td>{{fighter.stats.cou}}<span *ngIf="fighter.chercheNoise">*</span></td>
+                <td></td>
+                <td><button class="btn btn-success glyphicon glyphicon-plus" (click)="addItemTo(fighter.character)"></button></td>
+            </tr>
+            <tr [class.even_row]="i % 2 == 0" (click)="selectedCombatRow = i"
+                [class.combat_row_selected]="selectedCombatRow == i">
+                <td style="border:0;" colspan=3>
+                    <target-selector [element]=fighter.target [targets]=charAndMonsters
+                                     (onTargetChange)='changeTarget(fighter, $event)'></target-selector>
+                </td>
+                <td style="border:0;" colspan=8></td>
+            </tr>
+        </template>
+    </template>
+    </tbody>
+</table>
+
+<div>
+    <h3>Monstres morts</h3>
+    <table class="table table-striped table-condensed text-center">
+        <thead>
+        <th class="text-center">Nom</th>
+        <th class="text-center">AT</th>
+        <th class="text-center">PRD</th>
+        <th class="text-center">EV</th>
+        <th class="text-center">EA</th>
+        <th class="text-center">PR</th>
+        <th class="text-center">RESM</th>
+        <th class="text-center">Damage</th>
+        <th class="text-center">COU</th>
+        <th class="text-center">XP</th>
+        <th class="text-center">Notes</th>
+        <th></th>
+        </thead>
+        <tbody>
+        <template ngFor let-element [ngForOf]="deadMonsters">
+            <tr>
+                <td>{{element.name}}</td>
+                <td>{{element.data.at}}</td>
+                <td>{{element.data.prd}}</td>
+                <td>{{element.data.ev}}</td>
+                <td>{{element.data.ea}}</td>
+                <td>{{element.data.pr}}</td>
+                <td>{{element.data.resm}}</td>
+                <td>{{element.data.dmg}}</td>
+                <td>{{element.data.cou}}<span *ngIf="element.data.chercheNoise">*</span></td>
+                <td>{{element.data.xp}}</td>
+                <td>{{element.note}}</td>
+            </tr>
+        </template>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h3>Ajouter un monstre</h3>
+</div>
+<div>
+
+</div>
+<div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-xs-1 control-label">Nom</label>
+            <div class="col-xs-11">
+                <autocomplete-input [value]="newMonster.name"
+                                    (onSelect)="selectMonsterInAutocompleteList($event)"
+                                    [(callback)]="autocompleteMonsterListCallback"></autocomplete-input>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputMonsteAt" class="col-xs-1 control-label">AT</label>
+            <div class="col-xs-3">
+                <input type="number" class="form-control" id="inputMonsteAt"
+                       [(ngModel)]="newMonster.data.at">
+            </div>
+            <label for="inputMonsterPrd" class="col-xs-1 control-label">PRD</label>
+            <div class="col-xs-3">
+                <input type="number" class="form-control" id="inputMonsterPrd"
+                       [(ngModel)]="newMonster.data.prd">
+            </div>
+            <label for="inputMonsterPR" class="col-xs-1 control-label">PR</label>
+            <div class="col-xs-3">
+                <input type="text" class="form-control" id="inputMonsterPR" [(ngModel)]="newMonster.data.pr">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputMonsterEV" class="col-xs-1 control-label">EV</label>
+            <div class="col-xs-3">
+                <input type="number" class="form-control" id="inputMonsterEV"
+                       [(ngModel)]="newMonster.data.ev">
+            </div>
+            <label for="inputMonsterEA" class="col-xs-1 control-label">EA</label>
+            <div class="col-xs-3">
+                <input type="number" class="form-control" id="inputMonsterEA"
+                       [(ngModel)]="newMonster.data.ea">
+            </div>
+            <label for="inputMonsterResm" class="col-xs-1 control-label">RESM</label>
+            <div class="col-xs-3">
+                <input type="text" class="form-control" id="inputMonsterResm"
+                       [(ngModel)]="newMonster.data.resm">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputMonsterDmg" class="col-xs-1 control-label">DMG</label>
+            <div class="col-xs-3">
+                <input type="text" class="form-control" id="inputMonsterDmg"
+                       [(ngModel)]="newMonster.data.dmg">
+            </div>
+            <label for="inputMonsterXp" class="col-xs-1 control-label">XP</label>
+            <div class="col-xs-3">
+                <input type="text" class="form-control" id="inputMonsterXp"
+                       [(ngModel)]="newMonster.data.xp">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputMonsterCou" class="col-xs-1 control-label">COU</label>
+            <div class="col-xs-3">
+                <input type="number" class="form-control" id="inputMonsterCou"
+                       [(ngModel)]="newMonster.data.cou">
+            </div>
+            <label for="inputMonsterNoise" class="col-xs-3 control-label">Chercher des noises</label>
+            <div class="col-xs-1">
+                <input type="checkbox" class="form-control" id="inputMonsterNoise"
+                       [(ngModel)]="newMonster.data.chercheNoise">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputMonsterNote" class="col-xs-1 control-label">Note</label>
+            <div class="col-xs-11">
+                <input type="text" class="form-control" id="inputMonsterNote"
+                       [(ngModel)]="newMonster.data.note">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputMonsterNote" class="col-xs-1 control-label">Inventaire</label>
+            <div class="col-xs-1">
+                <button class="btn btn-primary ra ra-perspective-dice-random" (click)="randomMonsterInventory()"></button>
+            </div>
+            <div class="col-xs-9" *ngIf="newMonster.inventory">
+                <div *ngFor="let item of newMonster.inventory; let i=index">
+                    <span *ngIf="item.data.quantity > 1">{{item.data.quantity}}</span> {{item.data.name}}
+                    <span *ngIf="item.data.notIdentified" class="label label-warning">Non identifie</span>
+                    <button (click)="item.data.notIdentified = !item.data.notIdentified" class="btn btn-primary glyphicon glyphicon-question-sign"></button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-11">
+                <button type="submit" class="btn btn-primary" (click)="addMonster()">Ajouter monstre
+                </button>
+                <button type="submit" class="btn btn-default" (click)="cleanMonster()">Vider
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<create-item [character]="addItemTarget" (onAddItem)="onItemAdded()"></create-item>

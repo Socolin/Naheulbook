@@ -1,8 +1,4 @@
 import {Injectable} from "@angular/core";
-import {WebSocketService} from "../shared/websocket.service";
-import {NotificationsService} from "../notifications/notifications.service";
-import {Character} from "./character.model";
-import {CharacterService} from "./character.service";
 import {Observable, Observer} from "rxjs";
 import {Item} from "./item.model";
 

@@ -10,12 +10,11 @@ export interface GroupData {
     date: NhbkDate,
 }
 
-export interface Group {
+export class Group{
     id: number;
     name: string;
     data: GroupData|any;
     location: Location;
-    monsters: Monster[];
     invited: CharacterInviteInfo[];
     invites: CharacterInviteInfo[];
     characters: {id: number}[];

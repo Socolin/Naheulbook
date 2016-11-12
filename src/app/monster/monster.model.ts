@@ -1,9 +1,13 @@
 import {PartialItemTemplate} from "../item/item-template.model";
+import {Item} from "../character/item.model";
 class MonsterData {
     at: number;
     prd: number;
+    esq: number;
     ev: number;
+    maxEv: number;
     ea: number;
+    maxEa: number;
     pr: string;
     dmg: string;
     cou: number;
@@ -28,10 +32,13 @@ export class Monster {
     name: string;
     data: MonsterData = new MonsterData();
     dead: string;
+    items: Item[] = [];
     target: {
         id: number;
         isMonster: boolean;
     };
+
+    viewInventory: boolean;
 
     constructor(monster?: Monster) {
         if (monster) {

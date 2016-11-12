@@ -143,9 +143,24 @@
     <div class="form-group">
         <label class="col-sm-1 col-xs-4 control-label"></label>
         <div class="col-sm-11 col-xs-8">
-            <div *ngFor="let inventory of monster.simpleInventory; let i = index">
-                <button class="btn btn-danger glyphicon glyphicon-remove" (click)="removeItemSimpleInventory(i)"></button>
-                {{inventory.itemTemplate.name}}
+            <div class="row">
+                <template ngFor let-inventory [ngForOf]="monster.simpleInventory" let-i="index">
+                    <div class="col-xs-1">
+                        <button class="btn btn-danger glyphicon glyphicon-remove" (click)="removeItemSimpleInventory(i)"></button>
+                    </div>
+                    <div class="col-xs-6">
+                    {{inventory.itemTemplate.name}}
+                    </div>
+                    <div class="col-xs-1">
+                        <input type="number" class="form-control" min=0 [(ngModel)]="inventory.minCount"/>
+                    </div>
+                    <div class="col-xs-1">
+                        <input type="number" class="form-control" min=0 [(ngModel)]="inventory.maxCount"/>
+                    </div>
+                    <div class="col-xs-1">
+                        <input type="number" class="form-control" min=0 step="0.0001" [(ngModel)]="inventory.chance"/>
+                    </div>
+                </template>
             </div>
         </div>
     </div>

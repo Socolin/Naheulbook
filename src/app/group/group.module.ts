@@ -10,6 +10,8 @@ import {CharacterModule} from "../character/character.module";
 import {MonsterModule} from "../monster/monster.module";
 import {NotificationsModule} from "../notifications/notifications.module";
 import {DateModule} from "../date/date.module";
+import {FighterPanelComponent} from "./fighter-panel.component";
+import {UsefullDataComponent} from "./usefull-data.component";
 
 @NgModule({
     imports: [
@@ -28,6 +30,8 @@ import {DateModule} from "../date/date.module";
         CreateGroupComponent,
         MonsterEditableFieldComponent,
         TargetSelectorComponent,
+        FighterPanelComponent,
+        UsefullDataComponent,
     ],
     providers: [GroupService]
 })

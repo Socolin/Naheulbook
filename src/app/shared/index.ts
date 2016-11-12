@@ -16,4 +16,5 @@ export * from './autocomplete-input.component';
 export * from './icon.component';
 export * from './icon.service';
 export * from './icon-selector.component';
+export * from './random';
 

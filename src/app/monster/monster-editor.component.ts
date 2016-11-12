@@ -56,9 +56,9 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     addItemSimpleInventory() {
         let inventoryItem = new MonsterSimpleInventory();
         inventoryItem.itemTemplate = this.newItem;
-        inventoryItem.minCount = this.newItemData.minCount = 0;
-        inventoryItem.maxCount = this.newItemData.maxCount = 0;
-        inventoryItem.chance = this.newItemData.chance = 1;
+        inventoryItem.minCount = this.newItemData.minCount;
+        inventoryItem.maxCount = this.newItemData.maxCount;
+        inventoryItem.chance = this.newItemData.chance;
 
         if (!this.monster.simpleInventory) {
             this.monster.simpleInventory = [];

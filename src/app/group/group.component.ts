@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges} from '@angular/core';
+import {Component, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 
@@ -7,35 +7,23 @@ import {NotificationsService} from '../notifications';
 import {Group, CharacterInviteInfo} from '.';
 import {GroupService} from './group.service';
 import {Character, CharacterService, CharacterResume} from '../character';
-import {Monster, MonsterService, MonsterTemplate} from '../monster';
 
 import {LoginService} from '../user';
-import {Fighter} from './group.model';
 import {AutocompleteValue} from '../shared';
 import {LocationService, Location} from '../location';
 import {NhbkDateOffset} from "../date";
+import {GroupActionService} from "./group-action.service";
 
 @Component({
     templateUrl: 'group.component.html',
-    styles: [`
-        .even_row {
-            background-color: #f9f9f9;
-        }
-        .combat_row_selected {
-            background-color: #e3e3e3!important;
-        }
-    `],
+    providers: [GroupActionService],
 })
 export class GroupComponent implements OnInit, OnChanges {
     public group: Group;
     public characters: Character[] = [];
-    public newMonster: Monster = new Monster();
     public selectedCharacter: Character;
     public filteredInvitePlayers: CharacterInviteInfo[] = [];
-    public charAndMonsters: Fighter[] = [];
-    public deadMonsters: Monster[] = [];
     private autocompleteLocationsCallback: Function;
-    private selectedCombatRow: number = 0;
 
     constructor(private _route: ActivatedRoute
         , private _router: Router
@@ -43,43 +31,25 @@ export class GroupComponent implements OnInit, OnChanges {
         , private _groupService: GroupService
         , private _locationService: LocationService
         , private _notification: NotificationsService
-        , private _monsterService: MonsterService
+        , private _actionService: GroupActionService
         , private _characterService: CharacterService) {
     }
 
-    private currentPanel: string = null;
-    private currentSubPanel: string = null;
-    private selectedSubPanels = {};
+    /* Usefull action (top left) */
 
-    toggleDisplayPanel(name: string) {
-        if (this.currentPanel === name) {
-            this.currentPanel = null;
-        } else {
-            if (name) {
-                this.currentSubPanel = this.selectedSubPanels[name];
-            }
-            this.currentPanel = name;
-        }
-        return false;
+    refreshData() {
+        this.loadGroup(this.group.id);
     }
 
-    selectSubPanel(name) {
-        this.currentSubPanel = name;
-        this.selectedSubPanels[this.currentPanel] = name;
-        return false;
+    startCombat() {
+        this.changeGroupValue('inCombat', true);
     }
 
-    selectComatRow(i: number) {
-        this.selectedCombatRow = i;
+    endCombat() {
+        this.changeGroupValue('inCombat', false);
     }
 
-    private effectsCategoryId = 1;
-
-    showEffects(categoryId) {
-        this.effectsCategoryId = categoryId;
-        this.currentPanel = 'effects';
-        return false;
-    }
+    /* Players tab */
 
     activeAllCharacter(active: boolean) {
         for(let i = 0; i < this.characters.length; i++) {
@@ -87,7 +57,7 @@ export class GroupComponent implements OnInit, OnChanges {
             this._characterService.changeGmData(character.id, 'active', active).subscribe(
                 change => {
                     character.active = change.value;
-                    this.updateOrder();
+                    this._actionService.emitAction('reorderFighters', this.group);
                 }
             );
         }
@@ -97,7 +67,7 @@ export class GroupComponent implements OnInit, OnChanges {
         this._characterService.changeGmData(character.id, 'active', !character.active).subscribe(
             change => {
                 character.active = change.value;
-                this.updateOrder();
+                this._actionService.emitAction('reorderFighters', this.group);
             }
         );
     }
@@ -121,7 +91,37 @@ export class GroupComponent implements OnInit, OnChanges {
         );
     }
 
-    public searchNameInvite: string;
+    addTime(dateOffset: NhbkDateOffset) {
+        this._groupService.addTime(this.group.id, dateOffset).subscribe(
+            data => {
+                this.group.data = data;
+            }
+        );
+    }
+
+    changeGroupLocation(location: Location) {
+        this._groupService.editGroupValue(this.group.id, 'location', location).subscribe(
+            () => {
+                this._notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
+                this.group.location = location;
+            }
+        );
+    }
+
+    updateLocationListAutocomplete(filter: string) {
+        return this._locationService.searchLocations(filter).map(
+            list => list.map(e => new AutocompleteValue(e, e.name))
+        );
+    }
+
+    /* Invitation tab */
+
+    private searchNameInvite: string;
+    private selectedInviteCharacter: Character;
+    //FIXME: Replace with autocomplete component
+    private filteredUsers: Object[] = [];
+    private filterSearchUser: string = null;
+
 
     updateFilteredPlayer() {
         if (!this.searchNameInvite) {
@@ -144,106 +144,30 @@ export class GroupComponent implements OnInit, OnChanges {
         );
     }
 
-    addMonster() {
-        this._groupService.createMonster(this.group.id, this.newMonster).subscribe(
-            monster => {
-                this.group.monsters.push(monster);
-                this.updateOrder();
-            }
-        );
-    }
-
-    cleanMonster() {
-        this.newMonster = new Monster();
-    }
-
-    killMonster(monster: Monster) {
-        this._groupService.killMonster(monster.id).subscribe(
-            res => {
-                monster.dead = res.dead;
-                this.updateOrder();
-            },
-            err => {
-                console.log(err.stack);
-                this._notification.error("Erreur", "Erreur");
-            }
-        );
-    }
-
-    private monsterAutocompleteShow = false;
-    private autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
-
-    updateMonsterListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
-        this.newMonster.name = filter;
-        if (filter === '') {
-            return Observable.from([]);
-        }
-        return this._monsterService.searchMonster(filter).map(
-            list => list.map(e => new AutocompleteValue(e, e.name))
-        );
-    }
-
-    selectMonsterInAutocompleteList(monster: MonsterTemplate) {
-        this.monsterAutocompleteShow = false;
-        this.newMonster.name = monster.name;
-        this.newMonster.data.at = monster.data.at;
-        this.newMonster.data.prd = monster.data.prd;
-        this.newMonster.data.ev = monster.data.ev;
-        this.newMonster.data.ea = 0;
-        this.newMonster.data.pr = monster.data.pr;
-        this.newMonster.data.cou = monster.data.cou;
-        this.newMonster.data.dmg = monster.data.dmg;
-        this.newMonster.data.xp = monster.data.xp;
-        if (monster.data.resm) {
-            this.newMonster.data.resm = monster.data.resm;
-        } else {
-            this.newMonster.data.resm = 0;
-        }
-        this.newMonster.data.note = monster.data.note;
-        return false;
-    }
-
-    private selectedInviteCharacter: Character;
-
     selectInviteCharacter(character) {
         this.selectedInviteCharacter = character;
         return false;
     }
 
-    _removeFromInvites(character) {
-        for (let i = 0; i < this.group.invited.length; i++) {
-            let char = this.group.invited[i];
-            if (char.id === character.id) {
-                this.group.invited.splice(i, 1);
-                break;
-            }
+    _removeFromInvited(character): void {
+        let idx = this.group.invited.findIndex(char => char.id === character.id);
+        if (idx != -1) {
+            this.group.invited.splice(idx, 1);
         }
     }
 
-    _removeFromInvited(character) {
-        for (let i = 0; i < this.group.invites.length; i++) {
-            let char = this.group.invites[i];
-            if (char.id === character.id) {
-                this.group.invites.splice(i, 1);
-                break;
-            }
+    _removeFromInvites(character): void {
+        let idx = this.group.invites.findIndex(char => char.id === character.id);
+        if (idx != -1) {
+            this.group.invites.splice(idx, 1);
         }
     }
 
-    cancelInvite(character) {
+    cancelInvite(character): boolean {
         this._characterService.cancelInvite(character.id, this.group.id).subscribe(
             res => {
                 this._removeFromInvited(res.character);
                 this._removeFromInvites(res.character);
-            },
-            err => {
-                try {
-                    let errJson = err.json();
-                    this._notification.error("Erreur", errJson.error_code);
-                } catch (e) {
-                    console.log(err.stack);
-                    this._notification.error("Erreur", "Erreur");
-                }
             }
         );
         return false;
@@ -274,70 +198,6 @@ export class GroupComponent implements OnInit, OnChanges {
         return false;
     }
 
-    changeTarget(element, target) {
-        if (element.isMonster) {
-            this._groupService.updateMonster(element.id, 'target', {id: target.id, isMonster: target.isMonster})
-                .subscribe(
-                    () => {
-                        element.changeTarget(target);
-                        element.updateTarget(this.charAndMonsters);
-                        this._notification.info("Monstre", "Cible changée");
-                    }
-                );
-        } else {
-            this._characterService.changeGmData(element.id, 'target', {
-                id: target.id,
-                isMonster: target.isMonster
-            }).subscribe(
-                change => {
-                    element.changeTarget(change.value);
-                    element.updateTarget(this.charAndMonsters);
-                    this._notification.info("Joueur", "Cible changée");
-                }
-            );
-        }
-    }
-
-    changeColor(element: Fighter, color: string) {
-        if (color.indexOf('#') === 0) {
-            color = color.substring(1);
-        }
-        if (element.isMonster) {
-            this._groupService.updateMonster(element.id, 'color', color)
-                .subscribe(
-                    res => {
-                        element.changeColor(res.value);
-                        this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
-                        this._notification.info("Monstre", "Couleur changé");
-                    }
-                );
-        } else {
-            this._characterService.changeGmData(element.id, 'color', color).subscribe(
-                change => {
-                    element.changeColor(change.value);
-                    this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
-                    this._notification.info("Joueur", "Couleur changée");
-                }
-            );
-        }
-    }
-
-    changeNumber(element: Fighter, number: number) {
-        if (element.isMonster) {
-            this._groupService.updateMonster(element.id, 'number', number)
-                .subscribe(
-                    res => {
-                        element.changeNumber(res.value);
-                        this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
-                        this._notification.info("Monstre", "Couleur changé");
-                    }
-                );
-        }
-    }
-
-    public filteredUsers: Object[] = [];
-    public filterSearchUser: string = null;
-
     updateSearchUser() {
         if (this.filterSearchUser) {
             this._loginService.searchUser(this.filterSearchUser).subscribe(
@@ -350,68 +210,7 @@ export class GroupComponent implements OnInit, OnChanges {
         }
     }
 
-    updateOrder() {
-        let deadMonsters = [];
-        let charAndMonsters: Fighter[] = [];
-        for (let i = 0; i < this.characters.length; i++) {
-            let character = this.characters[i];
-            if (character.active) {
-                let fighter = Fighter.createFromCharacter(character);
-                fighter.chercheNoise = Character.hasChercherDesNoises(character);
-                charAndMonsters.push(fighter);
-            }
-        }
-        for (let i = 0; i < this.group.monsters.length; i++) {
-            let monster = this.group.monsters[i];
-            if (monster.dead) {
-                deadMonsters.push(monster);
-            } else {
-                charAndMonsters.push(Fighter.createFromMonster(monster));
-            }
-        }
-        deadMonsters.sort((first, second) => {
-            let a = new Date(first.dead);
-            let b = new Date(second.dead);
-            return a > b ? -1 : a < b ? 1 : 0;
-        });
-
-        while (deadMonsters.length > 10) {
-            deadMonsters.pop();
-        }
-
-        charAndMonsters.sort(function (first, second) {
-            if (first.chercheNoise && !second.chercheNoise) {
-                return -1;
-            }
-            else if (!first.chercheNoise && second.chercheNoise) {
-                return 1;
-            }
-            else {
-                let cou1 = first.stats.cou;
-                let cou2 = second.stats.cou;
-
-                if (cou1 > cou2) {
-                    return -1;
-                } else if (cou1 < cou2) {
-                    return 1;
-                } else {
-                    let ad1 = first.stats.ad;
-                    let ad2 = second.stats.ad;
-
-                    if (ad1 > ad2) {
-                        return -1;
-                    } else if (ad1 < ad2) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                }
-            }
-        });
-        charAndMonsters.forEach(f => f.updateTarget(charAndMonsters));
-        this.charAndMonsters = charAndMonsters;
-        this.deadMonsters = deadMonsters;
-    }
+    /* History tab */
 
     public historyPage: number = 0;
     public currentDay: string = null;
@@ -472,22 +271,6 @@ export class GroupComponent implements OnInit, OnChanges {
         return false;
     }
 
-    ngOnChanges() {
-        this.updateOrder();
-    }
-
-    refreshData() {
-        this.loadGroup(this.group.id);
-    }
-
-    startCombat() {
-        this.changeGroupValue('inCombat', true);
-    }
-
-    endCombat() {
-        this.changeGroupValue('inCombat', false);
-    }
-
     createNpc() {
         this._router.navigate(['/character/create'], {queryParams: {isNpc: true, groupId: this.group.id}});
         return false;
@@ -508,37 +291,6 @@ export class GroupComponent implements OnInit, OnChanges {
                 this.group.data = data;
             }
         );
-    }
-
-    addTime(dateOffset: NhbkDateOffset) {
-        this._groupService.addTime(this.group.id, dateOffset).subscribe(
-            data => {
-                this.group.data = data;
-            }
-        );
-    }
-
-    changeGroupLocation(location: Location) {
-        this._groupService.editGroupValue(this.group.id, 'location', location).subscribe(
-            () => {
-                this._notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
-                this.group.location = location;
-            }
-        );
-    }
-
-    updateLocationListAutocomplete(filter: string) {
-        return this._locationService.searchLocations(filter).map(
-            list => list.map(e => new AutocompleteValue(e, e.name))
-        );
-    }
-
-    private addItemTarget: Character;
-    addItemTo(character: Character) {
-        this.addItemTarget = character;
-    }
-    onItemAdded() {
-        this.addItemTarget = null;
     }
 
     loadGroup(id: number) {
@@ -562,7 +314,7 @@ export class GroupComponent implements OnInit, OnChanges {
                         character.onUpdate.subscribe(c => {
                             // FIXME: Copy reference may not be the best ?
                             this.characters[i] = c;
-                            this.updateOrder();
+                            this._actionService.emitAction('reorderFighters', this.group);
                         });
                     }
                     let charactersId: number[] = [];
@@ -592,7 +344,6 @@ export class GroupComponent implements OnInit, OnChanges {
                                     }
                                 }
                             }
-                            this.updateOrder();
                         }
                     );
                 });
@@ -609,6 +360,12 @@ export class GroupComponent implements OnInit, OnChanges {
         );
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('group' in changes) {
+            this._actionService.emitAction('reorderFighters', this.group);
+        }
+    }
+
     ngOnInit() {
         this._route.params.subscribe(
             params => {
@@ -617,6 +374,5 @@ export class GroupComponent implements OnInit, OnChanges {
             }
         );
         this.autocompleteLocationsCallback = this.updateLocationListAutocomplete.bind(this);
-
     }
 }

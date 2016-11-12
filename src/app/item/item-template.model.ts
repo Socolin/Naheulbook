@@ -68,10 +68,28 @@ export class ItemTemplate {
     slots: ItemSlot[];
     requirements: any[];
     skillModifiers: ItemSkillModifier[];
+
+    static hasSlot(template: ItemTemplate, slotName: string): boolean {
+        if (!template.slots) {
+            return false;
+        }
+        for (let i = 0; i < template.slots.length; i++) {
+            let slot = template.slots[i];
+            if (slot == null) {
+                continue;
+            }
+            if (template.slots[i].techName === slotName) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 export class PartialItemTemplate {
     id: number;
     name: string;
+    category: number;
+    data: ItemTemplateData = new ItemTemplateData();
 }
 
