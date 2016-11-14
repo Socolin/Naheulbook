@@ -16,10 +16,10 @@ class NhbkErrorHandler extends ErrorHandler {
         return this._http.post(url, JSON.stringify(data), {
             headers: headers
         })
-            .catch((err: any) => {
-                console.log(err);
-                return Observable.throw(err);
-            });
+        .catch((err: any) => {
+            console.log(err);
+            return Observable.throw(err);
+        });
     }
 
     handleError(error: any) {

@@ -100,7 +100,7 @@ export class InventoryPanelComponent implements OnInit {
             itemData['name'] = this.itemAddCustomName;
             itemData['description'] = this.itemAddCustomDescription;
             itemData['quantity'] = this.itemAddQuantity;
-            this._itemService.addItem(this.character.id
+            this._itemService.addItemTo('character', this.character.id
                 , this.selectedAddItem.id
                 , itemData)
                 .subscribe(

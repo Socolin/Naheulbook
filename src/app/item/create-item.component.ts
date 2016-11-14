@@ -38,11 +38,6 @@ export class CreateItemComponent {
                 if (this.lastItem.data.diceDrop) {
                     this.item.data.diceDrop = this.lastItem.data.diceDrop + 1;
                 }
-            },
-            error => {
-                console.log(error);
-                this.errorMessage = "Erreur lors de la sauvegarde de l'objet";
-                this.saving = false;
             }
         );
     }

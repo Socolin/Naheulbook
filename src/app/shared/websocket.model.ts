@@ -6,6 +6,7 @@ export interface WsMessage {
 }
 
 export interface WsEvent {
-    opcode: string;
+    id: number;
+    opcode?: string;
     data: any;
 }

@@ -1,0 +1,37 @@
+<div>
+    <div class="pull-right">
+        <input type="text" [(ngModel)]="newLootName"/>
+        <button class="btn btn-success" (click)="createLoot()" [disabled]="!newLootName">Creer</button>
+    </div>
+    <h3>Loot</h3>
+</div>
+<div class="row">
+    <div *ngFor="let loot of loots" class="panel panel-default">
+        <div class="panel-heading">
+            {{loot.name}}
+            <button class="btn btn-success" (click)="selectLootToAddItem(loot)">Ajouter item</button>
+            <button class="btn btn-danger" (click)="deleteLoot(loot)">Delete loot</button>
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li *ngFor="let item of loot.items">
+                    {{item.data.name}}
+                    <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromLoot(loot, item)"></button>
+                </li>
+            </ul>
+            <ul>
+                <li *ngFor="let monster of loot.monsters">
+                    {{monster.name}}
+                    <ul>
+                        <li *ngFor="let item of monster.items">
+                            {{item.data.name}}
+                            <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromMonster(monster, item)"></button>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<create-item [loot]="lootTargetForNewItem" (onAddItem)="addItemToLoot(lootTargetForNewItem, $event)"></create-item>

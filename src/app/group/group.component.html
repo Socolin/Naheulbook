@@ -27,6 +27,11 @@
                 </a>
             </li>
             <li role="presentation">
+                <a href="#loot" aria-controls="invites" role="tab" data-toggle="tab">
+                    Loot
+                </a>
+            </li>
+            <li role="presentation">
                 <a class="bg-success" href="#tab-history" aria-controls="history" role="tab" data-toggle="tab"
                    (click)="loadHistory()">
                     Historique
@@ -105,7 +110,7 @@
                                     <div *ngIf="log.data.oldValue" style="padding-left: 20px">Ancienne date: <date [date]="log.data.oldValue"></date></div>
                                     <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
                                 </template>
-								<template ngSwitchDefault>{{log.action}}</template>
+								<template *ngSwitchDefault>{{log.action}}</template>
 							</span>
                             </div>
                         </div>
@@ -233,6 +238,9 @@
             <div role="tabpanel" class="list-group tab-pane" id="combat">
                 <fighter-panel [group]="group" [characters]="characters"></fighter-panel>
             </div>
+            <div role="tabpanel" class="list-group tab-pane" id="loot">
+                <loot-panel [group]="group"></loot-panel>
+            </div>
             <div role="tabpanel" class="tab-pane" id="invites">
                 <div>
                     <h4>Invitation à valider</h4>
@@ -307,7 +315,7 @@
             <div class="modal-body">
                 <input class="form-control" type="text" [(ngModel)]="filterSearchUser"
                        (ngModelChange)="updateSearchUser()">
-                <template ngIf [ngIf]="!filteredUsers.length">
+                <template [ngIf]="!filteredUsers.length">
                     Aucun utilisateur trouve
                 </template>
                 <div class="list-group">

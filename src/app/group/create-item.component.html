@@ -1,11 +1,12 @@
-<div *ngIf="character" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;"
+<div *ngIf="character || loot" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;"
      (click)="close()">
 </div>
-<div *ngIf="character" style="position: absolute; top: 0; left: 0; width: 100%;">
+<div *ngIf="character || loot" style="position: absolute; top: 0; left: 0; width: 100%;">
     <div style="position: relative; background: white" class="container">
         <div class="form-horizontal" role="form">
             <div class="form-group">
-                <legend>Ajouter un objet a {{character.name}}</legend>
+                <legend *ngIf="character">Ajouter un objet a {{character.name}}</legend>
+                <legend *ngIf="loot">Ajouter un objet au loot {{loot.name}}</legend>
             </div>
 
 

@@ -251,6 +251,7 @@ export class Character {
     gmData: any;
     group: IMetadata;
     invites: IMetadata[];
+    isNpc: boolean;
 
     computedData: CharacterComputedData = new CharacterComputedData();
     onUpdate: EventEmitter<Character> = new EventEmitter<Character>();

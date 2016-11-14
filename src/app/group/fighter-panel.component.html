@@ -39,10 +39,18 @@
                     </value-editor>
                 </td>
                 <td>
-                    <value-editor [value]="fighter.monster.data.prd"
-                                  [title]="'AT'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'prd', $event)">
-                    </value-editor>
+                    <span *ngIf="fighter.monster.data.prd">
+                        <value-editor [value]="fighter.monster.data.prd"
+                                      [title]="'PRD'"
+                                      (onChange)="updateMonsterField(fighter.monster, 'prd', $event)">
+                        </value-editor>
+                    </span>
+                    <span *ngIf="fighter.monster.data.esq">
+                        <value-editor [value]="fighter.monster.data.esq"
+                                      [title]="'ESQ'"
+                                      (onChange)="updateMonsterField(fighter.monster, 'esq', $event)">
+                        </value-editor> E
+                    </span>
                 </td>
                 <td>
                     <value-editor [value]="fighter.monster.data.ev"
@@ -287,8 +295,8 @@
             <div class="col-xs-1">
                 <button class="btn btn-primary ra ra-perspective-dice-random" (click)="randomMonsterInventory()"></button>
             </div>
-            <div class="col-xs-9" *ngIf="newMonster.inventory">
-                <div *ngFor="let item of newMonster.inventory; let i=index">
+            <div class="col-xs-9" *ngIf="newMonster.items">
+                <div *ngFor="let item of newMonster.items; let i=index">
                     <span *ngIf="item.data.quantity > 1">{{item.data.quantity}}</span> {{item.data.name}}
                     <span *ngIf="item.data.notIdentified" class="label label-warning">Non identifie</span>
                     <button (click)="item.data.notIdentified = !item.data.notIdentified" class="btn btn-primary glyphicon glyphicon-question-sign"></button>
@@ -306,4 +314,4 @@
     </div>
 </div>
 
-<create-item [character]="addItemTarget" (onAddItem)="onItemAdded()"></create-item>
+<create-item [character]="addItemTarget" (onAddItem)="onItemAdded($event)"></create-item>

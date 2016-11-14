@@ -115,7 +115,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this._characterWebsocketService.registerPacket("update").subscribe(this.onChangeCharacterStat.bind(this));
         this._characterWebsocketService.registerPacket("statBonusAd").subscribe(this.onSetStatBonusAD.bind(this));
         this._characterWebsocketService.registerPacket("levelUp").subscribe(this.onLevelUp.bind(this));
-       }
+   }
 
     changeCharacterStat(stat: string, value: any) {
         this._characterService.changeCharacterStat(this.character.id, stat, value).subscribe(

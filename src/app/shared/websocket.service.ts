@@ -10,7 +10,7 @@ export class WebSocketService {
     public registeredElements: {[type: string]: {[id: number]: Subject<WsEvent>}} = {};
     public registeredObserverElements: {[type: string]: {[id: number]: Observer<WsEvent>}} = {};
 
-    public register(type: string, element: any): Subject<WsEvent> {
+    public register(type: string, elementId: number): Subject<WsEvent> {
         if (!this.webSocket) {
             let loc = window.location;
             let uri;
@@ -31,13 +31,13 @@ export class WebSocketService {
         }
 
         let observable = Observable.create(function (observer: Observer<WsEvent>) {
-            this.registeredObserverElements[type][element.id] = observer;
+            this.registeredObserverElements[type][elementId] = observer;
         }.bind(this));
         let observer = {
             next: (data: any) => {
                 let message: WsMessage = {
                     type: type,
-                    id: element.id,
+                    id: elementId,
                     opcode: data.opcode,
                     data: data.data
                 };
@@ -45,24 +45,30 @@ export class WebSocketService {
             },
         };
         let subject = Subject.create(observer, observable);
-        this.registeredElements[type][element.id] = subject;
+        this.registeredElements[type][elementId] = subject;
 
         this.sendData({
             opcode: "LISTEN_ELEMENT",
-            id: element.id,
-            type: 'character',
+            id: elementId,
+            type: type,
             data: null
         });
 
         return subject;
     }
 
-    public unregister(type: string, element: any) {
+    public unregister(type: string, elementId: number) {
         if (!(type in this.registeredElements)) {
             return;
         }
-        delete this.registeredElements[type][element.id];
-        delete this.registeredObserverElements[type][element.id];
+        delete this.registeredElements[type][elementId];
+        delete this.registeredObserverElements[type][elementId];
+        this.sendData({
+            opcode: "STOP_LISTEN_ELEMENT",
+            id: elementId,
+            type: type,
+            data: null
+        });
     }
 
     private onConnected(ev: Event) {
@@ -77,7 +83,7 @@ export class WebSocketService {
         if (message.type in this.registeredObserverElements) {
             let reg = this.registeredObserverElements[message.type];
             if (message.id in reg) {
-                reg[message.id].next({opcode: message.opcode, data: message.data});
+                reg[message.id].next({id: message.id, opcode: message.opcode, data: message.data});
             }
         }
     }
@@ -88,6 +94,32 @@ export class WebSocketService {
 
     private onClose(ev: Event) {
         console.log('closed ws', ev);
+        this.reconnect();
+    }
+
+    private reconnect() {
+        setTimeout(() => {
+            let loc = window.location;
+            let uri;
+            if (loc.protocol === "https:") {
+                uri = "wss:";
+            } else {
+                uri = "ws:";
+            }
+
+            this.create(uri + "//" + window.location.hostname + "/ws/listen");
+
+            for (let type in this.registeredElements) {
+                for (let id in this.registeredElements[type]) {
+                    this.sendData({
+                        opcode: "LISTEN_ELEMENT",
+                        id: +id,
+                        type: type,
+                        data: null
+                    });
+                }
+            }
+        }, 1000);
     }
 
     private sendData(message: WsMessage) {

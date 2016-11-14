@@ -5,6 +5,7 @@ import {ItemService} from "../item";
 import {Character, Item} from "../character";
 import {AutocompleteValue} from "../shared";
 import {ItemTemplate} from "../item";
+import {Loot} from "./loot.model";
 
 @Component({
     selector: 'create-item',
@@ -12,6 +13,7 @@ import {ItemTemplate} from "../item";
 })
 export class CreateItemComponent implements OnChanges {
     @Input() character: Character;
+    @Input() loot: Loot;
     @Output() onAddItem: EventEmitter<Item> = new EventEmitter<Item>();
 
     private mode: string = 'normal';
@@ -36,7 +38,6 @@ export class CreateItemComponent implements OnChanges {
         if (this.mode === 'gem') {
             this.newItem.data.ug = this.gemOption['ug'];
         }
-        this._itemService.addItem(this.character.id, this.newItem.template.id, this.newItem.data).subscribe();
         this.onAddItem.emit(this.newItem);
         this.newItem = new Item();
         return false;

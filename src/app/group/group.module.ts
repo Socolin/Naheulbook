@@ -12,6 +12,7 @@ import {NotificationsModule} from "../notifications/notifications.module";
 import {DateModule} from "../date/date.module";
 import {FighterPanelComponent} from "./fighter-panel.component";
 import {UsefullDataComponent} from "./usefull-data.component";
+import {LootPanelComponent} from "./loot-panel.component";
 
 @NgModule({
     imports: [
@@ -32,6 +33,7 @@ import {UsefullDataComponent} from "./usefull-data.component";
         TargetSelectorComponent,
         FighterPanelComponent,
         UsefullDataComponent,
+        LootPanelComponent,
     ],
     providers: [GroupService]
 })

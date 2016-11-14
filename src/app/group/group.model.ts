@@ -3,17 +3,17 @@ import {Character} from '../character';
 import {Location} from '../location';
 import {NhbkDate} from "../date";
 
-export interface GroupData {
-    debilibeuk: number,
-    mankdebol: number,
-    inCombat: boolean,
-    date: NhbkDate,
+export class GroupData {
+    debilibeuk: number;
+    mankdebol: number;
+    inCombat: boolean;
+    date: NhbkDate;
 }
 
 export class Group{
     id: number;
     name: string;
-    data: GroupData|any;
+    data: GroupData;
     location: Location;
     invited: CharacterInviteInfo[];
     invites: CharacterInviteInfo[];

@@ -12,6 +12,7 @@ import {getRandomInt} from "../shared/random";
 import {NotificationsService} from "../notifications/notifications.service";
 import {GroupActionService} from "./group-action.service";
 import {CharacterService} from "../character/character.service";
+import {ItemService} from "../item/item.service";
 
 @Component({
     selector: 'fighter-panel',
@@ -40,6 +41,7 @@ export class FighterPanelComponent implements OnInit{
         , private _actionService: GroupActionService
         , private _characterService: CharacterService
         , private _notification: NotificationsService
+        , private _itemService: ItemService
         , private _monsterService: MonsterService) {
     }
 
@@ -47,7 +49,10 @@ export class FighterPanelComponent implements OnInit{
         this.addItemTarget = character;
     }
 
-    onItemAdded() {
+    onItemAdded(item: Item) {
+        if (item != null) {
+            this._itemService.addItemTo('character', this.addItemTarget.id, item.template.id, item.data).subscribe();
+        }
         this.addItemTarget = null;
     }
 
@@ -138,7 +143,7 @@ export class FighterPanelComponent implements OnInit{
                     continue;
                 }
                 let item = new Item();
-                item.template = <ItemTemplate>inventoryItem.itemTemplate;
+                item.template = inventoryItem.itemTemplate;
                 item.data.name = inventoryItem.itemTemplate.name;
                 item.data.notIdentified = true;
                 if (item.template.data.useUG) {
@@ -311,7 +316,7 @@ export class FighterPanelComponent implements OnInit{
         this.newMonster.data.ev = monster.data.ev;
         this.newMonster.data.maxEv = monster.data.ev;
         this.newMonster.data.ea = monster.data.ea;
-        this.newMonster.data.maxEa= monster.data.ev;
+        this.newMonster.data.maxEa= monster.data.ea;
         this.newMonster.data.pr = monster.data.pr;
         this.newMonster.data.cou = monster.data.cou;
         this.newMonster.data.dmg = monster.data.dmg;

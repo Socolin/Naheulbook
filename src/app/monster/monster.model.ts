@@ -1,4 +1,4 @@
-import {PartialItemTemplate} from "../item/item-template.model";
+import {ItemTemplate} from "../item/item-template.model";
 import {Item} from "../character/item.model";
 class MonsterData {
     at: number;
@@ -85,7 +85,7 @@ export class MonsterTemplateCategory {
 }
 export class MonsterSimpleInventory {
     id: number;
-    itemTemplate: PartialItemTemplate;
+    itemTemplate: ItemTemplate;
     minCount: number;
     maxCount: number;
     chance: number;

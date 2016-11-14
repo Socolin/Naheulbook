@@ -8,6 +8,8 @@ import {
 import {IconSelectorComponent} from "./icon-selector.component";
 import {IconService} from "./icon.service";
 import {IconComponent} from "./icon.component";
+import {JsonService} from "./json-service";
+import {MiscService} from "./misc.service";
 
 @NgModule({
     imports: [
@@ -40,6 +42,7 @@ import {IconComponent} from "./icon.component";
     ],
     providers: [
         IconService,
+        MiscService,
     ]
 })
 export class SharedModule {

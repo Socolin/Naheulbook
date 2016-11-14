@@ -10,6 +10,7 @@ import {LoginService} from "../user/login.service";
 import {CharacterGiveDestination} from "../character/character.model";
 import {GroupData} from "./group.model";
 import {NhbkDateOffset} from "../date/date.model";
+import {Loot} from "./loot.model";
 
 @Injectable()
 export class GroupService extends JsonService {
@@ -51,6 +52,27 @@ export class GroupService extends JsonService {
     deleteMonster(monsterId: number): Observable<any> {
         return this.postJson('/api/group/deleteMonster', {
             monsterId: monsterId
+        }).map(res => res.json());
+    }
+
+    /* Loot */
+
+    loadLoots(groupId: number): Observable<Loot[]> {
+        return this.postJson('/api/group/loadLoots', {
+            groupId: groupId
+        }).map(res => res.json());
+    }
+
+    createLoot(groupId: number, lootName: string): Observable<Loot> {
+        return this.postJson('/api/group/createLoot', {
+            groupId: groupId,
+            name: lootName
+        }).map(res => res.json());
+    }
+
+    deleteLoot(lootId: number): Observable<Loot> {
+        return this.postJson('/api/group/deleteLoot', {
+            lootId: lootId
         }).map(res => res.json());
     }
 

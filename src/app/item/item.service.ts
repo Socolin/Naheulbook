@@ -161,7 +161,8 @@ export class ItemService extends JsonService {
             .map(res => res.json());
     }
 
-    addItem(characterId: number
+    addItemTo(targetType: string
+        , targetId: number
         , itemTemplateId: number
         , itemData: ItemData): Observable<Item> {
         if (itemData.quantity) {
@@ -173,7 +174,8 @@ export class ItemService extends JsonService {
         return Observable.create(observer => {
             Observable.forkJoin(this.postJson('/api/item/add', {
                     itemTemplateId: itemTemplateId,
-                    characterId: characterId,
+                    targetId: targetId,
+                    targetType: targetType,
                     itemData: itemData
                 }).map(res => res.json()),
                 this._skillService.getSkillsById()
@@ -182,7 +184,7 @@ export class ItemService extends JsonService {
                     let item: Item = res[0];
                     let skillsById: {[skillId: number]: Skill} = res[1];
                     this.fillMissingDataInItemTemplate(item.template, skillsById);
-                    observer.next(res);
+                    observer.next(item);
                     observer.complete();
                 },
                 err => {
@@ -192,6 +194,7 @@ export class ItemService extends JsonService {
             );
         });
     }
+
 
     equipItem(itemId: number, level: number): Observable<PartialItem> {
         return this.postJson('/api/item/equip', {

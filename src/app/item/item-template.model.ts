@@ -85,11 +85,3 @@ export class ItemTemplate {
         return false;
     }
 }
-
-export class PartialItemTemplate {
-    id: number;
-    name: string;
-    category: number;
-    data: ItemTemplateData = new ItemTemplateData();
-}
-

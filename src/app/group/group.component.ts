@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit, OnChanges, SimpleChanges, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 
@@ -13,12 +13,15 @@ import {AutocompleteValue} from '../shared';
 import {LocationService, Location} from '../location';
 import {NhbkDateOffset} from "../date";
 import {GroupActionService} from "./group-action.service";
+import {GroupData} from "./group.model";
+import {GroupWebsocketService} from "./group.websocket.service";
+import {Loot} from "./loot.model";
 
 @Component({
     templateUrl: 'group.component.html',
-    providers: [GroupActionService],
+    providers: [GroupActionService, GroupWebsocketService],
 })
-export class GroupComponent implements OnInit, OnChanges {
+export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     public group: Group;
     public characters: Character[] = [];
     public selectedCharacter: Character;
@@ -32,6 +35,7 @@ export class GroupComponent implements OnInit, OnChanges {
         , private _locationService: LocationService
         , private _notification: NotificationsService
         , private _actionService: GroupActionService
+        , private _groupWebsocketService: GroupWebsocketService
         , private _characterService: CharacterService) {
     }
 
@@ -297,7 +301,7 @@ export class GroupComponent implements OnInit, OnChanges {
         this._characterService.getGroup(id).subscribe(
             group => {
                 if (!group.data) {
-                    group.data = {};
+                    group.data = new GroupData();
                 }
                 this.group = group;
 
@@ -346,6 +350,7 @@ export class GroupComponent implements OnInit, OnChanges {
                             }
                         }
                     );
+                    this.registerWs();
                 });
             },
             err => {
@@ -360,10 +365,25 @@ export class GroupComponent implements OnInit, OnChanges {
         );
     }
 
+    onLootAction(action: string, loot: Loot): void {
+        this._actionService.emitAction(action, this.group, loot);
+    }
+
+    registerWs() {
+        this._groupWebsocketService.register(this.group.id);
+        this._groupWebsocketService.registerNotifyFunction(message => this._notification.info("Groupe", message));
+        this._groupWebsocketService.registerPacket("addLoot").subscribe(this.onLootAction.bind(this, "addLoot"));
+        this._groupWebsocketService.registerPacket("deleteLoot").subscribe(this.onLootAction.bind(this, "deleteLoot"));
+    }
+
     ngOnChanges(changes: SimpleChanges): void {
         if ('group' in changes) {
             this._actionService.emitAction('reorderFighters', this.group);
         }
+    }
+
+    ngOnDestroy(): void {
+        this._groupWebsocketService.unregister(this.group.id);
     }
 
     ngOnInit() {
