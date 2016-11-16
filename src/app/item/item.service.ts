@@ -156,6 +156,13 @@ export class ItemService extends JsonService {
             .map(res => res.json());
     }
 
+    takeItemFromLoot(itemId: number, characterId: number): Observable<Item> {
+        return this.postJson('/api/item/takeItemFromLoot', {
+            itemId: itemId,
+            characterId: characterId
+        }).map(res => res.json());
+    }
+
     giveItem(itemId: number, characterId: number): Observable<Item> {
         return this.postJson('/api/item/giveItem', {itemId: itemId, characterId: characterId})
             .map(res => res.json());
@@ -194,7 +201,6 @@ export class ItemService extends JsonService {
             );
         });
     }
-
 
     equipItem(itemId: number, level: number): Observable<PartialItem> {
         return this.postJson('/api/item/equip', {

@@ -11,6 +11,8 @@
             {{loot.name}}
             <button class="btn btn-success" (click)="selectLootToAddItem(loot)">Ajouter item</button>
             <button class="btn btn-danger" (click)="deleteLoot(loot)">Delete loot</button>
+            <button class="btn btn-primary" *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">Open</button>
+            <button class="btn btn-info" *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">Close</button>
         </div>
         <div class="panel-body">
             <ul>

@@ -15,7 +15,6 @@ import {NhbkDateOffset} from "../date";
 import {GroupActionService} from "./group-action.service";
 import {GroupData} from "./group.model";
 import {GroupWebsocketService} from "./group.websocket.service";
-import {Loot} from "./loot.model";
 
 @Component({
     templateUrl: 'group.component.html',
@@ -365,15 +364,9 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         );
     }
 
-    onLootAction(action: string, loot: Loot): void {
-        this._actionService.emitAction(action, this.group, loot);
-    }
-
     registerWs() {
         this._groupWebsocketService.register(this.group.id);
         this._groupWebsocketService.registerNotifyFunction(message => this._notification.info("Groupe", message));
-        this._groupWebsocketService.registerPacket("addLoot").subscribe(this.onLootAction.bind(this, "addLoot"));
-        this._groupWebsocketService.registerPacket("deleteLoot").subscribe(this.onLootAction.bind(this, "deleteLoot"));
     }
 
     ngOnChanges(changes: SimpleChanges): void {

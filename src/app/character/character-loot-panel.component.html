@@ -1,0 +1,29 @@
+<div>
+    <h3>Loot</h3>
+</div>
+<div class="row">
+    <div *ngFor="let loot of loots" class="panel panel-default">
+        <div class="panel-heading">
+            {{loot.name}}
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li *ngFor="let item of loot.items">
+                    <button class="game-icon game-icon-robber btn btn-info" (click)="takeItemFromLoot(loot, item)"></button>
+                    {{item.data.name}}
+                </li>
+            </ul>
+            <ul>
+                <li *ngFor="let monster of loot.monsters">
+                    {{monster.name}}
+                    <ul>
+                        <li *ngFor="let item of monster.items">
+                            <button class="game-icon game-icon-robber btn btn-info" (click)="takeItemFromMonster(monster, item)"></button>
+                            {{item.data.name}}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -13,6 +13,7 @@ import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
 import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
+import {Loot} from "../loot/loot.model";
 
 @Injectable()
 export class CharacterService extends JsonService {
@@ -323,5 +324,11 @@ export class CharacterService extends JsonService {
 
     createCharacter(creationData): Observable<{id: number}> {
         return this.postJson('/api/character/create', creationData).map(res => res.json());
+    }
+
+    loadLoots(characterId: number): Observable<Loot[]> {
+        return this.postJson('/api/character/loadLoots', {
+            characterId: characterId
+        }).map(res => res.json());
     }
 }

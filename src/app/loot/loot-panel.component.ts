@@ -1,87 +1,14 @@
-import {Component, Input, OnInit, OnDestroy} from '@angular/core';
-import {Group} from "./group.model";
-import {GroupService} from "./group.service";
-import {GroupActionService} from "./group-action.service";
-import {CharacterService} from "../character/character.service";
+import {OnDestroy} from '@angular/core';
 import {NotificationsService} from "../notifications/notifications.service";
 import {Loot} from "./loot.model";
-import {Item} from "../character/item.model";
-import {ItemService} from "../item/item.service";
 import {LootWebsocketService} from "./loot.websocket.service";
-import {WsEvent} from "../shared/websocket.model";
 import {Monster} from "../monster/monster.model";
 
-@Component({
-    selector: 'loot-panel',
-    templateUrl: 'loot-panel.component.html',
-    providers: [LootWebsocketService],
-})
-export class LootPanelComponent implements OnInit, OnDestroy {
-    @Input() group: Group;
+export class LootPanelComponent implements OnDestroy {
     public loots: Loot[] = [];
-    public lootTargetForNewItem: Loot;
-    public newLootName: string;
 
-    constructor(private _groupService: GroupService
-        , private _actionService: GroupActionService
-        , private _itemService: ItemService
-        , private _lootWebsocketService: LootWebsocketService
-        , private _characterService: CharacterService
-        , private _notification: NotificationsService) {
-    }
-
-    createLoot() {
-        this._groupService.createLoot(this.group.id, this.newLootName).subscribe(
-            loot => {
-                this.onAddLoot(loot);
-            }
-        );
-        this.newLootName = null;
-    }
-
-    selectLootToAddItem(loot: Loot) {
-        this.lootTargetForNewItem = loot;
-    }
-
-    deleteLoot(loot: Loot) {
-        this._groupService.deleteLoot(loot.id).subscribe(
-            loot => {
-                this.onDeleteLoot(loot);
-            }
-        );
-    }
-
-    addItemToLoot(loot: Loot, item: Item) {
-        if (item != null) {
-            this._itemService.addItemTo('loot', loot.id, item.template.id, item.data).subscribe(
-                item => {
-                    LootPanelComponent.onAddItemToLoot(loot, item);
-                }
-            );
-        }
-        this.lootTargetForNewItem = null;
-    }
-
-    removeItemFromLoot(loot: Loot, item: Item) {
-        if (item != null) {
-            this._itemService.deleteItem(item.id).subscribe(
-                item => {
-                    LootPanelComponent.onRemoveItemFromLoot(loot, item);
-                }
-            );
-        }
-        this.lootTargetForNewItem = null;
-    }
-
-    removeItemFromMonster(monster: Monster, item: Item) {
-        if (item != null) {
-            this._itemService.deleteItem(item.id).subscribe(
-                item => {
-                    LootPanelComponent.onRemoveItemFromMonster(monster, item);
-                }
-            );
-        }
-        this.lootTargetForNewItem = null;
+    constructor(protected _lootWebsocketService: LootWebsocketService
+        , protected _notification: NotificationsService) {
     }
 
     getLootById(id: number): Loot {
@@ -137,6 +64,44 @@ export class LootPanelComponent implements OnInit, OnDestroy {
         }
     }
 
+    static onRemoveItemFromMonsterLoot(loot: Loot, data: any) {
+        let monsterIndex = loot.monsters.findIndex(m => m.id === data.monster.id);
+        if (monsterIndex == -1) {
+            return;
+        }
+        let monster = loot.monsters[monsterIndex];
+        let itemIndex = monster.items.findIndex(i => data.item.id === i.id);
+        if (itemIndex == -1) {
+            return;
+        }
+        monster.items.splice(itemIndex, 1);
+    }
+
+    onTookItemFromLoot(loot: Loot, data: any) {
+        let character = data.character;
+        let itemIndex = loot.items.findIndex(i => data.item.id === i.id);
+        if (itemIndex == -1) {
+            return;
+        }
+        loot.items.splice(itemIndex, 1);
+        this._notification.info("Loot", character.name + " à pris: " + data.item.name);
+    }
+
+    onTookItemFromMonsterLoot(loot: Loot, data: any) {
+        let character = data.character;
+        let monsterIndex = loot.monsters.findIndex(m => m.id === data.monster.id);
+        if (monsterIndex == -1) {
+            return;
+        }
+        let monster = loot.monsters[monsterIndex];
+        let itemIndex = monster.items.findIndex(i => data.item.id === i.id);
+        if (itemIndex == -1) {
+            return;
+        }
+        monster.items.splice(itemIndex, 1);
+        this._notification.info("Loot", character.name + " à pris: " + data.item.name);
+    }
+
     notifyChange(message: string) {
         this._notification.info("Modification", message);
     }
@@ -155,6 +120,7 @@ export class LootPanelComponent implements OnInit, OnDestroy {
         if (lootIdx != -1) {
             return;
         }
+        this._lootWebsocketService.register(loot.id);
         this.loots.unshift(loot);
     }
 
@@ -162,6 +128,14 @@ export class LootPanelComponent implements OnInit, OnDestroy {
         let lootIdx = this.loots.findIndex(l => l.id == loot.id);
         if (lootIdx != -1) {
             this.loots.splice(lootIdx, 1);
+        }
+        this._lootWebsocketService.unregister(loot.id);
+    }
+
+    onUpdateLoot(loot: Loot) {
+        let lootIdx = this.loots.findIndex(l => l.id == loot.id);
+        if (lootIdx != -1) {
+            this.loots[lootIdx].visibleForPlayer = loot.visibleForPlayer;
         }
     }
 
@@ -174,11 +148,9 @@ export class LootPanelComponent implements OnInit, OnDestroy {
         this._lootWebsocketService.registerPacket("deleteItem").subscribe(this.wrapLootResult(LootPanelComponent.onRemoveItemFromLoot).bind(this));
         this._lootWebsocketService.registerPacket("addMonster").subscribe(this.wrapLootResult(LootPanelComponent.onAddMonsterToLoot).bind(this));
         this._lootWebsocketService.registerPacket("deleteMonster").subscribe(this.wrapLootResult(LootPanelComponent.onRemoveMonsterFromLoot).bind(this));
-    }
-
-    registerActions() {
-        this._actionService.registerAction("addLoot").map(a => a.data).subscribe(this.onAddLoot.bind(this));
-        this._actionService.registerAction("deleteLoot").map(a => a.data).subscribe(this.onDeleteLoot.bind(this));
+        this._lootWebsocketService.registerPacket("deleteItemMonster").subscribe(this.wrapLootResult(LootPanelComponent.onRemoveItemFromMonsterLoot).bind(this));
+        this._lootWebsocketService.registerPacket("tookItem").subscribe(this.wrapLootResult(this.onTookItemFromLoot.bind(this)).bind(this));
+        this._lootWebsocketService.registerPacket("tookItemMonster").subscribe(this.wrapLootResult(this.onTookItemFromMonsterLoot.bind(this)).bind(this));
     }
 
     ngOnDestroy(): void {
@@ -187,13 +159,8 @@ export class LootPanelComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnInit(): void {
-        this._groupService.loadLoots(this.group.id).subscribe(
-            loots => {
-                this.loots = loots;
-                this.registerWs();
-                this.registerActions();
-            }
-        );
+    onLoadLoots(loots: Loot[]) {
+        this.loots = loots;
+        this.registerWs();
     }
 }

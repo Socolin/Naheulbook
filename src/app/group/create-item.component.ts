@@ -5,7 +5,7 @@ import {ItemService} from "../item";
 import {Character, Item} from "../character";
 import {AutocompleteValue} from "../shared";
 import {ItemTemplate} from "../item";
-import {Loot} from "./loot.model";
+import {Loot} from "../loot";
 
 @Component({
     selector: 'create-item',

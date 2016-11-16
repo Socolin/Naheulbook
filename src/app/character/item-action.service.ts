@@ -4,7 +4,7 @@ import {Item} from "./item.model";
 
 @Injectable()
 export class ItemActionService {
-    private actionObservers: {[actionName: string]: Observer<{item: Item, data: any}>} = {}
+    private actionObservers: {[actionName: string]: Observer<{item: Item, data: any}>} = {};
 
     public registerAction(action: string): Observable<{item: Item, data: any}> {
         return Observable.create((function (observer) {

@@ -38,6 +38,11 @@
 			</a>
 		</li>
 		<li role="presentation">
+			<a href="#tab-loot_{{character.id}}" aria-controls="tab-effects" role="tab" data-toggle="tab">
+            Loot
+			</a>
+		</li>
+		<li role="presentation">
 			<a href="#tab-other_{{character.id}}" aria-controls="tab-other" role="tab" data-toggle="tab">
 				Autres
 				<span class="badge">{{character.computedData.countExceptionalStats}}</span>
@@ -253,7 +258,7 @@
 							<template [ngIf]="character.computedData.details.show.evea">
 								<template ngFor let-detail [ngForOf]="character.computedData.details.evea">
 									<tr class="stats-detail-name small">
-										<td colspan="15"class="text-left">{{detail.name}}:</td>
+										<td colspan="15" class="text-left">{{detail.name}}:</td>
 									</tr>
 									<tr class="stats-detail-values"></tr>
 									<tr class="stats-detail-values small">
@@ -290,7 +295,7 @@
 							<template [ngIf]="character.computedData.details.show.atprd">
 								<template ngFor let-detail [ngForOf]="character.computedData.details.atprd">
 									<tr class="stats-detail-name small">
-										<td colspan="15"class="text-left">{{detail.name}}:</td>
+										<td colspan="15" class="text-left">{{detail.name}}:</td>
 									</tr>
 									<tr class="stats-detail-values"></tr>
 									<tr class="stats-detail-values small">
@@ -331,7 +336,7 @@
 							<template [ngIf]="character.computedData.details.show.stat">
 								<template ngFor let-detail [ngForOf]="character.computedData.details.stat">
 									<tr class="stats-detail-name small">
-										<td colspan="15"class="text-left">{{detail.name}}:</td>
+										<td colspan="15" class="text-left">{{detail.name}}:</td>
 									</tr>
 									<tr class="stats-detail-values"></tr>
 									<tr class="stats-detail-values small">
@@ -371,7 +376,7 @@
 							<template [ngIf]="character.computedData.details.show.magic">
 								<template ngFor let-detail [ngForOf]="character.computedData.details.magic">
 									<tr class="stats-detail-name small">
-										<td colspan="15"class="text-left">{{detail.name}}:</td>
+										<td colspan="15" class="text-left">{{detail.name}}:</td>
 									</tr>
 									<tr class="stats-detail-values"></tr>
 									<tr class="stats-detail-values small">
@@ -408,7 +413,7 @@
 							<template [ngIf]="character.computedData.details.show.other">
 								<template ngFor let-detail [ngForOf]="character.computedData.details.other">
 									<tr class="stats-detail-name small">
-										<td colspan="15"class="text-left">{{detail.name}}:</td>
+										<td colspan="15" class="text-left">{{detail.name}}:</td>
 									</tr>
 									<tr class="stats-detail-values"></tr>
 									<tr class="stats-detail-values small">
@@ -451,6 +456,11 @@
 		 <div role="tabpanel" class="tab-pane" id="tab-effects_{{character.id}}">
 			<!-- Start of effects tab -->
 			<effect-panel [character]="character"></effect-panel>
+			<!-- End of effects tab -->
+		 </div>
+		 <div role="tabpanel" class="tab-pane" id="tab-loot_{{character.id}}">
+			<!-- Start of effects tab -->
+			<character-loot-panel [character]="character"></character-loot-panel>
 			<!-- End of effects tab -->
 		 </div>
 		 <div role="tabpanel" class="tab-pane" id="tab-other_{{character.id}}">
