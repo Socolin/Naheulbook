@@ -3,9 +3,11 @@ import {NotificationsService} from "../notifications/notifications.service";
 import {Loot} from "./loot.model";
 import {LootWebsocketService} from "./loot.websocket.service";
 import {Monster} from "../monster/monster.model";
+import {Subscription} from "rxjs";
 
 export class LootPanelComponent implements OnDestroy {
     public loots: Loot[] = [];
+    public subscriptions: Subscription[] = [];
 
     constructor(protected _lootWebsocketService: LootWebsocketService
         , protected _notification: NotificationsService) {
@@ -21,7 +23,7 @@ export class LootPanelComponent implements OnDestroy {
         return null;
     }
 
-    static onAddItemToLoot(loot: Loot, data: any) {
+    onAddItemToLoot(loot: Loot, data: any) {
         for (let i = 0; i < loot.items.length; i++) {
             if (loot.items[i].id == data.id) {
                 return;
@@ -30,7 +32,7 @@ export class LootPanelComponent implements OnDestroy {
         loot.items.push(data);
     }
 
-    static onRemoveItemFromLoot(loot: Loot, data: any) {
+    onRemoveItemFromLoot(loot: Loot, data: any) {
         for (let i = 0; i < loot.items.length; i++) {
             if (loot.items[i].id == data.id) {
                 loot.items.splice(i, 1);
@@ -38,7 +40,7 @@ export class LootPanelComponent implements OnDestroy {
         }
     }
 
-    static onRemoveItemFromMonster(monster: Monster, data: any) {
+    onRemoveItemFromMonster(monster: Monster, data: any) {
         for (let i = 0; i < monster.items.length; i++) {
             if (monster.items[i].id == data.id) {
                 monster.items.splice(i, 1);
@@ -46,7 +48,7 @@ export class LootPanelComponent implements OnDestroy {
         }
     }
 
-    static onAddMonsterToLoot(loot: Loot, monster: Monster) {
+    onAddMonsterToLoot(loot: Loot, monster: Monster) {
         for (let i = 0; i < loot.monsters.length; i++) {
             if (loot.monsters[i].id == monster.id) {
                 return;
@@ -56,7 +58,7 @@ export class LootPanelComponent implements OnDestroy {
     }
 
 
-    static onRemoveMonsterFromLoot(loot: Loot, monster: Monster) {
+    onRemoveMonsterFromLoot(loot: Loot, monster: Monster) {
         for (let i = 0; i < loot.monsters.length; i++) {
             if (loot.monsters[i].id == monster.id) {
                 loot.monsters.splice(i, 1);
@@ -64,7 +66,7 @@ export class LootPanelComponent implements OnDestroy {
         }
     }
 
-    static onRemoveItemFromMonsterLoot(loot: Loot, data: any) {
+    onRemoveItemFromMonsterLoot(loot: Loot, data: any) {
         let monsterIndex = loot.monsters.findIndex(m => m.id === data.monster.id);
         if (monsterIndex == -1) {
             return;
@@ -84,11 +86,10 @@ export class LootPanelComponent implements OnDestroy {
             return;
         }
         loot.items.splice(itemIndex, 1);
-        this._notification.info("Loot", character.name + " à pris: " + data.item.name);
+        this._lootWebsocketService.notifyChange(data.character.name + " à pris: " + data.item.data.name);
     }
 
     onTookItemFromMonsterLoot(loot: Loot, data: any) {
-        let character = data.character;
         let monsterIndex = loot.monsters.findIndex(m => m.id === data.monster.id);
         if (monsterIndex == -1) {
             return;
@@ -99,11 +100,11 @@ export class LootPanelComponent implements OnDestroy {
             return;
         }
         monster.items.splice(itemIndex, 1);
-        this._notification.info("Loot", character.name + " à pris: " + data.item.name);
+        this._lootWebsocketService.notifyChange(data.character.name + " à pris: " + data.item.data.name);
     }
 
     notifyChange(message: string) {
-        this._notification.info("Modification", message);
+        this._notification.info("Loot", message);
     }
 
     wrapLootResult(callback: Function): Function {
@@ -144,18 +145,21 @@ export class LootPanelComponent implements OnDestroy {
             this._lootWebsocketService.register(this.loots[i].id);
         }
         this._lootWebsocketService.registerNotifyFunction(this.notifyChange.bind(this));
-        this._lootWebsocketService.registerPacket("addItem").subscribe(this.wrapLootResult(LootPanelComponent.onAddItemToLoot).bind(this));
-        this._lootWebsocketService.registerPacket("deleteItem").subscribe(this.wrapLootResult(LootPanelComponent.onRemoveItemFromLoot).bind(this));
-        this._lootWebsocketService.registerPacket("addMonster").subscribe(this.wrapLootResult(LootPanelComponent.onAddMonsterToLoot).bind(this));
-        this._lootWebsocketService.registerPacket("deleteMonster").subscribe(this.wrapLootResult(LootPanelComponent.onRemoveMonsterFromLoot).bind(this));
-        this._lootWebsocketService.registerPacket("deleteItemMonster").subscribe(this.wrapLootResult(LootPanelComponent.onRemoveItemFromMonsterLoot).bind(this));
-        this._lootWebsocketService.registerPacket("tookItem").subscribe(this.wrapLootResult(this.onTookItemFromLoot.bind(this)).bind(this));
-        this._lootWebsocketService.registerPacket("tookItemMonster").subscribe(this.wrapLootResult(this.onTookItemFromMonsterLoot.bind(this)).bind(this));
+        this.subscriptions.push(this._lootWebsocketService.registerPacket("addItem").subscribe(this.wrapLootResult(this.onAddItemToLoot.bind(this)).bind(this)));
+        this.subscriptions.push(this._lootWebsocketService.registerPacket("deleteItem").subscribe(this.wrapLootResult(this.onRemoveItemFromLoot.bind(this)).bind(this)));
+        this.subscriptions.push(this._lootWebsocketService.registerPacket("addMonster").subscribe(this.wrapLootResult(this.onAddMonsterToLoot.bind(this)).bind(this)));
+        this.subscriptions.push(this._lootWebsocketService.registerPacket("deleteMonster").subscribe(this.wrapLootResult(this.onRemoveMonsterFromLoot.bind(this)).bind(this)));
+        this.subscriptions.push(this._lootWebsocketService.registerPacket("deleteItemMonster").subscribe(this.wrapLootResult(this.onRemoveItemFromMonsterLoot.bind(this)).bind(this)));
+        this.subscriptions.push(this._lootWebsocketService.registerPacket("tookItem").subscribe(this.wrapLootResult(this.onTookItemFromLoot.bind(this)).bind(this)));
+        this.subscriptions.push(this._lootWebsocketService.registerPacket("tookItemMonster").subscribe(this.wrapLootResult(this.onTookItemFromMonsterLoot.bind(this)).bind(this)));
     }
 
     ngOnDestroy(): void {
         for (let i = 0; i < this.loots.length; i++) {
             this._lootWebsocketService.unregister(this.loots[i].id);
+        }
+        for (let i = 0; i < this.subscriptions.length; i++) {
+            this.subscriptions[i].unsubscribe();
         }
     }
 

@@ -17,6 +17,7 @@ import {ItemService} from "../item/item.service";
 })
 export class CharacterLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() character: Character;
+    @Input() inGroupTab: boolean;
 
     constructor(private lootWebsocketService: LootWebsocketService
         , private notification: NotificationsService
@@ -26,12 +27,11 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         super(lootWebsocketService, notification);
     }
 
-
     takeItemFromLoot(loot: Loot, item: Item) {
         if (item != null) {
             this._itemService.takeItemFromLoot(item.id, this.character.id).subscribe(
                 item => {
-                    LootPanelComponent.onRemoveItemFromLoot(loot, item);
+                    this.onRemoveItemFromLoot(loot, item);
                 }
             );
         }
@@ -41,7 +41,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         if (item != null) {
             this._itemService.takeItemFromLoot(item.id, this.character.id).subscribe(
                 item => {
-                    LootPanelComponent.onRemoveItemFromMonster(monster, item);
+                    this.onRemoveItemFromMonster(monster, item);
                 }
             );
         }
@@ -57,6 +57,9 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
             loots => {
                 this.onLoadLoots(loots);
                 this.registerActions();
+                if (this.inGroupTab) {
+                    this._lootWebsocketService.registerNotifyFunction(null);
+                }
             }
         );
     }
