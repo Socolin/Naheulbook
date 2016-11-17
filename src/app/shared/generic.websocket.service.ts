@@ -2,11 +2,13 @@ import {Observer, Observable} from "rxjs";
 import {NotificationsService} from "../notifications/notifications.service";
 import {WebSocketService} from "./websocket.service";
 import {MiscService} from "./misc.service";
+import {WsEvent} from "./websocket.model";
 
 export abstract class GenericWebsocketService {
     private notifyFunc: Function;
     private elementType: string;
-    private registeredCallbacks: {[opcode: string]: Observer<any>} = {};
+    private registeredObservers: {[opcode: string]: Observer<WsEvent>} = {};
+    private registeredObservables: {[opcode: string]: Observable<WsEvent>} = {};
 
     constructor(private _notification: NotificationsService
         , private _miscService: MiscService
@@ -15,14 +17,21 @@ export abstract class GenericWebsocketService {
         this.elementType = elementType;
     }
 
-    registerPacket(opcode: string): Observable<any> {
-        return Observable.create((function (observer: Observer<any>) {
-            this.registeredCallbacks[opcode] = observer;
-        }).bind(this));
+    registerPacket(opcode: string): Observable<WsEvent> {
+        if (opcode in this.registeredObservables) {
+            return this.registeredObservables[opcode];
+        }
+        let observable = Observable.create((function (observer: Observer<WsEvent>) {
+            this.registeredObservers[opcode] = observer;
+        }).bind(this)).share();
+        this.registeredObservables[opcode] = observable;
+        return observable;
     }
 
     notifyChange(message: string) {
-        this.notifyFunc(message);
+        if (this.notifyFunc) {
+            this.notifyFunc(message);
+        }
     }
 
     registerNotifyFunction(notifyFunc: Function) {
@@ -33,8 +42,8 @@ export abstract class GenericWebsocketService {
         this._webSocketService.register(this.elementType, elementId).subscribe(
             res => {
                 try {
-                    if (res.opcode in this.registeredCallbacks) {
-                        this.registeredCallbacks[res.opcode].next(res);
+                    if (res.opcode in this.registeredObservers) {
+                        this.registeredObservers[res.opcode].next(res);
                     }
                     else {
                         console.log("Unhandled websocket opcode: " + res.opcode);
@@ -42,7 +51,7 @@ export abstract class GenericWebsocketService {
                 }
                 catch (err) {
                     this._notification.error("Erreur", "Erreur WS");
-                    this._miscService.postJson('/api/debug/report', err).subscribe();
+                    this._miscService.postJson('/api/debug/report', err, true).subscribe();
                     console.log(err);
                 }
             }

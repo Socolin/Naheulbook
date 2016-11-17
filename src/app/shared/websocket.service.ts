@@ -8,6 +8,7 @@ export class WebSocketService {
     private pendingData: string[] = [];
     private webSocket: WebSocket;
     public registeredElements: {[type: string]: {[id: number]: Subject<WsEvent>}} = {};
+    public registerCount: {[type: string]: {[id: number]: number}} = {};
     public registeredObserverElements: {[type: string]: {[id: number]: Observer<WsEvent>}} = {};
 
     public register(type: string, elementId: number): Subject<WsEvent> {
@@ -29,10 +30,19 @@ export class WebSocketService {
         if (!(type in this.registeredObserverElements)) {
             this.registeredObserverElements[type] = {};
         }
+        if (!(type in this.registerCount)) {
+            this.registerCount[type] = {};
+        }
+        if (elementId in this.registeredElements[type]) {
+            this.registerCount[type][elementId]++;
+            return this.registeredElements[type][elementId];
+        }
+
+        this.registerCount[type][elementId] = 1;
 
         let observable = Observable.create(function (observer: Observer<WsEvent>) {
             this.registeredObserverElements[type][elementId] = observer;
-        }.bind(this));
+        }.bind(this)).share();
         let observer = {
             next: (data: any) => {
                 let message: WsMessage = {
@@ -61,14 +71,17 @@ export class WebSocketService {
         if (!(type in this.registeredElements)) {
             return;
         }
-        delete this.registeredElements[type][elementId];
-        delete this.registeredObserverElements[type][elementId];
-        this.sendData({
-            opcode: "STOP_LISTEN_ELEMENT",
-            id: elementId,
-            type: type,
-            data: null
-        });
+        this.registerCount[type][elementId]--;
+        if (this.registerCount[type][elementId] == 0) {
+            delete this.registeredElements[type][elementId];
+            delete this.registeredObserverElements[type][elementId];
+            this.sendData({
+                opcode: "STOP_LISTEN_ELEMENT",
+                id: elementId,
+                type: type,
+                data: null
+            });
+        }
     }
 
     private onConnected(ev: Event) {
