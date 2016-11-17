@@ -11,37 +11,37 @@
     <div class="col-xs-12">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#characters" aria-controls="characters" role="tab" data-toggle="tab">
+            <li role="presentation" [class.active]="currentTab === 'characters'">
+                <a href="#" (click)="selectTab('characters')">
                     Joueurs
                 </a>
             </li>
-            <li role="presentation">
-                <a href="#invites" aria-controls="invites" role="tab" data-toggle="tab">
+            <li role="presentation" [class.active]="currentTab === 'invites'">
+                <a href="#" (click)="selectTab('invites')">
                     Invitations <span *ngIf="group.invites.length || group.invited.length" class="badge">{{group.invites.length}} - {{group.invited.length}}</span>
                 </a>
             </li>
-            <li role="presentation">
-                <a href="#combat" aria-controls="invites" role="tab" data-toggle="tab">
+            <li role="presentation" [class.active]="currentTab === 'combat'">
+                <a href="#" (click)="selectTab('combat')">
                     Combat
                 </a>
             </li>
-            <li role="presentation">
-                <a href="#loot" aria-controls="invites" role="tab" data-toggle="tab">
+            <li role="presentation" [class.active]="currentTab === 'loot'">
+                <a href="#" (click)="selectTab('loot')">
                     Loot
                 </a>
             </li>
-            <li role="presentation">
-                <a class="bg-success" href="#tab-history" aria-controls="history" role="tab" data-toggle="tab"
+            <li role="presentation" [class.active]="currentTab === 'history'">
+                <a class="bg-success" href="#" (click)="selectTab('history')"
                    (click)="loadHistory()">
                     Historique
                 </a>
             </li>
             <template ngFor let-character [ngForOf]="characters">
-                <li role="presentation">
-                    <a [class.bg-warning]="character.isNpc" [class.bg-info]="!character.isNpc" *ngIf="character.active"
-                       href="#character_{{character.id}}" [attr.aria-controls]="'character_' + character.id" role="tab"
-                       data-toggle="tab">
+                <li role="presentation" [class.active]="currentTab === 'character_' + character.id">
+                    <a *ngIf="character.active" href="#"
+                        [class.bg-warning]="character.isNpc" [class.bg-info]="!character.isNpc"
+                        (click)="selectTab('character_' + character.id)">
                         {{character.name}}
                     </a>
                 </li>
@@ -51,12 +51,13 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <template ngFor let-character [ngForOf]="characters">
-                <div *ngIf="character.active" role="tabpanel" class="list-group tab-pane"
-                     id="character_{{character.id}}">
+                <div *ngIf="character.active" role="tabpanel"
+                     [class.active]="currentTab === 'character_' + character.id"
+                     class="list-group tab-pane" id="character_{{character.id}}">
                     <character [character]="character"></character>
                 </div>
             </template>
-            <div role="tabpanel" class="tab-pane" id="tab-history">
+            <div [class.active]="currentTab === 'history'" class="tab-pane">
                 <div class="col-xs-12">
                     <h4>Ajouter une entrée</h4>
                 </div>
@@ -120,7 +121,7 @@
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="list-group tab-pane active" id="characters">
+            <div [class.active]="currentTab === 'characters'" class="list-group tab-pane">
                 <div class="col-lg-4 col-md-3 col-sm-6">
                     <div>
                         <h3>Informations</h3>
@@ -235,13 +236,13 @@
                     </a>
                 </div>
             </div>
-            <div role="tabpanel" class="list-group tab-pane" id="combat">
+            <div [class.active]="currentTab === 'combat'" class="list-group tab-pane">
                 <fighter-panel [group]="group" [characters]="characters"></fighter-panel>
             </div>
-            <div role="tabpanel" class="list-group tab-pane" id="loot">
+            <div [class.active]="currentTab === 'loot'" class="list-group tab-pane">
                 <group-loot-panel [group]="group"></group-loot-panel>
             </div>
-            <div role="tabpanel" class="tab-pane" id="invites">
+            <div [class.active]="currentTab === 'invites'" class="tab-pane">
                 <div>
                     <h4>Invitation à valider</h4>
                     <div class="list-group">

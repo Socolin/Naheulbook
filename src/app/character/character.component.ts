@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, OnDestroy} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 import {NotificationsService} from '../notifications';
 
@@ -48,9 +48,11 @@ export class CharacterComponent implements OnInit, OnDestroy {
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
     private inGroupTab: boolean = false;
     private selectedItem: Item;
+    private currentTab: string = 'infos';
 
     constructor(private _route: ActivatedRoute
         , private _notification: NotificationsService
+        , private _router: Router
         , private _characterWebsocketService: CharacterWebsocketService
         , private _characterService: CharacterService
         , private _itemActionService: ItemActionService) {
@@ -326,6 +328,14 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    selectTab(tab: string) {
+        this.currentTab = tab;
+        if (!this.inGroupTab) {
+            window.location.hash = tab;
+        }
+        return false;
+    }
+
     ngOnDestroy() {
         if (this.character) {
             this._characterWebsocketService.unregister();
@@ -351,6 +361,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
                     );
                 }
             );
+        }
+        if (!this.inGroupTab) {
+            this._route.fragment.subscribe(value => {
+                if (value) {
+                    this.currentTab = value;
+                }
+            });
         }
     }
 }

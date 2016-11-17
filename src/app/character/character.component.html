@@ -11,52 +11,52 @@
 	</div>
 
 	<ul class="nav nav-tabs" role="tablist">
-		<li role="presentation" class="active">
-			<a href="#tab-infos_{{character.id}}" aria-controls="tab-infos" role="tab" data-toggle="tab">
+		<li role="presentation" [class.active]="currentTab === 'infos'">
+			<a href="#" (click)="selectTab('infos')">
 				Info
 			</a>
 		</li>
-		<li role="presentation" class="">
-			<a href="#tab-combat_{{character.id}}" aria-controls="tab-combat" role="tab" data-toggle="tab">
+		<li role="presentation" [class.active]="currentTab === 'combat'">
+			<a href="#" (click)="selectTab('combat')">
 				Combat
 			</a>
 		</li>
-		<li role="presentation" class="">
-			<a href="#tab-statistics_{{character.id}}" aria-controls="tab-statistics" role="tab" data-toggle="tab">
+		<li role="presentation" [class.active]="currentTab === 'statistics'">
+			<a href="#" (click)="selectTab('statistics')">
 				Stat
 			</a>
 		</li>
-		<li role="presentation">
-			<a href="#tab-inventory_{{character.id}}" aria-controls="tab-inventory" role="tab" data-toggle="tab">
+		<li role="presentation" [class.active]="currentTab === 'inventory'">
+			<a href="#" (click)="selectTab('inventory')">
 				Inventaire
 			</a>
 		</li>
-		<li role="presentation">
-			<a href="#tab-effects_{{character.id}}" aria-controls="tab-effects" role="tab" data-toggle="tab">
+		<li role="presentation" [class.active]="currentTab === 'effects'">
+			<a href="#" (click)="selectTab('effects')">
 				Effets
 				<span class="badge">{{character.computedData.countActiveEffect}}</span>
 			</a>
 		</li>
-		<li role="presentation">
-			<a href="#tab-loot_{{character.id}}" aria-controls="tab-effects" role="tab" data-toggle="tab">
-            Loot
+		<li role="presentation" [class.active]="currentTab === 'loot'">
+			<a href="#" (click)="selectTab('loot')">
+                Loot
 			</a>
 		</li>
-		<li role="presentation">
-			<a href="#tab-other_{{character.id}}" aria-controls="tab-other" role="tab" data-toggle="tab">
+		<li role="presentation" [class.active]="currentTab === 'other'">
+			<a href="#" (click)="selectTab('other')">
 				Autres
 				<span class="badge">{{character.computedData.countExceptionalStats}}</span>
 			</a>
 		</li>
-		<li role="presentation">
-			<a href="#tab-history_{{character.id}}" aria-controls="tab-history" role="tab" data-toggle="tab" (click)="loadHistory()">
+		<li role="presentation" [class.active]="currentTab === 'history'">
+			<a href="#" (click)="selectTab('history')" (click)="loadHistory()">
 				Historique
 			</a>
 		</li>
 	</ul>
 
 	 <div class="tab-content">
-		 <div role="tabpanel" class="tab-pane active" id="tab-infos_{{character.id}}">
+		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'infos'">
 			<!-- Start of info tab -->
 		 	<div class="row">
 				<div class="col-sm-6">
@@ -150,7 +150,7 @@
 			<!-- End of infos tab -->
 		 </div>
 
-		 <div role="tabpanel" class="tab-pane" id="tab-combat_{{character.id}}">
+		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'combat'">
 			<!-- Start of combat tab -->
 			<div class="row" style="font-size: medium;">
 				<div class="col-xs-6">
@@ -239,7 +239,7 @@
 			</div>
 			<!-- End of combat tab -->
 		 </div>
-		 <div role="tabpanel" class="tab-pane" id="tab-statistics_{{character.id}}">
+		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'statistics'">
 			<!-- Start of stats tab -->
 			<div class="row">
 				<div class="col-md-3 col-sm-6">
@@ -448,22 +448,22 @@
 			</div>
 			<!-- End of stats tab -->
 		 </div>
-		 <div role="tabpanel" class="tab-pane" id="tab-inventory_{{character.id}}">
+		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'inventory'">
 			<!-- Start of inventory tab -->
             <inventory-panel [character]="character"></inventory-panel>
 			<!-- End of inventory tab -->
 		 </div>
-		 <div role="tabpanel" class="tab-pane" id="tab-effects_{{character.id}}">
+		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'effects'">
 			<!-- Start of effects tab -->
 			<effect-panel [character]="character"></effect-panel>
 			<!-- End of effects tab -->
 		 </div>
-		 <div role="tabpanel" class="tab-pane" id="tab-loot_{{character.id}}">
+		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'loot'">
 			<!-- Start of effects tab -->
-			<character-loot-panel [character]="character"></character-loot-panel>
+			<character-loot-panel [character]="character" [inGroupTab]="inGroupTab"></character-loot-panel>
 			<!-- End of effects tab -->
 		 </div>
-		 <div role="tabpanel" class="tab-pane" id="tab-other_{{character.id}}">
+		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'other'">
 			<!-- Start of other tab -->
 			<div *ngIf="character.computedData.stats['AD'] > 12" class="row">
 				<div class="col-xs-7 col-sm-5 col-md-3 col-lg-2">
@@ -496,7 +496,7 @@
 			</div>
 			<!-- End of other tab -->
 		 </div>
-		 <div role="tabpanel" class="tab-pane" id="tab-history_{{character.id}}">
+		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'history'">
 			<div *ngFor="let loggroup of history">
 				{{loggroup.date | date:'mediumDate'}}
 				<div style="padding-bottom: 5px; margin-left: 10px; padding-left: 10px; padding-top: 5px; border-left: 1px solid #E2D7D7">

@@ -25,7 +25,8 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     public characters: Character[] = [];
     public selectedCharacter: Character;
     public filteredInvitePlayers: CharacterInviteInfo[] = [];
-    private autocompleteLocationsCallback: Function;
+    public autocompleteLocationsCallback: Function;
+    public currentTab: string = 'characters';
 
     constructor(private _route: ActivatedRoute
         , private _router: Router
@@ -103,7 +104,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     changeGroupLocation(location: Location) {
-        this._groupService.editGroupValue(this.group.id, 'location', location).subscribe(
+        this._groupService.editGroupValue(this.group.id, 'location', location.id).subscribe(
             () => {
                 this._notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
                 this.group.location = location;
@@ -379,6 +380,12 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         this._groupWebsocketService.unregister(this.group.id);
     }
 
+    selectTab(tab: string) {
+        this.currentTab = tab;
+        window.location.hash = tab;
+        return false;
+    }
+
     ngOnInit() {
         this._route.params.subscribe(
             params => {
@@ -386,6 +393,11 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                 this.loadGroup(id);
             }
         );
+        this._route.fragment.subscribe(value => {
+            if (value) {
+                this.currentTab = value;
+            }
+        });
         this.autocompleteLocationsCallback = this.updateLocationListAutocomplete.bind(this);
     }
 }
