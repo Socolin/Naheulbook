@@ -32,12 +32,8 @@ export class CharacterService extends JsonService {
             this._originService.getOriginList(),
             this._skillService.getSkills(),
             this.postJson(url, data).map(res => res.json())
-        ).map((requiredData: [Job[], Origin[], Skill[], Character]) => {
-                let jobs: Job[] = requiredData[0];
-                let origins: Origin[] = requiredData[1];
-                let skills: Skill[] = requiredData[2];
+        ).map(([jobs, origins, skills, characterData]: [Job[], Origin[], Skill[], Character]) => {
                 let character = new Character();
-                let characterData = requiredData[3];
                 for (let propName in characterData) {
                     if (characterData.hasOwnProperty(propName)) {
                         character[propName] = characterData[propName];
@@ -144,11 +140,7 @@ export class CharacterService extends JsonService {
             this._jobService.getJobList(),
             this._originService.getOriginList(),
             this.postJson('/api/character/resumeList', list).map(res => res.json())
-        ).map((requiredData: [Job[], Origin[], CharacterResume[]]) => {
-                let jobs = requiredData[0];
-                let origins = requiredData[1];
-                let characters = requiredData[2];
-
+        ).map(([jobs, origins, characters]: [Job[], Origin[], CharacterResume[]]) => {
                 for (let i = 0; i < characters.length; i++) {
                     let character = characters[i];
                     for (let j = 0; j < jobs.length; j++) {
@@ -175,11 +167,7 @@ export class CharacterService extends JsonService {
             this._jobService.getJobList(),
             this._originService.getOriginList(),
             this._http.get('/api/character/list').map(res => res.json())
-        ).map((requiredData: [Job[], Origin[], CharacterResume[]]) => {
-                let jobs = requiredData[0];
-                let origins = requiredData[1];
-                let characters = requiredData[2];
-
+        ).map(([jobs, origins, characters]: [Job[], Origin[], CharacterResume[]]) => {
                 for (let i = 0; i < characters.length; i++) {
                     let character = characters[i];
                     for (let j = 0; j < jobs.length; j++) {

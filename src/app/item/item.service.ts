@@ -93,7 +93,7 @@ export class ItemService extends JsonService {
                 this.postJson('/api/item/list', {typeId: section.id}).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
-                ([items, skillsById]) => {
+                ([items, skillsById]: [ItemTemplate[], {[skillId: number]: Skill}]) => {
                     for (let i = 0; i < items.length; i++) {
                         let item = items[i];
                         this.fillMissingDataInItemTemplate(item, skillsById);
@@ -119,7 +119,7 @@ export class ItemService extends JsonService {
                 this.postJson('/api/item/detail', {id: id}).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
-                ([itemTemplate, skillsById]) => {
+                ([itemTemplate, skillsById]: [ItemTemplate, {[skillId: number]: Skill}]) => {
                     this.fillMissingDataInItemTemplate(itemTemplate, skillsById);
                     observer.next(itemTemplate);
                     observer.complete();
@@ -199,9 +199,7 @@ export class ItemService extends JsonService {
                 }).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
-                res => {
-                    let item: Item = res[0];
-                    let skillsById: {[skillId: number]: Skill} = res[1];
+                ([item, skillsById]: [Item, {[skillId: number]: Skill}]) => {
                     this.fillMissingDataInItemTemplate(item.template, skillsById);
                     observer.next(item);
                     observer.complete();
