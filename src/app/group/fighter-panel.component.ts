@@ -72,6 +72,7 @@ export class FighterPanelComponent implements OnInit{
             monster => {
                 this.monsters.push(monster);
                 this.updateOrder();
+                this.randomMonsterInventory();
             }
         );
     }
