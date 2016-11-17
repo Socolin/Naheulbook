@@ -69,9 +69,10 @@
 					</span>
 					{{item.note}}
 				</td>
-				<td *ngIf="hasSpecial('CAN_HAVE_RUPTURE')" class="rupture-{{item.rupture}}">
-					<span *ngIf="item.rupture > 1">1 à {{item.rupture}}</span>
-					<span *ngIf="!item.rupture">Non</span>
+				<td *ngIf="hasSpecial('CAN_HAVE_RUPTURE')" class="rupture-{{item.data.rupture}}">
+					<span *ngIf="item.data.rupture > 1">1 à {{item.data.rupture}}</span>
+					<span *ngIf="item.data.rupture == 1">Non</span>
+					<span *ngIf="!item.data.rupture">Non</span>
 				</td>
 				<td *ngIf="hasSpecial('DICE_DROP')">
 					{{item.diceDrop}}

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnChanges} from '@angular/core';
+import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import {NotificationsService} from '../notifications';
 
 import {ItemTemplate, ItemSection, ItemSlot} from "../item";
@@ -108,23 +108,32 @@ export class ItemEditorComponent implements OnInit, OnChanges {
         this._effectService.searchEffect(filterName).subscribe(
             effects => {
                 this.filteredEffects = effects;
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
             }
         );
     }
 
-    ngOnChanges() {
-        if (this.item.category && this.sections) {
+    setRupture(rupture) {
+        this.item.data.rupture = rupture;
+    }
+
+    updateSelectedSection() {
+        if (this.item && this.sections) {
             for (let i = 0; i < this.sections.length; i++) {
-                let t = this.sections[i];
-                if (t.id === this.item.category) {
-                    this.selectedSection = t;
-                    break;
+                let section = this.sections[i];
+                for (let j = 0; j < section.categories.length; j++) {
+                    let category = section.categories[j];
+                    if (category.id === this.item.category) {
+                        this.selectedSection = section;
+                        break;
+                    }
                 }
             }
+        }
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('item' in changes) {
+            this.updateSelectedSection();
         }
     }
 
@@ -142,6 +151,7 @@ export class ItemEditorComponent implements OnInit, OnChanges {
             this.skills = skills;
             this.skillsById = skillsById;
             this.slots = slots;
+            this.updateSelectedSection();
         });
     }
 }

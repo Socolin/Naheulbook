@@ -70,7 +70,7 @@
 		<div class="col-sm-10 btn-group" data-toggle="buttons">
 			<button *ngFor="let section of sections" class="btn btn-primary"
                     (click)="selectedSection = section"
-                    [class.active]="selectedSection && selectedSection.id == section.id">
+                    [class.active]="selectedSection && selectedSection.id === section.id">
                 {{section.name}}
             </button>
 		</div>
@@ -80,8 +80,8 @@
 		<label class="col-sm-2 control-label">Categorie</label>
 		<div class="col-sm-10 btn-group" data-toggle="buttons">
 			<button *ngFor="let category of selectedSection.categories" class="btn btn-primary"
-                    (click)="item.category = category"
-                    [class.active]="item.category && item.category.id == category.id">
+                    (click)="item.category = category.id"
+                    [class.active]="item.category === category.id">
                 {{category.name}}
             </button>
 		</div>
@@ -296,12 +296,13 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Rupture</label>
 		<div class="col-sm-10 btn-group" data-toggle="buttons">
-			<button class="btn btn-success" (click)="item.data.rupture = null" [class.active]="!item.data.rupture">non</button>
-			<button class="btn btn-success" (click)="item.data.rupture = 2" [class.active]="item.data.rupture == 2">1 à 2</button>
-			<button class="btn btn-warning" (click)="item.data.rupture = 3" [class.active]="item.data.rupture == 3">1 à 3</button>
-			<button class="btn btn-warning" (click)="item.data.rupture = 4" [class.active]="item.data.rupture == 4">1 à 4</button>
-			<button class="btn btn-danger" (click)="item.data.rupture = 5" [class.active]="item.data.rupture == 5">1 à 5</button>
-			<button class="btn btn-danger" (click)="item.data.rupture = 6" [class.active]="item.data.rupture == 6">Toujours</button>
+			<button class="btn btn-info" (click)="setRupture(null)" [class.active]="!item.data.rupture">null</button>
+			<button class="btn btn-success" (click)="setRupture(1)" [class.active]="item.data.rupture == 1">non</button>
+			<button class="btn btn-success" (click)="setRupture(2)" [class.active]="item.data.rupture == 2">1 à 2</button>
+			<button class="btn btn-warning" (click)="setRupture(3)" [class.active]="item.data.rupture == 3">1 à 3</button>
+			<button class="btn btn-warning" (click)="setRupture(4)" [class.active]="item.data.rupture == 4">1 à 4</button>
+			<button class="btn btn-danger" (click)="setRupture(5)" [class.active]="item.data.rupture == 5">1 à 5</button>
+			<button class="btn btn-danger" (click)="setRupture(6)" [class.active]="item.data.rupture == 6">Toujours</button>
 		</div>
 	</div>
 	<div *ngIf="selectedSection && item.category">

@@ -31,12 +31,11 @@ export class EditItemComponent implements OnInit {
                     if (showNext) {
                         this._router.navigate(['/edit-item', this.item.id + 1]);
                     } else {
-                        this._router.navigate(['/database/items'], {queryParams: {id: this.item.category.type}});
+                        this._router.navigate(['/database/items'], {queryParams: {id: 1}});
                     }
                 }).bind(this), 300);
             },
             error => {
-                console.log(error);
                 this.saving = false;
             }
         );
@@ -48,10 +47,6 @@ export class EditItemComponent implements OnInit {
             this._itemService.getItem(id).subscribe(
                 item => {
                     this.item = item;
-                },
-                error => {
-                    console.log(error);
-                    this._notification.error('Erreur', 'Erreur serveur');
                 }
             );
 
