@@ -26,7 +26,11 @@
         <div *ngIf="selectedInventoryTab=='all'" class="row overflow-item-list">
             <div class="col-sm-12">
                 <div *ngIf="!iconMode" class="list-group" style="height:400px">
-                    <a href="#" *ngFor="let item of character.items" class="list-group-item" (click)="selectItem(item)" [class.active]="selectedItem && selectedItem.id == item.id" [class.hidden]="!isItemFilteredByName(item)">
+                    <a href="#" *ngFor="let item of character.items"
+                       class="list-group-item"
+                       (click)="selectItem(item)"
+                       [class.active]="selectedItem && selectedItem.id == item.id"
+                       [class.hidden]="!isItemFilteredByName(item)">
                         <span style="position: relative;padding-right: 25px">
                             <span style="position: absolute; top: -15px; left: -10px">
                                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
@@ -44,7 +48,10 @@
                 </div>
                 <div *ngIf="iconMode" class="list-group" style="height:400px">
                     <template ngFor let-item [ngForOf]="character.items">
-                        <div [class.bg-info]="item === selectedItem" style="display: inline-block" (click)="selectItem(item)">
+                        <div [class.bg-info]="item === selectedItem"
+                             style="display: inline-block"
+                             (click)="selectItem(item)"
+                             [class.hidden]="!isItemFilteredByName(item)">
                             <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                         </div>
                         <template [ngIf]="item === selectedItem">
