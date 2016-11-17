@@ -5,6 +5,7 @@ import {ItemTemplate, ItemSection, ItemSlot} from "../item";
 import {Effect, EffectService} from "../effect";
 import {Skill, SkillService} from "../skill";
 import {ItemService} from "./item.service";
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'item-editor',
@@ -14,6 +15,7 @@ export class ItemEditorComponent implements OnInit, OnChanges {
     @Input() item: ItemTemplate;
 
     public skills: Skill[] = [];
+    public skillsById: {[skillId: number]: Skill} = {};
     public sections: ItemSection[];
     public selectedSection: ItemSection;
     public slots: ItemSlot[];
@@ -34,18 +36,8 @@ export class ItemEditorComponent implements OnInit, OnChanges {
         };
     }
 
-    getSkillById(skillId: number): Skill {
-        for (let i = 0; i < this.skills.length; i++) {
-            let skill = this.skills[i];
-            if (skill.id === skillId) {
-                return skill;
-            }
-        }
-        return null;
-    }
-
     addSkill(skillId: number) {
-        let skill = this.getSkillById(skillId);
+        let skill = this.skillsById[skillId];
         if (!this.item.skills) {
             this.item.skills = [];
         }
@@ -65,7 +57,7 @@ export class ItemEditorComponent implements OnInit, OnChanges {
     }
 
     addUnskill(skillId: number) {
-        let skill = this.getSkillById(skillId);
+        let skill = this.skillsById[skillId];
         if (!this.item.unskills) {
             this.item.unskills = [];
         }
@@ -140,15 +132,16 @@ export class ItemEditorComponent implements OnInit, OnChanges {
         if (!this.item) {
             this.item = new ItemTemplate();
         }
-        this._itemService.getSectionsList().subscribe(sections => {
+        Observable.forkJoin(
+            this._itemService.getSectionsList(),
+            this._skillService.getSkills(),
+            this._skillService.getSkillsById(),
+            this._itemService.getSlots()
+        ).subscribe(([sections, skills, skillsById, slots]) => {
             this.sections = sections;
-            this.ngOnChanges();
-        });
-        this._skillService.getSkills().subscribe(res => {
-            this.skills = res;
-        });
-        this._itemService.getSlots().subscribe(res => {
-            this.slots = res;
+            this.skills = skills;
+            this.skillsById = skillsById;
+            this.slots = slots;
         });
     }
 }

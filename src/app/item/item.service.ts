@@ -93,9 +93,7 @@ export class ItemService extends JsonService {
                 this.postJson('/api/item/list', {typeId: section.id}).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
-                res => {
-                    let items : ItemTemplate[] = res[0];
-                    let skillsById: {[skillId: number]: Skill} = res[1];
+                ([items, skillsById]) => {
                     for (let i = 0; i < items.length; i++) {
                         let item = items[i];
                         this.fillMissingDataInItemTemplate(item, skillsById);
@@ -115,9 +113,22 @@ export class ItemService extends JsonService {
             .map(res => res.json());
     }
 
-    getItem(id): Observable<ItemTemplate> {
-        return this.postJson('/api/item/detail', {id: id})
-            .map(res => res.json());
+    getItem(id: number): Observable<ItemTemplate> {
+        return Observable.create((function (observer) {
+            Observable.forkJoin(
+                this.postJson('/api/item/detail', {id: id}).map(res => res.json()),
+                this._skillService.getSkillsById()
+            ).subscribe(
+                ([itemTemplate, skillsById]) => {
+                    this.fillMissingDataInItemTemplate(itemTemplate, skillsById);
+                    observer.next(itemTemplate);
+                    observer.complete();
+                },
+                error => {
+                    observer.error(error);
+                }
+            );
+        }).bind(this));
     }
 
     searchItem(filter): Observable<ItemTemplate[]> {
@@ -137,6 +148,7 @@ export class ItemService extends JsonService {
                 .subscribe(
                     categoryList => {
                         this.slots.next(categoryList);
+                        this.slots.complete();
                     },
                     error => {
                         this.slots.error(error);

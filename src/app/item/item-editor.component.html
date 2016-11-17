@@ -68,14 +68,22 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Type</label>
 		<div class="col-sm-10 btn-group" data-toggle="buttons">
-			<button *ngFor="let section of itemSections" class="btn btn-primary" (click)="selectedSection = section" [class.active]="selectedSection && selectedSection.id == section.id">{{type.name}}</button>
+			<button *ngFor="let section of sections" class="btn btn-primary"
+                    (click)="selectedSection = section"
+                    [class.active]="selectedSection && selectedSection.id == section.id">
+                {{section.name}}
+            </button>
 		</div>
 	</div>
 
 	<div class="form-group" *ngIf="selectedSection">
 		<label class="col-sm-2 control-label">Categorie</label>
 		<div class="col-sm-10 btn-group" data-toggle="buttons">
-			<button *ngFor="let category of selectedSection.categories" class="btn btn-primary" (click)="item.category = category" [class.active]="item.category && item.category.id == category.id">{{category.name}}</button>
+			<button *ngFor="let category of selectedSection.categories" class="btn btn-primary"
+                    (click)="item.category = category"
+                    [class.active]="item.category && item.category.id == category.id">
+                {{category.name}}
+            </button>
 		</div>
 	</div>
 
