@@ -37,6 +37,7 @@ export class SwipableItemDetail {
     @Input() character: Character;
     @Input() item: Item;
     @Input() gmView: boolean;
+    @Input() readonly: boolean;
 
     constructor(private _swipeService: SwipeService) {
     }

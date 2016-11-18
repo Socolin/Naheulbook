@@ -1,5 +1,5 @@
 <h4>
-    <icon-selector [icon]="item.data.icon" (onChange)="_itemActionService.onAction('change_icon', item, {icon: $event})"></icon-selector>
+    <icon-selector [icon]="item.data.icon" [readonly]="readonly" (onChange)="_itemActionService.onAction('change_icon', item, {icon: $event})"></icon-selector>
     <span style="vertical-align: top;" *ngIf="item.data.quantity">
         {{item.data.quantity}}
     </span>
@@ -20,20 +20,16 @@
             class="ra ra-perspective-dice-random"></span></span>
         <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
         <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
-        <div style="margin-left: 20px">
-            <span *ngIf="character.computedData.stats['PI'] > 0" class="text-info">+{{character.computedData.stats['PI']}} (Bonus personnage)</span>
-            <span *ngIf="character.computedData.stats['PI'] < 0" class="text-warning">{{character.computedData.stats['PI']}} (Malus personnage)</span>
-        </div>
+        <template [ngIf]="!readonly">
+            <div style="margin-left: 20px">
+                <span *ngIf="character.computedData.stats['PI'] > 0" class="text-info">+{{character.computedData.stats['PI']}} (Bonus personnage)</span>
+                <span *ngIf="character.computedData.stats['PI'] < 0" class="text-warning">{{character.computedData.stats['PI']}} (Malus personnage)</span>
+            </div>
+        </template>
     </div>
     <div>
         <span *ngIf="!editing">{{item.data.description}}</span>
         <span *ngIf="editing"><input class="form-control" [(ngModel)]="itemEditDescription"/></span>
-    </div>
-    <div *ngIf="item.template.data.weight">
-        Poid:
-        <span *ngIf="item.template.data.weight < 1">{{(item.template.data.weight * 1000)}}g</span>
-        <span *ngIf="item.template.data.weight >= 1">{{(item.template.data.weight)}}Kg</span>
-        <span *ngIf="item.data.quantity">Total: {{item.data.quantity * item.template.data.weight}}Kg</span>
     </div>
 </div>
 <div *ngIf="!item.data.notIdentified || gmView">
@@ -80,10 +76,12 @@
         <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
         <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
         <span *ngIf="item.template.data.damageType">({{item.template.data.damageType}})</span>
-        <div style="margin-left: 20px">
-            <span *ngIf="character.computedData.stats.PI > 0" class="text-info">+{{character.computedData.stats.PI}} (Bonus personnage)</span>
-            <span *ngIf="character.computedData.stats.PI < 0" class="text-warning">{{character.computedData.stats.PI}} (Malus personnage)</span>
-        </div>
+        <template [ngIf]="!readonly">
+            <div style="margin-left: 20px">
+                <span *ngIf="character.computedData.stats.PI > 0" class="text-info">+{{character.computedData.stats.PI}} (Bonus personnage)</span>
+                <span *ngIf="character.computedData.stats.PI < 0" class="text-warning">{{character.computedData.stats.PI}} (Malus personnage)</span>
+            </div>
+        </template>
     </div>
 
     <div
@@ -198,6 +196,8 @@
     </div>
 </div>
 
+<template [ngIf]="!readonly">
+
 <span *ngIf="item.template.slots?.length > 0">
     <button *ngIf="!item.data.equiped" class="btn btn-success"
             (click)="_itemActionService.onAction('equip', item)">Equip</button>
@@ -207,6 +207,7 @@
 <button *ngIf="item.template.data.skillBook" class="btn btn-success"
         (click)="_itemActionService.onAction('read_skill_book', item)">Lire
 </button>
+
 
 <button class="btn glyphicon glyphicon-pencil" [class.btn-primary]="editing" [class.btn-default]="editing"
         (click)="editItem()"></button>
@@ -242,8 +243,6 @@
         Annuler
     </button>
 </div>
-
-
 <button *ngIf="gmView && item.data.notIdentified" class="btn btn-warning"
         (click)="_itemActionService.onAction('identify', item)">Identifier</button>
 
@@ -266,3 +265,4 @@
         </div>
     </template>
 </div>
+</template>

@@ -20,6 +20,7 @@ import {Monster} from "../monster/monster.model";
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() group: Group;
     public lootTargetForNewItem: Loot;
+    public monsterTargetForNewItem: Monster;
     public newLootName: string;
 
     constructor(private lootWebsocketService: LootWebsocketService
@@ -41,6 +42,11 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
 
     selectLootToAddItem(loot: Loot) {
         this.lootTargetForNewItem = loot;
+    }
+
+    selectMonsterToAddItem(loot: Loot, monster: Monster) {
+        this.lootTargetForNewItem = loot;
+        this.monsterTargetForNewItem = monster;
     }
 
     deleteLoot(loot: Loot) {
@@ -69,6 +75,23 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         );
     }
 
+    addRandomItemFromCategoryToLoot(loot: Loot,categoryName: string) {
+        this._itemService.addRandomItemTo('loot', loot.id, {categoryName: categoryName}).subscribe(
+            item => {
+                this.onAddItemToLoot(loot, item);
+            }
+        );
+        return false;
+    }
+
+    addRandomItemFromCategoryToMonster(loot: Loot, monster: Monster,categoryName: string) {
+        this._itemService.addRandomItemTo('monster', monster.id, {categoryName: categoryName}).subscribe(
+            item => {
+                this.onAddItemToMonster(loot, {monster, item});
+            }
+        );
+        return false;
+    }
     addItemToLoot(loot: Loot, item: Item) {
         if (item != null) {
             this._itemService.addItemTo('loot', loot.id, item.template.id, item.data).subscribe(

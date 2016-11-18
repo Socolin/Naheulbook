@@ -450,7 +450,7 @@
 		 </div>
 		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'inventory'">
 			<!-- Start of inventory tab -->
-            <inventory-panel [character]="character"></inventory-panel>
+            <inventory-panel [inGroupTab]="inGroupTab" [character]="character"></inventory-panel>
 			<!-- End of inventory tab -->
 		 </div>
 		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'effects'">

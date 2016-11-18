@@ -32,6 +32,19 @@ export class LootPanelComponent implements OnDestroy {
         loot.items.push(data);
     }
 
+    onAddItemToMonster(loot: Loot, data: any) {
+        let monsterIndex = loot.monsters.findIndex(m => m.id === data.monster.id);
+        if (monsterIndex == -1) {
+            return;
+        }
+        let monster = loot.monsters[monsterIndex];
+        let itemIndex = monster.items.findIndex(i => data.item.id === i.id);
+        if (itemIndex != -1) {
+            return;
+        }
+        monster.items.push(data.item);
+    }
+
     onRemoveItemFromLoot(loot: Loot, data: any) {
         for (let i = 0; i < loot.items.length; i++) {
             if (loot.items[i].id == data.id) {
@@ -146,6 +159,7 @@ export class LootPanelComponent implements OnDestroy {
         }
         this._lootWebsocketService.registerNotifyFunction(this.notifyChange.bind(this));
         this.subscriptions.push(this._lootWebsocketService.registerPacket("addItem").subscribe(this.wrapLootResult(this.onAddItemToLoot.bind(this)).bind(this)));
+        this.subscriptions.push(this._lootWebsocketService.registerPacket("addItemMonster").subscribe(this.wrapLootResult(this.onAddItemToMonster.bind(this)).bind(this)));
         this.subscriptions.push(this._lootWebsocketService.registerPacket("deleteItem").subscribe(this.wrapLootResult(this.onRemoveItemFromLoot.bind(this)).bind(this)));
         this.subscriptions.push(this._lootWebsocketService.registerPacket("addMonster").subscribe(this.wrapLootResult(this.onAddMonsterToLoot.bind(this)).bind(this)));
         this.subscriptions.push(this._lootWebsocketService.registerPacket("deleteMonster").subscribe(this.wrapLootResult(this.onRemoveMonsterFromLoot.bind(this)).bind(this)));

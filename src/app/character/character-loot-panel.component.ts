@@ -18,6 +18,7 @@ import {ItemService} from "../item/item.service";
 export class CharacterLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() character: Character;
     @Input() inGroupTab: boolean;
+    public selectedItem: Item;
 
     constructor(private lootWebsocketService: LootWebsocketService
         , private notification: NotificationsService
@@ -45,6 +46,11 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
                 }
             );
         }
+    }
+
+    selectItem(item: Item): boolean {
+        this.selectedItem = item;
+        return false;
     }
 
     registerActions() {

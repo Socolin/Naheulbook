@@ -145,7 +145,11 @@ export class FighterPanelComponent implements OnInit{
                 }
                 let item = new Item();
                 item.template = inventoryItem.itemTemplate;
-                item.data.name = inventoryItem.itemTemplate.name;
+                if (inventoryItem.itemTemplate.data.notIdentifiedName) {
+                    item.data.name = inventoryItem.itemTemplate.data.notIdentifiedName;
+                } else {
+                    item.data.name = inventoryItem.itemTemplate.name;
+                }
                 item.data.notIdentified = true;
                 if (item.template.data.useUG) {
                     item.data.ug = 1; //FIXME: minUg/maxUg

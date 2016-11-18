@@ -6,28 +6,35 @@
     <h3>Loot</h3>
 </div>
 <div class="row">
-    <div *ngFor="let loot of loots" class="panel panel-default">
+    <div *ngFor="let loot of loots" class="panel panel-default" [class.panel-success]="loot.visibleForPlayer">
         <div class="panel-heading">
             {{loot.name}}
             <button class="btn btn-success" (click)="selectLootToAddItem(loot)">Ajouter item</button>
             <button class="btn btn-danger" (click)="deleteLoot(loot)">Delete loot</button>
             <button class="btn btn-primary" *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">Open</button>
             <button class="btn btn-info" *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">Close</button>
+            <button class="btn btn-warning" (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">Ajouter item inutile</button>
         </div>
         <div class="panel-body">
             <ul>
                 <li *ngFor="let item of loot.items">
                     {{item.data.name}}
+                    <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
+                    <span *ngIf="item.template.data.price">{{item.template.data.price}} P.O.</span>
                     <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromLoot(loot, item)"></button>
                 </li>
             </ul>
             <ul>
                 <li *ngFor="let monster of loot.monsters">
                     {{monster.name}}
+                    <button class="btn btn-success" (click)="selectMonsterToAddItem(loot, monster)">Ajouter item</button>
+                    <button class="btn btn-warning" (click)="addRandomItemFromCategoryToMonster(loot, monster, 'USELESS_ITEM')">Ajouter item inutile</button>
                     <ul>
                         <li *ngFor="let item of monster.items">
-                            {{item.data.name}}
                             <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromMonster(monster, item)"></button>
+                            {{item.data.name}}
+                            <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
+                            <span *ngIf="item.template.data.price">{{item.template.data.price}} P.O.</span>
                         </li>
                     </ul>
                 </li>
@@ -35,5 +42,9 @@
         </div>
     </div>
 </div>
-
-<create-item [loot]="lootTargetForNewItem" (onAddItem)="addItemToLoot(lootTargetForNewItem, $event)"></create-item>
+<template [ngIf]="!monsterTargetForNewItem && lootTargetForNewItem">
+    <create-item [loot]="lootTargetForNewItem" (onAddItem)="addItemToLoot(lootTargetForNewItem, $event)"></create-item>
+</template>
+<template [ngIf]="monsterTargetForNewItem && lootTargetForNewItem">
+    <create-item [loot]="lootTargetForNewItem" (onAddItem)="onAddItemToMonster(monsterTargetForNewItem, $event)"></create-item>
+</template>

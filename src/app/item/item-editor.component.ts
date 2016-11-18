@@ -112,6 +112,10 @@ export class ItemEditorComponent implements OnInit, OnChanges {
         );
     }
 
+    automaticNotIdentifiedName() {
+        [this.item.data.notIdentifiedName] = this.item.name.split(' ');
+    }
+
     setRupture(rupture) {
         this.item.data.rupture = rupture;
     }

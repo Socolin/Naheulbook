@@ -9,7 +9,7 @@ export class JsonService {
         , private _loginService: LoginService) {
     }
 
-    postJson(url: string, data?: any): Observable<Response> {
+    postJson(url: string, data?: any, reportingError?: boolean): Observable<Response> {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -17,6 +17,9 @@ export class JsonService {
             headers: headers
         })
         .catch((err: any, caught: Observable<any>) => {
+            if (reportingError) {
+                return;
+            }
             if (err.status) {
                 if (err.status === 401) {
                     this._notification.error("Erreur", "Vous devez vous identifier.");

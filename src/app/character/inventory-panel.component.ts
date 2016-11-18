@@ -21,6 +21,7 @@ import {ItemActionService} from "./item-action.service";
 })
 export class InventoryPanelComponent implements OnInit {
     @Input() character: Character;
+    @Input() inGroupTab: boolean;
 
     // Inventory
     public selectedItem: Item;

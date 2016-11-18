@@ -13,6 +13,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() item: Item;
     @Input() character: Character;
     @Input() gmView: boolean;
+    @Input() readonly: boolean;
 
     public itemCategoriesById: {[categoryId: number]: ItemCategory};
     public modifiers: any[];

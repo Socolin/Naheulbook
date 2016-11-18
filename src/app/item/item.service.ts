@@ -211,6 +211,30 @@ export class ItemService extends JsonService {
             );
         });
     }
+    addRandomItemTo(targetType: string
+        , targetId: number
+        , criteria: any): Observable<Item> {
+
+        return Observable.create(observer => {
+            Observable.forkJoin(this.postJson('/api/item/addRandom', {
+                    targetId: targetId,
+                    targetType: targetType,
+                    criteria: criteria
+                }).map(res => res.json()),
+                this._skillService.getSkillsById()
+            ).subscribe(
+                ([item, skillsById]: [Item, {[skillId: number]: Skill}]) => {
+                    this.fillMissingDataInItemTemplate(item.template, skillsById);
+                    observer.next(item);
+                    observer.complete();
+                },
+                err => {
+                    observer.error(err);
+                    observer.complete();
+                }
+            );
+        });
+    }
 
     equipItem(itemId: number, level: number): Observable<PartialItem> {
         return this.postJson('/api/item/equip', {

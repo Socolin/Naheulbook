@@ -23,6 +23,7 @@ export class ItemSlot {
 export class ItemTemplateData {
     description: string;
     note: string;
+    notIdentifiedName: string;
     diceDrop: number;
     price: number;
     container: boolean;

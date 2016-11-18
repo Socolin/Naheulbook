@@ -23,6 +23,7 @@ import {IconDescription} from "./icon.model";
 })
 export class IconSelectorComponent implements OnInit, OnChanges {
     @Input() icon: IconDescription;
+    @Input() readonly: boolean;
     @Output() onChange: EventEmitter<IconDescription> = new EventEmitter<IconDescription>();
     public viewSelector: boolean = false;
     public tab: string = 'icon';
@@ -126,7 +127,9 @@ export class IconSelectorComponent implements OnInit, OnChanges {
     }
 
     showSelector(event: any) {
-        this.viewSelector = true;
+        if (!this.readonly) {
+            this.viewSelector = true;
+        }
         event.preventDefault();
     }
 

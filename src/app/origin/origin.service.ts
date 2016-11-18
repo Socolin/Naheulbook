@@ -21,9 +21,7 @@ export class OriginService {
                 this._skillService.getSkillsById(),
                 this._http.get('/api/origin/list').map(res => res.json())
             ).subscribe(
-                res => {
-                    let skillsById: {[skillId: number]: Skill} = res[0];
-                    let origins: Origin[] = res[1];
+                ([skillsById, origins]: [{[skillId: number]: Skill}, Origin[]]) => {
                     for (let i = 0; i < origins.length; i++) {
                         let origin = origins[i];
                         for (let s = 0; s < origin.skills.length; s++) {

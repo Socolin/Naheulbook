@@ -1,9 +1,9 @@
 <div class="form-horizontal">
 	<div class="form-group">
 		<label for="inputName" class="col-sm-2 control-label">Nom</label>
-		<div class="col-sm-4 col-md-5">
-			<input id="inputName" [(ngModel)]="item.name" type="text" class="form-control"/>
-		</div>
+        <div class="col-sm-4 col-md-5">
+            <input id="inputName" [(ngModel)]="item.name" type="text" class="form-control"/>
+        </div>
 		<label for="inputRelic" class="col-xs-8 col-sm-1 control-label">Relique</label>
 		<div class="col-xs-4 col-sm-1">
 			<input id="inputRelic" type="checkbox" [(ngModel)]="item.data.relic" class="form-control">
@@ -15,6 +15,19 @@
 			<button class="btn btn-primary" (click)="item.data.sex = 'f'" [class.active]="item.data.sex=='f'">F</button>
 		</div>
 	</div>
+    <div class="form-group">
+        <label for="inputNotIdentifiedName" class="col-sm-2 control-label">Nom non identifie</label>
+        <div class="col-sm-4 col-md-5">
+            <input id="inputNotIdentifiedName" [(ngModel)]="item.data.notIdentifiedName" type="text" class="form-control"/>
+        </div>
+        <div class="col-sm-1 col-xs-4">
+            <button class="btn btn-primary glyphicon glyphicon-refresh" (click)="automaticNotIdentifiedName()"></button>
+        </div>
+        <label for="inputContainer" class="col-xs-8 col-md-1 col-sm-2 control-label">Conteneur</label>
+        <div class="col-sm-1 col-xs-4">
+            <input id="inputContainer" type="checkbox" [(ngModel)]="item.data.container" class="form-control">
+        </div>
+    </div>
 
 	<div class="form-group">
 		<label for="inputDescription" class="col-sm-2 control-label">Description</label>
@@ -28,10 +41,6 @@
 		<label for="inputUG" class="col-xs-8 col-md-1 col-sm-2 control-label">U.G.</label>
 		<div class="col-sm-1 col-xs-4">
 			<input id="inputUG" type="checkbox" [(ngModel)]="item.data.useUG" class="form-control">
-		</div>
-		<label for="inputContainer" class="col-xs-8 col-md-1 col-sm-2 control-label">Conteneur</label>
-		<div class="col-sm-1 col-xs-4">
-			<input id="inputContainer" type="checkbox" [(ngModel)]="item.data.container" class="form-control">
 		</div>
 	</div>
 
@@ -128,7 +137,7 @@
 				</select>
 			</div>
 		</div>
-		<label for="inputUnskill" class="col-sm-2 control-label">Competences annulees</label>
+		<label for="inputUnskill" class="col-sm-2 control-label">Competences annulées</label>
 		<div class="col-sm-4">
 			<div *ngIf="item.skills">
 				<div *ngFor="let skill of item.unskills">
