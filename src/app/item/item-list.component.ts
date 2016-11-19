@@ -45,8 +45,15 @@ export class ItemListComponent implements OnInit, OnDestroy {
         this.filter = {name: null, dice: null};
     }
 
-    selectSection(section: ItemSection) {
-        this._router.navigate(['/database/items'], {queryParams: {id: section.id}});
+    selectSection(event: MouseEvent, section: ItemSection) {
+        if (this.selectedSection && this.selectedSection.id == section.id) {
+            if (event.ctrlKey) {
+                this._itemService.clearItemSectionCache(section.id);
+                this.selectSectionById(section.id, true);
+            }
+        } else {
+            this._router.navigate(['/database/items'], {queryParams: {id: section.id}});
+        }
         return false;
     }
 
@@ -101,8 +108,8 @@ export class ItemListComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    selectSectionById(sectionId: number) {
-        if (this.selectedSection && this.selectedSection.id === sectionId) {
+    selectSectionById(sectionId: number, force?: boolean) {
+        if (!force && this.selectedSection && this.selectedSection.id === sectionId) {
             return;
         }
 

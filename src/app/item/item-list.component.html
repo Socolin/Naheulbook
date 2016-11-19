@@ -1,7 +1,7 @@
 <ul class="nav nav-pills">
     <template ngFor let-section [ngForOf]="itemSections">
         <li role="presentation"
-            (click)="selectSection(section)"
+            (click)="selectSection($event, section)"
             [class.active]="selectedSection && selectedSection.id == section.id">
             <a href="#">{{section.name}}</a>
         </li>

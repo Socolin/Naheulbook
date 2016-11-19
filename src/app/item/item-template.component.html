@@ -67,7 +67,7 @@
 
     <!-- Prix/Charge/Durée -->
     <div class="row">
-        <div *ngIf="item.data.price" class="col-xs-6 col-sm-3">
+        <div *ngIf="item.data.price">
             <span class="item-section">Prix:</span>
             <template [ngIf]="item.data.price >= 1">
                 {{item.data.price | number}} P.O.
@@ -81,20 +81,20 @@
                 {{item.data.price * 100}} P.C.
             </template>
         </div>
-        <div *ngIf="item.data.duration" class="col-xs-6 col-sm-3">
+        <div *ngIf="item.data.duration">
             <span class="item-section">Durée:</span>
             {{item.data.duration}}
         </div>
-        <div *ngIf="item.data.charge" class="col-xs-6 col-sm-3">
+        <div *ngIf="item.data.charge">
             <span class="item-section">Charge:</span>
             {{item.data.charge}}
         </div>
     </div>
 
     <div *ngIf="item.data.weight">
-							<span class="item-section">
-								Poid:
-							</span>
+        <span class="item-section">
+            Poid:
+        </span>
         <span *ngIf="item.data.weight < 1">{{(item.data.weight * 1000)}}g</span>
         <span *ngIf="item.data.weight >= 1">{{(item.data.weight)}}Kg</span>
     </div>
