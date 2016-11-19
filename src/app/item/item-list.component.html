@@ -36,6 +36,8 @@
                 <div class="item-element">
                     <item-template class="item-element"
                                    *ngIf="isVisible(item)"
+                                   [originsName]="originsName"
+                                   [jobsName]="jobsName"
                                    [editable]="editable"
                                    [item]="item"></item-template>
                 </div>

@@ -6,6 +6,8 @@ import {Effect, EffectService} from "../effect";
 import {Skill, SkillService} from "../skill";
 import {ItemService} from "./item.service";
 import {Observable} from "rxjs";
+import {JobService} from "../job/job.service";
+import {OriginService} from "../origin/origin.service";
 
 @Component({
     selector: 'item-editor',
@@ -20,12 +22,16 @@ export class ItemEditorComponent implements OnInit, OnChanges {
     public selectedSection: ItemSection;
     public slots: ItemSlot[];
     public form: {levels: number[], protection: number[], damage: number[], dices: number[]};
+    private originsName: {[originId: number]: string};
+    private jobsName: {[jobId: number]: string};
 
     private filteredEffects: Effect[];
 
     constructor(private _itemService: ItemService
         , private _effectService: EffectService
         , private _notification: NotificationsService
+        , private _originService: OriginService
+        , private _jobService: JobService
         , private _skillService: SkillService) {
         this.item = new ItemTemplate();
         this.form = {
@@ -149,12 +155,29 @@ export class ItemEditorComponent implements OnInit, OnChanges {
             this._itemService.getSectionsList(),
             this._skillService.getSkills(),
             this._skillService.getSkillsById(),
-            this._itemService.getSlots()
-        ).subscribe(([sections, skills, skillsById, slots]) => {
+            this._itemService.getSlots(),
+            this._jobService.getJobList(),
+            this._originService.getOriginList()
+        ).subscribe(([sections, skills, skillsById, slots, jobs, origins]) => {
             this.sections = sections;
             this.skills = skills;
             this.skillsById = skillsById;
             this.slots = slots;
+
+            let jobsName: {[jobId: number]: string} = {};
+            for (let i = 0; i < jobs.length; i++) {
+                let job = jobs[i];
+                jobsName[job.id] = job.name;
+            }
+            this.jobsName = jobsName;
+
+            let originsName: {[originId: number]: string} = {};
+            for (let i = 0; i < origins.length; i++) {
+                let origin = origins[i];
+                originsName[origin.id] = origin.name;
+            }
+            this.originsName = originsName;
+
             this.updateSelectedSection();
         });
     }
