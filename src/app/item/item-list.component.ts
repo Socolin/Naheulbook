@@ -49,7 +49,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
         if (this.selectedSection && this.selectedSection.id == section.id) {
             if (event.ctrlKey) {
                 this._itemService.clearItemSectionCache(section.id);
-                this.selectSectionById(section.id, true);
+                this.loadSection(section);
             }
         } else {
             this._router.navigate(['/database/items'], {queryParams: {id: section.id}});
@@ -82,7 +82,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
     }
 
     loadSection(section: ItemSection) {
-        this.resetFilter();
         this.selectedSection = section;
         this._itemService.getItems(section).subscribe(items => {
             let itemsBySection: {[categoryId: number]: ItemTemplate[]} = {};
@@ -108,14 +107,15 @@ export class ItemListComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    selectSectionById(sectionId: number, force?: boolean) {
-        if (!force && this.selectedSection && this.selectedSection.id === sectionId) {
+    selectSectionById(sectionId: number) {
+        if (this.selectedSection && this.selectedSection.id === sectionId) {
             return;
         }
 
         for (let i = 0; i < this.itemSections.length; i++) {
             let section = this.itemSections[i];
             if (section.id === sectionId) {
+                this.resetFilter();
                 this.loadSection(section);
                 break;
             }
