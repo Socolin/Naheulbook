@@ -216,7 +216,17 @@
 						</tr>
 					</tbody>
 				</table>
-
+                <h3>Déplacement tactique</h3>
+                <ul>
+                    <li>
+                        <strong>Normal</strong>
+                        {{character.computedData.tacticalMovement.distance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.maxDuration}} secondes
+                    </li>
+                    <li>
+                        <strong>Sprint</strong> (Après un déplacement normal):
+                        {{character.computedData.tacticalMovement.sprintDistance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.sprintMaxDuration}} secondes
+                    </li>
+                </ul>
 				<h3>Armes</h3>
 				<div class="col-sm-6">
 					<div class="list-group" *ngIf="character.computedData.itemsBySlotsAll[1]">

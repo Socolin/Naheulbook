@@ -183,6 +183,13 @@ class StatisticDetail {
     show: StaticDetailShow = new StaticDetailShow();
 }
 
+class TacticalMovementInfo {
+    distance: number;
+    maxDuration: number;
+    sprintDistance: number;
+    sprintMaxDuration: number;
+}
+
 class CharacterComputedData {
     init() {
         this.details.init();
@@ -198,6 +205,7 @@ class CharacterComputedData {
         this.reusableEffects = [];
         this.nonReusableModifiers = [];
         this.reusableModifiers = [];
+        this.tacticalMovement = new TacticalMovementInfo();
     }
 
     stats: {[statName: string]: number} = {};
@@ -211,6 +219,7 @@ class CharacterComputedData {
     itemsEquiped: Item[] = [];
     itemSlots = [];
     topLevelContainers = [];
+    tacticalMovement: TacticalMovementInfo = new TacticalMovementInfo();
 
     nonReusableEffects: CharacterEffect[] = [];
     reusableEffects: CharacterEffect[] = [];
@@ -753,8 +762,8 @@ export class Character {
             this.computedData.details.add('Bonus FO > 12', {'PI': this.computedData.stats['FO'] - 12});
         }
         if (this.computedData.stats['FO'] < 9) {
-            this.computedData.stats['PI'] += (this.computedData.stats['FO'] - 9);
-            this.computedData.details.add('Malus FO < 9', {'PI': this.computedData.stats['FO'] - 9});
+            this.computedData.stats['PI'] -= 1;
+            this.computedData.details.add('Malus FO < 9', {'PI': -1});
         }
 
 
@@ -837,6 +846,67 @@ export class Character {
         if (this.computedData.stats['INT'] > 12) {
             this.computedData.countExceptionalStats++;
         }
+
+        this.computeTacticalMovement();
+    }
+
+    private computeTacticalMovement() {
+        let distance: number;
+        let sprintDistance: number;
+        let maxDuration: number;
+        let sprintMaxDuration: number;
+        let force: number = this.computedData.stats['FO'];
+        switch (this.computedData.stats['PR']) {
+            case 0:
+            case 1:
+                distance = 8;
+                sprintDistance = 12;
+                maxDuration = force * 20;
+                sprintMaxDuration = force * 5;
+                break;
+            case 2:
+                distance = 6;
+                sprintDistance = 10;
+                maxDuration = force * 18;
+                sprintMaxDuration = force * 5;
+                break;
+            case 3:
+            case 4:
+                distance = 4;
+                sprintDistance = 8;
+                maxDuration = force * 15;
+                sprintMaxDuration = force * 4;
+                break;
+            case 5:
+                distance = 4;
+                sprintDistance = 6;
+                maxDuration = force * 10;
+                sprintMaxDuration = force * 4;
+                break;
+            case 6:
+                distance = 3;
+                sprintDistance = 4;
+                maxDuration = force * 8;
+                sprintMaxDuration = force * 3;
+                break;
+            case 7:
+                distance = 2;
+                sprintDistance = 3;
+                maxDuration = force * 7;
+                sprintMaxDuration = force * 2;
+                break;
+            default:
+                distance = 1;
+                sprintDistance = 2;
+                maxDuration = force * 2;
+                sprintMaxDuration = force * 2;
+                break;
+        }
+        let speedModifier = this.computedData.stats['MV'] / 100;
+        this.computedData.tacticalMovement.distance = distance * speedModifier;
+        this.computedData.tacticalMovement.sprintDistance = sprintDistance * speedModifier;
+        this.computedData.tacticalMovement.maxDuration = maxDuration * speedModifier;
+        this.computedData.tacticalMovement.sprintMaxDuration = sprintMaxDuration * speedModifier;
     }
 
     public update() {

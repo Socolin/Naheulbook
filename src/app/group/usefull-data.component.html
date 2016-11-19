@@ -1169,6 +1169,91 @@
     </div>
 </div>
 
+<div class="row tab-content" [class.tab-hidden]="currentPanel != 'sleep'">
+    <div class="tab-inner-content">
+        <div class="col-xs-12">
+            <h3>Recuperation</h3>
+            <ul>
+                <li>
+                    Recuperation des PV (repos)
+                    <ul>
+                        <li>
+                            Mauvaises conditions: 1 PV pour 4 heures
+                        </li>
+                        <li>
+                            Conditions normales: 1 PV pour 2 heures
+                        </li>
+                        <li>
+                            Bonne conditions: 1 PV par heure
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    Recuperation des PV (nourriture)
+                    <ul>
+                        <li>
+                            Repas de voyage, ration à emporter: 1 PV
+                        </li>
+                        <li>
+                            Bon repas, repas chaud: 2 PV
+                        </li>
+                        <li>
+                            Repas de cuistot: 3 PV
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    Recuperation des PA
+                    <ul>
+                        <li>
+                            Mauvaises conditions: 2 PA par heure
+                        </li>
+                        <li>
+                            Conditions normales: 3 PA par heure
+                        </li>
+                        <li>
+                            Bonne conditions: 4 PA par heure
+                        </li>
+                        <li>Lecture/Recuperation des PA: 4 PA pour une heure d'étude, 1 fois par jour maxi (obligatoire
+                            sous peine de perde l'usage des sort ou prodiges
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-12">
+            <h3>Déplacements</h3>
+            <p>Le groupe voyage toujours à la vitesse de son élément le moins rapide.</p>
+            <ul>
+                <li>Des voyageurs à pied parcourent 30Km/jour</li>
+                <li>Voyage forcé à pied: 45Km/jour - Perte de 2 PV</li>
+                <li>Voyage à vitesse barbare: 55Km/jour - Perte de 4 PV (sauf barbares)</li>
+                <li>Voyage à cheval sans forcer: 50Km/jour</li>
+                <li>Voyage forcé à cheval: 75Km/jour - Perte de 4PV pour le cheval</li>
+            </ul>
+            <ul>
+                <li>Modification lié au déplacement selon terrain
+                    <ul>
+                        <li>Foret: 75% - Difficile en chariot</li>
+                        <li>Collines: 75% - Difficile en chariot</li>
+                        <li>Montagnes: 50% - Impossible en chariot</li>
+                        <li>Marécage: 50% - Impossible en chariot</li>
+                    </ul>
+                </li>
+                <li>Distance par jour en véhicule
+                    <ul>
+                        <li>Chariot: 30Km</li>
+                        <li>Diligence: 70Km</li>
+                        <li>Bateau à rames: 20Km</li>
+                        <li>Galère: 60Km</li>
+                        <li>Voilier: 80/120Km</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <div class="tabs-category">
     <div [class.tab-icon-critic-selected]="currentPanel==='critic'"
          class="tab-icon game-icon tab-icon-critic game-icon-spiky-eclipse"
@@ -1184,4 +1269,6 @@
          (click)="toggleDisplayPanel('entropic')"></div>
     <div [class.tab-icon-skills-selected]="currentPanel==='skills'" class="tab-icon game-icon tab-icon-skills game-icon-gears"
          (click)="toggleDisplayPanel('skills')"></div>
+    <div [class.tab-icon-skills-selected]="currentPanel==='sleep'" class="tab-icon game-icon tab-icon-sleep game-icon-sliced-bread"
+         (click)="toggleDisplayPanel('sleep')"></div>
 </div>
