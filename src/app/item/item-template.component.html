@@ -23,10 +23,9 @@
 
     <!-- Slots -->
     <div *ngIf="item.slots?.length > 0">
-							<span class="item-section">
-								Slot:
-							</span>
-
+        <span class="item-section">
+            Slot:
+        </span>
         <template ngFor let-slot [ngForOf]="item.slots">
             <span class="label label-primary">{{slot.name}}</span>
         </template>
@@ -34,39 +33,35 @@
 
     <!-- Description -->
     <div *ngIf="item.data.description">
-							<span class="item-section">
-								Description:
-							</span>
+        <span class="item-section">Description:</span>
         {{item.data.description}}
     </div>
 
 
     <!-- Note -->
     <div *ngIf="item.data.note">
-							<span class="item-section">
-								Note:
-							</span>
+        <span class="item-section">Note:</span>
         {{item.data.note}}
     </div>
 
     <!-- Encombrement -->
     <div *ngIf="item.data.space">
-							<span class="item-section">
-								Encombrement:
-							</span>
+        <span class="item-section">
+            Encombrement:
+        </span>
         {{item.data.space}}
     </div>
 
     <!-- Possibilités de récolte -->
     <div *ngIf="item.data.availableLocation">
-							<span class="item-section">
-								Possibilités de récolte:
-							</span>
+        <span class="item-section">
+            Possibilités de récolte:
+        </span>
         {{item.data.availableLocation}}
     </div>
 
     <!-- Prix/Charge/Durée -->
-    <div class="row">
+    <div>
         <div *ngIf="item.data.price">
             <span class="item-section">Prix:</span>
             <template [ngIf]="item.data.price >= 1">
@@ -103,7 +98,8 @@
     <div class="row" *ngIf="item.data.bonusDamage || item.data.damageDice">
         <div class="col-xs-12">
             <span class="ra ra-broadsword ra-lg"></span>
-            <span *ngIf="item.data.damageDice">{{item.data.damageDice}}<span class="ra ra-perspective-dice-random"></span></span>
+            <span *ngIf="item.data.damageDice">{{item.data.damageDice}}<span
+                class="ra ra-perspective-dice-random"></span></span>
             <span *ngIf="item.data.damageDice && item.data.bonusDamage>0">+</span>
             <span *ngIf="item.data.bonusDamage">{{item.data.bonusDamage}}</span>
             <span *ngIf="item.data.damageType">({{item.data.damageType}})</span>
@@ -117,10 +113,10 @@
         <span *ngIf="item.data.protection && item.data.magicProtection">+</span>
         <span *ngIf="item.data.magicProtection">{{item.data.magicProtection}} (magique)</span>
         <span *ngIf="(item.data.protection || item.data.magicProtection) && item.data.protectionAgainstMagic">/</span>
-        <span *ngIf="item.data.protectionAgainstMagic">{{item.data.protectionAgainstMagic}}
-								<span *ngIf="item.data.protectionAgainstType">(contre {{item.data.protectionAgainstType}})</span>
-								<span *ngIf="!item.data.protectionAgainstType">(contre mag./myst.)</span>
-							</span>
+        <span *ngIf="item.data.protectionAgainstMagic">{{item.data.protectionAgainstMagic}}>
+            <span *ngIf="item.data.protectionAgainstType">(contre {{item.data.protectionAgainstType}})</span>
+            <span *ngIf="!item.data.protectionAgainstType">(contre mag./myst.)</span>
+        </span>
     </div>
 
     <!-- Rupture -->
