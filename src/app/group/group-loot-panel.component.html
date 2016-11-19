@@ -18,10 +18,10 @@
         <div class="panel-body">
             <ul>
                 <li *ngFor="let item of loot.items">
+                    <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromLoot(loot, item)"></button>
                     {{item.data.name}}
                     <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
                     <span *ngIf="item.template.data.price">{{item.template.data.price}} P.O.</span>
-                    <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromLoot(loot, item)"></button>
                 </li>
             </ul>
             <ul>

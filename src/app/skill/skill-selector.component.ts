@@ -59,20 +59,10 @@ export class SkillSelectorComponent implements OnInit {
     }
 
     getSkills() {
-        let ignoreOrigin = false;
-        for (let i = 0; i < this.selectedOrigin.specials.length; i++) {
-            if (this.selectedOrigin.specials[i] === 'USE_JOB_SKILLS') {
-                if (this.selectedJob != null) {
-                    ignoreOrigin = true;
-                }
-                break;
-            }
-        }
-
         this._skillService.getSkills().subscribe(tmpSkills => {
             let availableSkills = [];
 
-            if (!ignoreOrigin) {
+            if (!this.selectedJob) {
                 if (this.selectedOrigin && this.selectedOrigin.availableSkills) {
                     for (let i = 0; i < this.selectedOrigin.availableSkills.length; i++) {
                         let skill = this.selectedOrigin.availableSkills[i];
@@ -80,34 +70,13 @@ export class SkillSelectorComponent implements OnInit {
                     }
                 }
             }
-
-            if (this.selectedJob && this.selectedJob.availableSkills) {
-                for (let i = 0; i < this.selectedJob.availableSkills.length; i++) {
-                    let skill = this.selectedJob.availableSkills[i];
-                    if (availableSkills.indexOf(skill.id) === -1) {
-                        availableSkills.push(skill.id);
-                    }
-                }
-            }
-
-            if (!ignoreOrigin) {
-                if (this.selectedOrigin && this.selectedOrigin.skills) {
-                    for (let i = 0; i < this.selectedOrigin.skills.length; i++) {
-                        let skill = this.selectedOrigin.skills[i];
-                        let index = availableSkills.indexOf(skill.id);
-                        if (index >= 0) {
-                            availableSkills.splice(index, 1);
+            else {
+                if (this.selectedJob.availableSkills) {
+                    for (let i = 0; i < this.selectedJob.availableSkills.length; i++) {
+                        let skill = this.selectedJob.availableSkills[i];
+                        if (availableSkills.indexOf(skill.id) === -1) {
+                            availableSkills.push(skill.id);
                         }
-                    }
-                }
-            }
-
-            if (this.selectedJob && this.selectedJob.skills) {
-                for (let i = 0; i < this.selectedJob.skills.length; i++) {
-                    let skill = this.selectedJob.skills[i];
-                    let index = availableSkills.indexOf(skill.id);
-                    if (index >= 0) {
-                        availableSkills.splice(index, 1);
                     }
                 }
             }

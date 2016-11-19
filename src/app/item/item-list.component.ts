@@ -30,7 +30,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     private filter: {name: string, dice: number};
     private originsName: {[originId: number]: string};
     private jobsName: {[jobId: number]: string};
-    private editable: boolean = true;
+    private editable: boolean;
     private sub: Subscription;
 
     constructor(private _router: Router
@@ -113,12 +113,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
                 break;
             }
         }
-    }
-
-    editItem(item: ItemTemplate) {
-        this.sub.unsubscribe();
-        this.sub = null;
-        this._router.navigate(['/edit-item', item.id], {queryParams: {}});
     }
 
     ngOnInit() {

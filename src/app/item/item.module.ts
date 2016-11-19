@@ -1,10 +1,11 @@
 import {NgModule}      from '@angular/core';
-import {CreateItemComponent, EditItemComponent, ItemEditorComponent, ItemElementComponent, ItemListComponent} from "./";
+import {CreateItemComponent, EditItemComponent, ItemEditorComponent, ItemListComponent} from "./";
 import {CommonModule} from "@angular/common";
 import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import {SkillModule} from "../skill/skill.module";
 import {ItemService} from "./item.service";
+import {ItemTemplateComponent} from "./item-template.component";
 
 @NgModule({
     imports: [
@@ -17,8 +18,8 @@ import {ItemService} from "./item.service";
         CreateItemComponent,
         EditItemComponent,
         ItemEditorComponent,
-        ItemElementComponent,
         ItemListComponent,
+        ItemTemplateComponent,
     ],
     providers: [
         ItemService,

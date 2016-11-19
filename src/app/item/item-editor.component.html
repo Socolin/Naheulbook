@@ -314,7 +314,7 @@
 			<button class="btn btn-danger" (click)="setRupture(6)" [class.active]="item.data.rupture == 6">Toujours</button>
 		</div>
 	</div>
-	<div *ngIf="selectedSection && item.category">
-		<item-element [items]="[item]" [type]="selectedSection" [restrictCategory]="item.category"></item-element>
-	</div>
+</div>
+<div style="background-color:white; opacity:0.85; z-index: 150; position: fixed; right: 0; top:200px; border: 1px solid black">
+    <item-template [item]="item"></item-template>
 </div>
