@@ -12,7 +12,6 @@ import {ItemService} from "./item.service";
 export class EditItemComponent implements OnInit {
     private item: ItemTemplate;
     private saving: boolean = false;
-    private successMessage: string;
 
     constructor(private _router: Router
         , private _route: ActivatedRoute
@@ -22,21 +21,29 @@ export class EditItemComponent implements OnInit {
 
     edit(showNext: boolean) {
         this.saving = true;
-        this.successMessage = null;
         this._itemService.editItemTemplate(this.item).subscribe(
             item => {
-                this.successMessage = "Objet bien sauvegarde: " + item.name;
+                this._notification.success("Objet", "Objet bien sauvegarde: " + item.name);
                 this.saving = false;
-                setTimeout((function () {
-                    if (showNext) {
-                        this._router.navigate(['/edit-item', this.item.id + 1]);
-                    } else {
-                        this._router.navigate(['/database/items'], {queryParams: {id: 1}});
+                this._itemService.getSectionFromCategory(item.category).subscribe(
+                    section => {
+                        console.log(section);
+                        let sectionId = null;
+                        if (section) {
+                            sectionId = section.id;
+                            this._itemService.clearItemSectionCache(section.id);
+                        } else {
+                            sectionId = 1;
+                        }
+                        setTimeout((function () {
+                            if (showNext) {
+                                this._router.navigate(['/edit-item', this.item.id + 1]);
+                            } else {
+                                this._router.navigate(['/database/items'], {queryParams: {id: sectionId}});
+                            }
+                        }).bind(this), 300);
                     }
-                }).bind(this), 300);
-            },
-            error => {
-                this.saving = false;
+                );
             }
         );
     }

@@ -236,6 +236,33 @@ export class ItemService extends JsonService {
         });
     }
 
+    clearItemSectionCache(sectionId: number) {
+        delete this.itemBySection[sectionId];
+    }
+
+    getSectionFromCategory(categoryId: number): Observable<ItemSection> {
+        return Observable.create(observer => {
+            this.getSectionsList().subscribe(
+                sections => {
+                    for (let i = 0; i < sections.length; i++) {
+                        let section = sections[i];
+                        for (let j = 0; j < section.categories.length; j++) {
+                            if (categoryId == section.categories[j].id) {
+                                observer.next(section);
+                                observer.complete();
+                                return;
+                            }
+                        }
+                    }
+                    observer.next(null);
+                    observer.complete();
+                    return;
+                }
+            );
+        });
+    }
+
+
     equipItem(itemId: number, level: number): Observable<PartialItem> {
         return this.postJson('/api/item/equip', {
             itemId: itemId,
