@@ -14,6 +14,7 @@
             <button class="btn btn-primary" *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">Open</button>
             <button class="btn btn-info" *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">Close</button>
             <button class="btn btn-warning" (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">Ajouter item inutile</button>
+            <button class="btn btn-warning" (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">Ajouter ingredient magique</button>
         </div>
         <div class="panel-body">
             <ul>
@@ -29,6 +30,7 @@
                     {{monster.name}}
                     <button class="btn btn-success" (click)="selectMonsterToAddItem(loot, monster)">Ajouter item</button>
                     <button class="btn btn-warning" (click)="addRandomItemFromCategoryToMonster(loot, monster, 'USELESS_ITEM')">Ajouter item inutile</button>
+                    <button class="btn btn-warning" (click)="addRandomItemFromCategoryToMonster(loot, monster, 'MAGICAL_INGREDIENT')">Ajouter ingredient magique</button>
                     <ul>
                         <li *ngFor="let item of monster.items">
                             <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromMonster(monster, item)"></button>
