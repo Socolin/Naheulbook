@@ -92,6 +92,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         );
         return false;
     }
+
     addItemToLoot(loot: Loot, item: Item) {
         if (item != null) {
             this._itemService.addItemTo('loot', loot.id, item.template.id, item.data).subscribe(
@@ -101,6 +102,18 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
             );
         }
         this.lootTargetForNewItem = null;
+    }
+
+    addItemToMonster(loot: Loot, monster: Monster, item: Item) {
+        if (item != null) {
+            this._itemService.addItemTo('monster', monster.id, item.template.id, item.data).subscribe(
+                item => {
+                    this.onAddItemToMonster(loot, {item: item, monster: monster});
+                }
+            );
+        }
+        this.lootTargetForNewItem = null;
+        this.monsterTargetForNewItem = null;
     }
 
     removeItemFromLoot(loot: Loot, item: Item) {

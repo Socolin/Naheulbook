@@ -48,6 +48,10 @@ export class CreateItemComponent implements OnChanges {
         if (!this.newItem.data.notIdentified) {
             this.newItem.data.name = itemTemplate.name;
             input.focus();
+        } else {
+            if (this.newItem.template && this.newItem.template.data && this.newItem.template.data.notIdentifiedName) {
+                this.newItem.data.name = this.newItem.template.data.notIdentifiedName;
+            }
         }
         this.newItem.data.description = itemTemplate.data.description;
         if (itemTemplate.data.quantifiable) {
@@ -63,10 +67,16 @@ export class CreateItemComponent implements OnChanges {
 
     setItemNotIdentified() {
         this.newItem.data.notIdentified = true;
+        if (this.newItem.template && this.newItem.template.data && this.newItem.template.data.notIdentifiedName) {
+            this.newItem.data.name = this.newItem.template.data.notIdentifiedName;
+        }
     }
 
     setItemIdentified() {
         delete this.newItem.data.notIdentified;
+        if (this.newItem.template && this.newItem.template.name) {
+            this.newItem.data.name = this.newItem.template.name;
+        }
     }
 
     setMode(m: string) {

@@ -15,6 +15,7 @@
             <button class="btn btn-info" *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">Close</button>
             <button class="btn btn-warning" (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">Ajouter item inutile</button>
             <button class="btn btn-warning" (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">Ajouter ingredient magique</button>
+            <span class="pull-right" *ngIf="loot.computedXp">XP: {{loot.computedXp}}</span>
         </div>
         <div class="panel-body">
             <ul>
@@ -48,5 +49,5 @@
     <create-item [loot]="lootTargetForNewItem" (onAddItem)="addItemToLoot(lootTargetForNewItem, $event)"></create-item>
 </template>
 <template [ngIf]="monsterTargetForNewItem && lootTargetForNewItem">
-    <create-item [loot]="lootTargetForNewItem" (onAddItem)="onAddItemToMonster(monsterTargetForNewItem, $event)"></create-item>
+    <create-item [loot]="lootTargetForNewItem" (onAddItem)="addItemToMonster(lootTargetForNewItem, monsterTargetForNewItem, $event)"></create-item>
 </template>

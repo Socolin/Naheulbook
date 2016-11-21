@@ -52,7 +52,7 @@ export abstract class GenericWebsocketService {
                 catch (err) {
                     this._notification.error("Erreur", "Erreur WS");
                     this._miscService.postJson('/api/debug/report', err, true).subscribe();
-                    console.log(err);
+                    console.error(err);
                 }
             }
         );

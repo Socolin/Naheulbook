@@ -7,4 +7,5 @@ export class Loot {
     public visibleForPlayer: boolean;
     public monsters: Monster[];
     public items: Item[];
+    public computedXp: number;
 }

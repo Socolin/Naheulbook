@@ -68,6 +68,7 @@ export class LootPanelComponent implements OnDestroy {
             }
         }
         loot.monsters.push(monster);
+        this.updateLootXp(loot);
     }
 
 
@@ -77,6 +78,7 @@ export class LootPanelComponent implements OnDestroy {
                 loot.monsters.splice(i, 1);
             }
         }
+        this.updateLootXp(loot);
     }
 
     onRemoveItemFromMonsterLoot(loot: Loot, data: any) {
@@ -136,6 +138,7 @@ export class LootPanelComponent implements OnDestroy {
         }
         this._lootWebsocketService.register(loot.id);
         this.loots.unshift(loot);
+        this.updateLootXp(loot);
     }
 
     onDeleteLoot(loot: Loot) {
@@ -144,6 +147,7 @@ export class LootPanelComponent implements OnDestroy {
             this.loots.splice(lootIdx, 1);
         }
         this._lootWebsocketService.unregister(loot.id);
+        this.updateLootXp(loot);
     }
 
     onUpdateLoot(loot: Loot) {
@@ -168,6 +172,23 @@ export class LootPanelComponent implements OnDestroy {
         this.subscriptions.push(this._lootWebsocketService.registerPacket("tookItemMonster").subscribe(this.wrapLootResult(this.onTookItemFromMonsterLoot.bind(this)).bind(this)));
     }
 
+    updateXp() {
+        for (let i = 0; i < this.loots.length; i++) {
+            this.updateLootXp(this.loots[i]);
+        }
+    }
+
+    updateLootXp(loot: Loot) {
+        let xp = 0;
+        for (let j = 0; j < loot.monsters.length; j++) {
+            let monster = loot.monsters[j];
+            if (monster.data.xp) {
+                xp += monster.data.xp;
+            }
+        }
+        loot.computedXp = xp;
+    }
+
     ngOnDestroy(): void {
         for (let i = 0; i < this.loots.length; i++) {
             this._lootWebsocketService.unregister(this.loots[i].id);
@@ -179,6 +200,7 @@ export class LootPanelComponent implements OnDestroy {
 
     onLoadLoots(loots: Loot[]) {
         this.loots = loots;
+        this.updateXp();
         this.registerWs();
     }
 }
