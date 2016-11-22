@@ -13,6 +13,9 @@ import {DateModule} from "../date/date.module";
 import {FighterPanelComponent} from "./fighter-panel.component";
 import {UsefullDataComponent} from "./usefull-data.component";
 import {GroupLootPanelComponent} from "./group-loot-panel.component";
+import {ItemModule} from "../item/item.module";
+import {JobModule} from "../job/job.module";
+import {OriginModule} from "../origin/origin.module";
 
 @NgModule({
     imports: [
@@ -23,6 +26,9 @@ import {GroupLootPanelComponent} from "./group-loot-panel.component";
         MonsterModule,
         NotificationsModule,
         DateModule,
+	ItemModule,
+	JobModule,
+	OriginModule,
     ],
     declarations: [
         CreateItemComponent,

@@ -38,6 +38,7 @@
     position: fixed;
     left: 0;
     top: 60px;
+    padding-bottom: 100px; /* Ipad scroll */
     border: 1px dashed gray;
     border-left: 0;
     background: #d1d1d1;
@@ -72,6 +73,19 @@
 .tab-icon-skills {
     color: darkgray;
 }
+.tab-icon-sleep {
+    color: darkblue;
+}
+.tab-icon-items {
+    color: indianred;
+}
+.tab-icon-jobs {
+    color: yellowgreen;
+}
+.tab-icon-origins {
+    color: orange;
+}
+
 
 .tab-icon-critic-selected {
     color: white;
@@ -93,6 +107,23 @@
     color: white;
     background-color: darkgray;
 }
+.tab-icon-sleep-selected {
+    color: white;
+    background-color: darkblue;
+}
+.tab-icon-items-selected {
+    color: white;
+    background-color: indianred;
+}
+.tab-icon-jobs-selected {
+    color: white;
+    background-color: yellowgreen;
+}
+.tab-icon-origins-selected {
+    color: white;
+    background-color: orange;
+}
+
 
 
 

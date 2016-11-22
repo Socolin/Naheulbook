@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
 
@@ -11,6 +11,7 @@ import {ItemService} from "./item.service";
 import {removeDiacritics} from "../shared";
 
 @Component({
+    selector: 'item-list',
     templateUrl: 'item-list.component.html',
     styles: [
         `.item-section {
@@ -23,6 +24,7 @@ import {removeDiacritics} from "../shared";
     ]
 })
 export class ItemListComponent implements OnInit, OnDestroy {
+    @Input() inTab: boolean;
     private itemSections: ItemSection[];
     private items: ItemTemplate[] = [];
     private itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
@@ -52,7 +54,12 @@ export class ItemListComponent implements OnInit, OnDestroy {
                 this.loadSection(section);
             }
         } else {
-            this._router.navigate(['/database/items'], {queryParams: {id: section.id}});
+            if (!this.inTab) {
+                this._router.navigate(['/database/items'], {queryParams: {id: section.id}});
+            }
+            else {
+                this.selectSectionById(section.id);
+            }
         }
         return false;
     }

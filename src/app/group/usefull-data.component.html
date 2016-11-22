@@ -741,6 +741,25 @@
     </div>
 </div>
 
+<div class="row tab-content" [class.tab-hidden]="currentPanel != 'items'">
+    <div class="tab-inner-content">
+        <item-list [inTab]=true></item-list>
+    </div>
+</div>
+
+<div class="row tab-content" [class.tab-hidden]="currentPanel != 'jobs'">
+    <div class="tab-inner-content">
+        <job-list></job-list>
+    </div>
+</div>
+
+<div class="row tab-content" [class.tab-hidden]="currentPanel != 'origins'">
+    <div class="tab-inner-content">
+        <origin-list></origin-list>
+    </div>
+</div>
+
+
 <div class="row tab-content" [class.tab-hidden]="currentPanel != 'effects'">
     <div class="tab-inner-content">
         <effect-list [inputCategoryId]=effectsCategoryId></effect-list>
@@ -1285,6 +1304,12 @@
          (click)="toggleDisplayPanel('entropic')"></div>
     <div [class.tab-icon-skills-selected]="currentPanel==='skills'" class="tab-icon game-icon tab-icon-skills game-icon-gears"
          (click)="toggleDisplayPanel('skills')"></div>
-    <div [class.tab-icon-skills-selected]="currentPanel==='sleep'" class="tab-icon game-icon tab-icon-sleep game-icon-sliced-bread"
+    <div [class.tab-icon-sleep-selected]="currentPanel==='sleep'" class="tab-icon game-icon tab-icon-sleep game-icon-sliced-bread"
          (click)="toggleDisplayPanel('sleep')"></div>
+    <div [class.tab-icon-items-selected]="currentPanel==='items'" class="tab-icon game-icon tab-icon-items game-icon-beer-stein"
+         (click)="toggleDisplayPanel('items')"></div>
+    <div [class.tab-icon-jobs-selected]="currentPanel==='jobs'" class="tab-icon game-icon tab-icon-jobs game-icon-gear-hammer"
+         (click)="toggleDisplayPanel('jobs')"></div>
+    <div [class.tab-icon-origins-selected]="currentPanel==='origins'" class="tab-icon game-icon tab-icon-origins game-icon-woman-elf-face"
+         (click)="toggleDisplayPanel('origins')"></div>
 </div>

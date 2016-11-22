@@ -21,6 +21,9 @@ import {ItemTemplateComponent} from "./item-template.component";
         ItemListComponent,
         ItemTemplateComponent,
     ],
+    exports: [
+        ItemListComponent,
+    ],
     providers: [
         ItemService,
     ]
