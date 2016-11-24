@@ -2,8 +2,8 @@ import {Component, Input, OnChanges, OnInit, forwardRef, Inject, SimpleChanges} 
 import {Item, ItemModifier} from './item.model';
 import {Character, CharacterGiveDestination} from './character.model';
 import {ItemService, ItemCategory} from '../item';
-import {ItemActionService} from "./item-action.service";
-import {GroupService} from "../group/group.service";
+import {ItemActionService} from './item-action.service';
+import {GroupService} from '../group/group.service';
 
 @Component({
     selector: 'item-detail',

@@ -1,9 +1,9 @@
 import {NgModule}      from '@angular/core';
-import {CommonModule} from "@angular/common";
-import {FormsModule} from "@angular/forms";
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
-import {SharedModule} from "../shared/shared.module";
-import {DateModule} from "../date/date.module";
+import {SharedModule} from '../shared/shared.module';
+import {DateModule} from '../date/date.module';
 
 import {
     EffectEditorComponent, CreateEffectComponent, EffectListComponent, EditEffectComponent,

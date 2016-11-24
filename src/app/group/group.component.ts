@@ -11,10 +11,10 @@ import {Character, CharacterService, CharacterResume} from '../character';
 import {LoginService} from '../user';
 import {AutocompleteValue} from '../shared';
 import {LocationService, Location} from '../location';
-import {NhbkDateOffset} from "../date";
-import {GroupActionService} from "./group-action.service";
-import {GroupData} from "./group.model";
-import {GroupWebsocketService} from "./group.websocket.service";
+import {NhbkDateOffset} from '../date';
+import {GroupActionService} from './group-action.service';
+import {GroupData} from './group.model';
+import {GroupWebsocketService} from './group.websocket.service';
 
 @Component({
     templateUrl: 'group.component.html',
@@ -28,6 +28,24 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     public autocompleteLocationsCallback: Function;
     public currentTab: string = 'characters';
 
+    /* Invitation tab */
+
+    public searchNameInvite: string;
+    public selectedInviteCharacter: Character;
+    //FIXME: Replace with autocomplete component
+    public filteredUsers: Object[] = [];
+    public filterSearchUser: string = null;
+
+    /* History tab */
+
+    public historyPage: number = 0;
+    public currentDay: string = null;
+    public history;
+    public loadMore: boolean = true;
+
+    public historyNewEntryText: string = null;
+    public historyNewEntryGm: boolean = false;
+
     constructor(private _route: ActivatedRoute
         , private _router: Router
         , private _loginService: LoginService
@@ -39,7 +57,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         , private _characterService: CharacterService) {
     }
 
-    /* Usefull action (top left) */
+    /* Useful action (top right) */
 
     refreshData() {
         this.loadGroup(this.group.id);
@@ -56,7 +74,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     /* Players tab */
 
     activeAllCharacter(active: boolean) {
-        for(let i = 0; i < this.characters.length; i++) {
+        for (let i = 0; i < this.characters.length; i++) {
             let character = this.characters[i];
             this._characterService.changeGmData(character.id, 'active', active).subscribe(
                 change => {
@@ -80,7 +98,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         this._characterService.changeGmData(character.id, 'owner', 0).subscribe(
             change => {
                 character.user = change.value;
-                this._notification.success("Modification personnage", "Ce personnage vous appartient a présent");
+                this._notification.success('Modification personnage', 'Ce personnage vous appartient a présent');
             }
         );
     }
@@ -90,7 +108,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         this._characterService.changeGmData(character.id, 'owner', user.id).subscribe(
             change => {
                 character.user = change.value;
-                this._notification.success("Modification personnage", "Ce personnage a changé de propriétaire");
+                this._notification.success('Modification personnage', 'Ce personnage a changé de propriétaire');
             }
         );
     }
@@ -120,13 +138,6 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
 
     /* Invitation tab */
 
-    private searchNameInvite: string;
-    private selectedInviteCharacter: Character;
-    //FIXME: Replace with autocomplete component
-    private filteredUsers: Object[] = [];
-    private filterSearchUser: string = null;
-
-
     updateFilteredPlayer() {
         if (!this.searchNameInvite) {
             this.filteredInvitePlayers = [];
@@ -135,15 +146,6 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         this._characterService.searchPlayersForInvite(this.searchNameInvite, this.group.id).subscribe(
             res => {
                 this.filteredInvitePlayers = res;
-            },
-            err => {
-                try {
-                    let errJson = err.json();
-                    this._notification.error("Erreur", errJson.error_code);
-                } catch (e) {
-                    console.log(err.stack);
-                    this._notification.error("Erreur", "Erreur");
-                }
             }
         );
     }
@@ -155,14 +157,14 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
 
     _removeFromInvited(character): void {
         let idx = this.group.invited.findIndex(char => char.id === character.id);
-        if (idx != -1) {
+        if (idx !== -1) {
             this.group.invited.splice(idx, 1);
         }
     }
 
     _removeFromInvites(character): void {
         let idx = this.group.invites.findIndex(char => char.id === character.id);
-        if (idx != -1) {
+        if (idx !== -1) {
             this.group.invites.splice(idx, 1);
         }
     }
@@ -188,15 +190,6 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                         break;
                     }
                 }
-            },
-            err => {
-                try {
-                    let errJson = err.json();
-                    this._notification.error("Erreur", errJson.error_code);
-                } catch (e) {
-                    console.log(err.stack);
-                    this._notification.error("Erreur", "Erreur");
-                }
             }
         );
         return false;
@@ -215,11 +208,6 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /* History tab */
-
-    public historyPage: number = 0;
-    public currentDay: string = null;
-    public history;
-    public loadMore: boolean = true;
 
     loadHistory(next) {
         if (!next) {
@@ -251,24 +239,17 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     logs.push(l);
                 }
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
             }
         );
         this.historyPage++;
         return false;
     }
 
-    public historyNewEntryText: string = null;
-    public historyNewEntryGm: boolean = false;
-
     addLog() {
         this._groupService.addLog(this.group.id, this.historyNewEntryText, this.historyNewEntryGm).subscribe(
             () => {
                 this.historyNewEntryText = null;
-                this._notification.success("Historique", "Entrée ajoutée");
+                this._notification.success('Historique', 'Entrée ajoutée');
                 this.loadHistory(0);
             }
         );
@@ -356,10 +337,10 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
             err => {
                 try {
                     let errJson = err.json();
-                    this._notification.error("Erreur", errJson.error_code, {timeOut: -1});
+                    this._notification.error('Erreur', errJson.error_code, {timeOut: -1});
                 } catch (e) {
                     console.log(err.stack);
-                    this._notification.error("Erreur", "Erreur");
+                    this._notification.error('Erreur', 'Erreur');
                 }
             }
         );
@@ -367,7 +348,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
 
     registerWs() {
         this._groupWebsocketService.register(this.group.id);
-        this._groupWebsocketService.registerNotifyFunction(message => this._notification.info("Groupe", message));
+        this._groupWebsocketService.registerNotifyFunction(message => this._notification.info('Groupe', message));
     }
 
     ngOnChanges(changes: SimpleChanges): void {

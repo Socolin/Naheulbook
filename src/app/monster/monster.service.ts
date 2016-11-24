@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable, ReplaySubject} from 'rxjs/Rx';
 
-import {MonsterTemplate, MonsterTemplateCategory, MonsterTrait} from "./monster.model";
+import {MonsterTemplate, MonsterTemplateCategory, MonsterTrait} from './monster.model';
 import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications';
-import {LoginService} from "../user";
-import {error} from "util";
+import {LoginService} from '../user';
+import {error} from 'util';
 
 @Injectable()
 export class MonsterService extends JsonService {

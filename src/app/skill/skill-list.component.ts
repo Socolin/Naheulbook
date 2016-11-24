@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 
-import {Skill} from "./skill.model";
-import {SkillService} from "./skill.service";
+import {Skill} from './skill.model';
+import {SkillService} from './skill.service';
 
-import {removeDiacritics} from "../shared";
-import {NotificationsService} from '../notifications';
+import {removeDiacritics} from '../shared';
 
 @Component({
     selector: 'skill-list',
@@ -14,8 +13,7 @@ export class SkillListComponent implements OnInit {
     public skills: Skill[];
     public filter: string;
 
-    constructor(private _skillService: SkillService
-        , private _notification: NotificationsService) {
+    constructor(private _skillService: SkillService) {
     }
 
     isFiltered(skill: Skill): boolean {
@@ -30,9 +28,6 @@ export class SkillListComponent implements OnInit {
         this._skillService.getSkills().subscribe(
             skills => {
                 this.skills = skills;
-            },
-            err => {
-                this._notification.error("Erreur", "Erreur serveur");
             }
         );
     }

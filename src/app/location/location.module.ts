@@ -1,11 +1,11 @@
 import {NgModule}      from '@angular/core';
-import {CommonModule} from "@angular/common";
-import {FormsModule} from "@angular/forms";
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
-import {SharedModule} from "../shared/shared.module";
+import {SharedModule} from '../shared/shared.module';
 
-import {EditLocationComponent, LocationComponent, LocationEditorComponent, LocationListComponent} from "./";
-import {LocationService} from "./location.service";
+import {EditLocationComponent, LocationComponent, LocationEditorComponent, LocationListComponent} from './';
+import {LocationService} from './location.service';
 
 @NgModule({
     imports: [

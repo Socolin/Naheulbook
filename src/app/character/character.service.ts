@@ -2,18 +2,18 @@ import {Injectable, forwardRef, Inject} from '@angular/core';
 import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
-import {Stat} from "../shared";
-import {Character, CharacterResume, CharacterModifier, CharacterEffect} from "./character.model";
-import {Effect} from "../effect";
-import {IMetadata, HistoryEntry} from "../shared";
-import {CharacterInviteInfo, Group} from "../group";
+import {Stat} from '../shared';
+import {Character, CharacterResume, CharacterModifier, CharacterEffect} from './character.model';
+import {Effect} from '../effect';
+import {IMetadata, HistoryEntry} from '../shared';
+import {CharacterInviteInfo, Group} from '../group';
 import {JsonService} from '../shared/json-service';
 import {Job, JobService} from '../job';
 import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
 import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
-import {Loot} from "../loot/loot.model";
+import {Loot} from '../loot/loot.model';
 
 @Injectable()
 export class CharacterService extends JsonService {

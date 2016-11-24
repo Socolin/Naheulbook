@@ -1,13 +1,13 @@
-import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
-import {Character, CharacterEffect, CharacterModifier} from "./character.model";
-import {Effect, EffectCategory} from "../effect/effect.model";
-import {EffectService} from "../effect/effect.service";
-import {CharacterService} from "./character.service";
-import {Observable} from "rxjs";
-import {CharacterWebsocketService} from "./character-websocket.service";
-import {AutocompleteValue} from "../shared/autocomplete-input.component";
-import {NhbkDateOffset} from "../date/date.model";
-import {dateOffset2TimeDuration} from "../date/util";
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Character, CharacterEffect, CharacterModifier} from './character.model';
+import {Effect, EffectCategory} from '../effect/effect.model';
+import {EffectService} from '../effect/effect.service';
+import {CharacterService} from './character.service';
+import {Observable} from 'rxjs';
+import {CharacterWebsocketService} from './character-websocket.service';
+import {AutocompleteValue} from '../shared/autocomplete-input.component';
+import {NhbkDateOffset} from '../date/date.model';
+import {dateOffset2TimeDuration} from '../date/util';
 
 @Component({
     selector: 'effect-detail',
@@ -60,29 +60,33 @@ export class ModifierDetailComponent {
 })
 export class EffectPanelComponent implements OnInit {
     @Input() character: Character;
-    private selectedEffect: CharacterEffect;
-    private selectedModifier: CharacterModifier;
-    private showEffectDetail: boolean;
+    public selectedEffect: CharacterEffect;
+    public selectedModifier: CharacterModifier;
+    public showEffectDetail: boolean;
 
-    private preSelectedEffect: Effect;
-    private newEffectReusable: boolean;
-    private newEffectCustomDuration: boolean = false;
-    private newEffectTimeDuration: number = null;
-    private newEffectDuration: string = null;
-    private newEffectTimeDurationDate: NhbkDateOffset = new NhbkDateOffset();
-    private newEffectCombatCount: number = null;
+    public preSelectedEffect: Effect;
+    public newEffectReusable: boolean;
+    public newEffectCustomDuration: boolean = false;
+    public newEffectTimeDuration: number = null;
+    public newEffectDuration: string = null;
+    public newEffectTimeDurationDate: NhbkDateOffset = new NhbkDateOffset();
+    public newEffectCombatCount: number = null;
 
-    private effectFilterName: string;
-    private newEffectDurationType: string = 'custom';
-    private effectCategoriesById: {[categoryId: number]: EffectCategory};
-    private autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
+    public effectFilterName: string;
+    public newEffectDurationType: string = 'custom';
+    public effectCategoriesById: {[categoryId: number]: EffectCategory};
+    public autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
 
+    // Custom modifier
+
+    public newModifierDurationType: string = 'custom';
+    public customAddModifier: CharacterModifier = new CharacterModifier();
+    public customAddModifierDateOffset: NhbkDateOffset = new NhbkDateOffset();
 
     constructor(private _effectService: EffectService
         , private _characterWebsocketService: CharacterWebsocketService
         , private _characterService: CharacterService) {
     }
-
 
     updateEffectListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
         this.effectFilterName = filter;
@@ -235,27 +239,23 @@ export class EffectPanelComponent implements OnInit {
 
     // Custom modifier
 
-    private newModifierDurationType: string = 'custom';
-    public customAddModifier: CharacterModifier = new CharacterModifier();
-    private customAddModifierDateOffset: NhbkDateOffset = new NhbkDateOffset();
-
     setCustomAddModifierTimeDuration(dateOffset: NhbkDateOffset) {
-        this.customAddModifier.timeDuration= dateOffset2TimeDuration(dateOffset);
+        this.customAddModifier.timeDuration = dateOffset2TimeDuration(dateOffset);
     }
 
     addCustomModifier() {
         if (this.customAddModifier.name) {
-            if (this.newModifierDurationType == 'custom') {
-                this.customAddModifier.timeDuration= null;
+            if (this.newModifierDurationType === 'custom') {
+                this.customAddModifier.timeDuration = null;
                 this.customAddModifier.combatCount = null;
-            } else if (this.newModifierDurationType == 'combat') {
-                this.customAddModifier.timeDuration= null;
+            } else if (this.newModifierDurationType === 'combat') {
+                this.customAddModifier.timeDuration = null;
                 this.customAddModifier.duration = null;
-            } else if (this.newModifierDurationType == 'time') {
+            } else if (this.newModifierDurationType === 'time') {
                 this.customAddModifier.combatCount = null;
                 this.customAddModifier.duration = null;
             } else {
-                throw new Error("Invalid newModifierDurationType: " + this.newModifierDurationType);
+                throw new Error('Invalid newModifierDurationType: ' + this.newModifierDurationType);
             }
             this._characterService.addModifier(this.character.id, this.customAddModifier).subscribe(
                 this.onAddModifier.bind(this)
@@ -344,11 +344,11 @@ export class EffectPanelComponent implements OnInit {
                 categories.map(c => this.effectCategoriesById[c.id] = c);
             });
 
-        this._characterWebsocketService.registerPacket("addEffect").subscribe(this.onAddEffect.bind(this));
-        this._characterWebsocketService.registerPacket("removeEffect").subscribe(this.onRemoveEffect.bind(this));
-        this._characterWebsocketService.registerPacket("updateEffect").subscribe(this.onUpdateEffect.bind(this));
-        this._characterWebsocketService.registerPacket("addModifier").subscribe(this.onAddModifier.bind(this));
-        this._characterWebsocketService.registerPacket("removeModifier").subscribe(this.onRemoveModifier.bind(this));
-        this._characterWebsocketService.registerPacket("updateModifier").subscribe(this.onUpdateModifier.bind(this));
+        this._characterWebsocketService.registerPacket('addEffect').subscribe(this.onAddEffect.bind(this));
+        this._characterWebsocketService.registerPacket('removeEffect').subscribe(this.onRemoveEffect.bind(this));
+        this._characterWebsocketService.registerPacket('updateEffect').subscribe(this.onUpdateEffect.bind(this));
+        this._characterWebsocketService.registerPacket('addModifier').subscribe(this.onAddModifier.bind(this));
+        this._characterWebsocketService.registerPacket('removeModifier').subscribe(this.onRemoveModifier.bind(this));
+        this._characterWebsocketService.registerPacket('updateModifier').subscribe(this.onUpdateModifier.bind(this));
     }
 }

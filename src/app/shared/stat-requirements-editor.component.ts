@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {Stat} from "./stat.model";
-import {CharacterService} from "../character/character.service";
+import {Stat} from './stat.model';
+import {CharacterService} from '../character/character.service';
 
 @Component({
     selector: 'stat-requirements-editor',

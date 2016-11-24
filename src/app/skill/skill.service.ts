@@ -2,14 +2,18 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
-import {Skill} from "./skill.model";
+import {Skill} from './skill.model';
+import {JsonService} from '../shared/json-service';
+import {NotificationsService} from '../notifications/notifications.service';
+import {LoginService} from '../user/login.service';
 
 @Injectable()
-export class SkillService {
+export class SkillService extends JsonService {
     private skills: ReplaySubject<Skill[]>;
     private skillsById: ReplaySubject<{[skillId: number]: Skill}>;
 
-    constructor(private _http: Http) {
+    constructor(http: Http, notifications: NotificationsService, login: LoginService) {
+        super(http, notifications, login);
     }
 
     getSkillsById(): Observable<{[skillId: number]: Skill}> {
@@ -38,7 +42,7 @@ export class SkillService {
         if (!this.skills) {
             this.skills = new ReplaySubject<Skill[]>(1);
 
-            this._http.get('/api/skill/list')
+            this.postJson('/api/skill/list')
                 .map(res => res.json())
                 .subscribe(
                     skills => {

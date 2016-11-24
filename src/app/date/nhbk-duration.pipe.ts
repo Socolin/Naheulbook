@@ -1,6 +1,6 @@
-import {Pipe, Injectable, PipeTransform} from "@angular/core";
-import {timeDuration2DateOffset2} from "./util";
-import {NhbkDateOffset} from "./date.model";
+import {Pipe, Injectable, PipeTransform} from '@angular/core';
+import {timeDuration2DateOffset2} from './util';
+import {NhbkDateOffset} from './date.model';
 
 @Pipe({
     name: 'nhbkDuration'
@@ -22,45 +22,45 @@ export class NhbkDateDurationPipe implements PipeTransform {
 
         let result = '';
         if (dateOffset.year > 1) {
-            result += dateOffset.year + ' ans '
+            result += dateOffset.year + ' ans ';
         }
         else if (dateOffset.year === 1) {
-            result += dateOffset.year + ' an '
+            result += dateOffset.year + ' an ';
         }
 
         if (dateOffset.week > 1) {
-            result += dateOffset.week + ' semaines '
+            result += dateOffset.week + ' semaines ';
         }
         else if (dateOffset.week === 1) {
-            result += dateOffset.week + ' semaine '
+            result += dateOffset.week + ' semaine ';
         }
 
         if (dateOffset.day > 1) {
-            result += dateOffset.day + ' jours '
+            result += dateOffset.day + ' jours ';
         }
         else if (dateOffset.day === 1) {
-            result += dateOffset.day + ' jour '
+            result += dateOffset.day + ' jour ';
         }
 
         if (dateOffset.hour > 1) {
-            result += dateOffset.hour + ' heures '
+            result += dateOffset.hour + ' heures ';
         }
         else if (dateOffset.hour === 1) {
-            result += dateOffset.hour + ' heure '
+            result += dateOffset.hour + ' heure ';
         }
 
         if (dateOffset.minute > 1) {
-            result += dateOffset.minute + ' minutes '
+            result += dateOffset.minute + ' minutes ';
         }
         else if (dateOffset.minute === 1) {
-            result += dateOffset.minute + ' minute '
+            result += dateOffset.minute + ' minute ';
         }
 
         if (dateOffset.second > 1) {
-            result += dateOffset.second + ' secondes '
+            result += dateOffset.second + ' secondes ';
         }
         else if (dateOffset.second === 1) {
-            result += dateOffset.second + ' seconde '
+            result += dateOffset.second + ' seconde ';
         }
 
         result = result.trim();

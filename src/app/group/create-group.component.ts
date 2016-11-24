@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
 
-import {CharacterService} from "../character/character.service";
+import {CharacterService} from '../character/character.service';
 @Component({
     templateUrl: 'create-group.component.html',
     providers: [CharacterService]
@@ -20,14 +20,6 @@ export class CreateGroupComponent {
         this._characterService.createGroup(this.groupName).subscribe(
             group => {
                 this.router.navigate(['/character/group/', group.id]);
-            },
-            err => {
-                console.log(err);
-                if (err.status === 500) {
-                    this._notification.error("Erreur", "Erreur serveur");
-                } else {
-                    this._notification.error("Erreur", "Erreur requête");
-                }
             }
         );
     }

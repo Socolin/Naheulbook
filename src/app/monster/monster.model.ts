@@ -1,6 +1,7 @@
-import {ItemTemplate} from "../item/item-template.model";
-import {Item} from "../character/item.model";
-class MonsterData {
+import {ItemTemplate} from '../item/item-template.model';
+import {Item} from '../character/item.model';
+
+export class MonsterData {
     at: number;
     prd: number;
     esq: number;

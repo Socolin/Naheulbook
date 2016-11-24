@@ -10,7 +10,7 @@ export class TextareaAutosizeDirective implements OnInit {
 
     updateSize() {
         this.element.nativeElement.style.height = 'auto';
-        this.element.nativeElement.style.height = this.element.nativeElement.scrollHeight + "px";
+        this.element.nativeElement.style.height = this.element.nativeElement.scrollHeight + 'px';
     }
 
     @HostListener('input', ['$event.target'])

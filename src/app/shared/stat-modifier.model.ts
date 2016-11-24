@@ -1,9 +1,9 @@
 export type StatModificationOperand =
-    "ADD"
-    | "MUL"
-    | "DIV"
-    | "SET"
-    | "PERCENTAGE";
+    'ADD'
+    | 'MUL'
+    | 'DIV'
+    | 'SET'
+    | 'PERCENTAGE';
 
 export class ItemStatModifier {
     stat: string;

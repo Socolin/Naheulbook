@@ -1,11 +1,7 @@
-import {Component, Input, OnChanges, OnInit, forwardRef, Inject, SimpleChanges} from '@angular/core';
-import {Item, ItemModifier} from './item.model';
-import {Character, CharacterGiveDestination} from './character.model';
-import {ItemService, ItemCategory} from '../item';
-import {ItemActionService} from "./item-action.service";
-import {GroupService} from "../group/group.service";
-import {NhbkDateOffset} from "../date/date.model";
-import {dateOffset2TimeDuration} from "../date/util";
+import {Component, Input, OnInit} from '@angular/core';
+import {ItemModifier} from './item.model';
+import {NhbkDateOffset} from '../date/date.model';
+import {dateOffset2TimeDuration} from '../date/util';
 
 @Component({
     selector: 'modifier-editor',

@@ -2,10 +2,10 @@ import {Component, SimpleChanges, Input, OnInit, OnChanges, OnDestroy} from '@an
 import {Router, ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
 
-import {LoginService} from "../user";
+import {LoginService} from '../user';
 
-import {EffectService} from "./effect.service";
-import {EffectCategory, Effect} from "./effect.model";
+import {EffectService} from './effect.service';
+import {EffectCategory, Effect} from './effect.model';
 
 @Component({
     selector: 'effect-list',

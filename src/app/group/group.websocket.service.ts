@@ -1,9 +1,9 @@
-import {Injectable} from "@angular/core";
-import {NotificationsService} from "../notifications/notifications.service";
-import {WebSocketService} from "../shared/websocket.service";
-import {GenericWebsocketService} from "../shared/generic.websocket.service";
-import {MiscService} from "../shared/misc.service";
-import {Observable} from "rxjs";
+import {Injectable} from '@angular/core';
+import {NotificationsService} from '../notifications/notifications.service';
+import {WebSocketService} from '../shared/websocket.service';
+import {GenericWebsocketService} from '../shared/generic.websocket.service';
+import {MiscService} from '../shared/misc.service';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class GroupWebsocketService extends GenericWebsocketService {

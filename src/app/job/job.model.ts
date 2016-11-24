@@ -1,12 +1,12 @@
-import {StatRequirement} from "../shared/stat-requirement.model";
-import {Speciality} from "../character";
+import {StatRequirement} from '../shared/stat-requirement.model';
+import {Speciality} from '../character';
 import {Skill} from '../skill';
 
-interface JobRestrict {
+export interface JobRestrict {
     text: string;
 }
 
-interface JobBonus {
+export  interface JobBonus {
     token: string;
     description: string;
 }

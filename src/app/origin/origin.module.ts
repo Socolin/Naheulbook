@@ -1,8 +1,8 @@
 import {NgModule}      from '@angular/core';
-import {OriginComponent, OriginListComponent, OriginSelectorComponent, OriginService} from "./";
-import {CommonModule} from "@angular/common";
-import {SharedModule} from "../shared/shared.module";
-import {FormsModule} from "@angular/forms";
+import {OriginComponent, OriginListComponent, OriginSelectorComponent, OriginService} from './';
+import {CommonModule} from '@angular/common';
+import {SharedModule} from '../shared/shared.module';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
     imports: [

@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 
-import {Origin} from "./origin.model";
-import {OriginService} from "./origin.service";
+import {Origin} from './origin.model';
+import {OriginService} from './origin.service';
 
 @Component({
     selector: 'origin-list',

@@ -1,4 +1,4 @@
-import {StatModifier} from "../shared";
+import {StatModifier} from '../shared';
 
 export interface Speciality {
     id: number;

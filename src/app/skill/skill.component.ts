@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 
-import {Skill} from "./skill.model";
+import {Skill} from './skill.model';
 
 @Component({
     selector: 'skill',

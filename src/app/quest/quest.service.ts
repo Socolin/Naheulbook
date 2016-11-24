@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 
-import {QuestTemplate} from "./quest.model";
+import {QuestTemplate} from './quest.model';
 
 @Injectable()
 export class QuestService {

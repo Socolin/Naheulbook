@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
-import {CalendarDate} from "./date.model";
+import {CalendarDate} from './date.model';
 
 @Injectable()
 export class DateService {

@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from '../notifications';
 
-import {ItemTemplate} from "./item-template.model";
-import {ItemService} from "./item.service";
+import {ItemTemplate} from './item-template.model';
+import {ItemService} from './item.service';
 
 @Component({
     selector: 'edit-item',
@@ -23,7 +23,7 @@ export class EditItemComponent implements OnInit {
         this.saving = true;
         this._itemService.editItemTemplate(this.item).subscribe(
             item => {
-                this._notification.success("Objet", "Objet bien sauvegarde: " + item.name);
+                this._notification.success('Objet', 'Objet bien sauvegarde: ' + item.name);
                 this.saving = false;
                 this._itemService.getSectionFromCategory(item.category).subscribe(
                     section => {

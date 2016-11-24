@@ -1,7 +1,7 @@
 export class Map {
     id: number;
-    name: string = "";
-    file: string = "";
+    name: string = '';
+    file: string = '';
     gm: boolean;
     data: any;
 }

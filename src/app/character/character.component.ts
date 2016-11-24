@@ -1,17 +1,17 @@
 import {Component, Input, OnInit, OnDestroy} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
 
-import {CharacterService} from "./character.service";
-import {Character} from "./character.model";
+import {CharacterService} from './character.service';
+import {Character} from './character.model';
 import {IMetadata} from '../shared';
-import {CharacterWebsocketService} from "./character-websocket.service";
-import {SwipeService} from "./swipe.service";
-import {ItemActionService} from "./item-action.service";
-import {Item} from "./item.model";
+import {CharacterWebsocketService} from './character-websocket.service';
+import {SwipeService} from './swipe.service';
+import {ItemActionService} from './item-action.service';
+import {Item} from './item.model';
 
-class LevelUpInfo {
+export class LevelUpInfo {
     EVorEA: string = 'EV';
     EVorEAValue: number;
     targetLevelUp: number;
@@ -46,16 +46,14 @@ export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
     @Input() character: Character;
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
-    private inGroupTab: boolean = false;
-    private selectedItem: Item;
-    private currentTab: string = 'infos';
+    public inGroupTab: boolean = false;
+    public selectedItem: Item;
+    public currentTab: string = 'infos';
 
     constructor(private _route: ActivatedRoute
         , private _notification: NotificationsService
-        , private _router: Router
         , private _characterWebsocketService: CharacterWebsocketService
-        , private _characterService: CharacterService
-        , private _itemActionService: ItemActionService) {
+        , private _characterService: CharacterService) {
     }
 
     public historyPage: number = 0;
@@ -106,7 +104,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 , {isCharacter: true, color: this.character.color}
             );
         } else {
-            this._notification.info("Modification", message);
+            this._notification.info('Modification', message);
         }
     }
 
@@ -114,9 +112,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this._characterWebsocketService.register(this.character);
         this._characterWebsocketService.registerNotifyFunction(this.notifyChange.bind(this));
 
-        this._characterWebsocketService.registerPacket("update").subscribe(this.onChangeCharacterStat.bind(this));
-        this._characterWebsocketService.registerPacket("statBonusAd").subscribe(this.onSetStatBonusAD.bind(this));
-        this._characterWebsocketService.registerPacket("levelUp").subscribe(this.onLevelUp.bind(this));
+        this._characterWebsocketService.registerPacket('update').subscribe(this.onChangeCharacterStat.bind(this));
+        this._characterWebsocketService.registerPacket('statBonusAd').subscribe(this.onSetStatBonusAD.bind(this));
+        this._characterWebsocketService.registerPacket('levelUp').subscribe(this.onLevelUp.bind(this));
    }
 
     changeCharacterStat(stat: string, value: any) {
@@ -127,7 +125,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     onChangeCharacterStat(change: any) {
         if (this.character[change.stat] !== change.value) {
-            this.notifyChange(change.stat.toUpperCase() + ": " + this.character[change.stat] + ' -> ' + change.value);
+            this.notifyChange(change.stat.toUpperCase() + ': ' + this.character[change.stat] + ' -> ' + change.value);
             this.character[change.stat] = change.value;
             this.character.update();
         }
@@ -143,7 +141,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     onSetStatBonusAD(bonusStat: any) {
         if (this.character.statBonusAD !== bonusStat) {
-            this.notifyChange("Stat bonus/malus AD défini sur " + bonusStat);
+            this.notifyChange('Stat bonus/malus AD défini sur ' + bonusStat);
             this.character.statBonusAD = bonusStat;
             this.character.update();
         }
@@ -159,7 +157,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     onLevelUp(result: any) {
         if (this.character.level !== result.level) {
-            this.notifyChange("Levelup ! " + this.character.level + '->' + result.level);
+            this.notifyChange('Levelup ! ' + this.character.level + '->' + result.level);
             this.character.level = result.level;
             this._characterService.getCharacter(result.id).subscribe(
                 character => {
@@ -203,7 +201,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     changeGmData(key: string, value: any) {
         this._characterService.changeGmData(this.character.id, key, value).subscribe(
             change => {
-                this._notification.info("Modification", key + ": " + this.character.gmData[change.key] + ' -> ' + change.value);
+                this._notification.info('Modification', key + ': ' + this.character.gmData[change.key] + ' -> ' + change.value);
                 this.character.gmData[change.key] = change.value;
             }
         );
@@ -303,15 +301,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
                         this.character.invites.splice(i, 1);
                         break;
                     }
-                }
-            },
-            err => {
-                try {
-                    let errJson = err.json();
-                    this._notification.error("Erreur", errJson.error_code);
-                } catch (e) {
-                    console.log(err.stack);
-                    this._notification.error("Erreur", "Erreur");
                 }
             }
         );

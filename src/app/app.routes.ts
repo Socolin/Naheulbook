@@ -1,4 +1,4 @@
-import {Routes} from "@angular/router";
+import {Routes} from '@angular/router';
 
 import {CreateCharacterComponent, CharacterComponent, CharacterListComponent} from './character';
 import {CreateItemComponent, EditItemComponent, ItemListComponent} from './item';

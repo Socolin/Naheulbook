@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
-import {MonsterTemplate, MonsterTemplateCategory} from "./monster.model";
-import {MonsterService} from "./monster.service";
-import {NotificationsService} from "../notifications/notifications.service";
+import {MonsterTemplate, MonsterTemplateCategory} from './monster.model';
+import {MonsterService} from './monster.service';
+import {NotificationsService} from '../notifications/notifications.service';
 
 @Component({
     selector: 'monster-list',
@@ -34,7 +34,7 @@ export class MonsterListComponent implements OnInit {
             monster => {
                 this.monsters.push(monster);
                 this.sortMonsterByCategory();
-                this._notifications.success("Monstre", "Monstre créée");
+                this._notifications.success('Monstre', 'Monstre créée');
             }
         );
         this.newMonster = null;

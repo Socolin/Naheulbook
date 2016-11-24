@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
 
-import {Location, Map} from "./location.model";
+import {Location, Map} from './location.model';
 import {LocationService} from './location.service';
 
 @Component({
@@ -30,6 +30,6 @@ export class LocationComponent {
     }
 
     editLocation() {
-        this._router.navigate(["/edit-location", this.location.id]);
+        this._router.navigate(['/edit-location', this.location.id]);
     }
 }

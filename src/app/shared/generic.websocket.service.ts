@@ -1,8 +1,8 @@
-import {Observer, Observable} from "rxjs";
-import {NotificationsService} from "../notifications/notifications.service";
-import {WebSocketService} from "./websocket.service";
-import {MiscService} from "./misc.service";
-import {WsEvent} from "./websocket.model";
+import {Observer, Observable} from 'rxjs';
+import {NotificationsService} from '../notifications/notifications.service';
+import {WebSocketService} from './websocket.service';
+import {MiscService} from './misc.service';
+import {WsEvent} from './websocket.model';
 
 export abstract class GenericWebsocketService {
     private notifyFunc: Function;
@@ -46,11 +46,10 @@ export abstract class GenericWebsocketService {
                         this.registeredObservers[res.opcode].next(res);
                     }
                     else {
-                        console.log("Unhandled websocket opcode: " + res.opcode);
+                        console.log('Unhandled websocket opcode: ' + res.opcode);
                     }
-                }
-                catch (err) {
-                    this._notification.error("Erreur", "Erreur WS");
+                } catch (err) {
+                    this._notification.error('Erreur', 'Erreur WS');
                     this._miscService.postJson('/api/debug/report', err, true).subscribe();
                     console.error(err);
                 }

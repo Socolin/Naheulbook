@@ -1,6 +1,6 @@
-import {Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter} from "@angular/core";
-import {NhbkDate, CalendarDate} from "./date.model";
-import {DateService} from "./date.service";
+import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {NhbkDate, CalendarDate} from './date.model';
+import {DateService} from './date.service';
 
 @Component({
     selector: 'date',
@@ -23,23 +23,23 @@ export class DateComponent implements OnInit, OnChanges {
             return;
         }
         if (this.date.minute < 10) {
-            this.minute = "0" + this.date.minute.toString();
+            this.minute = '0' + this.date.minute.toString();
         }
         else if (this.date.minute) {
             this.minute = this.date.minute.toString();
         }
         else {
-            this.minute = "00";
+            this.minute = '00';
         }
 
         if (this.date.hour < 10) {
-            this.hour = "0" + this.date.hour.toString();
+            this.hour = '0' + this.date.hour.toString();
         }
         else if (this.date.hour) {
             this.hour = this.date.hour.toString();
         }
          else {
-            this.minute = "00";
+            this.minute = '00';
         }
 
         if (!this.calendar) {
@@ -50,9 +50,9 @@ export class DateComponent implements OnInit, OnChanges {
             if (calendarDate.startDay <= this.date.day && this.date.day <= calendarDate.endDay) {
                 this.currentCalendarDate = calendarDate;
                 this.relativeDay = this.date.day - this.currentCalendarDate.startDay + 1;
-                if (calendarDate.name.startsWith("Trois jour")) {
+                if (calendarDate.name.startsWith('Trois jour')) {
                     this.period = this.relativeDay.toString() + 'e jour des ' + this.currentCalendarDate.name;
-                } else if (calendarDate.name.startsWith("Fête")) {
+                } else if (calendarDate.name.startsWith('Fête')) {
                     this.period = this.currentCalendarDate.name;
                 } else {
                     this.period = this.relativeDay.toString() + 'e jour de la ' + this.currentCalendarDate.name;
@@ -78,6 +78,6 @@ export class DateComponent implements OnInit, OnChanges {
                 this.calendar = calendar;
                 this.updateCurrentCalendar();
             }
-        )
+        );
     }
 }

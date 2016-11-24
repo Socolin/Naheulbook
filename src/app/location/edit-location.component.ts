@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
-import {Location, Map} from "./location.model";
+import {Location, Map} from './location.model';
 import {LocationService} from './location.service';
 import {NotificationsService} from '../notifications';
 
@@ -23,13 +23,9 @@ export class EditLocationComponent implements OnInit {
         this._locationService.addLocation(this.newLocationName, this.location.id).subscribe(
             location => {
                 this._locationService.clearLocations();
-                this._notifications.success("Cartographie", "Lieu ajotuer");
+                this._notifications.success('Cartographie', 'Lieu ajotuer');
                 this.location.sons.push(location);
                 this.newLocationName = null;
-            },
-            err => {
-                console.log(err);
-                this._notifications.error("Erreur", "Erreur serveur");
             }
         );
     }
@@ -38,13 +34,9 @@ export class EditLocationComponent implements OnInit {
         this._locationService.addLocation(this.newLocationName, this.location.id).subscribe(
             location => {
                 this._locationService.clearLocations();
-                this._notifications.success("Cartographie", "Lieu ajotuer");
-                this._router.navigate(["/edit-location", location.id]);
+                this._notifications.success('Cartographie', 'Lieu ajotuer');
+                this._router.navigate(['/edit-location', location.id]);
                 this.newLocationName = null;
-            },
-            err => {
-                console.log(err);
-                this._notifications.error("Erreur", "Erreur serveur");
             }
         );
     }
@@ -53,12 +45,8 @@ export class EditLocationComponent implements OnInit {
         this._locationService.editLocation(this.location, this.maps).subscribe(
             () => {
                 this._locationService.clearLocations();
-                this._notifications.success("Cartographie", "Lieu editer");
-                this._router.navigate(["/database/locations"]);
-            },
-            err => {
-                console.log(err);
-                this._notifications.error("Erreur", "Erreur serveur");
+                this._notifications.success('Cartographie', 'Lieu editer');
+                this._router.navigate(['/database/locations']);
             }
         );
     }

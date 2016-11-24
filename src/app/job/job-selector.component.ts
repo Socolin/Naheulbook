@@ -2,8 +2,8 @@ import {Component, Input, EventEmitter, Output, OnInit, OnChanges} from '@angula
 
 import {Origin} from '../origin';
 import {StatRequirement} from '../shared';
-import {Job} from "./job.model";
-import {JobService} from "./job.service";
+import {Job} from './job.model';
+import {JobService} from './job.service';
 
 @Component({
     selector: 'job-selector',

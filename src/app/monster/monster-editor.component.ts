@@ -3,15 +3,15 @@ import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core'
 import {
     MonsterTemplate, MonsterTemplateCategory, MonsterTrait, TraitInfo,
     MonsterSimpleInventory
-} from "./monster.model";
-import {MonsterService} from "./monster.service";
-import {Observable} from "rxjs";
-import {AutocompleteValue} from "../shared/autocomplete-input.component";
-import {ItemTemplate} from "../item/item-template.model";
-import {ItemService} from "../item/item.service";
-import {LocationService} from "../location/location.service";
-import {Location} from "../location/location.model";
-import {removeDiacritics} from "../shared/remove_diacritics";
+} from './monster.model';
+import {MonsterService} from './monster.service';
+import {Observable} from 'rxjs';
+import {AutocompleteValue} from '../shared/autocomplete-input.component';
+import {ItemTemplate} from '../item/item-template.model';
+import {ItemService} from '../item/item.service';
+import {LocationService} from '../location/location.service';
+import {Location} from '../location/location.model';
+import {removeDiacritics} from '../shared/remove_diacritics';
 
 @Component({
     selector: 'monster-editor',
@@ -29,11 +29,11 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     public simpleTraits: MonsterTrait[] = [];
     public powerTraits: MonsterTrait[] = [];
 
-    private autocompleteLocationsCallback: Function = this.updateAutocompleteLocation.bind(this);
+    public autocompleteLocationsCallback: Function = this.updateAutocompleteLocation.bind(this);
 
-    private autocompleteItemCallback: Function = this.updateAutocompleteItem.bind(this);
-    private newItem: ItemTemplate;
-    private newItemData: any = {};
+    public autocompleteItemCallback: Function = this.updateAutocompleteItem.bind(this);
+    public newItem: ItemTemplate;
+    public newItemData: any = {};
 
     constructor(private _monsterService: MonsterService
         , private _locationService: LocationService
@@ -82,10 +82,10 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
         if (!this.monster.locations) {
             this.monster.locations = [];
         }
-        if (this.monster.locations.indexOf(location.id) == -1) {
+        if (this.monster.locations.indexOf(location.id) === -1) {
             this.monster.locations.push(location.id);
         }
-        this.locationSearchName = "";
+        this.locationSearchName = '';
     }
 
     updateAutocompleteLocation(filter: string) {
@@ -102,7 +102,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
             }
             for (let i = 0; i < this.locations.length; i++) {
                 let location = this.locations[i];
-                if (location.name.toLowerCase().replace(" ","").indexOf(cleanFilter) !== -1) {
+                if (location.name.toLowerCase().replace(' ', '').indexOf(cleanFilter) !== -1) {
                     result.push(new AutocompleteValue(location, location.name));
                 }
             }
@@ -128,7 +128,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     hasTraitLevel(trait: MonsterTrait, level: number): boolean {
         let currentTrait = this.hasTrait(trait);
         if (currentTrait) {
-            return currentTrait.level == level;
+            return currentTrait.level === level;
         }
         return false;
     }
@@ -170,7 +170,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
         let categoryId = category.target.value;
         for (let i = 0; i < this.categories.length; i++) {
             let c = this.categories[i];
-            if (c.id == categoryId) {
+            if (c.id === categoryId) {
                 this.monster.type = c;
                 break;
             }
@@ -216,7 +216,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
                 let powerTraits = [];
                 for (let i = 0; i < this.traits.length; i++) {
                     let trait = this.traits[i];
-                    if (!trait.levels || trait.levels.length == 0) {
+                    if (!trait.levels || trait.levels.length === 0) {
                         simpleTraits.push(trait);
                     } else {
                         powerTraits.push(trait);

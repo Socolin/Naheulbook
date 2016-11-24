@@ -2,7 +2,7 @@ import {Injectable, forwardRef, Inject} from '@angular/core';
 import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
-import {Job} from "./job.model";
+import {Job} from './job.model';
 import {Skill, SkillService} from '../skill';
 
 @Injectable()

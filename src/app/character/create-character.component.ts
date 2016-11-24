@@ -5,8 +5,9 @@ import {Origin} from '../origin';
 import {Job} from '../job';
 import {Skill} from '../skill';
 
-import {CharacterService} from "./character.service";
-import {Speciality} from "./speciality.model";
+import {CharacterService} from './character.service';
+import {Speciality} from './speciality.model';
+import {getRandomInt} from '../shared/random';
 
 @Component({
     selector: 'create-character',
@@ -15,6 +16,65 @@ import {Speciality} from "./speciality.model";
 export class CreateCharacterComponent {
     public step: number;
     public creating: boolean = false;
+
+    // Step 0: Statistics
+
+    public cou: number;
+    public int: number;
+    public cha: number;
+    public ad: number;
+    public fo: number;
+
+    // Step 1: Select origin
+
+    public selectedOrigin: Origin;
+
+    // Step 2: Select job
+
+    public selectedJob: Job;
+
+    // Step 3: Select skills
+
+    public selectedSkills: Skill[];
+
+    // Step 4: Select fortune
+
+    public money: number;
+    public money2: number;
+
+    // Step 5: Stats modification due to bonus
+
+    public modifiedStat: {[modifierName: string]: any};
+
+    /// MOVE_1_POINT_STAT
+    public move1PointStatValues: {[statName: string]: number};
+    /// SUPER_BOURRIN
+    public superBourrinValue: number;
+    /// CHANGE_1_AT_PRD
+    public changeAtPrdValue: number;
+    /// REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA
+    public removeAttOrPrdToIntOrChaRemoveStat: string;
+    public removeAttOrPrdToIntOrChaAddStat: string;
+    /// REMOVE_1_AT_OR_PRD_TO_INT_OR_AD
+    public removeAttOrPrdToIntOrAdRemoveStat: string;
+    public removeAttOrPrdToIntOrAdAddStat: string;
+
+    // Step 6: Select speciality
+
+    public selectedSpeciality: Speciality;
+
+    // Step 7: Name
+
+    public name: string;
+    public sex: string;
+
+    // Step 8: FatePoint
+
+    public fatePoint: number;
+
+    // Bonuses management
+
+    public bonuses: string[];
 
     constructor(private _router: Router
         , private _characterService: CharacterService) {
@@ -65,33 +125,18 @@ export class CreateCharacterComponent {
 
     // Bonuses management
 
-    public bonuses: string[];
-
     hasBonus(bonus: string) {
         return this.bonuses && this.bonuses.indexOf(bonus) !== -1;
     }
 
     // Step 0: Statistics
 
-    public cou: number;
-    public int: number;
-    public cha: number;
-    public ad: number;
-    public fo: number;
-
-    /**
-     * Returns a random integer between min (inclusive) and max (inclusive)
-     */
-    static getRandomInt(min: number, max: number): number {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
     rollStats() {
-        this.cou = 7 + CreateCharacterComponent.getRandomInt(1, 6);
-        this.int = 7 + CreateCharacterComponent.getRandomInt(1, 6);
-        this.cha = 7 + CreateCharacterComponent.getRandomInt(1, 6);
-        this.ad = 7 + CreateCharacterComponent.getRandomInt(1, 6);
-        this.fo = 7 + CreateCharacterComponent.getRandomInt(1, 6);
+        this.cou = 7 + getRandomInt(1, 6);
+        this.int = 7 + getRandomInt(1, 6);
+        this.cha = 7 + getRandomInt(1, 6);
+        this.ad = 7 + getRandomInt(1, 6);
+        this.fo = 7 + getRandomInt(1, 6);
         this.setStep(1);
 
         return false;
@@ -109,8 +154,6 @@ export class CreateCharacterComponent {
 
     // Step 1: Select origin
 
-    public selectedOrigin: Origin;
-
     onSelectOrigin(origin) {
         this.selectedOrigin = origin;
         this.bonuses = [];
@@ -123,8 +166,6 @@ export class CreateCharacterComponent {
     }
 
     // Step 2: Select job
-
-    public selectedJob: Job;
 
     onSelectJob(job) {
         if (job != null && job.bonuses) {
@@ -139,8 +180,6 @@ export class CreateCharacterComponent {
 
     // Step 3: Select skills
 
-    public selectedSkills: Skill[];
-
     onSelectSkills(skills) {
         this.selectedSkills = skills;
         this.setStep(4);
@@ -148,17 +187,14 @@ export class CreateCharacterComponent {
 
     // Step 4: Select fortune
 
-    public money: number;
-    public money2: number;
-
     has2MoneyRoll() {
         return this.hasBonus('2_ROLL_MONEY');
     }
 
     rollMoney() {
-        this.money = CreateCharacterComponent.getRandomInt(1, 6) + CreateCharacterComponent.getRandomInt(1, 6);
+        this.money = getRandomInt(1, 6) + getRandomInt(1, 6);
         if (this.has2MoneyRoll()) {
-            this.money2 = CreateCharacterComponent.getRandomInt(1, 6) + CreateCharacterComponent.getRandomInt(1, 6);
+            this.money2 = getRandomInt(1, 6) + getRandomInt(1, 6);
         }
         this.setStep(5);
     }
@@ -172,8 +208,6 @@ export class CreateCharacterComponent {
     }
 
     // Step 5: Stats modification due to bonus
-
-    public modifiedStat: Object;
 
     public hasStatModification() {
         return this.hasSuperBourin()
@@ -215,7 +249,6 @@ export class CreateCharacterComponent {
 
 
     /// SUPER_BOURRIN
-    public superBourrinValue: number;
 
     hasSuperBourin() {
         return this.hasBonus('SUPER_BOURRIN');
@@ -229,13 +262,12 @@ export class CreateCharacterComponent {
         this.modifiedStat['SUPER_BOURRIN'] = {};
         this.modifiedStat['SUPER_BOURRIN']['AT'] = -this.superBourrinValue;
         this.modifiedStat['SUPER_BOURRIN']['PI'] = this.superBourrinValue;
-        this.modifiedStat['SUPER_BOURRIN'].name = "Super-bourrin";
+        this.modifiedStat['SUPER_BOURRIN'].name = 'Super-bourrin';
     }
 
     /// END SUPER_BOURRIN
 
     /// MOVE_1_POINT_STAT
-    public move1PointStatValues: {[statName: string]: number};
 
     initMove1PointStatValues() {
         this.move1PointStatValues = {'cou': 0, 'int': 0, 'cha': 0, 'ad': 0, 'fo': 0};
@@ -280,7 +312,7 @@ export class CreateCharacterComponent {
                 let value = this.move1PointStatValues[i];
                 if (value !== 0) {
                     this.modifiedStat['MOVE_1_POINT_STAT'][i.toUpperCase()] = value;
-                    this.modifiedStat['MOVE_1_POINT_STAT'].name = "Polyvalence ranger";
+                    this.modifiedStat['MOVE_1_POINT_STAT'].name = 'Polyvalence ranger';
                 } else {
                     delete this.modifiedStat['MOVE_1_POINT_STAT'][i.toUpperCase()];
                 }
@@ -291,7 +323,6 @@ export class CreateCharacterComponent {
     /// END MOVE_1_POINT_STAT
 
     /// CHANGE_1_AT_PRD
-    public changeAtPrdValue: number;
 
     hasChangeAtPrd() {
         return this.hasBonus('CHANGE_1_AT_PRD');
@@ -309,15 +340,13 @@ export class CreateCharacterComponent {
         this.modifiedStat['CHANGE_1_AT_PRD'] = {};
         this.modifiedStat['CHANGE_1_AT_PRD']['AT'] = this.changeAtPrdValue;
         this.modifiedStat['CHANGE_1_AT_PRD']['PRD'] = -this.changeAtPrdValue;
-        this.modifiedStat['CHANGE_1_AT_PRD'].name = "Guerrier Lvl 1";
+        this.modifiedStat['CHANGE_1_AT_PRD'].name = 'Guerrier Lvl 1';
 
     }
 
     /// END CHANGE_1_AT_PRD
 
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA
-    public removeAttOrPrdToIntOrChaRemoveStat: string;
-    public removeAttOrPrdToIntOrChaAddStat: string;
 
     hasRemoveAttOrPrdToIntOrCha() {
         return this.hasBonus('REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA');
@@ -337,7 +366,7 @@ export class CreateCharacterComponent {
         this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'] = {};
         this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'][this.removeAttOrPrdToIntOrChaRemoveStat] = -1;
         this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'][this.removeAttOrPrdToIntOrChaAddStat] = 1;
-        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'].name = "Marchand Lvl 1";
+        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'].name = 'Marchand Lvl 1';
     }
 
     setremoveAttOrPrdToIntOrChaRemoveStat(stat: string) {
@@ -353,8 +382,6 @@ export class CreateCharacterComponent {
     /// END REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA
 
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_AD
-    public removeAttOrPrdToIntOrAdRemoveStat: string;
-    public removeAttOrPrdToIntOrAdAddStat: string;
 
     hasRemoveAttOrPrdToIntOrAd() {
         return this.hasBonus('REMOVE_1_AT_OR_PRD_TO_INT_OR_AD');
@@ -374,7 +401,7 @@ export class CreateCharacterComponent {
         this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'] = {};
         this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'][this.removeAttOrPrdToIntOrAdRemoveStat] = -1;
         this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'][this.removeAttOrPrdToIntOrAdAddStat] = 1;
-        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'].name = "Ingénieur Lvl 1";
+        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'].name = 'Ingénieur Lvl 1';
     }
 
     setremoveAttOrPrdToIntOrAdRemoveStat(stat: string) {
@@ -392,8 +419,6 @@ export class CreateCharacterComponent {
 
     // Step 6: Select speciality
 
-    public selectedSpeciality: Speciality;
-
     hasSpeciality() {
         return this.selectedJob && this.selectedJob.specialities && this.selectedJob && this.selectedJob.specialities.length > 0;
     }
@@ -409,9 +434,6 @@ export class CreateCharacterComponent {
 
     // Step 7: Name
 
-    public name: string;
-    public sex: string;
-
     validName() {
         this.setStep(8);
     }
@@ -423,10 +445,8 @@ export class CreateCharacterComponent {
 
     // Step 8: FatePoint
 
-    public fatePoint: number;
-
     rollFatePoint() {
-        this.fatePoint = CreateCharacterComponent.getRandomInt(0, 3);
+        this.fatePoint = getRandomInt(0, 3);
     }
 
     validFatePoint() {

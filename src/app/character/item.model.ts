@@ -1,7 +1,7 @@
-import {ItemTemplate} from "../item";
+import {ItemTemplate} from '../item';
 import {IMetadata} from '../shared/misc.model';
-import {IconDescription} from "../shared/icon.model";
-import {StatModifier} from "../shared/stat-modifier.model";
+import {IconDescription} from '../shared/icon.model';
+import {StatModifier} from '../shared/stat-modifier.model';
 
 export class ItemData {
     name: string;

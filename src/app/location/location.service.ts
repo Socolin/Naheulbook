@@ -5,7 +5,7 @@ import {Observable, ReplaySubject} from 'rxjs/Rx';
 import {Location, Map} from './location.model';
 import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications';
-import {LoginService} from "../user";
+import {LoginService} from '../user';
 
 @Injectable()
 export class LocationService extends JsonService {

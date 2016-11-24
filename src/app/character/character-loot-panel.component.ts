@@ -1,14 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NotificationsService} from "../notifications/notifications.service";
-import {LootWebsocketService} from "../loot/loot.websocket.service";
-import {LootPanelComponent} from "../loot/loot-panel.component";
-import {CharacterWebsocketService} from "./character-websocket.service";
-import {CharacterService} from "./character.service";
-import {Character} from "./character.model";
-import {Loot} from "../loot/loot.model";
-import {Item} from "./item.model";
-import {Monster} from "../monster/monster.model";
-import {ItemService} from "../item/item.service";
+import {NotificationsService} from '../notifications/notifications.service';
+import {LootWebsocketService} from '../loot/loot.websocket.service';
+import {LootPanelComponent} from '../loot/loot-panel.component';
+import {CharacterWebsocketService} from './character-websocket.service';
+import {CharacterService} from './character.service';
+import {Character} from './character.model';
+import {Loot} from '../loot/loot.model';
+import {Item} from './item.model';
+import {Monster} from '../monster/monster.model';
+import {ItemService} from '../item/item.service';
 
 @Component({
     selector: 'character-loot-panel',
@@ -31,8 +31,8 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     takeItemFromLoot(loot: Loot, item: Item) {
         if (item != null) {
             this._itemService.takeItemFromLoot(item.id, this.character.id).subscribe(
-                item => {
-                    this.onRemoveItemFromLoot(loot, item);
+                takenItem => {
+                    this.onRemoveItemFromLoot(loot, takenItem);
                 }
             );
         }
@@ -41,8 +41,8 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     takeItemFromMonster(monster: Monster, item: Item) {
         if (item != null) {
             this._itemService.takeItemFromLoot(item.id, this.character.id).subscribe(
-                item => {
-                    this.onRemoveItemFromMonster(monster, item);
+                takenItem => {
+                    this.onRemoveItemFromMonster(monster, takenItem);
                 }
             );
         }
@@ -54,8 +54,8 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     }
 
     registerActions() {
-        this._characterWebsocketService.registerPacket("showLoot").subscribe(this.onAddLoot.bind(this));
-        this._characterWebsocketService.registerPacket("hideLoot").subscribe(this.onDeleteLoot.bind(this));
+        this._characterWebsocketService.registerPacket('showLoot').subscribe(this.onAddLoot.bind(this));
+        this._characterWebsocketService.registerPacket('hideLoot').subscribe(this.onDeleteLoot.bind(this));
     }
 
     ngOnInit(): void {

@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
 
-import {QuestService} from "./quest.service";
+import {QuestService} from './quest.service';
 import {QuestTemplate} from './quest.model';
 
 @Component({

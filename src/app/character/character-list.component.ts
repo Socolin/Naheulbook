@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
-import {CharacterService} from "./character.service";
-import {CharacterResume} from "./character.model";
+import {CharacterService} from './character.service';
+import {CharacterResume} from './character.model';
 
 @Component({
     selector: 'character-list',
@@ -27,10 +27,6 @@ export class CharacterListComponent implements OnInit {
         this._characterService.loadList().subscribe(
             characters => {
                 this.characters = characters;
-            },
-            err => {
-                console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
             }
         );
     }

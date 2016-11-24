@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 
-import {EffectService} from "./effect.service";
+import {EffectService} from './effect.service';
 import {Effect, EffectCategory} from './effect.model';
-import {NhbkDateOffset} from "../date/date.model";
-import {dateOffset2TimeDuration} from "../date/util";
+import {NhbkDateOffset} from '../date/date.model';
+import {dateOffset2TimeDuration} from '../date/util';
 
 @Component({
     selector: 'effect-editor',
@@ -13,7 +13,7 @@ export class EffectEditorComponent implements OnInit, OnChanges {
     @Input() effect: Effect;
     public categories: EffectCategory[];
     public effectDateOffset: NhbkDateOffset = new NhbkDateOffset();
-    private effectDurationType: string = 'custom';
+    public effectDurationType: string = 'custom';
 
     constructor(private _effectService: EffectService) {
         this.effect = new Effect();
@@ -34,7 +34,7 @@ export class EffectEditorComponent implements OnInit, OnChanges {
     }
     setEffectDurationType(type: string) {
         this.effectDurationType = type;
-        if (type == 'combat') {
+        if (type === 'combat') {
             this.effect.timeDuration = null;
             this.effect.duration = null;
         }
@@ -47,7 +47,7 @@ export class EffectEditorComponent implements OnInit, OnChanges {
             this.effect.timeDuration = null;
         }
         else {
-            throw new Error("Invalid type: " + type);
+            throw new Error('Invalid type: ' + type);
         }
     }
 

@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Origin} from "./origin.model";
+import {Origin} from './origin.model';
 
 @Component({
     selector: 'origin',

@@ -2,15 +2,15 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 
-import {HistoryEntry} from "../shared";
-import {Monster} from "../monster";
+import {HistoryEntry} from '../shared';
+import {Monster} from '../monster';
 import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications/notifications.service';
-import {LoginService} from "../user/login.service";
-import {CharacterGiveDestination} from "../character/character.model";
-import {GroupData} from "./group.model";
-import {NhbkDateOffset} from "../date/date.model";
-import {Loot} from "../loot";
+import {LoginService} from '../user/login.service';
+import {CharacterGiveDestination} from '../character/character.model';
+import {GroupData} from './group.model';
+import {NhbkDateOffset} from '../date/date.model';
+import {Loot} from '../loot';
 
 @Injectable()
 export class GroupService extends JsonService {

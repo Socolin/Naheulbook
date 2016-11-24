@@ -1,7 +1,7 @@
-import {Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges} from "@angular/core";
-import {IconService} from "./icon.service";
-import {removeDiacritics} from "./remove_diacritics";
-import {IconDescription} from "./icon.model";
+import {Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges} from '@angular/core';
+import {IconService} from './icon.service';
+import {removeDiacritics} from './remove_diacritics';
+import {IconDescription} from './icon.model';
 
 @Component({
     selector: 'icon-selector',
@@ -85,7 +85,7 @@ export class IconSelectorComponent implements OnInit, OnChanges {
         let cleanFilter = removeDiacritics(this.filter);
         for (let i = 0; i < this.icons.length; i++) {
             let iconName = this.icons[i];
-            if (iconName.indexOf(cleanFilter) != -1) {
+            if (iconName.indexOf(cleanFilter) !== -1) {
                 filtered.push(iconName);
                 if (filtered.length === 30) {
                     break;
@@ -188,6 +188,6 @@ export class IconSelectorComponent implements OnInit, OnChanges {
                 this.icons = icons;
                 this.selectRandom();
             }
-        )
+        );
     }
 }

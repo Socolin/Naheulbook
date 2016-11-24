@@ -11,13 +11,13 @@ export class MonsterColorSelectorComponent {
     @Output() onColorChange: EventEmitter<string> = new EventEmitter<string>();
     @Output() onNumberChange: EventEmitter<number> = new EventEmitter<number>();
 
-    private showSelector = false;
-    private colors: string[] = [
-        "ffcc00", "ff6600", "990033", "ff99ff",
-        "660066", "0066ff", "00802b", "666666",
-        "000000", "dddddd"
+    public showSelector = false;
+    public colors: string[] = [
+        'ffcc00', 'ff6600', '990033', 'ff99ff',
+        '660066', '0066ff', '00802b', '666666',
+        '000000', 'dddddd'
     ].map(color => '#' + color);
-    private numbers: number[];
+    public numbers: number[];
 
     constructor() {
         this.numbers = [];

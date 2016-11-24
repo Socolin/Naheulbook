@@ -1,8 +1,8 @@
 import {NgModule}      from '@angular/core';
-import {CreateQuestTemplateComponent, QuestEditorComponent, QuestListComponent} from "./";
-import {CommonModule} from "@angular/common";
-import {SharedModule} from "../shared/shared.module";
-import {FormsModule} from "@angular/forms";
+import {CreateQuestTemplateComponent, QuestEditorComponent, QuestListComponent} from './';
+import {CommonModule} from '@angular/common';
+import {SharedModule} from '../shared/shared.module';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
     imports: [

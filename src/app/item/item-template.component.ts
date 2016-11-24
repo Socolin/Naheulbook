@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {ItemTemplate} from "./item-template.model";
-import {Router} from "@angular/router";
+import {ItemTemplate} from './item-template.model';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'item-template',

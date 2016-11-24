@@ -15,13 +15,13 @@ export class WebSocketService {
         if (!this.webSocket) {
             let loc = window.location;
             let uri;
-            if (loc.protocol === "https:") {
-                uri = "wss:";
+            if (loc.protocol === 'https:') {
+                uri = 'wss:';
             } else {
-                uri = "ws:";
+                uri = 'ws:';
             }
 
-            this.create(uri + "//" + window.location.hostname + "/ws/listen");
+            this.create(uri + '//' + window.location.hostname + '/ws/listen');
         }
 
         if (!(type in this.registeredElements)) {
@@ -58,7 +58,7 @@ export class WebSocketService {
         this.registeredElements[type][elementId] = subject;
 
         this.sendData({
-            opcode: "LISTEN_ELEMENT",
+            opcode: 'LISTEN_ELEMENT',
             id: elementId,
             type: type,
             data: null
@@ -72,11 +72,11 @@ export class WebSocketService {
             return;
         }
         this.registerCount[type][elementId]--;
-        if (this.registerCount[type][elementId] == 0) {
+        if (this.registerCount[type][elementId] === 0) {
             delete this.registeredElements[type][elementId];
             delete this.registeredObserverElements[type][elementId];
             this.sendData({
-                opcode: "STOP_LISTEN_ELEMENT",
+                opcode: 'STOP_LISTEN_ELEMENT',
                 id: elementId,
                 type: type,
                 data: null
@@ -114,18 +114,18 @@ export class WebSocketService {
         setTimeout(() => {
             let loc = window.location;
             let uri;
-            if (loc.protocol === "https:") {
-                uri = "wss:";
+            if (loc.protocol === 'https:') {
+                uri = 'wss:';
             } else {
-                uri = "ws:";
+                uri = 'ws:';
             }
 
-            this.create(uri + "//" + window.location.hostname + "/ws/listen");
+            this.create(uri + '//' + window.location.hostname + '/ws/listen');
 
             for (let type in this.registeredElements) {
                 for (let id in this.registeredElements[type]) {
                     this.sendData({
-                        opcode: "LISTEN_ELEMENT",
+                        opcode: 'LISTEN_ELEMENT',
                         id: +id,
                         type: type,
                         data: null

@@ -1,6 +1,6 @@
-import {Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter} from "@angular/core";
-import {NhbkDate, CalendarDate} from "./date.model";
-import {DateService} from "./date.service";
+import {Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
+import {NhbkDate, CalendarDate} from './date.model';
+import {DateService} from './date.service';
 
 @Component({
     selector: 'date-selector',

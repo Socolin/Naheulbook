@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationsService} from '../notifications';
 
-import {Job} from "./job.model";
-import {JobService} from "./job.service";
+import {Job} from './job.model';
+import {JobService} from './job.service';
 
 @Component({
     selector: 'job-list',

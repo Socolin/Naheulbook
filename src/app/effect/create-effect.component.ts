@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
-import {EffectService} from "./effect.service";
-import {Effect} from "./effect.model";
+import {EffectService} from './effect.service';
+import {Effect} from './effect.model';
 
 @Component({
     selector: 'create-effect',

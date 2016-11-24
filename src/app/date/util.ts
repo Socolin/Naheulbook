@@ -1,4 +1,4 @@
-import {NhbkDateOffset} from "./date.model";
+import {NhbkDateOffset} from './date.model';
 
 export class NhbkDateUtil {
     public static yearDuration: number = 365 * 24 * 3600;

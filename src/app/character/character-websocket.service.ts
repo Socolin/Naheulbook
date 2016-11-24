@@ -1,9 +1,9 @@
-import {Injectable} from "@angular/core";
-import {WebSocketService} from "../shared/websocket.service";
-import {NotificationsService} from "../notifications/notifications.service";
-import {Character} from "./character.model";
-import {CharacterService} from "./character.service";
-import {Observable, Observer} from "rxjs";
+import {Injectable} from '@angular/core';
+import {WebSocketService} from '../shared/websocket.service';
+import {NotificationsService} from '../notifications/notifications.service';
+import {Character} from './character.model';
+import {CharacterService} from './character.service';
+import {Observable, Observer} from 'rxjs';
 
 @Injectable()
 export class CharacterWebsocketService {
@@ -39,11 +39,11 @@ export class CharacterWebsocketService {
                         this.registeredCallbacks[res.opcode].next(res.data);
                     }
                     else {
-                        console.log("Unhandled websocket opcode: " + res.opcode);
+                        console.log('Unhandled websocket opcode: ' + res.opcode);
                     }
                 }
                 catch (err) {
-                    this._notification.error("Erreur", "Erreur WS");
+                    this._notification.error('Erreur', 'Erreur WS');
                     this._characterService.postJson('/api/debug/report', err).subscribe();
                     console.log(err);
                 }

@@ -26,7 +26,7 @@
                 <div style="float:left; width: 48px; height: 48px">
                     <i [style.color]=color
                        class="ra ra-monster-skull ra-3x"
-                       (click)="changeColor(color);showSelector = false;">
+                       (click)="changeColor(color); showSelector = false;">
                     </i>
                 </div>
             </template>
@@ -34,7 +34,7 @@
         <div style="display:inline-block; width: 192px">
             <template ngFor let-number [ngForOf]="numbers">
                 <div style="float:left; width: 48px; height: 48px"
-                     (click)="changeNumber(number);showSelector = false;">
+                     (click)="changeNumber(number); showSelector = false;">
                     <span *ngIf="number"
                           style="
                                 text-align: center;

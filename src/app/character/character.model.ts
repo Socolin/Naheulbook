@@ -1,15 +1,15 @@
 import {EventEmitter} from '@angular/core';
 import {Speciality} from './speciality.model';
-import {Item} from "./item.model";
-import {Origin} from "../origin";
-import {Job} from "../job";
+import {Item} from './item.model';
+import {Origin} from '../origin';
+import {Job} from '../job';
 import {
     StatModifier
     , IMetadata
     , ItemStatModifier
     , formatModifierValue
-} from "../shared";
-import {Effect} from "../effect";
+} from '../shared';
+import {Effect} from '../effect';
 import {Skill} from '../skill';
 
 export interface CharacterResume {
@@ -51,20 +51,20 @@ export class CharacterModifier {
     currentTimeDuration: number;
 }
 
-interface SkillDetail {
+export interface SkillDetail {
     from: string[];
     skillDef: Skill;
     canceled?: boolean;
 }
 
-class StaticDetailShow {
+export class StaticDetailShow {
     evea: boolean = false;
     atprd: boolean = false;
     stat: boolean = false;
     other: boolean = false;
     magic: boolean = false;
 }
-class StatisticDetail {
+export class StatisticDetail {
     init() {
         this.evea = [];
         this.atprd = [];
@@ -183,14 +183,14 @@ class StatisticDetail {
     show: StaticDetailShow = new StaticDetailShow();
 }
 
-class TacticalMovementInfo {
+export class TacticalMovementInfo {
     distance: number;
     maxDuration: number;
     sprintDistance: number;
     sprintMaxDuration: number;
 }
 
-class CharacterComputedData {
+export class CharacterComputedData {
     init() {
         this.details.init();
 
@@ -614,33 +614,33 @@ export class Character {
                 let affectStats = true;
                 let overrideStatName = modifier.stat;
                 if (modifier.special) {
-                    if (modifier.special.indexOf("ONLY_IF_NOTHING_ON") >= 0) {
+                    if (modifier.special.indexOf('ONLY_IF_NOTHING_ON') >= 0) {
                         if (somethingOver) {
                             continue;
                         }
                     }
-                    if (modifier.special.indexOf("AFFECT_ONLY_THROW") >= 0) {
+                    if (modifier.special.indexOf('AFFECT_ONLY_THROW') >= 0) {
                         overrideStatName = 'THROW_MODIFIER';
                     }
-                    if (modifier.special.indexOf("DONT_AFFECT_MAGIEPSY") >= 0) {
+                    if (modifier.special.indexOf('DONT_AFFECT_MAGIEPSY') >= 0) {
                         this.computedData.stats[overrideStatName] += modifier.value;
                         this.computedData.stats['CHA_WITHOUT_MAGIEPSY'] += modifier.value;
                         modifications[overrideStatName] = modifier.value + '(!MPsy)';
                         affectStats = false;
                     }
-                    if (modifier.special.indexOf("AFFECT_ONLY_MELEE") >= 0) {
+                    if (modifier.special.indexOf('AFFECT_ONLY_MELEE') >= 0) {
                         // FIXME
                     }
-                    if (modifier.special.indexOf("AFFECT_ONLY_MELEE_STAFF") >= 0) {
+                    if (modifier.special.indexOf('AFFECT_ONLY_MELEE_STAFF') >= 0) {
                         // FIXME
                     }
-                    if (modifier.special.indexOf("AFFECT_PR_FOR_ELEMENTS") >= 0) {
+                    if (modifier.special.indexOf('AFFECT_PR_FOR_ELEMENTS') >= 0) {
                         // FIXME
                     }
-                    if (modifier.special.indexOf("AFFECT_DISCRETION") >= 0) {
+                    if (modifier.special.indexOf('AFFECT_DISCRETION') >= 0) {
                         overrideStatName = 'DISCRETION_MODIFIER';
                     }
-                    if (modifier.special.indexOf("AFFECT_ONLY_DANSE") >= 0) {
+                    if (modifier.special.indexOf('AFFECT_ONLY_DANSE') >= 0) {
                         overrideStatName = 'DANSE_MODIFIER';
                     }
                 }
@@ -746,15 +746,15 @@ export class Character {
             );
 
         this.computedData.details.add('Base', {
-            MPHYS: "<sup>(" + this.computedData.stats['INT']
-            + " + " + this.computedData.stats['AD'] + ")</sup>&frasl;<sub>2</sub>",
-            MPSY: "<sup>(" + this.computedData.stats['INT']
-            + " + " + (this.computedData.stats['CHA']
+            MPHYS: '<sup>(' + this.computedData.stats['INT']
+            + ' + ' + this.computedData.stats['AD'] + ')</sup>&frasl;<sub>2</sub>',
+            MPSY: '<sup>(' + this.computedData.stats['INT']
+            + ' + ' + (this.computedData.stats['CHA']
             - this.computedData.stats['CHA_WITHOUT_MAGIEPSY'])
-            + ")</sup>&frasl;<sub>2</sub>",
-            RESM: "<sup>(" + this.computedData.stats['COU']
-            + " + " + this.computedData.stats['INT'] + " " +
-            "+ " + this.computedData.stats['FO'] + ")</sup>&frasl;<sub>3</sub>",
+            + ')</sup>&frasl;<sub>2</sub>',
+            RESM: '<sup>(' + this.computedData.stats['COU']
+            + ' + ' + this.computedData.stats['INT'] + ' ' +
+            '+ ' + this.computedData.stats['FO'] + ')</sup>&frasl;<sub>3</sub>',
         });
 
         if (this.computedData.stats['FO'] > 12) {
@@ -787,7 +787,7 @@ export class Character {
             let skill = this.skills[i];
             this.computedData.skills.push({
                 skillDef: skill,
-                from: ["Choisi"]
+                from: ['Choisi']
             });
         }
         this.computedData.skills.sort(function (a, b) {

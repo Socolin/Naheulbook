@@ -1,11 +1,12 @@
 import {Component, Input, Output, EventEmitter, SimpleChanges, OnChanges} from '@angular/core';
-import {Observable} from "rxjs";
+import {Observable} from 'rxjs';
 
-import {ItemService} from "../item";
-import {Character, Item} from "../character";
-import {AutocompleteValue} from "../shared";
-import {ItemTemplate} from "../item";
-import {Loot} from "../loot";
+import {ItemService} from '../item';
+import {Character, Item} from '../character';
+import {AutocompleteValue} from '../shared';
+import {ItemTemplate} from '../item';
+import {Loot} from '../loot';
+import {getRandomInt} from '../shared/random';
 
 @Component({
     selector: 'create-item',
@@ -16,16 +17,12 @@ export class CreateItemComponent implements OnChanges {
     @Input() loot: Loot;
     @Output() onAddItem: EventEmitter<Item> = new EventEmitter<Item>();
 
-    private mode: string = 'normal';
-    private newItem: Item = new Item();
-    private gemOption: any = {};
-    private autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
+    public mode: string = 'normal';
+    public newItem: Item = new Item();
+    public gemOption: any = {};
+    public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
 
     constructor(private _itemService: ItemService) {
-    }
-
-    static getRandomInt(min: number, max: number): number {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     close() {
@@ -85,19 +82,19 @@ export class CreateItemComponent implements OnChanges {
         this.newItem.data.notIdentified = oldItem.data.notIdentified;
         this.mode = m;
         if (this.mode === 'gem') {
-            let type = CreateItemComponent.getRandomInt(1, 2);
-            if (type == 1) {
+            let type = getRandomInt(1, 2);
+            if (type === 1) {
                 this.setGemOption('type', 'raw');
             } else {
                 this.setGemOption('type', 'cut');
             }
             this.setGemOption('ug', 1);
-            this.setGemOption('number', CreateItemComponent.getRandomInt(1, 20));
+            this.setGemOption('number', getRandomInt(1, 20));
         }
     }
 
     setGemRandomUg(dice: number) {
-        this.setGemOption('ug', CreateItemComponent.getRandomInt(1, dice));
+        this.setGemOption('ug', getRandomInt(1, dice));
     }
 
 
@@ -120,7 +117,7 @@ export class CreateItemComponent implements OnChanges {
                 itemTemplate => {
                     this.newItem.template = itemTemplate;
                     if (this.newItem.data.notIdentified) {
-                        this.newItem.data.name = "Pierre précieuse";
+                        this.newItem.data.name = 'Pierre précieuse';
                     } else {
                         this.newItem.data.name = itemTemplate.name;
                     }

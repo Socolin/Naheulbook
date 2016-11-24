@@ -1,5 +1,5 @@
-import {Item} from "../character/item.model";
-import {Monster} from "../monster/monster.model";
+import {Item} from '../character/item.model';
+import {Monster} from '../monster/monster.model';
 
 export class Loot {
     public id: number;

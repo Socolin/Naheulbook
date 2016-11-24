@@ -1,13 +1,13 @@
 import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import {NotificationsService} from '../notifications';
 
-import {ItemTemplate, ItemSection, ItemSlot} from "../item";
-import {Effect, EffectService} from "../effect";
-import {Skill, SkillService} from "../skill";
-import {ItemService} from "./item.service";
-import {Observable} from "rxjs";
-import {JobService} from "../job/job.service";
-import {OriginService} from "../origin/origin.service";
+import {ItemTemplate, ItemSection, ItemSlot} from '../item';
+import {Effect, EffectService} from '../effect';
+import {Skill, SkillService} from '../skill';
+import {ItemService} from './item.service';
+import {Observable} from 'rxjs';
+import {JobService} from '../job/job.service';
+import {OriginService} from '../origin/origin.service';
 
 @Component({
     selector: 'item-editor',

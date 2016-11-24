@@ -1,7 +1,7 @@
 import {Http, Headers, Response} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 import {NotificationsService} from '../notifications';
-import {LoginService} from "../user";
+import {LoginService} from '../user';
 
 export class JsonService {
     constructor(protected _http: Http
@@ -22,27 +22,27 @@ export class JsonService {
             }
             if (err.status) {
                 if (err.status === 401) {
-                    this._notification.error("Erreur", "Vous devez vous identifier.");
+                    this._notification.error('Erreur', 'Vous devez vous identifier.');
                     if (this._loginService) {
                         this._loginService.loggedUser.next(null);
                     }
                 }
                 else if (err.status >= 500) {
                     this.postJson('/api/debug/report', err).subscribe();
-                    this._notification.error("Erreur", "Erreur serveur");
+                    this._notification.error('Erreur', 'Erreur serveur');
                 }
                 else if (err.status >= 400) {
                     this.postJson('/api/debug/report', err).subscribe();
-                    this._notification.error("Erreur", "Erreur javascript");
+                    this._notification.error('Erreur', 'Erreur javascript');
                 }
                 else {
                     this.postJson('/api/debug/report', err).subscribe();
-                    this._notification.error("Erreur", "Erreur inconnu");
+                    this._notification.error('Erreur', 'Erreur inconnu');
                 }
             }
             else {
                 this.postJson('/api/debug/report', err).subscribe();
-                this._notification.error("Erreur", "Erreur inconnu");
+                this._notification.error('Erreur', 'Erreur inconnu');
             }
             console.log(err);
             return Observable.throw(err);

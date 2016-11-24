@@ -1,7 +1,7 @@
 import {Monster} from '../monster';
 import {Character} from '../character';
 import {Location} from '../location';
-import {NhbkDate} from "../date";
+import {NhbkDate} from '../date';
 
 export class GroupData {
     debilibeuk: number;

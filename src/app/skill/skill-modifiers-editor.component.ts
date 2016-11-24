@@ -1,7 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 
-import {Skill} from "./skill.model";
-import {SkillService} from "./skill.service";
+import {Skill} from './skill.model';
+import {SkillService} from './skill.service';
 
 @Component({
     selector: 'skill-modifiers-editor',

@@ -3,7 +3,7 @@ import {Http} from '@angular/http';
 
 import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
-import {JsonService} from "./json-service";
+import {JsonService} from './json-service';
 
 @Injectable()
 export class MiscService extends JsonService {

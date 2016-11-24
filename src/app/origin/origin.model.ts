@@ -1,4 +1,4 @@
-import {StatRequirement} from "../shared";
+import {StatRequirement} from '../shared';
 import {Skill} from '../skill';
 
 export interface OriginInfo {

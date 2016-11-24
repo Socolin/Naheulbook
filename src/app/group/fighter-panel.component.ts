@@ -1,18 +1,18 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Group, Fighter} from "./group.model";
-import {Monster, MonsterTemplate} from "../monster/monster.model";
-import {GroupService} from "./group.service";
-import {ItemData, Item} from "../character/item.model";
-import {ItemTemplate} from "../item/item-template.model";
-import {Observable} from "rxjs";
-import {AutocompleteValue} from "../shared/autocomplete-input.component";
-import {MonsterService} from "../monster/monster.service";
-import {Character} from "../character/character.model";
-import {getRandomInt} from "../shared/random";
-import {NotificationsService} from "../notifications/notifications.service";
-import {GroupActionService} from "./group-action.service";
-import {CharacterService} from "../character/character.service";
-import {ItemService} from "../item/item.service";
+import {Group, Fighter} from './group.model';
+import {Monster, MonsterTemplate} from '../monster/monster.model';
+import {GroupService} from './group.service';
+import {ItemData, Item} from '../character/item.model';
+import {ItemTemplate} from '../item/item-template.model';
+import {Observable} from 'rxjs';
+import {AutocompleteValue} from '../shared/autocomplete-input.component';
+import {MonsterService} from '../monster/monster.service';
+import {Character} from '../character/character.model';
+import {getRandomInt} from '../shared/random';
+import {NotificationsService} from '../notifications/notifications.service';
+import {GroupActionService} from './group-action.service';
+import {CharacterService} from '../character/character.service';
+import {ItemService} from '../item/item.service';
 
 @Component({
     selector: 'fighter-panel',
@@ -26,7 +26,7 @@ import {ItemService} from "../item/item.service";
         }
     `],
 })
-export class FighterPanelComponent implements OnInit{
+export class FighterPanelComponent implements OnInit {
     @Input() group: Group;
     @Input() characters: Character[];
     public monsters: Monster[] = [];
@@ -34,8 +34,8 @@ export class FighterPanelComponent implements OnInit{
     public charAndMonsters: Fighter[] = [];
 
     public newMonster: Monster = new Monster();
-    private selectedCombatRow: number = 0;
-    private addItemTarget: Character;
+    public selectedCombatRow: number = 0;
+    public addItemTarget: Character;
 
     constructor(private _groupService: GroupService
         , private _actionService: GroupActionService
@@ -93,9 +93,10 @@ export class FighterPanelComponent implements OnInit{
             res => {
                 monster.dead = res.dead;
                 this.deadMonsters.push(monster);
-                let idx = this.monsters.findIndex(m => m.id == monster.id);
-                if (idx != -1)
+                let idx = this.monsters.findIndex(m => m.id === monster.id);
+                if (idx !== -1) {
                     this.monsters.splice(idx, 1);
+                }
                 this.updateOrder();
             }
         );
@@ -108,17 +109,18 @@ export class FighterPanelComponent implements OnInit{
     deleteMonster(monster: Monster) {
         this._groupService.deleteMonster(monster.id).subscribe(
             () => {
-                let idx = this.monsters.findIndex(m => m.id == monster.id);
-                if (idx != -1)
+                let idx = this.monsters.findIndex(m => m.id === monster.id);
+                if (idx !== -1) {
                     this.monsters.splice(idx, 1);
+                }
                 this.updateOrder();
             }
         );
     }
 
-    private selectedMonsterTemplate: MonsterTemplate;
-    private monsterAutocompleteShow = false;
-    private autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
+    public selectedMonsterTemplate: MonsterTemplate;
+    public monsterAutocompleteShow = false;
+    public autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
 
     updateMonsterListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
         this.newMonster.name = filter;
@@ -181,7 +183,7 @@ export class FighterPanelComponent implements OnInit{
                     () => {
                         element.changeTarget(target);
                         element.updateTarget(this.charAndMonsters);
-                        this._notification.info("Monstre", "Cible changée");
+                        this._notification.info('Monstre', 'Cible changée');
                     }
                 );
         } else {
@@ -192,7 +194,7 @@ export class FighterPanelComponent implements OnInit{
                 change => {
                     element.changeTarget(change.value);
                     element.updateTarget(this.charAndMonsters);
-                    this._notification.info("Joueur", "Cible changée");
+                    this._notification.info('Joueur', 'Cible changée');
                 }
             );
         }
@@ -208,7 +210,7 @@ export class FighterPanelComponent implements OnInit{
                     res => {
                         element.changeColor(res.value);
                         this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
-                        this._notification.info("Monstre", "Couleur changé");
+                        this._notification.info('Monstre', 'Couleur changé');
                     }
                 );
         } else {
@@ -216,7 +218,7 @@ export class FighterPanelComponent implements OnInit{
                 change => {
                     element.changeColor(change.value);
                     this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
-                    this._notification.info("Joueur", "Couleur changée");
+                    this._notification.info('Joueur', 'Couleur changée');
                 }
             );
         }
@@ -241,7 +243,7 @@ export class FighterPanelComponent implements OnInit{
                     res => {
                         element.changeNumber(res.value);
                         this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
-                        this._notification.info("Monstre", "Couleur changé");
+                        this._notification.info('Monstre', 'Couleur changé');
                     }
                 );
         }
@@ -317,11 +319,11 @@ export class FighterPanelComponent implements OnInit{
         this.newMonster.name = monster.name;
         this.newMonster.data.at = monster.data.at;
         this.newMonster.data.prd = monster.data.prd;
-        this.newMonster.data.esq= monster.data.esq;
+        this.newMonster.data.esq = monster.data.esq;
         this.newMonster.data.ev = monster.data.ev;
         this.newMonster.data.maxEv = monster.data.ev;
         this.newMonster.data.ea = monster.data.ea;
-        this.newMonster.data.maxEa= monster.data.ea;
+        this.newMonster.data.maxEa = monster.data.ea;
         this.newMonster.data.pr = monster.data.pr;
         this.newMonster.data.cou = monster.data.cou;
         this.newMonster.data.dmg = monster.data.dmg;

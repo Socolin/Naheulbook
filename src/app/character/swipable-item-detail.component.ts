@@ -1,7 +1,7 @@
-import {SwipeService} from "./swipe.service";
-import {Input, Component, EventEmitter, Output} from "@angular/core";
-import {Character} from "./character.model";
-import {Item} from "./item.model";
+import {SwipeService} from './swipe.service';
+import {Input, Component} from '@angular/core';
+import {Character} from './character.model';
+import {Item} from './item.model';
 
 @Component({
     selector: 'swipable-item-detail',

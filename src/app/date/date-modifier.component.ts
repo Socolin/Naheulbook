@@ -1,6 +1,6 @@
-import {Component, Output, EventEmitter, Input, DoCheck} from "@angular/core";
+import {Component, Output, EventEmitter, Input} from '@angular/core';
 
-import {NhbkDateOffset} from "./date.model";
+import {NhbkDateOffset} from './date.model';
 
 @Component({
     selector: 'date-modifier',

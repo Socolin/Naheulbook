@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationsService} from '../notifications';
 
-import {Location} from "./location.model";
-import {LocationService} from "./location.service";
+import {Location} from './location.model';
+import {LocationService} from './location.service';
 import {LoginService} from '../user';
 
 @Component({

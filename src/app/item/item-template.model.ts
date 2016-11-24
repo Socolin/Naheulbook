@@ -1,4 +1,4 @@
-import {ItemStatModifier} from "../shared/stat-modifier.model";
+import {ItemStatModifier} from '../shared/stat-modifier.model';
 import {Skill} from '../skill';
 
 export class ItemSection {

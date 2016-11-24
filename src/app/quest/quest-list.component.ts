@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
-import {QuestTemplate} from "./quest.model";
-import {QuestService} from "./quest.service";
+import {QuestTemplate} from './quest.model';
+import {QuestService} from './quest.service';
 
 @Component({
     selector: 'quest-list',

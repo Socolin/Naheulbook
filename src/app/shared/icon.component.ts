@@ -1,5 +1,5 @@
-import {Component, Input, OnChanges, SimpleChanges} from "@angular/core";
-import {IconDescription} from "./icon.model";
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {IconDescription} from './icon.model';
 
 @Component({
     selector: 'icon',

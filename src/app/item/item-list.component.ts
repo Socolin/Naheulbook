@@ -2,13 +2,13 @@ import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
 
-import {LoginService} from "../user/login.service";
-import {OriginService} from "../origin/origin.service";
-import {JobService} from "../job/job.service";
+import {LoginService} from '../user/login.service';
+import {OriginService} from '../origin/origin.service';
+import {JobService} from '../job/job.service';
 
-import {ItemSection, ItemTemplate} from "./item-template.model";
-import {ItemService} from "./item.service";
-import {removeDiacritics} from "../shared";
+import {ItemSection, ItemTemplate} from './item-template.model';
+import {ItemService} from './item.service';
+import {removeDiacritics} from '../shared';
 
 @Component({
     selector: 'item-list',
@@ -25,15 +25,15 @@ import {removeDiacritics} from "../shared";
 })
 export class ItemListComponent implements OnInit, OnDestroy {
     @Input() inTab: boolean;
-    private itemSections: ItemSection[];
-    private items: ItemTemplate[] = [];
-    private itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
-    private selectedSection: ItemSection;
-    private filter: {name: string, dice: number};
-    private originsName: {[originId: number]: string};
-    private jobsName: {[jobId: number]: string};
-    private editable: boolean;
-    private sub: Subscription;
+    public itemSections: ItemSection[];
+    public items: ItemTemplate[] = [];
+    public itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
+    public selectedSection: ItemSection;
+    public filter: {name: string, dice: number};
+    public originsName: {[originId: number]: string};
+    public jobsName: {[jobId: number]: string};
+    public editable: boolean;
+    public sub: Subscription;
 
     constructor(private _router: Router
         , private _loginService: LoginService
@@ -48,7 +48,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     }
 
     selectSection(event: MouseEvent, section: ItemSection) {
-        if (this.selectedSection && this.selectedSection.id == section.id) {
+        if (this.selectedSection && this.selectedSection.id === section.id) {
             if (event.ctrlKey) {
                 this._itemService.clearItemSectionCache(section.id);
                 this.loadSection(section);

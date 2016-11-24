@@ -145,7 +145,7 @@
                                     <span style="font-family: 'Glyphicons Halflings'">&#57492;</span>
                                 </button>
                                 <template [ngIf]="item === selectedItem">
-                                    <swipable-item-detail [gmView]="inGroupTab"  [character]="character" [item]="item"></swipable-item-detail>
+                                    <swipable-item-detail *ngIf="item.template.slots[0].name === slot.name" [gmView]="inGroupTab"  [character]="character" [item]="item"></swipable-item-detail>
                                 </template>
                             </div>
                         </div>

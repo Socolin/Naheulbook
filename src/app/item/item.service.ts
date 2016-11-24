@@ -3,15 +3,15 @@ import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
 import {ItemTemplate, ItemSection, ItemSlot} from '../item';
-import {Item} from "../character";
+import {Item} from '../character';
 import {JsonService} from '../shared/json-service';
 import {ItemCategory} from './item-template.model';
 import {NotificationsService} from '../notifications';
-import {ItemData, PartialItem} from "../character";
-import {LoginService} from "../user";
-import {SkillService} from "../skill";
-import {Skill} from "../skill";
-import {ItemModifier} from "../character/item.model";
+import {ItemData, PartialItem} from '../character';
+import {LoginService} from '../user';
+import {SkillService} from '../skill';
+import {Skill} from '../skill';
+import {ItemModifier} from '../character/item.model';
 
 @Injectable()
 export class ItemService extends JsonService {
@@ -247,7 +247,7 @@ export class ItemService extends JsonService {
                     for (let i = 0; i < sections.length; i++) {
                         let section = sections[i];
                         for (let j = 0; j < section.categories.length; j++) {
-                            if (categoryId == section.categories[j].id) {
+                            if (categoryId === section.categories[j].id) {
                                 observer.next(section);
                                 observer.complete();
                                 return;

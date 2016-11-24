@@ -1,6 +1,6 @@
-import {Input, Output, EventEmitter, OnInit, Component, OnChanges, SimpleChanges} from "@angular/core";
-import {Item} from "./item.model";
-import {Character} from "./character.model";
+import {Input, Output, EventEmitter, OnInit, Component, OnChanges, SimpleChanges} from '@angular/core';
+import {Item} from './item.model';
+import {Character} from './character.model';
 
 @Component({
     selector: 'bag-item-view',
@@ -17,8 +17,8 @@ export class BagItemViewComponent implements OnInit, OnChanges {
     @Input() ends: number[] = [];
     @Output() itemSelected: EventEmitter<Item> = new EventEmitter<Item>();
 
-    private itemsContainer: Item[] = [];
-    private itemsContained: Item[] = [];
+    public itemsContainer: Item[] = [];
+    public itemsContained: Item[] = [];
 
     selectItem(item) {
         this.itemSelected.emit(item);
@@ -27,8 +27,8 @@ export class BagItemViewComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if ('items' in changes) {
-            var container = [];
-            var contained = [];
+            let container = [];
+            let contained = [];
 
             for (let i = 0; i < this.items.length; i++) {
                 let item = this.items[i];

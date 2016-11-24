@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {MonsterTemplate, MonsterTrait} from "./monster.model";
-import {MonsterService} from "./monster.service";
-import {NotificationsService} from "../notifications/notifications.service";
+import {MonsterTemplate, MonsterTrait} from './monster.model';
+import {MonsterService} from './monster.service';
+import {NotificationsService} from '../notifications/notifications.service';
 
 @Component({
     selector: 'monster-template',
@@ -10,8 +10,8 @@ import {NotificationsService} from "../notifications/notifications.service";
 })
 export class MonsterTemplateComponent implements OnInit {
     @Input() monster: MonsterTemplate;
-    private traisById: {[id: number]: MonsterTrait};
-    private editing: boolean;
+    public traisById: {[id: number]: MonsterTrait};
+    public editing: boolean;
 
     constructor(private _monsterService: MonsterService
         , private _notifications: NotificationsService) {
@@ -19,9 +19,9 @@ export class MonsterTemplateComponent implements OnInit {
 
     saveMonster() {
         this.editing = false;
-        this._monsterService.editMonster(this.monster).subscribe(res => {
-            this._notifications.success("Monster", "Monstre editer");
-        })
+        this._monsterService.editMonster(this.monster).subscribe(() => {
+            this._notifications.success('Monster', 'Monstre editer');
+        });
     }
 
     editMonster() {

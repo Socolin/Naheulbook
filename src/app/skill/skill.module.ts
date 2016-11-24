@@ -2,10 +2,10 @@ import {NgModule}      from '@angular/core';
 import {
     SkillComponent, SkillListComponent, SkillModifiersEditorComponent, SkillSelectorComponent,
     SkillService
-} from "./";
-import {CommonModule} from "@angular/common";
-import {SharedModule} from "../shared/shared.module";
-import {FormsModule} from "@angular/forms";
+} from './';
+import {CommonModule} from '@angular/common';
+import {SharedModule} from '../shared/shared.module';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
     imports: [

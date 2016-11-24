@@ -1,13 +1,13 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 
 export class AutocompleteValue {
+    public value: any;
+    public text: string;
+
     constructor(value: any, text: string) {
         this.value = value;
         this.text = text;
     }
-
-    value: any;
-    text: string;
 }
 
 @Component({
@@ -25,7 +25,7 @@ export class AutocompleteInputComponent {
     selectValue(value: any) {
         this.onSelect.emit(value.value);
         if (this.clearOnSelect) {
-            this.value = "";
+            this.value = '';
         }
         else {
             this.value = value.text;
@@ -43,8 +43,9 @@ export class AutocompleteInputComponent {
             this.close();
         }
         else if (event.keyCode === 38) {
-            if (this.preSelectedValueIndex > 0)
+            if (this.preSelectedValueIndex > 0) {
                 this.preSelectedValueIndex--;
+            }
         }
         else if (event.keyCode === 40) {
             if (this.values && this.preSelectedValueIndex < this.values.length) {

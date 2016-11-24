@@ -2,8 +2,8 @@ import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
 
 import {Job} from '../job';
 import {Origin} from '../origin';
-import {Skill} from "./skill.model";
-import {SkillService} from "./skill.service";
+import {Skill} from './skill.model';
+import {SkillService} from './skill.service';
 
 @Component({
     selector: 'skill-selector',
