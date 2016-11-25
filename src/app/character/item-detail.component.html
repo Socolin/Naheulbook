@@ -65,8 +65,12 @@
     <div *ngIf="item.template.data.quantifiable" class="row">
         <div class="col-xs-6">
             Quantité:
-            <value-editor [title]="'Quantité'" [value]="item.data.quantity"
-                          (onChange)="_itemActionService.onAction('update_quantity', item, {quantity: $event})"></value-editor>
+            <span *ngIf="readonly">{{item.data.quantity}}</span>
+            <value-editor *ngIf="!readonly"
+                          [title]="'Quantité'"
+                          [value]="item.data.quantity"
+                          (onChange)="_itemActionService.onAction('update_quantity', item, {quantity: $event})">
+            </value-editor>
         </div>
     </div>
     <div *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">

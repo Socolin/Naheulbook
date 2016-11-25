@@ -13,6 +13,7 @@
                        (click)="selectItem(item)" [class.active]="item.id == selectedItem?.id">
                         <button class="game-icon game-icon-robber btn btn-info"
                                 (click)="takeItemFromLoot(loot, item)"></button>
+                        <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                         {{item.data.name}}
                         <swipable-item-detail *ngIf="item.id === selectedItem?.id"
                                               [character]="character"
@@ -29,6 +30,7 @@
                                (click)="selectItem(item)" [class.active]="item.id == selectedItem?.id">
                                 <button class="game-icon game-icon-robber btn btn-info"
                                         (click)="takeItemFromMonster(monster, item)"></button>
+                                <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                                 {{item.data.name}}
                                 <swipable-item-detail *ngIf="item.id === selectedItem?.id"
                                                       [character]="character"

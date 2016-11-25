@@ -21,6 +21,7 @@
             <ul>
                 <li *ngFor="let item of loot.items">
                     <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromLoot(loot, item)"></button>
+                    <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                     {{item.data.name}}
                     <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
                     <span *ngIf="item.template.data.price">{{item.template.data.price}} P.O.</span>
@@ -35,6 +36,7 @@
                     <ul>
                         <li *ngFor="let item of monster.items">
                             <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromMonster(monster, item)"></button>
+                            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                             {{item.data.name}}
                             <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
                             <span *ngIf="item.template.data.price">{{item.template.data.price}} P.O.</span>

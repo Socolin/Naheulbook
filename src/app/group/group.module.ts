@@ -18,6 +18,7 @@ import {GroupLootPanelComponent} from './group-loot-panel.component';
 import {ItemModule} from '../item/item.module';
 import {JobModule} from '../job/job.module';
 import {OriginModule} from '../origin/origin.module';
+import {GroupHistoryComponent} from './group-history.component';
 
 @NgModule({
     imports: [
@@ -42,6 +43,7 @@ import {OriginModule} from '../origin/origin.module';
         FighterPanelComponent,
         UsefullDataComponent,
         GroupLootPanelComponent,
+        GroupHistoryComponent,
     ],
     providers: [GroupService]
 })

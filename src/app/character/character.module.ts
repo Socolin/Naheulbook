@@ -24,6 +24,7 @@ import {BagItemViewComponent} from './bag-item-view.component';
 import {DateModule} from '../date/date.module';
 import {ModifierEditorComponent} from './modifier-editer.component';
 import {CharacterLootPanelComponent} from './character-loot-panel.component';
+import {CharacterHistoryComponent} from './character-history.component';
 
 @NgModule({
     imports: [
@@ -51,6 +52,7 @@ import {CharacterLootPanelComponent} from './character-loot-panel.component';
         , ModifierDetailComponent
         , ModifierEditorComponent
         , CharacterLootPanelComponent
+        , CharacterHistoryComponent
     ],
     exports: [
         CharacterComponent
