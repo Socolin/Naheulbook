@@ -28,6 +28,14 @@ export class GroupService extends JsonService {
         }).map(res => res.json());
     }
 
+    loadDeadMonsters(groupId: number, startIndex: number, count: number): Observable<Monster[]> {
+        return this.postJson('/api/group/loadDeadMonsters', {
+            groupId: groupId,
+            startIndex: startIndex,
+            count: count
+        }).map(res => res.json());
+    }
+
     createMonster(groupId: number, monster): Observable<Monster> {
         return this.postJson('/api/group/createMonster', {
             monster: monster,

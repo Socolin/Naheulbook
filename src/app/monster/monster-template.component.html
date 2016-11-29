@@ -13,8 +13,11 @@
             <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
                 <strong>AT:</strong> {{monster.data.at}}
             </div>
-            <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
+            <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special && monster.data.prd">
                 <strong>PRD:</strong> {{monster.data.prd}}
+            </div>>
+            <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special && monster.data.esq">
+                <strong>ESQ:</strong> {{monster.data.esq}}
             </div>
             <div class="col-xs-4 col-sm-2 col-md-1 col-lg-1" *ngIf="!monster.data.special">
                 <strong>EV:</strong> {{monster.data.ev}}

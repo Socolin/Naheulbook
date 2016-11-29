@@ -4,7 +4,7 @@
         <th></th>
         <th class="text-center">Nom</th>
         <th class="text-center">AT</th>
-        <th class="text-center">PRD</th>
+        <th class="text-center">PRD/ESQ</th>
         <th class="text-center">EV</th>
         <th class="text-center">EA</th>
         <th class="text-center">PR</th>
@@ -40,16 +40,16 @@
                 </td>
                 <td>
                     <span *ngIf="fighter.monster.data.prd">
-                        <value-editor [value]="fighter.monster.data.prd"
+                        Prd: <value-editor [value]="fighter.monster.data.prd"
                                       [title]="'PRD'"
                                       (onChange)="updateMonsterField(fighter.monster, 'prd', $event)">
                         </value-editor>
                     </span>
                     <span *ngIf="fighter.monster.data.esq">
-                        <value-editor [value]="fighter.monster.data.esq"
+                        Esq: <value-editor [value]="fighter.monster.data.esq"
                                       [title]="'ESQ'"
                                       (onChange)="updateMonsterField(fighter.monster, 'esq', $event)">
-                        </value-editor> E
+                        </value-editor>
                     </span>
                 </td>
                 <td>
@@ -211,6 +211,7 @@
         </tbody>
     </table>
 </div>
+<a href="#" *ngIf="!allDeadMonstersLoaded" (click)="loadMoreDeadMonsters()">Plus</a>
 
 <div>
     <h3>Ajouter un monstre</h3>
@@ -230,17 +231,22 @@
         </div>
         <div class="form-group">
             <label for="inputMonsteAt" class="col-xs-1 control-label">AT</label>
-            <div class="col-xs-3">
+            <div class="col-xs-2">
                 <input type="number" class="form-control" id="inputMonsteAt"
                        [(ngModel)]="newMonster.data.at">
             </div>
             <label for="inputMonsterPrd" class="col-xs-1 control-label">PRD</label>
-            <div class="col-xs-3">
+            <div class="col-xs-2">
                 <input type="number" class="form-control" id="inputMonsterPrd"
                        [(ngModel)]="newMonster.data.prd">
             </div>
+            <label for="inputMonsterPrd" class="col-xs-1 control-label">ESQ</label>
+            <div class="col-xs-2">
+                <input type="number" class="form-control" id="inputMonsterEsq"
+                       [(ngModel)]="newMonster.data.esq">
+            </div>
             <label for="inputMonsterPR" class="col-xs-1 control-label">PR</label>
-            <div class="col-xs-3">
+            <div class="col-xs-2">
                 <input type="text" class="form-control" id="inputMonsterPR" [(ngModel)]="newMonster.data.pr">
             </div>
         </div>

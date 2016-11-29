@@ -30,12 +30,18 @@ export class FighterPanelComponent implements OnInit {
     @Input() group: Group;
     @Input() characters: Character[];
     public monsters: Monster[] = [];
-    public deadMonsters: Monster[] = [];
     public charAndMonsters: Fighter[] = [];
+
+    public deadMonsters: Monster[] = [];
+    public allDeadMonstersLoaded: boolean = false;
 
     public newMonster: Monster = new Monster();
     public selectedCombatRow: number = 0;
     public addItemTarget: Character;
+
+    public selectedMonsterTemplate: MonsterTemplate;
+    public monsterAutocompleteShow = false;
+    public autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
 
     constructor(private _groupService: GroupService
         , private _actionService: GroupActionService
@@ -123,9 +129,18 @@ export class FighterPanelComponent implements OnInit {
         );
     }
 
-    public selectedMonsterTemplate: MonsterTemplate;
-    public monsterAutocompleteShow = false;
-    public autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
+    loadMoreDeadMonsters(): boolean {
+        this._groupService.loadDeadMonsters(this.group.id, this.deadMonsters.length, 10).subscribe(
+            monsters => {
+                if (monsters.length === 0) {
+                    this.allDeadMonstersLoaded = true;
+                } else {
+                    this.deadMonsters = this.deadMonsters.concat(monsters);
+                }
+            }
+        );
+        return false;
+    }
 
     updateMonsterListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
         this.newMonster.name = filter;
@@ -256,7 +271,6 @@ export class FighterPanelComponent implements OnInit {
 
 
     updateOrder() {
-        let deadMonsters = [];
         let charAndMonsters: Fighter[] = [];
         for (let i = 0; i < this.characters.length; i++) {
             let character = this.characters[i];
@@ -268,20 +282,7 @@ export class FighterPanelComponent implements OnInit {
         }
         for (let i = 0; i < this.monsters.length; i++) {
             let monster = this.monsters[i];
-            if (monster.dead) {
-                deadMonsters.push(monster);
-            } else {
-                charAndMonsters.push(Fighter.createFromMonster(monster));
-            }
-        }
-        deadMonsters.sort((first, second) => {
-            let a = new Date(first.dead);
-            let b = new Date(second.dead);
-            return a > b ? -1 : a < b ? 1 : 0;
-        });
-
-        while (deadMonsters.length > 10) {
-            deadMonsters.pop();
+            charAndMonsters.push(Fighter.createFromMonster(monster));
         }
 
         charAndMonsters.sort(function (first, second) {
@@ -315,7 +316,6 @@ export class FighterPanelComponent implements OnInit {
         });
         charAndMonsters.forEach(f => f.updateTarget(charAndMonsters));
         this.charAndMonsters = charAndMonsters;
-        this.deadMonsters = deadMonsters;
     }
 
     selectMonsterInAutocompleteList(monster: MonsterTemplate) {
@@ -353,6 +353,12 @@ export class FighterPanelComponent implements OnInit {
         this._actionService.registerAction('reorderFighters').subscribe(
             () => {
                 this.updateOrder();
+            }
+        );
+
+        this._groupService.loadDeadMonsters(this.group.id, 0, 10).subscribe(
+            monsters => {
+                this.deadMonsters = monsters;
             }
         );
 
