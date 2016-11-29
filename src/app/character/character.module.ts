@@ -19,7 +19,7 @@ import {
     EffectPanelComponent, ModifierDetailComponent, EffectDetailComponent
 } from './effect-panel.component';
 import {InventoryPanelComponent} from './inventory-panel.component';
-import {SwipableItemDetail} from './swipable-item-detail.component';
+import {SwipableItemDetailComponent} from './swipable-item-detail.component';
 import {BagItemViewComponent} from './bag-item-view.component';
 import {DateModule} from '../date/date.module';
 import {ModifierEditorComponent} from './modifier-editer.component';
@@ -46,7 +46,7 @@ import {CharacterHistoryComponent} from './character-history.component';
         , ItemDetailComponent
         , SpecialitySelectorComponent
         , EffectPanelComponent
-        , SwipableItemDetail
+        , SwipableItemDetailComponent
         , InventoryPanelComponent
         , EffectDetailComponent
         , ModifierDetailComponent

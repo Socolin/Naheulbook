@@ -33,7 +33,7 @@ import {Item} from './item.model';
         `
     ],
 })
-export class SwipableItemDetail {
+export class SwipableItemDetailComponent {
     @Input() character: Character;
     @Input() item: Item;
     @Input() gmView: boolean;
