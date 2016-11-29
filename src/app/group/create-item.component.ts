@@ -15,7 +15,7 @@ import {getRandomInt} from '../shared/random';
 export class CreateItemComponent implements OnChanges {
     @Input() character: Character;
     @Input() loot: Loot;
-    @Output() onAddItem: EventEmitter<Item> = new EventEmitter<Item>();
+    @Output() onAddItem: EventEmitter<{keepOpen: boolean, item: Item}> = new EventEmitter<{keepOpen: boolean, item: Item}>();
 
     public mode: string = 'normal';
     public newItem: Item = new Item();
@@ -31,11 +31,11 @@ export class CreateItemComponent implements OnChanges {
         return false;
     }
 
-    addItem() {
+    addItem(keepOpen: boolean) {
         if (this.mode === 'gem') {
             this.newItem.data.ug = this.gemOption['ug'];
         }
-        this.onAddItem.emit(this.newItem);
+        this.onAddItem.emit({keepOpen: keepOpen, item: this.newItem});
         this.newItem = new Item();
         return false;
     }

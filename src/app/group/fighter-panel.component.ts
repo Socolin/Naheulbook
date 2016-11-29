@@ -49,11 +49,16 @@ export class FighterPanelComponent implements OnInit {
         this.addItemTarget = character;
     }
 
-    onItemAdded(item: Item) {
-        if (item != null) {
-            this._itemService.addItemTo('character', this.addItemTarget.id, item.template.id, item.data).subscribe();
+    onItemAdded(data: {keepOpen: boolean, item: Item}) {
+        if (data != null) {
+            this._itemService.addItemTo('character', this.addItemTarget.id, data.item.template.id, data.item.data).subscribe();
+            if (!data.keepOpen) {
+                this.addItemTarget = null;
+            }
         }
-        this.addItemTarget = null;
+        else {
+            this.addItemTarget = null;
+        }
     }
 
     selectCombatRow(i: number) {
@@ -92,7 +97,7 @@ export class FighterPanelComponent implements OnInit {
         this._groupService.killMonster(monster.id).subscribe(
             res => {
                 monster.dead = res.dead;
-                this.deadMonsters.push(monster);
+                this.deadMonsters.unshift(monster);
                 let idx = this.monsters.findIndex(m => m.id === monster.id);
                 if (idx !== -1) {
                     this.monsters.splice(idx, 1);

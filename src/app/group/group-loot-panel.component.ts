@@ -93,27 +93,38 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         return false;
     }
 
-    addItemToLoot(loot: Loot, item: Item) {
-        if (item != null) {
-            this._itemService.addItemTo('loot', loot.id, item.template.id, item.data).subscribe(
+    addItemToLoot(loot: Loot, data: {keepOpen: boolean, item: Item}) {
+        if (data != null) {
+            this._itemService.addItemTo('loot', loot.id, data.item.template.id, data.item.data).subscribe(
                 item => {
                     this.onAddItemToLoot(loot, item);
                 }
             );
+            if (!data.keepOpen) {
+                this.lootTargetForNewItem = null;
+            }
         }
-        this.lootTargetForNewItem = null;
+        else {
+            this.lootTargetForNewItem = null;
+        }
     }
 
-    addItemToMonster(loot: Loot, monster: Monster, item: Item) {
-        if (item != null) {
-            this._itemService.addItemTo('monster', monster.id, item.template.id, item.data).subscribe(
+    addItemToMonster(loot: Loot, monster: Monster, data: {keepOpen: boolean, item: Item}) {
+        if (data != null) {
+            this._itemService.addItemTo('monster', monster.id, data.item.template.id, data.item.data).subscribe(
                 newItem => {
                     this.onAddItemToMonster(loot, {item: newItem, monster: monster});
                 }
             );
+            if (!data.keepOpen) {
+                this.lootTargetForNewItem = null;
+                this.monsterTargetForNewItem = null;
+            }
         }
-        this.lootTargetForNewItem = null;
-        this.monsterTargetForNewItem = null;
+        else {
+            this.lootTargetForNewItem = null;
+            this.monsterTargetForNewItem = null;
+        }
     }
 
     removeItemFromLoot(loot: Loot, item: Item) {
