@@ -2,7 +2,8 @@
     <div class="row">
         <div class="col-xs-12">
             <h4>
-                <span *ngIf="editable" (click)=editItem(item)><span class="glyphicon glyphicon-edit"></span></span>
+                <span *ngIf="editable" (click)=editItem(item)><span class="glyphicon glyphicon-edit pull-right"></span></span>
+                <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                 {{item.name}}
                 <span *ngIf="item.data.requireLevel" class="label label-info">Niveau {{item.data.requireLevel}}</span>
                 <span *ngIf="item.data.relic" class="label label-info">Relique</span>

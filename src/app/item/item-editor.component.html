@@ -23,6 +23,9 @@
         <div class="col-sm-1 col-xs-4">
             <button class="btn btn-primary glyphicon glyphicon-refresh" (click)="automaticNotIdentifiedName()"></button>
         </div>
+        <div class="col-sm-1 col-xs-4">
+            <icon-selector [icon]="item.data.icon" (onChange)="item.data.icon = $event"></icon-selector>
+        </div>
         <label for="inputContainer" class="col-xs-8 col-md-1 col-sm-2 control-label">Conteneur</label>
         <div class="col-sm-1 col-xs-4">
             <input id="inputContainer" type="checkbox" [(ngModel)]="item.data.container" class="form-control">

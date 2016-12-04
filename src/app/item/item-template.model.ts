@@ -1,5 +1,6 @@
 import {ItemStatModifier} from '../shared/stat-modifier.model';
 import {Skill} from '../skill';
+import {IconDescription} from '../shared/icon.model';
 
 export class ItemSection {
     id: number;
@@ -49,6 +50,7 @@ export class ItemTemplateData {
     useUG: boolean;
     lifetimeType: string;
     lifetime: string|number;
+    icon: IconDescription;
 }
 // FIXME: Is this used and checked ?
 export class ItemRequirement {
