@@ -154,28 +154,28 @@
 			<!-- Start of combat tab -->
 			<div class="row" style="font-size: medium;">
 				<div class="col-xs-6">
-                    <div [class.bg-danger]="character.ev > character.computedData.stats.EV" style="text-align: center">
+                    <div [class.bg-danger]="character.ev > character.computedData.stats['EV']" style="text-align: center">
                         <span class="glyphicon glyphicon-heart text-danger" style="font-size: 1.3em;"></span>
-                        <value-editor [title]="'Energie vitale'" [value]="character.ev" [maxValue]="character.computedData.stats.EV" (onChange)="changeCharacterStat('ev', $event)"></value-editor>
+                        <value-editor [title]="'Energie vitale'" [value]="character.ev" [maxValue]="character.computedData.stats['EV']" (onChange)="changeCharacterStat('ev', $event)"></value-editor>
                     </div>
 				</div>
 				<div class="col-xs-6">
 					<div *ngIf="character.ea != null">
-						<div [class.bg-danger]="character.ea > character.computedData.stats.EA" style="text-align: center">
+						<div [class.bg-danger]="character.ea > character.computedData.stats['EA']" style="text-align: center">
 							<span class="glyphicon glyphicon-star text-info" style="font-size: 1.3em;"></span>
-                            <value-editor [title]="'Energie astrale'" [value]="character.ea" [maxValue]="character.computedData.stats.EA" (onChange)="changeCharacterStat('ea', $event)"></value-editor>
+                            <value-editor [title]="'Energie astrale'" [value]="character.ea" [maxValue]="character.computedData.stats['EA']" (onChange)="changeCharacterStat('ea', $event)"></value-editor>
 						</div>
 					</div>
 				</div>
 				<table class="table table-striped table-condensed text-center">
 					<tbody>
 						<tr>
-							<td><span class="ra ra-sword ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats.AT}}</span></td>
-							<td><span class="ra ra-shield ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats.PRD}}</span></td>
+							<td><span class="ra ra-sword ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['AT']}}</span></td>
+							<td><span class="ra ra-shield ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['PRD']}}</span></td>
 						</tr>
 						<tr>
-							<td><span class="ra ra-vest ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats.PR}}</span></td>
-							<td><span class="ra ra-aura ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats.PR_MAGIC}}</span></td>
+							<td><span class="ra ra-vest ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['PR']}}</span></td>
+							<td><span class="ra ra-aura ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['PR_MAGIC']}}</span></td>
 						</tr>
 					</tbody>
 				</table>
@@ -184,19 +184,19 @@
 					<tbody>
 						<tr>
 							<td class="col-xs-3"><strong>COU</strong></td>
-							<td class="col-xs-3">{{character.computedData.stats.COU}}</td>
+							<td class="col-xs-3">{{character.computedData.stats['COU']}}</td>
 							<td class="col-xs-3"><strong>FO</strong></td>
-							<td class="col-xs-3">{{character.computedData.stats.FO}}</td>
+							<td class="col-xs-3">{{character.computedData.stats['FO']}}</td>
 						</tr>
 						<tr>
 							<td><strong>AD</strong></td>
-							<td>{{character.computedData.stats.AD}}</td>
+							<td>{{character.computedData.stats['AD']}}</td>
 							<td><strong>CHA</strong></td>
-							<td>{{character.computedData.stats.CHA}}</td>
+							<td>{{character.computedData.stats['CHA']}}</td>
 						</tr>
 						<tr>
 							<td><strong>PI Bonus</strong></td>
-							<td>{{character.computedData.stats.PI}}</td>
+							<td>{{character.computedData.stats['PI']}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -204,15 +204,15 @@
 					<tbody>
 						<tr>
 							<td class="col-xs-3"><strong>RESM</strong></td>
-							<td class="col-xs-3">{{character.computedData.stats.RESM}}</td>
+							<td class="col-xs-3">{{character.computedData.stats['RESM']}}</td>
 							<td class="col-xs-3"><strong>INT</strong></td>
-							<td class="col-xs-3">{{character.computedData.stats.INT}}</td>
+							<td class="col-xs-3">{{character.computedData.stats['INT']}}</td>
 						</tr>
 						<tr *ngIf="character.job && character.job.isMagic">
 							<td><strong>MPHYS</strong></td>
-							<td>{{character.computedData.stats.MPHYS}}</td>
+							<td>{{character.computedData.stats['MPHYS']}}</td>
 							<td><strong>MPSY</strong></td>
-							<td>{{character.computedData.stats.MPSY}}</td>
+							<td>{{character.computedData.stats['MPSY']}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -262,8 +262,8 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td>{{character.computedData.stats.EV}}</td>
-								<td>{{character.computedData.stats.EA}}</td>
+								<td>{{character.computedData.stats['EV']}}</td>
+								<td>{{character.computedData.stats['EA']}}</td>
 							</tr>
 							<template [ngIf]="character.computedData.details.show.evea">
 								<template ngFor let-detail [ngForOf]="character.computedData.details.evea">
@@ -292,15 +292,15 @@
 								<th class="text-center">AT</th>
 								<th class="text-center">PRD</th>
 								<th class="text-center">PR</th>
-								<th *ngIf="character.computedData.stats.PR_MAGIC" class="col-xs-1 text-center">PR_MAGIC</th>
+								<th *ngIf="character.computedData.stats['PR_MAGIC']" class="col-xs-1 text-center">PR_MAGIC</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>{{character.computedData.stats.AT}}</td>
-								<td>{{character.computedData.stats.PRD}}</td>
-								<td>{{character.computedData.stats.PR}}</td>
-								<td *ngIf="character.computedData.stats.PR_MAGIC">{{character.computedData.stats.PR_MAGIC}}</td>
+								<td>{{character.computedData.stats['AT']}}</td>
+								<td>{{character.computedData.stats['PRD']}}</td>
+								<td>{{character.computedData.stats['PR']}}</td>
+								<td *ngIf="character.computedData.stats['PR_MAGIC']">{{character.computedData.stats['PR_MAGIC']}}</td>
 							</tr>
 							<template [ngIf]="character.computedData.details.show.atprd">
 								<template ngFor let-detail [ngForOf]="character.computedData.details.atprd">
@@ -312,7 +312,7 @@
 										<td>{{detail.data.AT}}</td>
 										<td>{{detail.data.PRD}}</td>
 										<td>{{detail.data.PR}}</td>
-										<td *ngIf="character.computedData.stats.PR_MAGIC">{{detail.data.PR_MAGIC}}</td>
+										<td *ngIf="character.computedData.stats['PR_MAGIC']">{{detail.data.PR_MAGIC}}</td>
 									</tr>
 								</template>
 							</template>
@@ -337,11 +337,11 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td>{{character.computedData.stats.COU}}</td>
-								<td>{{character.computedData.stats.INT}}</td>
-								<td>{{character.computedData.stats.CHA}}</td>
-								<td>{{character.computedData.stats.AD}}</td>
-								<td>{{character.computedData.stats.FO}}</td>
+								<td>{{character.computedData.stats['COU']}}</td>
+								<td>{{character.computedData.stats['INT']}}</td>
+								<td>{{character.computedData.stats['CHA']}}</td>
+								<td>{{character.computedData.stats['AD']}}</td>
+								<td>{{character.computedData.stats['FO']}}</td>
 							</tr>
 							<template [ngIf]="character.computedData.details.show.stat">
 								<template ngFor let-detail [ngForOf]="character.computedData.details.stat">
@@ -379,9 +379,9 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td *ngIf="character.job && character.job.isMagic">{{character.computedData.stats.MPHYS}}</td>
-								<td *ngIf="character.job && character.job.isMagic">{{character.computedData.stats.MPSY}}</td>
-								<td>{{character.computedData.stats.RESM}}</td>
+								<td *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPHYS']}}</td>
+								<td *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPSY']}}</td>
+								<td>{{character.computedData.stats['RESM']}}</td>
 							</tr>
 							<template [ngIf]="character.computedData.details.show.magic">
 								<template ngFor let-detail [ngForOf]="character.computedData.details.magic">
@@ -402,23 +402,23 @@
 							</tr>
 						</tbody>
 					</table>
-					<table *ngIf="character.computedData.stats.MV != 100 || character.computedData.stats.THROW_MODIFIER  || character.computedData.stats.DISCRETION_MODIFIER  || character.computedData.stats.DANSE_MODIFIER || character.computedData.stats.PI" class="table table-striped table-condensed text-center">
+					<table *ngIf="character.computedData.stats['MV'] != 100 || character.computedData.stats['THROW_MODIFIER'] || character.computedData.stats['DISCRETION_MODIFIER'] || character.computedData.stats['DANSE_MODIFIER'] || character.computedData.stats['PI']" class="table table-striped table-condensed text-center">
 						<thead>
 							<tr>
-								<th *ngIf="character.computedData.stats.MV != 100" class="text-center"><strong>MV</strong></th>
-								<th *ngIf="character.computedData.stats.THROW_MODIFIER" class="text-center"><strong>Lancer</strong></th>
-								<th *ngIf="character.computedData.stats.DISCRETION_MODIFIER" class="text-center"><strong>Discretion</strong></th>
-								<th *ngIf="character.computedData.stats.DANSE_MODIFIER" class="text-center"><strong>Danse</strong></th>
-								<th *ngIf="character.computedData.stats.PI" class="text-center"><strong>PI</strong></th>
+								<th *ngIf="character.computedData.stats['MV'] !== 100" class="text-center"><strong>MV</strong></th>
+								<th *ngIf="character.computedData.stats['THROW_MODIFIER']" class="text-center"><strong>Lancer</strong></th>
+								<th *ngIf="character.computedData.stats['DISCRETION_MODIFIER']" class="text-center"><strong>Discretion</strong></th>
+								<th *ngIf="character.computedData.stats['DANSE_MODIFIER']" class="text-center"><strong>Danse</strong></th>
+								<th *ngIf="character.computedData.stats['PI']" class="text-center"><strong>PI</strong></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td *ngIf="character.computedData.stats.MV != 100">{{character.computedData.stats.MV}}%</td>
-								<td *ngIf="character.computedData.stats.THROW_MODIFIER">{{character.computedData.stats.THROW_MODIFIER | plusminus}}</td>
-								<td *ngIf="character.computedData.stats.DISCRETION_MODIFIER">{{character.computedData.stats.DISCRETION_MODIFIER | plusminus}}</td>
-								<td *ngIf="character.computedData.stats.DANSE_MODIFIER">{{character.computedData.stats.DANSE_MODIFIER | plusminus}}</td>
-								<td *ngIf="character.computedData.stats.PI">{{character.computedData.stats.PI}}</td>
+								<td *ngIf="character.computedData.stats['MV'] !== 100">{{character.computedData.stats['MV']}}%</td>
+								<td *ngIf="character.computedData.stats['THROW_MODIFIER']">{{character.computedData.stats['THROW_MODIFIER'] | plusminus}}</td>
+								<td *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">{{character.computedData.stats['DISCRETION_MODIFIER'] | plusminus}}</td>
+								<td *ngIf="character.computedData.stats['DANSE_MODIFIER']">{{character.computedData.stats['DANSE_MODIFIER'] | plusminus}}</td>
+								<td *ngIf="character.computedData.stats['PI']">{{character.computedData.stats['PI']}}</td>
 							</tr>
 							<template [ngIf]="character.computedData.details.show.other">
 								<template ngFor let-detail [ngForOf]="character.computedData.details.other">
@@ -427,11 +427,11 @@
 									</tr>
 									<tr class="stats-detail-values"></tr>
 									<tr class="stats-detail-values small">
-										<td *ngIf="character.computedData.stats.MV != 100">{{detail.data.MV}}</td>
-										<td *ngIf="character.computedData.stats.THROW_MODIFIER">{{detail.data.THROW_MODIFIER}}</td>
-										<td *ngIf="character.computedData.stats.DISCRETION_MODIFIER">{{detail.data.DISCRETION_MODIFIER}}</td>
-										<td *ngIf="character.computedData.stats.DANSE_MODIFIER">{{detail.data.DANSE_MODIFIER}}</td>
-										<td *ngIf="character.computedData.stats.PI">{{detail.data.PI}}</td>
+										<td *ngIf="character.computedData.stats['MV'] !== 100">{{detail.data.MV}}</td>
+										<td *ngIf="character.computedData.stats['THROW_MODIFIER']">{{detail.data.THROW_MODIFIER}}</td>
+										<td *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">{{detail.data.DISCRETION_MODIFIER}}</td>
+										<td *ngIf="character.computedData.stats['DANSE_MODIFIER']">{{detail.data.DANSE_MODIFIER}}</td>
+										<td *ngIf="character.computedData.stats['PI']">{{detail.data.PI}}</td>
 									</tr>
 								</template>
 							</template>
