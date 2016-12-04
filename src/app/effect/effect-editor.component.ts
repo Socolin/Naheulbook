@@ -52,7 +52,7 @@ export class EffectEditorComponent implements OnInit, OnChanges {
     }
 
     setEffectTimeDuration(dateOffset: NhbkDateOffset) {
-        this.effect.timeDuration= dateOffset2TimeDuration(dateOffset);
+        this.effect.timeDuration = dateOffset2TimeDuration(dateOffset);
     }
 
     ngOnInit() {

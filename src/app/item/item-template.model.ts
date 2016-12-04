@@ -47,6 +47,8 @@ export class ItemTemplateData {
     duration: string;
     space: string;
     useUG: boolean;
+    lifetimeType: string;
+    lifetime: string|number;
 }
 // FIXME: Is this used and checked ?
 export class ItemRequirement {

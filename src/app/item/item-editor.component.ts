@@ -8,6 +8,8 @@ import {ItemService} from './item.service';
 import {Observable} from 'rxjs';
 import {JobService} from '../job/job.service';
 import {OriginService} from '../origin/origin.service';
+import {NhbkDateOffset} from '../date/date.model';
+import {dateOffset2TimeDuration} from '../date/util';
 
 @Component({
     selector: 'item-editor',
@@ -22,10 +24,11 @@ export class ItemEditorComponent implements OnInit, OnChanges {
     public selectedSection: ItemSection;
     public slots: ItemSlot[];
     public form: {levels: number[], protection: number[], damage: number[], dices: number[]};
-    private originsName: {[originId: number]: string};
-    private jobsName: {[jobId: number]: string};
+    public originsName: {[originId: number]: string};
+    public jobsName: {[jobId: number]: string};
+    public lifetimeDateOffset: NhbkDateOffset = new NhbkDateOffset();
 
-    private filteredEffects: Effect[];
+    public filteredEffects: Effect[];
 
     constructor(private _itemService: ItemService
         , private _effectService: EffectService
@@ -137,6 +140,33 @@ export class ItemEditorComponent implements OnInit, OnChanges {
                         break;
                     }
                 }
+            }
+        }
+    }
+
+    setItemLifetimeDateOffset(dateOffset: NhbkDateOffset) {
+        this.item.data.lifetime = dateOffset2TimeDuration(dateOffset);
+    }
+
+    setLifetimeType(type: string) {
+        if (type === null) {
+            this.item.data.lifetime = null;
+            this.item.data.lifetimeType = null;
+        } else {
+            this.item.data.lifetimeType = type;
+            if (type === 'combat' || type === 'lap') {
+                this.item.data.lifetime = 1;
+            }
+            else if (type === 'time') {
+                if (this.lifetimeDateOffset) {
+                    this.setItemLifetimeDateOffset(this.lifetimeDateOffset);
+                }
+                else {
+                    this.item.data.lifetime = 0;
+                }
+            }
+            else if (type === 'custom') {
+                this.item.data.lifetime = '';
             }
         }
     }

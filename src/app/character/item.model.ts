@@ -13,6 +13,8 @@ export class ItemData {
     equiped: number;
     readCount: number;
     notIdentified: boolean;
+    lifetimeType: string;
+    lifetime: string|number;
 }
 
 export class ItemModifier {
