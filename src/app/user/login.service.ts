@@ -36,6 +36,38 @@ export class LoginService extends JsonService {
         return fbLogin;
     }
 
+    doGoogleLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
+        let googleLogin = this.postJson('/api/user/googleLogin', {
+                code: code,
+                loginToken: loginToken,
+                redirectUri: redirectUri
+            })
+            .map(res => res.json())
+            .share();
+
+        googleLogin.subscribe(user => {
+            this.loggedUser.next(user);
+        });
+
+        return googleLogin;
+    }
+
+    doTwitterLogin(oauthToken: string, oauthVerifier: string): Observable<User> {
+        let twitterLogin = this.postJson('/api/user/twitterLogin', {
+            oauthToken: oauthToken,
+            oauthVerifier: oauthVerifier
+        })
+            .map(res => res.json())
+            .share();
+
+        twitterLogin.subscribe(user => {
+            this.loggedUser.next(user);
+        });
+
+        return twitterLogin;
+    }
+
+
     logout(): Observable<User> {
         let logout = this._http.get('/api/user/logout')
             .map(res => res.json())
@@ -68,5 +100,32 @@ export class LoginService extends JsonService {
     searchUser(filter: string): Observable <Object[]> {
         return this.postJson('/api/user/searchUser', {filter: filter})
             .map(res => res.json());
+    }
+
+    redirectToFbLogin() {
+        this.getLoginToken('facebook').subscribe(authInfos => {
+            let state = 'facebook:' + authInfos.loginToken;
+            window.location.href = 'https://www.facebook.com/dialog/oauth?client_id=' + authInfos.appKey
+                + '&state=' + state
+                + '&response_type=code'
+                + '&redirect_uri=' + window.location.origin + '/logged';
+        });
+    }
+
+    redirectToGoogleLogin() {
+        this.getLoginToken('google').subscribe(authInfos => {
+            let state = 'google:' + authInfos.loginToken;
+            window.location.href = 'https://accounts.google.com/o/oauth2/auth?client_id=' + authInfos.appKey
+                + '&state=' + state
+                + '&scope=profile'
+                + '&response_type=code'
+                + '&redirect_uri=' + window.location.origin + '/logged';
+        });
+    }
+
+    redirectToTwitterLogin() {
+        this.getLoginToken('twitter').subscribe(authInfos => {
+            window.location.href = 'https://api.twitter.com/oauth/authenticate?oauth_token=' + authInfos.loginToken;
+        });
     }
 }

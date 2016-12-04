@@ -44,6 +44,39 @@ export class LoggedComponent implements OnInit, OnDestroy {
                         console.log('Missing error', params);
                     }
                 }
+                else if (app === 'google') {
+                    if (params.hasOwnProperty('code')) {
+                        this._loginService.doGoogleLogin(
+                            params['code']
+                            , token
+                            , window.location.origin + window.location.pathname).subscribe(
+                            () => {
+                                this._router.navigateByUrl('/character/list');
+                            }
+                        );
+                    }
+                    else if (params.hasOwnProperty('error')) {
+                        this._notification.error('Authentification', 'Erreur: ' + params['error_reason']);
+                    }
+                    else {
+                        console.log('Missing error', params);
+                    }
+                }
+                else if (app === 'twitter') {
+                    if (params.hasOwnProperty('oauth_token') && params.hasOwnProperty('oauth_verifier')) {
+                        this._loginService.doTwitterLogin(params['oauth_token'], params['oauth_verifier']).subscribe(
+                            () => {
+                                this._router.navigateByUrl('/character/list');
+                            }
+                        );
+                    }
+                    else if (params.hasOwnProperty('error')) {
+                        this._notification.error('Authentification', 'Erreur: ' + params['error_reason']);
+                    }
+                    else {
+                        console.log('Missing error', params);
+                    }
+                }
                 else {
                     this._notification.error('Error', 'Invalid app', params);
                 }

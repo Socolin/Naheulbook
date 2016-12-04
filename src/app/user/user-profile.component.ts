@@ -27,6 +27,18 @@ export class UserProfileComponent implements OnInit {
         );
     }
 
+    linkTo(method: string) {
+        if (method === 'facebook') {
+            this.loginService.redirectToFbLogin();
+        }
+        else if (method === 'google') {
+            this.loginService.redirectToGoogleLogin();
+        }
+        else if (method === 'twitter') {
+            this.loginService.redirectToTwitterLogin();
+        }
+    }
+
     ngOnInit() {
         this.loginService.loggedUser.subscribe(user => {
             this.profile = user;

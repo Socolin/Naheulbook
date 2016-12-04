@@ -10,21 +10,12 @@ import {User} from './user.model';
     templateUrl: 'login.component.html',
 })
 export class LoginComponent implements OnInit {
-    private user: User;
+    public user: User;
+    public selectingLoginMethod: boolean;
 
     constructor(private _loginService: LoginService
         , private _router: Router
         , private _notification: NotificationsService) {
-    }
-
-    redirectToFbLogin() {
-        this._loginService.getLoginToken('facebook').subscribe(authInfos => {
-            let state = 'facebook:' + authInfos.loginToken;
-            window.location.href = 'https://www.facebook.com/dialog/oauth?client_id=' + authInfos.appKey
-                + '&state=' + state
-                + '&response_type=code'
-                + '&redirect_uri=' + window.location.origin + '/logged';
-        });
     }
 
     viewProfile() {
@@ -32,8 +23,24 @@ export class LoginComponent implements OnInit {
         return false;
     }
 
-    login() {
-        this.redirectToFbLogin();
+    login(method: string) {
+        if (method === 'facebook') {
+            this._loginService.redirectToFbLogin();
+        }
+        else if (method === 'google') {
+            this._loginService.redirectToGoogleLogin();
+        }
+        else if (method === 'twitter') {
+            this._loginService.redirectToTwitterLogin();
+        }
+    }
+
+    closeSelector() {
+        this.selectingLoginMethod = false;
+    }
+
+    selectLoginMethod() {
+        this.selectingLoginMethod = true;
     }
 
     logout() {

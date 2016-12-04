@@ -344,7 +344,6 @@ export class FighterPanelComponent implements OnInit {
     }
 
 
-
     ngOnChanges() {
         this.updateOrder();
     }
