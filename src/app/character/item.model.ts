@@ -14,7 +14,7 @@ export class ItemData {
     readCount: number;
     notIdentified: boolean;
     lifetimeType: string;
-    lifetime: string|number;
+    lifetime: number|string;
 }
 
 export class ItemModifier {

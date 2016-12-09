@@ -90,7 +90,7 @@ export class InventoryPanelComponent implements OnInit {
             }
         }
 
-        this._characterWebsocketService.notifyChange("Ajout de l'objet: " + item.data.name);
+        this._characterWebsocketService.notifyChange("Ajout de l\'objet: " + item.data.name);
         this.character.items.push(item);
         this.character.update();
     }
@@ -108,7 +108,7 @@ export class InventoryPanelComponent implements OnInit {
                     item => {
                         this.onAddItem(item);
                         this.selectedItem = item;
-                        this.itemFilterName = "";
+                        this.itemFilterName = '';
                         this.selectedAddItem = null;
                         this.itemAddCustomName = null;
                         this.itemAddCustomDescription = null;
@@ -215,7 +215,7 @@ export class InventoryPanelComponent implements OnInit {
             if (it.id === item.id) {
                 this.character.items.splice(i, 1);
                 this.character.update();
-                this._characterWebsocketService.notifyChange("Suppression de l'objet: " + item.data.name);
+                this._characterWebsocketService.notifyChange('Suppression de l\'objet: ' + item.data.name);
                 break;
             }
         }
@@ -227,7 +227,7 @@ export class InventoryPanelComponent implements OnInit {
             if (it.id === item.id) {
                 it.data.charge = item.data.charge;
                 this.character.update();
-                this._characterWebsocketService.notifyChange("Utilisation d'une charge de l'objet: " + item.data.name);
+                this._characterWebsocketService.notifyChange('Utilisation d\'une charge de l\'objet: ' + item.data.name);
                 break;
             }
         }
@@ -251,13 +251,13 @@ export class InventoryPanelComponent implements OnInit {
                 it.data.name = item.data.name;
                 it.data.notIdentified = item.data.notIdentified;
                 this.character.update();
-                this._characterWebsocketService.notifyChange("Identification de l'objet: " + item.data.name);
+                this._characterWebsocketService.notifyChange('Identification de l\'objet: ' + item.data.name);
                 break;
             }
         }
     }
 
-    onUpdateItemName(item: PartialItem) {
+    onUpdateItem(item: PartialItem) {
         for (let i = 0; i < this.character.items.length; i++) {
             let it = this.character.items[i];
             if (it.id === item.id) {
@@ -284,7 +284,7 @@ export class InventoryPanelComponent implements OnInit {
             let it = this.character.items[i];
             if (it.id === item.id) {
                 if (it.data.quantity !== item.data.quantity) {
-                    this._characterWebsocketService.notifyChange("Modification de la quantité de l'objet: "
+                    this._characterWebsocketService.notifyChange('Modification de la quantité de l\'objet: '
                         + item.data.name + ': ' + item.data.quantity + ' ->' + it.data.quantity);
                     it.data.quantity = item.data.quantity;
                     this.character.update();
@@ -301,7 +301,7 @@ export class InventoryPanelComponent implements OnInit {
         this._characterWebsocketService.registerPacket('identifyItem').subscribe(this.onIdentifyItem.bind(this));
         this._characterWebsocketService.registerPacket('useCharge').subscribe(this.onUseItemCharge.bind(this));
         this._characterWebsocketService.registerPacket('changeContainer').subscribe(this.onChangeContainer.bind(this));
-        this._characterWebsocketService.registerPacket('updateItemName').subscribe(this.onUpdateItemName.bind(this));
+        this._characterWebsocketService.registerPacket('updateItem').subscribe(this.onUpdateItem.bind(this));
         this._characterWebsocketService.registerPacket('changeQuantity').subscribe(this.onUpdateQuantity.bind(this));
         this._characterWebsocketService.registerPacket('updateItemModifiers').subscribe(this.onUpdateModifiers.bind(this));
 
@@ -377,7 +377,7 @@ export class InventoryPanelComponent implements OnInit {
                 description: eventData.description
             };
             this._itemService.updateItem(item.id, data).subscribe(
-                this.onUpdateItemName.bind(this)
+                this.onUpdateItem.bind(this)
             );
         });
 
@@ -394,7 +394,7 @@ export class InventoryPanelComponent implements OnInit {
             let item = event.item;
             item.data.icon = eventData.icon;
             this._itemService.updateItem(item.id, item.data).subscribe(
-                this.onUpdateItemName.bind(this)
+                this.onUpdateItem.bind(this)
             );
         });
 
@@ -402,6 +402,13 @@ export class InventoryPanelComponent implements OnInit {
             let item = event.item;
             this._itemService.updateItemModifiers(item.id, item.modifiers).subscribe(
                 this.onUpdateModifiers.bind(this)
+            );
+        });
+
+        this._itemActionService.registerAction('update_data').subscribe((event: {item: Item, data: any}) => {
+            let item = event.item;
+            this._itemService.updateItem(item.id, item.data).subscribe(
+                this.onUpdateItem.bind(this)
             );
         });
     }

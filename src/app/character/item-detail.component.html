@@ -200,6 +200,12 @@
     </div>
 </div>
 
+<div *ngIf="item.data.lifetimeType === 'time'">
+    <span class="glyphicon glyphicon-time"></span>Temps de conservation:
+    <span *ngIf="item.data.lifetime > 0">{{item.data.lifetime | nhbkDuration}}</span>
+    <span *ngIf="item.data.lifetime === 0" class="text-danger">expiré</span>
+</div>
+
 <template [ngIf]="!readonly">
 
 <span *ngIf="item.template.slots?.length > 0">
@@ -247,6 +253,50 @@
         Annuler
     </button>
 </div>
+
+<button *ngIf="!updatingLifetime" class="btn btn-primary"
+        (click)="startUpdateLifetime()">Temps de conservation</button>
+<div *ngIf="updatingLifetime"  style="margin-top: 5px; margin-bottom: 5px; padding-bottom:5px; border-top: 1px solid gray; border-bottom: 1px solid gray">
+    <h3>Temps de conservation</h3>
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" (click)="setLifetimeType('time')"
+                [class.active]="item.data.lifetimeType == 'time'">Temps
+        </button>
+        <button type="button" class="btn btn-primary" (click)="setLifetimeType('custom')"
+                [class.active]="item.data.lifetimeType == 'custom'">Autre
+        </button>
+        <button type="button" class="btn btn-primary" (click)="setLifetimeType(null)"
+                [class.active]="!item.data.lifetimeType">
+            Retirer
+        </button>
+    </div>
+    <div *ngIf="item.data.lifetimeType == 'custom'">
+        <div class="input-group">
+            <span class="input-group-addon">Durée</span>
+            <input class="form-control" type="text" [(ngModel)]="item.data.lifetime"/>
+        </div>
+    </div>
+    <div *ngIf="item.data.lifetimeType == 'time'">
+        <div class="input-group">
+            <span class="input-group-addon">Temps</span>
+            <span class="input-group-addon">{{item.data.lifetime | nhbkDuration}}</span>
+            <span class="input-group-addon">
+                        <date-modifier [resetOnChange]=false [dateOffset]="lifetimeDateOffset"
+                                       (onChange)="setItemLifetimeDateOffset($event)">
+                        </date-modifier>
+                    </span>
+        </div>
+    </div>
+    <div>
+        <button class="btn btn-success" (click)="updateLifetime()">
+            Valider
+        </button>
+        <button class="btn btn-danger" (click)="stopUpdateLifetime()">
+            Annuler
+        </button>
+    </div>
+</div>
+
 <button *ngIf="gmView && item.data.notIdentified" class="btn btn-warning"
         (click)="_itemActionService.onAction('identify', item)">Identifier</button>
 

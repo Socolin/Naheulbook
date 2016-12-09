@@ -4,6 +4,8 @@ import {Character, CharacterGiveDestination} from './character.model';
 import {ItemService, ItemCategory} from '../item';
 import {ItemActionService} from './item-action.service';
 import {GroupService} from '../group/group.service';
+import {NhbkDateOffset} from '../date/date.model';
+import {dateOffset2TimeDuration, timeDuration2DateOffset2} from '../date/util';
 
 @Component({
     selector: 'item-detail',
@@ -28,8 +30,13 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public addingModifier: boolean = false;
     public newModifier: ItemModifier;
 
+    public updatingLifetime: boolean;
+    private previousLifetime: any;
+    public lifetimeDateOffset: NhbkDateOffset = new NhbkDateOffset();
+
+
     constructor(@Inject(forwardRef(() => ItemService)) private _itemService: ItemService
-        , private _itemActionService: ItemActionService
+        , public _itemActionService: ItemActionService
         , private _groupService: GroupService) {
     }
 
@@ -132,6 +139,53 @@ export class ItemDetailComponent implements OnChanges, OnInit {
                 this.item.modifiers[index].currentDuration = this.item.modifiers[index].duration;
             }
             this._itemActionService.onAction('update_modifiers', this.item);
+        }
+    }
+    ;
+
+    startUpdateLifetime(): void {
+        this.updatingLifetime = true;
+        this.previousLifetime = {type: this.item.data.lifetimeType, value: this.item.data.lifetime};
+        if (this.item.data.lifetimeType === 'time') {
+            this.lifetimeDateOffset = timeDuration2DateOffset2(+this.item.data.lifetime);
+        }
+    }
+
+    stopUpdateLifetime(): void {
+        this.updatingLifetime = false;
+        this.item.data.lifetime = this.previousLifetime.type;
+        this.item.data.lifetime = this.previousLifetime.value;
+    }
+
+    updateLifetime() {
+        this._itemActionService.onAction('update_data', this.item);
+        this.updatingLifetime = false;
+    }
+
+    setItemLifetimeDateOffset(dateOffset: NhbkDateOffset) {
+        this.item.data.lifetime = dateOffset2TimeDuration(dateOffset);
+    }
+
+    setLifetimeType(type: string) {
+        if (type === null) {
+            this.item.data.lifetime = null;
+            this.item.data.lifetimeType = null;
+        } else {
+            this.item.data.lifetimeType = type;
+            if (type === 'combat' || type === 'lap') {
+                this.item.data.lifetime = 1;
+            }
+            else if (type === 'time') {
+                if (this.lifetimeDateOffset) {
+                    this.setItemLifetimeDateOffset(this.lifetimeDateOffset);
+                }
+                else {
+                    this.item.data.lifetime = 0;
+                }
+            }
+            else if (type === 'custom') {
+                this.item.data.lifetime = '';
+            }
         }
     }
 
