@@ -71,6 +71,11 @@
         <div *ngIf="selectedInventoryTab=='add'" class="row">
             <div class="list-group" *ngIf="!selectedAddItem">
                 <a href="#" *ngFor="let item of filteredItems" (click)="selectAddItem(item)" [class.active]="isAddItemSelected(item)" class="list-group-item">
+                    <span style="position: relative;padding-right: 25px">
+                        <span style="position: absolute; top: -15px; left: -10px">
+                            <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                        </span>
+                    </span>
                     {{item.name}}
                 </a>
             </div>
