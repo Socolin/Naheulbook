@@ -13,7 +13,7 @@ export class ModifierEditorComponent implements OnInit {
     private durationDateOffset: NhbkDateOffset = new NhbkDateOffset();
 
     setTimeDuration(dateOffset: NhbkDateOffset) {
-        if (this.modifier.durationType != 'time') {
+        if (this.modifier.durationType !== 'time') {
             throw new Error('Try to set time duration while durationType is not `time` but is `' + this.modifier.durationType + '`');
         }
         this.modifier.duration = dateOffset2TimeDuration(dateOffset);

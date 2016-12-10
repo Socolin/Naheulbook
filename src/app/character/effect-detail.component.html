@@ -5,8 +5,10 @@
     </h4>
     <p>{{characterEffect.effect.description}}</p>
     <p *ngIf="characterEffect.effect.duration">Durée: {{characterEffect.effect.duration}}</p>
-    <p *ngIf="characterEffect.effect.combatCount">Durée: {{characterEffect.effect.combatCount}} combat</p>
-    <p *ngIf="characterEffect.currentCombatCount">Actif encore {{characterEffect.currentCombatCount}} combat</p>
+    <p *ngIf="characterEffect.effect.combatCount">Durée: {{characterEffect.effect.combatCount}} combat(s)</p>
+    <p *ngIf="characterEffect.currentCombatCount">Actif encore {{characterEffect.currentCombatCount}} combat(s)</p>
+    <p *ngIf="characterEffect.effect.lapCount">Durée: {{characterEffect.effect.lapCount}} tour(s)</p>
+    <p *ngIf="characterEffect.currentLapCount">Actif encore {{characterEffect.currentLapCount}} tour(s)</p>
     <p *ngIf="characterEffect.effect.timeDuration">Durée: {{characterEffect.effect.timeDuration | nhbkDuration}}</p>
     <p *ngIf="characterEffect.currentTimeDuration">Actif encore {{characterEffect.currentTimeDuration | nhbkDuration}}</p>
 

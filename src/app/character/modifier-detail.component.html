@@ -7,7 +7,10 @@
     <p *ngIf="characterModifier.combatCount">Durée: {{characterModifier.combatCount}} combat</p>
     <p *ngIf="characterModifier.timeDuration">Durée: {{characterModifier.timeDuration | nhbkDuration}}</p>
     <p *ngIf="characterModifier.currentCombatCount">Actif encore {{characterModifier.currentCombatCount}} combat</p>
+    <p *ngIf="characterModifier.lapCount">Durée: {{characterModifier.lapCount}} tour(s)</p>
+    <p *ngIf="characterModifier.currentLapCount">Actif encore {{characterModifier.currentLapCount}} tour(s)</p>
     <p *ngIf="characterModifier.currentTimeDuration">Actif encore {{characterModifier.currentTimeDuration | nhbkDuration}}</p>
+
     <div *ngFor="let modifier of characterModifier.values">
         {{modifier | modifier}}
     </div>

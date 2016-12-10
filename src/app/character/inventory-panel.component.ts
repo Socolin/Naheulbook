@@ -34,6 +34,7 @@ export class InventoryPanelComponent implements OnInit {
     public itemAddQuantity: number;
 
     public iconMode: boolean = false;
+    public itemFilterName: string;
 
     constructor(
         @Inject(forwardRef(()  => ItemService)) private _itemService: ItemService
@@ -123,7 +124,6 @@ export class InventoryPanelComponent implements OnInit {
         return false;
     }
 
-    private itemFilterName: string;
     isItemFilteredByName(item: Item): boolean {
         if (!this.itemFilterName) {
             return true;

@@ -216,7 +216,8 @@ export class EffectPanelComponent implements OnInit {
             if (this.character.effects[i].id === charEffect.id) {
                 if (this.character.effects[i].active === charEffect.active
                     && this.character.effects[i].currentTimeDuration === charEffect.currentTimeDuration
-                    && this.character.effects[i].currentCombatCount === charEffect.currentCombatCount) {
+                    && this.character.effects[i].currentCombatCount === charEffect.currentCombatCount
+                    && this.character.effects[i].currentLapCount === charEffect.currentLapCount) {
                     return;
                 }
                 if (!this.character.effects[i].active && charEffect.active) {
@@ -230,6 +231,7 @@ export class EffectPanelComponent implements OnInit {
                 this.character.effects[i].active = charEffect.active;
                 this.character.effects[i].currentCombatCount = charEffect.currentCombatCount;
                 this.character.effects[i].currentTimeDuration = charEffect.currentTimeDuration;
+                this.character.effects[i].currentLapCount = charEffect.currentLapCount;
                 break;
             }
         }
@@ -246,12 +248,24 @@ export class EffectPanelComponent implements OnInit {
     addCustomModifier() {
         if (this.customAddModifier.name) {
             if (this.newModifierDurationType === 'custom') {
+                this.customAddModifier.lapCount = null;
                 this.customAddModifier.timeDuration = null;
                 this.customAddModifier.combatCount = null;
             } else if (this.newModifierDurationType === 'combat') {
+                this.customAddModifier.lapCount = null;
                 this.customAddModifier.timeDuration = null;
                 this.customAddModifier.duration = null;
             } else if (this.newModifierDurationType === 'time') {
+                this.customAddModifier.lapCount = null;
+                this.customAddModifier.combatCount = null;
+                this.customAddModifier.duration = null;
+            } else if (this.newModifierDurationType === 'forever') {
+                this.customAddModifier.lapCount = null;
+                this.customAddModifier.timeDuration = null;
+                this.customAddModifier.combatCount = null;
+                this.customAddModifier.duration = null;
+            } else if (this.newModifierDurationType === 'lap') {
+                this.customAddModifier.timeDuration = null;
                 this.customAddModifier.combatCount = null;
                 this.customAddModifier.duration = null;
             } else {
@@ -318,6 +332,7 @@ export class EffectPanelComponent implements OnInit {
             if (this.character.modifiers[i].id === modifier.id) {
                 if (this.character.modifiers[i].active === modifier.active
                     && this.character.modifiers[i].currentTimeDuration === modifier.currentTimeDuration
+                    && this.character.modifiers[i].currentLapCount === modifier.currentLapCount
                     && this.character.modifiers[i].currentCombatCount === modifier.currentCombatCount) {
                     return;
                 }
@@ -331,6 +346,7 @@ export class EffectPanelComponent implements OnInit {
                 this.character.modifiers[i].active = modifier.active;
                 this.character.modifiers[i].currentCombatCount = modifier.currentCombatCount;
                 this.character.modifiers[i].currentTimeDuration = modifier.currentTimeDuration;
+                this.character.modifiers[i].currentLapCount = modifier.currentLapCount;
                 break;
             }
         }

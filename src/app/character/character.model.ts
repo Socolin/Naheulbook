@@ -34,6 +34,7 @@ export class CharacterEffect {
     active: boolean;
     reusable: boolean;
     currentCombatCount: number;
+    currentLapCount: number;
     currentTimeDuration: number;
 }
 
@@ -46,6 +47,8 @@ export class CharacterModifier {
     active: boolean;
     combatCount: number;
     currentCombatCount: number;
+    lapCount: number;
+    currentLapCount: number;
     reusable: boolean;
     timeDuration: number;
     currentTimeDuration: number;

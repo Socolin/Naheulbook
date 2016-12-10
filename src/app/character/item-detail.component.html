@@ -197,6 +197,8 @@
     <div *ngFor="let requirement of item.template.requirements">
         <span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
         <span *ngIf="requirement.max">Max {{requirement.stat}}: {{requirement.max}}</span>
+        <span *ngIf="requirement.min && character.computedData.stats[requirement.stat] < requirement.min" class="text-danger">Non utilisable</span>
+        <span *ngIf="requirement.max && character.computedData.stats[requirement.stat] > requirement.max" class="text-danger">Non utilisable</span>
     </div>
 </div>
 
