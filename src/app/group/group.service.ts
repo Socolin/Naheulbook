@@ -124,6 +124,12 @@ export class GroupService extends JsonService {
         }).map(res => res.json());
     }
 
+    nextLap(groupId: number): Observable<GroupData> {
+        return this.postJson('/api/group/nextLap', {
+            groupId: groupId
+        }).map(res => res.json());
+    }
+
     listActiveCharactersInGroup(characterId: number): Observable<CharacterGiveDestination[]> {
         return this.postJson('/api/group/listActiveCharacters', {
             characterId: characterId

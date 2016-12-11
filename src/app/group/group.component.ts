@@ -214,6 +214,12 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                     this._notification.info('Mankdebol', this.group.data[key] + ' -> ' + value);
                 } else if (key === 'inCombat') {
                     this._notification.info('Mode combat: ', this.group.data[key] + ' -> ' + value);
+                    if (value) {
+                        this._actionService.emitAction('onStartCombat', this.group);
+                    }
+                    else {
+                        this._actionService.emitAction('onStopCombat', this.group);
+                    }
                 } else if (key === 'date') {
                     this._notification.info('Date', 'Date changé');
                 }

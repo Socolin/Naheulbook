@@ -1,0 +1,58 @@
+.fighter-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    border-bottom: 1px solid #e2dede;
+}
+.fighter-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+}
+.field-icon {
+    flex: 0 45px;
+}
+.field-button {
+    flex: 0 36px;
+}
+.field-values {
+    flex: 1 auto;
+}
+.field {
+    text-align: center;
+    flex: 1 auto;
+    width: 20px;
+}
+.field-medium {
+    text-align: center;
+    flex: 1 auto;
+    width: 30px;
+}
+.field-large {
+    text-align: center;
+    flex: 1 auto;
+    width: 40px;
+}
+.field-name {
+    flex: 2 auto;
+    width: 80px;
+}
+.even_row {
+    background-color: #f4f4f4;
+}
+.combat_row_selected {
+    background-color: #e3e3e3!important;
+}
+.text-attack {
+    color: #c72b2b;
+    font-weight: bold;
+    letter-spacing: .08em;
+}
+.text-prd {
+    color: #633110;
+    font-weight: bold;
+    letter-spacing: .08em;
+}
+.fighter-header {
+    font-weight: bold;
+}

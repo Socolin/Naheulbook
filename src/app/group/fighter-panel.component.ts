@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import {Group, Fighter} from './group.model';
 import {Monster, MonsterTemplate} from '../monster/monster.model';
 import {GroupService} from './group.service';
@@ -9,28 +9,21 @@ import {AutocompleteValue} from '../shared/autocomplete-input.component';
 import {MonsterService} from '../monster/monster.service';
 import {Character} from '../character/character.model';
 import {getRandomInt} from '../shared/random';
-import {NotificationsService} from '../notifications/notifications.service';
 import {GroupActionService} from './group-action.service';
-import {CharacterService} from '../character/character.service';
 import {ItemService} from '../item/item.service';
 
 @Component({
     selector: 'fighter-panel',
     templateUrl: 'fighter-panel.component.html',
-    styles: [`
-        .even_row {
-            background-color: #f9f9f9;
-        }
-        .combat_row_selected {
-            background-color: #e3e3e3!important;
-        }
-    `],
+    styleUrls: ['fighter.component.css', 'fighter-panel.component.css']
 })
-export class FighterPanelComponent implements OnInit {
+export class FighterPanelComponent implements OnInit, OnChanges {
     @Input() group: Group;
     @Input() characters: Character[];
     public monsters: Monster[] = [];
-    public charAndMonsters: Fighter[] = [];
+    public fighters: Fighter[] = [];
+    public currentFighterIndex: number;
+    public loadingNextLap: boolean = false;
 
     public deadMonsters: Monster[] = [];
     public allDeadMonstersLoaded: boolean = false;
@@ -45,14 +38,8 @@ export class FighterPanelComponent implements OnInit {
 
     constructor(private _groupService: GroupService
         , private _actionService: GroupActionService
-        , private _characterService: CharacterService
-        , private _notification: NotificationsService
         , private _itemService: ItemService
         , private _monsterService: MonsterService) {
-    }
-
-    addItemTo(character: Character) {
-        this.addItemTarget = character;
     }
 
     onItemAdded(data: {keepOpen: boolean, item: Item}) {
@@ -195,97 +182,43 @@ export class FighterPanelComponent implements OnInit {
         }
     }
 
-
-    changeTarget(element, target) {
-        if (element.isMonster) {
-            this._groupService.updateMonster(element.id, 'target', {id: target.id, isMonster: target.isMonster})
-                .subscribe(
-                    () => {
-                        element.changeTarget(target);
-                        element.updateTarget(this.charAndMonsters);
-                        this._notification.info('Monstre', 'Cible changée');
-                    }
-                );
+    selectNextFighter() {
+        if (this.currentFighterIndex == null) {
+            return;
+        }
+        if (this.currentFighterIndex < this.fighters.length - 1) {
+            this.currentFighterIndex++;
         } else {
-            this._characterService.changeGmData(element.id, 'target', {
-                id: target.id,
-                isMonster: target.isMonster
-            }).subscribe(
-                change => {
-                    element.changeTarget(change.value);
-                    element.updateTarget(this.charAndMonsters);
-                    this._notification.info('Joueur', 'Cible changée');
+            this.loadingNextLap = true;
+            this._groupService.nextLap(this.group.id).subscribe(
+                () => {
+                    this.loadingNextLap = false;
+                    this.currentFighterIndex = 0;
+                },
+                () => {
+                    this.loadingNextLap = false;
                 }
             );
         }
     }
-
-    changeColor(element: Fighter, color: string) {
-        if (color.indexOf('#') === 0) {
-            color = color.substring(1);
-        }
-        if (element.isMonster) {
-            this._groupService.updateMonster(element.id, 'color', color)
-                .subscribe(
-                    res => {
-                        element.changeColor(res.value);
-                        this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
-                        this._notification.info('Monstre', 'Couleur changé');
-                    }
-                );
-        } else {
-            this._characterService.changeGmData(element.id, 'color', color).subscribe(
-                change => {
-                    element.changeColor(change.value);
-                    this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
-                    this._notification.info('Joueur', 'Couleur changée');
-                }
-            );
-        }
-    }
-
-    updateMonsterField(monster: Monster, fieldName: string, newValue: any) {
-        this._groupService.updateMonster(monster.id, fieldName, newValue)
-            .subscribe(
-                res => {
-                    this._notification.info('Monstre: ' + monster.name
-                        , 'Modification: ' + fieldName.toUpperCase() + ': '
-                        + monster.data[fieldName] + ' -> ' + res.value);
-                    monster.data[fieldName] = res.value;
-                }
-            );
-    }
-
-    changeNumber(element: Fighter, number: number) {
-        if (element.isMonster) {
-            this._groupService.updateMonster(element.id, 'number', number)
-                .subscribe(
-                    res => {
-                        element.changeNumber(res.value);
-                        this.charAndMonsters.forEach(f => f.updateTarget(this.charAndMonsters));
-                        this._notification.info('Monstre', 'Couleur changé');
-                    }
-                );
-        }
-    }
-
 
     updateOrder() {
-        let charAndMonsters: Fighter[] = [];
+        let fighters: Fighter[] = [];
+
         for (let i = 0; i < this.characters.length; i++) {
             let character = this.characters[i];
             if (character.active) {
                 let fighter = Fighter.createFromCharacter(character);
                 fighter.chercheNoise = Character.hasChercherDesNoises(character);
-                charAndMonsters.push(fighter);
+                fighters.push(fighter);
             }
         }
         for (let i = 0; i < this.monsters.length; i++) {
             let monster = this.monsters[i];
-            charAndMonsters.push(Fighter.createFromMonster(monster));
+            fighters.push(Fighter.createFromMonster(monster));
         }
 
-        charAndMonsters.sort(function (first, second) {
+        fighters.sort(function (first, second) {
             if (first.chercheNoise && !second.chercheNoise) {
                 return -1;
             }
@@ -314,8 +247,18 @@ export class FighterPanelComponent implements OnInit {
                 }
             }
         });
-        charAndMonsters.forEach(f => f.updateTarget(charAndMonsters));
-        this.charAndMonsters = charAndMonsters;
+        fighters.forEach(f => f.updateTarget(fighters));
+
+        if (this.currentFighterIndex != null && this.fighters) {
+            let index = fighters.findIndex(f => f === this.fighters[this.currentFighterIndex]);
+            if (index !== -1 && index !== this.currentFighterIndex) {
+                this.currentFighterIndex = index;
+            }
+            if (index === -1) {
+                this.currentFighterIndex = Math.min(this.currentFighterIndex, fighters.length - 1);
+            }
+        }
+        this.fighters = fighters;
     }
 
     selectMonsterInAutocompleteList(monster: MonsterTemplate) {
@@ -343,17 +286,51 @@ export class FighterPanelComponent implements OnInit {
         return false;
     }
 
-
-    ngOnChanges() {
-        this.updateOrder();
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('characters' in changes) {
+            this.updateOrder();
+        }
     }
 
     ngOnInit(): void {
+        this.updateOrder();
         this._actionService.registerAction('reorderFighters').subscribe(
             () => {
                 this.updateOrder();
             }
         );
+        this._actionService.registerAction('killMonster').subscribe(
+            data => {
+                this.killMonster(data.data);
+            }
+        );
+        this._actionService.registerAction('deleteMonster').subscribe(
+            data => {
+                this.deleteMonster(data.data);
+            }
+        );
+
+        this._actionService.registerAction('openAddItemForm').subscribe(
+            data => {
+                this.addItemTarget = data.data;
+            }
+        );
+
+        this._actionService.registerAction('onStartCombat').subscribe(
+            () => {
+                this.currentFighterIndex = 0;
+            }
+        );
+
+        this._actionService.registerAction('onStopCombat').subscribe(
+            () => {
+                this.currentFighterIndex = null;
+            }
+        );
+
+        if (this.group.data.inCombat) {
+            this.currentFighterIndex = 0;
+        }
 
         this._groupService.loadDeadMonsters(this.group.id, 0, 10).subscribe(
             monsters => {

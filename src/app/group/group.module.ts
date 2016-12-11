@@ -19,6 +19,7 @@ import {ItemModule} from '../item/item.module';
 import {JobModule} from '../job/job.module';
 import {OriginModule} from '../origin/origin.module';
 import {GroupHistoryComponent} from './group-history.component';
+import {FighterComponent} from './fighter.component';
 
 @NgModule({
     imports: [
@@ -44,6 +45,7 @@ import {GroupHistoryComponent} from './group-history.component';
         UsefullDataComponent,
         GroupLootPanelComponent,
         GroupHistoryComponent,
+        FighterComponent,
     ],
     providers: [GroupService]
 })

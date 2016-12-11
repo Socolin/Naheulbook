@@ -1,177 +1,47 @@
-<table class="table table-condensed text-center">
-    <thead>
-    <tr>
-        <th></th>
-        <th class="text-center">Nom</th>
-        <th class="text-center">AT</th>
-        <th class="text-center">PRD/ESQ</th>
-        <th class="text-center">EV</th>
-        <th class="text-center">EA</th>
-        <th class="text-center">PR</th>
-        <th class="text-center">RESM</th>
-        <th class="text-center">PI</th>
-        <th class="text-center">COU</th>
-        <th class="text-center">Classe-XP</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <template ngFor let-fighter [ngForOf]="charAndMonsters" let-i=index>
-        <template [ngIf]="fighter.isMonster">
-            <tr style="border-bottom-width:0" [class.even_row]="i % 2 == 0"
-                (click)="selectCombatRow(i)" [class.combat_row_selected]="selectedCombatRow == i">
-                <td rowspan=2>
-                    <monster-color-selector [monster]="fighter.monster"
-                                            (onNumberChange)='changeNumber(fighter, $event)'
-                                            (onColorChange)='changeColor(fighter, $event)'></monster-color-selector>
-                </td>
-                <td>
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=false
-                        [fieldName]="'name'">
-                    </monster-editable-field>
-                </td>
-                <td>
-                    <value-editor [value]="fighter.monster.data.at"
-                                  [title]="'AT'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'at', $event)">
-                    </value-editor>
-                </td>
-                <td>
-                    <span *ngIf="fighter.monster.data.prd">
-                        Prd: <value-editor [value]="fighter.monster.data.prd"
-                                      [title]="'PRD'"
-                                      (onChange)="updateMonsterField(fighter.monster, 'prd', $event)">
-                        </value-editor>
-                    </span>
-                    <span *ngIf="fighter.monster.data.esq">
-                        Esq: <value-editor [value]="fighter.monster.data.esq"
-                                      [title]="'ESQ'"
-                                      (onChange)="updateMonsterField(fighter.monster, 'esq', $event)">
-                        </value-editor>
-                    </span>
-                </td>
-                <td>
-                    <value-editor [value]="fighter.monster.data.ev"
-                                  [maxValue]="fighter.monster.data.maxEv"
-                                  [title]="'EV Monstre'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'ev', $event)">
-                    </value-editor>
-                </td>
-                <td>
-                    <value-editor [value]="fighter.monster.data.ea"
-                                  [maxValue]="fighter.monster.data.maxEa"
-                                  [title]="'EA Monstre'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'ea', $event)">
-                    </value-editor>
-                </td>
-                <td>
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'pr'">
-                    </monster-editable-field>
-                </td>
-                <td>
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'resm'">
-                    </monster-editable-field>
-                </td>
-                <td>
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'dmg'">
-                    </monster-editable-field>
-                </td>
-                <td>
-                                    <span *ngIf="fighter.chercheNoise" style="position:relative"><span
-                                        style="left:10px; float:right; position:absolute;">*</span></span>
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'cou'">
-                    </monster-editable-field>
-                </td>
-                <td>
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'xp'">
-                    </monster-editable-field>
-                </td>
-                <td rowspan=3>
-                    <button class="btn btn-danger game-icon game-icon-skull-crossed-bones"
-                            (click)=killMonster(fighter.monster)></button>
-                    <button class="btn btn-danger glyphicon glyphicon-trash"
-                            (click)=deleteMonster(fighter.monster)></button>
-                </td>
-            </tr>
-            <tr [class.even_row]="i % 2 == 0" (click)="selectedCombatRow = i"
-                [class.combat_row_selected]="selectedCombatRow == i">
-                <td style="border:0;" colspan=3>
-                    <target-selector [element]=fighter.target [targets]=charAndMonsters
-                                     (onTargetChange)='changeTarget(fighter, $event)'></target-selector>
-                </td>
-                <td style="border:0;" colspan=1>Note</td>
-                <td style="border:0;" colspan=6>
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'note'">
-                    </monster-editable-field>
-                </td>
-            </tr>
-            <tr [class.combat_row_selected]="selectedCombatRow == i" class="text-left" (click)="selectedCombatRow = i">
-                <td style="border:0;">
-                    <button class="btn btn-primary glyphicon glyphicon-plus-sign" (click)="fighter.monster.viewInventory = !fighter.monster.viewInventory" *ngIf="fighter.monster.items?.length"></button>
-                </td>
-                <td style="border:0;" colspan="10">
-                    <div class="row">
-                        <div *ngFor="let item of fighter.monster.items">
-                            <div *ngIf="fighter.monster.viewInventory || itemHasSlot(item.template, 'WEAPON')">
-                                {{item.data.name}}
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </template>
-        <template [ngIf]="!fighter.isMonster">
-            <tr [class.even_row]="i % 2 == 0" (click)="selectedCombatRow = i"
-                [class.combat_row_selected]="selectedCombatRow == i">
-                <td rowspan=2>
-                    <character-color-selector [character]="fighter.character"
-                                              (onColorChange)='changeColor(fighter, $event)'>
-                    </character-color-selector>
-                </td>
-                <td>{{fighter.name}}</td>
-                <td>{{fighter.stats.at}}</td>
-                <td>{{fighter.stats.prd}}</td>
-                <td [class.text-danger]="fighter.stats.ev < 4">{{fighter.stats.ev}}/{{fighter.stats.maxEv}}</td>
-                <td>{{fighter.stats.ea}}/{{fighter.stats.maxEa}}</td>
-                <td>{{fighter.stats.pr}}</td>
-                <td>{{fighter.stats.resm}}</td>
-                <td></td>
-                <td>{{fighter.stats.cou}}<span *ngIf="fighter.chercheNoise">*</span></td>
-                <td></td>
-                <td><button class="btn btn-success glyphicon glyphicon-plus" (click)="addItemTo(fighter.character)"></button></td>
-            </tr>
-            <tr [class.even_row]="i % 2 == 0" (click)="selectedCombatRow = i"
-                [class.combat_row_selected]="selectedCombatRow == i">
-                <td style="border:0;" colspan=3>
-                    <target-selector [element]=fighter.target [targets]=charAndMonsters
-                                     (onTargetChange)='changeTarget(fighter, $event)'></target-selector>
-                </td>
-                <td style="border:0;" colspan=8></td>
-            </tr>
-        </template>
+<div>
+    <div class="fighter-container fighter-header">
+        <div class="field-icon"></div>
+        <div class="field-values">
+            <div class="fighter-row">
+                <div class="field-name">Nom</div>
+                <div class="field">AT</div>
+                <div class="field">PRD</div>
+                <div class="field-large">EV</div>
+                <div class="field-large">EA</div>
+                <div class="field-medium">PR</div>
+                <div class="field">RESM</div>
+                <div class="field-large">DMG</div>
+                <div class="field">COU</div>
+                <div class="field">XP</div>
+            </div>
+        </div>
+        <div class="field-button">
+            <div *ngIf="currentFighterIndex != null">
+                <button [disabled]="loadingNextLap" class="btn btn-primary glyphicon glyphicon-arrow-right" (click)="selectNextFighter()"></button>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="currentFighterIndex != null && fighters[currentFighterIndex]" class="current-fighter">
+        <fighter
+                 [selected]="false"
+                 [group]="group"
+                 [fighter]="fighters[currentFighterIndex]"
+                 [fighters]="fighters"
+                 [i]="i"
+                 (onSelect)="selectCombatRow($event)">
+        </fighter>
+    </div>
+    <hr *ngIf="currentFighterIndex != null">
+    <template ngFor let-fighter [ngForOf]="fighters" let-i=index>
+        <fighter [selected]="(currentFighterIndex === null && selectedCombatRow === i) || currentFighterIndex == i"
+                 [group]="group"
+                 [fighter]="fighter"
+                 [fighters]="fighters"
+                 [i]="i"
+                 (onSelect)="selectCombatRow($event)">
+        </fighter>
     </template>
-    </tbody>
-</table>
+</div>
 
 <div>
     <h3>Monstres morts</h3>

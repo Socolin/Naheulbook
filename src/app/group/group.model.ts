@@ -60,6 +60,22 @@ export class Fighter {
     monster: Monster;
     character: Character;
 
+    static createFromMonster(monster: Monster): Fighter {
+        let f = new Fighter();
+        f.isMonster = true;
+        Object.freeze(f.isMonster);
+        f.updateSource(monster);
+        return f;
+    }
+
+    static createFromCharacter(character: Character): Fighter {
+        let f = new Fighter();
+        f.isMonster = false;
+        Object.freeze(f.isMonster);
+        f.updateSource(character);
+        return f;
+    }
+
     changeTarget(target: {id: number, isMonster: boolean}) {
         if (this.isMonster) {
             this.monster.target = target;
@@ -160,45 +176,20 @@ export class Fighter {
             }
             targetInfo = this.character.target;
         }
-        for (let i = 0; i < fighters.length; i++) {
-            let fighter = fighters[i];
-            if (fighter.isMonster === targetInfo.isMonster && fighter.id === targetInfo.id) {
-                if (fighter.isMonster) {
-                    this.target = {
-                        id: fighter.id,
-                        isMonster: fighter.isMonster,
-                        name: fighter.name,
-                        color: fighter.color,
-                        number: fighter.number
-                    };
-                    return;
-                } else {
-                    this.target = {
-                        id: fighter.id,
-                        isMonster: fighter.isMonster,
-                        name: fighter.name,
-                        color: fighter.color,
-                    };
-                    return;
-                }
-            }
+
+        let fighterIndex = fighters.findIndex(f => f.id === targetInfo.id && f.isMonster === targetInfo.isMonster);
+        if (fighterIndex !== -1) {
+            let fighter = fighters[fighterIndex];
+            this.target = {
+                id: fighter.id,
+                isMonster: fighter.isMonster,
+                name: fighter.name,
+                color: fighter.color,
+                number: fighter.number
+            };
         }
-        this.target = null;
-    }
-
-    static createFromMonster(monster: Monster): Fighter {
-        let f = new Fighter();
-        f.isMonster = true;
-        Object.freeze(f.isMonster);
-        f.updateSource(monster);
-        return f;
-    }
-
-    static createFromCharacter(character: Character): Fighter {
-        let f = new Fighter();
-        f.isMonster = false;
-        Object.freeze(f.isMonster);
-        f.updateSource(character);
-        return f;
+        else {
+            this.target = null;
+        }
     }
 }
