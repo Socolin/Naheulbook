@@ -3,7 +3,7 @@ import {Character} from './character.model';
 
 @Component({
     selector: 'character-color-selector',
-    templateUrl: 'character-color-selector.component.html'
+    templateUrl: './character-color-selector.component.html'
 })
 export class CharacterColorSelectorComponent {
     @Input() character: Character;

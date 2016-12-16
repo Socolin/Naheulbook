@@ -7,7 +7,7 @@ import {removeDiacritics} from '../shared';
 
 @Component({
     selector: 'skill-list',
-    templateUrl: 'skill-list.component.html'
+    templateUrl: './skill-list.component.html'
 })
 export class SkillListComponent implements OnInit {
     public skills: Skill[];

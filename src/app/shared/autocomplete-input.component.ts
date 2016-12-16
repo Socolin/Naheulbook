@@ -12,7 +12,7 @@ export class AutocompleteValue {
 
 @Component({
     selector: 'autocomplete-input',
-    templateUrl: 'autocomplete-input.component.html'
+    templateUrl: './autocomplete-input.component.html'
 })
 export class AutocompleteInputComponent {
     @Input() callback: Function;

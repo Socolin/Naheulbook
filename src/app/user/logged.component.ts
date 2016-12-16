@@ -6,7 +6,7 @@ import {NotificationsService} from '../notifications';
 import {LoginService} from './login.service';
 
 @Component({
-    templateUrl: 'logged.component.html',
+    templateUrl: './logged.component.html',
 })
 export class LoggedComponent implements OnInit, OnDestroy {
     private subscribtion: Subscription;

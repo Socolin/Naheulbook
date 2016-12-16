@@ -5,7 +5,7 @@ import {Item} from './item.model';
 
 @Component({
     selector: 'swipable-item-detail',
-    templateUrl: 'swipable-item-detail.component.html',
+    templateUrl: './swipable-item-detail.component.html',
     styles: [`
         .item-detail-swipe-container
         {

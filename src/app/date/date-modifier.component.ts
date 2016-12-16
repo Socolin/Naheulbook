@@ -4,7 +4,7 @@ import {NhbkDateOffset} from './date.model';
 
 @Component({
     selector: 'date-modifier',
-    templateUrl: 'date-modifier.component.html',
+    templateUrl: './date-modifier.component.html',
 })
 export class DateModifierComponent {
     @Output() onChange: EventEmitter<NhbkDateOffset> = new EventEmitter<NhbkDateOffset>();

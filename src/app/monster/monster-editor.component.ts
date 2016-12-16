@@ -15,7 +15,7 @@ import {removeDiacritics} from '../shared/remove_diacritics';
 
 @Component({
     selector: 'monster-editor',
-    templateUrl: 'monster-editor.component.html',
+    templateUrl: './monster-editor.component.html',
 })
 export class MonsterEditorComponent implements OnInit, OnChanges {
     @Input() monster: MonsterTemplate;

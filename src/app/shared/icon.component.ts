@@ -3,7 +3,7 @@ import {IconDescription} from './icon.model';
 
 @Component({
     selector: 'icon',
-    templateUrl: 'icon.component.html',
+    templateUrl: './icon.component.html',
     styles: [
         `.rotat0:before {
             display: inline-block;

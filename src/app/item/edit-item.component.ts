@@ -7,7 +7,7 @@ import {ItemService} from './item.service';
 
 @Component({
     selector: 'edit-item',
-    templateUrl: 'edit-item.component.html',
+    templateUrl: './edit-item.component.html',
 })
 export class EditItemComponent implements OnInit {
     private item: ItemTemplate;

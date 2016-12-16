@@ -6,7 +6,7 @@ import {LocationService} from './location.service';
 
 @Component({
     selector: 'location',
-    templateUrl: 'location.component.html',
+    templateUrl: './location.component.html',
 })
 export class LocationComponent {
     @Input() location: Location;

@@ -7,7 +7,7 @@ import {SkillService} from './skill.service';
 
 @Component({
     selector: 'skill-selector',
-    templateUrl: 'skill-selector.component.html',
+    templateUrl: './skill-selector.component.html',
 })
 export class SkillSelectorComponent implements OnInit {
     // Inputs

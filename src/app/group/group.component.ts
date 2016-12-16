@@ -17,7 +17,7 @@ import {GroupData} from './group.model';
 import {GroupWebsocketService} from './group.websocket.service';
 
 @Component({
-    templateUrl: 'group.component.html',
+    templateUrl: './group.component.html',
     providers: [GroupActionService, GroupWebsocketService],
 })
 export class GroupComponent implements OnInit, OnChanges, OnDestroy {

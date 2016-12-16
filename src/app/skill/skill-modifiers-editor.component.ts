@@ -5,7 +5,7 @@ import {SkillService} from './skill.service';
 
 @Component({
     selector: 'skill-modifiers-editor',
-    templateUrl: 'skill-modifiers-editor.component.html',
+    templateUrl: './skill-modifiers-editor.component.html',
 })
 export class SkillModifiersEditorComponent implements OnInit {
     @Input() modifiers: any[];

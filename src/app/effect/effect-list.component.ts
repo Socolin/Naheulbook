@@ -9,7 +9,7 @@ import {EffectCategory, Effect} from './effect.model';
 
 @Component({
     selector: 'effect-list',
-    templateUrl: 'effect-list.component.html',
+    templateUrl: './effect-list.component.html',
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputCategoryId: number = 1;

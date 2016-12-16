@@ -5,7 +5,7 @@ import {ItemTemplate} from './item-template.model';
 
 @Component({
     selector: 'create-item',
-    templateUrl: 'create-item.component.html',
+    templateUrl: './create-item.component.html',
     providers: [ItemService],
 })
 export class CreateItemComponent {

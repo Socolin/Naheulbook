@@ -7,7 +7,7 @@ import {OriginService} from './origin.service';
 
 @Component({
     selector: 'origin-list',
-    templateUrl: 'origin-list.component.html',
+    templateUrl: './origin-list.component.html',
 })
 export class OriginListComponent implements OnInit {
     public origins: Origin[];

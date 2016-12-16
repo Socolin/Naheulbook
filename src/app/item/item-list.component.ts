@@ -12,7 +12,7 @@ import {removeDiacritics} from '../shared';
 
 @Component({
     selector: 'item-list',
-    templateUrl: 'item-list.component.html',
+    templateUrl: './item-list.component.html',
     styles: [
         `.item-section {
             font-weight: bold;

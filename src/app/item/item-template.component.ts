@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 
 @Component({
     selector: 'item-template',
-    templateUrl: 'item-template.component.html',
+    templateUrl: './item-template.component.html',
 })
 export class ItemTemplateComponent {
     @Input() item: ItemTemplate;

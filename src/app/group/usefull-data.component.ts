@@ -2,8 +2,8 @@ import {Component} from '@angular/core';
 
 @Component({
     selector: 'usefull-data',
-    styleUrls: ['usefull-data.component.css'],
-    templateUrl: 'usefull-data.component.html',
+    styleUrls: ['./usefull-data.component.css'],
+    templateUrl: './usefull-data.component.html',
 })
 export class UsefullDataComponent {
 

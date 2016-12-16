@@ -2,7 +2,7 @@ import {Component, Input, Output, EventEmitter, Renderer, ElementRef, OnChanges}
 
 @Component({
     selector: 'value-editor',
-    templateUrl: 'value-editor.component.html',
+    templateUrl: './value-editor.component.html',
 })
 export class ValueEditorComponent implements OnChanges {
     @Input() value: number;

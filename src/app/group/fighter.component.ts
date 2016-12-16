@@ -9,8 +9,8 @@ import {Character} from '../character/character.model';
 
 @Component({
     selector: 'fighter',
-    templateUrl: 'fighter.component.html',
-    styleUrls: ['fighter.component.css']
+    templateUrl: './fighter.component.html',
+    styleUrls: ['./fighter.component.css']
 })
 export class FighterComponent {
     @Input() group: Group;

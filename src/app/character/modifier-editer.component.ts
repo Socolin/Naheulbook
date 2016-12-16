@@ -5,7 +5,7 @@ import {dateOffset2TimeDuration} from '../date/util';
 
 @Component({
     selector: 'modifier-editor',
-    templateUrl: 'modifier-editor.component.html'
+    templateUrl: './modifier-editor.component.html'
 })
 export class ModifierEditorComponent implements OnInit {
     @Input() modifier: ItemModifier = new ItemModifier();

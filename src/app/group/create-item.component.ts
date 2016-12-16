@@ -10,7 +10,7 @@ import {getRandomInt} from '../shared/random';
 
 @Component({
     selector: 'create-item',
-    templateUrl: 'create-item.component.html',
+    templateUrl: './create-item.component.html',
 })
 export class CreateItemComponent implements OnChanges {
     @Input() character: Character;

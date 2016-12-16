@@ -3,7 +3,7 @@ import {Origin} from './origin.model';
 
 @Component({
     selector: 'origin',
-    templateUrl: 'origin.component.html',
+    templateUrl: './origin.component.html',
 })
 export class OriginComponent {
     @Input() origin: Origin;

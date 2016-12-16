@@ -11,7 +11,7 @@ import {dateOffset2TimeDuration} from '../date/util';
 
 @Component({
     selector: 'effect-detail',
-    templateUrl: 'effect-detail.component.html',
+    templateUrl: './effect-detail.component.html',
 })
 export class EffectDetailComponent {
     @Input() characterEffect: CharacterEffect;
@@ -21,7 +21,7 @@ export class EffectDetailComponent {
 
 @Component({
     selector: 'modifier-detail',
-    templateUrl: 'modifier-detail.component.html',
+    templateUrl: './modifier-detail.component.html',
 })
 export class ModifierDetailComponent {
     @Input() characterModifier: CharacterModifier;
@@ -30,7 +30,7 @@ export class ModifierDetailComponent {
 
 @Component({
     selector: 'effect-panel',
-    templateUrl: 'effect-panel.component.html',
+    templateUrl: './effect-panel.component.html',
     styles: [`
         .effect-detail-swipe-container
         {

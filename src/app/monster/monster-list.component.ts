@@ -6,7 +6,7 @@ import {NotificationsService} from '../notifications/notifications.service';
 
 @Component({
     selector: 'monster-list',
-    templateUrl: 'monster-list.component.html',
+    templateUrl: './monster-list.component.html',
 })
 export class MonsterListComponent implements OnInit {
     public monsters: MonsterTemplate[];

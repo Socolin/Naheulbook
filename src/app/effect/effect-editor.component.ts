@@ -7,7 +7,7 @@ import {dateOffset2TimeDuration} from '../date/util';
 
 @Component({
     selector: 'effect-editor',
-    templateUrl: 'effect-editor.component.html',
+    templateUrl: './effect-editor.component.html',
 })
 export class EffectEditorComponent implements OnInit, OnChanges {
     @Input() effect: Effect;

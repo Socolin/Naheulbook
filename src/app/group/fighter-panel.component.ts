@@ -14,8 +14,8 @@ import {ItemService} from '../item/item.service';
 
 @Component({
     selector: 'fighter-panel',
-    templateUrl: 'fighter-panel.component.html',
-    styleUrls: ['fighter.component.css', 'fighter-panel.component.css']
+    templateUrl: './fighter-panel.component.html',
+    styleUrls: ['./fighter.component.css', './fighter-panel.component.css']
 })
 export class FighterPanelComponent implements OnInit, OnChanges {
     @Input() group: Group;

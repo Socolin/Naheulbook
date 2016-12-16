@@ -6,7 +6,7 @@ import {Effect} from './effect.model';
 
 @Component({
     selector: 'create-effect',
-    templateUrl: 'create-effect.component.html',
+    templateUrl: './create-effect.component.html',
     providers: [EffectService],
 })
 export class CreateEffectComponent {

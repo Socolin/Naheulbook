@@ -5,7 +5,7 @@ import {CharacterService} from './character.service';
 
 @Component({
     selector: 'character-history',
-    templateUrl: 'character-history.component.html'
+    templateUrl: './character-history.component.html'
 })
 export class CharacterHistoryComponent implements OnInit {
     @Input() character: Character;

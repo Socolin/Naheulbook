@@ -8,7 +8,7 @@ import {Observable} from 'rxjs';
 
 @Component({
     selector: 'location-editor',
-    templateUrl: 'location-editor.component.html'
+    templateUrl: './location-editor.component.html'
 })
 export class LocationEditorComponent implements OnInit {
     @Input() location: Location;

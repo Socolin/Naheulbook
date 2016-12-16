@@ -4,7 +4,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {EffectService} from './effect.service';
 
 @Component({
-    templateUrl: 'edit-effect.component.html',
+    templateUrl: './edit-effect.component.html',
     providers: [EffectService],
 })
 export class EditEffectComponent implements OnInit {

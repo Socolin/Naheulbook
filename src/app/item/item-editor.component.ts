@@ -13,7 +13,7 @@ import {dateOffset2TimeDuration} from '../date/util';
 
 @Component({
     selector: 'item-editor',
-    templateUrl: 'item-editor.component.html'
+    templateUrl: './item-editor.component.html'
 })
 export class ItemEditorComponent implements OnInit, OnChanges {
     @Input() item: ItemTemplate;

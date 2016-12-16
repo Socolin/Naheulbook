@@ -22,7 +22,7 @@ export class LevelUpInfo {
 
 @Component({
     selector: 'character',
-    templateUrl: 'character.component.html',
+    templateUrl: './character.component.html',
     providers: [CharacterWebsocketService, SwipeService, ItemActionService],
     styles: [`
         .canceled {

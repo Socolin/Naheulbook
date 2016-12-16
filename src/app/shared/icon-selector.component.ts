@@ -5,7 +5,7 @@ import {IconDescription} from './icon.model';
 
 @Component({
     selector: 'icon-selector',
-    templateUrl: 'icon-selector.component.html',
+    templateUrl: './icon-selector.component.html',
     styles: [`
         .selector-tab-content {
             background: whitesmoke;

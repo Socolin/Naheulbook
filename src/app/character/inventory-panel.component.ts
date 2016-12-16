@@ -10,7 +10,7 @@ import {ItemActionService} from './item-action.service';
 
 @Component({
     selector: 'inventory-panel',
-    templateUrl: 'inventory-panel.component.html',
+    templateUrl: './inventory-panel.component.html',
     styles: [`
         @media screen and (min-width: 768px) {
             .overflow-item-list {

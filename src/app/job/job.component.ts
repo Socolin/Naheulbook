@@ -4,7 +4,7 @@ import {Job} from './job.model';
 
 @Component({
     selector: 'job',
-    templateUrl: 'job.component.html'
+    templateUrl: './job.component.html'
 })
 export class JobComponent {
     @Input() job: Job;

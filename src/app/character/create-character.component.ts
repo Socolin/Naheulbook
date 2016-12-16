@@ -11,7 +11,7 @@ import {getRandomInt} from '../shared/random';
 
 @Component({
     selector: 'create-character',
-    templateUrl: 'create-character.component.html',
+    templateUrl: './create-character.component.html',
 })
 export class CreateCharacterComponent {
     public step: number;

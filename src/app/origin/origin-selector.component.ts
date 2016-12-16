@@ -6,7 +6,7 @@ import {OriginService} from './origin.service';
 
 @Component({
     selector: 'origin-selector',
-    templateUrl: 'origin-selector.component.html'
+    templateUrl: './origin-selector.component.html'
 })
 export class OriginSelectorComponent implements OnInit, OnChanges {
     @Input('cou') cou: number;

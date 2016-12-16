@@ -5,7 +5,7 @@ import {NotificationsService} from '../notifications/notifications.service';
 
 @Component({
     selector: 'group-history',
-    templateUrl: 'group-history.component.html'
+    templateUrl: './group-history.component.html'
 })
 export class GroupHistoryComponent implements OnInit {
     @Input() group: Group;

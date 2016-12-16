@@ -4,7 +4,7 @@ import {Character} from './character.model';
 
 @Component({
     selector: 'bag-item-view',
-    templateUrl: 'bag-item-view.component.html',
+    templateUrl: './bag-item-view.component.html',
 })
 export class BagItemViewComponent implements OnInit, OnChanges {
     @Input() items: Item[];

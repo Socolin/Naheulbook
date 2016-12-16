@@ -6,7 +6,7 @@ import {LocationService} from './location.service';
 import {NotificationsService} from '../notifications';
 
 @Component({
-    templateUrl: 'edit-location.component.html',
+    templateUrl: './edit-location.component.html',
 })
 export class EditLocationComponent implements OnInit {
     private location: Location;

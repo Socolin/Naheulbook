@@ -7,7 +7,7 @@ import {User} from './user';
 
 @Component({
     selector: 'app-root',
-    templateUrl: 'app.component.html',
+    templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
     public loggedUser: User;

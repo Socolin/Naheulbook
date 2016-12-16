@@ -5,7 +5,7 @@ import {Monster} from '../monster';
 
 @Component({
     selector: 'monster-editable-field',
-    templateUrl: 'monster-editable-field.component.html'
+    templateUrl: './monster-editable-field.component.html'
 })
 export class MonsterEditableFieldComponent implements OnChanges {
     @Input() monster: Monster;

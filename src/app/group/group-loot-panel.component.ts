@@ -14,7 +14,7 @@ import {Monster} from '../monster/monster.model';
 
 @Component({
     selector: 'group-loot-panel',
-    templateUrl: 'group-loot-panel.component.html',
+    templateUrl: './group-loot-panel.component.html',
     providers: [LootWebsocketService],
 })
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit {

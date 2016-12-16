@@ -7,7 +7,7 @@ import {JobService} from './job.service';
 
 @Component({
     selector: 'job-selector',
-    templateUrl: 'job-selector.component.html'
+    templateUrl: './job-selector.component.html'
 })
 export class JobSelectorComponent implements OnInit, OnChanges {
     @Input('cou') cou: string;

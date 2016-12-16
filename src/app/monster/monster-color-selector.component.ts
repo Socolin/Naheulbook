@@ -4,7 +4,7 @@ import {Monster} from './monster.model';
 
 @Component({
     selector: 'monster-color-selector',
-    templateUrl: 'monster-color-selector.component.html'
+    templateUrl: './monster-color-selector.component.html'
 })
 export class MonsterColorSelectorComponent {
     @Input() monster: Monster;

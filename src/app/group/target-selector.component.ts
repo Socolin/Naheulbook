@@ -3,8 +3,8 @@ import {Fighter} from './group.model';
 
 @Component({
     selector: 'target-selector',
-    templateUrl: 'target-selector.component.html',
-    styleUrls: ['target-selector.component.css']
+    templateUrl: './target-selector.component.html',
+    styleUrls: ['./target-selector.component.css']
 })
 export class TargetSelectorComponent implements OnInit {
     @Input() fighter: Fighter;

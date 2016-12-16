@@ -9,7 +9,7 @@ import {dateOffset2TimeDuration, timeDuration2DateOffset2} from '../date/util';
 
 @Component({
     selector: 'item-detail',
-    templateUrl: 'item-detail.component.html'
+    templateUrl: './item-detail.component.html'
 })
 export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() item: Item;

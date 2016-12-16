@@ -5,7 +5,7 @@ import {NotificationsService} from '../notifications';
 
 import {CharacterService} from '../character/character.service';
 @Component({
-    templateUrl: 'create-group.component.html',
+    templateUrl: './create-group.component.html',
     providers: [CharacterService]
 })
 export class CreateGroupComponent {

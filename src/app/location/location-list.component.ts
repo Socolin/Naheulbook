@@ -7,7 +7,7 @@ import {LoginService} from '../user';
 
 @Component({
     selector: 'location-list',
-    templateUrl: 'location-list.component.html'
+    templateUrl: './location-list.component.html'
 })
 export class LocationListComponent implements OnInit {
     private locations: Location[];

@@ -8,7 +8,7 @@ import {JobService} from '../job';
 import {CharacterService} from '../character';
 @Component({
     selector: 'modifiers-editor',
-    templateUrl: 'modifiers-editor.component.html'
+    templateUrl: './modifiers-editor.component.html'
 })
 export class ModifiersEditorComponent implements OnInit {
     @Input() modifiers: ItemStatModifier[];

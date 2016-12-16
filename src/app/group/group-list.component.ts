@@ -7,7 +7,7 @@ import {CharacterService} from '../character/character.service';
 import {Group} from './group.model';
 
 @Component({
-    templateUrl: 'group-list.component.html'
+    templateUrl: './group-list.component.html'
 })
 export class GroupListComponent implements OnInit {
     public groups: Object[];

@@ -12,7 +12,7 @@ import {ItemService} from '../item/item.service';
 
 @Component({
     selector: 'character-loot-panel',
-    templateUrl: 'character-loot-panel.component.html',
+    templateUrl: './character-loot-panel.component.html',
     providers: [LootWebsocketService],
 })
 export class CharacterLootPanelComponent extends LootPanelComponent implements OnInit {
