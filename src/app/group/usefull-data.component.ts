@@ -6,10 +6,10 @@ import {Component} from '@angular/core';
     templateUrl: './usefull-data.component.html',
 })
 export class UsefullDataComponent {
-
-    private currentPanel: string = null;
-    private currentSubPanel: string = null;
-    private selectedSubPanels = {};
+    public currentPanel: string = null;
+    public currentSubPanel: string = null;
+    public selectedSubPanels = {};
+    public effectsCategoryId = 1;
 
     toggleDisplayPanel(name: string) {
         if (this.currentPanel === name) {
@@ -28,8 +28,6 @@ export class UsefullDataComponent {
         this.selectedSubPanels[this.currentPanel] = name;
         return false;
     }
-
-    private effectsCategoryId = 1;
 
     showEffects(categoryId) {
         this.effectsCategoryId = categoryId;

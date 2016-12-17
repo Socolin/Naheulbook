@@ -161,7 +161,7 @@ export class FighterPanelComponent implements OnInit, OnChanges {
                 }
                 item.data.notIdentified = true;
                 if (item.template.data.useUG) {
-                    item.data.ug = 1; //FIXME: minUg/maxUg
+                    item.data.ug = 1; // FIXME: minUg/maxUg
                 }
 
                 if (item.template.data.quantifiable) {

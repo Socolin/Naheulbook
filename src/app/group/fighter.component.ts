@@ -27,7 +27,7 @@ export class FighterComponent {
     }
 
     addItemTo(character: Character) {
-        this._actionService.emitAction("openAddItemForm", this.group, character);
+        this._actionService.emitAction('openAddItemForm', this.group, character);
     }
 
     changeTarget(fighter: Fighter, target) {
