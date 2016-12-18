@@ -1,4 +1,4 @@
-import {NhbkDateOffset} from './date.model';
+import {NhbkDateOffset, NhbkDate} from './date.model';
 
 export class NhbkDateUtil {
     public static yearDuration: number = 365 * 24 * 3600;
@@ -10,7 +10,7 @@ export class NhbkDateUtil {
 
 
 export function dateOffset2TimeDuration (dateOffset: NhbkDateOffset): number {
-    let duration: number = 0;
+    let duration = 0;
 
     duration += dateOffset.year * NhbkDateUtil.yearDuration;
     duration += dateOffset.week * NhbkDateUtil.weekDuration;
@@ -19,6 +19,18 @@ export function dateOffset2TimeDuration (dateOffset: NhbkDateOffset): number {
     duration += dateOffset.minute * NhbkDateUtil.minuteDuration;
 
     return duration;
+}
+
+
+export function date2Timestamp (date: NhbkDate): number {
+    let timestamp = 0;
+
+    timestamp += date.year * NhbkDateUtil.yearDuration;
+    timestamp += date.day * NhbkDateUtil.dayDuration;
+    timestamp += date.hour * NhbkDateUtil.hourDuration;
+    timestamp += date.minute * NhbkDateUtil.minuteDuration;
+
+    return timestamp;
 }
 
 export function timeDuration2DateOffset2 (duration: number): NhbkDateOffset {
@@ -39,3 +51,20 @@ export function timeDuration2DateOffset2 (duration: number): NhbkDateOffset {
 
     return dateOffset;
 }
+
+
+export function timestamp2Date (duration: number): NhbkDate {
+    let date: NhbkDate = new NhbkDate();
+
+    date.year = Math.floor(duration / NhbkDateUtil.yearDuration);
+    duration -= NhbkDateUtil.yearDuration * date.year;
+
+    date.day = Math.floor(duration / NhbkDateUtil.dayDuration);
+    duration -= NhbkDateUtil.dayDuration * date.day;
+    date.hour = Math.floor(duration / NhbkDateUtil.hourDuration);
+    duration -= NhbkDateUtil.hourDuration * date.hour;
+    date.minute = Math.floor(duration / NhbkDateUtil.minuteDuration);
+
+    return date;
+}
+

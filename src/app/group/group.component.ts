@@ -26,7 +26,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     public selectedCharacter: Character;
     public filteredInvitePlayers: CharacterInviteInfo[] = [];
     public autocompleteLocationsCallback: Function;
-    public currentTab: string = 'characters';
+    public currentTab: string = 'infos';
 
     /* Invitation tab */
 
@@ -110,6 +110,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         this._groupService.addTime(this.group.id, dateOffset).subscribe(
             data => {
                 this.group.data = data;
+                this._actionService.emitAction('dateChanged', this.group);
             }
         );
     }
@@ -222,6 +223,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 } else if (key === 'date') {
                     this._notification.info('Date', 'Date changé');
+                    this._actionService.emitAction('dateChanged', this.group);
                 }
                 this.group.data = data;
             }

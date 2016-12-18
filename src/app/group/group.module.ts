@@ -20,6 +20,7 @@ import {JobModule} from '../job/job.module';
 import {OriginModule} from '../origin/origin.module';
 import {GroupHistoryComponent} from './group-history.component';
 import {FighterComponent} from './fighter.component';
+import {EventModule} from '../event/event.module';
 
 @NgModule({
     imports: [
@@ -33,6 +34,7 @@ import {FighterComponent} from './fighter.component';
         ItemModule,
         JobModule,
         OriginModule,
+        EventModule,
     ],
     declarations: [
         CreateItemComponent,
