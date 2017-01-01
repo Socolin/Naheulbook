@@ -28,6 +28,9 @@ export class TextFormatterPipe implements PipeTransform {
 
     transform(text: string) {
         let result = '';
+        if (!text) {
+            return result;
+        }
 
         let tags: string[] = [];
         let openTag = false;

@@ -4,6 +4,8 @@ import {NotificationsService} from '../notifications';
 
 import {LoginService} from './login.service';
 import {User} from './user.model';
+import {MdDialog, MdDialogRef} from "@angular/material";
+import {LoginDialogComponent} from "./login-dialog.component";
 
 @Component({
     selector: 'login',
@@ -11,11 +13,25 @@ import {User} from './user.model';
 })
 export class LoginComponent implements OnInit {
     public user: User;
-    public selectingLoginMethod: boolean;
+    public dialogRef: MdDialogRef<LoginDialogComponent>;
 
-    constructor(private _loginService: LoginService
+    constructor(public dialog: MdDialog
+        , private _loginService: LoginService
         , private _router: Router
         , private _notification: NotificationsService) {
+    }
+
+    openDialog() {
+        this.dialogRef = this.dialog.open(LoginDialogComponent, {
+            disableClose: false
+        });
+
+        this.dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.login(result);
+            }
+            this.dialogRef = null;
+        });
     }
 
     viewProfile() {
@@ -33,14 +49,6 @@ export class LoginComponent implements OnInit {
         else if (method === 'twitter') {
             this._loginService.redirectToTwitterLogin();
         }
-    }
-
-    closeSelector() {
-        this.selectingLoginMethod = false;
-    }
-
-    selectLoginMethod() {
-        this.selectingLoginMethod = true;
     }
 
     logout() {

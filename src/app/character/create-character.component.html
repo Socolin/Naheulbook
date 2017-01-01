@@ -1,322 +1,595 @@
-<div *ngIf="(step <= 1)" class="row">
-	<div class="col-xs-4 col-sm-2">
-		<input class="input-lg form-control" [(ngModel)]="cou" (change)="updateStat()" type="number" min=0 placeholder="Courage" />
-		<div class="text-center">Courage</div>
-	</div>
-	<div class="col-xs-4 col-sm-2">
-		<input class="input-lg form-control" [(ngModel)]="int" (change)="updateStat()" type="number" min=0 placeholder="Intéligence" />
-		<div class="text-center">Inteligence</div>
-	</div>
-	<div class="col-xs-4 col-sm-2">
-		<input class="input-lg form-control" [(ngModel)]="cha" (change)="updateStat()" type="number" min=0 placeholder="Charisme" />
-		<div class="text-center">Charisme</div>
-	</div>
-	<div class="col-xs-4 col-sm-2">
-		<input class="input-lg form-control" [(ngModel)]="ad" (change)="updateStat()" type="number" min=0 placeholder="Addresse" />
-		<div class="text-center">Addresse</div>
-	</div>
-	<div class="col-xs-4 col-sm-2">
-		<input class="input-lg form-control" [(ngModel)]="fo" (change)="updateStat()" type="number" min=0 placeholder="Force" />
-		<div class="text-center">Force</div>
-	</div>
-	<div class="col-xs-4 col-sm-2">
-		<button type="submit" (click)="rollStats()" class="btn-block btn btn-default"><span class="ra ra-perspective-dice-random ra-3x"></span></button>
-	</div>
-</div>
-<div *ngIf="(step > 1)" class="row">
-	<div class="col-sm-12">
-		<h3>
-			Statistique:
-		</h3>
-		<div class="row">
-			<span class="col-sm-2 col-xs-6">Courage: {{cou}}</span>
-			<span class="col-sm-2 col-xs-6">Intéligence: {{int}}</span>
-			<span class="col-sm-2 col-xs-6">Charisme: {{cha}}</span>
-			<span class="col-sm-2 col-xs-6">Adresse: {{ad}}</span>
-			<span class="col-sm-2 col-xs-6">Force: {{fo}}</span>
-			<span class="col-sm-2 col-xs-6"><button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(0)"></button></span>
-		</div>
-	</div>
-</div>
+<md-card>
+    <md-toolbar color="primary">
+        <span fxFlex="auto">Caractéristiques</span>
+        <button *ngIf="(step === 0)"
+                fxFlex="nogrow"
+                md-mini-fab
+                type="button"
+                (click)="rollStats()">
+            <md-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-md-button-icon-32"></md-icon>
+        </button>
+        <button *ngIf="(step >= 1)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="setStep(0)">
+            <md-icon>edit</md-icon>
+        </button>
+    </md-toolbar>
+    <md-card-content>
+        <p *ngIf="step == 0">
+            Lancez cinq fois un D6 pour obtenir les caractéristiques principales. Ces jets cruciaux vont définir tout
+            le profil du personnage. Vous ajoutez 7 à chaque score pour obtenir les caractéristiques suivantes (ce qui
+            donnera une note de 8 à 13) :
+        </p>
+        <div fxLayout="row" fxLayoutAlign="space-around center">
+            <md-input-container fxFlex="auto">
+                <input md-input
+                       type="number"
+                       [(ngModel)]="cou"
+                       [disabled]="step > 0"
+                       placeholder="Courage"
+                       min=0 />
+            </md-input-container>
+            <md-input-container fxFlex="auto">
+                <input md-input
+                       type="number"
+                       [(ngModel)]="int"
+                       [disabled]="step > 0"
+                       placeholder="Inteligence"
+                       min=0 />
+            </md-input-container>
+            <md-input-container fxFlex="auto">
+                <input md-input
+                       type="number"
+                       [(ngModel)]="cha"
+                       [disabled]="step > 0"
+                       placeholder="Charisme"
+                       min=0 />
+            </md-input-container>
+            <md-input-container fxFlex="auto">
+                <input md-input
+                       type="number"
+                       [(ngModel)]="ad"
+                       [disabled]="step > 0"
+                       placeholder="Adresse"
+                       min=0 />
+            </md-input-container>
+            <md-input-container fxFlex="auto">
+                <input md-input
+                       type="number"
+                       [(ngModel)]="fo"
+                       [disabled]="step > 0"
+                       placeholder="Force"
+                       min=0 />
+            </md-input-container>
+        </div>
+    </md-card-content>
+    <md-card-actions *ngIf="step == 0" align="end">
+        <button md-button type="button" color="primary" (click)="setStep(1)" [disabled]="!cou || !cha || !int || !fo || !ad">
+            VALIDER
+        </button>
+    </md-card-actions>
+</md-card>
 
-<div *ngIf="(step == 1)" class="row">
-	<div class="col-xs-12">
-		<h3>Origine</h3>
-	</div>
-	<origin-selector class="col-sm-12" [selectedOrigin]="selectedOrigin" (originChange)="onSelectOrigin($event)" [cou]="cou" [int]="int" [cha]="cha" [ad]="ad" [fo]="fo">Loading...</origin-selector>
-</div>
-<div *ngIf="(step > 1)" class="row">
-	<div class="col-sm-12">
-		<h3>
-			Origine: {{selectedOrigin.name}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(1)"></button>
-		</h3>
-	</div>
-</div>
-
-<div *ngIf="(step == 2)" class="row">
-	<div class="col-xs-12">
-		<h3>Métier</h3>
-	</div>
-	<job-selector class="col-sm-12" [selectedOrigin]="selectedOrigin" (jobChange)="onSelectJob($event)" [cou]="cou" [int]="int" [cha]="cha" [ad]="ad" [fo]="fo">Loading...</job-selector>
-</div>
-<div *ngIf="(step > 2)" class="row">
-	<div class="col-sm-12">
-		<h3 *ngIf="selectedJob">
-			Métier: {{selectedJob.name}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(2)"></button>
-		</h3>
-		<h3 *ngIf="!selectedJob">
-			Métier: Aucun <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(2)"></button>
-		</h3>
-	</div>
-</div>
-
-
-<div *ngIf="(step == 3)" class="row">
-	<div class="col-xs-12">
-		<h3>Compétences</h3>
-	</div>
-	<skill-selector class="col-sm-12" [selectedOrigin]="selectedOrigin" [selectedJob]="selectedJob" (skillsSelected)="onSelectSkills($event)">Loading...</skill-selector>
-</div>
-<div *ngIf="(step > 3)" class="row">
-	<div class="col-sm-12">
-		<h3>
-			Compétences choisis:
-			<button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(3)"></button>
-		</h3>
-		<ul>
-			<li *ngFor="let skill of selectedSkills">{{skill.name}}</li>
-		</ul>
-	</div>
-</div>
-
-<div *ngIf="(step == 4)" class="row">
-	<div class="col-xs-12">
-		<h3>Fortune</h3>
-	</div>
-	<div class="col-sm-2">
-		<input class="input-lg form-control" [(ngModel)]="money" (change)="updateMoney()" type="number" min=0 placeholder="Fortune" />
-	</div>
-	<div *ngIf="has2MoneyRoll()" class="col-sm-2">
-		<input class="input-lg form-control" [(ngModel)]="money2" (change)="updateMoney()" type="number" min=0 placeholder="Fortune 2" />
-	</div>
-	<div class="col-sm-2">
-		<button type="submit" (click)="rollMoney()" class="btn btn-default"><span class="ra ra-perspective-dice-random ra-3x"></span></button>
-	</div>
-	<div class="col-sm-2">
-		Fortune: {{(money + money2) * 10}} PO
-	</div>
-	<div *ngIf="money && (!has2MoneyRoll() || money2)" class="col-sm-2">
-		<input type="submit" (click)="validMondey()" class="btn-block btn btn-default btn-lg" value="Valid" />
-	</div>
-</div>
-<div *ngIf="(step > 4)" class="row">
-	<div class="col-sm-12">
-		<h3>Fortune: {{(money + money2) * 10}} PO <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(4)"></button></h3>
-	</div>
-</div>
-
-
-<div *ngIf="(step == 5)" class="row">
-	<div class="col-xs-12">
-		<h3>Truc spéciaux</h3>
-	</div>
-	<div *ngIf="hasSuperBourin()" class="col-sm-12">
-		<h3>SUPER-BOURRIN</h3>
-		<p>
-			a le droit de retrancher jusqu'à 3 points à son score de base en ATTAQUE et/ou en PARADE
-			pour en faire un bonus de dégâts (au corps à corps, toutes armes confondues). Ainsi il peut avoir +3 en dégâts en plus de ses
-			autres bonus de FORCE, mais son côté bourrin le rend maladroit. Le bonus est à choisir en début de carrière et ne pourra
-			être modifié par la suite.
-		</p>
-		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="superBourrinValue" (change)="updateSuperBourrin()" type="number" min=0 max=3 />
-		</div>
-	</div>
-
-	<div *ngIf="hasMove1PointStat()" class="col-sm-12">
-		<h3>Deplacement d'un point de stat</h3>
-		<p>
-			En raison de sa polyvalence, au niveau 1 le Ranger peut choisir de soustraire 1 point d'une CARAC pour l'ajouter à une
-			autre (INT, CHA, COU, FO, AD)
-		</p>
-		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['cou']" (change)="updateMove1PointStat()" type="number" min=-1 max=1 />
-		</div>
-		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['int']" (change)="updateMove1PointStat()" type="number" min=-1 max=1 />
-		</div>
-		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['cha']" (change)="updateMove1PointStat()" type="number" min=-1 max=1 />
-		</div>
-		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['ad']" (change)="updateMove1PointStat()" type="number" min=-1 max=1 />
-		</div>
-		<div class="col-sm-2">
-			<input class="input-lg form-control" [(ngModel)]="move1PointStatValues['fo']" (change)="updateMove1PointStat()" type="number" min=-1 max=1 />
-		</div>
-	</div>
-	<div *ngIf="hasChangeAtPrd()">
-		<h3>Deplacement d'un point de d'attaque et de parade</h3>
-		<p>Peut choisir au niveau 1 d'échanger 1 point d'ATTAQUE avec 1 point de PARADE, ou inversement</p>
-		<div class="col-sm-2">
-			AT <input class="input-lg form-control" [(ngModel)]="changeAtPrdValue" (change)="updateChangeAtPrd()" type="number" min=-1 max=1 />
-		</div>
-		<div class="col-sm-2">
-			PRD <input class="input-lg form-control" [(ngModel)]="-changeAtPrdValue" (change)="updateChangeAtPrd()" type="number" min=-1 max=1 readonly/>
-		</div>
-	</div>
-	<div *ngIf="hasRemoveAttOrPrdToIntOrCha()" class="col-sm-12">
-		<h3>Marchand</h3>
-		<p>
-			En raison de son érudition, au niveau 1 le marchand doit retirer 1 point à l'attaque ou à la parade, qu'il pourra ajouter au
-			choix à l'intelligence ou au charisme
-		</p>
-
-		<div>
-			<div class="btn-group" data-toggle="buttons">
-				<button class="btn btn-primary" (click)="setremoveAttOrPrdToIntOrChaRemoveStat('AT')" [class.active]="removeAttOrPrdToIntOrChaRemoveStat == 'AT'">
-					AT
-				</button>
-				<button class="btn btn-primary" (click)="setremoveAttOrPrdToIntOrChaRemoveStat('PRD')" [class.active]="removeAttOrPrdToIntOrChaRemoveStat == 'PRD'">
-					PRD
-				</button>
-			</div>
-		</div>
-		<div>
-			<div class="btn-group" data-toggle="buttons">
-				<button class="btn btn-primary" (click)="setRemoveAttOrPrdToIntOrChaAddStat('INT')" [class.active]="removeAttOrPrdToIntOrChaAddStat == 'INT'">
-					INT
-				</button>
-				<button class="btn btn-primary" (click)="setRemoveAttOrPrdToIntOrChaAddStat('CHA')" [class.active]="removeAttOrPrdToIntOrChaAddStat == 'CHA'">
-					CHA
-				</button>
-			</div>
-		</div>
-	</div>
-
-	<div *ngIf="hasRemoveAttOrPrdToIntOrAd()" class="col-sm-12">
-		<h3>Ingenieur</h3>
-		<p>
-			En raison de sa spécialisation technique, au niveau 1 l'ingénieur doit retirer 1 point à l'attaque ou à la parade, qu'il pourra
-			ajouter au choix à l'intelligence ou à l'adresse
-		</p>
-
-		<div>
-			<div class="btn-group" data-toggle="buttons">
-				<button class="btn btn-primary" (click)="setremoveAttOrPrdToIntOrAdRemoveStat('AT')" [class.active]="removeAttOrPrdToIntOrAdRemoveStat == 'AT'">
-					AT
-				</button>
-				<button class="btn btn-primary" (click)="setremoveAttOrPrdToIntOrAdRemoveStat('PRD')" [class.active]="removeAttOrPrdToIntOrAdRemoveStat == 'PRD'">
-					PRD
-				</button>
-			</div>
-		</div>
-		<div>
-			<div class="btn-group" data-toggle="buttons">
-				<button class="btn btn-primary" (click)="setRemoveAttOrPrdToIntOrAdAddStat('INT')" [class.active]="removeAttOrPrdToIntOrAdAddStat == 'INT'">
-					INT
-				</button>
-				<button class="btn btn-primary" (click)="setRemoveAttOrPrdToIntOrAdAddStat('AD')" [class.active]="removeAttOrPrdToIntOrAdAddStat == 'AD'">
-					AD
-				</button>
-			</div>
-		</div>
-	</div>
-
-	<div *ngIf="isStatModificationValid()" class="col-sm-2">
-		<input type="submit" (click)="setStep(6)" class="btn-block btn btn-default btn-lg" value="Suite" />
-	</div>
-</div>
-<div *ngIf="(step > 5)" class="row">
-	<div *ngIf="hasSuperBourin()" class="col-sm-12">
-		<h3>SUPER-BOURRIN: -{{superBourrinValue}} AT et +{{superBourrinValue}} Dégâts <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
-	</div>
-	<div *ngIf="hasMove1PointStat()" class="col-sm-12">
-		<h3>Modification de stat:
-			COU: {{move1PointStatValues['cou']}}
-		 	INT: {{move1PointStatValues['int']}}
-		 	CHA: {{move1PointStatValues['cha']}}
-		 	AD: {{move1PointStatValues['ad']}}
-		 	FO: {{move1PointStatValues['fo']}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
-	</div>
-	<div *ngIf="hasChangeAtPrd()" class="col-sm-12">
-		<h3>Deplacement d'un point de d'attaque et de parade AT:{{changeAtPrdValue}} PRD:{{-changeAtPrdValue}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
-	</div>
-	<div *ngIf="hasRemoveAttOrPrdToIntOrCha()" class="col-sm-12">
-		<h3>Marchand {{removeAttOrPrdToIntOrChaRemoveStat}}:-1 {{removeAttOrPrdToIntOrChaAddStat}}:+1 <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
-	</div>
-	<div *ngIf="hasRemoveAttOrPrdToIntOrAd()" class="col-sm-12">
-		<h3>Ingenieur {{removeAttOrPrdToIntOrAdRemoveStat}}:-1 {{removeAttOrPrdToIntOrAdAddStat}}:+1 <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(5)"></button></h3>
-	</div>
-</div>
+<md-card *ngIf="(step >= 1)">
+    <md-toolbar color="primary">
+        <span fxFlex="auto">Origine</span>
+        <button *ngIf="(step === 1)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="toggleViewAllOrigins()">
+            <md-icon>filter_list</md-icon>
+        </button>
+        <button *ngIf="(step === 1)"
+                fxFlex="nogrow"
+                md-mini-fab
+                type="button"
+                (click)="selectRandomOrigin()">
+            <md-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-md-button-icon-32"></md-icon>
+        </button>
+        <button *ngIf="(step > 1)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="setStep(1)">
+            <md-icon>edit</md-icon>
+        </button>
+    </md-toolbar>
+    <md-card-content>
+        <div *ngIf="(step == 1)">
+            <origin-selector [selectedOrigin]="selectedOrigin"
+                             (originChange)="onSelectOrigin($event)"
+                             [cou]="cou"
+                             [int]="int"
+                             [cha]="cha"
+                             [ad]="ad"
+                             [fo]="fo">
+            </origin-selector>
+        </div>
+        <div *ngIf="(step > 1)">
+            {{selectedOrigin.name}}
+        </div>
+    </md-card-content>
+</md-card>
 
 
-<div *ngIf="(step == 6)" class="row">
-	<div class="col-sm-12">
-		<h3>Selection specialite</h3>
-		<div *ngFor="let speciality of selectedJob.specialities" class="selectable" (click)="selectSpeciality(speciality)">
-			<h3>{{speciality.name}}</h3>
-			<p>{{speciality.description}}</p>
-		</div>
-	</div>
-</div>
-<div *ngIf="(step > 6 && selectedSpeciality != null)" class="row">
-	<div class="col-sm-12">
-		<h3>Specialite: {{selectedSpeciality.name}} <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(6)"></button></h3>
-	</div>
-</div>
+<md-card *ngIf="(step >= 2)">
+    <md-toolbar color="primary">
+        <span fxFlex="auto">Métier</span>
+        <button *ngIf="(step === 2)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="toggleViewAllJobs()">
+            <md-icon>filter_list</md-icon>
+        </button>
+        <button *ngIf="(step === 2)"
+                fxFlex="nogrow"
+                md-mini-fab
+                type="button"
+                (click)="selectRandomJob()">
+            <md-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-md-button-icon-32"></md-icon>
+        </button>
+        <button *ngIf="(step > 2)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="setStep(2)">
+            <md-icon>edit</md-icon>
+        </button>
+    </md-toolbar>
+    <md-card-content>
+        <div *ngIf="(step == 2)">
+            <job-selector [selectedOrigin]="selectedOrigin"
+                          (jobChange)="onSelectJob($event)"
+                          [cou]="cou"
+                          [int]="int"
+                          [cha]="cha"
+                          [ad]="ad"
+                          [fo]="fo">
+            </job-selector>
+        </div>
+        <div *ngIf="(step > 2)">
+            <span *ngIf="selectedJob">
+                {{selectedJob.name}}
+            </span>
+            <span *ngIf="!selectedJob">
+                Aucun
+            </span>
+        </div>
+    </md-card-content>
+</md-card>
+
+<md-card *ngIf="(step >= 3)">
+    <md-toolbar color="primary">
+        <span fxFlex="auto">Compétences</span>
+        <button *ngIf="(step === 3)"
+                fxFlex="nogrow"
+                md-mini-fab
+                type="button"
+                (click)="selectRandomSkills()">
+            <md-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-md-button-icon-32"></md-icon>
+        </button>
+        <button *ngIf="(step > 3)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="setStep(3)">
+            <md-icon>edit</md-icon>
+        </button>
+    </md-toolbar>
+    <md-card-content>
+        <div *ngIf="(step == 3)">
+            <skill-selector [selectedOrigin]="selectedOrigin"
+                            [selectedJob]="selectedJob"
+                            (skillsSelected)="onSelectSkills($event)">
+            </skill-selector>
+        </div>
+        <div *ngIf="(step > 3)">
+            <div *ngFor="let skill of selectedSkills">
+                {{skill.name}}
+            </div>
+        </div>
+    </md-card-content>
+</md-card>
+
+<md-card *ngIf="(step >= 4)">
+    <md-toolbar color="primary">
+        <span fxFlex="auto">Fortune de départ</span>
+        <button *ngIf="(step === 4)"
+                fxFlex="nogrow"
+                md-mini-fab
+                type="button"
+                (click)="rollMoney()">
+            <md-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-md-button-icon-32"></md-icon>
+        </button>
+        <button *ngIf="(step > 4)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="setStep(4)">
+            <md-icon>edit</md-icon>
+        </button>
+    </md-toolbar>
+    <md-card-content>
+        <p *ngIf="step == 4">
+            Tirer le pécule de départ permet de connaître la classe sociale du personnage. Le jet de dés est le suivant :<br/>
+            ➢ 2D6 x 10 = pécule de pièces d’or au départ de l’aventure
+        </p>
+        <p *ngIf="step == 4 && has2MoneyRoll()">
+            Votre metier vous donne droit a un deuxieme jet de votre fortune initiale qui s'additionne avec le premier.
+        </p>
+        <div fxLayout="row" fxLayoutAlign="space-around center">
+            <md-input-container fxFlex="auto">
+                <input md-input
+                       type="number"
+                       [(ngModel)]="money"
+                       [disabled]="step > 4"
+                       placeholder="Fortune"
+                       min=0 />
+            </md-input-container>
+
+            <md-input-container fxFlex="auto" *ngIf="has2MoneyRoll()">
+                <input md-input
+                       type="number"
+                       [(ngModel)]="money2"
+                       [disabled]="step > 4"
+                       placeholder="Fortune jet 2"
+                       min=0 />
+            </md-input-container>
+        </div>
+        <div>
+            Fortune: {{(money + money2) * 10}} PO
+        </div>
+    </md-card-content>
+    <md-card-actions *ngIf="step == 4" align="end">
+        <button md-button type="button" color="primary" (click)="setStep(5)" [disabled]="!money || (!money2 && has2MoneyRoll())">
+            VALIDER
+        </button>
+    </md-card-actions>
+</md-card>
 
 
-<div *ngIf="(step == 7)" class="row">
-	<div class="col-sm-12">
-		<h3>Nom</h3>
-		<div class="col-sm-4">
-			<input class="input-lg form-control" [(ngModel)]="name" placeholder="Nom" autocomplete="off" autocorrect="off" autocapitalize="none"/>
-		</div>
-		<div class="col-sm-4">
-			<div class="btn-group btn-group-justified" role="group">
-				<a href="#" class="btn btn-primary" (click)="selectSex('Homme')" [class.active]="sex=='Homme'">
-					Homme
-				</a>
-				<a href="#" class="btn btn-primary" (click)="selectSex('Femme')" [class.active]="sex=='Femme'">
-					Femme
-				</a>
-			</div>
-		</div>
-		<div class="col-sm-4" *ngIf="name && sex">
-			<input type="submit" (click)="validName()" class="btn-block btn btn-default btn-lg" value="Valider" />
-		</div>
-	</div>
-</div>
-<div *ngIf="(step > 7)" class="row">
-	<div class="col-sm-12">
-		<h3>Nom: {{name}}  <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(7)"></button></h3>
-	</div>
-</div>
+<md-card *ngIf="(step >= 5) && hasStatModification()">
+    <md-toolbar color="primary">
+        <span fxFlex="auto">Trucs spéciaux</span>
+        <button *ngIf="(step > 5)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="setStep(5)">
+            <md-icon>edit</md-icon>
+        </button>
+    </md-toolbar>
+    <md-card-content>
+        <div *ngIf="hasSuperBourin()">
+            <h3>SUPER-BOURRIN</h3>
+            <p *ngIf="step == 5">
+                a le droit de retrancher jusqu'à 3 points à son score de base en ATTAQUE et/ou en PARADE
+                pour en faire un bonus de dégâts (au corps à corps, toutes armes confondues). Ainsi il peut avoir +3 en dégâts en plus de ses
+                autres bonus de FORCE, mais son côté bourrin le rend maladroit. Le bonus est à choisir en début de carrière et ne pourra
+                être modifié par la suite.
+            </p>
 
-<div *ngIf="(step == 8)" class="row">
-	<div class="col-sm-12">
-		<h3>Points de destin</h3>
-	</div>
-	<div class="col-sm-4">
-		<input class="input-lg form-control" [(ngModel)]="fatePoint" placeholder="Point de destin" />
-	</div>
-	<div class="col-sm-2">
-		<button (click)="rollFatePoint()" class="btn-block btn btn-default"><span class="ra ra-perspective-dice-random ra-3x"></span></button>
-	</div>
-	<div class="col-sm-2" *ngIf="fatePoint != null">
-		<input type="submit" (click)="validFatePoint()" class="btn-block btn btn-default btn-lg" value="Valid" />
-	</div>
-</div>
-<div *ngIf="(step > 8)" class="row">
-	<div class="col-sm-12">
-		<h3>Points de destin: {{fatePoint}}  <button class="btn btn-primary glyphicon glyphicon-pencil pull-right" (click)="setStep(8)"></button></h3>
-	</div>
-</div>
+            <div *ngIf="step == 5">
+                AT:
+                <md-button-toggle-group [(ngModel)]="superBourrinValueAt" (change)="updateSuperBourrin()">
+                    <md-button-toggle [value]="0">0</md-button-toggle>
+                    <md-button-toggle [disabled]="superBourrinValuePrd > 2"  [value]="1">-1</md-button-toggle>
+                    <md-button-toggle [disabled]="superBourrinValuePrd > 1"  [value]="2">-2</md-button-toggle>
+                    <md-button-toggle [disabled]="superBourrinValuePrd > 0"  [value]="3">-3</md-button-toggle>
+                </md-button-toggle-group>
+                PRD:
+                <md-button-toggle-group [(ngModel)]="superBourrinValuePrd" (change)="updateSuperBourrin()">
+                    <md-button-toggle [value]="0">0</md-button-toggle>
+                    <md-button-toggle [disabled]="superBourrinValueAt > 2" [value]="1">-1</md-button-toggle>
+                    <md-button-toggle [disabled]="superBourrinValueAt > 1" [value]="2">-2</md-button-toggle>
+                    <md-button-toggle [disabled]="superBourrinValueAt > 0" [value]="3">-3</md-button-toggle>
+                </md-button-toggle-group>
+            </div>
 
-<div *ngIf="(step == 9)" class="row">
-	<div class="col-sm-12">
-		<h3>Confirmation</h3>
-		<button [disabled]="creating" class="btn btn-primary" (click)="createCharacter()">Creer</button>
-	</div>
+            <p *ngIf="superBourrinValueAt && superBourrinValuePrd">
+                Retrancher <em>{{superBourrinValueAt}}</em> point(s) du score de base <em>d'attaque</em>
+                et <em>{{superBourrinValuePrd}}</em> point(s) du score de base de <em>parade</em>
+                et ajouter <em>{{superBourrinValueAt + superBourrinValuePrd}}</em> point(s) de dégâts.
+            </p>
+            <p *ngIf="!superBourrinValueAt && superBourrinValuePrd">
+                Retrancher <em>{{superBourrinValuePrd}}</em> point(s) du score de base de <em>parade</em>
+                et ajouter <em>{{superBourrinValueAt + superBourrinValuePrd}}</em> point(s) de dégâts.
+            </p>
+            <p *ngIf="superBourrinValueAt && !superBourrinValuePrd">
+                Retrancher <em>{{superBourrinValueAt}}</em> point(s) du score de base <em>d'attaque</em>
+                et ajouter <em>{{superBourrinValueAt + superBourrinValuePrd}}</em> point(s) de dégâts.
+            </p>
+            <p *ngIf="!superBourrinValueAt && !superBourrinValuePrd">
+                Ne rien changer.
+            </p>
+        </div>
+
+        <div *ngIf="hasMove1PointStat()">
+            <h3>Deplacement d'un point de stat</h3>
+            <p>
+                En raison de sa polyvalence, au niveau 1 le Ranger peut choisir de soustraire 1 point d'une CARAC pour l'ajouter à une
+                autre (INT, CHA, COU, FO, AD)
+            </p>
+
+            <div fxLayout="row" fxLayoutAlign="space-around center">
+                <button md-icon-button (click)="move1PointStat('cou', 1)">
+                    <md-icon [color]="move1PointStatValues['cou'] == 1 ? 'accent' : null">keyboard_arrow_up</md-icon>
+                </button>
+                <button md-icon-button (click)="move1PointStat('int', 1)">
+                    <md-icon [color]="move1PointStatValues['int'] == 1 ? 'accent' : null">keyboard_arrow_up</md-icon>
+                </button>
+                <button md-icon-button (click)="move1PointStat('cha', 1)">
+                    <md-icon [color]="move1PointStatValues['cha'] == 1 ? 'accent' : null">keyboard_arrow_up</md-icon>
+                </button>
+                <button md-icon-button (click)="move1PointStat('ad', 1)">
+                    <md-icon [color]="move1PointStatValues['ad'] == 1 ? 'accent' : null">keyboard_arrow_up</md-icon>
+                </button>
+                <button md-icon-button (click)="move1PointStat('fo', 1)">
+                    <md-icon [color]="move1PointStatValues['fo'] == 1 ? 'accent' : null">keyboard_arrow_up</md-icon>
+                </button>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-around center">
+                <md-input-container fxFlex="auto">
+                    <input md-input [ngModel]="cou + move1PointStatValues['cou']" disabled placeholder="Courage"/>
+                </md-input-container>
+                <md-input-container fxFlex="auto">
+                    <input md-input [ngModel]="int + move1PointStatValues['int']" disabled placeholder="Inteligence" />
+                </md-input-container>
+                <md-input-container fxFlex="auto">
+                    <input md-input [ngModel]="cha + move1PointStatValues['cha']" disabled placeholder="Charisme" />
+                </md-input-container>
+                <md-input-container fxFlex="auto">
+                    <input md-input [ngModel]="ad + move1PointStatValues['ad']" disabled placeholder="Adresse" />
+                </md-input-container>
+                <md-input-container fxFlex="auto">
+                    <input md-input [ngModel]="fo + move1PointStatValues['fo']" disabled placeholder="Force" />
+                </md-input-container>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-around center">
+                <button md-icon-button (click)="move1PointStat('cou', -1)">
+                    <md-icon [color]="move1PointStatValues['cou'] == -1 ? 'accent' : null">keyboard_arrow_down</md-icon>
+                </button>
+                <button md-icon-button (click)="move1PointStat('int', -1)">
+                    <md-icon [color]="move1PointStatValues['int'] == -1 ? 'accent' : null">keyboard_arrow_down</md-icon>
+                </button>
+                <button md-icon-button (click)="move1PointStat('cha', -1)">
+                    <md-icon [color]="move1PointStatValues['cha'] == -1 ? 'accent' : null">keyboard_arrow_down</md-icon>
+                </button>
+                <button md-icon-button (click)="move1PointStat('ad', -1)">
+                    <md-icon [color]="move1PointStatValues['ad'] == -1 ? 'accent' : null">keyboard_arrow_down</md-icon>
+                </button>
+                <button md-icon-button (click)="move1PointStat('fo', -1)">
+                    <md-icon [color]="move1PointStatValues['fo'] == -1 ? 'accent' : null">keyboard_arrow_down</md-icon>
+                </button>
+            </div>
+        </div>
+        <div *ngIf="hasChangeAtPrd()">
+            <h3>Deplacement d'un point de d'attaque et de parade</h3>
+            <p *ngIf="step == 5">
+                Peut choisir au niveau 1 d'échanger 1 point d'ATTAQUE avec 1 point de PARADE, ou inversement
+            </p>
+
+            <md-button-toggle-group *ngIf="step == 5" [(ngModel)]="changeAtPrdValue">
+                <md-button-toggle [value]="1">+1 AT -1 PRD</md-button-toggle>
+                <md-button-toggle [value]="0">Aucune modification</md-button-toggle>
+                <md-button-toggle [value]="-1">-1 AT +1 PRD</md-button-toggle>
+            </md-button-toggle-group>
+
+            <div *ngIf="step > 5">
+                <span *ngIf="changeAtPrdValue === 1">Ajouter un point d'attaque et retrancher un point de parade</span>
+                <span *ngIf="changeAtPrdValue === 0">Aucune modification</span>
+                <span *ngIf="changeAtPrdValue === -1">Ajouter un point de parade et retrancher un point d'attaque</span>
+            </div>
+        </div>
+        <div *ngIf="hasRemoveAttOrPrdToIntOrCha()">
+            <h3>Marchand</h3>
+            <p>
+                En raison de son érudition, au niveau 1 le marchand doit retirer 1 point à l'attaque ou à la parade,
+                qu'il pourra ajouter au choix à l'intelligence ou au charisme
+            </p>
+
+            <span *ngIf="step == 5">
+                Enlever un point
+                <md-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrChaRemoveStat" (change)="updateRemoveAttOrPrdToIntOrCha()">
+                    <md-button-toggle value="AT">d'attaque</md-button-toggle>
+                    <md-button-toggle value="PRD">de parade</md-button-toggle>
+                </md-button-toggle-group>
+
+                et l'ajouter en
+                <md-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrChaAddStat" (change)="updateRemoveAttOrPrdToIntOrCha()">
+                    <md-button-toggle value="INT">intelligence</md-button-toggle>
+                    <md-button-toggle value="CHA">charisme</md-button-toggle>
+                </md-button-toggle-group>
+            </span>
+            <span *ngIf="step > 5">
+                Enlever un point <em>{{removeAttOrPrdToIntOrChaRemoveStat == 'AT' ? "d'attaque" : "de parade"}}</em>
+                et l'ajouter en <em>{{removeAttOrPrdToIntOrChaAddStat == 'INT' ? 'inteligence' : 'charisme'}}</em>.
+            </span>
+        </div>
+
+        <div *ngIf="hasRemoveAttOrPrdToIntOrAd()">
+            <h3>Ingenieur</h3>
+            <p>
+                En raison de sa spécialisation technique, au niveau 1 l'ingénieur doit retirer 1 point à l'attaque ou à la parade, qu'il pourra
+                ajouter au choix à l'intelligence ou à l'adresse
+            </p>
+
+            <span *ngIf="step == 5">
+                Enlever un point
+                <md-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrAdRemoveStat" (change)="updateRemoveAttOrPrdToIntOrAd()">
+                    <md-button-toggle value="AT">d'attaque</md-button-toggle>
+                    <md-button-toggle value="PRD">de parade</md-button-toggle>
+                </md-button-toggle-group>
+
+                et l'ajouter en
+                <md-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrAdAddStat" (change)="updateRemoveAttOrPrdToIntOrAd()">
+                    <md-button-toggle value="INT">intelligence</md-button-toggle>
+                    <md-button-toggle value="AD">adresse</md-button-toggle>
+                </md-button-toggle-group>
+            </span>
+            <span *ngIf="step > 5">
+                Enlever un point <em>{{removeAttOrPrdToIntOrAdRemoveStat == 'AT' ? "d'attaque" : "de parade"}}</em>
+                et l'ajouter en <em>{{removeAttOrPrdToIntOrAdAddStat == 'INT' ? 'inteligence' : 'adresse'}}</em>.
+            </span>
+        </div>
+
+    </md-card-content>
+    <md-card-actions *ngIf="step == 5" align="end">
+        <button md-button type="button" (click)="setStep(6)" color="primary" [disabled]="!isStatModificationValid()">
+            VALIDER
+        </button>
+    </md-card-actions>
+</md-card>
+
+<md-card *ngIf="(step >= 6) && hasSpeciality()">
+    <md-toolbar color="primary">
+        <span fxFlex="auto">Specialité</span>
+        <button *ngIf="(step === 6)"
+                fxFlex="nogrow"
+                md-mini-fab
+                type="button"
+                (click)="randomSpeciality()">
+            <md-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-md-button-icon-32"></md-icon>
+        </button>
+        <button *ngIf="(step > 6)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="setStep(6)">
+            <md-icon>edit</md-icon>
+        </button>
+    </md-toolbar>
+    <md-card-content>
+        <div *ngIf="step == 6">
+            <template ngFor let-speciality [ngForOf]="selectedJob.specialities">
+                <md-card class="speciality">
+                    <md-card-title>
+                        {{speciality.name}}
+                    </md-card-title>
+                    <md-card-content>
+                        <p>{{speciality.description}}</p>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button color="primary" (click)="selectSpeciality(speciality)">
+                            SELECTIONNER
+                        </button>
+                    </md-card-actions>
+                </md-card>
+            </template>
+        </div>
+        <div *ngIf="(step > 6 && selectedSpeciality != null)" class="row">
+            {{selectedSpeciality.name}}
+        </div>
+    </md-card-content>
+</md-card>
+
+
+<md-card *ngIf="(step >= 7)">
+    <md-toolbar color="primary">
+        <span fxFlex="auto">Nom &amp; sexe</span>
+        <button *ngIf="(step === 7)"
+                fxFlex="nogrow"
+                md-mini-fab
+                type="button"
+                (click)="randomNameAndSex()">
+            <md-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-md-button-icon-32"></md-icon>
+        </button>
+        <button *ngIf="(step > 7)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="setStep(7)">
+            <md-icon>edit</md-icon>
+        </button>
+    </md-toolbar>
+    <md-card-content>
+        <div>
+            <md-radio-group name="sexe" [(ngModel)]="sex" [disabled]="step > 7">
+                <md-radio-button name="sexe" [value]="'Homme'">
+                    Homme
+                </md-radio-button>
+                <md-radio-button name="sexe" [value]="'Femme'">
+                    Femme
+                </md-radio-button>
+            </md-radio-group>
+        </div>
+        <div fxLayout="row">
+            <md-input-container fxFlex="auto">
+                <input md-input
+                       type="text"
+                       [(ngModel)]="name"
+                       [disabled]="step > 7"
+                       placeholder="Nom"
+                       required/>
+            </md-input-container>
+            <button *ngIf="(step === 7)"
+                    fxFlex="nogrow"
+                    md-icon-button
+                    type="button"
+                    (click)="randomName()">
+                <md-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-md-button-icon-32"></md-icon>
+            </button>
+        </div>
+    </md-card-content>
+    <md-card-actions *ngIf="step == 7" align="end">
+        <button md-button type="button" (click)="validName()" color="primary" [disabled]="!name || !sex">
+            VALIDER
+        </button>
+    </md-card-actions>
+</md-card>
+
+
+
+<md-card *ngIf="(step >= 8)">
+    <md-toolbar color="primary">
+        <span fxFlex="auto">Points de destin</span>
+        <button *ngIf="(step === 8)"
+                fxFlex="nogrow"
+                md-mini-fab
+                type="button"
+                (click)="rollFatePoint()">
+            <md-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-md-button-icon-32"></md-icon>
+        </button>
+        <button *ngIf="(step > 8)"
+                fxFlex="nogrow"
+                md-icon-button
+                type="button"
+                (click)="setStep(8)">
+            <md-icon>edit</md-icon>
+        </button>
+    </md-toolbar>
+    <md-card-content>
+        <div *ngIf="step == 8">
+            Tirez 1D4-1 pour determiner votre nombre de point de destins.
+            Cela donne un score de 0 à 3... Oui, les guignards n'ont pas de point de destin.
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-around center">
+            <md-input-container fxFlex="auto">
+                <input md-input
+                       type="number"
+                       [(ngModel)]="fatePoint"
+                       [disabled]="step > 8"
+                       placeholder="Point de destins"
+                       min=0 />
+            </md-input-container>
+        </div>
+    </md-card-content>
+    <md-card-actions *ngIf="step == 8" align="end">
+        <button md-button type="button" (click)="validFatePoint()" color="primary" [disabled]="!fatePoint">
+            VALIDER
+        </button>
+    </md-card-actions>
+</md-card>
+
+<div *ngIf="(step == 9)" fxLayout="row">
+    <button fxFlex="auto"
+            md-raised-button
+            [disabled]="creating"
+            (click)="createCharacter()">
+        Creer
+    </button>
 </div>

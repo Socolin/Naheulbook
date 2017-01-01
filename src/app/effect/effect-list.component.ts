@@ -6,17 +6,18 @@ import {LoginService} from '../user';
 
 import {EffectService} from './effect.service';
 import {EffectCategory, Effect} from './effect.model';
+import {MdTabChangeEvent} from "@angular/material";
 
 @Component({
     selector: 'effect-list',
     templateUrl: './effect-list.component.html',
+    styleUrls: ['../shared/number-shadow.scss'],
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputCategoryId: number = 1;
 
-    private selectedCategory: EffectCategory;
     private categories: EffectCategory[];
-    private effects: Effect[] = [];
+    private effects: {[categoryId: number]: Effect[]} = {};
     private editable: boolean = false;
     private sub: Subscription;
 
@@ -28,6 +29,10 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
 
     isOverlay(): boolean {
         return this._route.snapshot.url.length === 0 || this._route.snapshot.url[0].path !== 'database';
+    }
+
+    selectChange(changeEvent: MdTabChangeEvent) {
+        this.selectCategory(this.categories[changeEvent.index]);
     }
 
     selectCategory(category: EffectCategory): boolean {
@@ -45,18 +50,11 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
 
     loadCategory(categoryId: number): void {
         if (categoryId) {
-            for (let i = 0; i < this.categories.length; i++) {
-                let category = this.categories[i];
-                if (category.id === categoryId) {
-                    this.selectedCategory = category;
-                    this._effectService.getEffects(categoryId).subscribe(
-                        effects => {
-                            this.effects = effects;
-                        }
-                    );
-                    break;
+            this._effectService.getEffects(categoryId).subscribe(
+                effects => {
+                    this.effects[categoryId] = effects;
                 }
-            }
+            );
         }
     }
 

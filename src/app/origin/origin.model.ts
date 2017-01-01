@@ -16,6 +16,7 @@ export interface Origin {
     id: number;
     name: string;
     description: string;
+    playerDescription: string;
     advantage: string;
     basePRD: number;
     baseEV: number;

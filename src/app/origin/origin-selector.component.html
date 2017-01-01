@@ -1,14 +1,42 @@
-<div *ngFor="let origin of origins">
-	<a href="#" class="list-group-item" [class.active]="isSelected(origin)" [class.disabled]="!isAvailable(origin)" (click)="selectOrigin(origin)">
-		<h4 class="list-group-item-heading">{{origin.name}}</h4>
-		<p class="list-group-item-text" *ngIf="!isAvailable(origin)">
-			<span *ngFor="let req of origin.requirements">
-				<span *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min" class="text-danger">{{req.stat|uppercase}} &ge; {{req.min}}</span>
-				<span *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max" class="text-danger">{{req.stat|uppercase}} &le; {{req.max}}</span>
-				<span *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min" class="text-success">{{req.stat|uppercase}} &ge; {{req.min}}</span>
-				<span *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max" class="text-success">{{req.stat|uppercase}} &le; {{req.max}}</span>
-			</span>
-		</p>
-		<p class="list-group-item-text" *ngIf="isAvailable(origin)" [innerHTML]="origin.description"></p>
-	</a>
-</div>
+<template ngFor [ngForOf]="origins" let-origin>
+    <md-card *ngIf="viewNotAvailable || isAvailable(origin)" [class.disabled]="!isAvailable(origin)">
+        <button md-mini-fab color="primary" (click)="toggleDetail(origin)">
+            <md-icon *ngIf="displayDetail(origin)">remove</md-icon>
+            <md-icon *ngIf="!displayDetail(origin)">add</md-icon>
+        </button>
+        <md-card-title>{{origin.name}}</md-card-title>
+        <md-card-subtitle>
+            <md-chip-list selectable="false">
+                <template ngFor [ngForOf]="origin.requirements" let-req>
+                    <md-chip selected="true" color="warn"    *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
+                        {{req.stat|uppercase}} &ge; {{req.min}}
+                    </md-chip>
+                    <md-chip selected="true" color="warn"    *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
+                        {{req.stat|uppercase}} &le; {{req.max}}
+                    </md-chip>
+                    <md-chip selected="true" color="primary" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
+                        {{req.stat|uppercase}} &ge; {{req.min}}
+                    </md-chip>
+                    <md-chip selected="true" color="primary" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
+                        {{req.stat|uppercase}} &le; {{req.max}}
+                    </md-chip>
+                </template>
+            </md-chip-list>
+        </md-card-subtitle>
+        <md-card-content *ngIf="displayDetail(origin)">
+            <div class="description" [innerHTML]="origin.playerDescription | textFormatter"></div>
+            <div class="skills">
+                Je suis né avec les compétences suivantes :
+                <ul>
+                    <li *ngFor="let skill of origin.skills">
+                        <span class="skill-name">{{skill.name}}</span>
+                        <span *ngIf="skill.playerDescription"> : {{skill.playerDescription}}</span>
+                    </li>
+                </ul>
+            </div>
+        </md-card-content>
+        <md-card-actions *ngIf="isAvailable(origin)" align="end">
+            <button color="primary" md-button (click)="selectOrigin(origin)">CHOISIR</button>
+        </md-card-actions>
+    </md-card>
+</template>

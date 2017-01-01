@@ -3,10 +3,12 @@ import {Component, Input, Output, EventEmitter, OnInit, OnChanges} from '@angula
 import {Origin} from './origin.model';
 import {StatRequirement} from '../shared';
 import {OriginService} from './origin.service';
+import {getRandomInt} from "../shared/random";
 
 @Component({
     selector: 'origin-selector',
-    templateUrl: './origin-selector.component.html'
+    templateUrl: './origin-selector.component.html',
+    styleUrls: ['./origin-selector.component.scss'],
 })
 export class OriginSelectorComponent implements OnInit, OnChanges {
     @Input('cou') cou: number;
@@ -21,14 +23,12 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
     public origins: Origin[] = [];
     public invalidStats: Object;
     public stats: Object;
+    public detail: {[originId: number]: boolean} = {};
+    public viewNotAvailable: boolean = false;
 
     constructor(private _originService: OriginService) {
         this.stats = this;
         this.invalidStats = [];
-    }
-
-    isSelected(origin: Origin) {
-        return this.selectedOrigin && this.selectedOrigin.id === origin.id;
     }
 
     updateInvalidStats(origin: Origin) {
@@ -85,6 +85,37 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
                 console.log(err);
             }
         );
+    }
+
+    randomSelect(): void {
+        let count = 0;
+        for (let i = 0; i < this.origins.length; i++) {
+            if (this.isAvailable(this.origins[i])) {
+                count++;
+            }
+        }
+        let rnd = getRandomInt(1, count);
+        count = 0;
+        for (let i = 0; i < this.origins.length; i++) {
+            if (this.isAvailable(this.origins[i])) {
+                count++;
+                if (count == rnd) {
+                    this.selectOrigin(this.origins[i]);
+                }
+            }
+        }
+    }
+
+    toggleViewAll(): void {
+        this.viewNotAvailable = !this.viewNotAvailable;
+    }
+
+    toggleDetail(origin: Origin) {
+        this.detail[origin.id] = !this.detail[origin.id];
+    }
+
+    displayDetail(origin: Origin) {
+        return this.detail[origin.id];
     }
 
     ngOnChanges() {

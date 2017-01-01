@@ -39,7 +39,7 @@ export class UserProfileComponent implements OnInit {
         }
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.loginService.loggedUser.subscribe(user => {
             this.profile = user;
         });

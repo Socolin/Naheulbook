@@ -4,10 +4,12 @@ import {Origin} from '../origin';
 import {StatRequirement} from '../shared';
 import {Job} from './job.model';
 import {JobService} from './job.service';
+import {getRandomInt} from "../shared/random";
 
 @Component({
     selector: 'job-selector',
-    templateUrl: './job-selector.component.html'
+    templateUrl: './job-selector.component.html',
+    styleUrls: ['./job-selector.component.scss'],
 })
 export class JobSelectorComponent implements OnInit, OnChanges {
     @Input('cou') cou: string;
@@ -19,18 +21,16 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     @Output() jobChange: EventEmitter<Job> = new EventEmitter<Job>();
     @Input() selectedJob: Job;
     @Input() selectedOrigin: Origin;
+    public detail: {[originId: number]: boolean} = {};
 
     public jobs: Job[] = [];
     private stats: any;
 
     public invalidStats: any[] = [];
+    public viewNotAvailable: boolean = false;
 
     constructor(private _jobService: JobService) {
         this.stats = this;
-    }
-
-    isSelected(job: Job) {
-        return this.selectedJob && this.selectedJob.id === job.id;
     }
 
     isVisible(job: Job) {
@@ -54,6 +54,10 @@ export class JobSelectorComponent implements OnInit, OnChanges {
                     }
                 }
             }
+
+        }
+        if (!this.viewNotAvailable && !this.isAvailable(job)) {
+            return false;
         }
         return true;
     }
@@ -133,6 +137,41 @@ export class JobSelectorComponent implements OnInit, OnChanges {
                 console.log(err);
             }
         );
+    }
+
+    toggleViewAll(): void {
+        this.viewNotAvailable = !this.viewNotAvailable;
+    }
+
+    randomSelect(): void {
+        let count = 1;
+        for (let i = 0; i < this.jobs.length; i++) {
+            let job = this.jobs[i];
+            if (this.isVisible(job) && this.isAvailable(job)) {
+                count++;
+            }
+        }
+        let rnd = getRandomInt(1, count);
+        count = 0;
+        for (let i = 0; i < this.jobs.length; i++) {
+            let job = this.jobs[i];
+            if (this.isVisible(job) && this.isAvailable(job)) {
+                count++;
+                if (count == rnd) {
+                    this.selectJob(this.jobs[i]);
+                    return;
+                }
+            }
+        }
+        this.selectJob(null);
+    }
+
+    toggleDetail(origin: Origin) {
+        this.detail[origin.id] = !this.detail[origin.id];
+    }
+
+    displayDetail(origin: Origin) {
+        return this.detail[origin.id];
     }
 
     ngOnChanges() {

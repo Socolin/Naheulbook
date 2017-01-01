@@ -4,15 +4,12 @@ import {Job} from './job.model';
 
 @Component({
     selector: 'job',
-    templateUrl: './job.component.html'
+    templateUrl: './job.component.html',
+    styleUrls: ['./job.component.scss']
 })
 export class JobComponent {
     @Input() job: Job;
-    public folded: boolean;
-
-    constructor() {
-        this.folded = true;
-    }
+    public folded: boolean = true;
 
     toggleFold(event: Event) {
         event.preventDefault();

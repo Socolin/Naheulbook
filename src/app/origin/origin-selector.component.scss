@@ -1,0 +1,22 @@
+md-card {
+    margin-bottom: 10px;
+    &.disabled {
+        color: rgba(1, 0, 0, 0.54);
+    }
+
+    button[md-mini-fab] {
+        float: right;
+    }
+
+    md-card-content {
+        text-align: justify;
+
+        .description {
+            margin-bottom: 16px;
+        }
+
+        .skill-name {
+            text-transform: uppercase;
+        }
+    }
+}
