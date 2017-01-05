@@ -10,6 +10,7 @@ import {CharacterWebsocketService} from './character-websocket.service';
 import {SwipeService} from './swipe.service';
 import {ItemActionService} from './item-action.service';
 import {Item} from './item.model';
+import {MdTabChangeEvent} from "@angular/material";
 
 export class LevelUpInfo {
     EVorEA: string = 'EV';
@@ -23,24 +24,8 @@ export class LevelUpInfo {
 @Component({
     selector: 'character',
     templateUrl: './character.component.html',
+    styleUrls: ['./character.component.scss'],
     providers: [CharacterWebsocketService, SwipeService, ItemActionService],
-    styles: [`
-        .canceled {
-            text-decoration: line-through;
-        }
-        .table-stats > td {
-            line-height: 1;
-        }
-        .stats-detail-name > td {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-        .stats-detail-values > td {
-            padding-top: 0;
-            border-top: 0;
-        }
-        `
-    ],
 })
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
@@ -49,6 +34,17 @@ export class CharacterComponent implements OnInit, OnDestroy {
     public inGroupTab: boolean = false;
     public selectedItem: Item;
     public currentTab: string = 'infos';
+    public currentTabIndex: number = 0;
+    public tabs: any[] = [
+        {hash: 'infos'},
+        {hash: 'combat'},
+        {hash: 'statistics'},
+        {hash: 'inventory'},
+        {hash: 'effects'},
+        {hash: 'loot'},
+        {hash: 'other'},
+        {hash: 'history'},
+    ];
 
     constructor(private _route: ActivatedRoute
         , private _notification: NotificationsService
@@ -277,10 +273,17 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    selectTab(tab: string) {
-        this.currentTab = tab;
+    // Tab
+
+    getTabIndexFromHash(hash: string): number {
+        return this.tabs.findIndex(t => t.hash === hash);
+    }
+
+    selectTab(tabChangeEvent: MdTabChangeEvent): boolean {
+        console.info(tabChangeEvent);
+        this.currentTab = this.tabs[tabChangeEvent.index].hash;
         if (!this.inGroupTab) {
-            window.location.hash = tab;
+            window.location.hash = this.currentTab;
         }
         return false;
     }
@@ -314,6 +317,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         if (!this.inGroupTab) {
             this._route.fragment.subscribe(value => {
                 if (value) {
+                    this.currentTabIndex = this.getTabIndexFromHash(value);
                     this.currentTab = value;
                 }
             });

@@ -1,0 +1,26 @@
+div {
+    & .character-component {
+        padding: -32px;
+    }
+
+    .canceled {
+        text-decoration: line-through;
+    }
+    .table-stats > td {
+        line-height: 1;
+    }
+    .stats-detail-name > td {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .stats-detail-values > td {
+        padding-top: 0;
+        border-top: 0;
+    }
+}
+
+md-card {
+    md-card-header {
+        justify-content: space-between;
+    }
+}

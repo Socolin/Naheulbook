@@ -9,9 +9,12 @@ md-sidenav {
     }
 }
 
-.app-content {
-    padding: 32px;
+@media (min-width: 600px) {
+    .app-content {
+        padding: 32px;
+    }
 }
+
 
 md-toolbar {
     md-icon {
