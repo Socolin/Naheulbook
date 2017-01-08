@@ -6,26 +6,27 @@
         </button>
         <md-card-title>{{origin.name}}</md-card-title>
         <md-card-subtitle>
-            <md-chip-list selectable="false">
-                <template ngFor [ngForOf]="origin.requirements" let-req>
-                    <md-chip selected="true" color="warn"    *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
-                        {{req.stat|uppercase}} &ge; {{req.min}}
-                    </md-chip>
-                    <md-chip selected="true" color="warn"    *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
-                        {{req.stat|uppercase}} &le; {{req.max}}
-                    </md-chip>
-                    <md-chip selected="true" color="primary" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
-                        {{req.stat|uppercase}} &ge; {{req.min}}
-                    </md-chip>
-                    <md-chip selected="true" color="primary" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
-                        {{req.stat|uppercase}} &le; {{req.max}}
-                    </md-chip>
-                </template>
-            </md-chip-list>
+            Prérequis:
+            <template ngFor [ngForOf]="origin.requirements" let-req let-last="last">
+                <span class="invalid-stat"    *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
+                    {{req.stat|uppercase}} &ge; {{req.min}}
+                </span>
+                <span class="invalid-stat"    *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
+                    {{req.stat|uppercase}} &le; {{req.max}}
+                </span>
+                <span class="valid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
+                    {{req.stat|uppercase}} &ge; {{req.min}}
+                </span>
+                <span class="valid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
+                    {{req.stat|uppercase}} &le; {{req.max}}
+                </span>
+                <span *ngIf="!last">,</span>
+            </template>
+            <span *ngIf="!origin.requirements.length">aucun</span>
         </md-card-subtitle>
         <md-card-content *ngIf="displayDetail(origin)">
             <div class="description" [innerHTML]="origin.playerDescription | textFormatter"></div>
-            <div class="skills">
+            <div class="skills" *ngIf="origin.skills.length">
                 Je suis né avec les compétences suivantes :
                 <ul>
                     <li *ngFor="let skill of origin.skills">

@@ -15,6 +15,12 @@ md-sidenav {
     }
 }
 
+@media (max-width: 599px) {
+    .app-content {
+        padding: 10px;
+    }
+}
+
 
 md-toolbar {
     md-icon {

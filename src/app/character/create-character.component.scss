@@ -2,8 +2,16 @@ md-card {
     padding: 0;
     margin-bottom: 10px;
 
+    md-input-container {
+        margin-right: 5px;
+    }
+
     & md-toolbar {
         margin: 0;
+
+        button[md-mini-fab] {
+            top: 30px;
+        }
     }
 
     & md-card-content {

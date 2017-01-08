@@ -8,11 +8,22 @@ md-card {
         float: right;
     }
 
+    md-card-subtitle {
+        .invalid-stat {
+            color: #d43f3a;
+        }
+
+        .valid-stat {
+            color: #3c763d;
+        }
+    }
+
     md-card-content {
         text-align: justify;
+        line-height: 150%;
 
         .description {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .skill-name {

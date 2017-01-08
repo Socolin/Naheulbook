@@ -1,5 +1,5 @@
 <h3>Évènements</h3>
-<template [ngIf]="group.data.date">
+<template [ngIf]="groupTimestamp">
     <div class="list-group">
         <a href="#" class="list-group-item" (click)="openEventEditor()">
             Ajouter un évènement
@@ -45,6 +45,6 @@
         </div>
     </div>
 </template>
-<template [ngIf]="!group.data.date">
+<template [ngIf]="!groupTimestamp">
     Vous devez définir la date du groupe avant de pouvoir ajouter des évènements
 </template>

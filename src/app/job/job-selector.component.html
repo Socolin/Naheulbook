@@ -1,6 +1,9 @@
 <md-card>
     <md-card-title>Aucun</md-card-title>
-    <md-card-actions>
+    <md-card-subtitle>
+        Prérequis: aucun
+    </md-card-subtitle>
+    <md-card-actions align="end">
         <button color="primary" md-button (click)="selectJob(null)">CHOISIR</button>
     </md-card-actions>
 </md-card>
@@ -12,22 +15,24 @@
         </button>
         <md-card-title>{{job.name}}</md-card-title>
         <md-card-subtitle>
-            <md-chip-list selectable="false">
-                <template ngFor [ngForOf]="job.requirements" let-req>
-                    <md-chip selected="true" color="warn"    *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
-                        {{req.stat|uppercase}} &ge; {{req.min}}
-                    </md-chip>
-                    <md-chip selected="true" color="warn"    *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
-                        {{req.stat|uppercase}} &le; {{req.max}}
-                    </md-chip>
-                    <md-chip selected="true" color="primary" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
-                        {{req.stat|uppercase}} &ge; {{req.min}}
-                    </md-chip>
-                    <md-chip selected="true" color="primary" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
-                        {{req.stat|uppercase}} &le; {{req.max}}
-                    </md-chip>
-                </template>
-            </md-chip-list>
+
+            Prérequis:
+            <template ngFor [ngForOf]="job.requirements" let-req let-last="last">
+                <span class="invalid-stat"    *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
+                    {{req.stat|uppercase}} &ge; {{req.min}}
+                </span>
+                <span class="invalid-stat"    *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
+                    {{req.stat|uppercase}} &le; {{req.max}}
+                </span>
+                <span class="valid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
+                    {{req.stat|uppercase}} &ge; {{req.min}}
+                </span>
+                <span class="valid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
+                    {{req.stat|uppercase}} &le; {{req.max}}
+                </span>
+                <span *ngIf="!last">,</span>
+            </template>
+            <span *ngIf="!job.requirements.length">aucun</span>
         </md-card-subtitle>
         <md-card-content *ngIf="displayDetail(job)">
             <div class="description" [innerHTML]="job.playerDescription | textFormatter"></div>
