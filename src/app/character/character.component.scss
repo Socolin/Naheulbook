@@ -22,5 +22,9 @@ div {
 md-card {
     md-card-header {
         justify-content: space-between;
+
+        div.md-card-header-text {
+            margin: 0;
+        }
     }
 }

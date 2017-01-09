@@ -3,146 +3,64 @@
         <md-tab label="Info">
             <!-- Start of info tab -->
             <md-card>
-                <md-card-header>
-                    <button md-icon-button [mdMenuTriggerFor]="posYMenu" class="end-icon">
-                        <md-icon>more_vert</md-icon>
-                    </button>
-                    <md-card-title>{{character.name}}</md-card-title>
-                    <md-card-subtitle>{{character.origin.name}}<span *ngIf="character.job"> - {{character.job.name}}</span></md-card-subtitle>
-                </md-card-header>
+                <md-card-title>{{character.name}}</md-card-title>
                 <md-card-content>
-                    Specialite:
+                    <dl>
+                        <dt>Origine</dt>
+                        <dd>{{character.origin.name}}</dd>
+
+                        <dt>Metier</dt>
+                        <dd *ngIf="character.job">{{character.job.name}}</dd>
+                        <dd *ngIf="!character.job">aucun</dd>
+
+                        <dt>Specialité</dt>
+                        <dd *ngFor="let speciality of character.specialities">
+                            {{speciality.name}}
+                        </dd>
+
+                        <dt>Groupe</dt>
+                        <dd *ngIf="character.group">{{character.group.name}}</dd>
+                        <dd *ngIf="!character.group">aucun</dd>
+
+
+                        <dt>Sexe</dt>
+                        <dd>{{character.sex}}</dd>
+
+                        <dt>Point de destins</dt>
+                        <dd>{{character.fatePoint}}<!--
+                            <value-editor [title]="'Point de destin'" [value]=character.fatePoint
+                                          (onChange)="changeCharacterStat('fatePoint', $event)"></value-editor>-->
+                        </dd>
+
+                        <dt>Niveau</dt>
+                        <dd>{{character.level}}
+                            <button *ngIf="canLevelUp()" (click)="initLevelUp()" type="button"
+                                    class="btn btn-success btn-xs" data-toggle="modal" data-target="#modalLevelUp">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span> Ding !
+                            </button>
+                        </dd>
+
+                        <dt>Experience</dt>
+                        <dd>
+                            <value-editor [title]="'Experience'" [value]=character.experience
+                                          (onChange)="changeCharacterStat('experience', $event)"></value-editor>
+                        </dd>
+
+                        <dt *ngIf="inGroupTab">Debilibeuk</dt>
+                        <dd *ngIf="inGroupTab">
+                            <value-editor [title]="'Debilibeuk du joueur'" [value]=character.gmData.debilibeuk
+                                          (onChange)="changeGmData('debilibeuk', $event)"></value-editor>
+                        </dd>
+
+                        <dt *ngIf="inGroupTab">Mankdebol</dt>
+                        <dd *ngIf="inGroupTab">
+                            <value-editor [title]="'Mankdebol du joueur'" [value]=character.gmData.mankdebol
+                                          (onChange)="changeGmData('mankdebol', $event)"></value-editor>
+                        </dd>
+                    </dl>
                 </md-card-content>
                 <md-card-actions></md-card-actions>
             </md-card>
-
-            <md-menu y-position="below" x-position="before" #posYMenu="mdMenu">
-                <button md-menu-item>
-                    a
-                </button>
-                <button md-menu-item>
-                    b
-                </button>
-                <button md-menu-item>
-                    c
-                </button>
-            </md-menu>
-
-
-
-            <div class="char-tab-info">
-                <md-list dense>
-                    <md-list-item>
-                        <h3 md-line>{{character.name}}</h3>
-                        <p md-line class="label">{{character.origin.name}}<span *ngIf="character.job"> - {{character.job.name}}</span></p>
-                    </md-list-item>
-                    <h3 *ngIf="character.specialities.length" md-subheader>Specialité</h3>
-                    <md-list-item *ngIf="character.specialities.length">
-                        <template ngFor let-speciality [ngForOf]="character.specialities">
-                            <h3 md-line>{{speciality.name}}</h3>
-                            <p md-line class="label">{{speciality.description}}</p>
-                        </template>
-                    </md-list-item>
-
-                    <md-divider></md-divider>
-
-                    <h3 md-subheader>Roleplay</h3>
-                    <md-list-item>
-                        <h3 md-line>{{character.name}}</h3>
-                        <p md-line class="label">Nom</p>
-                        <p md-line class="label">Nom</p>
-                    </md-list-item>
-
-                    <md-divider></md-divider>
-                </md-list>
-                <div>
-                    <div>
-                        <div class="label">
-                            <strong>Nom</strong>
-                        </div>
-                        <div>{{character.name}}</div>
-                    </div>
-                    <div>
-                        <div class="label">
-                            <strong>Origine</strong>
-                        </div>
-                        <div>{{character.origin.name}}</div>
-                    </div>
-                    <div *ngIf="character.job">
-                        <div class="label">
-                            <strong>Métier</strong>
-                        </div>
-                        <div>{{character.job.name}}</div>
-                    </div>
-                    <div *ngIf="character.specialities.length">
-                        <div class="label">
-                            <strong>Specialité</strong>
-                        </div>
-                        <div>
-                            <div *ngFor="let speciality of character.specialities">
-                                {{speciality.name}}
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="character.group">
-                        <div class="label">
-                            <strong>Groupe</strong>
-                        </div>
-                        <div>{{character.group.name}}</div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <div class="label">
-                            <strong>Sexe</strong>
-                        </div>
-                        <div>{{character.sex}}</div>
-                    </div>
-                    <div>
-                        <div class="label">
-                            <strong>Point de destins</strong>
-                        </div>
-                        <div>
-                            <value-editor [title]="'Point de destin'" [value]=character.fatePoint (onChange)="changeCharacterStat('fatePoint', $event)"></value-editor>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="label">
-                            <strong>Niveau</strong>
-                        </div>
-                        <div>
-                            {{character.level}}
-                            <button *ngIf="canLevelUp()" (click)="initLevelUp()" type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modalLevelUp">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span> Ding !
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="label">
-                            <strong>Experience</strong>
-                        </div>
-                        <div>
-                            <value-editor [title]="'Experience'" [value]=character.experience (onChange)="changeCharacterStat('experience', $event)"></value-editor>
-                        </div>
-                    </div>
-                    <div *ngIf="inGroupTab">
-                        <div class="label">
-                            <strong>Debilibeuk</strong>
-                        </div>
-                        <div>
-                            <value-editor [title]="'Debilibeuk du joueur'" [value]=character.gmData.debilibeuk (onChange)="changeGmData('debilibeuk', $event)"></value-editor>
-                        </div>
-                    </div>
-                    <div *ngIf="inGroupTab">
-                        <div class="label">
-                            <strong>Mankdebol</strong>
-                        </div>
-                        <div>
-                            <value-editor [title]="'Mankdebol du joueur'" [value]=character.gmData.mankdebol (onChange)="changeGmData('mankdebol', $event)"></value-editor>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- End of infos tab -->
         </md-tab>
 

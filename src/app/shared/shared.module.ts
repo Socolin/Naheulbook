@@ -9,11 +9,15 @@ import {IconSelectorComponent} from './icon-selector.component';
 import {IconService} from './icon.service';
 import {IconComponent} from './icon.component';
 import {MiscService} from './misc.service';
+import {MaterialModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
+        MaterialModule.forRoot(),
+        FlexLayoutModule.forRoot(),
     ],
     declarations: [
         AutocompleteInputComponent,

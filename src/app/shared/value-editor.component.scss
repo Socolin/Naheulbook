@@ -1,0 +1,108 @@
+.ve-container {
+    position: absolute;
+    width: 244px;
+    height: 176px;
+
+    .ve-delta-value {
+        padding-top: 13px;
+        padding-bottom: 11px;
+        width: 60px;
+        text-align: center;
+        font-size: large;
+        position: absolute;
+        left: 60px;
+        bottom: 25px;
+    }
+
+    .ve-summary {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        div {
+            padding-top: 5px;
+            padding-bottom: 4px;
+            width: 180px;
+            font-size: 14px;
+            text-align: center;
+        }
+    }
+
+    .ve-title {
+        position: absolute;
+        left: 0;
+        bottom: 160px;
+
+        div {
+            padding-left: 0;
+            padding-right: 0;
+            width: 180px;
+            font-size: 14px;
+            text-align: center;
+        }
+    }
+
+    .ve-actions {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        .minus-buttons {
+            position: relative;
+            left: 0;
+            bottom: 25px;
+            width: 60px;
+
+            button {
+                width: 60px;
+                height: 45px;
+                border: 0;
+            }
+        }
+
+        .plus-buttons {
+            position: absolute;
+            left: 120px;
+            bottom: 25px;
+            width: 60px;
+
+            button {
+                width: 60px;
+                height: 45px;
+                border: 0;
+            }
+        }
+
+        .max-zero-buttons {
+            position: absolute;
+            left: 60px;
+            bottom: 70px;
+
+            button {
+                width: 60px;
+                height: 45px;
+                border: 0;
+            }
+        }
+
+        .valid-button {
+            position: absolute;
+            left: 180px;
+            bottom: 0;
+
+            button {
+                width: 64px;
+                height: 176px;
+                border: 0;
+            }
+        }
+    }
+
+    button {
+        line-height: 36px;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 20px;
+    }
+}
+

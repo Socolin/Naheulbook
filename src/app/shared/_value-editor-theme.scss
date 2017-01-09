@@ -1,0 +1,52 @@
+@import '~@angular/material/core/theming/all-theme';
+
+@mixin value-selector-theme($theme) {
+    // Extract whichever individual palettes you need from the theme.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    .ve-container {
+        background: md-color($background, card);
+        color: md-color($foreground, base);
+
+        .ve-delta-value {
+            background: md-color($background, disabled-button);
+            color: md-color($foreground, base);
+        }
+
+        .ve-actions {
+            .valid-button {
+                button {
+                    background: md-color($accent);
+                    color: md-color($accent, default-contrast);
+                }
+            }
+            .minus-buttons {
+                button {
+                    background: md-color($primary, 400);
+                    color: md-color($primary, default-contrast);
+                }
+            }
+            .max-zero-buttons {
+                button {
+                    background: md-color($primary);
+                    color: md-color($primary, default-contrast);
+                }
+
+                button[disabled] {
+                    background: md-color($background, disabled-button);
+                    color: md-color($foreground, disabled-button);
+                }
+            }
+            .plus-buttons {
+                button {
+                    background: md-color($primary, 600);
+                    color: md-color($primary, default-contrast);
+                }
+            }
+        }
+
+    }
+}

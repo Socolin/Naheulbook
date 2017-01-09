@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter, Renderer, ElementRef, OnChanges}
 
 @Component({
     selector: 'value-editor',
+    styleUrls: ['./value-editor.component.scss'],
     templateUrl: './value-editor.component.html',
 })
 export class ValueEditorComponent implements OnChanges {
@@ -10,24 +11,21 @@ export class ValueEditorComponent implements OnChanges {
     @Input() title: string;
     @Output() onChange: EventEmitter<number> = new EventEmitter<number>();
 
-    private valueDelta: string;
-    private newValue: number = 0;
-    private displayEditor: boolean = false;
-    private xOffset: number = 0;
-    private yOffset: number = 0;
+    public valueDelta: string;
+    public newValue: number = 0;
+    public displayEditor: boolean = false;
+    public xOffset: number = 0;
+    public yOffset: number = 0;
 
     constructor(private _renderer: Renderer
         , private _elementRef: ElementRef) {
     }
 
     computeEditorBoundingBox(element: any, bbox: ClientRect): void {
-        let h = element.hidden;
-        element.hidden = false;
         for (let i = 0; i < element.children.length; i++) {
             this.computeEditorBoundingBox(element.children[i], bbox);
         }
         let rect = element.getBoundingClientRect();
-        element.hidden = h;
         bbox.bottom = Math.max(bbox.bottom, rect.bottom);
         bbox.top = Math.min(bbox.top, rect.top);
         bbox.right = Math.max(bbox.right, rect.right);
@@ -39,6 +37,15 @@ export class ValueEditorComponent implements OnChanges {
             this.displayEditor = false;
             return;
         }
+        this.displayEditor = true;
+    }
+
+    hideEditor() {
+        this.displayEditor = false;
+    }
+
+    onDisplayed() {
+        let elements = document.getElementsByClassName('cdk-overlay-container');
 
         let bbox: ClientRect = {
             bottom: 0,
@@ -48,7 +55,8 @@ export class ValueEditorComponent implements OnChanges {
             top: 0,
             width: 0
         };
-        this.computeEditorBoundingBox(this._elementRef.nativeElement, bbox);
+
+        this.computeEditorBoundingBox(elements[0], bbox);
 
         if (bbox.right > window.innerWidth) {
             this.xOffset = window.innerWidth - bbox.right;
@@ -63,8 +71,6 @@ export class ValueEditorComponent implements OnChanges {
         else if (bbox.top < 0) {
             this.yOffset = -bbox.top;
         }
-
-        this.displayEditor = true;
     }
 
     commitValue() {

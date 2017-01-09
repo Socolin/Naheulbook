@@ -92,7 +92,7 @@ export class EventsComponent implements OnInit, OnChanges {
         this._groupWebsocketService.registerPacket('deleteEvent').subscribe(this.onDeleteEvent.bind(this));
         this._actionService.registerAction('dateChanged').subscribe(
             (data) => {
-                this.groupTimestamp = date2Timestamp(data.element.data.date);;
+                this.groupTimestamp = date2Timestamp(data.element.data.date);
                 this.countEvents();
             }
         );
