@@ -28,3 +28,96 @@ md-card {
         }
     }
 }
+
+.info-tab {
+    font-size: large;
+    md-card {
+        margin: 5px;
+    }
+}
+
+.combat-tab {
+    font-size: large;
+    display: flex;
+    flex-wrap: wrap;
+
+    .stat-label {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    md-card {
+        margin: 5px;
+
+        .game-icon, .ra {
+            font-size: 40px;
+        }
+
+        &.stats-card {
+            display: flex;
+            flex: 1 auto;
+            flex-direction: column;
+
+            .stat-row {
+                display: flex;
+                align-content: space-around;
+                justify-content: space-around;
+                flex-direction: row;
+            }
+
+            .stat {
+                display: flex;
+                align-content: space-around;
+                justify-content: space-around;
+                flex-direction: row;
+                flex-wrap: nowrap;
+
+                .stat-icon {
+                    flex: 0 40px;
+                }
+                .stat-value {
+                    flex: 1 auto;
+                    width: 80px;
+                    flex-flow: column;
+                    display: flex;
+                    justify-content: space-around;
+                    text-align: center;
+
+                    div {
+                        flex: 0 0 auto;
+                    }
+                }
+            }
+        }
+
+        &.combat-stats {
+
+        }
+
+        &.life-mana {
+            justify-content: space-around;
+
+            @media (max-width: 475px) {
+                flex-direction: row;
+
+                .stat {
+                    flex: 0 auto;
+                }
+            }
+
+            .life-danger {
+                color: #c72b2b;
+            }
+
+            span {
+                &.game-icon-hearts {
+                    color: #c72b2b;
+                }
+                &.game-icon-abstract-061 {
+                    color: blueviolet;
+                }
+            }
+        }
+    }
+
+}

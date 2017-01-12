@@ -280,7 +280,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     selectTab(tabChangeEvent: MdTabChangeEvent): boolean {
-        console.info(tabChangeEvent);
         this.currentTab = this.tabs[tabChangeEvent.index].hash;
         if (!this.inGroupTab) {
             window.location.hash = this.currentTab;

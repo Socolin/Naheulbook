@@ -2,134 +2,185 @@
     <md-tab-group (selectChange)=selectTab($event) [selectedIndex]="currentTabIndex">
         <md-tab label="Info">
             <!-- Start of info tab -->
-            <md-card>
-                <md-card-title>{{character.name}}</md-card-title>
-                <md-card-content>
-                    <dl>
-                        <dt>Origine</dt>
-                        <dd>{{character.origin.name}}</dd>
+            <div class="info-tab">
+                <md-card>
+                    <md-card-title>{{character.name}}</md-card-title>
+                    <md-card-content>
+                        <dl>
+                            <dt>Origine</dt>
+                            <dd>{{character.origin.name}}</dd>
 
-                        <dt>Metier</dt>
-                        <dd *ngIf="character.job">{{character.job.name}}</dd>
-                        <dd *ngIf="!character.job">aucun</dd>
+                            <dt>Metier</dt>
+                            <dd *ngIf="character.job">{{character.job.name}}</dd>
+                            <dd *ngIf="!character.job">aucun</dd>
 
-                        <dt>Specialité</dt>
-                        <dd *ngFor="let speciality of character.specialities">
-                            {{speciality.name}}
-                        </dd>
+                            <dt>Specialité</dt>
+                            <dd *ngFor="let speciality of character.specialities">
+                                {{speciality.name}}
+                            </dd>
 
-                        <dt>Groupe</dt>
-                        <dd *ngIf="character.group">{{character.group.name}}</dd>
-                        <dd *ngIf="!character.group">aucun</dd>
+                            <dt>Groupe</dt>
+                            <dd *ngIf="character.group">{{character.group.name}}</dd>
+                            <dd *ngIf="!character.group">aucun</dd>
 
 
-                        <dt>Sexe</dt>
-                        <dd>{{character.sex}}</dd>
+                            <dt>Sexe</dt>
+                            <dd>{{character.sex}}</dd>
 
-                        <dt>Point de destins</dt>
-                        <dd>{{character.fatePoint}}<!--
-                            <value-editor [title]="'Point de destin'" [value]=character.fatePoint
-                                          (onChange)="changeCharacterStat('fatePoint', $event)"></value-editor>-->
-                        </dd>
+                            <dt>Point de destins</dt>
+                            <dd>
+                                <value-editor [title]="'Point de destin'"
+                                              [value]=character.fatePoint
+                                              (onChange)="changeCharacterStat('fatePoint', $event)">
+                                </value-editor>
+                            </dd>
 
-                        <dt>Niveau</dt>
-                        <dd>{{character.level}}
-                            <button *ngIf="canLevelUp()" (click)="initLevelUp()" type="button"
-                                    class="btn btn-success btn-xs" data-toggle="modal" data-target="#modalLevelUp">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span> Ding !
-                            </button>
-                        </dd>
+                            <dt>Niveau</dt>
+                            <dd>{{character.level}}
+                                <button *ngIf="canLevelUp()" (click)="initLevelUp()" type="button"
+                                        class="btn btn-success btn-xs" data-toggle="modal" data-target="#modalLevelUp">
+                                    <span class="glyphicon glyphicon-exclamation-sign"></span> Ding !
+                                </button>
+                            </dd>
 
-                        <dt>Experience</dt>
-                        <dd>
-                            <value-editor [title]="'Experience'" [value]=character.experience
-                                          (onChange)="changeCharacterStat('experience', $event)"></value-editor>
-                        </dd>
+                            <dt>Experience</dt>
+                            <dd>
+                                <value-editor [title]="'Experience'"
+                                              [value]=character.experience
+                                              (onChange)="changeCharacterStat('experience', $event)">
+                                </value-editor>
+                            </dd>
 
-                        <dt *ngIf="inGroupTab">Debilibeuk</dt>
-                        <dd *ngIf="inGroupTab">
-                            <value-editor [title]="'Debilibeuk du joueur'" [value]=character.gmData.debilibeuk
-                                          (onChange)="changeGmData('debilibeuk', $event)"></value-editor>
-                        </dd>
+                            <dt *ngIf="inGroupTab">Debilibeuk</dt>
+                            <dd *ngIf="inGroupTab">
+                                <value-editor [title]="'Debilibeuk du joueur'" [value]=character.gmData.debilibeuk
+                                              (onChange)="changeGmData('debilibeuk', $event)"></value-editor>
+                            </dd>
 
-                        <dt *ngIf="inGroupTab">Mankdebol</dt>
-                        <dd *ngIf="inGroupTab">
-                            <value-editor [title]="'Mankdebol du joueur'" [value]=character.gmData.mankdebol
-                                          (onChange)="changeGmData('mankdebol', $event)"></value-editor>
-                        </dd>
-                    </dl>
-                </md-card-content>
-                <md-card-actions></md-card-actions>
-            </md-card>
+                            <dt *ngIf="inGroupTab">Mankdebol</dt>
+                            <dd *ngIf="inGroupTab">
+                                <value-editor [title]="'Mankdebol du joueur'" [value]=character.gmData.mankdebol
+                                              (onChange)="changeGmData('mankdebol', $event)"></value-editor>
+                            </dd>
+                        </dl>
+                    </md-card-content>
+                </md-card>
+            </div>
             <!-- End of infos tab -->
         </md-tab>
 
         <md-tab label="Combat">
             <!-- Start of combat tab -->
-            <div style="font-size: medium;">
-                <div>
-                    <div [class.bg-danger]="character.ev > character.computedData.stats['EV']" style="text-align: center">
-                        <span class="glyphicon glyphicon-heart text-danger" style="font-size: 1.3em;"></span>
-                        <value-editor [title]="'Energie vitale'" [value]="character.ev" [maxValue]="character.computedData.stats['EV']" (onChange)="changeCharacterStat('ev', $event)"></value-editor>
-                    </div>
-                </div>
-                <div>
-                    <div *ngIf="character.ea != null">
-                        <div [class.bg-danger]="character.ea > character.computedData.stats['EA']" style="text-align: center">
-                            <span class="glyphicon glyphicon-star text-info" style="font-size: 1.3em;"></span>
-                            <value-editor [title]="'Energie astrale'" [value]="character.ea" [maxValue]="character.computedData.stats['EA']" (onChange)="changeCharacterStat('ea', $event)"></value-editor>
+            <div class="combat-tab">
+                <md-card class="life-mana stats-card">
+                    <div class="stat">
+                        <div class="stat-icon">
+                            <span class="game-icon game-icon-hearts"></span>
+                        </div>
+                        <div class="stat-value">
+                            <div [class.life-danger]="character.ev > character.computedData.stats['EV']">
+                                <value-editor [title]="'Energie vitale'"
+                                              [value]="character.ev"
+                                              [maxValue]="character.computedData.stats['EV']"
+                                              (onChange)="changeCharacterStat('ev', $event)">
+                                </value-editor>
+                            </div>
+                            <div class="stat-label">E.Vitale</div>
                         </div>
                     </div>
-                </div>
-                <table class="table table-striped table-condensed text-center">
-                    <tbody>
-                    <tr>
-                        <td><span class="ra ra-sword ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['AT']}}</span></td>
-                        <td><span class="ra ra-shield ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['PRD']}}</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="ra ra-vest ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['PR']}}</span></td>
-                        <td><span class="ra ra-aura ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['PR_MAGIC']}}</span></td>
-                    </tr>
-                    </tbody>
-                </table>
+                    <div *ngIf="character.ea != undefined" class="stat">
+                        <div class="stat-icon">
+                            <span class="game-icon game-icon-abstract-061"></span>
+                        </div>
+                        <div class="stat-value">
+                            <div [class.bg-danger]="character.ea > character.computedData.stats['EA']">
+                                <value-editor [title]="'Energie astrale'"
+                                              [value]="character.ea"
+                                              [maxValue]="character.computedData.stats['EA']"
+                                              (onChange)="changeCharacterStat('ea', $event)">
+                                </value-editor>
+                            </div>
+                            <div class="stat-label">E.Astrale</div>
+                        </div>
+                    </div>
+                </md-card>
 
-                <table class="table table-striped table-condensed text-center">
-                    <tbody>
-                    <tr>
-                        <td><strong>COU</strong></td>
-                        <td>{{character.computedData.stats['COU']}}</td>
-                        <td><strong>FO</strong></td>
-                        <td>{{character.computedData.stats['FO']}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>AD</strong></td>
-                        <td>{{character.computedData.stats['AD']}}</td>
-                        <td><strong>CHA</strong></td>
-                        <td>{{character.computedData.stats['CHA']}}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>PI Bonus</strong></td>
-                        <td>{{character.computedData.stats['PI']}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <table class="table table-striped table-condensed text-center">
-                    <tbody>
-                    <tr>
-                        <td><strong>RESM</strong></td>
-                        <td>{{character.computedData.stats['RESM']}}</td>
-                        <td><strong>INT</strong></td>
-                        <td>{{character.computedData.stats['INT']}}</td>
-                    </tr>
-                    <tr *ngIf="character.job && character.job.isMagic">
-                        <td><strong>MPHYS</strong></td>
-                        <td>{{character.computedData.stats['MPHYS']}}</td>
-                        <td><strong>MPSY</strong></td>
-                        <td>{{character.computedData.stats['MPSY']}}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <md-card class="combat-stats stats-card">
+                    <div class="stat-row">
+                        <div class="stat">
+                            <div class="stat-icon">
+                                <span class="ra ra-sword"></span>
+                            </div>
+                            <div class="stat-value">
+                                <div>{{character.computedData.stats['AT']}}</div>
+                                <div class="stat-label">Attaque</div>
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-icon">
+                                <span class="ra ra-shield"></span>
+                            </div>
+                            <div class="stat-value">
+                                <div>{{character.computedData.stats['PRD']}}</div>
+                                <div class="stat-label">Parade</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat">
+                            <div class="stat-icon">
+                                <span class="ra ra-vest"></span>
+                            </div>
+                            <div class="stat-value">
+                                <div>{{character.computedData.stats['PR']}}</div>
+                                <div class="stat-label">Protection</div>
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-icon">
+                                <span class="ra ra-aura"></span>
+                            </div>
+                            <div class="stat-value">
+                                <div>{{character.computedData.stats['PR_MAGIC']}}</div>
+                                <div class="stat-label">Pr magique</div>
+                            </div>
+                        </div>
+                    </div>
+                </md-card>
+
+                <md-card class="basic-stats stats-card">
+                    <div>
+                        <strong>COU</strong>
+                        {{character.computedData.stats['COU']}}
+                        <strong>FO</strong>
+                        {{character.computedData.stats['FO']}}
+                    </div>
+                    <div>
+                        <strong>AD</strong>
+                        {{character.computedData.stats['AD']}}
+                        <strong>CHA</strong>
+                        {{character.computedData.stats['CHA']}}
+                    </div>
+                    <div>
+                        <strong>PI Bonus</strong>
+                        {{character.computedData.stats['PI']}}
+                    </div>
+                </md-card>
+                <md-card class="magic-stat stats-card">
+                    <div>
+                        <strong>RESM</strong>
+                        {{character.computedData.stats['RESM']}}
+                        <strong>INT</strong>
+                        {{character.computedData.stats['INT']}}
+                    </div>
+                    <div *ngIf="character.job && character.job.isMagic">
+                        <strong>MPHYS</strong>
+                        {{character.computedData.stats['MPHYS']}}
+                        <strong>MPSY</strong>
+                        {{character.computedData.stats['MPSY']}}
+                    </div>
+                </md-card>
+
                 <h3>Déplacement tactique</h3>
                 <ul>
                     <li>
