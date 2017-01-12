@@ -1,23 +1,24 @@
 @font-face {
 	font-family: "game-icons";
+    font-weight: normal;
+    font-style: normal;
 	src: url('./game-icons.eot');
 	src: url('./game-icons.eot?#iefix') format('eot'),
 		url('./game-icons.woff') format('woff'),
 		url('./game-icons.ttf') format('truetype');
 }
 
-.game-icon:before {
+.game-icon {
 	font-family: "game-icons";
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: normal;
-	/* speak: none; only necessary if not using the private unicode range (firstGlyph option) */
-	text-decoration: none;
-	text-transform: none;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    speak: none;
+    text-transform: none;
 }
-
 
 .game-icon-police-badge:before {
 	content: "\E001";
