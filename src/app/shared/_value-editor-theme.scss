@@ -7,6 +7,13 @@
     $background: map-get($theme, background);
     $foreground: map-get($theme, foreground);
 
+    .ve-value {
+        background: md-color($background, status-bar);
+    }
+    .ve-value:hover {
+        background: md-color($background, app-bar);
+    }
+
     .ve-container {
         background: md-color($background, card);
         color: md-color($foreground, base);

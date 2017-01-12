@@ -1,7 +1,15 @@
+.ve-value {
+    border-radius: 6px;
+    padding: 2px;
+    cursor: pointer;
+}
 .ve-container {
     position: absolute;
     width: 244px;
     height: 176px;
+    -webkit-box-shadow: 3px 4px 5px -1px rgba(0,0,0,0.6);
+    -moz-box-shadow: 3px 4px 5px -1px rgba(0,0,0,0.6);
+    box-shadow: 3px 4px 5px -1px rgba(0,0,0,0.6);
 
     .ve-delta-value {
         padding-top: 13px;
@@ -99,6 +107,7 @@
     }
 
     button {
+        position: relative;
         line-height: 36px;
         font-weight: 500;
         text-decoration: none;
