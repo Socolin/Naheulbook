@@ -2,24 +2,13 @@ div {
     & .character-component {
         padding: -32px;
     }
-
-    .canceled {
-        text-decoration: line-through;
-    }
-    .table-stats > td {
-        line-height: 1;
-    }
-    .stats-detail-name > td {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-    .stats-detail-values > td {
-        padding-top: 0;
-        border-top: 0;
-    }
 }
 
 md-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
     md-card-header {
         justify-content: space-between;
 
@@ -66,6 +55,7 @@ md-card {
             }
 
             .stat {
+                flex: 1 auto;
                 display: flex;
                 align-content: space-around;
                 justify-content: space-around;
@@ -74,6 +64,11 @@ md-card {
 
                 .stat-icon {
                     flex: 0 40px;
+                }
+                .stat-name {
+                    min-width: 60px;
+                    flex: 1 60px;
+                    font-weight: bold;
                 }
                 .stat-value {
                     flex: 1 auto;
@@ -120,4 +115,65 @@ md-card {
         }
     }
 
+}
+
+.stat-tab {
+    display: flex;
+    flex-wrap: wrap;
+
+    md-card {
+        margin: 5px;
+        flex: 1 auto;
+    }
+
+    .stat-header {
+        font-weight: bold;
+        flex-direction: row;
+        display: flex;
+    }
+
+    .stat-row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .stat-element {
+        width: 60px;
+        flex: 1 auto;
+        text-align: center;
+    }
+    .stat-element-large {
+        width: 75px;
+        flex: 1 auto;
+        text-align: center;
+    }
+
+    .stat-details {
+        font-size: smaller;
+        .stat-detail-reason {
+            color: rgba(0, 0, 0, 0.54);
+        }
+        .stat-element {
+            color: rgba(0, 0, 0, 0.75);
+        }
+        .detail-row {
+            border-top: 1px solid lightgray;
+        }
+    }
+
+
+    .canceled {
+        text-decoration: line-through;
+    }
+    .table-stats > td {
+        line-height: 1;
+    }
+    .stats-detail-name > td {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .stats-detail-values > td {
+        padding-top: 0;
+        border-top: 0;
+    }
 }

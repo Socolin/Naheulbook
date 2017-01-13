@@ -149,266 +149,345 @@
                 </md-card>
 
                 <md-card class="basic-stats stats-card">
-                    <div>
-                        <strong>COU</strong>
-                        {{character.computedData.stats['COU']}}
-                        <strong>FO</strong>
-                        {{character.computedData.stats['FO']}}
+                    <div class="stat-row">
+                        <div class="stat">
+                            <div class="stat-name">
+                                COU
+                            </div>
+                            <div class="stat-value">
+                                {{character.computedData.stats['COU']}}
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-name">
+                                FO
+                            </div>
+                            <div class="stat-value">
+                                {{character.computedData.stats['FO']}}
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <strong>AD</strong>
-                        {{character.computedData.stats['AD']}}
-                        <strong>CHA</strong>
-                        {{character.computedData.stats['CHA']}}
+
+                    <div class="stat-row">
+                        <div class="stat">
+                            <div class="stat-name">
+                                AD
+                            </div>
+                            <div class="stat-value">
+                                {{character.computedData.stats['AD']}}
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-name">
+                                CHA
+                            </div>
+                            <div class="stat-value">
+                                {{character.computedData.stats['CHA']}}
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <strong>PI Bonus</strong>
-                        {{character.computedData.stats['PI']}}
+
+                    <div class="stat-row">
+                        <div class="stat">
+                            <div class="stat-name">
+                                PI Bonus
+                            </div>
+                            <div class="stat-value">
+                                {{character.computedData.stats['PI']}}
+                            </div>
+                        </div>
                     </div>
                 </md-card>
                 <md-card class="magic-stat stats-card">
-                    <div>
-                        <strong>RESM</strong>
-                        {{character.computedData.stats['RESM']}}
-                        <strong>INT</strong>
-                        {{character.computedData.stats['INT']}}
+                    <div class="stat-row">
+                        <div class="stat">
+                            <div class="stat-name">
+                                RESM
+                            </div>
+                            <div class="stat-value">
+                                {{character.computedData.stats['RESM']}}
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-name">
+                                INT
+                            </div>
+                            <div class="stat-value">
+                                {{character.computedData.stats['INT']}}
+                            </div>
+                        </div>
                     </div>
-                    <div *ngIf="character.job && character.job.isMagic">
-                        <strong>MPHYS</strong>
-                        {{character.computedData.stats['MPHYS']}}
-                        <strong>MPSY</strong>
-                        {{character.computedData.stats['MPSY']}}
+                    <div class="stat-row" *ngIf="character.job && character.job.isMagic">
+                        <div class="stat">
+                            <div class="stat-name">
+                                MPHYS
+                            </div>
+                            <div class="stat-value">
+                                {{character.computedData.stats['MPHYS']}}
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-name">
+                                MPSY
+                            </div>
+                            <div class="stat-value">
+                                {{character.computedData.stats['MPSY']}}
+                            </div>
+                        </div>
                     </div>
                 </md-card>
 
-                <h3>Déplacement tactique</h3>
-                <ul>
-                    <li>
-                        <strong>Normal</strong>
-                        {{character.computedData.tacticalMovement.distance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.maxDuration}} secondes
-                    </li>
-                    <li>
-                        <strong>Sprint</strong> (Après un déplacement normal):
-                        {{character.computedData.tacticalMovement.sprintDistance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.sprintMaxDuration}} secondes
-                    </li>
-                </ul>
-                <h3>Armes</h3>
-                <div>
-                    <div *ngIf="character.computedData.itemsBySlotsAll[1]">
-                        <template ngFor let-item [ngForOf]="character.computedData.itemsBySlotsAll[1]" let-i="index" let-last="last">
-                            <button type="button" class="list-group-item btn btn-default" (click)="selectedItem = item" [class.btn-primary]="selectedItem && selectedItem.id == item.id"
-                                    [class.active]="selectedItem && selectedItem.id == item.id">
-                                <span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span> {{item.data.name}}
-                                <template [ngIf]="item === selectedItem">
-                                    <swipable-item-detail [gmView]="inGroupTab"  [character]="character" [item]="item"></swipable-item-detail>
-                                </template>
-                            </button>
-                        </template>
-                    </div>
-                </div>
-                <div *ngIf="selectedItem">
-                    <div class="bg-info">
-                        <item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
-                    </div>
-                </div>
+                <md-card class="stats-card">
+                    <md-card-title>Déplacement tactique</md-card-title>
+                    <md-card-content>
+                        <ul>
+                            <li>
+                                <strong>Normal</strong>
+                                {{character.computedData.tacticalMovement.distance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.maxDuration}} secondes
+                            </li>
+                            <li>
+                                <strong>Sprint</strong> (Après un déplacement normal):
+                                {{character.computedData.tacticalMovement.sprintDistance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.sprintMaxDuration}} secondes
+                            </li>
+                        </ul>
+                    </md-card-content>
+                </md-card>
+                <md-card class="stats-card">
+                    <md-card-title>Armes</md-card-title>
+                    <md-card-content>
+                        <div *ngIf="character.computedData.itemsBySlotsAll[1]">
+                            <template ngFor let-item [ngForOf]="character.computedData.itemsBySlotsAll[1]" let-i="index" let-last="last">
+                                <button type="button" class="list-group-item btn btn-default" (click)="selectedItem = item" [class.btn-primary]="selectedItem && selectedItem.id == item.id"
+                                        [class.active]="selectedItem && selectedItem.id == item.id">
+                                    <span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span> {{item.data.name}}
+                                    <template [ngIf]="item === selectedItem">
+                                        <swipable-item-detail [gmView]="inGroupTab"  [character]="character" [item]="item"></swipable-item-detail>
+                                    </template>
+                                </button>
+                            </template>
+                        </div>
+                        <div *ngIf="selectedItem">
+                            <div class="bg-info">
+                                <item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
+                            </div>
+                        </div>
+                    </md-card-content>
+                </md-card>
             </div>
             <!-- End of combat tab -->
         </md-tab>
         <md-tab label="Stat">
             <!-- Start of stats tab -->
-            <div class="row">
-                <div class="col-md-3 col-sm-6">
-                    <table class="table table-striped table-condensed text-center">
-                        <thead>
-                        <tr>
-                            <th class="text-center">EV</th>
-                            <th *ngIf="character.job && character.job.isMagic" class="text-center">EA</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{{character.computedData.stats['EV']}}</td>
-                            <td>{{character.computedData.stats['EA']}}</td>
-                        </tr>
-                        <template [ngIf]="character.computedData.details.show.evea">
-                            <template ngFor let-detail [ngForOf]="character.computedData.details.evea">
-                                <tr class="stats-detail-name small">
-                                    <td colspan="15" class="text-left">{{detail.name}}:</td>
-                                </tr>
-                                <tr class="stats-detail-values"></tr>
-                                <tr class="stats-detail-values small">
-                                    <td>{{detail.data.EV}}</td>
-                                    <td>{{detail.data.EA}}</td>
-                                </tr>
-                            </template>
-                        </template>
-                        <tr (click)="character.computedData.details.show.evea = !character.computedData.details.show.evea">
-                            <td colspan=15 class="small" *ngIf="!character.computedData.details.show.evea">Voir details</td>
-                            <td colspan=15 class="small" *ngIf="character.computedData.details.show.evea">Cacher details</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="stat-tab">
+                <md-card>
+                    <md-card-content>
+                        <div class="stat-header">
+                            <div class="stat-element">EV</div>
+                            <div class="stat-element" *ngIf="character.job && character.job.isMagic">EA</div>
+                        </div>
+                        <div class="stat-values">
+                            <div class="stat-row">
+                                <div class="stat-element">{{character.computedData.stats['EV']}}</div>
+                                <div *ngIf="character.job && character.job.isMagic" class="stat-element">{{character.computedData.stats['EA']}}</div>
+                            </div>
+                            <div class="stat-details" *ngIf="character.computedData.details.show.evea">
+                                <div class="detail-row" *ngFor="let detail of character.computedData.details.evea">
+                                    <div class="stat-detail-reason">
+                                        {{detail.name}}
+                                    </div>
+                                    <div class="stat-row">
+                                        <div class="stat-element">{{detail.data.EV}}</div>
+                                        <div *ngIf="character.job && character.job.isMagic" class="stat-element">{{detail.data.EA}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.evea = !character.computedData.details.show.evea">
+                            <span *ngIf="!character.computedData.details.show.evea">Voir details</span>
+                            <span *ngIf="character.computedData.details.show.evea">Cacher details</span>
+                        </button>
+                    </md-card-actions>
+                </md-card>
+                <md-card>
+                    <md-card-content>
+                        <div class="stat-header">
+                            <div class="stat-element">AT</div>
+                            <div class="stat-element">PRD</div>
+                            <div class="stat-element">PR</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['PR_MAGIC']">PR_MAGIC</div>
+                        </div>
+                        <div class="stat-values">
+                            <div class="stat-row">
+                                <div class="stat-element">{{character.computedData.stats['AT']}}</div>
+                                <div class="stat-element">{{character.computedData.stats['PRD']}}</div>
+                                <div class="stat-element">{{character.computedData.stats['PR']}}</div>
+                                <div class="stat-element" *ngIf="character.computedData.stats['PR_MAGIC']">{{character.computedData.stats['PR_MAGIC']}}</div>
+                            </div>
+                            <div class="stat-details" *ngIf="character.computedData.details.show.atprd">
+                                <div class="detail-row" *ngFor="let detail of character.computedData.details.atprd">
+                                    <div class="stat-detail-reason">
+                                        {{detail.name}}
+                                    </div>
+                                    <div class="stat-row">
+                                        <div class="stat-element">{{detail.data.AT}}</div>
+                                        <div class="stat-element">{{detail.data.PRD}}</div>
+                                        <div class="stat-element">{{detail.data.PR}}</div>
+                                        <div class="stat-element" *ngIf="character.computedData.stats['PR_MAGIC']">{{detail.data.PR_MAGIC}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.atprd = !character.computedData.details.show.atprd">
+                            <span *ngIf="!character.computedData.details.show.atprd">Voir details</span>
+                            <span *ngIf="character.computedData.details.show.atprd">Cacher details</span>
+                        </button>
+                    </md-card-actions>
+                </md-card>
+                <md-card>
+                    <md-card-content>
+                        <div class="stat-header">
+                            <div class="stat-element">COU</div>
+                            <div class="stat-element">INT</div>
+                            <div class="stat-element">CHA</div>
+                            <div class="stat-element">AD</div>
+                            <div class="stat-element">FO</div>
+                        </div>
+                        <div class="stat-values">
+                            <div class="stat-row">
+                                <div class="stat-element">{{character.computedData.stats['COU']}}</div>
+                                <div class="stat-element">{{character.computedData.stats['INT']}}</div>
+                                <div class="stat-element">{{character.computedData.stats['CHA']}}</div>
+                                <div class="stat-element">{{character.computedData.stats['AD']}}</div>
+                                <div class="stat-element">{{character.computedData.stats['FO']}}</div>
+                            </div>
+                            <div class="stat-details" *ngIf="character.computedData.details.show.stat">
+                                <div class="detail-row" *ngFor="let detail of character.computedData.details.stat">
+                                    <div class="stat-detail-reason">
+                                        {{detail.name}}
+                                    </div>
+                                    <div class="stat-row">
+                                        <div class="stat-element">{{detail.data.COU}}</div>
+                                        <div class="stat-element">{{detail.data.INT}}</div>
+                                        <div class="stat-element">{{detail.data.CHA}}</div>
+                                        <div class="stat-element">{{detail.data.AD}}</div>
+                                        <div class="stat-element">{{detail.data.FO}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.stat = !character.computedData.details.show.stat">
+                            <span *ngIf="!character.computedData.details.show.stat">Voir details</span>
+                            <span *ngIf="character.computedData.details.show.stat">Cacher details</span>
+                        </button>
+                    </md-card-actions>
+                </md-card>
 
-                <div class="col-md-3 col-sm-6">
-                    <table class="table table-striped table-condensed text-center table-stats">
-                        <thead>
-                        <tr>
-                            <th class="text-center">AT</th>
-                            <th class="text-center">PRD</th>
-                            <th class="text-center">PR</th>
-                            <th *ngIf="character.computedData.stats['PR_MAGIC']" class="col-xs-1 text-center">PR_MAGIC</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{{character.computedData.stats['AT']}}</td>
-                            <td>{{character.computedData.stats['PRD']}}</td>
-                            <td>{{character.computedData.stats['PR']}}</td>
-                            <td *ngIf="character.computedData.stats['PR_MAGIC']">{{character.computedData.stats['PR_MAGIC']}}</td>
-                        </tr>
-                        <template [ngIf]="character.computedData.details.show.atprd">
-                            <template ngFor let-detail [ngForOf]="character.computedData.details.atprd">
-                                <tr class="stats-detail-name small">
-                                    <td colspan="15" class="text-left">{{detail.name}}:</td>
-                                </tr>
-                                <tr class="stats-detail-values"></tr>
-                                <tr class="stats-detail-values small">
-                                    <td>{{detail.data.AT}}</td>
-                                    <td>{{detail.data.PRD}}</td>
-                                    <td>{{detail.data.PR}}</td>
-                                    <td *ngIf="character.computedData.stats['PR_MAGIC']">{{detail.data.PR_MAGIC}}</td>
-                                </tr>
-                            </template>
-                        </template>
-                        <tr (click)="character.computedData.details.show.atprd = !character.computedData.details.show.atprd">
-                            <td colspan=15 class="small" *ngIf="!character.computedData.details.show.atprd">Voir details</td>
-                            <td colspan=15 class="small" *ngIf="character.computedData.details.show.atprd">Cacher details</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <md-card>
+                    <md-card-content>
+                        <div class="stat-header">
+                            <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">MagiePhys</div>
+                            <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">MagiePsy</div>
+                            <div class="stat-element">RESM</div>
+                        </div>
+                        <div class="stat-values">
+                            <div class="stat-row">
+                                <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPHYS']}}</div>
+                                <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPSY']}}</div>
+                                <div class="stat-element">{{character.computedData.stats['RESM']}}</div>
+                            </div>
+                            <div class="stat-details" *ngIf="character.computedData.details.show.magic">
+                                <div class="detail-row" *ngFor="let detail of character.computedData.details.magic">
+                                    <div class="stat-detail-reason">
+                                        {{detail.name}}
+                                    </div>
+                                    <div class="stat-row">
+                                        <div class="stat-element-large" *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPHYS || ''"></div>
+                                        <div class="stat-element-large" *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPSY || ''"></div>
+                                        <div class="stat-element" [innerHTML]="detail.data.RESM || ''"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.magic = !character.computedData.details.show.magic">
+                            <span *ngIf="!character.computedData.details.show.magic">Voir details</span>
+                            <span *ngIf="character.computedData.details.show.magic">Cacher details</span>
+                        </button>
+                    </md-card-actions>
+                </md-card>
 
-                <div class="col-md-6 col-sm-12">
-                    <table class="table table-striped table-condensed text-center">
-                        <thead>
-                        <tr>
-                            <th class="text-center">COU</th>
-                            <th class="text-center">INT</th>
-                            <th class="text-center">CHA</th>
-                            <th class="text-center">AD</th>
-                            <th class="text-center">FO</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{{character.computedData.stats['COU']}}</td>
-                            <td>{{character.computedData.stats['INT']}}</td>
-                            <td>{{character.computedData.stats['CHA']}}</td>
-                            <td>{{character.computedData.stats['AD']}}</td>
-                            <td>{{character.computedData.stats['FO']}}</td>
-                        </tr>
-                        <template [ngIf]="character.computedData.details.show.stat">
-                            <template ngFor let-detail [ngForOf]="character.computedData.details.stat">
-                                <tr class="stats-detail-name small">
-                                    <td colspan="15" class="text-left">{{detail.name}}:</td>
-                                </tr>
-                                <tr class="stats-detail-values"></tr>
-                                <tr class="stats-detail-values small">
-                                    <td>{{detail.data.COU}}</td>
-                                    <td>{{detail.data.INT}}</td>
-                                    <td>{{detail.data.CHA}}</td>
-                                    <td>{{detail.data.AD}}</td>
-                                    <td>{{detail.data.FO}}</td>
-                                </tr>
-                            </template>
-                        </template>
-                        <tr (click)="character.computedData.details.show.stat = !character.computedData.details.show.stat">
-                            <td colspan=15 class="small" *ngIf="!character.computedData.details.show.stat">Voir details</td>
-                            <td colspan=15 class="small" *ngIf="character.computedData.details.show.stat">Cacher details</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-sm-7 col-md-8">
-                    <table class="table table-striped table-condensed text-center">
-                        <thead>
-                        <tr>
-                            <th class="text-center" *ngIf="character.job && character.job.isMagic"><strong>MagiePhys</strong></th>
-                            <th class="text-center" *ngIf="character.job && character.job.isMagic"><strong>MagiePsy</strong></th>
-                            <th class="text-center"><strong>ResMagie</strong></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPHYS']}}</td>
-                            <td *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPSY']}}</td>
-                            <td>{{character.computedData.stats['RESM']}}</td>
-                        </tr>
-                        <template [ngIf]="character.computedData.details.show.magic">
-                            <template ngFor let-detail [ngForOf]="character.computedData.details.magic">
-                                <tr class="stats-detail-name small">
-                                    <td colspan="15" class="text-left">{{detail.name}}:</td>
-                                </tr>
-                                <tr class="stats-detail-values"></tr>
-                                <tr class="stats-detail-values small">
-                                    <td *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPHYS || ''"></td>
-                                    <td *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPSY || ''"></td>
-                                    <td [innerHTML]="detail.data.RESM || ''"></td>
-                                </tr>
-                            </template>
-                        </template>
-                        <tr (click)="character.computedData.details.show.magic = !character.computedData.details.show.magic">
-                            <td colspan=15 class="small" *ngIf="!character.computedData.details.show.magic">Voir details</td>
-                            <td colspan=15 class="small" *ngIf="character.computedData.details.show.magic">Cacher details</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <table *ngIf="character.computedData.stats['MV'] != 100 || character.computedData.stats['THROW_MODIFIER'] || character.computedData.stats['DISCRETION_MODIFIER'] || character.computedData.stats['DANSE_MODIFIER'] || character.computedData.stats['PI']" class="table table-striped table-condensed text-center">
-                        <thead>
-                        <tr>
-                            <th *ngIf="character.computedData.stats['MV'] !== 100" class="text-center"><strong>MV</strong></th>
-                            <th *ngIf="character.computedData.stats['THROW_MODIFIER']" class="text-center"><strong>Lancer</strong></th>
-                            <th *ngIf="character.computedData.stats['DISCRETION_MODIFIER']" class="text-center"><strong>Discretion</strong></th>
-                            <th *ngIf="character.computedData.stats['DANSE_MODIFIER']" class="text-center"><strong>Danse</strong></th>
-                            <th *ngIf="character.computedData.stats['PI']" class="text-center"><strong>PI</strong></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td *ngIf="character.computedData.stats['MV'] !== 100">{{character.computedData.stats['MV']}}%</td>
-                            <td *ngIf="character.computedData.stats['THROW_MODIFIER']">{{character.computedData.stats['THROW_MODIFIER'] | plusminus}}</td>
-                            <td *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">{{character.computedData.stats['DISCRETION_MODIFIER'] | plusminus}}</td>
-                            <td *ngIf="character.computedData.stats['DANSE_MODIFIER']">{{character.computedData.stats['DANSE_MODIFIER'] | plusminus}}</td>
-                            <td *ngIf="character.computedData.stats['PI']">{{character.computedData.stats['PI']}}</td>
-                        </tr>
-                        <template [ngIf]="character.computedData.details.show.other">
-                            <template ngFor let-detail [ngForOf]="character.computedData.details.other">
-                                <tr class="stats-detail-name small">
-                                    <td colspan="15" class="text-left">{{detail.name}}:</td>
-                                </tr>
-                                <tr class="stats-detail-values"></tr>
-                                <tr class="stats-detail-values small">
-                                    <td *ngIf="character.computedData.stats['MV'] !== 100">{{detail.data.MV}}</td>
-                                    <td *ngIf="character.computedData.stats['THROW_MODIFIER']">{{detail.data.THROW_MODIFIER}}</td>
-                                    <td *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">{{detail.data.DISCRETION_MODIFIER}}</td>
-                                    <td *ngIf="character.computedData.stats['DANSE_MODIFIER']">{{detail.data.DANSE_MODIFIER}}</td>
-                                    <td *ngIf="character.computedData.stats['PI']">{{detail.data.PI}}</td>
-                                </tr>
-                            </template>
-                        </template>
-                        <tr (click)="character.computedData.details.show.other = !character.computedData.details.show.other">
-                            <td colspan=15 class="small" *ngIf="!character.computedData.details.show.other">Voir details</td>
-                            <td colspan=15 class="small" *ngIf="character.computedData.details.show.other">Cacher details</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <hr class="visible-xs">
-                <div class="col-md-4 col-sm-5">
+                <md-card *ngIf="character.computedData.stats['MV'] != 100
+                                || character.computedData.stats['THROW_MODIFIER']
+                                || character.computedData.stats['DISCRETION_MODIFIER']
+                                || character.computedData.stats['DANSE_MODIFIER']
+                                || character.computedData.stats['PI']">
+                    <md-card-content>
+                        <div class="stat-header">
+                            <div class="stat-element" *ngIf="character.computedData.stats['MV'] !== 100">MV</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['THROW_MODIFIER']">Lancer</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">Discretion</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['DANSE_MODIFIER']">Danse</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['PI']">PI</div>
+                        </div>
+                        <div class="stat-values">
+                            <div class="stat-row">
+                                <div class="stat-element" *ngIf="character.computedData.stats['MV'] !== 100">
+                                    {{character.computedData.stats['MV']}}%
+                                </div>
+                                <div class="stat-element" *ngIf="character.computedData.stats['THROW_MODIFIER']">
+                                    {{character.computedData.stats['THROW_MODIFIER'] | plusminus}}
+                                </div>
+                                <div class="stat-element" *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">
+                                    {{character.computedData.stats['DISCRETION_MODIFIER'] | plusminus}}
+                                </div>
+                                <div class="stat-element" *ngIf="character.computedData.stats['DANSE_MODIFIER']">
+                                    {{character.computedData.stats['DANSE_MODIFIER'] | plusminus}}
+                                </div>
+                                <div class="stat-element" *ngIf="character.computedData.stats['PI']">
+                                    {{character.computedData.stats['PI']}}
+                                </div>
+                            </div>
+                            <div class="stat-details" *ngIf="character.computedData.details.show.other">
+                                <div class="detail-row" *ngFor="let detail of character.computedData.details.other">
+                                    <div class="stat-detail-reason">
+                                        {{detail.name}}
+                                    </div>
+                                    <div class="stat-row">
+                                        <div class="stat-element" *ngIf="character.computedData.stats['MV'] !== 100">
+                                            {{detail.data.MV}}
+                                        </div>
+                                        <div class="stat-element" *ngIf="character.computedData.stats['THROW_MODIFIER']">
+                                            {{detail.data.THROW_MODIFIER}}
+                                        </div>
+                                        <div class="stat-element" *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">
+                                            {{detail.data.DISCRETION_MODIFIER}}
+                                        </div>
+                                        <div class="stat-element" *ngIf="character.computedData.stats['DANSE_MODIFIER']">
+                                            {{detail.data.DANSE_MODIFIER}}
+                                        </div>
+                                        <div class="stat-element" *ngIf="character.computedData.stats['PI']">
+                                            {{detail.data.PI}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.other = !character.computedData.details.show.other">
+                            <span *ngIf="!character.computedData.details.show.other">Voir details</span>
+                            <span *ngIf="character.computedData.details.show.other">Cacher details</span>
+                        </button>
+                    </md-card-actions>
+                </md-card>
+                <md-card>
                     <div>
                         <strong>Compétence</strong>
                     </div>
@@ -419,7 +498,7 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </md-card>
             </div>
             <!-- End of stats tab -->
         </md-tab>
