@@ -261,7 +261,7 @@
                                         [class.active]="selectedItem && selectedItem.id == item.id">
                                     <span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span> {{item.data.name}}
                                     <template [ngIf]="item === selectedItem">
-                                        <swipable-item-detail [gmView]="inGroupTab"  [character]="character" [item]="item"></swipable-item-detail>
+                                        <swipeable-item-detail [gmView]="inGroupTab"  [character]="character" [item]="item"></swipeable-item-detail>
                                     </template>
                                 </button>
                             </template>

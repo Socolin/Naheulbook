@@ -1,74 +1,137 @@
-<div class="row" style="min-height: 350px">
-    <div class="col-sm-6">
-        <div class="row-fluid">
-            <ul class="nav nav-pills">
-                <li role="presentation" [class.active]="selectedInventoryTab=='all'"><a (click)="selectedInventoryTab = 'all'">Tout</a></li>
-                <li role="presentation" [class.active]="selectedInventoryTab=='bags'"><a (click)="selectedInventoryTab = 'bags'">Sacs</a></li>
-                <li role="presentation" [class.active]="selectedInventoryTab=='equiped'"><a (click)="selectedInventoryTab = 'equiped'">Equipé</a></li>
-                <li role="presentation" [class.active]="selectedInventoryTab=='add'"><a (click)="selectedInventoryTab = 'add';updateFilterItem()" class="glyphicon glyphicon-plus"></a></li>
-            </ul>
-        </div>
-        <div class="row">
-            <div class="form-group col-xs-12">
-                <div class="input-group">
-                    <input class="form-control" (keydown.esc)="itemFilterName=null"
-                           [(ngModel)]="itemFilterName"
-                           (ngModelChange)="updateFilterItem()"
-                           placeholder="Filtre"/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary glyphicon" [class.glyphicon-list]="iconMode" [class.glyphicon-th-large]="!iconMode" (click)="toggleIconMode()"></button>
-                        <button class="btn btn-primary glyphicon" [class.glyphicon-sort]="sortType !== 'asc' && sortType != 'desc'" [class.glyphicon-sort-by-alphabet]="sortType == 'asc'"  [class.glyphicon-sort-by-alphabet-alt]="sortType == 'desc'" (click)="sortInventory()"></button>
-                        <button class="btn btn-primary glyphicon glyphicon-sort-by-attributes" (click)="sortInventory('not_identified_first')"></button>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div *ngIf="selectedInventoryTab=='all'" class="row overflow-item-list">
-            <div class="col-sm-12">
-                <div *ngIf="!iconMode" class="list-group" style="height:400px">
-                    <a href="#" *ngFor="let item of character.items"
-                       class="list-group-item"
-                       (click)="selectItem(item)"
-                       [class.active]="selectedItem && selectedItem.id == item.id"
-                       [class.hidden]="!isItemFilteredByName(item)">
-                        <span style="position: relative;padding-right: 25px">
-                            <span style="position: absolute; top: -15px; left: -10px">
-                                <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                            </span>
-                        </span>
-                        <span *ngIf="item.data.notIdentified" class="glyphicon glyphicon-question-sign"></span>
-                        <span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span>
-                        <span *ngIf="item.data.equiped == null && !item.container" class="glyphicon glyphicon-exclamation-sign"></span>
-                        <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
-                        {{item.data.name}}
-                        <template [ngIf]="item === selectedItem">
-                            <swipable-item-detail [gmView]="inGroupTab" [character]="character" [item]="item"></swipable-item-detail>
-                        </template>
-                    </a>
-                </div>
-                <div *ngIf="iconMode" class="list-group" style="height:400px">
-                    <template ngFor let-item [ngForOf]="character.items">
-                        <div [class.bg-info]="item === selectedItem"
-                             style="display: inline-block"
-                             (click)="selectItem(item)"
-                             [class.hidden]="!isItemFilteredByName(item)">
+<md-card>
+    <div class="buttons-header">
+        <md-button-toggle-group [(ngModel)]="selectedInventoryTab">
+            <md-button-toggle value="all">
+                Tout
+            </md-button-toggle>
+            <md-button-toggle value="bags">
+                Sacs
+            </md-button-toggle>
+            <md-button-toggle value="equiped">
+                Equipé
+            </md-button-toggle>
+        </md-button-toggle-group>
+
+
+        <button md-icon-button (click)="toggleIconMode()">
+            <md-icon *ngIf="iconMode" class="md-24">list</md-icon>
+            <md-icon *ngIf="!iconMode" class="md-24">view_module</md-icon>
+        </button>
+
+
+        <md-button-toggle-group [(ngModel)]="sortType" (click)="sortInventory()">
+            <md-button-toggle *ngIf="!sortType || sortType === 'desc'" [value]="'asc'">
+                <md-icon>sort_by_alpha</md-icon>
+            </md-button-toggle>
+            <md-button-toggle *ngIf="sortType && sortType !== 'desc'" [value]="'desc'">
+                <md-icon>sort_by_alpha</md-icon>
+            </md-button-toggle>
+            <md-button-toggle [value]="'not_identified_first'">
+                <md-icon>sort</md-icon>
+            </md-button-toggle>
+        </md-button-toggle-group>
+
+
+        <md-input placeholder="Filtre"
+                  [(ngModel)]="itemFilterName"
+                  (keydown.esc)="itemFilterName = null">
+            <span md-suffix>&nbsp;
+                <md-icon>search</md-icon>
+            </span>
+        </md-input>
+    </div>
+
+    <div class="inventory">
+        <div *ngIf="selectedInventoryTab === 'all'" class="inventory-content">
+            <div *ngIf="!iconMode">
+                <div class="items-list">
+                    <div class="items-list-element" *ngFor="let item of character.items">
+                        <div class="item-line"
+                             [class.selected]="selectedItem && selectedItem.id === item.id"
+                             [hidden]="isItemFilteredByName(item)"
+                             (click)="selectItem(item)">
                             <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                            <md-icon *ngIf="item.data.notIdentified">help</md-icon>
+                            <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
+                            <md-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</md-icon>
+                            <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>&nbsp;
+                            {{item.data.name}}
                         </div>
+
                         <template [ngIf]="item === selectedItem">
-                            <swipable-item-detail [gmView]="inGroupTab" [character]="character" [item]="item"></swipable-item-detail>
+                            <swipeable-item-detail [gmView]="inGroupTab" [character]="character" [item]="item"></swipeable-item-detail>
                         </template>
-                    </template>
+                    </div>
                 </div>
             </div>
+            <div *ngIf="iconMode">
+                <template ngFor let-item [ngForOf]="character.items">
+                    <div [class.bg-info]="item === selectedItem"
+                         style="display: inline-block"
+                         (click)="selectItem(item)"
+                         [hidden]="!isItemFilteredByName(item)">
+                        <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                    </div>
+                    <template [ngIf]="item === selectedItem">
+                        <swipeable-item-detail [gmView]="inGroupTab" [character]="character" [item]="item"></swipeable-item-detail>
+                    </template>
+                </template>
+            </div>
         </div>
-        <div *ngIf="selectedInventoryTab=='bags'" class="row overflow-item-list" style="height:400px;">
+
+        <div *ngIf="selectedInventoryTab === 'bags'" class="inventory-content">
             <div class="col-sm-12" *ngIf="character.computedData.topLevelContainers">
                 <div class="list-group">
                     <bag-item-view [iconMode]="iconMode" [items]="character.computedData.topLevelContainers" [character]="character" [gmView]="inGroupTab" [selectedItem]="selectedItem" (itemSelected)="selectItem($event)">Loading</bag-item-view>
                 </div>
             </div>
         </div>
-        <div *ngIf="selectedInventoryTab=='add'" class="row">
+
+        <div *ngIf="selectedInventoryTab === 'equiped'" class="inventory-content">
+            <div *ngFor="let slot of character.computedData.itemSlots">
+                {{slot.name}}:
+                <div class="items-list equiped-items">
+                    <template ngFor let-item [ngForOf]="character.computedData.itemsBySlots[slot.id]" let-i="index" let-last="last">
+                        <div class="items-list-element">
+                            <div class="item-line"
+                                 [class.selected]="selectedItem && selectedItem.id === item.id"
+                                 [hidden]="isItemFilteredByName(item)"
+                                 (click)="selectItem(item)">
+                                <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                                <md-icon *ngIf="item.data.notIdentified">help</md-icon>
+                                <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>&nbsp;
+                                {{item.data.name}}
+
+                                <button md-icon-button *ngIf="i > 0 && character.computedData.itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="_itemActionService.onAction('equip', item, {level: 1})">
+                                    <md-icon>keyboard_arrow_up</md-icon>
+                                </button>
+                                <button md-icon-button *ngIf="!last && character.computedData.itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="_itemActionService.onAction('equip', item, {level: -1})">
+                                    <md-icon>keyboard_arrow_down</md-icon>
+                                </button>
+                            </div>
+
+                            <template [ngIf]="item === selectedItem">
+                                <swipeable-item-detail [gmView]="inGroupTab" [character]="character" [item]="item"></swipeable-item-detail>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <div class="item-detail" *ngIf="selectedItem">
+            <div #itemDetailTop class="detail-padding-height" [style.height]="itemDetailOffset + 'px'" ></div>
+            <div #itemDetail>
+                <item-detail [gmView]="inGroupTab"  [character]="character" [item]="selectedItem"></item-detail>
+            </div>
+        </div>
+
+    </div>
+</md-card>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div *ngIf="selectedInventoryTab==='add'" class="row">
             <div class="list-group" *ngIf="!selectedAddItem">
                 <a href="#" *ngFor="let item of filteredItems" (click)="selectAddItem(item)" [class.active]="isAddItemSelected(item)" class="list-group-item">
                     <span style="position: relative;padding-right: 25px">
@@ -118,53 +181,7 @@
             </div>
         </div>
 
-        <div class="row-fluid" *ngIf="selectedInventoryTab=='equiped'" >
-            <div *ngFor="let slot of character.computedData.itemSlots">
-                {{slot.name}}:
-                <div class="list-group">
-                    <template ngFor let-item [ngForOf]="character.computedData.itemsBySlots[slot.id]" let-i="index" let-last="last">
-                        <div class="row">
-                            <div class="btn-group col-xs-12" role="group">
-                                <button type="button" style="text-align: left;" class="btn btn-default"
-                                        [class.col-xs-8]="character.computedData.itemsBySlots[slot.id].length > 2 && (i && !last)"
-                                        [class.col-xs-10]="character.computedData.itemsBySlots[slot.id].length == 2 || (character.computedData.itemsBySlots[slot.id].length > 2 && (i == 0 || last))"
-                                        [class.col-xs-12]="character.computedData.itemsBySlots[slot.id].length == 1"
-                                        [class.col-md-10]="character.computedData.itemsBySlots[slot.id].length > 2 && (i && !last)"
-                                        [class.col-md-11]="character.computedData.itemsBySlots[slot.id].length == 2 || (character.computedData.itemsBySlots[slot.id].length > 2 && (i == 0 || last))"
-                                        [class.col-md-12]="character.computedData.itemsBySlots[slot.id].length == 1"
-                                        (click)="selectItem(item)"
-                                        [class.btn-primary]="selectedItem && selectedItem.id == item.id"
-                                        [class.active]="selectedItem && selectedItem.id == item.id">
-                                    <span style="position: relative;padding-right: 25px">
-                                        <span style="position: absolute; top: -15px; left: -10px">
-                                            <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                                        </span>
-                                    </span>
-                                    <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
-                                    {{item.data.name}}
-                                </button>
-                                <button *ngIf="i > 0 && character.computedData.itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="_itemActionService.onAction('equip', item, {level: 1})">
-                                    <span style="font-family: 'Glyphicons Halflings'">&#57491;</span>
-                                </button>
-                                <button *ngIf="!last && character.computedData.itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="_itemActionService.onAction('equip', item, {level: -1})">
-                                    <span style="font-family: 'Glyphicons Halflings'">&#57492;</span>
-                                </button>
-                                <template [ngIf]="item === selectedItem">
-                                    <swipable-item-detail *ngIf="item.template.slots[0].name === slot.name" [gmView]="inGroupTab"  [character]="character" [item]="item"></swipable-item-detail>
-                                </template>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-sm-6 hidden-xs" *ngIf="selectedItem">
-        <div class="bg-info">
-            <item-detail [gmView]="inGroupTab"  [character]="character" [item]="selectedItem"></item-detail>
-        </div>
     </div>
-
 
 </div>

@@ -31,32 +31,7 @@ export class ModifierDetailComponent {
 @Component({
     selector: 'effect-panel',
     templateUrl: './effect-panel.component.html',
-    styles: [`
-        .effect-detail-swipe-container
-        {
-            width: 90vw;
-            padding: 10px;
-            border-bottom-left-radius: 7px;
-            border-top-left-radius: 7px;
-        }
-        .effect-detail {
-            position: absolute;
-            top: 10px;
-            right: -17px;
-            color: #555;
-            z-index: 100;
-            width: 20vw;
-            touch-action: none;
-            -webkit-transition: width 0.5s; /* Safari */
-            transition: width 0.5s;
-        }
-        .effect-detail-swipe {
-            width: 90vw;
-            -webkit-transition: width 0.5s; /* Safari */
-            transition: width 0.5s;
-        }
-        `
-    ],
+    styleUrls: ['./effect-panel.component.scss'],
 })
 export class EffectPanelComponent implements OnInit {
     @Input() character: Character;
@@ -149,6 +124,9 @@ export class EffectPanelComponent implements OnInit {
         );
     }
 
+    openAddEffectModal() {
+
+    }
     onAddEffect(charEffect: CharacterEffect) {
         for (let i = 0; i < this.character.effects.length; i++) {
             if (this.character.effects[i].id === charEffect.id) {
@@ -202,13 +180,10 @@ export class EffectPanelComponent implements OnInit {
         return false;
     }
 
-    toggleReusableEffect(charEffect: CharacterEffect, event: Event) {
+    updateReusableEffect(charEffect: CharacterEffect) {
         this._characterService.toggleEffect(this.character.id, charEffect).subscribe(
             this.onUpdateEffect.bind(this)
         );
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        event.stopPropagation();
     }
 
     onUpdateEffect(charEffect: CharacterEffect) {
@@ -318,13 +293,10 @@ export class EffectPanelComponent implements OnInit {
         return false;
     }
 
-    toggleReusableModifier(modifier: CharacterModifier, event: Event) {
+    updateReusableModifier(modifier: CharacterModifier) {
         this._characterService.toggleModifier(this.character.id, modifier.id).subscribe(
             this.onUpdateModifier.bind(this)
         );
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        event.stopPropagation();
     }
 
     onUpdateModifier(modifier: CharacterModifier) {

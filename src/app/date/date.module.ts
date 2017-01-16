@@ -8,6 +8,8 @@ import {DateComponent} from './date.component';
 import {DateModifierComponent} from './date-modifier.component';
 import {DateService} from './date.service';
 import {NhbkDateDurationPipe} from './nhbk-duration.pipe';
+import {MaterialModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
     imports: [
@@ -15,6 +17,8 @@ import {NhbkDateDurationPipe} from './nhbk-duration.pipe';
         FormsModule,
         SharedModule,
         NotificationsModule,
+        MaterialModule.forRoot(),
+        FlexLayoutModule.forRoot(),
     ],
     declarations: [
         DateComponent,

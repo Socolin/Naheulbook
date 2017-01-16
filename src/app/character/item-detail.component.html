@@ -1,324 +1,430 @@
-<h4>
-    <icon-selector [icon]="item.data.icon" [readonly]="readonly" (onChange)="_itemActionService.onAction('change_icon', item, {icon: $event})"></icon-selector>
-    <span style="vertical-align: top;" *ngIf="item.data.quantity">
-        {{item.data.quantity}}
-    </span>
-    <span style="vertical-align: top;" *ngIf="item.data.notIdentified" class="label label-danger">
-        Non identifié
-    </span>
-    <span style="vertical-align: top;" *ngIf="!editing">
-        {{item.data.name}}
-    </span>
-    <span *ngIf="editing">
-        <input class="form-control" [(ngModel)]="itemEditName"/>
-    </span>
-</h4>
-<div *ngIf="item.data.notIdentified && !gmView">
-    <div *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
-        <span class="ra ra-broadsword ra-lg"></span>
-        <span *ngIf="item.template.data.damageDice">{{item.template.data.damageDice}}<span
-            class="ra ra-perspective-dice-random"></span></span>
-        <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
-        <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
-        <template [ngIf]="!readonly">
-            <div style="margin-left: 20px">
-                <span *ngIf="character.computedData.stats['PI'] > 0" class="text-info">+{{character.computedData.stats['PI']}} (Bonus personnage)</span>
-                <span *ngIf="character.computedData.stats['PI'] < 0" class="text-warning">{{character.computedData.stats['PI']}} (Malus personnage)</span>
+<md-card>
+    <md-card-header>
+        <icon-selector md-card-avatar [icon]="item.data.icon" [readonly]="readonly"
+                       (onChange)="_itemActionService.onAction('change_icon', item, {icon: $event})">
+        </icon-selector>
+        <md-card-title>
+            <span *ngIf="item.template.data.quantifiable || item.data.quantity">
+                {{item.data.quantity}}
+            </span>
+            <span style="vertical-align: top;" *ngIf="!editing">
+                {{item.data.name}}
+            </span>
+            <md-input-container *ngIf="editing">
+                <input md-input
+                       placeholder="Nom"
+                       [(ngModel)]="itemEditName">
+            </md-input-container>
+        </md-card-title>
+        <md-card-subtitle *ngIf="!editing">
+            <div *ngIf="itemCategoriesById">
+                <span class="label label-default">{{itemCategoriesById[item.template.category].type.name}}</span> -
+                <span>{{itemCategoriesById[item.template.category].name}}</span>
             </div>
-        </template>
-    </div>
-    <div>
-        <span *ngIf="!editing">{{item.data.description}}</span>
-        <span *ngIf="editing"><input class="form-control" [(ngModel)]="itemEditDescription"/></span>
-    </div>
-</div>
-<div *ngIf="!item.data.notIdentified || gmView">
-    <div>
-        <span *ngIf="item.template.name !== item.data.name">Nom reel: {{item.template.name}}</span>
-    </div>
-    <div>
-        <span *ngIf="item.template.data.relic" class="label label-primary">Relique</span>
-        <template [ngIf]="character.sex == 'Homme'">
-            <span *ngIf="item.template.data.sex == 'h'" class="label label-success">Homme uniq.</span>
-            <span *ngIf="item.template.data.sex == 'f'" class="label label-danger">Femme uniq.</span>
-        </template>
-        <template [ngIf]="character.sex == 'Femme'">
-            <span *ngIf="item.template.data.sex == 'h'" class="label label-danger">Homme uniq.</span>
-            <span *ngIf="item.template.data.sex == 'f'" class="label label-success">Femme uniq.</span>
-        </template>
-        <span *ngIf="item.template.data.requireLevel && character.level < item.template.data.requireLevel"
-              class="label label-danger">Level: {{item.template.data.requireLevel}}</span>
-        <span *ngIf="item.template.data.requireLevel && character.level >= item.template.data.requireLevel"
-              class="label label-success">Level: {{item.template.data.requireLevel}}</span>
-        <span *ngIf="item.template.data.throwable" class="label label-info">Prévue pour le jet</span>
-    </div>
-    <div style="padding-top:5px; padding-bottom:5px" *ngIf="itemCategoriesById">
-        <small><span class="label label-default">{{itemCategoriesById[item.template.category].type.name}}</span> <span
-            class="label label-default">{{itemCategoriesById[item.template.category].name}}</span></small>
-    </div>
-    <div *ngIf="item.template.slots?.length > 0">
-        Slot:
-        <span *ngFor="let slot of item.template.slots" class="label label-primary">{{slot.name}}</span>
-    </div>
-    <div *ngIf="item.template.data.note">Note: {{item.template.data.note}}</div>
 
-    <div *ngIf="item.template.data.quantifiable" class="row">
-        <div class="col-xs-6">
-            Quantité:
-            <span *ngIf="readonly">{{item.data.quantity}}</span>
-            <value-editor *ngIf="!readonly"
-                          [title]="'Quantité'"
-                          [value]="item.data.quantity"
-                          (onChange)="_itemActionService.onAction('update_quantity', item, {quantity: $event})">
-            </value-editor>
-        </div>
-    </div>
-    <div *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
-        <span class="ra ra-broadsword ra-lg"></span>
-        <span *ngIf="item.template.data.damageDice">{{item.template.data.damageDice}}<span
-            class="ra ra-perspective-dice-random"></span></span>
-        <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
-        <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
-        <span *ngIf="item.template.data.damageType">({{item.template.data.damageType}})</span>
-        <template [ngIf]="!readonly">
-            <div style="margin-left: 20px">
-                <span *ngIf="character.computedData.stats.PI > 0" class="text-info">+{{character.computedData.stats.PI}} (Bonus personnage)</span>
-                <span *ngIf="character.computedData.stats.PI < 0" class="text-warning">{{character.computedData.stats.PI}} (Malus personnage)</span>
+            <span *ngIf="item.data.notIdentified">
+                Non identifié
+            </span>
+        </md-card-subtitle>
+        <button md-icon-button [mdMenuTriggerFor]="itemMenu" *ngIf="!readonly">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu x-position="before" #itemMenu="mdMenu">
+            <button md-menu-item (click)="editItem()">Editer</button>
+            <button md-menu-item (click)="openModifierDialog()">Ajouter un modificateur</button>
+            <button md-menu-item (click)="openLifetimeDialog()">Editer temps de conservation</button>
+            <button md-menu-item (click)="openGiveItemDialog()">Donner</button>
+            <button md-menu-item *ngIf="item.template.data.skillBook"
+                    (click)="_itemActionService.onAction('read_skill_book', item)">
+                Lire
+            </button>
+
+            <button md-menu-item (click)="_itemActionService.onAction('delete', item)">Supprimer</button>
+        </md-menu>
+    </md-card-header>
+    <md-card-content>
+        <div *ngIf="item.data.notIdentified && !gmView">
+            <div *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
+                <span class="ra ra-broadsword ra-lg"></span>
+                <span *ngIf="item.template.data.damageDice">{{item.template.data.damageDice}}<span
+                    class="ra ra-perspective-dice-random"></span></span>
+                <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
+                <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
+                <template [ngIf]="!readonly">
+                    <div style="margin-left: 20px">
+                        <span *ngIf="character.computedData.stats['PI'] > 0" class="text-info">+{{character.computedData.stats['PI']}} (Bonus personnage)</span>
+                        <span *ngIf="character.computedData.stats['PI'] < 0" class="text-warning">{{character.computedData.stats['PI']}} (Malus personnage)</span>
+                    </div>
+                </template>
             </div>
-        </template>
-    </div>
-
-    <div
-        *ngIf="item.template.data.protection || item.template.data.magicProtection || item.template.data.protectionAgainstMagic">
-        <span class="ra ra-shield ra-lg"></span>
-        <span *ngIf="item.template.data.protection">{{item.template.data.protection}}</span>
-        <span *ngIf="item.template.data.protection && item.template.data.magicProtection">+</span>
-        <span *ngIf="item.template.data.magicProtection">{{item.template.data.magicProtection}} (magique)</span>
-        <span
-            *ngIf="(item.template.data.protection || item.template.data.magicProtection) && item.template.data.protectionAgainstMagic">/</span>
-        <span *ngIf="item.template.data.protectionAgainstMagic">{{item.template.data.protectionAgainstMagic}}
-            <span
-                *ngIf="item.template.data.protectionAgainstType">(contre {{item.template.data.protectionAgainstType}})</span>
-            <span *ngIf="!item.template.data.protectionAgainstType">(contre mag./myst.)</span>
-        </span>
-    </div>
-
-    <div *ngIf="item.template.data.charge">
-        Charges: {{item.data.charge}} / {{item.template.data.charge}}
-        <button (click)="_itemActionService.onAction('use_charge', item)" class="btn btn-success">Utiliser</button>
-    </div>
-
-
-    <div *ngIf="item.template.data.description">{{item.template.data.description}}</div>
-    <div>
-        <span *ngIf="!editing">{{item.data.description}}</span>
-        <span *ngIf="editing"><input class="form-control" [(ngModel)]="itemEditDescription"/></span>
-    </div>
-    <div *ngIf="item.template.data.weight && !item.template.data.useUG">
-        Poids:
-        <span *ngIf="item.template.data.weight < 1">{{(item.template.data.weight * 1000)}}g</span>
-        <span *ngIf="item.template.data.weight >= 1">{{(item.template.data.weight)}}Kg</span>
-        <span *ngIf="item.data.quantity">Total: {{item.data.quantity * item.template.data.weight}}Kg</span>
-    </div>
-    <div *ngIf="item.template.data.useUG">
-        <div>U.G: {{item.data.ug}}</div>
-        <div>Poids: {{item.data.ug * item.template.data.weight * 1000 }} g</div>
-    </div>
-    <div *ngIf="item.template.data.space">Encombrement: {{item.template.data.space}}</div>
-
-    <div *ngIf="item.template.data.rupture">
-        <span class="ra ra-broken-shield ra-lg"></span> 1 à {{item.template.data.rupture}}
-    </div>
-    <div *ngIf="item.template.data.duration">Durée: {{item.template.data.duration}}</div>
-    <div *ngIf="item.data.readCount">Lu: {{item.data.readCount}}</div>
-
-    <div *ngIf="modifiers && modifiers.length">
-        <div *ngFor="let modifier of modifiers">
-            <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
-            <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
-            {{modifier.stat}}<span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
-            <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_THROW') != -1">(lancer)</span>
-            <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE') != -1">(c.a.c)</span>
-            <span *ngIf="modifier.special && modifier.special.indexOf('DONT_AFFECT_MAGIEPSY') != -1">(NoMagPsy)</span>
-            <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE_STAFF') != -1">(c.a.c Baton)</span>
-            <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_PR_FOR_ELEMENTS') != -1">(element)</span>
-            <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_DISCRETION') != -1">(discretion)</span>
-            <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_DANSE') != -1">(danse)</span>
-            <span *ngIf="modifier.special && modifier.special.indexOf('ONLY_IF_NOTHING_ON') != -1">(si rien au dessus)</span>
+            <div>
+                <span *ngIf="!editing">{{item.data.description}}</span>
+                <md-input-container *ngIf="editing">
+                    <input md-input
+                           placeholder="Description"
+                           [(ngModel)]="itemEditDescription">
+                </md-input-container>
+            </div>
         </div>
-    </div>
+        <div *ngIf="!item.data.notIdentified || gmView">
+            <div>
+                <span *ngIf="item.template.name !== item.data.name">Nom reel: {{item.template.name}}</span>
+            </div>
 
-    <div *ngIf="item.modifiers">
-        <div *ngFor="let modifier of item.modifiers; let i = index" style="border-radius: 8px; background-color: #aae8aa">
-            <h4>
-                {{modifier.name}}
-                <span class="badge" *ngIf="modifier.currentDuration && modifier.durationType === 'combat'">
-                    <span class="ra ra-sword"></span>{{modifier.currentDuration}}
+            <div *ngIf="item.template.data.description">{{item.template.data.description}}</div>
+            <div>
+                <span *ngIf="!editing">{{item.data.description}}</span>
+                <md-input-container *ngIf="editing">
+                    <input md-input
+                           placeholder="Description"
+                           [(ngModel)]="itemEditDescription">
+                </md-input-container>
+            </div>
+
+            <div>
+                <span *ngIf="item.template.data.relic" class="label label-primary">Relique</span>
+                <template [ngIf]="character.sex === 'Homme'">
+                    <span *ngIf="item.template.data.sex === 'h'" class="label label-success">Homme uniq.</span>
+                    <span *ngIf="item.template.data.sex === 'f'" class="label label-danger">Femme uniq.</span>
+                </template>
+                <template [ngIf]="character.sex === 'Femme'">
+                    <span *ngIf="item.template.data.sex === 'h'" class="label label-danger">Homme uniq.</span>
+                    <span *ngIf="item.template.data.sex === 'f'" class="label label-success">Femme uniq.</span>
+                </template>
+                <span *ngIf="item.template.data.requireLevel && character.level < item.template.data.requireLevel"
+                      class="invalid-level">
+                    Level: {{item.template.data.requireLevel}}
                 </span>
-                <span class="badge" *ngIf="modifier.currentDuration && modifier.durationType === 'time'">
-                    <span class="ra ra-clockwork"></span>{{modifier.currentDuration | nhbkDuration}}
+                <span *ngIf="item.template.data.requireLevel && character.level >= item.template.data.requireLevel"
+                      class="valid-level">
+                    Level: {{item.template.data.requireLevel}}
                 </span>
-                <button class="btn btn-danger glyphicon glyphicon-trash" (click)="removeModifier(i)"></button>
-            </h4>
-            <div *ngIf="modifier.reusable">
-                <button (click)="toggleModifier(i)"
-                        class="glyphicon glyphicon-off btn"
-                        [class.btn-success]="modifier.active"
-                        [class.btn-danger]="!modifier.active">
+                <span *ngIf="item.template.data.throwable" class="label label-info">Prévue pour le jet</span>
+            </div>
+            <div *ngIf="item.template.slots?.length > 0">
+                Slot:
+                <span *ngFor="let slot of item.template.slots">{{slot.name}} </span>
+            </div>
+            <div *ngIf="item.template.data.note">Note: {{item.template.data.note}}</div>
+
+            <div *ngIf="item.template.data.quantifiable">
+                <div>
+                    Quantité:
+                    <span *ngIf="readonly">{{item.data.quantity}}</span>
+                    <value-editor *ngIf="!readonly"
+                                  [title]="'Quantité'"
+                                  [value]="item.data.quantity"
+                                  (onChange)="_itemActionService.onAction('update_quantity', item, {quantity: $event})">
+                    </value-editor>
+                </div>
+            </div>
+            <div *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
+                <span class="ra ra-broadsword ra-lg"></span>
+                <span *ngIf="item.template.data.damageDice">{{item.template.data.damageDice}}<span
+                    class="ra ra-perspective-dice-random"></span></span>
+                <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
+                <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
+                <span *ngIf="item.template.data.damageType">({{item.template.data.damageType}})</span>
+                <template [ngIf]="!readonly">
+                    <div style="margin-left: 20px">
+                        <span *ngIf="character.computedData.stats.PI > 0" class="text-info">+{{character.computedData.stats.PI}} (Bonus personnage)</span>
+                        <span *ngIf="character.computedData.stats.PI < 0" class="text-warning">{{character.computedData.stats.PI}} (Malus personnage)</span>
+                    </div>
+                </template>
+            </div>
+
+            <div *ngIf="item.template.data.protection
+                        || item.template.data.magicProtection
+                        || item.template.data.protectionAgainstMagic">
+                <span class="ra ra-shield ra-lg"></span>
+                <span *ngIf="item.template.data.protection">{{item.template.data.protection}}</span>
+                <span *ngIf="item.template.data.protection && item.template.data.magicProtection">+</span>
+                <span *ngIf="item.template.data.magicProtection">{{item.template.data.magicProtection}} (magique)</span>
+                <span
+                    *ngIf="(item.template.data.protection || item.template.data.magicProtection) && item.template.data.protectionAgainstMagic">/</span>
+                <span *ngIf="item.template.data.protectionAgainstMagic">{{item.template.data.protectionAgainstMagic}}
+                    <span
+                        *ngIf="item.template.data.protectionAgainstType">(contre {{item.template.data.protectionAgainstType}})</span>
+                    <span *ngIf="!item.template.data.protectionAgainstType">(contre mag./myst.)</span>
+                </span>
+            </div>
+
+            <div *ngIf="item.template.data.charge">
+                Charges: {{item.data.charge}} / {{item.template.data.charge}}
+                <button (click)="_itemActionService.onAction('use_charge', item)" class="btn btn-success">Utiliser
                 </button>
             </div>
-            <div *ngIf="!modifier.currentDuration">
-                <span *ngIf="modifier.durationType === 'combat'">
-                    <span class="ra ra-sword"></span>{{modifier.duration}}
-                </span>
-                <span *ngIf="modifier.durationType === 'time'">
-                    <span class="ra ra-clockwork"></span>{{modifier.duration | nhbkDuration}}
-                </span>
+
+            <div *ngIf="item.template.data.weight && !item.template.data.useUG">
+                Poids:
+                <span *ngIf="item.template.data.weight < 1">{{(item.template.data.weight * 1000)}}g</span>
+                <span *ngIf="item.template.data.weight >= 1">{{(item.template.data.weight)}}Kg</span>
+                <span *ngIf="item.data.quantity">Total: {{item.data.quantity * item.template.data.weight}}Kg</span>
             </div>
-            <div *ngIf="modifier.durationType === 'custom'">
-                Duree: {{modifier.currentDuration}}
+            <div *ngIf="item.template.data.useUG">
+                <div>U.G: {{item.data.ug}}</div>
+                <div>Poids: {{item.data.ug * item.template.data.weight * 1000 }} g</div>
             </div>
-            <div *ngFor="let value of modifier.values">
-                {{value | modifier}}
+            <div *ngIf="item.template.data.space">Encombrement: {{item.template.data.space}}</div>
+
+            <div *ngIf="item.template.data.rupture">
+                <span class="ra ra-broken-shield ra-lg"></span> 1 à {{item.template.data.rupture}}
             </div>
-            <hr>
+            <div *ngIf="item.template.data.duration">Durée: {{item.template.data.duration}}</div>
+            <div *ngIf="item.data.readCount">Lu: {{item.data.readCount}}</div>
+
+            <div *ngIf="modifiers && modifiers.length">
+                <div *ngFor="let modifier of modifiers">
+                    <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
+                    <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
+                    {{modifier.stat}}<span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
+                    <span
+                        *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_THROW') !== -1">(lancer)</span>
+                    <span
+                        *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE') !== -1">(c.a.c)</span>
+                    <span
+                        *ngIf="modifier.special && modifier.special.indexOf('DONT_AFFECT_MAGIEPSY') !== -1">(NoMagPsy)</span>
+                    <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE_STAFF') !== -1">(c.a.c Baton)</span>
+                    <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_PR_FOR_ELEMENTS') !== -1">(element)</span>
+                    <span
+                        *ngIf="modifier.special && modifier.special.indexOf('AFFECT_DISCRETION') !== -1">(discretion)</span>
+                    <span
+                        *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_DANSE') !== -1">(danse)</span>
+                    <span *ngIf="modifier.special && modifier.special.indexOf('ONLY_IF_NOTHING_ON') !== -1">(si rien au dessus)</span>
+                </div>
+            </div>
+
+            <div *ngIf="item.modifiers" class="item-modifiers">
+                <md-card *ngFor="let modifier of item.modifiers; let i = index">
+                    <div class="item-header">
+                        <span>
+                            <md-slide-toggle *ngIf="modifier.reusable"
+                                             color="primary"
+                                             (change)="updateModifier(i)"
+                                             [(ngModel)]="modifier.active">
+                            </md-slide-toggle>
+                        </span>
+                        <span>{{modifier.name}}</span>
+                        <span class="padding"></span>
+                        <span *ngIf="modifier.currentDuration && modifier.durationType === 'combat'">
+                            <md-icon fontSet="ra" fontIcon="ra-sword" class="ra-md-button-icon-32"></md-icon>
+                            {{modifier.currentDuration}}
+                        </span>
+                        <span *ngIf="modifier.currentDuration && modifier.durationType === 'time'">
+                            <span class="ra ra-clockwork"></span>{{modifier.currentDuration | nhbkDuration}}
+                        </span>
+                        <button md-icon-button (click)="removeModifier(i)">
+                            <md-icon>delete</md-icon>
+                        </button>
+                    </div>
+                    <div class="item-detail">
+                    </div>
+
+                    <div *ngIf="!modifier.currentDuration">
+                        <span *ngIf="modifier.durationType === 'combat'">
+                            <span class="ra ra-sword"></span>{{modifier.duration}}
+                        </span>
+                        <span *ngIf="modifier.durationType === 'time'">
+                            <span class="ra ra-clockwork"></span>{{modifier.duration | nhbkDuration}}
+                        </span>
+                    </div>
+
+                    <div *ngIf="modifier.durationType === 'custom'">
+                        Duree: {{modifier.currentDuration}}
+                    </div>
+
+                    <div *ngFor="let value of modifier.values">
+                        {{value | modifier}}
+                    </div>
+                </md-card>
+            </div>
+
+            <ul>
+                <li *ngFor="let skill of item.template.skills">Donne la compétence "{{skill.name}}"</li>
+                <li *ngFor="let skill of item.template.unskills">Annule "{{skill.name}}"</li>
+                <li *ngFor="let modifier of item.template.skillModifiers">{{modifier.skill.name}} <span
+                    *ngIf="modifier.value > 0">+</span>{{modifier.value}}
+                </li>
+            </ul>
+
+
+            <div *ngFor="let requirement of item.template.requirements">
+                <span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
+                <span *ngIf="requirement.max">Max {{requirement.stat}}: {{requirement.max}}</span>
+                <span *ngIf="requirement.min && character.computedData.stats[requirement.stat] < requirement.min"
+                      class="text-danger">Non utilisable</span>
+                <span *ngIf="requirement.max && character.computedData.stats[requirement.stat] > requirement.max"
+                      class="text-danger">Non utilisable</span>
+            </div>
         </div>
-    </div>
 
-    <ul>
-        <li *ngFor="let skill of item.template.skills">Donne la compétence "{{skill.name}}"</li>
-        <li *ngFor="let skill of item.template.unskills">Annule "{{skill.name}}"</li>
-        <li *ngFor="let modifier of item.template.skillModifiers">{{modifier.skill.name}} <span
-            *ngIf="modifier.value > 0">+</span>{{modifier.value}}
-        </li>
-    </ul>
+        <div *ngIf="item.data.lifetimeType === 'time'">
+            <span class="game-icon game-icon-stopwatch"></span>Temps de conservation:
+            <span *ngIf="item.data.lifetime > 0">{{item.data.lifetime | nhbkDuration}}</span>
+            <span *ngIf="item.data.lifetime === 0" class="text-danger">expiré</span>
+        </div>
 
-
-    <div *ngFor="let requirement of item.template.requirements">
-        <span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
-        <span *ngIf="requirement.max">Max {{requirement.stat}}: {{requirement.max}}</span>
-        <span *ngIf="requirement.min && character.computedData.stats[requirement.stat] < requirement.min" class="text-danger">Non utilisable</span>
-        <span *ngIf="requirement.max && character.computedData.stats[requirement.stat] > requirement.max" class="text-danger">Non utilisable</span>
-    </div>
-</div>
-
-<div *ngIf="item.data.lifetimeType === 'time'">
-    <span class="glyphicon glyphicon-time"></span>Temps de conservation:
-    <span *ngIf="item.data.lifetime > 0">{{item.data.lifetime | nhbkDuration}}</span>
-    <span *ngIf="item.data.lifetime === 0" class="text-danger">expiré</span>
-</div>
-
-<template [ngIf]="!readonly">
-
-<span *ngIf="item.template.slots?.length > 0">
-    <button *ngIf="!item.data.equiped" class="btn btn-success"
-            (click)="_itemActionService.onAction('equip', item)">Equip</button>
-    <button *ngIf="item.data.equiped" class="btn btn-danger" (click)="_itemActionService.onAction('unequip', item)">Unequip</button>
-</span>
-
-<button *ngIf="item.template.data.skillBook" class="btn btn-success"
-        (click)="_itemActionService.onAction('read_skill_book', item)">Lire
-</button>
-
-
-<button class="btn glyphicon glyphicon-pencil" [class.btn-primary]="editing" [class.btn-default]="editing"
-        (click)="editItem()"></button>
-
-<button *ngIf="!givingItem" class="btn btn-primary" (click)="startGiveItem()">Donner...</button>
-<div *ngIf="givingItem">
-    <span *ngIf="giveDestination == null">Loading...</span>
-    <div *ngIf="giveDestination" class="list-group">
-        <template ngFor let-destination [ngForOf]="giveDestination">
-            <button (click)="_itemActionService.onAction('give', item, {characterId: destination.id}); givingItem = false"
-                    [class.list-group-item-info]="destination.isNpc"
-                    class="list-group-item">
-                {{destination.name}}
-            </button>
+        <template [ngIf]="!readonly">
+            <div *ngIf="character.computedData.containers && !item.data.equiped">
+                <template [ngIf]="item.container">
+                    Dans: {{item.containerInfo.name}}
+                    <button md-button
+                            color="primary"
+                            (click)="_itemActionService.onAction('move_to_container', item, {container: null})">
+                        Retirer
+                    </button>
+                </template>
+                <template [ngIf]="!item.container">
+                    <h4>Ranger dans</h4>
+                    <div class="list-available-containers">
+                        <template ngFor let-container [ngForOf]="character.computedData.containers" let-i="index"
+                                  let-last="last">
+                            <div class="target-container"
+                               (click)="_itemActionService.onAction('move_to_container', item, {container: container.id})">
+                                {{container.data.name}}
+                                <md-divider></md-divider>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
         </template>
-        <button class="list-group-item list-group-item-danger" (click)="givingItem = false">
-            Annuler
-        </button>
-    </div>
-</div>
+    </md-card-content>
+    <md-card-actions align="start">
+        <span *ngIf="item.template.slots?.length > 0">
+            <button md-button
+                    [color]="'primary'"
+                    *ngIf="!item.data.equiped"
+                    (click)="_itemActionService.onAction('equip', item)">
+                ÉQUIPER
+            </button>
+            <button md-button
+                    [color]="'primary'"
+                    *ngIf="item.data.equiped"
+                    (click)="_itemActionService.onAction('unequip', item)">
+                DÉSÉQUIPER
+            </button>
+        </span>
 
+        <button md-button
+                [color]="'accent'"
+                *ngIf="gmView && item.data.notIdentified"
+                (click)="_itemActionService.onAction('identify', item)">
+            IDENTIFIER
+        </button>
 
-<button *ngIf="!addingModifier" class="btn btn-primary" (click)="startAddModifier()">Ajouter Modificateur</button>
-<div *ngIf="addingModifier" style="margin-top: 5px; margin-bottom: 5px; padding-bottom:5px; border-top: 1px solid gray; border-bottom: 1px solid gray">
-    <h3>Ajouter un modificateur</h3>
-    <div>
-        <modifier-editor [modifier]="newModifier"></modifier-editor>
-    </div>
-    <button class="btn btn-success" (click)="addModifier()">
-        Ajouter modificateur
-    </button>
-    <button class="btn btn-danger" (click)="stopAddModifier()">
-        Annuler
-    </button>
-</div>
+    </md-card-actions>
+</md-card>
 
-<button *ngIf="!updatingLifetime" class="btn btn-primary"
-        (click)="startUpdateLifetime()">Temps de conservation</button>
-<div *ngIf="updatingLifetime"  style="margin-top: 5px; margin-bottom: 5px; padding-bottom:5px; border-top: 1px solid gray; border-bottom: 1px solid gray">
-    <h3>Temps de conservation</h3>
-    <div class="btn-group">
-        <button type="button" class="btn btn-primary" (click)="setLifetimeType('time')"
-                [class.active]="item.data.lifetimeType == 'time'">Temps
-        </button>
-        <button type="button" class="btn btn-primary" (click)="setLifetimeType('custom')"
-                [class.active]="item.data.lifetimeType == 'custom'">Autre
-        </button>
-        <button type="button" class="btn btn-primary" (click)="setLifetimeType(null)"
-                [class.active]="!item.data.lifetimeType">
-            Retirer
-        </button>
-    </div>
-    <div *ngIf="item.data.lifetimeType == 'custom'">
-        <div class="input-group">
-            <span class="input-group-addon">Durée</span>
-            <input class="form-control" type="text" [(ngModel)]="item.data.lifetime"/>
-        </div>
-    </div>
-    <div *ngIf="item.data.lifetimeType == 'time'">
-        <div class="input-group">
-            <span class="input-group-addon">Temps</span>
-            <span class="input-group-addon">{{item.data.lifetime | nhbkDuration}}</span>
-            <span class="input-group-addon">
-                        <date-modifier [resetOnChange]=false [dateOffset]="lifetimeDateOffset"
+<template #addModifierDialog="cdkPortal" cdk-portal>
+    <md-card class="add-modifier-dialog">
+        <md-card-title>
+            Ajouter un modificateur
+        </md-card-title>
+        <md-card-content>
+            <modifier-editor [modifier]="newModifier"></modifier-editor>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button
+                    color="primary"
+                    class="btn btn-danger"
+                    (click)="closeModifierDialog()">
+                ANNULER
+            </button>
+            <button md-button
+                    [disabled]="!newModifier.name"
+                    color="primary"
+                    class="btn btn-success"
+                    (click)="addModifier()">
+                AJOUTER
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>
+
+<template #giveItemDialog="cdkPortal" cdk-portal>
+    <md-card class="give-item-dialog">
+        <md-card-title>Donner un objet</md-card-title>
+
+        <md-card-content>
+            <div>
+                <icon-selector [icon]="item.data.icon" [readonly]="true"></icon-selector>
+                <!-- FIXME: Custom quantity -->
+                <span *ngIf="item.template.data.quantifiable || item.data.quantity">
+                    {{item.data.quantity}}
+                </span>
+                {{item.data.name}}
+            </div>
+
+            <span *ngIf="giveDestination === null">Loading...</span>
+
+            <md-radio-group [(ngModel)]="giveTarget">
+                <template ngFor let-destination [ngForOf]="giveDestination">
+                    <md-radio-button [value]="destination">
+                        <span *ngIf="destination.isnpc">[NPC]</span>
+                        {{destination.name}}
+                    </md-radio-button>
+                </template>
+            </md-radio-group>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button
+                    color="primary"
+                    (click)="closeGiveItemDialog()">
+                ANNULER
+            </button>
+            <button md-button
+                    color="primary"
+                    [disabled]="!giveTarget"
+                    (click)="giveItem()">
+                DONNER
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>
+
+<template #lifetimeDialog="cdkPortal" cdk-portal>
+    <md-card>
+        <md-card-title>
+            Temps de conservation
+        </md-card-title>
+        <md-card-content>
+            <md-button-toggle-group [(ngModel)]="item.data.lifetimeType" (change)="updateLifetimeType()">
+                <md-button-toggle [value]="'time'">Temps</md-button-toggle>
+                <md-button-toggle [value]="'custom'">Autre</md-button-toggle>
+                <md-button-toggle [value]="null">Retirer</md-button-toggle>
+            </md-button-toggle-group>
+
+            <div *ngIf="item.data.lifetimeType === 'custom'">
+                <div class="input-group">
+                    <md-input-container>
+                        <input md-input
+                               placeholder="Durée"
+                               [(ngModel)]="item.data.lifetime">
+                    </md-input-container>
+                </div>
+            </div>
+            <div *ngIf="item.data.lifetimeType === 'time'">
+                <div class="input-group">
+                    <span>Temps: </span>
+                    <span>{{item.data.lifetime | nhbkDuration}}</span>
+                    <span>
+                        <date-modifier [resetOnChange]=false
+                                       [title]="'Définir durée de conservation'"
+                                       [dateOffset]="lifetimeDateOffset"
                                        (onChange)="setItemLifetimeDateOffset($event)">
                         </date-modifier>
                     </span>
-        </div>
-    </div>
-    <div>
-        <button class="btn btn-success" (click)="updateLifetime()">
-            Valider
-        </button>
-        <button class="btn btn-danger" (click)="stopUpdateLifetime()">
-            Annuler
-        </button>
-    </div>
-</div>
-
-<button *ngIf="gmView && item.data.notIdentified" class="btn btn-warning"
-        (click)="_itemActionService.onAction('identify', item)">Identifier</button>
-
-<button class="pull-right btn btn-danger glyphicon glyphicon-trash"
-        (click)="_itemActionService.onAction('delete', item)"></button>
-
-<div *ngIf="character.computedData.containers && !item.data.equiped">
-    <template [ngIf]="item.container">
-        Dans: {{item.containerInfo.name}}
-        <button class="btn btn-danger"  (click)="_itemActionService.onAction('move_to_container', item, {container: null})">Retirer</button>
-    </template>
-    <template [ngIf]="!item.container">
-        <h4>Ranger dans</h4>
-        <div class="list-group">
-            <template ngFor let-container [ngForOf]="character.computedData.containers" let-i="index" let-last="last">
-                <a href="#" class="list-group-item" (click)="_itemActionService.onAction('move_to_container', item, {container: container.id})">
-                    {{container.data.name}}
-                </a>
-            </template>
-        </div>
-    </template>
-</div>
+                </div>
+            </div>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button color="primary" (click)="cancelLifetimeDialog()">
+                ANNULER
+            </button>
+            <button md-button color="primary" (click)="updateLifetime()">
+                VALIDER
+            </button>
+        </md-card-actions>
+    </md-card>
 </template>

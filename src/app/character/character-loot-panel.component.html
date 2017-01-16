@@ -15,11 +15,11 @@
                                 (click)="takeItemFromLoot(loot, item)"></button>
                         <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                         {{item.data.name}}
-                        <swipable-item-detail *ngIf="item.id === selectedItem?.id"
+                        <swipeable-item-detail *ngIf="item.id === selectedItem?.id"
                                               [character]="character"
                                               [item]="item"
                                               [readonly]="true">
-                        </swipable-item-detail>
+                        </swipeable-item-detail>
                     </a>
                 </ul>
                 <ul>
@@ -32,11 +32,11 @@
                                         (click)="takeItemFromMonster(monster, item)"></button>
                                 <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                                 {{item.data.name}}
-                                <swipable-item-detail *ngIf="item.id === selectedItem?.id"
+                                <swipeable-item-detail *ngIf="item.id === selectedItem?.id"
                                                       [character]="character"
                                                       [item]="item"
                                                       [readonly]="true">
-                                </swipable-item-detail>
+                                </swipeable-item-detail>
                             </a>
                         </ul>
                     </li>

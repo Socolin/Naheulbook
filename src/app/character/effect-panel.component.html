@@ -1,96 +1,93 @@
-<div class="row" style="position:relative">
-    <div class="col-sm-6">
-        <h4>Effets activable</h4>
-        <div class="list-group">
-            <template ngFor let-characterEffect [ngForOf]="character.computedData.reusableEffects" let-i="index" let-last="last">
-                <a href="#" style="position: relative" class="list-group-item" (click)="selectEffect(characterEffect)" [class.active]="selectedEffect == characterEffect">
-                    <button [class.btn-danger]="!characterEffect.active" [class.btn-success]="characterEffect.active" (click)="toggleReusableEffect(characterEffect, $event)" class="btn btn-danger btn-sm glyphicon glyphicon-off"></button>
-                    {{characterEffect.effect.name}}
-                    <span *ngIf="characterEffect.currentCombatCount != null" class="badge" style="font-size: 20px"><span class="ra ra-sword"></span>{{characterEffect.currentCombatCount}}</span>
-                    <span *ngIf="characterEffect.currentTimeDuration" class="badge" style="font-size: 20px"><span class="ra ra-clockwork"></span> {{characterEffect.currentTimeDuration | nhbkDuration}}</span>
-                    <span *ngIf="characterEffect.currentLapCount" class="badge" style="font-size: 20px"><span class="game-icon game-icon-clockwise-rotation"></span> {{characterEffect.currentLapCount}}</span>
+<div class="effect-panel">
+    <div>
+        <md-card>
+            <md-card-title>
+                Effets
+            </md-card-title>
+            <md-card-content>
+                <div class="effect-list">
+                    <template ngFor let-characterEffect [ngForOf]="character.computedData.effects" let-i="index" let-last="last">
+                        <div (click)="selectEffect(characterEffect)"
+                             class="effect-element"
+                             [class.selected]="selectedEffect === characterEffect">
+                            <span *ngIf="characterEffect.reusable" (click)="$event.stopImmediatePropagation(); $event.stopPropagation(); $event.preventDefault()">
+                                <md-slide-toggle color="primary"
+                                                 (change)="updateReusableEffect(characterEffect)"
+                                                 [(ngModel)]="characterEffect.active">
+                                </md-slide-toggle>
+                            </span>
+                            <span *ngIf="!characterEffect.reusable" class="toggle-padding"></span>
+                            <span>{{characterEffect.effect.name}}</span>
+                            <span class="padding"></span>
+                            <span *ngIf="characterEffect.currentCombatCount != null">
+                                <span class="ra ra-sword duration-icon"></span>{{characterEffect.currentCombatCount}}
+                            </span>
+                            <span *ngIf="characterEffect.currentTimeDuration">
+                                <span class="ra ra-clockwork duration-icon"></span> {{characterEffect.currentTimeDuration | nhbkDuration}}
+                            </span>
+                            <span *ngIf="characterEffect.currentLapCount">
+                                <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{characterEffect.currentLapCount}}
+                            </span>
 
-                    <div *ngIf="characterEffect == selectedEffect"
-                         class="effect-detail visible-xs"
-                         [class.effect-detail-swipe]="showEffectDetail"
-                         (swipeleft)="onSwipeLeftEffect($event)"
-                         (swiperight)="onSwipeRightEffect($event)">
-                        <div class="effect-detail-swipe-container bg-info">
-                            <effect-detail [characterEffect]="characterEffect" [effectCategoriesById]="effectCategoriesById" (onRemove)="removeEffect($event)"></effect-detail>
+                            <div *ngIf="characterEffect === selectedEffect"
+                                 class="effect-detail"
+                                 [class.effect-detail-swipe]="showEffectDetail"
+                                 (swipeleft)="onSwipeLeftEffect($event)"
+                                 (swiperight)="onSwipeRightEffect($event)">
+                                <div class="effect-detail-swipe-container">
+                                    <effect-detail [characterEffect]="characterEffect" [effectCategoriesById]="effectCategoriesById" (onRemove)="removeEffect($event)"></effect-detail>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </template>
-            <template ngFor let-modifier [ngForOf]="character.computedData.reusableModifiers" let-i="index" let-last="last">
-                <a href="#" *ngIf="!modifier.permanent" (click)="selectModifier(modifier)" type="button" class="list-group-item" [class.active]="selectedModifier == modifier">
-                    <button [class.btn-danger]="!modifier.active" [class.btn-success]="modifier.active" (click)="toggleReusableModifier(modifier, $event)" class="btn btn-danger btn-sm glyphicon glyphicon-off"></button>
-                    {{modifier.name}}
-                    <span *ngIf="modifier.combatCount" class="badge" style="font-size: 20px"><span class="ra ra-sword"></span> {{modifier.currentCombatCount}}</span>
-                    <span *ngIf="modifier.currentTimeDuration" class="badge" style="font-size: 20px"><span class="ra ra-clockwork"></span> {{modifier.currentTimeDuration | nhbkDuration}}</span>
-                    <span *ngIf="modifier.currentLapCount" class="badge" style="font-size: 20px"><span class="game-icon game-icon-clockwise-rotation"></span> {{modifier.currentLapCount}}</span>
+                    </template>
+                    <template ngFor let-modifier [ngForOf]="character.computedData.modifiers" let-i="index" let-last="last">
+                        <div *ngIf="!modifier.permanent"
+                             (click)="selectModifier(modifier)"
+                             class="effect-element"
+                             [class.selected]="selectedModifier === modifier">
+                            <span *ngIf="modifier.reusable" (click)="$event.stopImmediatePropagation(); $event.stopPropagation(); $event.preventDefault()">
+                                <md-slide-toggle color="primary"
+                                                 (change)="updateReusableModifier(modifier)"
+                                                 [(ngModel)]="modifier.active">
+                                </md-slide-toggle>
+                            </span>
+                            <span *ngIf="!modifier.reusable" class="toggle-padding"></span>
+                            <span>{{modifier.name}}</span>
+                            <span class="padding"></span>
+                            <span *ngIf="modifier.combatCount">
+                                <span class="ra ra-sword duration-icon"></span> {{modifier.currentCombatCount}}
+                            </span>
+                            <span *ngIf="modifier.currentTimeDuration">
+                                <span class="ra ra-clockwork duration-icon"></span> {{modifier.currentTimeDuration | nhbkDuration}}
+                            </span>
+                            <span *ngIf="modifier.currentLapCount">
+                                <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{modifier.currentLapCount}}
+                            </span>
 
-                    <div *ngIf="modifier == selectedModifier"
-                         class="effect-detail visible-xs"
-                         [class.effect-detail-swipe]="showEffectDetail"
-                         (swipeleft)="onSwipeLeftEffect($event)"
-                         (swiperight)="onSwipeRightEffect($event)">
-                        <div class="effect-detail-swipe-container bg-info">
-                            <modifier-detail [characterModifier]="modifier" (onRemove)="removeModifier($event)"></modifier-detail>
+                            <div *ngIf="modifier === selectedModifier"
+                                 class="effect-detail"
+                                 [class.effect-detail-swipe]="showEffectDetail"
+                                 (swipeleft)="onSwipeLeftEffect($event)"
+                                 (swiperight)="onSwipeRightEffect($event)">
+                                <div class="effect-detail-swipe-container bg-info">
+                                    <modifier-detail [characterModifier]="modifier" (onRemove)="removeModifier($event)"></modifier-detail>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </template>
-            <button (click)="selectEffect(effect)" type="button" class="list-group-item" data-toggle="modal" data-target="#modalAddEffect">
-                <span class="glyphicon glyphicon-plus"></span>
-            </button>
-        </div>
-        <h4>Effets</h4>
-        <div class="list-group">
-            <template ngFor let-characterEffect [ngForOf]="character.computedData.nonReusableEffects" let-i="index" let-last="last">
-                <a href="#" (click)="selectEffect(characterEffect)" type="button" class="list-group-item" [class.active]="selectedEffect == characterEffect">
-                    {{characterEffect.effect.name}}
-                    <span *ngIf="characterEffect.currentCombatCount" class="badge" style="font-size: 20px"><span class="ra ra-sword"></span>{{characterEffect.currentCombatCount}}</span>
-                    <span *ngIf="characterEffect.currentTimeDuration" class="badge" style="font-size: 20px"><span class="ra ra-clockwork"></span> {{characterEffect.currentTimeDuration | nhbkDuration}}</span>
-                    <span *ngIf="characterEffect.currentLapCount" class="badge" style="font-size: 20px"><span class="game-icon game-icon-clockwise-rotation"></span> {{characterEffect.currentLapCount}}</span>
-                    <div *ngIf="characterEffect == selectedEffect"
-                         class="effect-detail visible-xs"
-                         [class.effect-detail-swipe]="showEffectDetail"
-                         (swipeleft)="onSwipeLeftEffect($event)"
-                         (swiperight)="onSwipeRightEffect($event)">
-                        <div class="effect-detail-swipe-container bg-info">
-                            <effect-detail [characterEffect]="characterEffect" [effectCategoriesById]="effectCategoriesById" (onRemove)="removeEffect($event)"></effect-detail>
-                        </div>
-                    </div>
-                </a>
-            </template>
-            <template ngFor let-modifier [ngForOf]="character.computedData.nonReusableModifiers" let-i="index" let-last="last">
-                <a href="#" *ngIf="!modifier.permanent" (click)="selectModifier(modifier)" type="button" class="list-group-item" [class.active]="selectedModifier == modifier">
-                    {{modifier.name}}
-                    <span *ngIf="modifier.combatCount" class="badge" style="font-size: 20px"><span class="ra ra-sword"></span>{{modifier.currentCombatCount}}</span>
-                    <span *ngIf="modifier.currentTimeDuration" class="badge" style="font-size: 20px"><span class="ra ra-clockwork"></span> {{modifier.currentTimeDuration|nhbkDuration}}</span>
-                    <span *ngIf="modifier.currentLapCount" class="badge" style="font-size: 20px"><span class="game-icon game-icon-clockwise-rotation"></span> {{modifier.currentLapCount}}</span>
-                    <div *ngIf="modifier == selectedModifier"
-                         class="effect-detail visible-xs"
-                         [class.effect-detail-swipe]="showEffectDetail"
-                         (swipeleft)="onSwipeLeftEffect($event)"
-                         (swiperight)="onSwipeRightEffect($event)">
-                        <div class="effect-detail-swipe-container bg-info">
-                            <modifier-detail [characterModifier]="modifier" (onRemove)="removeModifier($event)"></modifier-detail>
-                        </div>
-                    </div>
-                </a>
-            </template>
-            <button (click)="selectEffect(effect)" type="button" class="list-group-item" data-toggle="modal" data-target="#modalAddEffect">
-                <span class="glyphicon glyphicon-plus"></span>
-            </button>
-        </div>
+                    </template>
+                </div>
+            </md-card-content>
+            <md-card-actions align="end">
+                <button md-button color="primary" (click)="openAddEffectModal()">AJOUTER</button>
+            </md-card-actions>
+        </md-card>
     </div>
-    <div class="hidden-xs col-sm-6">
+    <div class="effect-detail-panel">
         <h4>Détail</h4>
-        <div *ngIf="selectedEffect" class="bg-info">
+        <div *ngIf="selectedEffect">
             <effect-detail [characterEffect]="selectedEffect" [effectCategoriesById]="effectCategoriesById" (onRemove)="removeEffect($event)"></effect-detail>
         </div>
-        <div *ngIf="selectedModifier" class="bg-info">
+        <div *ngIf="selectedModifier">
             <modifier-detail [characterModifier]="selectedModifier" (onRemove)="removeModifier($event)"></modifier-detail>
         </div>
     </div>

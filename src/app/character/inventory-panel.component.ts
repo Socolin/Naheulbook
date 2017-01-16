@@ -1,4 +1,7 @@
-import {Input, OnInit, Component, Inject, forwardRef} from '@angular/core';
+import {
+    Input, OnInit, Component, Inject, forwardRef, HostListener, ElementRef, ViewChild,
+    OnChanges, SimpleChanges
+} from '@angular/core';
 import {Character} from './character.model';
 import {CharacterWebsocketService} from './character-websocket.service';
 import {ItemService} from '../item/item.service';
@@ -7,19 +10,15 @@ import {Item, PartialItem, ItemData} from './item.model';
 import {removeDiacritics} from '../shared/remove_diacritics';
 import {SwipeService} from './swipe.service';
 import {ItemActionService} from './item-action.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
     selector: 'inventory-panel',
     templateUrl: './inventory-panel.component.html',
-    styles: [`
-        @media screen and (min-width: 768px) {
-            .overflow-item-list {
-                overflow-y: auto;
-            }
-        }`],
+    styleUrls: ['./inventory-panel.component.scss'],
     providers: [SwipeService],
 })
-export class InventoryPanelComponent implements OnInit {
+export class InventoryPanelComponent implements OnInit, OnChanges {
     @Input() character: Character;
     @Input() inGroupTab: boolean;
 
@@ -36,11 +35,36 @@ export class InventoryPanelComponent implements OnInit {
     public iconMode: boolean = false;
     public itemFilterName: string;
 
+    public itemDetailOffset: number = 0;
+    @ViewChild('itemDetail')
+    private itemDetailDiv: ElementRef;
+    @ViewChild('itemDetailTop')
+    private itemDetailTopDiv: ElementRef;
+
+    private sortType: string = 'none';
+
     constructor(
         @Inject(forwardRef(()  => ItemService)) private _itemService: ItemService
         , private _characterWebsocketService: CharacterWebsocketService
-        , private _itemActionService: ItemActionService
-        , private _swipeService: SwipeService) {
+        , private _itemActionService: ItemActionService) {
+    }
+
+    @HostListener('window:scroll') onScroll(): boolean {
+        if (this.itemDetailDiv && this.itemDetailTopDiv) {
+            let rect = this.itemDetailTopDiv.nativeElement.getBoundingClientRect();
+            if (rect.top < 30) {
+                this.itemDetailOffset = 30 - rect.top;
+            } else {
+                this.itemDetailOffset = 0;
+            }
+            return true;
+        }
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('itemFilterName' in changes) {
+            this.updateFilterItem();
+        }
     }
 
     updateFilterItem() {
@@ -91,7 +115,7 @@ export class InventoryPanelComponent implements OnInit {
             }
         }
 
-        this._characterWebsocketService.notifyChange("Ajout de l\'objet: " + item.data.name);
+        this._characterWebsocketService.notifyChange('Ajout de l\'objet: ' + item.data.name);
         this.character.items.push(item);
         this.character.update();
     }
@@ -138,7 +162,6 @@ export class InventoryPanelComponent implements OnInit {
         return false;
     }
 
-    private sortType = 'none';
     sortInventory(type: string) {
         if (type === 'not_identified_first') {
             this.sortType = type;
@@ -172,16 +195,14 @@ export class InventoryPanelComponent implements OnInit {
         else {
             if (this.sortType !== 'asc') {
                 this.sortType = 'asc';
-                this.character.items.sort((a, b) =>
-                    {
+                this.character.items.sort((a, b) => {
                         return a.data.name.localeCompare(b.data.name);
                     }
                 );
             }
             else {
                 this.sortType = 'desc';
-                this.character.items.sort((a, b) =>
-                    {
+                this.character.items.sort((a, b) => {
                         return 2 - a.data.name.localeCompare(b.data.name);
                     }
                 );
@@ -309,7 +330,7 @@ export class InventoryPanelComponent implements OnInit {
             let eventData = event.data;
             let item = event.item;
             let level = 1;
-            if (eventData != null && eventData.level != null) {
+            if (!isNullOrUndefined(eventData) && !isNullOrUndefined(eventData.level)) {
                 level = eventData.level;
             }
             this._itemService.equipItem(item.id, level).subscribe(

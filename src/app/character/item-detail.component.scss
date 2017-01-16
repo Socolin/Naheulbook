@@ -1,0 +1,55 @@
+md-card {
+    md-card-header {
+        & button {
+            margin-left: auto;
+        }
+    }
+}
+
+
+.give-item-dialog {
+    md-radio-button {
+        display: block;
+    }
+}
+.add-modifier-dialog {
+    margin: 20px;
+    max-width: 700px;
+}
+
+.item-modifiers {
+    md-card {
+        margin-bottom: 5px;
+        padding: 0;
+        .item-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .padding {
+                flex: 1 auto;
+            }
+        }
+    }
+}
+
+.valid-level {
+    color: #3c763d;
+}
+.invalid-level {
+    color: #c72b2b;
+}
+
+
+.list-available-containers {
+    display: flex;
+    flex-direction: column;
+    .target-container {
+        padding-top: 10px;
+        height: 22px;
+        cursor: pointer;
+    }
+    .target-container:hover {
+        background-color: #dfdfdf;
+    }
+}
+

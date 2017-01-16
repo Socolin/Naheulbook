@@ -1,69 +1,88 @@
 <div *ngIf="modifiers && modifiers.length > 0" class="row">
 	<div class="col-md-2">
-		<button class="btn btn-danger glyphicon glyphicon-remove" (click)="clear()"></button>
+		<button md-icon-button (click)="clear()"><md-icon>delete_forever</md-icon></button>
 	</div>
 </div>
 <div *ngFor="let modifier of modifiers; let i=index" class="row" [class.bg-success]="modifier.value > 0" [class.bg-danger]="modifier.value < 0">
-	<div class="col-xs-1">
-		<button class="btn btn-warning glyphicon glyphicon-remove" (click)="removeModifier(i)"></button>
-	</div>
-	<div class="col-xs-2">{{modifier | modifier}}</div>
-	<div *ngIf="options.indexOf('job') != -1" class="col-xs-2">
+    <button md-icon-button (click)="removeModifier(i)"><md-icon>delete</md-icon></button>
+	<span>{{modifier | modifier}}</span>
+	<span *ngIf="options.indexOf('job') !== -1" class="col-xs-2">
 		<select #jobSelector [(ngModel)] ="modifier.job">
 			<option></option>
 			<option *ngFor="let job of jobs" [attr.value]="job.id">{{job.name}}</option>
 		</select>
-	</div>
-	<div *ngIf="options.indexOf('origin') != -1" class="col-xs-3">
+	</span >
+	<span *ngIf="options.indexOf('origin') !== -1" class="col-xs-3">
 		<select #originSelector [(ngModel)] ="modifier.origin">
 			<option></option>
 			<option *ngFor="let origin of origins" [attr.value]="origin.id">{{origin.name}}</option>
 		</select>
-	</div>
-	<div *ngIf="options.indexOf('special') != -1"  class="col-xs-3">
+	</span>
+	<span *ngIf="options.indexOf('special') !== -1"  class="col-xs-3">
 		<div *ngIf="!modifier.special" (click)="modifier.special = []">Add special</div>
 		<div *ngIf="modifier.special" (click)="modifier.special = null">Remove special</div>
 		<div *ngIf="modifier.special">
 			<div *ngFor="let v of specialsValue">
-				<input type="checkbox" [checked]="modifier.special.indexOf(v) != -1" (click)="toggleSpecial(i, v)"/> {{v}}
+				<input type="checkbox" [checked]="modifier.special.indexOf(v) !== -1" (click)="toggleSpecial(i, v)"/> {{v}}
 			</div>
 		</div>
-	</div>
+	</span>
 </div>
-<div class="row">
-	<div class="col-sm-12 btn-group" data-toggle="buttons">
-		<button *ngFor="let stat of stats" class="btn btn-primary" (click)="setStat(stat)" [class.active]="selectedStat && selectedStat.name == stat.name">{{stat.name}}</button>
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-12 btn-group" data-toggle="buttons">
-		<button class="btn btn-default" (click)="selectedType = 'ADD'" [class.active]="selectedType && selectedType == 'ADD'">ADD</button>
-		<button class="btn btn-default" (click)="selectedType = 'MUL'" [class.active]="selectedType && selectedType == 'MUL'">MUL</button>
-		<button class="btn btn-default" (click)="selectedType = 'DIV'" [class.active]="selectedType && selectedType == 'DIV'">DIV</button>
-		<button class="btn btn-default" (click)="selectedType = 'SET'" [class.active]="selectedType && selectedType == 'SET'">=</button>
-		<button class="btn btn-default" (click)="selectedType = 'PERCENTAGE'" [class.active]="selectedType && selectedType == 'PERCENTAGE'">%</button>
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-9 btn-group" data-toggle="buttons">
-		<button class="btn btn-info" (click)="setValue(-5)" [class.active]="value == -5">-5</button>
-		<button class="btn btn-info" (click)="setValue(-4)" [class.active]="value == -4">-4</button>
-		<button class="btn btn-info" (click)="setValue(-3)" [class.active]="value == -3">-3</button>
-		<button class="btn btn-info" (click)="setValue(-2)" [class.active]="value == -2">-2</button>
-		<button class="btn btn-info" (click)="setValue(-1)" [class.active]="value == -1">-1</button>
-		<button class="btn btn-info" (click)="setValue(0)" [class.active]="value == 0">0</button>
-		<button class="btn btn-info" (click)="setValue(1)" [class.active]="value == 1">1</button>
-		<button class="btn btn-info" (click)="setValue(2)" [class.active]="value == 2">2</button>
-		<button class="btn btn-info" (click)="setValue(3)" [class.active]="value == 3">3</button>
-		<button class="btn btn-info" (click)="setValue(4)" [class.active]="value == 4">4</button>
-		<button class="btn btn-info" (click)="setValue(5)" [class.active]="value == 5">5</button>
-		<button class="btn btn-info" (click)="setValue(6)" [class.active]="value == 6">6</button>
-		<button class="btn btn-info" (click)="setValue(7)" [class.active]="value == 7">7</button>
-		<button class="btn btn-info" (click)="setValue(8)" [class.active]="value == 8">8</button>
-		<button class="btn btn-info" (click)="setValue(9)" [class.active]="value == 9">9</button>
-		<button class="btn btn-info" (click)="setValue(10)" [class.active]="value == 10">10</button>
-	</div>
-	<div class="col-sm-2">
-		<input type="number" class="form-control" [(ngModel)]="value" />
-	</div>
+<div>
+    <div>Stat:</div>
+    <md-button-toggle-group [(ngModel)]="basicSelectedStat" (change)="updateSelectedStat('basic')">
+        <md-button-toggle *ngFor="let stat of basicStats" [value]="stat">
+            {{stat}}
+        </md-button-toggle>
+    </md-button-toggle-group>
+    <md-button-toggle-group [(ngModel)]="lifeSelectedStat" (change)="updateSelectedStat('life')">
+        <md-button-toggle *ngFor="let stat of lifeStats" [value]="stat">
+            {{stat}}
+        </md-button-toggle>
+    </md-button-toggle-group>
+    <md-button-toggle-group [(ngModel)]="combatSelectedStat" (change)="updateSelectedStat('combat')">
+        <md-button-toggle *ngFor="let stat of combatStats" [value]="stat">
+            {{stat}}
+        </md-button-toggle>
+    </md-button-toggle-group>
+    <md-button-toggle-group [(ngModel)]="magicSelectedStat" (change)="updateSelectedStat('magic')">
+        <md-button-toggle *ngFor="let stat of magicStats" [value]="stat">
+            {{stat}}
+        </md-button-toggle>
+    </md-button-toggle-group>
+    <md-button-toggle-group [(ngModel)]="otherSelectedStat" (change)="updateSelectedStat('other')">
+        <md-button-toggle *ngFor="let stat of stats" [value]="stat">
+            {{stat}}
+        </md-button-toggle>
+    </md-button-toggle-group>
+
+    <div>Modification type:</div>
+    <md-button-toggle-group [(ngModel)]="selectedType">
+        <md-button-toggle [value]="'ADD'">ADD</md-button-toggle>
+        <md-button-toggle [value]="'MUL'">MUL</md-button-toggle>
+        <md-button-toggle [value]="'DIV'">DIV</md-button-toggle>
+        <md-button-toggle [value]="'SET'">SET</md-button-toggle>
+        <md-button-toggle [value]="'PERCENTAGE'">PERCENTAGE</md-button-toggle>
+    </md-button-toggle-group>
+
+    <div>Valeur:</div>
+    <md-button-toggle-group [(ngModel)]="value" (change)="addModifier()">
+        <md-button-toggle [value]="-5">-5</md-button-toggle>
+        <md-button-toggle [value]="-4">-4</md-button-toggle>
+        <md-button-toggle [value]="-3">-3</md-button-toggle>
+        <md-button-toggle [value]="-2">-2</md-button-toggle>
+        <md-button-toggle [value]="-1">-1</md-button-toggle>
+        <md-button-toggle [value]="0">0</md-button-toggle>
+        <md-button-toggle [value]="1">1</md-button-toggle>
+        <md-button-toggle [value]="2">2</md-button-toggle>
+        <md-button-toggle [value]="3">3</md-button-toggle>
+        <md-button-toggle [value]="4">4</md-button-toggle>
+        <md-button-toggle [value]="5">5</md-button-toggle>
+        <md-button-toggle [value]="6">6</md-button-toggle>
+        <md-button-toggle [value]="7">7</md-button-toggle>
+        <md-button-toggle [value]="8">8</md-button-toggle>
+        <md-button-toggle [value]="9">9</md-button-toggle>
+        <md-button-toggle [value]="10">10</md-button-toggle>
+    </md-button-toggle-group>
+    <md-input placeholder="Valeur" [(ngModel)]="value"></md-input>
 </div>

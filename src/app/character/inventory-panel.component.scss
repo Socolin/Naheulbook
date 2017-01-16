@@ -1,0 +1,74 @@
+md-card {
+    margin: 5px;
+    .buttons-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+
+        md-input {
+            margin-left: 10px;
+            flex: 1 auto;
+        }
+    }
+
+    .inventory-content {
+        .items-list {
+            .items-list-element {
+                border-bottom: 1px solid #dfdfdf;
+
+                .item-line {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    align-items: center;
+                    font-size: medium;
+
+                    icon {
+                        padding-right: 10px;
+                    }
+
+                    md-icon {
+                        color: rgba(0, 0, 0, 0.54);
+                    }
+                }
+
+                .selected {
+                    background: #efefef;
+                }
+            }
+        }
+    }
+
+    .equiped-items {
+        margin-left: 32px;
+    }
+
+    .inventory {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        .inventory-content {
+            flex: 1 1 50%;
+            width: 50%;
+        }
+
+        .item-detail {
+            flex: 1 1 50%;
+            width: 50%;
+
+            .detail-padding-height {
+                -webkit-transition: height 0.1s linear; /* Safari */
+                transition: height 0.1s linear;
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 599px) {
+    .item-detail {
+        display: none;
+    }
+}
