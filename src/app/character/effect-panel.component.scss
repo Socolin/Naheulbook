@@ -1,3 +1,6 @@
+md-card {
+    margin: 5px;
+}
 
 .effect-detail-swipe-container
 {
@@ -6,6 +9,7 @@
     border-bottom-left-radius: 7px;
     border-top-left-radius: 7px;
 }
+
 .effect-detail {
     position: absolute;
     top: 10px;
@@ -17,6 +21,7 @@
     -webkit-transition: width 0.5s; /* Safari */
     transition: width 0.5s;
 }
+
 .effect-detail-swipe {
     width: 90vw;
     -webkit-transition: width 0.5s; /* Safari */
@@ -59,5 +64,39 @@
 
     .duration-icon {
         font-size: 20px;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .swipe-effect-detail-area {
+        display: none;
+    }
+}
+.effect-panel {
+    display: flex;
+
+    .effect-list-panel {
+        flex: 1 0 auto;
+    }
+
+    .effect-detail-panel {
+        flex: 1 0 auto;
+    }
+
+    @media screen and (max-width: 599px) {
+        .effect-detail-panel {
+            display: none;
+        }
+    }
+}
+
+
+.add-effect-dialog {
+    margin: 20px;
+    max-width: 700px;
+
+    md-card-content {
+        max-height: 65vh;
+        overflow-y: auto;
     }
 }

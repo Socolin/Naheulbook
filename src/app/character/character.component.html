@@ -252,24 +252,26 @@
                         </ul>
                     </md-card-content>
                 </md-card>
-                <md-card class="stats-card">
+                <md-card class="stats-card weapons-card">
                     <md-card-title>Armes</md-card-title>
                     <md-card-content>
-                        <div *ngIf="character.computedData.itemsBySlotsAll[1]">
+                        <div *ngIf="character.computedData.itemsBySlotsAll[1]" class="weapons-list">
                             <template ngFor let-item [ngForOf]="character.computedData.itemsBySlotsAll[1]" let-i="index" let-last="last">
-                                <button type="button" class="list-group-item btn btn-default" (click)="selectedItem = item" [class.btn-primary]="selectedItem && selectedItem.id == item.id"
-                                        [class.active]="selectedItem && selectedItem.id == item.id">
-                                    <span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span> {{item.data.name}}
-                                    <template [ngIf]="item === selectedItem">
-                                        <swipeable-item-detail [gmView]="inGroupTab"  [character]="character" [item]="item"></swipeable-item-detail>
-                                    </template>
-                                </button>
+                                <div class="item-line"
+                                     [class.selected]="selectedItem && selectedItem.id === item.id"
+                                     (click)="selectedItem = item">
+                                    <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                                    <md-icon *ngIf="item.data.notIdentified">help</md-icon>
+                                    <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>&nbsp;
+                                    {{item.data.name}}
+                                </div>
+                                <template [ngIf]="item === selectedItem">
+                                    <swipeable-item-detail [gmView]="inGroupTab"  [character]="character" [item]="item"></swipeable-item-detail>
+                                </template>
                             </template>
                         </div>
-                        <div *ngIf="selectedItem">
-                            <div class="bg-info">
-                                <item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
-                            </div>
+                        <div *ngIf="selectedItem" class="weapons-detail">
+                            <item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
                         </div>
                     </md-card-content>
                 </md-card>
@@ -520,22 +522,23 @@
         <md-tab label="Autre">
             <!-- Start of other tab -->
             <div *ngIf="character.computedData.stats['AD'] > 12" class="row">
-                <div class="col-xs-7 col-sm-5 col-md-3 col-lg-2">
+                <div>
                     <strong>Bonus AD</strong>
                 </div>
-                <div class="col-xs-5">
-                    <div class="btn-group" data-toggle="buttons">
-                        <button class="btn btn-primary" (click)="setStatBonusAD(character.id, 'AT')" [class.active]="character.statBonusAD == 'AT'">AT</button>
-                        <button class="btn btn-primary" (click)="setStatBonusAD(character.id, 'PRD')" [class.active]="character.statBonusAD == 'PRD'">PRD</button>
-                    </div>
+                <div>
+
+                    <md-button-toggle-group name="alignment" [(ngModel)]="character.statBonusAD">
+                        <md-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</md-button-toggle>
+                        <md-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</md-button-toggle>
+                    </md-button-toggle-group>
                 </div>
             </div>
 
             <div *ngIf="character.computedData.stats['AD'] < 9" class="row">
-                <div class="col-xs-7 col-sm-5 col-md-3 col-lg-2">
+                <div>
                     <strong>Malus AD</strong>
                 </div>
-                <div class="col-xs-5">
+                <div>
                     <div class="btn-group" data-toggle="buttons">
                         <button class="btn btn-primary" (click)="setStatBonusAD(character.id, 'AT')" [class.active]="character.statBonusAD == 'AT'">AT</button>
                         <button class="btn btn-primary" (click)="setStatBonusAD(character.id, 'PRD')" [class.active]="character.statBonusAD == 'PRD'">PRD</button>
@@ -543,10 +546,10 @@
                 </div>
             </div>
             <div *ngIf="character.computedData.stats['INT'] > 12" class="row">
-                <div class="col-xs-7 col-sm-5 col-md-3 col-lg-2">
+                <div>
                     <strong>Bonus Degat magique</strong>
                 </div>
-                <div class="col-xs-5">{{(character.computedData.stats['INT'] - 12)}}</div>
+                <div>{{(character.computedData.stats['INT'] - 12)}}</div>
             </div>
             <!-- End of other tab -->
         </md-tab>

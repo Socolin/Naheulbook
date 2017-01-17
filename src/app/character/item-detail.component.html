@@ -38,7 +38,7 @@
                     (click)="_itemActionService.onAction('read_skill_book', item)">
                 Lire
             </button>
-
+            <button *ngIf="item.template.data.charge" (click)="_itemActionService.onAction('use_charge', item)">Utiliser une charge</button>
             <button md-menu-item (click)="_itemActionService.onAction('delete', item)">Supprimer</button>
         </md-menu>
     </md-card-header>
@@ -151,8 +151,6 @@
 
             <div *ngIf="item.template.data.charge">
                 Charges: {{item.data.charge}} / {{item.template.data.charge}}
-                <button (click)="_itemActionService.onAction('use_charge', item)" class="btn btn-success">Utiliser
-                </button>
             </div>
 
             <div *ngIf="item.template.data.weight && !item.template.data.useUG">
@@ -327,14 +325,12 @@
         <md-card-actions align="end">
             <button md-button
                     color="primary"
-                    class="btn btn-danger"
                     (click)="closeModifierDialog()">
                 ANNULER
             </button>
             <button md-button
                     [disabled]="!newModifier.name"
                     color="primary"
-                    class="btn btn-success"
                     (click)="addModifier()">
                 AJOUTER
             </button>

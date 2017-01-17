@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import {Character, CharacterEffect, CharacterModifier} from './character.model';
 import {Effect, EffectCategory} from '../effect/effect.model';
 import {EffectService} from '../effect/effect.service';
@@ -8,10 +8,12 @@ import {CharacterWebsocketService} from './character-websocket.service';
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
 import {NhbkDateOffset} from '../date/date.model';
 import {dateOffset2TimeDuration} from '../date/util';
+import {Portal, OverlayRef, Overlay, OverlayState} from '@angular/material';
 
 @Component({
     selector: 'effect-detail',
     templateUrl: './effect-detail.component.html',
+    styleUrls: ['./effect-detail.component.scss'],
 })
 export class EffectDetailComponent {
     @Input() characterEffect: CharacterEffect;
@@ -22,6 +24,7 @@ export class EffectDetailComponent {
 @Component({
     selector: 'modifier-detail',
     templateUrl: './modifier-detail.component.html',
+    styleUrls: ['./modifier-detail.component.scss'],
 })
 export class ModifierDetailComponent {
     @Input() characterModifier: CharacterModifier;
@@ -39,6 +42,11 @@ export class EffectPanelComponent implements OnInit {
     public selectedModifier: CharacterModifier;
     public showEffectDetail: boolean;
 
+    // Add effect dialog
+    @ViewChild('addEffectDialog')
+    public addEffectDialog: Portal<any>;
+    public addEffectOverlayRef: OverlayRef;
+
     public preSelectedEffect: Effect;
     public newEffectReusable: boolean;
     public newEffectCustomDuration: boolean = false;
@@ -53,15 +61,38 @@ export class EffectPanelComponent implements OnInit {
     public autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
 
     // Custom modifier
-
     public newModifierDurationType: string = 'custom';
     public customAddModifier: CharacterModifier = new CharacterModifier();
     public customAddModifierDateOffset: NhbkDateOffset = new NhbkDateOffset();
 
+
+
     constructor(private _effectService: EffectService
         , private _characterWebsocketService: CharacterWebsocketService
-        , private _characterService: CharacterService) {
+        , private _characterService: CharacterService
+        , private _overlay: Overlay) {
     }
+
+
+    openAddEffectModal() {
+        let config = new OverlayState();
+
+        config.positionStrategy = this._overlay.position()
+            .global()
+            .centerHorizontally()
+            .centerVertically();
+        config.hasBackdrop = true;
+
+        let overlayRef = this._overlay.create(config);
+        overlayRef.attach(this.addEffectDialog);
+        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        this.addEffectOverlayRef = overlayRef;
+
+    }
+    closeAddEffectDialog(){
+        this.addEffectOverlayRef.detach().then();
+    }
+
 
     updateEffectListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
         this.effectFilterName = filter;
@@ -124,9 +155,6 @@ export class EffectPanelComponent implements OnInit {
         );
     }
 
-    openAddEffectModal() {
-
-    }
     onAddEffect(charEffect: CharacterEffect) {
         for (let i = 0; i < this.character.effects.length; i++) {
             if (this.character.effects[i].id === charEffect.id) {
@@ -171,10 +199,6 @@ export class EffectPanelComponent implements OnInit {
     }
 
     selectEffect(charEffect: CharacterEffect) {
-        if (this.selectedEffect === charEffect) {
-            this.selectedEffect = null;
-            return false;
-        }
         this.selectedModifier = null;
         this.selectedEffect = charEffect;
         return false;
@@ -284,10 +308,6 @@ export class EffectPanelComponent implements OnInit {
     }
 
     selectModifier(modifier: CharacterModifier) {
-        if (this.selectedModifier === modifier) {
-            this.selectedModifier = null;
-            return false;
-        }
         this.selectedEffect = null;
         this.selectedModifier = modifier;
         return false;

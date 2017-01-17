@@ -177,3 +177,31 @@ md-card {
         border-top: 0;
     }
 }
+
+
+.weapons-card {
+    .selected {
+        background-color: #efefef;
+    }
+    md-card-content {
+        display: flex;
+        flex-wrap: wrap;
+        .weapons-list {
+            flex: 0 0 auto;
+        }
+        .weapons-detail {
+            flex: 1 0 auto;
+        }
+        @media screen and (max-width: 599px) {
+            .weapons-detail {
+                visibility: hidden;
+            }
+            .weapons-list {
+                flex: 1 0 auto;
+            }
+        }
+        .item-line {
+            border-bottom: 1px solid #efefef;
+        }
+    }
+}
