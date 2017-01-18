@@ -54,7 +54,7 @@
                             <md-icon *ngIf="item.data.notIdentified">help</md-icon>
                             <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
                             <md-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</md-icon>
-                            <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>&nbsp;
+                            <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                             {{item.data.name}}
                         </div>
 
@@ -99,7 +99,7 @@
                                  (click)="selectItem(item)">
                                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                                 <md-icon *ngIf="item.data.notIdentified">help</md-icon>
-                                <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>&nbsp;
+                                <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                 {{item.data.name}}
 
                                 <button md-icon-button *ngIf="i > 0 && character.computedData.itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="_itemActionService.onAction('equip', item, {level: 1})">

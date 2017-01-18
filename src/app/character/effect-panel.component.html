@@ -29,16 +29,6 @@
                         <span *ngIf="characterEffect.currentLapCount">
                             <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{characterEffect.currentLapCount}}
                         </span>
-
-                        <div *ngIf="characterEffect === selectedEffect"
-                             class="effect-detail swipe-effect-detail-area"
-                             [class.effect-detail-swipe]="showEffectDetail"
-                             (swipeleft)="onSwipeLeftEffect($event)"
-                             (swiperight)="onSwipeRightEffect($event)">
-                            <div class="effect-detail-swipe-container">
-                                <effect-detail [characterEffect]="characterEffect" [effectCategoriesById]="effectCategoriesById" (onRemove)="removeEffect($event)"></effect-detail>
-                            </div>
-                        </div>
                     </div>
                 </template>
                 <template ngFor let-modifier [ngForOf]="character.computedData.modifiers" let-i="index" let-last="last">
@@ -65,16 +55,6 @@
                         <span *ngIf="modifier.currentLapCount">
                             <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{modifier.currentLapCount}}
                         </span>
-
-                        <div *ngIf="modifier === selectedModifier"
-                             class="effect-detail swipe-effect-detail-area"
-                             [class.effect-detail-swipe]="showEffectDetail"
-                             (swipeleft)="onSwipeLeftEffect($event)"
-                             (swiperight)="onSwipeRightEffect($event)">
-                            <div class="effect-detail-swipe-container">
-                                <modifier-detail [characterModifier]="modifier" (onRemove)="removeModifier($event)"></modifier-detail>
-                            </div>
-                        </div>
                     </div>
                 </template>
             </div>

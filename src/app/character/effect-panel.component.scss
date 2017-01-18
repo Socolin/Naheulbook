@@ -67,26 +67,18 @@ md-card {
     }
 }
 
-@media screen and (min-width: 600px) {
-    .swipe-effect-detail-area {
-        display: none;
-    }
-}
 .effect-panel {
     display: flex;
+    flex-wrap: wrap;
 
     .effect-list-panel {
+        min-width: 350px;
         flex: 1 0 auto;
     }
 
     .effect-detail-panel {
+        min-width: 350px;
         flex: 1 0 auto;
-    }
-
-    @media screen and (max-width: 599px) {
-        .effect-detail-panel {
-            display: none;
-        }
     }
 }
 

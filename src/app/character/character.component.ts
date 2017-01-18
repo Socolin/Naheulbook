@@ -1,5 +1,6 @@
-import {Component, Input, OnInit, OnDestroy} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {MdTabChangeEvent, Portal, OverlayRef, OverlayState, Overlay} from "@angular/material";
 
 import {NotificationsService} from '../notifications';
 
@@ -10,14 +11,14 @@ import {CharacterWebsocketService} from './character-websocket.service';
 import {SwipeService} from './swipe.service';
 import {ItemActionService} from './item-action.service';
 import {Item} from './item.model';
-import {MdTabChangeEvent} from "@angular/material";
+import {Skill} from '../skill/skill.model';
 
 export class LevelUpInfo {
     EVorEA: string = 'EV';
     EVorEAValue: number;
     targetLevelUp: number;
     statToUp: string;
-    skill: any;
+    skill: Skill;
     speciality: any;
 }
 
@@ -30,6 +31,11 @@ export class LevelUpInfo {
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
     @Input() character: Character;
+
+    @ViewChild('levelUpDialog')
+    public levelUpDialog: Portal<any>;
+    public levelUpOverlayRef: OverlayRef;
+
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
     public inGroupTab: boolean = false;
     public selectedItem: Item;
@@ -49,6 +55,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     constructor(private _route: ActivatedRoute
         , private _notification: NotificationsService
         , private _characterWebsocketService: CharacterWebsocketService
+        , private _overlay: Overlay
         , private _characterService: CharacterService) {
     }
 
@@ -104,11 +111,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     levelUp() {
-        if (this.character) {
-            this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(
-                this.onLevelUp.bind(this)
-            );
-        }
+        this.closeLevelUpDialog();
+        this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(this.onLevelUp.bind(this));
     }
 
     onLevelUp(result: any) {
@@ -167,6 +171,21 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return this.character.level < this.getLevelForXp();
     }
 
+    getXpForNextLevel() {
+        let level = 1;
+        let totalXp = 0;
+        let xp = this.character.experience;
+        while (xp >= level * 100) {
+            xp -= level * 100;
+            totalXp += level * 100;
+            level++;
+        }
+
+        totalXp += level * 100;
+
+        return totalXp;
+    }
+
     getLevelForXp(): number {
         let level = 1;
         let xp = this.character.experience;
@@ -175,6 +194,27 @@ export class CharacterComponent implements OnInit, OnDestroy {
             level++;
         }
         return level;
+    }
+
+    openLevelUpDialog() {
+        this.initLevelUp();
+
+        let config = new OverlayState();
+
+        config.positionStrategy = this._overlay.position()
+            .global()
+            .centerHorizontally()
+            .centerVertically();
+        config.hasBackdrop = true;
+
+        let overlayRef = this._overlay.create(config);
+        overlayRef.attach(this.levelUpDialog);
+        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        this.levelUpOverlayRef = overlayRef;
+    }
+
+    closeLevelUpDialog() {
+        this.levelUpOverlayRef.detach();
     }
 
     initLevelUp() {
@@ -190,10 +230,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
-    setLevelUpStatToUp(stat: string) {
-        this.levelUpInfo.statToUp = stat;
-    }
-
     rollLevelUp() {
         let diceLevelUp = this.character.origin.diceEVLevelUp;
         if (this.levelUpInfo.EVorEA === 'EV') {
@@ -207,7 +243,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this.levelUpInfo.EVorEAValue = Math.ceil(Math.random() * diceLevelUp);
     }
 
-    onLevelUpSelectSkills(skills) {
+    onLevelUpSelectSkills(skills: Skill[]) {
         this.levelUpInfo.skill = skills[0];
     }
 

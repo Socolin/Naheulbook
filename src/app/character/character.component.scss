@@ -83,6 +83,15 @@ md-card {
                     }
                 }
             }
+
+            .large-stat {
+                .stat-name {
+                    flex: 1 auto;
+                }
+                .stat-value {
+                    flex: 0 auto;
+                }
+            }
         }
 
         &.combat-stats {
@@ -187,21 +196,59 @@ md-card {
         display: flex;
         flex-wrap: wrap;
         .weapons-list {
-            flex: 0 0 auto;
-        }
-        .weapons-detail {
             flex: 1 0 auto;
-        }
-        @media screen and (max-width: 599px) {
-            .weapons-detail {
-                visibility: hidden;
-            }
-            .weapons-list {
-                flex: 1 0 auto;
+            .item-line {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: center;
+                font-size: medium;
+
+                icon {
+                    padding-right: 10px;
+                }
+
+                md-icon {
+                    padding-right: 6px;
+                    color: rgba(0, 0, 0, 0.54);
+                }
             }
         }
         .item-line {
             border-bottom: 1px solid #efefef;
+        }
+    }
+}
+.weapons-detail {
+    width: 100%;
+}
+
+.level-up-button {
+    margin-left: 32px;
+}
+
+.level-up-dialog {
+    margin: 0 16px;
+
+    md-card-content {
+        md-card {
+            margin-bottom: 5px;
+        }
+    }
+    .level-up-dialog-content {
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+
+    .level-up-ea-ev {
+        display: flex;
+        md-input-container {
+            flex: 1 1 auto;
+            margin-right: 6px;
+        }
+
+        button {
+            flex: 0 0 auto;
         }
     }
 }

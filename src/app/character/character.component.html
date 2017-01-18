@@ -37,9 +37,12 @@
 
                             <dt>Niveau</dt>
                             <dd>{{character.level}}
-                                <button *ngIf="canLevelUp()" (click)="initLevelUp()" type="button"
-                                        class="btn btn-success btn-xs" data-toggle="modal" data-target="#modalLevelUp">
-                                    <span class="glyphicon glyphicon-exclamation-sign"></span> Ding !
+                                <button class="level-up-button"
+                                        md-raised-button
+                                        *ngIf="canLevelUp()"
+                                        color="primary"
+                                        (click)="openLevelUpDialog()">
+                                    Ding !
                                 </button>
                             </dd>
 
@@ -48,7 +51,7 @@
                                 <value-editor [title]="'Experience'"
                                               [value]=character.experience
                                               (onChange)="changeCharacterStat('experience', $event)">
-                                </value-editor>
+                                </value-editor> / {{getXpForNextLevel()}}
                             </dd>
 
                             <dt *ngIf="inGroupTab">Debilibeuk</dt>
@@ -63,6 +66,62 @@
                                               (onChange)="changeGmData('mankdebol', $event)"></value-editor>
                             </dd>
                         </dl>
+                    </md-card-content>
+                </md-card>
+                <md-card *ngIf="character.computedData.stats['AD'] > 12">
+                    <md-card-title>Adresse exceptionnelle</md-card-title>
+                    <md-card-content>
+                        <p>
+                            Un score d'adresse (AD) exceptionnelle confère un point <em>bonus</em> en attaque (AT) ou en parade (PRD)
+                        </p>
+                        <md-button-toggle-group name="alignment" [(ngModel)]="character.statBonusAD">
+                            <md-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</md-button-toggle>
+                            <md-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</md-button-toggle>
+                        </md-button-toggle-group>
+                    </md-card-content>
+                </md-card>
+                <md-card *ngIf="character.computedData.stats['AD'] < 9" class="row">
+                    <md-card-title>Adresse pourri</md-card-title>
+                    <md-card-content>
+                        <p>
+                            Un score d'adresse (AD) inférieur ou égale à 8 induit un point <em>malus</em> en attaque (AT) ou en parade (PRD)
+                        </p>
+                        <md-button-toggle-group name="alignment" [(ngModel)]="character.statBonusAD">
+                            <md-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</md-button-toggle>
+                            <md-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</md-button-toggle>
+                        </md-button-toggle-group>
+                    </md-card-content>
+                </md-card>
+                <md-card *ngIf="character.computedData.stats['INT'] > 12">
+                    <md-card-title>Intelligence exceptionnelle</md-card-title>
+                    <md-card-content>
+                        <p>
+                            Un score d'inteligence (INT) exceptionnelle confère un point de dégâts des sorts
+                            (selon sortilège) pour chaque point d'inteligence supérieur à 12.
+                        </p>
+                        <div>Bonus dégâts des sorts: {{(character.computedData.stats['INT'] - 12)}}</div>
+                    </md-card-content>
+                </md-card>
+                <md-card *ngIf="character.computedData.stats['FO'] > 12">
+                    <md-card-title>Force exceptionnelle</md-card-title>
+                    <md-card-content>
+                        <p>
+                            Un score exceptionnel offre forcément des avantages dans ce monde violent...
+                        </p>
+                        <p>
+                            Pour chaque point de force (FO) supérieur à 12 : +1 point d’impact (dégâts des armes améliorés au corps à corps ou à distance)
+                        </p>
+                        <div>Bonus point d'impact: {{(character.computedData.stats['FO'] - 12)}}</div>
+                    </md-card-content>
+                </md-card>
+                <md-card *ngIf="character.computedData.stats['FO'] <= 8">
+                    <md-card-title>Force de mauviette</md-card-title>
+                    <md-card-content>
+                        <p>
+                            Un score exceptionnel offre forcément des avantages dans ce monde violent...
+                            Et au contraire sur une carac. de force (FO) de 8 ou inférieure : -1 point d’impact (dégâts des armes diminués, car mauviette)
+                        </p>
+                        <div>Malus point d'impact: 1</div>
                     </md-card-content>
                 </md-card>
             </div>
@@ -186,14 +245,27 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="stat-row">
-                        <div class="stat">
+                </md-card>
+                <md-card class="stats-card" *ngIf="character.computedData.stats['PI']
+                                                || character.computedData.stats['INT'] > 12">
+                    <div class="stat-row" *ngIf="character.computedData.stats['PI']">
+                        <div class="stat large-stat">
                             <div class="stat-name">
-                                PI Bonus
+                                Bonus point d’impact
                             </div>
                             <div class="stat-value">
                                 {{character.computedData.stats['PI']}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-row" *ngIf="character.computedData.stats['INT'] > 12">
+                        <div *ngIf="character.computedData.stats['INT'] > 12" class="stat large-stat">
+                            <div class="stat-name">
+                                Bonus dégâts des sorts
+                            </div>
+                            <div class="stat-value">
+                                {{(character.computedData.stats['INT'] - 12)}}
                             </div>
                         </div>
                     </div>
@@ -261,20 +333,18 @@
                                      [class.selected]="selectedItem && selectedItem.id === item.id"
                                      (click)="selectedItem = item">
                                     <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                                    <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
                                     <md-icon *ngIf="item.data.notIdentified">help</md-icon>
-                                    <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>&nbsp;
+                                    <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                     {{item.data.name}}
                                 </div>
-                                <template [ngIf]="item === selectedItem">
-                                    <swipeable-item-detail [gmView]="inGroupTab"  [character]="character" [item]="item"></swipeable-item-detail>
-                                </template>
                             </template>
-                        </div>
-                        <div *ngIf="selectedItem" class="weapons-detail">
-                            <item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
                         </div>
                     </md-card-content>
                 </md-card>
+                <div *ngIf="selectedItem && selectedItem.template.slots.length > 0" class="weapons-detail">
+                    <item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
+                </div>
             </div>
             <!-- End of combat tab -->
         </md-tab>
@@ -395,13 +465,13 @@
                         <div class="stat-header">
                             <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">MagiePhys</div>
                             <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">MagiePsy</div>
-                            <div class="stat-element">RESM</div>
+                            <div class="stat-element-large">RESM</div>
                         </div>
                         <div class="stat-values">
                             <div class="stat-row">
                                 <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPHYS']}}</div>
                                 <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPSY']}}</div>
-                                <div class="stat-element">{{character.computedData.stats['RESM']}}</div>
+                                <div class="stat-element-large">{{character.computedData.stats['RESM']}}</div>
                             </div>
                             <div class="stat-details" *ngIf="character.computedData.details.show.magic">
                                 <div class="detail-row" *ngFor="let detail of character.computedData.details.magic">
@@ -411,7 +481,7 @@
                                     <div class="stat-row">
                                         <div class="stat-element-large" *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPHYS || ''"></div>
                                         <div class="stat-element-large" *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPSY || ''"></div>
-                                        <div class="stat-element" [innerHTML]="detail.data.RESM || ''"></div>
+                                        <div class="stat-element-large" [innerHTML]="detail.data.RESM || ''"></div>
                                     </div>
                                 </div>
                             </div>
@@ -489,6 +559,8 @@
                         </button>
                     </md-card-actions>
                 </md-card>
+            </div>
+            <div class="stat-tab">
                 <md-card>
                     <div>
                         <strong>Compétence</strong>
@@ -519,40 +591,6 @@
             <character-loot-panel [character]="character" [inGroupTab]="inGroupTab"></character-loot-panel>
             <!-- End of effects tab -->
         </md-tab>
-        <md-tab label="Autre">
-            <!-- Start of other tab -->
-            <div *ngIf="character.computedData.stats['AD'] > 12" class="row">
-                <div>
-                    <strong>Bonus AD</strong>
-                </div>
-                <div>
-
-                    <md-button-toggle-group name="alignment" [(ngModel)]="character.statBonusAD">
-                        <md-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</md-button-toggle>
-                        <md-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</md-button-toggle>
-                    </md-button-toggle-group>
-                </div>
-            </div>
-
-            <div *ngIf="character.computedData.stats['AD'] < 9" class="row">
-                <div>
-                    <strong>Malus AD</strong>
-                </div>
-                <div>
-                    <div class="btn-group" data-toggle="buttons">
-                        <button class="btn btn-primary" (click)="setStatBonusAD(character.id, 'AT')" [class.active]="character.statBonusAD == 'AT'">AT</button>
-                        <button class="btn btn-primary" (click)="setStatBonusAD(character.id, 'PRD')" [class.active]="character.statBonusAD == 'PRD'">PRD</button>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="character.computedData.stats['INT'] > 12" class="row">
-                <div>
-                    <strong>Bonus Degat magique</strong>
-                </div>
-                <div>{{(character.computedData.stats['INT'] - 12)}}</div>
-            </div>
-            <!-- End of other tab -->
-        </md-tab>
         <md-tab label="Historique">
             <character-history *ngIf="currentTab === 'history'" [character]="character"></character-history>
         </md-tab>
@@ -562,6 +600,7 @@
 
 
 	<div class="row">
+        <!-- FIXME -->
 		<div *ngFor="let invite of character.invites">
 			<div class="alert alert-info">
 				<button class="glyphicon glyphicon-remove btn btn-danger pull-right" (click)="cancelInvite(invite)"></button>
@@ -572,67 +611,124 @@
 		</div>
 	</div>
 
-
-	<!-- Levelup modal -->
-	<div *ngIf="canLevelUp()">
-
-		<!-- Modal -->
-		<div class="modal fade" id="modalLevelUp" tabindex="-1" role="dialog" aria-labelledby="modalLevelUpLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" id="modalLevelUpLabel">Gain d'un niveau</h4>
-					</div>
-					<div class="modal-body">
-						<div *ngIf="character.job && character.job.isMagic">
-							Augmenter:
-							<div class="btn-group" data-toggle="buttons">
-								<button class="btn btn-primary" (click)="levelUpInfo.EVorEA = 'EV'" [class.active]="levelUpInfo.EVorEA == 'EV'">EV</button>
-								<button class="btn btn-primary" (click)="levelUpInfo.EVorEA = 'EA'" [class.active]="levelUpInfo.EVorEA == 'EA'">EA</button>
-							</div>
-							<div></div>
-						</div>
-						<div>
-							Augmentation de {{levelUpInfo.EVorEA}} de <span *ngIf="levelUpInfo.EVorEA == 'EV'">1d{{character.origin.diceEVLevelUp}} <span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')"> -1 </span>
-							</span>
-							<div>
-								<span *ngIf="levelUpInfo.EVorEA == 'EA'">1d{{character.job.diceEaLevelUp}}</span> Nombre de {{levelUpInfo.EVorEA}} a augmente: <input [(ngModel)]="levelUpInfo.EVorEAValue" type="number" />
-								<button class="btn btn-primary" (click)="rollLevelUp()">Roll</button>
-							</div>
-						</div>
-						<div *ngIf="(levelUpInfo.targetLevelUp % 2) == 0">
-							<div class="btn-group" data-toggle="buttons">
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('FO')" [class.active]="levelUpInfo.statToUp == 'FO'">FORCE</button>
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('AD')" [class.active]="levelUpInfo.statToUp == 'AD'">ADRESSE</button>
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('COU')" [class.active]="levelUpInfo.statToUp == 'COU'">COURAGE</button>
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('INT')" [class.active]="levelUpInfo.statToUp == 'INT'">INTELLIGENCE</button>
-							</div>
-						</div>
-						<div *ngIf="(levelUpInfo.targetLevelUp % 2) == 1">
-							<div class="btn-group" data-toggle="buttons">
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('AT')" [class.active]="levelUpInfo.statToUp == 'AT'">AT</button>
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('PRD')" [class.active]="levelUpInfo.statToUp == 'PRD'">PRD</button>
-							</div>
-						</div>
-						<div *ngIf="levelUpShouldSelectSkill()">
-							<skill-selector [selectedOrigin]="character.origin" [selectedJob]="character.job" [knownSkills]="character.skills" [skillCount]=1 (skillsSelected)="onLevelUpSelectSkills($event)"></skill-selector>
-						</div>
-						<div *ngIf="levelUpShouldSelectSpeciality()">
-							<div *ngIf="!levelUpInfo.speciality">
-								<speciality-selector (specialityChange)="levelUpSelectSpeciality($event)" [knownSpecialities]="character.specialities" [specialities]="character.job.specialities"></speciality-selector>
-							</div>
-							<div *ngIf="levelUpInfo.speciality">Spécialité: {{levelUpInfo.speciality.name}}</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button [disabled]="!levelUpFormReady()" (click)="levelUp()" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 </div>
+
+
+
+
+<!-- Levelup modal -->
+<template #levelUpDialog="cdkPortal" cdk-portal>
+    <md-card class="level-up-dialog">
+        <md-card-title>
+            Gain d'un niveau
+        </md-card-title>
+        <md-card-content class="level-up-dialog-content">
+            <md-card>
+                <md-card-subtitle>
+                    Énergie vitale/Énergie Astrale
+                </md-card-subtitle>
+                <md-card-content>
+                    <p>Pour chaque niveau gagné, on ajoute
+                        1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')"> -1 </span>
+                        à son énergie vitale (EV)
+                        <span *ngIf="character.job && character.job.isMagic">
+                    <strong>OU</strong> 1D{{character.job.diceEaLevelUp}} astrale (EA)
+                </span>
+                    </p>
+
+                    <div *ngIf="character.job && character.job.isMagic">
+                        Je choisi d'augmenter mon:
+                        <md-button-toggle-group [(ngModel)]="levelUpInfo.EVorEA">
+                            <md-button-toggle value="EV">E.Vitale</md-button-toggle>
+                            <md-button-toggle value="EA">E.Astrale</md-button-toggle>
+                        </md-button-toggle-group>
+                    </div>
+                    <div>
+                        <div *ngIf="levelUpInfo.EVorEA === 'EV'">
+                            Augmentation de l'energie vitale (EV) de 1D{{character.origin.diceEVLevelUp}}
+                        </div>
+                        <div *ngIf="levelUpInfo.EVorEA === 'EA'">
+                            Augmentation de l'energie astrale (EA) de 1D{{character.job.diceEaLevelUp}}
+                        </div>
+
+                        <div class="level-up-ea-ev">
+                            `
+                            <button md-raised-button color="primary" (click)="rollLevelUp()">LANCER DÉ</button>
+                        </div>
+                    </div>
+                </md-card-content>
+            </md-card>
+
+            <md-card *ngIf="(levelUpInfo.targetLevelUp % 2) === 0">
+                <md-card-subtitle>
+                    Augmenter une caractéristique
+                </md-card-subtitle>
+                <md-card-content>
+                    Je choisi:
+                    <md-button-toggle-group [(ngModel)]="levelUpInfo.statToUp">
+                        <md-button-toggle value="FO">FO</md-button-toggle>
+                        <md-button-toggle value="AD">AD</md-button-toggle>
+                        <md-button-toggle value="COU">COU</md-button-toggle>
+                        <md-button-toggle value="INT">INT</md-button-toggle>
+                    </md-button-toggle-group>
+                </md-card-content>
+            </md-card>
+            <md-card *ngIf="(levelUpInfo.targetLevelUp % 2) === 1">
+                <md-card-subtitle>
+                    Augmenter Attaque ou parade
+                </md-card-subtitle>
+                <md-card-content>
+                    Je choisi d'augmenter de 1 point:
+                    <md-button-toggle-group [(ngModel)]="levelUpInfo.statToUp">
+                        <md-button-toggle value="AT">AT</md-button-toggle>
+                        <md-button-toggle value="PRD">PRD</md-button-toggle>
+                    </md-button-toggle-group>
+                </md-card-content>
+            </md-card>
+            <md-card *ngIf="levelUpShouldSelectSkill()">
+                <md-card-subtitle>Compétence supplémentaire</md-card-subtitle>
+                <md-card-content>
+                    <skill-selector *ngIf="!levelUpInfo.skill"
+                                    [selectedOrigin]="character.origin"
+                                    [selectedJob]="character.job"
+                                    [knownSkills]="character.skills"
+                                    [skillCount]=1
+                                    (skillsSelected)="onLevelUpSelectSkills($event)">
+                    </skill-selector>
+                    <p *ngIf="levelUpInfo.skill">J'apprends la compétence: {{levelUpInfo.skill.name}}</p>
+                </md-card-content>
+                <md-card-actions *ngIf="levelUpInfo.skill" align="end">
+                    <button md-button
+                            color="primary"
+                            (click)="levelUpInfo.skill = null">
+                        CHANGER
+                    </button>
+                </md-card-actions>
+            </md-card>
+            <md-card *ngIf="levelUpShouldSelectSpeciality()">
+                <md-card-subtitle>Spécialisation supplémentaire</md-card-subtitle>
+                <md-card-content>
+                    <div *ngIf="!levelUpInfo.speciality">
+                        <speciality-selector (specialityChange)="levelUpSelectSpeciality($event)" [knownSpecialities]="character.specialities" [specialities]="character.job.specialities"></speciality-selector>
+                    </div>
+                    <div *ngIf="levelUpInfo.speciality">Spécialité: {{levelUpInfo.speciality.name}}</div>
+                </md-card-content>
+                <md-card-actions *ngIf="levelUpInfo.speciality" align="end">
+                    <button md-button
+                            color="primary"
+                            (click)="levelUpInfo.speciality = null">
+                        CHANGER
+                    </button>
+                </md-card-actions>
+            </md-card>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button color="primary" (click)="closeLevelUpDialog()">
+                ANNULER
+            </button>
+            <button md-button color="primary"  [disabled]="!levelUpFormReady()" (click)="levelUp()">
+                VALIDER
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>

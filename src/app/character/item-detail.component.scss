@@ -1,11 +1,22 @@
 md-card {
+    margin: 5px;
     md-card-header {
-        & button {
-            margin-left: auto;
+        display: flex;
+
+        icon-selector {
+            flex: 0 0 auto;
+        }
+        div {
+            flex: 1 1 auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        button {
+            flex: 0 0 auto;
         }
     }
 }
-
 
 .give-item-dialog {
     md-radio-button {

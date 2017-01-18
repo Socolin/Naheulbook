@@ -16,17 +16,15 @@ export class SkillSelectorComponent implements OnInit {
     @Input() selectedJob: Job;
     @Input() selectedOrigin: Origin;
     @Input() knownSkills: Skill[];
-    @Input() skillCount: number;
+    @Input() skillCount: number = 2;
 
     // Outputs
     @Output() skillsSelected: EventEmitter<Skill[]> = new EventEmitter<Skill[]>();
 
-    public selectedSkills: Skill[];
+    public selectedSkills: Skill[] = [];
     public skills: Skill[];
 
     constructor(private _skillService: SkillService) {
-        this.selectedSkills = [];
-        this.skillCount = 2;
     }
 
     isSelected(skill: Skill) {
