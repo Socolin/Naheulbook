@@ -652,7 +652,15 @@
                         </div>
 
                         <div class="level-up-ea-ev">
-                            `
+                            <md-input-container align="end">
+                                <input md-input placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.EVorEAValue">
+                                <md-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EV'">
+                                    Lancer 1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')">-1</span>
+                                </md-hint>
+                                <md-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EA'">
+                                    Lancer 1D{{character.job.diceEaLevelUp}}
+                                </md-hint>
+                            </md-input-container>
                             <button md-raised-button color="primary" (click)="rollLevelUp()">LANCER DÉ</button>
                         </div>
                     </div>
