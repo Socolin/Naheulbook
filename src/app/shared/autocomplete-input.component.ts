@@ -12,15 +12,18 @@ export class AutocompleteValue {
 
 @Component({
     selector: 'autocomplete-input',
-    templateUrl: './autocomplete-input.component.html'
+    templateUrl: './autocomplete-input.component.html',
+    styleUrls: ['./autocomplete-input.component.scss']
 })
 export class AutocompleteInputComponent {
     @Input() callback: Function;
     @Input() value: string;
+    @Input() placeholder: string;
     @Input() clearOnSelect: boolean = false;
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
-    private values: AutocompleteValue[];
-    private preSelectedValueIndex: number;
+
+    public matchingValues: AutocompleteValue[];
+    public preSelectedValueIndex: number;
 
     selectValue(value: any) {
         this.onSelect.emit(value.value);
@@ -30,12 +33,12 @@ export class AutocompleteInputComponent {
         else {
             this.value = value.text;
         }
-        this.values = null;
+        this.matchingValues = null;
         return false;
     }
 
     close() {
-        this.values = null;
+        this.matchingValues = null;
     }
 
     onKey(event: KeyboardEvent) {
@@ -48,18 +51,18 @@ export class AutocompleteInputComponent {
             }
         }
         else if (event.keyCode === 40) {
-            if (this.values && this.preSelectedValueIndex < this.values.length) {
+            if (this.matchingValues && this.preSelectedValueIndex < this.matchingValues.length) {
                 this.preSelectedValueIndex++;
             }
         }
         else if (event.keyCode === 13) {
-            if (this.values && this.preSelectedValueIndex >= 0 && this.preSelectedValueIndex < this.values.length) {
-                this.selectValue(this.values[this.preSelectedValueIndex]);
+            if (this.matchingValues && this.preSelectedValueIndex >= 0 && this.preSelectedValueIndex < this.matchingValues.length) {
+                this.selectValue(this.matchingValues[this.preSelectedValueIndex]);
             }
         }
         else if (event.keyCode === 9) {
-            if (this.values && this.preSelectedValueIndex >= 0 && this.preSelectedValueIndex < this.values.length) {
-                this.selectValue(this.values[this.preSelectedValueIndex]);
+            if (this.matchingValues && this.preSelectedValueIndex >= 0 && this.preSelectedValueIndex < this.matchingValues.length) {
+                this.selectValue(this.matchingValues[this.preSelectedValueIndex]);
             }
         }
         else {
@@ -72,14 +75,13 @@ export class AutocompleteInputComponent {
 
     updateList() {
         this.callback(this.value).subscribe(
-            values => {
-                this.values = values;
+            matchingValues => {
+                this.matchingValues = matchingValues;
                 this.preSelectedValueIndex = 0;
             },
             err => {
                 console.log(err);
             }
-        )
-        ;
+        );
     }
 }
