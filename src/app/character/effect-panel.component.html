@@ -12,7 +12,7 @@
                         <span *ngIf="characterEffect.reusable">
                             <md-slide-toggle color="primary"
                                              (change)="updateReusableEffect(characterEffect)"
-                                             [(ngModel)]="characterEffect.active">
+                                             [ngModel]="characterEffect.active">
                             </md-slide-toggle>
                         </span>
                         <span *ngIf="!characterEffect.reusable" class="toggle-padding"></span>
@@ -38,7 +38,7 @@
                         <span *ngIf="modifier.reusable">
                             <md-slide-toggle color="primary"
                                              (change)="updateReusableModifier(modifier)"
-                                             [(ngModel)]="modifier.active">
+                                             [ngModel]="modifier.active">
                             </md-slide-toggle>
                         </span>
                         <span *ngIf="!modifier.reusable" class="toggle-padding"></span>
@@ -78,91 +78,77 @@
         <md-card-content>
             <md-tab-group class="demo-tab-group">
                 <md-tab label="Prédéfini">
+                    <div>
+                        <autocomplete-input [value]="effectFilterName"
+                                            [placeholder]="'Effet'"
+                                            (onSelect)="selectEffectInAutocompleteList($event)"
+                                            [(callback)]="autocompleteEffectListCallback"></autocomplete-input>
+                    </div>
+                    <div>
+                        <md-slide-toggle color="primary"
+                                         [ngModel]="newEffectReusable">
+                            Ré-utilisable
+                        </md-slide-toggle>
+                    </div>
 
+                    <div *ngIf="preSelectedEffect">
+                        <div *ngIf="preSelectedEffect.duration">
+                            <label class="col-sm-3 control-label">Durée</label>
+                            <div class="col-sm-9">
+                                {{preSelectedEffect.duration}}
+                            </div>
+                        </div>
+                        <div *ngIf="preSelectedEffect.combatCount">
+                            <label class="col-sm-3 control-label">Durée</label>
+                            <div class="col-sm-9">
+                                {{preSelectedEffect.combatCount}} combat
+                            </div>
+                        </div>
+                        <div *ngIf="preSelectedEffect.timeDuration">
+                            <label class="col-sm-3 control-label">Durée</label>
+                            <div class="col-sm-9">
+                                {{preSelectedEffect.timeDuration | nhbkDuration}}
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="preSelectedEffect" class="form-group">
+                        <md-checkbox [(ngModel)]="newEffectCustomDuration">
+                            Durée personnalisée
+                        </md-checkbox>
+                    </div>
+                    <div *ngIf="preSelectedEffect && newEffectCustomDuration">
+                        <h4>Durée</h4>
+                        <md-button-toggle-group name="alignment" [(ngModel)]="newEffectDurationType">
+                            <md-button-toggle value="combat">Nombre de combat</md-button-toggle>
+                            <md-button-toggle value="time">Temps</md-button-toggle>
+                            <md-button-toggle value="custom">Autre</md-button-toggle>
+                            <md-button-toggle value="forever">Toujours</md-button-toggle>
+                        </md-button-toggle-group>
 
-                    <div class="form-horizontal">
-                        <div class="row-fluid">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Effet</label>
-                                <div class="col-sm-9">
-                                    <autocomplete-input [value]="effectFilterName" (onSelect)="selectEffectInAutocompleteList($event)"
-                                                        [(callback)]="autocompleteEffectListCallback"></autocomplete-input>
-                                </div>
+                        <div *ngIf="newEffectDurationType === 'custom'">
+                            <md-input placeholder="Durée" [(ngModel)]="newEffectDuration"></md-input>
+                        </div>
+
+                        <div *ngIf="newEffectDurationType === 'time'">
+                            <div>
+                                <span>Temps</span>
+                                <span>
+                                    {{newEffectTimeDuration | nhbkDuration}}
+                                </span>
+                                <span>
+                                    <date-modifier [resetOnChange]=false
+                                                   [dateOffset]="newEffectTimeDurationDate"
+                                                   (onChange)="setNewEffectTimeDuration($event)">
+                                    </date-modifier>
+                                </span>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Ré-utilisable</label>
-                                <div class="col-sm-9">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-primary" (click)="newEffectReusable = true" [class.active]="newEffectReusable">Oui</button>
-                                        <button type="button" class="btn btn-primary" (click)="newEffectReusable = false" [class.active]="!newEffectReusable">Non</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="preSelectedEffect" class="form-group">
-                                <div *ngIf="preSelectedEffect.duration">
-                                    <label class="col-sm-3 control-label">Durée</label>
-                                    <div class="col-sm-9">
-                                        {{preSelectedEffect.duration}}
-                                    </div>
-                                </div>
-                                <div *ngIf="preSelectedEffect.combatCount">
-                                    <label class="col-sm-3 control-label">Durée</label>
-                                    <div class="col-sm-9">
-                                        {{preSelectedEffect.combatCount}} combat
-                                    </div>
-                                </div>
-                                <div *ngIf="preSelectedEffect.timeDuration">
-                                    <label class="col-sm-3 control-label">Durée</label>
-                                    <div class="col-sm-9">
-                                        {{preSelectedEffect.timeDuration | nhbkDuration}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="preSelectedEffect" class="form-group">
-                                <label class="col-sm-3 control-label">Durée personnalisée</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="checkbox" [(ngModel)]="newEffectCustomDuration" />
-                                </div>
-                            </div>
-                            <div *ngIf="preSelectedEffect && newEffectCustomDuration" class="form-group">
-                                <label class="col-sm-3 control-label">Durée</label>
-                                <div class="col-sm-9">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-primary" (click)="newEffectDurationType='combat'" [class.active]="newEffectDurationType == 'combat'">Nombre de combat</button>
-                                        <button type="button" class="btn btn-primary" (click)="newEffectDurationType='time'" [class.active]="newEffectDurationType == 'time'">Temps</button>
-                                        <button type="button" class="btn btn-primary" (click)="newEffectDurationType='custom'" [class.active]="newEffectDurationType == 'custom'">Autre</button>
-                                    </div>
-                                </div>
-                                <div *ngIf="newEffectDurationType === 'custom'">
-                                    <div class="input-group input-group-lg">
-                                        <span class="input-group-addon">Durée</span>
-                                        <input class="form-control" type="text" [(ngModel)]="newEffectDuration" />
-                                    </div>
-                                </div>
-                                <div *ngIf="newEffectDurationType === 'time'">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Temps</span>
-                                        <span class="input-group-addon">
-                                            {{newEffectTimeDuration | nhbkDuration}}
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <date-modifier [resetOnChange]=false [dateOffset]="newEffectTimeDurationDate" (onChange)="setNewEffectTimeDuration($event)"></date-modifier>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div *ngIf="newEffectDurationType === 'combat'">
-                                    <div class="input-group input-group-lg">
-                                        <input class="form-control" type="number" min="0" [(ngModel)]="newEffectCombatCount" />
-                                        <span class="input-group-addon">combat(s)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <button type="button" class="btn btn-primary" (click)="addEffect(preSelectedEffect, newEffectReusable)" data-dismiss="modal">Ajouter</button>
-                                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
+                        </div>
+
+                        <div *ngIf="newEffectDurationType === 'combat'">
+                            <md-input-container align="end">
+                                <input md-input type="number" min=0 placeholder="Durée" [(ngModel)]="newEffectCombatCount">
+                                <span md-suffix> combat(s)</span>
+                            </md-input-container>
                         </div>
                     </div>
                 </md-tab>
@@ -231,7 +217,7 @@
             <button md-button
                     [disabled]="!preSelectedEffect"
                     color="primary"
-                    (click)="addEffect()">
+                    (click)="addEffect(preSelectedEffect, newEffectReusable)">
                 AJOUTER
             </button>
             <button md-button

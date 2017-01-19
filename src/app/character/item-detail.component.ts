@@ -128,7 +128,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     closeGiveItemDialog() {
-        this.giveItemOverlayRef.detach().then();
+        this.giveItemOverlayRef.detach();
     }
 
     giveItem() {
@@ -158,7 +158,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     closeModifierDialog() {
-        this.addModifierOverlayRef.detach().then();
+        this.addModifierOverlayRef.detach();
     }
 
     addModifier() {
@@ -225,7 +225,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
 
 
     closeLifetimeDialog() {
-        this.lifetimeOverlayRef.detach().then();
+        this.lifetimeOverlayRef.detach();
     }
 
     cancelLifetimeDialog() {

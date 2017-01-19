@@ -2,6 +2,8 @@ import {
     Input, OnInit, Component, Inject, forwardRef, HostListener, ElementRef, ViewChild,
     OnChanges, SimpleChanges
 } from '@angular/core';
+import {OverlayRef, Portal, Overlay, OverlayState} from '@angular/material';
+
 import {Character} from './character.model';
 import {CharacterWebsocketService} from './character-websocket.service';
 import {ItemService} from '../item/item.service';
@@ -24,28 +26,32 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
 
     // Inventory
     public selectedItem: Item;
-
     public selectedInventoryTab: string = 'all';
+    private sortType: string = 'none';
+
+    public iconMode: boolean = false;
+    public itemFilterName: string;
+
+    @ViewChild('itemDetail')
+    private itemDetailDiv: ElementRef;
+    @ViewChild('itemDetailTop')
+    private itemDetailTopDiv: ElementRef;
+    public itemDetailOffset: number = 0;
+
+    @ViewChild('addItemDialog')
+    public addItemDialog: Portal<any>;
+    public addItemOverlayRef: OverlayRef;
+    public addItemSearch: string;
     public filteredItems: ItemTemplate[] = [];
     public itemAddCustomName: string;
     public itemAddCustomDescription: string;
     public selectedAddItem: ItemTemplate;
     public itemAddQuantity: number;
 
-    public iconMode: boolean = false;
-    public itemFilterName: string;
-
-    public itemDetailOffset: number = 0;
-    @ViewChild('itemDetail')
-    private itemDetailDiv: ElementRef;
-    @ViewChild('itemDetailTop')
-    private itemDetailTopDiv: ElementRef;
-
-    private sortType: string = 'none';
-
     constructor(
         @Inject(forwardRef(()  => ItemService)) private _itemService: ItemService
         , private _characterWebsocketService: CharacterWebsocketService
+        , private _overlay: Overlay
         , private _itemActionService: ItemActionService) {
     }
 
@@ -62,15 +68,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if ('itemFilterName' in changes) {
-            this.updateFilterItem();
-        }
-    }
-
-    updateFilterItem() {
-        if (this.selectedInventoryTab === 'add') {
-            this.updateFilterAddItem();
-        }
     }
 
     toggleIconMode() {
@@ -78,8 +75,8 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     updateFilterAddItem() {
-        if (this.itemFilterName) {
-            this._itemService.searchItem(this.itemFilterName).subscribe(
+        if (this.addItemSearch) {
+            this._itemService.searchItem(this.addItemSearch).subscribe(
                 items => {
                     this.filteredItems = items;
                     this.selectedAddItem = null;
@@ -120,27 +117,48 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         this.character.update();
     }
 
+    openAddItemModal() {
+        this.addItemSearch = null;
+        this.filteredItems = [];
+
+        let config = new OverlayState();
+
+        config.positionStrategy = this._overlay.position()
+            .global()
+            .centerHorizontally()
+            .centerVertically();
+        config.hasBackdrop = true;
+
+        let overlayRef = this._overlay.create(config);
+        overlayRef.attach(this.addItemDialog);
+        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        this.addItemOverlayRef = overlayRef;
+    }
+
+    closeAddItemDialog(){
+        this.addItemOverlayRef.detach();
+    }
+
     addItem() {
-        if (this.character) {
-            let itemData = new ItemData();
-            itemData['name'] = this.itemAddCustomName;
-            itemData['description'] = this.itemAddCustomDescription;
-            itemData['quantity'] = this.itemAddQuantity;
-            this._itemService.addItemTo('character', this.character.id
-                , this.selectedAddItem.id
-                , itemData)
-                .subscribe(
-                    item => {
-                        this.onAddItem(item);
-                        this.selectedItem = item;
-                        this.itemFilterName = '';
-                        this.selectedAddItem = null;
-                        this.itemAddCustomName = null;
-                        this.itemAddCustomDescription = null;
-                        this.itemAddQuantity = null;
-                    }
-                );
-        }
+        let itemData = new ItemData();
+        itemData['name'] = this.itemAddCustomName;
+        itemData['description'] = this.itemAddCustomDescription;
+        itemData['quantity'] = this.itemAddQuantity;
+        this._itemService.addItemTo('character', this.character.id
+            , this.selectedAddItem.id
+            , itemData)
+            .subscribe(
+                item => {
+                    this.onAddItem(item);
+                    this.selectedItem = item;
+                    this.itemFilterName = '';
+                    this.selectedAddItem = null;
+                    this.itemAddCustomName = null;
+                    this.itemAddCustomDescription = null;
+                    this.itemAddQuantity = null;
+                }
+            );
+        this.closeAddItemDialog();
     }
 
     selectItem(item: Item) {

@@ -35,8 +35,14 @@ export class CharacterComponent implements OnInit, OnDestroy {
     @ViewChild('levelUpDialog')
     public levelUpDialog: Portal<any>;
     public levelUpOverlayRef: OverlayRef;
-
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
+
+    @ViewChild('skillInfoDialog')
+    public skillInfoDialog: Portal<any>;
+    public skillInfoOverlayRef: OverlayRef;
+    public selectedSkillInfo: Skill;
+    public viewGmSkillInfo: boolean = false;
+
     public inGroupTab: boolean = false;
     public selectedItem: Item;
     public currentTab: string = 'infos';
@@ -322,6 +328,29 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
         return false;
     }
+
+    // Skill info modal
+
+    openSkillInfoDialog(skill: Skill) {
+        this.selectedSkillInfo = skill;
+        let config = new OverlayState();
+
+        config.positionStrategy = this._overlay.position()
+            .global()
+            .centerHorizontally()
+            .centerVertically();
+        config.hasBackdrop = true;
+
+        let overlayRef = this._overlay.create(config);
+        overlayRef.attach(this.skillInfoDialog);
+        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        this.skillInfoOverlayRef = overlayRef;
+    }
+
+    closeSkillInfoDialog() {
+        this.skillInfoOverlayRef.detach();
+    }
+
 
     ngOnDestroy() {
         if (this.character) {

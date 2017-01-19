@@ -43,10 +43,13 @@ md-card {
         }
 
         &.stats-card {
-            display: flex;
             flex: 1 auto;
-            flex-direction: column;
 
+            md-card-content {
+                font-size: large;
+                display: flex;
+                flex-direction: column;
+            }
             .stat-row {
                 display: flex;
                 align-content: space-around;
@@ -158,6 +161,12 @@ md-card {
         text-align: center;
     }
 
+    .stat-element-small {
+        width: 48px;
+        flex: 1 1 auto;
+        text-align: center;
+    }
+
     .stat-details {
         font-size: smaller;
         .stat-detail-reason {
@@ -250,5 +259,22 @@ md-card {
         button {
             flex: 0 0 auto;
         }
+    }
+}
+
+.skill-list-item {
+    height: 40px;
+    p[md-line] {
+        color: rgba(0, 0, 0, 0.54);
+    }
+    button {
+        color: rgba(0, 0, 0, 0.54);
+    }
+}
+
+.skill-info-dialog {
+    max-width: 80vw;
+    md-card-content {
+        max-height: 70vh;
     }
 }

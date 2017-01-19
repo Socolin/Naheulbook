@@ -1,5 +1,13 @@
 md-card {
     margin: 5px;
+
+    md-toolbar {
+        display: flex;
+        span {
+            flex: 1 auto;
+        }
+    }
+
     .buttons-header {
         display: flex;
         flex-wrap: wrap;
@@ -10,14 +18,21 @@ md-card {
             margin-left: 10px;
             flex: 1 auto;
         }
+
+        md-button-toggle-group {
+            margin-bottom: 2px;
+        }
     }
 
     .inventory-content {
+        padding-bottom: 300px;
         .items-list {
             .items-list-element {
                 border-bottom: 1px solid #dfdfdf;
+                display: flex;
 
                 .item-line {
+                    flex: 1 auto;
                     display: flex;
                     flex-direction: row;
                     flex-wrap: nowrap;
@@ -63,6 +78,12 @@ md-card {
                 transition: height 0.1s linear;
             }
         }
+    }
+
+    .item-icon {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
     }
 }
 

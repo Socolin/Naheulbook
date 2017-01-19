@@ -3,6 +3,17 @@
         <md-tab label="Info">
             <!-- Start of info tab -->
             <div class="info-tab">
+                <md-card *ngFor="let invite of character.invites">
+                    <md-card-title>Invitation</md-card-title>
+                    <md-card-content>
+                        Rejoindre le groupe <em>{{invite.name}}</em> ?
+                    </md-card-content>
+                    <md-card-actions>
+                        <button md-button color="primary" (click)="cancelInvite(invite)">REFUSER</button>
+                        <button md-button color="primary" (click)="acceptInvite(invite)">ACCEPTER</button>
+                    </md-card-actions>
+                </md-card>
+
                 <md-card>
                     <md-card-title>{{character.name}}</md-card-title>
                     <md-card-content>
@@ -132,181 +143,191 @@
             <!-- Start of combat tab -->
             <div class="combat-tab">
                 <md-card class="life-mana stats-card">
-                    <div class="stat">
-                        <div class="stat-icon">
-                            <span class="game-icon game-icon-hearts"></span>
-                        </div>
-                        <div class="stat-value">
-                            <div [class.life-danger]="character.ev > character.computedData.stats['EV']">
-                                <value-editor [title]="'Energie vitale'"
-                                              [value]="character.ev"
-                                              [maxValue]="character.computedData.stats['EV']"
-                                              (onChange)="changeCharacterStat('ev', $event)">
-                                </value-editor>
+                    <md-card-content>
+                        <div class="stat">
+                            <div class="stat-icon">
+                                <span class="game-icon game-icon-hearts"></span>
                             </div>
-                            <div class="stat-label">E.Vitale</div>
-                        </div>
-                    </div>
-                    <div *ngIf="character.ea != undefined" class="stat">
-                        <div class="stat-icon">
-                            <span class="game-icon game-icon-abstract-061"></span>
-                        </div>
-                        <div class="stat-value">
-                            <div [class.bg-danger]="character.ea > character.computedData.stats['EA']">
-                                <value-editor [title]="'Energie astrale'"
-                                              [value]="character.ea"
-                                              [maxValue]="character.computedData.stats['EA']"
-                                              (onChange)="changeCharacterStat('ea', $event)">
-                                </value-editor>
+                            <div class="stat-value">
+                                <div [class.life-danger]="character.ev > character.computedData.stats['EV']">
+                                    <value-editor [title]="'Energie vitale'"
+                                                  [value]="character.ev"
+                                                  [maxValue]="character.computedData.stats['EV']"
+                                                  (onChange)="changeCharacterStat('ev', $event)">
+                                    </value-editor>
+                                </div>
+                                <div class="stat-label">E.Vitale</div>
                             </div>
-                            <div class="stat-label">E.Astrale</div>
                         </div>
-                    </div>
+                        <div *ngIf="character.ea != undefined" class="stat">
+                            <div class="stat-icon">
+                                <span class="game-icon game-icon-abstract-061"></span>
+                            </div>
+                            <div class="stat-value">
+                                <div [class.bg-danger]="character.ea > character.computedData.stats['EA']">
+                                    <value-editor [title]="'Energie astrale'"
+                                                  [value]="character.ea"
+                                                  [maxValue]="character.computedData.stats['EA']"
+                                                  (onChange)="changeCharacterStat('ea', $event)">
+                                    </value-editor>
+                                </div>
+                                <div class="stat-label">E.Astrale</div>
+                            </div>
+                        </div>
+                    </md-card-content>
                 </md-card>
 
                 <md-card class="combat-stats stats-card">
-                    <div class="stat-row">
-                        <div class="stat">
-                            <div class="stat-icon">
-                                <span class="ra ra-sword"></span>
+                    <md-card-content>
+                        <div class="stat-row">
+                            <div class="stat">
+                                <div class="stat-icon">
+                                    <span class="ra ra-sword"></span>
+                                </div>
+                                <div class="stat-value">
+                                    <div>{{character.computedData.stats['AT']}}</div>
+                                    <div class="stat-label">Attaque</div>
+                                </div>
                             </div>
-                            <div class="stat-value">
-                                <div>{{character.computedData.stats['AT']}}</div>
-                                <div class="stat-label">Attaque</div>
-                            </div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-icon">
-                                <span class="ra ra-shield"></span>
-                            </div>
-                            <div class="stat-value">
-                                <div>{{character.computedData.stats['PRD']}}</div>
-                                <div class="stat-label">Parade</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stat-row">
-                        <div class="stat">
-                            <div class="stat-icon">
-                                <span class="ra ra-vest"></span>
-                            </div>
-                            <div class="stat-value">
-                                <div>{{character.computedData.stats['PR']}}</div>
-                                <div class="stat-label">Protection</div>
+                            <div class="stat">
+                                <div class="stat-icon">
+                                    <span class="ra ra-shield"></span>
+                                </div>
+                                <div class="stat-value">
+                                    <div>{{character.computedData.stats['PRD']}}</div>
+                                    <div class="stat-label">Parade</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="stat">
-                            <div class="stat-icon">
-                                <span class="ra ra-aura"></span>
+                        <div class="stat-row">
+                            <div class="stat">
+                                <div class="stat-icon">
+                                    <span class="ra ra-vest"></span>
+                                </div>
+                                <div class="stat-value">
+                                    <div>{{character.computedData.stats['PR']}}</div>
+                                    <div class="stat-label">Protection</div>
+                                </div>
                             </div>
-                            <div class="stat-value">
-                                <div>{{character.computedData.stats['PR_MAGIC']}}</div>
-                                <div class="stat-label">Pr magique</div>
+                            <div class="stat">
+                                <div class="stat-icon">
+                                    <span class="ra ra-aura"></span>
+                                </div>
+                                <div class="stat-value">
+                                    <div>{{character.computedData.stats['PR_MAGIC']}}</div>
+                                    <div class="stat-label">Pr magique</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </md-card-content>
                 </md-card>
 
                 <md-card class="basic-stats stats-card">
-                    <div class="stat-row">
-                        <div class="stat">
-                            <div class="stat-name">
-                                COU
+                    <md-card-content>
+                        <div class="stat-row">
+                            <div class="stat">
+                                <div class="stat-name">
+                                    COU
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['COU']}}
+                                </div>
                             </div>
-                            <div class="stat-value">
-                                {{character.computedData.stats['COU']}}
+                            <div class="stat">
+                                <div class="stat-name">
+                                    FO
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['FO']}}
+                                </div>
                             </div>
                         </div>
-                        <div class="stat">
-                            <div class="stat-name">
-                                FO
-                            </div>
-                            <div class="stat-value">
-                                {{character.computedData.stats['FO']}}
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="stat-row">
-                        <div class="stat">
-                            <div class="stat-name">
-                                AD
+                        <div class="stat-row">
+                            <div class="stat">
+                                <div class="stat-name">
+                                    AD
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['AD']}}
+                                </div>
                             </div>
-                            <div class="stat-value">
-                                {{character.computedData.stats['AD']}}
+                            <div class="stat">
+                                <div class="stat-name">
+                                    CHA
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['CHA']}}
+                                </div>
                             </div>
                         </div>
-                        <div class="stat">
-                            <div class="stat-name">
-                                CHA
-                            </div>
-                            <div class="stat-value">
-                                {{character.computedData.stats['CHA']}}
-                            </div>
-                        </div>
-                    </div>
+                    </md-card-content>
                 </md-card>
                 <md-card class="stats-card" *ngIf="character.computedData.stats['PI']
                                                 || character.computedData.stats['INT'] > 12">
-                    <div class="stat-row" *ngIf="character.computedData.stats['PI']">
-                        <div class="stat large-stat">
-                            <div class="stat-name">
-                                Bonus point d’impact
-                            </div>
-                            <div class="stat-value">
-                                {{character.computedData.stats['PI']}}
+                    <md-card-content>
+                        <div class="stat-row" *ngIf="character.computedData.stats['PI']">
+                            <div class="stat large-stat">
+                                <div class="stat-name">
+                                    Bonus point d’impact
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['PI']}}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="stat-row" *ngIf="character.computedData.stats['INT'] > 12">
-                        <div *ngIf="character.computedData.stats['INT'] > 12" class="stat large-stat">
-                            <div class="stat-name">
-                                Bonus dégâts des sorts
-                            </div>
-                            <div class="stat-value">
-                                {{(character.computedData.stats['INT'] - 12)}}
+                        <div class="stat-row" *ngIf="character.computedData.stats['INT'] > 12">
+                            <div *ngIf="character.computedData.stats['INT'] > 12" class="stat large-stat">
+                                <div class="stat-name">
+                                    Bonus dégâts des sorts
+                                </div>
+                                <div class="stat-value">
+                                    {{(character.computedData.stats['INT'] - 12)}}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </md-card-content>
                 </md-card>
                 <md-card class="magic-stat stats-card">
-                    <div class="stat-row">
-                        <div class="stat">
-                            <div class="stat-name">
-                                RESM
+                    <md-card-content>
+                        <div class="stat-row">
+                            <div class="stat">
+                                <div class="stat-name">
+                                    RESM
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['RESM']}}
+                                </div>
                             </div>
-                            <div class="stat-value">
-                                {{character.computedData.stats['RESM']}}
-                            </div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-name">
-                                INT
-                            </div>
-                            <div class="stat-value">
-                                {{character.computedData.stats['INT']}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stat-row" *ngIf="character.job && character.job.isMagic">
-                        <div class="stat">
-                            <div class="stat-name">
-                                MPHYS
-                            </div>
-                            <div class="stat-value">
-                                {{character.computedData.stats['MPHYS']}}
+                            <div class="stat">
+                                <div class="stat-name">
+                                    INT
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['INT']}}
+                                </div>
                             </div>
                         </div>
-                        <div class="stat">
-                            <div class="stat-name">
-                                MPSY
+                        <div class="stat-row" *ngIf="character.job && character.job.isMagic">
+                            <div class="stat">
+                                <div class="stat-name">
+                                    MPHYS
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['MPHYS']}}
+                                </div>
                             </div>
-                            <div class="stat-value">
-                                {{character.computedData.stats['MPSY']}}
+                            <div class="stat">
+                                <div class="stat-name">
+                                    MPSY
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['MPSY']}}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </md-card-content>
                 </md-card>
 
                 <md-card class="stats-card">
@@ -422,19 +443,19 @@
                 <md-card>
                     <md-card-content>
                         <div class="stat-header">
-                            <div class="stat-element">COU</div>
-                            <div class="stat-element">INT</div>
-                            <div class="stat-element">CHA</div>
-                            <div class="stat-element">AD</div>
-                            <div class="stat-element">FO</div>
+                            <div class="stat-element-small">COU</div>
+                            <div class="stat-element-small">INT</div>
+                            <div class="stat-element-small">CHA</div>
+                            <div class="stat-element-small">AD</div>
+                            <div class="stat-element-small">FO</div>
                         </div>
                         <div class="stat-values">
                             <div class="stat-row">
-                                <div class="stat-element">{{character.computedData.stats['COU']}}</div>
-                                <div class="stat-element">{{character.computedData.stats['INT']}}</div>
-                                <div class="stat-element">{{character.computedData.stats['CHA']}}</div>
-                                <div class="stat-element">{{character.computedData.stats['AD']}}</div>
-                                <div class="stat-element">{{character.computedData.stats['FO']}}</div>
+                                <div class="stat-element-small">{{character.computedData.stats['COU']}}</div>
+                                <div class="stat-element-small">{{character.computedData.stats['INT']}}</div>
+                                <div class="stat-element-small">{{character.computedData.stats['CHA']}}</div>
+                                <div class="stat-element-small">{{character.computedData.stats['AD']}}</div>
+                                <div class="stat-element-small">{{character.computedData.stats['FO']}}</div>
                             </div>
                             <div class="stat-details" *ngIf="character.computedData.details.show.stat">
                                 <div class="detail-row" *ngFor="let detail of character.computedData.details.stat">
@@ -442,11 +463,11 @@
                                         {{detail.name}}
                                     </div>
                                     <div class="stat-row">
-                                        <div class="stat-element">{{detail.data.COU}}</div>
-                                        <div class="stat-element">{{detail.data.INT}}</div>
-                                        <div class="stat-element">{{detail.data.CHA}}</div>
-                                        <div class="stat-element">{{detail.data.AD}}</div>
-                                        <div class="stat-element">{{detail.data.FO}}</div>
+                                        <div class="stat-element-small">{{detail.data.COU}}</div>
+                                        <div class="stat-element-small">{{detail.data.INT}}</div>
+                                        <div class="stat-element-small">{{detail.data.CHA}}</div>
+                                        <div class="stat-element-small">{{detail.data.AD}}</div>
+                                        <div class="stat-element-small">{{detail.data.FO}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -566,11 +587,18 @@
                         <strong>Compétence</strong>
                     </div>
                     <div>
-                        <ul>
-                            <li *ngFor="let skill of character.computedData.skills">
-                                <span [class.canceled]="skill.canceled">{{skill?.skillDef?.name}}</span> (<span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>)
-                            </li>
-                        </ul>
+                        <md-list dense>
+                            <md-list-item *ngFor="let skill of character.computedData.skills" class="skill-list-item">
+                                <h4 md-line>{{skill?.skillDef?.name}}</h4>
+                                <span *ngIf="skill.canceled">CANCELED</span>
+                                <p md-line>
+                                    <span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>
+                                </p>
+                                <button md-icon-button (click)="openSkillInfoDialog(skill.skillDef)">
+                                    <md-icon>info</md-icon>
+                                </button>
+                            </md-list-item>
+                        </md-list>
                     </div>
                 </md-card>
             </div>
@@ -592,28 +620,34 @@
             <!-- End of effects tab -->
         </md-tab>
         <md-tab label="Historique">
-            <character-history *ngIf="currentTab === 'history'" [character]="character"></character-history>
+            <character-history [character]="character"></character-history>
         </md-tab>
     </md-tab-group>
-
-
-
-
-	<div class="row">
-        <!-- FIXME -->
-		<div *ngFor="let invite of character.invites">
-			<div class="alert alert-info">
-				<button class="glyphicon glyphicon-remove btn btn-danger pull-right" (click)="cancelInvite(invite)"></button>
-				<button class="glyphicon glyphicon-ok btn btn-success pull-right" (click)="acceptInvite(invite)"></button>
-				<strong>Invitation: </strong>
-				{{invite.name}}
-			</div>
-		</div>
-	</div>
-
 </div>
 
+<!-- Skill info dialog -->
+<template #skillInfoDialog="cdkPortal" cdk-portal>
+    <md-card class="skill-info-dialog">
 
+        <md-card-title *ngIf="!viewGmSkillInfo && selectedSkillInfo">{{selectedSkillInfo.name}}</md-card-title>
+        <md-card-content *ngIf="!viewGmSkillInfo && selectedSkillInfo">
+            {{selectedSkillInfo.playerDescription}}
+        </md-card-content>
+        <skill *ngIf="viewGmSkillInfo && selectedSkillInfo" [skill]="selectedSkillInfo"></skill>
+
+        <md-card-actions align="end">
+            <button *ngIf="!viewGmSkillInfo" md-button color="primary" (click)="viewGmSkillInfo = true">
+                INFO GM
+            </button>
+            <button *ngIf="viewGmSkillInfo" md-button color="primary" (click)="viewGmSkillInfo = false">
+                INFO JOUEUR
+            </button>
+            <button md-button color="primary" (click)="closeSkillInfoDialog()">
+                FERMER
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>
 
 
 <!-- Levelup modal -->

@@ -112,5 +112,5 @@
     </div>
 </div>
 <div *ngIf="loadMore">
-    <a href="#" (click)="loadHistory(1)">Charger plus</a>
+    <button md-button color="primary" (click)="loadHistory(1)" [disabled]="loading">CHARGER PLUS</button>
 </div>

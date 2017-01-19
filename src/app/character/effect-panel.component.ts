@@ -65,14 +65,11 @@ export class EffectPanelComponent implements OnInit {
     public customAddModifier: CharacterModifier = new CharacterModifier();
     public customAddModifierDateOffset: NhbkDateOffset = new NhbkDateOffset();
 
-
-
     constructor(private _effectService: EffectService
         , private _characterWebsocketService: CharacterWebsocketService
         , private _characterService: CharacterService
         , private _overlay: Overlay) {
     }
-
 
     openAddEffectModal() {
         let config = new OverlayState();
@@ -89,10 +86,10 @@ export class EffectPanelComponent implements OnInit {
         this.addEffectOverlayRef = overlayRef;
 
     }
-    closeAddEffectDialog(){
-        this.addEffectOverlayRef.detach().then();
-    }
 
+    closeAddEffectDialog(){
+        this.addEffectOverlayRef.detach();
+    }
 
     updateEffectListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
         this.effectFilterName = filter;
@@ -219,6 +216,7 @@ export class EffectPanelComponent implements OnInit {
                     && this.character.effects[i].currentLapCount === charEffect.currentLapCount) {
                     return;
                 }
+
                 if (!this.character.effects[i].active && charEffect.active) {
                     this._characterWebsocketService.notifyChange('Activation de l\'effet: ' + charEffect.effect.name);
                 } else if (this.character.effects[i].active && !charEffect.active) {

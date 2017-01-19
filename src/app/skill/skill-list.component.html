@@ -6,6 +6,8 @@
 </md-input-container>
 <div *ngFor="let skill of skills; let lastSkill=last">
 	<div *ngIf="isFiltered(skill)">
-		<skill [skill]="skill"></skill>
+        <md-card style="margin-bottom: 10px">
+            <skill [skill]="skill"></skill>
+        </md-card>
 	</div>
 </div>
