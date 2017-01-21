@@ -13,6 +13,8 @@ import {removeDiacritics} from '../shared/remove_diacritics';
 import {SwipeService} from './swipe.service';
 import {ItemActionService} from './item-action.service';
 import {isNullOrUndefined} from 'util';
+import {Observable} from 'rxjs';
+import {AutocompleteValue} from '../shared/autocomplete-input.component';
 
 @Component({
     selector: 'inventory-panel',
@@ -43,6 +45,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     public addItemOverlayRef: OverlayRef;
     public addItemSearch: string;
     public filteredItems: ItemTemplate[] = [];
+
+    public autocompleteAddItemListCallback: Function = this.updateItemListAutocomplete.bind(this);
+
     public itemAddCustomName: string;
     public itemAddCustomDescription: string;
     public selectedAddItem: ItemTemplate;
@@ -74,17 +79,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         this.iconMode = !this.iconMode;
     }
 
-    updateFilterAddItem() {
-        if (this.addItemSearch) {
-            this._itemService.searchItem(this.addItemSearch).subscribe(
-                items => {
-                    this.filteredItems = items;
-                    this.selectedAddItem = null;
-                }
-            );
-        }
-    }
-
     selectAddItem(item: ItemTemplate) {
         this.selectedAddItem = item;
         this.itemAddCustomName = item.name;
@@ -94,15 +88,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             this.itemAddQuantity = null;
         }
         return false;
-    }
-
-    unselectAddItem() {
-        this.selectedAddItem = null;
-        return false;
-    }
-
-    isAddItemSelected(item) {
-        return this.selectedAddItem && this.selectedAddItem.id === item.id;
     }
 
     onAddItem(item: Item) {
@@ -135,8 +120,20 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         this.addItemOverlayRef = overlayRef;
     }
 
-    closeAddItemDialog(){
+    closeAddItemDialog() {
         this.addItemOverlayRef.detach();
+    }
+
+    updateItemListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
+        this.addItemSearch = filter;
+        if (filter === '') {
+            return Observable.from([]);
+        }
+        return this._itemService.searchItem(this.addItemSearch).map(
+            items => {
+                return items.map(e => new AutocompleteValue(e, e.name));
+            }
+        );
     }
 
     addItem() {
@@ -151,7 +148,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 item => {
                     this.onAddItem(item);
                     this.selectedItem = item;
-                    this.itemFilterName = '';
+                    this.addItemSearch = '';
                     this.selectedAddItem = null;
                     this.itemAddCustomName = null;
                     this.itemAddCustomDescription = null;

@@ -7,6 +7,9 @@ import {
     GroupComponent, CreateGroupComponent, GroupService
 } from './';
 
+import {MaterialModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
+
 import {SharedModule} from '../shared/shared.module';
 import {CharacterModule} from '../character/character.module';
 import {MonsterModule} from '../monster/monster.module';
@@ -26,6 +29,8 @@ import {EventModule} from '../event/event.module';
     imports: [
         CommonModule,
         FormsModule,
+        MaterialModule.forRoot(),
+        FlexLayoutModule.forRoot(),
         SharedModule,
         CharacterModule,
         MonsterModule,

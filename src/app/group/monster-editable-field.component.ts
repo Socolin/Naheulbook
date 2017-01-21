@@ -5,6 +5,7 @@ import {Monster} from '../monster';
 
 @Component({
     selector: 'monster-editable-field',
+    styleUrls: ['./monster-editable-field.component.scss'],
     templateUrl: './monster-editable-field.component.html'
 })
 export class MonsterEditableFieldComponent implements OnChanges {
@@ -34,10 +35,6 @@ export class MonsterEditableFieldComponent implements OnChanges {
                         , 'Modification: ' + this.fieldName.toUpperCase() + ': '
                         + this.oldValue + ' -> ' + res.value);
                     this.oldValue = res.value;
-                },
-                err => {
-                    console.log(err);
-                    this._notification.error('Erreur', 'Erreur serveur');
                 }
             );
     }

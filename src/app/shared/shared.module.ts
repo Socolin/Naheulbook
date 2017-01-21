@@ -11,6 +11,7 @@ import {IconComponent} from './icon.component';
 import {MiscService} from './misc.service';
 import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {NhbkDialogService} from './nhbk-dialog.service';
 
 @NgModule({
     imports: [
@@ -46,6 +47,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     providers: [
         IconService,
         MiscService,
+        NhbkDialogService,
     ]
 })
 export class SharedModule {

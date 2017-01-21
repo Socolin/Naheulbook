@@ -1,0 +1,64 @@
+.group-container {
+    margin-left: 50px;
+
+    .character-summary-card {
+        md-card-header {
+            button {
+                margin-left: auto;
+            }
+        }
+        margin-bottom: 5px;
+        white-space: nowrap;
+    }
+}
+
+.info-tab {
+    md-card {
+        margin-bottom: 5px;
+        margin-right: 5px;
+    }
+}
+
+.characters-tab {
+    md-card {
+        margin-bottom: 5px;
+        margin-right: 5px;
+    }
+}
+.characters-cards {
+    display: flex;
+    flex-wrap: wrap;
+    md-card {
+        flex-shrink: 0;
+        flex-grow: 1;
+        flex-basis: 0;
+    }
+}
+
+.change-ownership-dialog {
+    md-radio-button {
+        display: block;
+    }
+    md-card-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.combat-tab-header {
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 7px;
+}
+
+.invite-character-modal {
+    md-radio-button {
+        display: block;
+    }
+    md-card-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

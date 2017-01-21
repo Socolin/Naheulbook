@@ -6,12 +6,14 @@ import {MonsterColorSelectorComponent, MonsterListComponent, MonsterTemplateComp
 
 import {SharedModule} from '../shared/shared.module';
 import {MonsterEditorComponent} from './monster-editor.component';
+import {MaterialModule} from '@angular/material';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         SharedModule,
+        MaterialModule.forRoot(),
     ],
     declarations: [
         MonsterColorSelectorComponent,

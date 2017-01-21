@@ -1,14 +1,16 @@
 import {
     Component, Input, OnChanges, OnInit, forwardRef, Inject, SimpleChanges, ViewChild,
 } from '@angular/core';
-import {Item, ItemModifier} from './item.model';
-import {Character, CharacterGiveDestination} from './character.model';
+import {Portal, OverlayRef} from '@angular/material';
+
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {dateOffset2TimeDuration, timeDuration2DateOffset2} from '../date/util';
 import {ItemService, ItemCategory} from '../item';
-import {ItemActionService} from './item-action.service';
 import {GroupService} from '../group/group.service';
 import {NhbkDateOffset} from '../date/date.model';
-import {dateOffset2TimeDuration, timeDuration2DateOffset2} from '../date/util';
-import {Overlay, OverlayState, Portal, OverlayRef} from '@angular/material';
+import {Item, ItemModifier} from './item.model';
+import {Character, CharacterGiveDestination} from './character.model';
+import {ItemActionService} from './item-action.service';
 
 @Component({
     selector: 'item-detail',
@@ -48,7 +50,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     constructor(@Inject(forwardRef(() => ItemService)) private _itemService: ItemService
         , public _itemActionService: ItemActionService
         , private _groupService: GroupService
-        , private _overlay: Overlay) {
+        , private _nhbkDialogService: NhbkDialogService) {
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -107,18 +109,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
      */
 
     openGiveItemDialog() {
-        let config = new OverlayState();
-
-        config.positionStrategy = this._overlay.position()
-            .global()
-            .centerHorizontally()
-            .centerVertically();
-        config.hasBackdrop = true;
-
-        let overlayRef = this._overlay.create(config);
-        overlayRef.attach(this.giveItemDialog);
-        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
-        this.giveItemOverlayRef = overlayRef;
+        this.giveItemOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.giveItemDialog);
 
         this._groupService.listActiveCharactersInGroup(this.character.id).subscribe(
             characters => {
@@ -143,18 +134,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     openModifierDialog() {
         this.newModifier = new ItemModifier();
 
-        let config = new OverlayState();
-
-        config.positionStrategy = this._overlay.position()
-            .global()
-            .centerHorizontally()
-            .centerVertically();
-        config.hasBackdrop = true;
-
-        let overlayRef = this._overlay.create(config);
-        overlayRef.attach(this.addModifierDialog);
-        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
-        this.addModifierOverlayRef = overlayRef;
+        this.addModifierOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addModifierDialog);
     }
 
     closeModifierDialog() {
@@ -209,18 +189,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
             this.lifetimeDateOffset = timeDuration2DateOffset2(+this.item.data.lifetime);
         }
 
-        let config = new OverlayState();
-
-        config.positionStrategy = this._overlay.position()
-            .global()
-            .centerHorizontally()
-            .centerVertically();
-        config.hasBackdrop = true;
-
-        let overlayRef = this._overlay.create(config);
-        overlayRef.attach(this.lifetimeDialog);
-        overlayRef.backdropClick().subscribe(() => this.closeLifetimeDialog());
-        this.lifetimeOverlayRef = overlayRef;
+        this.lifetimeOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.lifetimeDialog);
     }
 
 

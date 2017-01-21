@@ -1,4 +1,6 @@
-import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {OverlayRef, Portal} from '@angular/material';
+
 import {Group, Fighter} from './group.model';
 import {Monster, MonsterTemplate} from '../monster/monster.model';
 import {GroupService} from './group.service';
@@ -11,11 +13,13 @@ import {Character} from '../character/character.model';
 import {getRandomInt} from '../shared/random';
 import {GroupActionService} from './group-action.service';
 import {ItemService} from '../item/item.service';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {CreateItemComponent} from './create-item.component';
 
 @Component({
     selector: 'fighter-panel',
     templateUrl: './fighter-panel.component.html',
-    styleUrls: ['./fighter.component.css', './fighter-panel.component.css']
+    styleUrls: ['./fighter.component.css', './fighter-panel.component.scss']
 })
 export class FighterPanelComponent implements OnInit, OnChanges {
     @Input() group: Group;
@@ -30,28 +34,49 @@ export class FighterPanelComponent implements OnInit, OnChanges {
 
     public newMonster: Monster = new Monster();
     public selectedCombatRow: number = 0;
-    public addItemTarget: Character;
 
     public selectedMonsterTemplate: MonsterTemplate;
     public monsterAutocompleteShow = false;
     public autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
 
+    @ViewChild('createItemComponent')
+    public createItemComponent: CreateItemComponent;
+
+    @ViewChild('addMonsterDialog')
+    public addMonsterDialog: Portal<any>;
+    public addMonsterOverlayRef: OverlayRef;
+
+    @ViewChild('deadMonstersDialog')
+    public deadMonstersDialog: Portal<any>;
+    public deadMonstersOverlayRef: OverlayRef;
+
     constructor(private _groupService: GroupService
         , private _actionService: GroupActionService
         , private _itemService: ItemService
+        , private _nhbkDialogService: NhbkDialogService
         , private _monsterService: MonsterService) {
     }
 
-    onItemAdded(data: {keepOpen: boolean, item: Item}) {
-        if (data != null) {
-            this._itemService.addItemTo('character', this.addItemTarget.id, data.item.template.id, data.item.data).subscribe();
-            if (!data.keepOpen) {
-                this.addItemTarget = null;
-            }
-        }
-        else {
-            this.addItemTarget = null;
-        }
+    onItemAdded(data: {character: Character, item: Item}) {
+        this._itemService.addItemTo('character', data.character.id, data.item.template.id, data.item.data).subscribe();
+    }
+
+    openAddMonsterDialog() {
+        this.addMonsterOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addMonsterDialog);
+    }
+
+    closeAddMonsterDialog() {
+        this.addMonsterOverlayRef.detach();
+        this.addMonsterOverlayRef = null;
+    }
+
+    openDeadMonstersDialog() {
+        this.deadMonstersOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.deadMonstersDialog);
+    }
+
+    closeDeadMonstersDialog() {
+        this.deadMonstersOverlayRef.detach();
+        this.deadMonstersOverlayRef = null;
     }
 
     selectCombatRow(i: number) {
@@ -312,7 +337,7 @@ export class FighterPanelComponent implements OnInit, OnChanges {
 
         this._actionService.registerAction('openAddItemForm').subscribe(
             data => {
-                this.addItemTarget = data.data;
+                this.createItemComponent.openDialogForCharacter(data.data);
             }
         );
 

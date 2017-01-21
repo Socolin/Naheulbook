@@ -1,6 +1,7 @@
 <span class="autocomplete-container">
     <md-input-container #autocompleteOrigin="cdkOverlayOrigin" cdk-overlay-origin>
         <input md-input
+               [disabled]="disabled"
                [placeholder]="placeholder"
                (keydown)="onKey($event)"
                [(ngModel)]="value"

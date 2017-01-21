@@ -1,26 +1,47 @@
-<div>
-    <div class="pull-right">
-        <input type="text" [(ngModel)]="newLootName"/>
-        <button class="btn btn-success" (click)="createLoot()" [disabled]="!newLootName">Creer</button>
-    </div>
-    <h3>Loot</h3>
+<div class="pull-right">
+    <input type="text" [(ngModel)]="newLootName"/>
+    <button md-button class="btn btn-success" (click)="createLoot()" [disabled]="!newLootName">Creer</button>
 </div>
-<div class="row">
-    <div *ngFor="let loot of loots" class="panel panel-default" [class.panel-success]="loot.visibleForPlayer">
-        <div class="panel-heading">
+
+<div class="loot-list">
+    <md-card *ngFor="let loot of loots" [class.panel-success]="loot.visibleForPlayer">
+        <md-toolbar>
             {{loot.name}}
-            <button class="btn btn-success" (click)="selectLootToAddItem(loot)">Ajouter item</button>
-            <button class="btn btn-danger" (click)="deleteLoot(loot)">Delete loot</button>
-            <button class="btn btn-primary" *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">Open</button>
-            <button class="btn btn-info" *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">Close</button>
-            <button class="btn btn-warning" (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">Ajouter item inutile</button>
-            <button class="btn btn-warning" (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">Ajouter ingredient magique</button>
-            <span class="pull-right" *ngIf="loot.computedXp">XP: {{loot.computedXp}}</span>
-        </div>
-        <div class="panel-body">
+
+            <span class="padding"></span>
+            <span *ngIf="loot.computedXp">XP: {{loot.computedXp}}</span>
+            <span class="padding"></span>
+
+            <button md-raised-button (click)="createItemDialog.openDialogForLoot(loot)">Ajouter item</button>
+            <button md-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">Ajouter item inutile</button>
+            <button md-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">Ajouter ingredient magique</button>
+
+            <span class="padding"></span>
+
+
+            <button md-icon-button *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">
+                <md-icon fontSet="game-icon" fontIcon="game-icon-locked-chest" class="ra-md-button-icon-32"></md-icon>
+            </button>
+            <button md-icon-button *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">
+                <md-icon fontSet="game-icon" fontIcon="game-icon-open-treasure-chest" class="ra-md-button-icon-32"></md-icon>
+            </button>
+            <button md-icon-button [mdMenuTriggerFor]="menuLoot" aria-label="Open basic menu">
+                <md-icon>more_vert</md-icon>
+            </button>
+            <md-menu x-position="before" #menuLoot="mdMenu">
+                <button md-menu-item
+                        (click)=deleteLoot(loot)>
+                    Supprimer
+                </button>
+            </md-menu>
+
+        </md-toolbar>
+        <md-card-content>
             <ul>
                 <li *ngFor="let item of loot.items">
-                    <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromLoot(loot, item)"></button>
+                    <button md-icon-button (click)="removeItemFromLoot(loot, item)">
+                        <md-icon>delete</md-icon>
+                    </button>
                     <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                     {{item.data.name}}
                     <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
@@ -30,12 +51,14 @@
             <ul>
                 <li *ngFor="let monster of loot.monsters">
                     {{monster.name}}
-                    <button class="btn btn-success" (click)="selectMonsterToAddItem(loot, monster)">Ajouter item</button>
-                    <button class="btn btn-warning" (click)="addRandomItemFromCategoryToMonster(loot, monster, 'USELESS_ITEM')">Ajouter item inutile</button>
-                    <button class="btn btn-warning" (click)="addRandomItemFromCategoryToMonster(loot, monster, 'MAGICAL_INGREDIENT')">Ajouter ingredient magique</button>
+                    <button md-raised-button (click)="createItemDialog.openDialogForLootMonster(loot, monster)">Ajouter item</button>
+                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(loot, monster, 'USELESS_ITEM')">Ajouter item inutile</button>
+                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(loot, monster, 'MAGICAL_INGREDIENT')">Ajouter ingredient magique</button>
                     <ul>
                         <li *ngFor="let item of monster.items">
-                            <button class="glyphicon glyphicon-trash btn btn-danger" (click)="removeItemFromMonster(monster, item)"></button>
+                            <button md-icon-button (click)="removeItemFromMonster(monster, item)">
+                                <md-icon>delete</md-icon>
+                            </button>
                             <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                             {{item.data.name}}
                             <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
@@ -44,12 +67,8 @@
                     </ul>
                 </li>
             </ul>
-        </div>
-    </div>
+        </md-card-content>
+    </md-card>
 </div>
-<template [ngIf]="!monsterTargetForNewItem && lootTargetForNewItem">
-    <create-item [loot]="lootTargetForNewItem" (onAddItem)="addItemToLoot(lootTargetForNewItem, $event)"></create-item>
-</template>
-<template [ngIf]="monsterTargetForNewItem && lootTargetForNewItem">
-    <create-item [loot]="lootTargetForNewItem" (onAddItem)="addItemToMonster(lootTargetForNewItem, monsterTargetForNewItem, $event)"></create-item>
-</template>
+
+<create-item #createItemDialog (onAddItem)="onAddItem($event)"></create-item>

@@ -1,7 +1,8 @@
 import {Component, Output, EventEmitter, Input, ViewChild} from '@angular/core';
 
 import {NhbkDateOffset} from './date.model';
-import {OverlayState, OverlayRef, Portal, Overlay} from '@angular/material';
+import {OverlayRef, Portal} from '@angular/material';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
     selector: 'date-modifier',
@@ -19,22 +20,11 @@ export class DateModifierComponent {
     public dateSelectorDialog: Portal<any>;
     public dateSelectorOverlayRef: OverlayRef;
 
-    constructor(private _overlay: Overlay) {
+    constructor(private _nhbkDialogService: NhbkDialogService) {
     }
 
     openSelector() {
-        let config = new OverlayState();
-
-        config.positionStrategy = this._overlay.position()
-            .global()
-            .centerHorizontally()
-            .centerVertically();
-        config.hasBackdrop = true;
-
-        let overlayRef = this._overlay.create(config);
-        overlayRef.attach(this.dateSelectorDialog);
-        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
-        this.dateSelectorOverlayRef = overlayRef;
+        this.dateSelectorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.dateSelectorDialog);
     }
 
     closeSelector() {

@@ -1,289 +1,342 @@
-<div class="row" *ngIf="group">
-    <div class="col-xs-12">
-        <button class="btn btn-default pull-right glyphicon glyphicon-refresh" (click)="refreshData()"></button>
-        <button *ngIf="!group.data.inCombat" class="btn btn-default pull-right btn-success" (click)="startCombat()">Debut combat</button>
-        <button *ngIf="group.data.inCombat" class="btn btn-default pull-right btn-danger" (click)="endCombat()">Fin combat</button>
-        <h3>{{group.name}}</h3>
-    </div>
+<div *ngIf="group" class="group-container">
+    <md-tab-group (selectChange)=selectTab($event) [selectedIndex]="currentTabIndex">
+        <md-tab label="Infos">
+            <div class="info-tab">
+                <md-card>
+                    <md-card-title>{{group.name}}
+                        <button md-icon-button (click)="refreshData()"><md-icon>refresh</md-icon></button>
+                    </md-card-title>
+                    <dl>
+                        <dt>Mankdebol</dt>
+                        <dd>
+                            <value-editor [value]="group.data.mankdebol"
+                                          [title]="'Mankdebol du groupe'"
+                                          (onChange)="changeGroupValue('mankdebol', $event)">
+                            </value-editor>
+                        </dd>
+
+                        <dt>Débilibeuk</dt>
+                        <dd>
+                            <value-editor [value]="group.data.debilibeuk"
+                                          [title]="'Débilibeuk du groupe'"
+                                          (onChange)="changeGroupValue('debilibeuk', $event)">
+                            </value-editor>
+                        </dd>
+
+                        <dt>Date</dt>
+                        <dd>
+                            <date-selector [date]="group.data.date"
+                                           (onChange)="changeGroupValue('date', $event)">
+                            </date-selector>
+                            <date-modifier *ngIf="group.data.date"
+                                           [title]="'Modification de la date'"
+                                           (onChange)="addTime($event)">
+                            </date-modifier>
+                            <date [date]="group.data.date"></date>
+                        </dd>
+
+                        <dt>Lieu</dt>
+                        <dd>
+                            <autocomplete-input [value]="group.location.name"
+                                                (onSelect)="changeGroupLocation($event)"
+                                                [(callback)]="autocompleteLocationsCallback">
+                            </autocomplete-input>
+                        </dd>
+                    </dl>
+                </md-card>
+                <md-card>
+                    <md-card-title>Évènements</md-card-title>
+                    <md-card-content>
+                        <events #events [group]="group"></events>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button
+                                color="primary"
+                                (click)="events.openAddEventDialog()">
+                            AJOUTER UN ÉVÈNEMENT
+                        </button>
+                    </md-card-actions>
+                </md-card>
+            </div>
+        </md-tab>
+
+        <md-tab label="Personnages">
+            <div class="characters-tab">
+                <md-card>
+                    <md-card-title>Joueurs</md-card-title>
+                    <md-card-content class="characters-cards">
+                        <template ngFor let-character [ngForOf]="characters">
+                            <md-card *ngIf="!character.isNpc" class="character-summary-card">
+                                <md-card-header>
+                                    <md-card-title>{{character.name}} - Lvl{{character.level}}</md-card-title>
+                                    <md-card-subtitle>
+                                        {{character.origin.name}}
+                                        <span *ngIf="character.job"> - {{character.job.name}} </span>
+                                    </md-card-subtitle>
+                                    <button md-icon-button [mdMenuTriggerFor]="characterActions" *ngIf="!readonly">
+                                        <md-icon>more_vert</md-icon>
+                                    </button>
+                                    <md-menu x-position="before" #characterActions="mdMenu">
+                                        <button md-menu-item
+                                                *ngIf="character.user && character.user !==  _loginService.loggedUser.id"
+                                                (click)="takeOwnership(character)">
+                                            Devenir propriétaire
+                                        </button>
+                                        <button md-menu-item
+                                                *ngIf="!character.user || character.user ===  _loginService.loggedUser.id"
+                                                (click)="openChangeOwnershipDialog(character)">
+                                            Définir le propriétaire
+                                        </button>
+                                    </md-menu>
+                                </md-card-header>
+                                <md-card-actions align="end">
+                                    <button
+                                        md-button
+                                        color="primary"
+                                        *ngIf="!character.active"
+                                        (click)="toggleActiveCharacter(character)">
+                                        ACTIVER
+                                    </button>
+                                    <button
+                                        md-button
+                                        *ngIf="character.active"
+                                        color="accent"
+                                        (click)="toggleActiveCharacter(character)">
+                                        DESACTIVER
+                                    </button>
+                                </md-card-actions>
+                            </md-card>
+                        </template>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button
+                                color="primary"
+                                (click)="activeAllCharacter(false)">
+                            DESACTIVER TOUS
+                        </button>
+                        <button md-button
+                                color="primary"
+                                (click)="activeAllCharacter(true)">
+                            ACTIVER TOUS
+                        </button>
+                    </md-card-actions>
+                </md-card>
+
+                <md-card>
+                    <md-card-title>PNJs</md-card-title>
+                    <md-card-content class="characters-cards">
+                        <template ngFor let-character [ngForOf]="characters">
+                            <md-card *ngIf="character.isNpc" class="character-summary-card">
+                                <md-card-header>
+                                    <md-card-title>{{character.name}}</md-card-title>
+                                    <md-card-subtitle>{{character.origin.name}}
+                                        <span *ngIf="character.job"> - {{character.job.name}} </span> - Lvl{{character.level}}
+                                    </md-card-subtitle>
+                                </md-card-header>
+                                <md-card-actions align="end">
+                                    <button
+                                        md-button
+                                        color="primary"
+                                        *ngIf="!character.active"
+                                        (click)="toggleActiveCharacter(character)">
+                                        ACTIVER
+                                    </button>
+                                    <button
+                                        md-button
+                                        *ngIf="character.active"
+                                        color="accent"
+                                        (click)="toggleActiveCharacter(character)">
+                                        DESACTIVER
+                                    </button>
+                                </md-card-actions>
+                            </md-card>
+                        </template>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button
+                                color="primary"
+                                (click)="createNpc()">
+                            AJOUTER PNJ
+                        </button>
+                    </md-card-actions>
+                </md-card>
+                <md-card>
+                    <md-card-title>Invitations</md-card-title>
+                    <md-card-content>
+                        <div *ngIf="group.invites.length">
+                            <h4>Invitation à valider</h4>
+                            <div class="list-group">
+                                <template ngFor let-character [ngForOf]="group.invites">
+                                    <div class="list-group-item">
+                                        <button class="glyphicon glyphicon-remove btn btn-danger pull-right"
+                                                (click)="cancelInvite(character)"></button>
+                                        <button class="glyphicon glyphicon-remove btn btn-success pull-right"
+                                                (click)="acceptInvite(character)"></button>
+                                        <h4 class="list-group-item-heading">{{character.name}}</h4>
+                                        <p class="list-group-item-text">{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
+                                        </p>
+                                    </div>
+                                </template>
+                            </div>
+                            <hr>
+                        </div>
+                        <div *ngIf="group.invited.length">
+                            <h4>Invitation en attente</h4>
+                            <div class="list-group">
+                                <template ngFor let-character [ngForOf]="group.invited">
+                                    <div class="list-group-item">
+                                        <button class="glyphicon glyphicon-remove btn btn-danger pull-right"
+                                                (click)="cancelInvite(character)"></button>
+                                        <h4 class="list-group-item-heading">{{character.name}}</h4>
+                                        <p class="list-group-item-text">{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
+                                        </p>
+                                    </div>
+                                </template>
+                            </div>
+                            <hr>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button
+                                (click)="openInviteCharacterModal()"
+                                color="primary">
+                            INVITER UN JOUEUR
+                        </button>
+                    </md-card-actions>
+                </md-card>
+            </div>
+        </md-tab>
+
+        <md-tab label="Combat">
+            <div class="combat-tab-header">
+                <button md-raised-button
+                        color="primary"
+                        *ngIf="!group?.data?.inCombat"
+                        (click)="startCombat()">
+                    Debut combat
+                </button>
+                <button md-raised-button
+                        color="primary"
+                        *ngIf="group.data.inCombat"
+                        (click)="endCombat()">
+                    Fin combat
+                </button>
+                <button md-raised-button
+                        color="primary"
+                        (click)="fighterPanel.openAddMonsterDialog()">
+                    Ajouter un monstre
+                </button>
+                <button md-raised-button
+                        color="primary"
+                        (click)="fighterPanel.openDeadMonstersDialog()">
+                    Monstres morts
+                </button>
+            </div>
+
+            <fighter-panel #fighterPanel [group]="group" [characters]="characters"></fighter-panel>
+        </md-tab>
+
+        <md-tab label="Loot">
+            <group-loot-panel [group]="group"></group-loot-panel>
+        </md-tab>
+
+        <md-tab label="Historique">
+            <group-history [group]="group"></group-history>
+        </md-tab>
+    </md-tab-group>
 </div>
 
 <div class="row" *ngIf="group" [hidden]="currentPanel">
-    <div class="col-xs-12">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" [class.active]="currentTab === 'infos'">
-                <a href="#" (click)="selectTab('infos')">
-                    Info
-                </a>
-            </li>
-            <li role="presentation" [class.active]="currentTab === 'characters'">
-                <a href="#" (click)="selectTab('characters')">
-                    Joueurs <span *ngIf="group.invites.length || group.invited.length" class="badge">{{group.invites.length}} - {{group.invited.length}}</span>
-                </a>
-            </li>
-            <li role="presentation" [class.active]="currentTab === 'combat'">
-                <a href="#" (click)="selectTab('combat')">
-                    Combat
-                </a>
-            </li>
-            <li role="presentation" [class.active]="currentTab === 'loot'">
-                <a href="#" (click)="selectTab('loot')">
-                    Loot
-                </a>
-            </li>
-            <li role="presentation" [class.active]="currentTab === 'history'">
-                <a class="bg-success" href="#" (click)="selectTab('history')">
-                    Historique
-                </a>
-            </li>
-            <template ngFor let-character [ngForOf]="characters">
-                <li role="presentation" [class.active]="currentTab === 'character_' + character.id">
-                    <a *ngIf="character.active" href="#"
-                        [class.bg-warning]="character.isNpc" [class.bg-info]="!character.isNpc"
-                        (click)="selectTab('character_' + character.id)">
-                        {{character.name}}
-                    </a>
-                </li>
-            </template>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <template ngFor let-character [ngForOf]="characters">
-                <div *ngIf="character.active" role="tabpanel"
-                     [class.active]="currentTab === 'character_' + character.id"
-                     class="list-group tab-pane" id="character_{{character.id}}">
-                    <character [character]="character"></character>
-                </div>
-            </template>
-            <div [class.active]="currentTab === 'history'" class="tab-pane">
-                <group-history *ngIf="currentTab === 'history'" [group]="group"></group-history>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <template ngFor let-character [ngForOf]="characters">
+            <div *ngIf="character.active" role="tabpanel"
+                 [class.active]="currentTab === 'character_' + character.id"
+                 class="list-group tab-pane" id="character_{{character.id}}">
+                <character *ngIf=false [character]="character"></character>
             </div>
-            <div [class.active]="currentTab === 'infos'" class="list-group tab-pane">
-                <div class="col-md-6 col-sm-6">
-                    <div>
-                        <h3>Informations</h3>
-                        <div class="row">
-                            <div class="col-xs-4 col-sm-3 col-md-4">
-                                <strong>Mankdebol</strong>
-                            </div>
-                            <div class="col-xs-8 col-sm-9 col-md-8">
-                                <value-editor [value]="group.data.mankdebol" [title]="'Mankdebol du groupe'"
-                                              (onChange)="changeGroupValue('mankdebol', $event)"></value-editor>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-4 col-sm-3 col-md-4">
-                                <strong>Débilibeuk</strong>
-                            </div>
-                            <div class="col-xs-8 col-sm-9 col-md-8">
-                                <value-editor [value]="group.data.debilibeuk" [title]="'Débilibeuk du groupe'"
-                                              (onChange)="changeGroupValue('debilibeuk', $event)"></value-editor>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-4 col-sm-3 col-md-4">
-                                <strong>Date</strong>
-                            </div>
-                            <div class="pull-right col-xs-8 col-sm-9 col-md-8">
-                                <date-selector [date]="group.data.date" (onChange)="changeGroupValue('date', $event)"></date-selector>
-                                <date-modifier *ngIf="group.data.date" (onChange)="addTime($event)"></date-modifier>
-                            </div>
-                            <div class="col-xs-8 col-sm-9 col-md-8 col-xs-offset-4 col-sm-offset-3 col-md-offset-4">
-                                <date [date]="group.data.date"></date>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-4 col-sm-3 col-md-4">
-                                <strong>Lieu</strong>
-                            </div>
-                            <div class="col-xs-8 col-sm-9 col-md-8">
-                                <autocomplete-input [value]="group.location.name" (onSelect)="changeGroupLocation($event)"
-                                                    [(callback)]="autocompleteLocationsCallback"></autocomplete-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-6">
-                    <events [group]="group"></events>
-                </div>
-            </div>
-            <div [class.active]="currentTab === 'combat'" class="list-group tab-pane">
-                <fighter-panel [group]="group" [characters]="characters"></fighter-panel>
-            </div>
-            <div [class.active]="currentTab === 'loot'" class="list-group tab-pane">
-                <group-loot-panel [group]="group"></group-loot-panel>
-            </div>
-            <div [class.active]="currentTab === 'characters'" class="tab-pane">
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div>
-                        <h3>
-                            Joueurs
-                            <button
-                                class="btn glyphicon glyphicon-off btn-danger pull-right"
-                                (click)="activeAllCharacter(false)">
-                            </button>
-                            <button
-                                class="btn glyphicon glyphicon-off btn-success pull-right"
-                                (click)="activeAllCharacter(true)">
-                            </button>
-                        </h3>
-                    </div>
-                    <div class="list-group">
-                        <template ngFor let-character [ngForOf]="characters">
-                            <div *ngIf="!character.isNpc" class="list-group-item">
-                                <h3>
-                                    {{character.name}} - Lvl{{character.level}}
-                                    <span class="pull-right">
-                                        <button
-                                            *ngIf="character.user && character.user !=  _loginService.loggedUser.id"
-                                            class="btn glyphicon glyphicon-user btn-primary"
-                                            (click)="takeOwnership(character)">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                        </button>
-                                        <button
-                                            *ngIf="!character.user || character.user ==  _loginService.loggedUser.id"
-                                            class="btn glyphicon glyphicon-user btn-primary"
-                                            data-toggle="modal" data-target="#assignOwnerModal"
-                                            (click)="selectedCharacter = character">
-                                            <span class="glyphicon glyphicon-ok"></span>
-                                        </button>
-                                        <button
-                                            class="btn glyphicon glyphicon-off"
-                                            [class.btn-success]="character.active"
-                                            [class.btn-danger]="!character.active"
-                                            (click)="toggleActiveCharacter(character)">
-                                        </button>
-                                    </span>
-                                </h3>
-                                <div>
-                                    {{character.origin.name}} <span *ngIf="character.job"> - {{character.job.name}} </span>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div>
-                        <h3>PNJ</h3>
-                    </div>
-                    <div class="list-group">
-                        <template ngFor let-character [ngForOf]="characters">
-                            <div *ngIf="character.isNpc" class="list-group-item">
-                                <h3>
-                                    {{character.name}} - Lvl{{character.level}}
-                                    <span class="pull-right">
-                                        <button
-                                            class="btn glyphicon glyphicon-off"
-                                            [class.btn-success]="character.active"
-                                            [class.btn-danger]="!character.active"
-                                            (click)="toggleActiveCharacter(character)">
-                                        </button>
-                                    </span>
-                                </h3>
-                                <div>
-                                    {{character.origin.name}} <span *ngIf="character.job"> - {{character.job.name}} </span>
-                                </div>
-                            </div>
-                        </template>
-                        <a href="#" (click)="createNpc()" class="list-group-item">
-                            Ajouter un npc
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-12 col-sm-12">
-                    <h3>Invitations</h3>
-                    <div *ngIf="group.invites.length">
-                        <h4>Invitation à valider</h4>
-                        <div class="list-group">
-                            <template ngFor let-character [ngForOf]="group.invites">
-                                <div class="list-group-item">
-                                    <button class="glyphicon glyphicon-remove btn btn-danger pull-right"
-                                            (click)="cancelInvite(character)"></button>
-                                    <button class="glyphicon glyphicon-remove btn btn-success pull-right"
-                                            (click)="acceptInvite(character)"></button>
-                                    <h4 class="list-group-item-heading">{{character.name}}</h4>
-                                    <p class="list-group-item-text">{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
-                                    </p>
-                                </div>
-                            </template>
-                        </div>
-                        <hr>
-                    </div>
-                    <div *ngIf="group.invited.length">
-                        <h4>Invitation en attente</h4>
-                        <div class="list-group">
-                            <template ngFor let-character [ngForOf]="group.invited">
-                                <div class="list-group-item">
-                                    <button class="glyphicon glyphicon-remove btn btn-danger pull-right"
-                                            (click)="cancelInvite(character)"></button>
-                                    <h4 class="list-group-item-heading">{{character.name}}</h4>
-                                    <p class="list-group-item-text">{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
-                                    </p>
-                                </div>
-                            </template>
-                        </div>
-                        <hr>
-                    </div>
-                    <div>
-                        <h4>Inviter un joueur</h4>
-                        <div class="form-group">
-                            <label for="searchNameInvite">Nom</label>
-                            <input type="text" class="form-control" [(ngModel)]="searchNameInvite"
-                                   (ngModelChange)="updateFilteredPlayer()" id="searchNameInvite"
-                                   placeholder="Nom">
-                        </div>
-                        <div class="list-group">
-                            <template ngFor let-character [ngForOf]="filteredInvitePlayers">
-                                <a href="#" class="list-group-item" (click)="selectInviteCharacter(character)"
-                                   [class.active]="selectedInviteCharacter && character.id == selectedInviteCharacter.id">
-                                    <h4 class="list-group-item-heading">{{character.name}}</h4>
-                                    <p class="list-group-item-text">{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
-                                    <p class="list-group-item-text">Joueur: {{character.owner}}
-                                    </p>
-                                </a>
-                            </template>
-                        </div>
-
-                        <button (click)="inviteCharacter(selectedInviteCharacter)" class="btn btn-primary">Inviter</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </template>
     </div>
 </div>
 
 
 <!-- Modal -->
-<div id="assignOwnerModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Changement de proprietaire de {{selectedCharacter?.name}}</h4>
-            </div>
+<template #changeOwnershipDialog="cdkPortal" cdk-portal>
+    <md-card class="change-ownership-dialog">
+        <md-card-title>Définir le propriétaire</md-card-title>
+        <md-card-subtitle>{{selectedCharacter?.name}}</md-card-subtitle>
+        <md-card-content>
             <div class="modal-body">
-                <input class="form-control" type="text" [(ngModel)]="filterSearchUser"
-                       (ngModelChange)="updateSearchUser()">
-                <template [ngIf]="!filteredUsers.length">
-                    Aucun utilisateur trouve
-                </template>
-                <div class="list-group">
-                    <template ngFor let-user [ngForOf]="filteredUsers">
-                        <button type="button" data-dismiss="modal" class="list-group-item" (click)="setOwnership(user)">
-                            {{user.displayName}}
-                        </button>
-                    </template>
+                <md-input-container>
+                    <input md-input
+                           placeholder="Chercher un utilisateur"
+                           type="text"
+                           [(ngModel)]="filterSearchUser"
+                           (ngModelChange)="updateSearchUser()" />
+                </md-input-container>
+                <div *ngIf="!filteredUsers.length">
+                    Aucun utilisateur trouvé
                 </div>
+                <md-radio-group [(ngModel)]="changeOwnershipNewOwner">
+                    <template ngFor let-user [ngForOf]="filteredUsers">
+                        <md-radio-button [value]="user">
+                            {{user.displayName}}
+                        </md-radio-button>
+                    </template>
+                </md-radio-group>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button
+                    (click)="closeChangeOwnershipDialog()"
+                    color="primary">
+                ANNULER
+            </button>
+            <button md-button
+                    (click)="changeOwnershipConfirm()"
+                    color="primary">
+                VALIDER
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>
 
-    </div>
-</div>
+<template #inviteCharacterModal="cdkPortal" cdk-portal>
+    <md-card class="invite-character-modal">
+        <md-card-title>Inviter un personnage</md-card-title>
+        <md-card-content>
+            <md-input-container>
+                <input md-input
+                       [(ngModel)]="searchNameInvite"
+                       (ngModelChange)="updateFilteredPlayer()"
+                       placeholder="Nom du personnage"/>
+            </md-input-container>
+
+            <div *ngIf="!filteredInvitePlayers?.length">
+                Aucun personnage trouvé
+            </div>
+            <md-radio-group [(ngModel)]="selectedInviteCharacter">
+                <template ngFor let-character [ngForOf]="filteredInvitePlayers">
+                    <md-radio-button [value]="character">
+                        {{character.name}} - {{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
+                        Joueur: {{character.owner}}
+                    </md-radio-button>
+                </template>
+            </md-radio-group>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button
+                    (click)="closeInviteCharacterModal()"
+                    color="primary">
+                ANNULER
+            </button>
+            <button md-button
+                    color="primary"
+                    (click)="inviteCharacter(selectedInviteCharacter)">
+                INVITER
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>
 
 <usefull-data></usefull-data>

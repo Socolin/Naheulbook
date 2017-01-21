@@ -141,62 +141,32 @@
 </md-card>
 
 <template #addItemDialog="cdkPortal" cdk-portal>
-    <md-card>
+    <md-card class="add-item-dialog">
         <md-card-title>Ajouter un objet</md-card-title>
         <md-card-content>
-            <md-input-container>
-                <input md-input
-                       placeholder="Rechercher"
-                       [(ngModel)]="addItemSearch"
-                       (ngModelChange)="updateFilterAddItem()">
-            </md-input-container>
-
-            <div *ngIf="!selectedAddItem">
-                <a href="#" *ngFor="let item of filteredItems" (click)="selectAddItem(item)" [class.active]="isAddItemSelected(item)" class="list-group-item">
-                    <span style="position: relative;padding-right: 25px">
-                        <span style="position: absolute; top: -15px; left: -10px">
-                            <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                        </span>
-                    </span>
-                    {{item.name}}
-                </a>
-            </div>
+            <autocomplete-input [value]="addItemSearch"
+                                [placeholder]="'Rechercher'"
+                                (onSelect)="selectAddItem($event)"
+                                [(callback)]="autocompleteAddItemListCallback">
+            </autocomplete-input>
 
             <div *ngIf="selectedAddItem">
-                <div class="row-fluid">
-                    <div class="list-group">
-                        <a href="#" (click)="unselectAddItem()" class="list-group-item active">
-                            <span class="glyphicon glyphicon-remove"></span> {{selectedAddItem.name}}
-                        </a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <span>Nom: </span>
-                    </div>
-                    <div class="col-sm-10">
-                        <input class="form-control" type="text" [(ngModel)]="itemAddCustomName" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <span>Description: </span>
-                    </div>
-                    <div class="col-sm-10">
-                        <input class="form-control" type="text" [(ngModel)]="itemAddCustomDescription" />
-                    </div>
-                </div>
-                <div class="row" *ngIf="selectedAddItem.data.quantifiable">
-                    <div class="col-sm-2">
-                        <span>Quantité: </span>
-                    </div>
-                    <div class="col-sm-10">
-                        <input class="form-control" type="text" [(ngModel)]="itemAddQuantity" />
-                    </div>
-                </div>
-                <div>
-                    <button (click)="addItem()" type="button" class="btn btn-primary" data-dismiss="modal">Ajouter</button>
-                </div>
+                <md-input-container style="width: 100%">
+                    <input md-input type="text"
+                           placeholder="Nom personnalisé"
+                           [(ngModel)]="itemAddCustomName"/>
+                </md-input-container>
+                <md-input-container style="width: 100%">
+                    <input md-input type="text"
+                           placeholder="Description personnalisé"
+                           [(ngModel)]="itemAddCustomDescription"/>
+                </md-input-container>
+
+                <md-input-container *ngIf="selectedAddItem.data.quantifiable" style="width: 100%">
+                    <input md-input type="number"
+                           placeholder="Quantité"
+                           [(ngModel)]="itemAddQuantity"/>
+                </md-input-container>
             </div>
         </md-card-content>
         <md-card-actions align="end">
@@ -209,6 +179,7 @@
             <button md-button
                     color="primary"
                     type="button"
+                    [disabled]="!selectedAddItem"
                     (click)="addItem()">
                 AJOUTER
             </button>

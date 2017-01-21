@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, SimpleChanges, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnChanges, SimpleChanges, OnDestroy, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 
@@ -15,56 +15,133 @@ import {NhbkDateOffset} from '../date';
 import {GroupActionService} from './group-action.service';
 import {GroupData} from './group.model';
 import {GroupWebsocketService} from './group.websocket.service';
+import {MdTabChangeEvent, OverlayRef, Portal, Overlay, OverlayState} from '@angular/material';
+import {User} from '../user/user.model';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
     templateUrl: './group.component.html',
+    styleUrls: ['./group.component.scss'],
     providers: [GroupActionService, GroupWebsocketService],
 })
 export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     public group: Group;
     public characters: Character[] = [];
-    public selectedCharacter: Character;
-    public filteredInvitePlayers: CharacterInviteInfo[] = [];
-    public autocompleteLocationsCallback: Function;
+
+    public currentTabIndex: number = 0;
     public currentTab: string = 'infos';
+    public tabs: Array<{hash: string}> = [
+        {hash: 'infos'},
+        {hash: 'characters'},
+        {hash: 'combat'},
+        {hash: 'loot'},
+        {hash: 'history'},
+    ];
 
-    /* Invitation tab */
+    public autocompleteLocationsCallback: Function;
 
-    // Replace with modal
-    public searchNameInvite: string;
-    public selectedInviteCharacter: Character;
-    //FIXME: Replace with autocomplete component
-    public filteredUsers: Object[] = [];
+    @ViewChild('changeOwnershipDialog')
+    public changeOwnershipDialog: Portal<any>;
+    public changeOwnershipOverlayRef: OverlayRef;
+    public selectedCharacter: Character;
+    public changeOwnershipNewOwner: User;
     public filterSearchUser: string = null;
+    public filteredUsers: Object[] = [];
 
-    /* History tab */
+    @ViewChild('inviteCharacterModal')
+    public inviteCharacterModal: Portal<any>;
+    public inviteCharacterOverlayRef: OverlayRef;
+    public searchNameInvite: string;
+    public filteredInvitePlayers: CharacterInviteInfo[] = [];
+    public selectedInviteCharacter: Character;
 
     constructor(private _route: ActivatedRoute
         , private _router: Router
-        , private _loginService: LoginService
+        , public _loginService: LoginService
         , private _groupService: GroupService
         , private _locationService: LocationService
         , private _notification: NotificationsService
         , private _actionService: GroupActionService
+        , private _nhbkDialogService: NhbkDialogService
         , private _groupWebsocketService: GroupWebsocketService
         , private _characterService: CharacterService) {
     }
 
-    /* Useful action (top right) */
+
+    /* Tabs */
+
+    getTabIndexFromHash(hash: string): number {
+        return this.tabs.findIndex(t => t.hash === hash);
+    }
+
+    selectTab(tabChangeEvent: MdTabChangeEvent): boolean {
+        if (tabChangeEvent.index < this.tabs.length) {
+            this.currentTab = this.tabs[tabChangeEvent.index].hash;
+            window.location.hash = this.currentTab;
+        }
+        return false;
+    }
+
+    /* Infos tab */
 
     refreshData() {
         this.loadGroup(this.group.id);
     }
 
-    startCombat() {
-        this.changeGroupValue('inCombat', true);
+    changeGroupValue(key: string, value: any) {
+        this._groupService.editGroupValue(this.group.id, key, value).subscribe(
+            data => {
+                if (key === 'debilibeuk') {
+                    this._notification.info('Debilibeuk', this.group.data[key] + ' -> ' + value);
+                } else if (key === 'mankdebol') {
+                    this._notification.info('Mankdebol', this.group.data[key] + ' -> ' + value);
+                } else if (key === 'inCombat') {
+                    this._notification.info('Mode combat: ', this.group.data[key] + ' -> ' + value);
+                    if (value) {
+                        this._actionService.emitAction('onStartCombat', this.group);
+                    }
+                    else {
+                        this._actionService.emitAction('onStopCombat', this.group);
+                    }
+                } else if (key === 'date') {
+                    this._notification.info('Date', 'Date changé');
+                    this._actionService.emitAction('dateChanged', this.group);
+                }
+                this.group.data = data;
+            }
+        );
     }
 
-    endCombat() {
-        this.changeGroupValue('inCombat', false);
+    addTime(dateOffset: NhbkDateOffset) {
+        this._groupService.addTime(this.group.id, dateOffset).subscribe(
+            data => {
+                this.group.data = data;
+                this._actionService.emitAction('dateChanged', this.group);
+            }
+        );
     }
 
-    /* Players tab */
+    changeGroupLocation(location: Location) {
+        this._groupService.editGroupValue(this.group.id, 'location', location.id).subscribe(
+            () => {
+                this._notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
+                this.group.location = location;
+            }
+        );
+    }
+
+    updateLocationListAutocomplete(filter: string) {
+        return this._locationService.searchLocations(filter).map(
+            list => list.map(e => new AutocompleteValue(e, e.name))
+        );
+    }
+
+    /* Characters tab */
+
+    createNpc() {
+        this._router.navigate(['/character/create'], {queryParams: {isNpc: true, groupId: this.group.id}});
+        return false;
+    }
 
     activeAllCharacter(active: boolean) {
         for (let i = 0; i < this.characters.length; i++) {
@@ -106,31 +183,28 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         );
     }
 
-    addTime(dateOffset: NhbkDateOffset) {
-        this._groupService.addTime(this.group.id, dateOffset).subscribe(
-            data => {
-                this.group.data = data;
-                this._actionService.emitAction('dateChanged', this.group);
-            }
-        );
+    openChangeOwnershipDialog(character: Character) {
+        this.selectedCharacter = character;
+
+        this.changeOwnershipOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeOwnershipDialog);
     }
 
-    changeGroupLocation(location: Location) {
-        this._groupService.editGroupValue(this.group.id, 'location', location.id).subscribe(
-            () => {
-                this._notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
-                this.group.location = location;
-            }
-        );
+    closeChangeOwnershipDialog() {
+        this.changeOwnershipOverlayRef.detach();
     }
 
-    updateLocationListAutocomplete(filter: string) {
-        return this._locationService.searchLocations(filter).map(
-            list => list.map(e => new AutocompleteValue(e, e.name))
-        );
+    changeOwnershipConfirm() {
+        this.setOwnership(this.changeOwnershipNewOwner);
+        this.closeChangeOwnershipDialog();
     }
 
-    /* Invitation tab */
+    openInviteCharacterModal() {
+        this.inviteCharacterOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.inviteCharacterModal);
+    }
+
+    closeInviteCharacterModal() {
+        this.inviteCharacterOverlayRef.detach();
+    }
 
     updateFilteredPlayer() {
         if (!this.searchNameInvite) {
@@ -142,11 +216,6 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                 this.filteredInvitePlayers = res;
             }
         );
-    }
-
-    selectInviteCharacter(character) {
-        this.selectedInviteCharacter = character;
-        return false;
     }
 
     _removeFromInvited(character): void {
@@ -201,34 +270,18 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    createNpc() {
-        this._router.navigate(['/character/create'], {queryParams: {isNpc: true, groupId: this.group.id}});
-        return false;
+    /* Combat tab */
+
+    startCombat() {
+        this.changeGroupValue('inCombat', true);
     }
 
-    changeGroupValue(key: string, value: any) {
-        this._groupService.editGroupValue(this.group.id, key, value).subscribe(
-            data => {
-                if (key === 'debilibeuk') {
-                    this._notification.info('Debilibeuk', this.group.data[key] + ' -> ' + value);
-                } else if (key === 'mankdebol') {
-                    this._notification.info('Mankdebol', this.group.data[key] + ' -> ' + value);
-                } else if (key === 'inCombat') {
-                    this._notification.info('Mode combat: ', this.group.data[key] + ' -> ' + value);
-                    if (value) {
-                        this._actionService.emitAction('onStartCombat', this.group);
-                    }
-                    else {
-                        this._actionService.emitAction('onStopCombat', this.group);
-                    }
-                } else if (key === 'date') {
-                    this._notification.info('Date', 'Date changé');
-                    this._actionService.emitAction('dateChanged', this.group);
-                }
-                this.group.data = data;
-            }
-        );
+    endCombat() {
+        this.changeGroupValue('inCombat', false);
     }
+
+
+    /* Misc */
 
     loadGroup(id: number) {
         this._characterService.getGroup(id).subscribe(
@@ -313,12 +366,6 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         this._groupWebsocketService.unregister(this.group.id);
     }
 
-    selectTab(tab: string) {
-        this.currentTab = tab;
-        window.location.hash = tab;
-        return false;
-    }
-
     ngOnInit() {
         this._route.params.subscribe(
             params => {
@@ -328,6 +375,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         );
         this._route.fragment.subscribe(value => {
             if (value) {
+                this.currentTabIndex = this.getTabIndexFromHash(value);
                 this.currentTab = value;
             }
         });

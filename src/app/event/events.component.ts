@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 
 import {Group} from '../group/group.model';
 import {NEvent} from './event.model';
@@ -6,37 +6,34 @@ import {EventService} from './event.service';
 import {date2Timestamp} from '../date/util';
 import {GroupWebsocketService} from '../group/group.websocket.service';
 import {GroupActionService} from '../group/group-action.service';
+import {EventEditorComponent} from './event-editor.component';
 
 @Component({
     selector: 'events',
+    styleUrls: ['./events.component.scss'],
     templateUrl: './events.component.html',
 })
 export class EventsComponent implements OnInit, OnChanges {
     @Input() group: Group;
-    public showEventEditor: boolean;
     public events: NEvent[] = [];
     public groupTimestamp: number = 0;
     public pastEventCount: number = 0;
     public futureEventCount: number = 0;
+
+    @ViewChild('eventEditor')
+    private eventEditorComponent: EventEditorComponent;
 
     constructor(private  _eventService: EventService
         , private _actionService: GroupActionService
         , private _groupWebsocketService: GroupWebsocketService) {
     }
 
-    openEventEditor(): boolean {
-        this.showEventEditor = true;
-        return false;
-    }
-
-    closeEventEditor(): boolean {
-        this.showEventEditor = false;
-        return false;
+    public openAddEventDialog() {
+        this.eventEditorComponent.openDialog();
     }
 
     createEvent(event: NEvent) {
         this._eventService.createEvent(this.group.id, event).subscribe(this.onAddEvent.bind(this));
-        this.closeEventEditor();
     }
 
     deleteEvent(event: NEvent) {

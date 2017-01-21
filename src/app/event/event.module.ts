@@ -9,11 +9,13 @@ import {EventService} from './event.service';
 
 import {EventEditorComponent} from './event-editor.component';
 import {EventsComponent} from './events.component';
+import {MaterialModule} from '@angular/material';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
+        MaterialModule.forRoot(),
         SharedModule,
         DateModule
     ],

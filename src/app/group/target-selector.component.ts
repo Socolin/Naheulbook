@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
 import {Fighter} from './group.model';
+import {ConnectionPositionPair} from '@angular/material';
 
 @Component({
     selector: 'target-selector',
@@ -11,7 +12,19 @@ export class TargetSelectorComponent implements OnInit {
     @Input() targets: Fighter[];
     @Output() onTargetChange: EventEmitter<Fighter> = new EventEmitter<Fighter>();
     public showSelector: boolean = false;
-    public targetType: string = 'monster';
+    public selectedTabIndex: number;
+
+    public positions = [
+        new ConnectionPositionPair(
+            {originX: 'end', originY: 'top'},
+            {overlayX: 'end', overlayY: 'bottom'}),
+        new ConnectionPositionPair(
+            {originX: 'start', originY: 'bottom'},
+            {overlayX: 'start', overlayY: 'top'}),
+    ];
+
+    public selectorHeight: number = 0;
+    public selectorMinHeight: number = 0;
 
     hideSelector() {
         this.showSelector = false;
@@ -21,31 +34,23 @@ export class TargetSelectorComponent implements OnInit {
         this.showSelector = true;
     }
 
-    setTargetType(targetType: string): void {
-        this.targetType = targetType;
-    }
-
     selectTarget(target: Fighter) {
         this.hideSelector();
         this.onTargetChange.emit(target);
     }
 
-    isTargetShow(target: Fighter): boolean {
-        if (target.isMonster && this.targetType === 'monster') {
-            return true;
-        }
-        if (!target.isMonster && this.targetType === 'character') {
-            return true;
-        }
-        return false;
-    }
-
     ngOnInit(): void {
         if (!this.fighter.isMonster) {
-            this.setTargetType('monster');
+            this.selectedTabIndex = 0;
         }
         else {
-            this.setTargetType('character');
+            this.selectedTabIndex = 1;
         }
+        let monsterCount = this.targets.filter(a => a.isMonster).length;
+        let playerCount = this.targets.filter(a => a.isMonster).length;
+        let maxPerTab = Math.max(monsterCount, playerCount);
+        let minPerTab = Math.min(monsterCount, playerCount);
+        this.selectorMinHeight = 48 + 66 * Math.ceil(minPerTab / 6);
+        this.selectorHeight = 48 + 66 * Math.ceil(maxPerTab / 6);
     }
 }

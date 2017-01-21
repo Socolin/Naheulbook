@@ -87,7 +87,7 @@ export class EffectPanelComponent implements OnInit {
 
     }
 
-    closeAddEffectDialog(){
+    closeAddEffectDialog() {
         this.addEffectOverlayRef.detach();
     }
 
