@@ -167,6 +167,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         if (!this.itemFilterName) {
             return true;
         }
+
         let cleanFilter = removeDiacritics(this.itemFilterName).toLowerCase();
         if (removeDiacritics(item.data.name).toLowerCase().indexOf(cleanFilter) > -1) {
             return true;

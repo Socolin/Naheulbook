@@ -35,40 +35,42 @@
             <md-icon *ngIf="!iconMode" class="md-24">view_module</md-icon>
         </button>
 
-        <md-input *ngIf="selectedInventoryTab === 'all'"
-                  placeholder="Filtre"
-                  [(ngModel)]="itemFilterName"
-                  (keydown.esc)="itemFilterName = null">
+        <md-input-container *ngIf="selectedInventoryTab === 'all'">
+            <input md-input
+                      placeholder="Filtre"
+                      [(ngModel)]="itemFilterName"
+                      (keydown.esc)="itemFilterName = null">
             <span md-suffix>&nbsp;
                 <md-icon>search</md-icon>
             </span>
-        </md-input>
+        </md-input-container>
     </div>
 
     <div class="inventory">
         <div *ngIf="selectedInventoryTab === 'all'" class="inventory-content">
             <div *ngIf="!iconMode">
                 <div class="items-list">
-                    <div class="items-list-element" *ngFor="let item of character.items">
-                        <div class="item-line"
-                             [class.selected]="selectedItem && selectedItem.id === item.id"
-                             [hidden]="isItemFilteredByName(item)"
-                             (click)="selectItem(item)">
-                            <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                            <md-icon *ngIf="item.data.notIdentified">help</md-icon>
-                            <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
-                            <md-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</md-icon>
-                            <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
-                            {{item.data.name}}
+                    <template ngFor let-item [ngForOf]="character.items">
+                        <div class="items-list-element" *ngIf="isItemFilteredByName(item)">
+                            <div class="item-line"
+                                 [class.selected]="selectedItem && selectedItem.id === item.id"
+                                 (click)="selectItem(item)">
+                                <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                                <md-icon *ngIf="item.data.notIdentified">help</md-icon>
+                                <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
+                                <md-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</md-icon>
+                                <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
+                                {{item.data.name}}
+                            </div>
+                            <template [ngIf]="item === selectedItem">
+                                <swipeable-item-detail style="position: absolute; right: 0"
+                                                       [gmView]="inGroupTab"
+                                                       [character]="character"
+                                                       [item]="item">
+                                </swipeable-item-detail>
+                            </template>
                         </div>
-                        <template [ngIf]="item === selectedItem">
-                            <swipeable-item-detail style="position: absolute; right: 0"
-                                                   [gmView]="inGroupTab"
-                                                   [character]="character"
-                                                   [item]="item">
-                            </swipeable-item-detail>
-                        </template>
-                    </div>
+                    </template>
                 </div>
             </div>
             <div *ngIf="iconMode">
@@ -76,7 +78,7 @@
                     <div class="item-icon"
                          [class.selected]="item === selectedItem"
                          (click)="selectItem(item)"
-                         [hidden]="!isItemFilteredByName(item)">
+                         *ngIf="!isItemFilteredByName(item)">
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                     </div>
                     <template [ngIf]="item === selectedItem">
@@ -106,7 +108,6 @@
                         <div class="items-list-element">
                             <div class="item-line"
                                  [class.selected]="selectedItem && selectedItem.id === item.id"
-                                 [hidden]="isItemFilteredByName(item)"
                                  (click)="selectItem(item)">
                                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                                 <md-icon *ngIf="item.data.notIdentified">help</md-icon>
