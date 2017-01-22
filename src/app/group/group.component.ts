@@ -1,4 +1,7 @@
-import {Component, OnInit, OnChanges, SimpleChanges, OnDestroy, ViewChild} from '@angular/core';
+import {
+    Component, OnInit, OnChanges, SimpleChanges, OnDestroy, ViewChild, QueryList,
+    ViewChildren
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 
@@ -15,7 +18,7 @@ import {NhbkDateOffset} from '../date';
 import {GroupActionService} from './group-action.service';
 import {GroupData} from './group.model';
 import {GroupWebsocketService} from './group.websocket.service';
-import {MdTabChangeEvent, OverlayRef, Portal, Overlay, OverlayState} from '@angular/material';
+import {MdTabChangeEvent, OverlayRef, Portal, Overlay, OverlayState, TemplatePortalDirective} from '@angular/material';
 import {User} from '../user/user.model';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
@@ -40,6 +43,10 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
 
     public autocompleteLocationsCallback: Function;
 
+    @ViewChildren('characters')
+    public characterSheetsDialog: QueryList<TemplatePortalDirective>;
+    private characterSheetOverlayRef: OverlayRef;
+
     @ViewChild('changeOwnershipDialog')
     public changeOwnershipDialog: Portal<any>;
     public changeOwnershipOverlayRef: OverlayRef;
@@ -62,6 +69,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         , private _locationService: LocationService
         , private _notification: NotificationsService
         , private _actionService: GroupActionService
+        , private _overlay: Overlay
         , private _nhbkDialogService: NhbkDialogService
         , private _groupWebsocketService: GroupWebsocketService
         , private _characterService: CharacterService) {
@@ -137,6 +145,37 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /* Characters tab */
+
+    displayCharacterSheet(character: Character) {
+        let characterSheetDialog = this.characterSheetsDialog.toArray();
+        let index = 0;
+        for (let i = 0; i < this.characters.length; i++) {
+            if (this.characters[i] === character) {
+                break;
+            }
+            if (this.characters[i].active) {
+                index++;
+            }
+        }
+        if (index < characterSheetDialog.length) {
+            let config = new OverlayState();
+
+            config.positionStrategy = this._overlay.position()
+                .global()
+                .top('5vh')
+                .centerHorizontally();
+            config.hasBackdrop = true;
+
+            let overlayRef = this._overlay.create(config);
+            overlayRef.attach(characterSheetDialog[index]);
+            overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+            this.characterSheetOverlayRef = overlayRef;
+        }
+    }
+
+    closeCharacterSheet() {
+        this.characterSheetOverlayRef.detach()
+    }
 
     createNpc() {
         this._router.navigate(['/character/create'], {queryParams: {isNpc: true, groupId: this.group.id}});
@@ -367,6 +406,11 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit() {
+        this._actionService.registerAction('displayCharacterSheet').subscribe(
+            data => {
+                this.displayCharacterSheet(data.data);
+            });
+
         this._route.params.subscribe(
             params => {
                 let id = +params['id'];

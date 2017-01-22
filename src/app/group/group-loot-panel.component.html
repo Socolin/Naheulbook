@@ -2,7 +2,7 @@
     <input type="text" [(ngModel)]="newLootName"/>
     <button md-button class="btn btn-success" (click)="createLoot()" [disabled]="!newLootName">Creer</button>
 </div>
-
+FIXME
 <div class="loot-list">
     <md-card *ngFor="let loot of loots" [class.panel-success]="loot.visibleForPlayer">
         <md-toolbar>

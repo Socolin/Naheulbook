@@ -78,6 +78,10 @@
                                     </button>
                                     <md-menu x-position="before" #characterActions="mdMenu">
                                         <button md-menu-item
+                                                (click)="displayCharacterSheet(character)">
+                                            Voir la fiche
+                                        </button>
+                                        <button md-menu-item
                                                 *ngIf="character.user && character.user !==  _loginService.loggedUser.id"
                                                 (click)="takeOwnership(character)">
                                             Devenir propriétaire
@@ -246,17 +250,22 @@
     </md-tab-group>
 </div>
 
-<div class="row" *ngIf="group" [hidden]="currentPanel">
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <template ngFor let-character [ngForOf]="characters">
-            <div *ngIf="character.active" role="tabpanel"
-                 [class.active]="currentTab === 'character_' + character.id"
-                 class="list-group tab-pane" id="character_{{character.id}}">
-                <character *ngIf=false [character]="character"></character>
+<div *ngIf="group">
+    <template ngFor let-character [ngForOf]="characters">
+        <template *ngIf="character.active" #characters="cdkPortal" cdk-portal>
+            <div class="character-sheet">
+                <md-card>
+                    <md-card-title>
+                        {{character.name}}
+                        <button md-button color="primary" (click)="closeCharacterSheet()">FERMER</button>
+                    </md-card-title>
+                    <md-card-content>
+                        <character [character]="character"></character>
+                    </md-card-content>
+                </md-card>
             </div>
         </template>
-    </div>
+    </template>
 </div>
 
 

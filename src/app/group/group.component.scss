@@ -12,6 +12,20 @@
     }
 }
 
+.character-sheet {
+    height: 90vh;
+    width: 90vw;
+    overflow-y: auto;
+    md-card {
+        min-height: 100%;
+        margin: 5px;
+        md-card-title {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}
+
 .info-tab {
     md-card {
         margin-bottom: 5px;

@@ -162,6 +162,10 @@
 
         <md-menu #menuCharacter="mdMenu">
             <button md-menu-item
+                    (click)="displayCharacterSheet(fighter.character)">
+                Voir la fiche
+            </button>
+            <button md-menu-item
                     (click)=addItemTo(fighter.character)>
                 Ajouter un objet
             </button>
