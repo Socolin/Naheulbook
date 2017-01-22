@@ -269,6 +269,7 @@
                 <template [ngIf]="item.container">
                     Dans: {{item.containerInfo.name}}
                     <button md-button
+                            *ngIf="!item.content?.length"
                             color="primary"
                             (click)="_itemActionService.onAction('move_to_container', item, {container: null})">
                         Retirer
@@ -294,13 +295,13 @@
         <span *ngIf="item.template.slots?.length > 0">
             <button md-button
                     [color]="'primary'"
-                    *ngIf="!item.data.equiped"
+                    *ngIf="!item.data.equiped && !item.content?.length"
                     (click)="_itemActionService.onAction('equip', item)">
                 ÉQUIPER
             </button>
             <button md-button
                     [color]="'primary'"
-                    *ngIf="item.data.equiped"
+                    *ngIf="item.data.equiped && !item.content?.length"
                     (click)="_itemActionService.onAction('unequip', item)">
                 DÉSÉQUIPER
             </button>
