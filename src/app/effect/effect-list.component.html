@@ -21,7 +21,7 @@
             <md-card-content>
                 <span *ngFor="let modifier of effect.modifiers">{{modifier | modifier}} </span>
                 <span *ngIf="effect.duration" fxLayout="row" fxLayoutAlign="start center">
-                    <!--<span class="game-icon game-icon-hourglass font-20px"></span>-->
+                    <span class="game-icon game-icon-hourglass font-20px"></span>
                     {{effect.duration}}
                 </span>
                 <span *ngIf="effect.timeDuration" fxLayout="row" fxLayoutAlign="start center">

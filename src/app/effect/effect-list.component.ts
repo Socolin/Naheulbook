@@ -74,6 +74,9 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.sub = this._router.routerState.root.queryParams.subscribe(params => {
                     let id = +params['id'];
+                    if (!id) {
+                        id = this.categories[0].id;
+                    }
                     this.loadCategory(id);
                     for (let i = 0; i < this.categories.length; i++) {
                         if (this.categories[i].id === id) {
