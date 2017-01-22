@@ -120,9 +120,10 @@
                         <h4>Durée</h4>
                         <md-button-toggle-group name="alignment" [(ngModel)]="newEffectDurationType">
                             <md-button-toggle value="combat">Nombre de combat</md-button-toggle>
+                            <md-button-toggle value="lap">Nombre de tour</md-button-toggle>
                             <md-button-toggle value="time">Temps</md-button-toggle>
                             <md-button-toggle value="custom">Autre</md-button-toggle>
-                            <md-button-toggle value="forever">Toujours</md-button-toggle>
+                            <md-button-toggle value="forever">Permanent</md-button-toggle>
                         </md-button-toggle-group>
 
                         <div *ngIf="newEffectDurationType === 'custom'">
@@ -150,6 +151,12 @@
                                 <span md-suffix> combat(s)</span>
                             </md-input-container>
                         </div>
+                        <div *ngIf="newEffectDurationType === 'lap'">
+                            <md-input-container align="end">
+                                <input md-input type="number" min=0 placeholder="Durée" [(ngModel)]="newEffectLapCount">
+                                <span md-suffix> tour(s)</span>
+                            </md-input-container>
+                        </div>
                     </div>
                 </md-tab>
 
@@ -165,7 +172,7 @@
                                 <md-button-toggle value="lap">Nombre de tours</md-button-toggle>
                                 <md-button-toggle value="time">Temps</md-button-toggle>
                                 <md-button-toggle value="custom">Autre</md-button-toggle>
-                                <md-button-toggle value="forever">Toujours</md-button-toggle>
+                                <md-button-toggle value="forever">Permanent</md-button-toggle>
                             </md-button-toggle-group>
 
                             <div class="form-group">

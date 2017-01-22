@@ -1,18 +1,42 @@
 import {Injectable} from '@angular/core';
 import {Notification} from './notification.model';
+import {MdSnackBar, MdSnackBarConfig} from '@angular/material';
 
 @Injectable()
 export class NotificationsService {
     public notifications: Notification[] = [];
 
-    constructor() {
+    constructor(private _snackBar: MdSnackBar) {
     }
 
     addNotification(n: Notification) {
         this.notifications.push(n);
-        setTimeout(() => {
-            this.update();
-        }, 5100);
+        if (this.notifications.length === 1) {
+            let config = new MdSnackBarConfig();
+            config.duration = 2500;
+            this._snackBar.open(n.title + ' ' + n.message, null, config).afterDismissed().subscribe(
+                () => {
+                    this.notifications.pop();
+                    this.proceedNextNotification();
+                }
+            );
+        }
+    }
+
+    proceedNextNotification() {
+        if (this.notifications.length === 0) {
+            return;
+        }
+
+        let n = this.notifications[0];
+        let config = new MdSnackBarConfig();
+        config.duration = 2500;
+        this._snackBar.open(n.title + ' ' + n.message, null, config).afterDismissed().subscribe(
+            () => {
+                this.notifications.pop();
+                this.proceedNextNotification();
+            }
+        );
     }
 
     error(title: string, message: string, err?: any, data?: any) {

@@ -28,8 +28,14 @@ export class EffectEditorComponent implements OnInit, OnChanges {
             else if (this.effect.timeDuration) {
                 this.effectDurationType = 'time';
             }
-            else {
+            else if (this.effect.lapCount) {
+                this.effectDurationType = 'lap';
+            }
+            else if (this.effect.duration) {
                 this.effectDurationType = 'custom';
+            }
+            else {
+                this.effectDurationType = 'forever';
             }
         }
     }
@@ -51,9 +57,15 @@ export class EffectEditorComponent implements OnInit, OnChanges {
             this.effect.duration = null;
             this.effect.lapCount = null;
         }
-        else if (type === 'custom' || type === 'forever') {
+        else if (type === 'custom') {
             this.effect.combatCount = null;
             this.effect.timeDuration = null;
+            this.effect.lapCount = null;
+        }
+        else if (type === 'forever') {
+            this.effect.combatCount = null;
+            this.effect.timeDuration = null;
+            this.effect.duration = null;
             this.effect.lapCount = null;
         }
         else {

@@ -54,6 +54,7 @@ export class EffectPanelComponent implements OnInit {
     public newEffectDuration: string = null;
     public newEffectTimeDurationDate: NhbkDateOffset = new NhbkDateOffset();
     public newEffectCombatCount: number = null;
+    public newEffectLapCount: number = null;
 
     public effectFilterName: string;
     public newEffectDurationType: string = 'custom';
@@ -110,18 +111,35 @@ export class EffectPanelComponent implements OnInit {
                 this.newEffectTimeDuration = null;
                 this.newEffectDuration = null;
                 this.newEffectCombatCount = effect.combatCount;
+                this.newEffectLapCount = null;
             }
             else if (effect.timeDuration) {
                 this.newEffectDurationType = 'time';
                 this.newEffectTimeDuration = effect.timeDuration;
                 this.newEffectDuration = null;
                 this.newEffectCombatCount = null;
+                this.newEffectLapCount = null;
+            }
+            else if (effect.lapCount) {
+                this.newEffectDurationType = 'lap';
+                this.newEffectTimeDuration = null;
+                this.newEffectDuration = null;
+                this.newEffectCombatCount = null;
+                this.newEffectLapCount = effect.lapCount;
+            }
+            else if (effect.duration) {
+                this.newEffectDurationType = 'lap';
+                this.newEffectTimeDuration = null;
+                this.newEffectDuration = effect.duration;
+                this.newEffectCombatCount = null;
+                this.newEffectLapCount = null;
             }
             else {
-                this.newEffectDurationType = 'custom';
+                this.newEffectDurationType = 'forever';
                 this.newEffectTimeDuration = null;
                 this.newEffectDuration = '';
                 this.newEffectCombatCount = null;
+                this.newEffectLapCount = null;
             }
         }
     }
@@ -143,8 +161,13 @@ export class EffectPanelComponent implements OnInit {
             else if (this.newEffectDurationType === 'time') {
                 data['timeDuration'] = this.newEffectTimeDuration;
             }
+            else if (this.newEffectDurationType === 'lap') {
+                data['lapCount'] = this.newEffectLapCount;
+            }
             else if (this.newEffectDurationType === 'custom') {
                 data['duration'] = this.newEffectDuration;
+            }
+            else if (this.newEffectDurationType === 'forever') {
             }
         }
         this._characterService.addEffect(this.character.id, effect.id, data).subscribe(

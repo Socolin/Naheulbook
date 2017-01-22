@@ -16,10 +16,11 @@ import {MdTabChangeEvent} from "@angular/material";
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputCategoryId: number = 1;
 
-    private categories: EffectCategory[];
-    private effects: {[categoryId: number]: Effect[]} = {};
-    private editable: boolean = false;
-    private sub: Subscription;
+    public categories: EffectCategory[];
+    public effects: {[categoryId: number]: Effect[]} = {};
+    public editable: boolean = false;
+    public sub: Subscription;
+    public currentTabIndex: number = 0;
 
     constructor(private _router: Router
         , private _route: ActivatedRoute
@@ -33,6 +34,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
 
     selectChange(changeEvent: MdTabChangeEvent) {
         this.selectCategory(this.categories[changeEvent.index]);
+        this.currentTabIndex = changeEvent.index;
     }
 
     selectCategory(category: EffectCategory): boolean {
@@ -73,6 +75,12 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
                 this.sub = this._router.routerState.root.queryParams.subscribe(params => {
                     let id = +params['id'];
                     this.loadCategory(id);
+                    for (let i = 0; i < this.categories.length; i++) {
+                        if (this.categories[i].id === id) {
+                            this.currentTabIndex = i;
+                            break;
+                        }
+                    }
                 });
             }
         });

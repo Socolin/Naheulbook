@@ -1,4 +1,4 @@
-<md-tab-group (selectChange)="selectChange($event)">
+<md-tab-group (selectChange)="selectChange($event)" [selectedIndex]="currentTabIndex">
     <template ngFor let-category [ngForOf]="categories">
     <md-tab [label]="category.name">
         <template ngFor [ngForOf]="effects[category.id]" let-effect>
@@ -21,7 +21,7 @@
             <md-card-content>
                 <span *ngFor="let modifier of effect.modifiers">{{modifier | modifier}} </span>
                 <span *ngIf="effect.duration" fxLayout="row" fxLayoutAlign="start center">
-                    <span class="game-icon game-icon-hourglass font-20px"></span>
+                    <!--<span class="game-icon game-icon-hourglass font-20px"></span>-->
                     {{effect.duration}}
                 </span>
                 <span *ngIf="effect.timeDuration" fxLayout="row" fxLayoutAlign="start center">
@@ -35,6 +35,10 @@
                 <span *ngIf="effect.lapCount" fxLayout="row" fxLayoutAlign="start center">
                     <span class="game-icon game-icon-hourglass font-20px"></span>
                     {{effect.lapCount}} tours
+                </span>
+                <span *ngIf="!effect.lapCount && !effect.combatCount && !effect.timeDuration && !effect.duration" fxLayout="row" fxLayoutAlign="start center">
+                    <span class="game-icon game-icon-hourglass font-20px"></span>
+                    permanent
                 </span>
             </md-card-content>
         </md-card>

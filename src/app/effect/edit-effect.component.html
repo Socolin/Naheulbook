@@ -1,6 +1,14 @@
-<effect-editor [(effect)]="effect"></effect-editor>
-<div class="form-horizontal">
-	<div class="form-group">
-		<button class="col-sm-12 btn btn-primary" (click)="edit()" [disabled]="saving">Editer</button>
-	</div>
-</div>
+<md-card>
+    <md-card-title>Modification de l'effet: {{effect.name}}</md-card-title>
+    <md-card-content>
+        <effect-editor [(effect)]="effect"></effect-editor>
+    </md-card-content>
+    <md-card-actions align="end">
+        <button md-button
+                color="primary"
+                (click)="edit()"
+                [disabled]="saving">
+            ÉDITER
+        </button>
+    </md-card-actions>
+</md-card>
