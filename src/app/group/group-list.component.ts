@@ -7,7 +7,8 @@ import {CharacterService} from '../character/character.service';
 import {Group} from './group.model';
 
 @Component({
-    templateUrl: './group-list.component.html'
+    templateUrl: './group-list.component.html',
+    styleUrls: ['./group-list.component.scss']
 })
 export class GroupListComponent implements OnInit {
     public groups: Object[];
@@ -29,7 +30,7 @@ export class GroupListComponent implements OnInit {
             },
             err => {
                 console.log(err);
-                this._notification.error("Erreur", "Erreur serveur");
+                this._notification.error('Erreur', 'Erreur serveur');
             }
         );
     }

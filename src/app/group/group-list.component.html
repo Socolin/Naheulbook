@@ -1,9 +1,7 @@
 <div class="groups">
-	<div *ngIf="!groups || groups.length == 0">Vous ne possedez aucun groupe.</div>
-	<div class="list-group">
-		<a href="#" *ngFor="let group of groups" (click)="selectGroup(group)" class="list-group-item">
-			<h4 class="list-group-item-heading">{{group.name}}</h4>
-			<p class="list-group-item-text">{{group.characterCount}} joueurs</p>
-		</a>
-	</div>
+    <div *ngIf="!groups || groups.length == 0">Vous ne possédez aucun groupe.</div>
+    <md-card *ngFor="let group of groups" (click)="selectGroup(group)">
+        <md-card-title>{{group.name}}</md-card-title>
+        <md-card-subtitle>{{group.characterCount}} joueurs</md-card-subtitle>
+    </md-card>
 </div>

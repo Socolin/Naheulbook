@@ -1,5 +1,16 @@
 <md-sidenav-container style="min-height: 100vh">
     <md-sidenav #start>
+        <h4 *ngIf="loggedUser">Utilisateur</h4>
+        <login (redirect)="redirectTo($event)"></login>
+        <md-divider></md-divider>
+        <h4 *ngIf="loggedUser">Joueur</h4>
+        <md-nav-list *ngIf="loggedUser">
+            <a md-list-item [routerLink]="['/character/create']">Créer un personnage</a>
+            <a md-list-item [routerLink]="['/character/list']">Liste de vos personnages</a>
+            <a md-list-item [routerLink]="['/create-group']">Créer un groupe</a>
+            <a md-list-item [routerLink]="['/group-list']">Liste de vos groupes</a>
+        </md-nav-list>
+        <md-divider></md-divider>
         <h4>Database</h4>
         <md-nav-list>
             <a md-list-item [routerLink]="['/database/skills']">Compétences</a>
@@ -12,14 +23,6 @@
             <a md-list-item [routerLink]="['/database/monsters']">Bestiaire</a>
             <a md-list-item [routerLink]="['/database/locations']">Cartographie</a>
         </md-nav-list>
-        <hr>
-        <h4 *ngIf="loggedUser">Utilisateur</h4>
-        <md-nav-list *ngIf="loggedUser">
-            <a md-list-item [routerLink]="['/character/create']">Créer</a>
-            <a md-list-item [routerLink]="['/character/list']">Liste</a>
-            <a md-list-item [routerLink]="['/create-group']">Créer un groupe</a>
-            <a md-list-item [routerLink]="['/group-list']">Groupes</a>
-        </md-nav-list>
     </md-sidenav>
 
     <div>
@@ -29,7 +32,6 @@
             </button>
             <div class="app-toolbar">
                 <h1>Naheulbook</h1>
-                <login (redirect)="redirectTo($event)"></login>
             </div>
         </md-toolbar>
 

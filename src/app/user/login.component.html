@@ -1,6 +1,9 @@
-<button *ngIf="!user" md-button type="button" (click)="openDialog()">Login</button>
-
-<button *ngIf="user" md-button type="button" (click)=viewProfile()>
-	{{user.displayName}}
-</button>
-<button *ngIf="user" md-button type="button" (click)="logout()">Logout</button>
+<div>
+    <button style="width: 100%" *ngIf="!user" md-button type="button" (click)="openDialog()">Login</button>
+    <button style="width: 100%" *ngIf="user" md-button type="button" (click)=viewProfile()>
+        {{user.displayName}}
+    </button>
+</div>
+<div>
+    <button style="width: 100%" *ngIf="user" md-button type="button" (click)="logout()">Logout</button>
+</div>
