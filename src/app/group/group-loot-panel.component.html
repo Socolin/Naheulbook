@@ -1,8 +1,28 @@
-<div class="pull-right">
-    <input type="text" [(ngModel)]="newLootName"/>
-    <button md-button class="btn btn-success" (click)="createLoot()" [disabled]="!newLootName">Creer</button>
+<div class="buttons-header">
+    <button md-raised-button (click)="openAddLootDialog()" color="primary">NOUVEAU LOOT</button>
 </div>
-FIXME
+<template #addLootDialog="cdkPortal" cdk-portal>
+    <md-card>
+        <md-card-title>Ajouter un loot</md-card-title>
+        <md-card-content>
+            <md-input type="text" placeholder="Nom du loot" [(ngModel)]="newLootName"></md-input>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button
+                    color="primary"
+                    (click)="closeAddLootDialog()">
+                FERMER
+            </button>
+            <button md-button
+                    color="primary"
+                    (click)="createLoot()"
+                    [disabled]="!newLootName">
+                CREER
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>
+
 <div class="loot-list">
     <md-card *ngFor="let loot of loots" [class.panel-success]="loot.visibleForPlayer">
         <md-toolbar>
@@ -12,18 +32,26 @@ FIXME
             <span *ngIf="loot.computedXp">XP: {{loot.computedXp}}</span>
             <span class="padding"></span>
 
-            <button md-raised-button (click)="createItemDialog.openDialogForLoot(loot)">Ajouter item</button>
-            <button md-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">Ajouter item inutile</button>
-            <button md-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">Ajouter ingredient magique</button>
+            <button md-raised-button (click)="createItemDialog.openDialogForLoot(loot)">
+                Ajouter item
+            </button>
+            <button md-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">
+                Ajouter item inutile
+            </button>
+            <button md-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">
+                Ajouter ingredient magique
+            </button>
 
             <span class="padding"></span>
 
 
             <button md-icon-button *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">
-                <md-icon fontSet="game-icon" fontIcon="game-icon-locked-chest" class="ra-md-button-icon-32"></md-icon>
+                <md-icon fontSet="game-icon" fontIcon="game-icon-locked-chest" class="ra-md-button-icon-32">
+                </md-icon>
             </button>
             <button md-icon-button *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">
-                <md-icon fontSet="game-icon" fontIcon="game-icon-open-treasure-chest" class="ra-md-button-icon-32"></md-icon>
+                <md-icon fontSet="game-icon" fontIcon="game-icon-open-treasure-chest" class="ra-md-button-icon-32">
+                </md-icon>
             </button>
             <button md-icon-button [mdMenuTriggerFor]="menuLoot" aria-label="Open basic menu">
                 <md-icon>more_vert</md-icon>
@@ -51,9 +79,15 @@ FIXME
             <ul>
                 <li *ngFor="let monster of loot.monsters">
                     {{monster.name}}
-                    <button md-raised-button (click)="createItemDialog.openDialogForLootMonster(loot, monster)">Ajouter item</button>
-                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(loot, monster, 'USELESS_ITEM')">Ajouter item inutile</button>
-                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(loot, monster, 'MAGICAL_INGREDIENT')">Ajouter ingredient magique</button>
+                    <button md-raised-button (click)="createItemDialog.openDialogForLootMonster(loot, monster)">
+                        Ajouter item
+                    </button>
+                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(loot, monster, 'USELESS_ITEM')">
+                        Ajouter item inutile
+                    </button>
+                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(loot, monster, 'MAGICAL_INGREDIENT')">
+                        Ajouter ingredient magique
+                    </button>
                     <ul>
                         <li *ngFor="let item of monster.items">
                             <button md-icon-button (click)="removeItemFromMonster(monster, item)">

@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {OverlayRef, Portal} from '@angular/material';
 
 import {NotificationsService} from '../notifications/notifications.service';
 
@@ -11,6 +12,7 @@ import {LootPanelComponent} from '../loot/loot-panel.component';
 import {LootWebsocketService} from '../loot/loot.websocket.service';
 import {Loot} from '../loot/loot.model';
 import {Monster} from '../monster/monster.model';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
     selector: 'group-loot-panel',
@@ -22,12 +24,25 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     @Input() group: Group;
     public newLootName: string;
 
+    @ViewChild('addLootDialog')
+    public addLootDialog: Portal<any>;
+    public addLootOverlayRef: OverlayRef;
+
     constructor(private lootWebsocketService: LootWebsocketService
         , private notification: NotificationsService
         , private _groupService: GroupService
+        , private _nhbkDialogService: NhbkDialogService
         , private _groupWebsocketService: GroupWebsocketService
         , private _itemService: ItemService) {
         super(lootWebsocketService, notification);
+    }
+
+    openAddLootDialog() {
+        this.addLootOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addLootDialog);
+    }
+
+    closeAddLootDialog() {
+        this.addLootOverlayRef.detach();
     }
 
     createLoot() {
