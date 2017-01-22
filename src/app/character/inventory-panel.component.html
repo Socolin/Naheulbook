@@ -1,4 +1,4 @@
-<md-card>
+<md-card class="inventory-card">
     <md-toolbar color="primary">
         <span>Inventaire</span>
         <button md-mini-fab color=accent (click)="openAddItemModal()">
@@ -78,7 +78,7 @@
                     <div class="item-icon"
                          [class.selected]="item === selectedItem"
                          (click)="selectItem(item)"
-                         *ngIf="!isItemFilteredByName(item)">
+                         *ngIf="isItemFilteredByName(item)">
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                     </div>
                     <template [ngIf]="item === selectedItem">

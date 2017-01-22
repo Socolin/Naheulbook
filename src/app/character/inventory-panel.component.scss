@@ -28,10 +28,6 @@ md-card {
             margin-left: 10px;
             flex: 1 auto;
         }
-
-        md-button-toggle-group {
-            margin-bottom: 2px;
-        }
     }
 
     .inventory-content {
@@ -105,4 +101,8 @@ md-card {
     .item-detail {
         display: none;
     }
+}
+
+.inventory-card {
+    padding: 0;
 }
