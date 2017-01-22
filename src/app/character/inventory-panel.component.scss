@@ -13,7 +13,16 @@ md-card {
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
-        height: 60px;
+
+        md-button-toggle-group {
+            margin-bottom: 12px;
+            margin-top: 12px;
+        }
+
+        button[md-raised-button] {
+            margin-bottom: 12px;
+            margin-top: 12px;
+        }
 
         md-input {
             margin-left: 10px;
