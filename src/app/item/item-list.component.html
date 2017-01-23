@@ -1,23 +1,23 @@
-<ul class="nav nav-pills">
+<md-chip-list selectable="true">
     <template ngFor let-section [ngForOf]="itemSections">
-        <li role="presentation"
-            (click)="selectSection($event, section)"
-            [class.active]="selectedSection && selectedSection.id == section.id">
-            <a href="#">{{section.name}}</a>
-        </li>
+        <md-chip (click)="selectSection($event, section)"
+                 [selected]="selectedSection && selectedSection.id == section.id"
+                 color="primary">
+            {{section.name}}
+        </md-chip>
     </template>
-</ul>
+</md-chip-list>
 
 <div *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
     <div class="panel-body" [innerHTML]="selectedSection.note|textFormatter">
     </div>
 </div>
 
-<div clas="row">
+<div>
     <div *ngIf="hasSpecial('DICE_DROP')" class="cold-md-2">
         <input class="input-lg form-control" placeholder="dice" [(ngModel)]="filter.dice" type=number min=1 max=100>
     </div>
-    <input class="input-lg form-control" placeholder="Filtre" [(ngModel)]="filter.name" type="text">
+    <md-input placeholder="Filtre" [(ngModel)]="filter.name" type="text"></md-input>
 </div>
 <template ngFor let-category [ngForOf]="selectedSection?.categories">
     <div *ngIf="itemsByCategory && isItemVisibleInList(itemsByCategory[category.id])">

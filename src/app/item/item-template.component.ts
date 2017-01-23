@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 
 @Component({
     selector: 'item-template',
+    styleUrls: ['./item-template.component.scss'],
     templateUrl: './item-template.component.html',
 })
 export class ItemTemplateComponent {

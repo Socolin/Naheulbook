@@ -16,7 +16,7 @@ export class NotificationsService {
             config.duration = 2500;
             this._snackBar.open(n.title + ' ' + n.message, null, config).afterDismissed().subscribe(
                 () => {
-                    this.notifications.pop();
+                    this.notifications.shift();
                     this.proceedNextNotification();
                 }
             );
@@ -33,7 +33,7 @@ export class NotificationsService {
         config.duration = 2500;
         this._snackBar.open(n.title + ' ' + n.message, null, config).afterDismissed().subscribe(
             () => {
-                this.notifications.pop();
+                this.notifications.shift();
                 this.proceedNextNotification();
             }
         );

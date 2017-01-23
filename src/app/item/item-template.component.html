@@ -1,17 +1,19 @@
-<div>
-    <div class="row">
-        <div class="col-xs-12">
-            <h4>
-                <span *ngIf="editable" (click)=editItem(item)><span class="glyphicon glyphicon-edit pull-right"></span></span>
-                <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                {{item.name}}
-                <span *ngIf="item.data.requireLevel" class="label label-info">Niveau {{item.data.requireLevel}}</span>
-                <span *ngIf="item.data.relic" class="label label-info">Relique</span>
-                <span *ngIf="item.data.sex == 'h'" class="label label-info">Homme uniq.</span>
-                <span *ngIf="item.data.sex == 'f'" class="label label-info">Femme uniq.</span>
-            </h4>
-        </div>
-    </div>
+<md-card>
+    <md-card-header>
+        <icon md-card-avatar [icon]="item.data.icon" [size]="'32px'"></icon>
+        <md-card-title>
+            {{item.name}}
+        </md-card-title>
+        <md-card-subtitle>
+            <span *ngIf="item.data.requireLevel">Niveau {{item.data.requireLevel}} </span>
+            <span *ngIf="item.data.relic">Relique </span>
+            <span *ngIf="item.data.sex == 'h'">Homme uniq. </span>
+            <span *ngIf="item.data.sex == 'f'">Femme uniq. </span>
+        </md-card-subtitle>
+        <span class="padding"></span>
+        <button md-icon-button color="primary" *ngIf="editable" (click)=editItem(item)><md-icon>edit</md-icon></button>
+    </md-card-header>
+
     <!-- Dice drop -->
     <div *ngIf="item.data.diceDrop">
         <span class="ra ra-perspective-dice-random ra-lg">{{item.data.diceDrop}}</span>
@@ -19,35 +21,35 @@
 
     <!-- Throwable -->
     <div *ngIf="item.data.throwable">
-        <span class="label label-primary">Arme prévue pour le jet</span>
+        <span>Arme prévue pour le jet</span>
     </div>
 
     <!-- Slots -->
     <div *ngIf="item.slots?.length > 0">
-        <span class="item-section">
+        <span>
             Slot:
         </span>
         <template ngFor let-slot [ngForOf]="item.slots">
-            <span class="label label-primary">{{slot.name}}</span>
+            <span>{{slot.name}}</span>
         </template>
     </div>
 
     <!-- Description -->
     <div *ngIf="item.data.description">
-        <span class="item-section">Description:</span>
+        <span>Description:</span>
         {{item.data.description}}
     </div>
 
 
     <!-- Note -->
     <div *ngIf="item.data.note">
-        <span class="item-section">Note:</span>
+        <span>Note:</span>
         {{item.data.note}}
     </div>
 
     <!-- Encombrement -->
     <div *ngIf="item.data.space">
-        <span class="item-section">
+        <span>
             Encombrement:
         </span>
         {{item.data.space}}
@@ -55,7 +57,7 @@
 
     <!-- Possibilités de récolte -->
     <div *ngIf="item.data.availableLocation">
-        <span class="item-section">
+        <span>
             Possibilités de récolte:
         </span>
         {{item.data.availableLocation}}
@@ -64,7 +66,7 @@
     <!-- Prix/Charge/Durée -->
     <div>
         <div *ngIf="item.data.price">
-            <span class="item-section">Prix:</span>
+            <span>Prix:</span>
             <template [ngIf]="item.data.price >= 1">
                 {{item.data.price | number}} P.O.
             </template>
@@ -78,17 +80,17 @@
             </template>
         </div>
         <div *ngIf="item.data.duration">
-            <span class="item-section">Durée:</span>
+            <span>Durée:</span>
             {{item.data.duration}}
         </div>
         <div *ngIf="item.data.charge">
-            <span class="item-section">Charge:</span>
+            <span>Charge:</span>
             {{item.data.charge}}
         </div>
     </div>
 
     <div *ngIf="item.data.weight">
-        <span class="item-section">
+        <span>
             Poid:
         </span>
         <span *ngIf="item.data.weight < 1">{{(item.data.weight * 1000)}}g</span>
@@ -157,7 +159,7 @@
     <template ngFor let-requirement [ngForOf]="item.requirements">
         <div>
             <span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
-            <span *ngIf="requirement.Max">Max {{requirement.stat}}: {{requirement.max}}</span>
+            <span *ngIf="requirement.max">Max {{requirement.stat}}: {{requirement.max}}</span>
         </div>
     </template>
-</div>
+</md-card>

@@ -8,12 +8,20 @@ import {DateModule} from '../date/date.module';
 
 import {ItemService} from './item.service';
 import {ItemTemplateComponent} from './item-template.component';
-import {CreateItemComponent, EditItemComponent, ItemEditorComponent, ItemListComponent} from './';
+import {
+    CreateItemComponent,
+    EditItemComponent,
+    ItemListComponent,
+    ItemTemplateEditorComponent,
+    ItemTemplateEditorModuleComponent
+} from './';
+import {MaterialModule} from '@angular/material';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
+        MaterialModule.forRoot(),
         SharedModule,
         SkillModule,
         DateModule,
@@ -21,9 +29,10 @@ import {CreateItemComponent, EditItemComponent, ItemEditorComponent, ItemListCom
     declarations: [
         CreateItemComponent,
         EditItemComponent,
-        ItemEditorComponent,
+        ItemTemplateEditorComponent,
         ItemListComponent,
         ItemTemplateComponent,
+        ItemTemplateEditorModuleComponent,
     ],
     exports: [
         ItemListComponent,
