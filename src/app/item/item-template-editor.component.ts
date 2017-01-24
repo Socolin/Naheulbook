@@ -10,6 +10,7 @@ import {OriginService} from '../origin/origin.service';
 import {NhbkDateOffset} from '../date/date.model';
 import {dateOffset2TimeDuration} from '../date/util';
 import {isNullOrUndefined} from 'util';
+import {AutocompleteValue} from '../shared/autocomplete-input.component';
 
 @Component({
     selector: 'item-template-editor',
@@ -29,11 +30,36 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     public originsName: { [originId: number]: string };
     public jobsName: { [jobId: number]: string };
 
-    public lifetimeDateOffset: NhbkDateOffset = new NhbkDateOffset();
     public selectedSection: ItemSection;
     public form: { levels: number[], protection: number[], damage: number[], dices: number[] };
 
     public filteredEffects: Effect[];
+
+    public autocompleteModuleCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteModule.bind(this);
+    public newModuleName: string;
+
+    private modulesDef: any[] = [
+        {name: 'charge'},
+        {name: 'container'},
+        {name: 'damage'},
+        {name: 'diceDrop'},
+        {name: 'gem'},
+        {name: 'level'},
+        {name: 'lifetime'},
+        {name: 'modifiers'},
+        {name: 'prereq'},
+        {name: 'protection'},
+        {name: 'quantifiable'},
+        {name: 'relic'},
+        {name: 'rupture'},
+        {name: 'sex'},
+        {name: 'skill'},
+        {name: 'skillBook'},
+        {name: 'slots'},
+        {name: 'throwable'},
+        {name: 'weight'}
+    ];
+
 
     constructor(private _itemService: ItemService
         , private _effectService: EffectService
@@ -49,72 +75,14 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         };
     }
 
-    addSkill(skillId: number) {
-        let skill = this.skillsById[skillId];
-        if (!this.itemTemplate.skills) {
-            this.itemTemplate.skills = [];
-        }
-        this.itemTemplate.skills.push(skill);
-    }
 
-    removeSkill(skillId: number) {
-        if (this.itemTemplate.skills) {
-            for (let i = 0; i < this.itemTemplate.skills.length; i++) {
-                let skill = this.itemTemplate.skills[i];
-                if (skill.id === skillId) {
-                    this.itemTemplate.skills.splice(i, 1);
-                    break;
-                }
-            }
+    updateAutocompleteModule(filter: string) {
+        if (!filter) {
+            return Observable.of([]);
         }
-    }
-
-    addUnskill(skillId: number) {
-        let skill = this.skillsById[skillId];
-        if (!this.itemTemplate.unskills) {
-            this.itemTemplate.unskills = [];
-        }
-        this.itemTemplate.unskills.push(skill);
-    }
-
-    removeUnskill(skillId: number) {
-        if (this.itemTemplate.unskills) {
-            for (let i = 0; i < this.itemTemplate.unskills.length; i++) {
-                let skill = this.itemTemplate.unskills[i];
-                if (skill.id === skillId) {
-                    this.itemTemplate.unskills.splice(i, 1);
-                    break;
-                }
-            }
-        }
-    }
-
-    isInSlot(slot) {
-        if (!this.itemTemplate.slots) {
-            return false;
-        }
-        for (let i = 0; i < this.itemTemplate.slots.length; i++) {
-            if (this.itemTemplate.slots[i].id === slot.id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    toggleSlot(slot) {
-        if (!this.itemTemplate.slots) {
-            this.itemTemplate.slots = [];
-        }
-        if (this.isInSlot(slot)) {
-            for (let i = 0; i < this.itemTemplate.slots.length; i++) {
-                if (this.itemTemplate.slots[i].id === slot.id) {
-                    this.itemTemplate.slots.splice(i, 1);
-                    break;
-                }
-            }
-        } else {
-            this.itemTemplate.slots.push(slot);
-        }
+        let filtered = this.modulesDef.filter(m => m.name.indexOf(filter) !== -1 && this.modules.indexOf(m.name) === -1)
+            .map(m => new AutocompleteValue(m, m.name));
+        return Observable.of(filtered);
     }
 
     searchEffect(filterName) {
@@ -127,10 +95,6 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
     automaticNotIdentifiedName() {
         [this.itemTemplate.data.notIdentifiedName] = this.itemTemplate.name.split(' ');
-    }
-
-    setRupture(rupture) {
-        this.itemTemplate.data.rupture = rupture;
     }
 
     updateSelectedSection() {
@@ -148,43 +112,20 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
     }
 
-    setItemLifetimeDateOffset(dateOffset: NhbkDateOffset) {
-        this.itemTemplate.data.lifetime = dateOffset2TimeDuration(dateOffset);
-    }
-
-    setLifetimeType(type: string) {
-        if (type === null) {
-            this.itemTemplate.data.lifetime = null;
-            this.itemTemplate.data.lifetimeType = null;
-        } else {
-            this.itemTemplate.data.lifetimeType = type;
-            if (type === 'combat' || type === 'lap') {
-                this.itemTemplate.data.lifetime = 1;
-            }
-            else if (type === 'time') {
-                if (this.lifetimeDateOffset) {
-                    this.setItemLifetimeDateOffset(this.lifetimeDateOffset);
-                }
-                else {
-                    this.itemTemplate.data.lifetime = 0;
-                }
-            }
-            else if (type === 'custom') {
-                this.itemTemplate.data.lifetime = '';
-            }
-        }
-    }
-
     ngOnChanges(changes: SimpleChanges): void {
         if ('itemTemplate' in changes) {
             this.updateSelectedSection();
         }
     }
 
-    addModule(moduleName: string) {
-        if (this.modules.indexOf(moduleName) !== -1) {
+    addModule(module: any) {
+        if (this.modules.indexOf(module.name) !== -1) {
             return;
         }
+
+        let moduleName = module.name;
+
+        this.newModuleName = null;
 
         switch (moduleName) {
             case 'charge':
@@ -196,11 +137,18 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'damage':
                 this.itemTemplate.data.damageDice = 1;
                 break;
+            case 'diceDrop':
+                this.itemTemplate.data.diceDrop = 1;
+                break;
             case 'gem':
                 this.itemTemplate.data.useUG = true;
                 break;
             case 'level':
                 this.itemTemplate.data.requireLevel = 1;
+                break;
+            case 'lifetime':
+                this.itemTemplate.data.lifetime = 1;
+                this.itemTemplate.data.lifetimeType = 'combat';
                 break;
             case 'modifiers':
                 this.itemTemplate.modifiers = [];
@@ -210,6 +158,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 break;
             case 'protection':
                 this.itemTemplate.data.protection = 1;
+                break;
+            case 'quantifiable':
+                this.itemTemplate.data.quantifiable = true;
                 break;
             case 'relic':
                 this.itemTemplate.data.relic = true;
@@ -225,8 +176,17 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 this.itemTemplate.unskills = [];
                 this.itemTemplate.skillModifiers = [];
                 break;
+            case 'skillBook':
+                this.itemTemplate.data.skillBook = true;
+                break;
             case 'slots':
                 this.itemTemplate.slots = [];
+                break;
+            case 'throwable':
+                this.itemTemplate.data.throwable = true;
+                break;
+            case 'weight':
+                this.itemTemplate.data.weight = 1;
                 break;
         }
 
@@ -251,11 +211,18 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 this.itemTemplate.data.bonusDamage = null;
                 this.itemTemplate.data.damageType = null;
                 break;
+            case 'diceDrop':
+                this.itemTemplate.data.diceDrop = null;
+                break;
             case 'gem':
                 this.itemTemplate.data.useUG = null;
                 break;
             case 'level':
                 this.itemTemplate.data.requireLevel = null;
+                break;
+            case 'lifetime':
+                this.itemTemplate.data.lifetime = null;
+                this.itemTemplate.data.lifetimeType = null;
                 break;
             case 'modifiers':
                 this.itemTemplate.modifiers = null;
@@ -268,6 +235,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 this.itemTemplate.data.protectionAgainstMagic = null;
                 this.itemTemplate.data.magicProtection = null;
                 this.itemTemplate.data.protectionAgainstType = null;
+                break;
+            case 'quantifiable':
+                this.itemTemplate.data.quantifiable = null;
                 break;
             case 'relic':
                 this.itemTemplate.data.relic = null;
@@ -283,8 +253,17 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 this.itemTemplate.unskills = null;
                 this.itemTemplate.skillModifiers = null;
                 break;
+            case 'skillBook':
+                this.itemTemplate.data.skillBook = null;
+                break;
             case 'slots':
                 this.itemTemplate.slots = null;
+                break;
+            case 'throwable':
+                this.itemTemplate.data.throwable = null;
+                break;
+            case 'weight':
+                this.itemTemplate.data.weight = null;
                 break;
         }
 
@@ -303,11 +282,17 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (this.itemTemplate.data.damageDice || this.itemTemplate.data.bonusDamage) {
             modules.push('damage');
         }
+        if (this.itemTemplate.data.diceDrop) {
+            modules.push('diceDrop');
+        }
         if (this.itemTemplate.data.useUG) {
             modules.push('gem');
         }
         if (this.itemTemplate.data.requireLevel) {
             modules.push('level');
+        }
+        if (this.itemTemplate.data.lifetime) {
+            modules.push('lifetime');
         }
         if (this.itemTemplate.modifiers !== null && this.itemTemplate.modifiers.length) {
             modules.push('modifiers');
@@ -320,6 +305,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             || this.itemTemplate.data.magicProtection
             || this.itemTemplate.data.protectionAgainstMagic) {
             modules.push('protection');
+        }
+        if (this.itemTemplate.data.quantifiable) {
+            modules.push('quantifiable');
         }
         if (this.itemTemplate.data.relic) {
             modules.push('relic');
@@ -335,8 +323,17 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             || (this.itemTemplate.skillModifiers !== null && this.itemTemplate.skillModifiers.length)) {
             modules.push('skill');
         }
+        if (this.itemTemplate.data.skillBook) {
+            modules.push('skillBook');
+        }
         if (this.itemTemplate.slots !== null && this.itemTemplate.slots.length) {
             modules.push('slots');
+        }
+        if (this.itemTemplate.data.throwable) {
+            modules.push('throwable');
+        }
+        if (this.itemTemplate.data.weight) {
+            modules.push('weight');
         }
 
         this.modules = modules;

@@ -43,261 +43,52 @@
     </div>
 </md-card>
 
-<template ngFor let-moduleName [ngForOf]="modules">
-    <div>{{moduleName}}</div>
-</template>
+<md-card>
+    <md-card-subtitle>Section</md-card-subtitle>
+    <md-card-content class="section-list">
+        <md-radio-group [(ngModel)]="selectedSection">
+            <md-radio-button *ngFor="let section of sections" [value]="section">
+                {{section.name}}
+            </md-radio-button>
+        </md-radio-group>
+    </md-card-content>
+</md-card>
+
+<md-card *ngIf="selectedSection">
+    <md-card-subtitle>Sous section</md-card-subtitle>
+    <md-card-content>
+        <md-radio-group [(ngModel)]="itemTemplate.category">
+            <md-radio-button *ngFor="let category of selectedSection.categories" [value]="category.id">
+                {{category.name}}
+            </md-radio-button>
+        </md-radio-group>
+    </md-card-content>
+</md-card>
 
 <template ngFor let-moduleName [ngForOf]="modules">
     <item-template-editor-module [itemTemplate]="itemTemplate"
                                  [slots]="slots"
+                                 [skills]="skills"
+                                 [skillsById]="skillsById"
                                  (onDelete)="removeModule(moduleName)"
                                  [moduleName]="moduleName">
     </item-template-editor-module>
 </template>
 
-Preview
-<item-template [jobsName]="jobsName" [originsName]="originsName" [item]="itemTemplate"></item-template>
+<md-card>
+    Ajouter un module
+    <autocomplete-input [value]="newModuleName"
+                        [placeholder]="'Module'"
+                        (onSelect)="addModule($event)"
+                        [(callback)]="autocompleteModuleCallback">
+    </autocomplete-input>
+</md-card>
 
-<div>
-	<div class="form-group">
-		<label for="inputRelic" class="col-xs-8 col-sm-1 control-label">Relique</label>
-		<div class="col-xs-4 col-sm-1">
-			<input id="inputRelic" type="checkbox" [(ngModel)]="itemTemplate.data.relic" class="form-control">
-		</div>
-		<label class="col-xs-4 col-sm-1 col-md-1 control-label">Sexe</label>
-		<div class="col-xs-8 col-sm-3 col-md-2 btn-group" data-toggle="buttons">
-			<button class="btn btn-primary" (click)="itemTemplate.data.sex = null" [class.active]="!itemTemplate.data.sex">?</button>
-			<button class="btn btn-primary" (click)="itemTemplate.data.sex = 'h'" [class.active]="itemTemplate.data.sex=='h'">H</button>
-			<button class="btn btn-primary" (click)="itemTemplate.data.sex = 'f'" [class.active]="itemTemplate.data.sex=='f'">F</button>
-		</div>
-	</div>
-    <div class="form-group">
-        <label for="inputNotIdentifiedName" class="col-sm-2 control-label">Nom non identifie</label>
-        <div class="col-sm-4 col-md-5">
-            <input id="inputNotIdentifiedName" [(ngModel)]="itemTemplate.data.notIdentifiedName" type="text" class="form-control"/>
-        </div>
-        <div class="col-sm-1 col-xs-4">
-            <button class="btn btn-primary glyphicon glyphicon-refresh" (click)="automaticNotIdentifiedName()"></button>
-        </div>
-        <div class="col-sm-1 col-xs-4">
-        </div>
-        <label for="inputContainer" class="col-xs-8 col-md-1 col-sm-2 control-label">Conteneur</label>
-        <div class="col-sm-1 col-xs-4">
-            <input id="inputContainer" type="checkbox" [(ngModel)]="itemTemplate.data.container" class="form-control">
-        </div>
-    </div>
-
-	<div class="form-group">
-		<label for="inputDescription" class="col-sm-2 control-label">Description</label>
-		<div class="col-sm-4 col-md-6">
-			<input id="inputDescription" [(ngModel)]="itemTemplate.data.description" type="text" class="form-control" />
-		</div>
-		<label for="inputQuantifiable" class="col-xs-8 col-md-1 col-sm-2 control-label">Quantifiable</label>
-		<div class="col-sm-1 col-xs-4">
-			<input id="inputQuantifiable" type="checkbox" [(ngModel)]="itemTemplate.data.quantifiable" class="form-control">
-		</div>
-		<label for="inputUG" class="col-xs-8 col-md-1 col-sm-2 control-label">U.G.</label>
-		<div class="col-sm-1 col-xs-4">
-			<input id="inputUG" type="checkbox" [(ngModel)]="itemTemplate.data.useUG" class="form-control">
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="inputNote" class="col-sm-2 control-label">Note</label>
-		<div class="col-sm-10">
-			<input id="inputNote" [(ngModel)]="itemTemplate.data.note" type="text" class="form-control" />
-		</div>
-	</div>
-
-	<div class="form-group">
-		<div class="col-sm-2">
-		</div>
-		<div class="col-sm-6 btn-group" data-toggle="buttons">
-			<button class="btn btn-warning" (click)="itemTemplate.data.price = 0">0</button>
-			<button class="btn btn-warning" (click)="itemTemplate.data.price = itemTemplate.data.price + 50">+50</button>
-			<button class="btn btn-warning" (click)="itemTemplate.data.price = itemTemplate.data.price - 50">-50</button>
-			<button class="btn btn-warning" (click)="itemTemplate.data.price = itemTemplate.data.price + 100">+100</button>
-			<button class="btn btn-warning" (click)="itemTemplate.data.price = itemTemplate.data.price - 100">-100</button>
-			<button class="btn btn-warning" (click)="itemTemplate.data.price = itemTemplate.data.price + 500">+500</button>
-			<button class="btn btn-warning" (click)="itemTemplate.data.price = itemTemplate.data.price - 500">-500</button>
-			<button class="btn btn-warning" (click)="itemTemplate.data.price = itemTemplate.data.price + 1000">+1000</button>
-			<button class="btn btn-warning" (click)="itemTemplate.data.price = itemTemplate.data.price - 1000">-1000</button>
-		</div>
-
-        <label for="inputskillBook" class="col-xs-8 col-md-1 col-sm-1 control-label">Livre de competences</label>
-        <div class="col-sm-1 col-xs-4">
-            <input id="inputskillBook" type="checkbox" [(ngModel)]="itemTemplate.data.skillBook" class="form-control">
-        </div>
-	</div>
-
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Type</label>
-		<div class="col-sm-10 btn-group" data-toggle="buttons">
-			<button *ngFor="let section of sections" class="btn btn-primary"
-                    (click)="selectedSection = section"
-                    [class.active]="selectedSection && selectedSection.id === section.id">
-                {{section.name}}
-            </button>
-		</div>
-	</div>
-
-	<div class="form-group" *ngIf="selectedSection">
-		<label class="col-sm-2 control-label">Categorie</label>
-		<div class="col-sm-10 btn-group" data-toggle="buttons">
-			<button *ngFor="let category of selectedSection.categories" class="btn btn-primary"
-                    (click)="itemTemplate.category = category.id"
-                    [class.active]="itemTemplate.category === category.id">
-                {{category.name}}
-            </button>
-		</div>
-	</div>
-
-	<div class="form-group" *ngIf="slots && slots.length">
-		<label class="col-sm-2 control-label">Slots</label>
-		<div class="col-sm-8 btn-group" data-toggle="buttons">
-			<button *ngFor="let slot of slots"
-					class="btn"
-					(click)="toggleSlot(slot)"
-					[class.active]="isInSlot(slot)"
-					[class.btn-primary]="!isInSlot(slot)"
-					[class.btn-success]="isInSlot(slot)">
-						{{slot.name}}
-			</button>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="inputLevel" class="col-sm-2 control-label">Niveau requis</label>
-		<div class="col-sm-8 btn-group" data-toggle="buttons">
-			<button class="btn btn-info" (click)="itemTemplate.data.requireLevel = null" [class.active]="!itemTemplate.data.requireLevel">0</button>
-			<button *ngFor="let lvl of form.levels" class="btn btn-info" (click)="itemTemplate.data.requireLevel = lvl" [class.active]="itemTemplate.data.requireLevel == lvl">{{lvl}}</button>
-		</div>
-		<div class="col-sm-2">
-			<input id="inputLevel" [(ngModel)]="itemTemplate.data.requireLevel" type="number" class="form-control" />
-		</div>
-	</div>
-
-	<div class="form-group" *ngIf="skills">
-		<label for="inputSkill" class="col-sm-2 control-label">Competences</label>
-		<div class="col-sm-4">
-			<div *ngIf="itemTemplate.skills">
-				<div *ngFor="let skill of itemTemplate.skills">
-					<span>{{skill.name}}</span>
-					<span><button class="btn btn-danger glyphicon glyphicon-remove" (click)="removeSkill(skill.id)"></button></span>
-				</div>
-			</div>
-			<div>
-				<select id="inputSkill" [(ngModel)]="selectedSkill" (change)=addSkill($event.target.value)>
-					 <option></option>
-					 <option *ngFor="let skill of skills" [value]="skill.id" >{{skill.name}}</option>
-				</select>
-			</div>
-		</div>
-		<label for="inputUnskill" class="col-sm-2 control-label">Competences annulées</label>
-		<div class="col-sm-4">
-			<div *ngIf="itemTemplate.skills">
-				<div *ngFor="let skill of itemTemplate.unskills">
-					<span>{{skill.name}}</span>
-					<span><button class="btn btn-danger glyphicon glyphicon-remove" (click)="removeUnskill(skill.id)"></button></span>
-				</div>
-			</div>
-			<div>
-				<select id="inputUnskill" [(ngModel)]="selectedSkill" (change)=addUnskill($event.target.value)>
-					 <option></option>
-					 <option *ngFor="let skill of skills" [value]="skill.id" >{{skill.name}}</option>
-				</select>
-			</div>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="inputDiceDrop" class="col-sm-2 control-label">Dé</label>
-		<div class="col-sm-2">
-			<input id="inputDiceDrop" [(ngModel)]="itemTemplate.data.diceDrop" type="number" class="form-control" />
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="inputCharge" class="col-sm-2 control-label">Charges</label>
-		<div class="col-sm-2">
-			<input id="inputCharge" [(ngModel)]="itemTemplate.data.charge" type="number" class="form-control" />
-		</div>
-	</div>
-
+<md-card>
 	<div class="form-group">
 		<label for="inputDuration" class="col-sm-2 control-label">Durée</label>
 		<div class="col-sm-4">
 			<input id="inputDuration" [(ngModel)]="itemTemplate.data.duration" type="text" class="form-control" />
-		</div>
-		<label for="inputWeight" class="col-sm-2 control-label">Poids</label>
-		<div class="col-sm-4">
-			<input id="inputWeight" [(ngModel)]="itemTemplate.data.weight" type="number" step="0.01" class="form-control" />
-		</div>
-	</div>
-
-
-	<div class="form-group">
-		<label for="inputProtection" class="col-sm-2 control-label">Protection</label>
-		<div class="col-sm-5 btn-group" data-toggle="buttons">
-			<button class="btn btn-primary" (click)="itemTemplate.data.protection = null" [class.active]="!itemTemplate.data.protection">0</button>
-			<button *ngFor="let p of form.protection" class="btn btn-primary" (click)="itemTemplate.data.protection = p" [class.active]="itemTemplate.data.protection == p">{{p}}</button>
-		</div>
-		<div class="col-sm-5">
-			<input id="inputProtection" [(ngModel)]="itemTemplate.data.protection" type="number" class="form-control" />
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="inputMagicProtection" class="col-sm-2 control-label">Protection magique</label>
-		<div class="col-sm-5 btn-group" data-toggle="buttons">
-			<button class="btn btn-success" (click)="itemTemplate.data.magicProtection = null" [class.active]="!itemTemplate.data.magicProtection">0</button>
-			<button *ngFor="let p of form.protection" class="btn btn-success" (click)="itemTemplate.data.magicProtection = p" [class.active]="itemTemplate.data.magicProtection == p">{{p}}</button>
-		</div>
-		<div class="col-sm-5">
-			<input id="inputMagicProtection" [(ngModel)]="itemTemplate.data.magicProtection" type="number" class="form-control" />
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="inputProtectionAgainstMagic" class="col-sm-2 control-label">Protection dégâts magiques ou mystiques</label>
-		<div class="col-sm-5 btn-group" data-toggle="buttons">
-			<button class="btn btn-success" (click)="itemTemplate.data.protectionAgainstMagic = null" [class.active]="!itemTemplate.data.protectionAgainstMagic">0</button>
-			<button *ngFor="let p of form.protection" class="btn btn-success" (click)="itemTemplate.data.protectionAgainstMagic = p" [class.active]="itemTemplate.data.protectionAgainstMagic == p">{{p}}</button>
-		</div>
-		<div class="col-sm-2">
-			<input id="inputProtectionAgainstMagic" [(ngModel)]="itemTemplate.data.protectionAgainstMagic" type="number" class="form-control" />
-		</div>
-		<label for="inputProtectionAgainstType" class="col-sm-1 control-label">Type</label>
-		<div class="col-sm-2">
-			<input id="inputProtectionAgainstType" [(ngModel)]="itemTemplate.data.protectionAgainstType" type="text" class="form-control" />
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="inputThrowable" class="col-xs-8 col-sm-2 control-label">Lançable</label>
-		<div class="col-xs-4 col-sm-10">
-			<input id="inputThrowable" type="checkbox" [(ngModel)]="itemTemplate.data.throwable" class="form-control">
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="inputDamageDiceCount" class="col-sm-2 control-label">Nombre de dé de dégât</label>
-		<div class="col-sm-5 btn-group" data-toggle="buttons">
-			<button class="btn btn-primary" (click)="itemTemplate.data.damageDice = null" [class.active]="!itemTemplate.data.damageDice">0</button>
-			<button *ngFor="let d of form.dices" class="btn btn-primary" (click)="itemTemplate.data.damageDice = d" [class.active]="itemTemplate.data.damageDice == d">{{d}}</button>
-		</div>
-		<div class="col-sm-5">
-			<input id="inputDamageDiceCount" [(ngModel)]="itemTemplate.data.damageDice" type="number" class="form-control" />
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="inputDamage" class="col-sm-2 control-label">Dégat</label>
-		<div class="col-sm-5 btn-group" data-toggle="buttons">
-			<button *ngFor="let d of form.damage" class="btn btn-danger" (click)="itemTemplate.data.bonusDamage = d" [class.active]="itemTemplate.data.bonusDamage == d">{{d}}</button>
-		</div>
-		<div class="col-sm-5">
-			<input id="inputDamage" [(ngModel)]="itemTemplate.data.bonusDamage" type="number" class="form-control" />
 		</div>
 	</div>
 
@@ -314,33 +105,6 @@ Preview
 			<input id="inputLoad" [(ngModel)]="itemTemplate.data.space" type="text" class="form-control" />
 		</div>
 	</div>
-
-	<div class="form-group">
-		<label for="inputDamageType" class="col-sm-2 control-label">DamageType</label>
-		<div class="col-sm-10">
-			<input id="inputDamageType" [(ngModel)]="itemTemplate.data.damageType" type="text" class="form-control" />
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Modificateur</label>
-		<div class="col-sm-10">
-			<modifiers-editor [options]="['job','origin','special']" [(modifiers)]="itemTemplate.modifiers"></modifiers-editor>
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Modificateur de competences</label>
-		<div class="col-sm-10">
-			<skill-modifiers-editor [(modifiers)]="itemTemplate.skillModifiers"></skill-modifiers-editor>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Prerequis</label>
-		<div class="col-sm-10">
-			<stat-requirements-editor [(requirements)]="itemTemplate.requirements"></stat-requirements-editor>
-		</div>
-	</div>
-
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Effet</label>
 		<div class="col-sm-10">
@@ -358,75 +122,8 @@ Preview
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Rupture</label>
-		<div class="col-sm-10 btn-group" data-toggle="buttons">
-			<button class="btn btn-info" (click)="setRupture(null)" [class.active]="!itemTemplate.data.rupture">null</button>
-			<button class="btn btn-success" (click)="setRupture(1)" [class.active]="itemTemplate.data.rupture == 1">non</button>
-			<button class="btn btn-success" (click)="setRupture(2)" [class.active]="itemTemplate.data.rupture == 2">1 à 2</button>
-			<button class="btn btn-warning" (click)="setRupture(3)" [class.active]="itemTemplate.data.rupture == 3">1 à 3</button>
-			<button class="btn btn-warning" (click)="setRupture(4)" [class.active]="itemTemplate.data.rupture == 4">1 à 4</button>
-			<button class="btn btn-danger" (click)="setRupture(5)" [class.active]="itemTemplate.data.rupture == 5">1 à 5</button>
-			<button class="btn btn-danger" (click)="setRupture(6)" [class.active]="itemTemplate.data.rupture == 6">Toujours</button>
-		</div>
-	</div>
 
-    <div class="form-group">
-        <label class="col-sm-2 control-label">Duree de vie</label>
-        <template [ngIf]="!itemTemplate.data.lifetimeType">
-            <div class="col-sm-10">
-                <button type="button" class="btn btn-primary" (click)="setLifetimeType('time')">Ajouter</button>
-            </div>
-        </template>
-        <template [ngIf]="itemTemplate.data.lifetimeType">
-            <div class="col-sm-10">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary" (click)="setLifetimeType('combat')"
-                            [class.active]="itemTemplate.data.lifetimeType == 'combat'">Nombre de combat
-                    </button>
-                    <button type="button" class="btn btn-primary" (click)="setLifetimeType('lap')"
-                            [class.active]="itemTemplate.data.lifetimeType == 'lap'">Tour
-                    </button>
-                    <button type="button" class="btn btn-primary" (click)="setLifetimeType('time')"
-                            [class.active]="itemTemplate.data.lifetimeType == 'time'">Temps
-                    </button>
-                    <button type="button" class="btn btn-primary" (click)="setLifetimeType('custom')"
-                            [class.active]="itemTemplate.data.lifetimeType == 'custom'">Autre
-                    </button>
-                    <button type="button" class="btn btn-primary" (click)="setLifetimeType(null)">
-                        Retirer
-                    </button>
-                </div>
-            </div>
-            <div *ngIf="itemTemplate.data.lifetimeType == 'custom'" class="col-sm-push-2 col-sm-10">
-                <div class="input-group">
-                    <span class="input-group-addon">Durée</span>
-                    <input class="form-control" type="text" [(ngModel)]="itemTemplate.data.lifetime"/>
-                </div>
-            </div>
-            <div *ngIf="itemTemplate.data.lifetimeType == 'time'" class="col-sm-push-2 col-sm-10">
-                <div class="input-group">
-                    <span class="input-group-addon">Temps</span>
-                    <span class="input-group-addon">{{itemTemplate.data.lifetime | nhbkDuration}}</span>
-                    <span class="input-group-addon">
-                        <date-modifier [resetOnChange]=false [dateOffset]="lifetimeDateOffset"
-                                       (onChange)="setItemLifetimeDateOffset($event)">
-                        </date-modifier>
-                    </span>
-                </div>
-            </div>
-            <div *ngIf="itemTemplate.data.lifetimeType == 'lap'" class="col-sm-push-2 col-sm-10">
-                <div class="input-group">
-                    <input class="form-control" type="number" min="0" [(ngModel)]="itemTemplate.data.lifetime"/>
-                    <span class="input-group-addon">tour(s)</span>
-                </div>
-            </div>
-            <div *ngIf="itemTemplate.data.lifetimeType == 'combat'" class="col-sm-push-2 col-sm-10">
-                <div class="input-group">
-                    <input class="form-control" type="number" min="0" [(ngModel)]="itemTemplate.data.lifetime"/>
-                    <span class="input-group-addon">combat(s)</span>
-                </div>
-            </div>
-        </template>
-    </div>
-</div>
+</md-card>
+Preview
+<item-template [jobsName]="jobsName" [originsName]="originsName" [item]="itemTemplate"></item-template>
+

@@ -5,6 +5,7 @@ import {CharacterService} from '../character/character.service';
 
 @Component({
     selector: 'stat-requirements-editor',
+    styleUrls: ['./stat-requirements-editor.component.scss'],
     templateUrl: './stat-requirements-editor.component.html',
 })
 export class StatRequirementsEditorComponent implements OnInit {

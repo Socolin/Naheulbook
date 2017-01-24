@@ -88,8 +88,6 @@ export class IconSelectorComponent implements OnInit, OnChanges {
     openIconSelectorDialog() {
         this.resetNewIcon();
 
-        event.preventDefault();
-
         if (this.readonly) {
             return;
         }
