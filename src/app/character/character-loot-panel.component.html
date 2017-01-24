@@ -1,53 +1,56 @@
-<div>
-    <h3>Loot</h3>
-</div>
-<div class="row">
-    <div class="col-sm-6">
-        <div *ngFor="let loot of loots" class="panel panel-default">
-            <div class="panel-heading">
-                {{loot.name}}
-            </div>
-            <div class="panel-body">
-                <ul class="list-group">
-                    <a href="#" class="list-group-item" *ngFor="let item of loot.items"
+<div class="loot-tab">
+    <div class="loot-list">
+        <md-card *ngFor="let loot of loots">
+            <md-card-title>{{loot.name}}</md-card-title>
+            <md-card-content>
+                <ul>
+                    <li *ngFor="let item of loot.items"
                        (click)="selectItem(item)" [class.active]="item.id == selectedItem?.id">
-                        <button class="game-icon game-icon-robber btn btn-info"
-                                (click)="takeItemFromLoot(loot, item)"></button>
+                        <button md-icon-button
+                                (click)="takeItemFromLoot(loot, item)">
+                            <md-icon>add_shopping_cart</md-icon>
+                        </button>
                         <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                         {{item.data.name}}
-                        <swipable-item-detail *ngIf="item.id === selectedItem?.id"
-                                              [character]="character"
-                                              [item]="item"
-                                              [readonly]="true">
-                        </swipable-item-detail>
-                    </a>
+                        <swipeable-item-detail *ngIf="item.id === selectedItem?.id"
+                                               [character]="character"
+                                               [item]="item"
+                                               [readonly]="true">
+                        </swipeable-item-detail>
+                    </li>
                 </ul>
                 <ul>
                     <li *ngFor="let monster of loot.monsters">
                         {{monster.name}}
-                        <ul class="list-group">
-                            <a href="#" class="list-group-item" *ngFor="let item of monster.items"
-                               (click)="selectItem(item)" [class.active]="item.id == selectedItem?.id">
-                                <button class="game-icon game-icon-robber btn btn-info"
-                                        (click)="takeItemFromMonster(monster, item)"></button>
+                        <ul>
+                            <li *ngFor="let item of monster.items"
+                                (click)="selectItem(item)"
+                                [class.active]="item.id == selectedItem?.id">
+                                <button md-icon-button
+                                        (click)="takeItemFromMonster(monster, item)">
+                                    <md-icon>add_shopping_cart</md-icon>
+                                </button>
+
                                 <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                                 {{item.data.name}}
-                                <swipable-item-detail *ngIf="item.id === selectedItem?.id"
-                                                      [character]="character"
-                                                      [item]="item"
-                                                      [readonly]="true">
-                                </swipable-item-detail>
-                            </a>
+                                <swipeable-item-detail *ngIf="item.id === selectedItem?.id"
+                                                       [character]="character"
+                                                       [item]="item"
+                                                       [readonly]="true">
+                                </swipeable-item-detail>
+                            </li>
                         </ul>
                     </li>
                 </ul>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-sm-6 hidden-xs" *ngIf="selectedItem">
-        <div class="bg-info">
-            <item-detail [gmView]="inGroupTab"  [character]="character" [item]="selectedItem" [readonly]="true"></item-detail>
-        </div>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div *ngIf="selectedItem" class="item-detail">
+        <item-detail [gmView]="inGroupTab"
+                     [character]="character"
+                     [item]="selectedItem"
+                     [readonly]="true"></item-detail>
     </div>
 </div>
+

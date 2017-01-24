@@ -1,5 +1,6 @@
-import {Component, Input, OnInit, OnDestroy} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {MdTabChangeEvent, Portal, OverlayRef, OverlayState, Overlay} from "@angular/material";
 
 import {NotificationsService} from '../notifications';
 
@@ -10,49 +11,57 @@ import {CharacterWebsocketService} from './character-websocket.service';
 import {SwipeService} from './swipe.service';
 import {ItemActionService} from './item-action.service';
 import {Item} from './item.model';
+import {Skill} from '../skill/skill.model';
 
 export class LevelUpInfo {
     EVorEA: string = 'EV';
     EVorEAValue: number;
     targetLevelUp: number;
     statToUp: string;
-    skill: any;
+    skill: Skill;
     speciality: any;
 }
 
 @Component({
     selector: 'character',
     templateUrl: './character.component.html',
+    styleUrls: ['./character.component.scss'],
     providers: [CharacterWebsocketService, SwipeService, ItemActionService],
-    styles: [`
-        .canceled {
-            text-decoration: line-through;
-        }
-        .table-stats > td {
-            line-height: 1;
-        }
-        .stats-detail-name > td {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-        .stats-detail-values > td {
-            padding-top: 0;
-            border-top: 0;
-        }
-        `
-    ],
 })
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
     @Input() character: Character;
+
+    @ViewChild('levelUpDialog')
+    public levelUpDialog: Portal<any>;
+    public levelUpOverlayRef: OverlayRef;
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
+
+    @ViewChild('skillInfoDialog')
+    public skillInfoDialog: Portal<any>;
+    public skillInfoOverlayRef: OverlayRef;
+    public selectedSkillInfo: Skill;
+    public viewGmSkillInfo: boolean = false;
+
     public inGroupTab: boolean = false;
     public selectedItem: Item;
     public currentTab: string = 'infos';
+    public currentTabIndex: number = 0;
+    public tabs: any[] = [
+        {hash: 'infos'},
+        {hash: 'combat'},
+        {hash: 'statistics'},
+        {hash: 'inventory'},
+        {hash: 'effects'},
+        {hash: 'loot'},
+        {hash: 'other'},
+        {hash: 'history'},
+    ];
 
     constructor(private _route: ActivatedRoute
         , private _notification: NotificationsService
         , private _characterWebsocketService: CharacterWebsocketService
+        , private _overlay: Overlay
         , private _characterService: CharacterService) {
     }
 
@@ -108,11 +117,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     levelUp() {
-        if (this.character) {
-            this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(
-                this.onLevelUp.bind(this)
-            );
-        }
+        this.closeLevelUpDialog();
+        this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(this.onLevelUp.bind(this));
     }
 
     onLevelUp(result: any) {
@@ -171,6 +177,21 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return this.character.level < this.getLevelForXp();
     }
 
+    getXpForNextLevel() {
+        let level = 1;
+        let totalXp = 0;
+        let xp = this.character.experience;
+        while (xp >= level * 100) {
+            xp -= level * 100;
+            totalXp += level * 100;
+            level++;
+        }
+
+        totalXp += level * 100;
+
+        return totalXp;
+    }
+
     getLevelForXp(): number {
         let level = 1;
         let xp = this.character.experience;
@@ -179,6 +200,27 @@ export class CharacterComponent implements OnInit, OnDestroy {
             level++;
         }
         return level;
+    }
+
+    openLevelUpDialog() {
+        this.initLevelUp();
+
+        let config = new OverlayState();
+
+        config.positionStrategy = this._overlay.position()
+            .global()
+            .centerHorizontally()
+            .centerVertically();
+        config.hasBackdrop = true;
+
+        let overlayRef = this._overlay.create(config);
+        overlayRef.attach(this.levelUpDialog);
+        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        this.levelUpOverlayRef = overlayRef;
+    }
+
+    closeLevelUpDialog() {
+        this.levelUpOverlayRef.detach();
     }
 
     initLevelUp() {
@@ -194,10 +236,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
-    setLevelUpStatToUp(stat: string) {
-        this.levelUpInfo.statToUp = stat;
-    }
-
     rollLevelUp() {
         let diceLevelUp = this.character.origin.diceEVLevelUp;
         if (this.levelUpInfo.EVorEA === 'EV') {
@@ -211,7 +249,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this.levelUpInfo.EVorEAValue = Math.ceil(Math.random() * diceLevelUp);
     }
 
-    onLevelUpSelectSkills(skills) {
+    onLevelUpSelectSkills(skills: Skill[]) {
         this.levelUpInfo.skill = skills[0];
     }
 
@@ -277,13 +315,42 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    selectTab(tab: string) {
-        this.currentTab = tab;
+    // Tab
+
+    getTabIndexFromHash(hash: string): number {
+        return this.tabs.findIndex(t => t.hash === hash);
+    }
+
+    selectTab(tabChangeEvent: MdTabChangeEvent): boolean {
+        this.currentTab = this.tabs[tabChangeEvent.index].hash;
         if (!this.inGroupTab) {
-            window.location.hash = tab;
+            window.location.hash = this.currentTab;
         }
         return false;
     }
+
+    // Skill info modal
+
+    openSkillInfoDialog(skill: Skill) {
+        this.selectedSkillInfo = skill;
+        let config = new OverlayState();
+
+        config.positionStrategy = this._overlay.position()
+            .global()
+            .centerHorizontally()
+            .centerVertically();
+        config.hasBackdrop = true;
+
+        let overlayRef = this._overlay.create(config);
+        overlayRef.attach(this.skillInfoDialog);
+        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        this.skillInfoOverlayRef = overlayRef;
+    }
+
+    closeSkillInfoDialog() {
+        this.skillInfoOverlayRef.detach();
+    }
+
 
     ngOnDestroy() {
         if (this.character) {
@@ -314,6 +381,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         if (!this.inGroupTab) {
             this._route.fragment.subscribe(value => {
                 if (value) {
+                    this.currentTabIndex = this.getTabIndexFromHash(value);
                     this.currentTab = value;
                 }
             });

@@ -1,0 +1,71 @@
+md-card {
+    margin: 5px;
+    md-card-header {
+        display: flex;
+
+        icon-selector {
+            flex: 0 0 auto;
+        }
+        div {
+            flex: 1 1 auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        button {
+            flex: 0 0 auto;
+        }
+    }
+}
+
+.give-item-dialog {
+    md-radio-button {
+        display: block;
+    }
+}
+.add-modifier-dialog {
+    margin: 20px;
+    max-width: 700px;
+
+    md-card-content {
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+}
+
+.item-modifiers {
+    md-card {
+        margin-bottom: 5px;
+        padding: 0;
+        .item-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .padding {
+                flex: 1 auto;
+            }
+        }
+    }
+}
+
+.valid-level {
+    color: #3c763d;
+}
+.invalid-level {
+    color: #c72b2b;
+}
+
+
+.list-available-containers {
+    display: flex;
+    flex-direction: column;
+    .target-container {
+        padding-top: 10px;
+        height: 22px;
+        cursor: pointer;
+    }
+    .target-container:hover {
+        background-color: #dfdfdf;
+    }
+}
+

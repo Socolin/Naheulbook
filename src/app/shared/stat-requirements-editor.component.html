@@ -1,23 +1,51 @@
-<div *ngIf="requirements && requirements.length > 0" class="row">
-	<div class="col-md-2">
-		<button class="btn btn-danger glyphicon glyphicon-remove" (click)="clear()"></button>
-	</div>
+<div class="stat-requirements">
+    <div *ngIf="requirements && requirements.length > 0" class="delete_all_button">
+        <button md-icon-button
+                (click)="clear()"
+                color="warn">
+            <md-icon>delete_forever</md-icon>
+        </button>
+    </div>
+
+    <div class="requirements-list">
+        <div *ngFor="let requirement of requirements; let i=index" class="requirement-line">
+            <button md-icon-button
+                    (click)="removeRequirement(i)"
+                    color="accent">
+                <md-icon>delete_forever</md-icon>
+            </button>
+            <div *ngIf="requirement.min">
+                Min {{requirement.stat}}: {{requirement.min}}
+            </div>
+            <div *ngIf="requirement.max">
+                Max {{requirement.stat}}: {{requirement.max}}
+            </div>
+        </div>
+    </div>
 </div>
 
-<div *ngFor="let requirement of requirements; let i=index" class="row" [class.bg-success]="requirement.value > 0" [class.bg-danger]="requirement.value < 0">
-	<div class="col-sm-2">
-		<button class="btn btn-warning glyphicon glyphicon-remove" (click)="removeRequirement(i)"></button>
-	</div>
-	<div *ngIf="requirement.min" class="col-sm-5">Min {{requirement.stat}}: {{requirement.min}}</div>
-	<div *ngIf="requirement.max" class="col-sm-5">Max {{requirement.stat}}: {{requirement.max}}</div>
-</div>
-
-<div class="row">
-	<div class="col-sm-2">
-		<input type="number" class="form-control" [(ngModel)]="minValue" placeholder="min"/>
-		<input type="number" class="form-control" [(ngModel)]="maxValue" placeholder="max"/>
-	</div>
-	<div class="col-sm-10 btn-group" data-toggle="buttons">
-		<button *ngFor="let stat of stats" class="btn btn-primary" (click)="setStat(stat)" [class.active]="selectedStat && selectedStat.name == stat.name">{{stat.name}}</button>
-	</div>
+<div>
+    <div>
+        <md-input-container>
+            <input md-input
+                   [(ngModel)]="minValue"
+                   type="number"
+                   min="0"
+                   placeholder="min"/>
+        </md-input-container>
+        <md-input-container>
+            <input md-input
+                   [(ngModel)]="maxValue"
+                   type="number"
+                   min="0"
+                   placeholder="max"/>
+        </md-input-container>
+    </div>
+    <md-button-toggle-group [(ngModel)]="selectedStat">
+        <md-button-toggle *ngFor="let stat of stats"
+                          (click)="setStat(stat)"
+                          class="btn btn-primary">
+            {{stat.name}}
+        </md-button-toggle>
+    </md-button-toggle-group>
 </div>

@@ -26,15 +26,24 @@ export class MonsterColorSelectorComponent {
         }
     }
 
+    openSelector() {
+        this.showSelector = true;
+    }
+    closeSelector() {
+        this.showSelector = false;
+    }
+
     changeColor(color: string) {
         if (color.indexOf('#') === 0) {
             color = color.substring(1);
         }
         this.onColorChange.emit(color);
+        this.closeSelector();
     }
 
     changeNumber(number: number) {
         this.onNumberChange.emit(number);
+        this.closeSelector();
     }
 
 }

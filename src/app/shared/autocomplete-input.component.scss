@@ -1,0 +1,15 @@
+.autocomplete-container {
+    position: relative;
+
+    md-input-container {
+        width: 100%;
+    }
+}
+
+.autocomplete-overlay {
+    background: white;
+}
+
+.active {
+    background: #dfdfdf;
+}

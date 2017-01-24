@@ -1,0 +1,108 @@
+md-card {
+    margin: 5px;
+
+    md-toolbar {
+        display: flex;
+        span {
+            flex: 1 auto;
+        }
+    }
+
+    .buttons-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+
+        md-button-toggle-group {
+            margin-bottom: 12px;
+            margin-top: 12px;
+        }
+
+        button[md-raised-button] {
+            margin-bottom: 12px;
+            margin-top: 12px;
+        }
+
+        md-input {
+            margin-left: 10px;
+            flex: 1 auto;
+        }
+    }
+
+    .inventory-content {
+        padding-bottom: 300px;
+        .items-list {
+            .items-list-element {
+                border-bottom: 1px solid #dfdfdf;
+                display: flex;
+
+                .item-line {
+                    flex: 1 auto;
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    align-items: center;
+                    font-size: medium;
+
+                    icon {
+                        padding-right: 10px;
+                    }
+
+                    md-icon {
+                        color: rgba(0, 0, 0, 0.54);
+                    }
+                }
+
+                .selected {
+                    background: #efefef;
+                }
+            }
+        }
+    }
+
+    .equiped-items {
+        margin-left: 32px;
+    }
+
+    .inventory {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        .inventory-content {
+            flex: 1 1 50%;
+            width: 50%;
+        }
+
+        .item-detail {
+            flex: 1 1 50%;
+            width: 50%;
+
+            .detail-padding-height {
+                -webkit-transition: height 0.1s linear; /* Safari */
+                transition: height 0.1s linear;
+            }
+        }
+    }
+
+    .item-icon {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.add-item-dialog {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+@media screen and (max-width: 599px) {
+    .item-detail {
+        display: none;
+    }
+}
+
+.inventory-card {
+    padding: 0;
+}

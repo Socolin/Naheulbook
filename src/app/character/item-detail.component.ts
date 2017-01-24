@@ -1,15 +1,21 @@
-import {Component, Input, OnChanges, OnInit, forwardRef, Inject, SimpleChanges} from '@angular/core';
-import {Item, ItemModifier} from './item.model';
-import {Character, CharacterGiveDestination} from './character.model';
+import {
+    Component, Input, OnChanges, OnInit, forwardRef, Inject, SimpleChanges, ViewChild,
+} from '@angular/core';
+import {Portal, OverlayRef} from '@angular/material';
+
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {dateOffset2TimeDuration, timeDuration2DateOffset2} from '../date/util';
 import {ItemService, ItemCategory} from '../item';
-import {ItemActionService} from './item-action.service';
 import {GroupService} from '../group/group.service';
 import {NhbkDateOffset} from '../date/date.model';
-import {dateOffset2TimeDuration, timeDuration2DateOffset2} from '../date/util';
+import {Item, ItemModifier} from './item.model';
+import {Character, CharacterGiveDestination} from './character.model';
+import {ItemActionService} from './item-action.service';
 
 @Component({
     selector: 'item-detail',
-    templateUrl: './item-detail.component.html'
+    templateUrl: './item-detail.component.html',
+    styleUrls: ['./item-detail.component.scss'],
 })
 export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() item: Item;
@@ -24,28 +30,34 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public itemEditDescription: string;
     public editing: boolean;
 
-    public givingItem: boolean = false;
-    public giveDestination: CharacterGiveDestination[];
+    @ViewChild('giveItemDialog')
+    public giveItemDialog: Portal<any>;
+    public giveItemOverlayRef: OverlayRef;
+    public giveDestination: CharacterGiveDestination[] = null;
+    public giveTarget: CharacterGiveDestination;
 
-    public addingModifier: boolean = false;
+    @ViewChild('addModifierDialog')
+    public addModifierDialog: Portal<any>;
+    public addModifierOverlayRef: OverlayRef;
     public newModifier: ItemModifier;
 
-    public updatingLifetime: boolean;
-    private previousLifetime: any;
+    @ViewChild('lifetimeDialog')
+    public lifetimeDialog: Portal<any>;
+    public lifetimeOverlayRef: OverlayRef;
+    public previousLifetime: any;
     public lifetimeDateOffset: NhbkDateOffset = new NhbkDateOffset();
-
 
     constructor(@Inject(forwardRef(() => ItemService)) private _itemService: ItemService
         , public _itemActionService: ItemActionService
-        , private _groupService: GroupService) {
+        , private _groupService: GroupService
+        , private _nhbkDialogService: NhbkDialogService) {
     }
 
     ngOnChanges(changes: SimpleChanges) {
         if ('item' in changes
             && changes['item'].previousValue
             && changes['item'].currentValue
-            && changes['item'].currentValue['id'] != changes['item'].previousValue['id']) {
-            this.givingItem = false;
+            && changes['item'].currentValue['id'] !== changes['item'].previousValue['id']) {
         }
         this.modifiers = [];
         if (this.item && this.item.template.modifiers) {
@@ -92,8 +104,13 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         }
     }
 
-    startGiveItem() {
-        this.givingItem = true;
+    /*
+     * Give item dialog
+     */
+
+    openGiveItemDialog() {
+        this.giveItemOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.giveItemDialog);
+
         this._groupService.listActiveCharactersInGroup(this.character.id).subscribe(
             characters => {
                 this.giveDestination = characters;
@@ -101,17 +118,30 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         );
     }
 
-    startAddModifier() {
-        this.newModifier = new ItemModifier();
-        this.addingModifier = true;
+    closeGiveItemDialog() {
+        this.giveItemOverlayRef.detach();
     }
 
-    stopAddModifier() {
-        this.addingModifier = false;
+    giveItem() {
+        this._itemActionService.onAction('give', this.item, {characterId: this.giveTarget.id});
+        this.closeGiveItemDialog();
+    }
+
+    /*
+     * Add modifier dialog
+     */
+
+    openModifierDialog() {
+        this.newModifier = new ItemModifier();
+
+        this.addModifierOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addModifierDialog);
+    }
+
+    closeModifierDialog() {
+        this.addModifierOverlayRef.detach();
     }
 
     addModifier() {
-        this.addingModifier = false;
         if (this.item.modifiers === null) {
             this.item.modifiers = [];
         }
@@ -120,58 +150,73 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         this.item.modifiers.push(this.newModifier);
         this._itemActionService.onAction('update_modifiers', this.item);
         this.newModifier = new ItemModifier();
+        this.closeModifierDialog();
     }
+
+    /*
+     * Modifier
+     */
 
     removeModifier(index: number) {
         if (this.item.modifiers) {
             this.item.modifiers.splice(index, 1);
-            if (this.item.modifiers.length == 0) {
+            if (this.item.modifiers.length === 0) {
                 this.item.modifiers = null;
             }
             this._itemActionService.onAction('update_modifiers', this.item);
         }
     }
 
-    toggleModifier(index: number) {
+    updateModifier(index: number) {
         if (this.item.modifiers) {
-            this.item.modifiers[index].active = !this.item.modifiers[index].active;
             if (this.item.modifiers[index].active) {
                 this.item.modifiers[index].currentDuration = this.item.modifiers[index].duration;
             }
             this._itemActionService.onAction('update_modifiers', this.item);
         }
     }
-    ;
 
-    startUpdateLifetime(): void {
-        this.updatingLifetime = true;
+    /*
+     * Lifetime dialog
+     */
+
+    openLifetimeDialog() {
         this.previousLifetime = {type: this.item.data.lifetimeType, value: this.item.data.lifetime};
         if (this.item.data.lifetimeType === 'time') {
+            if (!this.item.data.lifetime) {
+                this.item.data.lifetime = 0;
+            }
             this.lifetimeDateOffset = timeDuration2DateOffset2(+this.item.data.lifetime);
         }
+
+        this.lifetimeOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.lifetimeDialog);
     }
 
-    stopUpdateLifetime(): void {
-        this.updatingLifetime = false;
-        this.item.data.lifetime = this.previousLifetime.type;
+
+    closeLifetimeDialog() {
+        this.lifetimeOverlayRef.detach();
+    }
+
+    cancelLifetimeDialog() {
+        this.item.data.lifetimeType = this.previousLifetime.type;
         this.item.data.lifetime = this.previousLifetime.value;
+        this.closeLifetimeDialog();
     }
 
     updateLifetime() {
         this._itemActionService.onAction('update_data', this.item);
-        this.updatingLifetime = false;
+        this.closeLifetimeDialog();
     }
 
     setItemLifetimeDateOffset(dateOffset: NhbkDateOffset) {
         this.item.data.lifetime = dateOffset2TimeDuration(dateOffset);
     }
 
-    setLifetimeType(type: string) {
+    updateLifetimeType() {
+        let type = this.item.data.lifetimeType;
         if (type === null) {
             this.item.data.lifetime = null;
-            this.item.data.lifetimeType = null;
         } else {
-            this.item.data.lifetimeType = type;
             if (type === 'combat' || type === 'lap') {
                 this.item.data.lifetime = 1;
             }

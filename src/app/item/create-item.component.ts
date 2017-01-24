@@ -4,7 +4,7 @@ import {ItemService} from './item.service';
 import {ItemTemplate} from './item-template.model';
 
 @Component({
-    selector: 'create-item',
+    selector: 'create-item-template',
     templateUrl: './create-item.component.html',
     providers: [ItemService],
 })

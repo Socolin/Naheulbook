@@ -1,49 +1,59 @@
-<div style="position: relative; display: inline-block">
-    <span (click)="showSelector($event)"><icon [size]="'32px'" [icon]="icon"></icon></span>
-    <div *ngIf="viewSelector" style="z-index:10; position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.7; background: black;" (click)="hideSelector($event)"></div>
-    <div *ngIf="viewSelector" class="selector-panel row">
-        <div class="btn-group">
-            <button class="btn btn-info" [class.active]="tab=='icon'" (click)="selectTab('icon')">Icone</button>
-            <button class="btn btn-info" [class.active]="tab=='color'" (click)="selectTab('color')">Couleur</button>
-            <button class="btn btn-info" [class.active]="tab=='rotation'" (click)="selectTab('rotation')">Rotation</button>
-        </div>
-        <div class="selector-tab-content">
-            <div *ngIf="tab == 'icon'">
-                <div class="row">
-                    <div class="col-sm-9 col-xs-12">
-                        <input class="form-control" type="text" [(ngModel)]="filter" (ngModelChange)="updateFiltered()"/>
-                    </div>
-                    <div class="col-sm-2 col-xs-3">
-                        <button class="btn btn-default" (click)="selectRandom()"><span class="ra ra-perspective-dice-random ra-2x"></span></button>
-                    </div>
-                    <div class="col-sm-12 col-xs-9">
-                        <div>
-                            <b>Icone actuel</b>
-                        </div>
-                        <div>
-                            {{icon.name}}
-                        </div>
+<span (click)="openIconSelectorDialog($event)"><icon [size]="'32px'" [icon]="icon"></icon></span>
+<template #iconSelectorDialog="cdkPortal" cdk-portal>
+    <md-card class="selector-panel">
+        <md-card-title>Selection de l'icone</md-card-title>
+        <md-card-content>
+            <md-card>
+                <md-card-subtitle>Icone</md-card-subtitle>
+                <div>
+                    <div>
+                        <md-input-container align="end">
+                            <input md-input
+                                   placeholder="Icone"
+                                   type="text"
+                                   [(ngModel)]="filter"
+                                   (ngModelChange)="updateFiltered()">
+                            <md-hint align="end">
+                                Actuelle: {{icon.name}}
+                            </md-hint>
+                        </md-input-container>
+                        <button md-icon-button (click)="selectRandom()"><span class="ra ra-perspective-dice-random ra-2x"></span></button>
                     </div>
                 </div>
-                <div style="font-size: 60px; background: white">
+                <div style="font-size: 32px;">
                     <template ngFor let-iconName [ngForOf]="filteredIcons">
                         <span class="game-icon" [ngClass]="'game-icon-' + iconName" (click)="selectIcon(iconName)"></span>
                     </template>
                 </div>
-            </div>
-            <div *ngIf="tab == 'color'">
+            </md-card>
+            <md-card>
+                <md-card-subtitle>Couleur</md-card-subtitle>
                 <div style="font-size: 32px; ">
                     <template ngFor let-color [ngForOf]="colors">
-                        <span class="game-icon" [ngClass]="'game-icon-' + icon.name" (click)="selectColor(color)" [style.color]="color"></span>
+                        <span class="game-icon" [ngClass]="'game-icon-' + newIcon.name" (click)="selectColor(color)" [style.color]="color"></span>
                     </template>
                 </div>
-            </div>
-            <div *ngIf="tab == 'rotation'">
+            </md-card>
+            <md-card>
+                <md-card-subtitle>Orientation</md-card-subtitle>
                 <span (click)="selectRotation(0)"><icon [size]="'32px'" [icon]="iconRot0"></icon></span>
                 <span (click)="selectRotation(90)"><icon [size]="'32px'" [icon]="iconRot90"></icon></span>
                 <span (click)="selectRotation(180)"><icon [size]="'32px'" [icon]="iconRot180"></icon></span>
-                <span (click)="selectRotation(280)"><icon [size]="'32px'" [icon]="iconRot280"></icon></span>
-            </div>
-        </div>
-    </div>
-</div>
+                <span (click)="selectRotation(270)"><icon [size]="'32px'" [icon]="iconRot270"></icon></span>
+            </md-card>
+            <md-card>
+                <md-card-subtitle>Changement</md-card-subtitle>
+                <div class="summary">
+                    <icon [size]="'32px'" [icon]="icon" (click)="resetNewIcon()"></icon>
+                    ->
+                    <icon [size]="'32px'" [icon]="newIcon"></icon>
+                </div>
+            </md-card>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button color="primary" (click)="closeIconSelectorDialog()">FERMER</button>
+            <button md-button color="primary" (click)="resetNewIcon()">RESET</button>
+            <button md-button color="accent" (click)="saveChange()">VALIDER</button>
+        </md-card-actions>
+    </md-card>
+</template>

@@ -1,50 +1,61 @@
-<h3>Évènements</h3>
-<template [ngIf]="group.data.date">
-    <div class="list-group">
-        <a href="#" class="list-group-item" (click)="openEventEditor()">
-            Ajouter un évènement
-        </a>
-    </div>
-    <event-editor [group]=group *ngIf="showEventEditor" (onClose)="closeEventEditor()" (onCreate)="createEvent($event)"></event-editor>
+<div *ngIf="groupTimestamp">
+    <event-editor #eventEditor [group]=group (onCreate)="createEvent($event)"></event-editor>
     <div *ngIf="pastEventCount">
         <h4>Évènements passé</h4>
-        <div class="list-group">
+        <div class="event-list">
             <template ngFor let-event [ngForOf]="events">
                 <template [ngIf]="event.timestamp <= groupTimestamp">
-                    <div class="list-group-item list-group-item-success">
-                        <button class="pull-right glyphicon glyphicon-trash btn btn-danger" (click)="deleteEvent(event)"></button>
-                        <h4 class="list-group-item-heading">{{event.name}}</h4>
-                        <p class="list-group-item-text">
+                    <md-card>
+                        <md-card-title-group>
+                            <md-card-title>{{event.name}}</md-card-title>
+                            <md-card-subtitle>
+                                Il y a : {{groupTimestamp - event.timestamp | nhbkDuration}}
+                            </md-card-subtitle>
+                        </md-card-title-group>
+                        <md-card-content>
                             {{event.description}}
-                        </p>
-                        <p class="list-group-item-text">
-                            Il y a : {{groupTimestamp - event.timestamp | nhbkDuration}}
-                        </p>
-                    </div>
+                        </md-card-content>
+                        <md-card-actions align="end">
+                            <button md-button
+                                    color="primary"
+                                    (click)="deleteEvent(event)">
+                                SUPPRIMER
+                            </button>
+                        </md-card-actions>
+                    </md-card>
                 </template>
             </template>
         </div>
     </div>
     <div *ngIf="futureEventCount">
         <h4>Évènements à venir</h4>
-        <div class="list-group">
+        <div class="event-list">
             <template ngFor let-event [ngForOf]="events">
                 <template [ngIf]="event.timestamp > groupTimestamp">
-                    <div class="list-group-item">
-                        <button class="pull-right glyphicon glyphicon-trash btn btn-danger" (click)="deleteEvent(event)"></button>
-                        <h4 class="list-group-item-heading">{{event.name}}</h4>
-                        <p class="list-group-item-text">
+                    <md-card>
+                        <md-card-title-group>
+                            <md-card-title>{{event.name}}</md-card-title>
+                            <md-card-subtitle>
+                                Dans: {{event.timestamp - groupTimestamp | nhbkDuration}}
+                            </md-card-subtitle>
+                        </md-card-title-group>
+                        <md-card-content>
                             {{event.description}}
-                        </p>
-                        <p class="list-group-item-text">
-                            Dans: {{event.timestamp - groupTimestamp | nhbkDuration}}
-                        </p>
-                    </div>
+                        </md-card-content>
+                        <md-card-actions align="end">
+                            <button md-button
+                                    color="primary"
+                                    (click)="deleteEvent(event)">
+                                SUPPRIMER
+                            </button>
+                        </md-card-actions>
+                    </md-card>
+
                 </template>
             </template>
         </div>
     </div>
-</template>
-<template [ngIf]="!group.data.date">
+</div>
+<div *ngIf="!groupTimestamp">
     Vous devez définir la date du groupe avant de pouvoir ajouter des évènements
-</template>
+</div>

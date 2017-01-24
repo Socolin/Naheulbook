@@ -7,6 +7,7 @@ import {dateOffset2TimeDuration} from '../date/util';
 
 @Component({
     selector: 'effect-editor',
+    styleUrls: ['./effect-editor.component.scss'],
     templateUrl: './effect-editor.component.html',
 })
 export class EffectEditorComponent implements OnInit, OnChanges {
@@ -27,24 +28,45 @@ export class EffectEditorComponent implements OnInit, OnChanges {
             else if (this.effect.timeDuration) {
                 this.effectDurationType = 'time';
             }
-            else {
+            else if (this.effect.lapCount) {
+                this.effectDurationType = 'lap';
+            }
+            else if (this.effect.duration) {
                 this.effectDurationType = 'custom';
+            }
+            else {
+                this.effectDurationType = 'forever';
             }
         }
     }
-    setEffectDurationType(type: string) {
-        this.effectDurationType = type;
+
+    updateEffectDurationType() {
+        let type = this.effectDurationType;
         if (type === 'combat') {
+            this.effect.timeDuration = null;
+            this.effect.duration = null;
+            this.effect.lapCount = null;
+        }
+        else if (type === 'lap') {
+            this.effect.combatCount = null;
             this.effect.timeDuration = null;
             this.effect.duration = null;
         }
         else if (type === 'time') {
             this.effect.combatCount = null;
             this.effect.duration = null;
+            this.effect.lapCount = null;
         }
         else if (type === 'custom') {
             this.effect.combatCount = null;
             this.effect.timeDuration = null;
+            this.effect.lapCount = null;
+        }
+        else if (type === 'forever') {
+            this.effect.combatCount = null;
+            this.effect.timeDuration = null;
+            this.effect.duration = null;
+            this.effect.lapCount = null;
         }
         else {
             throw new Error('Invalid type: ' + type);

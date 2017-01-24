@@ -1,0 +1,42 @@
+md-sidenav {
+    min-width: 15%;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    [md-button] {
+        width: 100%;
+        position: relative;
+        bottom: 0;
+        margin: 24px 0;
+    }
+}
+
+@media (min-width: 600px) {
+    .app-content {
+        padding: 0 32px 32px;
+    }
+}
+
+@media (max-width: 599px) {
+    .app-content {
+        padding: 0 10px 10px;
+    }
+}
+
+
+md-toolbar {
+    md-icon {
+        cursor: pointer;
+    }
+
+    .app-toolbar {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        width: 100%;
+    }
+}
+
+h1 {
+    font-size: 20px;
+}

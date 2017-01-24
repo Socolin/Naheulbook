@@ -1,4 +1,6 @@
-import {Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges} from '@angular/core';
+import {Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges, ViewChild} from '@angular/core';
+import {Portal, OverlayRef, Overlay, OverlayState} from '@angular/material';
+
 import {IconService} from './icon.service';
 import {removeDiacritics} from './remove_diacritics';
 import {IconDescription} from './icon.model';
@@ -6,27 +8,13 @@ import {IconDescription} from './icon.model';
 @Component({
     selector: 'icon-selector',
     templateUrl: './icon-selector.component.html',
-    styles: [`
-        .selector-tab-content {
-            background: whitesmoke;
-        }
-        .selector-panel {
-            position: absolute; 
-            width: 80vw; 
-            z-index: 100;
-        }
-        @media screen and (min-width: 768px) {
-            .selector-panel{
-                width: 40vw; 
-            }
-        }`],
+    styleUrls: ['./icon-selector.component.scss'],
 })
 export class IconSelectorComponent implements OnInit, OnChanges {
     @Input() icon: IconDescription;
     @Input() readonly: boolean;
     @Output() onChange: EventEmitter<IconDescription> = new EventEmitter<IconDescription>();
-    public viewSelector: boolean = false;
-    public tab: string = 'icon';
+
     public filter: string;
     public icons: string[];
     public filteredIcons: string[];
@@ -38,7 +26,7 @@ export class IconSelectorComponent implements OnInit, OnChanges {
     public iconRot0: IconDescription;
     public iconRot90: IconDescription;
     public iconRot180: IconDescription;
-    public iconRot280: IconDescription;
+    public iconRot270: IconDescription;
     public colors: string[] = [
         '#d6a090',
         '#fe3b1e',
@@ -73,7 +61,53 @@ export class IconSelectorComponent implements OnInit, OnChanges {
         '#08fdcc',
     ];
 
-    constructor(private _iconService: IconService) {
+    @ViewChild('iconSelectorDialog')
+    public iconSelectorDialog: Portal<any>;
+    public iconSelectorOverlayRef: OverlayRef;
+
+    public newIcon: IconDescription = new IconDescription();
+
+    constructor(private _iconService: IconService
+                , private _overlay: Overlay) {
+    }
+
+    resetNewIcon() {
+        if (this.icon && this.icon.name) {
+            this.filter = this.icon.name;
+        }
+        else {
+            this.filter = this.defaultIcon.name;
+        }
+        this.updateFiltered();
+
+        this.newIcon.name = this.icon.name;
+        this.newIcon.color = this.icon.color;
+        this.newIcon.rotation = this.icon.rotation;
+    }
+
+    openIconSelectorDialog() {
+        this.resetNewIcon();
+
+        if (this.readonly) {
+            return;
+        }
+
+        let config = new OverlayState();
+
+        config.positionStrategy = this._overlay.position()
+            .global()
+            .centerHorizontally()
+            .centerVertically();
+        config.hasBackdrop = true;
+
+        let overlayRef = this._overlay.create(config);
+        overlayRef.attach(this.iconSelectorDialog);
+        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        this.iconSelectorOverlayRef = overlayRef;
+    }
+
+    closeIconSelectorDialog() {
+        this.iconSelectorOverlayRef.detach();
     }
 
     updateFiltered() {
@@ -95,49 +129,23 @@ export class IconSelectorComponent implements OnInit, OnChanges {
         this.filteredIcons = filtered;
     }
 
-    selectTab(tab: string) {
-        this.tab = tab;
-    }
-
     selectIcon(iconName: string) {
-        this.onChange.emit({
-            name: iconName,
-            color: this.icon.color,
-            rotation: this.icon.rotation
-        });
-        this.hideSelector();
+        this.newIcon.name = iconName;
+        this.updateIconRotation();
     }
 
     selectColor(color: string) {
-        this.onChange.emit({
-            name: this.icon.name,
-            color: color,
-            rotation: this.icon.rotation
-        });
-        this.hideSelector();
+        this.newIcon.color = color;
+        this.updateIconRotation();
     }
 
     selectRotation(rotation: number) {
-        this.onChange.emit({
-            name: this.icon.name,
-            color: this.icon.color,
-            rotation: rotation
-        });
-        this.hideSelector();
+        this.newIcon.rotation = rotation;
     }
 
-    showSelector(event: any) {
-        if (!this.readonly) {
-            this.viewSelector = true;
-        }
-        event.preventDefault();
-    }
-
-    hideSelector(event?: any) {
-        this.viewSelector = false;
-        if (event) {
-            event.preventDefault();
-        }
+    saveChange() {
+        this.onChange.emit(this.newIcon);
+        this.closeIconSelectorDialog();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -151,24 +159,24 @@ export class IconSelectorComponent implements OnInit, OnChanges {
 
     updateIconRotation() {
         this.iconRot0 = {
-            name: this.icon.name,
-            color: this.icon.color,
+            name: this.newIcon.name,
+            color: this.newIcon.color,
             rotation: 0
         };
         this.iconRot90 = {
-            name: this.icon.name,
-            color: this.icon.color,
+            name: this.newIcon.name,
+            color: this.newIcon.color,
             rotation: 90
         };
         this.iconRot180 = {
-            name: this.icon.name,
-            color: this.icon.color,
+            name: this.newIcon.name,
+            color: this.newIcon.color,
             rotation: 180
         };
-        this.iconRot280 = {
-            name: this.icon.name,
-            color: this.icon.color,
-            rotation: 280
+        this.iconRot270 = {
+            name: this.newIcon.name,
+            color: this.newIcon.color,
+            rotation: 270
         };
     }
 
@@ -186,7 +194,6 @@ export class IconSelectorComponent implements OnInit, OnChanges {
         this._iconService.getIcons().subscribe(
             icons => {
                 this.icons = icons;
-                this.selectRandom();
             }
         );
     }

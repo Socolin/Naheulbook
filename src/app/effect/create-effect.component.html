@@ -1,6 +1,12 @@
-<div class="form-horizontal">
-	<effect-editor [(effect)]="effect"></effect-editor>
-	<div class="form-group">
-		<button class="col-sm-12 btn btn-primary" (click)="create()">Créer</button>
-	</div>
-</div>
+<md-card>
+    <md-card-title>Créer un effet</md-card-title>
+    <effect-editor [(effect)]="effect"></effect-editor>
+    <md-card-actions align="end">
+        <button md-button
+                color="primary"
+                (click)="create()">
+            CRÉER
+        </button>
+
+    </md-card-actions>
+</md-card>

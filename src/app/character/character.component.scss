@@ -1,0 +1,281 @@
+div {
+    & .character-component {
+        padding: -32px;
+    }
+}
+
+md-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    md-card-header {
+        justify-content: space-between;
+
+        div.md-card-header-text {
+            margin: 0;
+        }
+    }
+}
+
+.info-tab {
+    font-size: large;
+    md-card {
+        margin: 5px;
+    }
+}
+
+.combat-tab {
+    font-size: large;
+    display: flex;
+    flex-wrap: wrap;
+
+    .stat-label {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    md-card {
+        margin: 5px;
+
+        .game-icon, .ra {
+            font-size: 40px;
+        }
+
+        &.stats-card {
+            flex: 1 auto;
+
+            md-card-content {
+                font-size: large;
+                display: flex;
+                flex-direction: column;
+            }
+            .stat-row {
+                display: flex;
+                align-content: space-around;
+                justify-content: space-around;
+                flex-direction: row;
+            }
+
+            .stat {
+                flex: 1 auto;
+                display: flex;
+                align-content: space-around;
+                justify-content: space-around;
+                flex-direction: row;
+                flex-wrap: nowrap;
+
+                .stat-icon {
+                    flex: 0 40px;
+                }
+                .stat-name {
+                    min-width: 60px;
+                    flex: 1 60px;
+                    font-weight: bold;
+                }
+                .stat-value {
+                    flex: 1 auto;
+                    width: 80px;
+                    flex-flow: column;
+                    display: flex;
+                    justify-content: space-around;
+                    text-align: center;
+
+                    div {
+                        flex: 0 0 auto;
+                    }
+                }
+            }
+
+            .large-stat {
+                .stat-name {
+                    flex: 1 auto;
+                }
+                .stat-value {
+                    flex: 0 auto;
+                }
+            }
+        }
+
+        &.combat-stats {
+
+        }
+
+        &.life-mana {
+            justify-content: space-around;
+
+            @media (max-width: 475px) {
+                flex-direction: row;
+
+                .stat {
+                    flex: 0 auto;
+                }
+            }
+
+            .life-danger {
+                color: #c72b2b;
+            }
+
+            span {
+                &.game-icon-hearts {
+                    color: #c72b2b;
+                }
+                &.game-icon-abstract-061 {
+                    color: blueviolet;
+                }
+            }
+        }
+    }
+
+}
+
+.stat-tab {
+    display: flex;
+    flex-wrap: wrap;
+
+    md-card {
+        margin: 5px;
+        flex: 1 auto;
+    }
+
+    .stat-header {
+        font-weight: bold;
+        flex-direction: row;
+        display: flex;
+    }
+
+    .stat-row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .stat-element {
+        width: 60px;
+        flex: 1 auto;
+        text-align: center;
+    }
+
+    .stat-element-large {
+        width: 75px;
+        flex: 1 auto;
+        text-align: center;
+    }
+
+    .stat-element-small {
+        width: 48px;
+        flex: 1 1 auto;
+        text-align: center;
+    }
+
+    .stat-details {
+        font-size: smaller;
+        .stat-detail-reason {
+            color: rgba(0, 0, 0, 0.54);
+        }
+        .stat-element {
+            color: rgba(0, 0, 0, 0.75);
+        }
+        .detail-row {
+            border-top: 1px solid lightgray;
+        }
+    }
+
+    .canceled {
+        text-decoration: line-through;
+    }
+    .table-stats > td {
+        line-height: 1;
+    }
+    .stats-detail-name > td {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .stats-detail-values > td {
+        padding-top: 0;
+        border-top: 0;
+    }
+}
+
+
+.weapons-card {
+    .selected {
+        background-color: #efefef;
+    }
+    md-card-content {
+        display: flex;
+        flex-wrap: wrap;
+        .weapons-list {
+            flex: 1 0 auto;
+            .item-line {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: center;
+                font-size: medium;
+
+                icon {
+                    padding-right: 10px;
+                }
+
+                md-icon {
+                    padding-right: 6px;
+                    color: rgba(0, 0, 0, 0.54);
+                }
+            }
+        }
+        .item-line {
+            border-bottom: 1px solid #efefef;
+        }
+    }
+}
+.weapons-detail {
+    width: 100%;
+    padding-bottom: 40px;
+}
+
+.level-up-button {
+    margin-left: 32px;
+}
+
+.level-up-dialog {
+    margin: 0 16px;
+
+    md-card-content {
+        md-card {
+            margin-bottom: 5px;
+        }
+    }
+    .level-up-dialog-content {
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+
+    .level-up-ea-ev {
+        display: flex;
+        md-input-container {
+            flex: 1 1 auto;
+            margin-right: 6px;
+        }
+
+        button {
+            flex: 0 0 auto;
+        }
+    }
+}
+
+.skill-list-item {
+    height: 40px;
+    p[md-line] {
+        color: rgba(0, 0, 0, 0.54);
+    }
+    button {
+        color: rgba(0, 0, 0, 0.54);
+    }
+}
+
+.skill-info-dialog {
+    max-width: 80vw;
+    md-card-content {
+        max-height: 70vh;
+    }
+}

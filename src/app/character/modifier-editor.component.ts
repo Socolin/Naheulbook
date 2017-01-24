@@ -7,10 +7,10 @@ import {dateOffset2TimeDuration} from '../date/util';
     selector: 'modifier-editor',
     templateUrl: './modifier-editor.component.html'
 })
-export class ModifierEditorComponent implements OnInit {
+export class ModifierEditorComponent {
     @Input() modifier: ItemModifier = new ItemModifier();
 
-    private durationDateOffset: NhbkDateOffset = new NhbkDateOffset();
+    public durationDateOffset: NhbkDateOffset = new NhbkDateOffset();
 
     setTimeDuration(dateOffset: NhbkDateOffset) {
         if (this.modifier.durationType !== 'time') {
@@ -19,22 +19,21 @@ export class ModifierEditorComponent implements OnInit {
         this.modifier.duration = dateOffset2TimeDuration(dateOffset);
     }
 
-    setDurationType(durationType: string) {
-        if (durationType === 'custom') {
+    updateDurationType() {
+        if (this.modifier.durationType === 'custom') {
             this.modifier.duration = '';
         }
-        else if (durationType === 'combat') {
+        else if (this.modifier.durationType === 'combat') {
             this.modifier.duration = 1;
         }
-        else if (durationType === 'time') {
+        else if (this.modifier.durationType === 'forever') {
+            this.modifier.duration = null;
+        }
+        else if (this.modifier.durationType === 'time') {
             this.modifier.duration = dateOffset2TimeDuration(this.durationDateOffset);
         }
         else {
-            throw new Error('Invalid durationType: `' + durationType + '\'');
+            throw new Error('Invalid durationType: `' + this.modifier.durationType + '\'');
         }
-        this.modifier.durationType = durationType;
-    }
-
-    ngOnInit() {
     }
 }

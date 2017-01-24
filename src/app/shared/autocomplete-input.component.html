@@ -1,13 +1,27 @@
-<span style="position: relative">
-    <div  *ngIf="values" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"
-         (click)="close()">
-    </div>
-    <span *ngIf="values" style="position: absolute; top: 25px; left: 10px; z-index: 100; display: table">
-        <div class="list-group" style="display: table-row">
-            <template ngFor let-item [ngForOf]="values" let-i="index">
-                <a href="#" class="list-group-item" [class.active]="preSelectedValueIndex == i" (click)="selectValue(item)">{{item.text}}</a>
+<span class="autocomplete-container">
+    <md-input-container #autocompleteOrigin="cdkOverlayOrigin" cdk-overlay-origin>
+        <input md-input
+               [disabled]="disabled"
+               [placeholder]="placeholder"
+               (keydown)="onKey($event)"
+               [(ngModel)]="value"
+               (ngModelChange)="updateList()"
+               (click)="updateList()"
+               autocomplete="false"/>
+    </md-input-container>
+
+    <template cdk-connected-overlay
+              [origin]="autocompleteOrigin"
+              [open]="matchingValues !== null && matchingValues?.length > 0"
+              hasBackdrop
+              backdropClass="cdk-overlay-transparent-backdrop"
+              (backdropClick)="matchingValues = null">
+        <md-nav-list dense class="autocomplete-overlay">
+            <template ngFor let-item [ngForOf]="matchingValues" let-i="index">
+                <md-list-item (click)="selectValue(item)" [class.active]="preSelectedValueIndex === i">
+                    {{item.text}}
+                </md-list-item>
             </template>
-        </div>
-    </span>
-    <input class="form-control" (keydown)="onKey($event)" [(ngModel)]="value" (ngModelChange)="updateList()" (click)="updateList()" autocomplete="false"/>
+        </md-nav-list>
+    </template>
 </span>

@@ -1,16 +1,21 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, NavigationStart} from '@angular/router';
 import {NotificationsService} from './notifications';
 
 import {LoginService} from './user';
 import {User} from './user';
+import {MdSidenav} from '@angular/material';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
     public loggedUser: User;
+
+    @ViewChild('start', {read: MdSidenav})
+    public start: MdSidenav;
 
     constructor(private _loginService: LoginService
         , private _notifications: NotificationsService
@@ -25,9 +30,10 @@ export class AppComponent implements OnInit {
                     } else if (event.url.lastIndexOf('/character', 0) === 0) {
                         this.checkIsLogged();
                     }
+                    this.start.close();
                 }
             });
-    }
+    };
 
     checkIsAdmin() {
         if (this.loggedUser) {

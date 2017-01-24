@@ -155,16 +155,36 @@
         </template>
     </div>
 
+    <div *ngIf="!fighter.isMonster" class="field-button">
+        <button md-icon-button [mdMenuTriggerFor]="menuCharacter" aria-label="Open basic menu">
+            <md-icon>more_vert</md-icon>
+        </button>
 
-    <div class="field-button">
-        <div *ngIf="fighter.isMonster">
-            <button class="btn btn-danger game-icon game-icon-skull-crossed-bones"
-                    (click)=killMonster(fighter.monster)></button>
-            <button class="btn btn-danger glyphicon glyphicon-trash"
-                    (click)=deleteMonster(fighter.monster)></button>
-        </div>
-        <div *ngIf="!fighter.isMonster">
-            <button class="btn btn-success glyphicon glyphicon-plus" (click)="addItemTo(fighter.character)"></button>
-        </div>
+        <md-menu #menuCharacter="mdMenu">
+            <button md-menu-item
+                    (click)="displayCharacterSheet(fighter.character)">
+                Voir la fiche
+            </button>
+            <button md-menu-item
+                    (click)=addItemTo(fighter.character)>
+                Ajouter un objet
+            </button>
+        </md-menu>
+    </div>
+    <div *ngIf="fighter.isMonster" class="field-button">
+        <button md-icon-button [mdMenuTriggerFor]="menuMonster" aria-label="Open basic menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+
+        <md-menu #menuMonster="mdMenu">
+            <button md-menu-item
+                    (click)=killMonster(fighter.monster)>
+                Tuer le monstre
+            </button>
+            <button md-menu-item
+                    (click)=deleteMonster(fighter.monster)>
+                Supprimer le monstre
+            </button>
+        </md-menu>
     </div>
 </div>

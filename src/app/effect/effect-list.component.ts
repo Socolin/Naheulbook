@@ -6,19 +6,21 @@ import {LoginService} from '../user';
 
 import {EffectService} from './effect.service';
 import {EffectCategory, Effect} from './effect.model';
+import {MdTabChangeEvent} from "@angular/material";
 
 @Component({
     selector: 'effect-list',
     templateUrl: './effect-list.component.html',
+    styleUrls: ['../shared/number-shadow.scss'],
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputCategoryId: number = 1;
 
-    private selectedCategory: EffectCategory;
-    private categories: EffectCategory[];
-    private effects: Effect[] = [];
-    private editable: boolean = false;
-    private sub: Subscription;
+    public categories: EffectCategory[];
+    public effects: {[categoryId: number]: Effect[]} = {};
+    public editable: boolean = false;
+    public sub: Subscription;
+    public currentTabIndex: number = 0;
 
     constructor(private _router: Router
         , private _route: ActivatedRoute
@@ -28,6 +30,11 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
 
     isOverlay(): boolean {
         return this._route.snapshot.url.length === 0 || this._route.snapshot.url[0].path !== 'database';
+    }
+
+    selectChange(changeEvent: MdTabChangeEvent) {
+        this.selectCategory(this.categories[changeEvent.index]);
+        this.currentTabIndex = changeEvent.index;
     }
 
     selectCategory(category: EffectCategory): boolean {
@@ -45,18 +52,11 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
 
     loadCategory(categoryId: number): void {
         if (categoryId) {
-            for (let i = 0; i < this.categories.length; i++) {
-                let category = this.categories[i];
-                if (category.id === categoryId) {
-                    this.selectedCategory = category;
-                    this._effectService.getEffects(categoryId).subscribe(
-                        effects => {
-                            this.effects = effects;
-                        }
-                    );
-                    break;
+            this._effectService.getEffects(categoryId).subscribe(
+                effects => {
+                    this.effects[categoryId] = effects;
                 }
-            }
+            );
         }
     }
 
@@ -74,7 +74,16 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.sub = this._router.routerState.root.queryParams.subscribe(params => {
                     let id = +params['id'];
+                    if (!id) {
+                        id = this.categories[0].id;
+                    }
                     this.loadCategory(id);
+                    for (let i = 0; i < this.categories.length; i++) {
+                        if (this.categories[i].id === id) {
+                            this.currentTabIndex = i;
+                            break;
+                        }
+                    }
                 });
             }
         });

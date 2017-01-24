@@ -1,0 +1,19 @@
+.stat-modifiers {
+    display: flex;
+    flex-direction: row;
+
+    .delete_all_button {
+        flex: 0 0 auto;
+    }
+    .modifiers-list {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+
+        .modifier-line {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+    }
+}

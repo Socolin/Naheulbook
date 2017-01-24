@@ -1,29 +1,37 @@
-import {Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild} from '@angular/core';
 import {NhbkDate, CalendarDate} from './date.model';
 import {DateService} from './date.service';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {OverlayRef, Portal} from '@angular/material';
 
 @Component({
     selector: 'date-selector',
+    styleUrls: ['./date-selector.component.scss'],
     templateUrl: './date-selector.component.html',
 })
 export class DateSelectorComponent implements OnInit, OnChanges {
     @Input() date: NhbkDate;
     @Output() onChange: EventEmitter<NhbkDate> = new EventEmitter<NhbkDate>();
-    private show: boolean;
-    private calendar: CalendarDate[];
-    private currentCalendarDate: CalendarDate;
-    private relativeDay: number;
-    private defaultDate: NhbkDate = new NhbkDate(0, 8, Math.floor(Math.random() * 365), 1498);
 
-    constructor(private _dateService: DateService) {
+    @ViewChild('dateSelectorDialog')
+    public dateSelectorDialog: Portal<any>;
+    public dateSelectorOverlayRef: OverlayRef;
+
+    public calendar: CalendarDate[];
+    public currentCalendarDate: CalendarDate;
+    public relativeDay: number;
+    public defaultDate: NhbkDate = new NhbkDate(0, 8, Math.floor(Math.random() * 365), 1498);
+
+    constructor(private _dateService: DateService,
+                private _nhbkDialogService: NhbkDialogService) {
     }
 
     openSelector() {
-        this.show = true;
+        this.dateSelectorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.dateSelectorDialog);
     }
 
     closeSelector() {
-        this.show = false;
+        this.dateSelectorOverlayRef.detach();
     }
 
     validDate() {

@@ -24,13 +24,13 @@ import {IconDescription} from './icon.model';
             -o-transform: rotate(180deg) ;
             -ms-transform: rotate(180deg) ;
         }
-        .rotate280:before {
+        .rotate270:before {
             display: inline-block;
-            transform: rotate(280deg) ;
-            -webkit-transform: rotate(280deg) ;
-            -moz-transform: rotate(280deg) ;
-            -o-transform: rotate(280deg) ;
-            -ms-transform: rotate(280deg) ;
+            transform: rotate(270deg) ;
+            -webkit-transform: rotate(270deg) ;
+            -moz-transform: rotate(270deg) ;
+            -o-transform: rotate(270deg) ;
+            -ms-transform: rotate(270deg) ;
         }
         `,
     ]

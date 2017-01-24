@@ -1,0 +1,23 @@
+.loot-tab {
+    display: flex;
+
+    .loot-list {
+        flex: 1 1 0;
+        md-card {
+            margin: 5px;
+        }
+
+        ul {
+            padding-left: 16px;
+        }
+    }
+    .item-detail {
+        flex: 1 1 0;
+    }
+
+    @media screen and (max-width: 599px) {
+        .item-detail {
+            display: none;
+        }
+    }
+}

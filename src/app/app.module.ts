@@ -1,6 +1,8 @@
 import {NgModule, ErrorHandler} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule}  from '@angular/router';
+import {MaterialModule} from "@angular/material";
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 import {AppComponent}  from './app.component';
 import {routes} from './app.routes';
@@ -23,10 +25,14 @@ import {WebSocketService} from './shared/websocket.service';
 import {DateModule} from './date/date.module';
 import {NhbkErrorHandler} from './nhbk-error-handler';
 
+import 'hammerjs';
+
 @NgModule({
     imports: [
         BrowserModule,
         RouterModule.forRoot(routes),
+        MaterialModule.forRoot(),
+        FlexLayoutModule.forRoot(),
         HttpModule,
         CharacterModule,
         EffectModule,
@@ -41,7 +47,7 @@ import {NhbkErrorHandler} from './nhbk-error-handler';
         SharedModule,
         SkillModule,
         UserModule,
-        DateModule,
+        DateModule
     ],
     declarations: [
         AppComponent

@@ -14,11 +14,13 @@ export class CharacterHistoryComponent implements OnInit {
     public currentDay: string = null;
     public history: any[];
     public loadMore: boolean;
+    public loading: boolean;
 
     constructor(private _characterService: CharacterService) {
     }
 
     loadHistory(next?: boolean) {
+        this.loading = true;
         if (!next) {
             this.historyPage = 0;
             this.currentDay = null;
@@ -48,6 +50,7 @@ export class CharacterHistoryComponent implements OnInit {
                     }
                     logs.push(l);
                 }
+                this.loading = false;
             }
         );
         this.historyPage++;

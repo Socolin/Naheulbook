@@ -1,6 +1,8 @@
 import {NgModule}      from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {MaterialModule} from "@angular/material";
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 import {SharedModule} from '../shared/shared.module';
 
@@ -19,17 +21,20 @@ import {
     EffectPanelComponent, ModifierDetailComponent, EffectDetailComponent
 } from './effect-panel.component';
 import {InventoryPanelComponent} from './inventory-panel.component';
-import {SwipableItemDetailComponent} from './swipable-item-detail.component';
+import {SwipeableItemDetailComponent} from './swipeable-item-detail.component';
 import {BagItemViewComponent} from './bag-item-view.component';
 import {DateModule} from '../date/date.module';
-import {ModifierEditorComponent} from './modifier-editer.component';
+import {ModifierEditorComponent} from './modifier-editor.component';
 import {CharacterLootPanelComponent} from './character-loot-panel.component';
 import {CharacterHistoryComponent} from './character-history.component';
+import {GiveItemDialogComponent} from './give-item-dialog-component';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
+        MaterialModule.forRoot(),
+        FlexLayoutModule.forRoot(),
         SharedModule,
         SkillModule,
         OriginModule,
@@ -46,13 +51,14 @@ import {CharacterHistoryComponent} from './character-history.component';
         , ItemDetailComponent
         , SpecialitySelectorComponent
         , EffectPanelComponent
-        , SwipableItemDetailComponent
+        , SwipeableItemDetailComponent
         , InventoryPanelComponent
         , EffectDetailComponent
         , ModifierDetailComponent
         , ModifierEditorComponent
         , CharacterLootPanelComponent
         , CharacterHistoryComponent
+        , GiveItemDialogComponent
     ],
     exports: [
         CharacterComponent

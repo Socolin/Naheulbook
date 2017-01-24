@@ -1,5 +1,5 @@
 <div style='width:100%;height:100%;text-align:left'>
-    <i class="ra ra-targeted ra-lg" (click)="displaySelector()"></i>
+    <i cdk-overlay-origin #targetSelectorOrigin="cdkOverlayOrigin" class="ra ra-targeted ra-lg" (click)="displaySelector()"></i>
     <div *ngIf="fighter.target" style="display:inline-block; position: relative" (click)="displaySelector()">
         <div style="display: inline-block; width: 20px; height: 12px">
             <i [style.color]="'#' + fighter.target.color"
@@ -24,46 +24,60 @@
         </div>
         {{fighter.target.name}}
     </div>
-    <div *ngIf="showSelector" style="position: relative">
-        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;"
-             (click)="hideSelector()">
-        </div>
-        <div style="z-index: 100;
-                    position: absolute;
-                    width: 310px;
-                    left: 35px;
-                    top: -15px;
-                    background-color: white;
-                    border: 1px solid gray;">
-            <div class="target-tabs">
-                <div class="target-tab"
-                     [class.target-tab-selected]="targetType==='monster'"
-                     (click)="setTargetType('monster')">
-                    Monstres
+</div>
+
+<template cdk-connected-overlay
+          [positions]="positions"
+          [origin]="targetSelectorOrigin"
+          [open]="showSelector"
+          [height]="selectorHeight"
+          [minHeight]="selectorMinHeight"
+          hasBackdrop
+          (backdropClick)="hideSelector()">
+    <md-card style="padding: 0">
+        <md-tab-group [selectedIndex]="selectedTabIndex">
+            <md-tab label="Monstres">
+                <div class="target-list">
+                    <template ngFor let-target [ngForOf]="targets">
+                        <div *ngIf="target.isMonster" class=target-element (click)="selectTarget(target)">
+                            <div class="target-icon">
+                                <i [style.color]="'#' + target.color"
+                                   [class.ra-player]="!target.isMonster"
+                                   [class.ra-monster-skull]="target.isMonster"
+                                   style="position: absolute"
+                                   class="ra ra-3x"></i>
+                                <span *ngIf="target.number" class="target-number">
+                                {{target.number}}
+                            </span>
+                            </div>
+                            <div *ngIf="target.name" class="target-name">
+                                {{target.name}}
+                            </div>
+                        </div>
+                    </template>
                 </div>
-                <div class="target-tab"
-                     [class.target-tab-selected]="targetType==='character'"
-                     (click)="setTargetType('character')">
-                    Joueurs
-                </div>
-            </div>
-            <template ngFor let-target [ngForOf]="targets">
-                <div *ngIf="isTargetShow(target)" class=target-element (click)="selectTarget(target)">
-                    <div class="target-icon">
-                        <i [style.color]="'#' + target.color"
-                           [class.ra-player]="!target.isMonster"
-                           [class.ra-monster-skull]="target.isMonster"
-                           style="position: absolute"
-                           class="ra ra-3x"></i>
-                        <span *ngIf="target.number" class="target-number">
+            </md-tab>
+            <md-tab label="Joueurs">
+                <div class="target-list">
+                    <template ngFor let-target [ngForOf]="targets">
+                        <div *ngIf="!target.isMonster" class=target-element (click)="selectTarget(target)">
+                            <div class="target-icon">
+                                <i [style.color]="'#' + target.color"
+                                   [class.ra-player]="!target.isMonster"
+                                   [class.ra-monster-skull]="target.isMonster"
+                                   style="position: absolute"
+                                   class="ra ra-3x"></i>
+                                <span *ngIf="target.number" class="target-number">
                             {{target.number}}
                         </span>
-                    </div>
-                    <div *ngIf="target.name" class="target-name">
-                        {{target.name}}
-                    </div>
+                            </div>
+                            <div *ngIf="target.name" class="target-name">
+                                {{target.name}}
+                            </div>
+                        </div>
+                    </template>
                 </div>
-            </template>
-        </div>
-    </div>
-</div>
+            </md-tab>
+        </md-tab-group>
+    </md-card>
+</template>

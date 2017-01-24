@@ -1,29 +1,46 @@
-import {Component, Output, EventEmitter, Input} from '@angular/core';
+import {Component, Output, EventEmitter, Input, ViewChild} from '@angular/core';
 
 import {NhbkDateOffset} from './date.model';
+import {OverlayRef, Portal} from '@angular/material';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
     selector: 'date-modifier',
+    styleUrls: ['./date-modifier.component.scss'],
     templateUrl: './date-modifier.component.html',
 })
 export class DateModifierComponent {
     @Output() onChange: EventEmitter<NhbkDateOffset> = new EventEmitter<NhbkDateOffset>();
-    private show: boolean;
     @Input() dateOffset: NhbkDateOffset = new NhbkDateOffset();
     @Input() resetOnChange: boolean = true;
+    @Input() title: string;
     private forceUpdateDuration: number = 0;
 
+    @ViewChild('dateSelectorDialog')
+    public dateSelectorDialog: Portal<any>;
+    public dateSelectorOverlayRef: OverlayRef;
+
+    constructor(private _nhbkDialogService: NhbkDialogService) {
+    }
+
     openSelector() {
-        this.show = true;
+        this.dateSelectorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.dateSelectorDialog);
     }
 
     closeSelector() {
-        this.show = false;
+        this.dateSelectorOverlayRef.detach();
     }
 
     updateTime(unit: string, value: number) {
         this.dateOffset[unit] += value;
+        if (this.dateOffset[unit] < 0) {
+            this.dateOffset[unit] = 0;
+        }
         this.forceUpdateDuration++;
+    }
+
+    resetDate() {
+        this.dateOffset = new NhbkDateOffset();
     }
 
     validDate() {

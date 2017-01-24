@@ -4,27 +4,27 @@ import {Job} from '../job';
 import {Origin} from '../origin';
 import {Skill} from './skill.model';
 import {SkillService} from './skill.service';
+import {getRandomInt} from "../shared/random";
 
 @Component({
     selector: 'skill-selector',
     templateUrl: './skill-selector.component.html',
+    styleUrls: ['./skill-selector.component.scss'],
 })
 export class SkillSelectorComponent implements OnInit {
     // Inputs
     @Input() selectedJob: Job;
     @Input() selectedOrigin: Origin;
     @Input() knownSkills: Skill[];
-    @Input() skillCount: number;
+    @Input() skillCount: number = 2;
 
     // Outputs
     @Output() skillsSelected: EventEmitter<Skill[]> = new EventEmitter<Skill[]>();
 
-    public selectedSkills: Skill[];
+    public selectedSkills: Skill[] = [];
     public skills: Skill[];
 
     constructor(private _skillService: SkillService) {
-        this.selectedSkills = [];
-        this.skillCount = 2;
     }
 
     isSelected(skill: Skill) {
@@ -100,6 +100,16 @@ export class SkillSelectorComponent implements OnInit {
             }
             this.skills = skills;
         });
+    }
+
+    randomSelect(): void {
+        while (this.selectedSkills.length < this.skillCount) {
+            let rnd = getRandomInt(0, this.skills.length - 1);
+            let skill = this.skills[rnd];
+            if (!this.isSelected(skill)) {
+                this.selectSkill(skill);
+            }
+        }
     }
 
     ngOnInit() {

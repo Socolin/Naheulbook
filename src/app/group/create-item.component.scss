@@ -1,0 +1,16 @@
+.new-item-template {
+
+}
+
+.new-item-data {
+    margin: 5px;
+    md-card-content {
+        display: flex;
+        flex-direction: column;
+    }
+}
+.new-item-template {
+    md-card {
+        margin: 5px;
+    }
+}

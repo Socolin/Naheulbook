@@ -1,4 +1,9 @@
-import {Input, OnInit, Component, Inject, forwardRef} from '@angular/core';
+import {
+    Input, OnInit, Component, Inject, forwardRef, HostListener, ElementRef, ViewChild,
+    OnChanges, SimpleChanges
+} from '@angular/core';
+import {OverlayRef, Portal, Overlay, OverlayState} from '@angular/material';
+
 import {Character} from './character.model';
 import {CharacterWebsocketService} from './character-websocket.service';
 import {ItemService} from '../item/item.service';
@@ -7,61 +12,71 @@ import {Item, PartialItem, ItemData} from './item.model';
 import {removeDiacritics} from '../shared/remove_diacritics';
 import {SwipeService} from './swipe.service';
 import {ItemActionService} from './item-action.service';
+import {isNullOrUndefined} from 'util';
+import {Observable} from 'rxjs';
+import {AutocompleteValue} from '../shared/autocomplete-input.component';
 
 @Component({
     selector: 'inventory-panel',
     templateUrl: './inventory-panel.component.html',
-    styles: [`
-        @media screen and (min-width: 768px) {
-            .overflow-item-list {
-                overflow-y: auto;
-            }
-        }`],
+    styleUrls: ['./inventory-panel.component.scss'],
     providers: [SwipeService],
 })
-export class InventoryPanelComponent implements OnInit {
+export class InventoryPanelComponent implements OnInit, OnChanges {
     @Input() character: Character;
     @Input() inGroupTab: boolean;
 
     // Inventory
     public selectedItem: Item;
-
     public selectedInventoryTab: string = 'all';
+    private sortType: string = 'none';
+
+    public iconMode: boolean = false;
+    public itemFilterName: string;
+
+    @ViewChild('itemDetail')
+    private itemDetailDiv: ElementRef;
+    @ViewChild('itemDetailTop')
+    private itemDetailTopDiv: ElementRef;
+    public itemDetailOffset: number = 0;
+
+    @ViewChild('addItemDialog')
+    public addItemDialog: Portal<any>;
+    public addItemOverlayRef: OverlayRef;
+    public addItemSearch: string;
     public filteredItems: ItemTemplate[] = [];
+
+    public autocompleteAddItemListCallback: Function = this.updateItemListAutocomplete.bind(this);
+
     public itemAddCustomName: string;
     public itemAddCustomDescription: string;
     public selectedAddItem: ItemTemplate;
     public itemAddQuantity: number;
 
-    public iconMode: boolean = false;
-    public itemFilterName: string;
-
     constructor(
         @Inject(forwardRef(()  => ItemService)) private _itemService: ItemService
         , private _characterWebsocketService: CharacterWebsocketService
-        , private _itemActionService: ItemActionService
-        , private _swipeService: SwipeService) {
+        , private _overlay: Overlay
+        , private _itemActionService: ItemActionService) {
     }
 
-    updateFilterItem() {
-        if (this.selectedInventoryTab === 'add') {
-            this.updateFilterAddItem();
+    @HostListener('window:scroll') onScroll(): boolean {
+        if (this.itemDetailDiv && this.itemDetailTopDiv) {
+            let rect = this.itemDetailTopDiv.nativeElement.getBoundingClientRect();
+            if (rect.top < 30) {
+                this.itemDetailOffset = 30 - rect.top;
+            } else {
+                this.itemDetailOffset = 0;
+            }
+            return true;
         }
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
     }
 
     toggleIconMode() {
         this.iconMode = !this.iconMode;
-    }
-
-    updateFilterAddItem() {
-        if (this.itemFilterName) {
-            this._itemService.searchItem(this.itemFilterName).subscribe(
-                items => {
-                    this.filteredItems = items;
-                    this.selectedAddItem = null;
-                }
-            );
-        }
     }
 
     selectAddItem(item: ItemTemplate) {
@@ -75,15 +90,6 @@ export class InventoryPanelComponent implements OnInit {
         return false;
     }
 
-    unselectAddItem() {
-        this.selectedAddItem = null;
-        return false;
-    }
-
-    isAddItemSelected(item) {
-        return this.selectedAddItem && this.selectedAddItem.id === item.id;
-    }
-
     onAddItem(item: Item) {
         for (let i = 0; i < this.character.items.length; i++) {
             if (this.character.items[i].id === item.id) {
@@ -91,32 +97,65 @@ export class InventoryPanelComponent implements OnInit {
             }
         }
 
-        this._characterWebsocketService.notifyChange("Ajout de l\'objet: " + item.data.name);
+        this._characterWebsocketService.notifyChange('Ajout de l\'objet: ' + item.data.name);
         this.character.items.push(item);
         this.character.update();
     }
 
-    addItem() {
-        if (this.character) {
-            let itemData = new ItemData();
-            itemData['name'] = this.itemAddCustomName;
-            itemData['description'] = this.itemAddCustomDescription;
-            itemData['quantity'] = this.itemAddQuantity;
-            this._itemService.addItemTo('character', this.character.id
-                , this.selectedAddItem.id
-                , itemData)
-                .subscribe(
-                    item => {
-                        this.onAddItem(item);
-                        this.selectedItem = item;
-                        this.itemFilterName = '';
-                        this.selectedAddItem = null;
-                        this.itemAddCustomName = null;
-                        this.itemAddCustomDescription = null;
-                        this.itemAddQuantity = null;
-                    }
-                );
+    openAddItemModal() {
+        this.addItemSearch = null;
+        this.filteredItems = [];
+
+        let config = new OverlayState();
+
+        config.positionStrategy = this._overlay.position()
+            .global()
+            .centerHorizontally()
+            .centerVertically();
+        config.hasBackdrop = true;
+
+        let overlayRef = this._overlay.create(config);
+        overlayRef.attach(this.addItemDialog);
+        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        this.addItemOverlayRef = overlayRef;
+    }
+
+    closeAddItemDialog() {
+        this.addItemOverlayRef.detach();
+    }
+
+    updateItemListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
+        this.addItemSearch = filter;
+        if (filter === '') {
+            return Observable.from([]);
         }
+        return this._itemService.searchItem(this.addItemSearch).map(
+            items => {
+                return items.map(e => new AutocompleteValue(e, e.name));
+            }
+        );
+    }
+
+    addItem() {
+        let itemData = new ItemData();
+        itemData['name'] = this.itemAddCustomName;
+        itemData['description'] = this.itemAddCustomDescription;
+        itemData['quantity'] = this.itemAddQuantity;
+        this._itemService.addItemTo('character', this.character.id
+            , this.selectedAddItem.id
+            , itemData)
+            .subscribe(
+                item => {
+                    this.onAddItem(item);
+                    this.selectedItem = item;
+                    this.addItemSearch = '';
+                    this.selectedAddItem = null;
+                    this.itemAddCustomName = null;
+                    this.itemAddCustomDescription = null;
+                    this.itemAddQuantity = null;
+                }
+            );
+        this.closeAddItemDialog();
     }
 
     selectItem(item: Item) {
@@ -128,6 +167,7 @@ export class InventoryPanelComponent implements OnInit {
         if (!this.itemFilterName) {
             return true;
         }
+
         let cleanFilter = removeDiacritics(this.itemFilterName).toLowerCase();
         if (removeDiacritics(item.data.name).toLowerCase().indexOf(cleanFilter) > -1) {
             return true;
@@ -138,7 +178,6 @@ export class InventoryPanelComponent implements OnInit {
         return false;
     }
 
-    private sortType = 'none';
     sortInventory(type: string) {
         if (type === 'not_identified_first') {
             this.sortType = type;
@@ -172,16 +211,14 @@ export class InventoryPanelComponent implements OnInit {
         else {
             if (this.sortType !== 'asc') {
                 this.sortType = 'asc';
-                this.character.items.sort((a, b) =>
-                    {
+                this.character.items.sort((a, b) => {
                         return a.data.name.localeCompare(b.data.name);
                     }
                 );
             }
             else {
                 this.sortType = 'desc';
-                this.character.items.sort((a, b) =>
-                    {
+                this.character.items.sort((a, b) => {
                         return 2 - a.data.name.localeCompare(b.data.name);
                     }
                 );
@@ -309,7 +346,7 @@ export class InventoryPanelComponent implements OnInit {
             let eventData = event.data;
             let item = event.item;
             let level = 1;
-            if (eventData != null && eventData.level != null) {
+            if (!isNullOrUndefined(eventData) && !isNullOrUndefined(eventData.level)) {
                 level = eventData.level;
             }
             this._itemService.equipItem(item.id, level).subscribe(

@@ -1,0 +1,29 @@
+.item-detail-swipe-container
+{
+    width: 85vw;
+    padding: 10px;
+    border-bottom-left-radius: 7px;
+    border-top-left-radius: 7px;
+}
+.item-detail {
+    position: absolute;
+    right: 0;
+    top: -90px;
+    color: #555;
+    z-index: 100;
+    width: 20vw;
+    touch-action: none;
+    -webkit-transition: width 0.5s; /* Safari */
+    transition: width 0.5s;
+}
+.item-detail-swipe {
+    width: 85vw;
+    -webkit-transition: width 0.5s; /* Safari */
+    transition: width 0.5s;
+}
+
+@media screen and (min-width: 600px) {
+    .item-detail {
+        display: none;
+    }
+}

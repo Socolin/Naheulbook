@@ -5,7 +5,6 @@ import {EffectService} from './effect.service';
 
 @Component({
     templateUrl: './edit-effect.component.html',
-    providers: [EffectService],
 })
 export class EditEffectComponent implements OnInit {
     public effect: Object;
@@ -19,6 +18,7 @@ export class EditEffectComponent implements OnInit {
     edit() {
         this._effectService.editEffect(this.effect).subscribe(
             effect => {
+                this._effectService.clearCacheCategory(effect.category);
                 this._router.navigate(['/database/effects'], {queryParams: {id: effect.category}});
             }
         );

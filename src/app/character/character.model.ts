@@ -11,6 +11,7 @@ import {
 } from '../shared';
 import {Effect} from '../effect';
 import {Skill} from '../skill';
+import {isNullOrUndefined} from 'util';
 
 export interface CharacterResume {
     id: number;
@@ -68,13 +69,12 @@ export class StaticDetailShow {
     magic: boolean = false;
 }
 export class StatisticDetail {
-    init() {
-        this.evea = [];
-        this.atprd = [];
-        this.stat = [];
-        this.magic = [];
-        this.other = [];
-    }
+    evea: any[] = [];
+    atprd: any[] = [];
+    stat: any[] = [];
+    magic: any[] = [];
+    other: any[] = [];
+    show: StaticDetailShow = new StaticDetailShow();
 
     static getDetailCategoryForStat(statName: string) {
         if (statName === 'EV' || statName === 'EA') {
@@ -103,6 +103,14 @@ export class StatisticDetail {
             return 'magic';
         }
         return 'unk';
+    }
+
+    init() {
+        this.evea = [];
+        this.atprd = [];
+        this.stat = [];
+        this.magic = [];
+        this.other = [];
     }
 
     add(name: string, data: {[statName: string]: any}) {
@@ -177,13 +185,6 @@ export class StatisticDetail {
             }
         }
     }
-
-    evea: any[] = [];
-    atprd: any[] = [];
-    stat: any[] = [];
-    magic: any[] = [];
-    other: any[] = [];
-    show: StaticDetailShow = new StaticDetailShow();
 }
 
 export class TacticalMovementInfo {
@@ -194,23 +195,6 @@ export class TacticalMovementInfo {
 }
 
 export class CharacterComputedData {
-    init() {
-        this.details.init();
-
-        this.itemsBySlots = {};
-        this.itemsBySlotsAll = {};
-        this.itemsEquiped = [];
-        this.itemSlots = [];
-        this.topLevelContainers = [];
-        this.containers = [];
-        this.skills = [];
-        this.nonReusableEffects = [];
-        this.reusableEffects = [];
-        this.nonReusableModifiers = [];
-        this.reusableModifiers = [];
-        this.tacticalMovement = new TacticalMovementInfo();
-    }
-
     stats: {[statName: string]: number} = {};
     skills: SkillDetail[] = [];
     containers: Object[];
@@ -224,13 +208,26 @@ export class CharacterComputedData {
     topLevelContainers = [];
     tacticalMovement: TacticalMovementInfo = new TacticalMovementInfo();
 
-    nonReusableEffects: CharacterEffect[] = [];
-    reusableEffects: CharacterEffect[] = [];
-    nonReusableModifiers: CharacterModifier[] = [];
-    reusableModifiers: CharacterModifier[] = [];
+    effects: CharacterEffect[] = [];
+    modifiers: CharacterModifier[] = [];
 
     countExceptionalStats: number = 0;
     countActiveEffect: number = 0;
+
+    init() {
+        this.details.init();
+
+        this.itemsBySlots = {};
+        this.itemsBySlotsAll = {};
+        this.itemsEquiped = [];
+        this.itemSlots = [];
+        this.topLevelContainers = [];
+        this.containers = [];
+        this.skills = [];
+        this.effects = [];
+        this.modifiers = [];
+        this.tacticalMovement = new TacticalMovementInfo();
+    }
 }
 
 export class Character {
@@ -267,6 +264,34 @@ export class Character {
 
     computedData: CharacterComputedData = new CharacterComputedData();
     onUpdate: EventEmitter<Character> = new EventEmitter<Character>();
+
+    static hasChercherDesNoises(character: Character): boolean {
+        return this.hasSkill(character, 14);
+    }
+
+    static hasSkill(character: Character, skillId: number): boolean {
+        for (let i = 0; i < character.origin.skills.length; i++) {
+            let skill = character.origin.skills[i];
+            if (skill.id === skillId) {
+                return true;
+            }
+        }
+        if (character.job) {
+            for (let i = 0; i < character.job.skills.length; i++) {
+                let skill = character.job.skills[i];
+                if (skill.id === skillId) {
+                    return true;
+                }
+            }
+        }
+        for (let i = 0; i < character.skills.length; i++) {
+            let skill = character.skills[i];
+            if (skill.id === skillId) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // Concatenate modifiers like [-2 PRD] and [+2 PRD for dwarf]
     private cleanItemModifiers(item: Item): ItemStatModifier[] {
@@ -313,7 +338,7 @@ export class Character {
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
             itemsById[item.id] = item;
-            if (item.data.equiped || item.container != null) {
+            if (item.data.equiped || item.container !== null) {
                 if (item.template.data.container) {
                     if (item.data.equiped) {
                         topLevelContainers.push(item);
@@ -476,20 +501,16 @@ export class Character {
 
         for (let i = 0; i < this.modifiers.length; i++) {
             let modifier = this.modifiers[i];
-            if (modifier.reusable) {
-                this.computedData.reusableModifiers.push(modifier);
-            }
-            else {
-                if (modifier.active) {
-                    this.computedData.nonReusableModifiers.push(modifier);
-                }
+
+            if (modifier.reusable || modifier.active) {
+                this.computedData.modifiers.push(modifier);
             }
 
             if (!modifier.active) {
                 continue;
             }
             if (!modifier.permanent) {
-                this.computedData.countActiveEffect++
+                this.computedData.countActiveEffect++;
             }
             let detailData = {};
             for (let j = 0; j < modifier.values.length; j++) {
@@ -575,15 +596,15 @@ export class Character {
             }
 
             if (item.modifiers) {
-                for (let i = 0; i < item.modifiers.length; i++) {
-                    let modifier = item.modifiers[i];
+                for (let j = 0; j < item.modifiers.length; j++) {
+                    let modifier = item.modifiers[j];
                     if (!modifier.active) {
                         continue;
                     }
                     this.computedData.countActiveEffect++;
                     let detailData = {};
-                    for (let j = 0; j < modifier.values.length; j++) {
-                        let mod = modifier.values[j];
+                    for (let k = 0; k < modifier.values.length; k++) {
+                        let mod = modifier.values[k];
                         if (mod.type === 'ADD') {
                             this.computedData.stats[mod.stat] += mod.value;
                         }
@@ -663,7 +684,7 @@ export class Character {
                     else if (modifier.type === 'PERCENTAGE') {
                         this.computedData.stats[overrideStatName] *= (modifier.value / 100);
                     }
-                    if (modifications[overrideStatName] == null) {
+                    if (modifications[overrideStatName] === null) {
                         modifications[overrideStatName] = 0;
                     }
                     modifications[overrideStatName] = formatModifierValue(modifier);
@@ -696,12 +717,7 @@ export class Character {
         for (let i = 0; i < this.effects.length; i++) {
             let characterEffect = this.effects[i];
             let effect = characterEffect.effect;
-            if (characterEffect.reusable) {
-                this.computedData.reusableEffects.push(characterEffect);
-            }
-            else {
-                this.computedData.nonReusableEffects.push(characterEffect);
-            }
+            this.computedData.effects.push(characterEffect);
             if (!characterEffect.active) {
                 continue;
             }
@@ -825,10 +841,10 @@ export class Character {
             }
         }
 
-        if (this.ev == null) {
+        if (isNullOrUndefined(this.ev)) {
             this.ev = this.computedData.stats['EV'];
         }
-        if (this.ea == null && this.computedData.stats['EA'] != null) {
+        if (isNullOrUndefined(this.ea) && !isNullOrUndefined(this.computedData.stats['EA'])) {
             this.ea = this.computedData.stats['EA'];
         }
 
@@ -917,33 +933,5 @@ export class Character {
         this.updateInventory();
         this.updateStats();
         this.onUpdate.emit(this);
-    }
-
-    static hasChercherDesNoises(character: Character): boolean {
-        return this.hasSkill(character, 14);
-    }
-
-    static hasSkill(character: Character, skillId: number): boolean {
-        for (let i = 0; i < character.origin.skills.length; i++) {
-            let skill = character.origin.skills[i];
-            if (skill.id === skillId) {
-                return true;
-            }
-        }
-        if (character.job) {
-            for (let i = 0; i < character.job.skills.length; i++) {
-                let skill = character.job.skills[i];
-                if (skill.id === skillId) {
-                    return true;
-                }
-            }
-        }
-        for (let i = 0; i < character.skills.length; i++) {
-            let skill = character.skills[i];
-            if (skill.id === skillId) {
-                return true;
-            }
-        }
-        return false;
     }
 }

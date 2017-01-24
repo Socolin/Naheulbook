@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {Origin} from '../origin';
@@ -8,10 +8,14 @@ import {Skill} from '../skill';
 import {CharacterService} from './character.service';
 import {Speciality} from './speciality.model';
 import {getRandomInt} from '../shared/random';
+import {OriginSelectorComponent} from "../origin/origin-selector.component";
+import {JobSelectorComponent} from "../job/job-selector.component";
+import {SkillSelectorComponent} from "../skill/skill-selector.component";
 
 @Component({
     selector: 'create-character',
     templateUrl: './create-character.component.html',
+    styleUrls: ['./create-character.component.scss']
 })
 export class CreateCharacterComponent {
     public step: number;
@@ -29,13 +33,22 @@ export class CreateCharacterComponent {
 
     public selectedOrigin: Origin;
 
+    @ViewChild(OriginSelectorComponent)
+    private originSelectorComponent: OriginSelectorComponent;
+
     // Step 2: Select job
 
     public selectedJob: Job;
 
+    @ViewChild(JobSelectorComponent)
+    private jobSelectorComponent: JobSelectorComponent;
+
     // Step 3: Select skills
 
     public selectedSkills: Skill[];
+
+    @ViewChild(SkillSelectorComponent)
+    private skillsSelectorComponent: SkillSelectorComponent;
 
     // Step 4: Select fortune
 
@@ -49,7 +62,8 @@ export class CreateCharacterComponent {
     /// MOVE_1_POINT_STAT
     public move1PointStatValues: {[statName: string]: number};
     /// SUPER_BOURRIN
-    public superBourrinValue: number;
+    public superBourrinValueAt: number;
+    public superBourrinValuePrd: number;
     /// CHANGE_1_AT_PRD
     public changeAtPrdValue: number;
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA
@@ -98,7 +112,8 @@ export class CreateCharacterComponent {
         if (step === 5) {
             this.modifiedStat = {};
             if (this.hasStatModification()) {
-                this.superBourrinValue = 0;
+                this.superBourrinValueAt = 0;
+                this.superBourrinValuePrd = 0;
                 this.initChangeAtPrd();
                 this.initRemoveAttOrPrdToIntOrCha();
                 this.initRemoveAttOrPrdToIntOrAd();
@@ -142,16 +157,6 @@ export class CreateCharacterComponent {
         return false;
     }
 
-    updateStat() {
-        this.selectedOrigin = null;
-        this.selectedJob = null;
-        if (this.cou && this.int && this.cha && this.ad && this.fo) {
-            this.setStep(1);
-        } else {
-            this.setStep(0);
-        }
-    }
-
     // Step 1: Select origin
 
     onSelectOrigin(origin) {
@@ -165,9 +170,23 @@ export class CreateCharacterComponent {
         this.setStep(2);
     }
 
+    selectRandomOrigin() {
+        this.originSelectorComponent.randomSelect();
+    }
+
+    toggleViewAllOrigins() {
+        this.originSelectorComponent.toggleViewAll();
+    }
+
     // Step 2: Select job
 
     onSelectJob(job) {
+        this.bonuses = [];
+        if (this.selectedOrigin.bonuses) {
+            for (let i = 0; i < this.selectedOrigin.bonuses.length; i++) {
+                this.bonuses.push(this.selectedOrigin.bonuses[i].token);
+            }
+        }
         if (job != null && job.bonuses) {
             for (let i = 0; i < job.bonuses.length; i++) {
                 this.bonuses.push(job.bonuses[i].token);
@@ -178,11 +197,24 @@ export class CreateCharacterComponent {
         this.setStep(3);
     }
 
+    selectRandomJob() {
+        this.jobSelectorComponent.randomSelect();
+    }
+
+    toggleViewAllJobs() {
+        this.jobSelectorComponent.toggleViewAll();
+    }
+
+
     // Step 3: Select skills
 
     onSelectSkills(skills) {
         this.selectedSkills = skills;
         this.setStep(4);
+    }
+
+    selectRandomSkills() {
+        this.skillsSelectorComponent.randomSelect();
     }
 
     // Step 4: Select fortune
@@ -197,10 +229,6 @@ export class CreateCharacterComponent {
             this.money2 = getRandomInt(1, 6) + getRandomInt(1, 6);
         }
         this.setStep(5);
-    }
-
-    updateMoney() {
-        this.setStep(4);
     }
 
     validMondey() {
@@ -255,13 +283,15 @@ export class CreateCharacterComponent {
     }
 
     isSuperBourrinValid() {
-        return (this.superBourrinValue >= 0 && this.superBourrinValue <= 3);
+        return (this.superBourrinValueAt + this.superBourrinValuePrd >= 0
+            && this.superBourrinValueAt + this.superBourrinValuePrd <= 3);
     }
 
     updateSuperBourrin() {
         this.modifiedStat['SUPER_BOURRIN'] = {};
-        this.modifiedStat['SUPER_BOURRIN']['AT'] = -this.superBourrinValue;
-        this.modifiedStat['SUPER_BOURRIN']['PI'] = this.superBourrinValue;
+        this.modifiedStat['SUPER_BOURRIN']['AT'] = -this.superBourrinValueAt;
+        this.modifiedStat['SUPER_BOURRIN']['PRD'] = -this.superBourrinValuePrd;
+        this.modifiedStat['SUPER_BOURRIN']['PI'] = (this.superBourrinValueAt + this.superBourrinValuePrd);
         this.modifiedStat['SUPER_BOURRIN'].name = 'Super-bourrin';
     }
 
@@ -320,6 +350,29 @@ export class CreateCharacterComponent {
         }
     }
 
+    move1PointStat(stat: string, value: number) {
+        for (let i in this.move1PointStatValues) {
+            if (!this.move1PointStatValues.hasOwnProperty(i)) {
+                continue;
+            }
+            if (stat === i) {
+                continue;
+            }
+            if (value > 0 && this.move1PointStatValues[i] > 0) {
+                this.move1PointStatValues[i] = 0;
+            }
+            if (value < 0 && this.move1PointStatValues[i] < 0) {
+                this.move1PointStatValues[i] = 0;
+            }
+        }
+        if (this.move1PointStatValues[stat] === value) {
+            this.move1PointStatValues[stat] = 0;
+        } else {
+            this.move1PointStatValues[stat] = value;
+        }
+        this.updateMove1PointStat();
+    }
+
     /// END MOVE_1_POINT_STAT
 
     /// CHANGE_1_AT_PRD
@@ -369,16 +422,6 @@ export class CreateCharacterComponent {
         this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'].name = 'Marchand Lvl 1';
     }
 
-    setremoveAttOrPrdToIntOrChaRemoveStat(stat: string) {
-        this.removeAttOrPrdToIntOrChaRemoveStat = stat;
-        this.updateRemoveAttOrPrdToIntOrCha();
-    }
-
-    setRemoveAttOrPrdToIntOrChaAddStat(stat: string) {
-        this.removeAttOrPrdToIntOrChaAddStat = stat;
-        this.updateRemoveAttOrPrdToIntOrCha();
-    }
-
     /// END REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA
 
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_AD
@@ -404,23 +447,13 @@ export class CreateCharacterComponent {
         this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'].name = 'Ingénieur Lvl 1';
     }
 
-    setremoveAttOrPrdToIntOrAdRemoveStat(stat: string) {
-        this.removeAttOrPrdToIntOrAdRemoveStat = stat;
-        this.updateRemoveAttOrPrdToIntOrAd();
-    }
-
-    setRemoveAttOrPrdToIntOrAdAddStat(stat: string) {
-        this.removeAttOrPrdToIntOrAdAddStat = stat;
-        this.updateRemoveAttOrPrdToIntOrAd();
-    }
-
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_AD
 
 
     // Step 6: Select speciality
 
     hasSpeciality() {
-        return this.selectedJob && this.selectedJob.specialities && this.selectedJob && this.selectedJob.specialities.length > 0;
+        return this.selectedJob && this.selectedJob.specialities && this.selectedJob.specialities.length > 0;
     }
 
     initSelectSpeciality() {
@@ -434,19 +467,28 @@ export class CreateCharacterComponent {
 
     // Step 7: Name
 
-    validName() {
-        this.setStep(8);
+    randomNameAndSex() {
+        if (getRandomInt(0, 1)) {
+            this.sex = 'Homme';
+        } else {
+            this.sex = 'Femme';
+        }
+        this.randomName();
     }
 
-    selectSex(sex: string) {
-        this.sex = sex;
-        return false;
+    randomName() {
+
+    }
+
+    validName() {
+        this.setStep(8);
     }
 
     // Step 8: FatePoint
 
     rollFatePoint() {
         this.fatePoint = getRandomInt(0, 3);
+        this.validFatePoint();
     }
 
     validFatePoint() {

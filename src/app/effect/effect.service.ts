@@ -36,7 +36,15 @@ export class EffectService extends JsonService {
         return this.effectCategoryList;
     }
 
+    clearCacheCategory(categoryId: number) {
+        if (categoryId in this.effectsByCategory) {
+            this.effectsByCategory[categoryId].unsubscribe();
+            delete this.effectsByCategory[categoryId];
+        }
+    }
+
     getEffects(categoryId: number): Observable<Effect[]> {
+        console.log('getEffects', categoryId, this.effectsByCategory);
         if (!(categoryId in this.effectsByCategory)) {
             this.effectsByCategory[categoryId] = new ReplaySubject<Effect[]>(1);
             this.postJson('/api/effect/list', {
@@ -44,6 +52,7 @@ export class EffectService extends JsonService {
             }).map(res => res.json()).subscribe(
                 effects => {
                     this.effectsByCategory[categoryId].next(effects);
+                    this.effectsByCategory[categoryId].complete();
                 },
                 error => {
                     this.effectsByCategory[categoryId].error(error);

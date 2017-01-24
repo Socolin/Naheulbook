@@ -1,576 +1,776 @@
-<div *ngIf="character">
-	<div class="row">
-		<div *ngFor="let invite of character.invites">
-			<div class="alert alert-info">
-				<button class="glyphicon glyphicon-remove btn btn-danger pull-right" (click)="cancelInvite(invite)"></button>
-				<button class="glyphicon glyphicon-ok btn btn-success pull-right" (click)="acceptInvite(invite)"></button>
-				<strong>Invitation: </strong>
-				{{invite.name}}
-			</div>
-		</div>
-	</div>
+<div *ngIf="character" class="character-component">
+    <md-tab-group (selectChange)=selectTab($event) [selectedIndex]="currentTabIndex">
+        <md-tab label="Info">
+            <!-- Start of info tab -->
+            <div class="info-tab">
+                <md-card *ngFor="let invite of character.invites">
+                    <md-card-title>Invitation</md-card-title>
+                    <md-card-content>
+                        Rejoindre le groupe <em>{{invite.name}}</em> ?
+                    </md-card-content>
+                    <md-card-actions>
+                        <button md-button color="primary" (click)="cancelInvite(invite)">REFUSER</button>
+                        <button md-button color="primary" (click)="acceptInvite(invite)">ACCEPTER</button>
+                    </md-card-actions>
+                </md-card>
 
-	<ul class="nav nav-tabs" role="tablist">
-		<li role="presentation" [class.active]="currentTab === 'infos'">
-			<a href="#" (click)="selectTab('infos')">
-				Info
-			</a>
-		</li>
-		<li role="presentation" [class.active]="currentTab === 'combat'">
-			<a href="#" (click)="selectTab('combat')">
-				Combat
-			</a>
-		</li>
-		<li role="presentation" [class.active]="currentTab === 'statistics'">
-			<a href="#" (click)="selectTab('statistics')">
-				Stat
-			</a>
-		</li>
-		<li role="presentation" [class.active]="currentTab === 'inventory'">
-			<a href="#" (click)="selectTab('inventory')">
-				Inventaire
-			</a>
-		</li>
-		<li role="presentation" [class.active]="currentTab === 'effects'">
-			<a href="#" (click)="selectTab('effects')">
-				Effets
-				<span class="badge">{{character.computedData.countActiveEffect}}</span>
-			</a>
-		</li>
-		<li role="presentation" [class.active]="currentTab === 'loot'">
-			<a href="#" (click)="selectTab('loot')">
-                Loot
-			</a>
-		</li>
-		<li role="presentation" [class.active]="currentTab === 'other'">
-			<a href="#" (click)="selectTab('other')">
-				Autres
-				<span class="badge">{{character.computedData.countExceptionalStats}}</span>
-			</a>
-		</li>
-		<li role="presentation" [class.active]="currentTab === 'history'">
-			<a href="#" (click)="selectTab('history')">
-				Historique
-			</a>
-		</li>
-	</ul>
+                <md-card>
+                    <md-card-title>{{character.name}}</md-card-title>
+                    <md-card-content>
+                        <dl>
+                            <dt>Origine</dt>
+                            <dd>{{character.origin.name}}</dd>
 
-	 <div class="tab-content">
-		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'infos'">
-			<!-- Start of info tab -->
-		 	<div class="row">
-				<div class="col-sm-6">
-					<div class="row">
-						<div class="col-sm-5 col-xs-5">
-							<strong>Nom</strong>
-						</div>
-						<div class="col-sm-7 col-xs-7">{{character.name}}</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-5 col-xs-5">
-							<strong>Origine</strong>
-						</div>
-						<div class="col-sm-7 col-xs-7">{{character.origin.name}}</div>
-					</div>
-					<div class="row" *ngIf="character.job">
-						<div class="col-sm-5 col-xs-5">
-							<strong>Métier</strong>
-						</div>
-						<div class="col-sm-7 col-xs-7">{{character.job.name}}</div>
-					</div>
-					<div *ngIf="character.specialities.length" class="row">
-						<div class="col-sm-5 col-xs-4">
-							<strong>Specialité</strong>
-						</div>
-						<div class="col-sm-7 col-xs-8">
-							<ul>
-								<li *ngFor="let speciality of character.specialities">{{speciality.name}}</li>
-							</ul>
-						</div>
-					</div>
-					<div class="row" *ngIf="character.group">
-						<div class="col-sm-5 col-xs-5">
-							<strong>Groupe</strong>
-						</div>
-						<div class="col-sm-7 col-xs-7">{{character.group.name}}</div>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="row">
-						<div class="col-sm-5 col-xs-5">
-							<strong>Sexe</strong>
-						</div>
-						<div class="col-sm-2 col-xs-2">{{character.sex}}</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-5 col-xs-5">
-							<strong>Point de destins</strong>
-						</div>
-						<div class="col-sm-5 col-xs-5">
-                            <value-editor [title]="'Point de destin'" [value]=character.fatePoint (onChange)="changeCharacterStat('fatePoint', $event)"></value-editor>
-                        </div>
-					</div>
-					<div class="row">
-						<div class="col-sm-5 col-xs-5">
-							<strong>Niveau</strong>
-						</div>
-						<div class="col-sm-2 col-xs-2">{{character.level}}</div>
-						<div class="col-sm-1 col-xs-1">
-							<button *ngIf="canLevelUp()" (click)="initLevelUp()" type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modalLevelUp">
-								<span class="glyphicon glyphicon-exclamation-sign"></span> Ding !
-							</button>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-5 col-xs-5">
-							<strong>Experience</strong>
-						</div>
-						<div class="col-sm-2 col-xs-2">
-                            <value-editor [title]="'Experience'" [value]=character.experience (onChange)="changeCharacterStat('experience', $event)"></value-editor>
-                        </div>
-					</div>
-                    <div *ngIf="inGroupTab" class="row">
-                        <div class="col-sm-5 col-xs-5">
-                            <strong>Debilibeuk</strong>
-                        </div>
-                        <div class="col-sm-5 col-xs-5">
-                            <value-editor [title]="'Debilibeuk du joueur'" [value]=character.gmData.debilibeuk (onChange)="changeGmData('debilibeuk', $event)"></value-editor>
-                        </div>
-                    </div>
-                    <div *ngIf="inGroupTab" class="row">
-                        <div class="col-sm-5 col-xs-5">
-                            <strong>Mankdebol</strong>
-                        </div>
-                        <div class="col-sm-5 col-xs-5">
-                            <value-editor [title]="'Mankdebol du joueur'" [value]=character.gmData.mankdebol (onChange)="changeGmData('mankdebol', $event)"></value-editor>
-                        </div>
-                    </div>
-				</div>
-			</div>
-			<!-- End of infos tab -->
-		 </div>
+                            <dt>Metier</dt>
+                            <dd *ngIf="character.job">{{character.job.name}}</dd>
+                            <dd *ngIf="!character.job">aucun</dd>
 
-		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'combat'">
-			<!-- Start of combat tab -->
-			<div class="row" style="font-size: medium;">
-				<div class="col-xs-6">
-                    <div [class.bg-danger]="character.ev > character.computedData.stats['EV']" style="text-align: center">
-                        <span class="glyphicon glyphicon-heart text-danger" style="font-size: 1.3em;"></span>
-                        <value-editor [title]="'Energie vitale'" [value]="character.ev" [maxValue]="character.computedData.stats['EV']" (onChange)="changeCharacterStat('ev', $event)"></value-editor>
-                    </div>
-				</div>
-				<div class="col-xs-6">
-					<div *ngIf="character.ea != null">
-						<div [class.bg-danger]="character.ea > character.computedData.stats['EA']" style="text-align: center">
-							<span class="glyphicon glyphicon-star text-info" style="font-size: 1.3em;"></span>
-                            <value-editor [title]="'Energie astrale'" [value]="character.ea" [maxValue]="character.computedData.stats['EA']" (onChange)="changeCharacterStat('ea', $event)"></value-editor>
-						</div>
-					</div>
-				</div>
-				<table class="table table-striped table-condensed text-center">
-					<tbody>
-						<tr>
-							<td><span class="ra ra-sword ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['AT']}}</span></td>
-							<td><span class="ra ra-shield ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['PRD']}}</span></td>
-						</tr>
-						<tr>
-							<td><span class="ra ra-vest ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['PR']}}</span></td>
-							<td><span class="ra ra-aura ra-2x"></span><span style="font-size: larger;">{{character.computedData.stats['PR_MAGIC']}}</span></td>
-						</tr>
-					</tbody>
-				</table>
+                            <dt>Specialité</dt>
+                            <dd *ngFor="let speciality of character.specialities">
+                                {{speciality.name}}
+                            </dd>
 
-				<table class="table table-striped table-condensed text-center">
-					<tbody>
-						<tr>
-							<td class="col-xs-3"><strong>COU</strong></td>
-							<td class="col-xs-3">{{character.computedData.stats['COU']}}</td>
-							<td class="col-xs-3"><strong>FO</strong></td>
-							<td class="col-xs-3">{{character.computedData.stats['FO']}}</td>
-						</tr>
-						<tr>
-							<td><strong>AD</strong></td>
-							<td>{{character.computedData.stats['AD']}}</td>
-							<td><strong>CHA</strong></td>
-							<td>{{character.computedData.stats['CHA']}}</td>
-						</tr>
-						<tr>
-							<td><strong>PI Bonus</strong></td>
-							<td>{{character.computedData.stats['PI']}}</td>
-						</tr>
-					</tbody>
-				</table>
-				<table class="table table-striped table-condensed text-center">
-					<tbody>
-						<tr>
-							<td class="col-xs-3"><strong>RESM</strong></td>
-							<td class="col-xs-3">{{character.computedData.stats['RESM']}}</td>
-							<td class="col-xs-3"><strong>INT</strong></td>
-							<td class="col-xs-3">{{character.computedData.stats['INT']}}</td>
-						</tr>
-						<tr *ngIf="character.job && character.job.isMagic">
-							<td><strong>MPHYS</strong></td>
-							<td>{{character.computedData.stats['MPHYS']}}</td>
-							<td><strong>MPSY</strong></td>
-							<td>{{character.computedData.stats['MPSY']}}</td>
-						</tr>
-					</tbody>
-				</table>
-                <h3>Déplacement tactique</h3>
-                <ul>
-                    <li>
-                        <strong>Normal</strong>
-                        {{character.computedData.tacticalMovement.distance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.maxDuration}} secondes
-                    </li>
-                    <li>
-                        <strong>Sprint</strong> (Après un déplacement normal):
-                        {{character.computedData.tacticalMovement.sprintDistance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.sprintMaxDuration}} secondes
-                    </li>
-                </ul>
-				<h3>Armes</h3>
-				<div class="col-sm-6">
-					<div class="list-group" *ngIf="character.computedData.itemsBySlotsAll[1]">
-						<template ngFor let-item [ngForOf]="character.computedData.itemsBySlotsAll[1]" let-i="index" let-last="last">
-						<button type="button" class="list-group-item btn btn-default" (click)="selectedItem = item" [class.btn-primary]="selectedItem && selectedItem.id == item.id"
-							[class.active]="selectedItem && selectedItem.id == item.id">
-							<span *ngIf="item.data.equiped != null" class="glyphicon glyphicon-ok"></span> {{item.data.name}}
-                            <template [ngIf]="item === selectedItem">
-                                <swipable-item-detail [gmView]="inGroupTab"  [character]="character" [item]="item"></swipable-item-detail>
+                            <dt>Groupe</dt>
+                            <dd *ngIf="character.group">{{character.group.name}}</dd>
+                            <dd *ngIf="!character.group">aucun</dd>
+
+
+                            <dt>Sexe</dt>
+                            <dd>{{character.sex}}</dd>
+
+                            <dt>Point de destins</dt>
+                            <dd>
+                                <value-editor [title]="'Point de destin'"
+                                              [value]=character.fatePoint
+                                              (onChange)="changeCharacterStat('fatePoint', $event)">
+                                </value-editor>
+                            </dd>
+
+                            <dt>Niveau</dt>
+                            <dd>{{character.level}}
+                                <button class="level-up-button"
+                                        md-raised-button
+                                        *ngIf="canLevelUp()"
+                                        color="primary"
+                                        (click)="openLevelUpDialog()">
+                                    Ding !
+                                </button>
+                            </dd>
+
+                            <dt>Experience</dt>
+                            <dd>
+                                <value-editor [title]="'Experience'"
+                                              [value]=character.experience
+                                              (onChange)="changeCharacterStat('experience', $event)">
+                                </value-editor> / {{getXpForNextLevel()}}
+                            </dd>
+
+                            <dt *ngIf="inGroupTab">Debilibeuk</dt>
+                            <dd *ngIf="inGroupTab">
+                                <value-editor [title]="'Debilibeuk du joueur'" [value]=character.gmData.debilibeuk
+                                              (onChange)="changeGmData('debilibeuk', $event)"></value-editor>
+                            </dd>
+
+                            <dt *ngIf="inGroupTab">Mankdebol</dt>
+                            <dd *ngIf="inGroupTab">
+                                <value-editor [title]="'Mankdebol du joueur'" [value]=character.gmData.mankdebol
+                                              (onChange)="changeGmData('mankdebol', $event)"></value-editor>
+                            </dd>
+                        </dl>
+                    </md-card-content>
+                </md-card>
+                <md-card *ngIf="character.computedData.stats['AD'] > 12">
+                    <md-card-title>Adresse exceptionnelle</md-card-title>
+                    <md-card-content>
+                        <p>
+                            Un score d'adresse (AD) exceptionnelle confère un point <em>bonus</em> en attaque (AT) ou en parade (PRD)
+                        </p>
+                        <md-button-toggle-group name="alignment" [(ngModel)]="character.statBonusAD">
+                            <md-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</md-button-toggle>
+                            <md-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</md-button-toggle>
+                        </md-button-toggle-group>
+                    </md-card-content>
+                </md-card>
+                <md-card *ngIf="character.computedData.stats['AD'] < 9" class="row">
+                    <md-card-title>Adresse pourri</md-card-title>
+                    <md-card-content>
+                        <p>
+                            Un score d'adresse (AD) inférieur ou égale à 8 induit un point <em>malus</em> en attaque (AT) ou en parade (PRD)
+                        </p>
+                        <md-button-toggle-group name="alignment" [(ngModel)]="character.statBonusAD">
+                            <md-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</md-button-toggle>
+                            <md-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</md-button-toggle>
+                        </md-button-toggle-group>
+                    </md-card-content>
+                </md-card>
+                <md-card *ngIf="character.computedData.stats['INT'] > 12">
+                    <md-card-title>Intelligence exceptionnelle</md-card-title>
+                    <md-card-content>
+                        <p>
+                            Un score d'inteligence (INT) exceptionnelle confère un point de dégâts des sorts
+                            (selon sortilège) pour chaque point d'inteligence supérieur à 12.
+                        </p>
+                        <div>Bonus dégâts des sorts: {{(character.computedData.stats['INT'] - 12)}}</div>
+                    </md-card-content>
+                </md-card>
+                <md-card *ngIf="character.computedData.stats['FO'] > 12">
+                    <md-card-title>Force exceptionnelle</md-card-title>
+                    <md-card-content>
+                        <p>
+                            Un score exceptionnel offre forcément des avantages dans ce monde violent...
+                        </p>
+                        <p>
+                            Pour chaque point de force (FO) supérieur à 12 : +1 point d’impact (dégâts des armes améliorés au corps à corps ou à distance)
+                        </p>
+                        <div>Bonus point d'impact: {{(character.computedData.stats['FO'] - 12)}}</div>
+                    </md-card-content>
+                </md-card>
+                <md-card *ngIf="character.computedData.stats['FO'] <= 8">
+                    <md-card-title>Force de mauviette</md-card-title>
+                    <md-card-content>
+                        <p>
+                            Un score exceptionnel offre forcément des avantages dans ce monde violent...
+                            Et au contraire sur une carac. de force (FO) de 8 ou inférieure : -1 point d’impact (dégâts des armes diminués, car mauviette)
+                        </p>
+                        <div>Malus point d'impact: 1</div>
+                    </md-card-content>
+                </md-card>
+            </div>
+            <!-- End of infos tab -->
+        </md-tab>
+
+        <md-tab label="Combat">
+            <!-- Start of combat tab -->
+            <div class="combat-tab">
+                <md-card class="life-mana stats-card">
+                    <md-card-content>
+                        <div class="stat">
+                            <div class="stat-icon">
+                                <span class="game-icon game-icon-hearts"></span>
+                            </div>
+                            <div class="stat-value">
+                                <div [class.life-danger]="character.ev > character.computedData.stats['EV']">
+                                    <value-editor [title]="'Energie vitale'"
+                                                  [value]="character.ev"
+                                                  [maxValue]="character.computedData.stats['EV']"
+                                                  (onChange)="changeCharacterStat('ev', $event)">
+                                    </value-editor>
+                                </div>
+                                <div class="stat-label">E.Vitale</div>
+                            </div>
+                        </div>
+                        <div *ngIf="character.ea != undefined" class="stat">
+                            <div class="stat-icon">
+                                <span class="game-icon game-icon-abstract-061"></span>
+                            </div>
+                            <div class="stat-value">
+                                <div [class.bg-danger]="character.ea > character.computedData.stats['EA']">
+                                    <value-editor [title]="'Energie astrale'"
+                                                  [value]="character.ea"
+                                                  [maxValue]="character.computedData.stats['EA']"
+                                                  (onChange)="changeCharacterStat('ea', $event)">
+                                    </value-editor>
+                                </div>
+                                <div class="stat-label">E.Astrale</div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+
+                <md-card class="combat-stats stats-card">
+                    <md-card-content>
+                        <div class="stat-row">
+                            <div class="stat">
+                                <div class="stat-icon">
+                                    <span class="ra ra-sword"></span>
+                                </div>
+                                <div class="stat-value">
+                                    <div>{{character.computedData.stats['AT']}}</div>
+                                    <div class="stat-label">Attaque</div>
+                                </div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon">
+                                    <span class="ra ra-shield"></span>
+                                </div>
+                                <div class="stat-value">
+                                    <div>{{character.computedData.stats['PRD']}}</div>
+                                    <div class="stat-label">Parade</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat">
+                                <div class="stat-icon">
+                                    <span class="ra ra-vest"></span>
+                                </div>
+                                <div class="stat-value">
+                                    <div>{{character.computedData.stats['PR']}}</div>
+                                    <div class="stat-label">Protection</div>
+                                </div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon">
+                                    <span class="ra ra-aura"></span>
+                                </div>
+                                <div class="stat-value">
+                                    <div>{{character.computedData.stats['PR_MAGIC']}}</div>
+                                    <div class="stat-label">Pr magique</div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+
+                <md-card class="basic-stats stats-card">
+                    <md-card-content>
+                        <div class="stat-row">
+                            <div class="stat">
+                                <div class="stat-name">
+                                    COU
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['COU']}}
+                                </div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-name">
+                                    FO
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['FO']}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-row">
+                            <div class="stat">
+                                <div class="stat-name">
+                                    AD
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['AD']}}
+                                </div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-name">
+                                    CHA
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['CHA']}}
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+                <md-card class="stats-card" *ngIf="character.computedData.stats['PI']
+                                                || character.computedData.stats['INT'] > 12">
+                    <md-card-content>
+                        <div class="stat-row" *ngIf="character.computedData.stats['PI']">
+                            <div class="stat large-stat">
+                                <div class="stat-name">
+                                    Bonus point d’impact
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['PI']}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-row" *ngIf="character.computedData.stats['INT'] > 12">
+                            <div *ngIf="character.computedData.stats['INT'] > 12" class="stat large-stat">
+                                <div class="stat-name">
+                                    Bonus dégâts des sorts
+                                </div>
+                                <div class="stat-value">
+                                    {{(character.computedData.stats['INT'] - 12)}}
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+                <md-card class="magic-stat stats-card">
+                    <md-card-content>
+                        <div class="stat-row">
+                            <div class="stat">
+                                <div class="stat-name">
+                                    RESM
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['RESM']}}
+                                </div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-name">
+                                    INT
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['INT']}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-row" *ngIf="character.job && character.job.isMagic">
+                            <div class="stat">
+                                <div class="stat-name">
+                                    MPHYS
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['MPHYS']}}
+                                </div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-name">
+                                    MPSY
+                                </div>
+                                <div class="stat-value">
+                                    {{character.computedData.stats['MPSY']}}
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+
+                <md-card class="stats-card">
+                    <md-card-title>Déplacement tactique</md-card-title>
+                    <md-card-content>
+                        <ul>
+                            <li>
+                                <strong>Normal</strong>
+                                {{character.computedData.tacticalMovement.distance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.maxDuration}} secondes
+                            </li>
+                            <li>
+                                <strong>Sprint</strong> (Après un déplacement normal):
+                                {{character.computedData.tacticalMovement.sprintDistance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.sprintMaxDuration}} secondes
+                            </li>
+                        </ul>
+                    </md-card-content>
+                </md-card>
+                <md-card class="stats-card weapons-card">
+                    <md-card-title>Armes</md-card-title>
+                    <md-card-content>
+                        <div *ngIf="character.computedData.itemsBySlotsAll[1]" class="weapons-list">
+                            <template ngFor let-item [ngForOf]="character.computedData.itemsBySlotsAll[1]" let-i="index" let-last="last">
+                                <div class="item-line"
+                                     [class.selected]="selectedItem && selectedItem.id === item.id"
+                                     (click)="selectedItem = item">
+                                    <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                                    <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
+                                    <md-icon *ngIf="item.data.notIdentified">help</md-icon>
+                                    <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
+                                    {{item.data.name}}
+                                </div>
                             </template>
-						</button>
-						</template>
-					</div>
-				</div>
-				<div class="col-sm-6 hidden-xs" *ngIf="selectedItem">
-					<div class="bg-info">
-						<item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
-					</div>
-				</div>
-			</div>
-			<!-- End of combat tab -->
-		 </div>
-		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'statistics'">
-			<!-- Start of stats tab -->
-			<div class="row">
-				<div class="col-md-3 col-sm-6">
-					<table class="table table-striped table-condensed text-center">
-						<thead>
-							<tr>
-								<th class="text-center">EV</th>
-								<th *ngIf="character.job && character.job.isMagic" class="text-center">EA</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{character.computedData.stats['EV']}}</td>
-								<td>{{character.computedData.stats['EA']}}</td>
-							</tr>
-							<template [ngIf]="character.computedData.details.show.evea">
-								<template ngFor let-detail [ngForOf]="character.computedData.details.evea">
-									<tr class="stats-detail-name small">
-										<td colspan="15" class="text-left">{{detail.name}}:</td>
-									</tr>
-									<tr class="stats-detail-values"></tr>
-									<tr class="stats-detail-values small">
-										<td>{{detail.data.EV}}</td>
-										<td>{{detail.data.EA}}</td>
-									</tr>
-								</template>
-							</template>
-							<tr (click)="character.computedData.details.show.evea = !character.computedData.details.show.evea">
-								<td colspan=15 class="small" *ngIf="!character.computedData.details.show.evea">Voir details</td>
-								<td colspan=15 class="small" *ngIf="character.computedData.details.show.evea">Cacher details</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+                <div *ngIf="selectedItem && selectedItem.template.slots.length > 0" class="weapons-detail">
+                    <item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
+                </div>
+            </div>
+            <!-- End of combat tab -->
+        </md-tab>
+        <md-tab label="Stat">
+            <!-- Start of stats tab -->
+            <div class="stat-tab">
+                <md-card>
+                    <md-card-content>
+                        <div class="stat-header">
+                            <div class="stat-element">EV</div>
+                            <div class="stat-element" *ngIf="character.job && character.job.isMagic">EA</div>
+                        </div>
+                        <div class="stat-values">
+                            <div class="stat-row">
+                                <div class="stat-element">{{character.computedData.stats['EV']}}</div>
+                                <div *ngIf="character.job && character.job.isMagic" class="stat-element">{{character.computedData.stats['EA']}}</div>
+                            </div>
+                            <div class="stat-details" *ngIf="character.computedData.details.show.evea">
+                                <div class="detail-row" *ngFor="let detail of character.computedData.details.evea">
+                                    <div class="stat-detail-reason">
+                                        {{detail.name}}
+                                    </div>
+                                    <div class="stat-row">
+                                        <div class="stat-element">{{detail.data.EV}}</div>
+                                        <div *ngIf="character.job && character.job.isMagic" class="stat-element">{{detail.data.EA}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.evea = !character.computedData.details.show.evea">
+                            <span *ngIf="!character.computedData.details.show.evea">Voir details</span>
+                            <span *ngIf="character.computedData.details.show.evea">Cacher details</span>
+                        </button>
+                    </md-card-actions>
+                </md-card>
+                <md-card>
+                    <md-card-content>
+                        <div class="stat-header">
+                            <div class="stat-element">AT</div>
+                            <div class="stat-element">PRD</div>
+                            <div class="stat-element">PR</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['PR_MAGIC']">PR_MAGIC</div>
+                        </div>
+                        <div class="stat-values">
+                            <div class="stat-row">
+                                <div class="stat-element">{{character.computedData.stats['AT']}}</div>
+                                <div class="stat-element">{{character.computedData.stats['PRD']}}</div>
+                                <div class="stat-element">{{character.computedData.stats['PR']}}</div>
+                                <div class="stat-element" *ngIf="character.computedData.stats['PR_MAGIC']">{{character.computedData.stats['PR_MAGIC']}}</div>
+                            </div>
+                            <div class="stat-details" *ngIf="character.computedData.details.show.atprd">
+                                <div class="detail-row" *ngFor="let detail of character.computedData.details.atprd">
+                                    <div class="stat-detail-reason">
+                                        {{detail.name}}
+                                    </div>
+                                    <div class="stat-row">
+                                        <div class="stat-element">{{detail.data.AT}}</div>
+                                        <div class="stat-element">{{detail.data.PRD}}</div>
+                                        <div class="stat-element">{{detail.data.PR}}</div>
+                                        <div class="stat-element" *ngIf="character.computedData.stats['PR_MAGIC']">{{detail.data.PR_MAGIC}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.atprd = !character.computedData.details.show.atprd">
+                            <span *ngIf="!character.computedData.details.show.atprd">Voir details</span>
+                            <span *ngIf="character.computedData.details.show.atprd">Cacher details</span>
+                        </button>
+                    </md-card-actions>
+                </md-card>
+                <md-card>
+                    <md-card-content>
+                        <div class="stat-header">
+                            <div class="stat-element-small">COU</div>
+                            <div class="stat-element-small">INT</div>
+                            <div class="stat-element-small">CHA</div>
+                            <div class="stat-element-small">AD</div>
+                            <div class="stat-element-small">FO</div>
+                        </div>
+                        <div class="stat-values">
+                            <div class="stat-row">
+                                <div class="stat-element-small">{{character.computedData.stats['COU']}}</div>
+                                <div class="stat-element-small">{{character.computedData.stats['INT']}}</div>
+                                <div class="stat-element-small">{{character.computedData.stats['CHA']}}</div>
+                                <div class="stat-element-small">{{character.computedData.stats['AD']}}</div>
+                                <div class="stat-element-small">{{character.computedData.stats['FO']}}</div>
+                            </div>
+                            <div class="stat-details" *ngIf="character.computedData.details.show.stat">
+                                <div class="detail-row" *ngFor="let detail of character.computedData.details.stat">
+                                    <div class="stat-detail-reason">
+                                        {{detail.name}}
+                                    </div>
+                                    <div class="stat-row">
+                                        <div class="stat-element-small">{{detail.data.COU}}</div>
+                                        <div class="stat-element-small">{{detail.data.INT}}</div>
+                                        <div class="stat-element-small">{{detail.data.CHA}}</div>
+                                        <div class="stat-element-small">{{detail.data.AD}}</div>
+                                        <div class="stat-element-small">{{detail.data.FO}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.stat = !character.computedData.details.show.stat">
+                            <span *ngIf="!character.computedData.details.show.stat">Voir details</span>
+                            <span *ngIf="character.computedData.details.show.stat">Cacher details</span>
+                        </button>
+                    </md-card-actions>
+                </md-card>
 
-				<div class="col-md-3 col-sm-6">
-					<table class="table table-striped table-condensed text-center table-stats">
-						<thead>
-							<tr>
-								<th class="text-center">AT</th>
-								<th class="text-center">PRD</th>
-								<th class="text-center">PR</th>
-								<th *ngIf="character.computedData.stats['PR_MAGIC']" class="col-xs-1 text-center">PR_MAGIC</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{character.computedData.stats['AT']}}</td>
-								<td>{{character.computedData.stats['PRD']}}</td>
-								<td>{{character.computedData.stats['PR']}}</td>
-								<td *ngIf="character.computedData.stats['PR_MAGIC']">{{character.computedData.stats['PR_MAGIC']}}</td>
-							</tr>
-							<template [ngIf]="character.computedData.details.show.atprd">
-								<template ngFor let-detail [ngForOf]="character.computedData.details.atprd">
-									<tr class="stats-detail-name small">
-										<td colspan="15" class="text-left">{{detail.name}}:</td>
-									</tr>
-									<tr class="stats-detail-values"></tr>
-									<tr class="stats-detail-values small">
-										<td>{{detail.data.AT}}</td>
-										<td>{{detail.data.PRD}}</td>
-										<td>{{detail.data.PR}}</td>
-										<td *ngIf="character.computedData.stats['PR_MAGIC']">{{detail.data.PR_MAGIC}}</td>
-									</tr>
-								</template>
-							</template>
-							<tr (click)="character.computedData.details.show.atprd = !character.computedData.details.show.atprd">
-								<td colspan=15 class="small" *ngIf="!character.computedData.details.show.atprd">Voir details</td>
-								<td colspan=15 class="small" *ngIf="character.computedData.details.show.atprd">Cacher details</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+                <md-card>
+                    <md-card-content>
+                        <div class="stat-header">
+                            <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">MagiePhys</div>
+                            <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">MagiePsy</div>
+                            <div class="stat-element-large">RESM</div>
+                        </div>
+                        <div class="stat-values">
+                            <div class="stat-row">
+                                <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPHYS']}}</div>
+                                <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPSY']}}</div>
+                                <div class="stat-element-large">{{character.computedData.stats['RESM']}}</div>
+                            </div>
+                            <div class="stat-details" *ngIf="character.computedData.details.show.magic">
+                                <div class="detail-row" *ngFor="let detail of character.computedData.details.magic">
+                                    <div class="stat-detail-reason">
+                                        {{detail.name}}
+                                    </div>
+                                    <div class="stat-row">
+                                        <div class="stat-element-large" *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPHYS || ''"></div>
+                                        <div class="stat-element-large" *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPSY || ''"></div>
+                                        <div class="stat-element-large" [innerHTML]="detail.data.RESM || ''"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.magic = !character.computedData.details.show.magic">
+                            <span *ngIf="!character.computedData.details.show.magic">Voir details</span>
+                            <span *ngIf="character.computedData.details.show.magic">Cacher details</span>
+                        </button>
+                    </md-card-actions>
+                </md-card>
 
-				<div class="col-md-6 col-sm-12">
-					<table class="table table-striped table-condensed text-center">
-						<thead>
-							<tr>
-								<th class="text-center">COU</th>
-								<th class="text-center">INT</th>
-								<th class="text-center">CHA</th>
-								<th class="text-center">AD</th>
-								<th class="text-center">FO</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{character.computedData.stats['COU']}}</td>
-								<td>{{character.computedData.stats['INT']}}</td>
-								<td>{{character.computedData.stats['CHA']}}</td>
-								<td>{{character.computedData.stats['AD']}}</td>
-								<td>{{character.computedData.stats['FO']}}</td>
-							</tr>
-							<template [ngIf]="character.computedData.details.show.stat">
-								<template ngFor let-detail [ngForOf]="character.computedData.details.stat">
-									<tr class="stats-detail-name small">
-										<td colspan="15" class="text-left">{{detail.name}}:</td>
-									</tr>
-									<tr class="stats-detail-values"></tr>
-									<tr class="stats-detail-values small">
-										<td>{{detail.data.COU}}</td>
-										<td>{{detail.data.INT}}</td>
-										<td>{{detail.data.CHA}}</td>
-										<td>{{detail.data.AD}}</td>
-										<td>{{detail.data.FO}}</td>
-									</tr>
-								</template>
-							</template>
-							<tr (click)="character.computedData.details.show.stat = !character.computedData.details.show.stat">
-								<td colspan=15 class="small" *ngIf="!character.computedData.details.show.stat">Voir details</td>
-								<td colspan=15 class="small" *ngIf="character.computedData.details.show.stat">Cacher details</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-
-			</div>
-			<div class="row">
-				<div class="col-sm-7 col-md-8">
-					<table class="table table-striped table-condensed text-center">
-						<thead>
-							<tr>
-								<th class="text-center" *ngIf="character.job && character.job.isMagic"><strong>MagiePhys</strong></th>
-								<th class="text-center" *ngIf="character.job && character.job.isMagic"><strong>MagiePsy</strong></th>
-								<th class="text-center"><strong>ResMagie</strong></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPHYS']}}</td>
-								<td *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPSY']}}</td>
-								<td>{{character.computedData.stats['RESM']}}</td>
-							</tr>
-							<template [ngIf]="character.computedData.details.show.magic">
-								<template ngFor let-detail [ngForOf]="character.computedData.details.magic">
-									<tr class="stats-detail-name small">
-										<td colspan="15" class="text-left">{{detail.name}}:</td>
-									</tr>
-									<tr class="stats-detail-values"></tr>
-									<tr class="stats-detail-values small">
-										<td *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPHYS || ''"></td>
-										<td *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPSY || ''"></td>
-										<td [innerHTML]="detail.data.RESM || ''"></td>
-									</tr>
-								</template>
-							</template>
-							<tr (click)="character.computedData.details.show.magic = !character.computedData.details.show.magic">
-								<td colspan=15 class="small" *ngIf="!character.computedData.details.show.magic">Voir details</td>
-								<td colspan=15 class="small" *ngIf="character.computedData.details.show.magic">Cacher details</td>
-							</tr>
-						</tbody>
-					</table>
-					<table *ngIf="character.computedData.stats['MV'] != 100 || character.computedData.stats['THROW_MODIFIER'] || character.computedData.stats['DISCRETION_MODIFIER'] || character.computedData.stats['DANSE_MODIFIER'] || character.computedData.stats['PI']" class="table table-striped table-condensed text-center">
-						<thead>
-							<tr>
-								<th *ngIf="character.computedData.stats['MV'] !== 100" class="text-center"><strong>MV</strong></th>
-								<th *ngIf="character.computedData.stats['THROW_MODIFIER']" class="text-center"><strong>Lancer</strong></th>
-								<th *ngIf="character.computedData.stats['DISCRETION_MODIFIER']" class="text-center"><strong>Discretion</strong></th>
-								<th *ngIf="character.computedData.stats['DANSE_MODIFIER']" class="text-center"><strong>Danse</strong></th>
-								<th *ngIf="character.computedData.stats['PI']" class="text-center"><strong>PI</strong></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td *ngIf="character.computedData.stats['MV'] !== 100">{{character.computedData.stats['MV']}}%</td>
-								<td *ngIf="character.computedData.stats['THROW_MODIFIER']">{{character.computedData.stats['THROW_MODIFIER'] | plusminus}}</td>
-								<td *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">{{character.computedData.stats['DISCRETION_MODIFIER'] | plusminus}}</td>
-								<td *ngIf="character.computedData.stats['DANSE_MODIFIER']">{{character.computedData.stats['DANSE_MODIFIER'] | plusminus}}</td>
-								<td *ngIf="character.computedData.stats['PI']">{{character.computedData.stats['PI']}}</td>
-							</tr>
-							<template [ngIf]="character.computedData.details.show.other">
-								<template ngFor let-detail [ngForOf]="character.computedData.details.other">
-									<tr class="stats-detail-name small">
-										<td colspan="15" class="text-left">{{detail.name}}:</td>
-									</tr>
-									<tr class="stats-detail-values"></tr>
-									<tr class="stats-detail-values small">
-										<td *ngIf="character.computedData.stats['MV'] !== 100">{{detail.data.MV}}</td>
-										<td *ngIf="character.computedData.stats['THROW_MODIFIER']">{{detail.data.THROW_MODIFIER}}</td>
-										<td *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">{{detail.data.DISCRETION_MODIFIER}}</td>
-										<td *ngIf="character.computedData.stats['DANSE_MODIFIER']">{{detail.data.DANSE_MODIFIER}}</td>
-										<td *ngIf="character.computedData.stats['PI']">{{detail.data.PI}}</td>
-									</tr>
-								</template>
-							</template>
-							<tr (click)="character.computedData.details.show.other = !character.computedData.details.show.other">
-								<td colspan=15 class="small" *ngIf="!character.computedData.details.show.other">Voir details</td>
-								<td colspan=15 class="small" *ngIf="character.computedData.details.show.other">Cacher details</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<hr class="visible-xs">
-				<div class="col-md-4 col-sm-5">
-					<div>
-						<strong>Compétence</strong>
-					</div>
-					<div>
-						<ul>
-							<li *ngFor="let skill of character.computedData.skills">
-								<span [class.canceled]="skill.canceled">{{skill?.skillDef?.name}}</span> (<span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>)
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<!-- End of stats tab -->
-		 </div>
-		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'inventory'">
-			<!-- Start of inventory tab -->
+                <md-card *ngIf="character.computedData.stats['MV'] != 100
+                                || character.computedData.stats['THROW_MODIFIER']
+                                || character.computedData.stats['DISCRETION_MODIFIER']
+                                || character.computedData.stats['DANSE_MODIFIER']
+                                || character.computedData.stats['PI']">
+                    <md-card-content>
+                        <div class="stat-header">
+                            <div class="stat-element" *ngIf="character.computedData.stats['MV'] !== 100">MV</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['THROW_MODIFIER']">Lancer</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">Discretion</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['DANSE_MODIFIER']">Danse</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['PI']">PI</div>
+                        </div>
+                        <div class="stat-values">
+                            <div class="stat-row">
+                                <div class="stat-element" *ngIf="character.computedData.stats['MV'] !== 100">
+                                    {{character.computedData.stats['MV']}}%
+                                </div>
+                                <div class="stat-element" *ngIf="character.computedData.stats['THROW_MODIFIER']">
+                                    {{character.computedData.stats['THROW_MODIFIER'] | plusminus}}
+                                </div>
+                                <div class="stat-element" *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">
+                                    {{character.computedData.stats['DISCRETION_MODIFIER'] | plusminus}}
+                                </div>
+                                <div class="stat-element" *ngIf="character.computedData.stats['DANSE_MODIFIER']">
+                                    {{character.computedData.stats['DANSE_MODIFIER'] | plusminus}}
+                                </div>
+                                <div class="stat-element" *ngIf="character.computedData.stats['PI']">
+                                    {{character.computedData.stats['PI']}}
+                                </div>
+                            </div>
+                            <div class="stat-details" *ngIf="character.computedData.details.show.other">
+                                <div class="detail-row" *ngFor="let detail of character.computedData.details.other">
+                                    <div class="stat-detail-reason">
+                                        {{detail.name}}
+                                    </div>
+                                    <div class="stat-row">
+                                        <div class="stat-element" *ngIf="character.computedData.stats['MV'] !== 100">
+                                            {{detail.data.MV}}
+                                        </div>
+                                        <div class="stat-element" *ngIf="character.computedData.stats['THROW_MODIFIER']">
+                                            {{detail.data.THROW_MODIFIER}}
+                                        </div>
+                                        <div class="stat-element" *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">
+                                            {{detail.data.DISCRETION_MODIFIER}}
+                                        </div>
+                                        <div class="stat-element" *ngIf="character.computedData.stats['DANSE_MODIFIER']">
+                                            {{detail.data.DANSE_MODIFIER}}
+                                        </div>
+                                        <div class="stat-element" *ngIf="character.computedData.stats['PI']">
+                                            {{detail.data.PI}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions align="end">
+                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.other = !character.computedData.details.show.other">
+                            <span *ngIf="!character.computedData.details.show.other">Voir details</span>
+                            <span *ngIf="character.computedData.details.show.other">Cacher details</span>
+                        </button>
+                    </md-card-actions>
+                </md-card>
+            </div>
+            <div class="stat-tab">
+                <md-card>
+                    <div>
+                        <strong>Compétence</strong>
+                    </div>
+                    <div>
+                        <md-list dense>
+                            <md-list-item *ngFor="let skill of character.computedData.skills" class="skill-list-item">
+                                <h4 md-line>{{skill?.skillDef?.name}}</h4>
+                                <span *ngIf="skill.canceled">CANCELED</span>
+                                <p md-line>
+                                    <span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>
+                                </p>
+                                <button md-icon-button (click)="openSkillInfoDialog(skill.skillDef)">
+                                    <md-icon>info</md-icon>
+                                </button>
+                            </md-list-item>
+                        </md-list>
+                    </div>
+                </md-card>
+            </div>
+            <!-- End of stats tab -->
+        </md-tab>
+        <md-tab label="Inventaire">
+            <!-- Start of inventory tab -->
             <inventory-panel [inGroupTab]="inGroupTab" [character]="character"></inventory-panel>
-			<!-- End of inventory tab -->
-		 </div>
-		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'effects'">
-			<!-- Start of effects tab -->
-			<effect-panel [character]="character"></effect-panel>
-			<!-- End of effects tab -->
-		 </div>
-		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'loot'">
-			<!-- Start of effects tab -->
-			<character-loot-panel [character]="character" [inGroupTab]="inGroupTab"></character-loot-panel>
-			<!-- End of effects tab -->
-		 </div>
-		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'other'">
-			<!-- Start of other tab -->
-			<div *ngIf="character.computedData.stats['AD'] > 12" class="row">
-				<div class="col-xs-7 col-sm-5 col-md-3 col-lg-2">
-					<strong>Bonus AD</strong>
-				</div>
-				<div class="col-xs-5">
-					<div class="btn-group" data-toggle="buttons">
-						<button class="btn btn-primary" (click)="setStatBonusAD(character.id, 'AT')" [class.active]="character.statBonusAD == 'AT'">AT</button>
-						<button class="btn btn-primary" (click)="setStatBonusAD(character.id, 'PRD')" [class.active]="character.statBonusAD == 'PRD'">PRD</button>
-					</div>
-				</div>
-			</div>
-
-			<div *ngIf="character.computedData.stats['AD'] < 9" class="row">
-				<div class="col-xs-7 col-sm-5 col-md-3 col-lg-2">
-					<strong>Malus AD</strong>
-				</div>
-				<div class="col-xs-5">
-					<div class="btn-group" data-toggle="buttons">
-						<button class="btn btn-primary" (click)="setStatBonusAD(character.id, 'AT')" [class.active]="character.statBonusAD == 'AT'">AT</button>
-						<button class="btn btn-primary" (click)="setStatBonusAD(character.id, 'PRD')" [class.active]="character.statBonusAD == 'PRD'">PRD</button>
-					</div>
-				</div>
-			</div>
-			<div *ngIf="character.computedData.stats['INT'] > 12" class="row">
-				<div class="col-xs-7 col-sm-5 col-md-3 col-lg-2">
-					<strong>Bonus Degat magique</strong>
-				</div>
-				<div class="col-xs-5">{{(character.computedData.stats['INT'] - 12)}}</div>
-			</div>
-			<!-- End of other tab -->
-		 </div>
-		 <div role="tabpanel" class="tab-pane" [class.active]="currentTab === 'history'">
-             <character-history *ngIf="currentTab === 'history'" [character]="character"></character-history>
-		 </div>
-	 </div>
-
-	<!-- Levelup modal -->
-	<div *ngIf="canLevelUp()">
-
-		<!-- Modal -->
-		<div class="modal fade" id="modalLevelUp" tabindex="-1" role="dialog" aria-labelledby="modalLevelUpLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" id="modalLevelUpLabel">Gain d'un niveau</h4>
-					</div>
-					<div class="modal-body">
-						<div *ngIf="character.job && character.job.isMagic">
-							Augmenter:
-							<div class="btn-group" data-toggle="buttons">
-								<button class="btn btn-primary" (click)="levelUpInfo.EVorEA = 'EV'" [class.active]="levelUpInfo.EVorEA == 'EV'">EV</button>
-								<button class="btn btn-primary" (click)="levelUpInfo.EVorEA = 'EA'" [class.active]="levelUpInfo.EVorEA == 'EA'">EA</button>
-							</div>
-							<div></div>
-						</div>
-						<div>
-							Augmentation de {{levelUpInfo.EVorEA}} de <span *ngIf="levelUpInfo.EVorEA == 'EV'">1d{{character.origin.diceEVLevelUp}} <span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')"> -1 </span>
-							</span>
-							<div>
-								<span *ngIf="levelUpInfo.EVorEA == 'EA'">1d{{character.job.diceEaLevelUp}}</span> Nombre de {{levelUpInfo.EVorEA}} a augmente: <input [(ngModel)]="levelUpInfo.EVorEAValue" type="number" />
-								<button class="btn btn-primary" (click)="rollLevelUp()">Roll</button>
-							</div>
-						</div>
-						<div *ngIf="(levelUpInfo.targetLevelUp % 2) == 0">
-							<div class="btn-group" data-toggle="buttons">
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('FO')" [class.active]="levelUpInfo.statToUp == 'FO'">FORCE</button>
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('AD')" [class.active]="levelUpInfo.statToUp == 'AD'">ADRESSE</button>
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('COU')" [class.active]="levelUpInfo.statToUp == 'COU'">COURAGE</button>
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('INT')" [class.active]="levelUpInfo.statToUp == 'INT'">INTELLIGENCE</button>
-							</div>
-						</div>
-						<div *ngIf="(levelUpInfo.targetLevelUp % 2) == 1">
-							<div class="btn-group" data-toggle="buttons">
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('AT')" [class.active]="levelUpInfo.statToUp == 'AT'">AT</button>
-								<button class="btn btn-primary" (click)="setLevelUpStatToUp('PRD')" [class.active]="levelUpInfo.statToUp == 'PRD'">PRD</button>
-							</div>
-						</div>
-						<div *ngIf="levelUpShouldSelectSkill()">
-							<skill-selector [selectedOrigin]="character.origin" [selectedJob]="character.job" [knownSkills]="character.skills" [skillCount]=1 (skillsSelected)="onLevelUpSelectSkills($event)"></skill-selector>
-						</div>
-						<div *ngIf="levelUpShouldSelectSpeciality()">
-							<div *ngIf="!levelUpInfo.speciality">
-								<speciality-selector (specialityChange)="levelUpSelectSpeciality($event)" [knownSpecialities]="character.specialities" [specialities]="character.job.specialities"></speciality-selector>
-							</div>
-							<div *ngIf="levelUpInfo.speciality">Spécialité: {{levelUpInfo.speciality.name}}</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button [disabled]="!levelUpFormReady()" (click)="levelUp()" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+            <!-- End of inventory tab -->
+        </md-tab>
+        <md-tab label="Effet">
+            <!-- Start of effects tab -->
+            <effect-panel [character]="character"></effect-panel>
+            <!-- End of effects tab -->
+        </md-tab>
+        <md-tab label="Loot">
+            <!-- Start of effects tab -->
+            <character-loot-panel [character]="character" [inGroupTab]="inGroupTab"></character-loot-panel>
+            <!-- End of effects tab -->
+        </md-tab>
+        <md-tab label="Historique">
+            <character-history [character]="character"></character-history>
+        </md-tab>
+    </md-tab-group>
 </div>
+
+<!-- Skill info dialog -->
+<template #skillInfoDialog="cdkPortal" cdk-portal>
+    <md-card class="skill-info-dialog">
+
+        <md-card-title *ngIf="!viewGmSkillInfo && selectedSkillInfo">{{selectedSkillInfo.name}}</md-card-title>
+        <md-card-content *ngIf="!viewGmSkillInfo && selectedSkillInfo">
+            {{selectedSkillInfo.playerDescription}}
+        </md-card-content>
+        <skill *ngIf="viewGmSkillInfo && selectedSkillInfo" [skill]="selectedSkillInfo"></skill>
+
+        <md-card-actions align="end">
+            <button *ngIf="!viewGmSkillInfo" md-button color="primary" (click)="viewGmSkillInfo = true">
+                INFO GM
+            </button>
+            <button *ngIf="viewGmSkillInfo" md-button color="primary" (click)="viewGmSkillInfo = false">
+                INFO JOUEUR
+            </button>
+            <button md-button color="primary" (click)="closeSkillInfoDialog()">
+                FERMER
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>
+
+
+<!-- Levelup modal -->
+<template #levelUpDialog="cdkPortal" cdk-portal>
+    <md-card class="level-up-dialog">
+        <md-card-title>
+            Gain d'un niveau
+        </md-card-title>
+        <md-card-content class="level-up-dialog-content">
+            <md-card>
+                <md-card-subtitle>
+                    Énergie vitale/Énergie Astrale
+                </md-card-subtitle>
+                <md-card-content>
+                    <p>Pour chaque niveau gagné, on ajoute
+                        1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')"> -1 </span>
+                        à son énergie vitale (EV)
+                        <span *ngIf="character.job && character.job.isMagic">
+                    <strong>OU</strong> 1D{{character.job.diceEaLevelUp}} astrale (EA)
+                </span>
+                    </p>
+
+                    <div *ngIf="character.job && character.job.isMagic">
+                        Je choisi d'augmenter mon:
+                        <md-button-toggle-group [(ngModel)]="levelUpInfo.EVorEA">
+                            <md-button-toggle value="EV">E.Vitale</md-button-toggle>
+                            <md-button-toggle value="EA">E.Astrale</md-button-toggle>
+                        </md-button-toggle-group>
+                    </div>
+                    <div>
+                        <div *ngIf="levelUpInfo.EVorEA === 'EV'">
+                            Augmentation de l'energie vitale (EV) de 1D{{character.origin.diceEVLevelUp}}
+                        </div>
+                        <div *ngIf="levelUpInfo.EVorEA === 'EA'">
+                            Augmentation de l'energie astrale (EA) de 1D{{character.job.diceEaLevelUp}}
+                        </div>
+
+                        <div class="level-up-ea-ev">
+                            <md-input-container align="end">
+                                <input md-input placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.EVorEAValue">
+                                <md-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EV'">
+                                    Lancer 1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')">-1</span>
+                                </md-hint>
+                                <md-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EA'">
+                                    Lancer 1D{{character.job.diceEaLevelUp}}
+                                </md-hint>
+                            </md-input-container>
+                            <button md-raised-button color="primary" (click)="rollLevelUp()">LANCER DÉ</button>
+                        </div>
+                    </div>
+                </md-card-content>
+            </md-card>
+
+            <md-card *ngIf="(levelUpInfo.targetLevelUp % 2) === 0">
+                <md-card-subtitle>
+                    Augmenter une caractéristique
+                </md-card-subtitle>
+                <md-card-content>
+                    Je choisi:
+                    <md-button-toggle-group [(ngModel)]="levelUpInfo.statToUp">
+                        <md-button-toggle value="FO">FO</md-button-toggle>
+                        <md-button-toggle value="AD">AD</md-button-toggle>
+                        <md-button-toggle value="COU">COU</md-button-toggle>
+                        <md-button-toggle value="INT">INT</md-button-toggle>
+                    </md-button-toggle-group>
+                </md-card-content>
+            </md-card>
+            <md-card *ngIf="(levelUpInfo.targetLevelUp % 2) === 1">
+                <md-card-subtitle>
+                    Augmenter Attaque ou parade
+                </md-card-subtitle>
+                <md-card-content>
+                    Je choisi d'augmenter de 1 point:
+                    <md-button-toggle-group [(ngModel)]="levelUpInfo.statToUp">
+                        <md-button-toggle value="AT">AT</md-button-toggle>
+                        <md-button-toggle value="PRD">PRD</md-button-toggle>
+                    </md-button-toggle-group>
+                </md-card-content>
+            </md-card>
+            <md-card *ngIf="levelUpShouldSelectSkill()">
+                <md-card-subtitle>Compétence supplémentaire</md-card-subtitle>
+                <md-card-content>
+                    <skill-selector *ngIf="!levelUpInfo.skill"
+                                    [selectedOrigin]="character.origin"
+                                    [selectedJob]="character.job"
+                                    [knownSkills]="character.skills"
+                                    [skillCount]=1
+                                    (skillsSelected)="onLevelUpSelectSkills($event)">
+                    </skill-selector>
+                    <p *ngIf="levelUpInfo.skill">J'apprends la compétence: {{levelUpInfo.skill.name}}</p>
+                </md-card-content>
+                <md-card-actions *ngIf="levelUpInfo.skill" align="end">
+                    <button md-button
+                            color="primary"
+                            (click)="levelUpInfo.skill = null">
+                        CHANGER
+                    </button>
+                </md-card-actions>
+            </md-card>
+            <md-card *ngIf="levelUpShouldSelectSpeciality()">
+                <md-card-subtitle>Spécialisation supplémentaire</md-card-subtitle>
+                <md-card-content>
+                    <div *ngIf="!levelUpInfo.speciality">
+                        <speciality-selector (specialityChange)="levelUpSelectSpeciality($event)" [knownSpecialities]="character.specialities" [specialities]="character.job.specialities"></speciality-selector>
+                    </div>
+                    <div *ngIf="levelUpInfo.speciality">Spécialité: {{levelUpInfo.speciality.name}}</div>
+                </md-card-content>
+                <md-card-actions *ngIf="levelUpInfo.speciality" align="end">
+                    <button md-button
+                            color="primary"
+                            (click)="levelUpInfo.speciality = null">
+                        CHANGER
+                    </button>
+                </md-card-actions>
+            </md-card>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button color="primary" (click)="closeLevelUpDialog()">
+                ANNULER
+            </button>
+            <button md-button color="primary"  [disabled]="!levelUpFormReady()" (click)="levelUp()">
+                VALIDER
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>

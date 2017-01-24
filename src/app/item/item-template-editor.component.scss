@@ -1,0 +1,25 @@
+md-card {
+    margin: 5px;
+}
+
+.name-line {
+    display: flex;
+
+    md-input-container {
+        flex: 1 auto;
+    }
+}
+
+.not-identified-name-line {
+    display: flex;
+
+    md-input-container {
+        flex: 1 auto;
+    }
+    button {
+        flex: 0 auto;
+    }
+}
+
+.section-list {
+}

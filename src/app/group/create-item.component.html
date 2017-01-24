@@ -1,125 +1,120 @@
-<div *ngIf="character || loot" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;"
-     (click)="close()">
-</div>
-<div *ngIf="character || loot" style="position: absolute; top: 0; left: 0; width: 100%;">
-    <div style="position: relative; background: white" class="container">
-        <div class="form-horizontal" role="form">
-            <div class="form-group">
-                <legend *ngIf="character">Ajouter un objet a {{character.name}}</legend>
-                <legend *ngIf="loot">Ajouter un objet au loot {{loot.name}}</legend>
+<template #addItemDialog="cdkPortal" cdk-portal>
+    <md-card>
+        <md-card-title *ngIf="character">Ajouter un objet a {{character.name}}</md-card-title>
+        <md-card-title *ngIf="loot">Ajouter un objet au loot {{loot.name}}</md-card-title>
+        <md-card-content style="display: flex; justify-content: space-around; flex-direction: column">
+            <div class="new-item-template">
+                <md-tab-group (selectedIndexChange)="onSelectTab($event)">
+                    <md-tab label="Classique">
+                        <md-card>
+                            <md-card-subtitle>Modèle</md-card-subtitle>
+                            <autocomplete-input [value]="newItem.template?.name"
+                                                [placeholder]="'Objet'"
+                                                (onSelect)="selectItemTemplate($event, newItemName)"
+                                                [(callback)]="autocompleteItemCallback">
+                            </autocomplete-input>
+                        </md-card>
+                    </md-tab>
+                    <md-tab label="Pierre précieuse">
+                        <md-card>
+                            <md-card-subtitle>Modèle</md-card-subtitle>
+                            <md-card-content>
+                                <div>
+                                    <md-button-toggle-group [ngModel]="gemOption['type']">
+                                        <md-button-toggle [value]="'raw'" (click)="setGemOption('type', 'raw')">
+                                            Brut
+                                        </md-button-toggle>
+                                        <md-button-toggle [value]="'cut'" (click)="setGemOption('type', 'cut')">
+                                            Taillé
+                                        </md-button-toggle>
+                                    </md-button-toggle-group>
+
+                                    <md-input-container>
+                                        <input md-input
+                                               type="number"
+                                               [(ngModel)]="gemOption['number']"
+                                               class="form-control"
+                                               placeholder="D20"/>
+                                    </md-input-container>
+
+                                </div>
+
+                                <div>
+                                    <md-input-container>
+                                        <input md-input
+                                               type="number"
+                                               [(ngModel)]="gemOption['ug']"
+                                               class="form-control"
+                                               placeholder="U.G."/>
+                                    </md-input-container>
+                                    <button md-mini-fab [color]="gemOption['maxUg'] == 2 ? 'accent' : 'primary'" (click)="setGemRandomUg(2)">D2</button>
+                                    <button md-mini-fab [color]="gemOption['maxUg'] == 4 ? 'accent' : 'primary'" (click)="setGemRandomUg(4)">D4</button>
+                                    <button md-mini-fab [color]="gemOption['maxUg'] == 6 ? 'accent' : 'primary'" (click)="setGemRandomUg(6)">D6</button>
+                                    <button md-mini-fab [color]="gemOption['maxUg'] == 10 ? 'accent' : 'primary'" (click)="setGemRandomUg(10)">D10</button>
+                                </div>
+                            </md-card-content>
+                            <md-card-actions align="end">
+                                <button md-button
+                                        color="primary"
+                                        (click)="randomGem()">
+                                    RANDOMISER
+                                </button>
+                            </md-card-actions>
+                        </md-card>
+                    </md-tab>
+                </md-tab-group>
             </div>
-
-
-            <div class="form-group">
-                <div class="col-sm-2">
-                </div>
-                <div class="col-sm-10">
-                    <div class="btn-group btn-group-lg" role="group">
-                        <button type="button" [class.active]="!newItem.data.notIdentified" (click)="setItemIdentified()"
-                                class="btn btn-default">Identifie
-                        </button>
-                        <button type="button" [class.active]="newItem.data.notIdentified"
-                                (click)="setItemNotIdentified()" class="btn btn-default">Non-identifie
-                        </button>
+            <md-card class="new-item-data">
+                <md-card-subtitle>Résumé</md-card-subtitle>
+                <md-card-content>
+                    <md-input-container>
+                        <input md-input
+                               #newItemName
+                               placeholder="Nom"
+                               [(ngModel)]="newItem.data.name"/>
+                        <md-hint *ngIf="newItem.data.notIdentified" align="end">
+                            {{newItem.template?.name}}
+                        </md-hint>
+                    </md-input-container>
+                    <md-input-container>
+                        <input md-input
+                               placeholder="Description"
+                               [(ngModel)]="newItem.data.description"/>
+                    </md-input-container>
+                    <md-input-container *ngIf="newItem.template?.data?.quantifiable">
+                        <input md-input
+                               type="number"
+                               placeholder="Quantité"
+                               [(ngModel)]="newItem.data.quantity"/>
+                    </md-input-container>
+                    <div>
+                        <md-slide-toggle color="primary"
+                                         [(ngModel)]="newItem.data.notIdentified"
+                                         (change)="updateItemIdentified()">
+                            Non-identifié
+                        </md-slide-toggle>
                     </div>
-                </div>
-            </div>
+                </md-card-content>
+            </md-card>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button
+                    color="primary"
+                    [disabled]="!newItem.template"
+                    (click)=addItem(false)>
+                AJOUTER
+            </button>
+            <button md-button
+                    color="primary"
+                    [disabled]="!newItem.template"
+                    (click)=addItem(true)>
+                AJOUTER ET CONTINUER
+            </button>
+            <button md-button
+                    color="primary"
+                    (click)=close()>ANNULER
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>
 
-            <div class="form-group">
-                <div class="col-sm-2">
-                </div>
-                <div class="col-sm-10">
-                    <div class="btn-group btn-group-lg" role="group">
-                        <button type="button" [class.active]="mode === 'normal'" (click)="setMode('normal')"
-                                class="btn btn-default">Normal
-                        </button>
-                        <button type="button" [class.active]="mode === 'gem'" (click)="setMode('gem')"
-                                class="btn btn-default">Pierre precieuse
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div *ngIf="mode == 'gem'">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Type</label>
-                    <div class="col-sm-10">
-                        <div class="btn-group btn-group-lg" role="group">
-                            <button type="button" [class.active]="gemOption['type'] == 'raw'"
-                                    (click)="setGemOption('type','raw')" class="btn btn-default">Brut
-                            </button>
-                            <button type="button" [class.active]="gemOption['type'] == 'cut'"
-                                    (click)="setGemOption('type','cut')" class="btn btn-default">Taillé
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="gemUG" class="col-sm-2 control-label">U.G.</label>
-                    <div class="col-sm-3">
-                        <input type="number" [(ngModel)]="gemOption['ug']" class="form-control" id="gemUG"
-                               placeholder="U.G.">
-                    </div>
-                    <div class="col-sm-7">
-                        <button class="btn btn-primary" (click)="setGemRandomUg(2)">D2</button>
-                        <button class="btn btn-primary" (click)="setGemRandomUg(4)">D4</button>
-                        <button class="btn btn-primary" (click)="setGemRandomUg(6)">D6</button>
-                        <button class="btn btn-primary" (click)="setGemRandomUg(10)">D10</button>
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <label for="gemNumber" class="col-sm-2 control-label">d20</label>
-                    <div class="col-sm-10">
-                        <input type="number" [(ngModel)]="gemOption['number']" class="form-control" id="gemNumber"
-                               placeholder="d20">
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Template</label>
-                <div class="col-sm-10">
-                    <autocomplete-input [value]="newItem.template?.name"
-                                        (onSelect)="selectItemTemplate($event, newItemName)"
-                                        [(callback)]="autocompleteItemCallback"></autocomplete-input>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="newItemName" class="col-sm-2 control-label">Nom</label>
-                <div class="col-sm-10">
-                    <input #newItemName type="text" [(ngModel)]="newItem.data.name" class="form-control"
-                           id="newItemName" placeholder="Nom">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="newItemDescription" class="col-sm-2 control-label">Description</label>
-                <div class="col-sm-10">
-                    <input type="text" [(ngModel)]="newItem.data.description" class="form-control"
-                           id="newItemDescription" placeholder="Description">
-                </div>
-            </div>
-
-            <div class="form-group" *ngIf="newItem.template?.data?.quantifiable">
-                <label for="newItemQuantity" class="col-sm-2 control-label">Quantité</label>
-                <div class="col-sm-10">
-                    <input type="number" [(ngModel)]="newItem.data.quantity" class="form-control"
-                           id="newItemQuantity" placeholder="Quantité">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-10 col-sm-offset-2">
-                    <button [disabled]="!newItem.template" (click)=addItem(false) class="btn btn-primary">Ajouter</button>
-                    <button [disabled]="!newItem.template" (click)=addItem(true) class="btn btn-primary">Ajouter et continuer</button>
-                    <button (click)=close() class="btn btn-danger">Annuler</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>

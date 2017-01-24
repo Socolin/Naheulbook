@@ -1,30 +1,34 @@
-<div class="col-xs-12">
-    <h4>Ajouter une entrée</h4>
-</div>
-<div class="col-xs-10">
-    <input type="text" class="form-control" [(ngModel)]=historyNewEntryText/>
-</div>
-<div class="col-xs-1">
-    <div class="checkbox">
-        <label>
-            <input [(ngModel)]=historyNewEntryGm type="checkbox"> GM
-        </label>
-    </div>
-</div>
-<div class="col-xs-1">
-    <button class="btn btn-primary glyphicon glyphicon-plus" (click)="addLog()"></button>
-</div>
-<div class="col-xs-12">
-    <h4>Historique</h4>
-</div>
-<div class="col-xs-12">
-    <div *ngFor="let loggroup of history">
-        {{loggroup.date | date:'mediumDate'}}
-        <div
-            style="padding-bottom: 5px; margin-left: 10px; padding-left: 10px; padding-top: 5px; border-left: 1px solid #E2D7D7">
-            <div *ngFor="let log of loggroup.logs">
-                {{log.date | date:'shortTime'}}:
-                <span [ngSwitch]="log.action">
+<md-card>
+    <md-card-title>Ajouter une entrée</md-card-title>
+    <md-card-content style="display: flex">
+        <md-input-container style="flex: 1 auto">
+            <input md-input
+                   type="text"
+                   placeholder="Message"
+                   [(ngModel)]="historyNewEntryText"/>
+        </md-input-container>
+        <md-checkbox [(ngModel)]=historyNewEntryGm style="flex: 0 auto">
+            Visible par le DM seulement
+        </md-checkbox>
+    </md-card-content>
+    <md-card-actions align="end">
+        <button md-button
+                color="primary"
+                (click)="addLog()">
+            AJOUTER
+        </button>
+    </md-card-actions>
+</md-card>
+<md-card>
+    <md-card-title>Historique</md-card-title>
+    <md-card-content>
+        <div *ngFor="let loggroup of history">
+            {{loggroup.date | date:'mediumDate'}}
+            <div
+                style="padding-bottom: 5px; margin-left: 10px; padding-left: 10px; padding-top: 5px; border-left: 1px solid #E2D7D7">
+                <div *ngFor="let log of loggroup.logs">
+                    {{log.date | date:'shortTime'}}:
+                    <span [ngSwitch]="log.action">
                     <template [ngSwitchCase]="'EVENT_RP'">
                         Event: {{log.info}}
                     </template>
@@ -48,15 +52,22 @@
                     </template>
                     <template [ngSwitchCase]="'CHANGE_DATE'">
                         Modification de la date
-                        <div *ngIf="log.data.oldValue" style="padding-left: 20px">Ancienne date: <date [date]="log.data.oldValue"></date></div>
+                        <div *ngIf="log.data.oldValue" style="padding-left: 20px">Ancienne date: <date
+                            [date]="log.data.oldValue"></date></div>
                         <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
                     </template>
                     <template *ngSwitchDefault>{{log.action}}</template>
                 </span>
+                </div>
             </div>
         </div>
-    </div>
-    <div *ngIf="loadMore">
-        <a href="#" (click)="loadHistory(1)">Charger plus</a>
-    </div>
-</div>
+    </md-card-content>
+    <md-card-actions align="end">
+        <button md-button
+                color="primary"
+                [disabled]="!loadMore"
+                (click)="loadHistory(1)">
+            Charger plus
+        </button>
+    </md-card-actions>
+</md-card>

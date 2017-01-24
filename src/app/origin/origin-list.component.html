@@ -1,6 +1,5 @@
 <div class="origins">
-	<div *ngFor="let origin of origins; let lastOrigin=last">
+	<div *ngFor="let origin of origins">
 		<origin [origin]="origin"></origin>
-		<hr [hidden]="lastOrigin" />
 	</div>
 </div>

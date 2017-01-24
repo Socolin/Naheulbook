@@ -5,6 +5,7 @@ import {SkillService} from './skill.service';
 
 @Component({
     selector: 'skill-modifiers-editor',
+    styleUrls: ['./skill-modifiers-editor.component.scss'],
     templateUrl: './skill-modifiers-editor.component.html',
 })
 export class SkillModifiersEditorComponent implements OnInit {
@@ -17,11 +18,6 @@ export class SkillModifiersEditorComponent implements OnInit {
         this.modifiers = [];
     }
 
-    setValue(value) {
-        this.value = value;
-        this.addModifier();
-    }
-
     removeModifier(i: number) {
         this.modifiers.splice(i, 1);
     }
@@ -32,6 +28,7 @@ export class SkillModifiersEditorComponent implements OnInit {
 
     addModifier() {
         if (this.value && this.selectedSkill) {
+            this.selectedSkill = +this.selectedSkill;
             let skill = null;
             for (let i = 0; i < this.skills.length; i++) {
                 let s = this.skills[i];

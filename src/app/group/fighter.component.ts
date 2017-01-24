@@ -30,6 +30,10 @@ export class FighterComponent {
         this._actionService.emitAction('openAddItemForm', this.group, character);
     }
 
+    displayCharacterSheet(character: Character) {
+        this._actionService.emitAction('displayCharacterSheet', this.group, character);
+    }
+
     changeTarget(fighter: Fighter, target) {
         if (fighter.isMonster) {
             this._groupService.updateMonster(fighter.id, 'target', {id: target.id, isMonster: target.isMonster})

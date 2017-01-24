@@ -1,18 +1,25 @@
-<div>
-    <h4 style="width:100%">{{characterEffect.effect.name}}
-        <button type="button" class="glyphicon glyphicon-trash btn btn-danger pull-right" (click)="onRemove.emit(characterEffect)"></button>
-        <span class="label label-default">{{effectCategoriesById[characterEffect.effect.category].name}}</span>
-    </h4>
-    <p>{{characterEffect.effect.description}}</p>
-    <p *ngIf="characterEffect.effect.duration">Durée: {{characterEffect.effect.duration}}</p>
-    <p *ngIf="characterEffect.effect.combatCount">Durée: {{characterEffect.effect.combatCount}} combat(s)</p>
-    <p *ngIf="characterEffect.currentCombatCount">Actif encore {{characterEffect.currentCombatCount}} combat(s)</p>
-    <p *ngIf="characterEffect.effect.lapCount">Durée: {{characterEffect.effect.lapCount}} tour(s)</p>
-    <p *ngIf="characterEffect.currentLapCount">Actif encore {{characterEffect.currentLapCount}} tour(s)</p>
-    <p *ngIf="characterEffect.effect.timeDuration">Durée: {{characterEffect.effect.timeDuration | nhbkDuration}}</p>
-    <p *ngIf="characterEffect.currentTimeDuration">Actif encore {{characterEffect.currentTimeDuration | nhbkDuration}}</p>
+<md-card>
+    <md-card-title>
+        {{characterEffect.effect.name}}
+    </md-card-title>
+    <md-card-subtitle>
+        {{effectCategoriesById[characterEffect.effect.category].name}}
+    </md-card-subtitle>
+    <md-card-content>
+        <p>{{characterEffect.effect.description}}</p>
+        <p *ngIf="characterEffect.effect.duration">Durée: {{characterEffect.effect.duration}}</p>
+        <p *ngIf="characterEffect.effect.combatCount">Durée: {{characterEffect.effect.combatCount}} combat(s)</p>
+        <p *ngIf="characterEffect.currentCombatCount">Actif encore {{characterEffect.currentCombatCount}} combat(s)</p>
+        <p *ngIf="characterEffect.effect.lapCount">Durée: {{characterEffect.effect.lapCount}} tour(s)</p>
+        <p *ngIf="characterEffect.currentLapCount">Actif encore {{characterEffect.currentLapCount}} tour(s)</p>
+        <p *ngIf="characterEffect.effect.timeDuration">Durée: {{characterEffect.effect.timeDuration | nhbkDuration}}</p>
+        <p *ngIf="characterEffect.currentTimeDuration">Actif encore {{characterEffect.currentTimeDuration | nhbkDuration}}</p>
 
-    <div *ngFor="let modifier of characterEffect.effect.modifiers">
-        {{modifier | modifier}}
-    </div>
-</div>
+        <div *ngFor="let modifier of characterEffect.effect.modifiers">
+            {{modifier | modifier}}
+        </div>
+    </md-card-content>
+    <md-card-actions align="end">
+        <button md-button color="accent" (click)="onRemove.emit(characterEffect)">SUPPRIMER</button>
+    </md-card-actions>
+</md-card>

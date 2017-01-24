@@ -1,14 +1,20 @@
 import {NgModule}      from '@angular/core';
-import {JobComponent, JobListComponent, JobSelectorComponent, JobService} from './';
 import {CommonModule} from '@angular/common';
-import {SharedModule} from '../shared/shared.module';
 import {FormsModule} from '@angular/forms';
+import {MaterialModule} from "@angular/material";
+import {FlexLayoutModule} from "@angular/flex-layout";
+
+import {SharedModule} from '../shared/shared.module';
+
+import {JobComponent, JobListComponent, JobSelectorComponent, JobService} from './';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
-        SharedModule
+        SharedModule,
+        MaterialModule.forRoot(),
+        FlexLayoutModule.forRoot(),
     ],
     declarations: [
         JobComponent,

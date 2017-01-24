@@ -1,7 +1,7 @@
 .tabs-category {
     position: fixed;
     left: 0;
-    top: 60px;
+    top: 70px;
     z-index: 50;
 }
 .tab-icon:first-child {
@@ -37,7 +37,7 @@
 .tab-content {
     position: fixed;
     left: 0;
-    top: 60px;
+    top: 70px;
     padding-bottom: 100px; /* Ipad scroll */
     border: 1px dashed gray;
     border-left: 0;

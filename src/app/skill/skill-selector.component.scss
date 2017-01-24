@@ -1,0 +1,15 @@
+md-card {
+    margin-bottom: 10px;
+
+    md-card-content {
+        text-align: justify;
+    }
+
+    md-card-subtitle::first-letter {
+        text-transform: capitalize;
+    }
+
+    md-icon {
+        color: rgba(0, 0, 0, 0.54);
+    }
+}

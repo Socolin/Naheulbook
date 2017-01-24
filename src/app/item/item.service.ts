@@ -46,26 +46,18 @@ export class ItemService extends JsonService {
     }
 
     getCategoriesById(): Observable<{[categoryId: number]: ItemCategory}> {
-        let categoriesEv: EventEmitter<{[categoryId: number]: ItemCategory}> = new EventEmitter<{[categoryId: number]: ItemCategory}>();
-        this.getSectionsList().subscribe(
-            sections => {
-                let categories: {[categoryId: number]: ItemCategory} = {};
-                for (let i = 0; i < sections.length; i++) {
-                    let section = sections[i];
-                    for (let j = 0; j < section.categories.length; j++) {
-                        let category = section.categories[j];
-                        categories[category.id] = category;
-                        category.type = section;
-                    }
+        return this.getSectionsList().map(sections => {
+            let categories: {[categoryId: number]: ItemCategory} = {};
+            for (let i = 0; i < sections.length; i++) {
+                let section = sections[i];
+                for (let j = 0; j < section.categories.length; j++) {
+                    let category = section.categories[j];
+                    categories[category.id] = category;
+                    category.type = section;
                 }
-                categoriesEv.emit(categories);
-                categoriesEv.complete();
-            },
-            error => {
-                this.itemSections.error(error);
             }
-        );
-        return categoriesEv;
+            return categories;
+        });
     }
 
     private fillMissingDataInItemTemplate(itemTemplate: ItemTemplate, skillsById: {[skillId: number]: Skill}) {

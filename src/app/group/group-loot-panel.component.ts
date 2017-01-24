@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {OverlayRef, Portal} from '@angular/material';
 
 import {NotificationsService} from '../notifications/notifications.service';
 
@@ -11,24 +12,37 @@ import {LootPanelComponent} from '../loot/loot-panel.component';
 import {LootWebsocketService} from '../loot/loot.websocket.service';
 import {Loot} from '../loot/loot.model';
 import {Monster} from '../monster/monster.model';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
     selector: 'group-loot-panel',
+    styleUrls: ['./group-loot-panel.component.scss'],
     templateUrl: './group-loot-panel.component.html',
     providers: [LootWebsocketService],
 })
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() group: Group;
-    public lootTargetForNewItem: Loot;
-    public monsterTargetForNewItem: Monster;
     public newLootName: string;
+
+    @ViewChild('addLootDialog')
+    public addLootDialog: Portal<any>;
+    public addLootOverlayRef: OverlayRef;
 
     constructor(private lootWebsocketService: LootWebsocketService
         , private notification: NotificationsService
         , private _groupService: GroupService
+        , private _nhbkDialogService: NhbkDialogService
         , private _groupWebsocketService: GroupWebsocketService
         , private _itemService: ItemService) {
         super(lootWebsocketService, notification);
+    }
+
+    openAddLootDialog() {
+        this.addLootOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addLootDialog);
+    }
+
+    closeAddLootDialog() {
+        this.addLootOverlayRef.detach();
     }
 
     createLoot() {
@@ -38,15 +52,6 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
             }
         );
         this.newLootName = null;
-    }
-
-    selectLootToAddItem(loot: Loot) {
-        this.lootTargetForNewItem = loot;
-    }
-
-    selectMonsterToAddItem(loot: Loot, monster: Monster) {
-        this.lootTargetForNewItem = loot;
-        this.monsterTargetForNewItem = monster;
     }
 
     deleteLoot(loot: Loot) {
@@ -93,37 +98,20 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         return false;
     }
 
-    addItemToLoot(loot: Loot, data: {keepOpen: boolean, item: Item}) {
-        if (data != null) {
-            this._itemService.addItemTo('loot', loot.id, data.item.template.id, data.item.data).subscribe(
+    onAddItem(data: {monster: Monster, loot: Loot, item: Item}) {
+        if (data.monster === null) {
+            this._itemService.addItemTo('loot', data.loot.id, data.item.template.id, data.item.data).subscribe(
                 item => {
-                    this.onAddItemToLoot(loot, item);
+                    this.onAddItemToLoot(data.loot, item);
                 }
             );
-            if (!data.keepOpen) {
-                this.lootTargetForNewItem = null;
-            }
         }
         else {
-            this.lootTargetForNewItem = null;
-        }
-    }
-
-    addItemToMonster(loot: Loot, monster: Monster, data: {keepOpen: boolean, item: Item}) {
-        if (data != null) {
-            this._itemService.addItemTo('monster', monster.id, data.item.template.id, data.item.data).subscribe(
+            this._itemService.addItemTo('monster', data.monster.id, data.item.template.id, data.item.data).subscribe(
                 newItem => {
-                    this.onAddItemToMonster(loot, {item: newItem, monster: monster});
+                    this.onAddItemToMonster(data.loot, {item: newItem, monster: data.monster});
                 }
             );
-            if (!data.keepOpen) {
-                this.lootTargetForNewItem = null;
-                this.monsterTargetForNewItem = null;
-            }
-        }
-        else {
-            this.lootTargetForNewItem = null;
-            this.monsterTargetForNewItem = null;
         }
     }
 

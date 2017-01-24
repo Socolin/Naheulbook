@@ -4,6 +4,7 @@ export interface Skill {
     id: number;
     name: string;
     description: string;
+    playerDescription: string;
     require: string;
     resist: string;
     using: string;

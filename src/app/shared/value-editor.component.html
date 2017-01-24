@@ -1,64 +1,60 @@
-<span style="position: relative">
-    <span (click)="showEditor()" style="font-size: larger; border: 1px dashed gray;">
-        {{value|number}}<span *ngIf="maxValue">/{{maxValue}}</span>
-    </span>
-    <div [hidden]="!displayEditor" style="position: absolute; z-index: 100" [style.bottom]="(15 - yOffset) + 'px'"
-         [style.left]="(40 + xOffset)+ 'px'">
-        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.2; background: black;z-index: -1"
-             (click)="displayEditor = false;">
-        </div>
-        <div class="form-control input-lg"
-             style="padding-top: 10px;
-                    padding-left:0;
-                    padding-right:0;
-                    width: 60px;
-                    text-align: center;
-                    z-index: 0;
-                    font-size: large;
-                    font-weight: bold">
-            {{valueDelta}}
-        </div>
-        <div style="position: absolute; left:-120px; bottom: 0">
-            <div class="form-control input-lg"
-                 style="padding-left:0; padding-right:0; padding-top: 10px; width: 120px; font-size: 14px;text-align: center; font-weight: bold">
-                {{value}} <span *ngIf="maxValue">/{{maxValue}}</span> -> {{newValue}} <span *ngIf="maxValue">/{{maxValue}}</span>
+<span cdk-overlay-origin #trigger="cdkOverlayOrigin" (click)="showEditor()" class="ve-value">
+    {{value|number}}<span *ngIf="maxValue">/{{maxValue}}</span>
+</span>
+
+<template cdk-connected-overlay [origin]="trigger" hasBackdrop [open]="displayEditor"
+          (backdropClick)="hideEditor()" (attach)="onDisplayed($event)">
+    <div style="position: relative">
+        <div class="ve-container"
+             [style.bottom]="(-15 - yOffset) + 'px'"
+             [style.left]="(40 + xOffset)+ 'px'">
+
+            <div class="ve-delta-value">
+                {{valueDelta ? valueDelta : "0"}}
             </div>
-        </div>
-        <div *ngIf="title" style="position: absolute; left:-120px; bottom: 138px">
-            <div class="form-control input-sm"
-                 style="padding-left:0; padding-right:0; width: 240px; font-size: 14px;text-align: center; font-weight: bold">
-                {{title}}
+            <div class="ve-summary">
+                <div>
+                    {{value}} <span *ngIf="maxValue">/{{maxValue}}</span> -> {{newValue}} <span *ngIf="maxValue">/{{maxValue}}</span>
+                </div>
             </div>
-        </div>
-        <div style="position: absolute; left:0; bottom: 0">
-            <div style="position: relative; left:-60px; bottom: 46px">
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-info"
-                        (click)="changeValue('-5')">-5</button>
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-info"
-                        (click)="changeValue('-1')">-1</button>
+            <div *ngIf="title" class="ve-title">
+                <div>{{title}}</div>
             </div>
-            <div style="position: absolute; left:60px; bottom: 46px">
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-primary"
-                        (click)="changeValue('+5')">+5</button>
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-primary"
-                        (click)="changeValue('+1')">+1</button>
-            </div>
-            <div style="position: absolute; left:-120px; bottom: 46px">
-                <button style="display: block; width: 60px; font-weight: bold" class="btn btn-lg btn-primary"
-                        (click)="changeValue('+50')">+50</button>
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-primary"
-                        (click)="changeValue('-50')">-50</button>
-            </div>
-            <div style="position: absolute; left:0; bottom: 46px">
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-default"
-                        (click)="changeValue('max')" [disabled]="!maxValue">Max</button>
-                <button style="width: 60px; font-weight: bold" class="btn btn-lg btn-default"
-                        (click)="changeValue('zero')">0</button>
-            </div>
-            <div style="position: absolute; left:60px; bottom: -46px">
-                <button style="width: 120px; height: 93px; font-weight: bold" class="btn btn-lg btn-success glyphicon glyphicon-ok"
-                        (click)="commitValue()"></button>
+            <div class="ve-actions">
+                <div class="minus-buttons">
+                    <button (click)="changeValue('-50')">
+                        -50
+                    </button>
+                    <button (click)="changeValue('-5')">
+                        -5
+                    </button>
+                    <button (click)="changeValue('-1')">
+                        -1
+                    </button>
+                </div>
+                <div class="plus-buttons">
+                    <button (click)="changeValue('+50')">
+                        +50
+                    </button>
+                    <button (click)="changeValue('+5')">
+                        +5
+                    </button>
+                    <button (click)="changeValue('+1')">
+                        +1
+                    </button>
+                </div>
+                <div class="max-zero-buttons">
+                    <button (click)="changeValue('max')" [disabled]="!maxValue">
+                        Max
+                    </button>
+                    <button (click)="changeValue('zero')">
+                        0
+                    </button>
+                </div>
+                <div class="valid-button">
+                    <button (click)="commitValue()"><md-icon>check</md-icon></button>
+                </div>
             </div>
         </div>
     </div>
-</span>
+</template>

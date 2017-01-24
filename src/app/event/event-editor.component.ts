@@ -1,8 +1,11 @@
-import {Component, Output, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, Output, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
+import {Portal, OverlayRef} from '@angular/material';
+
 import {NEvent} from './event.model';
 import {NhbkDateOffset, NhbkDate} from '../date/date.model';
 import {Group} from '../group/group.model';
 import {dateOffset2TimeDuration, date2Timestamp, timestamp2Date} from '../date/util';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
     selector: 'event-editor',
@@ -13,18 +16,26 @@ export class EventEditorComponent implements OnInit {
     @Output() onCreate: EventEmitter<NEvent> = new EventEmitter<NEvent>();
     @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
 
+    @ViewChild('eventEditorDialog')
+    public eventEditorDialog: Portal<any>;
+    public eventEditorOverlayRef: OverlayRef;
+
     public event: NEvent = new NEvent();
     public durationType: string = 'offset';
     public durationDateOffset: NhbkDateOffset = new NhbkDateOffset();
     public durationOffset: number = 0;
     public eventDate: NhbkDate = new NhbkDate();
 
-    closeSelector() {
-        this.onClose.emit(true);
+    constructor(private _nhbkDialogService: NhbkDialogService) {
     }
 
-    setDurationType(type: string) {
-        this.durationType = type;
+    openDialog() {
+        this.eventEditorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.eventEditorDialog);
+    }
+
+    closeDialog() {
+        this.eventEditorOverlayRef.detach();
+        this.onClose.emit(true);
     }
 
     setTimeDuration(dateOffset: NhbkDateOffset) {
@@ -50,6 +61,7 @@ export class EventEditorComponent implements OnInit {
         if (!this.event.timestamp) {
             return;
         }
+        this.closeDialog();
         this.onCreate.emit(this.event);
     }
 

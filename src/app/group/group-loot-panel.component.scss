@@ -1,0 +1,16 @@
+.padding {
+    flex: 1 auto;
+}
+md-card {
+    margin: 5px;
+}
+.loot-list {
+    > md-card {
+        padding: 0;
+    }
+}
+.buttons-header {
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 7px;
+}
