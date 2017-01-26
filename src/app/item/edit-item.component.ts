@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, HostListener} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from '../notifications';
 
@@ -17,6 +17,17 @@ export class EditItemComponent implements OnInit {
         , private _route: ActivatedRoute
         , private _notification: NotificationsService
         , private _itemService: ItemService) {
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    keyboardInput(event: KeyboardEvent) {
+        if (event.srcElement.tagName === 'BODY') {
+            if (event.code === 'Enter') {
+                if (event.ctrlKey) {
+                    this.edit(event.shiftKey);
+                }
+            }
+        }
     }
 
     edit(showNext: boolean) {
