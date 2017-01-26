@@ -77,13 +77,23 @@
 
 <md-card>
     Ajouter un module
-    <autocomplete-input [value]="newModuleName"
+    <autocomplete-input [clearOnSelect]="true"
                         [placeholder]="'Module'"
                         (onSelect)="addModule($event)"
                         [(callback)]="autocompleteModuleCallback">
     </autocomplete-input>
 </md-card>
-
+<template cdk-portal #addModuleDialog="cdkPortal">
+    <md-card>
+        Ajouter un module
+        <autocomplete-input #autocompleteModuleModalTextField
+                            [clearOnSelect]="true"
+                            [placeholder]="'Module'"
+                            (onSelect)="addModule($event)"
+                            [(callback)]="autocompleteModuleCallback">
+        </autocomplete-input>
+    </md-card>
+</template>
 <md-card>
 	<div class="form-group">
 		<label for="inputDuration" class="col-sm-2 control-label">Durée</label>

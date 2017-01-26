@@ -1,4 +1,7 @@
-import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {
+    Component, Input, OnInit, OnChanges, SimpleChanges, HostListener, ViewChild, QueryList,
+    ViewChildren
+} from '@angular/core';
 
 import {ItemTemplate, ItemSection, ItemSlot} from '../item';
 import {Effect, EffectService} from '../effect';
@@ -7,10 +10,11 @@ import {ItemService} from './item.service';
 import {Observable} from 'rxjs';
 import {JobService} from '../job/job.service';
 import {OriginService} from '../origin/origin.service';
-import {NhbkDateOffset} from '../date/date.model';
-import {dateOffset2TimeDuration} from '../date/util';
 import {isNullOrUndefined} from 'util';
-import {AutocompleteValue} from '../shared/autocomplete-input.component';
+import {AutocompleteValue, AutocompleteInputComponent} from '../shared/autocomplete-input.component';
+import {Portal, OverlayRef} from '@angular/material';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {removeDiacritics} from '../shared/remove_diacritics';
 
 @Component({
     selector: 'item-template-editor',
@@ -36,34 +40,41 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     public filteredEffects: Effect[];
 
     public autocompleteModuleCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteModule.bind(this);
-    public newModuleName: string;
+
+    @ViewChild('autocompleteModuleModalTextField')
+    autocompleteModuleModalTextField: AutocompleteInputComponent;
+
+    @ViewChild('addModuleDialog')
+    public addModuleDialog: Portal<any>;
+    public addModuleOverlayRef: OverlayRef;
 
     private modulesDef: any[] = [
-        {name: 'charge'},
-        {name: 'container'},
-        {name: 'damage'},
-        {name: 'diceDrop'},
-        {name: 'gem'},
-        {name: 'level'},
-        {name: 'lifetime'},
-        {name: 'modifiers'},
-        {name: 'prereq'},
-        {name: 'protection'},
-        {name: 'quantifiable'},
-        {name: 'relic'},
-        {name: 'rupture'},
-        {name: 'sex'},
-        {name: 'skill'},
-        {name: 'skillBook'},
-        {name: 'slots'},
-        {name: 'throwable'},
-        {name: 'weight'}
+        {name: 'charge',       displayName: 'Charges/Utilisations'},
+        {name: 'container',    displayName: 'Conteneur'},
+        {name: 'damage',       displayName: 'Dégât'},
+        {name: 'diceDrop',     displayName: 'Dé'},
+        {name: 'gem',          displayName: 'Gemme'},
+        {name: 'level',        displayName: 'Niveau requis'},
+        {name: 'lifetime',     displayName: 'Temps de conservation'},
+        {name: 'modifiers',    displayName: 'Modificateurs'},
+        {name: 'prereq',       displayName: 'Prérequis'},
+        {name: 'protection',   displayName: 'Protection'},
+        {name: 'quantifiable', displayName: 'Quantifiable'},
+        {name: 'relic',        displayName: 'Relique'},
+        {name: 'rupture',      displayName: 'Rupture'},
+        {name: 'sex',          displayName: 'Sexe'},
+        {name: 'skill',        displayName: 'Compétences'},
+        {name: 'skillBook',    displayName: 'Livre de compétences'},
+        {name: 'slots',        displayName: 'Equipement'},
+        {name: 'throwable',    displayName: 'Prévue pour le jet'},
+        {name: 'weight',       displayName: 'Poids'}
     ];
 
 
     constructor(private _itemService: ItemService
         , private _effectService: EffectService
         , private _originService: OriginService
+        , private _nhbkDialogService: NhbkDialogService
         , private _jobService: JobService
         , private _skillService: SkillService) {
         this.itemTemplate = new ItemTemplate();
@@ -75,13 +86,44 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         };
     }
 
+    @HostListener('window:keydown', ['$event'])
+    keyboardInput(event: any) {
+        if (event.target.tagName === 'BODY') {
+            if (event.code === 'KeyT') {
+                this.openAddModuleDialog();
+            }
+        }
+        if (event.code === 'Escape') {
+            this.closeAddModuleDialog();
+        }
+    }
+
+    openAddModuleDialog() {
+        if (this.addModuleOverlayRef == null) {
+            this.addModuleOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addModuleDialog, true);
+            this.addModuleOverlayRef.backdropClick().subscribe(() => this.closeAddModuleDialog());
+            setTimeout(() => {
+                this.autocompleteModuleModalTextField.focus();
+            }, 0);
+        }
+    }
+
+    closeAddModuleDialog() {
+        if (this.addModuleOverlayRef) {
+            this.addModuleOverlayRef.detach();
+            this.addModuleOverlayRef = null;
+        }
+    }
 
     updateAutocompleteModule(filter: string) {
         if (!filter) {
             return Observable.of([]);
         }
-        let filtered = this.modulesDef.filter(m => m.name.indexOf(filter) !== -1 && this.modules.indexOf(m.name) === -1)
-            .map(m => new AutocompleteValue(m, m.name));
+        filter = removeDiacritics(filter).toLowerCase();
+        let filtered = this.modulesDef
+            .filter(m => this.modules.indexOf(m.name) === -1)
+            .filter(m => (m.name.indexOf(filter) !== -1 || removeDiacritics(m.displayName.toLowerCase()).indexOf(filter) !== -1))
+            .map(m => new AutocompleteValue(m, m.displayName));
         return Observable.of(filtered);
     }
 
@@ -115,6 +157,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if ('itemTemplate' in changes) {
             this.updateSelectedSection();
+            this.determineModulesFromItemTemplate();
         }
     }
 
@@ -124,8 +167,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
 
         let moduleName = module.name;
-
-        this.newModuleName = null;
+        this.closeAddModuleDialog();
 
         switch (moduleName) {
             case 'charge':

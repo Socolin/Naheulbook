@@ -6,7 +6,7 @@ export class NhbkDialogService {
     constructor(private _overlay: Overlay) {
     }
 
-    openCenteredBackdropDialog(portal: Portal<any>): OverlayRef {
+    openCenteredBackdropDialog(portal: Portal<any>, noBackdropEvent?: boolean): OverlayRef {
         let config = new OverlayState();
 
         config.positionStrategy = this._overlay.position()
@@ -17,7 +17,9 @@ export class NhbkDialogService {
 
         let overlayRef = this._overlay.create(config);
         overlayRef.attach(portal);
-        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        if (!noBackdropEvent) {
+            overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        }
         return overlayRef;
     }
 }
