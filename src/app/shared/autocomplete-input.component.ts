@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
 
 export class AutocompleteValue {
     public value: any;
@@ -23,8 +23,19 @@ export class AutocompleteInputComponent {
     @Input() clearOnSelect: boolean = false;
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
 
+    @ViewChild('inputField')
+    public inputField: ElementRef;
+
     public matchingValues: AutocompleteValue[];
     public preSelectedValueIndex: number;
+
+    focus() {
+        this.inputField.nativeElement.focus();
+    }
+
+    clear() {
+        this.value = '';
+    }
 
     selectValue(value: any) {
         this.onSelect.emit(value.value);
@@ -45,6 +56,8 @@ export class AutocompleteInputComponent {
     onKey(event: KeyboardEvent) {
         if (event.keyCode === 27) {
             this.close();
+            this.inputField.nativeElement.blur();
+            return;
         }
         else if (event.keyCode === 38) {
             if (this.preSelectedValueIndex > 0) {
