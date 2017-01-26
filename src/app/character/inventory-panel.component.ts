@@ -247,6 +247,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     onDeleteItem(item: PartialItem) {
+        if (this.selectedItem && this.selectedItem.id === item.id) {
+            this.selectedItem = null;
+        }
         for (let i = 0; i < this.character.items.length; i++) {
             let it = this.character.items[i];
             if (it.id === item.id) {
@@ -322,8 +325,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             if (it.id === item.id) {
                 if (it.data.quantity !== item.data.quantity) {
                     this._characterWebsocketService.notifyChange('Modification de la quantité de l\'objet: '
-                        + item.data.name + ': ' + item.data.quantity + ' ->' + it.data.quantity);
+                        + item.data.name + ': ' + it.data.quantity + ' ->' + item.data.quantity);
                     it.data.quantity = item.data.quantity;
+                    it.data.charge = item.data.charge;
                     this.character.update();
                 }
                 break;
@@ -394,6 +398,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         });
         this._itemActionService.registerAction('use_charge').subscribe((event: {item: Item, data: any}) => {
             let item = event.item;
+            if (isNullOrUndefined(item.data.charge)) {
+                item.data.charge = item.template.data.charge;
+            }
             this._itemService.updateCharge(item.id, item.data.charge - 1).subscribe(
                 this.onUseItemCharge.bind(this)
             );

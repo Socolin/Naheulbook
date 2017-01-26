@@ -40,7 +40,15 @@
                     (click)="_itemActionService.onAction('read_skill_book', item)">
                 Lire
             </button>
-            <button *ngIf="item.template.data.charge" (click)="_itemActionService.onAction('use_charge', item)">Utiliser une charge</button>
+            <button *ngIf="item.template.data.charge"
+                    md-menu-item
+                    (click)="_itemActionService.onAction('use_charge', item)">
+                Utiliser sur soi-meme
+            </button>
+            <button *ngIf="item.template.data.charge"
+                    md-menu-item>
+                Utiliser sur...
+            </button>
             <button md-menu-item (click)="_itemActionService.onAction('delete', item)">Supprimer</button>
         </md-menu>
     </md-card-header>
@@ -152,7 +160,16 @@
             </div>
 
             <div *ngIf="item.template.data.charge">
-                Charges: {{item.data.charge}} / {{item.template.data.charge}}
+                <div>
+                    <span>Nombre d'utilisations:</span>
+                    {{item.data.charge}} / {{item.template.data.charge}}
+                </div>
+                <div *ngIf="item.template.data?.actions?.length">
+                    Lors de l'utilisation:
+                    <div *ngFor="let action of item.template.data.actions" style="margin-left: 20px">
+                        <nhbk-action *ngIf="!action.hidden" [action]="action"></nhbk-action>
+                    </div>
+                </div>
             </div>
 
             <div *ngIf="item.template.data.weight && !item.template.data.useUG">

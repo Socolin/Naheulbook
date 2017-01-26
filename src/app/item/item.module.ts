@@ -16,6 +16,8 @@ import {
     ItemTemplateEditorModuleComponent
 } from './';
 import {MaterialModule} from '@angular/material';
+import {AutocompleteSearchItemTemplateComponent} from './autocomplete-search-item-template.component';
+import {ActionModule} from '../action';
 
 @NgModule({
     imports: [
@@ -25,6 +27,7 @@ import {MaterialModule} from '@angular/material';
         SharedModule,
         SkillModule,
         DateModule,
+        ActionModule,
     ],
     declarations: [
         CreateItemComponent,
@@ -33,9 +36,11 @@ import {MaterialModule} from '@angular/material';
         ItemListComponent,
         ItemTemplateComponent,
         ItemTemplateEditorModuleComponent,
+        AutocompleteSearchItemTemplateComponent,
     ],
     exports: [
         ItemListComponent,
+        AutocompleteSearchItemTemplateComponent,
     ],
     providers: [
         ItemService,

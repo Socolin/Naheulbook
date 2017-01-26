@@ -1,12 +1,12 @@
 import {Component, Input, OnInit, forwardRef, Inject} from '@angular/core';
 
-import {Stat} from './stat.model';
 import {ItemStatModifier, StatModificationOperand} from './stat-modifier.model';
 import {Origin, OriginService} from '../origin';
 import {Job} from '../job';
 import {JobService} from '../job';
 import {CharacterService} from '../character';
 import {isNullOrUndefined} from 'util';
+
 @Component({
     selector: 'modifiers-editor',
     styleUrls: ['./modifiers-editor.component.scss'],

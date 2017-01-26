@@ -156,6 +156,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if ('itemTemplate' in changes) {
+            console.log('change itemtemplate');
             this.updateSelectedSection();
             this.determineModulesFromItemTemplate();
         }

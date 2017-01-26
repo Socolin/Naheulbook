@@ -1,22 +1,70 @@
 <md-card [ngSwitch]="moduleName">
     <button class="delete-button" md-icon-button (click)="deleteModule()"><md-icon>delete</md-icon></button>
     <template [ngSwitchCase]="'charge'">
-        <md-card-subtitle>Charges</md-card-subtitle>
+        <md-card-subtitle>Charges / Utilisations</md-card-subtitle>
         <md-card-content>
-            <md-input-container align="end">
-                <input md-input
-                       placeholder="Nombre de charges"
-                       [(ngModel)]="itemTemplate.data.charge"
-                       type="number"/>
-                <span md-prefix>Cet objet a un nombre limité de </span>
-                <span md-suffix>utilisation(s)</span>
-            </md-input-container>
+            <div>
+                <md-input-container align="end">
+                    <input md-input
+                           placeholder="Nombre de charges"
+                           [(ngModel)]="itemTemplate.data.charge"
+                           type="number"/>
+                    <span md-prefix>Cet objet a un nombre limité de </span>
+                    <span md-suffix>utilisation(s)</span>
+                </md-input-container>
+            </div>
+            <div>
+                Lors de l'utilisation:
+            </div>
+            <div *ngFor="let action of itemTemplate.data.actions; let i = index" style="display: flex; align-items: center">
+                <button md-icon-button
+                        color="accent"
+                        (click)="removeChargeAction(i)">
+                    <md-icon>delete</md-icon>
+                </button>
+                <span *ngIf="action.hidden">[Caché]</span>
+                <nhbk-action [action]="action"></nhbk-action>
+            </div>
+            <div>
+                <button md-button color="primary" (click)="openAddChargeActionModal()">AJOUTER UNE ACTION</button>
+            </div>
         </md-card-content>
+        <template #addChargeActionModal="cdkPortal" cdk-portal>
+            <md-card>
+                <md-card-title>
+                    Ajouter une action
+                </md-card-title>
+                <md-card-subtitle>
+                    Lors de l'utilisation d'une charge
+                </md-card-subtitle>
+                <md-card-content>
+                    <nhbk-action-editor [action]="newChargeAction"></nhbk-action-editor>
+                </md-card-content>
+                <md-card-actions align="end">
+                    <button md-button
+                            (click)="closeAddChargeActionModal()"
+                            color="primary">
+                        FERMER
+                    </button>
+                    <button md-button
+                            (click)="addChargeAction()"
+                            color="primary">
+                        AJOUTER
+                    </button>
+                </md-card-actions>
+            </md-card>
+        </template>
     </template>
     <template [ngSwitchCase]="'container'">
         <md-card-subtitle>Conteneur</md-card-subtitle>
         <md-card-content>
             Cet objet permet de stocker d'autres objets
+        </md-card-content>
+    </template>
+    <template [ngSwitchCase]="'currency'">
+        <md-card-subtitle>Monnaie</md-card-subtitle>
+        <md-card-content>
+            Cet objet est comptabiliser dans le total de piece d'or du joueur.
         </md-card-content>
     </template>
     <template [ngSwitchCase]="'damage'">

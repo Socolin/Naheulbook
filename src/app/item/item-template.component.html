@@ -83,11 +83,23 @@
             <span>Durée:</span>
             {{item.data.duration}}
         </div>
-        <div *ngIf="item.data.charge">
-            <span>Charge:</span>
+    </div>
+
+    <!-- Charge / Action -->
+
+    <div *ngIf="item.data.charge">
+        <div>
+            <span>Nombre d'utilisations:</span>
             {{item.data.charge}}
         </div>
+        <div *ngIf="item.data?.actions?.length">
+            Lors de l'utilisation:
+            <div *ngFor="let action of item.data.actions" style="margin-left: 20px">
+                <nhbk-action *ngIf="!action.hidden" [action]="action"></nhbk-action>
+            </div>
+        </div>
     </div>
+
 
     <div *ngIf="item.data.weight">
         <span>

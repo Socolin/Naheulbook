@@ -29,7 +29,6 @@ export class CreateItemComponent implements OnChanges {
     public mode: string = 'normal';
     public newItem: Item = new Item();
     public gemOption: any = {};
-    public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
 
     constructor(private _itemService: ItemService,
                 private _nhbkDialogService: NhbkDialogService) {
@@ -111,12 +110,6 @@ export class CreateItemComponent implements OnChanges {
         if (itemTemplate.data.quantifiable) {
             this.newItem.data.quantity = 1;
         }
-    }
-
-    updateAutocompleteItem(filter: string) {
-        return this._itemService.searchItem(filter).map(
-            list => list.map(e => new AutocompleteValue(e, e.name))
-        );
     }
 
     setItemNotIdentified() {

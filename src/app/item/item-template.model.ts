@@ -22,6 +22,7 @@ export class ItemSlot {
     techName: string;
 }
 export class ItemTemplateData {
+    actions: any[];
     description: string;
     note: string;
     notIdentifiedName: string;

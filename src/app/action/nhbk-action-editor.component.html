@@ -1,0 +1,57 @@
+<select [(ngModel)]="action.type" (change)="updateActionType()">
+    <option *ngFor="let action of validActions" [value]="action.type">{{action.displayName}}</option>
+</select>
+
+<md-checkbox [(ngModel)]="action.hidden">Cacher</md-checkbox>
+<div [ngSwitch]="action.type">
+    <template [ngSwitchCase]="'addItem'">
+    </template>
+    <template [ngSwitchCase]="'addItem'">
+        <autocomplete-input [clearOnSelect]="false"
+                            [placeholder]="'Objet'"
+                            (onSelect)="selectItemTemplate($event)"
+                            [(callback)]="autocompleteItemCallback">
+        </autocomplete-input>
+        <div *ngIf="selectedItemTemplate?.data?.quantifiable">
+            <md-input-container align="end">
+                <input md-input
+                       type="number"
+                       placeholder="Quantité"
+                       [(ngModel)]="action.data.quantity"/>
+            </md-input-container>
+        </div>
+    </template>
+    <template [ngSwitchCase]="'removeItem'">
+    </template>
+    <template [ngSwitchCase]="'addEv'">
+        <md-input-container align="end">
+            <input md-input
+                   type="number"
+                   placeholder="Energie vitale"
+                   [(ngModel)]="action.data.ev"/>
+            <span md-prefix>Redonner</span>
+            <span md-suffix>E.V.</span>
+        </md-input-container>
+    </template>
+    <template [ngSwitchCase]="'addEa'">
+        <md-input-container align="end">
+            <input md-input
+                   type="number"
+                   placeholder="Energie astrale"
+                   [(ngModel)]="action.data.ea"/>
+            <span md-prefix>Redonner</span>
+            <span md-suffix>E.A.</span>
+        </md-input-container>
+    </template>
+    <template [ngSwitchCase]="'custom'">
+        <md-input-container align="end">
+            <input md-input
+                   type="text"
+                   placeholder="Action"
+                   [(ngModel)]="action.data.text"/>
+        </md-input-container>
+    </template>
+    <template ngSwitchDefault>
+        No data for {{action.type}}
+    </template>
+</div>

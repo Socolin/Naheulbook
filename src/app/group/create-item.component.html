@@ -8,11 +8,8 @@
                     <md-tab label="Classique">
                         <md-card>
                             <md-card-subtitle>Modèle</md-card-subtitle>
-                            <autocomplete-input [value]="newItem.template?.name"
-                                                [placeholder]="'Objet'"
-                                                (onSelect)="selectItemTemplate($event, newItemName)"
-                                                [(callback)]="autocompleteItemCallback">
-                            </autocomplete-input>
+                            <autocomplete-search-item-template (onSelect)="selectItemTemplate($event, newItemName)">
+                            </autocomplete-search-item-template>
                         </md-card>
                     </md-tab>
                     <md-tab label="Pierre précieuse">

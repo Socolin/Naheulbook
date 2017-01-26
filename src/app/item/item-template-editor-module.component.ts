@@ -1,8 +1,12 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {OverlayRef, Portal} from '@angular/material';
+
 import {ItemTemplate, ItemSlot} from './item-template.model';
 import {Skill} from '../skill/skill.model';
 import {NhbkDateOffset} from '../date/date.model';
 import {dateOffset2TimeDuration} from '../date/util';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {NhbkAction} from '../action/nhbk-action.model';
 
 @Component({
     selector: 'item-template-editor-module',
@@ -19,7 +23,37 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
 
     @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
 
+    @ViewChild('addChargeActionModal')
+    public addChargeActionModal: Portal<any>;
+    public addChargeActionOverlayRef: OverlayRef;
+    public newChargeAction: NhbkAction;
+
     public lifetimeDateOffset: NhbkDateOffset = new NhbkDateOffset();
+
+    constructor(private _nhbkDialogService: NhbkDialogService) {
+    }
+
+    openAddChargeActionModal() {
+        if (!this.itemTemplate.data.actions) {
+            this.itemTemplate.data.actions = [];
+        }
+        this.newChargeAction = new NhbkAction(NhbkAction.VALID_ACTIONS[0].type);
+        this.addChargeActionOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addChargeActionModal);
+    }
+
+    closeAddChargeActionModal() {
+        this.addChargeActionOverlayRef.detach();
+    }
+
+    addChargeAction() {
+        this.itemTemplate.data.actions.push(this.newChargeAction);
+        this.closeAddChargeActionModal();
+        this.newChargeAction = null;
+    }
+
+    removeChargeAction(index: number) {
+        this.itemTemplate.data.actions.splice(index, 1);
+    }
 
     isInSlot(slot) {
         if (!this.itemTemplate.slots) {

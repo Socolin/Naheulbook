@@ -1,0 +1,20 @@
+<div [ngSwitch]="action.type">
+    <template [ngSwitchCase]="'addEv'">
+        Redonne {{action.data.ev}} E.V.
+    </template>
+    <template [ngSwitchCase]="'addEa'">
+        Redonne {{action.data.ea}} E.A.
+    </template>
+    <template [ngSwitchCase]="'removeItem'">
+        Supprime l'objet
+    </template>
+    <template [ngSwitchCase]="'addItem'">
+        Ajoute l'objet {{action.data.itemName}} <span *ngIf="action.data.quantity > 1">en {{action.data.quantity}} exemplaire</span>
+    </template>
+    <template [ngSwitchCase]="'custom'">
+        {{action.data.text}}
+    </template>
+    <template ngSwitchDefault>
+        No data for {{action.type}}
+    </template>
+</div>
