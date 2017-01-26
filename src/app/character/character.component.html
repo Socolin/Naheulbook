@@ -65,6 +65,11 @@
                                 </value-editor> / {{getXpForNextLevel()}}
                             </dd>
 
+                            <dt>Fortune</dt>
+                            <dd>
+                                {{character.computedData.totalMoney | number}} Pieces d'or
+                            </dd>
+
                             <dt *ngIf="inGroupTab">Debilibeuk</dt>
                             <dd *ngIf="inGroupTab">
                                 <value-editor [title]="'Debilibeuk du joueur'" [value]=character.gmData.debilibeuk

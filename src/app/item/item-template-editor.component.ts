@@ -51,6 +51,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     private modulesDef: any[] = [
         {name: 'charge',       displayName: 'Charges/Utilisations'},
         {name: 'container',    displayName: 'Conteneur'},
+        {name: 'currency',     displayName: 'Monnaie'},
         {name: 'damage',       displayName: 'Dégât'},
         {name: 'diceDrop',     displayName: 'Dé'},
         {name: 'gem',          displayName: 'Gemme'},
@@ -69,7 +70,6 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         {name: 'throwable',    displayName: 'Prévue pour le jet'},
         {name: 'weight',       displayName: 'Poids'}
     ];
-
 
     constructor(private _itemService: ItemService
         , private _effectService: EffectService
@@ -176,6 +176,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'container':
                 this.itemTemplate.data.container = true;
                 break;
+            case 'currency':
+                this.itemTemplate.data.isCurrency = true;
+                break;
             case 'damage':
                 this.itemTemplate.data.damageDice = 1;
                 break;
@@ -247,6 +250,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 break;
             case 'container':
                 this.itemTemplate.data.container = null;
+                break;
+            case 'currency':
+                this.itemTemplate.data.isCurrency = null;
                 break;
             case 'damage':
                 this.itemTemplate.data.damageDice = null;
@@ -320,6 +326,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
         if (this.itemTemplate.data.container) {
             modules.push('container');
+        }
+        if (this.itemTemplate.data.isCurrency) {
+            modules.push('currency');
         }
         if (this.itemTemplate.data.damageDice || this.itemTemplate.data.bonusDamage) {
             modules.push('damage');

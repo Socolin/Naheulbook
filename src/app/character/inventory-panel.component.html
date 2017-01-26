@@ -16,6 +16,9 @@
             <md-button-toggle value="equiped">
                 Equipé
             </md-button-toggle>
+            <md-button-toggle value="currency">
+                Monnaie
+            </md-button-toggle>
         </md-button-toggle-group>
 
         <md-button-toggle-group [(ngModel)]="sortType" (click)="sortInventory()">
@@ -79,6 +82,50 @@
                          [class.selected]="item === selectedItem"
                          (click)="selectItem(item)"
                          *ngIf="isItemFilteredByName(item)">
+                        <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                    </div>
+                    <template [ngIf]="item === selectedItem">
+                        <swipeable-item-detail style="position: absolute; right: 0"
+                                               [gmView]="inGroupTab"
+                                               [character]="character"
+                                               [item]="item">
+                        </swipeable-item-detail>
+                    </template>
+                </template>
+            </div>
+        </div>
+
+        <div *ngIf="selectedInventoryTab === 'currency'" class="inventory-content">
+            <div *ngIf="!iconMode">
+                <div class="items-list">
+                    <template ngFor let-item [ngForOf]="character.computedData.currencyItems">
+                        <div class="items-list-element">
+                            <div class="item-line"
+                                 [class.selected]="selectedItem && selectedItem.id === item.id"
+                                 (click)="selectItem(item)">
+                                <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                                <md-icon *ngIf="item.data.notIdentified">help</md-icon>
+                                <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
+                                <md-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</md-icon>
+                                <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
+                                {{item.data.name}}
+                            </div>
+                            <template [ngIf]="item === selectedItem">
+                                <swipeable-item-detail style="position: absolute; right: 0"
+                                                       [gmView]="inGroupTab"
+                                                       [character]="character"
+                                                       [item]="item">
+                                </swipeable-item-detail>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div *ngIf="iconMode">
+                <template ngFor let-item [ngForOf]="character.items">
+                    <div class="item-icon"
+                         [class.selected]="item === selectedItem"
+                         (click)="selectItem(item)">
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                     </div>
                     <template [ngIf]="item === selectedItem">

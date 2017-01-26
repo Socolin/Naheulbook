@@ -28,6 +28,7 @@ export class ItemTemplateData {
     diceDrop: number;
     price: number;
     container: boolean;
+    isCurrency: boolean;
     throwable: boolean;
     rupture: number;
     damageDice: number;

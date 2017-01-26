@@ -204,6 +204,8 @@ export class CharacterComputedData {
     itemsBySlots = {};
     itemsBySlotsAll = {};
     itemsEquiped: Item[] = [];
+    currencyItems: Item[] = [];
+    totalMoney: number = 0;
     itemSlots = [];
     topLevelContainers = [];
     tacticalMovement: TacticalMovementInfo = new TacticalMovementInfo();
@@ -332,11 +334,19 @@ export class Character {
         let slots = [];
         let containers: Item[] = [];
         let topLevelContainers = [];
+        let currencyItems = [];
+        let totalMoney = 0;
         let content: {[itemId: number]: Item[]} = {};
         let itemsById: {[itemId: number]: Item} = {};
 
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
+
+            if (item.template.data.isCurrency) {
+                totalMoney += item.template.data.price * (item.data.quantity || 1);
+                currencyItems.push(item);
+            }
+
             itemsById[item.id] = item;
             if (item.data.equiped || item.container !== null) {
                 if (item.template.data.container) {
@@ -428,6 +438,8 @@ export class Character {
         this.computedData.itemsBySlotsAll = itemsBySlotsAll;
         this.computedData.containers = containers;
         this.computedData.topLevelContainers = topLevelContainers;
+        this.computedData.currencyItems = currencyItems;
+        this.computedData.totalMoney = totalMoney;
     }
 
     private updateStats() {
