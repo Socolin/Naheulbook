@@ -76,142 +76,16 @@
     <md-card class="add-effect-dialog">
         <md-card-title>Ajouter un effet</md-card-title>
         <md-card-content>
-            <md-tab-group class="demo-tab-group">
+            <md-tab-group (selectedIndexChange)="selectEffectTypeTab($event)">
                 <md-tab label="Prédéfini">
-                    <div>
-                        <autocomplete-input [value]="effectFilterName"
-                                            [placeholder]="'Effet'"
-                                            (onSelect)="selectEffectInAutocompleteList($event)"
-                                            [(callback)]="autocompleteEffectListCallback"></autocomplete-input>
-                    </div>
-                    <div>
-                        <md-slide-toggle color="primary"
-                                         [ngModel]="newEffectReusable">
-                            Ré-utilisable
-                        </md-slide-toggle>
-                    </div>
-
-                    <div *ngIf="preSelectedEffect">
-                        <div *ngIf="preSelectedEffect.duration">
-                            <label class="col-sm-3 control-label">Durée</label>
-                            <div class="col-sm-9">
-                                {{preSelectedEffect.duration}}
-                            </div>
-                        </div>
-                        <div *ngIf="preSelectedEffect.combatCount">
-                            <label class="col-sm-3 control-label">Durée</label>
-                            <div class="col-sm-9">
-                                {{preSelectedEffect.combatCount}} combat
-                            </div>
-                        </div>
-                        <div *ngIf="preSelectedEffect.timeDuration">
-                            <label class="col-sm-3 control-label">Durée</label>
-                            <div class="col-sm-9">
-                                {{preSelectedEffect.timeDuration | nhbkDuration}}
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="preSelectedEffect" class="form-group">
-                        <md-checkbox [(ngModel)]="newEffectCustomDuration">
-                            Durée personnalisée
-                        </md-checkbox>
-                    </div>
-                    <div *ngIf="preSelectedEffect && newEffectCustomDuration">
-                        <h4>Durée</h4>
-                        <md-button-toggle-group name="alignment" [(ngModel)]="newEffectDurationType">
-                            <md-button-toggle value="combat">Nombre de combat</md-button-toggle>
-                            <md-button-toggle value="lap">Nombre de tour</md-button-toggle>
-                            <md-button-toggle value="time">Temps</md-button-toggle>
-                            <md-button-toggle value="custom">Autre</md-button-toggle>
-                            <md-button-toggle value="forever">Permanent</md-button-toggle>
-                        </md-button-toggle-group>
-
-                        <div *ngIf="newEffectDurationType === 'custom'">
-                            <md-input placeholder="Durée" [(ngModel)]="newEffectDuration"></md-input>
-                        </div>
-
-                        <div *ngIf="newEffectDurationType === 'time'">
-                            <div>
-                                <span>Temps</span>
-                                <span>
-                                    {{newEffectTimeDuration | nhbkDuration}}
-                                </span>
-                                <span>
-                                    <date-modifier [resetOnChange]=false
-                                                   [dateOffset]="newEffectTimeDurationDate"
-                                                   (onChange)="setNewEffectTimeDuration($event)">
-                                    </date-modifier>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div *ngIf="newEffectDurationType === 'combat'">
-                            <md-input-container align="end">
-                                <input md-input type="number" min=0 placeholder="Durée" [(ngModel)]="newEffectCombatCount">
-                                <span md-suffix> combat(s)</span>
-                            </md-input-container>
-                        </div>
-                        <div *ngIf="newEffectDurationType === 'lap'">
-                            <md-input-container align="end">
-                                <input md-input type="number" min=0 placeholder="Durée" [(ngModel)]="newEffectLapCount">
-                                <span md-suffix> tour(s)</span>
-                            </md-input-container>
-                        </div>
-                    </div>
+                    <character-effect-editor #characterEffectEditor
+                                             (onValidate)="addEffect($event)">
+                    </character-effect-editor>
                 </md-tab>
 
                 <md-tab label="Custom">
-                    <div class="form-horizontal">
-                        <div class="row-fluid">
-                            <div>
-                                <md-input placeholder="Nom" [(ngModel)]="customAddModifier.name"></md-input>
-                            </div>
-                            <h4>Durée</h4>
-                            <md-button-toggle-group name="alignment" [(ngModel)]="newModifierDurationType">
-                                <md-button-toggle value="combat">Nombre de combat</md-button-toggle>
-                                <md-button-toggle value="lap">Nombre de tours</md-button-toggle>
-                                <md-button-toggle value="time">Temps</md-button-toggle>
-                                <md-button-toggle value="custom">Autre</md-button-toggle>
-                                <md-button-toggle value="forever">Permanent</md-button-toggle>
-                            </md-button-toggle-group>
-
-                            <div class="form-group">
-                                <div *ngIf="newModifierDurationType === 'custom'">
-                                    <md-input placeholder="Durée" [(ngModel)]="customAddModifier.duration"></md-input>
-                                </div>
-                                <div *ngIf="newModifierDurationType === 'time'">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Temps</span>
-                                        <span class="input-group-addon">
-                                            {{customAddModifier.timeDuration | nhbkDuration}}
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <date-modifier [resetOnChange]=false [dateOffset]="customAddModifierDateOffset" (onChange)="setCustomAddModifierTimeDuration($event)"></date-modifier>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div *ngIf="newModifierDurationType === 'lap'">
-                                    <md-input-container align="end">
-                                        <input md-input type="number" min=0 placeholder="Durée" [(ngModel)]="customAddModifier.lapCount">
-                                        <span md-suffix> tour(s)</span>
-                                    </md-input-container>
-                                </div>
-                                <div *ngIf="newModifierDurationType === 'combat'">
-                                    <md-input-container align="end">
-                                        <input md-input type="number" min=0 placeholder="Durée" [(ngModel)]="customAddModifier.combatCount">
-                                        <span md-suffix> combat(s)</span>
-                                    </md-input-container>
-                                </div>
-                            </div>
-
-                            <md-slide-toggle color="primary" [(ngModel)]="customAddModifier.reusable">
-                                Ré-utilisable
-                            </md-slide-toggle>
-
-                            <h4>Modificateurs</h4>
-                            <modifiers-editor [(modifiers)]="customAddModifier.values"></modifiers-editor>
-                        </div>
-                    </div>
+                    <stats-modifier-editor [modifier]="newCharacterModifier">
+                    </stats-modifier-editor>
                 </md-tab>
             </md-tab-group>
         </md-card-content>
@@ -222,14 +96,14 @@
                 ANNULER
             </button>
             <button md-button
-                    [disabled]="!preSelectedEffect"
                     color="primary"
-                    (click)="addEffect(preSelectedEffect, newEffectReusable)">
+                    *ngIf="addEffectTypeSelectedTab === 0"
+                    (click)="characterEffectEditor.addEffect()">
                 AJOUTER
             </button>
             <button md-button
-                    [disabled]="!customAddModifier.name"
                     color="primary"
+                    *ngIf="addEffectTypeSelectedTab === 1"
                     (click)="addCustomModifier()">
                 AJOUTER
             </button>

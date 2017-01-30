@@ -12,6 +12,7 @@ import {
 import {Effect} from '../effect';
 import {Skill} from '../skill';
 import {isNullOrUndefined} from 'util';
+import {StatsModifier} from '../shared/stat-modifier.model';
 
 export interface CharacterResume {
     id: number;
@@ -39,19 +40,13 @@ export class CharacterEffect {
     currentTimeDuration: number;
 }
 
-export class CharacterModifier {
+export class CharacterModifier extends StatsModifier {
     id: number;
-    name: string;
-    values: StatModifier[] = [];
     permanent: boolean;
-    duration: string;
     active: boolean;
-    combatCount: number;
+
     currentCombatCount: number;
-    lapCount: number;
     currentLapCount: number;
-    reusable: boolean;
-    timeDuration: number;
     currentTimeDuration: number;
 }
 

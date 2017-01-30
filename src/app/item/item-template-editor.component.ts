@@ -1,6 +1,5 @@
 import {
-    Component, Input, OnInit, OnChanges, SimpleChanges, HostListener, ViewChild, QueryList,
-    ViewChildren
+    Component, Input, OnInit, OnChanges, SimpleChanges, HostListener, ViewChild
 } from '@angular/core';
 
 import {ItemTemplate, ItemSection, ItemSlot} from '../item';
@@ -156,7 +155,6 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if ('itemTemplate' in changes) {
-            console.log('change itemtemplate');
             this.updateSelectedSection();
             this.determineModulesFromItemTemplate();
         }
@@ -193,8 +191,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 this.itemTemplate.data.requireLevel = 1;
                 break;
             case 'lifetime':
-                this.itemTemplate.data.lifetime = 1;
-                this.itemTemplate.data.lifetimeType = 'combat';
+                this.itemTemplate.data.lifetime = {durationType: 'time', timeDuration: 0};
                 break;
             case 'modifiers':
                 this.itemTemplate.modifiers = [];
@@ -271,7 +268,6 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 break;
             case 'lifetime':
                 this.itemTemplate.data.lifetime = null;
-                this.itemTemplate.data.lifetimeType = null;
                 break;
             case 'modifiers':
                 this.itemTemplate.modifiers = null;

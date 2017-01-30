@@ -30,29 +30,8 @@
             </div>
         </md-card-content>
         <template #addChargeActionModal="cdkPortal" cdk-portal>
-            <md-card>
-                <md-card-title>
-                    Ajouter une action
-                </md-card-title>
-                <md-card-subtitle>
-                    Lors de l'utilisation d'une charge
-                </md-card-subtitle>
-                <md-card-content>
-                    <nhbk-action-editor [action]="newChargeAction"></nhbk-action-editor>
-                </md-card-content>
-                <md-card-actions align="end">
-                    <button md-button
-                            (click)="closeAddChargeActionModal()"
-                            color="primary">
-                        FERMER
-                    </button>
-                    <button md-button
-                            (click)="addChargeAction()"
-                            color="primary">
-                        AJOUTER
-                    </button>
-                </md-card-actions>
-            </md-card>
+            <nhbk-action-editor (onValidate)="addChargeAction($event)" (onClose)="closeAddChargeActionModal()">
+            </nhbk-action-editor>
         </template>
     </template>
     <template [ngSwitchCase]="'container'">
@@ -124,51 +103,7 @@
     </template>
     <template [ngSwitchCase]="'lifetime'">
         <md-card-subtitle>Duree de conservation</md-card-subtitle>
-        <md-card-content>
-            <div>
-                <md-button-toggle-group name="alignment" [(ngModel)]="itemTemplate.data.lifetimeType">
-                    <md-button-toggle (click)="setLifetimeType('combat')" value="combat">Nombre de combat</md-button-toggle>
-                    <md-button-toggle (click)="setLifetimeType('lap')" value="lap">Nombre de tour</md-button-toggle>
-                    <md-button-toggle (click)="setLifetimeType('time')" value="time">Temps</md-button-toggle>
-                    <md-button-toggle (click)="setLifetimeType('custom')" value="custom">Autre</md-button-toggle>
-                </md-button-toggle-group>
-            </div>
-
-            <div *ngIf="itemTemplate.data.lifetimeType == 'custom'">
-                <md-input-container>
-                    <span md-prefix>Cet objet peut se conserver</span>
-                    <input md-input
-                           placeholder="Durée"
-                           type="text"
-                           [(ngModel)]="itemTemplate.data.lifetime"/>
-                </md-input-container>
-            </div>
-            <div *ngIf="itemTemplate.data.lifetimeType == 'time'">
-                <div>
-                    <span>Cet objet peut se conserver</span>
-                    <em>{{itemTemplate.data.lifetime | nhbkDuration}}</em>
-                    <span>
-                        <date-modifier [resetOnChange]=false [dateOffset]="lifetimeDateOffset"
-                                       (onChange)="setItemLifetimeDateOffset($event)">
-                        </date-modifier>
-                    </span>
-                </div>
-            </div>
-            <div *ngIf="itemTemplate.data.lifetimeType == 'lap'">
-                <md-input-container align="end">
-                    <input md-input type="number" min=0 placeholder="Nombre de tours" [(ngModel)]="itemTemplate.data.lifetime">
-                    <span md-prefix>Cet objet peut se conserver</span>
-                    <span md-suffix> tour(s)</span>
-                </md-input-container>
-            </div>
-            <div *ngIf="itemTemplate.data.lifetimeType == 'combat'">
-                <md-input-container align="end">
-                    <span md-prefix>Cet objet peut se conserver</span>
-                    <input md-input type="number" min=0 placeholder="Nombre de combats" [(ngModel)]="itemTemplate.data.lifetime">
-                    <span md-suffix> combat(s)</span>
-                </md-input-container>
-            </div>
-        </md-card-content>
+        <duration-selector [durable]="itemTemplate.data.lifetime"></duration-selector>
     </template>
     <template [ngSwitchCase]="'level'">
         <md-card-subtitle>Niveau requis</md-card-subtitle>

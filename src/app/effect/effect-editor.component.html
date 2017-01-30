@@ -25,49 +25,7 @@
 
 	<div>
         Durée
-        <md-button-toggle-group name="alignment" [(ngModel)]="effectDurationType" (change)="updateEffectDurationType()">
-            <md-button-toggle value="combat">Nombre de combat</md-button-toggle>
-            <md-button-toggle value="lap">Nombre de tours</md-button-toggle>
-            <md-button-toggle value="time">Temps</md-button-toggle>
-            <md-button-toggle value="custom">Autre</md-button-toggle>
-            <md-button-toggle value="forever">Permanent</md-button-toggle>
-        </md-button-toggle-group>
-
-        <div *ngIf="effectDurationType === 'custom'">
-            <md-input-container>
-                <input md-input
-                       [(ngModel)]="effect.duration"
-                       placeholder="Durée">
-            </md-input-container>
-        </div>
-
-        <div *ngIf="effectDurationType === 'time'">
-            <div>
-                <span>Temps</span>
-                <span>
-                    {{effect.timeDuration | nhbkDuration}}
-                </span>
-                <span>
-                    <date-modifier [resetOnChange]=false
-                                   [dateOffset]="effectDateOffset"
-                                   (onChange)="setEffectTimeDuration($event)">
-                    </date-modifier>
-                </span>
-            </div>
-        </div>
-
-        <div *ngIf="effectDurationType === 'lap'">
-            <md-input-container align="end">
-                <input md-input type="number" min=0 placeholder="Durée" [(ngModel)]="effect.lapCount">
-                <span md-suffix> tour(s)</span>
-            </md-input-container>
-        </div>
-        <div *ngIf="effectDurationType === 'combat'">
-            <md-input-container align="end">
-                <input md-input type="number" min=0 placeholder="Durée" [(ngModel)]="effect.combatCount">
-                <span md-suffix> combat(s)</span>
-            </md-input-container>
-        </div>
+        <duration-selector [durable]="effect"></duration-selector>
 	</div>
 
     <md-divider></md-divider>

@@ -1,0 +1,15 @@
+<div>
+    <div>
+        <md-input placeholder="Nom" [(ngModel)]="modifier.name"></md-input>
+    </div>
+
+    <h4>Durée</h4>
+    <duration-selector [durable]="modifier"></duration-selector>
+
+    <md-slide-toggle *ngIf="reusableToggle" color="primary" [(ngModel)]="modifier.reusable">
+        Ré-utilisable
+    </md-slide-toggle>
+
+    <h4>Modificateurs</h4>
+    <modifiers-editor [(modifiers)]="modifier.values"></modifiers-editor>
+</div>

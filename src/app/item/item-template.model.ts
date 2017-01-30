@@ -1,6 +1,7 @@
 import {ItemStatModifier} from '../shared/stat-modifier.model';
 import {Skill} from '../skill';
 import {IconDescription} from '../shared/icon.model';
+import {IDurable} from '../date/durable.model';
 
 export class ItemSection {
     id: number;
@@ -16,11 +17,13 @@ export class ItemCategory {
     note: string;
     type: any;
 }
+
 export class ItemSlot {
     id: number;
     name: string;
     techName: string;
 }
+
 export class ItemTemplateData {
     actions: any[];
     description: string;
@@ -50,20 +53,22 @@ export class ItemTemplateData {
     duration: string;
     space: string;
     useUG: boolean;
-    lifetimeType: string;
-    lifetime: string|number;
+    lifetime: IDurable;
     icon: IconDescription;
 }
+
 // FIXME: Is this used and checked ?
 export class ItemRequirement {
     stat: string;
     min: number;
     max: number;
 }
+
 export class ItemSkillModifier {
     skill: number|Skill;
     value: number;
 }
+
 export class ItemTemplate {
     id: number;
     name: string;

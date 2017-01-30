@@ -11,6 +11,7 @@ import {LoginService} from '../user';
 export class EffectService extends JsonService {
     private effectsByCategory: {[categoryId: number]: ReplaySubject<Effect[]>} = {};
     private effectCategoryList: ReplaySubject<EffectCategory[]>;
+    private effectsById: {[effectId: number]: ReplaySubject<Effect>} = {};
 
     constructor(http: Http
         , notification: NotificationsService
@@ -36,6 +37,15 @@ export class EffectService extends JsonService {
         return this.effectCategoryList;
     }
 
+    clearCacheEffect(effect: Effect) {
+        let effectId = effect.id;
+        if (effectId in this.effectsById) {
+            this.effectsById[effectId].unsubscribe();
+            delete this.effectsById[effectId];
+        }
+        this.clearCacheCategory(effect.category);
+    }
+
     clearCacheCategory(categoryId: number) {
         if (categoryId in this.effectsByCategory) {
             this.effectsByCategory[categoryId].unsubscribe();
@@ -44,7 +54,6 @@ export class EffectService extends JsonService {
     }
 
     getEffects(categoryId: number): Observable<Effect[]> {
-        console.log('getEffects', categoryId, this.effectsByCategory);
         if (!(categoryId in this.effectsByCategory)) {
             this.effectsByCategory[categoryId] = new ReplaySubject<Effect[]>(1);
             this.postJson('/api/effect/list', {
@@ -69,9 +78,21 @@ export class EffectService extends JsonService {
     }
 
     getEffect(effectId: number): Observable<Effect> {
-        return this.postJson('/api/effect/detail', {
-            effectId: effectId
-        }).map(res => res.json());
+        if (!(effectId in this.effectsById)) {
+            this.effectsById[effectId] = new ReplaySubject<Effect>(1);
+            this.postJson('/api/effect/detail', {
+                effectId: effectId
+            }).map(res => res.json()).subscribe(
+                effect => {
+                    this.effectsById[effectId].next(effect);
+                    this.effectsById[effectId].complete();
+                },
+                error => {
+                    this.effectsById[effectId].error(error);
+                }
+            );
+        }
+        return this.effectsById[effectId];
     }
 
     createEffect(effect: Object): Observable<Effect> {

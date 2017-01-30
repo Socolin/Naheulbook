@@ -1,4 +1,5 @@
 import {StatModifier} from '../shared';
+import {DurationType, IDurable} from '../date/durable.model';
 
 export class EffectCategory {
     id: number;
@@ -8,15 +9,16 @@ export class EffectCategory {
     nore: string;
 }
 
-export class Effect {
+export class Effect implements IDurable {
     id: number;
     name: string;
+    category: number;
     description: string;
+    modifiers: StatModifier[] = [];
     dice: number;
+    durationType: DurationType;
     combatCount: number;
     lapCount: number;
-    modifiers: StatModifier[] = [];
     duration: string;
-    category: number;
     timeDuration: number;
 }

@@ -1,14 +1,12 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Portal, OverlayRef} from '@angular/material';
+
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {EffectCategory} from '../effect/effect.model';
+
 import {Character, CharacterEffect, CharacterModifier} from './character.model';
-import {Effect, EffectCategory} from '../effect/effect.model';
-import {EffectService} from '../effect/effect.service';
 import {CharacterService} from './character.service';
-import {Observable} from 'rxjs';
 import {CharacterWebsocketService} from './character-websocket.service';
-import {AutocompleteValue} from '../shared/autocomplete-input.component';
-import {NhbkDateOffset} from '../date/date.model';
-import {dateOffset2TimeDuration} from '../date/util';
-import {Portal, OverlayRef, Overlay, OverlayState} from '@angular/material';
 
 @Component({
     selector: 'effect-detail',
@@ -40,136 +38,40 @@ export class EffectPanelComponent implements OnInit {
     @Input() character: Character;
     public selectedEffect: CharacterEffect;
     public selectedModifier: CharacterModifier;
-    public showEffectDetail: boolean;
 
     // Add effect dialog
     @ViewChild('addEffectDialog')
     public addEffectDialog: Portal<any>;
     public addEffectOverlayRef: OverlayRef;
+    public addEffectTypeSelectedTab: number = 0;
 
-    public preSelectedEffect: Effect;
-    public newEffectReusable: boolean;
-    public newEffectCustomDuration: boolean = false;
-    public newEffectTimeDuration: number = null;
-    public newEffectDuration: string = null;
-    public newEffectTimeDurationDate: NhbkDateOffset = new NhbkDateOffset();
-    public newEffectCombatCount: number = null;
-    public newEffectLapCount: number = null;
+    public newCharacterModifier: CharacterModifier = new CharacterModifier();
 
-    public effectFilterName: string;
-    public newEffectDurationType: string = 'custom';
-    public effectCategoriesById: {[categoryId: number]: EffectCategory};
-    public autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
-
-    // Custom modifier
-    public newModifierDurationType: string = 'custom';
-    public customAddModifier: CharacterModifier = new CharacterModifier();
-    public customAddModifierDateOffset: NhbkDateOffset = new NhbkDateOffset();
-
-    constructor(private _effectService: EffectService
-        , private _characterWebsocketService: CharacterWebsocketService
-        , private _characterService: CharacterService
-        , private _overlay: Overlay) {
+    constructor(private _characterWebsocketService: CharacterWebsocketService
+        , private _nhbkDialogService: NhbkDialogService
+        , private _characterService: CharacterService) {
     }
 
     openAddEffectModal() {
-        let config = new OverlayState();
-
-        config.positionStrategy = this._overlay.position()
-            .global()
-            .centerHorizontally()
-            .centerVertically();
-        config.hasBackdrop = true;
-
-        let overlayRef = this._overlay.create(config);
-        overlayRef.attach(this.addEffectDialog);
-        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
-        this.addEffectOverlayRef = overlayRef;
-
+        this.newCharacterModifier = new CharacterModifier();
+        this.addEffectOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addEffectDialog);
     }
 
     closeAddEffectDialog() {
         this.addEffectOverlayRef.detach();
     }
 
-    updateEffectListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
-        this.effectFilterName = filter;
-        if (filter === '') {
-            return Observable.from([]);
-        }
-        return this._effectService.searchEffect(filter).map(
-            list => list.map(e => new AutocompleteValue(e, this.effectCategoriesById[e.category].name + ': ' + e.name))
-        );
+    selectEffectTypeTab(index: number) {
+        this.addEffectTypeSelectedTab = index;
     }
 
-    selectEffectInAutocompleteList(effect: Effect) {
-        this.preSelectedEffect = effect;
-        this.newEffectCustomDuration = false;
-        if (effect) {
-            if (effect.combatCount) {
-                this.newEffectDurationType = 'combat';
-                this.newEffectTimeDuration = null;
-                this.newEffectDuration = null;
-                this.newEffectCombatCount = effect.combatCount;
-                this.newEffectLapCount = null;
-            }
-            else if (effect.timeDuration) {
-                this.newEffectDurationType = 'time';
-                this.newEffectTimeDuration = effect.timeDuration;
-                this.newEffectDuration = null;
-                this.newEffectCombatCount = null;
-                this.newEffectLapCount = null;
-            }
-            else if (effect.lapCount) {
-                this.newEffectDurationType = 'lap';
-                this.newEffectTimeDuration = null;
-                this.newEffectDuration = null;
-                this.newEffectCombatCount = null;
-                this.newEffectLapCount = effect.lapCount;
-            }
-            else if (effect.duration) {
-                this.newEffectDurationType = 'lap';
-                this.newEffectTimeDuration = null;
-                this.newEffectDuration = effect.duration;
-                this.newEffectCombatCount = null;
-                this.newEffectLapCount = null;
-            }
-            else {
-                this.newEffectDurationType = 'forever';
-                this.newEffectTimeDuration = null;
-                this.newEffectDuration = '';
-                this.newEffectCombatCount = null;
-                this.newEffectLapCount = null;
-            }
-        }
-    }
+    // Called by callback from character-effect-editor
+    addEffect(newEffect: any) {
+        let effect = newEffect.effect;
+        let data = newEffect.data;
 
+        this.closeAddEffectDialog();
 
-    setNewEffectTimeDuration(dateOffset: NhbkDateOffset) {
-        this.newEffectTimeDuration = dateOffset2TimeDuration(dateOffset);
-        this.newEffectTimeDurationDate = dateOffset;
-    }
-
-    addEffect(effect: Effect, reusable: boolean) {
-        let data = {
-            reusable: reusable
-        };
-        if (this.newEffectCustomDuration) {
-            if (this.newEffectDurationType === 'combat') {
-                data['combatCount'] = this.newEffectCombatCount;
-            }
-            else if (this.newEffectDurationType === 'time') {
-                data['timeDuration'] = this.newEffectTimeDuration;
-            }
-            else if (this.newEffectDurationType === 'lap') {
-                data['lapCount'] = this.newEffectLapCount;
-            }
-            else if (this.newEffectDurationType === 'custom') {
-                data['duration'] = this.newEffectDuration;
-            }
-            else if (this.newEffectDurationType === 'forever') {
-            }
-        }
         this._characterService.addEffect(this.character.id, effect.id, data).subscribe(
             this.onAddEffect.bind(this)
         );
@@ -203,18 +105,6 @@ export class EffectPanelComponent implements OnInit {
                 this.character.update();
                 return;
             }
-        }
-    }
-
-    onSwipeLeftEffect() {
-        if (window.innerWidth < 768) {
-            this.showEffectDetail = true;
-        }
-    }
-
-    onSwipeRightEffect() {
-        if (window.innerWidth < 768) {
-            this.showEffectDetail = false;
         }
     }
 
@@ -258,43 +148,10 @@ export class EffectPanelComponent implements OnInit {
         this.character.update();
     }
 
-
-    // Custom modifier
-
-    setCustomAddModifierTimeDuration(dateOffset: NhbkDateOffset) {
-        this.customAddModifier.timeDuration = dateOffset2TimeDuration(dateOffset);
-    }
-
     addCustomModifier() {
-        if (this.customAddModifier.name) {
-            if (this.newModifierDurationType === 'custom') {
-                this.customAddModifier.lapCount = null;
-                this.customAddModifier.timeDuration = null;
-                this.customAddModifier.combatCount = null;
-            } else if (this.newModifierDurationType === 'combat') {
-                this.customAddModifier.lapCount = null;
-                this.customAddModifier.timeDuration = null;
-                this.customAddModifier.duration = null;
-            } else if (this.newModifierDurationType === 'time') {
-                this.customAddModifier.lapCount = null;
-                this.customAddModifier.combatCount = null;
-                this.customAddModifier.duration = null;
-            } else if (this.newModifierDurationType === 'forever') {
-                this.customAddModifier.lapCount = null;
-                this.customAddModifier.timeDuration = null;
-                this.customAddModifier.combatCount = null;
-                this.customAddModifier.duration = null;
-            } else if (this.newModifierDurationType === 'lap') {
-                this.customAddModifier.timeDuration = null;
-                this.customAddModifier.combatCount = null;
-                this.customAddModifier.duration = null;
-            } else {
-                throw new Error('Invalid newModifierDurationType: ' + this.newModifierDurationType);
-            }
-            this._characterService.addModifier(this.character.id, this.customAddModifier).subscribe(
-                this.onAddModifier.bind(this)
-            );
-        }
+        this._characterService.addModifier(this.character.id, this.newCharacterModifier).subscribe(
+            this.onAddModifier.bind(this)
+        );
     }
 
     onAddModifier(modifier: CharacterModifier) {
@@ -305,7 +162,6 @@ export class EffectPanelComponent implements OnInit {
         }
         this.character.modifiers.push(modifier);
         this.character.update();
-        this.customAddModifier = new CharacterModifier();
         this._characterWebsocketService.notifyChange('Ajout du modificateur: ' + modifier.name);
     }
 
@@ -367,12 +223,6 @@ export class EffectPanelComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._effectService.getCategoryList().subscribe(
-            categories => {
-                this.effectCategoriesById = {};
-                categories.map(c => this.effectCategoriesById[c.id] = c);
-            });
-
         this._characterWebsocketService.registerPacket('addEffect').subscribe(this.onAddEffect.bind(this));
         this._characterWebsocketService.registerPacket('removeEffect').subscribe(this.onRemoveEffect.bind(this));
         this._characterWebsocketService.registerPacket('updateEffect').subscribe(this.onUpdateEffect.bind(this));

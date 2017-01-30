@@ -1,0 +1,44 @@
+<div>
+    <autocomplete-input [value]="effectFilterName"
+                        [placeholder]="'Effet'"
+                        (onSelect)="selectEffectInAutocompleteList($event)"
+                        [(callback)]="autocompleteEffectListCallback">
+    </autocomplete-input>
+</div>
+<div>
+    <md-slide-toggle color="primary"
+                     *ngIf="reusableToggle"
+                     [ngModel]="newEffectReusable">
+        Ré-utilisable
+    </md-slide-toggle>
+</div>
+
+<div *ngIf="preSelectedEffect">
+    <div *ngIf="preSelectedEffect.duration">
+        <label>Durée</label>
+        <div>
+            {{preSelectedEffect.duration}}
+        </div>
+    </div>
+    <div *ngIf="preSelectedEffect.combatCount">
+        <label>Durée</label>
+        <div>
+            {{preSelectedEffect.combatCount}} combat
+        </div>
+    </div>
+    <div *ngIf="preSelectedEffect.timeDuration">
+        <label>Durée</label>
+        <div>
+            {{preSelectedEffect.timeDuration | nhbkDuration}}
+        </div>
+    </div>
+</div>
+<div *ngIf="preSelectedEffect">
+    <md-checkbox [(ngModel)]="newEffectCustomDuration">
+        Durée personnalisée
+    </md-checkbox>
+</div>
+<div *ngIf="preSelectedEffect && newEffectCustomDuration">
+    <h4>Durée</h4>
+    <duration-selector [durable]="customDuration"></duration-selector>
+</div>

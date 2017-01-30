@@ -4,13 +4,12 @@ import {
 import {Portal, OverlayRef} from '@angular/material';
 
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {dateOffset2TimeDuration, timeDuration2DateOffset2} from '../date/util';
 import {ItemService, ItemCategory} from '../item';
 import {GroupService} from '../group/group.service';
-import {NhbkDateOffset} from '../date/date.model';
 import {Item, ItemModifier} from './item.model';
 import {Character, CharacterGiveDestination} from './character.model';
 import {ItemActionService} from './item-action.service';
+import {IDurable} from '../date/durable.model';
 
 @Component({
     selector: 'item-detail',
@@ -39,13 +38,12 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     @ViewChild('addModifierDialog')
     public addModifierDialog: Portal<any>;
     public addModifierOverlayRef: OverlayRef;
-    public newModifier: ItemModifier;
+    public newItemModifier: ItemModifier;
 
     @ViewChild('lifetimeDialog')
     public lifetimeDialog: Portal<any>;
     public lifetimeOverlayRef: OverlayRef;
-    public previousLifetime: any;
-    public lifetimeDateOffset: NhbkDateOffset = new NhbkDateOffset();
+    public previousLifetime: IDurable;
 
     constructor(@Inject(forwardRef(() => ItemService)) private _itemService: ItemService
         , public _itemActionService: ItemActionService
@@ -132,8 +130,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
      */
 
     openModifierDialog() {
-        this.newModifier = new ItemModifier();
-
+        this.newItemModifier = new ItemModifier();
         this.addModifierOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addModifierDialog);
     }
 
@@ -141,15 +138,28 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         this.addModifierOverlayRef.detach();
     }
 
+    activeModifier(modifier: ItemModifier) {
+        modifier.active = true;
+        switch (modifier.durationType) {
+            case 'time':
+                modifier.currentTimeDuration = modifier.timeDuration;
+                break;
+            case 'combat':
+                modifier.currentCombatCount = modifier.combatCount;
+                break;
+            case 'lap':
+                modifier.currentLapCount = modifier.lapCount;
+                break;
+        }
+    }
+
     addModifier() {
         if (this.item.modifiers === null) {
             this.item.modifiers = [];
         }
-        this.newModifier.active = true;
-        this.newModifier.currentDuration = this.newModifier.duration;
-        this.item.modifiers.push(this.newModifier);
+        this.activeModifier(this.newItemModifier);
+        this.item.modifiers.push(this.newItemModifier);
         this._itemActionService.onAction('update_modifiers', this.item);
-        this.newModifier = new ItemModifier();
         this.closeModifierDialog();
     }
 
@@ -170,7 +180,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     updateModifier(index: number) {
         if (this.item.modifiers) {
             if (this.item.modifiers[index].active) {
-                this.item.modifiers[index].currentDuration = this.item.modifiers[index].duration;
+                this.activeModifier(this.item.modifiers[index]);
             }
             this._itemActionService.onAction('update_modifiers', this.item);
         }
@@ -181,12 +191,12 @@ export class ItemDetailComponent implements OnChanges, OnInit {
      */
 
     openLifetimeDialog() {
-        this.previousLifetime = {type: this.item.data.lifetimeType, value: this.item.data.lifetime};
-        if (this.item.data.lifetimeType === 'time') {
-            if (!this.item.data.lifetime) {
-                this.item.data.lifetime = 0;
-            }
-            this.lifetimeDateOffset = timeDuration2DateOffset2(+this.item.data.lifetime);
+        if (!this.item.data.lifetime) {
+            this.item.data.lifetime = {durationType: 'forever'};
+            this.previousLifetime = null;
+        }
+        else {
+            this.previousLifetime = Object.assign({}, this.item.data.lifetime);
         }
 
         this.lifetimeOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.lifetimeDialog);
@@ -198,40 +208,16 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     cancelLifetimeDialog() {
-        this.item.data.lifetimeType = this.previousLifetime.type;
-        this.item.data.lifetime = this.previousLifetime.value;
+        this.item.data.lifetime = this.previousLifetime;
         this.closeLifetimeDialog();
     }
 
     updateLifetime() {
+        if (this.item.data.lifetime.durationType === 'forever') {
+            this.item.data.lifetime = null;
+        }
         this._itemActionService.onAction('update_data', this.item);
         this.closeLifetimeDialog();
-    }
-
-    setItemLifetimeDateOffset(dateOffset: NhbkDateOffset) {
-        this.item.data.lifetime = dateOffset2TimeDuration(dateOffset);
-    }
-
-    updateLifetimeType() {
-        let type = this.item.data.lifetimeType;
-        if (type === null) {
-            this.item.data.lifetime = null;
-        } else {
-            if (type === 'combat' || type === 'lap') {
-                this.item.data.lifetime = 1;
-            }
-            else if (type === 'time') {
-                if (this.lifetimeDateOffset) {
-                    this.setItemLifetimeDateOffset(this.lifetimeDateOffset);
-                }
-                else {
-                    this.item.data.lifetime = 0;
-                }
-            }
-            else if (type === 'custom') {
-                this.item.data.lifetime = '';
-            }
-        }
     }
 
     ngOnInit() {

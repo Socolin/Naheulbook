@@ -6,6 +6,7 @@ import {MaterialModule} from '@angular/material';
 import {SharedModule} from '../shared/shared.module';
 import {NhbkActionComponent} from './nhbk-action.component';
 import {NhbkActionEditorComponent} from './nhbk-action-editor.component';
+import {EffectModule} from '../effect/effect.module';
 
 @NgModule({
     imports: [
@@ -13,6 +14,7 @@ import {NhbkActionEditorComponent} from './nhbk-action-editor.component';
         FormsModule,
         MaterialModule.forRoot(),
         SharedModule,
+        EffectModule,
     ],
     declarations: [
         NhbkActionComponent,

@@ -1,4 +1,4 @@
-<md-card>
+<md-card *ngIf="effect">
     <md-card-title>Modification de l'effet: {{effect.name}}</md-card-title>
     <md-card-content>
         <effect-editor [(effect)]="effect"></effect-editor>

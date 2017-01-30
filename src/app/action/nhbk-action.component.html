@@ -11,6 +11,21 @@
     <template [ngSwitchCase]="'addItem'">
         Ajoute l'objet {{action.data.itemName}} <span *ngIf="action.data.quantity > 1">en {{action.data.quantity}} exemplaire</span>
     </template>
+    <template [ngSwitchCase]="'addCustomModifier'">
+        Applique le modificateur <em>{{action.data.modifier.name}}</em> pour <em>{{effectDuration}}</em> avec les effets suivants:
+        <span *ngFor="let modifier of action.data.modifier.values">
+            {{modifier | modifier}}
+        </span>
+    </template>
+    <template [ngSwitchCase]="'addEffect'">
+        <span *ngIf="effectInfo">Applique l'effet {{effectInfo.name}} pour {{effectDuration}}</span>
+        <span *ngIf="effectInfo?.modifiers?.length">
+            avec les effets suivants:
+            <span *ngFor="let modifier of effectInfo?.modifiers">
+                {{modifier | modifier}}
+            </span>
+        </span>
+    </template>
     <template [ngSwitchCase]="'custom'">
         {{action.data.text}}
     </template>

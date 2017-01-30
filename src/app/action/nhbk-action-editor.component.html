@@ -1,57 +1,86 @@
-<select [(ngModel)]="action.type" (change)="updateActionType()">
-    <option *ngFor="let action of validActions" [value]="action.type">{{action.displayName}}</option>
-</select>
+<md-card>
+    <md-card-title>
+        Ajouter une action
+    </md-card-title>
+    <md-card-subtitle>
+        Lors de l'utilisation d'une charge
+    </md-card-subtitle>
+    <md-card-content>
 
-<md-checkbox [(ngModel)]="action.hidden">Cacher</md-checkbox>
-<div [ngSwitch]="action.type">
-    <template [ngSwitchCase]="'addItem'">
-    </template>
-    <template [ngSwitchCase]="'addItem'">
-        <autocomplete-input [clearOnSelect]="false"
-                            [placeholder]="'Objet'"
-                            (onSelect)="selectItemTemplate($event)"
-                            [(callback)]="autocompleteItemCallback">
-        </autocomplete-input>
-        <div *ngIf="selectedItemTemplate?.data?.quantifiable">
-            <md-input-container align="end">
-                <input md-input
-                       type="number"
-                       placeholder="Quantité"
-                       [(ngModel)]="action.data.quantity"/>
-            </md-input-container>
+        <select [(ngModel)]="action.type" (change)="updateActionType()">
+            <option *ngFor="let action of validActions" [value]="action.type">{{action.displayName}}</option>
+        </select>
+
+        <md-checkbox [(ngModel)]="action.hidden">Cacher</md-checkbox>
+        <div [ngSwitch]="action.type">
+            <template [ngSwitchCase]="'addItem'">
+                <autocomplete-input [clearOnSelect]="false"
+                                    [placeholder]="'Objet'"
+                                    (onSelect)="selectItemTemplate($event)"
+                                    [(callback)]="autocompleteItemCallback">
+                </autocomplete-input>
+                <div *ngIf="selectedItemTemplate?.data?.quantifiable">
+                    <md-input-container align="end">
+                        <input md-input
+                               type="number"
+                               placeholder="Quantité"
+                               [(ngModel)]="action.data.quantity"/>
+                    </md-input-container>
+                </div>
+            </template>
+            <template [ngSwitchCase]="'removeItem'">
+            </template>
+            <template [ngSwitchCase]="'addEv'">
+                <md-input-container align="end">
+                    <input md-input
+                           type="number"
+                           placeholder="Energie vitale"
+                           [(ngModel)]="action.data.ev"/>
+                    <span md-prefix>Redonner</span>
+                    <span md-suffix>E.V.</span>
+                </md-input-container>
+            </template>
+            <template [ngSwitchCase]="'addEa'">
+                <md-input-container align="end">
+                    <input md-input
+                           type="number"
+                           placeholder="Energie astrale"
+                           [(ngModel)]="action.data.ea"/>
+                    <span md-prefix>Redonner</span>
+                    <span md-suffix>E.A.</span>
+                </md-input-container>
+            </template>
+            <template [ngSwitchCase]="'custom'">
+                <md-input-container align="end">
+                    <input md-input
+                           type="text"
+                           placeholder="Action"
+                           [(ngModel)]="action.data.text"/>
+                </md-input-container>
+            </template>
+            <template [ngSwitchCase]="'addCustomModifier'">
+                <stats-modifier-editor [modifier]="characterModifier" [reusableToggle]="false">
+                </stats-modifier-editor>
+            </template>
+            <template [ngSwitchCase]="'addEffect'">
+                <character-effect-editor [reusableToggle]="false" (onChange)="updateEffect($event)">
+                </character-effect-editor>
+            </template>
+            <template ngSwitchDefault>
+                No data for {{action.type}}
+            </template>
         </div>
-    </template>
-    <template [ngSwitchCase]="'removeItem'">
-    </template>
-    <template [ngSwitchCase]="'addEv'">
-        <md-input-container align="end">
-            <input md-input
-                   type="number"
-                   placeholder="Energie vitale"
-                   [(ngModel)]="action.data.ev"/>
-            <span md-prefix>Redonner</span>
-            <span md-suffix>E.V.</span>
-        </md-input-container>
-    </template>
-    <template [ngSwitchCase]="'addEa'">
-        <md-input-container align="end">
-            <input md-input
-                   type="number"
-                   placeholder="Energie astrale"
-                   [(ngModel)]="action.data.ea"/>
-            <span md-prefix>Redonner</span>
-            <span md-suffix>E.A.</span>
-        </md-input-container>
-    </template>
-    <template [ngSwitchCase]="'custom'">
-        <md-input-container align="end">
-            <input md-input
-                   type="text"
-                   placeholder="Action"
-                   [(ngModel)]="action.data.text"/>
-        </md-input-container>
-    </template>
-    <template ngSwitchDefault>
-        No data for {{action.type}}
-    </template>
-</div>
+    </md-card-content>
+    <md-card-actions align="end">
+        <button md-button
+                (click)="close()"
+                color="primary">
+            FERMER
+        </button>
+        <button md-button
+                (click)="validate()"
+                color="primary">
+            AJOUTER
+        </button>
+    </md-card-actions>
+</md-card>

@@ -3,8 +3,6 @@ import {OverlayRef, Portal} from '@angular/material';
 
 import {ItemTemplate, ItemSlot} from './item-template.model';
 import {Skill} from '../skill/skill.model';
-import {NhbkDateOffset} from '../date/date.model';
-import {dateOffset2TimeDuration} from '../date/util';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {NhbkAction} from '../action/nhbk-action.model';
 
@@ -26,9 +24,6 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     @ViewChild('addChargeActionModal')
     public addChargeActionModal: Portal<any>;
     public addChargeActionOverlayRef: OverlayRef;
-    public newChargeAction: NhbkAction;
-
-    public lifetimeDateOffset: NhbkDateOffset = new NhbkDateOffset();
 
     constructor(private _nhbkDialogService: NhbkDialogService) {
     }
@@ -37,7 +32,6 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
         if (!this.itemTemplate.data.actions) {
             this.itemTemplate.data.actions = [];
         }
-        this.newChargeAction = new NhbkAction(NhbkAction.VALID_ACTIONS[0].type);
         this.addChargeActionOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addChargeActionModal);
     }
 
@@ -45,10 +39,9 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
         this.addChargeActionOverlayRef.detach();
     }
 
-    addChargeAction() {
-        this.itemTemplate.data.actions.push(this.newChargeAction);
+    addChargeAction(action: NhbkAction) {
+        this.itemTemplate.data.actions.push(action);
         this.closeAddChargeActionModal();
-        this.newChargeAction = null;
     }
 
     removeChargeAction(index: number) {
@@ -122,34 +115,6 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
             }
         }
     }
-
-    setItemLifetimeDateOffset(dateOffset: NhbkDateOffset) {
-        this.itemTemplate.data.lifetime = dateOffset2TimeDuration(dateOffset);
-    }
-
-    setLifetimeType(type: string) {
-        if (type === null) {
-            this.itemTemplate.data.lifetime = null;
-            this.itemTemplate.data.lifetimeType = null;
-        } else {
-            this.itemTemplate.data.lifetimeType = type;
-            if (type === 'combat' || type === 'lap') {
-                this.itemTemplate.data.lifetime = 1;
-            }
-            else if (type === 'time') {
-                if (this.lifetimeDateOffset) {
-                    this.setItemLifetimeDateOffset(this.lifetimeDateOffset);
-                }
-                else {
-                    this.itemTemplate.data.lifetime = 0;
-                }
-            }
-            else if (type === 'custom') {
-                this.itemTemplate.data.lifetime = '';
-            }
-        }
-    }
-
 
     deleteModule() {
         this.onDelete.emit(true);

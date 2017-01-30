@@ -223,12 +223,16 @@
                         </span>
                         <span>{{modifier.name}}</span>
                         <span class="padding"></span>
-                        <span *ngIf="modifier.currentDuration && modifier.durationType === 'combat'">
+                        <span *ngIf="modifier.active && modifier.durationType === 'combat'">
                             <md-icon fontSet="ra" fontIcon="ra-sword" class="ra-md-button-icon-32"></md-icon>
-                            {{modifier.currentDuration}}
+                            {{modifier.currentCombatCount}}
                         </span>
-                        <span *ngIf="modifier.currentDuration && modifier.durationType === 'time'">
-                            <span class="ra ra-clockwork"></span>{{modifier.currentDuration | nhbkDuration}}
+                        <span *ngIf="modifier.active && modifier.durationType === 'lap'">
+                            <md-icon fontSet="game-icon" fontIcon="game-icon-clockwise-rotation" class="ra-md-button-icon-32"></md-icon>
+                            {{modifier.currentLapCount}}
+                        </span>
+                        <span *ngIf="modifier.active && modifier.durationType === 'time'">
+                            <span class="ra ra-clockwork"></span>{{modifier.currentTimeDuration | nhbkDuration}}
                         </span>
                         <button md-icon-button (click)="removeModifier(i)">
                             <md-icon>delete</md-icon>
@@ -237,17 +241,22 @@
                     <div class="item-detail">
                     </div>
 
-                    <div *ngIf="!modifier.currentDuration">
+                    <div *ngIf="!modifier.active">
                         <span *ngIf="modifier.durationType === 'combat'">
-                            <span class="ra ra-sword"></span>{{modifier.duration}}
+                            <span class="ra ra-sword"></span>{{modifier.combatCount}}
                         </span>
                         <span *ngIf="modifier.durationType === 'time'">
-                            <span class="ra ra-clockwork"></span>{{modifier.duration | nhbkDuration}}
+                            <span class="ra ra-clockwork"></span>{{modifier.timeDuration | nhbkDuration}}
                         </span>
+                        <span *ngIf="modifier.durationType === 'lap'">
+                            <md-icon fontSet="game-icon" fontIcon="game-icon-clockwise-rotation" class="ra-md-button-icon-32"></md-icon>
+                            {{modifier.lapCount}}
+                        </span>
+
                     </div>
 
                     <div *ngIf="modifier.durationType === 'custom'">
-                        Duree: {{modifier.currentDuration}}
+                        Duree: {{modifier.duration}}
                     </div>
 
                     <div *ngFor="let value of modifier.values">
@@ -275,10 +284,10 @@
             </div>
         </div>
 
-        <div *ngIf="item.data.lifetimeType === 'time'">
+        <div *ngIf="item.data.lifetime?.durationType === 'time'">
             <span class="game-icon game-icon-stopwatch"></span>Temps de conservation:
-            <span *ngIf="item.data.lifetime > 0">{{item.data.lifetime | nhbkDuration}}</span>
-            <span *ngIf="item.data.lifetime === 0" class="text-danger">expiré</span>
+            <span *ngIf="item.data.lifetime.timeDuration > 0">{{item.data.lifetime.timeDuration | nhbkDuration}}</span>
+            <span *ngIf="item.data.lifetime.timeDuration === 0" class="text-danger">expiré</span>
         </div>
 
         <template [ngIf]="!readonly">
@@ -340,7 +349,8 @@
             Ajouter un modificateur
         </md-card-title>
         <md-card-content>
-            <modifier-editor [modifier]="newModifier"></modifier-editor>
+            <stats-modifier-editor [modifier]="newItemModifier">
+            </stats-modifier-editor>
         </md-card-content>
         <md-card-actions align="end">
             <button md-button
@@ -349,7 +359,6 @@
                 ANNULER
             </button>
             <button md-button
-                    [disabled]="!newModifier.name"
                     color="primary"
                     (click)="addModifier()">
                 AJOUTER
@@ -405,34 +414,7 @@
             Temps de conservation
         </md-card-title>
         <md-card-content>
-            <md-button-toggle-group [(ngModel)]="item.data.lifetimeType" (change)="updateLifetimeType()">
-                <md-button-toggle [value]="'time'">Temps</md-button-toggle>
-                <md-button-toggle [value]="'custom'">Autre</md-button-toggle>
-                <md-button-toggle [value]="null">Retirer</md-button-toggle>
-            </md-button-toggle-group>
-
-            <div *ngIf="item.data.lifetimeType === 'custom'">
-                <div class="input-group">
-                    <md-input-container>
-                        <input md-input
-                               placeholder="Durée"
-                               [(ngModel)]="item.data.lifetime">
-                    </md-input-container>
-                </div>
-            </div>
-            <div *ngIf="item.data.lifetimeType === 'time'">
-                <div class="input-group">
-                    <span>Temps: </span>
-                    <span>{{item.data.lifetime | nhbkDuration}}</span>
-                    <span>
-                        <date-modifier [resetOnChange]=false
-                                       [title]="'Définir durée de conservation'"
-                                       [dateOffset]="lifetimeDateOffset"
-                                       (onChange)="setItemLifetimeDateOffset($event)">
-                        </date-modifier>
-                    </span>
-                </div>
-            </div>
+            <duration-selector [hiddenType]="['combat','lap']" [durable]="item.data.lifetime"></duration-selector>
         </md-card-content>
         <md-card-actions align="end">
             <button md-button color="primary" (click)="cancelLifetimeDialog()">

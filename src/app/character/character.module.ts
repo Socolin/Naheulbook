@@ -24,7 +24,6 @@ import {InventoryPanelComponent} from './inventory-panel.component';
 import {SwipeableItemDetailComponent} from './swipeable-item-detail.component';
 import {BagItemViewComponent} from './bag-item-view.component';
 import {DateModule} from '../date/date.module';
-import {ModifierEditorComponent} from './modifier-editor.component';
 import {CharacterLootPanelComponent} from './character-loot-panel.component';
 import {CharacterHistoryComponent} from './character-history.component';
 import {GiveItemDialogComponent} from './give-item-dialog-component';
@@ -57,7 +56,6 @@ import {ActionModule} from '../action/action.module';
         , InventoryPanelComponent
         , EffectDetailComponent
         , ModifierDetailComponent
-        , ModifierEditorComponent
         , CharacterLootPanelComponent
         , CharacterHistoryComponent
         , GiveItemDialogComponent

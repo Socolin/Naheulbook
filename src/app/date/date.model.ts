@@ -28,3 +28,4 @@ export class NhbkDateOffset {
     public year: number = 0;
     public second: number = 0;
 }
+

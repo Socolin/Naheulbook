@@ -11,6 +11,8 @@ import {
     EffectEditorComponent, CreateEffectComponent, EffectListComponent, EditEffectComponent,
     EffectService
 } from "./";
+import {CharacterEffectEditorComponent} from './character-effect-editor.component';
+import {CharacterModifierEditorComponent} from './stats-modifier-editor.component';
 
 @NgModule({
     imports: [
@@ -26,6 +28,8 @@ import {
         CreateEffectComponent,
         EffectListComponent,
         EditEffectComponent,
+        CharacterEffectEditorComponent,
+        CharacterModifierEditorComponent,
     ],
     providers: [
         EffectService
@@ -35,6 +39,8 @@ import {
         CreateEffectComponent,
         EffectListComponent,
         EditEffectComponent,
+        CharacterEffectEditorComponent,
+        CharacterModifierEditorComponent,
     ],
 })
 export class EffectModule {

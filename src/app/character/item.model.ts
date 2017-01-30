@@ -1,7 +1,8 @@
 import {ItemTemplate} from '../item';
 import {IMetadata} from '../shared/misc.model';
 import {IconDescription} from '../shared/icon.model';
-import {StatModifier} from '../shared/stat-modifier.model';
+import {StatsModifier} from '../shared/stat-modifier.model';
+import {DurationType, IDurable} from '../date/durable.model';
 
 export class ItemData {
     name: string;
@@ -13,18 +14,15 @@ export class ItemData {
     equiped: number;
     readCount: number;
     notIdentified: boolean;
-    lifetimeType: string;
-    lifetime: number|string;
+    lifetime: IDurable;
 }
 
-export class ItemModifier {
-    name: string;
-    durationType: string = 'combat';
-    duration: string|number = 1;
+export class ItemModifier extends StatsModifier {
     active: boolean;
-    currentDuration: any;
-    reusable: boolean = false;
-    values: StatModifier[] = [];
+
+    currentCombatCount: number;
+    currentTimeDuration: number;
+    currentLapCount: number;
 }
 
 export class Item {
