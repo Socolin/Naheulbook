@@ -26,7 +26,7 @@ export class FighterPanelComponent implements OnInit, OnChanges {
     @Input() characters: Character[];
     public monsters: Monster[] = [];
     public fighters: Fighter[] = [];
-    public currentFighterIndex: number;
+    public currentFighterIndex?: number;
     public loadingNextLap: boolean = false;
 
     public deadMonsters: Monster[] = [];

@@ -15,13 +15,8 @@
                 <div class="field">XP</div>
             </div>
         </div>
-        <div class="field-button">
-            <div *ngIf="currentFighterIndex != null">
-                <button [disabled]="loadingNextLap" class="btn btn-primary glyphicon glyphicon-arrow-right" (click)="selectNextFighter()"></button>
-            </div>
-        </div>
     </div>
-    <div *ngIf="currentFighterIndex != null && fighters[currentFighterIndex]" class="current-fighter">
+    <div *ngIf="currentFighterIndex !== null && fighters[currentFighterIndex]" class="current-fighter">
         <fighter
                  [selected]="false"
                  [group]="group"
@@ -31,7 +26,15 @@
                  (onSelect)="selectCombatRow($event)">
         </fighter>
     </div>
-    <hr *ngIf="currentFighterIndex != null">
+    <div *ngIf="currentFighterIndex !== null && fighters[currentFighterIndex]">
+        <button md-raised-button
+                color="primary"
+                [disabled]="loadingNextLap"
+                (click)="selectNextFighter()">
+            Suivant
+        </button>
+    </div>
+    <hr *ngIf="currentFighterIndex !== null">
     <template ngFor let-fighter [ngForOf]="fighters" let-i=index>
         <fighter [selected]="(currentFighterIndex === null && selectedCombatRow === i) || currentFighterIndex == i"
                  [group]="group"
