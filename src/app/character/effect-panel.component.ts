@@ -7,6 +7,7 @@ import {EffectCategory} from '../effect/effect.model';
 import {Character, CharacterEffect, CharacterModifier} from './character.model';
 import {CharacterService} from './character.service';
 import {CharacterWebsocketService} from './character-websocket.service';
+import {EffectService} from '../effect/effect.service';
 
 @Component({
     selector: 'effect-detail',
@@ -45,10 +46,13 @@ export class EffectPanelComponent implements OnInit {
     public addEffectOverlayRef: OverlayRef;
     public addEffectTypeSelectedTab: number = 0;
 
+    public effectCategoriesById: { [categoryId: number]: EffectCategory };
+
     public newCharacterModifier: CharacterModifier = new CharacterModifier();
 
     constructor(private _characterWebsocketService: CharacterWebsocketService
         , private _nhbkDialogService: NhbkDialogService
+        , private _effectService: EffectService
         , private _characterService: CharacterService) {
     }
 
@@ -229,5 +233,11 @@ export class EffectPanelComponent implements OnInit {
         this._characterWebsocketService.registerPacket('addModifier').subscribe(this.onAddModifier.bind(this));
         this._characterWebsocketService.registerPacket('removeModifier').subscribe(this.onRemoveModifier.bind(this));
         this._characterWebsocketService.registerPacket('updateModifier').subscribe(this.onUpdateModifier.bind(this));
+
+        this._effectService.getCategoryList().subscribe(
+            categories => {
+                this.effectCategoriesById = {};
+                categories.map(c => this.effectCategoriesById[c.id] = c);
+            });
     }
 }
