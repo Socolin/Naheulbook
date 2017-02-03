@@ -45,18 +45,27 @@ export class LootPanelComponent implements OnDestroy {
         monster.items.push(data.item);
     }
 
-    onRemoveItemFromLoot(loot: Loot, data: any) {
+    onRemoveItemFromLoot(loot: Loot, data: any, quantity?: number) {
         for (let i = 0; i < loot.items.length; i++) {
             if (loot.items[i].id === data.id) {
-                loot.items.splice(i, 1);
+                if (quantity) {
+                    loot.items[i].data.quantity -= quantity;
+                }
+                else {
+                    loot.items.splice(i, 1);
+                }
             }
         }
     }
 
-    onRemoveItemFromMonster(monster: Monster, data: any) {
+    onRemoveItemFromMonster(monster: Monster, data: any, quantity?: number) {
         for (let i = 0; i < monster.items.length; i++) {
             if (monster.items[i].id === data.id) {
-                monster.items.splice(i, 1);
+                if (quantity) {
+                    monster.items[i].data.quantity -= quantity;
+                } else {
+                    monster.items.splice(i, 1);
+                }
             }
         }
     }
@@ -100,8 +109,17 @@ export class LootPanelComponent implements OnDestroy {
         if (itemIndex === -1) {
             return;
         }
-        loot.items.splice(itemIndex, 1);
-        this._lootWebsocketService.notifyChange(character.name + ' à pris: ' + data.item.data.name);
+        if (data.quantity) {
+            if (loot.items[itemIndex].data.quantity !== data.item.data.quantity) {
+                return;
+            }
+            loot.items[itemIndex].data.quantity -= data.quantity;
+            this._lootWebsocketService.notifyChange(character.name + ' à pris: ' + data.quantity + ' ' + data.item.data.name);
+        }
+        else {
+            loot.items.splice(itemIndex, 1);
+            this._lootWebsocketService.notifyChange(character.name + ' à pris: ' + data.item.data.name);
+        }
     }
 
     onTookItemFromMonsterLoot(loot: Loot, data: any) {
@@ -114,8 +132,17 @@ export class LootPanelComponent implements OnDestroy {
         if (itemIndex === -1) {
             return;
         }
-        monster.items.splice(itemIndex, 1);
-        this._lootWebsocketService.notifyChange(data.character.name + ' à pris: ' + data.item.data.name);
+        if (data.quantity) {
+            if (monster.items[itemIndex].data.quantity !== data.item.data.quantity) {
+                return;
+            }
+            monster.items[itemIndex].data.quantity -= data.quantity;
+            this._lootWebsocketService.notifyChange(data.character.name + ' à pris: ' + data.quantity + ' ' + data.item.data.name);
+        }
+        else {
+            monster.items.splice(itemIndex, 1);
+            this._lootWebsocketService.notifyChange(data.character.name + ' à pris: ' + data.item.data.name);
+        }
     }
 
     notifyChange(message: string) {

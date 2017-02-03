@@ -160,9 +160,10 @@ export class ItemService extends JsonService {
             .map(res => res.json());
     }
 
-    takeItemFromLoot(itemId: number, characterId: number): Observable<Item> {
+    takeItemFromLoot(itemId: number, characterId: number, quantity?: number): Observable<Item> {
         return this.postJson('/api/item/takeItemFromLoot', {
             itemId: itemId,
+            quantity: quantity,
             characterId: characterId
         }).map(res => res.json());
     }

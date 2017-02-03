@@ -7,7 +7,7 @@
                     <li *ngFor="let item of loot.items"
                        (click)="selectItem(item)" [class.active]="item.id == selectedItem?.id">
                         <button md-icon-button
-                                (click)="takeItemFromLoot(loot, item)">
+                                (click)="openTakeItemLootDialog(loot, item)">
                             <md-icon>add_shopping_cart</md-icon>
                         </button>
                         <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
@@ -27,7 +27,7 @@
                                 (click)="selectItem(item)"
                                 [class.active]="item.id == selectedItem?.id">
                                 <button md-icon-button
-                                        (click)="takeItemFromMonster(monster, item)">
+                                        (click)="openTakeItemMonsterDialog(monster, item)">
                                     <md-icon>add_shopping_cart</md-icon>
                                 </button>
 
@@ -53,4 +53,31 @@
                      [readonly]="true"></item-detail>
     </div>
 </div>
+
+<template cdk-portal #takeItemDialog="cdkPortal">
+    <md-card>
+        <md-card-title>Loot</md-card-title>
+        <md-card-content *ngIf="!takingItem.data.quantity || takingItem.data.quantity < 2">
+            Prendre l'objet {{takingItem.data.name}} ?
+        </md-card-content>
+        <md-card-content *ngIf="takingItem.data.quantity > 1">
+            Prendre l'objet <value-editor [title]="'Quantité'"
+                                          [value]="takingQuantity"
+                                          (onChange)="takingQuantity = $event"
+                                          [maxValue]="takingItem.data.quantity"></value-editor> {{takingItem.data.name}} ?
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button
+                    color="primary"
+                    (click)="closeTakeItemDialog()">
+                ANNULER
+            </button>
+            <button md-button
+                    color="primary"
+                    (click)="validTakeItem()">
+                PRENDRE
+            </button>
+        </md-card-actions>
+    </md-card>
+</template>
 
