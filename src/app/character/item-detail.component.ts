@@ -34,6 +34,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public giveItemOverlayRef: OverlayRef;
     public giveDestination: CharacterGiveDestination[] = null;
     public giveTarget: CharacterGiveDestination;
+    public giveQuantity: number;
 
     @ViewChild('addModifierDialog')
     public addModifierDialog: Portal<any>;
@@ -106,7 +107,8 @@ export class ItemDetailComponent implements OnChanges, OnInit {
      * Give item dialog
      */
 
-    openGiveItemDialog() {
+    openGiveItemDialog(item: Item) {
+        this.giveQuantity = item.data.quantity;
         this.giveItemOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.giveItemDialog);
 
         this._groupService.listActiveCharactersInGroup(this.character.id).subscribe(
@@ -121,7 +123,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     giveItem() {
-        this._itemActionService.onAction('give', this.item, {characterId: this.giveTarget.id});
+        this._itemActionService.onAction('give', this.item, {characterId: this.giveTarget.id, quantity: this.giveQuantity});
         this.closeGiveItemDialog();
     }
 

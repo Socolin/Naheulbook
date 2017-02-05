@@ -41,8 +41,7 @@ export class CharacterWebsocketService {
                     else {
                         console.log('Unhandled websocket opcode: ' + res.opcode);
                     }
-                }
-                catch (err) {
+                } catch (err) {
                     this._notification.error('Erreur', 'Erreur WS');
                     this._characterService.postJson('/api/debug/report', err).subscribe();
                     console.log(err);

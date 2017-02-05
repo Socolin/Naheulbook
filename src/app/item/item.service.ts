@@ -168,8 +168,8 @@ export class ItemService extends JsonService {
         }).map(res => res.json());
     }
 
-    giveItem(itemId: number, characterId: number): Observable<Item> {
-        return this.postJson('/api/item/giveItem', {itemId: itemId, characterId: characterId})
+    giveItem(itemId: number, characterId: number, quantity?: number): Observable<Item> {
+        return this.postJson('/api/item/giveItem', {itemId: itemId, characterId: characterId, quantity: quantity})
             .map(res => res.json());
     }
 

@@ -9,6 +9,7 @@ export class ValueEditorComponent implements OnChanges {
     @Input() value: number;
     @Input() maxValue: number;
     @Input() title: string;
+    @Input() hideMaxValue: boolean;
     @Output() onChange: EventEmitter<number> = new EventEmitter<number>();
 
     public valueDelta: string;

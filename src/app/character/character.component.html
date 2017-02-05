@@ -62,7 +62,7 @@
                                 <value-editor [title]="'Experience'"
                                               [value]=character.experience
                                               (onChange)="changeCharacterStat('experience', $event)">
-                                </value-editor> / {{getXpForNextLevel()}}
+                                </value-editor> / {{character.computedData.xpToNextLevel}}
                             </dd>
 
                             <dt>Fortune</dt>

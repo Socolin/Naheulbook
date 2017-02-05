@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {MdTabChangeEvent, Portal, OverlayRef, OverlayState, Overlay} from "@angular/material";
+import {MdTabChangeEvent, Portal, OverlayRef, OverlayState, Overlay} from '@angular/material';
 
 import {NotificationsService} from '../notifications';
 
@@ -65,74 +65,23 @@ export class CharacterComponent implements OnInit, OnDestroy {
         , private _characterService: CharacterService) {
     }
 
-
-    notifyChange(message: string) {
-        if (this.inGroupTab) {
-            this._notification.info(this.character.name
-                , message
-                , {isCharacter: true, color: this.character.color}
-            );
-        } else {
-            this._notification.info('Modification', message);
-        }
-    }
-
-    registerWS() {
-        this._characterWebsocketService.register(this.character);
-        this._characterWebsocketService.registerNotifyFunction(this.notifyChange.bind(this));
-
-        this._characterWebsocketService.registerPacket('update').subscribe(this.onChangeCharacterStat.bind(this));
-        this._characterWebsocketService.registerPacket('statBonusAd').subscribe(this.onSetStatBonusAD.bind(this));
-        this._characterWebsocketService.registerPacket('levelUp').subscribe(this.onLevelUp.bind(this));
-   }
-
     changeCharacterStat(stat: string, value: any) {
         this._characterService.changeCharacterStat(this.character.id, stat, value).subscribe(
-            this.onChangeCharacterStat.bind(this)
+            this.character.onChangeCharacterStat.bind(this.character)
         );
-    }
-
-    onChangeCharacterStat(change: any) {
-        if (this.character[change.stat] !== change.value) {
-            this.notifyChange(change.stat.toUpperCase() + ': ' + this.character[change.stat] + ' -> ' + change.value);
-            this.character[change.stat] = change.value;
-            this.character.update();
-        }
     }
 
     setStatBonusAD(id: number, stat: string) {
         if (this.character) {
             this._characterService.setStatBonusAD(id, stat).subscribe(
-                this.onSetStatBonusAD.bind(this)
+                this.character.onSetStatBonusAD.bind(this.character)
             );
-        }
-    }
-
-    onSetStatBonusAD(bonusStat: any) {
-        if (this.character.statBonusAD !== bonusStat) {
-            this.notifyChange('Stat bonus/malus AD défini sur ' + bonusStat);
-            this.character.statBonusAD = bonusStat;
-            this.character.update();
         }
     }
 
     levelUp() {
         this.closeLevelUpDialog();
-        this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(this.onLevelUp.bind(this));
-    }
-
-    onLevelUp(result: any) {
-        if (this.character.level !== result.level) {
-            this.notifyChange('Levelup ! ' + this.character.level + '->' + result.level);
-            this.character.level = result.level;
-            this._characterService.getCharacter(result.id).subscribe(
-                character => {
-                    character.onUpdate = this.character.onUpdate;
-                    this.character = character;
-                    character.update();
-                }
-            );
-        }
+        this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(this.character.onLevelUp.bind(this.character));
     }
 
     characterHasToken(token: string) {
@@ -175,21 +124,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     canLevelUp(): boolean {
         return this.character.level < this.getLevelForXp();
-    }
-
-    getXpForNextLevel() {
-        let level = 1;
-        let totalXp = 0;
-        let xp = this.character.experience;
-        while (xp >= level * 100) {
-            xp -= level * 100;
-            totalXp += level * 100;
-            level++;
-        }
-
-        totalXp += level * 100;
-
-        return totalXp;
     }
 
     getLevelForXp(): number {
@@ -351,7 +285,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this.skillInfoOverlayRef.detach();
     }
 
-
     ngOnDestroy() {
         if (this.character) {
             this._characterWebsocketService.unregister();
@@ -361,7 +294,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     ngOnInit() {
         if (this.character) {
             this.inGroupTab = true;
-            this.registerWS();
         } else {
             this._route.params.subscribe(
                 param => {
@@ -372,7 +304,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
                     this._characterService.getCharacter(id).subscribe(
                         character => {
                             this.character = character;
-                            this.registerWS();
+                            character.registerWS(this._characterWebsocketService,
+                                (message: string) => this._notification.info('Modification', message)
+                            );
                         }
                     );
                 }

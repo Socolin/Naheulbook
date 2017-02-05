@@ -1,5 +1,5 @@
 <span cdk-overlay-origin #trigger="cdkOverlayOrigin" (click)="showEditor()" class="ve-value">
-    {{value|number}}<span *ngIf="maxValue">/{{maxValue}}</span>
+    {{value|number}}<span *ngIf="maxValue && !hideMaxValue">/{{maxValue}}</span>
 </span>
 
 <template cdk-connected-overlay [origin]="trigger" hasBackdrop [open]="displayEditor"

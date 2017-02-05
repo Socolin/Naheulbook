@@ -35,7 +35,7 @@
             <button md-menu-item (click)="editItem()">Editer</button>
             <button md-menu-item (click)="openModifierDialog()">Ajouter un modificateur</button>
             <button md-menu-item (click)="openLifetimeDialog()">Editer temps de conservation</button>
-            <button md-menu-item (click)="openGiveItemDialog()">Donner</button>
+            <button md-menu-item (click)="openGiveItemDialog(item)">Donner</button>
             <button md-menu-item *ngIf="item.template.data.skillBook"
                     (click)="_itemActionService.onAction('read_skill_book', item)">
                 Lire
@@ -374,9 +374,13 @@
         <md-card-content>
             <div>
                 <icon-selector [icon]="item.data.icon" [readonly]="true"></icon-selector>
-                <!-- FIXME: Custom quantity -->
                 <span *ngIf="item.template.data.quantifiable || item.data.quantity">
-                    {{item.data.quantity}}
+                    <value-editor [value]="giveQuantity"
+                                  [maxValue]="item.data.quantity"
+                                  [hideMaxValue]="true"
+                                  (onChange)="giveQuantity = $event">
+                                  [title]="'Quantité à donner'">
+                    </value-editor>
                 </span>
                 {{item.data.name}}
             </div>

@@ -26,7 +26,6 @@ import {BagItemViewComponent} from './bag-item-view.component';
 import {DateModule} from '../date/date.module';
 import {CharacterLootPanelComponent} from './character-loot-panel.component';
 import {CharacterHistoryComponent} from './character-history.component';
-import {GiveItemDialogComponent} from './give-item-dialog-component';
 import {ActionModule} from '../action/action.module';
 
 @NgModule({
@@ -58,7 +57,6 @@ import {ActionModule} from '../action/action.module';
         , ModifierDetailComponent
         , CharacterLootPanelComponent
         , CharacterHistoryComponent
-        , GiveItemDialogComponent
     ],
     exports: [
         CharacterComponent

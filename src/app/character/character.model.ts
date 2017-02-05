@@ -1,11 +1,10 @@
 import {EventEmitter} from '@angular/core';
 import {Speciality} from './speciality.model';
-import {Item} from './item.model';
+import {Item, PartialItem} from './item.model';
 import {Origin} from '../origin';
 import {Job} from '../job';
 import {
-    StatModifier
-    , IMetadata
+    IMetadata
     , ItemStatModifier
     , formatModifierValue
 } from '../shared';
@@ -13,6 +12,7 @@ import {Effect} from '../effect';
 import {Skill} from '../skill';
 import {isNullOrUndefined} from 'util';
 import {StatsModifier} from '../shared/stat-modifier.model';
+import {CharacterWebsocketService} from './character-websocket.service';
 
 export interface CharacterResume {
     id: number;
@@ -203,6 +203,7 @@ export class CharacterComputedData {
     totalMoney: number = 0;
     itemSlots = [];
     topLevelContainers = [];
+    xpToNextLevel: number;
     tacticalMovement: TacticalMovementInfo = new TacticalMovementInfo();
 
     effects: CharacterEffect[] = [];
@@ -261,6 +262,7 @@ export class Character {
 
     computedData: CharacterComputedData = new CharacterComputedData();
     onUpdate: EventEmitter<Character> = new EventEmitter<Character>();
+    notifyChange: (n: string) => string;
 
     static hasChercherDesNoises(character: Character): boolean {
         return this.hasSkill(character, 14);
@@ -320,6 +322,21 @@ export class Character {
             }
         }
         return cleanModifiers;
+    }
+
+    getXpForNextLevel() {
+        let level = 1;
+        let totalXp = 0;
+        let xp = this.experience;
+        while (xp >= level * 100) {
+            xp -= level * 100;
+            totalXp += level * 100;
+            level++;
+        }
+
+        totalXp += level * 100;
+
+        return totalXp;
     }
 
     private updateInventory() {
@@ -427,6 +444,7 @@ export class Character {
             }
         }
 
+        this.computedData.xpToNextLevel = this.getXpForNextLevel();
         this.computedData.itemsEquiped = equiped;
         this.computedData.itemSlots = slots;
         this.computedData.itemsBySlots = itemsBySlots;
@@ -940,5 +958,279 @@ export class Character {
         this.updateInventory();
         this.updateStats();
         this.onUpdate.emit(this);
+    }
+
+    onChangeCharacterStat(change: any) {
+        if (this[change.stat] !== change.value) {
+            this.notifyChange(change.stat.toUpperCase() + ': ' + this[change.stat] + ' -> ' + change.value);
+            this[change.stat] = change.value;
+            this.update();
+        }
+    }
+
+    onSetStatBonusAD(bonusStat: any) {
+        if (this.statBonusAD !== bonusStat) {
+            this.notifyChange('Stat bonus/malus AD défini sur ' + bonusStat);
+            this.statBonusAD = bonusStat;
+            this.update();
+        }
+    }
+
+    onLevelUp(result: Character) {
+        if (this.level !== result.level) {
+            this.notifyChange('Levelup ! ' + this.level + '->' + result.level);
+            this.level = result.level;
+            this.modifiers = result.modifiers;
+            this.skills = result.skills;
+            this.update();
+        }
+    }
+
+
+    onAddItem(item: Item) {
+        for (let i = 0; i < this.items.length; i++) {
+            if (this.items[i].id === item.id) {
+                return;
+            }
+        }
+
+        this.notifyChange('Ajout de l\'objet: ' + item.data.name);
+        this.items.push(item);
+        this.update();
+    }
+
+    onEquipItem(it: PartialItem) {
+        for (let i = 0; i < this.items.length; i++) {
+            let item = this.items[i];
+            if (item.id === it.id) {
+                if (item.data.equiped === it.data.equiped) {
+                    return;
+                }
+                item.data.equiped = it.data.equiped;
+                if (it.data.equiped) {
+                    this.notifyChange('Equipe ' + item.data.name);
+                } else {
+                    this.notifyChange('Déséquipe ' + item.data.name);
+                }
+                this.update();
+                return;
+            }
+        }
+    }
+
+    onDeleteItem(item: PartialItem) {
+        for (let i = 0; i < this.items.length; i++) {
+            let it = this.items[i];
+            if (it.id === item.id) {
+                this.items.splice(i, 1);
+                this.update();
+                this.notifyChange('Suppression de l\'objet: ' + item.data.name);
+                break;
+            }
+        }
+    }
+
+    onUseItemCharge(item: PartialItem) {
+        for (let i = 0; i < this.items.length; i++) {
+            let it = this.items[i];
+            if (it.id === item.id) {
+                it.data.charge = item.data.charge;
+                this.update();
+                this.notifyChange('Utilisation d\'une charge de l\'objet: ' + item.data.name);
+                break;
+            }
+        }
+    }
+
+    onChangeContainer(item: PartialItem) {
+        for (let i = 0; i < this.items.length; i++) {
+            let it = this.items[i];
+            if (it.id === item.id) {
+                it.container = item.container;
+                this.update();
+                break;
+            }
+        }
+    }
+
+    onIdentifyItem(item: PartialItem) {
+        for (let i = 0; i < this.items.length; i++) {
+            let it = this.items[i];
+            if (it.id === item.id) {
+                it.data.name = item.data.name;
+                it.data.notIdentified = item.data.notIdentified;
+                this.update();
+                this.notifyChange('Identification de l\'objet: ' + item.data.name);
+                break;
+            }
+        }
+    }
+
+    onUpdateItem(item: PartialItem) {
+        for (let i = 0; i < this.items.length; i++) {
+            let it = this.items[i];
+            if (it.id === item.id) {
+                it.data = item.data;
+                this.update();
+                break;
+            }
+        }
+    }
+
+    onUpdateModifiers(item: PartialItem) {
+        for (let i = 0; i < this.items.length; i++) {
+            let it = this.items[i];
+            if (it.id === item.id) {
+                it.modifiers = item.modifiers;
+                this.update();
+                break;
+            }
+        }
+    }
+
+    onUpdateQuantity(item: PartialItem) {
+        for (let i = 0; i < this.items.length; i++) {
+            let it = this.items[i];
+            if (it.id === item.id) {
+                if (it.data.quantity !== item.data.quantity) {
+                    this.notifyChange('Modification de la quantité de l\'objet: '
+                        + item.data.name + ': ' + it.data.quantity + ' ->' + item.data.quantity);
+                    it.data.quantity = item.data.quantity;
+                    it.data.charge = item.data.charge;
+                    this.update();
+                }
+                break;
+            }
+        }
+    }
+
+    onAddEffect(charEffect: CharacterEffect) {
+        for (let i = 0; i < this.effects.length; i++) {
+            if (this.effects[i].id === charEffect.id) {
+                return;
+            }
+        }
+
+        this.notifyChange('Ajout de l\'effet: ' + charEffect.effect.name);
+        this.effects.push(charEffect);
+        this.update();
+    }
+
+    onAddModifier(modifier: CharacterModifier) {
+        for (let i = 0; i < this.modifiers.length; i++) {
+            if (this.modifiers[i].id === modifier.id) {
+                return;
+            }
+        }
+        this.modifiers.push(modifier);
+        this.update();
+        this.notifyChange('Ajout du modificateur: ' + modifier.name);
+    }
+
+    onRemoveModifier(modifier: CharacterModifier) {
+        for (let i = 0; i < this.modifiers.length; i++) {
+            let e = this.modifiers[i];
+            if (e.id === modifier.id) {
+                this.modifiers.splice(i, 1);
+                this.update();
+                this.notifyChange('Suppression du modificateur: ' + modifier.name);
+                return;
+            }
+        }
+    }
+
+    onUpdateEffect(charEffect: CharacterEffect) {
+        for (let i = 0; i < this.effects.length; i++) {
+            if (this.effects[i].id === charEffect.id) {
+                if (this.effects[i].active === charEffect.active
+                    && this.effects[i].currentTimeDuration === charEffect.currentTimeDuration
+                    && this.effects[i].currentCombatCount === charEffect.currentCombatCount
+                    && this.effects[i].currentLapCount === charEffect.currentLapCount) {
+                    return;
+                }
+
+                if (!this.effects[i].active && charEffect.active) {
+                    this.notifyChange('Activation de l\'effet: ' + charEffect.effect.name);
+                } else if (this.effects[i].active && !charEffect.active) {
+                    this.notifyChange('Désactivation de l\'effet: ' + charEffect.effect.name);
+                } else {
+                    this.notifyChange('Mis à jour de l\'effet: ' + charEffect.effect.name);
+                }
+
+                this.effects[i].active = charEffect.active;
+                this.effects[i].currentCombatCount = charEffect.currentCombatCount;
+                this.effects[i].currentTimeDuration = charEffect.currentTimeDuration;
+                this.effects[i].currentLapCount = charEffect.currentLapCount;
+                break;
+            }
+        }
+        this.update();
+    }
+
+    onUpdateModifier(modifier: CharacterModifier) {
+        for (let i = 0; i < this.modifiers.length; i++) {
+            if (this.modifiers[i].id === modifier.id) {
+                if (this.modifiers[i].active === modifier.active
+                    && this.modifiers[i].currentTimeDuration === modifier.currentTimeDuration
+                    && this.modifiers[i].currentLapCount === modifier.currentLapCount
+                    && this.modifiers[i].currentCombatCount === modifier.currentCombatCount) {
+                    return;
+                }
+                if (!this.modifiers[i].active && modifier.active) {
+                    this.notifyChange('Activation de l\'effet: ' + modifier.name);
+                } else if (this.modifiers[i].active && !modifier.active) {
+                    this.notifyChange('Désactivation de l\'effet: ' + modifier.name);
+                } else {
+                    this.notifyChange('Mis à jour de l\'effet: ' + modifier.name);
+                }
+                this.modifiers[i].active = modifier.active;
+                this.modifiers[i].currentCombatCount = modifier.currentCombatCount;
+                this.modifiers[i].currentTimeDuration = modifier.currentTimeDuration;
+                this.modifiers[i].currentLapCount = modifier.currentLapCount;
+                break;
+            }
+        }
+        this.update();
+    }
+
+    onRemoveEffect(charEffect: CharacterEffect) {
+        for (let i = 0; i < this.effects.length; i++) {
+            let e = this.effects[i];
+            if (e.id === charEffect.id) {
+                this.notifyChange('Suppression de l\'effetde: ' + charEffect.effect.name);
+                this.effects.splice(i, 1);
+                this.update();
+                return;
+            }
+        }
+    }
+
+
+    public registerWS(websocketService: CharacterWebsocketService, notifyChange: (n: string) => any) {
+        this.notifyChange = notifyChange;
+
+        websocketService.register(this);
+        websocketService.registerNotifyFunction(notifyChange);
+
+        websocketService.registerPacket('update').subscribe(this.onChangeCharacterStat.bind(this));
+        websocketService.registerPacket('statBonusAd').subscribe(this.onSetStatBonusAD.bind(this));
+        websocketService.registerPacket('levelUp').subscribe(this.onLevelUp.bind(this));
+
+        websocketService.registerPacket('equipItem').subscribe(this.onEquipItem.bind(this));
+        websocketService.registerPacket('addItem').subscribe(this.onAddItem.bind(this));
+        websocketService.registerPacket('deleteItem').subscribe(this.onDeleteItem.bind(this));
+        websocketService.registerPacket('identifyItem').subscribe(this.onIdentifyItem.bind(this));
+        websocketService.registerPacket('useCharge').subscribe(this.onUseItemCharge.bind(this));
+        websocketService.registerPacket('changeContainer').subscribe(this.onChangeContainer.bind(this));
+        websocketService.registerPacket('updateItem').subscribe(this.onUpdateItem.bind(this));
+        websocketService.registerPacket('changeQuantity').subscribe(this.onUpdateQuantity.bind(this));
+        websocketService.registerPacket('updateItemModifiers').subscribe(this.onUpdateModifiers.bind(this));
+
+        websocketService.registerPacket('addEffect').subscribe(this.onAddEffect.bind(this));
+        websocketService.registerPacket('removeEffect').subscribe(this.onRemoveEffect.bind(this));
+        websocketService.registerPacket('updateEffect').subscribe(this.onUpdateEffect.bind(this));
+        websocketService.registerPacket('addModifier').subscribe(this.onAddModifier.bind(this));
+        websocketService.registerPacket('removeModifier').subscribe(this.onRemoveModifier.bind(this));
+        websocketService.registerPacket('updateModifier').subscribe(this.onUpdateModifier.bind(this));
     }
 }

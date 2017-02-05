@@ -21,11 +21,12 @@ import {GroupWebsocketService} from './group.websocket.service';
 import {MdTabChangeEvent, OverlayRef, Portal, Overlay, OverlayState, TemplatePortalDirective} from '@angular/material';
 import {User} from '../user/user.model';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {CharacterWebsocketService} from '../character/character-websocket.service';
 
 @Component({
     templateUrl: './group.component.html',
     styleUrls: ['./group.component.scss'],
-    providers: [GroupActionService, GroupWebsocketService],
+    providers: [GroupActionService, GroupWebsocketService, CharacterWebsocketService],
 })
 export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     public group: Group;
@@ -72,6 +73,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         , private _overlay: Overlay
         , private _nhbkDialogService: NhbkDialogService
         , private _groupWebsocketService: GroupWebsocketService
+        , private _characterWebsocketService: CharacterWebsocketService
         , private _characterService: CharacterService) {
     }
 
@@ -157,6 +159,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                 index++;
             }
         }
+
         if (index < characterSheetDialog.length) {
             let config = new OverlayState();
 
@@ -174,7 +177,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     closeCharacterSheet() {
-        this.characterSheetOverlayRef.detach()
+        this.characterSheetOverlayRef.detach();
     }
 
     createNpc() {
@@ -345,6 +348,11 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                             this.characters[i] = c;
                             this._actionService.emitAction('reorderFighters', this.group);
                         });
+
+                        character.registerWS(this._characterWebsocketService, message => this._notification.info(character.name
+                            , message
+                            , {isCharacter: true, color: character.color}
+                        ));
                     }
                     let charactersId: number[] = [];
                     for (let i = 0; i < group.invited.length; i++) {
