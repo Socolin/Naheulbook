@@ -7,6 +7,7 @@ import {MonsterColorSelectorComponent, MonsterListComponent, MonsterTemplateComp
 import {SharedModule} from '../shared/shared.module';
 import {MonsterEditorComponent} from './monster-editor.component';
 import {MaterialModule} from '@angular/material';
+import {MonsterTraitComponent} from './monster-trait.component';
 
 @NgModule({
     imports: [
@@ -20,6 +21,7 @@ import {MaterialModule} from '@angular/material';
         MonsterListComponent,
         MonsterTemplateComponent,
         MonsterEditorComponent,
+        MonsterTraitComponent,
     ],
     providers: [
         MonsterService,

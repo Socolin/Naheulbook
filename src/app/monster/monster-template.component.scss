@@ -1,0 +1,22 @@
+md-card {
+    margin: 5px;
+}
+
+.monster-stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    >div {
+        flex: 1 0 60px;
+    }
+}
+
+.monster-traits-row {
+    display: flex;
+    flex-wrap: wrap;
+
+    >div {
+        flex: 0 0 auto;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+}

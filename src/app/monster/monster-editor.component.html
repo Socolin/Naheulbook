@@ -1,88 +1,132 @@
-<div *ngIf="monster" class="form-horizontal">
-    <div class="form-group">
-        <label for="name" class="col-sm-1 control-label">Nom</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="name" placeholder="Nom" [(ngModel)]="monster.name">
-        </div>
-        <div class="col-sm-2 col-xs-4 control-label btn-group">
-            <button class="btn btn-default" [class.btn-info]="defenseStat === 'PRD'" (click)="setDefenseStat('PRD')">PRD</button>
-            <button class="btn btn-default" [class.btn-info]="defenseStat === 'ESQ'" (click)="setDefenseStat('ESQ')">ESQ</button>
+<div *ngIf="monster">
+    <div>
+        <md-input-container>
+            <input md-input
+                   type="text"
+                   placeholder="Nom"
+                   [(ngModel)]="monster.name">
+        </md-input-container>
+        <md-button-toggle-group [(ngModel)]="defenseStat" (change)="updateDefenseStat()">
+            <md-button-toggle [value]="'PRD'">PRD</md-button-toggle>
+            <md-button-toggle [value]="'ESQ'">ESQ</md-button-toggle>
+        </md-button-toggle-group>
+        <md-checkbox [(ngModel)]="monster.data.chercheNoise">
+            Chercher des noises
+        </md-checkbox>
+    </div>
+    <div>
+        <md-input-container>
+            <input md-input
+                   type="number"
+                   placeholder="AT"
+                   [(ngModel)]="monster.data.at">
+        </md-input-container>
+        <md-input-container *ngIf="defenseStat === 'PRD'">
+            <input md-input
+                   type="number"
+                   placeholder="PRD"
+                   [(ngModel)]="monster.data.prd">
+        </md-input-container>
+        <md-input-container *ngIf="defenseStat === 'ESQ'">
+            <input md-input
+                   type="number"
+                   placeholder="ESQ"
+                   [(ngModel)]="monster.data.esq">
+        </md-input-container>
+        <md-input-container>
+            <input md-input
+                   type="number"
+                   placeholder="EV"
+                   [(ngModel)]="monster.data.ev">
+        </md-input-container>
+        <md-input-container>
+            <input md-input
+                   type="number"
+                   placeholder="EA"
+                   [(ngModel)]="monster.data.ea">
+        </md-input-container>
+        <md-input-container>
+            <input md-input
+                   type="text"
+                   placeholder="PR"
+                   [(ngModel)]="monster.data.pr">
+        </md-input-container>
+        <md-input-container>
+            <input md-input
+                   type="number"
+                   placeholder="COU"
+                   [(ngModel)]="monster.data.cou">
+        </md-input-container>
+        <md-input-container>
+            <input md-input
+                   type="number"
+                   placeholder="RESM"
+                   [(ngModel)]="monster.data.resm">
+        </md-input-container>
+        <md-input-container>
+            <input md-input
+                   type="text"
+                   placeholder="DMG"
+                   [(ngModel)]="monster.data.dmg">
+        </md-input-container>
+        <md-input-container>
+            <input md-input
+                   type="number"
+                   placeholder="XP"
+                   [(ngModel)]="monster.data.xp">
+        </md-input-container>
+    </div>
+
+    <div>
+        <md-input-container style="width: 100%">
+            <textarea md-input
+                      md-textarea-autosize
+                      [(ngModel)]="monster.data.note"
+                      placeholder="Note">
+            </textarea>
+        </md-input-container>
+    </div>
+    <div>
+        <div>Traits simple</div>
+        <div>
+            <template ngFor let-trait [ngForOf]=simpleTraits>
+                <button *ngIf="hasTrait(trait)"
+                        md-raised-button
+                        type="button"
+                        class="btn btn-default"
+                        color="primary"
+                        (click)="toggleTrait(trait)">
+                    {{trait.name}}
+                </button>
+                <button *ngIf="!hasTrait(trait)"
+                        md-button
+                        type="button"
+                        class="btn btn-default"
+                        color="primary"
+                        (click)="toggleTrait(trait)">
+                    {{trait.name}}
+                </button>
+            </template>
         </div>
     </div>
-    <div class="form-group">
-        <label for="at" class="col-sm-1 col-xs-4 control-label">AT</label>
-        <div class="col-sm-2 col-xs-8">
-            <input type="number" class="form-control" id="at" placeholder="AT" [(ngModel)]="monster.data.at">
-        </div>
-        <label for="prd" class="col-sm-1 col-xs-4 control-label">{{defenseStat}}</label>
-        <div *ngIf="defenseStat === 'PRD'" class="col-sm-2 col-xs-8">
-            <input type="number" class="form-control" id="prd" placeholder="PRD" [(ngModel)]="monster.data.prd">
-        </div>
-        <div *ngIf="defenseStat === 'ESQ'" class="col-sm-2 col-xs-8">
-            <input type="number" class="form-control" id="esq" placeholder="ESQ" [(ngModel)]="monster.data.esq">
-        </div>
-        <label for="ev" class="col-sm-1 col-xs-4 control-label">EV</label>
-        <div class="col-sm-2 col-xs-8">
-            <input type="number" class="form-control" id="ev" placeholder="EV" [(ngModel)]="monster.data.ev">
-        </div>
-        <label for="pr" class="col-sm-1 col-xs-4 control-label">PR</label>
-        <div class="col-sm-2 col-xs-8">
-            <input type="text" class="form-control" id="pr" placeholder="PR" [(ngModel)]="monster.data.pr">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="cou" class="col-sm-1 col-xs-4 control-label">COU</label>
-        <div class="col-sm-2 col-xs-8">
-            <input type="text" class="form-control" id="cou" placeholder="COU" [(ngModel)]="monster.data.cou">
-        </div>
-        <label for="resm" class="col-sm-1 col-xs-4 control-label">RESM</label>
-        <div class="col-sm-2 col-xs-8">
-            <input type="number" class="form-control" id="resm" placeholder="RESM" [(ngModel)]="monster.data.resm">
-        </div>
-        <label for="dmg" class="col-sm-1 control-label">Degats</label>
-        <div class="col-sm-2">
-            <input type="text" class="form-control" id="dmg" placeholder="Degats" [(ngModel)]="monster.data.dmg">
-        </div>
-        <label for="xp" class="col-sm-1 col-xs-4 control-label">XP</label>
-        <div class="col-sm-2 col-xs-8">
-            <input type="number" class="form-control" id="xp" placeholder="XP" [(ngModel)]="monster.data.xp">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="ea" class="col-sm-1 col-xs-4 control-label">EA</label>
-        <div class="col-sm-2 col-xs-8">
-            <input type="number" class="form-control" id="ea" placeholder="EA" [(ngModel)]="monster.data.ea">
-        </div>
-        <label for="inputMonsterNoise" class="col-xs-3 control-label">Chercher des noises</label>
-        <div class="col-xs-1">
-            <input type="checkbox" class="form-control" id="inputMonsterNoise"
-                   [(ngModel)]="monster.data.chercheNoise">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="pr" class="col-sm-1 control-label">Traits simple</label>
-        <div class="col-sm-11">
-            <div class="btn-group" role="group">
-                <template ngFor let-trait [ngForOf]=simpleTraits>
-                    <button type="button"
-                            class="btn btn-default"
-                            [class.btn-success]="hasTrait(trait)"
-                            (click)="toggleTrait(trait)">
-                        {{trait.name}}
-                    </button>
-                </template>
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="pr" class="col-sm-1 control-label">Traits</label>
-        <div class="col-sm-11">
+    <div>
+        <div>Traits</div>
+        <div>
             <div class="btn-group" role="group">
                 <template ngFor let-trait [ngForOf]=powerTraits>
-                    <button type="button" class="btn btn-default"
-                            [class.btn-success]="hasTraitLevel(trait, 1)"
-                            [class.btn-warning]="hasTraitLevel(trait, 2)"
-                            [class.btn-danger]="hasTraitLevel(trait, 3)"
+                    <button *ngIf="!hasTrait(trait)"
+                            md-button
+                            type="button"
+                            class="btn btn-default"
+                            color="primary"
+                            (click)="toggleTrait(trait)">
+                        {{trait.name}}
+                    </button>
+                    <button *ngIf="hasTrait(trait)"
+                            md-raised-button
+                            type="button"
+                            class="btn btn-default"
+                            [color]="hasTraitLevel(trait, 1) ? 'primary' : (hasTraitLevel(trait, 2) ? 'accent' : 'warn')"
                             (click)="toggleTrait(trait)">
                         {{trait.name}}
                     </button>
@@ -90,90 +134,74 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <label for="pr" class="col-sm-1 control-label">Type</label>
-        <div class="col-sm-11">
-            <select class="form-control" (change)="selectCategory($event)">
+    <div>
+        <label>Type</label>
+        <div>
+            <select (change)="selectCategory($event)">
                 <option [selected]="!monster.type"></option>
                 <template ngFor let-category [ngForOf]="categories">
-                    <option value="{{category.id}}" [selected]="category.id == monster.type?.id">{{category.name}}</option>
+                    <option value="{{category.id}}" [selected]="category.id == monster.type?.id">{{category.name}}
+                    </option>
                 </template>
             </select>
         </div>
     </div>
-    <div class="form-group">
-        <label for="pr" class="col-sm-1 control-label">Lieux</label>
-        <div class="col-sm-11" *ngIf="locationsById">
-            <span style="border-radius: 4px; background-color: #7aa09b; margin-right: 5px" *ngFor="let locationId of monster.locations">
-                {{locationsById[locationId].name}} <span class="glyphicon glyphicon-remove" (click)="removeLocation(locationId)"></span>
+    <div>
+        <div *ngIf="locationsById">
+            <span style="border-radius: 4px; background-color: #7aa09b; margin-right: 5px"
+                  *ngFor="let locationId of monster.locations">
+                {{locationsById[locationId].name}} <span (click)="removeLocation(locationId)">X</span>
             </span>
-            <autocomplete-input [value]="locationSearchName" (onSelect)="selectLocation($event)"
+            <autocomplete-input [placeholder]="'Lieu'"
+                                [value]="locationSearchName" (onSelect)="selectLocation($event)"
                                 [(callback)]="autocompleteLocationsCallback"></autocomplete-input>
 
         </div>
     </div>
-    <div class="form-group">
-        <label for="pr" class="col-sm-1 control-label">Inventaire</label>
-        <div class="col-sm-11">
-            <autocomplete-input [clearOnSelect]="true"
+    <div>
+        <div>
+            <autocomplete-input [placeholder]="'Ajouter un objet dans l\'inventaire'"
+                                [clearOnSelect]="true"
                                 (onSelect)="selectItemTemplate($event)"
-                                [(callback)]="autocompleteItemCallback"></autocomplete-input>
+                                [(callback)]="autocompleteItemCallback">
+            </autocomplete-input>
         </div>
     </div>
-    <div *ngIf="newItem" class="form-group bg-info">
-        <label for="pr" class="col-sm-1 control-label"></label>
-        <div class="col-sm-11">
-            <div class="form-group">
-                <label class="col-sm-12 col-xs-12">{{newItem.name}}</label>
+    <md-card *ngIf="newItem">
+        <md-card-subtitle>{{newItem.name}}</md-card-subtitle>
+        <md-card-content>
+            <md-input type="number" min=0 placeholder="Quantité min"
+                      [(ngModel)]="newItemData.minCount"></md-input>
+            <md-input type="number" min=0 placeholder="Quantité max"
+                      [(ngModel)]="newItemData.maxCount"></md-input>
+            <md-input type="number" min=0 max=1 step="0.0001"
+                      placeholder="Chance" [(ngModel)]="newItemData.chance"></md-input>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button
+                    color="primary"
+                    (click)="addItemSimpleInventory()">
+                AJOUTER
+            </button>
+        </md-card-actions>
+    </md-card>
+    <md-card *ngIf="monster.simpleInventory && monster.simpleInventory.length">
+        <md-card-subtitle>Inventaire</md-card-subtitle>
+        <template ngFor let-inventory [ngForOf]="monster.simpleInventory" let-i="index">
+            <div>
+                <button md-icon-button (click)="removeItemSimpleInventory(i)">
+                    <md-icon>delete</md-icon>
+                </button>
+                {{inventory.itemTemplate.name}}
             </div>
-            <div class="form-group">
-                <label for="newItemMinCount" class="col-sm-1 col-xs-2 control-label">MinCount</label>
-                <div class="col-sm-2 col-xs-4">
-                    <input type="number" class="form-control" id="newItemMinCount" min=0 placeholder="Min" [(ngModel)]="newItemData.minCount">
-                </div>
-                <label for="newItemMaxCount" class="col-sm-1 col-xs-2 control-label">MaxCount</label>
-                <div class="col-sm-2 col-xs-4">
-                    <input type="number" class="form-control" id="newItemMaxCount" min=0 placeholder="Max" [(ngModel)]="newItemData.maxCount">
-                </div>
-                <label for="newItemChance" class="col-sm-1 col-xs-2 control-label">Chance</label>
-                <div class="col-sm-2 col-xs-4">
-                    <input type="number" class="form-control" id="newItemChance" min=0 max=1 step="0.0001" placeholder="Chance" [(ngModel)]="newItemData.chance">
-                </div>
-                <div class="col-sm-3 col-xs-6">
-                    <button class="btn btn-success" (click)="addItemSimpleInventory()">Ajouter</button>
-                </div>
+            <div>
+                <md-input type="number" min=0 [(ngModel)]="inventory.minCount" placeholder="Quantité min">
+                </md-input>
+                <md-input type="number" min=0 [(ngModel)]="inventory.maxCount" placeholder="Quantité max">
+                </md-input>
+                <md-input type="number" min=0 step="0.0001" [(ngModel)]="inventory.chance" placeholder="Chance">
+                </md-input>
             </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-1 col-xs-4 control-label"></label>
-        <div class="col-sm-11 col-xs-8">
-            <div class="row">
-                <template ngFor let-inventory [ngForOf]="monster.simpleInventory" let-i="index">
-                    <div class="col-xs-1">
-                        <button class="btn btn-danger glyphicon glyphicon-remove" (click)="removeItemSimpleInventory(i)"></button>
-                    </div>
-                    <div class="col-xs-6">
-                    {{inventory.itemTemplate.name}}
-                    </div>
-                    <div class="col-xs-1">
-                        <input type="number" class="form-control" min=0 [(ngModel)]="inventory.minCount"/>
-                    </div>
-                    <div class="col-xs-1">
-                        <input type="number" class="form-control" min=0 [(ngModel)]="inventory.maxCount"/>
-                    </div>
-                    <div class="col-xs-1">
-                        <input type="number" class="form-control" min=0 step="0.0001" [(ngModel)]="inventory.chance"/>
-                    </div>
-                </template>
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="note" class="col-sm-1 control-label">Note</label>
-        <div class="col-sm-11">
-            <textarea autosize rows="1" class="form-control" id="note" [(ngModel)]="monster.data.note"></textarea>
-        </div>
-    </div>
-
+        </template>
+    </md-card>
 </div>

@@ -15,6 +15,7 @@ import {removeDiacritics} from '../shared/remove_diacritics';
 
 @Component({
     selector: 'monster-editor',
+    styleUrls: ['./monster-editor.component.scss'],
     templateUrl: './monster-editor.component.html',
 })
 export class MonsterEditorComponent implements OnInit, OnChanges {
@@ -177,23 +178,22 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
         }
     }
 
-    setDefenseStat(stat: string) {
-        if (stat === 'PRD') {
+    updateDefenseStat() {
+        if (this.defenseStat === 'PRD') {
             this.monster.data.esq = null;
         }
-        if (stat === 'ESQ') {
+        if (this.defenseStat === 'ESQ') {
             this.monster.data.prd = null;
         }
-        this.defenseStat = stat;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         if ('monster' in changes) {
             if (this.monster.data.prd) {
-                this.setDefenseStat('PRD');
+                this.defenseStat = 'PRD';
             }
             else {
-                this.setDefenseStat('ESQ');
+                this.defenseStat = 'ESQ';
             }
         }
     }

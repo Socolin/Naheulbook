@@ -76,6 +76,7 @@ export class MonsterTemplateData {
     pr: string;
     resm: number;
     xp: number;
+    chercheNoise: boolean;
     special: boolean;
     traits: TraitInfo[];
 }
@@ -107,7 +108,7 @@ export class MonsterTemplate {
     locations: number[];
 }
 
-export interface MonsterTrait {
+export class MonsterTrait {
     id: number;
     name: string;
     description: string;
