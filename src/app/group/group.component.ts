@@ -22,6 +22,7 @@ import {MdTabChangeEvent, OverlayRef, Portal, Overlay, OverlayState, TemplatePor
 import {User} from '../user/user.model';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {CharacterWebsocketService} from '../character/character-websocket.service';
+import {WebSocketService} from '../shared/websocket.service';
 
 @Component({
     templateUrl: './group.component.html',
@@ -73,7 +74,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         , private _overlay: Overlay
         , private _nhbkDialogService: NhbkDialogService
         , private _groupWebsocketService: GroupWebsocketService
-        , private _characterWebsocketService: CharacterWebsocketService
+        , private _websocketService: WebSocketService
         , private _characterService: CharacterService) {
     }
 
@@ -349,7 +350,12 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                             this._actionService.emitAction('reorderFighters', this.group);
                         });
 
-                        character.registerWS(this._characterWebsocketService, message => this._notification.info(character.name
+                        let characterWebsocketService = new CharacterWebsocketService(
+                            this._notification,
+                            this._characterService,
+                            this._websocketService
+                        );
+                        character.registerWS(characterWebsocketService, message => this._notification.info(character.name
                             , message
                             , {isCharacter: true, color: character.color}
                         ));
