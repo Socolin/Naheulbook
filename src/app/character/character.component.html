@@ -341,11 +341,11 @@
                         <ul>
                             <li>
                                 <strong>Normal</strong>
-                                {{character.computedData.tacticalMovement.distance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.maxDuration}} secondes
+                                {{character.computedData.tacticalMovement.distance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.maxDuration.toPrecision(2)}} secondes
                             </li>
                             <li>
                                 <strong>Sprint</strong> (Après un déplacement normal):
-                                {{character.computedData.tacticalMovement.sprintDistance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.sprintMaxDuration}} secondes
+                                {{character.computedData.tacticalMovement.sprintDistance.toPrecision(2)}} m/s pendant {{character.computedData.tacticalMovement.sprintMaxDuration.toPrecision(2)}} secondes
                             </li>
                         </ul>
                     </md-card-content>
