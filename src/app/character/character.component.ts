@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy, ViewChild, ElementRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MdTabChangeEvent, Portal, OverlayRef, OverlayState, Overlay} from '@angular/material';
 
@@ -14,7 +14,7 @@ import {Item} from './item.model';
 import {Skill} from '../skill/skill.model';
 
 export class LevelUpInfo {
-    EVorEA: string = 'EV';
+    EVorEA = 'EV';
     EVorEAValue: number;
     targetLevelUp: number;
     statToUp: string;
@@ -32,6 +32,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
     @Input() character: Character;
 
+    @ViewChild('combatWeaponDetail')
+    private combatWeaponDetailElement: ElementRef;
+
     @ViewChild('levelUpDialog')
     public levelUpDialog: Portal<any>;
     public levelUpOverlayRef: OverlayRef;
@@ -41,12 +44,12 @@ export class CharacterComponent implements OnInit, OnDestroy {
     public skillInfoDialog: Portal<any>;
     public skillInfoOverlayRef: OverlayRef;
     public selectedSkillInfo: Skill;
-    public viewGmSkillInfo: boolean = false;
+    public viewGmSkillInfo = false;
 
-    public inGroupTab: boolean = false;
+    public inGroupTab = false;
     public selectedItem: Item;
-    public currentTab: string = 'infos';
-    public currentTabIndex: number = 0;
+    public currentTab = 'infos';
+    public currentTabIndex = 0;
     public tabs: any[] = [
         {hash: 'infos'},
         {hash: 'combat'},
@@ -289,6 +292,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
         if (this.character) {
             this._characterWebsocketService.unregister();
         }
+    }
+
+    selectItem(item: Item) {
+        this.selectedItem = item;
+        setTimeout(() => {
+            scrollTo(0, this.combatWeaponDetailElement.nativeElement.getBoundingClientRect().bottom);
+        }, 10);
     }
 
     ngOnInit() {

@@ -1,9 +1,10 @@
 import {OnDestroy} from '@angular/core';
 import {NotificationsService} from '../notifications/notifications.service';
-import {Loot} from './loot.model';
+import {Loot, LootTookItemMsg} from './loot.model';
 import {LootWebsocketService} from './loot.websocket.service';
 import {Monster} from '../monster/monster.model';
 import {Subscription} from 'rxjs';
+import {Item} from '../character/item.model';
 
 export class LootPanelComponent implements OnDestroy {
     public loots: Loot[] = [];
@@ -45,27 +46,20 @@ export class LootPanelComponent implements OnDestroy {
         monster.items.push(data.item);
     }
 
-    onRemoveItemFromLoot(loot: Loot, data: any, quantity?: number) {
+    onRemoveItemFromLoot(loot: Loot, data: Item) {
         for (let i = 0; i < loot.items.length; i++) {
             if (loot.items[i].id === data.id) {
-                if (quantity) {
-                    loot.items[i].data.quantity -= quantity;
-                }
-                else {
-                    loot.items.splice(i, 1);
-                }
+                loot.items.splice(i, 1);
+                break;
             }
         }
     }
 
-    onRemoveItemFromMonster(monster: Monster, data: any, quantity?: number) {
+    onRemoveItemFromMonster(monster: Monster, data: Item) {
         for (let i = 0; i < monster.items.length; i++) {
             if (monster.items[i].id === data.id) {
-                if (quantity) {
-                    monster.items[i].data.quantity -= quantity;
-                } else {
-                    monster.items.splice(i, 1);
-                }
+                monster.items.splice(i, 1);
+                break;
             }
         }
     }
@@ -103,45 +97,57 @@ export class LootPanelComponent implements OnDestroy {
         monster.items.splice(itemIndex, 1);
     }
 
-    onTookItemFromLoot(loot: Loot, data: any) {
+    onTookItemFromLoot(loot: Loot, data: LootTookItemMsg) {
         let character = data.character;
         let itemIndex = loot.items.findIndex(i => data.item.id === i.id);
         if (itemIndex === -1) {
             return;
         }
-        if (data.quantity) {
-            if (loot.items[itemIndex].data.quantity !== data.item.data.quantity) {
+        if (data.leftItem) {
+            let newQuantity = data.leftItem.data.quantity;
+            if (loot.items[itemIndex].data.quantity === newQuantity) {
                 return;
             }
-            loot.items[itemIndex].data.quantity -= data.quantity;
+            loot.items[itemIndex].data.quantity = newQuantity;
             this._lootWebsocketService.notifyChange(character.name + ' à pris: ' + data.quantity + ' ' + data.item.data.name);
         }
         else {
             loot.items.splice(itemIndex, 1);
-            this._lootWebsocketService.notifyChange(character.name + ' à pris: ' + data.item.data.name);
+            if (data.quantity) {
+                this._lootWebsocketService.notifyChange(character.name + ' à pris: ' + data.quantity + ' ' + data.item.data.name);
+            } else {
+                this._lootWebsocketService.notifyChange(character.name + ' à pris: ' + data.item.data.name);
+            }
         }
     }
 
-    onTookItemFromMonsterLoot(loot: Loot, data: any) {
+    onTookItemFromMonsterLoot(loot: Loot, data: LootTookItemMsg) {
+        let character = data.character;
         let monsterIndex = loot.monsters.findIndex(m => m.id === data.monster.id);
         if (monsterIndex === -1) {
             return;
         }
         let monster = loot.monsters[monsterIndex];
-        let itemIndex = monster.items.findIndex(i => data.item.id === i.id);
+        let lootItemId = data.leftItem ? data.leftItem.id : data.item.id;
+        let itemIndex = monster.items.findIndex(i => lootItemId === i.id);
         if (itemIndex === -1) {
             return;
         }
-        if (data.quantity) {
-            if (monster.items[itemIndex].data.quantity !== data.item.data.quantity) {
+        if (data.leftItem) {
+            let newQuantity = data.leftItem.data.quantity;
+            if (monster.items[itemIndex].data.quantity === newQuantity) {
                 return;
             }
-            monster.items[itemIndex].data.quantity -= data.quantity;
-            this._lootWebsocketService.notifyChange(data.character.name + ' à pris: ' + data.quantity + ' ' + data.item.data.name);
+            monster.items[itemIndex].data.quantity = newQuantity;
+            this._lootWebsocketService.notifyChange(character.name + ' à pris: ' + data.quantity + ' ' + data.item.data.name);
         }
         else {
             monster.items.splice(itemIndex, 1);
-            this._lootWebsocketService.notifyChange(data.character.name + ' à pris: ' + data.item.data.name);
+            if (data.quantity) {
+                this._lootWebsocketService.notifyChange(character.name + ' à pris: ' + data.quantity + ' ' + data.item.data.name);
+            } else {
+                this._lootWebsocketService.notifyChange(character.name + ' à pris: ' + data.item.data.name);
+            }
         }
     }
 

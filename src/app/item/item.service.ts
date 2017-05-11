@@ -12,6 +12,7 @@ import {LoginService} from '../user';
 import {SkillService} from '../skill';
 import {Skill} from '../skill';
 import {ItemModifier} from '../character/item.model';
+import {LootTookItemMsg} from '../loot/loot.model';
 
 @Injectable()
 export class ItemService extends JsonService {
@@ -160,7 +161,7 @@ export class ItemService extends JsonService {
             .map(res => res.json());
     }
 
-    takeItemFromLoot(itemId: number, characterId: number, quantity?: number): Observable<Item> {
+    takeItemFromLoot(itemId: number, characterId: number, quantity?: number): Observable<LootTookItemMsg> {
         return this.postJson('/api/item/takeItemFromLoot', {
             itemId: itemId,
             quantity: quantity,

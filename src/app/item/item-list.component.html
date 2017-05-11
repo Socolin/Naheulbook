@@ -18,7 +18,7 @@
         <input class="input-lg form-control" placeholder="dice" [(ngModel)]="filter.dice" type=number min=1 max=100>
     </div>
     <md-input-container>
-        <input placeholder="Filtre" [(ngModel)]="filter.name" type="text" />
+        <input mdInput placeholder="Filtre" [(ngModel)]="filter.name" type="text" />
     </md-input-container>
 </div>
 <ng-template ngFor let-category [ngForOf]="selectedSection?.categories">

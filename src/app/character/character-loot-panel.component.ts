@@ -48,9 +48,10 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         this.takeItemOverlayRef = this._nhbkDialogservice.openCenteredBackdropDialog(this.takeItemDialog);
     }
 
-    openTakeItemMonsterDialog(monster: Monster, item: Item) {
+    openTakeItemMonsterDialog(loot: Loot, monster: Monster, item: Item) {
         this.takingItem = item;
         this.takingQuantity = item.data.quantity;
+        this.takingItemLoot = loot;
         this.takingItemMonster = monster;
         this.takeItemOverlayRef = this._nhbkDialogservice.openCenteredBackdropDialog(this.takeItemDialog);
     }
@@ -60,11 +61,10 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     }
 
     validTakeItem() {
-        if (this.takingItemLoot) {
+        if (this.takingItemMonster) {
+            this.takeItemFromMonster(this.takingItemLoot, this.takingItemMonster, this.takingItem, this.takingQuantity);
+        } else if (this.takingItemLoot) {
             this.takeItemFromLoot(this.takingItemLoot, this.takingItem, this.takingQuantity);
-        }
-        else if (this.takingItemMonster) {
-            this.takeItemFromMonster(this.takingItemMonster, this.takingItem, this.takingQuantity);
         }
         this.closeTakeItemDialog();
     }
@@ -72,18 +72,18 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     takeItemFromLoot(loot: Loot, item: Item, quantity?: number) {
         if (item != null) {
             this._itemService.takeItemFromLoot(item.id, this.character.id, quantity).subscribe(
-                takenItem => {
-                    this.onRemoveItemFromLoot(loot, takenItem, quantity);
+                takenItemData => {
+                    this.onTookItemFromLoot(loot, takenItemData);
                 }
             );
         }
     }
 
-    takeItemFromMonster(monster: Monster, item: Item, quantity?: number) {
+    takeItemFromMonster(loot: Loot, monster: Monster, item: Item, quantity?: number) {
         if (item != null) {
             this._itemService.takeItemFromLoot(item.id, this.character.id, quantity).subscribe(
-                takenItem => {
-                    this.onRemoveItemFromMonster(monster, takenItem, quantity);
+                takenItemData => {
+                    this.onTookItemFromMonsterLoot(loot, takenItemData);
                 }
             );
         }

@@ -357,7 +357,7 @@
                             <ng-template ngFor let-item [ngForOf]="character.computedData.itemsBySlotsAll[1]" let-i="index" let-last="last">
                                 <div class="item-line"
                                      [class.selected]="selectedItem && selectedItem.id === item.id"
-                                     (click)="selectedItem = item">
+                                     (click)="selectItem(item)">
                                     <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                                     <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
                                     <md-icon *ngIf="item.data.notIdentified">help</md-icon>
@@ -371,6 +371,7 @@
                 <div *ngIf="selectedItem && selectedItem.template.slots.length > 0" class="weapons-detail">
                     <item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
                 </div>
+                <div #combatWeaponDetail></div>
             </div>
             <!-- End of combat tab -->
         </md-tab>
