@@ -5,7 +5,7 @@
         </md-card-title>
         <md-card-content>
             <div class="effect-list">
-                <template ngFor let-characterEffect [ngForOf]="character.computedData.effects" let-i="index" let-last="last">
+                <ng-template ngFor let-characterEffect [ngForOf]="character.computedData.effects" let-i="index" let-last="last">
                     <div (click)="selectEffect(characterEffect)"
                          class="effect-element"
                          [class.selected]="selectedEffect === characterEffect">
@@ -30,8 +30,8 @@
                             <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{characterEffect.currentLapCount}}
                         </span>
                     </div>
-                </template>
-                <template ngFor let-modifier [ngForOf]="character.computedData.modifiers" let-i="index" let-last="last">
+                </ng-template>
+                <ng-template ngFor let-modifier [ngForOf]="character.computedData.modifiers" let-i="index" let-last="last">
                     <div *ngIf="!modifier.permanent"
                          class="effect-element"
                          [class.selected]="selectedModifier === modifier">
@@ -56,7 +56,7 @@
                             <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{modifier.currentLapCount}}
                         </span>
                     </div>
-                </template>
+                </ng-template>
             </div>
         </md-card-content>
         <md-card-actions align="end">
@@ -72,7 +72,7 @@
 </div>
 
 
-<template #addEffectDialog="cdkPortal" cdk-portal>
+<ng-template #addEffectDialog="cdkPortal" cdk-portal>
     <md-card class="add-effect-dialog">
         <md-card-title>Ajouter un effet</md-card-title>
         <md-card-content>
@@ -109,4 +109,4 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>

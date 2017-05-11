@@ -1,7 +1,7 @@
 <div *ngIf="monster">
     <div>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    type="text"
                    placeholder="Nom"
                    [(ngModel)]="monster.name">
@@ -16,61 +16,61 @@
     </div>
     <div>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    type="number"
                    placeholder="AT"
                    [(ngModel)]="monster.data.at">
         </md-input-container>
         <md-input-container *ngIf="defenseStat === 'PRD'">
-            <input md-input
+            <input mdInput
                    type="number"
                    placeholder="PRD"
                    [(ngModel)]="monster.data.prd">
         </md-input-container>
         <md-input-container *ngIf="defenseStat === 'ESQ'">
-            <input md-input
+            <input mdInput
                    type="number"
                    placeholder="ESQ"
                    [(ngModel)]="monster.data.esq">
         </md-input-container>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    type="number"
                    placeholder="EV"
                    [(ngModel)]="monster.data.ev">
         </md-input-container>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    type="number"
                    placeholder="EA"
                    [(ngModel)]="monster.data.ea">
         </md-input-container>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    type="text"
                    placeholder="PR"
                    [(ngModel)]="monster.data.pr">
         </md-input-container>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    type="number"
                    placeholder="COU"
                    [(ngModel)]="monster.data.cou">
         </md-input-container>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    type="number"
                    placeholder="RESM"
                    [(ngModel)]="monster.data.resm">
         </md-input-container>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    type="text"
                    placeholder="DMG"
                    [(ngModel)]="monster.data.dmg">
         </md-input-container>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    type="number"
                    placeholder="XP"
                    [(ngModel)]="monster.data.xp">
@@ -89,7 +89,7 @@
     <div>
         <div>Traits simple</div>
         <div>
-            <template ngFor let-trait [ngForOf]=simpleTraits>
+            <ng-template ngFor let-trait [ngForOf]=simpleTraits>
                 <button *ngIf="hasTrait(trait)"
                         md-raised-button
                         type="button"
@@ -106,14 +106,14 @@
                         (click)="toggleTrait(trait)">
                     {{trait.name}}
                 </button>
-            </template>
+            </ng-template>
         </div>
     </div>
     <div>
         <div>Traits</div>
         <div>
             <div class="btn-group" role="group">
-                <template ngFor let-trait [ngForOf]=powerTraits>
+                <ng-template ngFor let-trait [ngForOf]=powerTraits>
                     <button *ngIf="!hasTrait(trait)"
                             md-button
                             type="button"
@@ -130,7 +130,7 @@
                             (click)="toggleTrait(trait)">
                         {{trait.name}}
                     </button>
-                </template>
+                </ng-template>
             </div>
         </div>
     </div>
@@ -139,10 +139,10 @@
         <div>
             <select (change)="selectCategory($event)">
                 <option [selected]="!monster.type"></option>
-                <template ngFor let-category [ngForOf]="categories">
+                <ng-template ngFor let-category [ngForOf]="categories">
                     <option value="{{category.id}}" [selected]="category.id == monster.type?.id">{{category.name}}
                     </option>
-                </template>
+                </ng-template>
             </select>
         </div>
     </div>
@@ -170,12 +170,18 @@
     <md-card *ngIf="newItem">
         <md-card-subtitle>{{newItem.name}}</md-card-subtitle>
         <md-card-content>
-            <md-input type="number" min=0 placeholder="Quantité min"
-                      [(ngModel)]="newItemData.minCount"></md-input>
-            <md-input type="number" min=0 placeholder="Quantité max"
-                      [(ngModel)]="newItemData.maxCount"></md-input>
-            <md-input type="number" min=0 max=1 step="0.0001"
-                      placeholder="Chance" [(ngModel)]="newItemData.chance"></md-input>
+            <md-input-container>
+                <input mdInput type="number" min=0 placeholder="Quantité min"
+                          [(ngModel)]="newItemData.minCount" />
+            </md-input-container>
+            <md-input-container>
+                <input mdInput type="number" min=0 placeholder="Quantité max"
+                          [(ngModel)]="newItemData.maxCount" />
+            </md-input-container>
+            <md-input-container>
+                <input mdInput type="number" min=0 max=1 step="0.0001"
+                          placeholder="Chance" [(ngModel)]="newItemData.chance" />
+            </md-input-container>
         </md-card-content>
         <md-card-actions align="end">
             <button md-button
@@ -187,7 +193,7 @@
     </md-card>
     <md-card *ngIf="monster.simpleInventory && monster.simpleInventory.length">
         <md-card-subtitle>Inventaire</md-card-subtitle>
-        <template ngFor let-inventory [ngForOf]="monster.simpleInventory" let-i="index">
+        <ng-template ngFor let-inventory [ngForOf]="monster.simpleInventory" let-i="index">
             <div>
                 <button md-icon-button (click)="removeItemSimpleInventory(i)">
                     <md-icon>delete</md-icon>
@@ -195,13 +201,16 @@
                 {{inventory.itemTemplate.name}}
             </div>
             <div>
-                <md-input type="number" min=0 [(ngModel)]="inventory.minCount" placeholder="Quantité min">
-                </md-input>
-                <md-input type="number" min=0 [(ngModel)]="inventory.maxCount" placeholder="Quantité max">
-                </md-input>
-                <md-input type="number" min=0 step="0.0001" [(ngModel)]="inventory.chance" placeholder="Chance">
-                </md-input>
+                <md-input-container>
+                    <input mdInput type="number" min=0 [(ngModel)]="inventory.minCount" placeholder="Quantité min" />
+                </md-input-container>
+                <md-input-container>
+                    <input mdInput type="number" min=0 [(ngModel)]="inventory.maxCount" placeholder="Quantité max" />
+                </md-input-container>
+                <md-input-container>
+                    <input mdInput type="number" min=0 step="0.0001" [(ngModel)]="inventory.chance" placeholder="Chance" />
+                </md-input-container>
             </div>
-        </template>
+        </ng-template>
     </md-card>
 </div>

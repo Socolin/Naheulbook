@@ -1,6 +1,6 @@
-<template [ngIf]="!rootLocation">
+<ng-template [ngIf]="!rootLocation">
     Loading...
-</template>
-<template [ngIf]="rootLocation">
+</ng-template>
+<ng-template [ngIf]="rootLocation">
     <location [editable]="editable" [location]="rootLocation"></location>
-</template>
+</ng-template>

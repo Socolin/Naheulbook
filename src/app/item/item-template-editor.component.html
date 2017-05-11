@@ -1,7 +1,7 @@
 <md-card>
     <div class="name-line">
         <md-input-container>
-            <input md-input
+            <input mdInput
                    placeholder="Nom de l'objet"
                    [(ngModel)]="itemTemplate.name"
                    type="text"/>
@@ -10,7 +10,7 @@
     </div>
     <div class="not-identified-name-line">
         <md-input-container>
-            <input md-input
+            <input mdInput
                    placeholder="Nom quand non identifié"
                    [(ngModel)]="itemTemplate.data.notIdentifiedName"
                    type="text"/>
@@ -20,14 +20,14 @@
     </div>
     <div>
         <md-input-container align="end">
-            <input md-input
+            <input mdInput
                    placeholder="Prix"
                    [(ngModel)]="itemTemplate.data.price"
                    type="number"/>
             <span md-suffix>P.O.</span>
         </md-input-container>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    placeholder="Description"
                    [(ngModel)]="itemTemplate.data.description"
                    type="text"/>
@@ -35,7 +35,7 @@
     </div>
     <div>
         <md-input-container>
-            <input md-input
+            <input mdInput
                    placeholder="Note"
                    [(ngModel)]="itemTemplate.data.note"
                    type="text"/>
@@ -65,7 +65,7 @@
     </md-card-content>
 </md-card>
 
-<template ngFor let-moduleName [ngForOf]="modules">
+<ng-template ngFor let-moduleName [ngForOf]="modules">
     <item-template-editor-module [itemTemplate]="itemTemplate"
                                  [slots]="slots"
                                  [skills]="skills"
@@ -73,7 +73,7 @@
                                  (onDelete)="removeModule(moduleName)"
                                  [moduleName]="moduleName">
     </item-template-editor-module>
-</template>
+</ng-template>
 
 <md-card>
     Ajouter un module
@@ -83,7 +83,7 @@
                         [(callback)]="autocompleteModuleCallback">
     </autocomplete-input>
 </md-card>
-<template cdk-portal #addModuleDialog="cdkPortal">
+<ng-template cdk-portal #addModuleDialog="cdkPortal">
     <md-card>
         Ajouter un module
         <autocomplete-input #autocompleteModuleModalTextField
@@ -93,7 +93,7 @@
                             [(callback)]="autocompleteModuleCallback">
         </autocomplete-input>
     </md-card>
-</template>
+</ng-template>
 <md-card>
 	<div class="form-group">
 		<label for="inputDuration" class="col-sm-2 control-label">Durée</label>

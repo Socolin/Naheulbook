@@ -14,7 +14,7 @@ import {MonsterTraitComponent} from './monster-trait.component';
         CommonModule,
         FormsModule,
         SharedModule,
-        MaterialModule.forRoot(),
+        MaterialModule,
     ],
     declarations: [
         MonsterColorSelectorComponent,

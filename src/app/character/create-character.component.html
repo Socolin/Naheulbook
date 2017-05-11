@@ -24,7 +24,7 @@
         </p>
         <div fxLayout="row" fxLayoutAlign="space-around center">
             <md-input-container fxFlex="auto">
-                <input md-input
+                <input mdInput
                        type="number"
                        [(ngModel)]="cou"
                        [disabled]="step > 0"
@@ -32,7 +32,7 @@
                        min=0 />
             </md-input-container>
             <md-input-container fxFlex="auto">
-                <input md-input
+                <input mdInput
                        type="number"
                        [(ngModel)]="int"
                        [disabled]="step > 0"
@@ -40,7 +40,7 @@
                        min=0 />
             </md-input-container>
             <md-input-container fxFlex="auto">
-                <input md-input
+                <input mdInput
                        type="number"
                        [(ngModel)]="cha"
                        [disabled]="step > 0"
@@ -48,7 +48,7 @@
                        min=0 />
             </md-input-container>
             <md-input-container fxFlex="auto">
-                <input md-input
+                <input mdInput
                        type="number"
                        [(ngModel)]="ad"
                        [disabled]="step > 0"
@@ -56,7 +56,7 @@
                        min=0 />
             </md-input-container>
             <md-input-container fxFlex="auto">
-                <input md-input
+                <input mdInput
                        type="number"
                        [(ngModel)]="fo"
                        [disabled]="step > 0"
@@ -223,7 +223,7 @@
         </p>
         <div fxLayout="row" fxLayoutAlign="space-around center">
             <md-input-container fxFlex="auto">
-                <input md-input
+                <input mdInput
                        type="number"
                        [(ngModel)]="money"
                        [disabled]="step > 4"
@@ -232,7 +232,7 @@
             </md-input-container>
 
             <md-input-container fxFlex="auto" *ngIf="has2MoneyRoll()">
-                <input md-input
+                <input mdInput
                        type="number"
                        [(ngModel)]="money2"
                        [disabled]="step > 4"
@@ -334,19 +334,19 @@
             </div>
             <div fxLayout="row" fxLayoutAlign="space-around center">
                 <md-input-container fxFlex="auto">
-                    <input md-input [ngModel]="cou + move1PointStatValues['cou']" disabled placeholder="Courage"/>
+                    <input mdInput [ngModel]="cou + move1PointStatValues['cou']" disabled placeholder="Courage"/>
                 </md-input-container>
                 <md-input-container fxFlex="auto">
-                    <input md-input [ngModel]="int + move1PointStatValues['int']" disabled placeholder="Inteligence" />
+                    <input mdInput [ngModel]="int + move1PointStatValues['int']" disabled placeholder="Inteligence" />
                 </md-input-container>
                 <md-input-container fxFlex="auto">
-                    <input md-input [ngModel]="cha + move1PointStatValues['cha']" disabled placeholder="Charisme" />
+                    <input mdInput [ngModel]="cha + move1PointStatValues['cha']" disabled placeholder="Charisme" />
                 </md-input-container>
                 <md-input-container fxFlex="auto">
-                    <input md-input [ngModel]="ad + move1PointStatValues['ad']" disabled placeholder="Adresse" />
+                    <input mdInput [ngModel]="ad + move1PointStatValues['ad']" disabled placeholder="Adresse" />
                 </md-input-container>
                 <md-input-container fxFlex="auto">
-                    <input md-input [ngModel]="fo + move1PointStatValues['fo']" disabled placeholder="Force" />
+                    <input mdInput [ngModel]="fo + move1PointStatValues['fo']" disabled placeholder="Force" />
                 </md-input-container>
             </div>
             <div fxLayout="row" fxLayoutAlign="space-around center">
@@ -465,7 +465,7 @@
     </md-toolbar>
     <md-card-content>
         <div *ngIf="step == 6">
-            <template ngFor let-speciality [ngForOf]="selectedJob.specialities">
+            <ng-template ngFor let-speciality [ngForOf]="selectedJob.specialities">
                 <md-card class="speciality">
                     <md-card-title>
                         {{speciality.name}}
@@ -479,7 +479,7 @@
                         </button>
                     </md-card-actions>
                 </md-card>
-            </template>
+            </ng-template>
         </div>
         <div *ngIf="(step > 6 && selectedSpeciality != null)" class="row">
             {{selectedSpeciality.name}}
@@ -519,7 +519,7 @@
         </div>
         <div fxLayout="row">
             <md-input-container fxFlex="auto">
-                <input md-input
+                <input mdInput
                        type="text"
                        [(ngModel)]="name"
                        [disabled]="step > 7"
@@ -569,7 +569,7 @@
         </div>
         <div fxLayout="row" fxLayoutAlign="space-around center">
             <md-input-container fxFlex="auto">
-                <input md-input
+                <input mdInput
                        type="number"
                        [(ngModel)]="fatePoint"
                        [disabled]="step > 8"

@@ -1,4 +1,4 @@
-<template [ngIf]="location">
+<ng-template [ngIf]="location">
     <div action="" method="post" class="form-horizontal" role="form">
 
         <div class="form-group">
@@ -16,11 +16,11 @@
             <div class="col-sm-10">
                 <select id="inputParent" class="form-control" [(ngModel)]="location.parent">
                     <option value="0"></option>
-                    <template ngFor let-loc [ngForOf]="locations">
+                    <ng-template ngFor let-loc [ngForOf]="locations">
                         <option value="{{loc.id}}" *ngIf="loc.id != location.id">
                             {{loc.name}}
                         </option>
-                    </template>
+                    </ng-template>
                 </select>
             </div>
         </div>
@@ -40,13 +40,13 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">Cartes</label>
             <div class="col-sm-10">
-                <template ngFor let-map [ngForOf]="maps">
+                <ng-template ngFor let-map [ngForOf]="maps">
                     <div class="col-xs-12">
                         {{map.name}}
                         {{map.file}}
                         {{map.gm}}
                     </div>
-                </template>
+                </ng-template>
                 <div class="col-xs-12">
                     <div class="form-inline" role="form">
 
@@ -65,4 +65,4 @@
         </div>
 
     </div>
-</template>
+</ng-template>

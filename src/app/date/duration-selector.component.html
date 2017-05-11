@@ -7,7 +7,9 @@
 </md-button-toggle-group>
 
 <div *ngIf="durable.durationType === 'custom'">
-    <md-input placeholder="Durée" [(ngModel)]="durable.duration"></md-input>
+    <md-input-container>
+        <input placeholder="Durée" [(ngModel)]="durable.duration">
+    </md-input-container>
 </div>
 
 <div *ngIf="durable.durationType === 'time'">
@@ -27,13 +29,13 @@
 
 <div *ngIf="durable.durationType === 'combat'">
     <md-input-container align="end">
-        <input md-input type="number" min=0 placeholder="Durée" [(ngModel)]="durable.combatCount">
+        <input mdInput type="number" min=0 placeholder="Durée" [(ngModel)]="durable.combatCount">
         <span md-suffix> combat(s)</span>
     </md-input-container>
 </div>
 <div *ngIf="durable.durationType === 'lap'">
     <md-input-container align="end">
-        <input md-input type="number" min=0 placeholder="Durée" [(ngModel)]="durable.lapCount">
+        <input mdInput type="number" min=0 placeholder="Durée" [(ngModel)]="durable.lapCount">
         <span md-suffix> tour(s)</span>
     </md-input-container>
 </div>

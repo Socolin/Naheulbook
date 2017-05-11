@@ -1,11 +1,11 @@
 <md-card [ngSwitch]="moduleName">
     <button class="delete-button" md-icon-button (click)="deleteModule()"><md-icon>delete</md-icon></button>
-    <template [ngSwitchCase]="'charge'">
+    <ng-template [ngSwitchCase]="'charge'">
         <md-card-subtitle>Charges / Utilisations</md-card-subtitle>
         <md-card-content>
             <div>
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            placeholder="Nombre de charges"
                            [(ngModel)]="itemTemplate.data.charge"
                            type="number"/>
@@ -29,24 +29,24 @@
                 <button md-button color="primary" (click)="openAddChargeActionModal()">AJOUTER UNE ACTION</button>
             </div>
         </md-card-content>
-        <template #addChargeActionModal="cdkPortal" cdk-portal>
+        <ng-template #addChargeActionModal="cdkPortal" cdk-portal>
             <nhbk-action-editor (onValidate)="addChargeAction($event)" (onClose)="closeAddChargeActionModal()">
             </nhbk-action-editor>
-        </template>
-    </template>
-    <template [ngSwitchCase]="'container'">
+        </ng-template>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'container'">
         <md-card-subtitle>Conteneur</md-card-subtitle>
         <md-card-content>
             Cet objet permet de stocker d'autres objets
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'currency'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'currency'">
         <md-card-subtitle>Monnaie</md-card-subtitle>
         <md-card-content>
             Cet objet est comptabiliser dans le total de piece d'or du joueur.
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'damage'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'damage'">
         <md-card-subtitle>Dégât de l'objet</md-card-subtitle>
         <md-card-content>
             <div>
@@ -60,7 +60,7 @@
             </div>
             <div>
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            placeholder="Nombre de dé"
                            [(ngModel)]="itemTemplate.data.damageDice"
                            type="number"/>
@@ -68,65 +68,65 @@
                 </md-input-container>
 
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            placeholder="Dégât fixe"
                            [(ngModel)]="itemTemplate.data.bonusDamage"
                            type="number"/>
                 </md-input-container>
 
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            placeholder="Type de dégât"
                            [(ngModel)]="itemTemplate.data.damageType"
                            type="text"/>
                 </md-input-container>
             </div>
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'diceDrop'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'diceDrop'">
         <md-card-subtitle>Dé</md-card-subtitle>
         <md-card-content>
             Cet objet s'obtient en lancant un dé avec une valeur de
             <md-input-container align="end">
-                <input md-input
+                <input mdInput
                        placeholder="Valeur du dé"
                        [(ngModel)]="itemTemplate.data.diceDrop"
                        type="number"/>
             </md-input-container>
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'gem'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'gem'">
         <md-card-subtitle>Gemmes</md-card-subtitle>
         <md-card-content>
             Cet objet est une gemme pouvant avoir un poix en U.G.
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'lifetime'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'lifetime'">
         <md-card-subtitle>Duree de conservation</md-card-subtitle>
         <duration-selector [durable]="itemTemplate.data.lifetime"></duration-selector>
-    </template>
-    <template [ngSwitchCase]="'level'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'level'">
         <md-card-subtitle>Niveau requis</md-card-subtitle>
         <md-card-content>
             Cet objet est utilisable a partir du niveaux:
-            <md-input placeholder="Niveau requis" [(ngModel)]="itemTemplate.data.requireLevel"></md-input>
+            <input placeholder="Niveau requis" [(ngModel)]="itemTemplate.data.requireLevel" />
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'modifiers'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'modifiers'">
         <md-card-subtitle>Modificateurs</md-card-subtitle>
         <md-card-content>
             <modifiers-editor [options]="['job','origin','special']" [(modifiers)]="itemTemplate.modifiers">
             </modifiers-editor>
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'prereq'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'prereq'">
         <md-card-subtitle>Prérequis</md-card-subtitle>
         <md-card-content>
             <stat-requirements-editor [(requirements)]="itemTemplate.requirements">
             </stat-requirements-editor>
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'protection'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'protection'">
         <md-card-subtitle>Protection</md-card-subtitle>
         <md-card-content>
             <div>
@@ -141,13 +141,13 @@
             </div>
             <div>
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            placeholder="Protection"
                            [(ngModel)]="itemTemplate.data.protection"
                            type="number"/>
                 </md-input-container>
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            placeholder="Protection magique"
                            [(ngModel)]="itemTemplate.data.magicProtection"
                            type="number"/>
@@ -155,34 +155,34 @@
             </div>
             <div>
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            placeholder="Protection contre une magie"
                            [(ngModel)]="itemTemplate.data.protectionAgainstMagic"
                            type="number"/>
                 </md-input-container>
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            placeholder="Type de protection"
                            [(ngModel)]="itemTemplate.data.protectionAgainstType"
                            type="number"/>
                 </md-input-container>
             </div>
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'quantifiable'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'quantifiable'">
         <md-card-subtitle>Quantifiable</md-card-subtitle>
         <md-card-content>
             Il est possible de posséder cet objet dans une certaines quantité dans un seul slot de l'inventaire (piece d'or, ingredient magique...)
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'relic'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'relic'">
         <md-card-subtitle>Relique</md-card-subtitle>
         <md-card-content>
             C'est objet est une relique, qui permet a un paladin d'acceder a ses pouvoir<br>
             FIXME: Définir le dieu associe
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'rupture'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'rupture'">
         <md-card-subtitle>Rupture</md-card-subtitle>
         <md-card-content>
             <div *ngIf="itemTemplate.data.rupture > 1">
@@ -206,8 +206,8 @@
                 <md-button-toggle [value]="6">1 à 6</md-button-toggle>
             </md-button-toggle-group>
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'sex'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'sex'">
         <md-card-subtitle>Sexe</md-card-subtitle>
         <md-card-content>
             Cet objet est réservé aux personnage de sexe
@@ -216,8 +216,8 @@
                 <md-radio-button [value]="'f'">Féminin</md-radio-button>
             </md-radio-group>
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'skill'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'skill'">
         <md-card-subtitle>Compétences</md-card-subtitle>
         <md-card-content *ngIf="skills">
             <div>
@@ -250,14 +250,14 @@
                 <skill-modifiers-editor [(modifiers)]="itemTemplate.skillModifiers"></skill-modifiers-editor>
             </div>
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'skillBook'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'skillBook'">
         <md-card-subtitle>Livre de compétence</md-card-subtitle>
         <md-card-content>
             Cet objet permet d'obtenir une compétence après avoir ete lu.
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'slots'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'slots'">
         <md-card-subtitle>Équipement</md-card-subtitle>
         <md-card-content>
             Cet objet peut être équipé, et occupe les emplacement suivant:
@@ -267,18 +267,18 @@
                 </md-checkbox>
             </div>
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'throwable'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'throwable'">
         <md-card-subtitle>Arme prévue pour le jet</md-card-subtitle>
         <md-card-content>
             Cet objet est une arme prévue pour le jet.
         </md-card-content>
-    </template>
-    <template [ngSwitchCase]="'weight'">
+    </ng-template>
+    <ng-template [ngSwitchCase]="'weight'">
         <md-card-subtitle>Poids</md-card-subtitle>
         <md-card-content>
             <md-input-container align="end">
-                <input md-input
+                <input mdInput
                        placeholder="Poids"
                        [(ngModel)]="itemTemplate.data.weight"
                        type="number"/>
@@ -286,8 +286,8 @@
                 <span md-suffix>Kg</span>
             </md-input-container>
         </md-card-content>
-    </template>
-    <template ngSwitchDefault>
+    </ng-template>
+    <ng-template ngSwitchDefault>
         <div>Unknow module {{moduleName}}</div>
-    </template>
+    </ng-template>
 </md-card>

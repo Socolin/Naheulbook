@@ -4,7 +4,7 @@ import {NotificationsService} from '../notifications';
 
 import {LoginService} from './login.service';
 import {User} from './user.model';
-import {MdDialog, MdDialogRef} from "@angular/material";
+import {MdDialog, MdDialogRef} from '@angular/material';
 import {LoginDialogComponent} from "./login-dialog.component";
 
 @Component({

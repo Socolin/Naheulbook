@@ -1,11 +1,13 @@
 <div class="buttons-header">
     <button md-raised-button (click)="openAddLootDialog()" color="primary">NOUVEAU LOOT</button>
 </div>
-<template #addLootDialog="cdkPortal" cdk-portal>
+<ng-template #addLootDialog="cdkPortal" cdk-portal>
     <md-card>
         <md-card-title>Ajouter un loot</md-card-title>
         <md-card-content>
-            <md-input type="text" placeholder="Nom du loot" [(ngModel)]="newLootName"></md-input>
+            <md-input-container>
+                <input mdInput type="text" placeholder="Nom du loot" [(ngModel)]="newLootName" />
+            </md-input-container>
         </md-card-content>
         <md-card-actions align="end">
             <button md-button
@@ -21,7 +23,7 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>
 
 <div class="loot-list">
     <md-card *ngFor="let loot of loots" [class.panel-success]="loot.visibleForPlayer">

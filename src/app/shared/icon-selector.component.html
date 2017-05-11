@@ -1,5 +1,5 @@
 <span (click)="openIconSelectorDialog($event)"><icon [size]="'32px'" [icon]="icon"></icon></span>
-<template #iconSelectorDialog="cdkPortal" cdk-portal>
+<ng-template #iconSelectorDialog="cdkPortal" cdk-portal>
     <md-card class="selector-panel">
         <md-card-title>Selection de l'icone</md-card-title>
         <md-card-content>
@@ -8,7 +8,7 @@
                 <div>
                     <div>
                         <md-input-container align="end">
-                            <input md-input
+                            <input mdInput
                                    placeholder="Icone"
                                    type="text"
                                    [(ngModel)]="filter"
@@ -21,17 +21,17 @@
                     </div>
                 </div>
                 <div style="font-size: 32px;">
-                    <template ngFor let-iconName [ngForOf]="filteredIcons">
+                    <ng-template ngFor let-iconName [ngForOf]="filteredIcons">
                         <span class="game-icon" [ngClass]="'game-icon-' + iconName" (click)="selectIcon(iconName)"></span>
-                    </template>
+                    </ng-template>
                 </div>
             </md-card>
             <md-card>
                 <md-card-subtitle>Couleur</md-card-subtitle>
                 <div style="font-size: 32px; ">
-                    <template ngFor let-color [ngForOf]="colors">
+                    <ng-template ngFor let-color [ngForOf]="colors">
                         <span class="game-icon" [ngClass]="'game-icon-' + newIcon.name" (click)="selectColor(color)" [style.color]="color"></span>
-                    </template>
+                    </ng-template>
                 </div>
             </md-card>
             <md-card>
@@ -56,4 +56,4 @@
             <button md-button color="accent" (click)="saveChange()">VALIDER</button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>

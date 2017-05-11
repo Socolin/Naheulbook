@@ -54,17 +54,21 @@
     </div>
 </div>
 
-<template cdk-portal #takeItemDialog="cdkPortal">
+<ng-template cdk-portal #takeItemDialog="cdkPortal">
     <md-card>
         <md-card-title>Loot</md-card-title>
         <md-card-content *ngIf="!takingItem.data.quantity || takingItem.data.quantity < 2">
             Prendre l'objet {{takingItem.data.name}} ?
         </md-card-content>
         <md-card-content *ngIf="takingItem.data.quantity > 1">
-            Prendre l'objet <value-editor [title]="'Quantité'"
-                                          [value]="takingQuantity"
-                                          (onChange)="takingQuantity = $event"
-                                          [maxValue]="takingItem.data.quantity"></value-editor> {{takingItem.data.name}} ?
+            Prendre l'objet
+            <value-editor [title]="'Quantité'"
+                          [hideMaxValue]="true"
+                          [value]="takingQuantity"
+                          (onChange)="takingQuantity = $event"
+                          [maxValue]="takingItem.data.quantity">
+            </value-editor>
+            {{takingItem.data.name}} ?
         </md-card-content>
         <md-card-actions align="end">
             <button md-button
@@ -79,5 +83,5 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>
 

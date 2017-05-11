@@ -1,11 +1,11 @@
 <md-chip-list selectable="true">
-    <template ngFor let-section [ngForOf]="itemSections">
+    <ng-template ngFor let-section [ngForOf]="itemSections">
         <md-chip (click)="selectSection($event, section)"
                  [selected]="selectedSection && selectedSection.id == section.id"
                  color="primary">
             {{section.name}}
         </md-chip>
-    </template>
+    </ng-template>
 </md-chip-list>
 
 <div *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
@@ -17,9 +17,11 @@
     <div *ngIf="hasSpecial('DICE_DROP')" class="cold-md-2">
         <input class="input-lg form-control" placeholder="dice" [(ngModel)]="filter.dice" type=number min=1 max=100>
     </div>
-    <md-input placeholder="Filtre" [(ngModel)]="filter.name" type="text"></md-input>
+    <md-input-container>
+        <input placeholder="Filtre" [(ngModel)]="filter.name" type="text" />
+    </md-input-container>
 </div>
-<template ngFor let-category [ngForOf]="selectedSection?.categories">
+<ng-template ngFor let-category [ngForOf]="selectedSection?.categories">
     <div *ngIf="itemsByCategory && isItemVisibleInList(itemsByCategory[category.id])">
         <div class="row">
             <div class="col-xs-12">
@@ -31,8 +33,8 @@
                 </p>
             </div>
         </div>
-        <template [ngIf]="itemsByCategory">
-            <template ngFor let-item [ngForOf]="itemsByCategory[category.id]">
+        <ng-template [ngIf]="itemsByCategory">
+            <ng-template ngFor let-item [ngForOf]="itemsByCategory[category.id]">
                 <div class="item-element">
                     <item-template class="item-element"
                                    *ngIf="isVisible(item)"
@@ -41,8 +43,8 @@
                                    [editable]="editable"
                                    [item]="item"></item-template>
                 </div>
-            </template>
-        </template>
+            </ng-template>
+        </ng-template>
         <hr>
     </div>
-</template>
+</ng-template>

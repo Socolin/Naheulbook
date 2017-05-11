@@ -12,7 +12,7 @@ import {EffectModule} from '../effect/effect.module';
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule.forRoot(),
+        MaterialModule,
         SharedModule,
         EffectModule,
     ],

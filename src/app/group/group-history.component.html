@@ -2,7 +2,7 @@
     <md-card-title>Ajouter une entrée</md-card-title>
     <md-card-content style="display: flex">
         <md-input-container style="flex: 1 auto">
-            <input md-input
+            <input mdInput
                    type="text"
                    placeholder="Message"
                    [(ngModel)]="historyNewEntryText"/>
@@ -29,34 +29,34 @@
                 <div *ngFor="let log of loggroup.logs">
                     {{log.date | date:'shortTime'}}:
                     <span [ngSwitch]="log.action">
-                    <template [ngSwitchCase]="'EVENT_RP'">
+                    <ng-template [ngSwitchCase]="'EVENT_RP'">
                         Event: {{log.info}}
-                    </template>
-                    <template [ngSwitchCase]="'TIME_CHANGE'">
+                    </ng-template>
+                    <ng-template [ngSwitchCase]="'TIME_CHANGE'">
                         Avance temps: {{log.info}}
-                    </template>
-                    <template [ngSwitchCase]="'DEBILIBEUK'">
+                    </ng-template>
+                    <ng-template [ngSwitchCase]="'DEBILIBEUK'">
                         Débilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
-                    </template>
-                    <template [ngSwitchCase]="'MANKDEBOL'">
+                    </ng-template>
+                    <ng-template [ngSwitchCase]="'MANKDEBOL'">
                         Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
-                    </template>
-                    <template [ngSwitchCase]="'END_COMBAT'">
+                    </ng-template>
+                    <ng-template [ngSwitchCase]="'END_COMBAT'">
                         Fin de combat
-                    </template>
-                    <template [ngSwitchCase]="'START_COMBAT'">
+                    </ng-template>
+                    <ng-template [ngSwitchCase]="'START_COMBAT'">
                         Debut d'un combat
-                    </template>
-                    <template [ngSwitchCase]="'ADD_TIME'">
+                    </ng-template>
+                    <ng-template [ngSwitchCase]="'ADD_TIME'">
                         Modification du temps: {{log.data.offset | nhbkDuration}}
-                    </template>
-                    <template [ngSwitchCase]="'CHANGE_DATE'">
+                    </ng-template>
+                    <ng-template [ngSwitchCase]="'CHANGE_DATE'">
                         Modification de la date
                         <div *ngIf="log.data.oldValue" style="padding-left: 20px">Ancienne date: <date
                             [date]="log.data.oldValue"></date></div>
                         <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
-                    </template>
-                    <template *ngSwitchDefault>{{log.action}}</template>
+                    </ng-template>
+                    <ng-template *ngSwitchDefault>{{log.action}}</ng-template>
                 </span>
                 </div>
             </div>

@@ -7,7 +7,7 @@
         <button color="primary" md-button (click)="selectJob(null)">CHOISIR</button>
     </md-card-actions>
 </md-card>
-<template ngFor [ngForOf]="jobs" let-job>
+<ng-template ngFor [ngForOf]="jobs" let-job>
     <md-card *ngIf=isVisible(job) [class.disabled]="!isAvailable(job)">
         <button md-mini-fab color="primary" (click)="toggleDetail(job)">
             <md-icon *ngIf="displayDetail(job)">remove</md-icon>
@@ -17,7 +17,7 @@
         <md-card-subtitle>
 
             Prérequis:
-            <template ngFor [ngForOf]="job.requirements" let-req let-last="last">
+            <ng-template ngFor [ngForOf]="job.requirements" let-req let-last="last">
                 <span class="invalid-stat"    *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
                     {{req.stat|uppercase}} &ge; {{req.min}}
                 </span>
@@ -31,7 +31,7 @@
                     {{req.stat|uppercase}} &le; {{req.max}}
                 </span>
                 <span *ngIf="!last">,</span>
-            </template>
+            </ng-template>
             <span *ngIf="!job.requirements.length">aucun</span>
         </md-card-subtitle>
         <md-card-content *ngIf="displayDetail(job)">
@@ -50,4 +50,4 @@
             <button color="primary" md-button (click)="selectJob(job)">CHOISIR</button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>

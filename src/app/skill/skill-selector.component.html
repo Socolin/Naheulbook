@@ -1,4 +1,4 @@
-<template ngFor [ngForOf]="skills" let-skill>
+<ng-template ngFor [ngForOf]="skills" let-skill>
     <md-card>
         <div fxLayout="row">
             <md-icon *ngIf="isSelected(skill)" fxFlex="nogrow">check_circle</md-icon>
@@ -12,4 +12,4 @@
             <button *ngIf=isSelected(skill) color="primary" md-button (click)="unselectSkill(skill)">DE-SÉLECTIONNER</button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>

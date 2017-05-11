@@ -16,7 +16,7 @@
     </div>
 
     <div class="field-values">
-        <template [ngIf]="fighter.isMonster">
+        <ng-template [ngIf]="fighter.isMonster">
             <div class="fighter-row">
                 <div class="field-name">
                     <monster-editable-field
@@ -129,8 +129,8 @@
                     </div>
                 </div>
             </div>
-        </template>
-        <template [ngIf]="!fighter.isMonster">
+        </ng-template>
+        <ng-template [ngIf]="!fighter.isMonster">
             <div class="fighter-row">
                 <div class="field-name">{{fighter.name}}</div>
                 <div class="field text-attack">{{fighter.stats.at}}</div>
@@ -152,7 +152,7 @@
                                  (onTargetChange)='changeTarget(fighter, $event)'>
                 </target-selector>
             </div>
-        </template>
+        </ng-template>
     </div>
 
     <div *ngIf="!fighter.isMonster" class="field-button">

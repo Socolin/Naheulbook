@@ -5,11 +5,11 @@
 <div class="row">
     <h3>Fils</h3>
     <div *ngIf="location">
-        <template ngFor let-son [ngForOf]="location.sons">
+        <ng-template ngFor let-son [ngForOf]="location.sons">
             <div>
                 {{son.name}}
             </div>
-        </template>
+        </ng-template>
     </div>
 </div>
 <div class="row">

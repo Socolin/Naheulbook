@@ -8,7 +8,7 @@ import {MaterialModule} from '@angular/material';
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule.forRoot(),
+        MaterialModule,
     ],
     providers: [
         NotificationsService,

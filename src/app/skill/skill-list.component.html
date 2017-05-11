@@ -1,10 +1,10 @@
 <md-input-container style="width: 100%">
-    <input md-input
+    <input mdInput
            placeholder="Filtre"
            (keydown.esc)="filter = null"
            [(ngModel)]="filter">
 </md-input-container>
-<div *ngFor="let skill of skills; let lastSkill=last">
+<div *ngFor="let skill of skills">
 	<div *ngIf="isFiltered(skill)">
         <md-card style="margin-bottom: 10px">
             <skill [skill]="skill"></skill>

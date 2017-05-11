@@ -5,17 +5,17 @@
         </md-card-title>
         <md-card-subtitle>
             <span *ngIf="job.originsBlacklist.length"><strong>Excepté:</strong></span>
-            <template ngFor let-l="last" let-bl [ngForOf]=job.originsBlacklist>
+            <ng-template ngFor let-l="last" let-bl [ngForOf]=job.originsBlacklist>
             <span>
-                {{bl.name}}<template [ngIf]="!l">,</template>
+                {{bl.name}}<ng-template [ngIf]="!l">,</ng-template>
             </span>
-            </template>
+            </ng-template>
             <span *ngIf="job.originsWhitelist.length"><strong>Seulement:</strong></span>
-            <template ngFor let-l="last" let-wl [ngForOf]=job.originsWhitelist>
+            <ng-template ngFor let-l="last" let-wl [ngForOf]=job.originsWhitelist>
             <span>
-                {{wl.name}}<template [ngIf]="!l">,</template>
+                {{wl.name}}<ng-template [ngIf]="!l">,</ng-template>
             </span>
-            </template>
+            </ng-template>
         </md-card-subtitle>
     </md-card-title-group>
     <md-card-content>

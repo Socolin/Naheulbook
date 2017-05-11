@@ -17,7 +17,7 @@ import {NhbkDialogService} from './nhbk-dialog.service';
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule.forRoot(),
+        MaterialModule,
         FlexLayoutModule.forRoot(),
     ],
     declarations: [

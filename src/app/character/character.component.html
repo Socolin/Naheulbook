@@ -354,7 +354,7 @@
                     <md-card-title>Armes</md-card-title>
                     <md-card-content>
                         <div *ngIf="character.computedData.itemsBySlotsAll[1]" class="weapons-list">
-                            <template ngFor let-item [ngForOf]="character.computedData.itemsBySlotsAll[1]" let-i="index" let-last="last">
+                            <ng-template ngFor let-item [ngForOf]="character.computedData.itemsBySlotsAll[1]" let-i="index" let-last="last">
                                 <div class="item-line"
                                      [class.selected]="selectedItem && selectedItem.id === item.id"
                                      (click)="selectedItem = item">
@@ -364,7 +364,7 @@
                                     <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                     {{item.data.name}}
                                 </div>
-                            </template>
+                            </ng-template>
                         </div>
                     </md-card-content>
                 </md-card>
@@ -631,7 +631,7 @@
 </div>
 
 <!-- Skill info dialog -->
-<template #skillInfoDialog="cdkPortal" cdk-portal>
+<ng-template #skillInfoDialog="cdkPortal" cdk-portal>
     <md-card class="skill-info-dialog">
 
         <md-card-title *ngIf="!viewGmSkillInfo && selectedSkillInfo">{{selectedSkillInfo.name}}</md-card-title>
@@ -652,11 +652,11 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>
 
 
 <!-- Levelup modal -->
-<template #levelUpDialog="cdkPortal" cdk-portal>
+<ng-template #levelUpDialog="cdkPortal" cdk-portal>
     <md-card class="level-up-dialog">
         <md-card-title>
             Gain d'un niveau
@@ -692,7 +692,7 @@
 
                         <div class="level-up-ea-ev">
                             <md-input-container align="end">
-                                <input md-input placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.EVorEAValue">
+                                <input mdInput placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.EVorEAValue">
                                 <md-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EV'">
                                     Lancer 1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')">-1</span>
                                 </md-hint>
@@ -778,4 +778,4 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>

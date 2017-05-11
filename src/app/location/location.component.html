@@ -16,14 +16,14 @@
             <div *ngIf="maps && maps.length">
                 <h4>Cartes</h4>
                 <ul>
-                    <template ngFor let-map [ngForOf]="maps">
+                    <ng-template ngFor let-map [ngForOf]="maps">
                         <li><a href="/data/images/maps/{{map.file}}">{{map.name}}</a></li>
-                    </template>
+                    </ng-template>
                 </ul>
             </div>
         </div>
-        <template ngFor let-son [ngForOf]="location.sons">
+        <ng-template ngFor let-son [ngForOf]="location.sons">
             <location [editable]="editable" [location]="son"></location>
-        </template>
+        </ng-template>
     </div>
 </div>

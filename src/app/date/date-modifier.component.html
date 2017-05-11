@@ -1,7 +1,7 @@
 <button md-icon-button (click)="openSelector()"><md-icon>update</md-icon></button>
 
 
-<template #dateSelectorDialog="cdkPortal" cdk-portal>
+<ng-template #dateSelectorDialog="cdkPortal" cdk-portal>
     <md-card>
         <md-card-title>{{title ? title : 'Définir une durée'}}</md-card-title>
         <md-card-content>
@@ -49,4 +49,4 @@
             <button md-button color="primary" (click)="validDate()">VALIDER</button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>

@@ -19,24 +19,24 @@
     </span>
 </div>
 
-<template cdk-connected-overlay
+<ng-template cdk-connected-overlay
           hasBackdrop
           (backdropClick)="closeSelector()"
           [open]="showSelector"
           [origin]="colorSelectorOrigin">
     <md-card style="padding: 0; display: flex;">
         <div style="flex: 0 auto; width: 192px">
-            <template ngFor let-color [ngForOf]="colors">
+            <ng-template ngFor let-color [ngForOf]="colors">
                 <div style="float:left; width: 48px; height: 48px">
                     <i [style.color]=color
                        class="ra ra-monster-skull ra-3x"
                        (click)="changeColor(color)">
                     </i>
                 </div>
-            </template>
+            </ng-template>
         </div>
         <div style="flex: 0 auto; width: 192px">
-            <template ngFor let-number [ngForOf]="numbers">
+            <ng-template ngFor let-number [ngForOf]="numbers">
                 <div style="float:left; width: 48px; height: 48px"
                      (click)="changeNumber(number)">
                     <span *ngIf="number"
@@ -47,7 +47,7 @@
                                  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
                                 ">{{number}}</span>
                 </div>
-            </template>
+            </ng-template>
         </div>
     </md-card>
-</template>
+</ng-template>

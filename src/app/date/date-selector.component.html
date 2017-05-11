@@ -2,13 +2,13 @@
     <md-icon>date_range</md-icon>
 </button>
 
-<template #dateSelectorDialog="cdkPortal" cdk-portal>
+<ng-template #dateSelectorDialog="cdkPortal" cdk-portal>
     <md-card class="date-selector-dialog">
         <md-card-title>Définir une date</md-card-title>
         <md-card-content>
             <div>
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            [(ngModel)]="date.hour"
                            type="number"
                            min="0"
@@ -18,7 +18,7 @@
                 </md-input-container>
                 :
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            [(ngModel)]="date.minute"
                            type="number"
                            min="0"
@@ -29,7 +29,7 @@
             </div>
             <div>
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            [(ngModel)]="relativeDay"
                            type="number"
                            min="1"
@@ -47,7 +47,7 @@
                 </select>
 
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            [(ngModel)]="date.year"
                            type="number"
                            min="0"
@@ -69,4 +69,4 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>

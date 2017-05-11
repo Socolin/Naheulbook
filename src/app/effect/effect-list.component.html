@@ -1,7 +1,7 @@
 <md-tab-group (selectChange)="selectChange($event)" [selectedIndex]="currentTabIndex">
-    <template ngFor let-category [ngForOf]="categories">
+    <ng-template ngFor let-category [ngForOf]="categories">
     <md-tab [label]="category.name">
-        <template ngFor [ngForOf]="effects[category.id]" let-effect>
+        <ng-template ngFor [ngForOf]="effects[category.id]" let-effect>
         <md-card style="margin-bottom: 10px">
             <md-card-title-group>
                 <md-card-title>
@@ -42,9 +42,9 @@
                 </span>
             </md-card-content>
         </md-card>
-        </template>
+        </ng-template>
     </md-tab>
-    </template>
+    </ng-template>
 </md-tab-group>
 
 

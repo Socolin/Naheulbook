@@ -1,4 +1,4 @@
-<template #addItemDialog="cdkPortal" cdk-portal>
+<ng-template #addItemDialog="cdkPortal" cdk-portal>
     <md-card>
         <md-card-title *ngIf="character">Ajouter un objet a {{character.name}}</md-card-title>
         <md-card-title *ngIf="loot">Ajouter un objet au loot {{loot.name}}</md-card-title>
@@ -27,7 +27,7 @@
                                     </md-button-toggle-group>
 
                                     <md-input-container>
-                                        <input md-input
+                                        <input mdInput
                                                type="number"
                                                [(ngModel)]="gemOption['number']"
                                                class="form-control"
@@ -38,7 +38,7 @@
 
                                 <div>
                                     <md-input-container>
-                                        <input md-input
+                                        <input mdInput
                                                type="number"
                                                [(ngModel)]="gemOption['ug']"
                                                class="form-control"
@@ -65,7 +65,7 @@
                 <md-card-subtitle>Résumé</md-card-subtitle>
                 <md-card-content>
                     <md-input-container>
-                        <input md-input
+                        <input mdInput
                                #newItemName
                                placeholder="Nom"
                                [(ngModel)]="newItem.data.name"/>
@@ -74,12 +74,12 @@
                         </md-hint>
                     </md-input-container>
                     <md-input-container>
-                        <input md-input
+                        <input mdInput
                                placeholder="Description"
                                [(ngModel)]="newItem.data.description"/>
                     </md-input-container>
                     <md-input-container *ngIf="newItem.template?.data?.quantifiable">
-                        <input md-input
+                        <input mdInput
                                type="number"
                                placeholder="Quantité"
                                [(ngModel)]="newItem.data.quantity"/>
@@ -113,5 +113,5 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>
 

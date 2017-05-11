@@ -26,7 +26,7 @@
     </div>
 </div>
 
-<template cdk-connected-overlay
+<ng-template cdk-connected-overlay
           [positions]="positions"
           [origin]="targetSelectorOrigin"
           [open]="showSelector"
@@ -38,7 +38,7 @@
         <md-tab-group [selectedIndex]="selectedTabIndex">
             <md-tab label="Monstres">
                 <div class="target-list">
-                    <template ngFor let-target [ngForOf]="targets">
+                    <ng-template ngFor let-target [ngForOf]="targets">
                         <div *ngIf="target.isMonster" class=target-element (click)="selectTarget(target)">
                             <div class="target-icon">
                                 <i [style.color]="'#' + target.color"
@@ -54,12 +54,12 @@
                                 {{target.name}}
                             </div>
                         </div>
-                    </template>
+                    </ng-template>
                 </div>
             </md-tab>
             <md-tab label="Joueurs">
                 <div class="target-list">
-                    <template ngFor let-target [ngForOf]="targets">
+                    <ng-template ngFor let-target [ngForOf]="targets">
                         <div *ngIf="!target.isMonster" class=target-element (click)="selectTarget(target)">
                             <div class="target-icon">
                                 <i [style.color]="'#' + target.color"
@@ -75,9 +75,9 @@
                                 {{target.name}}
                             </div>
                         </div>
-                    </template>
+                    </ng-template>
                 </div>
             </md-tab>
         </md-tab-group>
     </md-card>
-</template>
+</ng-template>

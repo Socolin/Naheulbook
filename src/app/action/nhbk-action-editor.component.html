@@ -13,7 +13,7 @@
 
         <md-checkbox [(ngModel)]="action.hidden">Cacher</md-checkbox>
         <div [ngSwitch]="action.type">
-            <template [ngSwitchCase]="'addItem'">
+            <ng-template [ngSwitchCase]="'addItem'">
                 <autocomplete-input [clearOnSelect]="false"
                                     [placeholder]="'Objet'"
                                     (onSelect)="selectItemTemplate($event)"
@@ -21,54 +21,54 @@
                 </autocomplete-input>
                 <div *ngIf="selectedItemTemplate?.data?.quantifiable">
                     <md-input-container align="end">
-                        <input md-input
+                        <input mdInput
                                type="number"
                                placeholder="Quantité"
                                [(ngModel)]="action.data.quantity"/>
                     </md-input-container>
                 </div>
-            </template>
-            <template [ngSwitchCase]="'removeItem'">
-            </template>
-            <template [ngSwitchCase]="'addEv'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'removeItem'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'addEv'">
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            type="number"
                            placeholder="Energie vitale"
                            [(ngModel)]="action.data.ev"/>
                     <span md-prefix>Redonner</span>
                     <span md-suffix>E.V.</span>
                 </md-input-container>
-            </template>
-            <template [ngSwitchCase]="'addEa'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'addEa'">
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            type="number"
                            placeholder="Energie astrale"
                            [(ngModel)]="action.data.ea"/>
                     <span md-prefix>Redonner</span>
                     <span md-suffix>E.A.</span>
                 </md-input-container>
-            </template>
-            <template [ngSwitchCase]="'custom'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'custom'">
                 <md-input-container align="end">
-                    <input md-input
+                    <input mdInput
                            type="text"
                            placeholder="Action"
                            [(ngModel)]="action.data.text"/>
                 </md-input-container>
-            </template>
-            <template [ngSwitchCase]="'addCustomModifier'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'addCustomModifier'">
                 <stats-modifier-editor [modifier]="characterModifier" [reusableToggle]="false">
                 </stats-modifier-editor>
-            </template>
-            <template [ngSwitchCase]="'addEffect'">
+            </ng-template>
+            <ng-template [ngSwitchCase]="'addEffect'">
                 <character-effect-editor [reusableToggle]="false" (onChange)="updateEffect($event)">
                 </character-effect-editor>
-            </template>
-            <template ngSwitchDefault>
+            </ng-template>
+            <ng-template ngSwitchDefault>
                 No data for {{action.type}}
-            </template>
+            </ng-template>
         </div>
     </md-card-content>
     <md-card-actions align="end">

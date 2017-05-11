@@ -1,4 +1,4 @@
-<template cdk-portal #eventEditorDialog="cdkPortal">
+<ng-template cdk-portal #eventEditorDialog="cdkPortal">
     <md-card>
         <md-card-title>
             Ajouter un évènement
@@ -6,7 +6,7 @@
         <md-card-content>
             <div>
                 <md-input-container style="width: 100%">
-                    <input md-input
+                    <input mdInput
                            type="text"
                            [(ngModel)]="event.name"
                            placeholder="Nom"/>
@@ -14,7 +14,7 @@
             </div>
             <div>
                 <md-input-container style="width: 100%">
-                    <input md-input
+                    <input mdInput
                            type="text"
                            [(ngModel)]="event.description"
                            placeholder="Description"/>
@@ -64,4 +64,4 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>

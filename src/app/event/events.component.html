@@ -3,8 +3,8 @@
     <div *ngIf="pastEventCount">
         <h4>Évènements passé</h4>
         <div class="event-list">
-            <template ngFor let-event [ngForOf]="events">
-                <template [ngIf]="event.timestamp <= groupTimestamp">
+            <ng-template ngFor let-event [ngForOf]="events">
+                <ng-template [ngIf]="event.timestamp <= groupTimestamp">
                     <md-card>
                         <md-card-title-group>
                             <md-card-title>{{event.name}}</md-card-title>
@@ -23,15 +23,15 @@
                             </button>
                         </md-card-actions>
                     </md-card>
-                </template>
-            </template>
+                </ng-template>
+            </ng-template>
         </div>
     </div>
     <div *ngIf="futureEventCount">
         <h4>Évènements à venir</h4>
         <div class="event-list">
-            <template ngFor let-event [ngForOf]="events">
-                <template [ngIf]="event.timestamp > groupTimestamp">
+            <ng-template ngFor let-event [ngForOf]="events">
+                <ng-template [ngIf]="event.timestamp > groupTimestamp">
                     <md-card>
                         <md-card-title-group>
                             <md-card-title>{{event.name}}</md-card-title>
@@ -51,8 +51,8 @@
                         </md-card-actions>
                     </md-card>
 
-                </template>
-            </template>
+                </ng-template>
+            </ng-template>
         </div>
     </div>
 </div>

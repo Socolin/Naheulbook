@@ -84,5 +84,7 @@
         <md-button-toggle [value]="9">9</md-button-toggle>
         <md-button-toggle [value]="10">10</md-button-toggle>
     </md-button-toggle-group>
-    <md-input placeholder="Valeur" [(ngModel)]="value"></md-input>
+    <md-input-container>
+        <input mdInput placeholder="Valeur" [(ngModel)]="value" />
+    </md-input-container>
 </div>

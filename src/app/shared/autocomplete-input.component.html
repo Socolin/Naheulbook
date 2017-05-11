@@ -1,6 +1,6 @@
 <span class="autocomplete-container">
     <md-input-container #autocompleteOrigin="cdkOverlayOrigin" cdk-overlay-origin>
-        <input md-input
+        <input mdInput
                #inputField
                [disabled]="disabled"
                [placeholder]="placeholder"
@@ -11,18 +11,18 @@
                autocomplete="false"/>
     </md-input-container>
 
-    <template cdk-connected-overlay
+    <ng-template cdk-connected-overlay
               [origin]="autocompleteOrigin"
               [open]="matchingValues !== null && matchingValues?.length > 0"
               hasBackdrop
               backdropClass="cdk-overlay-transparent-backdrop"
               (backdropClick)="matchingValues = null">
         <md-nav-list dense class="autocomplete-overlay">
-            <template ngFor let-item [ngForOf]="matchingValues" let-i="index">
+            <ng-template ngFor let-item [ngForOf]="matchingValues" let-i="index">
                 <md-list-item (click)="selectValue(item)" [class.active]="preSelectedValueIndex === i">
                     {{item.text}}
                 </md-list-item>
-            </template>
+            </ng-template>
         </md-nav-list>
-    </template>
+    </ng-template>
 </span>

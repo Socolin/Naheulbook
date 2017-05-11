@@ -12,7 +12,7 @@
                     {{item.data.name}}
                 </span>
                 <md-input-container *ngIf="editing">
-                    <input md-input
+                    <input mdInput
                            placeholder="Nom"
                            [(ngModel)]="itemEditName">
                 </md-input-container>
@@ -60,17 +60,17 @@
                     class="ra ra-perspective-dice-random"></span></span>
                 <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
                 <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
-                <template [ngIf]="!readonly">
+                <ng-template [ngIf]="!readonly">
                     <div style="margin-left: 20px">
                         <span *ngIf="character.computedData.stats['PI'] > 0" class="text-info">+{{character.computedData.stats['PI']}} (Bonus personnage)</span>
                         <span *ngIf="character.computedData.stats['PI'] < 0" class="text-warning">{{character.computedData.stats['PI']}} (Malus personnage)</span>
                     </div>
-                </template>
+                </ng-template>
             </div>
             <div>
                 <span *ngIf="!editing">{{item.data.description}}</span>
                 <md-input-container *ngIf="editing">
-                    <input md-input
+                    <input mdInput
                            placeholder="Description"
                            [(ngModel)]="itemEditDescription">
                 </md-input-container>
@@ -85,7 +85,7 @@
             <div>
                 <span *ngIf="!editing">{{item.data.description}}</span>
                 <md-input-container *ngIf="editing">
-                    <input md-input
+                    <input mdInput
                            placeholder="Description"
                            [(ngModel)]="itemEditDescription">
                 </md-input-container>
@@ -93,14 +93,14 @@
 
             <div>
                 <span *ngIf="item.template.data.relic" class="label label-primary">Relique</span>
-                <template [ngIf]="character.sex === 'Homme'">
+                <ng-template [ngIf]="character.sex === 'Homme'">
                     <span *ngIf="item.template.data.sex === 'h'" class="label label-success">Homme uniq.</span>
                     <span *ngIf="item.template.data.sex === 'f'" class="label label-danger">Femme uniq.</span>
-                </template>
-                <template [ngIf]="character.sex === 'Femme'">
+                </ng-template>
+                <ng-template [ngIf]="character.sex === 'Femme'">
                     <span *ngIf="item.template.data.sex === 'h'" class="label label-danger">Homme uniq.</span>
                     <span *ngIf="item.template.data.sex === 'f'" class="label label-success">Femme uniq.</span>
-                </template>
+                </ng-template>
                 <span *ngIf="item.template.data.requireLevel && character.level < item.template.data.requireLevel"
                       class="invalid-level">
                     Level: {{item.template.data.requireLevel}}
@@ -135,12 +135,12 @@
                 <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
                 <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
                 <span *ngIf="item.template.data.damageType">({{item.template.data.damageType}})</span>
-                <template [ngIf]="!readonly">
+                <ng-template [ngIf]="!readonly">
                     <div style="margin-left: 20px">
                         <span *ngIf="character.computedData.stats.PI > 0" class="text-info">+{{character.computedData.stats.PI}} (Bonus personnage)</span>
                         <span *ngIf="character.computedData.stats.PI < 0" class="text-warning">{{character.computedData.stats.PI}} (Malus personnage)</span>
                     </div>
-                </template>
+                </ng-template>
             </div>
 
             <div *ngIf="item.template.data.protection
@@ -290,9 +290,9 @@
             <span *ngIf="item.data.lifetime.timeDuration === 0" class="text-danger">expiré</span>
         </div>
 
-        <template [ngIf]="!readonly">
+        <ng-template [ngIf]="!readonly">
             <div *ngIf="character.computedData.containers && !item.data.equiped">
-                <template [ngIf]="item.container">
+                <ng-template [ngIf]="item.container">
                     Dans: {{item.containerInfo.name}}
                     <button md-button
                             *ngIf="!item.content?.length"
@@ -300,22 +300,22 @@
                             (click)="_itemActionService.onAction('move_to_container', item, {container: null})">
                         Retirer
                     </button>
-                </template>
-                <template [ngIf]="!item.container">
+                </ng-template>
+                <ng-template [ngIf]="!item.container">
                     <h4>Ranger dans</h4>
                     <div class="list-available-containers">
-                        <template ngFor let-container [ngForOf]="character.computedData.containers" let-i="index"
+                        <ng-template ngFor let-container [ngForOf]="character.computedData.containers" let-i="index"
                                   let-last="last">
                             <div class="target-container"
                                (click)="_itemActionService.onAction('move_to_container', item, {container: container.id})">
                                 {{container.data.name}}
                                 <md-divider></md-divider>
                             </div>
-                        </template>
+                        </ng-template>
                     </div>
-                </template>
+                </ng-template>
             </div>
-        </template>
+        </ng-template>
     </md-card-content>
     <md-card-actions align="start">
         <span *ngIf="item.template.slots?.length > 0">
@@ -343,7 +343,7 @@
     </md-card-actions>
 </md-card>
 
-<template #addModifierDialog="cdkPortal" cdk-portal>
+<ng-template #addModifierDialog="cdkPortal" cdk-portal>
     <md-card class="add-modifier-dialog">
         <md-card-title>
             Ajouter un modificateur
@@ -365,9 +365,9 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>
 
-<template #giveItemDialog="cdkPortal" cdk-portal>
+<ng-template #giveItemDialog="cdkPortal" cdk-portal>
     <md-card class="give-item-dialog">
         <md-card-title>Donner un objet</md-card-title>
 
@@ -388,12 +388,12 @@
             <span *ngIf="giveDestination === null">Loading...</span>
 
             <md-radio-group [(ngModel)]="giveTarget">
-                <template ngFor let-destination [ngForOf]="giveDestination">
+                <ng-template ngFor let-destination [ngForOf]="giveDestination">
                     <md-radio-button [value]="destination">
                         <span *ngIf="destination.isnpc">[NPC]</span>
                         {{destination.name}}
                     </md-radio-button>
-                </template>
+                </ng-template>
             </md-radio-group>
         </md-card-content>
         <md-card-actions align="end">
@@ -410,9 +410,9 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>
 
-<template #lifetimeDialog="cdkPortal" cdk-portal>
+<ng-template #lifetimeDialog="cdkPortal" cdk-portal>
     <md-card>
         <md-card-title>
             Temps de conservation
@@ -429,4 +429,4 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>

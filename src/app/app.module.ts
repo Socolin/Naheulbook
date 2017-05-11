@@ -1,12 +1,13 @@
 import {NgModule, ErrorHandler} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule}  from '@angular/router';
-import {MaterialModule} from "@angular/material";
-import {FlexLayoutModule} from "@angular/flex-layout";
+import {MaterialModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {AppComponent}  from './app.component';
 import {routes} from './app.routes';
 import {HttpModule} from '@angular/http';
+
 import {CharacterModule} from './character/character.module';
 import {EffectModule} from './effect/effect.module';
 import {GroupModule} from './group/group.module';
@@ -26,12 +27,14 @@ import {DateModule} from './date/date.module';
 import {NhbkErrorHandler} from './nhbk-error-handler';
 
 import 'hammerjs';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         RouterModule.forRoot(routes),
-        MaterialModule.forRoot(),
+        MaterialModule,
         FlexLayoutModule.forRoot(),
         HttpModule,
         CharacterModule,

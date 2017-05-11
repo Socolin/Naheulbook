@@ -1,4 +1,4 @@
-<template ngFor [ngForOf]="origins" let-origin>
+<ng-template ngFor [ngForOf]="origins" let-origin>
     <md-card *ngIf="viewNotAvailable || isAvailable(origin)" [class.disabled]="!isAvailable(origin)">
         <button md-mini-fab color="primary" (click)="toggleDetail(origin)">
             <md-icon *ngIf="displayDetail(origin)">remove</md-icon>
@@ -7,7 +7,7 @@
         <md-card-title>{{origin.name}}</md-card-title>
         <md-card-subtitle>
             Prérequis:
-            <template ngFor [ngForOf]="origin.requirements" let-req let-last="last">
+            <ng-template ngFor [ngForOf]="origin.requirements" let-req let-last="last">
                 <span class="invalid-stat"    *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
                     {{req.stat|uppercase}} &ge; {{req.min}}
                 </span>
@@ -21,7 +21,7 @@
                     {{req.stat|uppercase}} &le; {{req.max}}
                 </span>
                 <span *ngIf="!last">,</span>
-            </template>
+            </ng-template>
             <span *ngIf="!origin.requirements.length">aucun</span>
         </md-card-subtitle>
         <md-card-content *ngIf="displayDetail(origin)">
@@ -40,4 +40,4 @@
             <button color="primary" md-button (click)="selectOrigin(origin)">CHOISIR</button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>

@@ -1,5 +1,5 @@
 <div style="position: fixed; right:0; bottom: 0">
-    <template ngFor let-notification [ngForOf]="_notifications.notifications">
+    <ng-template ngFor let-notification [ngForOf]="_notifications.notifications">
         <div class="alert"
              [class.alert-danger]="notification.type==='error'"
              [class.alert-info]="notification.type==='info'"
@@ -13,5 +13,5 @@
 
             <span>{{notification.message}}</span>
         </div>
-    </template>
+    </ng-template>
 </div>

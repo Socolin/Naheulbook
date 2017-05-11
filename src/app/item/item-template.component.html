@@ -29,9 +29,9 @@
         <span>
             Slot:
         </span>
-        <template ngFor let-slot [ngForOf]="item.slots">
+        <ng-template ngFor let-slot [ngForOf]="item.slots">
             <span>{{slot.name}}</span>
-        </template>
+        </ng-template>
     </div>
 
     <!-- Description -->
@@ -67,17 +67,17 @@
     <div>
         <div *ngIf="item.data.price">
             <span>Prix:</span>
-            <template [ngIf]="item.data.price >= 1">
+            <ng-template [ngIf]="item.data.price >= 1">
                 {{item.data.price | number}} P.O.
-            </template>
+            </ng-template>
 
-            <template [ngIf]="item.data.price < 1 && item.data.price >= 0.1">
+            <ng-template [ngIf]="item.data.price < 1 && item.data.price >= 0.1">
                 {{item.data.price * 10}} P.A.
-            </template>
+            </ng-template>
 
-            <template [ngIf]="item.data.price < 0.1">
+            <ng-template [ngIf]="item.data.price < 0.1">
                 {{item.data.price * 100}} P.C.
-            </template>
+            </ng-template>
         </div>
         <div *ngIf="item.data.duration">
             <span>Durée:</span>
@@ -143,35 +143,35 @@
     </div>
 
     <!-- Modificateurs -->
-    <template [ngIf]="item.modifiers && item.modifiers.length">
-        <template ngFor let-modifier [ngForOf]="item.modifiers">
+    <ng-template [ngIf]="item.modifiers && item.modifiers.length">
+        <ng-template ngFor let-modifier [ngForOf]="item.modifiers">
             <div>
                 <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
                 <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
                 {{modifier | modifier}}
             </div>
-        </template>
-    </template>
+        </ng-template>
+    </ng-template>
 
     <!-- Compétences ajouté/annulé -->
-    <template ngFor let-skill [ngForOf]="item.skills">
+    <ng-template ngFor let-skill [ngForOf]="item.skills">
         <div>Donne la compétence "{{skill.name}}"</div>
-    </template>
-    <template ngFor let-skill [ngForOf]="item.unskills">
+    </ng-template>
+    <ng-template ngFor let-skill [ngForOf]="item.unskills">
         <div>Annule la compétence "{{skill.name}}"</div>
-    </template>
-    <template ngFor let-modifier [ngForOf]="item.skillModifiers">
+    </ng-template>
+    <ng-template ngFor let-modifier [ngForOf]="item.skillModifiers">
         <div>
             {{modifier.skill.name}} <span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
         </div>
-    </template>
+    </ng-template>
 
 
     <!-- Prérequis -->
-    <template ngFor let-requirement [ngForOf]="item.requirements">
+    <ng-template ngFor let-requirement [ngForOf]="item.requirements">
         <div>
             <span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
             <span *ngIf="requirement.max">Max {{requirement.stat}}: {{requirement.max}}</span>
         </div>
-    </template>
+    </ng-template>
 </md-card>

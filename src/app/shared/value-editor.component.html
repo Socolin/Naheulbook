@@ -2,7 +2,7 @@
     {{value|number}}<span *ngIf="maxValue && !hideMaxValue">/{{maxValue}}</span>
 </span>
 
-<template cdk-connected-overlay [origin]="trigger" hasBackdrop [open]="displayEditor"
+<ng-template cdk-connected-overlay [origin]="trigger" hasBackdrop [open]="displayEditor"
           (backdropClick)="hideEditor()" (attach)="onDisplayed($event)">
     <div style="position: relative">
         <div class="ve-container"
@@ -57,4 +57,4 @@
             </div>
         </div>
     </div>
-</template>
+</ng-template>

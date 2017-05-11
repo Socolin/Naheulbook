@@ -6,7 +6,7 @@ import {LoginService} from '../user';
 
 import {EffectService} from './effect.service';
 import {EffectCategory, Effect} from './effect.model';
-import {MdTabChangeEvent} from "@angular/material";
+import {MdTabChangeEvent} from '@angular/material';
 
 @Component({
     selector: 'effect-list',

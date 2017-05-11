@@ -35,7 +35,7 @@
         </button>
     </div>
     <hr *ngIf="currentFighterIndex !== null">
-    <template ngFor let-fighter [ngForOf]="fighters" let-i=index>
+    <ng-template ngFor let-fighter [ngForOf]="fighters" let-i=index>
         <fighter [selected]="(currentFighterIndex === null && selectedCombatRow === i) || currentFighterIndex == i"
                  [group]="group"
                  [fighter]="fighter"
@@ -43,10 +43,10 @@
                  [i]="i"
                  (onSelect)="selectCombatRow($event)">
         </fighter>
-    </template>
+    </ng-template>
 </div>
 
-<template #deadMonstersDialog="cdkPortal" cdk-portal>
+<ng-template #deadMonstersDialog="cdkPortal" cdk-portal>
     <md-card class="dead-monsters-dialog">
         <md-card-title>Monstres morts</md-card-title>
         <md-card-content class="dead-monsters-list">
@@ -68,7 +68,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <template ngFor let-element [ngForOf]="deadMonsters">
+                    <ng-template ngFor let-element [ngForOf]="deadMonsters">
                         <tr>
                             <td>{{element.name}}</td>
                             <td>{{element.data.at}}</td>
@@ -82,7 +82,7 @@
                             <td>{{element.data.xp}}</td>
                             <td>{{element.note}}</td>
                         </tr>
-                    </template>
+                    </ng-template>
                 </tbody>
             </table>
         </md-card-content>
@@ -96,10 +96,10 @@
                     (click)="closeDeadMonstersDialog()">FERMER</button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>
 
 
-<template #addMonsterDialog="cdkPortal" cdk-portal>
+<ng-template #addMonsterDialog="cdkPortal" cdk-portal>
     <md-card class="add-monster-dialog">
         <md-card-title>Ajouter un monstre</md-card-title>
         <md-card-content>
@@ -110,25 +110,25 @@
             </autocomplete-input>
             <div class="inputs">
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            placeholder="AT"
                            type="number"
                            [(ngModel)]="newMonster.data.at"/>
                 </md-input-container>
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            placeholder="PRD"
                            type="number"
                            [(ngModel)]="newMonster.data.prd"/>
                 </md-input-container>
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            placeholder="ESQ"
                            type="number"
                            [(ngModel)]="newMonster.data.esq"/>
                 </md-input-container>
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            type="text"
                            placeholder="PR"
                            [(ngModel)]="newMonster.data.pr">
@@ -137,25 +137,25 @@
 
             <div class="inputs">
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            placeholder="EV"
                            type="number"
                            [(ngModel)]="newMonster.data.ev"/>
                 </md-input-container>
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            placeholder="EA"
                            type="number"
                            [(ngModel)]="newMonster.data.ea"/>
                 </md-input-container>
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            placeholder="RESM"
                            type="number"
                            [(ngModel)]="newMonster.data.resm"/>
                 </md-input-container>
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            placeholder="Degat"
                            type="text"
                            [(ngModel)]="newMonster.data.dmg"/>
@@ -164,13 +164,13 @@
 
             <div class="inputs">
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            placeholder="XP"
                            type="number"
                            [(ngModel)]="newMonster.data.xp"/>
                 </md-input-container>
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            placeholder="COU"
                            type="number"
                            [(ngModel)]="newMonster.data.cou"/>
@@ -182,7 +182,7 @@
             </div>
             <div class="inputs">
                 <md-input-container style="width: 100%">
-                    <input md-input
+                    <input mdInput
                            placeholder="Note"
                            type="text"
                            [(ngModel)]="newMonster.data.note"/>
@@ -214,6 +214,6 @@
                     (click)="addMonster()">AJOUTER</button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>
 
 <create-item #createItemComponent (onAddItem)="onItemAdded($event)"></create-item>

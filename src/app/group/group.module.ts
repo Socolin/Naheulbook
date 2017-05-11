@@ -10,26 +10,27 @@ import {
 import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
-import {SharedModule} from '../shared/shared.module';
+import {NotificationsModule} from '../notifications/notifications.module';
+import {EventModule} from '../event/event.module';
+import {DateModule} from '../date/date.module';
+import {JobModule} from '../job/job.module';
+import {OriginModule} from '../origin/origin.module';
+import {ItemModule} from '../item/item.module';
 import {CharacterModule} from '../character/character.module';
 import {MonsterModule} from '../monster/monster.module';
-import {NotificationsModule} from '../notifications/notifications.module';
-import {DateModule} from '../date/date.module';
+
+import {FighterComponent} from './fighter.component';
+import {GroupHistoryComponent} from './group-history.component';
+import {SharedModule} from '../shared/shared.module';
 import {FighterPanelComponent} from './fighter-panel.component';
 import {UsefullDataComponent} from './usefull-data.component';
 import {GroupLootPanelComponent} from './group-loot-panel.component';
-import {ItemModule} from '../item/item.module';
-import {JobModule} from '../job/job.module';
-import {OriginModule} from '../origin/origin.module';
-import {GroupHistoryComponent} from './group-history.component';
-import {FighterComponent} from './fighter.component';
-import {EventModule} from '../event/event.module';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule.forRoot(),
+        MaterialModule,
         FlexLayoutModule.forRoot(),
         SharedModule,
         CharacterModule,

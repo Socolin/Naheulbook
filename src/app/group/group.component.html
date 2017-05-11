@@ -65,7 +65,7 @@
                 <md-card>
                     <md-card-title>Joueurs</md-card-title>
                     <md-card-content class="characters-cards">
-                        <template ngFor let-character [ngForOf]="characters">
+                        <ng-template ngFor let-character [ngForOf]="characters">
                             <md-card *ngIf="!character.isNpc" class="character-summary-card">
                                 <md-card-header>
                                     <md-card-title>{{character.name}} - Lvl{{character.level}}</md-card-title>
@@ -110,7 +110,7 @@
                                     </button>
                                 </md-card-actions>
                             </md-card>
-                        </template>
+                        </ng-template>
                     </md-card-content>
                     <md-card-actions align="end">
                         <button md-button
@@ -129,7 +129,7 @@
                 <md-card>
                     <md-card-title>PNJs</md-card-title>
                     <md-card-content class="characters-cards">
-                        <template ngFor let-character [ngForOf]="characters">
+                        <ng-template ngFor let-character [ngForOf]="characters">
                             <md-card *ngIf="character.isNpc" class="character-summary-card">
                                 <md-card-header>
                                     <md-card-title>{{character.name}}</md-card-title>
@@ -154,7 +154,7 @@
                                     </button>
                                 </md-card-actions>
                             </md-card>
-                        </template>
+                        </ng-template>
                     </md-card-content>
                     <md-card-actions align="end">
                         <button md-button
@@ -170,7 +170,7 @@
                         <div *ngIf="group.invites.length">
                             <h4>Invitation à valider</h4>
                             <div class="list-group">
-                                <template ngFor let-character [ngForOf]="group.invites">
+                                <ng-template ngFor let-character [ngForOf]="group.invites">
                                     <div class="list-group-item">
                                         <button class="glyphicon glyphicon-remove btn btn-danger pull-right"
                                                 (click)="cancelInvite(character)"></button>
@@ -180,14 +180,14 @@
                                         <p class="list-group-item-text">{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
                                         </p>
                                     </div>
-                                </template>
+                                </ng-template>
                             </div>
                             <hr>
                         </div>
                         <div *ngIf="group.invited.length">
                             <h4>Invitation en attente</h4>
                             <div class="list-group">
-                                <template ngFor let-character [ngForOf]="group.invited">
+                                <ng-template ngFor let-character [ngForOf]="group.invited">
                                     <div class="list-group-item">
                                         <button class="glyphicon glyphicon-remove btn btn-danger pull-right"
                                                 (click)="cancelInvite(character)"></button>
@@ -195,7 +195,7 @@
                                         <p class="list-group-item-text">{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
                                         </p>
                                     </div>
-                                </template>
+                                </ng-template>
                             </div>
                             <hr>
                         </div>
@@ -251,8 +251,8 @@
 </div>
 
 <div *ngIf="group">
-    <template ngFor let-character [ngForOf]="characters">
-        <template *ngIf="character.active" #characters="cdkPortal" cdk-portal>
+    <ng-template ngFor let-character [ngForOf]="characters">
+        <ng-template *ngIf="character.active" #characters="cdkPortal" cdk-portal>
             <div class="character-sheet">
                 <md-card>
                     <md-card-title>
@@ -264,20 +264,20 @@
                     </md-card-content>
                 </md-card>
             </div>
-        </template>
-    </template>
+        </ng-template>
+    </ng-template>
 </div>
 
 
 <!-- Modal -->
-<template #changeOwnershipDialog="cdkPortal" cdk-portal>
+<ng-template #changeOwnershipDialog="cdkPortal" cdk-portal>
     <md-card class="change-ownership-dialog">
         <md-card-title>Définir le propriétaire</md-card-title>
         <md-card-subtitle>{{selectedCharacter?.name}}</md-card-subtitle>
         <md-card-content>
             <div class="modal-body">
                 <md-input-container>
-                    <input md-input
+                    <input mdInput
                            placeholder="Chercher un utilisateur"
                            type="text"
                            [(ngModel)]="filterSearchUser"
@@ -287,11 +287,11 @@
                     Aucun utilisateur trouvé
                 </div>
                 <md-radio-group [(ngModel)]="changeOwnershipNewOwner">
-                    <template ngFor let-user [ngForOf]="filteredUsers">
+                    <ng-template ngFor let-user [ngForOf]="filteredUsers">
                         <md-radio-button [value]="user">
                             {{user.displayName}}
                         </md-radio-button>
-                    </template>
+                    </ng-template>
                 </md-radio-group>
             </div>
         </md-card-content>
@@ -308,14 +308,14 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>
 
-<template #inviteCharacterModal="cdkPortal" cdk-portal>
+<ng-template #inviteCharacterModal="cdkPortal" cdk-portal>
     <md-card class="invite-character-modal">
         <md-card-title>Inviter un personnage</md-card-title>
         <md-card-content>
             <md-input-container>
-                <input md-input
+                <input mdInput
                        [(ngModel)]="searchNameInvite"
                        (ngModelChange)="updateFilteredPlayer()"
                        placeholder="Nom du personnage"/>
@@ -325,12 +325,12 @@
                 Aucun personnage trouvé
             </div>
             <md-radio-group [(ngModel)]="selectedInviteCharacter">
-                <template ngFor let-character [ngForOf]="filteredInvitePlayers">
+                <ng-template ngFor let-character [ngForOf]="filteredInvitePlayers">
                     <md-radio-button [value]="character">
                         {{character.name}} - {{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
                         Joueur: {{character.owner}}
                     </md-radio-button>
-                </template>
+                </ng-template>
             </md-radio-group>
         </md-card-content>
         <md-card-actions align="end">
@@ -346,6 +346,6 @@
             </button>
         </md-card-actions>
     </md-card>
-</template>
+</ng-template>
 
 <usefull-data></usefull-data>

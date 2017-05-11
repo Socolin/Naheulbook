@@ -1,8 +1,8 @@
 import {NgModule}      from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {MaterialModule} from "@angular/material";
-import {FlexLayoutModule} from "@angular/flex-layout";
+import {MaterialModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {SharedModule} from '../shared/shared.module';
 
@@ -32,7 +32,7 @@ import {ActionModule} from '../action/action.module';
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule.forRoot(),
+        MaterialModule,
         FlexLayoutModule.forRoot(),
         SharedModule,
         SkillModule,

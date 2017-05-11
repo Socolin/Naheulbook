@@ -23,7 +23,7 @@ import {DurationSelectorComponent} from './duration-selector.component';
         FormsModule,
         SharedModule,
         NotificationsModule,
-        MaterialModule.forRoot(),
+        MaterialModule,
         FlexLayoutModule.forRoot(),
     ],
     declarations: [
