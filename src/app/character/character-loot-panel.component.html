@@ -10,6 +10,7 @@
                                 (click)="openTakeItemLootDialog(loot, item)">
                             <md-icon>add_shopping_cart</md-icon>
                         </button>
+                        <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                         <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                         {{item.data.name}}
                         <swipeable-item-detail *ngIf="item.id === selectedItem?.id"
