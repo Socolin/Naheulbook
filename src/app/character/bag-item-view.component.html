@@ -44,18 +44,18 @@
             <ng-template ngFor let-l [ngForOf]="ends" let-i="index" let-last="last">
                 <span>
                     <ng-template [ngIf]="lastItem && last">
-                        <img src="/img/tree-top-left.png"/>
+                        <img src="/assets/img/tree-top-left.png"/>
                     </ng-template>
                     <ng-template [ngIf]="!lastItem && last">
-                        <img src="/img/tree-top-bot-left.png"/>
+                        <img src="/assets/img/tree-top-bot-left.png"/>
                     </ng-template>
 
                     <ng-template [ngIf]="!last">
                         <ng-template [ngIf]="ends[i + 1]">
-                            <img src="/img/tree-empty.png"/>
+                            <img src="/assets/img/tree-empty.png"/>
                         </ng-template>
                         <ng-template [ngIf]="!ends[i + 1]">
-                            <img src="/img/tree-top-bot.png"/>
+                            <img src="/assets/img/tree-top-bot.png"/>
                         </ng-template>
                     </ng-template>
                 </span>
