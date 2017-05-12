@@ -1,7 +1,7 @@
 <md-sidenav-container style="min-height: 100vh">
     <md-sidenav #start>
         <h4 *ngIf="loggedUser">Utilisateur</h4>
-        <login (redirect)="redirectTo($event)"></login>
+        <login></login>
         <md-divider></md-divider>
         <h4 *ngIf="loggedUser">Joueur</h4>
         <md-nav-list *ngIf="loggedUser">

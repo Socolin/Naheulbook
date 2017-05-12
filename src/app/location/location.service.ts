@@ -10,8 +10,8 @@ import {LoginService} from '../user';
 @Injectable()
 export class LocationService extends JsonService {
 
-    private locations: ReplaySubject<Location[]>;
-    private locationsTree: ReplaySubject<Location[]>;
+    public locations: ReplaySubject<Location[]>;
+    public locationsTree: ReplaySubject<Location[]>;
 
     constructor(http: Http
         , notification: NotificationsService

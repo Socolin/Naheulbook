@@ -10,9 +10,9 @@ import {LoginService} from '../user';
     templateUrl: './location-list.component.html'
 })
 export class LocationListComponent implements OnInit {
-    private locations: Location[];
-    private rootLocation: Location;
-    private editable: boolean;
+    public locations: Location[];
+    public rootLocation: Location;
+    public editable: boolean;
 
     constructor(private _locationService: LocationService
         , private _loginService: LoginService

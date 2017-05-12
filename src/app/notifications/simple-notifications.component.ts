@@ -8,7 +8,7 @@ import {NotificationsService} from './notifications.service';
 })
 export class SimpleNotificationsComponent implements OnInit {
 
-    constructor(private _notifications: NotificationsService) {
+    constructor(public _notifications: NotificationsService) {
     }
 
     ngOnInit() {

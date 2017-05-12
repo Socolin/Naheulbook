@@ -13,15 +13,15 @@ export  interface JobBonus {
 
 export interface Job {
     availableSkills: Array<Skill>;
-    baseAT: number;
-    baseEa: number;
-    baseEv: number;
-    basePRD: number;
+    baseAT: number|null;
+    baseEa: number|null;
+    baseEv: number|null;
+    basePRD: number|null;
     bonuses: Array<JobBonus>;
-    bonusEv: number;
+    bonusEv: number|null;
     description: string;
-    diceEaLevelUp: number;
-    factorEv: number;
+    diceEaLevelUp: number|null;
+    factorEv: number|null;
     id: number;
     information: string;
     isMagic: boolean;

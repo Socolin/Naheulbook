@@ -3,7 +3,7 @@
 </span>
 
 <ng-template cdk-connected-overlay [origin]="trigger" hasBackdrop [open]="displayEditor"
-          (backdropClick)="hideEditor()" (attach)="onDisplayed($event)">
+          (backdropClick)="hideEditor()" (attach)="onDisplayed()">
     <div style="position: relative">
         <div class="ve-container"
              [style.bottom]="(-15 - yOffset) + 'px'"

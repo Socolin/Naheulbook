@@ -32,7 +32,7 @@
 
 	<div *ngIf="categories">
         Catégorie
-        <md-button-toggle-group name="alignment" [(ngModel)]="effect.category" (change)="updateEffectDurationType()">
+        <md-button-toggle-group name="alignment" [(ngModel)]="effect.category">
             <md-button-toggle *ngFor="let category of categories" [value]="category.id">{{category.name}}</md-button-toggle>
         </md-button-toggle-group>
 	</div>

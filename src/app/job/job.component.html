@@ -39,7 +39,7 @@
             <div *ngIf="!job.baseEv && job.factorEv && !job.bonusEv">
                 EV initiale : EV initiale -{{ (1 - job.factorEv) | percent}}
             </div>
-            <div *ngIf="!job.baseEv && !job.factorEv && job.bonusEv">
+            <div *ngIf="!job.baseEv && !job.factorEv && job.bonusEv > 0">
                 EV initiale : EV initiale + {{job.bonusEv}}
             </div>
             <div *ngIf="job.baseEv && !job.factorEv && !job.bonusEv">
@@ -50,8 +50,8 @@
                 EA initiale (mana) : {{job.baseEa}} (+1D{{job.diceEaLevelUp}} par niveau)
             </div>
 
-            <div *ngIf="job.baseAt != null || job.basePrd != null">
-                Valeur ATTAQUE initiale : {{job.baseAt}} – Valeur PARADE initiale : {{job.basePRD}}
+            <div *ngIf="job.baseAT != null || job.basePRD != null">
+                Valeur ATTAQUE initiale : {{job.baseAT}} – Valeur PARADE initiale : {{job.basePRD}}
             </div>
 
             <div *ngFor="let bonus of job.bonuses">
@@ -79,7 +79,7 @@
             <div *ngIf="job.restricts && job.restricts.length > 0">
                 Restrictions:
                 <ul>
-                    <li *ngFor="let restrict of job.restricts; let lastRes=last">
+                    <li *ngFor="let restrict of job.restricts">
                         {{restrict.text}}
                     </li>
                 </ul>

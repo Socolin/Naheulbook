@@ -9,9 +9,9 @@ import {NotificationsService} from '../notifications';
     templateUrl: './edit-location.component.html',
 })
 export class EditLocationComponent implements OnInit {
-    private location: Location;
-    private maps: Map[] = [];
-    private newLocationName: string;
+    public location: Location;
+    public maps: Map[] = [];
+    public newLocationName: string;
 
     constructor(private _route: ActivatedRoute
         , private _router: Router

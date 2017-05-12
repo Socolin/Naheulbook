@@ -27,17 +27,17 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
 
     // Inventory
     public selectedItem: Item;
-    public selectedInventoryTab: string = 'all';
-    private sortType: string = 'none';
+    public selectedInventoryTab = 'all';
+    public sortType = 'none';
 
-    public iconMode: boolean = false;
+    public iconMode = false;
     public itemFilterName: string;
 
     @ViewChild('itemDetail')
     private itemDetailDiv: ElementRef;
     @ViewChild('itemDetailTop')
     private itemDetailTopDiv: ElementRef;
-    public itemDetailOffset: number = 0;
+    public itemDetailOffset = 0;
 
     @ViewChild('addItemDialog')
     public addItemDialog: Portal<any>;
@@ -164,11 +164,10 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         return false;
     }
 
-    sortInventory(type: string) {
+    sortInventory(type?: string) {
         if (type === 'not_identified_first') {
             this.sortType = type;
-            this.character.items.sort((a, b) =>
-                {
+            this.character.items.sort((a, b) => {
                     if (a.data.notIdentified && b.data.notIdentified) {
                         return 0;
                     }

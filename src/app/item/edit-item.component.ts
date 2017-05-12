@@ -10,8 +10,8 @@ import {ItemService} from './item.service';
     templateUrl: './edit-item.component.html',
 })
 export class EditItemComponent implements OnInit {
-    private item: ItemTemplate;
-    private saving: boolean = false;
+    public item: ItemTemplate;
+    public saving: boolean = false;
 
     constructor(private _router: Router
         , private _route: ActivatedRoute

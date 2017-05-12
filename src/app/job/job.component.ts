@@ -9,7 +9,7 @@ import {Job} from './job.model';
 })
 export class JobComponent {
     @Input() job: Job;
-    public folded: boolean = true;
+    public folded = true;
 
     toggleFold(event: Event) {
         event.preventDefault();

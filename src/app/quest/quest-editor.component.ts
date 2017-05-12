@@ -14,6 +14,8 @@ export class QuestEditorComponent {
     @Input() quest: QuestTemplate;
     @Output() onValid: EventEmitter<QuestTemplate> = new EventEmitter<QuestTemplate>();
 
+    public previewDescription: boolean;
+
     constructor(private _questService: QuestService
         , private _notification: NotificationsService
         , private router: Router) {

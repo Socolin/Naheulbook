@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, Renderer, ElementRef, OnChanges} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 
 @Component({
     selector: 'value-editor',
@@ -13,10 +13,10 @@ export class ValueEditorComponent implements OnChanges {
     @Output() onChange: EventEmitter<number> = new EventEmitter<number>();
 
     public valueDelta: string;
-    public newValue: number = 0;
-    public displayEditor: boolean = false;
-    public xOffset: number = 0;
-    public yOffset: number = 0;
+    public newValue = 0;
+    public displayEditor = false;
+    public xOffset = 0;
+    public yOffset = 0;
 
     constructor() {
     }

@@ -11,8 +11,9 @@ import {LocationService} from './location.service';
 export class LocationComponent {
     @Input() location: Location;
     @Input() editable: boolean;
-    private folded: boolean = true;
-    private maps: Map[];
+
+    public folded = true;
+    public maps: Map[];
 
     constructor(private _router: Router
         , private _locationService: LocationService) {

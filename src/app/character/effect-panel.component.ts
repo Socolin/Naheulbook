@@ -16,7 +16,7 @@ import {EffectService} from '../effect/effect.service';
 export class EffectDetailComponent {
     @Input() characterEffect: CharacterEffect;
     @Input() effectCategoriesById: {[categoryId: number]: EffectCategory};
-    @Output() onRemove: EventEmitter<CharacterModifier> = new EventEmitter<CharacterModifier>();
+    @Output() onRemove: EventEmitter<CharacterEffect> = new EventEmitter<CharacterEffect>();
 }
 
 @Component({
