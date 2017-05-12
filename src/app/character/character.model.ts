@@ -994,7 +994,12 @@ export class Character {
             }
         }
 
-        this.notifyChange('Ajout de l\'objet: ' + item.data.name);
+        if (item.template.data.quantifiable) {
+            this.notifyChange('Ajout de l\'objet: ' + item.data.quantity + item.data.name);
+        }
+        else {
+            this.notifyChange('Ajout de l\'objet: ' + item.data.name);
+        }
         this.items.push(item);
         this.update();
     }

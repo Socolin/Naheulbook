@@ -99,7 +99,8 @@ export class LootPanelComponent implements OnDestroy {
 
     onTookItemFromLoot(loot: Loot, data: LootTookItemMsg) {
         let character = data.character;
-        let itemIndex = loot.items.findIndex(i => data.item.id === i.id);
+        let lootItemId = data.leftItem ? data.leftItem.id : data.item.id;
+        let itemIndex = loot.items.findIndex(i => lootItemId === i.id);
         if (itemIndex === -1) {
             return;
         }
