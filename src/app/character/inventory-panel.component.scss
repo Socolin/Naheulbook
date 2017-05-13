@@ -1,5 +1,4 @@
 md-card {
-    margin: 5px;
 
     md-toolbar {
         display: flex;
@@ -31,7 +30,6 @@ md-card {
     }
 
     .inventory-content {
-        padding-bottom: 300px;
         .items-list {
             .items-list-element {
                 border-bottom: 1px solid #dfdfdf;

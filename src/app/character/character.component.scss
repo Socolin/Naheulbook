@@ -20,6 +20,8 @@ md-card {
 
 .info-tab {
     font-size: large;
+    display: flex;
+    flex-direction: column;
     md-card {
         margin: 5px;
     }
