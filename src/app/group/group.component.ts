@@ -389,8 +389,8 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                             }
                         }
                     );
-                    this.registerWs();
                 });
+                this.registerWs();
             },
             err => {
                 try {

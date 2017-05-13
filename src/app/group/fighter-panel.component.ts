@@ -5,7 +5,6 @@ import {Group, Fighter} from './group.model';
 import {Monster, MonsterTemplate} from '../monster/monster.model';
 import {GroupService} from './group.service';
 import {ItemData, Item} from '../character/item.model';
-import {ItemTemplate} from '../item/item-template.model';
 import {Observable} from 'rxjs';
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
 import {MonsterService} from '../monster/monster.service';
@@ -19,14 +18,14 @@ import {CreateItemComponent} from './create-item.component';
 @Component({
     selector: 'fighter-panel',
     templateUrl: './fighter-panel.component.html',
-    styleUrls: ['./fighter.component.css', './fighter-panel.component.scss']
+    styleUrls: ['./fighter.component.scss', './fighter-panel.component.scss']
 })
 export class FighterPanelComponent implements OnInit, OnChanges {
     @Input() group: Group;
     @Input() characters: Character[];
     public monsters: Monster[] = [];
     public fighters: Fighter[] = [];
-    public currentFighterIndex?: number;
+    public currentFighterIndex: number | null;
     public loadingNextLap: boolean = false;
 
     public deadMonsters: Monster[] = [];
@@ -81,10 +80,6 @@ export class FighterPanelComponent implements OnInit, OnChanges {
 
     selectCombatRow(i: number) {
         this.selectedCombatRow = i;
-    }
-
-    itemHasSlot(template: ItemTemplate, slot: string) {
-        return ItemTemplate.hasSlot(template, slot);
     }
 
     /**

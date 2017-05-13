@@ -6,11 +6,12 @@ import {Monster} from '../monster/monster.model';
 import {CharacterService} from '../character/character.service';
 import {GroupActionService} from './group-action.service';
 import {Character} from '../character/character.model';
+import {ItemTemplate} from '../item/item-template.model';
 
 @Component({
     selector: 'fighter',
     templateUrl: './fighter.component.html',
-    styleUrls: ['./fighter.component.css']
+    styleUrls: ['./fighter.component.scss']
 })
 export class FighterComponent {
     @Input() group: Group;
@@ -118,5 +119,9 @@ export class FighterComponent {
 
     selectFighter() {
         this.onSelect.emit(this.i);
+    }
+
+    itemHasSlot(template: ItemTemplate, slot: string) {
+        return ItemTemplate.hasSlot(template, slot);
     }
 }
