@@ -51,6 +51,9 @@ export class CharacterWebsocketService {
     }
 
     unregister() {
-        this._webSocketService.unregister('character', this.character.id);
+        if (this.character) {
+            this._webSocketService.unregister('character', this.character.id);
+            this.character = null;
+        }
     }
 }

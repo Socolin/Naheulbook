@@ -27,6 +27,7 @@ import {DateModule} from '../date/date.module';
 import {CharacterLootPanelComponent} from './character-loot-panel.component';
 import {CharacterHistoryComponent} from './character-history.component';
 import {ActionModule} from '../action/action.module';
+import {CharacterResolve} from './character.resolver';
 
 @NgModule({
     imports: [
@@ -68,6 +69,7 @@ import {ActionModule} from '../action/action.module';
     ],
     providers: [
         CharacterService,
+        CharacterResolve,
     ],
 })
 export class CharacterModule {

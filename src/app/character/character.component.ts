@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, OnDestroy, ViewChild, ElementRef} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {MdTabChangeEvent, Portal, OverlayRef, OverlayState, Overlay} from '@angular/material';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MdTabChangeEvent, Portal, OverlayRef, OverlayState, Overlay, MdTabGroup} from '@angular/material';
 
 import {NotificationsService} from '../notifications';
 
@@ -35,6 +35,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
     @ViewChild('combatWeaponDetail')
     private combatWeaponDetailElement: ElementRef;
 
+    @ViewChild('mainTabGroup')
+    private mainTabGroup: MdTabGroup;
+
     @ViewChild('levelUpDialog')
     public levelUpDialog: Portal<any>;
     public levelUpOverlayRef: OverlayRef;
@@ -49,7 +52,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     public inGroupTab = false;
     public selectedItem: Item;
     public currentTab = 'infos';
-    public currentTabIndex = 0;
     public tabs: any[] = [
         {hash: 'infos'},
         {hash: 'combat'},
@@ -62,6 +64,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     ];
 
     constructor(private _route: ActivatedRoute
+        , private _router: Router
         , private _notification: NotificationsService
         , private _characterWebsocketService: CharacterWebsocketService
         , private _overlay: Overlay
@@ -261,7 +264,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     selectTab(tabChangeEvent: MdTabChangeEvent): boolean {
         this.currentTab = this.tabs[tabChangeEvent.index].hash;
         if (!this.inGroupTab) {
-            window.location.hash = this.currentTab;
+            this._router.navigate(['/character/detail', this.character.id], {fragment: this.currentTab});
         }
         return false;
     }
@@ -305,30 +308,15 @@ export class CharacterComponent implements OnInit, OnDestroy {
         if (this.character) {
             this.inGroupTab = true;
         } else {
-            this._route.params.subscribe(
-                param => {
-                    let id = this.id;
-                    if (!this.id) {
-                        id = +param['id'];
-                    }
-                    this._characterService.getCharacter(id).subscribe(
-                        character => {
-                            this.character = character;
-                            character.registerWS(this._characterWebsocketService,
-                                (message: string) => this._notification.info('Modification', message)
-                            );
-                        }
-                    );
-                }
+            this.character = this._route.snapshot.data['character'];
+            this.character.registerWS(this._characterWebsocketService,
+                (message: string) => this._notification.info('Modification', message)
             );
-        }
-        if (!this.inGroupTab) {
-            this._route.fragment.subscribe(value => {
-                if (value) {
-                    this.currentTabIndex = this.getTabIndexFromHash(value);
-                    this.currentTab = value;
-                }
-            });
+            let tab = this._route.snapshot.fragment;
+            if (tab) {
+                this.mainTabGroup.selectedIndex = this.getTabIndexFromHash(tab);
+                this.currentTab = tab;
+            }
         }
     }
 }

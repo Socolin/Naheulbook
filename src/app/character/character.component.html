@@ -1,5 +1,5 @@
-<div *ngIf="character" class="character-component">
-    <md-tab-group (selectChange)=selectTab($event) [selectedIndex]="currentTabIndex">
+<div class="character-component">
+    <md-tab-group #mainTabGroup (selectChange)=selectTab($event)>
         <md-tab label="Info">
             <!-- Start of info tab -->
             <div class="info-tab">

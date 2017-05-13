@@ -11,6 +11,7 @@ import {CreateGroupComponent, GroupListComponent, GroupComponent} from './group'
 import {UserProfileComponent, LoggedComponent} from './user';
 import {LocationListComponent, EditLocationComponent} from './location';
 import {QuestListComponent, CreateQuestTemplateComponent} from './quest';
+import {CharacterResolve} from './character/character.resolver';
 
 export const routes: Routes = [
     {
@@ -36,6 +37,9 @@ export const routes: Routes = [
     {
         path: 'character/detail/:id',
         component: CharacterComponent,
+        resolve: {
+            character: CharacterResolve
+        }
     },
     {
         path: 'character/group/:id',
