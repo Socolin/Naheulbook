@@ -342,10 +342,10 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (this.itemTemplate.data.lifetime) {
             modules.push('lifetime');
         }
-        if (this.itemTemplate.modifiers !== null && this.itemTemplate.modifiers.length) {
+        if (!isNullOrUndefined(this.itemTemplate.modifiers) && this.itemTemplate.modifiers.length) {
             modules.push('modifiers');
         }
-        if (this.itemTemplate.requirements !== null
+        if (!isNullOrUndefined(this.itemTemplate.requirements)
             && this.itemTemplate.requirements.length) {
             modules.push('prereq');
         }
@@ -366,15 +366,15 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (this.itemTemplate.data.sex) {
             modules.push('sex');
         }
-        if ((this.itemTemplate.skills !== null && this.itemTemplate.skills.length)
-            || (this.itemTemplate.unskills !== null && this.itemTemplate.unskills.length)
-            || (this.itemTemplate.skillModifiers !== null && this.itemTemplate.skillModifiers.length)) {
+        if ((!isNullOrUndefined(this.itemTemplate.skills) && this.itemTemplate.skills.length)
+            || (!isNullOrUndefined(this.itemTemplate.unskills) && this.itemTemplate.unskills.length)
+            || (!isNullOrUndefined(this.itemTemplate.skillModifiers) && this.itemTemplate.skillModifiers.length)) {
             modules.push('skill');
         }
         if (this.itemTemplate.data.skillBook) {
             modules.push('skillBook');
         }
-        if (this.itemTemplate.slots !== null && this.itemTemplate.slots.length) {
+        if (!isNullOrUndefined(this.itemTemplate.slots) && this.itemTemplate.slots.length) {
             modules.push('slots');
         }
         if (this.itemTemplate.data.throwable) {
