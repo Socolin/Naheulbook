@@ -12,9 +12,9 @@ import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 export class DateModifierComponent {
     @Output() onChange: EventEmitter<NhbkDateOffset> = new EventEmitter<NhbkDateOffset>();
     @Input() dateOffset: NhbkDateOffset = new NhbkDateOffset();
-    @Input() resetOnChange: boolean = true;
+    @Input() resetOnChange = true;
     @Input() title: string;
-    private forceUpdateDuration: number = 0;
+    public forceUpdateDuration = 0;
 
     @ViewChild('dateSelectorDialog')
     public dateSelectorDialog: Portal<any>;

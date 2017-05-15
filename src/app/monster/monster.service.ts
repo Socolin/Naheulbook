@@ -6,7 +6,6 @@ import {MonsterTemplate, MonsterTemplateCategory, MonsterTrait} from './monster.
 import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
-import {error} from 'util';
 
 @Injectable()
 export class MonsterService extends JsonService {

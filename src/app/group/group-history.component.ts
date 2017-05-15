@@ -10,13 +10,13 @@ import {NotificationsService} from '../notifications/notifications.service';
 export class GroupHistoryComponent implements OnInit {
     @Input() group: Group;
 
-    public historyPage: number = 0;
+    public historyPage = 0;
     public currentDay: string = null;
     public history: any[];
-    public loadMore: boolean = true;
+    public loadMore = true;
 
     public historyNewEntryText: string = null;
-    public historyNewEntryGm: boolean = false;
+    public historyNewEntryGm = false;
 
     constructor(private _groupService: GroupService, private _notification: NotificationsService) {
     }

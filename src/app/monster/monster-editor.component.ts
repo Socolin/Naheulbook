@@ -23,7 +23,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     public categories: MonsterTemplateCategory[] = [];
     public locations: Location[] = [];
     public locationsById: {[id: number]:  Location} = null;
-    public defenseStat: string = 'PRD';
+    public defenseStat = 'PRD';
     public locationSearchName: string;
 
     public traits: MonsterTrait[] = [];

@@ -1,8 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
-import {MonsterTemplate, MonsterTrait, TraitInfo} from './monster.model';
-import {MonsterService} from './monster.service';
-import {NotificationsService} from '../notifications/notifications.service';
+import {MonsterTrait, TraitInfo} from './monster.model';
 import {removeDiacritics} from '../shared/remove_diacritics';
 
 @Component({

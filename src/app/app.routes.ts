@@ -1,120 +1,30 @@
 import {Routes} from '@angular/router';
 
-import {CreateCharacterComponent, CharacterComponent, CharacterListComponent} from './character';
-import {CreateItemComponent, EditItemComponent, ItemListComponent} from './item';
-import {CreateEffectComponent, EffectListComponent, EditEffectComponent} from './effect';
-import {OriginListComponent} from './origin';
-import {SkillListComponent} from './skill';
-import {JobListComponent} from './job';
-import {MonsterListComponent} from './monster';
-import {CreateGroupComponent, GroupListComponent, GroupComponent} from './group';
-import {UserProfileComponent, LoggedComponent} from './user';
-import {LocationListComponent, EditLocationComponent} from './location';
-import {QuestListComponent, CreateQuestTemplateComponent} from './quest';
-import {CharacterResolve} from './character/character.resolver';
+import {LoggedComponent} from './user';
+import {CreditComponent} from './home/credit.component';
+import {HomeComponent} from './home/home.component';
+import {UserProfileComponent} from './user/user-profile.component';
+import {LoginComponent} from './user/login.component';
 
 export const routes: Routes = [
     {
         path: '',
-        component: SkillListComponent
+        component: HomeComponent
     },
     {
-        path: 'home',
-        component: SkillListComponent
+        path: 'login',
+        component: LoginComponent,
     },
     {
         path: 'logged',
         component: LoggedComponent,
     },
     {
-        path: 'character/create',
-        component: CreateCharacterComponent,
-    },
-    {
-        path: 'character/list',
-        component: CharacterListComponent,
-    },
-    {
-        path: 'character/detail/:id',
-        component: CharacterComponent,
-        resolve: {
-            character: CharacterResolve
-        }
-    },
-    {
-        path: 'character/group/:id',
-        component: GroupComponent,
+        path: 'credit',
+        component: CreditComponent,
     },
     {
         path: 'profile',
         component: UserProfileComponent,
-    },
-    {
-        path: 'edit-item/:id',
-        component: EditItemComponent,
-    },
-    {
-        path: 'edit-location/:id',
-        component: EditLocationComponent,
-    },
-    {
-        path: 'edit-effect/:id',
-        component: EditEffectComponent,
-    },
-    {
-        path: 'database/skills',
-        component: SkillListComponent
-    },
-    {
-        path: 'database/origins',
-        component: OriginListComponent
-    },
-    {
-        path: 'database/jobs',
-        component: JobListComponent
-    },
-    {
-        path: 'database/items/:id',
-        component: ItemListComponent
-    },
-    {
-        path: 'database/items',
-        component: ItemListComponent
-    },
-    {
-        path: 'database/effects',
-        component: EffectListComponent,
-    },
-    {
-        path: 'database/monsters',
-        component: MonsterListComponent
-    },
-    {
-        path: 'database/locations',
-        component: LocationListComponent
-    },
-    {
-        path: 'database/quests',
-        component: QuestListComponent
-    },
-    {
-        path: 'create-group',
-        component: CreateGroupComponent
-    },
-    {
-        path: 'group-list',
-        component: GroupListComponent
-    },
-    {
-        path: 'create-effect',
-        component: CreateEffectComponent
-    },
-    {
-        path: 'create-item',
-        component: CreateItemComponent
-    },
-    {
-        path: 'create-quest',
-        component: CreateQuestTemplateComponent
     }
 ];

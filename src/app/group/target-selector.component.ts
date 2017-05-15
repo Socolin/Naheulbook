@@ -11,7 +11,7 @@ export class TargetSelectorComponent implements OnInit {
     @Input() fighter: Fighter;
     @Input() targets: Fighter[];
     @Output() onTargetChange: EventEmitter<Fighter> = new EventEmitter<Fighter>();
-    public showSelector: boolean = false;
+    public showSelector = false;
     public selectedTabIndex: number;
 
     public positions = [
@@ -23,8 +23,8 @@ export class TargetSelectorComponent implements OnInit {
             {overlayX: 'start', overlayY: 'top'}),
     ];
 
-    public selectorHeight: number = 0;
-    public selectorMinHeight: number = 0;
+    public selectorHeight = 0;
+    public selectorMinHeight = 0;
 
     hideSelector() {
         this.showSelector = false;

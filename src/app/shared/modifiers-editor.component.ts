@@ -1,11 +1,11 @@
-import {Component, Input, OnInit, forwardRef, Inject} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 import {ItemStatModifier, StatModificationOperand} from './stat-modifier.model';
 import {Origin, OriginService} from '../origin';
 import {Job} from '../job';
 import {JobService} from '../job';
-import {CharacterService} from '../character';
 import {isNullOrUndefined} from 'util';
+import {MiscService} from './misc.service';
 
 @Component({
     selector: 'modifiers-editor',
@@ -36,8 +36,8 @@ export class ModifiersEditorComponent implements OnInit {
     public origins: Origin[];
     public jobs: Job[];
 
-    constructor(@Inject(forwardRef(()  => CharacterService)) private characterService: CharacterService
-        , private originService: OriginService
+    constructor(private originService: OriginService
+        , private _miscService: MiscService
         , private jobService: JobService) {
         this.modifiers = [];
         this.specialsValue = [
@@ -147,7 +147,7 @@ export class ModifiersEditorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.characterService.getStats().subscribe(stats => {
+        this._miscService.getStats().subscribe(stats => {
             let filteredStats = stats.map(s => s.name);
             filteredStats = filteredStats.filter(s => {
                 return this.basicStats.indexOf(s) === -1

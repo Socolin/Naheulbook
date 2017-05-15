@@ -19,8 +19,8 @@ export class AutocompleteInputComponent {
     @Input() callback: Function;
     @Input() value: string;
     @Input() placeholder: string;
-    @Input() disabled: boolean = false;
-    @Input() clearOnSelect: boolean = false;
+    @Input() disabled = false;
+    @Input() clearOnSelect = false;
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('inputField')

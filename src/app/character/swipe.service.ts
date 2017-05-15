@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class SwipeService {
-    public swipedLeft: boolean = false;
-    public swipedRight: boolean = true;
+    public swipedLeft = false;
+    public swipedRight = true;
 
     constructor() {
     }

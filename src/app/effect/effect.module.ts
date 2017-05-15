@@ -10,7 +10,7 @@ import {DateModule} from '../date/date.module';
 import {
     EffectEditorComponent, CreateEffectComponent, EffectListComponent, EditEffectComponent,
     EffectService
-} from "./";
+} from './';
 import {CharacterEffectEditorComponent} from './character-effect-editor.component';
 import {CharacterModifierEditorComponent} from './stats-modifier-editor.component';
 

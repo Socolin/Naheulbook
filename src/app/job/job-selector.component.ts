@@ -4,7 +4,7 @@ import {Origin} from '../origin';
 import {StatRequirement} from '../shared';
 import {Job} from './job.model';
 import {JobService} from './job.service';
-import {getRandomInt} from "../shared/random";
+import {getRandomInt} from '../shared/random';
 
 @Component({
     selector: 'job-selector',
@@ -24,10 +24,10 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     public detail: {[originId: number]: boolean} = {};
 
     public jobs: Job[] = [];
-    private stats: any;
+    public stats: any;
 
     public invalidStats: any[] = [];
-    public viewNotAvailable: boolean = false;
+    public viewNotAvailable = false;
 
     constructor(private _jobService: JobService) {
         this.stats = this;
@@ -157,7 +157,7 @@ export class JobSelectorComponent implements OnInit, OnChanges {
             let job = this.jobs[i];
             if (this.isVisible(job) && this.isAvailable(job)) {
                 count++;
-                if (count == rnd) {
+                if (count === rnd) {
                     this.selectJob(this.jobs[i]);
                     return;
                 }

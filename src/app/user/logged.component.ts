@@ -33,7 +33,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
                             , token
                             , window.location.origin + window.location.pathname).subscribe(
                             () => {
-                                this._router.navigateByUrl('/character/list');
+                                this._router.navigateByUrl('/player/character/list');
                             }
                         );
                     }
@@ -51,7 +51,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
                             , token
                             , window.location.origin + window.location.pathname).subscribe(
                             () => {
-                                this._router.navigateByUrl('/character/list');
+                                this._router.navigateByUrl('/player/character/list');
                             }
                         );
                     }
@@ -66,7 +66,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
                     if (params.hasOwnProperty('oauth_token') && params.hasOwnProperty('oauth_verifier')) {
                         this._loginService.doTwitterLogin(params['oauth_token'], params['oauth_verifier']).subscribe(
                             () => {
-                                this._router.navigateByUrl('/character/list');
+                                this._router.navigateByUrl('/player/character/list');
                             }
                         );
                     }

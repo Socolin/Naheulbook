@@ -12,7 +12,7 @@ import {EffectService} from './effect.service';
     styleUrls: ['./character-effect-editor.component.scss'],
 })
 export class CharacterEffectEditorComponent implements OnInit, DoCheck {
-    @Input() reusableToggle: boolean = true;
+    @Input() reusableToggle = true;
     @Output() onValidate: EventEmitter<any> = new EventEmitter<any>();
     @Output() onChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -21,7 +21,7 @@ export class CharacterEffectEditorComponent implements OnInit, DoCheck {
     public autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
     public preSelectedEffect: Effect;
     public newEffectReusable: boolean;
-    public newEffectCustomDuration: boolean = false;
+    public newEffectCustomDuration = false;
     public customDuration: IDurable;
 
     constructor(private _effectService: EffectService) {

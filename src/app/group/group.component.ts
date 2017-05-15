@@ -9,7 +9,7 @@ import {NotificationsService} from '../notifications';
 
 import {Group, CharacterInviteInfo} from '.';
 import {GroupService} from './group.service';
-import {Character, CharacterService, CharacterResume} from '../character';
+import {Character, CharacterResume} from '../character';
 
 import {LoginService} from '../user';
 import {AutocompleteValue} from '../shared';
@@ -23,6 +23,7 @@ import {User} from '../user/user.model';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {CharacterWebsocketService} from '../character/character-websocket.service';
 import {WebSocketService} from '../shared/websocket.service';
+import {CharacterService} from '../character/character.service';
 
 @Component({
     templateUrl: './group.component.html',
@@ -33,8 +34,8 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     public group: Group;
     public characters: Character[] = [];
 
-    public currentTabIndex: number = 0;
-    public currentTab: string = 'infos';
+    public currentTabIndex = 0;
+    public currentTab = 'infos';
     public tabs: Array<{hash: string}> = [
         {hash: 'infos'},
         {hash: 'characters'},
@@ -280,6 +281,16 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
             res => {
                 this._removeFromInvited(res.character);
                 this._removeFromInvites(res.character);
+            }
+        );
+        return false;
+    }
+
+    acceptInvite(character) {
+        this._characterService.joinGroup(character.id, this.group.id).subscribe(
+            res => {
+                character.invites = [];
+                character.group = res.group;
             }
         );
         return false;

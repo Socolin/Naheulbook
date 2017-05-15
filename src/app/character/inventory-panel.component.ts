@@ -1,5 +1,5 @@
 import {
-    Input, OnInit, Component, Inject, forwardRef, HostListener, ElementRef, ViewChild,
+    Input, OnInit, Component, HostListener, ElementRef, ViewChild,
     OnChanges, SimpleChanges
 } from '@angular/core';
 import {OverlayRef, Portal, Overlay, OverlayState} from '@angular/material';
@@ -53,7 +53,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     public itemAddQuantity: number;
 
     constructor(
-        @Inject(forwardRef(()  => ItemService)) private _itemService: ItemService
+        private _itemService: ItemService
         , private _overlay: Overlay
         , private _itemActionService: ItemActionService) {
     }

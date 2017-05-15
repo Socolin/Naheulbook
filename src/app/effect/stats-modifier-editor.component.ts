@@ -8,5 +8,5 @@ import {StatsModifier} from '../shared/stat-modifier.model';
 })
 export class CharacterModifierEditorComponent {
     @Input() modifier: StatsModifier;
-    @Input() reusableToggle: boolean = true;
+    @Input() reusableToggle = true;
 }

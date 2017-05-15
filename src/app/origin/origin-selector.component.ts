@@ -3,7 +3,7 @@ import {Component, Input, Output, EventEmitter, OnInit, OnChanges} from '@angula
 import {Origin} from './origin.model';
 import {StatRequirement} from '../shared';
 import {OriginService} from './origin.service';
-import {getRandomInt} from "../shared/random";
+import {getRandomInt} from '../shared/random';
 
 @Component({
     selector: 'origin-selector',
@@ -24,7 +24,7 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
     public invalidStats: Object;
     public stats: Object;
     public detail: {[originId: number]: boolean} = {};
-    public viewNotAvailable: boolean = false;
+    public viewNotAvailable = false;
 
     constructor(private _originService: OriginService) {
         this.stats = this;
@@ -99,7 +99,7 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
         for (let i = 0; i < this.origins.length; i++) {
             if (this.isAvailable(this.origins[i])) {
                 count++;
-                if (count == rnd) {
+                if (count === rnd) {
                     this.selectOrigin(this.origins[i]);
                 }
             }

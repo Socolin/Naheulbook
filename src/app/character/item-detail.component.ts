@@ -1,5 +1,5 @@
 import {
-    Component, Input, OnChanges, OnInit, forwardRef, Inject, SimpleChanges, ViewChild,
+    Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild
 } from '@angular/core';
 import {Portal, OverlayRef} from '@angular/material';
 
@@ -21,6 +21,8 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() character: Character;
     @Input() gmView: boolean;
     @Input() readonly: boolean;
+    @Input() jobsName: {[id: number]: string};
+    @Input() originsName: {[id: number]: string};
 
     public itemCategoriesById: {[categoryId: number]: ItemCategory};
     public modifiers: any[];
@@ -46,7 +48,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public lifetimeOverlayRef: OverlayRef;
     public previousLifetime: IDurable;
 
-    constructor(@Inject(forwardRef(() => ItemService)) private _itemService: ItemService
+    constructor(private _itemService: ItemService
         , public _itemActionService: ItemActionService
         , private _groupService: GroupService
         , private _nhbkDialogService: NhbkDialogService) {

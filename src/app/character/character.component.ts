@@ -264,7 +264,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     selectTab(tabChangeEvent: MdTabChangeEvent): boolean {
         this.currentTab = this.tabs[tabChangeEvent.index].hash;
         if (!this.inGroupTab) {
-            this._router.navigate(['/character/detail', this.character.id], {fragment: this.currentTab});
+            this._router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this._route});
         }
         return false;
     }
@@ -317,6 +317,17 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 this.mainTabGroup.selectedIndex = this.getTabIndexFromHash(tab);
                 this.currentTab = tab;
             }
+            this._route.data.subscribe(data => {
+                if (this.character !== data['character']) {
+                    this.character = data['character'];
+                    this._characterWebsocketService.unregister();
+                    this.character.registerWS(this._characterWebsocketService,
+                        (message: string) => this._notification.info('Modification', message)
+                    );
+                    this.mainTabGroup.selectedIndex = 0;
+                }
+            });
+
         }
     }
 }

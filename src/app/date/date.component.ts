@@ -8,12 +8,12 @@ import {DateService} from './date.service';
 })
 export class DateComponent implements OnInit, OnChanges {
     @Input() date: NhbkDate;
-    private calendar: CalendarDate[];
-    private currentCalendarDate: CalendarDate;
-    private relativeDay: number;
-    private minute: string;
-    private hour: string;
-    private period: string;
+    public calendar: CalendarDate[];
+    public currentCalendarDate: CalendarDate;
+    public relativeDay: number;
+    public minute: string;
+    public hour: string;
+    public period: string;
 
     constructor(private _dateService: DateService) {
     }

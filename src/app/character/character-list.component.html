@@ -1,7 +1,12 @@
 <div class="characters">
-	<div *ngIf="!characters || characters.length === 0">Vous ne possédez aucun personnage.</div>
-    <md-card *ngFor="let character of characters" (click)="selectCharacter(character)">
+	<md-card *ngIf="!characters || characters.length === 0">
+        Vous ne possédez aucun personnage.
+    </md-card>
+    <md-card *ngFor="let character of characters" (click)="selectCharacter(character)" class="clickable">
         <md-card-title>{{character.name}} - lvl {{character.level}}</md-card-title>
         <md-card-subtitle>{{character.origin}} {{character.job}}</md-card-subtitle>
+    </md-card>
+    <md-card (click)="createCharacter()" class="create-character clickable">
+        <md-icon>add</md-icon>Créer un personnage
     </md-card>
 </div>

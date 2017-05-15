@@ -1,4 +1,4 @@
-import {Injectable, forwardRef, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
@@ -10,7 +10,7 @@ export class JobService {
     private jobs: ReplaySubject<Job[]>;
 
     constructor(private _http: Http
-        , @Inject(forwardRef(()  => SkillService)) private _skillService: SkillService) {
+        , private _skillService: SkillService) {
     }
 
     getJobList(): Observable<Job[]> {

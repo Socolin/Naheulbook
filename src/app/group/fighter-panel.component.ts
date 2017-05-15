@@ -26,13 +26,13 @@ export class FighterPanelComponent implements OnInit, OnChanges {
     public monsters: Monster[] = [];
     public fighters: Fighter[] = [];
     public currentFighterIndex: number | null;
-    public loadingNextLap: boolean = false;
+    public loadingNextLap = false;
 
     public deadMonsters: Monster[] = [];
-    public allDeadMonstersLoaded: boolean = false;
+    public allDeadMonstersLoaded = false;
 
     public newMonster: Monster = new Monster();
-    public selectedCombatRow: number = 0;
+    public selectedCombatRow = 0;
 
     public selectedMonsterTemplate: MonsterTemplate;
     public monsterAutocompleteShow = false;

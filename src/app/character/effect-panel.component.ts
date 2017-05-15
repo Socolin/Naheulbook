@@ -43,7 +43,7 @@ export class EffectPanelComponent implements OnInit {
     @ViewChild('addEffectDialog')
     public addEffectDialog: Portal<any>;
     public addEffectOverlayRef: OverlayRef;
-    public addEffectTypeSelectedTab: number = 0;
+    public addEffectTypeSelectedTab = 0;
 
     public effectCategoriesById: { [categoryId: number]: EffectCategory };
 

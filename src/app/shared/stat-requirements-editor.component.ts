@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 import {Stat} from './stat.model';
-import {CharacterService} from '../character/character.service';
+import {MiscService} from './misc.service';
 
 @Component({
     selector: 'stat-requirements-editor',
@@ -15,7 +15,7 @@ export class StatRequirementsEditorComponent implements OnInit {
     public minValue: number;
     public maxValue: number;
 
-    constructor(private characterService: CharacterService) {
+    constructor(private _miscService: MiscService) {
         this.requirements = [];
     }
 
@@ -46,7 +46,7 @@ export class StatRequirementsEditorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.characterService.getStats().subscribe(stats => {
+        this._miscService.getStats().subscribe(stats => {
             this.stats = stats;
         });
     }

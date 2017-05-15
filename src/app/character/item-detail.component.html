@@ -137,8 +137,8 @@
                 <span *ngIf="item.template.data.damageType">({{item.template.data.damageType}})</span>
                 <ng-template [ngIf]="!readonly">
                     <div style="margin-left: 20px">
-                        <span *ngIf="character.computedData.stats.PI > 0" class="text-info">+{{character.computedData.stats.PI}} (Bonus personnage)</span>
-                        <span *ngIf="character.computedData.stats.PI < 0" class="text-warning">{{character.computedData.stats.PI}} (Malus personnage)</span>
+                        <span *ngIf="character.computedData.stats['PI'] > 0" class="text-info">+{{character.computedData.stats['PI']}} (Bonus personnage)</span>
+                        <span *ngIf="character.computedData.stats['PI'] < 0" class="text-warning">{{character.computedData.stats['PI']}} (Malus personnage)</span>
                     </div>
                 </ng-template>
             </div>

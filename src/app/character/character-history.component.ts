@@ -10,7 +10,7 @@ import {CharacterService} from './character.service';
 export class CharacterHistoryComponent implements OnInit {
     @Input() character: Character;
 
-    public historyPage: number = 0;
+    public historyPage = 0;
     public currentDay: string = null;
     public history: any[];
     public loadMore: boolean;

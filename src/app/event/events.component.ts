@@ -16,9 +16,9 @@ import {EventEditorComponent} from './event-editor.component';
 export class EventsComponent implements OnInit, OnChanges {
     @Input() group: Group;
     public events: NEvent[] = [];
-    public groupTimestamp: number = 0;
-    public pastEventCount: number = 0;
-    public futureEventCount: number = 0;
+    public groupTimestamp = 0;
+    public pastEventCount = 0;
+    public futureEventCount = 0;
 
     @ViewChild('eventEditor')
     private eventEditorComponent: EventEditorComponent;

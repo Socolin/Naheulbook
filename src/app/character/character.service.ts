@@ -1,28 +1,30 @@
-import {Injectable, forwardRef, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
-import {Stat} from '../shared';
+import {Stat, IMetadata, HistoryEntry} from '../shared';
+import {Loot} from '../loot/loot.model';
 import {Character, CharacterResume, CharacterModifier, CharacterEffect} from './character.model';
 import {Effect} from '../effect';
-import {IMetadata, HistoryEntry} from '../shared';
 import {CharacterInviteInfo, Group} from '../group';
-import {JsonService} from '../shared/json-service';
+
 import {Job, JobService} from '../job';
 import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
 import {NotificationsService} from '../notifications';
+import {JsonService} from '../shared/json-service';
 import {LoginService} from '../user';
-import {Loot} from '../loot/loot.model';
 
 @Injectable()
 export class CharacterService extends JsonService {
+    private stats: ReplaySubject<Stat[]>;
+
     constructor(http: Http
         , notification: NotificationsService
         , loginService: LoginService
         , private _jobService: JobService
-        , @Inject(forwardRef(()  => SkillService)) private _skillService: SkillService
-        , @Inject(forwardRef(()  => OriginService)) private _originService: OriginService) {
+        , private _skillService: SkillService
+        , private _originService: OriginService) {
         super(http, notification, loginService);
     }
 
@@ -113,26 +115,6 @@ export class CharacterService extends JsonService {
             id: id,
             levelUpInfo: levelUpInfo
         }).map(res => res.json());
-    }
-
-    private stats: ReplaySubject<Stat[]>;
-
-    getStats(): Observable<Stat[]> {
-        if (!this.stats) {
-            this.stats = new ReplaySubject<Stat[]>(1);
-
-            this._http.get('/api/character/stats')
-                .map(res => res.json())
-                .subscribe(
-                    stats => {
-                        this.stats.next(stats);
-                    },
-                    error => {
-                        this.stats.error(error);
-                    }
-                );
-        }
-        return this.stats;
     }
 
     loadCharactersResume(list: number[]): Observable<CharacterResume[]> {

@@ -10,7 +10,7 @@ export class OriginService {
     private origins: ReplaySubject<Origin[]>;
 
     constructor(private _http: Http
-        , @Inject(forwardRef(()  => SkillService)) private _skillService: SkillService) {
+        , private _skillService: SkillService) {
     }
 
     getOriginList(): Observable<Origin[]> {

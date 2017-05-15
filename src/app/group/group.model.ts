@@ -10,7 +10,7 @@ export class GroupData {
     date: NhbkDate;
 }
 
-export class Group{
+export class Group {
     id: number;
     name: string;
     data: GroupData;

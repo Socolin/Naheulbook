@@ -4,7 +4,6 @@ import {NotificationsService} from './notifications';
 
 import {LoginService} from './user';
 import {User} from './user';
-import {MdSidenav} from '@angular/material';
 
 @Component({
     selector: 'app-root',
@@ -14,25 +13,13 @@ import {MdSidenav} from '@angular/material';
 export class AppComponent implements OnInit {
     public loggedUser: User;
 
-    @ViewChild('start', {read: MdSidenav})
-    public start: MdSidenav;
-
     constructor(private _loginService: LoginService
         , private _notifications: NotificationsService
-        , private _router: Router) {
-        _router.events.subscribe(
-            event => {
-                if (event instanceof NavigationStart) {
-                    if (event.url.lastIndexOf('/create-', 0) === 0) {
-                        this.checkIsAdmin();
-                    } else if (event.url.lastIndexOf('/edit-', 0) === 0) {
-                        this.checkIsAdmin();
-                    } else if (event.url.lastIndexOf('/character', 0) === 0) {
-                        this.checkIsLogged();
-                    }
-                    this.start.close();
-                }
-            });
+        , public _router: Router) {
+        this._router.events.subscribe(event => {
+            console.log(event);
+        })
+
     };
 
     checkIsAdmin() {

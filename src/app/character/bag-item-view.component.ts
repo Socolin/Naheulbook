@@ -11,7 +11,7 @@ export class BagItemViewComponent implements OnInit, OnChanges {
     @Input() items: Item[];
     @Input() selectedItem: Item;
     @Input() character: Character;
-    @Input() level: number = 0;
+    @Input() level = 0;
     @Input() iconMode: boolean;
     @Input() end: number;
     @Input() gmView: boolean;

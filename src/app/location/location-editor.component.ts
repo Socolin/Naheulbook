@@ -16,6 +16,7 @@ export class LocationEditorComponent implements OnInit {
     public locations: Location[];
     public autocompleteFilesCallback: Function;
     public newMap: Map;
+    public previewDescription: boolean;
 
     constructor(private _notification: NotificationsService
         , private _locationService: LocationService) {

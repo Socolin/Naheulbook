@@ -57,11 +57,11 @@ export interface SkillDetail {
 }
 
 export class StaticDetailShow {
-    evea: boolean = false;
-    atprd: boolean = false;
-    stat: boolean = false;
-    other: boolean = false;
-    magic: boolean = false;
+    evea = false;
+    atprd = false;
+    stat = false;
+    other = false;
+    magic = false;
 }
 export class StatisticDetail {
     evea: any[] = [];
@@ -200,7 +200,7 @@ export class CharacterComputedData {
     itemsBySlotsAll = {};
     itemsEquiped: Item[] = [];
     currencyItems: Item[] = [];
-    totalMoney: number = 0;
+    totalMoney = 0;
     itemSlots = [];
     topLevelContainers = [];
     xpToNextLevel: number;
@@ -209,8 +209,8 @@ export class CharacterComputedData {
     effects: CharacterEffect[] = [];
     modifiers: CharacterModifier[] = [];
 
-    countExceptionalStats: number = 0;
-    countActiveEffect: number = 0;
+    countExceptionalStats = 0;
+    countActiveEffect = 0;
 
     init() {
         this.details.init();

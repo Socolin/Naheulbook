@@ -7,10 +7,10 @@ export interface CalendarDate {
 }
 
 export class NhbkDate {
-    public minute: number = 0;
-    public hour: number = 0;
-    public day: number = 0;
-    public year: number = 1498;
+    public minute = 0;
+    public hour = 0;
+    public day = 0;
+    public year = 1498;
 
     constructor(minute?: number, hour?: number, day?: number, year?: number) {
         this.minute = minute;
@@ -21,11 +21,11 @@ export class NhbkDate {
 }
 
 export class NhbkDateOffset {
-    public minute: number = 0;
-    public hour: number = 0;
-    public day: number = 0;
-    public week: number = 0;
-    public year: number = 0;
-    public second: number = 0;
+    public minute = 0;
+    public hour = 0;
+    public day = 0;
+    public week = 0;
+    public year = 0;
+    public second = 0;
 }
 

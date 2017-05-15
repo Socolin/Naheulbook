@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 import {EffectService} from './effect.service';
 import {Effect, EffectCategory} from './effect.model';

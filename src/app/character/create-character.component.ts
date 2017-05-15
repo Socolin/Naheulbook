@@ -1,16 +1,17 @@
 import {Component, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 
+import {getRandomInt} from '../shared/random';
+
 import {Origin} from '../origin';
 import {Job} from '../job';
 import {Skill} from '../skill';
+import {Speciality} from './speciality.model';
 
 import {CharacterService} from './character.service';
-import {Speciality} from './speciality.model';
-import {getRandomInt} from '../shared/random';
-import {OriginSelectorComponent} from "../origin/origin-selector.component";
-import {JobSelectorComponent} from "../job/job-selector.component";
-import {SkillSelectorComponent} from "../skill/skill-selector.component";
+import {OriginSelectorComponent} from '../origin/origin-selector.component';
+import {JobSelectorComponent} from '../job/job-selector.component';
+import {SkillSelectorComponent} from '../skill/skill-selector.component';
 
 @Component({
     selector: 'create-character',
@@ -19,7 +20,7 @@ import {SkillSelectorComponent} from "../skill/skill-selector.component";
 })
 export class CreateCharacterComponent {
     public step: number;
-    public creating: boolean = false;
+    public creating = false;
 
     // Step 0: Statistics
 
@@ -465,6 +466,10 @@ export class CreateCharacterComponent {
         this.setStep(7);
     }
 
+    randomSpeciality() {
+        // FI
+    }
+
     // Step 7: Name
 
     randomNameAndSex() {
@@ -544,7 +549,7 @@ export class CreateCharacterComponent {
                     this._router.navigate(['/character/group'
                         , +this._router.routerState.snapshot.root.queryParams['groupId']]);
                 } else {
-                    this._router.navigate(['/character/detail', res.id]);
+                    this._router.navigate(['character', 'detail', res.id]);
                 }
             },
             () => {

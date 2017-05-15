@@ -14,13 +14,13 @@ import {MdTabChangeEvent} from '@angular/material';
     styleUrls: ['../shared/number-shadow.scss'],
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
-    @Input() inputCategoryId: number = 1;
+    @Input() inputCategoryId = 1;
 
     public categories: EffectCategory[];
     public effects: {[categoryId: number]: Effect[]} = {};
-    public editable: boolean = false;
+    public editable = false;
     public sub: Subscription;
-    public currentTabIndex: number = 0;
+    public currentTabIndex = 0;
 
     constructor(private _router: Router
         , private _route: ActivatedRoute

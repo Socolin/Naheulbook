@@ -1,10 +1,8 @@
 import {Component, Output, EventEmitter, SimpleChanges, OnChanges, ViewChild} from '@angular/core';
-import {OverlayRef, Portal, MdTabChangeEvent} from '@angular/material';
-import {Observable} from 'rxjs';
+import {OverlayRef, Portal} from '@angular/material';
 
 import {ItemService} from '../item';
 import {Character, Item} from '../character';
-import {AutocompleteValue} from '../shared';
 import {ItemTemplate} from '../item';
 import {Loot} from '../loot';
 import {getRandomInt} from '../shared/random';
@@ -26,7 +24,7 @@ export class CreateItemComponent implements OnChanges {
     public character: Character;
     public loot: Loot;
     public monster: Monster;
-    public mode: string = 'normal';
+    public mode = 'normal';
     public newItem: Item = new Item();
     public gemOption: any = {};
 

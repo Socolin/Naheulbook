@@ -5,10 +5,12 @@ import {Observable, ReplaySubject} from 'rxjs/Rx';
 import {User} from './user.model';
 import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications/notifications.service';
+import {isNullOrUndefined} from 'util';
 
 @Injectable()
 export class LoginService extends JsonService {
     public loggedUser: ReplaySubject<User> = new ReplaySubject<User>(1);
+    public currentLoggedUser: User;
 
     constructor(http: Http
         , notification: NotificationsService) {
@@ -31,6 +33,7 @@ export class LoginService extends JsonService {
 
         fbLogin.subscribe(user => {
             this.loggedUser.next(user);
+            this.currentLoggedUser = user;
         });
 
         return fbLogin;
@@ -47,6 +50,7 @@ export class LoginService extends JsonService {
 
         googleLogin.subscribe(user => {
             this.loggedUser.next(user);
+            this.currentLoggedUser = user;
         });
 
         return googleLogin;
@@ -62,6 +66,7 @@ export class LoginService extends JsonService {
 
         twitterLogin.subscribe(user => {
             this.loggedUser.next(user);
+            this.currentLoggedUser = user;
         });
 
         return twitterLogin;
@@ -87,10 +92,16 @@ export class LoginService extends JsonService {
 
         checkLogged.subscribe(user => {
             this.loggedUser.next(user);
+            this.currentLoggedUser = user;
         });
 
         return checkLogged;
     }
+
+    isLogged(): Observable<boolean> {
+        return this.checkLogged().map(user => !isNullOrUndefined(user));
+    }
+
 
     updateProfile(profile): Observable <Response> {
         return this.postJson('/api/user/updateProfile', profile)

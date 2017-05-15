@@ -1,11 +1,11 @@
 import {NhbkDateOffset, NhbkDate} from './date.model';
 
 export class NhbkDateUtil {
-    public static yearDuration: number = 365 * 24 * 3600;
-    public static weekDuration: number = 7 * 24 * 3600;
-    public static dayDuration: number = 24 * 3600;
-    public static hourDuration: number = 3600;
-    public static minuteDuration: number = 60;
+    public static yearDuration = 365 * 24 * 3600;
+    public static weekDuration = 7 * 24 * 3600;
+    public static dayDuration = 24 * 3600;
+    public static hourDuration = 3600;
+    public static minuteDuration = 60;
 }
 
 

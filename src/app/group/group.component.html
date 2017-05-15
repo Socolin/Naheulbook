@@ -73,7 +73,7 @@
                                         {{character.origin.name}}
                                         <span *ngIf="character.job"> - {{character.job.name}} </span>
                                     </md-card-subtitle>
-                                    <button md-icon-button [mdMenuTriggerFor]="characterActions" *ngIf="!readonly">
+                                    <button md-icon-button [mdMenuTriggerFor]="characterActions">
                                         <md-icon>more_vert</md-icon>
                                     </button>
                                     <md-menu x-position="before" #characterActions="mdMenu">
@@ -82,12 +82,12 @@
                                             Voir la fiche
                                         </button>
                                         <button md-menu-item
-                                                *ngIf="character.user && character.user !==  _loginService.loggedUser.id"
+                                                *ngIf="character.user && character.user !== _loginService.currentLoggedUser.id"
                                                 (click)="takeOwnership(character)">
                                             Devenir propriétaire
                                         </button>
                                         <button md-menu-item
-                                                *ngIf="!character.user || character.user ===  _loginService.loggedUser.id"
+                                                *ngIf="!character.user || character.user === _loginService.currentLoggedUser.id"
                                                 (click)="openChangeOwnershipDialog(character)">
                                             Définir le propriétaire
                                         </button>

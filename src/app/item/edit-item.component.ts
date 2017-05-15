@@ -11,7 +11,7 @@ import {ItemService} from './item.service';
 })
 export class EditItemComponent implements OnInit {
     public item: ItemTemplate;
-    public saving: boolean = false;
+    public saving = false;
 
     constructor(private _router: Router
         , private _route: ActivatedRoute

@@ -11,7 +11,7 @@ import {ItemTemplate} from './item-template.model';
 export class CreateItemComponent {
     public item: ItemTemplate = new ItemTemplate();
     public lastItem: ItemTemplate;
-    public saving: boolean = false;
+    public saving = false;
     public errorMessage: string;
     public successMessage: string;
 

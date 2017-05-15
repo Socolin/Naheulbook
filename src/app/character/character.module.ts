@@ -8,7 +8,7 @@ import {SharedModule} from '../shared/shared.module';
 
 import {
     SpecialitySelectorComponent, ItemDetailComponent, CharacterComponent,
-    CharacterColorSelectorComponent, CharacterListComponent, CreateCharacterComponent
+    CharacterColorSelectorComponent, CharacterListComponent
 } from './';
 import {
     CharacterService
@@ -28,6 +28,7 @@ import {CharacterLootPanelComponent} from './character-loot-panel.component';
 import {CharacterHistoryComponent} from './character-history.component';
 import {ActionModule} from '../action/action.module';
 import {CharacterResolve} from './character.resolver';
+import {CreateCharacterComponent} from './create-character.component';
 
 @NgModule({
     imports: [
@@ -44,28 +45,28 @@ import {CharacterResolve} from './character.resolver';
         ActionModule,
     ],
     declarations: [
-        BagItemViewComponent
-        , CharacterComponent
-        , CharacterColorSelectorComponent
-        , CharacterListComponent
-        , CreateCharacterComponent
-        , ItemDetailComponent
-        , SpecialitySelectorComponent
-        , EffectPanelComponent
-        , SwipeableItemDetailComponent
-        , InventoryPanelComponent
-        , EffectDetailComponent
-        , ModifierDetailComponent
-        , CharacterLootPanelComponent
-        , CharacterHistoryComponent
+        BagItemViewComponent,
+        CharacterColorSelectorComponent,
+        CharacterComponent,
+        CharacterHistoryComponent,
+        CharacterListComponent,
+        CharacterLootPanelComponent,
+        CreateCharacterComponent,
+        EffectDetailComponent,
+        EffectPanelComponent,
+        InventoryPanelComponent,
+        ItemDetailComponent,
+        ModifierDetailComponent,
+        SpecialitySelectorComponent,
+        SwipeableItemDetailComponent,
     ],
     exports: [
-        CharacterComponent
-        , CharacterListComponent
-        , CreateCharacterComponent
-        , CharacterColorSelectorComponent
-        , EffectModule
-        , SkillModule
+        CharacterColorSelectorComponent,
+        CharacterComponent,
+        CharacterListComponent,
+        CreateCharacterComponent,
+        EffectModule,
+        SkillModule,
     ],
     providers: [
         CharacterService,

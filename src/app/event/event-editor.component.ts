@@ -21,9 +21,9 @@ export class EventEditorComponent implements OnInit {
     public eventEditorOverlayRef: OverlayRef;
 
     public event: NEvent = new NEvent();
-    public durationType: string = 'offset';
+    public durationType = 'offset';
     public durationDateOffset: NhbkDateOffset = new NhbkDateOffset();
-    public durationOffset: number = 0;
+    public durationOffset = 0;
     public eventDate: NhbkDate = new NhbkDate();
 
     constructor(private _nhbkDialogService: NhbkDialogService) {

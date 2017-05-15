@@ -27,12 +27,12 @@ export class ItemStatModifier implements StatModifier {
 export class StatsModifier implements IDurable {
     name: string;
 
-    reusable: boolean = false;
+    reusable = false;
 
     durationType: DurationType = 'combat';
     duration: string;
-    combatCount: number = 1;
-    lapCount: number = 1;
+    combatCount = 1;
+    lapCount = 1;
     timeDuration: number;
 
     values: StatModifier[] = [];

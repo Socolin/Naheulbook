@@ -57,12 +57,13 @@ export class Monster {
     }
 }
 export class TraitInfo {
+    traitId: number;
+    level: number;
+
     constructor(id: number, level: number) {
         this.traitId = id;
         this.level = level;
     }
-    traitId: number;
-    level: number;
 }
 export class MonsterTemplateData {
     at: number;
@@ -94,18 +95,18 @@ export class MonsterSimpleInventory {
 }
 
 export class MonsterTemplate {
-    constructor() {
-        this.data = new MonsterTemplateData();
-        this.locations = [];
-        this.simpleInventory = [];
-    }
-
     id: number;
     name: string;
     data: MonsterTemplateData;
     type: MonsterTemplateCategory;
     simpleInventory: MonsterSimpleInventory[];
     locations: number[];
+
+    constructor() {
+        this.data = new MonsterTemplateData();
+        this.locations = [];
+        this.simpleInventory = [];
+    }
 }
 
 export class MonsterTrait {

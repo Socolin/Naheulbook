@@ -1,10 +1,9 @@
-import {Component, OnInit, Output, EventEmitter, Input, ViewChild, ViewChildren} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {NhbkAction, NhbkActionType} from './nhbk-action.model';
 import {Observable} from 'rxjs';
 import {ItemService} from '../item/item.service';
 import {ItemTemplate} from '../item/item-template.model';
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
-import {CharacterEffectEditorComponent} from '../effect/character-effect-editor.component';
 import {CharacterModifier} from '../character/character.model';
 
 @Component({

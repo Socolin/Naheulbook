@@ -4,7 +4,7 @@ import {Job} from '../job';
 import {Origin} from '../origin';
 import {Skill} from './skill.model';
 import {SkillService} from './skill.service';
-import {getRandomInt} from "../shared/random";
+import {getRandomInt} from '../shared/random';
 
 @Component({
     selector: 'skill-selector',
@@ -16,7 +16,7 @@ export class SkillSelectorComponent implements OnInit {
     @Input() selectedJob: Job;
     @Input() selectedOrigin: Origin;
     @Input() knownSkills: Skill[];
-    @Input() skillCount: number = 2;
+    @Input() skillCount = 2;
 
     // Outputs
     @Output() skillsSelected: EventEmitter<Skill[]> = new EventEmitter<Skill[]>();
