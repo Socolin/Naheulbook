@@ -23,12 +23,13 @@ export const routes: Routes = [
         component: HomeGmComponent,
         canActivate: [AuthGuard],
         data: {
-            authGuardRedirect: '/login'
+            authGuardRedirect: '/login/gm'
         },
         children: [
             {
                 path: '',
-                component: GroupListComponent,
+                redirectTo: 'group/list',
+                pathMatch: 'full'
             },
             {
                 path: 'character',

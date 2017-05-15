@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NotificationsService} from '../notifications';
 
 import {LoginService} from './login.service';
@@ -14,10 +14,12 @@ import {LoginDialogComponent} from './login-dialog.component';
 export class LoginComponent implements OnInit {
     public user: User;
     public dialogRef: MdDialogRef<LoginDialogComponent>;
+    public redirectPage: string;
 
     constructor(public dialog: MdDialog
         , private _loginService: LoginService
         , private _router: Router
+        , private _route: ActivatedRoute
         , private _notification: NotificationsService) {
     }
 
@@ -41,13 +43,13 @@ export class LoginComponent implements OnInit {
 
     login(method: string) {
         if (method === 'facebook') {
-            this._loginService.redirectToFbLogin();
+            this._loginService.redirectToFbLogin(this.redirectPage);
         }
         else if (method === 'google') {
-            this._loginService.redirectToGoogleLogin();
+            this._loginService.redirectToGoogleLogin(this.redirectPage);
         }
         else if (method === 'twitter') {
-            this._loginService.redirectToTwitterLogin();
+            this._loginService.redirectToTwitterLogin(this.redirectPage);
         }
     }
 
@@ -61,6 +63,9 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
+        this._route.params.subscribe(params => {
+            this.redirectPage = params['redirect'];
+        });
         this._loginService.loggedUser.subscribe(
             user => {
                 this.user = user;

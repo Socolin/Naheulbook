@@ -29,13 +29,13 @@ export class UserProfileComponent implements OnInit {
 
     linkTo(method: string) {
         if (method === 'facebook') {
-            this.loginService.redirectToFbLogin();
+            this.loginService.redirectToFbLogin('profile');
         }
         else if (method === 'google') {
-            this.loginService.redirectToGoogleLogin();
+            this.loginService.redirectToGoogleLogin('profile');
         }
         else if (method === 'twitter') {
-            this.loginService.redirectToTwitterLogin();
+            this.loginService.redirectToTwitterLogin('profile');
         }
     }
 

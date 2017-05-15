@@ -113,7 +113,8 @@ export class LoginService extends JsonService {
             .map(res => res.json());
     }
 
-    redirectToFbLogin() {
+    redirectToFbLogin(redirectPage: string) {
+        localStorage.setItem('redirectPage', redirectPage);
         this.getLoginToken('facebook').subscribe(authInfos => {
             let state = 'facebook:' + authInfos.loginToken;
             window.location.href = 'https://www.facebook.com/dialog/oauth?client_id=' + authInfos.appKey
@@ -123,7 +124,8 @@ export class LoginService extends JsonService {
         });
     }
 
-    redirectToGoogleLogin() {
+    redirectToGoogleLogin(redirectPage: string) {
+        localStorage.setItem('redirectPage', redirectPage);
         this.getLoginToken('google').subscribe(authInfos => {
             let state = 'google:' + authInfos.loginToken;
             window.location.href = 'https://accounts.google.com/o/oauth2/auth?client_id=' + authInfos.appKey
@@ -134,7 +136,8 @@ export class LoginService extends JsonService {
         });
     }
 
-    redirectToTwitterLogin() {
+    redirectToTwitterLogin(redirectPage: string) {
+        localStorage.setItem('redirectPage', redirectPage);
         this.getLoginToken('twitter').subscribe(authInfos => {
             window.location.href = 'https://api.twitter.com/oauth/authenticate?oauth_token=' + authInfos.loginToken;
         });

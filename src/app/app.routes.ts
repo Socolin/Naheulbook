@@ -12,8 +12,12 @@ export const routes: Routes = [
         component: HomeComponent
     },
     {
-        path: 'login',
+        path: 'login/:redirect',
         component: LoginComponent,
+    },
+    {
+        path: 'logged/:redirect',
+        component: LoggedComponent,
     },
     {
         path: 'logged',

@@ -9,15 +9,16 @@ import {AuthGuard} from '../user/auth-guard';
 export const routes: Routes = [
     {
         path: 'player',
-        component: HomePlayerComponent,
         canActivate: [AuthGuard],
+        component: HomePlayerComponent,
         data: {
-            authGuardRedirect: '/login'
+            authGuardRedirect: '/login/player'
         },
         children: [
             {
                 path: '',
-                component: CharacterListComponent,
+                redirectTo: 'character/list',
+                pathMatch: 'full'
             },
             {
                 path: 'character',
