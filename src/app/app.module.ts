@@ -30,6 +30,7 @@ import {NhbkErrorHandler} from './nhbk-error-handler';
 
 import 'hammerjs';
 import {PlayerHomeModule} from './home-player/home-player.module';
+import {GmHomeModule} from './home-gm/home-gm.module';
 
 @NgModule({
     imports: [
@@ -41,6 +42,7 @@ import {PlayerHomeModule} from './home-player/home-player.module';
         HttpModule,
         HomeModule,
         PlayerHomeModule,
+        GmHomeModule,
         CharacterModule,
         EffectModule,
         GroupModule,

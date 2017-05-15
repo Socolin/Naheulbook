@@ -1,31 +1,28 @@
 <md-sidenav-container style="min-height: 100vh">
     <md-sidenav #start>
-        <h4 *ngIf="loggedUser">Utilisateur</h4>
-        <login></login>
-        <md-divider></md-divider>
-        <h4 *ngIf="loggedUser">Joueur</h4>
-        <md-nav-list *ngIf="loggedUser">
-            <a md-list-item [routerLink]="['/character/create']">Créer un personnage</a>
-            <a md-list-item [routerLink]="['/character/list']">Liste de vos personnages</a>
-            <a md-list-item [routerLink]="['/create-group']">Créer un groupe</a>
-            <a md-list-item [routerLink]="['/group-list']">Liste de vos groupes</a>
+        <h4 >MJ</h4>
+        <md-nav-list>
+            <ng-template ngFor [ngForOf]="groups" let-group>
+                <a md-list-item [routerLink]="['group/detail/', group.id]">{{group.name}}</a>
+            </ng-template>
+            <a md-list-item [routerLink]="['/gm/group/list']">Tous vos groupes</a>
+            <a md-list-item [routerLink]="['/gm/group/create']"><md-icon>add</md-icon>Créer un groupe</a>
         </md-nav-list>
         <md-divider></md-divider>
         <h4>Database</h4>
         <md-nav-list>
-            <a md-list-item [routerLink]="['/database/skills']">Compétences</a>
-            <a md-list-item [routerLink]="['/database/origins']">Origines</a>
-            <a md-list-item [routerLink]="['/database/jobs']">Metiers</a>
-            <a md-list-item [routerLink]="['/database/items']">Objets</a>
-            <a md-list-item *ngIf="loggedUser && loggedUser.admin" [routerLink]="['/create-item']">Créer un objet</a>
-            <a md-list-item [routerLink]="['/database/effects']">Effets</a>
-            <a md-list-item *ngIf="loggedUser && loggedUser.admin" [routerLink]="['/create-effect']">Créer un effet</a>
-            <a md-list-item [routerLink]="['/database/monsters']">Bestiaire</a>
-            <a md-list-item [routerLink]="['/database/locations']">Cartographie</a>
+            <a md-list-item [routerLink]="['/gm/database/skills']">Compétences</a>
+            <a md-list-item [routerLink]="['/gm/database/origins']">Origines</a>
+            <a md-list-item [routerLink]="['/gm/database/jobs']">Metiers</a>
+            <a md-list-item [routerLink]="['/gm/database/items']">Objets</a>
+            <a md-list-item [routerLink]="['/gm/database/effects']">Effets</a>
+            <a md-list-item [routerLink]="['/gm/database/monsters']">Bestiaire</a>
+            <a md-list-item [routerLink]="['/gm/database/locations']">Cartographie</a>
         </md-nav-list>
         <h4>Autre</h4>
         <md-nav-list>
             <a md-list-item [routerLink]="['/credit']">Crédits</a>
+            <a md-list-item [routerLink]="['/profile']">Profile</a>
         </md-nav-list>
     </md-sidenav>
 
@@ -38,7 +35,7 @@
                 <h1>
                     Naheulbook
                 </h1>
-                <a class="home-link" [routerLink]="['/home']"><md-icon class="md-24">home</md-icon></a>
+                <a class="home-link" [routerLink]="['/']"><md-icon class="md-24">home</md-icon></a>
             </div>
         </md-toolbar>
 

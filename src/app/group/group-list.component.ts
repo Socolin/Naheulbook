@@ -19,7 +19,12 @@ export class GroupListComponent implements OnInit {
     }
 
     selectGroup(group: Group) {
-        this._router.navigate(['/character/group/', group.id]);
+        this._router.navigate(['/gm/group/', group.id]);
+        return false;
+    }
+
+    createGroup(group: Group) {
+        this._router.navigate(['/gm/group/create']);
         return false;
     }
 

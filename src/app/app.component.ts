@@ -16,10 +16,6 @@ export class AppComponent implements OnInit {
     constructor(private _loginService: LoginService
         , private _notifications: NotificationsService
         , public _router: Router) {
-        this._router.events.subscribe(event => {
-            console.log(event);
-        })
-
     };
 
     checkIsAdmin() {
