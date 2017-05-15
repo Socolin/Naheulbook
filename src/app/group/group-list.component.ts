@@ -23,7 +23,7 @@ export class GroupListComponent implements OnInit {
         return false;
     }
 
-    createGroup(group: Group) {
+    createGroup() {
         this._router.navigate(['/gm/group/create']);
         return false;
     }
