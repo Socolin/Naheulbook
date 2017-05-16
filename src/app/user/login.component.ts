@@ -4,41 +4,20 @@ import {NotificationsService} from '../notifications';
 
 import {LoginService} from './login.service';
 import {User} from './user.model';
-import {MdDialog, MdDialogRef} from '@angular/material';
-import {LoginDialogComponent} from './login-dialog.component';
+import {MdDialog} from '@angular/material';
 
 @Component({
     selector: 'login',
     templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
     public user: User;
-    public dialogRef: MdDialogRef<LoginDialogComponent>;
     public redirectPage: string;
 
     constructor(public dialog: MdDialog
         , private _loginService: LoginService
-        , private _router: Router
-        , private _route: ActivatedRoute
-        , private _notification: NotificationsService) {
-    }
-
-    openDialog() {
-        this.dialogRef = this.dialog.open(LoginDialogComponent, {
-            disableClose: false
-        });
-
-        this.dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.login(result);
-            }
-            this.dialogRef = null;
-        });
-    }
-
-    viewProfile() {
-        this._router.navigate(['/profile']);
-        return false;
+        , private _route: ActivatedRoute) {
     }
 
     login(method: string) {
@@ -51,15 +30,6 @@ export class LoginComponent implements OnInit {
         else if (method === 'twitter') {
             this._loginService.redirectToTwitterLogin(this.redirectPage);
         }
-    }
-
-    logout() {
-        this._loginService.logout().subscribe(() => {
-            this._router.navigate(['']);
-            this._notification.info('Déconnexion', 'Vous êtes a present déconnecté');
-        });
-
-        return false;
     }
 
     ngOnInit() {

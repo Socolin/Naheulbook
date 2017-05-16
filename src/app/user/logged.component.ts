@@ -9,16 +9,15 @@ import {LoginService} from './login.service';
     templateUrl: './logged.component.html',
 })
 export class LoggedComponent implements OnInit, OnDestroy {
-    private subscribtion: Subscription;
+    private subscription: Subscription;
 
     constructor(private _loginService: LoginService
         , private _notification: NotificationsService
-        , private _route: ActivatedRoute
         , private _router: Router) {
     }
 
     ngOnDestroy() {
-        this.subscribtion.unsubscribe();
+        this.subscription.unsubscribe();
     }
 
     ngOnInit() {
@@ -31,7 +30,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
             redirectUrl = '/';
         }
 
-        this.subscribtion = this._router.routerState.root.queryParams.subscribe(params => {
+        this.subscription = this._router.routerState.root.queryParams.subscribe(params => {
             if (params.hasOwnProperty('state')) {
                 let state = decodeURIComponent(params['state']).split(':', 2);
                 let app = state[0];

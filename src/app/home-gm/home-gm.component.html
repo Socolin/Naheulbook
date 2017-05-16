@@ -3,7 +3,7 @@
         <h4 >MJ</h4>
         <md-nav-list>
             <ng-template ngFor [ngForOf]="groups" let-group>
-                <a md-list-item [routerLink]="['group/detail/', group.id]">{{group.name}}</a>
+                <a md-list-item [routerLink]="['/gm/group/', group.id]">{{group.name}}</a>
             </ng-template>
             <a md-list-item [routerLink]="['/gm/group/list']">Tous vos groupes</a>
             <a md-list-item [routerLink]="['/gm/group/create']"><md-icon>add</md-icon>Créer un groupe</a>

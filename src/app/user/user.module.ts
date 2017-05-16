@@ -5,7 +5,6 @@ import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 
 import {LoggedComponent, LoginComponent, UserProfileComponent, LoginService} from './';
-import {LoginDialogComponent} from './login-dialog.component';
 import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {AuthGuard} from './auth-guard';
@@ -22,10 +21,6 @@ import {AuthGuard} from './auth-guard';
         LoggedComponent,
         LoginComponent,
         UserProfileComponent,
-        LoginDialogComponent,
-    ],
-    entryComponents: [
-        LoginDialogComponent,
     ],
     providers: [
         LoginService,

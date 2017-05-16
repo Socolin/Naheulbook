@@ -1,9 +1,18 @@
-<div>
-    <button style="width: 100%" *ngIf="!user" md-button type="button" (click)="openDialog()">Login</button>
-    <button style="width: 100%" *ngIf="user" md-button type="button" (click)=viewProfile()>
-        {{user.displayName}}
-    </button>
-</div>
-<div>
-    <button style="width: 100%" *ngIf="user" md-button type="button" (click)="logout()">Logout</button>
+<div class="login-form">
+    <md-card>
+        <md-card-title>
+            Connexion
+        </md-card-title>
+        <md-card-content>
+            <div>
+                Choissez quelle methode utiliser pour vous authentifier.
+            </div>
+            <div>
+                <button md-raised-button color="primary" (click)="login('facebook')">Facebook</button>
+                <button md-raised-button color="primary" (click)="login('google')">Google</button>
+                <button md-raised-button color="primary" (click)="login('twitter')">Twitter</button>
+            </div>
+
+        </md-card-content>
+    </md-card>
 </div>
