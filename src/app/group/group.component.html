@@ -44,7 +44,7 @@
                         </dd>
                     </dl>
                 </md-card>
-                <md-card>
+                <md-card *ngIf="group.data?.date">
                     <md-card-title>Évènements</md-card-title>
                     <md-card-content>
                         <events #events [group]="group"></events>

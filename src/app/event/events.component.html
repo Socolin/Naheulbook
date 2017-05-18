@@ -1,5 +1,5 @@
+<event-editor #eventEditor [group]=group (onCreate)="createEvent($event)"></event-editor>
 <div *ngIf="groupTimestamp">
-    <event-editor #eventEditor [group]=group (onCreate)="createEvent($event)"></event-editor>
     <div *ngIf="pastEventCount">
         <h4>Évènements passé</h4>
         <div class="event-list">
