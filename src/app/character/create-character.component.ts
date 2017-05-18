@@ -546,10 +546,10 @@ export class CreateCharacterComponent {
         this._characterService.createCharacter(creationData).subscribe(
             res => {
                 if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
-                    this._router.navigate(['/character/group'
+                    this._router.navigate(['/gm/character/group'
                         , +this._router.routerState.snapshot.root.queryParams['groupId']]);
                 } else {
-                    this._router.navigate(['character', 'detail', res.id]);
+                    this._router.navigate(['player', 'character', 'detail', res.id]);
                 }
             },
             () => {
