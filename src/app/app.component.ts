@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {LoginService} from './user';
-import {User} from './user';
+import {ThemeService} from './theme.service';
 
 @Component({
     selector: 'app-root',
@@ -10,16 +10,14 @@ import {User} from './user';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    public loggedUser: User;
-
-    constructor(private _loginService: LoginService
+    constructor(private _themeService: ThemeService
+        , private _loginService: LoginService
         , public _router: Router) {
     };
 
     ngOnInit() {
-        this._loginService.loggedUser.subscribe(user => {
-            this.loggedUser = user;
-        });
+        this._themeService.updateTheme();
+        this._loginService.checkLogged().subscribe(() => {});
     }
 }
 

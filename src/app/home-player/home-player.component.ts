@@ -4,6 +4,7 @@ import {NavigationStart, Router} from '@angular/router';
 import {MdSidenav} from '@angular/material';
 import {CharacterService} from '../character/character.service';
 import {CharacterResume} from '../character/character.model';
+import {ThemeService} from '../theme.service';
 
 @Component({
     templateUrl: './home-player.component.html',
@@ -16,6 +17,7 @@ export class HomePlayerComponent implements OnInit {
     public start: MdSidenav;
 
     constructor(private _characterService: CharacterService
+        , private _themeService: ThemeService
         , public _router: Router) {
         this._router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
@@ -23,6 +25,10 @@ export class HomePlayerComponent implements OnInit {
             }
         })
     };
+
+    changeTheme(theme: string) {
+        this._themeService.setTheme(theme);
+    }
 
     ngOnInit() {
         this._characterService.loadList().subscribe(

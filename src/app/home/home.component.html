@@ -1,43 +1,45 @@
-<div class="home">
-    <div class="header">
-        <h1>
-            Naheulbook
-        </h1>
-        <img src="assets/favicon/android-chrome-192x192.png">
+<md-sidenav-container style="min-height: 100vh">
+    <div class="home">
+        <div class="header">
+            <h1>
+                Naheulbook
+            </h1>
+            <img src="assets/favicon/android-chrome-192x192.png">
+        </div>
+        <div>
+            <nav>
+                <button md-button [routerLink]="['/player/character/list']">Joueur</button>
+                <button md-button [routerLink]="['/gm/group/list']">Maitre du Jeu</button>
+                <button md-button [routerLink]="['/database']">Database</button>
+            </nav>
+        </div>
+        <md-card class="summary">
+            <p>
+                Naheulbook est un site/application gratuit permettant de gérer les fiches de
+                personnages du <a href="http://naheulbeuk.com/">jeu de rôle Naheulbeuk</a>
+                simplement.
+            </p>
+            <p>
+                Cette application n'a pas pour but d'automatiser le jeu, ou de faire un équivalent
+                de Roll20, mais juste de simplifier la gestion de certains mécanismes complexes ou
+                qui prenne du temps, et de pouvoir plus ce concentrer sur le roleplay.
+            </p>
+            <p>
+                Naheulbook est utilisable sur smartphone pour le mode joueur, le mode MJ est pensé
+                pour fonctionner sur une tablette (ou écran plus grand)
+            </p>
+            <p>
+                L'application est encore en cours de développement et il manque encore certaines
+                choses. Le
+                <a target="_blank" href="https://bitbucket.org/naheulbook/">
+                    code source est disponible
+                </a>
+                ainsi que le
+                <a target="_blank" href="https://jira.naheulbook.fr/projects/NHBK/issues/">
+                    gestionnaire de ticket
+                </a>
+                afin de suivre les fonctionnalités en cours de développement.
+            </p>
+        </md-card>
     </div>
-    <div>
-        <nav>
-            <button md-button [routerLink]="['/player/character/list']">Joueur</button>
-            <button md-button [routerLink]="['/gm/group/list']">Maitre du Jeu</button>
-            <button md-button [routerLink]="['/database']">Database</button>
-        </nav>
-    </div>
-    <div class="summary">
-        <p>
-            Naheulbook est un site/application gratuit permettant de gérer les fiches de
-            personnages du <a href="http://naheulbeuk.com/">jeu de rôle Naheulbeuk</a>
-            simplement.
-        </p>
-        <p>
-            Cette application n'a pas pour but d'automatiser le jeu, ou de faire un équivalent
-            de Roll20, mais juste de simplifier la gestion de certains mécanismes complexes ou
-            qui prenne du temps, et de pouvoir plus ce concentrer sur le roleplay.
-        </p>
-        <p>
-            Naheulbook est utilisable sur smartphone pour le mode joueur, le mode MJ est pensé
-            pour fonctionner sur une tablette (ou écran plus grand)
-        </p>
-        <p>
-            L'application est encore en cours de développement et il manque encore certaines
-            choses. Le
-            <a target="_blank" href="https://bitbucket.org/naheulbook/">
-                code source est disponible
-            </a>
-            ainsi que le
-            <a target="_blank" href="https://jira.naheulbook.fr/projects/NHBK/issues/">
-                gestionnaire de ticket
-            </a>
-            afin de suivre les fonctionnalités en cours de développement.
-        </p>
-    </div>
-</div>
+</md-sidenav-container>

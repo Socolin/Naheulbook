@@ -4,6 +4,7 @@ import {NotificationsService} from '../notifications';
 
 import {MdSidenav} from '@angular/material';
 import {CharacterService} from '../character/character.service';
+import {ThemeService} from '../theme.service';
 
 @Component({
     templateUrl: './home-gm.component.html',
@@ -16,6 +17,7 @@ export class HomeGmComponent implements OnInit {
     public start: MdSidenav;
 
     constructor(private _characterService: CharacterService
+        , private _themeService: ThemeService
         , private _notifications: NotificationsService
         , public _router: Router) {
         this._router.events.subscribe(event => {
@@ -24,6 +26,10 @@ export class HomeGmComponent implements OnInit {
             }
         })
     };
+
+    changeTheme(theme: string) {
+        this._themeService.setTheme(theme);
+    }
 
     loadGroups() {
         this._characterService.listGroups().subscribe(

@@ -1,0 +1,114 @@
+@import '~@angular/material/theming';
+
+@mixin character-theme($theme) {
+    // Extract whichever individual palettes you need from the theme.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    .stat-details {
+        .stat-detail-reason {
+            color: mat-color($foreground, secondary-text);
+        }
+        .stat-element {
+            color: mat-color($foreground, hint-text);
+        }
+        .detail-row {
+            border-color: mat-color($foreground, hint-text);
+        }
+    }
+
+    .stat-label {
+        color: mat-color($foreground, hint-text);
+    }
+
+    .skill-list-item {
+        p[md-line] {
+            color: mat-color($foreground, hint-text);
+        }
+        button {
+            color: mat-color($foreground, hint-text);
+        }
+    }
+
+    .selected {
+        background-color: mat-color($background, selected-button);
+    }
+
+    .item-line {
+        md-icon {
+            color: mat-color($foreground, text);
+        }
+        border-bottom-color: mat-color($foreground, hint-text);
+    }
+
+    .item-icon-container {
+        border-left-color: mat-color($foreground, hint-text);
+    }
+
+    .inventory-content {
+        .items-list {
+            .items-list-element {
+                border-bottom-color: mat-color($foreground, hint-text);
+            }
+        }
+    }
+
+    .combat-tab {
+        md-card {
+
+            &.life-mana {
+                .life-danger {
+                    color: mat-color($warn);
+                }
+
+                span {
+                    &.game-icon-hearts {
+                        @if (map_get($theme, is-dark)) {
+                            color: #a01219;
+                        } @else {
+                            color: #ff0d26;
+                        }
+                    }
+                    &.game-icon-abstract-061 {
+                        @if (map_get($theme, is-dark)) {
+                            color: #400a71;
+                        } @else {
+                            color: blueviolet;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .effect-list {
+        border-top-color: mat-color($foreground, hint-text);;
+    }
+
+    .effect-element:hover {
+        background-color: mat-color($background, hover);
+    }
+
+    .effect-element {
+        border-bottom-color: mat-color($foreground, hint-text);;
+    }
+
+    .loot-tab {
+        .loot-list {
+            .active {
+                background-color: mat-color($background, selected-button);
+            }
+
+            ul {
+                > li {
+                    > icon {
+                        color: mat-color($foreground, text);
+                    }
+                }
+            }
+        }
+    }
+}

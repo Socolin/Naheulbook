@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
 
 import {LoginService} from '../user/login.service';
@@ -36,6 +36,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     public sub: Subscription;
 
     constructor(private _router: Router
+        , private _route: ActivatedRoute
         , private _loginService: LoginService
         , private _itemService: ItemService
         , private _originService: OriginService
@@ -55,7 +56,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
             }
         } else {
             if (!this.inTab) {
-                this._router.navigate(['/database/items'], {queryParams: {id: section.id}});
+                this._router.navigate(['../items'], {queryParams: {id: section.id}, relativeTo: this._route});
             }
             else {
                 this.selectSectionById(section.id);

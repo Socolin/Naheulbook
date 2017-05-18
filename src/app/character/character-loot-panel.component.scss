@@ -2,9 +2,6 @@
     display: flex;
 
     .loot-list {
-        .active {
-            background-color: rgba(0, 0, 0, 0.2);
-        }
         flex: 1 1 0;
         md-card {
             margin: 5px;

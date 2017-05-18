@@ -31,6 +31,8 @@ import {NhbkErrorHandler} from './nhbk-error-handler';
 import 'hammerjs';
 import {PlayerHomeModule} from './home-player/home-player.module';
 import {GmHomeModule} from './home-gm/home-gm.module';
+import {DatabaseHomeModule} from './home-database/home-database.module';
+import {ThemeService} from './theme.service';
 
 @NgModule({
     imports: [
@@ -41,6 +43,7 @@ import {GmHomeModule} from './home-gm/home-gm.module';
         FlexLayoutModule.forRoot(),
         HttpModule,
         HomeModule,
+        DatabaseHomeModule,
         PlayerHomeModule,
         GmHomeModule,
         CharacterModule,
@@ -65,6 +68,7 @@ import {GmHomeModule} from './home-gm/home-gm.module';
         AppComponent
     ],
     providers: [
+        ThemeService,
         WebSocketService
         , {
             provide: ErrorHandler,

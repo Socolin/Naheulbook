@@ -34,7 +34,6 @@ md-card {
 
     .stat-label {
         font-size: 14px;
-        color: rgba(0, 0, 0, 0.54);
     }
 
     md-card {
@@ -113,19 +112,6 @@ md-card {
                     flex: 0 auto;
                 }
             }
-
-            .life-danger {
-                color: #c72b2b;
-            }
-
-            span {
-                &.game-icon-hearts {
-                    color: #c72b2b;
-                }
-                &.game-icon-abstract-061 {
-                    color: blueviolet;
-                }
-            }
         }
     }
 
@@ -171,14 +157,9 @@ md-card {
 
     .stat-details {
         font-size: smaller;
-        .stat-detail-reason {
-            color: rgba(0, 0, 0, 0.54);
-        }
-        .stat-element {
-            color: rgba(0, 0, 0, 0.75);
-        }
         .detail-row {
-            border-top: 1px solid lightgray;
+            border-top-width: 1px;
+            border-top-style: solid;
         }
     }
 
@@ -200,9 +181,6 @@ md-card {
 
 
 .weapons-card {
-    .selected {
-        background-color: #efefef;
-    }
     md-card-content {
         display: flex;
         flex-wrap: wrap;
@@ -221,12 +199,12 @@ md-card {
 
                 md-icon {
                     padding-right: 6px;
-                    color: rgba(0, 0, 0, 0.54);
                 }
             }
         }
         .item-line {
-            border-bottom: 1px solid #efefef;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
         }
     }
 }
@@ -266,12 +244,6 @@ md-card {
 
 .skill-list-item {
     height: 40px;
-    p[md-line] {
-        color: rgba(0, 0, 0, 0.54);
-    }
-    button {
-        color: rgba(0, 0, 0, 0.54);
-    }
 }
 
 .skill-info-dialog {

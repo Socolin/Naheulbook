@@ -17,6 +17,6 @@ export class ItemTemplateComponent {
     }
 
     editItem(item: ItemTemplate) {
-        this._router.navigate(['/edit-item', item.id], {queryParams: {}});
+        this._router.navigate(['/database/edit-item', item.id], {queryParams: {}});
     }
 }

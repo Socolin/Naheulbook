@@ -29,24 +29,20 @@ md-card {
 }
 
 .effect-list {
-    border-top: 1px solid #dfdfdf;
+    border-top-width: 1px;
+    border-top-style: solid;
 }
 
-.effect-element:hover {
-    background-color: #f7f7f7;
-}
 
 .effect-element {
-    &.selected {
-        background-color: #efefef;
-    }
     cursor: pointer;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
 
-    border-bottom: 1px solid #dfdfdf;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 
     md-slide-toggle {
         margin: 0;

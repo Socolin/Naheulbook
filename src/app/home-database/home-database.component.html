@@ -1,20 +1,19 @@
 <md-sidenav-container style="min-height: 100vh">
     <md-sidenav #start>
-        <h4>Vos personnages</h4>
+        <h4>Database</h4>
         <md-nav-list>
-            <ng-template ngFor [ngForOf]="characters" let-character>
-                <a md-list-item [routerLink]="['character/detail/', character.id]">{{character.name}}</a>
-            </ng-template>
-            <a md-list-item [routerLink]="['character/list']">Tous vos personnages</a>
-            <a md-list-item [routerLink]="['character/create']"><md-icon>add</md-icon>Créer un personnage</a>
-            <md-divider></md-divider>
+            <a md-list-item [routerLink]="['/database/skills']">Compétences</a>
+            <a md-list-item [routerLink]="['/database/origins']">Origines</a>
+            <a md-list-item [routerLink]="['/database/jobs']">Metiers</a>
+            <a md-list-item [routerLink]="['/database/items']">Objets</a>
+            <a md-list-item [routerLink]="['/database/effects']">Effets</a>
+            <a md-list-item [routerLink]="['/database/monsters']">Bestiaire</a>
+            <a md-list-item [routerLink]="['/database/locations']">Cartographie</a>
         </md-nav-list>
         <h4>Autre</h4>
         <md-nav-list>
             <a md-list-item [routerLink]="['/credit']">Crédits</a>
             <a md-list-item [routerLink]="['/profile']">Profile</a>
-            <a md-list-item (click)="changeTheme('dark')">Style sombre</a>
-            <a md-list-item (click)="changeTheme('light')">Style clair</a>
         </md-nav-list>
     </md-sidenav>
 

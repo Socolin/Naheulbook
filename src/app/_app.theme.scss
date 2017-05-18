@@ -1,0 +1,22 @@
+@import '~@angular/material/theming';
+
+@mixin global-theme($theme) {
+    // Extract whichever individual palettes you need from the theme.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    a {
+        color: mat-color($primary, 500);
+        text-decoration: none;
+    }
+
+    hr {
+        color: mat-color($foreground, secondary-text);
+    }
+
+    .secondary-text {
+        color: mat-color($foreground, secondary-text);
+    }
+}

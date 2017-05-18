@@ -8,10 +8,10 @@
     $foreground: map-get($theme, foreground);
 
     .ve-value {
-        background: mat-color($background, status-bar);
+        background: mat-color($background, app-bar);
     }
     .ve-value:hover {
-        background: mat-color($background, app-bar);
+        background: mat-color($background, background);
     }
 
     .ve-container {

@@ -1,19 +1,19 @@
-.selected {
-    background: #efefef;
-}
 .item-line {
     display: flex;
     align-items: center;
     height: 41px;
     width: 100%;
-    border-bottom: 1px solid #dfdfdf;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+
     .padding {
         flex: 1 auto;
     }
 }
 
 .item-icon-container {
-    border-left: 1px solid #dfdfdf;
+    border-left-width: 1px;
+    border-left-style: solid;
     margin-left: 15px;
     padding-left: 15px;
 }

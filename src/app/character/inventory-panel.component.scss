@@ -32,7 +32,8 @@ md-card {
     .inventory-content {
         .items-list {
             .items-list-element {
-                border-bottom: 1px solid #dfdfdf;
+                border-bottom-width: 1px;
+                border-bottom-style: solid;
                 display: flex;
 
                 .item-line {
@@ -46,14 +47,6 @@ md-card {
                     icon {
                         padding-right: 10px;
                     }
-
-                    md-icon {
-                        color: rgba(0, 0, 0, 0.54);
-                    }
-                }
-
-                .selected {
-                    background: #efefef;
                 }
             }
         }
