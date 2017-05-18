@@ -184,7 +184,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     createNpc() {
-        this._router.navigate(['/character/create'], {queryParams: {isNpc: true, groupId: this.group.id}});
+        this._router.navigate(['/gm/character/create'], {queryParams: {isNpc: true, groupId: this.group.id}});
         return false;
     }
 
