@@ -17,7 +17,7 @@ export class CreateGroupComponent {
     create() {
         this._characterService.createGroup(this.groupName).subscribe(
             group => {
-                this.router.navigate(['/character/group/', group.id]);
+                this.router.navigate(['/gm/group/', group.id]);
             }
         );
     }
