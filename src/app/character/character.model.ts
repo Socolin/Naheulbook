@@ -978,7 +978,6 @@ export class Character {
 
     onLevelUp(result: Character) {
         if (this.level !== result.level) {
-            this.notifyChange('Levelup ! ' + this.level + '->' + result.level);
             this.level = result.level;
             this.modifiers = result.modifiers;
             this.skills = result.skills;
@@ -986,6 +985,13 @@ export class Character {
         }
     }
 
+    onPartialLevelUp(result: Character) {
+        if (this.level !== result.level) {
+            this.level = result.level;
+            this.modifiers = result.modifiers;
+            this.update();
+        }
+    }
 
     onAddItem(item: Item) {
         for (let i = 0; i < this.items.length; i++) {
@@ -1219,7 +1225,7 @@ export class Character {
 
         websocketService.registerPacket('update').subscribe(this.onChangeCharacterStat.bind(this));
         websocketService.registerPacket('statBonusAd').subscribe(this.onSetStatBonusAD.bind(this));
-        websocketService.registerPacket('levelUp').subscribe(this.onLevelUp.bind(this));
+        websocketService.registerPacket('levelUp').subscribe(this.onPartialLevelUp.bind(this));
 
         websocketService.registerPacket('equipItem').subscribe(this.onEquipItem.bind(this));
         websocketService.registerPacket('addItem').subscribe(this.onAddItem.bind(this));

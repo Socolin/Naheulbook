@@ -111,10 +111,26 @@ export class CharacterService extends JsonService {
     }
 
     LevelUp(id: number, levelUpInfo: Object): Observable<any> {
-        return this.postJson('/api/character/levelUp', {
-            id: id,
-            levelUpInfo: levelUpInfo
-        }).map(res => res.json());
+        return Observable.forkJoin(
+            this._skillService.getSkills(),
+            this.postJson('/api/character/levelUp', {
+                id: id,
+                levelUpInfo: levelUpInfo
+            }).map(res => res.json()))
+            .map(([skills, character]: [Skill[], Character]) => {
+                for (let i = 0; i < character.skills.length; i++) {
+                    let characterSkill = character.skills[i];
+                    for (let j = 0; j < skills.length; j++) {
+                        let skill = skills[j];
+                        if (skill.id === characterSkill.id) {
+                            character.skills[i] = skill;
+                            break;
+                        }
+                    }
+                }
+                return character;
+            }
+        );
     }
 
     loadCharactersResume(list: number[]): Observable<CharacterResume[]> {
