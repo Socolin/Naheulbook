@@ -37,14 +37,11 @@
                            placeholder="Jour">
                 </md-input-container>
 
-                <!-- FIXME: wait support from material2
-                <md-select placeholder="Période" [formControl]="currentCalendarDate">
-                    <md-option *ngFor="let cDate of calendar" [value]="cDate"> {{ cDate.name}} </md-option>
+                <md-select placeholder="Période">
+                    <md-option *ngFor="let cDate of calendar" [value]="cDate">
+                        {{cDate.name}}
+                    </md-option>
                 </md-select>
-                -->
-                <select [ngModel]="currentCalendarDate" (ngModelChange)="currentCalendarDate = $event" name="period">
-                    <option *ngFor="let cDate of calendar" [ngValue]="cDate">{{ cDate.name}}</option>
-                </select>
 
                 <md-input-container>
                     <input mdInput
