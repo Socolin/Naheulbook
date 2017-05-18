@@ -103,12 +103,14 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     changeGroupValue(key: string, value: any) {
         this._groupService.editGroupValue(this.group.id, key, value).subscribe(
             data => {
+                let oldData = this.group.data;
+                this.group.data = data;
                 if (key === 'debilibeuk') {
-                    this._notification.info('Debilibeuk', this.group.data[key] + ' -> ' + value);
+                    this._notification.info('Debilibeuk', oldData[key] + ' -> ' + value);
                 } else if (key === 'mankdebol') {
-                    this._notification.info('Mankdebol', this.group.data[key] + ' -> ' + value);
+                    this._notification.info('Mankdebol', oldData[key] + ' -> ' + value);
                 } else if (key === 'inCombat') {
-                    this._notification.info('Mode combat: ', this.group.data[key] + ' -> ' + value);
+                    this._notification.info('Mode combat: ', oldData[key] + ' -> ' + value);
                     if (value) {
                         this._actionService.emitAction('onStartCombat', this.group);
                     }
@@ -119,7 +121,6 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                     this._notification.info('Date', 'Date changé');
                     this._actionService.emitAction('dateChanged', this.group);
                 }
-                this.group.data = data;
             }
         );
     }

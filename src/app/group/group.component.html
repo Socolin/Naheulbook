@@ -44,13 +44,14 @@
                         </dd>
                     </dl>
                 </md-card>
-                <md-card *ngIf="group.data?.date">
+                <md-card>
                     <md-card-title>Évènements</md-card-title>
                     <md-card-content>
                         <events #events [group]="group"></events>
                     </md-card-content>
                     <md-card-actions align="end">
                         <button md-button
+                                [disabled]="group.data?.date == null"
                                 color="primary"
                                 (click)="events.openAddEventDialog()">
                             AJOUTER UN ÉVÈNEMENT
