@@ -13,15 +13,16 @@
 }
 .tab-icon:last-child {
     border-bottom-right-radius: 6px;
-    border-bottom: 1px solid gray;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 }
 .tab-icon {
     text-align: right;
     font-size: 40px;
-    border: 1px solid gray;
+    border-width: 1px;
+    border-style: solid;
     border-bottom: 0;
     z-index: 50;
-    background-color: white;
 }
 
 .tab-label-with-icon {
@@ -41,71 +42,6 @@
 }
 
 
-.tab-icon-critic {
-    color: #3c763d;
-}
-.tab-icon-epicfail {
-    color: #d43f3a;
-}
-.tab-icon-effects {
-    color: #2b669a;
-}
-.tab-icon-entropic {
-    color: darkmagenta;
-}
-.tab-icon-skills {
-    color: darkgray;
-}
-.tab-icon-sleep {
-    color: darkblue;
-}
-.tab-icon-items {
-    color: indianred;
-}
-.tab-icon-jobs {
-    color: yellowgreen;
-}
-.tab-icon-origins {
-    color: orange;
-}
-
-
-.tab-icon-critic-selected {
-    color: white;
-    background-color: #3c763d;
-}
-.tab-icon-epicfail-selected {
-    color: white;
-    background-color: #d43f3a;
-}
-.tab-icon-effects-selected {
-    color: white;
-    background-color: #2b669a;
-}
-.tab-icon-entropic-selected {
-    color: white;
-    background-color: darkmagenta;
-}
-.tab-icon-skills-selected {
-    color: white;
-    background-color: darkgray;
-}
-.tab-icon-sleep-selected {
-    color: white;
-    background-color: darkblue;
-}
-.tab-icon-items-selected {
-    color: white;
-    background-color: indianred;
-}
-.tab-icon-jobs-selected {
-    color: white;
-    background-color: yellowgreen;
-}
-.tab-icon-origins-selected {
-    color: white;
-    background-color: orange;
-}
 
 .panel-content {
     max-width: 90vw;

@@ -202,454 +202,456 @@
 </ng-template>
 
 <ng-template #panelItems="cdkPortal" cdk-portal>
-    <div class="panel-content">
+    <md-card class="panel-content">
         <item-list [inTab]=true></item-list>
-    </div>
+    </md-card>
 </ng-template>
 
 <ng-template #panelJobs="cdkPortal" cdk-portal>
-    <div class="panel-content">
+    <md-card class="panel-content">
         <job-list></job-list>
-    </div>
+    </md-card>
 </ng-template>
 
 <ng-template #panelOrigins="cdkPortal" cdk-portal>
-    <div class="panel-content">
+    <md-card class="panel-content">
         <origin-list></origin-list>
-    </div>
+    </md-card>
 </ng-template>
 
 
 <ng-template #panelEffects="cdkPortal" cdk-portal>
-    <div class="panel-content">
+    <md-card class="panel-content">
         <effect-list [inputCategoryId]=effectsCategoryId></effect-list>
-    </div>
+    </md-card>
 </ng-template>
 
 <ng-template #panelSkills="cdkPortal" cdk-portal>
-    <div class="panel-content">
-        <div>
-            <h3>Compétences</h3>
-        </div>
-        <div>
+    <md-card class="panel-content">
+        <md-card-title>
+            Compétences
+        </md-card-title>
+        <md-card-content>
             <skill-list></skill-list>
-        </div>
-    </div>
+        </md-card-content>
+    </md-card>
 </ng-template>
 
 <ng-template #panelEntropic="cdkPortal" cdk-portal>
-    <div class="panel-content">
-        <div>
-            <h3>Tableau des sorts et prodiges entropiques</h3>
+    <md-card class="panel-content">
+        <md-card-title>
+            Tableau des sorts et prodiges entropiques
+        </md-card-title>
+        <md-card-content>
             <ul>
                 <li>Les conséquences des sorts bizarres sont laissés à la discrétion du MJ</li>
                 <li>1 personnage = celui qui fait le plus haut score au D6</li>
             </ul>
-        </div>
         <table class="table table-condensed table-striped">
             <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Effet</th>
-                <th>D100</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Pluie d'or</td>
-                <td>2000 pièces d'or tombent du ciel en rafale, causant 1 D6 de BL à tout le monde, et ce dans un rayon de
-                    50m — elles peuvent être ensuite ramassées mais ça prend du temps.
-                </td>
-                <td>1 à 5</td>
-            </tr>
-            <tr>
-                <td>Pop corn mystique</td>
-                <td>Toute la zone est noyée dans un énorme flot de pop corn, tout à fait comestible.</td>
-                <td>6</td>
-            </tr>
-            <tr>
-                <td>Poussin géant</td>
-                <td>Un ennemi, au choix du MJ, est changé en poussin géant, inoffensif. Sans ennemi, aucun effet.</td>
-                <td>7</td>
-            </tr>
-            <tr>
-                <td>Chaussettes !</td>
-                <td>Les armes des ennemis sont changées en chaussettes rouges. Sans ennemi, aucun effet.</td>
-                <td>8</td>
-            </tr>
-            <tr>
-                <td>Les 'niellas</td>
-                <td>Sans savoir pourquoi, les membres du groupe gagnent +2 en intelligence, pendant 24 heures.</td>
-                <td>9</td>
-            </tr>
-            <tr>
-                <td>Baillement de Dlul</td>
-                <td>Dlul se penche sur la scène et plonge tout le monde dans le sommeil, pour 1 D6 heures (tirer un D6 pour
-                    chaque personne sur la zone, afin de savoir qui s'éveille en premier).
-                </td>
-                <td>10 à 15</td>
-            </tr>
-            <tr>
-                <td>Guérison massive de Youclidh</td>
-                <td>Tout le monde, dans un rayon de 50m, est soigné de toutes ses blessures (sauf les morts).</td>
-                <td>16</td>
-            </tr>
-            <tr>
-                <td>L'éveil de Chakhom</td>
-                <td>Le dieu s'énerve. 2D6 chats furieux débarquent sur la zone et font n'importe quoi.</td>
-                <td>17</td>
-            </tr>
-            <tr>
-                <td>Babouches !</td>
-                <td>Toutes les lames (sauf reliques), sont changées en babouches dans un rayon de 50 mètres.</td>
-                <td>18</td>
-            </tr>
-            <tr>
-                <td>Goldfinger</td>
-                <td>Larme principale d'un personnage se change en or pur. Si c'est un Nain, il s'évanouit.</td>
-                <td>19</td>
-            </tr>
-            <tr>
-                <td>Tornade</td>
-                <td>Une tornade glacée se déclenche et tout le monde perd 2D PV dans un rayon de 100m.</td>
-                <td>20 à 25</td>
-            </tr>
-            <tr>
-                <td>Déconcentration de Slanoush</td>
-                <td>Toutes les créatures pensantes dans la zones sont le jouet d'hallucinations salaces. Ils doivent réussir
-                    un jet d'intelligence ou bien se retrouver au sol, en position foetale. Durée :10
-                    minutes.
-                </td>
-                <td>26</td>
-            </tr>
-            <tr>
-                <td>Désirs de Lafoune</td>
-                <td>Deux personnages veulent soudainement copuler. Ils ne cesseront que si on les assomme.</td>
-                <td>27</td>
-            </tr>
-            <tr>
-                <td>Auto-terreur</td>
-                <td>Le mage se jette à lui-même le sort "terreur et il est effrayé par lui-même pendant 15 min.</td>
-                <td>28</td>
-            </tr>
-            <tr>
-                <td>Influence de Keskonspwale</td>
-                <td>Toutes les créatures pensantes dans la zone sont prises de fou-rire. Ils perdent 2 points de vie et ne
-                    peuvent rien faire d'autre que rire pendant 5 minutes. Non, les animaux ne rient
-                    pas.
-                </td>
-                <td>29</td>
-            </tr>
-            <tr>
-                <td>Immolation</td>
-                <td>Les vêtements d'l personnage (D6, pair) ou d'l ennemi (D6, impair) prennent feu, -2D6 PV. Tout ce qui
-                    n'est pas "enchanté" ou "relique" est perdu.
-                </td>
-                <td>30</td>
-            </tr>
-            <tr>
-                <td>Choc en retour</td>
-                <td>Le mage se prend dans la tête une gifle de Namzar de haut niveau, il tombe et perd 10 PV.</td>
-                <td>31</td>
-            </tr>
-            <tr>
-                <td>L'homme-ballon</td>
-                <td>1 personnage du groupe commence à gonfler comme un ballon, et ne tarde pas à s'envoler (il perd 1 D6
-                    PV). On peut stopper le processus avec un dispel magic ou une blessure perforante. On
-                    peut aussi l'attacher, il dégonfle au bout de 15 minutes. S'il s'envole, il mourra en tombant.
-                </td>
-                <td>32</td>
-            </tr>
-            <tr>
-                <td>Vapeurs de Picrate</td>
-                <td>La déesse Picrate génère un brouillard d'alcool, qui plonge tout le monde dans l'ivresse. Il faut
-                    plusieurs heures pour récupérer, avec des caracs à -2 (et +4 en COU).
-                </td>
-                <td>33</td>
-            </tr>
-            <tr>
-                <td>Expérience de Tzinntch</td>
-                <td>L'un des aventuriers est frappé par un rayon noir de Tzinntch. Il perd 3D6 PV.</td>
-                <td>34</td>
-            </tr>
-            <tr>
-                <td>Soirée mousse</td>
-                <td>Une zone de 100 mètres se couvre de mousse rose qui pique les yeux, à hauteur d'homme. Il est presque
-                    impossible de combattre et il faut réussire des épreuves AD pour se mouvoir.
-                </td>
-                <td>35</td>
-            </tr>
-            <tr>
-                <td>Pastèques</td>
-                <td>Les chaussures de tous les aventuriers se transforment en pastèques, et ce n'est vraiment pas pratique !
-                    -3 CHA et -4 AD jusqu'au changement (nouvelles chaussures ou dispel magic).
-                </td>
-                <td>36</td>
-            </tr>
-            <tr>
-                <td>Vision débilitante</td>
-                <td>Une vieille dame, nue sous un imperméable transparent, apparaît et danse en chantant. Le groupe perd 2
-                    points en INT pendant 1H.
-                </td>
-                <td>37</td>
-            </tr>
-            <tr>
-                <td>Débordement de Caddyro</td>
-                <td>Des champignons géants poussent un peu partout, en quelques secondes.Ils explosent après 1 minute en
-                    libérant des spores qui donnent les crampes de Burzum ! Les symptômes apparaissent immédiatement si les
-                    aventuriers n'ont pas fui.
-                </td>
-                <td>38</td>
-            </tr>
-            <tr>
-                <td>Cactus virulents</td>
-                <td>Des cactus géant poussent un peu partout dans la zone. Épreuves AD pour les éviter, en cas d'échec la
-                    cible encaisse 1 BL + poison Kirmu. La zone doit être évacuée rapidement.
-                </td>
-                <td>39</td>
-            </tr>
-            <tr>
-                <td>Arme enchantée</td>
-                <td>Si le groupe possède des flèches, l'une d'elle se met à briller. Elle est enchantée +4 PI, et désormais
-                    indestructible. Il leur faudra la tester pour le découvrir, ou la faire examiner.
-                </td>
-                <td>40</td>
-            </tr>
-            <tr>
-                <td>Mutation mineure</td>
-                <td>Un personnage du groupe subit <a href='#' (click)=showEffects(1)>une mutation mineure</a>.</td>
-                <td>41 à 50</td>
-            </tr>
-            <tr>
-                <td>Le brouillard</td>
-                <td>Il tombe un brouillard étrange, enchanté par un dieu. La visibilité devient presque nulle ! Les sorts et
-                    prodiges ne fonctionnent plus. Durée :1 heure.
-                </td>
-                <td>51</td>
-            </tr>
-            <tr>
-                <td>Expérience de Niourgl</td>
-                <td>Le mage est touché par les miasmes de Niourgl et attrape la boustifilasse.</td>
-                <td>52</td>
-            </tr>
-            <tr>
-                <td>Expérience de Niourgl</td>
-                <td>Le mage est touché par les miasmes de Niourgl et attrape la myxomarrante.</td>
-                <td>53</td>
-            </tr>
-            <tr>
-                <td>Démon sanglier</td>
-                <td>Un démon sanglier apparaît, énervé (voir tableau des invocations).</td>
-                <td>54</td>
-            </tr>
-            <tr>
-                <td>Arme de feu</td>
-                <td>L'arme d'un ennemi se transforme en arme de feu, avec +2 PI. Sans ennemi, pas d'effet.</td>
-                <td>55</td>
-            </tr>
-            <tr>
-                <td>Truiccube</td>
-                <td>Une truiccube de Slanoush apparaît, énervée (voir tableau des invocations).</td>
-                <td>56</td>
-            </tr>
-            <tr>
-                <td>Injustice</td>
-                <td>S'il y a au moins un innocent (passant, serviteur, etc.) à portée de vue du groupe, il est frappé par un
-                    éclair de foudre (-4D6 PV). S'ils sont plusieurs, 1 D6 innocents sont frappés.
-                    S'il n'y en a pas, le sort tombe sur le/les moins charismatiques héros du groupe.
-                </td>
-                <td>57</td>
-            </tr>
-            <tr>
-                <td>Expérience de Niourgl</td>
-                <td>Un personnage est touché par les miasmes de Niourgl et attrape la tremblotite.</td>
-                <td>58</td>
-            </tr>
-            <tr>
-                <td>Mauvais choix</td>
-                <td>L'ennemi visé par le sort, si c'était le cas, devient géant. Fuyez ! Sans ennemi, c'est un personnage du
-                    groupe qui devient géant (10 m de haut). Son équipement grandit avec lui.
-                </td>
-                <td>59</td>
-            </tr>
-            <tr>
-                <td>Mutation majeure</td>
-                <td>Un personnage du groupe subit une <a href='#' (click)=showEffects(2)>mutation majeure</a>.</td>
-                <td>60 à 65</td>
-            </tr>
-            <tr>
-                <td>Shalibukk</td>
-                <td>Un démon Shalibukk apparaît, énervé (voir tableau des invocations).</td>
-                <td>66</td>
-            </tr>
-            <tr>
-                <td>Ère glaciaire</td>
-                <td>La température s'abaisse soudain sur une zone de plusieurs kilomètres carrés, descendant jusqu'à faire
-                    geler tous les liquides. Il faut s'abriter et se réchauffer. Durée : 6 heures.
-                </td>
-                <td>67</td>
-            </tr>
-            <tr>
-                <td>Sans gravité</td>
-                <td>L'influence de la gravité disparaît pratiquement sur une large zone. Les aventuriers et ennemis ne
-                    seront plus que moyennement soumis à la gravité : ils peuvent sauter haut et loin, ne se
-                    blessent pas s'ils tombent, et les tirs sont plus précis, etc. Durée : 1 heure.
-                </td>
-                <td>68</td>
-            </tr>
-            <tr>
-                <td>La grande injustice</td>
-                <td>Le personnage le moins fort du groupe est frappé par un petit météore : 5D de dégât. Si ex-aequo faites
-                    la moyenne de FO, COU et CHA. Départagez au dé.
-                </td>
-                <td>69</td>
-            </tr>
-            <tr>
-                <td>Mage malchanceux</td>
-                <td>Le mage ayant lancé le sortilège subit 1 <a href='#' (click)=showEffects(2)>mutation majeure</a> et 1 <a
-                    href='#' (click)=showEffects(1)>mineure</a>. Il perd également 1 D6 points de vie.
-                </td>
-                <td>70</td>
-            </tr>
-            <tr>
-                <td>Sables mouvants</td>
-                <td>Le sol se change en bourbier de sables mouvants, et tout le monde est lentement absorbé. Réussissez 1
-                    épreuve (moyenne FO /AD) pour en sortir, ou périssez.
-                </td>
-                <td>71</td>
-            </tr>
-            <tr>
-                <td>Nuée de Niourgl</td>
-                <td>Des milliers de mouches, provenant d'un plan putréfié, envahissent la zone. Visibilité nulle et épreuve
-                    de COU pour ne pas perdre les pédales.
-                </td>
-                <td>72</td>
-            </tr>
-            <tr>
-                <td>La disparition</td>
-                <td>Le sac à dos d'un aventurier se volatilise, avec tout ce qu'il contenait !</td>
-                <td>73</td>
-            </tr>
-            <tr>
-                <td>Changement de sexe</td>
-                <td>Tous les aventuriers changent subitement de sexe (transformation :1 minute). Certains de leurs
-                    vêtements/armure doivent être changés. Seul un exorcisme chez un prêtre de Slanoush pourra
-                    régler ça (information à récupérer chez un sage).
-                </td>
-                <td>74</td>
-            </tr>
-            <tr>
-                <td>Erreur de Youclidh</td>
-                <td>L'avatar de Youclidh se penche par-dessus un nuage. Si les aventuriers ont des ennemis, il soigne
-                    ceux-ci complètement, à la suite d'une erreur de jugement. Sinon, il rit et s'en va.
-                </td>
-                <td>75</td>
-            </tr>
-            <tr>
-                <td>Touché d'Adathie</td>
-                <td>Les bras d'un aventurier se transforment en merguez, sans doigts. 1 perd 1 D6 PV et -4 CHA. Il n'a plus
-                    de mains et doit être exorcisé par un prêtre d'Adathie ou de Youclidh.
-                </td>
-                <td>76</td>
-            </tr>
-            <tr>
-                <td>À poil !</td>
-                <td>Un personnage est frappé d'un éclair mauve. Tout son équipement disparaît, le laissant nu. S'il
-                    possèdait des reliques ou objets enchantés, il ne lui restera que ça.
-                </td>
-                <td>77</td>
-            </tr>
-            <tr>
-                <td>Le grand malade</td>
-                <td>Un personnage du groupe attrape une maladie, au D6 : 1=maldorantose, 2=gratouillette 3=flemitase dorée,
-                    4=bubonite purulente, 5=peste de Kéleem, 6=zaibola.
-                </td>
-                <td>78</td>
-            </tr>
-            <tr>
-                <td>Injustice</td>
-                <td>S'il y a au moins un innocent à portée de vue du groupe, il reçoit le sort à la place de la cible. S'ils
-                    sont plusieurs, 1 D6 innocents reçoivent le sort. S'il n'y en a pas, le sort tombe
-                    sur le moins charismatique héros du groupe.
-                </td>
-                <td>79</td>
-            </tr>
-            <tr>
-                <td>Mutations en chaîne</td>
-                <td>Tous les personnages du groupe subissent <a href='#' (click)=showEffects(1)>une mutation mineure</a>.
-                </td>
-                <td>80 à 85</td>
-            </tr>
-            <tr>
-                <td>Expérience de Niourgl</td>
-                <td>Le mage est touché par les miasmes de Niourgl et reçoit la Bubonite Purulente.</td>
-                <td>86</td>
-            </tr>
-            <tr>
-                <td>Et vlan, un gorgauth</td>
-                <td>Un gorgauth apparaît, il veut manger (voir tableau des invocations).</td>
-                <td>87</td>
-            </tr>
-            <tr>
-                <td>Dalmorg</td>
-                <td>Un dalmorg apparaît, et il n'aime pas qu'on l'invoque (voir tableau des invocations).</td>
-                <td>88</td>
-            </tr>
-            <tr>
-                <td>Le Golbargh</td>
-                <td>Le sort raté fait apparaître un Golbargh, et il n'est pas content (voir tableau des invocations).</td>
-                <td>89</td>
-            </tr>
-            <tr>
-                <td>Mutations en folie</td>
-                <td>Chaque personnage du groupe subit une <a href='#' (click)=showEffects(2)>mutation majeure</a>.</td>
-                <td>90 à 95</td>
-            </tr>
-            <tr>
-                <td>Cataclysme de Tzinntch</td>
-                <td>Un sort de masse de Tzinntch touche tout le monde dans une zone de 50m, causant 3D6 BL à chaque cible.
-                    Ignore l'armure et les protections magiques.
-                </td>
-                <td>96</td>
-            </tr>
-            <tr>
-                <td>Mage vraiment maudit</td>
-                <td>Le mage ayant lancé le sortilège subit 2 <a href='#' (click)=showEffects(2)>mutations majeures</a> et <a
-                    href='#' (click)=showEffects(1)>1 mineure</a>. Il perd également 2D6 points de vie (voir tableau des
-                    mutations pour le reste).
-                </td>
-                <td>97</td>
-            </tr>
-            <tr>
-                <td>Tempête électrique</td>
-                <td>Une tempête électrique de grande ampleur touche la zone, causant 1 D6 BL ignorant l'armure à chaque
-                    assaut, touchant tout le monde. Mieux vaut prendre la fuite rapidement ! Rayon de 50 m,
-                    environnement détruit à moins qu'il ne s'agissvalue de pierre.
-                </td>
-                <td>98</td>
-            </tr>
-            <tr>
-                <td>Tempête de feu majeure</td>
-                <td>Une pluie de météores enflammés s'abat sur une zone de 10 hectares, détruisant tout sur son passage. À
-                    moins de trouver rapidement un abri profond sous terre, chaque héros lance 1 d6 :
-                    sur 1 ou 2, il meurt écrasé et brûlé.
-                </td>
-                <td>99</td>
-            </tr>
-            <tr>
-                <td>L'Ange de la Mort</td>
-                <td>L'Ange de la mort, invoqué par le sortilège entropique, apparaît et tue un aventurier. Puis il s'en
-                    retourne en ricanant, en faisant voler sa cape.
-                </td>
-                <td>100</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+                <tr>
+                    <th>Nom</th>
+                    <th>Effet</th>
+                    <th>D100</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Pluie d'or</td>
+                    <td>2000 pièces d'or tombent du ciel en rafale, causant 1 D6 de BL à tout le monde, et ce dans un rayon de
+                        50m — elles peuvent être ensuite ramassées mais ça prend du temps.
+                    </td>
+                    <td>1 à 5</td>
+                </tr>
+                <tr>
+                    <td>Pop corn mystique</td>
+                    <td>Toute la zone est noyée dans un énorme flot de pop corn, tout à fait comestible.</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>Poussin géant</td>
+                    <td>Un ennemi, au choix du MJ, est changé en poussin géant, inoffensif. Sans ennemi, aucun effet.</td>
+                    <td>7</td>
+                </tr>
+                <tr>
+                    <td>Chaussettes !</td>
+                    <td>Les armes des ennemis sont changées en chaussettes rouges. Sans ennemi, aucun effet.</td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td>Les 'niellas</td>
+                    <td>Sans savoir pourquoi, les membres du groupe gagnent +2 en intelligence, pendant 24 heures.</td>
+                    <td>9</td>
+                </tr>
+                <tr>
+                    <td>Baillement de Dlul</td>
+                    <td>Dlul se penche sur la scène et plonge tout le monde dans le sommeil, pour 1 D6 heures (tirer un D6 pour
+                        chaque personne sur la zone, afin de savoir qui s'éveille en premier).
+                    </td>
+                    <td>10 à 15</td>
+                </tr>
+                <tr>
+                    <td>Guérison massive de Youclidh</td>
+                    <td>Tout le monde, dans un rayon de 50m, est soigné de toutes ses blessures (sauf les morts).</td>
+                    <td>16</td>
+                </tr>
+                <tr>
+                    <td>L'éveil de Chakhom</td>
+                    <td>Le dieu s'énerve. 2D6 chats furieux débarquent sur la zone et font n'importe quoi.</td>
+                    <td>17</td>
+                </tr>
+                <tr>
+                    <td>Babouches !</td>
+                    <td>Toutes les lames (sauf reliques), sont changées en babouches dans un rayon de 50 mètres.</td>
+                    <td>18</td>
+                </tr>
+                <tr>
+                    <td>Goldfinger</td>
+                    <td>Larme principale d'un personnage se change en or pur. Si c'est un Nain, il s'évanouit.</td>
+                    <td>19</td>
+                </tr>
+                <tr>
+                    <td>Tornade</td>
+                    <td>Une tornade glacée se déclenche et tout le monde perd 2D PV dans un rayon de 100m.</td>
+                    <td>20 à 25</td>
+                </tr>
+                <tr>
+                    <td>Déconcentration de Slanoush</td>
+                    <td>Toutes les créatures pensantes dans la zones sont le jouet d'hallucinations salaces. Ils doivent réussir
+                        un jet d'intelligence ou bien se retrouver au sol, en position foetale. Durée :10
+                        minutes.
+                    </td>
+                    <td>26</td>
+                </tr>
+                <tr>
+                    <td>Désirs de Lafoune</td>
+                    <td>Deux personnages veulent soudainement copuler. Ils ne cesseront que si on les assomme.</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>Auto-terreur</td>
+                    <td>Le mage se jette à lui-même le sort "terreur et il est effrayé par lui-même pendant 15 min.</td>
+                    <td>28</td>
+                </tr>
+                <tr>
+                    <td>Influence de Keskonspwale</td>
+                    <td>Toutes les créatures pensantes dans la zone sont prises de fou-rire. Ils perdent 2 points de vie et ne
+                        peuvent rien faire d'autre que rire pendant 5 minutes. Non, les animaux ne rient
+                        pas.
+                    </td>
+                    <td>29</td>
+                </tr>
+                <tr>
+                    <td>Immolation</td>
+                    <td>Les vêtements d'l personnage (D6, pair) ou d'l ennemi (D6, impair) prennent feu, -2D6 PV. Tout ce qui
+                        n'est pas "enchanté" ou "relique" est perdu.
+                    </td>
+                    <td>30</td>
+                </tr>
+                <tr>
+                    <td>Choc en retour</td>
+                    <td>Le mage se prend dans la tête une gifle de Namzar de haut niveau, il tombe et perd 10 PV.</td>
+                    <td>31</td>
+                </tr>
+                <tr>
+                    <td>L'homme-ballon</td>
+                    <td>1 personnage du groupe commence à gonfler comme un ballon, et ne tarde pas à s'envoler (il perd 1 D6
+                        PV). On peut stopper le processus avec un dispel magic ou une blessure perforante. On
+                        peut aussi l'attacher, il dégonfle au bout de 15 minutes. S'il s'envole, il mourra en tombant.
+                    </td>
+                    <td>32</td>
+                </tr>
+                <tr>
+                    <td>Vapeurs de Picrate</td>
+                    <td>La déesse Picrate génère un brouillard d'alcool, qui plonge tout le monde dans l'ivresse. Il faut
+                        plusieurs heures pour récupérer, avec des caracs à -2 (et +4 en COU).
+                    </td>
+                    <td>33</td>
+                </tr>
+                <tr>
+                    <td>Expérience de Tzinntch</td>
+                    <td>L'un des aventuriers est frappé par un rayon noir de Tzinntch. Il perd 3D6 PV.</td>
+                    <td>34</td>
+                </tr>
+                <tr>
+                    <td>Soirée mousse</td>
+                    <td>Une zone de 100 mètres se couvre de mousse rose qui pique les yeux, à hauteur d'homme. Il est presque
+                        impossible de combattre et il faut réussire des épreuves AD pour se mouvoir.
+                    </td>
+                    <td>35</td>
+                </tr>
+                <tr>
+                    <td>Pastèques</td>
+                    <td>Les chaussures de tous les aventuriers se transforment en pastèques, et ce n'est vraiment pas pratique !
+                        -3 CHA et -4 AD jusqu'au changement (nouvelles chaussures ou dispel magic).
+                    </td>
+                    <td>36</td>
+                </tr>
+                <tr>
+                    <td>Vision débilitante</td>
+                    <td>Une vieille dame, nue sous un imperméable transparent, apparaît et danse en chantant. Le groupe perd 2
+                        points en INT pendant 1H.
+                    </td>
+                    <td>37</td>
+                </tr>
+                <tr>
+                    <td>Débordement de Caddyro</td>
+                    <td>Des champignons géants poussent un peu partout, en quelques secondes.Ils explosent après 1 minute en
+                        libérant des spores qui donnent les crampes de Burzum ! Les symptômes apparaissent immédiatement si les
+                        aventuriers n'ont pas fui.
+                    </td>
+                    <td>38</td>
+                </tr>
+                <tr>
+                    <td>Cactus virulents</td>
+                    <td>Des cactus géant poussent un peu partout dans la zone. Épreuves AD pour les éviter, en cas d'échec la
+                        cible encaisse 1 BL + poison Kirmu. La zone doit être évacuée rapidement.
+                    </td>
+                    <td>39</td>
+                </tr>
+                <tr>
+                    <td>Arme enchantée</td>
+                    <td>Si le groupe possède des flèches, l'une d'elle se met à briller. Elle est enchantée +4 PI, et désormais
+                        indestructible. Il leur faudra la tester pour le découvrir, ou la faire examiner.
+                    </td>
+                    <td>40</td>
+                </tr>
+                <tr>
+                    <td>Mutation mineure</td>
+                    <td>Un personnage du groupe subit <a href='#' (click)=showEffects(1)>une mutation mineure</a>.</td>
+                    <td>41 à 50</td>
+                </tr>
+                <tr>
+                    <td>Le brouillard</td>
+                    <td>Il tombe un brouillard étrange, enchanté par un dieu. La visibilité devient presque nulle ! Les sorts et
+                        prodiges ne fonctionnent plus. Durée :1 heure.
+                    </td>
+                    <td>51</td>
+                </tr>
+                <tr>
+                    <td>Expérience de Niourgl</td>
+                    <td>Le mage est touché par les miasmes de Niourgl et attrape la boustifilasse.</td>
+                    <td>52</td>
+                </tr>
+                <tr>
+                    <td>Expérience de Niourgl</td>
+                    <td>Le mage est touché par les miasmes de Niourgl et attrape la myxomarrante.</td>
+                    <td>53</td>
+                </tr>
+                <tr>
+                    <td>Démon sanglier</td>
+                    <td>Un démon sanglier apparaît, énervé (voir tableau des invocations).</td>
+                    <td>54</td>
+                </tr>
+                <tr>
+                    <td>Arme de feu</td>
+                    <td>L'arme d'un ennemi se transforme en arme de feu, avec +2 PI. Sans ennemi, pas d'effet.</td>
+                    <td>55</td>
+                </tr>
+                <tr>
+                    <td>Truiccube</td>
+                    <td>Une truiccube de Slanoush apparaît, énervée (voir tableau des invocations).</td>
+                    <td>56</td>
+                </tr>
+                <tr>
+                    <td>Injustice</td>
+                    <td>S'il y a au moins un innocent (passant, serviteur, etc.) à portée de vue du groupe, il est frappé par un
+                        éclair de foudre (-4D6 PV). S'ils sont plusieurs, 1 D6 innocents sont frappés.
+                        S'il n'y en a pas, le sort tombe sur le/les moins charismatiques héros du groupe.
+                    </td>
+                    <td>57</td>
+                </tr>
+                <tr>
+                    <td>Expérience de Niourgl</td>
+                    <td>Un personnage est touché par les miasmes de Niourgl et attrape la tremblotite.</td>
+                    <td>58</td>
+                </tr>
+                <tr>
+                    <td>Mauvais choix</td>
+                    <td>L'ennemi visé par le sort, si c'était le cas, devient géant. Fuyez ! Sans ennemi, c'est un personnage du
+                        groupe qui devient géant (10 m de haut). Son équipement grandit avec lui.
+                    </td>
+                    <td>59</td>
+                </tr>
+                <tr>
+                    <td>Mutation majeure</td>
+                    <td>Un personnage du groupe subit une <a href='#' (click)=showEffects(2)>mutation majeure</a>.</td>
+                    <td>60 à 65</td>
+                </tr>
+                <tr>
+                    <td>Shalibukk</td>
+                    <td>Un démon Shalibukk apparaît, énervé (voir tableau des invocations).</td>
+                    <td>66</td>
+                </tr>
+                <tr>
+                    <td>Ère glaciaire</td>
+                    <td>La température s'abaisse soudain sur une zone de plusieurs kilomètres carrés, descendant jusqu'à faire
+                        geler tous les liquides. Il faut s'abriter et se réchauffer. Durée : 6 heures.
+                    </td>
+                    <td>67</td>
+                </tr>
+                <tr>
+                    <td>Sans gravité</td>
+                    <td>L'influence de la gravité disparaît pratiquement sur une large zone. Les aventuriers et ennemis ne
+                        seront plus que moyennement soumis à la gravité : ils peuvent sauter haut et loin, ne se
+                        blessent pas s'ils tombent, et les tirs sont plus précis, etc. Durée : 1 heure.
+                    </td>
+                    <td>68</td>
+                </tr>
+                <tr>
+                    <td>La grande injustice</td>
+                    <td>Le personnage le moins fort du groupe est frappé par un petit météore : 5D de dégât. Si ex-aequo faites
+                        la moyenne de FO, COU et CHA. Départagez au dé.
+                    </td>
+                    <td>69</td>
+                </tr>
+                <tr>
+                    <td>Mage malchanceux</td>
+                    <td>Le mage ayant lancé le sortilège subit 1 <a href='#' (click)=showEffects(2)>mutation majeure</a> et 1 <a
+                        href='#' (click)=showEffects(1)>mineure</a>. Il perd également 1 D6 points de vie.
+                    </td>
+                    <td>70</td>
+                </tr>
+                <tr>
+                    <td>Sables mouvants</td>
+                    <td>Le sol se change en bourbier de sables mouvants, et tout le monde est lentement absorbé. Réussissez 1
+                        épreuve (moyenne FO /AD) pour en sortir, ou périssez.
+                    </td>
+                    <td>71</td>
+                </tr>
+                <tr>
+                    <td>Nuée de Niourgl</td>
+                    <td>Des milliers de mouches, provenant d'un plan putréfié, envahissent la zone. Visibilité nulle et épreuve
+                        de COU pour ne pas perdre les pédales.
+                    </td>
+                    <td>72</td>
+                </tr>
+                <tr>
+                    <td>La disparition</td>
+                    <td>Le sac à dos d'un aventurier se volatilise, avec tout ce qu'il contenait !</td>
+                    <td>73</td>
+                </tr>
+                <tr>
+                    <td>Changement de sexe</td>
+                    <td>Tous les aventuriers changent subitement de sexe (transformation :1 minute). Certains de leurs
+                        vêtements/armure doivent être changés. Seul un exorcisme chez un prêtre de Slanoush pourra
+                        régler ça (information à récupérer chez un sage).
+                    </td>
+                    <td>74</td>
+                </tr>
+                <tr>
+                    <td>Erreur de Youclidh</td>
+                    <td>L'avatar de Youclidh se penche par-dessus un nuage. Si les aventuriers ont des ennemis, il soigne
+                        ceux-ci complètement, à la suite d'une erreur de jugement. Sinon, il rit et s'en va.
+                    </td>
+                    <td>75</td>
+                </tr>
+                <tr>
+                    <td>Touché d'Adathie</td>
+                    <td>Les bras d'un aventurier se transforment en merguez, sans doigts. 1 perd 1 D6 PV et -4 CHA. Il n'a plus
+                        de mains et doit être exorcisé par un prêtre d'Adathie ou de Youclidh.
+                    </td>
+                    <td>76</td>
+                </tr>
+                <tr>
+                    <td>À poil !</td>
+                    <td>Un personnage est frappé d'un éclair mauve. Tout son équipement disparaît, le laissant nu. S'il
+                        possèdait des reliques ou objets enchantés, il ne lui restera que ça.
+                    </td>
+                    <td>77</td>
+                </tr>
+                <tr>
+                    <td>Le grand malade</td>
+                    <td>Un personnage du groupe attrape une maladie, au D6 : 1=maldorantose, 2=gratouillette 3=flemitase dorée,
+                        4=bubonite purulente, 5=peste de Kéleem, 6=zaibola.
+                    </td>
+                    <td>78</td>
+                </tr>
+                <tr>
+                    <td>Injustice</td>
+                    <td>S'il y a au moins un innocent à portée de vue du groupe, il reçoit le sort à la place de la cible. S'ils
+                        sont plusieurs, 1 D6 innocents reçoivent le sort. S'il n'y en a pas, le sort tombe
+                        sur le moins charismatique héros du groupe.
+                    </td>
+                    <td>79</td>
+                </tr>
+                <tr>
+                    <td>Mutations en chaîne</td>
+                    <td>Tous les personnages du groupe subissent <a href='#' (click)=showEffects(1)>une mutation mineure</a>.
+                    </td>
+                    <td>80 à 85</td>
+                </tr>
+                <tr>
+                    <td>Expérience de Niourgl</td>
+                    <td>Le mage est touché par les miasmes de Niourgl et reçoit la Bubonite Purulente.</td>
+                    <td>86</td>
+                </tr>
+                <tr>
+                    <td>Et vlan, un gorgauth</td>
+                    <td>Un gorgauth apparaît, il veut manger (voir tableau des invocations).</td>
+                    <td>87</td>
+                </tr>
+                <tr>
+                    <td>Dalmorg</td>
+                    <td>Un dalmorg apparaît, et il n'aime pas qu'on l'invoque (voir tableau des invocations).</td>
+                    <td>88</td>
+                </tr>
+                <tr>
+                    <td>Le Golbargh</td>
+                    <td>Le sort raté fait apparaître un Golbargh, et il n'est pas content (voir tableau des invocations).</td>
+                    <td>89</td>
+                </tr>
+                <tr>
+                    <td>Mutations en folie</td>
+                    <td>Chaque personnage du groupe subit une <a href='#' (click)=showEffects(2)>mutation majeure</a>.</td>
+                    <td>90 à 95</td>
+                </tr>
+                <tr>
+                    <td>Cataclysme de Tzinntch</td>
+                    <td>Un sort de masse de Tzinntch touche tout le monde dans une zone de 50m, causant 3D6 BL à chaque cible.
+                        Ignore l'armure et les protections magiques.
+                    </td>
+                    <td>96</td>
+                </tr>
+                <tr>
+                    <td>Mage vraiment maudit</td>
+                    <td>Le mage ayant lancé le sortilège subit 2 <a href='#' (click)=showEffects(2)>mutations majeures</a> et <a
+                        href='#' (click)=showEffects(1)>1 mineure</a>. Il perd également 2D6 points de vie (voir tableau des
+                        mutations pour le reste).
+                    </td>
+                    <td>97</td>
+                </tr>
+                <tr>
+                    <td>Tempête électrique</td>
+                    <td>Une tempête électrique de grande ampleur touche la zone, causant 1 D6 BL ignorant l'armure à chaque
+                        assaut, touchant tout le monde. Mieux vaut prendre la fuite rapidement ! Rayon de 50 m,
+                        environnement détruit à moins qu'il ne s'agissvalue de pierre.
+                    </td>
+                    <td>98</td>
+                </tr>
+                <tr>
+                    <td>Tempête de feu majeure</td>
+                    <td>Une pluie de météores enflammés s'abat sur une zone de 10 hectares, détruisant tout sur son passage. À
+                        moins de trouver rapidement un abri profond sous terre, chaque héros lance 1 d6 :
+                        sur 1 ou 2, il meurt écrasé et brûlé.
+                    </td>
+                    <td>99</td>
+                </tr>
+                <tr>
+                    <td>L'Ange de la Mort</td>
+                    <td>L'Ange de la mort, invoqué par le sortilège entropique, apparaît et tue un aventurier. Puis il s'en
+                        retourne en ricanant, en faisant voler sa cape.
+                    </td>
+                    <td>100</td>
+                </tr>
+                </tbody>
+            </table>
+        </md-card-content>
+    </md-card>
 </ng-template>
 
 <ng-template #panelSleep="cdkPortal" cdk-portal>
-    <div class="panel-content">
+    <md-card class="panel-content">
         <div>
             <h3>Recuperation</h3>
             <ul>
@@ -746,7 +748,7 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </md-card>
 </ng-template>
 
 <div class="placeholder">
