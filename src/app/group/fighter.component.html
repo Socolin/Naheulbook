@@ -98,12 +98,9 @@
                         [fieldName]="'xp'">
                     </monster-editable-field>
                 </div>
-                <div>
-                    <button class="btn btn-primary glyphicon glyphicon-plus-sign" (click)="fighter.monster.viewInventory = !fighter.monster.viewInventory" *ngIf="fighter.monster.items?.length"></button>
-                </div>
             </div>
             <div style="display: flex; justify-content: space-between">
-                <div>
+                <div style="min-width: 180px;">
                     <target-selector [fighter]=fighter
                                      [targets]=fighters
                                      (onTargetChange)='changeTarget(fighter, $event)'>
@@ -121,6 +118,9 @@
             <div class="fighter-row">
                 <div>
                     <div class="row">
+                        <div>
+                            <button md-button (click)="fighter.monster.viewInventory = !fighter.monster.viewInventory" *ngIf="fighter.monster.items?.length"><md-icon>plus</md-icon></button>
+                        </div>
                         <div *ngFor="let item of fighter.monster.items">
                             <div *ngIf="fighter.monster.viewInventory || itemHasSlot(item.template, 'WEAPON')">
                                 {{item.data.name}}

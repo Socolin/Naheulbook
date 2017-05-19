@@ -1,0 +1,13 @@
+@import '~@angular/material/theming';
+
+@mixin usefull-data-theme($theme) {
+    // Extract whichever individual palettes you need from the theme.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    .data:nth-child(even) {
+        background-color: mat-color($background, selected-button);
+    }
+}

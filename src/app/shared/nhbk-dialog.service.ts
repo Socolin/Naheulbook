@@ -22,4 +22,21 @@ export class NhbkDialogService {
         }
         return overlayRef;
     }
+
+    openTopCenteredBackdropDialog(portal: Portal<any>, noBackdropEvent?: boolean): OverlayRef {
+        let config = new OverlayState();
+
+        config.positionStrategy = this._overlay.position()
+            .global()
+            .centerHorizontally()
+            .top('40px');
+        config.hasBackdrop = true;
+
+        let overlayRef = this._overlay.create(config);
+        overlayRef.attach(portal);
+        if (!noBackdropEvent) {
+            overlayRef.backdropClick().subscribe(() => overlayRef.detach());
+        }
+        return overlayRef;
+    }
 }

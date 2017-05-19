@@ -1,7 +1,9 @@
-<div class="row tab-content" [class.tab-hidden]="currentPanel != 'critic'">
-    <div class="tab-inner-content">
-        <div class="col-xs-12">
-            <h3>Attaque et parade critique</h3>
+<ng-template #panelCritic="cdkPortal" cdk-portal>
+    <md-card class="panel-content">
+        <md-card-title>
+            Attaque et parade critique (Réussite critique)
+        </md-card-title>
+        <md-card-content>
             <ul>
                 <li><strong>Attaque critique</strong> L'attaquant tire <strong>1</strong> au jet d'ATTAQUE sur un ennemi
                 </li>
@@ -10,444 +12,102 @@
                 </li>
                 <li>L'Attaque critique IGNORE L'ARMURE et ne peut être parée ou esquivée</li>
             </ul>
-        </div>
-        <div class="col-xs-12">
-            <h4>
-                <span (click)="selectSubPanel('sword')">
-                    <span class="ra ra-sword ra-2x"></span>
-                    <span [hidden]="currentSubPanel!='sword'">Attaque critique arme tranchante</span>
-                </span>
-                <span (click)="selectSubPanel('hammer')">
-                    <span class="ra ra-large-hammer ra-2x"></span>
-                    <span [hidden]="currentSubPanel!='hammer'">Attaque critique arme contondante</span>
-                </span>
-                <span (click)="selectSubPanel('protect')">
-                    <span class="ra ra-shield ra-2x"></span>
-                    <span [hidden]="currentSubPanel!='protect'">Parade critique</span>
-                </span>
-                <span (click)="selectSubPanel('hand')">
-                    <span class="ra ra-hand ra-2x"></span>
-                    <span [hidden]="currentSubPanel!='hand'">Attaque critique à mains nues</span>
-                </span>
-                <span (click)="selectSubPanel('arrow')">
-                    <span class="ra ra-arrow-flights ra-2x"></span>
-                    <span [hidden]="currentSubPanel!='arrow'">Attaque critique aux projectiles</span>
-                </span>
-            </h4>
-        </div>
+            <md-tab-group>
+                <md-tab>
+                    <ng-template md-tab-label>
+                        <div class="tab-label-with-icon">
+                            <md-icon fontSet="game-icon" fontIcon="game-icon-broad-dagger"></md-icon>
+                            <span>Arme tranchante</span>
+                        </div>
+                    </ng-template>
 
-        <div class="col-xs-12" [hidden]="currentSubPanel!='sword'">
-            <p>épées, lances, lames diverses, haches...</p>
-            <table class="table table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>D20</th>
-                    <th>Effet sur l'ennemi</th>
-                    <th>Modif. dégâts</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1-2</td>
-                    <td>Incision profonde</td>
-                    <td>Degâts +1</td>
-                </tr>
-                <tr>
-                    <td>3-4</td>
-                    <td>Incision vraiment profonde</td>
-                    <td>Degâts +2</td>
-                </tr>
-                <tr>
-                    <td>5-6</td>
-                    <td>Plaie impressionnante et dommages à l'armure</td>
-                    <td>Degâts +3 pièce d'armure PR -1</td>
-                </tr>
-                <tr>
-                    <td>7-8</td>
-                    <td>Coup précis et dommages à l'armure</td>
-                    <td>Degâts +4 pièce d'armure PR -2</td>
-                </tr>
-                <tr>
-                    <td>9-10</td>
-                    <td>Coup précis de bourrin et dommages à l'armure</td>
-                    <td>Degâts +5 pièce d'armure PR -3</td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td>Une partie de l'armure est détruite Pièce d'armure concernée</td>
-                    <td>PR=O</td>
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td>Œil crevé</td>
-                    <td>Dégâts +5 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>13</td>
-                    <td>Main tranchée droite (au D6 - 1-3) ou gauche (au D6 - 4-6)</td>
-                    <td>Dégâts +6 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>14</td>
-                    <td>Pied tranché droit (au D6 - 1-3) ou gauche (au D6 - 4-6)</td>
-                    <td>Dégâts +6 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>15</td>
-                    <td>Bras tranché droit (au D6 - 1-3) ou gauche (au D6 - 4-6)</td>
-                    <td>Dégâts +7 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>16</td>
-                    <td>Jambe tranchée droite (au D6 - 1-3) ou gauche (au D6 - 4-6)</td>
-                    <td>Dégâts +8 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>17</td>
-                    <td>Organes génitaux endommagés</td>
-                    <td>Dégâts +5 et durée**</td>
-                </tr>
-                <tr>
-                    <td>18</td>
-                    <td>Organe vital endommagé</td>
-                    <td>Dégâts +9 et durée**</td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td>Blessure au coeur</td>
-                    <td>Décès</td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>Blessure grave à la tête</td>
-                    <td>Décès</td>
-                </tr>
-                <tr>
-                    <td colspan=3>* voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
-                        graves</a></td>
-                </tr>
-                <tr>
-                    <td colspan=3>** Hémorragie, dégâts sur la durée : la victime perd 1 D6 PV chaque minute jusqu'à ce
+                    <p>Epées, lances, lames diverses, haches...</p>
+                    <data-array
+                        [labels]="['D20', 'Effet sur l\'ennemi', 'Modif. dégâts']"
+                        [datas]="criticData['sharp']">
+                    </data-array>
+                    <p>
+                        * voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures graves</a>
+                    </p>
+                    <p>
+                        ** Hémorragie, dégâts sur la durée : la victime perd 1 D6 PV chaque minute jusqu'à ce
                         qu'on la soigne
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-xs-12" [hidden]="currentSubPanel!='hammer'">
-            <p>massues, bâtons, marteaux, masses, fléaux, nunchakus...</p>
-            <table class="table table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>D20</th>
-                    <th>Effet sur l'ennemi</th>
-                    <th>Modif. dégâts</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1-2</td>
-                    <td>Ématome impressionnant</td>
-                    <td>Degâts +1</td>
-                </tr>
-                <tr>
-                    <td>3-4</td>
-                    <td>Ématome et luxation d'un membre</td>
-                    <td>Degâts +2</td>
-                </tr>
-                <tr>
-                    <td>5-6</td>
-                    <td>Fracture de côte</td>
-                    <td>Degâts +3</td>
-                </tr>
-                <tr>
-                    <td>7-8</td>
-                    <td>Coup précis et dommages à l'armure</td>
-                    <td>Degâts +4 pièce d'armure PR -1</td>
-                </tr>
-                <tr>
-                    <td>9-10</td>
-                    <td>Coup précis de bourrin et dommages à l'armure</td>
-                    <td>Degâts +5 pièce d'armure PR -2</td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td>Une partie de l'armure est détruite</td>
-                    <td>Pièce d'armure concernée PR=O</td>
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td>Luxation du genou</td>
-                    <td>Dégâts +3 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>13</td>
-                    <td>Main cassée droite (au D6 - 1-3) ou gauche (au D6 - 4-6)</td>
-                    <td>Dégâts +3 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>14</td>
-                    <td>Pied écrasé droit (au D6 - 1-3) ou gauche (au D6 - 4-6)</td>
-                    <td>Dégâts +3 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>15</td>
-                    <td>Bras cassé droit (au D6 - 1-3) ou gauche (au D6 - 4-6)</td>
-                    <td>Dégâts +4 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>16</td>
-                    <td>Jambe cassée droite (au D6 - 1-3) ou gauche (au D6 - 4-6)</td>
-                    <td>Dégâts +5 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>17</td>
-                    <td>Organes génitaux écrasés</td>
-                    <td>Dégâts +5 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>18</td>
-                    <td>Assommé</td>
-                    <td> Inconscient</td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td>Fracture ouverte du crâne</td>
-                    <td>Décès</td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>Ecrasement violent d'un organe vital</td>
-                    <td>Décès</td>
-                </tr>
-                <tr>
-                    <td colspan=3>* voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
-                        graves</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-xs-12" [hidden]="currentSubPanel!='protect'">
-            <table class="table table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>D20</th>
-                    <th>Effet sur l'ennemi</th>
-                    <th>Modif. dégâts</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1-2</td>
-                    <td>Mais non en fait : la parade était normale</td>
-                    <td>Résolution normale de parade</td>
-                </tr>
-                <tr>
-                    <td>3-5</td>
-                    <td>L'ennemi est repoussé</td>
-                    <td>Il rate un assaut</td>
-                </tr>
-                <tr>
-                    <td>6-7</td>
-                    <td>L'ennemi trébuche</td>
-                    <td>Il subit 1 attaque imparable</td>
-                </tr>
-                <tr>
-                    <td>8-9</td>
-                    <td>L'ennemi tombe</td>
-                    <td>Il subit 2 attaques imparables</td>
-                </tr>
-                <tr>
-                    <td>10-12</td>
-                    <td>L'ennemi lâche son arme à 1 D6 mètres</td>
-                    <td>Il combat à mains nues</td>
-                </tr>
-                <tr>
-                    <td>13-15</td>
-                    <td>L'ennemi casse son arme</td>
-                    <td>Il combat à mains nues</td>
-                </tr>
-                <tr>
-                    <td>16-18</td>
-                    <td>L'ennemi reçoit un coup de votre arme</td>
-                    <td>Il subit des dégâts</td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td>L'ennemi subit un coup critique avec votre arme</td>
-                    <td>Il subit des dégâts : table critique</td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>L'ennemi, ce loser, subit un coup critique avec son arme</td>
-                    <td>II subit des dégâts : table critique</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-xs-12" [hidden]="currentSubPanel!='hand'">
-            <p>A utiliser si jamais le héros s'engage dans un combat à mains nues</p>
-            <table class="table table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>D20</th>
-                    <th>Effet sur l'ennemi</th>
-                    <th>Modif. dégâts</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1-2</td>
-                    <td>Ématome impressionnant</td>
-                    <td>Degâts +1</td>
-                </tr>
-                <tr>
-                    <td>3-4</td>
-                    <td>Ématome et luxation d'un membre</td>
-                    <td>Degâts +2</td>
-                </tr>
-                <tr>
-                    <td>5-6</td>
-                    <td>Fracture du nez, hémorragie nasale</td>
-                    <td>Degâts +3</td>
-                </tr>
-                <tr>
-                    <td>7-8</td>
-                    <td>Fracture de côte</td>
-                    <td>Degâts +4</td>
-                </tr>
-                <tr>
-                    <td>9-10</td>
-                    <td>Coup précis de bourrin dans la tempe</td>
-                    <td>Degâts +2, cible étourdie 3 assauts</td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td>Coup précis au sternum</td>
-                    <td>Cible étourdie 4 assauts</td>
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td>Luxation du genou</td>
-                    <td>Dégâts +3 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>13</td>
-                    <td>Main cassée droite (au D6 - 1-3) ou gauche (au D6 - 4-6)</td>
-                    <td>Dégâts +3 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>14</td>
-                    <td>Mâchoire brisée</td>
-                    <td>Dégâts +3, incapacité à parler</td>
-                </tr>
-                <tr>
-                    <td>15</td>
-                    <td>Bras cassé droit (au D6 - 1-3) ou gauche (au D6 - 4-6)</td>
-                    <td>Dégâts +4 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>16/17</td>
-                    <td>Organes génitaux écrasés, houlala</td>
-                    <td>Dégâts +5 et modifs*</td>
-                </tr>
-                <tr>
-                    <td>18/19</td>
-                    <td>Assommé</td>
-                    <td>Inconscient</td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>Enfoncement du nez dans le cerveau</td>
-                    <td>Décès</td>
-                </tr>
-                <tr>
-                    <td colspan=3>* voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
-                        graves</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-xs-12" [hidden]="currentSubPanel!='arrow'">
-            <p>Projectiles : flèches, carreaux, javelots, poignards, dagues...</p>
-            <table class="table table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>D20</th>
-                    <th>Effet sur l'ennemi</th>
-                    <th>Modif. dégâts</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1 ou 2</td>
-                    <td>Projectile bien placé</td>
-                    <td>Degâts +1</td>
-                </tr>
-                <tr>
-                    <td>3 à 4</td>
-                    <td>Projectile magistralement placé</td>
-                    <td>Degâts +2</td>
-                </tr>
-                <tr>
-                    <td>5 à 6</td>
-                    <td>Projectile dans une articulation du bras</td>
-                    <td>Degâts +3, AT/PRD-2</td>
-                </tr>
-                <tr>
-                    <td>7 à 8</td>
-                    <td>Projectile dans une articulation de la jambe</td>
-                    <td>Degâts +3, MV-50%</td>
-                </tr>
-                <tr>
-                    <td>9 à 11</td>
-                    <td>Projectile dans un poumon</td>
-                    <td>Degâts +3, toutes caracs -1</td>
-                </tr>
-                <tr>
-                    <td>12 à 16</td>
-                    <td>Projectile de maître</td>
-                    <td>Dégâts +5</td>
-                </tr>
-                <tr>
-                    <td>17</td>
-                    <td>En plein dans les organes génitaux, bien fait !</td>
-                    <td>Dégâts +5 et durée**</td>
-                </tr>
-                <tr>
-                    <td>18</td>
-                    <td>Organe vital endommagé</td>
-                    <td>Dégâts +6 et durée**</td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td>Coeur transpercé</td>
-                    <td>Décès</td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>Oeil et cerveau transpercé, bien fait !</td>
-                    <td>Décès</td>
-                </tr>
-                <tr>
-                    <td colspan=3>* voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
-                        graves</a></td>
-                </tr>
-                <tr>
-                    <td colspan=3>** Hémorragie, dégâts sur la durée : la victime perd 1 D6 PV chaque minute jusqu'à ce
-                        qu'on la soigne
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+                    </p>
+                </md-tab>
+                <md-tab>
+                    <ng-template md-tab-label>
+                        <div class="tab-label-with-icon">
+                            <md-icon fontSet="game-icon" fontIcon="game-icon-thor-hammer"></md-icon>
+                            <span>Arme contondante</span>
+                        </div>
+                    </ng-template>
+                    <p>Massues, bâtons, marteaux, masses, fléaux, nunchakus...</p>
+                    <data-array
+                        [labels]="['D20', 'Effet sur l\'ennemi', 'Modif. dégâts']"
+                        [datas]="criticData['blunt']">
+                    </data-array>
+                    <p>
+                        * voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures graves</a>
+                    </p>
+                </md-tab>
+                <md-tab>
+                    <ng-template md-tab-label>
+                        <div class="tab-label-with-icon">
+                            <md-icon fontSet="game-icon" fontIcon="game-icon-shield-reflect"></md-icon>
+                            <span>Parade</span>
+                        </div>
+                    </ng-template>
+                    <data-array
+                        [labels]="['D20', 'Effet sur l\'ennemi', 'Effet sur l\'attaquant']"
+                        [datas]="criticData['parade']">
+                    </data-array>
+                </md-tab>
+                <md-tab>
+                    <ng-template md-tab-label>
+                        <div class="tab-label-with-icon">
+                            <md-icon fontSet="game-icon" fontIcon="game-icon-punch"></md-icon>
+                            <span>Main nues</span>
+                        </div>
+                    </ng-template>
+                    <p>A utiliser si jamais le héros s'engage dans un combat à mains nues</p>
+                    <data-array
+                        [labels]="['D20', 'Effet sur l\'ennemi', 'Modif. dégâts']"
+                        [datas]="criticData['hand']">
+                    </data-array>
+                    <p>
+                        * voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
+                        graves</a>
+                    </p>
+                </md-tab>
+                <md-tab>
+                    <ng-template md-tab-label>
+                        <div class="tab-label-with-icon">
+                            <md-icon fontSet="game-icon" fontIcon="game-icon-high-shot"></md-icon>
+                            <span>Projectiles</span>
+                        </div>
+                    </ng-template>
+                    <p>Projectiles : flèches, carreaux, javelots, poignards, dagues...</p>
+                    <data-array
+                        [labels]="['D20', 'Effet sur l\'ennemi', 'Modif. dégâts']"
+                        [datas]="criticData['projectile']">
+                    </data-array>
 
+                    <p>
+                        * voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures graves</a>
+                    </p>
+                    <p>
+                        ** Hémorragie, dégâts sur la durée : la victime perd 1 D6 PV chaque minute jusqu'à ce qu'on la soigne
+                    </p>
+                </md-tab>
+            </md-tab-group>
 
-<div class="row tab-content" [class.tab-hidden]="currentPanel != 'epicfail'">
-    <div class="tab-inner-content">
-        <div class="col-xs-12">
+        </md-card-content>
+    </md-card>
+</ng-template>
+
+<ng-template #panelEpicfail="cdkPortal" cdk-portal>
+    <div class="panel-content">
+        <div class="">
             <h3>Maladresses</h3>
             <ul>
                 <li>Maladresse attaque-parade : tirer 20 au jet d'ATTAQUE ou PARADE</li>
@@ -456,7 +116,7 @@
                 <li>Maladresse à mains nues : tirer 20 au jet d'ATTAQUE</li>
             </ul>
         </div>
-        <div class="col-xs-12">
+        <div class="">
             <h4>
                 <span (click)="selectSubPanel('combat')">
                     <span class="ra ra-sword ra-2x"></span>
@@ -477,7 +137,7 @@
             </h4>
         </div>
 
-        <div class="col-xs-12" [hidden]="currentSubPanel!='combat'">
+        <div class="" [hidden]="currentSubPanel!='combat'">
             <table class="table table-condensed table-striped">
                 <thead>
                 <tr>
@@ -544,7 +204,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-xs-12" [hidden]="currentSubPanel!='magic'">
+        <div class="" [hidden]="currentSubPanel!='magic'">
             <table class="table table-condensed table-striped">
                 <thead>
                 <tr>
@@ -618,7 +278,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-xs-12" [hidden]="currentSubPanel!='arrow'">
+        <div class="" [hidden]="currentSubPanel!='arrow'">
             <table class="table table-condensed table-striped">
                 <thead>
                 <tr>
@@ -685,7 +345,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-xs-12" [hidden]="currentSubPanel!='hand'">
+        <div class="" [hidden]="currentSubPanel!='hand'">
             <table class="table table-condensed table-striped">
                 <thead>
                 <tr>
@@ -739,47 +399,47 @@
             </table>
         </div>
     </div>
-</div>
+</ng-template>
 
-<div class="row tab-content" [class.tab-hidden]="currentPanel != 'items'">
-    <div class="tab-inner-content">
+<ng-template #panelItems="cdkPortal" cdk-portal>
+    <div class="panel-content">
         <item-list [inTab]=true></item-list>
     </div>
-</div>
+</ng-template>
 
-<div class="row tab-content" [class.tab-hidden]="currentPanel != 'jobs'">
-    <div class="tab-inner-content">
+<ng-template #panelJobs="cdkPortal" cdk-portal>
+    <div class="panel-content">
         <job-list></job-list>
     </div>
-</div>
+</ng-template>
 
-<div class="row tab-content" [class.tab-hidden]="currentPanel != 'origins'">
-    <div class="tab-inner-content">
+<ng-template #panelOrigins="cdkPortal" cdk-portal>
+    <div class="panel-content">
         <origin-list></origin-list>
     </div>
-</div>
+</ng-template>
 
 
-<div class="row tab-content" [class.tab-hidden]="currentPanel != 'effects'">
-    <div class="tab-inner-content">
+<ng-template #panelEffects="cdkPortal" cdk-portal>
+    <div class="panel-content">
         <effect-list [inputCategoryId]=effectsCategoryId></effect-list>
     </div>
-</div>
+</ng-template>
 
-<div class="row tab-content" [class.tab-hidden]="currentPanel != 'skills'">
-    <div class="tab-inner-content">
-        <div class="col-xs-12">
+<ng-template #panelSkills="cdkPortal" cdk-portal>
+    <div class="panel-content">
+        <div class="">
             <h3>Compétences</h3>
         </div>
-        <div class="col-xs-12">
+        <div class="">
             <skill-list></skill-list>
         </div>
     </div>
-</div>
+</ng-template>
 
-<div class="row tab-content" [class.tab-hidden]="currentPanel != 'entropic'">
-    <div class="tab-inner-content">
-        <div class="col-xs-12">
+<ng-template #panelEntropic="cdkPortal" cdk-portal>
+    <div class="panel-content">
+        <div class="">
             <h3>Tableau des sorts et prodiges entropiques</h3>
             <ul>
                 <li>Les conséquences des sorts bizarres sont laissés à la discrétion du MJ</li>
@@ -1186,11 +846,11 @@
             </tbody>
         </table>
     </div>
-</div>
+</ng-template>
 
-<div class="row tab-content" [class.tab-hidden]="currentPanel != 'sleep'">
-    <div class="tab-inner-content">
-        <div class="col-xs-12">
+<ng-template #panelSleep="cdkPortal" cdk-portal>
+    <div class="panel-content">
+        <div class="">
             <h3>Recuperation</h3>
             <ul>
                 <li>
@@ -1240,7 +900,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-xs-12">
+        <div class="">
             <h3>Déplacements</h3>
             <p>Le groupe voyage toujours à la vitesse de son élément le moins rapide.</p>
             <ul>
@@ -1287,8 +947,11 @@
             </ul>
         </div>
     </div>
-</div>
+</ng-template>
 
+<div class="placeholder">
+
+</div>
 <div class="tabs-category">
     <div [class.tab-icon-critic-selected]="currentPanel==='critic'"
          class="tab-icon game-icon tab-icon-critic game-icon-spiky-eclipse"

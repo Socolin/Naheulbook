@@ -1,5 +1,15 @@
+.group-component-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    .usefull-data {
+        flex: 0;
+    }
+}
+
 .group-container {
-    margin-left: 50px;
+    flex: 1 auto;
 
     .character-summary-card {
         md-card-header {

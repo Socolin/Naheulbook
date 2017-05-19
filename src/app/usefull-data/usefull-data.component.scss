@@ -1,3 +1,7 @@
+.placeholder {
+    width: 40px;
+    height: 370px;
+}
 .tabs-category {
     position: fixed;
     left: 0;
@@ -20,41 +24,18 @@
     background-color: white;
 }
 
-.tab-inner-content {
-    width: calc(100vw - 70px);
-}
-.table-striped > tbody > tr:nth-of-type(odd) {
-    background-color: #b5b5b5;
-}
-.table-bordered > thead > tr > th,
-.table-bordered > tbody > tr > th,
-.table-bordered > tfoot > tr > th,
-.table-bordered > thead > tr > td,
-.table-bordered > tbody > tr > td,
-.table-bordered > tfoot > tr > td {
-    border: 1px solid #8c8c8c;
-}
-.tab-content {
-    position: fixed;
-    left: 0;
-    top: 70px;
-    padding-bottom: 100px; /* Ipad scroll */
-    border: 1px dashed gray;
-    border-left: 0;
-    background: #d1d1d1;
-    margin-left: 42px;
-    z-index: 45;
-    width: calc(100vw - 55px);
-    -webkit-transition: width 0.5s ease; /* Safari */
-    transition: width 0.5s ease;
-    overflow-x: hidden;
-    overflow-y: auto;
-    max-height: calc(100vh - 63px);
-}
-.tab-hidden {
-    width: 0;
-    border: 0;
-    z-index: 44;
+.tab-label-with-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    >md-icon {
+        flex: 0 auto;
+        font-size: 24px;
+        padding-right: 2px !important;
+    }
+    >span {
+        flex: 0 auto;
+    }
 }
 
 
@@ -124,6 +105,8 @@
     background-color: orange;
 }
 
-
-
-
+.panel-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+}

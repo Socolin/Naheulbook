@@ -1,0 +1,23 @@
+.header {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    font-weight: bold;
+}
+
+.data {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+}
+
+.dice {
+    flex: 0 70px;
+}
+.effect {
+    flex: 1 300px;
+}
+
+.effect2 {
+    flex: 1 200px;
+}

@@ -23,8 +23,8 @@ import {FighterComponent} from './fighter.component';
 import {GroupHistoryComponent} from './group-history.component';
 import {SharedModule} from '../shared/shared.module';
 import {FighterPanelComponent} from './fighter-panel.component';
-import {UsefullDataComponent} from './usefull-data.component';
 import {GroupLootPanelComponent} from './group-loot-panel.component';
+import {UsefullDataModule} from '../usefull-data/usefull-data.module';
 
 @NgModule({
     imports: [
@@ -41,6 +41,7 @@ import {GroupLootPanelComponent} from './group-loot-panel.component';
         JobModule,
         OriginModule,
         EventModule,
+        UsefullDataModule,
     ],
     declarations: [
         CreateItemComponent,
@@ -50,7 +51,6 @@ import {GroupLootPanelComponent} from './group-loot-panel.component';
         MonsterEditableFieldComponent,
         TargetSelectorComponent,
         FighterPanelComponent,
-        UsefullDataComponent,
         GroupLootPanelComponent,
         GroupHistoryComponent,
         FighterComponent,

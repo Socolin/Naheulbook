@@ -1,3 +1,7 @@
+<div class="group-component-container">
+<div class="usefull-data">
+    <usefull-data></usefull-data>
+</div>
 <div *ngIf="group" class="group-container">
     <md-tab-group (selectChange)=selectTab($event) [selectedIndex]="currentTabIndex">
         <md-tab label="Infos">
@@ -250,6 +254,7 @@
         </md-tab>
     </md-tab-group>
 </div>
+</div>
 
 <div *ngIf="group">
     <ng-template ngFor let-character [ngForOf]="characters">
@@ -349,4 +354,3 @@
     </md-card>
 </ng-template>
 
-<usefull-data></usefull-data>

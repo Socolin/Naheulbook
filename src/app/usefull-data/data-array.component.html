@@ -1,0 +1,10 @@
+<div class="header">
+    <div class="dice">{{labels[0]}}</div>
+    <div class="effect">{{labels[1]}}</div>
+    <div class="effect2">{{labels[2]}}</div>
+</div>
+<div class="data" *ngFor="let data of datas">
+    <div class="dice">{{data.dice.join('-')}}</div>
+    <div class="effect">{{data.effect}}</div>
+    <div class="effect2">{{data.effect2}}</div>
+</div>
