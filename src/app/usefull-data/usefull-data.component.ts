@@ -24,6 +24,7 @@ export class UsefullDataComponent implements OnInit {
 
     @ViewChild('panelEpicfail')
     public panelEpicfailDialog: Portal<any>;
+    public epicfailData: {[name: string]: CriticalData[]} = {};
 
     @ViewChild('panelItems')
     public panelItemsDialog: Portal<any>;
@@ -99,5 +100,6 @@ export class UsefullDataComponent implements OnInit {
         this.panelByNames['entropic'] = this.panelEntropicDialog;
         this.panelByNames['sleep'] = this.panelSleepDialog;
         this.criticData = this._usefullDataService.getCriticalData();
+        this.epicfailData = this._usefullDataService.getEpifailData();
     }
 }

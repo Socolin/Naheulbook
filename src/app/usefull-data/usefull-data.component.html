@@ -106,299 +106,99 @@
 </ng-template>
 
 <ng-template #panelEpicfail="cdkPortal" cdk-portal>
-    <div class="panel-content">
-        <div class="">
-            <h3>Maladresses</h3>
+    <md-card class="panel-content">
+        <md-card-title>
+            Maladresses (Echec critique)
+        </md-card-title>
+        <md-card-content>
             <ul>
                 <li>Maladresse attaque-parade : tirer 20 au jet d'ATTAQUE ou PARADE</li>
                 <li>Maladresse du sortilège : tirer 20 à l'épreuve au lancement du sort</li>
                 <li>Maladresse à l'arme de jet : tirer 20 au jet d'ADRESSE</li>
                 <li>Maladresse à mains nues : tirer 20 au jet d'ATTAQUE</li>
             </ul>
-        </div>
-        <div class="">
-            <h4>
-                <span (click)="selectSubPanel('combat')">
-                    <span class="ra ra-sword ra-2x"></span>
-                    <span [hidden]="currentSubPanel!='combat'">Maladresse attaque ou parade</span>
-                </span>
-                <span (click)="selectSubPanel('magic')">
-                    <span class="ra ra-lightning-bolt ra-2x"></span>
-                    <span [hidden]="currentSubPanel!='magic'">Maladresse au lancement du sort</span>
-                </span>
-                <span (click)="selectSubPanel('arrow')">
-                    <span class="ra ra-arrow-flights ra-2x"></span>
-                    <span [hidden]="currentSubPanel!='arrow'">Maladresse à l'arme de jet</span>
-                </span>
-                <span (click)="selectSubPanel('hand')">
-                    <span class="ra ra-hand ra-2x"></span>
-                    <span [hidden]="currentSubPanel!='hand'">Maladresse à mains nues</span>
-                </span>
-            </h4>
-        </div>
+        </md-card-content>
 
-        <div class="" [hidden]="currentSubPanel!='combat'">
-            <table class="table table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>D20</th>
-                    <th>Maladresse du combattant</th>
-                    <th>Effets</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1-2</td>
-                    <td>Rattrape son erreur in extremis</td>
-                    <td>L'attaque échoue seulement</td>
-                </tr>
-                <tr>
-                    <td>3-5</td>
-                    <td>Trébuche et chute maladroitement</td>
-                    <td>Le maladroit rate 2 assauts</td>
-                </tr>
-                <tr>
-                    <td>6-7</td>
-                    <td>Frappe un allié proche vers la gauche</td>
-                    <td>Tirer des dégâts sur l'allié</td>
-                </tr>
-                <tr>
-                    <td>8-9</td>
-                    <td>Frappe un allié proche vers la droite</td>
-                    <td>Tirer des dégâts sur l'allié</td>
-                </tr>
-                <tr>
-                    <td>10-12</td>
-                    <td>Lâche son arme comme un loser</td>
-                    <td>Combat mains nues, change d'arme</td>
-                </tr>
-                <tr>
-                    <td>13-15</td>
-                    <td>Casse son arme (ou pas, voir point de rupture)</td>
-                    <td>Combat mains nues, change d'arme</td>
-                </tr>
-                <tr>
-                    <td>16-18</td>
-                    <td>Se blesse tout seul comme un cake</td>
-                    <td>Tirer des dégâts sur le combattant</td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td>Se blesse très sévèrement de façon atroce et douloureuse</td>
-                    <td>Dégâts sur le combattant (critique)</td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>Perd un oeil (au D6, 1-2) ou un doigt (au D6, 3-6)</td>
-                    <td>Blessure grave**</td>
-                </tr>
-                <tr>
-                    <td colspan=3>* Tirer 1 D6 pour savoir si l'arme résiste au choc — voir point de rup ure dans le tableau
-                        de l'armement
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan=3>** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
-                        graves</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="" [hidden]="currentSubPanel!='magic'">
-            <table class="table table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>D20</th>
-                    <th>Effets sur le sortilège</th>
-                    <th>Effets</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1-2</td>
-                    <td>Rattrapage de dernière minute, sacré veinard</td>
-                    <td>Le sort échoue simplement</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Le sort s'évapore et 50% des PA investis également</td>
-                    <td>50% des PA sont perdus</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Le sort s'évapore et tous les PA investis sont perdus</td>
-                    <td>100% des PA sont perdus</td>
-                </tr>
-                <tr>
-                    <td>5-6</td>
-                    <td>Le sort frappe la personne la plus proche vers la droite</td>
-                    <td>Voir effets du sort</td>
-                </tr>
-                <tr>
-                    <td>7-8</td>
-                    <td>Le sort frappe la personne la plus proche vers la gauche</td>
-                    <td>Voir effets du sort</td>
-                </tr>
-                <tr>
-                    <td>9-10</td>
-                    <td>Le sort frappe la personne la plus proche vers l'arrière</td>
-                    <td>Voir effets du sort</td>
-                </tr>
-                <tr>
-                    <td>11-12</td>
-                    <td>Le sort frappe la personne la plus proche à l'avant</td>
-                    <td>Voir effets du sort</td>
-                </tr>
-                <tr>
-                    <td>13-16</td>
-                    <td>Choc en retour : le sort revient vers le lanceur</td>
-                    <td>Voir effets du sort</td>
-                </tr>
-                <tr>
-                    <td>17-18</td>
-                    <td>Zone d'effet multipiée par 1D10 - sort multidirectionnel*</td>
-                    <td>Voir effets du sort</td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td>Sort entropique à destination d'un ennemi**</td>
-                    <td><a href='#' (click)="toggleDisplayPanel('entropic')">Voir sorts entropiques</a></td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>Sort entropique à destination d'un allié**</td>
-                    <td><a href='#' (click)="toggleDisplayPanel('entropic')">Voir sorts entropiques</a></td>
-                </tr>
-                <tr>
-                    <td colspan=3>*Le sortilège devient fou et frappe tout le monde dans une zone énorme</td>
-                </tr>
-                <tr>
-                    <td colspan=3>** Un sort surgit de nulle part, et qui peut être n'importe quoi - le MJ décide</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="" [hidden]="currentSubPanel!='arrow'">
-            <table class="table table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>D20</th>
-                    <th>Maladresse du combattant</th>
-                    <th>Effets</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1-2</td>
-                    <td>Rattrape son erreur in extremis</td>
-                    <td>Le projectile n'atteint pas la cible</td>
-                </tr>
-                <tr>
-                    <td>3-5</td>
-                    <td>Lâche son arme comme un loser</td>
-                    <td>Combat mains nues, change d'arme</td>
-                </tr>
-                <tr>
-                    <td>6-7</td>
-                    <td>Frappe un allié proche vers la gauche</td>
-                    <td>Tirer des dégâts sur l'allié</td>
-                </tr>
-                <tr>
-                    <td>8-9</td>
-                    <td>Frappe un allié proche vers la droite</td>
-                    <td>Tirer des dégâts sur l'allié</td>
-                </tr>
-                <tr>
-                    <td>10-12</td>
-                    <td>Frappe l'allié le plus lointain</td>
-                    <td>Tirer des dégâts sur l'allié</td>
-                </tr>
-                <tr>
-                    <td>13-15</td>
-                    <td>Casse son arme (ou pas, selon point de rupture*)</td>
-                    <td>Combat à mains nues</td>
-                </tr>
-                <tr>
-                    <td>16-18</td>
-                    <td>Se tire dans le pied</td>
-                    <td>Dégâts de l'arme +2</td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td>Se blesse très sévèrement dans un grand cri haineux</td>
-                    <td>Dégâts sur le combattant (critique)</td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>Crève l'oeil de l'allié le plus proche</td>
-                    <td>Blessure grave**</td>
-                </tr>
-                <tr>
-                    <td colspan=3>* Tirer 1 D6 pour savoir si l'arme résiste au choc — voir point de rup ure dans le tableau
-                        de l'armement
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan=3>** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
-                        graves</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="" [hidden]="currentSubPanel!='hand'">
-            <table class="table table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>D20</th>
-                    <th>Maladresse du combattant</th>
-                    <th>Effets</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1-2</td>
-                    <td>Rattrape son erreur in extremis</td>
-                    <td>L'attaque échoue seulement</td>
-                </tr>
-                <tr>
-                    <td>3-10</td>
-                    <td>Tombe et s'écrase le nez par terre</td>
-                    <td>Perd 2 assauts, 2BL</td>
-                </tr>
-                <tr>
-                    <td>11-12</td>
-                    <td>Frappe un allié proche vers la gauche</td>
-                    <td>Tirer des dégâts sur l'allié</td>
-                </tr>
-                <tr>
-                    <td>13-14</td>
-                    <td>Frappe un allié proche vers la droite</td>
-                    <td>Tirer des dégâts sur l'allié</td>
-                </tr>
-                <tr>
-                    <td>15-16</td>
-                    <td>Se brise la main tout seul comme une tanche</td>
-                    <td>3BL, blessure grave**</td>
-                </tr>
-                <tr>
-                    <td>17-19</td>
-                    <td>Se casse un bras bêtement</td>
-                    <td>6BL, blessure grave**</td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>Tombe en arrière et s'assomme</td>
-                    <td>Perte de connaissance</td>
-                </tr>
-                <tr>
-                    <td colspan=3>** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
-                        graves</a></td>
-                </tr>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
+        <md-tab-group>
+            <md-tab>
+                <ng-template md-tab-label>
+                    <div class="tab-label-with-icon">
+                        <md-icon fontSet="game-icon" fontIcon="game-icon-broad-dagger"></md-icon>
+                        <span>Attaque ou parade</span>
+                    </div>
+                </ng-template>
+                <data-array
+                    [labels]="['D20', 'Maladresse du combattant', 'Effets']"
+                    [datas]="epicfailData['combat']">
+                </data-array>
+                <p>
+                    * Tirer 1 D6 pour savoir si l'arme résiste au choc — voir point de rup ure dans le tableau
+                    de l'armement
+                </p>
+                <p>
+                    ** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
+                    graves</a>
+                </p>
+            </md-tab>
+            <md-tab>
+                <ng-template md-tab-label>
+                    <div class="tab-label-with-icon">
+                        <md-icon fontSet="game-icon" fontIcon="game-icon-thunder-struck"></md-icon>
+                        <span>Lancement du sort</span>
+                    </div>
+                </ng-template>
+                <data-array
+                    [labels]="['D20', 'Effets sur le sortilège', 'Effets']"
+                    [datas]="epicfailData['magic']">
+                </data-array>
+                <p>
+                    *Le sortilège devient fou et frappe tout le monde dans une zone énorme
+                </p>
+                <p>
+                    ** Un sort surgit de nulle part, et qui peut être n'importe quoi - le MJ décide
+                </p>
+                <p>
+                    <a href='#' (click)="toggleDisplayPanel('entropic')">Voir sorts entropiques</a>
+                </p>
+            </md-tab>
+            <md-tab>
+                <ng-template md-tab-label>
+                    <div class="tab-label-with-icon">
+                        <md-icon fontSet="game-icon" fontIcon="game-icon-pierced-heart"></md-icon>
+                        <span>Arme de jet</span>
+                    </div>
+                </ng-template>
+                <data-array
+                    [labels]="['D20', 'Maladresse du combattant', 'Effets']"
+                    [datas]="epicfailData['arrow']">
+                </data-array>
+                <p>
+                    * Tirer 1 D6 pour savoir si l'arme résiste au choc — voir point de rup ure dans le tableau
+                    de l'armement
+                </p>
+                <p>
+                    ** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
+                    graves</a>
+                </p>
+            </md-tab>
+            <md-tab>
+                <ng-template md-tab-label>
+                    <div class="tab-label-with-icon">
+                        <md-icon fontSet="game-icon" fontIcon="game-icon-fist"></md-icon>
+                        <span>Mains nues</span>
+                    </div>
+                </ng-template>
+                <data-array
+                    [labels]="['D20', 'Maladresse du combattant', 'Effets']"
+                    [datas]="epicfailData['hand']">
+                </data-array>
+                <p>
+                    ** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
+                    graves</a>
+                </p>
+            </md-tab>
+        </md-tab-group>
+    </md-card>
 </ng-template>
 
 <ng-template #panelItems="cdkPortal" cdk-portal>
@@ -428,10 +228,10 @@
 
 <ng-template #panelSkills="cdkPortal" cdk-portal>
     <div class="panel-content">
-        <div class="">
+        <div>
             <h3>Compétences</h3>
         </div>
-        <div class="">
+        <div>
             <skill-list></skill-list>
         </div>
     </div>
@@ -439,7 +239,7 @@
 
 <ng-template #panelEntropic="cdkPortal" cdk-portal>
     <div class="panel-content">
-        <div class="">
+        <div>
             <h3>Tableau des sorts et prodiges entropiques</h3>
             <ul>
                 <li>Les conséquences des sorts bizarres sont laissés à la discrétion du MJ</li>
@@ -850,7 +650,7 @@
 
 <ng-template #panelSleep="cdkPortal" cdk-portal>
     <div class="panel-content">
-        <div class="">
+        <div>
             <h3>Recuperation</h3>
             <ul>
                 <li>
@@ -900,7 +700,7 @@
                 </li>
             </ul>
         </div>
-        <div class="">
+        <div>
             <h3>Déplacements</h3>
             <p>Le groupe voyage toujours à la vitesse de son élément le moins rapide.</p>
             <ul>

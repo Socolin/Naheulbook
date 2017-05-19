@@ -327,7 +327,202 @@ export class UsefullDataService {
         ]
     };
 
+    public epicfailData = {
+        'combat': [
+            {
+                dice: [1, 2],
+                effect: 'Rattrape son erreur in extremis',
+                effect2: 'L\'attaque échoue seulement'
+            },
+            {
+                dice: [3, 5],
+                effect: 'Trébuche et chute maladroitement',
+                effect2: 'Le maladroit rate 2 assauts'
+            },
+            {
+                dice: [6, 7],
+                effect: 'Frappe un allié proche vers la gauche',
+                effect2: 'Tirer des dégâts sur l\'allié'
+            },
+            {
+                dice: [8, 9],
+                effect: 'Frappe un allié proche vers la droite',
+                effect2: 'Tirer des dégâts sur l\'allié'
+            },
+            {
+                dice: [10, 12],
+                effect: 'Lâche son arme comme un loser',
+                effect2: 'Combat mains nues, change d\'arme'
+            },
+            {
+                dice: [13, 15],
+                effect: 'Casse son arme (ou pas, voir point de rupture)',
+                effect2: 'Combat mains nues, change d\'arme'
+            },
+            {
+                dice: [16, 18],
+                effect: 'Se blesse tout seul comme un cake',
+                effect2: 'Tirer des dégâts sur le combattant'
+            },
+            {
+                dice: [19],
+                effect: 'Se blesse très sévèrement de façon atroce et douloureuse',
+                effect2: 'Dégâts sur le combattant (critique)'
+            },
+            {
+                dice: [20],
+                effect: 'Perd un oeil (au D6, 1-2) ou un doigt (au D6, 3-6)',
+                effect2: 'Blessure grave**'
+            }
+        ],
+        'magic': [
+            {
+                dice: [1, 2],
+                effect: 'Rattrapage de dernière minute, sacré veinard',
+                effect2: 'Le sort échoue simplement'
+            },
+            {
+                dice: [3],
+                effect: 'Le sort s\'évapore et 50% des PA investis également',
+                effect2: '50% des PA sont perdus'
+            },
+            {
+                dice: [4],
+                effect: 'Le sort s\'évapore et tous les PA investis sont perdus',
+                effect2: '100% des PA sont perdus'
+            },
+            {
+                dice: [5, 6],
+                effect: 'Le sort frappe la personne la plus proche vers la droite',
+                effect2: 'Voir effets du sort'
+            },
+            {
+                dice: [7, 8],
+                effect: 'Le sort frappe la personne la plus proche vers la gauche',
+                effect2: 'Voir effets du sort'
+            },
+            {
+                dice: [9, 10],
+                effect: 'Le sort frappe la personne la plus proche vers l\'arrière',
+                effect2: 'Voir effets du sort'
+            },
+            {
+                dice: [11, 12],
+                effect: 'Le sort frappe la personne la plus proche à l\'avant',
+                effect2: 'Voir effets du sort'
+            },
+            {
+                dice: [13, 16],
+                effect: 'Choc en retour : le sort revient vers le lanceur',
+                effect2: 'Voir effets du sort'
+            },
+            {
+                dice: [17, 18],
+                effect: 'Zone d\'effet multipiée par 1D10 - sort multidirectionnel*',
+                effect2: 'Voir effets du sort'
+            },
+            {
+                dice: [19],
+                effect: 'Sort entropique à destination d\'un ennemi**',
+                effect2: 'Voir sorts entropiques'
+            },
+            {
+                dice: [20],
+                effect: 'Sort entropique à destination d\'un allié**',
+                effect2: 'Voir sorts entropiques'
+            }
+        ],
+        'arrow': [
+            {
+                dice: [1, 2],
+                effect: 'Rattrape son erreur in extremis',
+                effect2: 'Le projectile n\'atteint pas la cible'
+            },
+            {
+                dice: [3, 5],
+                effect: 'Lâche son arme comme un loser',
+                effect2: 'Combat mains nues, change d\'arme'
+            },
+            {
+                dice: [6, 7],
+                effect: 'Frappe un allié proche vers la gauche',
+                effect2: 'Tirer des dégâts sur l\'allié'
+            },
+            {
+                dice: [8, 9],
+                effect: 'Frappe un allié proche vers la droite',
+                effect2: 'Tirer des dégâts sur l\'allié'
+            },
+            {
+                dice: [10, 12],
+                effect: 'Frappe l\'allié le plus lointain',
+                effect2: 'Tirer des dégâts sur l\'allié'
+            },
+            {
+                dice: [13, 15],
+                effect: 'Casse son arme (ou pas, selon point de rupture*)',
+                effect2: 'Combat à mains nues'
+            },
+            {
+                dice: [16, 18],
+                effect: 'Se tire dans le pied',
+                effect2: 'Dégâts de l\'arme +2'
+            },
+            {
+                dice: [19],
+                effect: 'Se blesse très sévèrement dans un grand cri haineux',
+                effect2: 'Dégâts sur le combattant (critique)'
+            },
+            {
+                dice: [20],
+                effect: 'Crève l\'oeil de l\'allié le plus proche',
+                effect2: 'Blessure grave**'
+            }
+        ],
+        'hand': [
+            {
+                dice: [1, 2],
+                effect: 'Rattrape son erreur in extremis',
+                effect2: 'L\'attaque échoue seulement'
+            },
+            {
+                dice: [3, 10],
+                effect: 'Tombe et s\'écrase le nez par terre',
+                effect2: 'Perd 2 assauts, 2BL'
+            },
+            {
+                dice: [11, 12],
+                effect: 'Frappe un allié proche vers la gauche',
+                effect2: 'Tirer des dégâts sur l\'allié'
+            },
+            {
+                dice: [13, 14],
+                effect: 'Frappe un allié proche vers la droite',
+                effect2: 'Tirer des dégâts sur l\'allié'
+            },
+            {
+                dice: [15, 16],
+                effect: 'Se brise la main tout seul comme une tanche',
+                effect2: '3BL, blessure grave**'
+            },
+            {
+                dice: [17, 19],
+                effect: 'Se casse un bras bêtement',
+                effect2: '6BL, blessure grave**'
+            },
+            {
+                dice: [20],
+                effect: 'Tombe en arrière et s\'assomme',
+                effect2: 'Perte de connaissance'
+            }
+        ]
+    };
+
     public getCriticalData(): {[name: string]: CriticalData[]} {
         return this.criticData;
+    }
+
+    public getEpifailData(): {[name: string]: CriticalData[]} {
+        return this.epicfailData;
     }
 }
