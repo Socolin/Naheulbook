@@ -37,11 +37,13 @@ export class Fighter {
         at: number;
         ad: number;
         prd: number;
+        esq: number;
         ev: number;
         ea: number;
         maxEv: number;
         maxEa: number;
-        pr: string;
+        pr: number;
+        pr_magic: number;
         dmg: string;
         cou: number;
         resm: number;
@@ -123,11 +125,13 @@ export class Fighter {
                 at: monster.data.at,
                 ad: 10, // FIXME: this is used to compute fight order
                 prd: monster.data.prd,
+                esq: monster.data.esq,
                 ev: monster.data.ev,
                 ea: monster.data.ea,
                 maxEv: monster.data.ev,
                 maxEa: monster.data.ea,
                 pr: monster.data.pr,
+                pr_magic: monster.data.pr_magic,
                 dmg: monster.data.dmg,
                 cou: monster.data.cou,
                 resm: monster.data.resm,
@@ -147,11 +151,13 @@ export class Fighter {
                 at: character.computedData.stats['AT'],
                 ad: character.computedData.stats['AD'],
                 prd: character.computedData.stats['PRD'],
+                esq: character.computedData.stats['AD'],
                 ev: character.ev,
                 maxEv: character.computedData.stats['EV'],
                 ea: character.ea,
                 maxEa:  character.computedData.stats['EA'],
-                pr: character.computedData.stats['PR'] + ' (' + character.computedData.stats['PR_MAGIC'] + ')',
+                pr: character.computedData.stats['PR'],
+                pr_magic: character.computedData.stats['PR_MAGIC'],
                 dmg: '',
                 cou: character.computedData.stats['COU'],
                 resm: character.computedData.stats['RESM'],

@@ -90,8 +90,8 @@ export class FighterComponent {
                     this._notification.info('Monstre: ' + monster.name
                         , 'Modification: ' + fieldName.toUpperCase() + ': '
                         + monster.data[fieldName] + ' -> ' + res.value);
-                    this._actionService.emitAction('reorderFighters', this.group);
                     monster.data[fieldName] = res.value;
+                    this._actionService.emitAction('reorderFighters', this.group);
                 }
             );
     }

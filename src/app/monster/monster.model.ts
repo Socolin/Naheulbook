@@ -9,7 +9,8 @@ export class MonsterData {
     maxEv: number;
     ea: number;
     maxEa: number;
-    pr: string;
+    pr: number;
+    pr_magic: number;
     dmg: string;
     cou: number;
     chercheNoise: boolean;
@@ -74,7 +75,8 @@ export class MonsterTemplateData {
     cou: number;
     dmg: string;
     note: string;
-    pr: string;
+    pr: number;
+    pr_magic: number;
     resm: number;
     xp: number;
     chercheNoise: boolean;

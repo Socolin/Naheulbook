@@ -293,6 +293,7 @@ export class FighterPanelComponent implements OnInit, OnChanges {
         this.newMonster.data.ea = monster.data.ea;
         this.newMonster.data.maxEa = monster.data.ea;
         this.newMonster.data.pr = monster.data.pr;
+        this.newMonster.data.pr_magic = monster.data.pr_magic;
         this.newMonster.data.cou = monster.data.cou;
         this.newMonster.data.dmg = monster.data.dmg;
         this.newMonster.data.xp = monster.data.xp;

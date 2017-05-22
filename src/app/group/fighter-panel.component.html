@@ -6,13 +6,15 @@
                 <div class="field-name">Nom</div>
                 <div class="field">AT</div>
                 <div class="field">PRD</div>
+                <div class="field">ESQ</div>
                 <div class="field-large">EV</div>
                 <div class="field-large">EA</div>
                 <div class="field-medium">PR</div>
                 <div class="field">RESM</div>
                 <div class="field-large">DMG</div>
                 <div class="field">COU</div>
-                <div class="field">XP</div>
+                <div class="field-fixed-small">CdN</div>
+                <div class="field-button"></div>
             </div>
         </div>
     </div>
@@ -22,11 +24,11 @@
                  [group]="group"
                  [fighter]="fighters[currentFighterIndex]"
                  [fighters]="fighters"
-                 [i]="0"
+                 [i]="1"
                  (onSelect)="selectCombatRow($event)">
         </fighter>
     </div>
-    <div *ngIf="currentFighterIndex !== null && fighters[currentFighterIndex]">
+    <div *ngIf="currentFighterIndex !== null && fighters[currentFighterIndex]" class="next-fighter">
         <button md-raised-button
                 color="primary"
                 [disabled]="loadingNextLap"
@@ -34,7 +36,7 @@
             Suivant
         </button>
     </div>
-    <hr *ngIf="currentFighterIndex !== null">
+    <hr *ngIf="currentFighterIndex !== null && fighters[currentFighterIndex]">
     <ng-template ngFor let-fighter [ngForOf]="fighters" let-i=index>
         <fighter [selected]="(currentFighterIndex === null && selectedCombatRow === i) || currentFighterIndex == i"
                  [group]="group"
@@ -54,14 +56,6 @@
                 <thead>
                 <tr>
                     <th class="text-center">Nom</th>
-                    <th class="text-center">AT</th>
-                    <th class="text-center">PRD</th>
-                    <th class="text-center">EV</th>
-                    <th class="text-center">EA</th>
-                    <th class="text-center">PR</th>
-                    <th class="text-center">RESM</th>
-                    <th class="text-center">Damage</th>
-                    <th class="text-center">COU</th>
                     <th class="text-center">XP</th>
                     <th class="text-center">Notes</th>
                     <th></th>
@@ -71,14 +65,6 @@
                     <ng-template ngFor let-element [ngForOf]="deadMonsters">
                         <tr>
                             <td>{{element.name}}</td>
-                            <td>{{element.data.at}}</td>
-                            <td>{{element.data.prd}}</td>
-                            <td>{{element.data.ev}}</td>
-                            <td>{{element.data.ea}}</td>
-                            <td>{{element.data.pr}}</td>
-                            <td>{{element.data.resm}}</td>
-                            <td>{{element.data.dmg}}</td>
-                            <td>{{element.data.cou}}<span *ngIf="element.data.chercheNoise">*</span></td>
                             <td>{{element.data.xp}}</td>
                             <td>{{element.note}}</td>
                         </tr>
@@ -129,9 +115,15 @@
                 </md-input-container>
                 <md-input-container>
                     <input mdInput
-                           type="text"
+                           type="number"
                            placeholder="PR"
                            [(ngModel)]="newMonster.data.pr">
+                </md-input-container>
+                <md-input-container>
+                    <input mdInput
+                           type="number"
+                           placeholder="PR_MAGIC"
+                           [(ngModel)]="newMonster.data.pr_magic">
                 </md-input-container>
             </div>
 

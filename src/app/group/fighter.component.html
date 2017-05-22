@@ -31,18 +31,18 @@
                                   (onChange)="updateMonsterField(fighter.monster, 'at', $event)">
                     </value-editor>
                 </div>
-                <div class="field text-prd">
-                    <span *ngIf="fighter.monster.data.prd">
-                        Prd:
+                <div class="field">
+                    <span class="text-prd">
                         <value-editor [value]="fighter.monster.data.prd"
-                                      [title]="'PRD'"
+                                      [title]="'Parade'"
                                       (onChange)="updateMonsterField(fighter.monster, 'prd', $event)">
                         </value-editor>
                     </span>
-                    <span *ngIf="fighter.monster.data.esq">
-                        Esq:
+                </div>
+                <div class="field">
+                    <span class="text-esq">
                         <value-editor [value]="fighter.monster.data.esq"
-                                      [title]="'ESQ'"
+                                      [title]="'Esquive'"
                                       (onChange)="updateMonsterField(fighter.monster, 'esq', $event)">
                         </value-editor>
                     </span>
@@ -62,18 +62,20 @@
                     </value-editor>
                 </div>
                 <div class="field-medium">
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'pr'">
-                    </monster-editable-field>
+                    <value-editor [value]="fighter.monster.data.pr"
+                                  [title]="'Protection'"
+                                  (onChange)="updateMonsterField(fighter.monster, 'pr', $event)">
+                    </value-editor>
+                    (<value-editor [value]="fighter.monster.data.pr_magic"
+                                  [title]="'Protection magique'"
+                                  (onChange)="updateMonsterField(fighter.monster, 'pr_magic', $event)">
+                    </value-editor>)
                 </div>
                 <div class="field">
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'resm'">
-                    </monster-editable-field>
+                    <value-editor [value]="fighter.monster.data.resm"
+                                  [title]="'Resistance Magique'"
+                                  (onChange)="updateMonsterField(fighter.monster, 'resm', $event)">
+                    </value-editor>
                 </div>
                 <div class="field-large">
                     <monster-editable-field
@@ -83,20 +85,15 @@
                     </monster-editable-field>
                 </div>
                 <div class="field">
-                <span *ngIf="fighter.chercheNoise" style="position:relative"><span
-                    style="left:10px; float:right; position:absolute;">*</span></span>
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'cou'">
-                    </monster-editable-field>
+                    <value-editor [value]="fighter.monster.data.cou"
+                                  [title]="'Courage'"
+                                  (onChange)="updateMonsterField(fighter.monster, 'cou', $event)">
+                    </value-editor>
                 </div>
-                <div class="field">
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'xp'">
-                    </monster-editable-field>
+                <div class="field-fixed-small">
+                    <md-checkbox [checked]="fighter.monster.data.chercheNoise"
+                                 (change)="updateMonsterField(fighter.monster, 'chercheNoise', $event.checked)">
+                    </md-checkbox>
                 </div>
             </div>
             <div style="display: flex; justify-content: space-between">
@@ -134,17 +131,20 @@
             <div class="fighter-row">
                 <div class="field-name">{{fighter.name}}</div>
                 <div class="field text-attack">{{fighter.stats.at}}</div>
-                <div class="field text-prd">{{fighter.stats.prd}}</div>
+                <div class="field"><span class="text-prd">{{fighter.stats.prd}}</span></div>
+                <div class="field"><span class="text-esq">{{fighter.stats.esq}}</span></div>
                 <div class="field-large" [class.text-danger]="fighter.stats.ev < 4">{{fighter.stats.ev}}/{{fighter.stats.maxEv}}</div>
                 <div class="field-large">
                     <span *ngIf="fighter.stats.maxEa">{{fighter.stats.ea}}/{{fighter.stats.maxEa}}</span>
                     <span *ngIf="!fighter.stats.maxEa">-</span>
                 </div>
-                <div class="field-medium">{{fighter.stats.pr}}</div>
-                <div class="field">{{fighter.stats.resm}}</div>
+                <div class="field-medium">{{fighter.stats.pr}}({{fighter.stats.pr_magic}})</div>
+                <div class="field">
+                    {{fighter.stats.resm}}
+                </div>
                 <div class="field-large"></div>
-                <div class="field">{{fighter.stats.cou}}<span *ngIf="fighter.chercheNoise">*</span></div>
-                <div class="field"></div>
+                <div class="field">{{fighter.stats.cou}}</div>
+                <div class="field-fixed-small"><md-checkbox [checked]="fighter.chercheNoise" disabled></md-checkbox></div>
             </div>
             <div style="display: flex; justify-content: flex-start">
                 <target-selector [fighter]=fighter

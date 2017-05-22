@@ -1,8 +1,12 @@
 .fighter-container {
     display: flex;
     flex-wrap: nowrap;
+    align-items: center;
     justify-content: space-around;
-    border-bottom: 1px solid #e2dede;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 .fighter-row {
     display: flex;
@@ -19,10 +23,15 @@
     flex: 1 auto;
 }
 .field {
-    text-align: center;
     flex: 1 auto;
     width: 20px;
+    text-align: center;
 }
+.field-fixed-small {
+    flex: 0 36px;
+    text-align: center;
+}
+
 .field-medium {
     text-align: center;
     flex: 1 auto;
@@ -34,22 +43,18 @@
     width: 40px;
 }
 .field-name {
-    flex: 2 auto;
+    flex: 3 auto;
     width: 80px;
 }
-.even_row {
-    background-color: #d2d2d2;
-}
-.combat_row_selected {
-    background-color: #e3e3e3!important;
-}
 .text-attack {
-    color: #c72b2b;
     font-weight: bold;
     letter-spacing: .08em;
 }
 .text-prd {
-    color: #633110;
+    font-weight: bold;
+    letter-spacing: .08em;
+}
+.text-esq {
     font-weight: bold;
     letter-spacing: .08em;
 }

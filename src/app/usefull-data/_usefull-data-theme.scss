@@ -11,6 +11,10 @@
         background-color: mat-color($background, selected-button);
     }
 
+    .table-striped>tbody>tr:nth-child(even) {
+        background-color: mat-color($background, selected-button);
+    }
+
     .tab-icon {
         border-color: mat-color($foreground, divider);
         background-color: mat-color($background, background);
@@ -18,8 +22,6 @@
     .tab-icon:last-child {
         border-bottom-color: mat-color($foreground, divider);
     }
-
-
 
     @if (map_get($theme, is-dark)) {
         .tab-icon-critic {

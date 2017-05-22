@@ -1,7 +1,3 @@
-.current-fighter {
-    background: #c2e7b6;
-}
-
 .add-monster-dialog {
     .inputs {
         display: flex;
@@ -20,6 +16,10 @@
         max-height: 75vh;
         overflow-x: auto;
     }
+}
+
+.next-fighter {
+    text-align: right;
 }
 
 .dead-monsters-list {

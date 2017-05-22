@@ -1,8 +1,7 @@
 <span cdk-overlay-origin #trigger="cdkOverlayOrigin" (click)="showEditor()" class="ve-value">
-    {{value|number}}<span *ngIf="maxValue && !hideMaxValue">/{{maxValue}}</span>
-</span>
-
-<ng-template cdk-connected-overlay [origin]="trigger" hasBackdrop [open]="displayEditor"
+    {{value|number}}<span *ngIf="maxValue && !hideMaxValue">/{{maxValue}}</span
+></span
+><ng-template cdk-connected-overlay [origin]="trigger" hasBackdrop [open]="displayEditor"
           (backdropClick)="hideEditor()" (attach)="onDisplayed()">
     <div style="position: relative">
         <div class="ve-container"

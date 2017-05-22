@@ -1,12 +1,12 @@
-<input
-    *ngIf="!isDataField"
-    type="text"
-    [(ngModel)]="monster[fieldName]"
-    (change)="updateMonsterField()"
-/>
-<input
-    *ngIf="isDataField"
-    type="text"
-    [(ngModel)]="monster.data[fieldName]"
-    (change)="updateMonsterField()"
-/>
+<md-input-container class="small-input" *ngIf="!isDataField">
+    <input mdInput
+           [(ngModel)]="monster[fieldName]"
+           (change)="updateMonsterField()"
+    />
+</md-input-container>
+<md-input-container class="small-input" *ngIf="isDataField">
+    <input mdInput
+           [(ngModel)]="monster.data[fieldName]"
+           (change)="updateMonsterField()"
+    />
+</md-input-container>

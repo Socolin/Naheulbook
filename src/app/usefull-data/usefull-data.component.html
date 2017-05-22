@@ -158,7 +158,7 @@
                     ** Un sort surgit de nulle part, et qui peut être n'importe quoi - le MJ décide
                 </p>
                 <p>
-                    <a href='#' (click)="toggleDisplayPanel('entropic')">Voir sorts entropiques</a>
+                    <a href='#' (click)="openPanel('entropic')">Voir sorts entropiques</a>
                 </p>
             </md-tab>
             <md-tab>
@@ -222,7 +222,7 @@
 
 <ng-template #panelEffects="cdkPortal" cdk-portal>
     <md-card class="panel-content">
-        <effect-list [inputCategoryId]=effectsCategoryId></effect-list>
+        <effect-list [isOverlay]="true" [inputCategoryId]=effectsCategoryId></effect-list>
     </md-card>
 </ng-template>
 
@@ -247,7 +247,7 @@
                 <li>Les conséquences des sorts bizarres sont laissés à la discrétion du MJ</li>
                 <li>1 personnage = celui qui fait le plus haut score au D6</li>
             </ul>
-        <table class="table table-condensed table-striped">
+        <table class="table-striped">
             <thead>
                 <tr>
                     <th>Nom</th>
@@ -757,24 +757,24 @@
 <div class="tabs-category">
     <div [class.tab-icon-critic-selected]="currentPanel==='critic'"
          class="tab-icon game-icon tab-icon-critic game-icon-spiky-eclipse"
-         (click)="toggleDisplayPanel('critic')"></div>
+         (click)="openPanel('critic')"></div>
     <div [class.tab-icon-epicfail-selected]="currentPanel==='epicfail'"
          class="tab-icon game-icon tab-icon-epicfail game-icon-dripping-blade"
-         (click)="toggleDisplayPanel('epicfail')"></div>
+         (click)="openPanel('epicfail')"></div>
     <div [class.tab-icon-effects-selected]="currentPanel==='effects'"
          class="tab-icon game-icon tab-icon-effects game-icon-pierced-body"
-         (click)="toggleDisplayPanel('effects')"></div>
+         (click)="openPanel('effects')"></div>
     <div [class.tab-icon-entropic-selected]="currentPanel==='entropic'"
          class="tab-icon game-icon tab-icon-entropic game-icon-bolt-spell-cast"
-         (click)="toggleDisplayPanel('entropic')"></div>
+         (click)="openPanel('entropic')"></div>
     <div [class.tab-icon-skills-selected]="currentPanel==='skills'" class="tab-icon game-icon tab-icon-skills game-icon-gears"
-         (click)="toggleDisplayPanel('skills')"></div>
+         (click)="openPanel('skills')"></div>
     <div [class.tab-icon-sleep-selected]="currentPanel==='sleep'" class="tab-icon game-icon tab-icon-sleep game-icon-sliced-bread"
-         (click)="toggleDisplayPanel('sleep')"></div>
+         (click)="openPanel('sleep')"></div>
     <div [class.tab-icon-items-selected]="currentPanel==='items'" class="tab-icon game-icon tab-icon-items game-icon-beer-stein"
-         (click)="toggleDisplayPanel('items')"></div>
+         (click)="openPanel('items')"></div>
     <div [class.tab-icon-jobs-selected]="currentPanel==='jobs'" class="tab-icon game-icon tab-icon-jobs game-icon-gear-hammer"
-         (click)="toggleDisplayPanel('jobs')"></div>
+         (click)="openPanel('jobs')"></div>
     <div [class.tab-icon-origins-selected]="currentPanel==='origins'" class="tab-icon game-icon tab-icon-origins game-icon-woman-elf-face"
-         (click)="toggleDisplayPanel('origins')"></div>
+         (click)="openPanel('origins')"></div>
 </div>

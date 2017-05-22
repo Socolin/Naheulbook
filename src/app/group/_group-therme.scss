@@ -1,0 +1,37 @@
+@import '~@angular/material/theming';
+
+@mixin group-theme($theme) {
+    // Extract whichever individual palettes you need from the theme.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    @if (map_get($theme, is-dark)) {
+        .current-fighter {
+            background: #35502c;
+        }
+    } @else {
+        .current-fighter {
+            background: #c2e7b6;
+        }
+    }
+    .even_row {
+        background-color: mat-color($background, selected-button);
+    }
+    .combat_row_selected {
+        background-color: mat-color($background, selected-button)!important;
+    }
+    .text-attack {
+        color: #c72b2b;
+    }
+    .text-prd {
+        color: #633110;
+    }
+    .text-esq {
+        color: #33a736;
+    }
+    .fighter-container {
+        border-bottom-color: mat-color($foreground, hint-text);;
+    }
+}

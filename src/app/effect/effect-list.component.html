@@ -1,4 +1,4 @@
-<md-tab-group (selectChange)="selectChange($event)" [selectedIndex]="currentTabIndex">
+<md-tab-group (selectedIndexChange)="selectTab($event)" [selectedIndex]="currentTabIndex">
     <ng-template ngFor let-category [ngForOf]="categories">
     <md-tab [label]="category.name">
         <ng-template ngFor [ngForOf]="effects[category.id]" let-effect>

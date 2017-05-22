@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {OverlayRef, Portal} from '@angular/material';
+import {Portal} from '@angular/material';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {UsefullDataService} from './usefull-data.service';
 import {CriticalData} from './usefull-data.model';
@@ -11,12 +11,8 @@ import {CriticalData} from './usefull-data.model';
 })
 export class UsefullDataComponent implements OnInit {
     public currentPanel: string = null;
-    public currentSubPanel: string = null;
-    public selectedSubPanels = {};
     public effectsCategoryId = 1;
     public panelByNames: {[name: string]: Portal<any>} = {};
-
-    public currentOverlayRef: OverlayRef;
 
     @ViewChild('panelCritic')
     public panelCriticDialog: Portal<any>;
@@ -52,12 +48,10 @@ export class UsefullDataComponent implements OnInit {
 
     }
 
-    toggleDisplayPanel(name: string) {
-        if (this.currentOverlayRef) {
-            this.currentOverlayRef.detach();
-            this.currentOverlayRef = null;
+    openPanel(name: string) {
+        if (!this.currentPanel) {
+            this.currentPanel = name;
         }
-
         this._nhbkDialogService.openTopCenteredBackdropDialog(this.panelByNames[name]).detachments().subscribe(
             () =>  {
                 if (this.currentPanel === name) {
@@ -65,27 +59,12 @@ export class UsefullDataComponent implements OnInit {
                 }
             }
         );
-
-        if (this.currentPanel === name) {
-            this.currentPanel = null;
-        } else {
-            if (name) {
-                this.currentSubPanel = this.selectedSubPanels[name];
-            }
-            this.currentPanel = name;
-        }
-        return false;
-    }
-
-    selectSubPanel(name) {
-        this.currentSubPanel = name;
-        this.selectedSubPanels[this.currentPanel] = name;
         return false;
     }
 
     showEffects(categoryId) {
         this.effectsCategoryId = categoryId;
-        this.currentPanel = 'effects';
+        this.openPanel('effects');
         return false;
     }
 
