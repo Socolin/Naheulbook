@@ -61,3 +61,27 @@
 .fighter-header {
     font-weight: bold;
 }
+
+.expanded-data-card {
+    margin: 5px;
+}
+
+.expanded-data {
+    display: flex;
+    .fighter-note {
+        flex: 1 auto;
+        width: 100px;
+    }
+    .fighter-advanced-datas {
+        flex: 1 auto;
+        width: 40px;
+    }
+    .fighter-inventory-item {
+        display: flex;
+        align-items: center;
+        >icon {
+            padding-left: 4px;
+        }
+    }
+
+}

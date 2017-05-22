@@ -66,6 +66,7 @@ import {CreateCharacterComponent} from './create-character.component';
         CharacterListComponent,
         CreateCharacterComponent,
         EffectModule,
+        ItemDetailComponent,
         SkillModule,
     ],
     providers: [

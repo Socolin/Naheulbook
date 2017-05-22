@@ -321,13 +321,13 @@
         <span *ngIf="item.template.slots?.length > 0">
             <button md-button
                     [color]="'primary'"
-                    *ngIf="!item.data.equiped && !item.content?.length"
+                    *ngIf="_itemActionService && !item.data.equiped && !item.content?.length"
                     (click)="_itemActionService.onAction('equip', item)">
                 ÉQUIPER
             </button>
             <button md-button
                     [color]="'primary'"
-                    *ngIf="item.data.equiped && !item.content?.length"
+                    *ngIf="_itemActionService && item.data.equiped && !item.content?.length"
                     (click)="_itemActionService.onAction('unequip', item)">
                 DÉSÉQUIPER
             </button>

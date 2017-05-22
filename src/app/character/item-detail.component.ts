@@ -1,5 +1,5 @@
 import {
-    Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild
+    Component, Input, OnChanges, OnInit, Optional, SimpleChanges, ViewChild
 } from '@angular/core';
 import {Portal, OverlayRef} from '@angular/material';
 
@@ -49,7 +49,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public previousLifetime: IDurable;
 
     constructor(private _itemService: ItemService
-        , public _itemActionService: ItemActionService
+        , @Optional() public _itemActionService: ItemActionService
         , private _groupService: GroupService
         , private _nhbkDialogService: NhbkDialogService) {
     }

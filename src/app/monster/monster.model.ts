@@ -40,8 +40,6 @@ export class Monster {
         isMonster: boolean;
     };
 
-    viewInventory: boolean;
-
     constructor(monster?: Monster) {
         if (monster) {
             this.id = monster.id;
