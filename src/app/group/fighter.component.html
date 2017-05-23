@@ -1,5 +1,5 @@
 <div class="fighter-container"
-     [class.combat_row_selected]="selected"
+     [class.combat-row-selected]="selected"
      (click)="selectFighter()">
 
     <div class="field-icon">
@@ -167,19 +167,39 @@
 </div>
 
 <md-card class="expanded-data-card"
-     [class.combat_row_selected]="selected"
+     [class.combat-row-selected]="selected"
      *ngIf="expandedView">
     <md-card-subtitle>Informations supplémentaires</md-card-subtitle>
     <md-card-content class="expanded-data" *ngIf="fighter.isMonster">
         <div class="fighter-advanced-datas">
-            <b>XP:</b>
-            <value-editor [value]="fighter.monster.data.xp"
-                          [title]="'XP'"
-                          (onChange)="updateMonsterField(fighter.monster, 'xp', $event)">
-            </value-editor>
-            <md-divider></md-divider>
-            <b>Inventaire:</b>
+            <div class="fighter-advanced-data">
+                <span class="label">XP</span>
+                <span class="value">
+                    <value-editor [value]="fighter.monster.data.xp"
+                                  [title]="'XP'"
+                                  (onChange)="updateMonsterField(fighter.monster, 'xp', $event)">
+                    </value-editor>
+                </span>
+            </div>
+            <div class="fighter-advanced-data">
+                <span class="label">Sexe</span>
+                <span class="value">
+                    <md-select [ngModel]="fighter.monster.data.sex" (ngModelChange)="updateMonsterField(fighter.monster, 'sex', $event)">
+                        <md-option [value]="null">
+                            Non défini
+                        </md-option>
+                        <md-option [value]="'f'">
+                            Femme
+                        </md-option>
+                        <md-option [value]="'h'">
+                            Homme
+                        </md-option>
+                    </md-select>
+                </span>
+            </div>
+
             <div>
+                <b>Inventaire:</b>
                 <div *ngFor="let item of fighter.monster.items" class="fighter-inventory-item">
                     <icon [icon]="item.data.icon" [size]="'24px'"></icon>
                     <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}} </span>

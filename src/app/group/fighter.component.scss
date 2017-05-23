@@ -43,7 +43,7 @@
     width: 40px;
 }
 .field-name {
-    flex: 3 auto;
+    flex: 4 auto;
     width: 80px;
 }
 .text-attack {
@@ -76,6 +76,17 @@
     .fighter-advanced-datas {
         flex: 1 auto;
         width: 40px;
+        .fighter-advanced-data {
+            display: flex;
+            align-items: center;
+            .label {
+                flex: 0 90px;
+                font-weight: bold;
+            }
+            .value {
+                flex: 0 auto;
+            }
+        }
     }
     .fighter-inventory-item {
         display: flex;

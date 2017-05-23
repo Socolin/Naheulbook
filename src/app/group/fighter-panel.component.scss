@@ -1,6 +1,10 @@
 .add-monster-dialog {
     .inputs {
         display: flex;
+        align-items: center;
+        md-radio-group {
+            margin-left: 5px;
+        }
         md-input-container {
             margin-left: 5px;
         }

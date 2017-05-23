@@ -147,7 +147,6 @@
                 <md-input-container>
                     <input mdInput
                            placeholder="Degat"
-                           type="text"
                            [(ngModel)]="newMonster.data.dmg"/>
                 </md-input-container>
             </div>
@@ -169,6 +168,20 @@
                                   color="primary">
                     Chercher des noises
                 </md-slide-toggle>
+            </div>
+            <div class="inputs">
+                Sexe
+                <md-radio-group name="sex" [(ngModel)]="newMonster.data.sex">
+                    <md-radio-button name="sex" [value]="null">
+                        Non défini
+                    </md-radio-button>
+                    <md-radio-button name="sex" [value]="'f'">
+                        Femme
+                    </md-radio-button>
+                    <md-radio-button name="sex" [value]="'h'">
+                        Homme
+                    </md-radio-button>
+                </md-radio-group>
             </div>
             <div class="inputs">
                 <md-input-container style="width: 100%">

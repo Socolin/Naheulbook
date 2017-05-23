@@ -19,6 +19,7 @@ export class MonsterData {
     note: string;
     color: string;
     number: number;
+    sex: string;
 
     constructor(monsterData?: MonsterData) {
         if (monsterData) {
