@@ -7,12 +7,23 @@
     $background: map-get($theme, background);
     $foreground: map-get($theme, foreground);
 
-    .data:nth-child(even) {
-        background: linear-gradient(rgba(0,0,0,.20),rgba(0,0,0,.20));
-    }
+    @if (map_get($theme, is-dark)) {
+        .data:nth-child(even) {
+            background: linear-gradient(rgba(0,0,0,.20),rgba(0,0,0,.20));
+        }
 
-    .table-striped>tbody>tr:nth-child(even) {
-        background: linear-gradient(rgba(0,0,0,.20),rgba(0,0,0,.20));
+        .table-striped>tbody>tr:nth-child(even) {
+            background: linear-gradient(rgba(0,0,0,.20),rgba(0,0,0,.20));
+        }
+
+    } @else {
+        .data:nth-child(even) {
+            background: linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
+        }
+
+        .table-striped>tbody>tr:nth-child(even) {
+            background: linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
+        }
     }
 
     .tab-icon {
