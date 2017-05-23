@@ -11,9 +11,27 @@
         .current-fighter {
             background: #35502c;
         }
+        .text-attack {
+            color: #bf3737;
+        }
+        .text-prd {
+            color: #9e643e;
+        }
+        .text-esq {
+            color: #2d732f;
+        }
     } @else {
         .current-fighter {
             background: #d7f5d0;
+        }
+        .text-attack {
+            color: #c72b2b;
+        }
+        .text-prd {
+            color: #633110;
+        }
+        .text-esq {
+            color: #33a736;
         }
     }
     .combat_row_selected {
@@ -21,15 +39,6 @@
     }
     .selected {
         background: linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
-    }
-    .text-attack {
-        color: #c72b2b;
-    }
-    .text-prd {
-        color: #633110;
-    }
-    .text-esq {
-        color: #33a736;
     }
     .fighter-container {
         border-bottom-color: mat-color($foreground, hint-text);;
