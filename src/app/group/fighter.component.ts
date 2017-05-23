@@ -18,10 +18,9 @@ export class FighterComponent {
     @Input() group: Group;
     @Input() fighter: Fighter;
     @Input() fighters: Fighter[];
-    @Input() i: number;
     @Input() selected: boolean;
     @Input() expandedView: boolean;
-    @Output() onSelect: EventEmitter<number> = new EventEmitter<number>();
+    @Output() onSelect: EventEmitter<Fighter> = new EventEmitter<Fighter>();
     public selectedItem: Item;
 
     constructor(private _groupService: GroupService
@@ -124,7 +123,7 @@ export class FighterComponent {
     }
 
     selectFighter() {
-        this.onSelect.emit(this.i);
+        this.onSelect.emit(this.fighter);
     }
 
     itemHasSlot(template: ItemTemplate, slot: string) {

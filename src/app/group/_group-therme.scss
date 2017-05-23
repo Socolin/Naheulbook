@@ -13,14 +13,14 @@
         }
     } @else {
         .current-fighter {
-            background: #c2e7b6;
+            background: #d7f5d0;
         }
     }
-    .even_row {
-        background-color: mat-color($background, selected-button);
-    }
     .combat_row_selected {
-        background-color: mat-color($background, selected-button)!important;
+        background: linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
+    }
+    .selected {
+        background: linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
     }
     .text-attack {
         color: #c72b2b;

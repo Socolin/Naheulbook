@@ -78,8 +78,8 @@ export class FighterPanelComponent implements OnInit, OnChanges {
         this.deadMonstersOverlayRef = null;
     }
 
-    selectCombatRow(i: number) {
-        this.selectedCombatRow = i;
+    selectFighter(fighter: Fighter) {
+        this.selectedCombatRow = this.fighters.indexOf(fighter);
     }
 
     /**

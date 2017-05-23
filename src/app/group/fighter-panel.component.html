@@ -19,13 +19,11 @@
         </div>
     </div>
     <div *ngIf="currentFighterIndex !== null && fighters[currentFighterIndex]" class="current-fighter">
-        <fighter
-                 [selected]="false"
+        <fighter [selected]="false"
                  [group]="group"
                  [fighter]="fighters[currentFighterIndex]"
-                 [fighters]="fighters"
-                 [i]="1"
-                 (onSelect)="selectCombatRow($event)">
+                 [expandedView]="true"
+                 [fighters]="fighters">
         </fighter>
     </div>
     <div *ngIf="currentFighterIndex !== null && fighters[currentFighterIndex]" class="next-fighter">
@@ -42,9 +40,8 @@
                  [group]="group"
                  [fighter]="fighter"
                  [fighters]="fighters"
-                 [i]="i"
                  [expandedView]="selectedCombatRow === i"
-                 (onSelect)="selectCombatRow($event)">
+                 (onSelect)="selectFighter($event)">
         </fighter>
     </ng-template>
 </div>
