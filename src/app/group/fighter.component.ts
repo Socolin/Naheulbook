@@ -29,8 +29,8 @@ export class FighterComponent {
         , private _notification: NotificationsService) {
     }
 
-    addItemTo(character: Character) {
-        this._actionService.emitAction('openAddItemForm', this.group, character);
+    addItemTo(fighter: Fighter) {
+        this._actionService.emitAction('openAddItemForm', this.group, fighter);
     }
 
     displayCharacterSheet(character: Character) {

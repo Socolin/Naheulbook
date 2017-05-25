@@ -143,7 +143,7 @@
                 Voir la fiche
             </button>
             <button md-menu-item
-                    (click)=addItemTo(fighter.character)>
+                    (click)=addItemTo(fighter)>
                 Ajouter un objet
             </button>
         </md-menu>
@@ -199,12 +199,15 @@
             </div>
 
             <div>
-                <b>Inventaire:</b>
+                <div><strong>Inventaire</strong></div>
                 <div *ngFor="let item of fighter.monster.items" class="fighter-inventory-item">
                     <icon [icon]="item.data.icon" [size]="'24px'"></icon>
                     <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}} </span>
                     {{item.data.name}}
                 </div>
+                <button md-icon-button (click)="addItemTo(fighter)">
+                    <md-icon>add</md-icon>
+                </button>
             </div>
         </div>
         <md-input-container class="fighter-note">

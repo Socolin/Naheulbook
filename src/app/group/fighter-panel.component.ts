@@ -14,6 +14,7 @@ import {GroupActionService} from './group-action.service';
 import {ItemService} from '../item/item.service';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {CreateItemComponent} from './create-item.component';
+import {isNullOrUndefined} from 'util';
 
 @Component({
     selector: 'fighter-panel',
@@ -56,8 +57,13 @@ export class FighterPanelComponent implements OnInit, OnChanges {
         , private _monsterService: MonsterService) {
     }
 
-    onItemAdded(data: {character: Character, item: Item}) {
-        this._itemService.addItemTo('character', data.character.id, data.item.template.id, data.item.data).subscribe();
+    onItemAdded(data: {character: Character, monster: Monster, item: Item}) {
+        if (!isNullOrUndefined(data.character)) {
+            this._itemService.addItemTo('character', data.character.id, data.item.template.id, data.item.data).subscribe();
+        }
+        else if (!isNullOrUndefined(data.monster)) {
+            this._itemService.addItemTo('monster', data.monster.id, data.item.template.id, data.item.data).subscribe();
+        }
     }
 
     openAddMonsterDialog() {
@@ -333,7 +339,13 @@ export class FighterPanelComponent implements OnInit, OnChanges {
 
         this._actionService.registerAction('openAddItemForm').subscribe(
             data => {
-                this.createItemComponent.openDialogForCharacter(data.data);
+                let fighter: Fighter = data.data;
+                if (fighter.isMonster)  {
+                    this.createItemComponent.openDialogForMonster(fighter.monster);
+                }
+                else {
+                    this.createItemComponent.openDialogForCharacter(fighter.character);
+                }
             }
         );
 

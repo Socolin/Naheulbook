@@ -62,6 +62,13 @@ export class CreateItemComponent implements OnChanges {
         this.openDialog();
     }
 
+    openDialogForMonster(monster: Monster) {
+        this.loot = null;
+        this.monster = monster;
+        this.character = null;
+        this.openDialog();
+    }
+
     openDialog() {
         this.newItem = new Item();
         this.addItemOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addItemDialog);

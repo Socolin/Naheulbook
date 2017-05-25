@@ -2,6 +2,7 @@
     <md-card>
         <md-card-title *ngIf="character">Ajouter un objet a {{character.name}}</md-card-title>
         <md-card-title *ngIf="loot">Ajouter un objet au loot {{loot.name}}</md-card-title>
+        <md-card-title *ngIf="loot === null && monster">Ajouter un objet au monstre {{monster.name}}</md-card-title>
         <md-card-content style="display: flex; justify-content: space-around; flex-direction: column">
             <div class="new-item-template">
                 <md-tab-group (selectedIndexChange)="onSelectTab($event)">
