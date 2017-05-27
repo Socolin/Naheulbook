@@ -190,7 +190,7 @@ export class ItemService extends JsonService {
                     targetId: targetId,
                     targetType: targetType,
                     itemData: itemData
-                }).map(res => res.json()),
+                }).map(res => Item.fromJson(res.json())),
                 this._skillService.getSkillsById()
             ).subscribe(
                 ([item, skillsById]: [Item, {[skillId: number]: Skill}]) => {
@@ -214,7 +214,7 @@ export class ItemService extends JsonService {
                     targetId: targetId,
                     targetType: targetType,
                     criteria: criteria
-                }).map(res => res.json()),
+                }).map(res => Item.fromJson(res.json())),
                 this._skillService.getSkillsById()
             ).subscribe(
                 ([item, skillsById]: [Item, {[skillId: number]: Skill}]) => {

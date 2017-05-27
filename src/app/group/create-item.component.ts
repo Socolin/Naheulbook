@@ -55,13 +55,6 @@ export class CreateItemComponent implements OnChanges {
         this.openDialog();
     }
 
-    openDialogForLootMonster(loot: Loot, monster: Monster) {
-        this.loot = loot;
-        this.monster = monster;
-        this.character = null;
-        this.openDialog();
-    }
-
     openDialogForMonster(monster: Monster) {
         this.loot = null;
         this.monster = monster;

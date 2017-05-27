@@ -315,6 +315,6 @@ export class CharacterService extends JsonService {
     loadLoots(characterId: number): Observable<Loot[]> {
         return this.postJson('/api/character/loadLoots', {
             characterId: characterId
-        }).map(res => res.json());
+        }).map(res => Loot.lootsFromJson(res.json()));
     }
 }

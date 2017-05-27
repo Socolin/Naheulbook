@@ -109,6 +109,13 @@
                     }
                 }
             }
+            .loot-monsters {
+                .monster-item {
+                    border-left-color: mat-color($foreground, hint-text);
+                }
+            }
         }
     }
+
+
 }

@@ -34,6 +34,20 @@ export class Item {
     // Generated field
     content: Item[];
     containerInfo: IMetadata;
+
+    static fromJson(jsonData: any): Item {
+        let item = new Item();
+        Object.assign(item, jsonData);
+        return item;
+    }
+
+    static itemsFromJson(itemsData: object[]): Item[] {
+        let items: Item[] = [];
+        for (let i = 0; i < itemsData.length; i++) {
+            items.push(Item.fromJson(itemsData[i]));
+        }
+        return items;
+    }
 }
 
 export class PartialItem {
@@ -41,4 +55,10 @@ export class PartialItem {
     data: ItemData = new ItemData();
     modifiers: ItemModifier[];
     container: number;
+
+    static fromJson(jsonData: any): PartialItem {
+        let item = new PartialItem();
+        Object.assign(item, jsonData);
+        return item;
+    }
 }

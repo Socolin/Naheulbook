@@ -3,12 +3,15 @@
         <md-card *ngFor="let loot of loots">
             <md-card-title>{{loot.name}}</md-card-title>
             <md-card-content>
-                <ul>
-                    <li *ngFor="let item of loot.items"
-                       (click)="selectItem(item)" [class.active]="item.id == selectedItem?.id">
+                    <div class="loot-items">
+                        <div *ngFor="let item of loot.items"
+                              (click)="selectItem(item)"
+                              class="loot-item"
+                              [class.active]="item.id == selectedItem?.id">
                         <button md-icon-button
                                 (click)="openTakeItemLootDialog(loot, item)">
-                            <md-icon>add_shopping_cart</md-icon>
+                            <md-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-md-button-icon-32">
+                            </md-icon>
                         </button>
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                         <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
@@ -18,31 +21,31 @@
                                                [item]="item"
                                                [readonly]="true">
                         </swipeable-item-detail>
-                    </li>
-                </ul>
-                <ul>
-                    <li *ngFor="let monster of loot.monsters">
+                    </div>
+                </div>
+                <div class="loot-monsters" *ngFor="let monster of loot.monsters">
+                    <div class="monster-name">
                         {{monster.name}}
-                        <ul>
-                            <li *ngFor="let item of monster.items"
-                                (click)="selectItem(item)"
-                                [class.active]="item.id == selectedItem?.id">
-                                <button md-icon-button
-                                        (click)="openTakeItemMonsterDialog(loot, monster, item)">
-                                    <md-icon>add_shopping_cart</md-icon>
-                                </button>
+                    </div>
+                    <div class="monster-item loot-item" *ngFor="let item of monster.items"
+                         (click)="selectItem(item)"
+                         [class.active]="item.id == selectedItem?.id">
+                        <button md-icon-button
+                                (click)="openTakeItemMonsterDialog(monster, item)">
+                            <md-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-md-button-icon-32">
+                            </md-icon>
+                        </button>
 
-                                <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
-                                {{item.data.name}}
-                                <swipeable-item-detail *ngIf="item.id === selectedItem?.id"
-                                                       [character]="character"
-                                                       [item]="item"
-                                                       [readonly]="true">
-                                </swipeable-item-detail>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                        <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                        <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
+                        {{item.data.name}}
+                        <swipeable-item-detail *ngIf="item.id === selectedItem?.id"
+                                               [character]="character"
+                                               [item]="item"
+                                               [readonly]="true">
+                        </swipeable-item-detail>
+                    </div>
+                </div>
 
             </md-card-content>
         </md-card>

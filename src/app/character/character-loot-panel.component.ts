@@ -45,13 +45,14 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         this.takingItem = item;
         this.takingQuantity = item.data.quantity;
         this.takingItemLoot = loot;
+        this.takingItemMonster = null;
         this.takeItemOverlayRef = this._nhbkDialogservice.openCenteredBackdropDialog(this.takeItemDialog);
     }
 
-    openTakeItemMonsterDialog(loot: Loot, monster: Monster, item: Item) {
+    openTakeItemMonsterDialog(monster: Monster, item: Item) {
         this.takingItem = item;
         this.takingQuantity = item.data.quantity;
-        this.takingItemLoot = loot;
+        this.takingItemLoot = null;
         this.takingItemMonster = monster;
         this.takeItemOverlayRef = this._nhbkDialogservice.openCenteredBackdropDialog(this.takeItemDialog);
     }
@@ -62,7 +63,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
 
     validTakeItem() {
         if (this.takingItemMonster) {
-            this.takeItemFromMonster(this.takingItemLoot, this.takingItemMonster, this.takingItem, this.takingQuantity);
+            this.takeItemFromMonster(this.takingItemMonster, this.takingItem, this.takingQuantity);
         } else if (this.takingItemLoot) {
             this.takeItemFromLoot(this.takingItemLoot, this.takingItem, this.takingQuantity);
         }
@@ -73,17 +74,17 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         if (item != null) {
             this._itemService.takeItemFromLoot(item.id, this.character.id, quantity).subscribe(
                 takenItemData => {
-                    this.onTookItemFromLoot(loot, takenItemData);
+                    loot.takeItem(takenItemData.leftItem, takenItemData.item, takenItemData.character);
                 }
             );
         }
     }
 
-    takeItemFromMonster(loot: Loot, monster: Monster, item: Item, quantity?: number) {
+    takeItemFromMonster(monster: Monster, item: Item, quantity?: number) {
         if (item != null) {
             this._itemService.takeItemFromLoot(item.id, this.character.id, quantity).subscribe(
                 takenItemData => {
-                    this.onTookItemFromMonsterLoot(loot, takenItemData);
+                    monster.takeItem(takenItemData.leftItem, takenItemData.item, takenItemData.character);
                 }
             );
         }
@@ -95,18 +96,19 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     }
 
     registerActions() {
-        this._characterWebsocketService.registerPacket('showLoot').subscribe(this.onAddLoot.bind(this));
-        this._characterWebsocketService.registerPacket('hideLoot').subscribe(this.onDeleteLoot.bind(this));
+        this._characterWebsocketService.registerPacket('showLoot').subscribe(data => {
+            this.lootAdded(Loot.fromJson(data), this.inGroupTab);
+        });
+        this._characterWebsocketService.registerPacket('hideLoot').subscribe(data => {
+            this.lootDeleted(data.id);
+        });
     }
 
     ngOnInit(): void {
         this._characterService.loadLoots(this.character.id).subscribe(
             loots => {
-                this.onLoadLoots(loots);
+                this.onLoadLoots(loots, this.inGroupTab);
                 this.registerActions();
-                if (this.inGroupTab) {
-                    this._lootWebsocketService.registerNotifyFunction(null);
-                }
             }
         );
     }

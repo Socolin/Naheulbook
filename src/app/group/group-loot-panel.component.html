@@ -67,42 +67,45 @@
 
         </md-toolbar>
         <md-card-content>
-            <ul>
-                <li *ngFor="let item of loot.items">
+            <div class="loot-items">
+                <div *ngFor="let item of loot.items" class="loot-item">
                     <button md-icon-button (click)="removeItemFromLoot(loot, item)">
                         <md-icon>delete</md-icon>
                     </button>
+                    <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                     <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
                     {{item.data.name}}
                     <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
-                    <span *ngIf="item.template.data.price">{{item.template.data.price}} P.O.</span>
-                </li>
-            </ul>
-            <ul>
-                <li *ngFor="let monster of loot.monsters">
+                    <span *ngIf="item.template.data.price"> {{item.template.data.price}} P.O.</span>
+                </div>
+            </div>
+
+            <div class="loot-monsters" *ngFor="let monster of loot.monsters">
+                <div class="monster-name">
                     {{monster.name}}
-                    <button md-raised-button (click)="createItemDialog.openDialogForLootMonster(loot, monster)">
+                    <button md-raised-button (click)="createItemDialog.openDialogForMonster(monster)">
                         Ajouter item
                     </button>
-                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(loot, monster, 'USELESS_ITEM')">
+                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'USELESS_ITEM')">
                         Ajouter item inutile
                     </button>
-                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(loot, monster, 'MAGICAL_INGREDIENT')">
+                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'MAGICAL_INGREDIENT')">
                         Ajouter ingredient magique
                     </button>
-                    <ul>
-                        <li *ngFor="let item of monster.items">
-                            <button md-icon-button (click)="removeItemFromMonster(monster, item)">
-                                <md-icon>delete</md-icon>
-                            </button>
-                            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
-                            {{item.data.name}}
-                            <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
-                            <span *ngIf="item.template.data.price">{{item.template.data.price}} P.O.</span>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+                </div>
+                <div>
+                    <div class="monster-item loot-item" *ngFor="let item of monster.items">
+                        <button md-icon-button (click)="removeItemFromMonster(monster, item)">
+                            <md-icon>delete</md-icon>
+                        </button>
+                        <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                        <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
+                        {{item.data.name}}
+                        <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
+                        <span *ngIf="item.template.data.price"> {{item.template.data.price}} P.O.</span>
+                    </div>
+                </div>
+            </div>
         </md-card-content>
     </md-card>
 </div>

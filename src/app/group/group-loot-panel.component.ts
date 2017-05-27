@@ -48,7 +48,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     createLoot() {
         this._groupService.createLoot(this.group.id, this.newLootName).subscribe(
             loot => {
-                this.onAddLoot(loot);
+                this.lootAdded(loot);
             }
         );
         this.newLootName = null;
@@ -56,17 +56,34 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
 
     deleteLoot(loot: Loot) {
         this._groupService.deleteLoot(loot.id).subscribe(
-            deletedLoot => {
-                this.onDeleteLoot(deletedLoot);
+            () => {
+                this.lootDeleted(loot.id);
             }
         );
+    }
+
+    onAddItem(data: {monster: Monster, loot: Loot, item: Item}) {
+        if (data.loot) {
+            this._itemService.addItemTo('loot', data.loot.id, data.item.template.id, data.item.data).subscribe(
+                item => {
+                    data.loot.addItem(item);
+                }
+            );
+        }
+        else {
+            this._itemService.addItemTo('monster', data.monster.id, data.item.template.id, data.item.data).subscribe(
+                item => {
+                    data.monster.addItem(item);
+                }
+            );
+        }
     }
 
     openLoot(loot: Loot) {
         loot.visibleForPlayer = true;
         this._groupService.updateLoot(loot).subscribe(
-            openedLoot => {
-                this.onUpdateLoot(openedLoot);
+            updatedLoot => {
+                loot.visibleForPlayer = updatedLoot.visibleForPlayer;
             }
         );
     }
@@ -75,7 +92,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         loot.visibleForPlayer = false;
         this._groupService.updateLoot(loot).subscribe(
             updatedLoot => {
-                this.onUpdateLoot(updatedLoot);
+                loot.visibleForPlayer = updatedLoot.visibleForPlayer;
             }
         );
     }
@@ -83,43 +100,26 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     addRandomItemFromCategoryToLoot(loot: Loot, categoryName: string) {
         this._itemService.addRandomItemTo('loot', loot.id, {categoryName: categoryName}).subscribe(
             item => {
-                this.onAddItemToLoot(loot, item);
+                loot.addItem(item);
             }
         );
         return false;
     }
 
-    addRandomItemFromCategoryToMonster(loot: Loot, monster: Monster, categoryName: string) {
+    addRandomItemFromCategoryToMonster(monster: Monster, categoryName: string) {
         this._itemService.addRandomItemTo('monster', monster.id, {categoryName: categoryName}).subscribe(
             item => {
-                this.onAddItemToMonster(loot, {monster, item});
+                monster.addItem(item);
             }
         );
         return false;
-    }
-
-    onAddItem(data: {monster: Monster, loot: Loot, item: Item}) {
-        if (data.monster === null) {
-            this._itemService.addItemTo('loot', data.loot.id, data.item.template.id, data.item.data).subscribe(
-                item => {
-                    this.onAddItemToLoot(data.loot, item);
-                }
-            );
-        }
-        else {
-            this._itemService.addItemTo('monster', data.monster.id, data.item.template.id, data.item.data).subscribe(
-                newItem => {
-                    this.onAddItemToMonster(data.loot, {item: newItem, monster: data.monster});
-                }
-            );
-        }
     }
 
     removeItemFromLoot(loot: Loot, item: Item) {
         if (item != null) {
             this._itemService.deleteItem(item.id).subscribe(
                 deletedItem => {
-                    this.onRemoveItemFromLoot(loot, deletedItem);
+                    loot.removeItem(deletedItem.id);
                 }
             );
         }
@@ -129,16 +129,15 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         if (item != null) {
             this._itemService.deleteItem(item.id).subscribe(
                 deletedItem => {
-                    this.onRemoveItemFromMonster(monster, deletedItem);
+                    monster.removeItem(deletedItem.id);
                 }
             );
         }
     }
 
     registerActions() {
-        this._groupWebsocketService.registerPacket('addLoot').subscribe(this.onAddLoot.bind(this));
-        this._groupWebsocketService.registerPacket('deleteLoot').subscribe(this.onDeleteLoot.bind(this));
-        this._groupWebsocketService.registerPacket('updateLoot').subscribe(this.onUpdateLoot.bind(this));
+        this._groupWebsocketService.registerPacket('lootAdded').subscribe(this.lootAdded.bind(this));
+        this._groupWebsocketService.registerPacket('deleteLoot').subscribe(this.lootDeleted.bind(this));
     }
 
     ngOnInit(): void {
@@ -146,7 +145,6 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
             loots => {
                 this.onLoadLoots(loots);
                 this.registerActions();
-                this._lootWebsocketService.registerNotifyFunction(null);
             }
         );
     }

@@ -7,14 +7,23 @@
             margin: 5px;
         }
 
-        ul {
-            padding-left: 0;
-            > li {
-                display: flex;
-                align-items: center;
-                > icon {
-                    padding-right: 5px;
-                }
+        .loot-item {
+            display: flex;
+            align-items: center;
+            >icon {
+                padding-right: 10px;
+            }
+        }
+
+        .loot-monsters {
+            .monster-name {
+                font-weight: bold;
+            }
+            .monster-item {
+                margin-left: 20px;
+                padding-left: 5px;
+                border-left-style: solid;
+                border-left-width: 1px;
             }
         }
     }

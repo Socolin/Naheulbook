@@ -25,7 +25,7 @@ export class GroupService extends JsonService {
     loadMonsters(groupId: number): Observable<Monster[]> {
         return this.postJson('/api/group/loadMonsters', {
             groupId: groupId
-        }).map(res => res.json());
+        }).map(res => Monster.monstersFromJson(res.json()));
     }
 
     loadDeadMonsters(groupId: number, startIndex: number, count: number): Observable<Monster[]> {
@@ -33,14 +33,14 @@ export class GroupService extends JsonService {
             groupId: groupId,
             startIndex: startIndex,
             count: count
-        }).map(res => res.json());
+        }).map(res => Monster.monstersFromJson(res.json()));
     }
 
     createMonster(groupId: number, monster): Observable<Monster> {
         return this.postJson('/api/group/createMonster', {
             monster: monster,
             groupId: groupId
-        }).map(res => res.json());
+        }).map(res => Monster.fromJson(res.json()));
     }
 
     updateMonster(monsterId: number, fieldName: string, value: any): Observable<{value: any, fieldName: string}> {
@@ -54,7 +54,7 @@ export class GroupService extends JsonService {
     killMonster(monsterId: number): Observable<Monster> {
         return this.postJson('/api/group/killMonster', {
             monsterId: monsterId
-        }).map(res => res.json());
+        }).map(res => Monster.fromJson(res.json()));
     }
 
     deleteMonster(monsterId: number): Observable<any> {
@@ -68,26 +68,29 @@ export class GroupService extends JsonService {
     loadLoots(groupId: number): Observable<Loot[]> {
         return this.postJson('/api/group/loadLoots', {
             groupId: groupId
-        }).map(res => res.json());
+        }).map(res => Loot.lootsFromJson(res.json()));
     }
 
     createLoot(groupId: number, lootName: string): Observable<Loot> {
         return this.postJson('/api/group/createLoot', {
             groupId: groupId,
             name: lootName
-        }).map(res => res.json());
+        }).map(res => Loot.fromJson(res.json()));
     }
 
-    deleteLoot(lootId: number): Observable<Loot> {
+    deleteLoot(lootId: number) {
         return this.postJson('/api/group/deleteLoot', {
             lootId: lootId
-        }).map(res => res.json());
+        });
     }
 
     updateLoot(loot: Loot): Observable<Loot> {
         return this.postJson('/api/group/updateLoot', {
-            loot: loot
-        }).map(res => res.json());
+            loot: {
+                visibleForPlayer: loot.visibleForPlayer,
+                id: loot.id
+            }
+        }).map(res => Loot.fromJson(res.json()));
     }
 
     /* History */

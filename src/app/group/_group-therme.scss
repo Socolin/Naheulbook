@@ -43,4 +43,23 @@
     .fighter-container {
         border-bottom-color: mat-color($foreground, hint-text);;
     }
+
+    .loot-list {
+        .active {
+            background-color: mat-color($background, selected-button);
+        }
+
+        ul {
+            > li {
+                > icon {
+                    color: mat-color($foreground, text);
+                }
+            }
+        }
+        .loot-monsters {
+            .monster-item {
+                border-left-color: mat-color($foreground, hint-text);
+            }
+        }
+    }
 }

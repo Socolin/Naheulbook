@@ -1,16 +1,40 @@
 .padding {
     flex: 1 auto;
 }
+
 md-card {
     margin: 5px;
 }
-.loot-list {
-    > md-card {
-        padding: 0;
-    }
-}
+
 .buttons-header {
     text-align: right;
     margin-top: 5px;
     margin-bottom: 7px;
+}
+
+.loot-list {
+    flex: 1 1 0;
+    md-card {
+        margin: 5px;
+    }
+
+    .loot-item {
+        display: flex;
+        align-items: center;
+        > icon {
+            padding-right: 10px;
+        }
+    }
+
+    .loot-monsters {
+        .monster-name {
+            font-weight: bold;
+        }
+        .monster-item {
+            margin-left: 20px;
+            padding-left: 5px;
+            border-left-style: solid;
+            border-left-width: 1px;
+        }
+    }
 }
