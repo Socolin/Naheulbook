@@ -1277,7 +1277,7 @@ export class Character extends WsRegistrable {
         if (i !== -1) {
             return false;
         }
-        this.loots.push(addedLoot);
+        this.loots.unshift(addedLoot);
         this.lootAdded.next(addedLoot);
         if (this.wsSubscribtion) {
             this.wsSubscribtion.service.registerElement(addedLoot);
@@ -1322,10 +1322,10 @@ export class Character extends WsRegistrable {
 
     public onWebsocketData(opcode: string, data: any): void {
         switch (opcode) {
-            case 'addLoot':
+            case 'showLoot':
                 this.addLoot(Loot.fromJson(data));
                 break;
-            case 'deleteLoot':
+            case 'hideLoot':
                 this.removeLoot(data.id);
                 break;
             case 'update':
