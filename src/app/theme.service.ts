@@ -8,7 +8,7 @@ export class ThemeService {
     }
 
     updateTheme() {
-        let body = document.getElementsByTagName('body')[0]
+        let body = document.getElementsByTagName('body')[0];
         let theme = localStorage.getItem('theme');
         switch (theme) {
             case 'dark':

@@ -1,4 +1,3 @@
-import {EventEmitter} from '@angular/core';
 import {Speciality} from './speciality.model';
 import {Item, PartialItem} from './item.model';
 import {Origin} from '../origin';
@@ -12,7 +11,11 @@ import {Effect} from '../effect';
 import {Skill} from '../skill';
 import {isNullOrUndefined} from 'util';
 import {StatsModifier} from '../shared/stat-modifier.model';
-import {CharacterWebsocketService} from './character-websocket.service';
+import {Subject} from 'rxjs/Subject';
+import {WsRegistrable} from '../shared/websocket.model';
+import {Loot} from '../loot/loot.model';
+import {TargetJsonData} from '../group/target.model';
+import {WebSocketService} from '../shared/websocket.service';
 
 export interface CharacterResume {
     id: number;
@@ -228,32 +231,55 @@ export class CharacterComputedData {
     }
 }
 
-export class Character {
+export class CharacterJsonData {
+    active: number;
+    color: string;
+    ea: number;
+    effects: CharacterEffect[];
+    ev: number;
+    experience: number;
+    fatePoint: number;
+    gmData: any;
+    group: IMetadata;
+    id: number;
+    invites: IMetadata[];
+    isNpc: boolean;
+    items: Item[];
+    jobId: number;
+    level: number;
+    modifiers: CharacterModifier[];
+    name: string;
+    originId: number;
+    sex: string;
+    skills: {id: number}[];
+    specialities: Speciality[];
+    statBonusAD: string;
+    stats: { [statName: string]: number };
+    target: TargetJsonData;
+    userId: number;
+}
+
+export class Character extends WsRegistrable {
     id: number;
     name: string;
     ev: number;
     ea: number;
-    originId: number;
     origin: Origin;
-    jobId: number;
     job: Job;
     level: number;
     sex: string;
     experience: number;
     active: number;
     fatePoint: number;
-    items: Item[];
-    skills: Skill[];
-    effects: CharacterEffect[];
+    items: Item[] = [];
+    skills: Skill[] = [];
+    effects: CharacterEffect[] = [];
     stats: {[statName: string]: number};
-    modifiers: CharacterModifier[];
-    specialities: Speciality[];
+    modifiers: CharacterModifier[] = [];
+    specialities: Speciality[] = [];
     statBonusAD: string;
     user: Object;
-    target: {
-        id: number;
-        isMonster: boolean;
-    };
+    target: TargetJsonData;
     color: string;
     gmData: any;
     group: IMetadata;
@@ -261,11 +287,18 @@ export class Character {
     isNpc: boolean;
 
     computedData: CharacterComputedData = new CharacterComputedData();
-    onUpdate: EventEmitter<Character> = new EventEmitter<Character>();
-    notifyChange: (n: string) => string;
+    onUpdate: Subject<Character> = new Subject<Character>();
 
-    static hasChercherDesNoises(character: Character): boolean {
-        return this.hasSkill(character, 14);
+    public loots: Loot[] = [];
+    public lootAdded: Subject<Loot> = new Subject<Loot>();
+    public lootRemoved: Subject<Loot> = new Subject<Loot>();
+
+    public onNotification: Subject<any> = new Subject<any>();
+
+    static fromJson(jsonData: CharacterJsonData): Character {
+        let character = new Character();
+        Object.assign(character, jsonData, {skills: []});
+        return character;
     }
 
     static hasSkill(character: Character, skillId: number): boolean {
@@ -290,6 +323,10 @@ export class Character {
             }
         }
         return false;
+    }
+
+    hasChercherDesNoises(): boolean {
+        return Character.hasSkill(this, 14);
     }
 
     // Concatenate modifiers like [-2 PRD] and [+2 PRD for dwarf]
@@ -957,12 +994,16 @@ export class Character {
         this.computedData.init();
         this.updateInventory();
         this.updateStats();
-        this.onUpdate.emit(this);
+        this.onUpdate.next(this);
+    }
+
+    public notify(type: string, message: string, data?: any) {
+        this.onNotification.next({type: type, message: message, data: data});
     }
 
     onChangeCharacterStat(change: any) {
         if (this[change.stat] !== change.value) {
-            this.notifyChange(change.stat.toUpperCase() + ': ' + this[change.stat] + ' -> ' + change.value);
+            this.notify('stat', change.stat.toUpperCase() + ': ' + this[change.stat] + ' -> ' + change.value);
             this[change.stat] = change.value;
             this.update();
         }
@@ -970,13 +1011,13 @@ export class Character {
 
     onSetStatBonusAD(bonusStat: any) {
         if (this.statBonusAD !== bonusStat) {
-            this.notifyChange('Stat bonus/malus AD défini sur ' + bonusStat);
+            this.notify('bonusStatAD', 'Stat bonus AD défini sur ' + bonusStat);
             this.statBonusAD = bonusStat;
             this.update();
         }
     }
 
-    onLevelUp(result: Character) {
+    onLevelUp(result: Character)  {
         if (this.level !== result.level) {
             this.level = result.level;
             this.modifiers = result.modifiers;
@@ -1001,16 +1042,16 @@ export class Character {
         }
 
         if (item.template.data.quantifiable) {
-            this.notifyChange('Ajout de l\'objet: ' + item.data.quantity + item.data.name);
+            this.notify('addItem', 'Ajout de l\'objet: ' + item.data.quantity + item.data.name);
         }
         else {
-            this.notifyChange('Ajout de l\'objet: ' + item.data.name);
+            this.notify('addItem', 'Ajout de l\'objet: ' + item.data.name);
         }
         this.items.push(item);
         this.update();
     }
 
-    onEquipItem(it: PartialItem) {
+    onEquipItem(it: PartialItem)  {
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
             if (item.id === it.id) {
@@ -1019,9 +1060,9 @@ export class Character {
                 }
                 item.data.equiped = it.data.equiped;
                 if (it.data.equiped) {
-                    this.notifyChange('Equipe ' + item.data.name);
+                    this.notify('equipItem', item.data.name + ' équipé');
                 } else {
-                    this.notifyChange('Déséquipe ' + item.data.name);
+                    this.notify('equipItem', item.data.name + ' déséquipé');
                 }
                 this.update();
                 return;
@@ -1035,19 +1076,24 @@ export class Character {
             if (it.id === item.id) {
                 this.items.splice(i, 1);
                 this.update();
-                this.notifyChange('Suppression de l\'objet: ' + item.data.name);
+                if (it.template.data.quantifiable) {
+                    this.notify('deleteItem', 'Suppression de ' + item.data.quantity + ' ' + item.data.name);
+                }
+                else {
+                    this.notify('deleteItem', 'Suppression de ' + item.data.name);
+                }
                 break;
             }
         }
     }
 
-    onUseItemCharge(item: PartialItem) {
+    onUseItemCharge(item: PartialItem)  {
         for (let i = 0; i < this.items.length; i++) {
             let it = this.items[i];
             if (it.id === item.id) {
                 it.data.charge = item.data.charge;
                 this.update();
-                this.notifyChange('Utilisation d\'une charge de l\'objet: ' + item.data.name);
+                this.notify('useObject', 'Utilisation d\'une charge de ' + item.data.name);
                 break;
             }
         }
@@ -1071,7 +1117,7 @@ export class Character {
                 it.data.name = item.data.name;
                 it.data.notIdentified = item.data.notIdentified;
                 this.update();
-                this.notifyChange('Identification de l\'objet: ' + item.data.name);
+                this.notify('identifyObject', 'Objet identifié: ' + item.data.name);
                 break;
             }
         }
@@ -1104,8 +1150,13 @@ export class Character {
             let it = this.items[i];
             if (it.id === item.id) {
                 if (it.data.quantity !== item.data.quantity) {
-                    this.notifyChange('Modification de la quantité de l\'objet: '
-                        + item.data.name + ': ' + it.data.quantity + ' ->' + item.data.quantity);
+                    let diff = item.data.quantity - it.data.quantity;
+                    if (diff > 0) {
+                        this.notify('addItem', 'Ajout de ' + diff + item.data.name);
+                    }
+                    else {
+                        this.notify('deleteItem', 'Suppression de ' + (-diff) + ' ' + item.data.name);
+                    }
                     it.data.quantity = item.data.quantity;
                     it.data.charge = item.data.charge;
                     this.update();
@@ -1122,35 +1173,35 @@ export class Character {
             }
         }
 
-        this.notifyChange('Ajout de l\'effet: ' + charEffect.effect.name);
+        this.notify('addEffect', 'Ajout de l\'effet: ' + charEffect.effect.name);
         this.effects.push(charEffect);
         this.update();
     }
 
     onAddModifier(modifier: CharacterModifier) {
-        for (let i = 0; i < this.modifiers.length; i++) {
+        for (let i = 0 ; i < this.modifiers.length; i++) {
             if (this.modifiers[i].id === modifier.id) {
                 return;
             }
         }
         this.modifiers.push(modifier);
         this.update();
-        this.notifyChange('Ajout du modificateur: ' + modifier.name);
+        this.notify('addModifier' , 'Ajout du modificateur: ' + modifier.name);
     }
 
     onRemoveModifier(modifier: CharacterModifier) {
         for (let i = 0; i < this.modifiers.length; i++) {
             let e = this.modifiers[i];
-            if (e.id === modifier.id) {
+            if (e. id === modifier.id) {
                 this.modifiers.splice(i, 1);
                 this.update();
-                this.notifyChange('Suppression du modificateur: ' + modifier.name);
+                this.notify('removeModifier', 'Suppression du modificateur: ' + modifier.name);
                 return;
             }
         }
     }
 
-    onUpdateEffect(charEffect: CharacterEffect) {
+    onUpdateEffect(charEffect: CharacterEffect)  {
         for (let i = 0; i < this.effects.length; i++) {
             if (this.effects[i].id === charEffect.id) {
                 if (this.effects[i].active === charEffect.active
@@ -1161,17 +1212,17 @@ export class Character {
                 }
 
                 if (!this.effects[i].active && charEffect.active) {
-                    this.notifyChange('Activation de l\'effet: ' + charEffect.effect.name);
+                    this.notify('updateEffect', 'Activation de l\'effet: ' + charEffect.effect.name);
                 } else if (this.effects[i].active && !charEffect.active) {
-                    this.notifyChange('Désactivation de l\'effet: ' + charEffect.effect.name);
+                    this.notify('updateEffect', 'Désactivation de l\'effet: ' + charEffect.effect.name);
                 } else {
-                    this.notifyChange('Mis à jour de l\'effet: ' + charEffect.effect.name);
+                    this.notify('updateEffect', 'Mis à jour de l\'effet: ' + charEffect.effect.name);
                 }
 
                 this.effects[i].active = charEffect.active;
-                this.effects[i].currentCombatCount = charEffect.currentCombatCount;
+                this.effects[i] .currentCombatCount = charEffect.currentCombatCount;
                 this.effects[i].currentTimeDuration = charEffect.currentTimeDuration;
-                this.effects[i].currentLapCount = charEffect.currentLapCount;
+                this.effects[i] .currentLapCount = charEffect.currentLapCount;
                 break;
             }
         }
@@ -1188,15 +1239,15 @@ export class Character {
                     return;
                 }
                 if (!this.modifiers[i].active && modifier.active) {
-                    this.notifyChange('Activation de l\'effet: ' + modifier.name);
+                    this.notify('updateModifier', 'Activation du modificateur: ' + modifier.name);
                 } else if (this.modifiers[i].active && !modifier.active) {
-                    this.notifyChange('Désactivation de l\'effet: ' + modifier.name);
+                    this.notify('updateModifier', 'Désactivation du modificateur: ' + modifier.name);
                 } else {
-                    this.notifyChange('Mis à jour de l\'effet: ' + modifier.name);
+                    this.notify('updateModifier', 'Mis à jour du modificateur: ' + modifier.name);
                 }
-                this.modifiers[i].active = modifier.active;
+                this.modifiers[i] .active = modifier.active;
                 this.modifiers[i].currentCombatCount = modifier.currentCombatCount;
-                this.modifiers[i].currentTimeDuration = modifier.currentTimeDuration;
+                this.modifiers[i] .currentTimeDuration = modifier.currentTimeDuration;
                 this.modifiers[i].currentLapCount = modifier.currentLapCount;
                 break;
             }
@@ -1208,7 +1259,7 @@ export class Character {
         for (let i = 0; i < this.effects.length; i++) {
             let e = this.effects[i];
             if (e.id === charEffect.id) {
-                this.notifyChange('Suppression de l\'effetde: ' + charEffect.effect.name);
+                this.notify('removeEffect', 'Suppression de l\'effet: ' + charEffect.effect.name);
                 this.effects.splice(i, 1);
                 this.update();
                 return;
@@ -1216,32 +1267,128 @@ export class Character {
         }
     }
 
+    /**
+      * Add an loot to the list of viewable loot by this character
+     * @param addedLoot The loot to add
+     * @returns {boolean} true if the loot has been added (false if the loot was already in)
+     */
+    public addLoot(addedLoot: Loot): boolean {
+        let i = this.loots.findIndex(loot => loot.id === addedLoot.id);
+        if (i !== -1) {
+            return false;
+        }
+        this.loots.push(addedLoot);
+        this.lootAdded.next(addedLoot);
+        if (this.wsSubscribtion) {
+            this.wsSubscribtion.service.registerElement(addedLoot);
+        }
+        return true;
+    }
 
-    public registerWS(websocketService: CharacterWebsocketService, notifyChange: (n: string) => any) {
-        this.notifyChange = notifyChange;
+    /**
+     * Delete an loot from the list of viewable loot by this character
+     * @param lootId The id of the loot to remove
+     * @returns {boolean} true if loot was removed (false if loot was not present)
+     */
+    public removeLoot(lootId: number): boolean {
+        let i = this.loots.findIndex(loot => loot.id === lootId);
+        if (i !== -1) {
+            let removedLoot = this.loots[i];
+            this.loots.splice(i, 1);
+            this.lootRemoved.next(removedLoot);
+            if (this.wsSubscribtion) {
+                this.wsSubscribtion.service.unregisterElement(removedLoot);
+            }
+            return true;
+        }
+        return false;
+    }
 
-        websocketService.register(this);
-        websocketService.registerNotifyFunction(notifyChange);
+    getWsTypeName(): string {
+        return 'character';
+    }
 
-        websocketService.registerPacket('update').subscribe(this.onChangeCharacterStat.bind(this));
-        websocketService.registerPacket('statBonusAd').subscribe(this.onSetStatBonusAD.bind(this));
-        websocketService.registerPacket('levelUp').subscribe(this.onPartialLevelUp.bind(this));
+    public onWsRegister(service: WebSocketService) {
+        for (let loot of this.loots) {
+            service.registerElement(loot);
+        }
+    }
 
-        websocketService.registerPacket('equipItem').subscribe(this.onEquipItem.bind(this));
-        websocketService.registerPacket('addItem').subscribe(this.onAddItem.bind(this));
-        websocketService.registerPacket('deleteItem').subscribe(this.onDeleteItem.bind(this));
-        websocketService.registerPacket('identifyItem').subscribe(this.onIdentifyItem.bind(this));
-        websocketService.registerPacket('useCharge').subscribe(this.onUseItemCharge.bind(this));
-        websocketService.registerPacket('changeContainer').subscribe(this.onChangeContainer.bind(this));
-        websocketService.registerPacket('updateItem').subscribe(this.onUpdateItem.bind(this));
-        websocketService.registerPacket('changeQuantity').subscribe(this.onUpdateQuantity.bind(this));
-        websocketService.registerPacket('updateItemModifiers').subscribe(this.onUpdateModifiers.bind(this));
+    public onWsUnregister(): void {
+        for (let loot of this.loots) {
+            this.wsSubscribtion.service.unregisterElement(loot);
+        }
+    }
 
-        websocketService.registerPacket('addEffect').subscribe(this.onAddEffect.bind(this));
-        websocketService.registerPacket('removeEffect').subscribe(this.onRemoveEffect.bind(this));
-        websocketService.registerPacket('updateEffect').subscribe(this.onUpdateEffect.bind(this));
-        websocketService.registerPacket('addModifier').subscribe(this.onAddModifier.bind(this));
-        websocketService.registerPacket('removeModifier').subscribe(this.onRemoveModifier.bind(this));
-        websocketService.registerPacket('updateModifier').subscribe(this.onUpdateModifier.bind(this));
+    public onWebsocketData(opcode: string, data: any): void {
+        switch (opcode) {
+            case 'addLoot':
+                this.addLoot(Loot.fromJson(data));
+                break;
+            case 'deleteLoot':
+                this.removeLoot(data.id);
+                break;
+            case 'update':
+                this.onChangeCharacterStat(data);
+                break;
+            case 'statBonusAd':
+                this.onSetStatBonusAD(data);
+                break;
+            case 'levelUp':
+                this.onPartialLevelUp(data);
+                break;
+            case 'equipItem':
+                this.onEquipItem(data);
+                break;
+            case 'addItem':
+                this.onAddItem(Item.fromJson(data));
+                break;
+            case 'deleteItem':
+                this.onDeleteItem(data);
+                break;
+            case 'identifyItem':
+                this.onIdentifyItem(Item.fromJson(data));
+                break;
+            case 'useCharge':
+                this.onUseItemCharge(data);
+                break;
+            case 'changeContainer':
+                this.onChangeContainer(data);
+                break;
+            case 'updateItem':
+                this.onUpdateItem(data);
+                break;
+            case 'changeQuantity':
+                this.onUpdateQuantity(data);
+                break;
+            case 'updateItemModifiers':
+                this.onUpdateModifiers(data);
+                break;
+            case 'addEffect':
+                this.onAddEffect(data);
+                break;
+            case 'removeEffect':
+                this.onRemoveEffect(data);
+                break;
+            case 'updateEffect':
+                this.onUpdateEffect(data);
+                break;
+            case 'addModifier':
+                this.onAddModifier(data);
+                break;
+            case 'removeModifier':
+                this.onRemoveModifier(data);
+                break;
+            case 'updateModifier':
+                this.onUpdateModifier(data);
+                break;
+            default:
+                console.warn('Opcode not handle: `' + opcode + '`');
+                break;
+        }
+    }
+
+    dispose() {
+
     }
 }

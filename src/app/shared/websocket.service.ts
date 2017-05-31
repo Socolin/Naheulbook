@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Subject, Observable, Observer} from 'rxjs/Rx';
 
-import {WsMessage, WsEvent} from './websocket.model';
+import {WsMessage, WsEvent, WsRegistrable} from './websocket.model';
+import {NotificationsService} from '../notifications/notifications.service';
+import {MiscService} from './misc.service';
 
 @Injectable()
 export class WebSocketService {
@@ -10,6 +12,10 @@ export class WebSocketService {
     public registeredElements: {[type: string]: {[id: number]: Subject<WsEvent>}} = {};
     public registerCount: {[type: string]: {[id: number]: number}} = {};
     public registeredObserverElements: {[type: string]: {[id: number]: Observer<WsEvent>}} = {};
+
+    constructor(private _notification: NotificationsService
+        , private _miscService: MiscService) {
+    }
 
     public register(type: string, elementId: number): Subject<WsEvent> {
         if (!this.webSocket) {
@@ -152,5 +158,31 @@ export class WebSocketService {
         ws.onclose = this.onClose.bind(this);
 
         this.webSocket = ws;
+    }
+
+    public registerElement(registrable: WsRegistrable) {
+        if (registrable.wsSubscribtion) {
+            throw new Error('Element is already subscribed to websocket: ' + registrable);
+        }
+        let sub = this.register(registrable.getWsTypeName(), registrable.id).subscribe(
+            res => {
+                try {
+                    registrable.onWebsocketData(res.opcode, res.data);
+                } catch (err) {
+                    this._notification.error('Erreur', 'Erreur WS');
+                    this._miscService.postJson('/api/debug/report', err, true).subscribe();
+                    console.error(err);
+                }
+            }
+        );
+        registrable.wsRegister(sub, this);
+    }
+
+    public unregisterElement(registrable: WsRegistrable) {
+        if (!registrable.wsSubscribtion) {
+            throw new Error('Element not registered to websocket: ' + registrable);
+        }
+        this.unregister(registrable.getWsTypeName(), registrable.id);
+        registrable.wsUnregister();
     }
 }

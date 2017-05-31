@@ -21,7 +21,6 @@ export class NhbkActionComponent implements OnInit, OnChanges {
 
     private updateInfos() {
         if (this.action.type === 'addEffect') {
-            console.log(this.action);
             if (!this.effectInfo || this.action.data.effectId !== this.effectInfo.id) {
                 if (this.action.data.effectId) {
                     this._effectService.getEffect(this.action.data.effectId).subscribe(

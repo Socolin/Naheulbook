@@ -38,7 +38,6 @@ export class EditItemComponent implements OnInit {
                 this.saving = false;
                 this._itemService.getSectionFromCategory(item.category).subscribe(
                     section => {
-                        console.log(section);
                         let sectionId = null;
                         if (section) {
                             sectionId = section.id;

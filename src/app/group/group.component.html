@@ -8,7 +8,6 @@
             <div class="info-tab">
                 <md-card>
                     <md-card-title>{{group.name}}
-                        <button md-icon-button (click)="refreshData()"><md-icon>refresh</md-icon></button>
                     </md-card-title>
                     <dl>
                         <dt>Mankdebol</dt>
@@ -70,7 +69,7 @@
                 <md-card>
                     <md-card-title>Joueurs</md-card-title>
                     <md-card-content class="characters-cards">
-                        <ng-template ngFor let-character [ngForOf]="characters">
+                        <ng-template ngFor let-character [ngForOf]="group.characters">
                             <md-card *ngIf="!character.isNpc" class="character-summary-card">
                                 <md-card-header>
                                     <md-card-title>{{character.name}} - Lvl{{character.level}}</md-card-title>
@@ -134,7 +133,7 @@
                 <md-card>
                     <md-card-title>PNJs</md-card-title>
                     <md-card-content class="characters-cards">
-                        <ng-template ngFor let-character [ngForOf]="characters">
+                        <ng-template ngFor let-character [ngForOf]="group.characters">
                             <md-card *ngIf="character.isNpc" class="character-summary-card">
                                 <md-card-header>
                                     <md-card-title>{{character.name}}</md-card-title>
@@ -242,7 +241,7 @@
                 </button>
             </div>
 
-            <fighter-panel #fighterPanel [group]="group" [characters]="characters"></fighter-panel>
+            <fighter-panel #fighterPanel [group]="group"></fighter-panel>
         </md-tab>
 
         <md-tab label="Loot">
@@ -257,7 +256,7 @@
 </div>
 
 <div *ngIf="group">
-    <ng-template ngFor let-character [ngForOf]="characters">
+    <ng-template ngFor let-character [ngForOf]="group.characters">
         <ng-template *ngIf="character.active" #characters="cdkPortal" cdk-portal>
             <div class="character-sheet">
                 <md-card>

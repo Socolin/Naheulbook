@@ -7,11 +7,12 @@ import {NotificationsService} from '../notifications';
 import {CharacterService} from './character.service';
 import {Character} from './character.model';
 import {IMetadata} from '../shared';
-import {CharacterWebsocketService} from './character-websocket.service';
 import {SwipeService} from './swipe.service';
 import {ItemActionService} from './item-action.service';
 import {Item} from './item.model';
 import {Skill} from '../skill/skill.model';
+import {WebSocketService} from '../shared/websocket.service';
+import {Subscription} from 'rxjs/Subscription';
 
 export class LevelUpInfo {
     EVorEA = 'EV';
@@ -26,7 +27,7 @@ export class LevelUpInfo {
     selector: 'character',
     templateUrl: './character.component.html',
     styleUrls: ['./character.component.scss'],
-    providers: [CharacterWebsocketService, SwipeService, ItemActionService],
+    providers: [SwipeService, ItemActionService],
 })
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
@@ -63,10 +64,12 @@ export class CharacterComponent implements OnInit, OnDestroy {
         {hash: 'history'},
     ];
 
+    private notificationSub: Subscription;
+
     constructor(private _route: ActivatedRoute
         , private _router: Router
         , private _notification: NotificationsService
-        , private _characterWebsocketService: CharacterWebsocketService
+        , private _websocketService: WebSocketService
         , private _overlay: Overlay
         , private _characterService: CharacterService) {
     }
@@ -292,8 +295,12 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.character) {
-            this._characterWebsocketService.unregister();
+        if (this.character && !this.inGroupTab) {
+            this._websocketService.unregisterElement(this.character);
+            this.character.dispose();
+        }
+        if (this.notificationSub) {
+            this.notificationSub.unsubscribe();
         }
     }
 
@@ -309,9 +316,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
             this.inGroupTab = true;
         } else {
             this.character = this._route.snapshot.data['character'];
-            this.character.registerWS(this._characterWebsocketService,
-                (message: string) => this._notification.info('Modification', message)
-            );
+            this.notificationSub = this.character.onNotification.subscribe(notificationData => {
+                this._notification.info('', notificationData.message);
+            });
             let tab = this._route.snapshot.fragment;
             if (tab) {
                 this.mainTabGroup.selectedIndex = this.getTabIndexFromHash(tab);
@@ -319,12 +326,14 @@ export class CharacterComponent implements OnInit, OnDestroy {
             }
             this._route.data.subscribe(data => {
                 if (this.character !== data['character']) {
+                    if (this.notificationSub) {
+                        this.notificationSub.unsubscribe();
+                    }
                     this.character = data['character'];
-                    this._characterWebsocketService.unregister();
-                    this.character.registerWS(this._characterWebsocketService,
-                        (message: string) => this._notification.info('Modification', message)
-                    );
                     this.mainTabGroup.selectedIndex = 0;
+                    this.notificationSub = this.character.onNotification.subscribe(notificationData => {
+                        this._notification.info('', notificationData.message);
+                    });
                 }
             });
 

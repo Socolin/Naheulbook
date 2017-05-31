@@ -1,38 +1,33 @@
 import {
-    Component, OnInit, OnChanges, SimpleChanges, OnDestroy, ViewChild, QueryList,
+    Component, OnInit, OnDestroy, ViewChild, QueryList,
     ViewChildren
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
 
 import {Group, CharacterInviteInfo} from '.';
 import {GroupService} from './group.service';
-import {Character, CharacterResume} from '../character';
+import {Character} from '../character';
 
 import {LoginService} from '../user';
 import {AutocompleteValue} from '../shared';
 import {LocationService, Location} from '../location';
 import {NhbkDateOffset} from '../date';
 import {GroupActionService} from './group-action.service';
-import {GroupData} from './group.model';
-import {GroupWebsocketService} from './group.websocket.service';
 import {MdTabChangeEvent, OverlayRef, Portal, Overlay, OverlayState, TemplatePortalDirective} from '@angular/material';
 import {User} from '../user/user.model';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {CharacterWebsocketService} from '../character/character-websocket.service';
-import {WebSocketService} from '../shared/websocket.service';
 import {CharacterService} from '../character/character.service';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
     templateUrl: './group.component.html',
     styleUrls: ['./group.component.scss'],
-    providers: [GroupActionService, GroupWebsocketService, CharacterWebsocketService],
+    providers: [GroupActionService],
 })
-export class GroupComponent implements OnInit, OnChanges, OnDestroy {
+export class GroupComponent implements OnInit, OnDestroy {
     public group: Group;
-    public characters: Character[] = [];
 
     public currentTabIndex = 0;
     public currentTab = 'infos';
@@ -65,6 +60,12 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     public filteredInvitePlayers: CharacterInviteInfo[] = [];
     public selectedInviteCharacter: Character;
 
+    private charactersSubscriptions: {[characterId: number]: {notification: Subscription }} = {};
+    private addedCharacterSub: Subscription;
+    private removedCharacterSub: Subscription;
+    private routeSub: Subscription;
+    private routeFragmentSub: Subscription;
+
     constructor(private _route: ActivatedRoute
         , private _router: Router
         , public _loginService: LoginService
@@ -74,8 +75,6 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
         , private _actionService: GroupActionService
         , private _overlay: Overlay
         , private _nhbkDialogService: NhbkDialogService
-        , private _groupWebsocketService: GroupWebsocketService
-        , private _websocketService: WebSocketService
         , private _characterService: CharacterService) {
     }
 
@@ -96,31 +95,10 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
 
     /* Infos tab */
 
-    refreshData() {
-        this.loadGroup(this.group.id);
-    }
-
     changeGroupValue(key: string, value: any) {
         this._groupService.editGroupValue(this.group.id, key, value).subscribe(
             data => {
-                let oldData = this.group.data;
-                this.group.data = data;
-                if (key === 'debilibeuk') {
-                    this._notification.info('Debilibeuk', oldData[key] + ' -> ' + value);
-                } else if (key === 'mankdebol') {
-                    this._notification.info('Mankdebol', oldData[key] + ' -> ' + value);
-                } else if (key === 'inCombat') {
-                    this._notification.info('Mode combat: ', oldData[key] + ' -> ' + value);
-                    if (value) {
-                        this._actionService.emitAction('onStartCombat', this.group);
-                    }
-                    else {
-                        this._actionService.emitAction('onStopCombat', this.group);
-                    }
-                } else if (key === 'date') {
-                    this._notification.info('Date', 'Date changé');
-                    this._actionService.emitAction('dateChanged', this.group);
-                }
+                this.group.data.changeValue(key, data[key]);
             }
         );
     }
@@ -128,8 +106,7 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     addTime(dateOffset: NhbkDateOffset) {
         this._groupService.addTime(this.group.id, dateOffset).subscribe(
             data => {
-                this.group.data = data;
-                this._actionService.emitAction('dateChanged', this.group);
+                this.group.data.changeValue('date', data.date);
             }
         );
     }
@@ -154,11 +131,11 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     displayCharacterSheet(character: Character) {
         let characterSheetDialog = this.characterSheetsDialog.toArray();
         let index = 0;
-        for (let i = 0; i < this.characters.length; i++) {
-            if (this.characters[i] === character) {
+        for (let i = 0; i < this.group.characters.length; i++) {
+            if (this.group.characters[i] === character) {
                 break;
             }
-            if (this.characters[i].active) {
+            if (this.group.characters[i].active) {
                 index++;
             }
         }
@@ -189,8 +166,8 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     activeAllCharacter(active: boolean) {
-        for (let i = 0; i < this.characters.length; i++) {
-            let character = this.characters[i];
+        for (let i = 0; i < this.group.characters.length; i++) {
+            let character = this.group.characters[i];
             this._characterService.changeGmData(character.id, 'active', active).subscribe(
                 change => {
                     character.active = change.value;
@@ -338,97 +315,38 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
 
     /* Misc */
 
-    loadGroup(id: number) {
-        this._characterService.getGroup(id).subscribe(
-            group => {
-                if (!group.data) {
-                    group.data = new GroupData();
-                }
-                this.group = group;
-
-                let toLoad: Observable<Character>[] = [];
-                for (let i = 0; i < group.characters.length; i++) {
-                    let char = group.characters[i];
-                    toLoad.push(this._characterService.getCharacter(char.id));
-                }
-
-                Observable.forkJoin(toLoad).subscribe((characters: Character[]) => {
-                    this.characters = characters;
-                    for (let i = 0; i < this.characters.length; i++) {
-                        let character = this.characters[i];
-                        character.onUpdate.subscribe(c => {
-                            // FIXME: Copy reference may not be the best ?
-                            this.characters[i] = c;
-                            this._actionService.emitAction('reorderFighters', this.group);
-                        });
-
-                        let characterWebsocketService = new CharacterWebsocketService(
-                            this._notification,
-                            this._characterService,
-                            this._websocketService
-                        );
-                        character.registerWS(characterWebsocketService, message => this._notification.info(character.name
-                            , message
-                            , {isCharacter: true, color: character.color}
-                        ));
-                    }
-                    let charactersId: number[] = [];
-                    for (let i = 0; i < group.invited.length; i++) {
-                        charactersId.push(group.invited[i].id);
-                    }
-                    for (let i = 0; i < group.invites.length; i++) {
-                        charactersId.push(group.invites[i].id);
-                    }
-                    this._characterService.loadCharactersResume(charactersId).subscribe(
-                        (characterInvite: CharacterResume[]) => {
-                            for (let i = 0; i < group.invited.length; i++) {
-                                let char = group.invited[i];
-                                for (let j = 0; j < characterInvite.length; j++) {
-                                    let c = characterInvite[j];
-                                    if (c.id === char.id) {
-                                        group.invited[i] = c;
-                                    }
-                                }
-                            }
-                            for (let i = 0; i < group.invites.length; i++) {
-                                let char = group.invites[i];
-                                for (let j = 0; j < characterInvite.length; j++) {
-                                    let c = characterInvite[j];
-                                    if (c.id === char.id) {
-                                        group.invites[i] = c;
-                                    }
-                                }
-                            }
-                        }
-                    );
-                });
-                this.registerWs();
-            },
-            err => {
-                try {
-                    let errJson = err.json();
-                    this._notification.error('Erreur', errJson.error_code, {timeOut: -1});
-                } catch (e) {
-                    console.log(err.stack);
-                    this._notification.error('Erreur', 'Erreur');
-                }
-            }
-        );
-    }
-
-    registerWs() {
-        this._groupWebsocketService.register(this.group.id);
-        this._groupWebsocketService.registerNotifyFunction(message => this._notification.info('Groupe', message));
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if ('group' in changes) {
-            this._actionService.emitAction('reorderFighters', this.group);
+    unregisterCharacterNotification(character: Character) {
+        if (character.id in this.charactersSubscriptions) {
+            this.charactersSubscriptions[character.id].notification.unsubscribe();
         }
     }
 
+    registerCharacterNotification(character: Character) {
+        let notifSub = character.onNotification.subscribe(notificationData => {
+            this._notification.info('', character.name + ':' + notificationData.message);
+        });
+
+        this.charactersSubscriptions[character.id] = {notification: notifSub};
+    }
+
+    private clearGroupSub() {
+        if (!this.group) {
+            return;
+        }
+
+        for (let character of this.group.characters) {
+            this.unregisterCharacterNotification(character);
+        }
+
+        this.group.dispose();
+        this.addedCharacterSub.unsubscribe();
+        this.removedCharacterSub.unsubscribe();
+    }
+
     ngOnDestroy(): void {
-        this._groupWebsocketService.unregister(this.group.id);
+        this.clearGroupSub();
+        this.routeSub.unsubscribe();
+        this.routeFragmentSub.unsubscribe();
     }
 
     ngOnInit() {
@@ -437,13 +355,28 @@ export class GroupComponent implements OnInit, OnChanges, OnDestroy {
                 this.displayCharacterSheet(data.data);
             });
 
-        this._route.params.subscribe(
+        this.routeSub = this._route.params.subscribe(
             params => {
                 let id = +params['id'];
-                this.loadGroup(id);
+                this._groupService.getGroup(id).subscribe(
+                    group => {
+                        this.clearGroupSub();
+                        this.group = group;
+                        for (let character of this.group.characters) {
+                            this.registerCharacterNotification(character);
+                        }
+                        this.addedCharacterSub = this.group.characterAdded.subscribe(character => {
+                            this.registerCharacterNotification(character);
+                        });
+                        this.removedCharacterSub = this.group.characterRemoved.subscribe(character => {
+                            this.unregisterCharacterNotification(character);
+                        });
+                    }
+                );
             }
         );
-        this._route.fragment.subscribe(value => {
+
+        this.routeFragmentSub = this._route.fragment.subscribe(value => {
             if (value) {
                 this.currentTabIndex = this.getTabIndexFromHash(value);
                 this.currentTab = value;

@@ -1,15 +1,15 @@
 <event-editor #eventEditor [group]=group (onCreate)="createEvent($event)"></event-editor>
-<div *ngIf="groupTimestamp">
-    <div *ngIf="pastEventCount">
+<div *ngIf="group.data.timestamp">
+    <div *ngIf="group.pastEventCount">
         <h4>Évènements passé</h4>
         <div class="event-list">
-            <ng-template ngFor let-event [ngForOf]="events">
-                <ng-template [ngIf]="event.timestamp <= groupTimestamp">
-                    <md-card>
+            <ng-template ngFor let-event [ngForOf]="group.events">
+                <ng-template [ngIf]="event.timestamp <= group.data.timestamp">
+                    <md-card class="past-event">
                         <md-card-title-group>
                             <md-card-title>{{event.name}}</md-card-title>
                             <md-card-subtitle>
-                                Il y a : {{groupTimestamp - event.timestamp | nhbkDuration}}
+                                Il y a : {{group.data.timestamp - event.timestamp | nhbkDuration}}
                             </md-card-subtitle>
                         </md-card-title-group>
                         <md-card-content>
@@ -27,16 +27,16 @@
             </ng-template>
         </div>
     </div>
-    <div *ngIf="futureEventCount">
+    <div *ngIf="group.futureEventCount">
         <h4>Évènements à venir</h4>
         <div class="event-list">
-            <ng-template ngFor let-event [ngForOf]="events">
-                <ng-template [ngIf]="event.timestamp > groupTimestamp">
+            <ng-template ngFor let-event [ngForOf]="group.events">
+                <ng-template [ngIf]="event.timestamp > group.data.timestamp">
                     <md-card>
                         <md-card-title-group>
                             <md-card-title>{{event.name}}</md-card-title>
                             <md-card-subtitle>
-                                Dans: {{event.timestamp - groupTimestamp | nhbkDuration}}
+                                Dans: {{event.timestamp - group.data.timestamp | nhbkDuration}}
                             </md-card-subtitle>
                         </md-card-title-group>
                         <md-card-content>
@@ -56,6 +56,6 @@
         </div>
     </div>
 </div>
-<div *ngIf="!groupTimestamp">
+<div *ngIf="!group.data.timestamp">
     Vous devez définir la date du groupe avant de pouvoir ajouter des évènements
 </div>

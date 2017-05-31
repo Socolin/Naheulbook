@@ -2,10 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {OverlayRef, Portal} from '@angular/material';
 
 import {NotificationsService} from '../notifications/notifications.service';
-import {LootWebsocketService} from '../loot/loot.websocket.service';
 import {LootPanelComponent} from '../loot/loot-panel.component';
-import {CharacterWebsocketService} from './character-websocket.service';
-import {CharacterService} from './character.service';
 import {Character} from './character.model';
 import {Loot} from '../loot/loot.model';
 import {Item} from './item.model';
@@ -17,7 +14,6 @@ import {NhbkDialogService} from '../shared/nhbk-dialog.service';
     selector: 'character-loot-panel',
     styleUrls: ['./character-loot-panel.component.scss'],
     templateUrl: './character-loot-panel.component.html',
-    providers: [LootWebsocketService],
 })
 export class CharacterLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() character: Character;
@@ -32,13 +28,10 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     public takingItem: Item;
     public takingQuantity?: number;
 
-    constructor(private lootWebsocketService: LootWebsocketService
-        , private notification: NotificationsService
+    constructor(private notification: NotificationsService
         , private _itemService: ItemService
-        , private _characterService: CharacterService
-        , private _nhbkDialogservice: NhbkDialogService
-        , private _characterWebsocketService: CharacterWebsocketService) {
-        super(lootWebsocketService, notification);
+        , private _nhbkDialogservice: NhbkDialogService) {
+        super(notification);
     }
 
     openTakeItemLootDialog(loot: Loot, item: Item) {
@@ -95,21 +88,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         return false;
     }
 
-    registerActions() {
-        this._characterWebsocketService.registerPacket('showLoot').subscribe(data => {
-            this.lootAdded(Loot.fromJson(data), this.inGroupTab);
-        });
-        this._characterWebsocketService.registerPacket('hideLoot').subscribe(data => {
-            this.lootDeleted(data.id);
-        });
-    }
-
     ngOnInit(): void {
-        this._characterService.loadLoots(this.character.id).subscribe(
-            loots => {
-                this.onLoadLoots(loots, this.inGroupTab);
-                this.registerActions();
-            }
-        );
+        this.loots = this.character.loots;
     }
 }

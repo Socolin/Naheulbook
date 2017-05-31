@@ -18,14 +18,14 @@ export class EventService extends JsonService {
     loadEvents(groupId: number): Observable<NEvent[]> {
         return this.postJson('/api/group/loadEvents', {
             groupId: groupId
-        }).map(res => res.json());
+        }).map(res => NEvent.eventsFromJson(res.json()));
     }
 
     createEvent(groupId: number, event: NEvent): Observable<NEvent> {
         return this.postJson('/api/group/createEvent', {
             groupId: groupId,
             event: event
-        }).map(res => res.json());
+        }).map(res => NEvent.fromJson(res.json()));
     }
 
     deleteEvent(eventId: number): Observable<NEvent> {

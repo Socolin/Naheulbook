@@ -4,9 +4,9 @@ import {ReplaySubject, Observable} from 'rxjs/Rx';
 
 import {Stat, IMetadata, HistoryEntry} from '../shared';
 import {Loot} from '../loot/loot.model';
-import {Character, CharacterResume, CharacterModifier, CharacterEffect} from './character.model';
+import {Character, CharacterResume, CharacterModifier, CharacterEffect, CharacterJsonData} from './character.model';
 import {Effect} from '../effect';
-import {CharacterInviteInfo, Group} from '../group';
+import {CharacterInviteInfo} from '../group';
 
 import {Job, JobService} from '../job';
 import {Origin, OriginService} from '../origin';
@@ -14,93 +14,75 @@ import {Skill, SkillService} from '../skill';
 import {NotificationsService} from '../notifications';
 import {JsonService} from '../shared/json-service';
 import {LoginService} from '../user';
+import {WebSocketService} from '../shared/websocket.service';
 
 @Injectable()
 export class CharacterService extends JsonService {
-    private stats: ReplaySubject<Stat[]>;
-
     constructor(http: Http
         , notification: NotificationsService
         , loginService: LoginService
+        , private _websocketService: WebSocketService
         , private _jobService: JobService
         , private _skillService: SkillService
         , private _originService: OriginService) {
         super(http, notification, loginService);
     }
 
-    private handleCharacterAsResponse(url: string, data: any): Observable<Character> {
+    getCharacter(id: number): Observable<Character> {
         return Observable.forkJoin(
             this._jobService.getJobList(),
             this._originService.getOriginList(),
             this._skillService.getSkills(),
-            this.postJson(url, data).map(res => res.json())
-        ).map(([jobs, origins, skills, characterData]: [Job[], Origin[], Skill[], Character]) => {
-                let character = new Character();
-                for (let propName in characterData) {
-                    if (characterData.hasOwnProperty(propName)) {
-                        character[propName] = characterData[propName];
-                    }
+            this.loadLoots(id),
+            this.postJson('/api/character/detail', {id: id}).map(res => res.json())
+        ).map(([jobs, origins, skills, loots, characterData]: [Job[], Origin[], Skill[], Loot[], CharacterJsonData]) => {
+            let character = Character.fromJson(characterData);
+            this._websocketService.registerElement(character);
+            character.origin = origins.find(o => o.id === characterData.originId);
+            character.job = jobs.find(j => j.id === characterData.jobId);
+            for (let sk of characterData.skills) {
+                let skill = skills.find(s => s.id === sk.id);
+                if (skill) {
+                    character.skills.push(skill);
                 }
-                for (let j = 0; j < jobs.length; j++) {
-                    let job = jobs[j];
-                    if (job.id === character.jobId) {
-                        character.job = job;
-                        break;
-                    }
-                }
-                for (let j = 0; j < origins.length; j++) {
-                    let origin = origins[j];
-                    if (origin.id === character.originId) {
-                        character.origin = origin;
-                        break;
-                    }
-                }
-                for (let i = 0; i < character.skills.length; i++) {
-                    let characterSkill = character.skills[i];
+            }
+            for (let i = 0; i < loots.length; i++) {
+                let loot = loots[i];
+                character.addLoot(loot);
+            }
+
+            // FIXME: improve this Item.FromJson() and give skill in param
+            for (let i = 0; i < character.items.length; i++) {
+                let item = character.items[i];
+                for (let k = 0; k < item.template.skills.length; k++) {
+                    let itemSkill = item.template.skills[k];
                     for (let j = 0; j < skills.length; j++) {
                         let skill = skills[j];
-                        if (skill.id === characterSkill.id) {
-                            character.skills[i] = skill;
+                        if (skill.id === itemSkill.id) {
+                            item.template.skills[k] = skill;
                             break;
                         }
                     }
                 }
-                for (let i = 0; i < character.items.length; i++) {
-                    let item = character.items[i];
-                    for (let k = 0; k < item.template.skills.length; k++) {
-                        let itemSkill = item.template.skills[k];
-                        for (let j = 0; j < skills.length; j++) {
-                            let skill = skills[j];
-                            if (skill.id === itemSkill.id) {
-                                item.template.skills[k] = skill;
-                                break;
-                            }
-                        }
-                    }
-                    for (let k = 0; k < item.template.unskills.length; k++) {
-                        let itemSkill = item.template.unskills[k];
-                        for (let j = 0; j < skills.length; j++) {
-                            let skill = skills[j];
-                            if (skill.id === itemSkill.id) {
-                                item.template.unskills[k] = skill;
-                                break;
-                            }
+                for (let k = 0; k < item.template.unskills.length; k++) {
+                    let itemSkill = item.template.unskills[k];
+                    for (let j = 0; j < skills.length; j++) {
+                        let skill = skills[j];
+                        if (skill.id === itemSkill.id) {
+                            item.template.unskills[k] = skill;
+                            break;
                         }
                     }
                 }
-                try {
-                    character.update();
-                } catch (e) {
-                    console.log(e, e.stack);
-                    throw e;
-                }
-                return character;
             }
-        );
-    }
-
-    getCharacter(id: number): Observable<Character> {
-        return this.handleCharacterAsResponse('/api/character/detail', {id: id});
+            try {
+                character.update();
+            } catch (e) {
+                console.log(e, e.stack);
+                throw e;
+            }
+            return character;
+        });
     }
 
     setStatBonusAD(id: number, stat: string): Observable<string> {
@@ -282,18 +264,6 @@ export class CharacterService extends JsonService {
             characterId: characterId,
             groupId: groupId,
             fromGroup: false
-        }).map(res => res.json());
-    }
-
-    getGroup(groupId): Observable<Group> {
-        return this.postJson('/api/character/groupDetail', {
-            groupId: groupId
-        }).map(res => res.json());
-    }
-
-    createGroup(name): Observable<Group> {
-        return this.postJson('/api/character/createGroup', {
-            name: name
         }).map(res => res.json());
     }
 

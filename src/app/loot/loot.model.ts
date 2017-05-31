@@ -4,6 +4,8 @@ import {Subscription} from 'rxjs/Subscription';
 import {Item, PartialItem} from '../character/item.model';
 import {Monster} from '../monster/monster.model';
 import {CharacterResume} from '../character/character.model';
+import {WsRegistrable} from '../shared/websocket.model';
+import {WebSocketService} from '../shared/websocket.service';
 
 export class LootTookItemMsg {
     item: Item;
@@ -12,12 +14,10 @@ export class LootTookItemMsg {
     quantity?: number;
 }
 
-export class Loot {
+export class Loot extends WsRegistrable {
     public id: number;
     public name: string;
     public visibleForPlayer: boolean;
-
-    public wsSubscribtion: Subscription;
 
     public items: Item[];
     public itemAdded: Subject<Item> = new Subject<Item>();
@@ -104,6 +104,9 @@ export class Loot {
         this.monsterAdded.next(addedMonster);
         this.monsterSubscriptions[addedMonster.id] = addedMonster.onChange
             .subscribe(() => this.updateXp());
+        if (this.wsSubscribtion) {
+            this.wsSubscribtion.service.registerElement(addedMonster);
+        }
         return true;
     }
 
@@ -121,6 +124,9 @@ export class Loot {
             this.monsterRemoved.next(removedMonster);
             this.monsterSubscriptions[removedMonster.id].unsubscribe();
             delete this.monsterSubscriptions[removedMonster.id];
+            if (this.wsSubscribtion) {
+                this.wsSubscribtion.service.unregisterElement(removedMonster);
+            }
             return true;
         }
         return false;
@@ -152,7 +158,11 @@ export class Loot {
         this.onTookItem.next({character: character, item: takenItem});
     }
 
-    public onWebsocketData(opcode: string, data: any) {
+    public getWsTypeName(): string {
+        return 'loot';
+    }
+
+    public onWebsocketData(opcode: string, data: any): void {
         switch (opcode) {
             case 'addItem': {
                 let item = Item.fromJson(data);
@@ -187,6 +197,18 @@ export class Loot {
                 this.takeItem(leftItem, takenItem, data.character);
                 break;
             }
+        }
+    }
+
+    public onWsRegister(service: WebSocketService) {
+        for (let monster of this.monsters) {
+            service.registerElement(monster);
+        }
+    }
+
+    public onWsUnregister(): void {
+        for (let monster of this.monsters) {
+            this.wsSubscribtion.service.unregisterElement(monster);
         }
     }
 

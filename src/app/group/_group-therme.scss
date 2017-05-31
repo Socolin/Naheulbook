@@ -62,4 +62,16 @@
             }
         }
     }
+
+    .event-list {
+        @if (map_get($theme, is-dark)) {
+            .past-event {
+                background-color: #2c3e30;
+            }
+        } @else {
+            .past-event {
+                background-color: #d7fde4;
+            }
+        }
+    }
 }

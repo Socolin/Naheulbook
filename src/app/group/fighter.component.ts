@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, Optional} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {Fighter, Group} from './group.model';
 import {GroupService} from './group.service';
 import {NotificationsService} from '../notifications/notifications.service';

@@ -21,11 +21,9 @@ import {isNullOrUndefined} from 'util';
     templateUrl: './fighter-panel.component.html',
     styleUrls: ['./fighter.component.scss', './fighter-panel.component.scss']
 })
-export class FighterPanelComponent implements OnInit, OnChanges {
+export class FighterPanelComponent implements OnInit {
     @Input() group: Group;
-    @Input() characters: Character[];
-    public monsters: Monster[] = [];
-    public fighters: Fighter[] = [];
+
     public currentFighterIndex: number | null = null;
     public loadingNextLap = false;
 
@@ -85,7 +83,7 @@ export class FighterPanelComponent implements OnInit, OnChanges {
     }
 
     selectFighter(fighter: Fighter) {
-        this.selectedCombatRow = this.fighters.indexOf(fighter);
+        this.selectedCombatRow = this.group.fighters.indexOf(fighter);
     }
 
     /**
@@ -94,11 +92,10 @@ export class FighterPanelComponent implements OnInit, OnChanges {
     addMonster(): void {
         this._groupService.createMonster(this.group.id, this.newMonster).subscribe(
             monster => {
-                this.monsters.push(monster);
-                this.updateOrder();
-                this.randomMonsterInventory();
+                this.group.addMonster(monster);
             }
         );
+        this.randomMonsterInventory();
     }
 
     /**
@@ -115,13 +112,8 @@ export class FighterPanelComponent implements OnInit, OnChanges {
     killMonster(monster: Monster) {
         this._groupService.killMonster(monster.id).subscribe(
             res => {
-                monster.dead = res.dead;
+                this.group.removeMonster(monster.id);
                 this.deadMonsters.unshift(monster);
-                let idx = this.monsters.findIndex(m => m.id === monster.id);
-                if (idx !== -1) {
-                    this.monsters.splice(idx, 1);
-                }
-                this.updateOrder();
             }
         );
     }
@@ -133,11 +125,7 @@ export class FighterPanelComponent implements OnInit, OnChanges {
     deleteMonster(monster: Monster) {
         this._groupService.deleteMonster(monster.id).subscribe(
             () => {
-                let idx = this.monsters.findIndex(m => m.id === monster.id);
-                if (idx !== -1) {
-                    this.monsters.splice(idx, 1);
-                }
-                this.updateOrder();
+                this.group.removeMonster(monster.id);
             }
         );
     }
@@ -212,7 +200,7 @@ export class FighterPanelComponent implements OnInit, OnChanges {
         if (this.currentFighterIndex == null) {
             return;
         }
-        if (this.currentFighterIndex < this.fighters.length - 1) {
+        if (this.currentFighterIndex < this.group.fighters.length - 1) {
             this.currentFighterIndex++;
         } else {
             this.loadingNextLap = true;
@@ -226,65 +214,6 @@ export class FighterPanelComponent implements OnInit, OnChanges {
                 }
             );
         }
-    }
-
-    updateOrder() {
-        let fighters: Fighter[] = [];
-
-        for (let i = 0; i < this.characters.length; i++) {
-            let character = this.characters[i];
-            if (character.active) {
-                let fighter = Fighter.createFromCharacter(character);
-                fighter.chercheNoise = Character.hasChercherDesNoises(character);
-                fighters.push(fighter);
-            }
-        }
-        for (let i = 0; i < this.monsters.length; i++) {
-            let monster = this.monsters[i];
-            fighters.push(Fighter.createFromMonster(monster));
-        }
-
-        fighters.sort(function (first, second) {
-            if (first.chercheNoise && !second.chercheNoise) {
-                return -1;
-            }
-            else if (!first.chercheNoise && second.chercheNoise) {
-                return 1;
-            }
-            else {
-                let cou1 = first.stats.cou;
-                let cou2 = second.stats.cou;
-
-                if (cou1 > cou2) {
-                    return -1;
-                } else if (cou1 < cou2) {
-                    return 1;
-                } else {
-                    let ad1 = first.stats.ad;
-                    let ad2 = second.stats.ad;
-
-                    if (ad1 > ad2) {
-                        return -1;
-                    } else if (ad1 < ad2) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                }
-            }
-        });
-        fighters.forEach(f => f.updateTarget(fighters));
-
-        if (this.currentFighterIndex != null && this.fighters) {
-            let index = fighters.findIndex(f => f === this.fighters[this.currentFighterIndex]);
-            if (index !== -1 && index !== this.currentFighterIndex) {
-                this.currentFighterIndex = index;
-            }
-            if (index === -1) {
-                this.currentFighterIndex = Math.min(this.currentFighterIndex, fighters.length - 1);
-            }
-        }
-        this.fighters = fighters;
     }
 
     selectMonsterInAutocompleteList(monster: MonsterTemplate) {
@@ -313,19 +242,7 @@ export class FighterPanelComponent implements OnInit, OnChanges {
         return false;
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if ('characters' in changes) {
-            this.updateOrder();
-        }
-    }
-
     ngOnInit(): void {
-        this.updateOrder();
-        this._actionService.registerAction('reorderFighters').subscribe(
-            () => {
-                this.updateOrder();
-            }
-        );
         this._actionService.registerAction('killMonster').subscribe(
             data => {
                 this.killMonster(data.data);
@@ -368,13 +285,6 @@ export class FighterPanelComponent implements OnInit, OnChanges {
         this._groupService.loadDeadMonsters(this.group.id, 0, 10).subscribe(
             monsters => {
                 this.deadMonsters = monsters;
-            }
-        );
-
-        this._groupService.loadMonsters(this.group.id).subscribe(
-            monsters => {
-                this.monsters = monsters;
-                this.updateOrder();
             }
         );
     }

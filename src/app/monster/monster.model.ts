@@ -1,7 +1,9 @@
 import {ItemTemplate} from '../item/item-template.model';
 import {Item, PartialItem} from '../character/item.model';
 import {Subject} from 'rxjs/Subject';
-import {Subscription} from 'rxjs/Subscription';
+import {WsRegistrable} from '../shared/websocket.model';
+import {TargetJsonData} from '../group/target.model';
+import {WebSocketService} from '../shared/websocket.service';
 
 export class MonsterData {
     at: number;
@@ -36,7 +38,7 @@ export class MonsterData {
     }
 }
 
-export class Monster {
+export class Monster extends WsRegistrable {
     public id: number;
     public name: string;
     public data: MonsterData = new MonsterData();
@@ -44,13 +46,9 @@ export class Monster {
     public items: Item[];
     public itemAdded: Subject<Item> = new Subject<Item>();
     public itemRemoved: Subject<Item> = new Subject<Item>();
+    public targetChanged: Subject<TargetJsonData> = new Subject<TargetJsonData>();
 
-    public wsSubscribtion: Subscription;
-
-    public target: {
-        id: number;
-        isMonster: boolean;
-    };
+    public target: TargetJsonData;
 
     public onChange: Subject<any> = new Subject<any>();
 
@@ -72,6 +70,7 @@ export class Monster {
     }
 
     constructor(monster?: Monster) {
+        super();
         if (monster) {
             Object.assign(this, monster, {data: new MonsterData(monster.data)});
             if (monster.target) {
@@ -136,6 +135,16 @@ export class Monster {
         this.onChange.next({action: 'tookItem', character: character, item: takenItem});
     }
 
+    public getWsTypeName(): string {
+        return 'monster';
+    }
+
+    public onWsRegister(service: WebSocketService) {
+    }
+
+    public onWsUnregister(): void {
+    }
+
     public onWebsocketData(opcode: string, data: any) {
         switch (opcode) {
             case 'addItem': {
@@ -158,6 +167,12 @@ export class Monster {
                 break;
             }
         }
+    }
+
+    dispose() {
+        this.itemAdded.unsubscribe();
+        this.itemRemoved.unsubscribe();
+        this.targetChanged.unsubscribe();
     }
 }
 

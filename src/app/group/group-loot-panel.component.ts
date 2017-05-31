@@ -4,12 +4,10 @@ import {OverlayRef, Portal} from '@angular/material';
 import {NotificationsService} from '../notifications/notifications.service';
 
 import {GroupService} from './group.service';
-import {GroupWebsocketService} from './group.websocket.service';
 import {Group} from './group.model';
 import {ItemService} from '../item/item.service';
 import {Item} from '../character/item.model';
 import {LootPanelComponent} from '../loot/loot-panel.component';
-import {LootWebsocketService} from '../loot/loot.websocket.service';
 import {Loot} from '../loot/loot.model';
 import {Monster} from '../monster/monster.model';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
@@ -18,7 +16,6 @@ import {NhbkDialogService} from '../shared/nhbk-dialog.service';
     selector: 'group-loot-panel',
     styleUrls: ['./group-loot-panel.component.scss'],
     templateUrl: './group-loot-panel.component.html',
-    providers: [LootWebsocketService],
 })
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() group: Group;
@@ -28,13 +25,11 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     public addLootDialog: Portal<any>;
     public addLootOverlayRef: OverlayRef;
 
-    constructor(private lootWebsocketService: LootWebsocketService
-        , private notification: NotificationsService
+    constructor(private notification: NotificationsService
         , private _groupService: GroupService
         , private _nhbkDialogService: NhbkDialogService
-        , private _groupWebsocketService: GroupWebsocketService
         , private _itemService: ItemService) {
-        super(lootWebsocketService, notification);
+        super(notification);
     }
 
     openAddLootDialog() {
@@ -135,17 +130,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         }
     }
 
-    registerActions() {
-        this._groupWebsocketService.registerPacket('lootAdded').subscribe(this.lootAdded.bind(this));
-        this._groupWebsocketService.registerPacket('deleteLoot').subscribe(this.lootDeleted.bind(this));
-    }
-
-    ngOnInit(): void {
-        this._groupService.loadLoots(this.group.id).subscribe(
-            loots => {
-                this.onLoadLoots(loots);
-                this.registerActions();
-            }
-        );
+    ngOnInit() {
+        this.loots = this.group.loots;
     }
 }
