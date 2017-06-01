@@ -110,9 +110,21 @@
                 <div class="field text-attack">{{fighter.stats.at}}</div>
                 <div class="field"><span class="text-prd">{{fighter.stats.prd}}</span></div>
                 <div class="field"><span class="text-esq">{{fighter.stats.esq}}</span></div>
-                <div class="field-large" [class.text-danger]="fighter.stats.ev < 4">{{fighter.stats.ev}}/{{fighter.stats.maxEv}}</div>
+                <div class="field-large" [class.text-danger]="fighter.stats.ev < 4">
+                    <value-editor [title]="'Energie vitale'"
+                                  [value]="fighter.stats.ev"
+                                  [maxValue]="fighter.stats.maxEv"
+                                  (onChange)="changeCharacterStat(fighter.character, 'ev', $event)">
+                    </value-editor>
+                </div>
                 <div class="field-large">
-                    <span *ngIf="fighter.stats.maxEa">{{fighter.stats.ea}}/{{fighter.stats.maxEa}}</span>
+                    <span *ngIf="fighter.stats.maxEa">
+                        <value-editor [title]="'Energie astrale'"
+                                      [value]="fighter.stats.ea"
+                                      [maxValue]="fighter.stats.maxEa"
+                                      (onChange)="changeCharacterStat(fighter.character, 'ea', $event)">
+                        </value-editor>
+                    </span>
                     <span *ngIf="!fighter.stats.maxEa">-</span>
                 </div>
                 <div class="field-medium">{{fighter.stats.pr}}({{fighter.stats.pr_magic}})</div>

@@ -114,6 +114,12 @@ export class FighterComponent {
         }
     }
 
+    changeCharacterStat(character: Character, stat: string, value: any) {
+        this._characterService.changeCharacterStat(character.id, stat, value).subscribe(
+            character.onChangeCharacterStat.bind(character)
+        );
+    }
+
     killMonster(monster: Monster) {
         this._actionService.emitAction('killMonster', this.group, monster);
     }
