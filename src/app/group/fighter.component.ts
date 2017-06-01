@@ -96,7 +96,6 @@ export class FighterComponent {
                         , 'Modification: ' + fieldName.toUpperCase() + ': '
                         + monster.data[fieldName] + ' -> ' + res.value);
                     monster.data[fieldName] = res.value;
-                    this._actionService.emitAction('reorderFighters', this.group);
                 }
             );
     }
@@ -112,6 +111,12 @@ export class FighterComponent {
                     }
                 );
         }
+    }
+
+    changeCharacterStat(character: Character, stat: string, value: any) {
+        this._characterService.changeCharacterStat(character.id, stat, value).subscribe(
+            character.onChangeCharacterStat.bind(character)
+        );
     }
 
     killMonster(monster: Monster) {

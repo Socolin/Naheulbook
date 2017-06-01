@@ -293,6 +293,7 @@ export class Character extends WsRegistrable {
     public lootAdded: Subject<Loot> = new Subject<Loot>();
     public lootRemoved: Subject<Loot> = new Subject<Loot>();
 
+    public onActiveChange: Subject<number> = new Subject<number>();
     public onNotification: Subject<any> = new Subject<any>();
 
     static fromJson(jsonData: CharacterJsonData): Character {
@@ -1320,6 +1321,14 @@ export class Character extends WsRegistrable {
         }
     }
 
+    changeActive(isActive: number) {
+        if (isActive === this.active) {
+            return;
+        }
+        this.active = isActive;
+        this.onActiveChange.next(this.active);
+    }
+
     public onWebsocketData(opcode: string, data: any): void {
         switch (opcode) {
             case 'showLoot':
@@ -1381,6 +1390,9 @@ export class Character extends WsRegistrable {
                 break;
             case 'updateModifier':
                 this.onUpdateModifier(data);
+                break;
+            case 'active':
+                this.changeActive(data);
                 break;
             default:
                 console.warn('Opcode not handle: `' + opcode + '`');

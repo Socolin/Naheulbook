@@ -246,7 +246,7 @@ export class Group extends WsRegistrable {
     public characters: Character[] = [];
     public characterAdded: Subject<Character> = new Subject<Character>();
     public characterRemoved: Subject<Character> = new Subject<Character>();
-    public characterSubscriptions: {[characterId: number]: Subscription} = {};
+    public characterSubscriptions: {[characterId: number]: {change: Subscription, active: Subscription}} = {};
 
     public monsters: Monster[] = [];
     public monsterAdded: Subject<Monster> = new Subject<Monster>();
@@ -284,12 +284,28 @@ export class Group extends WsRegistrable {
         }
         this.characters.push(addedCharacter);
         this.characterAdded.next(addedCharacter);
-        this.characterSubscriptions[addedCharacter.id] = addedCharacter.onUpdate
+        let changeSub = addedCharacter.onUpdate
             .subscribe(() => this.updateFightersOrder());
+        let activeSub = addedCharacter.onActiveChange.subscribe((active: number) => {
+            if (active) {
+                this.fighters.push(Fighter.createFromCharacter(addedCharacter));
+            }
+            else {
+                let fi = this.fighters.findIndex(f => !f.isMonster && f.character.id === addedCharacter.id);
+                if (fi !== -1) {
+                    this.fighters.splice(fi, 1);
+                }
+            }
+            this.updateFightersOrder();
+        });
         if (addedCharacter.active) {
             this.fighters.push(Fighter.createFromCharacter(addedCharacter));
             this.updateFightersOrder();
         }
+        this.characterSubscriptions[addedCharacter.id] = {
+            active: activeSub,
+            change: changeSub
+        };
         return true;
     }
 
@@ -304,7 +320,8 @@ export class Group extends WsRegistrable {
             let removedCharacter = this.characters[i];
             this.characters.splice(i, 1);
             this.characterRemoved.next(removedCharacter);
-            this.characterSubscriptions[removedCharacter.id].unsubscribe();
+            this.characterSubscriptions[removedCharacter.id].active.unsubscribe();
+            this.characterSubscriptions[removedCharacter.id].change.unsubscribe();
             delete this.characterSubscriptions[removedCharacter.id];
             let fi = this.fighters.findIndex(f => !f.isMonster && f.character.id === removedCharacter.id);
             if (fi !== -1) {
@@ -540,7 +557,8 @@ export class Group extends WsRegistrable {
     dispose() {
         for (let character of this.characters) {
             if (character.id in this.characterSubscriptions) {
-                this.characterSubscriptions[character.id].unsubscribe();
+                this.characterSubscriptions[character.id].active.unsubscribe();
+                this.characterSubscriptions[character.id].change.unsubscribe();
             }
             character.dispose();
         }

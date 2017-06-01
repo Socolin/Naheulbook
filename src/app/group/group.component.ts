@@ -170,8 +170,7 @@ export class GroupComponent implements OnInit, OnDestroy {
             let character = this.group.characters[i];
             this._characterService.changeGmData(character.id, 'active', active).subscribe(
                 change => {
-                    character.active = change.value;
-                    this._actionService.emitAction('reorderFighters', this.group);
+                    character.changeActive(change.value);
                 }
             );
         }
@@ -180,8 +179,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     toggleActiveCharacter(character) {
         this._characterService.changeGmData(character.id, 'active', !character.active).subscribe(
             change => {
-                character.active = change.value;
-                this._actionService.emitAction('reorderFighters', this.group);
+                character.changeActive(change.value);
             }
         );
     }
