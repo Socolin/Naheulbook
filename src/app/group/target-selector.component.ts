@@ -30,7 +30,9 @@ export class TargetSelectorComponent implements OnInit {
         this.showSelector = false;
     }
 
-    displaySelector() {
+    displaySelector(event: Event) {
+        event.preventDefault();
+        event.stopPropagation();
         this.showSelector = true;
     }
 

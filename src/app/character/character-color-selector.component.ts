@@ -16,7 +16,9 @@ export class CharacterColorSelectorComponent {
         '000000', 'dddddd'
     ].map(color => '#' + color);
 
-    toggleSelector() {
+    toggleSelector(event: Event) {
+        event.preventDefault();
+        event.stopPropagation();
         this.showSelector = !this.showSelector;
     }
 

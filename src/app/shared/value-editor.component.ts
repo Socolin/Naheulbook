@@ -32,7 +32,9 @@ export class ValueEditorComponent implements OnChanges {
         bbox.left = Math.min(bbox.left, rect.left);
     }
 
-    showEditor() {
+    showEditor(event: MouseEvent) {
+        event.preventDefault();
+        event.stopPropagation();
         if (this.displayEditor) {
             this.displayEditor = false;
             return;

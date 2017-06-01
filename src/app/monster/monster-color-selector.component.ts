@@ -26,7 +26,9 @@ export class MonsterColorSelectorComponent {
         }
     }
 
-    openSelector() {
+    openSelector(event: Event) {
+        event.preventDefault();
+        event.stopPropagation();
         this.showSelector = true;
     }
     closeSelector() {
