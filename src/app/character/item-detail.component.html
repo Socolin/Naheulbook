@@ -93,19 +93,19 @@
 
             <div>
                 <span *ngIf="item.template.data.relic" class="label label-primary">Relique</span>
-                <ng-template [ngIf]="character.sex === 'Homme'">
+                <ng-template [ngIf]="character?.sex === 'Homme'">
                     <span *ngIf="item.template.data.sex === 'h'" class="label label-success">Homme uniq.</span>
                     <span *ngIf="item.template.data.sex === 'f'" class="label label-danger">Femme uniq.</span>
                 </ng-template>
-                <ng-template [ngIf]="character.sex === 'Femme'">
+                <ng-template [ngIf]="character?.sex === 'Femme'">
                     <span *ngIf="item.template.data.sex === 'h'" class="label label-danger">Homme uniq.</span>
                     <span *ngIf="item.template.data.sex === 'f'" class="label label-success">Femme uniq.</span>
                 </ng-template>
-                <span *ngIf="item.template.data.requireLevel && character.level < item.template.data.requireLevel"
+                <span *ngIf="item.template.data.requireLevel && character?.level < item.template.data.requireLevel"
                       class="invalid-level">
                     Level: {{item.template.data.requireLevel}}
                 </span>
-                <span *ngIf="item.template.data.requireLevel && character.level >= item.template.data.requireLevel"
+                <span *ngIf="item.template.data.requireLevel && character?.level >= item.template.data.requireLevel"
                       class="valid-level">
                     Level: {{item.template.data.requireLevel}}
                 </span>
