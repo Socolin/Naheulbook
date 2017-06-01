@@ -190,6 +190,11 @@
             <div *ngIf="item.template.data.duration">Durée: {{item.template.data.duration}}</div>
             <div *ngIf="item.data.readCount">Lu: {{item.data.readCount}}</div>
 
+            <div *ngIf="gmView && item.price">
+                <span>Prix:</span>
+                {{item.price}} P.O.
+            </div>
+
             <div *ngIf="modifiers && modifiers.length">
                 <div *ngFor="let modifier of modifiers">
                     <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>

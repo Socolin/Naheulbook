@@ -31,6 +31,23 @@ export class Item {
     modifiers: ItemModifier[];
     container: number;
     template: ItemTemplate;
+
+    get price(): number|undefined {
+        if (!this.template.data.price) {
+            return undefined;
+        }
+
+        let quantity = 1;
+        if (this.template.data.quantifiable || this.data.quantity) {
+            quantity = +this.data.quantity;
+        }
+        if (this.template.data.useUG) {
+            quantity = this.data.ug;
+        }
+
+        return this.template.data.price * quantity;
+    }
+
     // Generated field
     content: Item[];
     containerInfo: IMetadata;
