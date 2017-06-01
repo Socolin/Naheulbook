@@ -212,7 +212,10 @@
 
             <div>
                 <div><strong>Inventaire</strong></div>
-                <div *ngFor="let item of fighter.monster.items" class="fighter-inventory-item">
+                <div *ngFor="let item of fighter.monster.items"
+                     class="fighter-inventory-item"
+                     [class.selected]="selectedItem === item"
+                     (click)="selectedItem = item">
                     <icon [icon]="item.data.icon" [size]="'24px'"></icon>
                     <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}} </span>
                     {{item.data.name}}
@@ -222,15 +225,23 @@
                 </button>
             </div>
         </div>
-        <md-input-container class="fighter-note">
-        <textarea mdInput
-                  mdTextareaAutosize
-                  mdAutosizeMinRows="2"
-                  placeholder="Note"
-                  [ngModel]="fighter.monster.data.note"
-                  (blur)="updateMonsterField(fighter.monster, 'note', $event.target.value)">
-        </textarea>
-        </md-input-container>
+        <div class="fighter-right-data">
+            <md-input-container class="fighter-note">
+                <textarea mdInput
+                          mdTextareaAutosize
+                          mdAutosizeMinRows="2"
+                          placeholder="Note"
+                          [ngModel]="fighter.monster.data.note"
+                          (blur)="updateMonsterField(fighter.monster, 'note', $event.target.value)">
+                </textarea>
+            </md-input-container>
+            <div>
+                <ng-template [ngIf]="selectedItem">
+                    <item-detail [gmView]="true" [item]="selectedItem" [readonly]="true">
+                    </item-detail>
+                </ng-template>
+            </div>
+        </div>
     </md-card-content>
     <md-card-content class="expanded-data" *ngIf="!fighter.isMonster">
         <div class="fighter-advanced-datas">

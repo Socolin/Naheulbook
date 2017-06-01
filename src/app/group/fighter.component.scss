@@ -69,9 +69,12 @@
 
 .expanded-data {
     display: flex;
-    .fighter-note {
+    .fighter-right-data {
         flex: 1 auto;
         width: 100px;
+    }
+    .fighter-note {
+        width: 100%;
     }
     .fighter-advanced-datas {
         flex: 1 auto;
