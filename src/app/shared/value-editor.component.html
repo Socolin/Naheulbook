@@ -21,37 +21,37 @@
             </div>
             <div class="ve-actions">
                 <div class="minus-buttons">
-                    <button (click)="changeValue('-50')">
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('-50')">
                         -50
                     </button>
-                    <button (click)="changeValue('-5')">
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('-5')">
                         -5
                     </button>
-                    <button (click)="changeValue('-1')">
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('-1')">
                         -1
                     </button>
                 </div>
                 <div class="plus-buttons">
-                    <button (click)="changeValue('+50')">
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('+50')">
                         +50
                     </button>
-                    <button (click)="changeValue('+5')">
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('+5')">
                         +5
                     </button>
-                    <button (click)="changeValue('+1')">
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('+1')">
                         +1
                     </button>
                 </div>
                 <div class="max-zero-buttons">
-                    <button (click)="changeValue('max')" [disabled]="!maxValue">
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('max')" [disabled]="!maxValue">
                         Max
                     </button>
-                    <button (click)="changeValue('zero')">
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('zero')">
                         0
                     </button>
                 </div>
                 <div class="valid-button">
-                    <button (click)="commitValue()"><md-icon>check</md-icon></button>
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="commitValue()"><md-icon>check</md-icon></button>
                 </div>
             </div>
         </div>
