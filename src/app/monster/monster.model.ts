@@ -151,6 +151,7 @@ export class Monster extends WsRegistrable {
             'Modification: ' + fieldName.toUpperCase() + ': ' + this.data[fieldName] + ' -> ' + value,
             {fieldName: fieldName, value: value});
         this.data[fieldName] = value;
+        this.onChange.next({action: 'changeData', fieldName: fieldName, value: value});
     }
 
     public getWsTypeName(): string {
