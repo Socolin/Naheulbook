@@ -24,7 +24,6 @@ import {SharedModule} from './shared/shared.module';
 import {SkillModule} from './skill/skill.module';
 import {UserModule} from './user/user.module';
 
-import {WebSocketService} from './shared/websocket.service';
 import {DateModule} from './date/date.module';
 import {NhbkErrorHandler} from './nhbk-error-handler';
 
@@ -33,6 +32,7 @@ import {PlayerHomeModule} from './home-player/home-player.module';
 import {GmHomeModule} from './home-gm/home-gm.module';
 import {DatabaseHomeModule} from './home-database/home-database.module';
 import {ThemeService} from './theme.service';
+import {WebsocketModule} from './websocket/websocket.module';
 
 @NgModule({
     imports: [
@@ -59,7 +59,8 @@ import {ThemeService} from './theme.service';
         SharedModule,
         SkillModule,
         UserModule,
-        DateModule
+        DateModule,
+        WebsocketModule,
     ],
     declarations: [
         AppComponent
@@ -69,8 +70,7 @@ import {ThemeService} from './theme.service';
     ],
     providers: [
         ThemeService,
-        WebSocketService
-        , {
+        {
             provide: ErrorHandler,
             useClass: NhbkErrorHandler
         }

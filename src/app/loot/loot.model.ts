@@ -4,8 +4,9 @@ import {Subscription} from 'rxjs/Subscription';
 import {Item, PartialItem} from '../character/item.model';
 import {Monster} from '../monster/monster.model';
 import {CharacterResume} from '../character/character.model';
-import {WsRegistrable} from '../shared/websocket.model';
-import {WebSocketService} from '../shared/websocket.service';
+import {WsRegistrable} from '../websocket/websocket.model';
+import {WebSocketService} from '../websocket/websocket.service';
+import {Skill} from '../skill/skill.model';
 
 export class LootTookItemMsg {
     item: Item;
@@ -32,20 +33,20 @@ export class Loot extends WsRegistrable {
 
     public computedXp: number;
 
-    static fromJson(jsonData: any): Loot {
+    static fromJson(jsonData: any, skillsById: {[skillId: number]: Skill}): Loot {
         let loot = new Loot();
         Object.assign(loot, jsonData, {
-            monsters: Monster.monstersFromJson(jsonData.monsters),
-            items: Item.itemsFromJson(jsonData.items)
+            monsters: Monster.monstersFromJson(jsonData.monsters, skillsById),
+            items: Item.itemsFromJson(jsonData.items, skillsById)
         });
         loot.updateXp();
         return loot;
     }
 
-    static lootsFromJson(lootsData: object[]): Loot[] {
+    static lootsFromJson(lootsData: object[], skillsById: {[skillId: number]: Skill}): Loot[] {
         let loots: Loot[] = [];
         for (let i = 0; i < lootsData.length; i++) {
-            loots.push(Loot.fromJson(lootsData[i]));
+            loots.push(Loot.fromJson(lootsData[i], skillsById));
         }
         return loots;
     }
@@ -160,44 +161,6 @@ export class Loot extends WsRegistrable {
 
     public getWsTypeName(): string {
         return 'loot';
-    }
-
-    public onWebsocketData(opcode: string, data: any): void {
-        switch (opcode) {
-            case 'addItem': {
-                let item = Item.fromJson(data);
-                this.addItem(item);
-                break;
-            }
-            case 'deleteItem': {
-                let item = PartialItem.fromJson(data);
-                this.removeItem(item.id);
-                break;
-            }
-            case 'addMonster': {
-                let monster = Monster.fromJson(data);
-                this.addMonster(monster);
-                break;
-            }
-            case 'deleteMonster': {
-                let monster = Monster.fromJson(data);
-                this.removeMonster(monster.id);
-                break;
-            }
-            case 'updateLoot': {
-                this.visibleForPlayer = data.visibleForPlayer;
-                break;
-            }
-            case 'tookItem': {
-                let takenItem = PartialItem.fromJson(data.item);
-                let leftItem = null;
-                if (data.leftItem) {
-                    leftItem = PartialItem.fromJson(data.leftItem);
-                }
-                this.takeItem(leftItem, takenItem, data.character);
-                break;
-            }
-        }
     }
 
     public onWsRegister(service: WebSocketService) {

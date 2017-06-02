@@ -11,7 +11,7 @@ import {SwipeService} from './swipe.service';
 import {ItemActionService} from './item-action.service';
 import {Item} from './item.model';
 import {Skill} from '../skill/skill.model';
-import {WebSocketService} from '../shared/websocket.service';
+import {WebSocketService} from '../websocket/websocket.service';
 import {Subscription} from 'rxjs/Subscription';
 
 export class LevelUpInfo {
@@ -316,6 +316,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
             this.inGroupTab = true;
         } else {
             this.character = this._route.snapshot.data['character'];
+            this._websocketService.registerElement(this.character);
             this.notificationSub = this.character.onNotification.subscribe(notificationData => {
                 this._notification.info('', notificationData.message);
             });
@@ -330,6 +331,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
                         this.notificationSub.unsubscribe();
                     }
                     this.character = data['character'];
+                    this._websocketService.registerElement(this.character);
                     this.mainTabGroup.selectedIndex = 0;
                     this.notificationSub = this.character.onNotification.subscribe(notificationData => {
                         this._notification.info('', notificationData.message);

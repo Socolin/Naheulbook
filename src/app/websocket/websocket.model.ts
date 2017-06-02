@@ -35,5 +35,4 @@ export abstract class WsRegistrable {
     abstract getWsTypeName(): string;
     abstract onWsRegister(service: WebSocketService);
     abstract onWsUnregister(): void;
-    abstract onWebsocketData(opcode: string, data: any): void;
 }

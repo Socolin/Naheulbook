@@ -1,9 +1,10 @@
 import {ItemTemplate} from '../item/item-template.model';
 import {Item, PartialItem} from '../character/item.model';
 import {Subject} from 'rxjs/Subject';
-import {WsRegistrable} from '../shared/websocket.model';
+import {WsRegistrable} from '../websocket/websocket.model';
 import {TargetJsonData} from '../group/target.model';
-import {WebSocketService} from '../shared/websocket.service';
+import {WebSocketService} from '../websocket/websocket.service';
+import {Skill} from '../skill/skill.model';
 
 export class MonsterData {
     at: number;
@@ -51,20 +52,21 @@ export class Monster extends WsRegistrable {
     public target: TargetJsonData;
 
     public onChange: Subject<any> = new Subject<any>();
+    public onNotification: Subject<any> = new Subject<any>();
 
-    static fromJson(jsonData: any): Monster {
+    static fromJson(jsonData: any, skillsById: {[skillId: number]: Skill}): Monster {
         let monster = new Monster();
         Object.assign(monster, jsonData, {
             data: MonsterData.fromJson(jsonData.data),
-            items: Item.itemsFromJson(jsonData.items)
+            items: Item.itemsFromJson(jsonData.items, skillsById)
         });
         return monster;
     }
 
-    static monstersFromJson(monstersData: any[]): Monster[] {
+    static monstersFromJson(monstersData: any[], skillsById: {[skillId: number]: Skill}): Monster[] {
         let monsters: Monster[] = [];
         for (let i = 0; i < monstersData.length; i++) {
-            monsters.push(Monster.fromJson(monstersData[i]));
+            monsters.push(Monster.fromJson(monstersData[i], skillsById));
         }
         return monsters;
     }
@@ -77,6 +79,10 @@ export class Monster extends WsRegistrable {
                 this.target = Object.assign({}, monster.target);
             }
         }
+    }
+
+    public notify(type: string, message: string, data?: any) {
+        this.onNotification.next({type: type, message: message, data: data});
     }
 
     public getItem(itemId: number): Item {
@@ -135,6 +141,18 @@ export class Monster extends WsRegistrable {
         this.onChange.next({action: 'tookItem', character: character, item: takenItem});
     }
 
+    changeTarget(target: TargetJsonData) {
+        this.target = target;
+        this.targetChanged.next(target);
+    }
+
+    public changeData(fieldName: string, value: any) {
+        this.notify('changeData',
+            'Modification: ' + fieldName.toUpperCase() + ': ' + this.data[fieldName] + ' -> ' + value,
+            {fieldName: fieldName, value: value});
+        this.data[fieldName] = value;
+    }
+
     public getWsTypeName(): string {
         return 'monster';
     }
@@ -145,34 +163,12 @@ export class Monster extends WsRegistrable {
     public onWsUnregister(): void {
     }
 
-    public onWebsocketData(opcode: string, data: any) {
-        switch (opcode) {
-            case 'addItem': {
-                let item = Item.fromJson(data);
-                this.addItem(item);
-                break;
-            }
-            case 'deleteItem': {
-                let item = PartialItem.fromJson(data);
-                this.removeItem(item.id);
-                break;
-            }
-            case 'tookItem': {
-                let takenItem = PartialItem.fromJson(data.item);
-                let leftItem = null;
-                if (data.leftItem) {
-                    leftItem = PartialItem.fromJson(data.leftItem);
-                }
-                this.takeItem(leftItem, takenItem, data.character);
-                break;
-            }
-        }
-    }
-
     dispose() {
         this.itemAdded.unsubscribe();
         this.itemRemoved.unsubscribe();
         this.targetChanged.unsubscribe();
+        this.onNotification.unsubscribe();
+        this.onChange.unsubscribe();
     }
 }
 

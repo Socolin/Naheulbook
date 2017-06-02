@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {ReplaySubject, Observable} from 'rxjs/Rx';
+import {Observable} from 'rxjs/Rx';
 
-import {Stat, IMetadata, HistoryEntry} from '../shared';
+import {IMetadata, HistoryEntry} from '../shared';
 import {Loot} from '../loot/loot.model';
 import {Character, CharacterResume, CharacterModifier, CharacterEffect, CharacterJsonData} from './character.model';
 import {Effect} from '../effect';
@@ -14,14 +14,12 @@ import {Skill, SkillService} from '../skill';
 import {NotificationsService} from '../notifications';
 import {JsonService} from '../shared/json-service';
 import {LoginService} from '../user';
-import {WebSocketService} from '../shared/websocket.service';
 
 @Injectable()
 export class CharacterService extends JsonService {
     constructor(http: Http
         , notification: NotificationsService
         , loginService: LoginService
-        , private _websocketService: WebSocketService
         , private _jobService: JobService
         , private _skillService: SkillService
         , private _originService: OriginService) {
@@ -32,49 +30,18 @@ export class CharacterService extends JsonService {
         return Observable.forkJoin(
             this._jobService.getJobList(),
             this._originService.getOriginList(),
-            this._skillService.getSkills(),
+            this._skillService.getSkillsById(),
             this.loadLoots(id),
             this.postJson('/api/character/detail', {id: id}).map(res => res.json())
-        ).map(([jobs, origins, skills, loots, characterData]: [Job[], Origin[], Skill[], Loot[], CharacterJsonData]) => {
-            let character = Character.fromJson(characterData);
-            this._websocketService.registerElement(character);
-            character.origin = origins.find(o => o.id === characterData.originId);
-            character.job = jobs.find(j => j.id === characterData.jobId);
-            for (let sk of characterData.skills) {
-                let skill = skills.find(s => s.id === sk.id);
-                if (skill) {
-                    character.skills.push(skill);
-                }
-            }
+        ).map(([jobs, origins, skillsById, loots, characterData]:
+                                            [Job[], Origin[], {[skillId: number]: Skill}, Loot[], CharacterJsonData]) => {
+            let character = Character.fromJson(characterData, origins, jobs, skillsById);
+
             for (let i = 0; i < loots.length; i++) {
                 let loot = loots[i];
                 character.addLoot(loot);
             }
 
-            // FIXME: improve this Item.FromJson() and give skill in param
-            for (let i = 0; i < character.items.length; i++) {
-                let item = character.items[i];
-                for (let k = 0; k < item.template.skills.length; k++) {
-                    let itemSkill = item.template.skills[k];
-                    for (let j = 0; j < skills.length; j++) {
-                        let skill = skills[j];
-                        if (skill.id === itemSkill.id) {
-                            item.template.skills[k] = skill;
-                            break;
-                        }
-                    }
-                }
-                for (let k = 0; k < item.template.unskills.length; k++) {
-                    let itemSkill = item.template.unskills[k];
-                    for (let j = 0; j < skills.length; j++) {
-                        let skill = skills[j];
-                        if (skill.id === itemSkill.id) {
-                            item.template.unskills[k] = skill;
-                            break;
-                        }
-                    }
-                }
-            }
             try {
                 character.update();
             } catch (e) {
@@ -283,8 +250,13 @@ export class CharacterService extends JsonService {
     }
 
     loadLoots(characterId: number): Observable<Loot[]> {
-        return this.postJson('/api/character/loadLoots', {
-            characterId: characterId
-        }).map(res => Loot.lootsFromJson(res.json()));
+        return Observable.forkJoin(
+            this.postJson('/api/character/loadLoots', {
+                characterId: characterId
+            }).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([lootsJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
+            return Loot.lootsFromJson(lootsJsonData, skillsById)
+        });
     }
 }

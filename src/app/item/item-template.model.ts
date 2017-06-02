@@ -96,4 +96,22 @@ export class ItemTemplate {
         }
         return false;
     }
+
+    static fromJson(jsonData: ItemTemplate, skillsById: {[skillId: number]: Skill}): ItemTemplate {
+        let itemTemplate = new ItemTemplate();
+        Object.assign(itemTemplate, jsonData, {skills: [], unskills: []});
+
+        for (let s of jsonData.skills) {
+            itemTemplate.skills.push(skillsById[s.id]);
+        }
+        for (let s of jsonData.unskills) {
+            itemTemplate.unskills.push(skillsById[s.id]);
+        }
+
+        for (let skillModifier of itemTemplate.skillModifiers) {
+            skillModifier.skill = skillsById[+skillModifier.skill];
+        }
+
+        return itemTemplate;
+    }
 }

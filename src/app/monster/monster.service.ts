@@ -92,5 +92,4 @@ export class MonsterService extends JsonService {
     editMonster(monster: MonsterTemplate): Observable<MonsterTemplate> {
         return this.postJson('/api/monster/editMonster', monster).map(res => res.json());
     }
-
 }

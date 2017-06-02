@@ -2,7 +2,8 @@ import {ItemTemplate} from '../item';
 import {IMetadata} from '../shared/misc.model';
 import {IconDescription} from '../shared/icon.model';
 import {StatsModifier} from '../shared/stat-modifier.model';
-import {DurationType, IDurable} from '../date/durable.model';
+import {IDurable} from '../date/durable.model';
+import {Skill} from '../skill/skill.model';
 
 export class ItemData {
     name: string;
@@ -52,16 +53,16 @@ export class Item {
     content: Item[];
     containerInfo: IMetadata;
 
-    static fromJson(jsonData: any): Item {
+    static fromJson(jsonData: any, skillsById: {[skillId: number]: Skill}): Item {
         let item = new Item();
-        Object.assign(item, jsonData);
+        Object.assign(item, jsonData, {template: ItemTemplate.fromJson(jsonData.template, skillsById)});
         return item;
     }
 
-    static itemsFromJson(itemsData: object[]): Item[] {
+    static itemsFromJson(itemsData: object[], skillsById: {[skillId: number]: Skill}): Item[] {
         let items: Item[] = [];
         for (let i = 0; i < itemsData.length; i++) {
-            items.push(Item.fromJson(itemsData[i]));
+            items.push(Item.fromJson(itemsData[i], skillsById));
         }
         return items;
     }

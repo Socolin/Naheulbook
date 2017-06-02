@@ -20,6 +20,7 @@ import {User} from '../user/user.model';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {CharacterService} from '../character/character.service';
 import {Subscription} from 'rxjs/Subscription';
+import {WebSocketService} from '../websocket/websocket.service';
 
 @Component({
     templateUrl: './group.component.html',
@@ -73,6 +74,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         , private _locationService: LocationService
         , private _notification: NotificationsService
         , private _actionService: GroupActionService
+        , private _websocketService: WebSocketService
         , private _overlay: Overlay
         , private _nhbkDialogService: NhbkDialogService
         , private _characterService: CharacterService) {
@@ -369,6 +371,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                         this.removedCharacterSub = this.group.characterRemoved.subscribe(character => {
                             this.unregisterCharacterNotification(character);
                         });
+                        this._websocketService.registerElement(this.group);
                     }
                 );
             }

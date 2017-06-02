@@ -12,17 +12,18 @@ import {Group, GroupData, GroupJsonData} from './group.model';
 import {NhbkDateOffset} from '../date/date.model';
 import {Loot} from '../loot';
 import {CharacterService} from '../character/character.service';
-import {WebSocketService} from '../shared/websocket.service';
 import {EventService} from '../event/event.service';
 import {NEvent} from '../event/event.model';
+import {SkillService} from '../skill/skill.service';
+import {Skill} from '../skill/skill.model';
 
 @Injectable()
 export class GroupService extends JsonService {
     constructor(http: Http
         , notification: NotificationsService
         , private _characterService: CharacterService
-        , private _websocketService: WebSocketService
         , private _eventService: EventService
+        , private _skillService: SkillService
         , loginService: LoginService) {
         super(http, notification, loginService);
     }
@@ -38,7 +39,6 @@ export class GroupService extends JsonService {
             }
 
             let group = Group.fromJson(groupData);
-            this._websocketService.registerElement(group);
 
             Observable.forkJoin(
                 Observable.forkJoin(charactersLoading),
@@ -105,24 +105,39 @@ export class GroupService extends JsonService {
     /* Monster */
 
     loadMonsters(groupId: number): Observable<Monster[]> {
-        return this.postJson('/api/group/loadMonsters', {
-            groupId: groupId
-        }).map(res => Monster.monstersFromJson(res.json()));
+        return Observable.forkJoin(
+            this.postJson('/api/group/loadMonsters', {
+                groupId: groupId
+            }).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
+            return Monster.monstersFromJson(monstersJsonData, skillsById)
+        });
     }
 
     loadDeadMonsters(groupId: number, startIndex: number, count: number): Observable<Monster[]> {
-        return this.postJson('/api/group/loadDeadMonsters', {
-            groupId: groupId,
-            startIndex: startIndex,
-            count: count
-        }).map(res => Monster.monstersFromJson(res.json()));
+        return Observable.forkJoin(
+            this.postJson('/api/group/loadDeadMonsters', {
+                groupId: groupId,
+                startIndex: startIndex,
+                count: count
+            }).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
+            return Monster.monstersFromJson(monstersJsonData, skillsById)
+        });
     }
 
     createMonster(groupId: number, monster): Observable<Monster> {
-        return this.postJson('/api/group/createMonster', {
-            monster: monster,
-            groupId: groupId
-        }).map(res => Monster.fromJson(res.json()));
+        return Observable.forkJoin(
+            this.postJson('/api/group/createMonster', {
+                monster: monster,
+                groupId: groupId
+            }).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+            return Monster.fromJson(monsterJsonData, skillsById)
+        });
     }
 
     updateMonster(monsterId: number, fieldName: string, value: any): Observable<{value: any, fieldName: string}> {
@@ -134,9 +149,14 @@ export class GroupService extends JsonService {
     }
 
     killMonster(monsterId: number): Observable<Monster> {
-        return this.postJson('/api/group/killMonster', {
-            monsterId: monsterId
-        }).map(res => Monster.fromJson(res.json()));
+        return Observable.forkJoin(
+            this.postJson('/api/group/killMonster', {
+                monsterId: monsterId
+            }).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+            return Monster.fromJson(monsterJsonData, skillsById)
+        });
     }
 
     deleteMonster(monsterId: number): Observable<any> {
@@ -148,16 +168,26 @@ export class GroupService extends JsonService {
     /* Loot */
 
     loadLoots(groupId: number): Observable<Loot[]> {
-        return this.postJson('/api/group/loadLoots', {
-            groupId: groupId
-        }).map(res => Loot.lootsFromJson(res.json()));
+        return Observable.forkJoin(
+            this.postJson('/api/group/loadLoots', {
+                groupId: groupId
+            }).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([lootsJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
+            return Loot.lootsFromJson(lootsJsonData, skillsById)
+        });
     }
 
     createLoot(groupId: number, lootName: string): Observable<Loot> {
-        return this.postJson('/api/group/createLoot', {
-            groupId: groupId,
-            name: lootName
-        }).map(res => Loot.fromJson(res.json()));
+        return Observable.forkJoin(
+            this.postJson('/api/group/createLoot', {
+                groupId: groupId,
+                name: lootName
+            }).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([lootJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+            return Loot.fromJson(lootJsonData, skillsById)
+        });
     }
 
     deleteLoot(lootId: number) {
@@ -167,12 +197,17 @@ export class GroupService extends JsonService {
     }
 
     updateLoot(loot: Loot): Observable<Loot> {
-        return this.postJson('/api/group/updateLoot', {
-            loot: {
-                visibleForPlayer: loot.visibleForPlayer,
-                id: loot.id
-            }
-        }).map(res => Loot.fromJson(res.json()));
+        return Observable.forkJoin(
+            this.postJson('/api/group/updateLoot', {
+                loot: {
+                    visibleForPlayer: loot.visibleForPlayer,
+                    id: loot.id
+                }
+            }).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([lootJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+            return Loot.fromJson(lootJsonData, skillsById)
+        });
     }
 
     /* History */

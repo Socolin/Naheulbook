@@ -43,7 +43,6 @@ export class FighterComponent {
                 .subscribe(
                     () => {
                         fighter.changeTarget(target);
-                        fighter.updateTarget(this.fighters);
                         this._notification.info('Monstre', 'Cible changée');
                     }
                 );
@@ -54,7 +53,6 @@ export class FighterComponent {
             }).subscribe(
                 change => {
                     fighter.changeTarget(change.value);
-                    fighter.updateTarget(this.fighters);
                     this._notification.info('Joueur', 'Cible changée');
                 }
             );
@@ -70,7 +68,6 @@ export class FighterComponent {
                 .subscribe(
                     res => {
                         element.changeColor(res.value);
-                        this.fighters.forEach(f => f.updateTarget(this.fighters));
                         this._notification.info('Monstre', 'Couleur changé');
                     }
                 );
@@ -78,7 +75,6 @@ export class FighterComponent {
             this._characterService.changeGmData(element.id, 'color', color).subscribe(
                 change => {
                     element.changeColor(change.value);
-                    this.fighters.forEach(f => f.updateTarget(this.fighters));
                     this._notification.info('Joueur', 'Couleur changée');
                 }
             );
@@ -106,7 +102,6 @@ export class FighterComponent {
                 .subscribe(
                     res => {
                         element.changeNumber(res.value);
-                        this.fighters.forEach(f => f.updateTarget(this.fighters));
                         this._notification.info('Monstre', 'Couleur changé');
                     }
                 );

@@ -61,23 +61,6 @@ export class ItemService extends JsonService {
         });
     }
 
-    private fillMissingDataInItemTemplate(itemTemplate: ItemTemplate, skillsById: {[skillId: number]: Skill}) {
-        for (let j = 0; j < itemTemplate.skills.length; j++) {
-            let partialSkill = itemTemplate.skills[j];
-            itemTemplate.skills[j] = skillsById[partialSkill.id];
-        }
-
-        for (let j = 0; j < itemTemplate.unskills.length; j++) {
-            let partialSkill = itemTemplate.unskills[j];
-            itemTemplate.unskills[j] = skillsById[partialSkill.id];
-        }
-
-        for (let j = 0; j < itemTemplate.skillModifiers.length; j++) {
-            let skillModifier = itemTemplate.skillModifiers[j];
-            skillModifier.skill = skillsById[+skillModifier.skill];
-        }
-    }
-
     getItems(section: ItemSection): Observable<ItemTemplate[]> {
         if (!(section.id in this.itemBySection)) {
 
@@ -86,10 +69,11 @@ export class ItemService extends JsonService {
                 this.postJson('/api/item/list', {typeId: section.id}).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
-                ([items, skillsById]: [ItemTemplate[], {[skillId: number]: Skill}]) => {
-                    for (let i = 0; i < items.length; i++) {
-                        let item = items[i];
-                        this.fillMissingDataInItemTemplate(item, skillsById);
+                ([itemTemplateDatas, skillsById]: [ItemTemplate[], {[skillId: number]: Skill}]) => {
+                    let items: ItemTemplate[] = [];
+                    for (let i = 0; i < itemTemplateDatas.length; i++) {
+                        let itemTemplate = ItemTemplate.fromJson(itemTemplateDatas[i], skillsById);
+                        items.push(itemTemplate);
                     }
                     this.itemBySection[section.id].next(items);
                 },
@@ -112,8 +96,8 @@ export class ItemService extends JsonService {
                 this.postJson('/api/item/detail', {id: id}).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
-                ([itemTemplate, skillsById]: [ItemTemplate, {[skillId: number]: Skill}]) => {
-                    this.fillMissingDataInItemTemplate(itemTemplate, skillsById);
+                ([itemTemplateData, skillsById]: [ItemTemplate, {[skillId: number]: Skill}]) => {
+                    let itemTemplate = ItemTemplate.fromJson(itemTemplateData, skillsById);
                     observer.next(itemTemplate);
                     observer.complete();
                 },
@@ -190,11 +174,11 @@ export class ItemService extends JsonService {
                     targetId: targetId,
                     targetType: targetType,
                     itemData: itemData
-                }).map(res => Item.fromJson(res.json())),
+                }).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
-                ([item, skillsById]: [Item, {[skillId: number]: Skill}]) => {
-                    this.fillMissingDataInItemTemplate(item.template, skillsById);
+                ([itemJsonData, skillsById]: [Item, {[skillId: number]: Skill}]) => {
+                    let item = Item.fromJson(itemJsonData, skillsById);
                     observer.next(item);
                     observer.complete();
                 },
@@ -214,11 +198,11 @@ export class ItemService extends JsonService {
                     targetId: targetId,
                     targetType: targetType,
                     criteria: criteria
-                }).map(res => Item.fromJson(res.json())),
+                }).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
-                ([item, skillsById]: [Item, {[skillId: number]: Skill}]) => {
-                    this.fillMissingDataInItemTemplate(item.template, skillsById);
+                ([itemJsonData, skillsById]: [Item, {[skillId: number]: Skill}]) => {
+                    let item = Item.fromJson(itemJsonData, skillsById);
                     observer.next(item);
                     observer.complete();
                 },

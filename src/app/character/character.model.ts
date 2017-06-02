@@ -12,10 +12,10 @@ import {Skill} from '../skill';
 import {isNullOrUndefined} from 'util';
 import {StatsModifier} from '../shared/stat-modifier.model';
 import {Subject} from 'rxjs/Subject';
-import {WsRegistrable} from '../shared/websocket.model';
+import {WsRegistrable} from '../websocket/websocket.model';
 import {Loot} from '../loot/loot.model';
 import {TargetJsonData} from '../group/target.model';
-import {WebSocketService} from '../shared/websocket.service';
+import {WebSocketService} from '../websocket/websocket.service';
 
 export interface CharacterResume {
     id: number;
@@ -295,10 +295,22 @@ export class Character extends WsRegistrable {
 
     public onActiveChange: Subject<number> = new Subject<number>();
     public onNotification: Subject<any> = new Subject<any>();
+    public targetChanged: Subject<TargetJsonData> = new Subject<TargetJsonData>();
 
-    static fromJson(jsonData: CharacterJsonData): Character {
+    static fromJson(jsonData: CharacterJsonData, origins: Origin[], jobs: Job[], skillsById: {[skillId: number]: Skill}): Character {
         let character = new Character();
-        Object.assign(character, jsonData, {skills: []});
+        Object.assign(character, jsonData, {skills: [], items: []});
+        character.origin = origins.find(o => o.id === jsonData.originId);
+        character.job = jobs.find(j => j.id === jsonData.jobId);
+
+        for (let sk of jsonData.skills) {
+            character.skills.push(skillsById[sk.id]);
+        }
+
+        for (let itemJsonData of jsonData.items) {
+            character.items.push(Item.fromJson(itemJsonData, skillsById));
+        }
+
         return character;
     }
 
@@ -848,7 +860,6 @@ export class Character extends WsRegistrable {
             this.computedData.details.add('Malus FO < 9', {'PI': -1});
         }
 
-
         if (this.job) {
             for (let i = 0; i < this.job.skills.length; i++) {
                 let skill = this.job.skills[i];
@@ -1329,75 +1340,9 @@ export class Character extends WsRegistrable {
         this.onActiveChange.next(this.active);
     }
 
-    public onWebsocketData(opcode: string, data: any): void {
-        switch (opcode) {
-            case 'showLoot':
-                this.addLoot(Loot.fromJson(data));
-                break;
-            case 'hideLoot':
-                this.removeLoot(data.id);
-                break;
-            case 'update':
-                this.onChangeCharacterStat(data);
-                break;
-            case 'statBonusAd':
-                this.onSetStatBonusAD(data);
-                break;
-            case 'levelUp':
-                this.onPartialLevelUp(data);
-                break;
-            case 'equipItem':
-                this.onEquipItem(data);
-                break;
-            case 'addItem':
-                this.onAddItem(Item.fromJson(data));
-                break;
-            case 'deleteItem':
-                this.onDeleteItem(data);
-                break;
-            case 'identifyItem':
-                this.onIdentifyItem(Item.fromJson(data));
-                break;
-            case 'useCharge':
-                this.onUseItemCharge(data);
-                break;
-            case 'changeContainer':
-                this.onChangeContainer(data);
-                break;
-            case 'updateItem':
-                this.onUpdateItem(data);
-                break;
-            case 'changeQuantity':
-                this.onUpdateQuantity(data);
-                break;
-            case 'updateItemModifiers':
-                this.onUpdateModifiers(data);
-                break;
-            case 'addEffect':
-                this.onAddEffect(data);
-                break;
-            case 'removeEffect':
-                this.onRemoveEffect(data);
-                break;
-            case 'updateEffect':
-                this.onUpdateEffect(data);
-                break;
-            case 'addModifier':
-                this.onAddModifier(data);
-                break;
-            case 'removeModifier':
-                this.onRemoveModifier(data);
-                break;
-            case 'updateModifier':
-                this.onUpdateModifier(data);
-                break;
-            case 'active':
-                this.changeActive(data);
-                break;
-            default:
-                console.warn('Opcode not handle: `' + opcode + '`');
-                break;
-        }
+    changeTarget(target: TargetJsonData) {
+        this.target = target;
+        this.targetChanged.next(target);
     }
 
     dispose() {

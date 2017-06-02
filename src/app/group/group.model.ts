@@ -4,11 +4,13 @@ import {Location} from '../location';
 import {NhbkDate} from '../date';
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
-import {WsRegistrable} from '../shared/websocket.model';
+import {WsRegistrable} from '../websocket/websocket.model';
 import {Loot} from '../loot/loot.model';
 import {NEvent} from '../event/event.model';
 import {date2Timestamp} from '../date/util';
-import {WebSocketService} from '../shared/websocket.service';
+import {WebSocketService} from '../websocket/websocket.service';
+import {TargetJsonData} from './target.model';
+import {Observable} from 'rxjs/Observable';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -58,19 +60,52 @@ export class FighterStat {
     }
 }
 
+export class Target {
+    fighter: Fighter;
+
+    constructor(fighter: Fighter) {
+        this.fighter = fighter;
+    }
+    get id(): number {
+        return this.fighter.id;
+    }
+    get isMonster(): boolean {
+        return this.fighter.isMonster;
+    }
+    get name(): string {
+        return this.fighter.name;
+    }
+    get color(): string {
+        return this.fighter.color;
+    }
+    get number() : number|undefined|null {
+        return this.fighter.number;
+    }
+}
+
 export class Fighter {
     stats: FighterStat = new FighterStat(this);
-    target: {
-        id: number;
-        isMonster: boolean;
-        name: string;
-        color: string;
-        number?: number;
-    };
+    target: Target;
 
     isMonster: boolean;
     monster: Monster;
     character: Character;
+
+    get onTargetChange(): Observable<TargetJsonData> {
+        return this.isMonster ? this.monster.targetChanged : this.character.targetChanged;
+    }
+
+    constructor(element: Monster|Character) {
+        if (element instanceof Monster) {
+            this.isMonster = true;
+            this.monster = element;
+        }
+        else {
+            this.isMonster = false;
+            this.character = element;
+        }
+        Object.freeze(this.isMonster);
+    }
 
     get chercheNoise(): boolean {
         return this.isMonster ? this.monster.data.chercheNoise : this.character.hasChercherDesNoises();
@@ -78,6 +113,10 @@ export class Fighter {
 
     get id(): number {
         return this.isMonster ? this.monster.id : this.character.id;
+    }
+
+    get uid(): string {
+        return this.isMonster ? 'm_' + this.monster.id : 'c_' + this.character.id;
     }
 
     get active(): boolean {
@@ -96,27 +135,11 @@ export class Fighter {
         return this.isMonster ? this.monster.data.number : 0;
     }
 
-    static createFromMonster(monster: Monster): Fighter {
-        let f = new Fighter();
-        f.isMonster = true;
-        Object.freeze(f.isMonster);
-        f.updateSource(monster);
-        return f;
-    }
-
-    static createFromCharacter(character: Character): Fighter {
-        let f = new Fighter();
-        f.isMonster = false;
-        Object.freeze(f.isMonster);
-        f.updateSource(character);
-        return f;
-    }
-
-    changeTarget(target: {id: number, isMonster: boolean}) {
+    changeTarget(target: TargetJsonData) {
         if (this.isMonster) {
-            this.monster.target = target;
+            this.monster.changeTarget(target);
         } else {
-            this.character.target = target;
+            this.character.changeTarget(target);
         }
     }
 
@@ -133,14 +156,6 @@ export class Fighter {
             this.monster.data.number = number;
         } else {
             return;
-        }
-    }
-
-    updateSource(source?: any) {
-        if (this.isMonster) {
-            this.monster = source;
-        } else {
-            this.character = source;
         }
     }
 
@@ -163,13 +178,7 @@ export class Fighter {
         let fighterIndex = fighters.findIndex(f => f.id === targetInfo.id && f.isMonster === targetInfo.isMonster);
         if (fighterIndex !== -1) {
             let fighter = fighters[fighterIndex];
-            this.target = {
-                id: fighter.id,
-                isMonster: fighter.isMonster,
-                name: fighter.name,
-                color: fighter.color,
-                number: fighter.number
-            };
+            this.target = new Target(fighter);
         }
         else {
             this.target = null;
@@ -262,6 +271,7 @@ export class Group extends WsRegistrable {
     public eventRemoved: Subject<NEvent> = new Subject<NEvent>();
 
     public fighters: Fighter[] = [];
+    public fightersSubscriptions: {[fighterUid: string]: Subscription} = {};
 
     public pastEventCount = 0;
     public futureEventCount = 0;
@@ -288,24 +298,23 @@ export class Group extends WsRegistrable {
             .subscribe(() => this.updateFightersOrder());
         let activeSub = addedCharacter.onActiveChange.subscribe((active: number) => {
             if (active) {
-                this.fighters.push(Fighter.createFromCharacter(addedCharacter));
+                this.addFighter(addedCharacter);
             }
             else {
-                let fi = this.fighters.findIndex(f => !f.isMonster && f.character.id === addedCharacter.id);
-                if (fi !== -1) {
-                    this.fighters.splice(fi, 1);
-                }
+                this.removeFighter(addedCharacter);
             }
             this.updateFightersOrder();
         });
         if (addedCharacter.active) {
-            this.fighters.push(Fighter.createFromCharacter(addedCharacter));
-            this.updateFightersOrder();
+            this.addFighter(addedCharacter);
         }
         this.characterSubscriptions[addedCharacter.id] = {
             active: activeSub,
             change: changeSub
         };
+        if (this.wsSubscribtion) {
+            this.wsSubscribtion.service.registerElement(addedCharacter);
+        }
         return true;
     }
 
@@ -323,10 +332,9 @@ export class Group extends WsRegistrable {
             this.characterSubscriptions[removedCharacter.id].active.unsubscribe();
             this.characterSubscriptions[removedCharacter.id].change.unsubscribe();
             delete this.characterSubscriptions[removedCharacter.id];
-            let fi = this.fighters.findIndex(f => !f.isMonster && f.character.id === removedCharacter.id);
-            if (fi !== -1) {
-                this.fighters.splice(fi, 1);
-                this.updateFightersOrder();
+            this.removeFighter(removedCharacter);
+            if (this.wsSubscribtion) {
+                this.wsSubscribtion.service.unregisterElement(removedCharacter);
             }
             return true;
         }
@@ -347,7 +355,7 @@ export class Group extends WsRegistrable {
         this.monsterAdded.next(addedMonster);
         this.monsterSubscriptions[addedMonster.id] = addedMonster.onChange
             .subscribe(() => this.updateFightersOrder());
-        this.fighters.push(Fighter.createFromMonster(addedMonster));
+        this.addFighter(addedMonster);
         this.updateFightersOrder();
         if (this.wsSubscribtion) {
             this.wsSubscribtion.service.registerElement(addedMonster);
@@ -368,10 +376,7 @@ export class Group extends WsRegistrable {
             this.monsterRemoved.next(removedMonster);
             this.monsterSubscriptions[removedMonster.id].unsubscribe();
             delete this.monsterSubscriptions[removedMonster.id];
-            let fi = this.fighters.findIndex(f => f.isMonster && f.monster.id === monsterId);
-            if (fi !== -1) {
-                this.fighters.splice(fi, 1);
-            }
+            this.removeFighter(removedMonster);
             if (this.wsSubscribtion) {
                 this.wsSubscribtion.service.unregisterElement(removedMonster);
             }
@@ -469,6 +474,28 @@ export class Group extends WsRegistrable {
         this.futureEventCount = futureEventCount;
     }
 
+    private addFighter(element: Monster|Character) {
+        let fighter = new Fighter(element);
+        this.fighters.push(fighter);
+        this.fightersSubscriptions[fighter.uid] = fighter.onTargetChange.subscribe(() => {
+            console.log('targetChange');
+            fighter.updateTarget(this.fighters);
+        });
+        this.updateFightersOrder();
+        this.fighters.forEach(f => f.updateTarget(this.fighters));
+    }
+
+    private removeFighter(element: Monster|Character) {
+        let isMonster = element instanceof Monster;
+        let i = this.fighters.findIndex(f => f.isMonster === isMonster && f.id === element.id);
+        if (i !== -1) {
+            let fighter = this.fighters[i];
+            this.fightersSubscriptions[fighter.uid].unsubscribe();
+            this.fighters.splice(i, 1);
+        }
+        this.fighters.forEach(f => f.updateTarget(this.fighters));
+    }
+
     public updateFightersOrder() {
         this.fighters.sort((first: Fighter, second: Fighter) => {
             if (first.chercheNoise && !second.chercheNoise) {
@@ -499,7 +526,6 @@ export class Group extends WsRegistrable {
                 }
             }
         });
-        this.fighters.forEach(f => f.updateTarget(this.fighters));
     }
 
     public getWsTypeName(): string {
@@ -530,30 +556,6 @@ export class Group extends WsRegistrable {
         }
     }
 
-    onWebsocketData(opcode: string, data: any) {
-        switch (opcode) {
-            case 'addLoot':
-                this.addLoot(Loot.fromJson(data));
-                break;
-            case 'deleteLoot':
-                this.removeLoot(data.id);
-                break;
-            case 'addEvent':
-                this.addEvent(NEvent.fromJson(data));
-                break;
-            case 'deleteEvent':
-                this.removeEvent(data.id);
-                break;
-            case 'changeData': {
-                this.data.changeValue(data.key, data.value);
-                break;
-            }
-            default:
-                console.warn('Opcode not handle: `' + opcode + '`');
-                break;
-        }
-    }
-
     dispose() {
         for (let character of this.characters) {
             if (character.id in this.characterSubscriptions) {
@@ -568,6 +570,12 @@ export class Group extends WsRegistrable {
                 this.monsterSubscriptions[monster.id].unsubscribe();
             }
             monster.dispose();
+        }
+
+        for (let fighter of this.fighters) {
+            if (fighter.uid in this.fightersSubscriptions) {
+                this.fightersSubscriptions[fighter.uid].unsubscribe();
+            }
         }
 
         this.characterAdded.unsubscribe();
