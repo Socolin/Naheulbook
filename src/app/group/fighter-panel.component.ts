@@ -24,7 +24,7 @@ import {isNullOrUndefined} from 'util';
 export class FighterPanelComponent implements OnInit {
     @Input() group: Group;
 
-    public currentFighterIndex: number | null = null;
+    public currentFighterIndex = 0;
     public loadingNextLap = false;
 
     public deadMonsters: Monster[] = [];
@@ -266,17 +266,12 @@ export class FighterPanelComponent implements OnInit {
             }
         );
 
-        this._actionService.registerAction('onStartCombat').subscribe(
-            () => {
-                this.currentFighterIndex = 0;
-            }
-        );
+        this.group.data.onChange.subscribe((v: {key: string, value: any}) => {
+           if (v.key === 'inCombat') {
+               this.currentFighterIndex = 0;
+           }
+        });
 
-        this._actionService.registerAction('onStopCombat').subscribe(
-            () => {
-                this.currentFighterIndex = null;
-            }
-        );
 
         if (this.group.data.inCombat) {
             this.currentFighterIndex = 0;

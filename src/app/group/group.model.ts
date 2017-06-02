@@ -78,7 +78,7 @@ export class Target {
     get color(): string {
         return this.fighter.color;
     }
-    get number() : number|undefined|null {
+    get number(): number|undefined|null {
         return this.fighter.number;
     }
 }
