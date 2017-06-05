@@ -18,7 +18,7 @@ import {OriginModule} from '../origin/origin.module';
 import {JobModule} from '../job/job.module';
 import {EffectModule} from '../effect/effect.module';
 import {
-    EffectPanelComponent, ModifierDetailComponent, EffectDetailComponent
+    EffectPanelComponent, EffectDetailComponent
 } from './effect-panel.component';
 import {InventoryPanelComponent} from './inventory-panel.component';
 import {SwipeableItemDetailComponent} from './swipeable-item-detail.component';
@@ -56,7 +56,6 @@ import {CreateCharacterComponent} from './create-character.component';
         EffectPanelComponent,
         InventoryPanelComponent,
         ItemDetailComponent,
-        ModifierDetailComponent,
         SpecialitySelectorComponent,
         SwipeableItemDetailComponent,
     ],

@@ -5,13 +5,14 @@
     justify-content: space-around;
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 .fighter-row {
     display: flex;
     flex-wrap: nowrap;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
 }
 .field-icon {
     flex: 0 45px;
@@ -62,9 +63,34 @@
     font-weight: bold;
 }
 
+.row-stat-modifiers {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    >md-card {
+        flex: 1 auto;
+        width: 400px;
+    }
+}
+.row-inventory {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    >md-card {
+        flex: 1 auto;
+        width: 400px;
+    }
+    .item-detail {
+        flex: 1 auto;
+        width: 400px;
+    }
+}
+
 .expanded-data-card {
     background-color: inherit;
-    margin: 5px;
+    margin: 1px 2px 5px;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 .expanded-data {
@@ -100,3 +126,77 @@
     }
 
 }
+
+.monster-effects {
+    display: flex;
+    flex-direction: row;
+    .effect-list {
+        flex: 1 auto;
+        flex-direction: column;
+        width: 60px;
+        .effect-element {
+            height: 33px;
+            padding-left: 10px;
+            padding-right: 10px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
+
+            .toggle-reusable {
+                padding-top: 8px;
+            }
+
+            .padding {
+                flex: 1 1 auto;
+            }
+
+            .duration-icon {
+                font-size: 20px;
+            }
+        }
+
+        .effect-detail {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            background-color: inherit;
+            min-height: 36px;
+
+            .effect-modifier {
+                padding-left: 20px;
+            }
+            .delete-modifier-button {
+                float: right;
+            }
+        }
+    }
+}
+
+.editable-data {
+    .name {
+        width: 100%;
+    }
+}
+.add-effect-dialog {
+    margin: 20px;
+    max-width: 700px;
+
+    md-card-content {
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+}
+
+.equip-toggle {
+    padding-top: 8px;
+}
+
+.effect-list {
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+

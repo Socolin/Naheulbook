@@ -5,6 +5,8 @@ import {WsRegistrable} from '../websocket/websocket.model';
 import {TargetJsonData} from '../group/target.model';
 import {WebSocketService} from '../websocket/websocket.service';
 import {Skill} from '../skill/skill.model';
+import {ActiveStatsModifier, StatModifier} from '../shared/stat-modifier.model';
+import {isNullOrUndefined} from 'util';
 
 export class MonsterData {
     at: number;
@@ -39,18 +41,35 @@ export class MonsterData {
     }
 }
 
+
+export class MonsterComputedData {
+    at: number;
+    prd: number;
+    esq: number;
+    pr: number;
+    pr_magic: number;
+    dmg: string;
+    cou: number;
+    chercheNoise: boolean;
+    resm: number;
+}
+
 export class Monster extends WsRegistrable {
     public id: number;
     public name: string;
     public data: MonsterData = new MonsterData();
     public dead: string;
     public items: Item[];
+
+    public modifiers: ActiveStatsModifier[] = [];
+
     public itemAdded: Subject<Item> = new Subject<Item>();
     public itemRemoved: Subject<Item> = new Subject<Item>();
     public targetChanged: Subject<TargetJsonData> = new Subject<TargetJsonData>();
 
     public target: TargetJsonData;
 
+    public computedData: MonsterComputedData = new MonsterComputedData();
     public onChange: Subject<any> = new Subject<any>();
     public onNotification: Subject<any> = new Subject<any>();
 
@@ -58,15 +77,17 @@ export class Monster extends WsRegistrable {
         let monster = new Monster();
         Object.assign(monster, jsonData, {
             data: MonsterData.fromJson(jsonData.data),
-            items: Item.itemsFromJson(jsonData.items, skillsById)
+            items: Item.itemsFromJson(jsonData.items, skillsById),
+            modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers)
         });
+        monster.update();
         return monster;
     }
 
     static monstersFromJson(monstersData: any[], skillsById: {[skillId: number]: Skill}): Monster[] {
         let monsters: Monster[] = [];
-        for (let i = 0; i < monstersData.length; i++) {
-            monsters.push(Monster.fromJson(monstersData[i], skillsById));
+        for (let monsterData of monstersData) {
+            monsters.push(Monster.fromJson(monsterData, skillsById));
         }
         return monsters;
     }
@@ -152,6 +173,116 @@ export class Monster extends WsRegistrable {
             {fieldName: fieldName, value: value});
         this.data[fieldName] = value;
         this.onChange.next({action: 'changeData', fieldName: fieldName, value: value});
+        this.update();
+    }
+
+    onAddModifier(modifier: ActiveStatsModifier) {
+        for (let i = 0 ; i < this.modifiers.length; i++) {
+            if (this.modifiers[i].id === modifier.id) {
+                return;
+            }
+        }
+        this.modifiers.push(modifier);
+        this.update();
+        this.notify('addModifier' , 'Ajout du modificateur: ' + modifier.name);
+    }
+
+    onRemoveModifier(modifier: ActiveStatsModifier) {
+        for (let i = 0; i < this.modifiers.length; i++) {
+            let e = this.modifiers[i];
+            if (e. id === modifier.id) {
+                this.modifiers.splice(i, 1);
+                this.update();
+                this.notify('removeModifier', 'Suppression du modificateur: ' + modifier.name);
+                return;
+            }
+        }
+    }
+
+    onUpdateModifier(modifier: ActiveStatsModifier) {
+        for (let i = 0; i < this.modifiers.length; i++) {
+            if (this.modifiers[i].id === modifier.id) {
+                if (this.modifiers[i].active === modifier.active
+                    && this.modifiers[i].currentTimeDuration === modifier.currentTimeDuration
+                    && this.modifiers[i].currentLapCount === modifier.currentLapCount
+                    && this.modifiers[i].currentCombatCount === modifier.currentCombatCount) {
+                    return;
+                }
+                if (!this.modifiers[i].active && modifier.active) {
+                    this.notify('updateModifier', 'Activation du modificateur: ' + modifier.name);
+                } else if (this.modifiers[i].active && !modifier.active) {
+                    this.notify('updateModifier', 'Désactivation du modificateur: ' + modifier.name);
+                } else {
+                    this.notify('updateModifier', 'Mis à jour du modificateur: ' + modifier.name);
+                }
+                this.modifiers[i] .active = modifier.active;
+                this.modifiers[i].currentCombatCount = modifier.currentCombatCount;
+                this.modifiers[i] .currentTimeDuration = modifier.currentTimeDuration;
+                this.modifiers[i].currentLapCount = modifier.currentLapCount;
+                break;
+            }
+        }
+        this.update();
+    }
+
+    private applyStatModifier(mod: StatModifier) {
+        if (mod.stat === 'AT') {
+            this.computedData.at = StatModifier.apply(this.computedData.at, mod);
+        }
+        if (mod.stat === 'PRD' && !isNullOrUndefined(this.computedData.prd)) {
+            this.computedData.prd = StatModifier.apply(this.computedData.prd, mod);
+        }
+        if (mod.stat === 'AD') {
+            this.computedData.esq = StatModifier.apply(this.computedData.esq, mod);
+        }
+        if (mod.stat === 'ESQ') {
+            this.computedData.esq = StatModifier.apply(this.computedData.esq, mod);
+        }
+        if (mod.stat === 'PR') {
+            this.computedData.pr = StatModifier.apply(this.computedData.pr, mod);
+        }
+        if (mod.stat === 'PR_MAGIC') {
+            this.computedData.pr_magic = StatModifier.apply(this.computedData.pr_magic, mod);
+        }
+        if (mod.stat === 'RESM') {
+            this.computedData.cou = StatModifier.apply(this.computedData.resm, mod);
+        }
+    }
+
+    equipItem(partialItem: PartialItem) {
+        let item = this.getItem(partialItem.id);
+        if (item.data.equiped === partialItem.data.equiped) {
+            return;
+        }
+        item.data.equiped = partialItem.data.equiped;
+        this.update();
+    }
+
+    update() {
+        this.computedData.at =  this.data.at;
+        this.computedData.prd =  this.data.prd;
+        this.computedData.esq =  this.data.esq;
+        this.computedData.pr =  this.data.pr;
+        this.computedData.pr_magic =  this.data.pr_magic;
+        this.computedData.dmg =  this.data.dmg;
+        this.computedData.cou =  this.data.cou;
+        this.computedData.chercheNoise =  this.data.chercheNoise;
+        this.computedData.resm =  this.data.resm;
+
+        for (let activeModifier of this.modifiers) {
+            if (activeModifier.active) {
+                for (let mod of activeModifier.values) {
+                    this.applyStatModifier(mod);
+                }
+            }
+        }
+        for (let item of this.items) {
+            if (item.data.equiped) {
+                for (let mod of item.template.modifiers) {
+                    this.applyStatModifier(mod);
+                }
+            }
+        }
     }
 
     public getWsTypeName(): string {

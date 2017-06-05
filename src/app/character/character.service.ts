@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Rx';
 
 import {IMetadata, HistoryEntry} from '../shared';
 import {Loot} from '../loot/loot.model';
-import {Character, CharacterResume, CharacterModifier, CharacterEffect, CharacterJsonData} from './character.model';
+import {Character, CharacterResume, CharacterJsonData} from './character.model';
 import {Effect} from '../effect';
 import {CharacterInviteInfo} from '../group';
 
@@ -14,6 +14,8 @@ import {Skill, SkillService} from '../skill';
 import {NotificationsService} from '../notifications';
 import {JsonService} from '../shared/json-service';
 import {LoginService} from '../user';
+import {ActiveEffect} from '../effect/effect.model';
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 
 @Injectable()
 export class CharacterService extends JsonService {
@@ -153,7 +155,7 @@ export class CharacterService extends JsonService {
         }).map(res => res.json());
     }
 
-    addEffect(characterId: number, effectId: number, data: any): Observable<CharacterEffect> {
+    addEffect(characterId: number, effectId: number, data: any): Observable<ActiveEffect> {
         return this.postJson('/api/character/addEffect', {
             characterId: characterId,
             effectId: effectId,
@@ -162,35 +164,35 @@ export class CharacterService extends JsonService {
         }).map(res => res.json());
     }
 
-    removeEffect(characterId: number, charEffect: CharacterEffect): Observable<Effect> {
+    removeEffect(characterId: number, charEffect: ActiveEffect): Observable<Effect> {
         return this.postJson('/api/character/removeEffect', {
             characterId: characterId,
             charEffectId: charEffect.id,
         }).map(res => res.json());
     }
 
-    toggleEffect(characterId: number, charEffect: CharacterEffect): Observable<Effect> {
+    toggleEffect(characterId: number, charEffect: ActiveEffect): Observable<Effect> {
         return this.postJson('/api/character/toggleEffect', {
             characterId: characterId,
             charEffectId: charEffect.id,
         }).map(res => res.json());
     }
 
-    addModifier(characterId: number, modifier: CharacterModifier): Observable<CharacterModifier> {
+    addModifier(characterId: number, modifier: ActiveStatsModifier): Observable<ActiveStatsModifier> {
         return this.postJson('/api/character/addModifier', {
             characterId: characterId,
             modifier: modifier,
         }).map(res => res.json());
     }
 
-    removeModifier(characterId: number, modifierId: number): Observable<CharacterModifier> {
+    removeModifier(characterId: number, modifierId: number): Observable<ActiveStatsModifier> {
         return this.postJson('/api/character/removeModifier', {
             characterId: characterId,
             modifierId: modifierId,
         }).map(res => res.json());
     }
 
-    toggleModifier(characterId: number, modifierId: number): Observable<CharacterModifier> {
+    toggleModifier(characterId: number, modifierId: number): Observable<ActiveStatsModifier> {
         return this.postJson('/api/character/toggleModifier', {
             characterId: characterId,
             modifierId: modifierId,

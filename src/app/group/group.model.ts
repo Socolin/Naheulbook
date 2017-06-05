@@ -16,16 +16,16 @@ export class FighterStat {
     private fighter: Fighter;
 
     get at(): number {
-        return this.fighter.isMonster ? this.fighter.monster.data.at : this.fighter.character.computedData.stats['AT'];
+        return this.fighter.isMonster ? this.fighter.monster.computedData.at : this.fighter.character.computedData.stats['AT'];
     }
     get ad(): number {
         return this.fighter.isMonster ? 10 : this.fighter.character.computedData.stats['AD'];
     }
     get prd(): number {
-        return this.fighter.isMonster ? this.fighter.monster.data.prd : this.fighter.character.computedData.stats['PRD'];
+        return this.fighter.isMonster ? this.fighter.monster.computedData.prd : this.fighter.character.computedData.stats['PRD'];
     }
     get esq(): number {
-        return this.fighter.isMonster ? this.fighter.monster.data.esq : this.fighter.character.computedData.stats['AD'];
+        return this.fighter.isMonster ? this.fighter.monster.computedData.esq : this.fighter.character.computedData.stats['AD'];
     }
     get ev(): number {
         return this.fighter.isMonster ? this.fighter.monster.data.ev : this.fighter.character.ev;
@@ -34,25 +34,25 @@ export class FighterStat {
         return this.fighter.isMonster ? this.fighter.monster.data.ea : this.fighter.character.ea;
     }
     get maxEv(): number {
-        return this.fighter.isMonster ? this.fighter.monster.data.ev : this.fighter.character.computedData.stats['EV'];
+        return this.fighter.isMonster ? this.fighter.monster.data.maxEv : this.fighter.character.computedData.stats['EV'];
     }
     get maxEa(): number {
-        return this.fighter.isMonster ? this.fighter.monster.data.ea : this.fighter.character.computedData.stats['EA'];
+        return this.fighter.isMonster ? this.fighter.monster.data.maxEa : this.fighter.character.computedData.stats['EA'];
     }
     get pr(): number {
-        return this.fighter.isMonster ? this.fighter.monster.data.pr : this.fighter.character.computedData.stats['PR'];
+        return this.fighter.isMonster ? this.fighter.monster.computedData.pr : this.fighter.character.computedData.stats['PR'];
     }
     get pr_magic(): number {
-        return this.fighter.isMonster ? this.fighter.monster.data.pr_magic : this.fighter.character.computedData.stats['PR_MAGIC'];
+        return this.fighter.isMonster ? this.fighter.monster.computedData.pr_magic : this.fighter.character.computedData.stats['PR_MAGIC'];
     }
     get dmg(): string {
-        return this.fighter.isMonster ? this.fighter.monster.data.dmg : '';
+        return this.fighter.isMonster ? this.fighter.monster.computedData.dmg : '';
     }
     get cou(): number {
-        return this.fighter.isMonster ? this.fighter.monster.data.cou : this.fighter.character.computedData.stats['COU'];
+        return this.fighter.isMonster ? this.fighter.monster.computedData.cou : this.fighter.character.computedData.stats['COU'];
     }
     get resm(): number {
-        return this.fighter.isMonster ? this.fighter.monster.data.resm : this.fighter.character.computedData.stats['RESM'];
+        return this.fighter.isMonster ? this.fighter.monster.computedData.resm : this.fighter.character.computedData.stats['RESM'];
     }
 
     constructor(fighter: Fighter) {
@@ -197,7 +197,9 @@ export class GroupData {
 
     static fromJson(jsonData: any): GroupData {
         let groupData = new GroupData();
-        Object.assign(groupData, jsonData, {timestamp: date2Timestamp(jsonData.date)});
+        if (jsonData) {
+            Object.assign(groupData, jsonData, {timestamp: date2Timestamp(jsonData.date)});
+        }
         return groupData;
     }
 

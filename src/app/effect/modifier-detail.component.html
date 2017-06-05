@@ -1,0 +1,21 @@
+<md-card>
+    <md-card-title>
+        {{activeModifier.name}}
+    </md-card-title>
+    <md-card-content>
+        <p *ngIf="activeModifier.duration">Durée: {{activeModifier.duration}}</p>
+        <p *ngIf="activeModifier.combatCount">Durée: {{activeModifier.combatCount}} combat</p>
+        <p *ngIf="activeModifier.timeDuration">Durée: {{activeModifier.timeDuration | nhbkDuration}}</p>
+        <p *ngIf="activeModifier.currentCombatCount">Actif encore {{activeModifier.currentCombatCount}} combat</p>
+        <p *ngIf="activeModifier.lapCount">Durée: {{activeModifier.lapCount}} tour(s)</p>
+        <p *ngIf="activeModifier.currentLapCount">Actif encore {{activeModifier.currentLapCount}} tour(s)</p>
+        <p *ngIf="activeModifier.currentTimeDuration">Actif encore {{activeModifier.currentTimeDuration | nhbkDuration}}</p>
+
+        <div *ngFor="let modifier of activeModifier.values">
+            {{modifier | modifier}}
+        </div>
+    </md-card-content>
+    <md-card-actions align="end">
+        <button md-button color="accent" (click)="onRemove.emit(activeModifier)">SUPPRIMER</button>
+    </md-card-actions>
+</md-card>

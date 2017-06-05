@@ -42,7 +42,7 @@
                             <dd>
                                 <value-editor [title]="'Point de destin'"
                                               [value]=character.fatePoint
-                                              (onChange)="changeCharacterStat('fatePoint', $event)">
+                                              (onChange)="changeStat('fatePoint', $event)">
                                 </value-editor>
                             </dd>
 
@@ -61,7 +61,7 @@
                             <dd>
                                 <value-editor [title]="'Experience'"
                                               [value]=character.experience
-                                              (onChange)="changeCharacterStat('experience', $event)">
+                                              (onChange)="changeStat('experience', $event)">
                                 </value-editor> / {{character.computedData.xpToNextLevel}}
                             </dd>
 
@@ -158,7 +158,7 @@
                                     <value-editor [title]="'Energie vitale'"
                                                   [value]="character.ev"
                                                   [maxValue]="character.computedData.stats['EV']"
-                                                  (onChange)="changeCharacterStat('ev', $event)">
+                                                  (onChange)="changeStat('ev', $event)">
                                     </value-editor>
                                 </div>
                                 <div class="stat-label">E.Vitale</div>
@@ -173,7 +173,7 @@
                                     <value-editor [title]="'Energie astrale'"
                                                   [value]="character.ea"
                                                   [maxValue]="character.computedData.stats['EA']"
-                                                  (onChange)="changeCharacterStat('ea', $event)">
+                                                  (onChange)="changeStat('ea', $event)">
                                     </value-editor>
                                 </div>
                                 <div class="stat-label">E.Astrale</div>

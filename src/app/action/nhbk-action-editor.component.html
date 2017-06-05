@@ -59,12 +59,12 @@
                 </md-input-container>
             </ng-template>
             <ng-template [ngSwitchCase]="'addCustomModifier'">
-                <stats-modifier-editor [modifier]="characterModifier" [reusableToggle]="false">
+                <stats-modifier-editor [modifier]="activeModifier" [reusableToggle]="false">
                 </stats-modifier-editor>
             </ng-template>
             <ng-template [ngSwitchCase]="'addEffect'">
-                <character-effect-editor [reusableToggle]="false" (onChange)="updateEffect($event)">
-                </character-effect-editor>
+                <active-effect-editor [reusableToggle]="false" (onChange)="updateEffect($event)">
+                </active-effect-editor>
             </ng-template>
             <ng-template ngSwitchDefault>
                 No data for {{action.type}}

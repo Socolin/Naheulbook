@@ -1,95 +1,89 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {Observable, ReplaySubject} from 'rxjs/Rx';
+import {Observable} from 'rxjs/Rx';
 
-import {MonsterTemplate, MonsterTemplateCategory, MonsterTrait} from './monster.model';
 import {JsonService} from '../shared/json-service';
 import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
 
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {Monster} from './monster.model';
+import {Skill} from '../skill/skill.model';
+import {SkillService} from '../skill/skill.service';
+import {PartialItem} from '../character/item.model';
+
 @Injectable()
 export class MonsterService extends JsonService {
-    private monsterCategories: ReplaySubject<MonsterTemplateCategory[]>;
-    private monsterTraits: ReplaySubject<MonsterTrait[]>;
-    private monsterTraitsById: ReplaySubject<{[id: number]: MonsterTrait}>;
-
     constructor(http: Http
         , notification: NotificationsService
-        , loginService: LoginService) {
+        , loginService: LoginService
+        , private _skillService: SkillService) {
         super(http, notification, loginService);
     }
 
-    getMonsterCategories(): Observable<MonsterTemplateCategory[]> {
-        if (!this.monsterCategories) {
-            this.monsterCategories = new ReplaySubject<MonsterTemplateCategory[]>(1);
-
-            this.postJson('/api/monster/listCategory')
-                .map(res => res.json())
-                .subscribe(
-                    monsterCategories => {
-                        this.monsterCategories.next(monsterCategories);
-                        this.monsterCategories.complete();
-                    },
-                    error => {
-                        this.monsterCategories.error(error);
-                    }
-                );
-        }
-        return this.monsterCategories;
+    createMonster(groupId: number, monster): Observable<Monster> {
+        return Observable.forkJoin(
+            this.postJson('/api/group/createMonster', {
+                monster: monster,
+                groupId: groupId
+            }).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+            return Monster.fromJson(monsterJsonData, skillsById)
+        });
     }
 
-    getMonsterList(): Observable<MonsterTemplate[]> {
-        return this.postJson('/api/monster/listMonster').map(res => res.json());
-    }
-
-    getMonsterTraits(): Observable<MonsterTrait[]> {
-        if (!this.monsterTraits) {
-            this.monsterTraits = new ReplaySubject<MonsterTrait[]>(1);
-
-            this.postJson('/api/monster/listTraits')
-                .map(res => res.json())
-                .subscribe(
-                    monsterTraits => {
-                        this.monsterTraits.next(monsterTraits);
-                        this.monsterTraits.complete();
-                    },
-                    error => {
-                        this.monsterTraits.error(error);
-                    }
-                );
-        }
-        return this.monsterTraits;
-    }
-
-    getMonsterTraitsById(): Observable<{[id: number]: MonsterTrait}> {
-        if (!this.monsterTraitsById) {
-            this.monsterTraitsById = new ReplaySubject<MonsterTrait[]>(1);
-
-            this.getMonsterTraits().subscribe(
-                traits => {
-                    let monsterTraitsById = {};
-                    for (let i = 0; i < traits.length; i++) {
-                        let trait = traits[i];
-                        monsterTraitsById[trait.id] = trait;
-                    }
-                    this.monsterTraitsById.next(monsterTraitsById);
-                    this.monsterTraitsById.complete();
-                },
-                error => {
-                    this.monsterTraitsById.error(error);
-                }
-            );
-        }
-        return this.monsterTraitsById;
-    }
-
-    searchMonster(name): Observable<MonsterTemplate[]> {
-        return this.postJson('/api/monster/searchMonster', {
-            name: name
+    updateMonster(monsterId: number, fieldName: string, value: any): Observable<{value: any, fieldName: string}> {
+        return this.postJson('/api/monster/updateMonster', {
+            fieldName: fieldName,
+            value: value,
+            monsterId: monsterId
         }).map(res => res.json());
     }
 
-    editMonster(monster: MonsterTemplate): Observable<MonsterTemplate> {
-        return this.postJson('/api/monster/editMonster', monster).map(res => res.json());
+    killMonster(monsterId: number): Observable<Monster> {
+        return Observable.forkJoin(
+            this.postJson('/api/group/killMonster', {
+                monsterId: monsterId
+            }).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+            return Monster.fromJson(monsterJsonData, skillsById)
+        });
+    }
+
+    deleteMonster(monsterId: number): Observable<any> {
+        return this.postJson('/api/group/deleteMonster', {
+            monsterId: monsterId
+        }).map(res => res.json());
+    }
+
+    addModifier(monsterId: number, modifier: ActiveStatsModifier): Observable<ActiveStatsModifier> {
+        return this.postJson('/api/monster/addModifier', {
+            monsterId: monsterId,
+            modifier: modifier,
+        }).map(res => ActiveStatsModifier.fromJson(res.json()));
+    }
+
+    removeModifier(monsterId: number, modifierId: number): Observable<ActiveStatsModifier> {
+        return this.postJson('/api/monster/removeModifier', {
+            monsterId: monsterId,
+            modifierId: modifierId,
+        }).map(res => ActiveStatsModifier.fromJson(res.json()));
+    }
+
+    toggleModifier(monsterId: number, modifierId: number): Observable<ActiveStatsModifier> {
+        return this.postJson('/api/monster/toggleModifier', {
+            monsterId: monsterId,
+            modifierId: modifierId,
+        }).map(res => ActiveStatsModifier.fromJson(res.json()));
+    }
+
+    equipItem(monsterId: number, itemId: number, equiped: boolean): Observable<PartialItem> {
+        return this.postJson('/api/monster/equipItem', {
+            monsterId: monsterId,
+            itemId: itemId,
+            equiped: equiped,
+        }).map(res => PartialItem.fromJson(res.json()));
     }
 }

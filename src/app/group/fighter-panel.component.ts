@@ -1,19 +1,18 @@
-import {Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {OverlayRef, Portal} from '@angular/material';
 
 import {Group, Fighter} from './group.model';
-import {Monster, MonsterTemplate} from '../monster/monster.model';
 import {GroupService} from './group.service';
 import {ItemData, Item} from '../character/item.model';
+import {Monster, MonsterTemplate, MonsterService, MonsterTemplateService} from '../monster';
 import {Observable} from 'rxjs';
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
-import {MonsterService} from '../monster/monster.service';
 import {Character} from '../character/character.model';
-import {getRandomInt} from '../shared/random';
 import {GroupActionService} from './group-action.service';
 import {ItemService} from '../item/item.service';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {CreateItemComponent} from './create-item.component';
+import {getRandomInt} from '../shared/random';
 import {isNullOrUndefined} from 'util';
 
 @Component({
@@ -48,11 +47,12 @@ export class FighterPanelComponent implements OnInit {
     public deadMonstersDialog: Portal<any>;
     public deadMonstersOverlayRef: OverlayRef;
 
-    constructor(private _groupService: GroupService
-        , private _actionService: GroupActionService
-        , private _itemService: ItemService
-        , private _nhbkDialogService: NhbkDialogService
-        , private _monsterService: MonsterService) {
+    constructor(private _actionService: GroupActionService,
+                private _groupService: GroupService,
+                private _itemService: ItemService,
+                private _monsterService: MonsterService,
+                private _monsterTemplateService: MonsterTemplateService,
+                private _nhbkDialogService: NhbkDialogService) {
     }
 
     onItemAdded(data: {character: Character, monster: Monster, item: Item}) {
@@ -90,7 +90,7 @@ export class FighterPanelComponent implements OnInit {
      * Using data in monster creation form (bound with `newMonster`), post request to create a new monster
      */
     addMonster(): void {
-        this._groupService.createMonster(this.group.id, this.newMonster).subscribe(
+        this._monsterService.createMonster(this.group.id, this.newMonster).subscribe(
             monster => {
                 this.group.addMonster(monster);
             }
@@ -110,7 +110,7 @@ export class FighterPanelComponent implements OnInit {
      * @param monster
      */
     killMonster(monster: Monster) {
-        this._groupService.killMonster(monster.id).subscribe(
+        this._monsterService.killMonster(monster.id).subscribe(
             res => {
                 this.group.removeMonster(monster.id);
                 this.deadMonsters.unshift(monster);
@@ -123,7 +123,7 @@ export class FighterPanelComponent implements OnInit {
      * @param monster
      */
     deleteMonster(monster: Monster) {
-        this._groupService.deleteMonster(monster.id).subscribe(
+        this._monsterService.deleteMonster(monster.id).subscribe(
             () => {
                 this.group.removeMonster(monster.id);
             }
@@ -148,7 +148,7 @@ export class FighterPanelComponent implements OnInit {
         if (filter === '') {
             return Observable.from([]);
         }
-        return this._monsterService.searchMonster(filter).map(
+        return this._monsterTemplateService.searchMonster(filter).map(
             list => list.map(e => new AutocompleteValue(e, e.name))
         );
     }

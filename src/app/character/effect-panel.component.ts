@@ -2,11 +2,12 @@ import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angula
 import {Portal, OverlayRef} from '@angular/material';
 
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {EffectCategory} from '../effect/effect.model';
+import {ActiveEffect, EffectCategory} from '../effect/effect.model';
 
-import {Character, CharacterEffect, CharacterModifier} from './character.model';
+import {Character} from './character.model';
 import {CharacterService} from './character.service';
 import {EffectService} from '../effect/effect.service';
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 
 @Component({
     selector: 'effect-detail',
@@ -14,19 +15,9 @@ import {EffectService} from '../effect/effect.service';
     styleUrls: ['./effect-detail.component.scss'],
 })
 export class EffectDetailComponent {
-    @Input() characterEffect: CharacterEffect;
+    @Input() characterEffect: ActiveEffect;
     @Input() effectCategoriesById: {[categoryId: number]: EffectCategory};
-    @Output() onRemove: EventEmitter<CharacterEffect> = new EventEmitter<CharacterEffect>();
-}
-
-@Component({
-    selector: 'modifier-detail',
-    templateUrl: './modifier-detail.component.html',
-    styleUrls: ['./modifier-detail.component.scss'],
-})
-export class ModifierDetailComponent {
-    @Input() characterModifier: CharacterModifier;
-    @Output() onRemove: EventEmitter<CharacterModifier> = new EventEmitter<CharacterModifier>();
+    @Output() onRemove: EventEmitter<ActiveEffect> = new EventEmitter<ActiveEffect>();
 }
 
 @Component({
@@ -36,8 +27,8 @@ export class ModifierDetailComponent {
 })
 export class EffectPanelComponent implements OnInit {
     @Input() character: Character;
-    public selectedEffect: CharacterEffect;
-    public selectedModifier: CharacterModifier;
+    public selectedEffect: ActiveEffect;
+    public selectedModifier: ActiveStatsModifier;
 
     // Add effect dialog
     @ViewChild('addEffectDialog')
@@ -47,7 +38,7 @@ export class EffectPanelComponent implements OnInit {
 
     public effectCategoriesById: { [categoryId: number]: EffectCategory };
 
-    public newCharacterModifier: CharacterModifier = new CharacterModifier();
+    public newActiveStatsModifier: ActiveStatsModifier = new ActiveStatsModifier();
 
     constructor(private _nhbkDialogService: NhbkDialogService
         , private _effectService: EffectService
@@ -55,7 +46,7 @@ export class EffectPanelComponent implements OnInit {
     }
 
     openAddEffectModal() {
-        this.newCharacterModifier = new CharacterModifier();
+        this.newActiveStatsModifier = new ActiveStatsModifier();
         this.addEffectOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addEffectDialog);
     }
 
@@ -67,7 +58,7 @@ export class EffectPanelComponent implements OnInit {
         this.addEffectTypeSelectedTab = index;
     }
 
-    // Called by callback from character-effect-editor
+    // Called by callback from active-effect-editor
     addEffect(newEffect: any) {
         let effect = newEffect.effect;
         let data = newEffect.data;
@@ -75,49 +66,51 @@ export class EffectPanelComponent implements OnInit {
         this.closeAddEffectDialog();
 
         this._characterService.addEffect(this.character.id, effect.id, data).subscribe(
-            this.character.onAddEffect.bind(this.character)
+            (activeEffect: ActiveEffect) => {
+                this.character.onAddEffect(activeEffect);
+            }
         );
     }
 
-    removeEffect(charEffect: CharacterEffect) {
+    removeEffect(charEffect: ActiveEffect) {
         this.selectedEffect = null;
         this._characterService.removeEffect(this.character.id, charEffect).subscribe(
             this.character.onRemoveEffect.bind(this.character)
         );
     }
 
-    selectEffect(charEffect: CharacterEffect) {
+    selectEffect(charEffect: ActiveEffect) {
         this.selectedModifier = null;
         this.selectedEffect = charEffect;
         return false;
     }
 
-    updateReusableEffect(charEffect: CharacterEffect) {
+    updateReusableEffect(charEffect: ActiveEffect) {
         this._characterService.toggleEffect(this.character.id, charEffect).subscribe(
             this.character.onUpdateEffect.bind(this.character)
         );
     }
 
     addCustomModifier() {
-        this._characterService.addModifier(this.character.id, this.newCharacterModifier).subscribe(
+        this._characterService.addModifier(this.character.id, this.newActiveStatsModifier).subscribe(
             this.character.onAddModifier.bind(this.character)
         );
     }
 
-    removeModifier(modifier: CharacterModifier) {
+    removeModifier(modifier: ActiveStatsModifier) {
         this.selectedModifier = null;
         this._characterService.removeModifier(this.character.id, modifier.id).subscribe(
             this.character.onRemoveModifier.bind(this.character)
         );
     }
 
-    selectModifier(modifier: CharacterModifier) {
+    selectModifier(modifier: ActiveStatsModifier) {
         this.selectedEffect = null;
         this.selectedModifier = modifier;
         return false;
     }
 
-    updateReusableModifier(modifier: CharacterModifier) {
+    updateReusableModifier(modifier: ActiveStatsModifier) {
         this._characterService.toggleModifier(this.character.id, modifier.id).subscribe(
             this.character.onUpdateModifier.bind(this.character)
         );

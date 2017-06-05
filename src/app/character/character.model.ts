@@ -7,15 +7,15 @@ import {
     , ItemStatModifier
     , formatModifierValue
 } from '../shared';
-import {Effect} from '../effect';
 import {Skill} from '../skill';
 import {isNullOrUndefined} from 'util';
-import {StatsModifier} from '../shared/stat-modifier.model';
 import {Subject} from 'rxjs/Subject';
 import {WsRegistrable} from '../websocket/websocket.model';
 import {Loot} from '../loot/loot.model';
 import {TargetJsonData} from '../group/target.model';
 import {WebSocketService} from '../websocket/websocket.service';
+import {ActiveEffect} from '../effect/effect.model';
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 
 export interface CharacterResume {
     id: number;
@@ -31,26 +31,6 @@ export interface CharacterGiveDestination {
     id: number;
     name: string;
     isNpc: boolean;
-}
-
-export class CharacterEffect {
-    id: number;
-    effect: Effect;
-    active: boolean;
-    reusable: boolean;
-    currentCombatCount: number;
-    currentLapCount: number;
-    currentTimeDuration: number;
-}
-
-export class CharacterModifier extends StatsModifier {
-    id: number;
-    permanent: boolean;
-    active: boolean;
-
-    currentCombatCount: number;
-    currentLapCount: number;
-    currentTimeDuration: number;
 }
 
 export interface SkillDetail {
@@ -209,8 +189,8 @@ export class CharacterComputedData {
     xpToNextLevel: number;
     tacticalMovement: TacticalMovementInfo = new TacticalMovementInfo();
 
-    effects: CharacterEffect[] = [];
-    modifiers: CharacterModifier[] = [];
+    effects: ActiveEffect[] = [];
+    modifiers: ActiveStatsModifier[] = [];
 
     countExceptionalStats = 0;
     countActiveEffect = 0;
@@ -235,7 +215,7 @@ export class CharacterJsonData {
     active: number;
     color: string;
     ea: number;
-    effects: CharacterEffect[];
+    effects: ActiveEffect[];
     ev: number;
     experience: number;
     fatePoint: number;
@@ -247,7 +227,7 @@ export class CharacterJsonData {
     items: Item[];
     jobId: number;
     level: number;
-    modifiers: CharacterModifier[];
+    modifiers: ActiveStatsModifier[];
     name: string;
     originId: number;
     sex: string;
@@ -273,9 +253,9 @@ export class Character extends WsRegistrable {
     fatePoint: number;
     items: Item[] = [];
     skills: Skill[] = [];
-    effects: CharacterEffect[] = [];
+    effects: ActiveEffect[] = [];
     stats: {[statName: string]: number};
-    modifiers: CharacterModifier[] = [];
+    modifiers: ActiveStatsModifier[] = [];
     specialities: Speciality[] = [];
     statBonusAD: string;
     user: Object;
@@ -1178,7 +1158,7 @@ export class Character extends WsRegistrable {
         }
     }
 
-    onAddEffect(charEffect: CharacterEffect) {
+    onAddEffect(charEffect: ActiveEffect) {
         for (let i = 0; i < this.effects.length; i++) {
             if (this.effects[i].id === charEffect.id) {
                 return;
@@ -1190,7 +1170,7 @@ export class Character extends WsRegistrable {
         this.update();
     }
 
-    onAddModifier(modifier: CharacterModifier) {
+    onAddModifier(modifier: ActiveStatsModifier) {
         for (let i = 0 ; i < this.modifiers.length; i++) {
             if (this.modifiers[i].id === modifier.id) {
                 return;
@@ -1201,7 +1181,7 @@ export class Character extends WsRegistrable {
         this.notify('addModifier' , 'Ajout du modificateur: ' + modifier.name);
     }
 
-    onRemoveModifier(modifier: CharacterModifier) {
+    onRemoveModifier(modifier: ActiveStatsModifier) {
         for (let i = 0; i < this.modifiers.length; i++) {
             let e = this.modifiers[i];
             if (e. id === modifier.id) {
@@ -1213,7 +1193,7 @@ export class Character extends WsRegistrable {
         }
     }
 
-    onUpdateEffect(charEffect: CharacterEffect)  {
+    onUpdateEffect(charEffect: ActiveEffect)  {
         for (let i = 0; i < this.effects.length; i++) {
             if (this.effects[i].id === charEffect.id) {
                 if (this.effects[i].active === charEffect.active
@@ -1241,7 +1221,7 @@ export class Character extends WsRegistrable {
         this.update();
     }
 
-    onUpdateModifier(modifier: CharacterModifier) {
+    onUpdateModifier(modifier: ActiveStatsModifier) {
         for (let i = 0; i < this.modifiers.length; i++) {
             if (this.modifiers[i].id === modifier.id) {
                 if (this.modifiers[i].active === modifier.active
@@ -1267,7 +1247,7 @@ export class Character extends WsRegistrable {
         this.update();
     }
 
-    onRemoveEffect(charEffect: CharacterEffect) {
+    onRemoveEffect(charEffect: ActiveEffect) {
         for (let i = 0; i < this.effects.length; i++) {
             let e = this.effects[i];
             if (e.id === charEffect.id) {
@@ -1316,7 +1296,7 @@ export class Character extends WsRegistrable {
         return false;
     }
 
-    getWsTypeName(): string {
+    public getWsTypeName(): string {
         return 'character';
     }
 
@@ -1332,7 +1312,7 @@ export class Character extends WsRegistrable {
         }
     }
 
-    changeActive(isActive: number) {
+    public changeActive(isActive: number) {
         if (isActive === this.active) {
             return;
         }
@@ -1340,7 +1320,7 @@ export class Character extends WsRegistrable {
         this.onActiveChange.next(this.active);
     }
 
-    changeTarget(target: TargetJsonData) {
+    public changeTarget(target: TargetJsonData) {
         this.target = target;
         this.targetChanged.next(target);
     }

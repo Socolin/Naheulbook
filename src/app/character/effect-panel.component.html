@@ -17,7 +17,7 @@
                         </span>
                         <span *ngIf="!characterEffect.reusable" class="toggle-padding"></span>
                         <span class="padding"
-                              (click)="selectModifier(modifier)">
+                              (click)="selectEffect(characterEffect)">
                             {{characterEffect.effect.name}}
                         </span>
                         <span *ngIf="characterEffect.currentCombatCount !== null">
@@ -67,7 +67,7 @@
         <effect-detail [characterEffect]="selectedEffect" [effectCategoriesById]="effectCategoriesById" (onRemove)="removeEffect($event)"></effect-detail>
     </div>
     <div *ngIf="selectedModifier" class="effect-detail-panel">
-        <modifier-detail [characterModifier]="selectedModifier" (onRemove)="removeModifier($event)"></modifier-detail>
+        <modifier-detail [activeModifier]="selectedModifier" (onRemove)="removeModifier($event)"></modifier-detail>
     </div>
 </div>
 
@@ -78,13 +78,13 @@
         <md-card-content>
             <md-tab-group (selectedIndexChange)="selectEffectTypeTab($event)">
                 <md-tab label="Prédéfini">
-                    <character-effect-editor #characterEffectEditor
-                                             (onValidate)="addEffect($event)">
-                    </character-effect-editor>
+                    <active-effect-editor #activeEffectEditor
+                                          (onValidate)="addEffect($event)">
+                    </active-effect-editor>
                 </md-tab>
 
                 <md-tab label="Custom">
-                    <stats-modifier-editor [modifier]="newCharacterModifier">
+                    <stats-modifier-editor [modifier]="newActiveStatsModifier">
                     </stats-modifier-editor>
                 </md-tab>
             </md-tab-group>
@@ -98,7 +98,7 @@
             <button md-button
                     color="primary"
                     *ngIf="addEffectTypeSelectedTab === 0"
-                    (click)="characterEffectEditor.addEffect()">
+                    (click)="activeEffectEditor.addEffect()">
                 AJOUTER
             </button>
             <button md-button

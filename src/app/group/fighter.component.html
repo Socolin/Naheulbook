@@ -15,140 +15,48 @@
     </div>
 
     <div class="field-values">
-        <ng-template [ngIf]="fighter.isMonster">
-            <div class="fighter-row">
-                <div class="field-name">
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=false
-                        [fieldName]="'name'">
-                    </monster-editable-field>
-                </div>
-                <div class="field text-attack">
-                    <value-editor [value]="fighter.monster.data.at"
-                                  [title]="'AT'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'at', $event)">
-                    </value-editor>
-                </div>
-                <div class="field">
-                    <span class="text-prd">
-                        <value-editor [value]="fighter.monster.data.prd"
-                                      [title]="'Parade'"
-                                      (onChange)="updateMonsterField(fighter.monster, 'prd', $event)">
-                        </value-editor>
-                    </span>
-                </div>
-                <div class="field">
-                    <span class="text-esq">
-                        <value-editor [value]="fighter.monster.data.esq"
-                                      [title]="'Esquive'"
-                                      (onChange)="updateMonsterField(fighter.monster, 'esq', $event)">
-                        </value-editor>
-                    </span>
-                </div>
-                <div class="field-large">
-                    <value-editor [value]="fighter.monster.data.ev"
-                                  [maxValue]="fighter.monster.data.maxEv"
-                                  [title]="'EV Monstre'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'ev', $event)">
-                    </value-editor>
-                </div>
-                <div class="field-large">
-                    <value-editor [value]="fighter.monster.data.ea"
-                                  [maxValue]="fighter.monster.data.maxEa"
-                                  [title]="'EA Monstre'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'ea', $event)">
-                    </value-editor>
-                </div>
-                <div class="field-medium">
-                    <value-editor [value]="fighter.monster.data.pr"
-                                  [title]="'Protection'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'pr', $event)">
-                    </value-editor>
-                    (<value-editor [value]="fighter.monster.data.pr_magic"
-                                  [title]="'Protection magique'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'pr_magic', $event)">
-                    </value-editor>)
-                </div>
-                <div class="field">
-                    <value-editor [value]="fighter.monster.data.resm"
-                                  [title]="'Resistance Magique'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'resm', $event)">
-                    </value-editor>
-                </div>
-                <div class="field-large">
-                    <monster-editable-field
-                        [monster]="fighter.monster"
-                        [isDataField]=true
-                        [fieldName]="'dmg'">
-                    </monster-editable-field>
-                </div>
-                <div class="field">
-                    <value-editor [value]="fighter.monster.data.cou"
-                                  [title]="'Courage'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'cou', $event)">
-                    </value-editor>
-                </div>
-                <div class="field-fixed-small">
-                    <md-checkbox [checked]="fighter.monster.data.chercheNoise"
-                                 (change)="updateMonsterField(fighter.monster, 'chercheNoise', $event.checked)">
-                    </md-checkbox>
-                </div>
+        <div class="fighter-row">
+            <div class="field-name">{{fighter.name}}</div>
+            <div class="field text-attack">{{fighter.stats.at}}</div>
+            <div class="field"><span class="text-prd">{{fighter.stats.prd}}</span></div>
+            <div class="field"><span class="text-esq">{{fighter.stats.esq}}</span></div>
+            <div class="field-large" [class.text-danger]="fighter.stats.ev < 4">
+                <value-editor [title]="'Energie vitale'"
+                              [value]="fighter.stats.ev"
+                              [maxValue]="fighter.stats.maxEv"
+                              (onChange)="changeStat('ev', $event)">
+                </value-editor>
             </div>
-            <div style="display: flex; justify-content: space-between">
-                <div>
-                    <target-selector [fighter]=fighter
-                                     [targets]=fighters
-                                     (onTargetChange)='changeTarget(fighter, $event)'>
-                    </target-selector>
-                </div>
-            </div>
-        </ng-template>
-        <ng-template [ngIf]="!fighter.isMonster">
-            <div class="fighter-row">
-                <div class="field-name">{{fighter.name}}</div>
-                <div class="field text-attack">{{fighter.stats.at}}</div>
-                <div class="field"><span class="text-prd">{{fighter.stats.prd}}</span></div>
-                <div class="field"><span class="text-esq">{{fighter.stats.esq}}</span></div>
-                <div class="field-large" [class.text-danger]="fighter.stats.ev < 4">
-                    <value-editor [title]="'Energie vitale'"
-                                  [value]="fighter.stats.ev"
-                                  [maxValue]="fighter.stats.maxEv"
-                                  (onChange)="changeCharacterStat(fighter.character, 'ev', $event)">
+            <div class="field-large">
+                <span *ngIf="fighter.stats.maxEa">
+                    <value-editor [title]="'Energie astrale'"
+                                  [value]="fighter.stats.ea"
+                                  [maxValue]="fighter.stats.maxEa"
+                                  (onChange)="changeStat('ea', $event)">
                     </value-editor>
-                </div>
-                <div class="field-large">
-                    <span *ngIf="fighter.stats.maxEa">
-                        <value-editor [title]="'Energie astrale'"
-                                      [value]="fighter.stats.ea"
-                                      [maxValue]="fighter.stats.maxEa"
-                                      (onChange)="changeCharacterStat(fighter.character, 'ea', $event)">
-                        </value-editor>
-                    </span>
-                    <span *ngIf="!fighter.stats.maxEa">-</span>
-                </div>
-                <div class="field-medium">{{fighter.stats.pr}}({{fighter.stats.pr_magic}})</div>
-                <div class="field">
-                    {{fighter.stats.resm}}
-                </div>
-                <div class="field-large"></div>
-                <div class="field">{{fighter.stats.cou}}</div>
-                <div class="field-fixed-small"><md-checkbox [checked]="fighter.chercheNoise" disabled></md-checkbox></div>
+                </span>
+                <span *ngIf="!fighter.stats.maxEa">-</span>
             </div>
-            <div style="display: flex; justify-content: flex-start">
-                <target-selector [fighter]=fighter
-                                 [targets]=fighters
-                                 (onTargetChange)='changeTarget(fighter, $event)'>
-                </target-selector>
+            <div class="field-medium">{{fighter.stats.pr}}({{fighter.stats.pr_magic}})</div>
+            <div class="field">
+                {{fighter.stats.resm}}
             </div>
-        </ng-template>
+            <div class="field-large">{{fighter.stats.dmg}}</div>
+            <div class="field">{{fighter.stats.cou}}</div>
+            <div class="field-fixed-small"><md-checkbox [checked]="fighter.chercheNoise" disabled></md-checkbox></div>
+        </div>
+        <div style="display: flex; justify-content: flex-start">
+            <target-selector [fighter]=fighter
+                             [targets]=fighters
+                             (onTargetChange)='changeTarget($event)'>
+            </target-selector>
+        </div>
     </div>
 
     <div *ngIf="!fighter.isMonster" class="field-button">
         <button md-icon-button [mdMenuTriggerFor]="menuCharacter" aria-label="Open basic menu">
             <md-icon>more_vert</md-icon>
         </button>
-
         <md-menu #menuCharacter="mdMenu">
             <button md-menu-item
                     (click)="displayCharacterSheet(fighter.character)">
@@ -174,28 +82,33 @@
                     (click)=deleteMonster(fighter.monster)>
                 Supprimer le monstre
             </button>
+            <button md-menu-item
+                    (click)=openEditMonsterDialog()>
+                Modifier
+            </button>
         </md-menu>
     </div>
 </div>
 
-<md-card class="expanded-data-card"
-     [class.combat-row-selected]="selected"
-     *ngIf="expandedView">
-    <md-card-subtitle>Informations supplémentaires</md-card-subtitle>
-    <md-card-content class="expanded-data" *ngIf="fighter.isMonster">
-        <div class="fighter-advanced-datas">
-            <div class="fighter-advanced-data">
-                <span class="label">XP</span>
-                <span class="value">
+<div class="row-stat-modifiers">
+    <md-card class="expanded-data-card"
+             [class.combat-row-selected]="selected"
+             *ngIf="expandedView && fighter.isMonster">
+        <md-card-subtitle>Informations complémentaires</md-card-subtitle>
+        <md-card-content class="expanded-data">
+            <div class="fighter-advanced-datas">
+                <div class="fighter-advanced-data">
+                    <span class="label">XP</span>
+                    <span class="value">
                     <value-editor [value]="fighter.monster.data.xp"
                                   [title]="'XP'"
                                   (onChange)="updateMonsterField(fighter.monster, 'xp', $event)">
                     </value-editor>
                 </span>
-            </div>
-            <div class="fighter-advanced-data">
-                <span class="label">Sexe</span>
-                <span class="value">
+                </div>
+                <div class="fighter-advanced-data">
+                    <span class="label">Sexe</span>
+                    <span class="value">
                     <md-select [ngModel]="fighter.monster.data.sex" (ngModelChange)="updateMonsterField(fighter.monster, 'sex', $event)">
                         <md-option [value]="null">
                             Non défini
@@ -208,25 +121,9 @@
                         </md-option>
                     </md-select>
                 </span>
-            </div>
-
-            <div>
-                <div><strong>Inventaire</strong></div>
-                <div *ngFor="let item of fighter.monster.items"
-                     class="fighter-inventory-item"
-                     [class.selected]="selectedItem === item"
-                     (click)="selectedItem = item">
-                    <icon [icon]="item.data.icon" [size]="'24px'"></icon>
-                    <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}} </span>
-                    {{item.data.name}}
                 </div>
-                <button md-icon-button (click)="addItemTo(fighter)">
-                    <md-icon>add</md-icon>
-                </button>
-            </div>
-        </div>
-        <div class="fighter-right-data">
-            <md-input-container class="fighter-note">
+
+                <md-input-container class="fighter-note">
                 <textarea mdInput
                           mdTextareaAutosize
                           mdAutosizeMinRows="2"
@@ -234,44 +131,275 @@
                           [ngModel]="fighter.monster.data.note"
                           (blur)="updateMonsterField(fighter.monster, 'note', $event.target.value)">
                 </textarea>
-            </md-input-container>
-            <div>
-                <ng-template [ngIf]="selectedItem">
-                    <item-detail [gmView]="true" [item]="selectedItem" [readonly]="true">
-                    </item-detail>
-                </ng-template>
+                </md-input-container>
             </div>
-        </div>
-    </md-card-content>
-    <md-card-content class="expanded-data" *ngIf="!fighter.isMonster">
-        <div class="fighter-advanced-datas">
-            <b>Inventaire:</b>
-            <div>
-                <div *ngFor="let item of fighter.character.items"
-                     [class.selected]="selectedItem === item">
-                    <span *ngIf="item.data.equiped && itemHasSlot(item.template, 'WEAPON')"
-                          class="fighter-inventory-item"
-                          (click)="selectedItem = item">
+        </md-card-content>
+    </md-card>
+
+    <md-card class="expanded-data-card"
+             [class.combat-row-selected]="selected"
+             *ngIf="expandedView && fighter.isMonster">
+        <md-card-subtitle>Effets</md-card-subtitle>
+        <md-card-content class="monster-effects">
+            <div class="effect-list">
+                <ng-template ngFor let-modifier [ngForOf]="fighter.monster.modifiers" let-i="index" let-last="last">
+                    <div *ngIf="!modifier.permanent"
+                         class="effect-element"
+                         (click)="selectModifier(modifier)"
+                         [class.selected]="selectedModifier === modifier">
+                        <span *ngIf="modifier.reusable" class="toggle-reusable">
+                            <md-slide-toggle color="primary"
+                                             (change)="toggleReusableModifier(modifier)"
+                                             (click)="$event.stopPropagation()"
+                                             [ngModel]="modifier.active">
+                            </md-slide-toggle>
+                        </span>
+                        <span class="padding">
+                            {{modifier.name}}
+                        </span>
+                        <span *ngIf="modifier.combatCount">
+                            <span class="ra ra-sword duration-icon"></span> {{modifier.currentCombatCount}}
+                        </span>
+                        <span *ngIf="modifier.currentTimeDuration">
+                            <span class="ra ra-clockwork duration-icon"></span> {{modifier.currentTimeDuration | nhbkDuration}}
+                        </span>
+                        <span *ngIf="modifier.currentLapCount">
+                            <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{modifier.currentLapCount}}
+                        </span>
+                    </div>
+                    <md-card *ngIf="selectedModifier === modifier"
+                         class="effect-detail"
+                         [class.selected]="selectedModifier === modifier">
+                        <button md-button color="accent"
+                                class="delete-modifier-button"
+                                (click)="removeModifier(modifier)">
+                            SUPPRIMER
+                        </button>
+                        <div *ngIf="modifier.description">{{modifier.description}}</div>
+                        <div *ngIf="modifier.duration">Durée totale: {{modifier.duration}}</div>
+                        <div *ngIf="modifier.combatCount">Durée totale: {{modifier.combatCount}} combat</div>
+                        <div *ngIf="modifier.timeDuration">Durée totale: {{modifier.timeDuration | nhbkDuration}}</div>
+                        <div *ngIf="modifier.currentCombatCount">Actif encore {{modifier.currentCombatCount}} combat</div>
+                        <div *ngIf="modifier.lapCount">Durée: {{modifier.lapCount}} tour(s)</div>
+                        <div *ngIf="modifier.currentLapCount">Actif encore {{modifier.currentLapCount}} tour(s)</div>
+                        <div *ngIf="modifier.currentTimeDuration">Actif encore {{modifier.currentTimeDuration | nhbkDuration}}</div>
+
+                        <div *ngIf="modifier.values && modifier.values.length">
+                            Effet:
+                            <div class="effect-modifier" *ngFor="let modifier of modifier.values">
+                                {{modifier | modifier}}
+                            </div>
+                        </div>
+                    </md-card>
+                </ng-template>
+                <button md-icon-button (click)="openAddEffectModal()">
+                    <md-icon>add</md-icon>
+                </button>
+            </div>
+        </md-card-content>
+    </md-card>
+
+</div>
+
+<div class="row-inventory" *ngIf="expandedView && fighter.isMonster">
+    <md-card class="expanded-data-card"
+             [class.combat-row-selected]="selected">
+        <md-card-subtitle>Inventaire</md-card-subtitle>
+        <md-card-content class="expanded-data">
+            <div class="fighter-advanced-datas">
+                <div>
+                    <div *ngFor="let item of fighter.monster.items"
+                         class="fighter-inventory-item"
+                         [class.selected]="selectedItem === item"
+                         (click)="selectedItem = item">
+                        <md-slide-toggle class="equip-toggle"
+                                         *ngIf="item.template.slots && item.template.slots.length"
+                                         [ngModel]="item.data.equiped"
+                                         (change)="equipItem(item, $event)">
+                        </md-slide-toggle>
                         <icon [icon]="item.data.icon" [size]="'24px'"></icon>
                         <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}} </span>
                         {{item.data.name}}
-                    </span>
-                    <span *ngIf="item.data.equiped && !itemHasSlot(item.template, 'WEAPON') && !item.template.data.container"
-                          class="fighter-inventory-item"
-                          (click)="selectedItem = item">
-                        <icon [icon]="item.data.icon" [size]="'24px'"></icon>
-                        <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}} </span>
-                        {{item.data.name}}
-                    </span>
+                    </div>
+                    <button md-icon-button (click)="addItemTo(fighter)">
+                        <md-icon>add</md-icon>
+                    </button>
                 </div>
             </div>
-        </div>
-        <div class="fighter-advanced-datas">
-            <ng-template [ngIf]="selectedItem">
-                <item-detail [gmView]="true" [character]="fighter.character" [item]="selectedItem" [readonly]="true">
-                </item-detail>
-            </ng-template>
-        </div>
-    </md-card-content>
-</md-card>
+        </md-card-content>
+    </md-card>
+    <div class="item-detail" *ngIf="selectedItem">
+        <item-detail [gmView]="true" [character]="fighter.character" [item]="selectedItem" [readonly]="true">
+        </item-detail>
+    </div>
+</div>
 
+<div class="row-inventory" *ngIf="expandedView && !fighter.isMonster">
+    <md-card class="expanded-data-card"
+             [class.combat-row-selected]="selected">
+        <md-card-subtitle>Inventaire</md-card-subtitle>
+        <md-card-content class="expanded-data">
+            <div class="fighter-advanced-datas">
+                <div>
+                    <div *ngFor="let item of fighter.character.items"
+                         [class.selected]="selectedItem === item">
+                        <span *ngIf="item.data.equiped && itemHasSlot(item.template, 'WEAPON')"
+                              class="fighter-inventory-item"
+                              (click)="selectedItem = item">
+                            <icon [icon]="item.data.icon" [size]="'24px'"></icon>
+                            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}} </span>
+                            {{item.data.name}}
+                        </span>
+                        <span *ngIf="item.data.equiped && !itemHasSlot(item.template, 'WEAPON') && !item.template.data.container"
+                              class="fighter-inventory-item"
+                              (click)="selectedItem = item">
+                            <icon [icon]="item.data.icon" [size]="'24px'"></icon>
+                            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}} </span>
+                            {{item.data.name}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+    <div class="item-detail" *ngIf="selectedItem">
+        <item-detail [gmView]="true" [character]="fighter.character" [item]="selectedItem" [readonly]="true">
+        </item-detail>
+    </div>
+</div>
+
+<ng-template #editMonsterDialog="cdkPortal" cdk-portal>
+    <md-card>
+        <md-card-content>
+            <div class="editable-data">
+                <div class="fighter-row">
+                    <md-input-container class="name">
+                        <input mdInput
+                               placeholder="Nom"
+                               [ngModel]="fighter.monster.name"
+                               (ngModelChange)="changeStat('name', $event)"
+                        />
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="fighter-row">
+                <div class="at">
+                    AT:
+                    <span class="text-attack">
+                            <value-editor [value]="fighter.monster.data.at"
+                                          [title]="'AT'"
+                                          (onChange)="updateMonsterField(fighter.monster, 'at', $event)">
+                            </value-editor>
+                        </span>
+                </div>
+                <div class="prd">
+                    PRD:
+                    <span class="text-prd">
+                            <value-editor [value]="fighter.monster.data.prd"
+                                          [title]="'Parade'"
+                                          (onChange)="updateMonsterField(fighter.monster, 'prd', $event)">
+                            </value-editor>
+                        </span>
+                </div>
+                <div class="esq">
+                    ESQ:
+                    <span class="text-esq">
+                            <value-editor [value]="fighter.monster.data.esq"
+                                          [title]="'Esquive'"
+                                          (onChange)="updateMonsterField(fighter.monster, 'esq', $event)">
+                            </value-editor>
+                        </span>
+                </div>
+                <div class="pr">
+                    PR:
+                    <span class="">
+                            <value-editor [value]="fighter.monster.data.pr"
+                                          [title]="'Protection'"
+                                          (onChange)="updateMonsterField(fighter.monster, 'pr', $event)">
+                            </value-editor>
+                        </span>
+                </div>
+                <div class="pr_magic">
+                    PR Ma:
+                    <span class="">
+                            <value-editor [value]="fighter.monster.data.pr_magic"
+                                          [title]="'Protection magique'"
+                                          (onChange)="updateMonsterField(fighter.monster, 'pr_magic', $event)">
+                            </value-editor>
+                        </span>
+                </div>
+                <div class="resm">
+                    RESM:
+                    <span class="">
+                            <value-editor [value]="fighter.monster.data.resm"
+                                          [title]="'Resistance Magique'"
+                                          (onChange)="updateMonsterField(fighter.monster, 'resm', $event)">
+                            </value-editor>
+                        </span>
+                </div>
+            </div>
+            <div class="fighter-row">
+                <md-input-container class="dmg">
+                    <input mdInput
+                           placeholder="Dmg"
+                           [ngModel]="fighter.monster.data.dmg"
+                           (ngModelChange)="changeStat('dmg', $event)"
+                    />
+                </md-input-container>
+                <div class="cou">
+                    COU:
+                    <value-editor [value]="fighter.monster.data.cou"
+                                  [title]="'Courage'"
+                                  (onChange)="updateMonsterField(fighter.monster, 'cou', $event)">
+                    </value-editor>
+                </div>
+                <div class="cherchenoise">
+                    Chercher des noises:
+                    <md-checkbox [checked]="fighter.monster.data.chercheNoise"
+                                 (change)="updateMonsterField(fighter.monster, 'chercheNoise', $event.checked)">
+                    </md-checkbox>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+</ng-template>
+
+
+<ng-template #addEffectDialog="cdkPortal" cdk-portal>
+    <md-card class="add-effect-dialog">
+        <md-card-title>Ajouter un effet</md-card-title>
+        <md-card-content>
+            <md-tab-group (selectedIndexChange)="addEffectTypeSelectedTab = $event">
+                <md-tab label="Prédéfini">
+                    <active-effect-editor #activeEffectEditor
+                                          (onValidate)="addEffect($event)">
+                    </active-effect-editor>
+                </md-tab>
+
+                <md-tab label="Custom">
+                    <stats-modifier-editor [modifier]="newStatsModifier">
+                    </stats-modifier-editor>
+                </md-tab>
+            </md-tab-group>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button
+                    color="primary"
+                    (click)="closeAddEffectDialog()">
+                ANNULER
+            </button>
+            <button md-button
+                    color="primary"
+                    *ngIf="addEffectTypeSelectedTab === 0"
+                    (click)="activeEffectEditor.addEffect()">
+                AJOUTER
+            </button>
+            <button md-button
+                    color="primary"
+                    *ngIf="addEffectTypeSelectedTab === 1"
+                    (click)="addCustomModifier()">
+                AJOUTER
+            </button>
+        </md-card-actions>
+    </md-card>
+</ng-template>

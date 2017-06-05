@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 import {MonsterTemplate, MonsterTrait} from './monster.model';
-import {MonsterService} from './monster.service';
+import {MonsterTemplateService} from '.';
 import {NotificationsService} from '../notifications/notifications.service';
 import {removeDiacritics} from '../shared/remove_diacritics';
 
@@ -15,7 +15,7 @@ export class MonsterTemplateComponent implements OnInit {
     public traisById: {[id: number]: MonsterTrait};
     public editing: boolean;
 
-    constructor(private _monsterService: MonsterService
+    constructor(private _monsterTemplateService: MonsterTemplateService
         , private _notifications: NotificationsService) {
     }
 
@@ -25,7 +25,7 @@ export class MonsterTemplateComponent implements OnInit {
 
     saveMonster() {
         this.editing = false;
-        this._monsterService.editMonster(this.monster).subscribe(() => {
+        this._monsterTemplateService.editMonster(this.monster).subscribe(() => {
             this._notifications.success('Monster', 'Monstre editer');
         });
     }
@@ -35,7 +35,7 @@ export class MonsterTemplateComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this._monsterService.getMonsterTraitsById().subscribe(
+        this._monsterTemplateService.getMonsterTraitsById().subscribe(
             traitsById => {
                 this.traisById = traitsById
             }

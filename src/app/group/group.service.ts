@@ -106,7 +106,7 @@ export class GroupService extends JsonService {
 
     loadMonsters(groupId: number): Observable<Monster[]> {
         return Observable.forkJoin(
-            this.postJson('/api/group/loadMonsters', {
+            this.postJson('/api/monster/loadMonsters', {
                 groupId: groupId
             }).map(res => res.json()),
             this._skillService.getSkillsById()
@@ -117,7 +117,7 @@ export class GroupService extends JsonService {
 
     loadDeadMonsters(groupId: number, startIndex: number, count: number): Observable<Monster[]> {
         return Observable.forkJoin(
-            this.postJson('/api/group/loadDeadMonsters', {
+            this.postJson('/api/monster/loadDeadMonsters', {
                 groupId: groupId,
                 startIndex: startIndex,
                 count: count
@@ -126,43 +126,6 @@ export class GroupService extends JsonService {
         ).map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
             return Monster.monstersFromJson(monstersJsonData, skillsById)
         });
-    }
-
-    createMonster(groupId: number, monster): Observable<Monster> {
-        return Observable.forkJoin(
-            this.postJson('/api/group/createMonster', {
-                monster: monster,
-                groupId: groupId
-            }).map(res => res.json()),
-            this._skillService.getSkillsById()
-        ).map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
-            return Monster.fromJson(monsterJsonData, skillsById)
-        });
-    }
-
-    updateMonster(monsterId: number, fieldName: string, value: any): Observable<{value: any, fieldName: string}> {
-        return this.postJson('/api/group/updateMonster', {
-            fieldName: fieldName,
-            value: value,
-            monsterId: monsterId
-        }).map(res => res.json());
-    }
-
-    killMonster(monsterId: number): Observable<Monster> {
-        return Observable.forkJoin(
-            this.postJson('/api/group/killMonster', {
-                monsterId: monsterId
-            }).map(res => res.json()),
-            this._skillService.getSkillsById()
-        ).map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
-            return Monster.fromJson(monsterJsonData, skillsById)
-        });
-    }
-
-    deleteMonster(monsterId: number): Observable<any> {
-        return this.postJson('/api/group/deleteMonster', {
-            monsterId: monsterId
-        }).map(res => res.json());
     }
 
     /* Loot */

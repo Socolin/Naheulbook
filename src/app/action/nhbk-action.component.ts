@@ -3,7 +3,7 @@ import {NhbkAction} from './nhbk-action.model';
 import {EffectService} from '../effect/effect.service';
 import {Effect} from '../effect/effect.model';
 import {duration2text} from '../date/util';
-import {CharacterModifier} from '../character/character.model';
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 
 @Component({
     selector: 'nhbk-action',
@@ -67,7 +67,7 @@ export class NhbkActionComponent implements OnInit, OnChanges {
         }
     }
     private updateModifierInfo() {
-        let modifier: CharacterModifier = this.action.data.modifier;
+        let modifier: ActiveStatsModifier = this.action.data.modifier;
         this.updateEffectDuration(modifier);
     }
 

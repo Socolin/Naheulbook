@@ -7,11 +7,11 @@ import {AutocompleteValue} from '../shared/autocomplete-input.component';
 import {EffectService} from './effect.service';
 
 @Component({
-    selector: 'character-effect-editor',
-    templateUrl: './character-effect-editor.component.html',
-    styleUrls: ['./character-effect-editor.component.scss'],
+    selector: 'active-effect-editor',
+    templateUrl: './active-effect-editor.component.html',
+    styleUrls: ['./active-effect-editor.component.scss'],
 })
-export class CharacterEffectEditorComponent implements OnInit, DoCheck {
+export class ActiveEffectEditorComponent implements OnInit, DoCheck {
     @Input() reusableToggle = true;
     @Output() onValidate: EventEmitter<any> = new EventEmitter<any>();
     @Output() onChange: EventEmitter<any> = new EventEmitter<any>();

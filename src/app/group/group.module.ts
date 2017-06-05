@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 import {
-    CreateItemComponent, TargetSelectorComponent, MonsterEditableFieldComponent, GroupListComponent,
+    CreateItemComponent, TargetSelectorComponent, GroupListComponent,
     GroupComponent, CreateGroupComponent, GroupService
 } from './';
 
@@ -48,7 +48,6 @@ import {UsefullDataModule} from '../usefull-data/usefull-data.module';
         GroupListComponent,
         GroupComponent,
         CreateGroupComponent,
-        MonsterEditableFieldComponent,
         TargetSelectorComponent,
         FighterPanelComponent,
         GroupLootPanelComponent,

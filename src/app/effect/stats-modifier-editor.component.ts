@@ -6,7 +6,7 @@ import {StatsModifier} from '../shared/stat-modifier.model';
     templateUrl: './stats-modifier-editor.component.html',
     styleUrls: ['./stats-modifier-editor.component.scss'],
 })
-export class CharacterModifierEditorComponent {
+export class StatModifierEditorComponent {
     @Input() modifier: StatsModifier;
     @Input() reusableToggle = true;
 }

@@ -56,6 +56,9 @@ export class DateSelectorComponent implements OnInit, OnChanges {
         if (!this.calendar) {
             return;
         }
+        if (!this.date) {
+            return;
+        }
         for (let i = 0; i < this.calendar.length; i++) {
             let calendarDate = this.calendar[i];
             if (calendarDate.startDay <= this.date.day && this.date.day <= calendarDate.endDay) {

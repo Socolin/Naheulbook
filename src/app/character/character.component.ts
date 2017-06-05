@@ -74,7 +74,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         , private _characterService: CharacterService) {
     }
 
-    changeCharacterStat(stat: string, value: any) {
+    changeStat(stat: string, value: any) {
         this._characterService.changeCharacterStat(this.character.id, stat, value).subscribe(
             this.character.onChangeCharacterStat.bind(this.character)
         );

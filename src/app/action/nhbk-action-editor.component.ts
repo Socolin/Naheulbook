@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {ItemService} from '../item/item.service';
 import {ItemTemplate} from '../item/item-template.model';
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
-import {CharacterModifier} from '../character/character.model';
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 
 @Component({
     selector: 'nhbk-action-editor',
@@ -16,7 +16,7 @@ export class NhbkActionEditorComponent implements OnInit {
     @Output() onValidate: EventEmitter<NhbkAction> = new EventEmitter<NhbkAction>();
     @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
 
-    public characterModifier: CharacterModifier = new CharacterModifier();
+    public activeModifier: ActiveStatsModifier = new ActiveStatsModifier();
     public validActions: { type: NhbkActionType, displayName: string }[] = NhbkAction.VALID_ACTIONS;
 
     public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
@@ -53,7 +53,7 @@ export class NhbkActionEditorComponent implements OnInit {
     validate() {
         if (this.isReady()) {
             if (this.action.type === 'addCustomModifier') {
-                this.action.data.modifier = this.characterModifier;
+                this.action.data.modifier = this.activeModifier;
             }
             this.onValidate.emit(this.action);
         }

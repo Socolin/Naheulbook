@@ -1,31 +1,55 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild, OnInit} from '@angular/core';
 import {Fighter, Group} from './group.model';
 import {GroupService} from './group.service';
 import {NotificationsService} from '../notifications/notifications.service';
-import {Monster} from '../monster/monster.model';
 import {CharacterService} from '../character/character.service';
 import {GroupActionService} from './group-action.service';
 import {Character} from '../character/character.model';
 import {ItemTemplate} from '../item/item-template.model';
 import {Item} from '../character/item.model';
+import {TargetJsonData} from './target.model';
+import {MdSlideToggleChange, OverlayRef, Portal} from '@angular/material';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {Effect, EffectCategory} from '../effect/effect.model';
+import {EffectService} from '../effect/effect.service';
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {Monster, MonsterTemplateService} from '../monster';
+import {MonsterService} from '../monster/monster.service';
 
 @Component({
     selector: 'fighter',
     templateUrl: './fighter.component.html',
     styleUrls: ['./fighter.component.scss']
 })
-export class FighterComponent {
+export class FighterComponent implements OnInit {
     @Input() group: Group;
     @Input() fighter: Fighter;
     @Input() fighters: Fighter[];
     @Input() selected: boolean;
     @Input() expandedView: boolean;
     @Output() onSelect: EventEmitter<Fighter> = new EventEmitter<Fighter>();
+    @Input() selectedModifier: ActiveStatsModifier;
     public selectedItem: Item;
+
+    @ViewChild('editMonsterDialog')
+    public editMonsterDialog: Portal<any>;
+    public editMonsterOverlayRef: OverlayRef;
+
+    @ViewChild('addEffectDialog')
+    public addEffectDialog: Portal<any>;
+    public addEffectOverlayRef: OverlayRef;
+    public addEffectTypeSelectedTab = 0;
+    public effectCategoriesById: { [categoryId: number]: EffectCategory };
+
+    public newStatsModifier: ActiveStatsModifier = new ActiveStatsModifier();
 
     constructor(private _groupService: GroupService
         , private _actionService: GroupActionService
         , private _characterService: CharacterService
+        , private _monsterService: MonsterService
+        , private _monsterTemplateService: MonsterTemplateService
+        , private _nhbkDialogService: NhbkDialogService
+        , private _effectService: EffectService
         , private _notification: NotificationsService) {
     }
 
@@ -33,26 +57,35 @@ export class FighterComponent {
         this._actionService.emitAction('openAddItemForm', this.group, fighter);
     }
 
+    openAddEffectModal() {
+        this.newStatsModifier = new ActiveStatsModifier();
+        this.addEffectOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addEffectDialog);
+    }
+
+    closeAddEffectDialog() {
+        this.addEffectOverlayRef.detach();
+    }
+
     displayCharacterSheet(character: Character) {
         this._actionService.emitAction('displayCharacterSheet', this.group, character);
     }
 
-    changeTarget(fighter: Fighter, target) {
-        if (fighter.isMonster) {
-            this._groupService.updateMonster(fighter.id, 'target', {id: target.id, isMonster: target.isMonster})
+    changeTarget(target: TargetJsonData) {
+        if (this.fighter.isMonster) {
+            this._monsterService.updateMonster(this.fighter.id, 'target', {id: target.id, isMonster: target.isMonster})
                 .subscribe(
                     () => {
-                        fighter.changeTarget(target);
+                        this.fighter.changeTarget(target);
                         this._notification.info('Monstre', 'Cible changée');
                     }
                 );
         } else {
-            this._characterService.changeGmData(fighter.id, 'target', {
+            this._characterService.changeGmData(this.fighter.id, 'target', {
                 id: target.id,
                 isMonster: target.isMonster
             }).subscribe(
                 change => {
-                    fighter.changeTarget(change.value);
+                    this.fighter.changeTarget(change.value);
                     this._notification.info('Joueur', 'Cible changée');
                 }
             );
@@ -64,7 +97,7 @@ export class FighterComponent {
             color = color.substring(1);
         }
         if (element.isMonster) {
-            this._groupService.updateMonster(element.id, 'color', color)
+            this._monsterService.updateMonster(element.id, 'color', color)
                 .subscribe(
                     res => {
                         element.changeColor(res.value);
@@ -85,20 +118,20 @@ export class FighterComponent {
         if (monster.data[fieldName] === newValue) {
             return;
         }
-        this._groupService.updateMonster(monster.id, fieldName, newValue)
+        this._monsterService.updateMonster(monster.id, fieldName, newValue)
             .subscribe(
                 res => {
                     this._notification.info('Monstre: ' + monster.name
                         , 'Modification: ' + fieldName.toUpperCase() + ': '
                         + monster.data[fieldName] + ' -> ' + res.value);
-                    monster.data[fieldName] = res.value;
+                    monster.changeData(fieldName, res.value);
                 }
             );
     }
 
     changeNumber(element: Fighter, number: number) {
         if (element.isMonster) {
-            this._groupService.updateMonster(element.id, 'number', number)
+            this._monsterService.updateMonster(element.id, 'number', number)
                 .subscribe(
                     res => {
                         element.changeNumber(res.value);
@@ -108,10 +141,31 @@ export class FighterComponent {
         }
     }
 
-    changeCharacterStat(character: Character, stat: string, value: any) {
-        this._characterService.changeCharacterStat(character.id, stat, value).subscribe(
-            character.onChangeCharacterStat.bind(character)
-        );
+    changeStat(stat: string, value: any) {
+        if (this.fighter.isMonster) {
+            let monster = this.fighter.monster;
+            this._monsterService.updateMonster(monster.id, stat, value)
+                .subscribe(
+                    res => {
+                        if (res.fieldName === 'name') {
+                            monster.name = res.value;
+                        } else {
+                            monster.changeData(res.fieldName, res.value);
+                        }
+                    }
+                );
+        }
+        else {
+            this._characterService.changeCharacterStat(this.fighter.character.id, stat, value).subscribe(
+                this.fighter.character.onChangeCharacterStat.bind(this.fighter.character)
+            );
+        }
+    }
+
+    equipItem(item: Item, event: MdSlideToggleChange) {
+        this._monsterService.equipItem(this.fighter.id, item.id, event.checked).subscribe(res => {
+            this.fighter.monster.equipItem(res);
+        });
     }
 
     killMonster(monster: Monster) {
@@ -122,11 +176,68 @@ export class FighterComponent {
         this._actionService.emitAction('deleteMonster', this.group, monster);
     }
 
+    openEditMonsterDialog(monster: Monster) {
+        this.editMonsterOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.editMonsterDialog);
+    }
+
+    closeEditMonsterDialog() {
+        this.editMonsterOverlayRef.detach();
+        this.editMonsterOverlayRef = null;
+    }
+
     selectFighter() {
         this.onSelect.emit(this.fighter);
     }
 
     itemHasSlot(template: ItemTemplate, slot: string) {
         return ItemTemplate.hasSlot(template, slot);
+    }
+
+    addEffect(newEffect: {effect: Effect, data: any}) {
+        let effect = newEffect.effect;
+        let data = newEffect.data;
+
+        this._monsterService.addModifier(this.fighter.id, ActiveStatsModifier.fromEffect(effect, data)).subscribe(
+            this.fighter.monster.onAddModifier.bind(this.fighter.monster)
+        );
+        this.closeAddEffectDialog();
+    }
+
+    selectModifier(modifier: ActiveStatsModifier) {
+        if (modifier === this.selectedModifier) {
+            this.selectedModifier = null;
+        } else {
+            this.selectedModifier = modifier;
+        }
+    }
+
+    toggleReusableModifier(modifier: ActiveStatsModifier) {
+        this._monsterService.toggleModifier(this.fighter.id, modifier.id).subscribe(
+            this.fighter.monster.onUpdateModifier.bind(this.fighter.monster)
+        );
+    }
+
+    addCustomModifier() {
+        this.closeAddEffectDialog();
+        this._monsterService.addModifier(this.fighter.id, this.newStatsModifier).subscribe(
+             this.fighter.monster.onAddModifier.bind(this.fighter.monster)
+        );
+    }
+
+    removeModifier(modifier: ActiveStatsModifier) {
+        this._monsterService.removeModifier(this.fighter.id, modifier.id).subscribe((deletedModifier: ActiveStatsModifier) => {
+            if (this.selectedModifier && this.selectedModifier.id === deletedModifier.id) {
+                this.selectedModifier = undefined;
+            }
+            this.fighter.monster.onRemoveModifier(deletedModifier);
+        });
+    }
+
+    ngOnInit() {
+        this._effectService.getCategoryList().subscribe(
+            categories => {
+                this.effectCategoriesById = {};
+                categories.map(c => this.effectCategoriesById[c.id] = c);
+            });
     }
 }

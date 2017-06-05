@@ -9,10 +9,8 @@ import {DateModule} from '../date/date.module';
 
 import {
     EffectEditorComponent, CreateEffectComponent, EffectListComponent, EditEffectComponent,
-    EffectService
+    EffectService, ModifierDetailComponent, StatModifierEditorComponent, ActiveEffectEditorComponent
 } from './';
-import {CharacterEffectEditorComponent} from './character-effect-editor.component';
-import {CharacterModifierEditorComponent} from './stats-modifier-editor.component';
 
 @NgModule({
     imports: [
@@ -28,8 +26,9 @@ import {CharacterModifierEditorComponent} from './stats-modifier-editor.componen
         CreateEffectComponent,
         EffectListComponent,
         EditEffectComponent,
-        CharacterEffectEditorComponent,
-        CharacterModifierEditorComponent,
+        ActiveEffectEditorComponent,
+        StatModifierEditorComponent,
+        ModifierDetailComponent,
     ],
     providers: [
         EffectService
@@ -39,8 +38,9 @@ import {CharacterModifierEditorComponent} from './stats-modifier-editor.componen
         CreateEffectComponent,
         EffectListComponent,
         EditEffectComponent,
-        CharacterEffectEditorComponent,
-        CharacterModifierEditorComponent,
+        ActiveEffectEditorComponent,
+        StatModifierEditorComponent,
+        ModifierDetailComponent,
     ],
 })
 export class EffectModule {

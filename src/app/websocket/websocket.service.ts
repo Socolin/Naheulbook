@@ -11,6 +11,7 @@ import {SkillService} from '../skill/skill.service';
 import {MiscService} from '../shared/misc.service';
 import {Group} from '../group/group.model';
 import {NEvent} from '../event/event.model';
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 
 @Injectable()
 export class WebSocketService {
@@ -249,115 +250,162 @@ export class WebSocketService {
                 monster.changeData(data.fieldName, data.value);
                 break;
             }
-            default:
+            case 'addModifier': {
+                monster.onAddModifier(ActiveStatsModifier.fromJson(data));
+                break;
+            }
+            case 'removeModifier': {
+                monster.onRemoveModifier(ActiveStatsModifier.fromJson(data));
+                break;
+            }
+            case 'updateModifier': {
+                monster.onUpdateModifier(ActiveStatsModifier.fromJson(data));
+                break;
+            }
+            case 'equipItem': {
+                monster.equipItem(PartialItem.fromJson(data));
+                break;
+            }
+            default: {
                 console.warn('Opcode not handle: `' + opcode + '`');
                 break;
+            }
         }
     }
 
     public handleWebsocketGroupEvent(group: Group, opcode: string, data: any) {
         switch (opcode) {
-            case 'addLoot':
+            case 'addLoot': {
                 this._skillService.getSkillsById().subscribe(skillsById => {
                     group.addLoot(Loot.fromJson(data, skillsById));
                 });
                 break;
-            case 'deleteLoot':
+            }
+            case 'deleteLoot': {
                 group.removeLoot(data.id);
                 break;
-            case 'addEvent':
+            }
+            case 'addEvent': {
                 group.addEvent(NEvent.fromJson(data));
                 break;
-            case 'deleteEvent':
+            }
+            case 'deleteEvent': {
                 group.removeEvent(data.id);
                 break;
+            }
             case 'changeData': {
                 group.data.changeValue(data.key, data.value);
                 break;
             }
-            default:
+            default: {
                 console.warn('Opcode not handle: `' + opcode + '`');
                 break;
+            }
         }
     }
 
     public handleWebsocketCharacterEvent(character: Character, opcode: string, data: any): void {
         switch (opcode) {
-            case 'showLoot':
+            case 'showLoot': {
                 this._skillService.getSkillsById().subscribe(skillsById => {
                     character.addLoot(Loot.fromJson(data, skillsById));
                 });
                 break;
-            case 'hideLoot':
+            }
+            case 'hideLoot': {
                 character.removeLoot(data.id);
                 break;
-            case 'update':
+            }
+            case 'update': {
                 character.onChangeCharacterStat(data);
                 break;
-            case 'statBonusAd':
+            }
+            case 'statBonusAd': {
                 character.onSetStatBonusAD(data);
                 break;
-            case 'levelUp':
+            }
+            case 'levelUp': {
                 character.onPartialLevelUp(data);
                 break;
-            case 'equipItem':
+            }
+            case 'equipItem': {
                 character.onEquipItem(data);
                 break;
-            case 'addItem':
+            }
+            case 'addItem': {
                 this._skillService.getSkillsById().subscribe(skillsById => {
                     character.onAddItem(Item.fromJson(data, skillsById));
+
                 });
                 break;
-            case 'deleteItem':
+            }
+            case 'deleteItem': {
                 character.onDeleteItem(data);
                 break;
-            case 'identifyItem':
+            }
+            case 'identifyItem': {
                 this._skillService.getSkillsById().subscribe(skillsById => {
                     character.onIdentifyItem(Item.fromJson(data, skillsById));
+
                 });
                 break;
-            case 'useCharge':
+            }
+            case 'useCharge': {
                 character.onUseItemCharge(data);
                 break;
-            case 'changeContainer':
+            }
+            case 'changeContainer': {
                 character.onChangeContainer(data);
                 break;
-            case 'updateItem':
+            }
+            case 'updateItem': {
                 character.onUpdateItem(data);
                 break;
-            case 'changeQuantity':
+            }
+            case 'changeQuantity': {
                 character.onUpdateQuantity(data);
                 break;
-            case 'updateItemModifiers':
+            }
+            case 'updateItemModifiers': {
                 character.onUpdateModifiers(data);
                 break;
-            case 'addEffect':
+            }
+            case 'addEffect': {
                 character.onAddEffect(data);
                 break;
-            case 'removeEffect':
+            }
+            case 'removeEffect': {
                 character.onRemoveEffect(data);
                 break;
-            case 'updateEffect':
+            }
+            case 'updateEffect': {
                 character.onUpdateEffect(data);
                 break;
-            case 'addModifier':
+            }
+            case 'addModifier': {
                 character.onAddModifier(data);
                 break;
-            case 'removeModifier':
+            }
+            case 'removeModifier': {
                 character.onRemoveModifier(data);
                 break;
-            case 'updateModifier':
+            }
+            case 'updateModifier': {
                 character.onUpdateModifier(data);
                 break;
-            case 'active':
+            }
+            case 'active': {
                 character.changeActive(data);
                 break;
-            case 'changeColor':
+            }
+            case 'changeColor': {
                 character.color = data;
                 break;
-            case 'changeTarget':
+            }
+            case 'changeTarget': {
                 character.changeTarget(data);
                 break;
+            }
             default:
                 console.warn('Opcode not handle: `' + opcode + '`');
                 break;

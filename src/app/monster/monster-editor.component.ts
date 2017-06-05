@@ -2,9 +2,9 @@ import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core'
 
 import {
     MonsterTemplate, MonsterTemplateCategory, MonsterTrait, TraitInfo,
-    MonsterSimpleInventory
-} from './monster.model';
-import {MonsterService} from './monster.service';
+    MonsterSimpleInventory, MonsterTemplateService
+} from '.';
+
 import {Observable} from 'rxjs';
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
 import {ItemTemplate} from '../item/item-template.model';
@@ -36,7 +36,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     public newItem: ItemTemplate;
     public newItemData: any = {};
 
-    constructor(private _monsterService: MonsterService
+    constructor(private _monsterTemplateService: MonsterTemplateService
         , private _locationService: LocationService
         , private _itemService: ItemService) {
     }
@@ -199,9 +199,9 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        Observable.forkJoin(this._monsterService.getMonsterCategories()
+        Observable.forkJoin(this._monsterTemplateService.getMonsterCategories()
             , this._locationService.getLocations()
-            , this._monsterService.getMonsterTraits()).subscribe(
+            , this._monsterTemplateService.getMonsterTraits()).subscribe(
             res => {
                 this.categories = res[0];
                 this.locations = res[1];

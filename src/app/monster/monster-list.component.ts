@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
-import {MonsterTemplate, MonsterTemplateCategory} from './monster.model';
-import {MonsterService} from './monster.service';
 import {NotificationsService} from '../notifications/notifications.service';
+import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateService} from '.';
 
 @Component({
     selector: 'monster-list',
@@ -15,7 +14,7 @@ export class MonsterListComponent implements OnInit {
 
     public newMonster: MonsterTemplate;
 
-    constructor(private _monsterService: MonsterService, private _notifications: NotificationsService) {
+    constructor(private _monsterTemplateService: MonsterTemplateService, private _notifications: NotificationsService) {
     }
 
     startAddMonster() {
@@ -30,7 +29,7 @@ export class MonsterListComponent implements OnInit {
         if (!this.newMonster.type) {
             return;
         }
-        this._monsterService.editMonster(this.newMonster).subscribe(
+        this._monsterTemplateService.editMonster(this.newMonster).subscribe(
             monster => {
                 this.monsters.push(monster);
                 this.sortMonsterByCategory();
@@ -56,7 +55,7 @@ export class MonsterListComponent implements OnInit {
     }
 
     getMonsters() {
-        this._monsterService.getMonsterList().subscribe(
+        this._monsterTemplateService.getMonsterList().subscribe(
             res => {
                 this.monsters = res;
                 this.sortMonsterByCategory();
