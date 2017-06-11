@@ -18,7 +18,7 @@ export class ModifiersEditorComponent implements OnInit {
 
     public stats: string[];
     public basicStats: string[] = ['AD', 'CHA', 'COU', 'INT', 'FO'];
-    public combatStats: string[] = ['AT', 'PRD', 'PR', 'PR_MAGIC'];
+    public combatStats: string[] = ['AT', 'PRD', 'PR', 'PR_MAGIC', 'ESQ'];
     public lifeStats: string[] = ['EA', 'EV'];
     public magicStats: string[] = ['MPHYS', 'MPSY', 'RESM'];
 
