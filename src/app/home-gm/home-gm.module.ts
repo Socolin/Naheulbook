@@ -31,7 +31,7 @@ import {routes} from './home-gm.routes';
         FormsModule,
         SharedModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
         RouterModule.forChild(routes),
         NotificationsModule,
         UserModule,

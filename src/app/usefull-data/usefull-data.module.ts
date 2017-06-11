@@ -20,7 +20,7 @@ import {EffectModule} from '../effect/effect.module';
         CommonModule,
         FormsModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
         SharedModule,
         ItemModule,
         JobModule,

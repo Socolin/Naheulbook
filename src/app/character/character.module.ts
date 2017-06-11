@@ -35,7 +35,7 @@ import {CreateCharacterComponent} from './create-character.component';
         CommonModule,
         FormsModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
         SharedModule,
         SkillModule,
         OriginModule,

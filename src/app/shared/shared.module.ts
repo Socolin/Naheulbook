@@ -18,7 +18,7 @@ import {NhbkDialogService} from './nhbk-dialog.service';
         CommonModule,
         FormsModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
     ],
     declarations: [
         AutocompleteInputComponent,

@@ -17,7 +17,7 @@ import {RouterModule} from '@angular/router';
         FormsModule,
         SharedModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
         RouterModule,
     ],
     declarations: [

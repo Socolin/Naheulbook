@@ -30,7 +30,7 @@ import {HomeDatabaseComponent} from './home-database.component';
         FormsModule,
         SharedModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
         RouterModule.forChild(routes),
         NotificationsModule,
         UserModule,

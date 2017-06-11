@@ -24,7 +24,7 @@ import {DurationSelectorComponent} from './duration-selector.component';
         SharedModule,
         NotificationsModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
     ],
     declarations: [
         DateComponent,

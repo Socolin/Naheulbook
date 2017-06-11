@@ -40,7 +40,7 @@ import {WebsocketModule} from './websocket/websocket.module';
         BrowserAnimationsModule,
         RouterModule.forRoot(routes),
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
         HttpModule,
         HomeModule,
         DatabaseHomeModule,

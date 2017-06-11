@@ -15,7 +15,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
         FormsModule,
         SharedModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
     ],
     declarations: [
         SkillComponent,

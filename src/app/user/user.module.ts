@@ -15,7 +15,7 @@ import {AuthGuard} from './auth-guard';
         SharedModule,
         FormsModule,
         MaterialModule,
-        FlexLayoutModule.forRoot()
+        FlexLayoutModule
     ],
     declarations: [
         LoggedComponent,

@@ -11,7 +11,7 @@ import {WebSocketService} from './websocket.service';
         CommonModule,
         FormsModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
     ],
     declarations: [
     ],

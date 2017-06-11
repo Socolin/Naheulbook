@@ -14,7 +14,7 @@ import {JobComponent, JobListComponent, JobSelectorComponent, JobService} from '
         FormsModule,
         SharedModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
     ],
     declarations: [
         JobComponent,

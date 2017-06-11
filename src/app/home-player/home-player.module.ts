@@ -20,7 +20,7 @@ import {routes} from './home-player.routes';
         FormsModule,
         SharedModule,
         MaterialModule,
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
         RouterModule.forChild(routes),
         NotificationsModule,
         UserModule,
