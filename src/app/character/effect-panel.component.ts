@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {Portal, OverlayRef} from '@angular/material';
+import {Portal, OverlayRef, MdCheckboxChange} from '@angular/material';
 
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {ActiveEffect} from '../effect/effect.model';
@@ -62,9 +62,10 @@ export class EffectPanelComponent {
 
         this.closeAddEffectDialog();
 
-        this._characterService.addEffect(this.character.id, effect.id, data).subscribe(
-            (activeEffect: ActiveEffect) => {
-                this.character.onAddEffect(activeEffect);
+        let modifier = ActiveStatsModifier.fromEffect(effect, data);
+        this._characterService.addModifier(this.character.id, modifier).subscribe(
+            (activeModifier: ActiveStatsModifier) => {
+                this.character.onAddModifier(activeModifier);
             }
         );
     }
@@ -104,7 +105,6 @@ export class EffectPanelComponent {
     selectModifier(modifier: ActiveStatsModifier) {
         this.selectedEffect = null;
         this.selectedModifier = modifier;
-        return false;
     }
 
     updateReusableModifier(modifier: ActiveStatsModifier) {

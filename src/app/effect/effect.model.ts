@@ -74,6 +74,7 @@ export class Effect implements IDurable {
     }
 }
 
+/** @deprecated */
 export class ActiveEffect {
     id: number;
     effect: Effect;

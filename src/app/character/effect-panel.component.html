@@ -15,46 +15,54 @@
                                              [ngModel]="characterEffect.active">
                             </md-slide-toggle>
                         </span>
-                        <span *ngIf="!characterEffect.reusable" class="toggle-padding"></span>
-                        <span class="padding"
-                              (click)="selectEffect(characterEffect)">
+                        <span class="padding">
                             {{characterEffect.effect.name}}
                         </span>
                         <span *ngIf="characterEffect.currentCombatCount !== null">
                             <span class="ra ra-sword duration-icon"></span>{{characterEffect.currentCombatCount}}
                         </span>
                         <span *ngIf="characterEffect.currentTimeDuration">
-                            <span class="ra ra-clockwork duration-icon"></span> {{characterEffect.currentTimeDuration | nhbkDuration}}
+                            <span class="ra ra-clockwork duration-icon"></span> {{characterEffect.currentTimeDuration | nhbkShortDuration}}
                         </span>
                         <span *ngIf="characterEffect.currentLapCount">
                             <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{characterEffect.currentLapCount}}
                         </span>
                     </div>
                 </ng-template>
-                <ng-template ngFor let-modifier [ngForOf]="character.computedData.modifiers" let-i="index" let-last="last">
+                <ng-template ngFor let-modifier [ngForOf]="character.computedData.modifiers">
                     <div *ngIf="!modifier.permanent"
-                         class="effect-element"
+                         (click)="selectModifier(modifier)"
+                             class="effect-element"
                          [class.selected]="selectedModifier === modifier">
-                        <span *ngIf="modifier.reusable">
-                            <md-slide-toggle color="primary"
-                                             (change)="updateReusableModifier(modifier)"
-                                             [ngModel]="modifier.active">
-                            </md-slide-toggle>
-                        </span>
-                        <span *ngIf="!modifier.reusable" class="toggle-padding"></span>
-                        <span class="padding"
-                              (click)="selectModifier(modifier)">
-                            {{modifier.name}}
-                        </span>
-                        <span *ngIf="modifier.combatCount">
-                            <span class="ra ra-sword duration-icon"></span> {{modifier.currentCombatCount}}
-                        </span>
-                        <span *ngIf="modifier.currentTimeDuration">
-                            <span class="ra ra-clockwork duration-icon"></span> {{modifier.currentTimeDuration | nhbkDuration}}
-                        </span>
-                        <span *ngIf="modifier.currentLapCount">
-                            <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{modifier.currentLapCount}}
-                        </span>
+                        <div class="modifier-toggle">
+                            <md-checkbox color="primary"
+                                         [disabled]="!modifier.reusable"
+                                         [checked]="modifier.active"
+                                         (change)="updateReusableModifier(modifier)">
+                            </md-checkbox>
+                        </div>
+                        <div class="modifier-info">
+                            <div>
+                                {{modifier.name}}
+                            </div>
+                            <div class="modifier-type secondary-text">
+                                {{modifier.type}}
+                            </div>
+                        </div>
+                        <div class="modifier-duration">
+                            <span *ngIf="modifier.combatCount">
+                                <span class="ra ra-sword duration-icon"></span>
+                                {{modifier.currentCombatCount}}
+                            </span>
+                            <span *ngIf="modifier.currentTimeDuration">
+                                <span class="ra ra-clockwork duration-icon"></span>
+                                {{modifier.currentTimeDuration | nhbkShortDuration}}
+                            </span>
+                            <span *ngIf="modifier.currentLapCount">
+                                <span class="game-icon game-icon-clockwise-rotation duration-icon"></span>
+                                {{modifier.currentLapCount}}
+                            </span>
+                        </div>
                     </div>
                 </ng-template>
             </div>
@@ -63,11 +71,11 @@
             <button md-button color="primary" (click)="openAddEffectModal()">AJOUTER</button>
         </md-card-actions>
     </md-card>
-    <div *ngIf="selectedEffect" class="effect-detail-panel">
-        <effect-detail [characterEffect]="selectedEffect" (onRemove)="removeEffect($event)"></effect-detail>
-    </div>
-    <div *ngIf="selectedModifier" class="effect-detail-panel">
-        <modifier-detail [activeModifier]="selectedModifier" (onRemove)="removeModifier($event)"></modifier-detail>
+    <div class="effect-detail-panel">
+        <effect-detail *ngIf="selectedEffect" [characterEffect]="selectedEffect" (onRemove)="removeEffect($event)">
+        </effect-detail>
+        <modifier-detail *ngIf="selectedModifier" [activeModifier]="selectedModifier" (onRemove)="removeModifier($event)">
+        </modifier-detail>
     </div>
 </div>
 

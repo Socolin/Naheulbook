@@ -14,7 +14,7 @@ import {DateComponent} from './date.component';
 
 import {DateSelectorComponent} from './date-selector.component';
 import {DateModifierComponent} from './date-modifier.component';
-import {NhbkDateDurationPipe} from './nhbk-duration.pipe';
+import {NhbkDateDurationPipe, NhbkDateShortDurationPipe} from './nhbk-duration.pipe';
 import {DurationSelectorComponent} from './duration-selector.component';
 
 @NgModule({
@@ -31,6 +31,7 @@ import {DurationSelectorComponent} from './duration-selector.component';
         DateSelectorComponent,
         DateModifierComponent,
         NhbkDateDurationPipe,
+        NhbkDateShortDurationPipe,
         DurationSelectorComponent,
     ],
     exports: [
@@ -38,6 +39,7 @@ import {DurationSelectorComponent} from './duration-selector.component';
         DateSelectorComponent,
         DateModifierComponent,
         NhbkDateDurationPipe,
+        NhbkDateShortDurationPipe,
         DurationSelectorComponent,
     ],
     providers: [DateService]

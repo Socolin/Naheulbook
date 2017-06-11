@@ -132,3 +132,46 @@ export function duration2text(duration: number|NhbkDateOffset) {
     result = result.trim();
     return result;
 }
+
+export function duration2shortText(duration: number|NhbkDateOffset) {
+    let dateOffset;
+
+    if (!duration) {
+        return '';
+    }
+
+    if (typeof duration === 'number') {
+        dateOffset = timeDuration2DateOffset2(duration);
+    } else {
+        dateOffset = duration;
+    }
+
+    let result = '';
+    if (dateOffset.year > 1) {
+        result += dateOffset.year + ' a ';
+    } else if (dateOffset.year === 1) {
+        result += dateOffset.year + ' a ';
+    } else if (dateOffset.week > 1) {
+        result += dateOffset.week + ' sem ';
+    } else if (dateOffset.week === 1) {
+        result += dateOffset.week + ' sem ';
+    } else if (dateOffset.day > 1) {
+        result += dateOffset.day + ' j ';
+    } else if (dateOffset.day === 1) {
+        result += dateOffset.day + ' j ';
+    } else if (dateOffset.hour > 1) {
+        result += dateOffset.hour + ' h ';
+    } else if (dateOffset.hour === 1) {
+        result += dateOffset.hour + ' h ';
+    } else if (dateOffset.minute > 1) {
+        result += dateOffset.minute + ' mn ';
+    } else if (dateOffset.minute === 1) {
+        result += dateOffset.minute + ' mn ';
+    } else if (dateOffset.second > 1) {
+        result += dateOffset.second + ' sec ';
+    } else if (dateOffset.second === 1) {
+        result += dateOffset.second + ' sec ';
+    }
+    result = result.trim();
+    return result;
+}
