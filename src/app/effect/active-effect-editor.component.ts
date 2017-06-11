@@ -40,23 +40,27 @@ export class ActiveEffectEditorComponent implements DoCheck {
         this.preSelectedEffect = effect;
         this.newEffectCustomDuration = false;
         if (effect) {
-            switch (effect.durationType) {
-                case 'combat':
-                    this.customDuration = {durationType: effect.durationType, combatCount: effect.combatCount};
-                    break;
-                case 'time':
-                    this.customDuration = {durationType: effect.durationType, timeDuration: effect.timeDuration};
-                    break;
-                case 'lap':
-                    this.customDuration = {durationType: effect.durationType, lapCount: effect.lapCount};
-                    break;
-                case 'custom':
-                    this.customDuration = {durationType: effect.durationType, duration: effect.duration};
-                    break;
-                case 'forever':
-                    this.customDuration = {durationType: effect.durationType};
-                    break;
-            }
+            this.updateCustomDuration(effect);
+        }
+    }
+
+    public updateCustomDuration(effect: Effect) {
+        switch (effect.durationType) {
+            case 'combat':
+                this.customDuration = {durationType: effect.durationType, combatCount: effect.combatCount};
+                break;
+            case 'time':
+                this.customDuration = {durationType: effect.durationType, timeDuration: effect.timeDuration};
+                break;
+            case 'lap':
+                this.customDuration = {durationType: effect.durationType, lapCount: effect.lapCount};
+                break;
+            case 'custom':
+                this.customDuration = {durationType: effect.durationType, duration: effect.duration};
+                break;
+            case 'forever':
+                this.customDuration = {durationType: effect.durationType};
+                break;
         }
     }
 
@@ -65,7 +69,6 @@ export class ActiveEffectEditorComponent implements DoCheck {
             reusable: this.newEffectReusable,
         };
         if (this.newEffectCustomDuration) {
-            // FIXME: angular4 typescript 2.1 concatenate data and customDuration
             data['durationType'] = this.customDuration.durationType;
             if (this.customDuration.durationType === 'combat') {
                 data['combatCount'] = this.customDuration.combatCount;
@@ -100,8 +103,12 @@ export class ActiveEffectEditorComponent implements DoCheck {
         this.preSelectedEffect = null;
         this.effectFilterName = '';
     }
+
     selectEffect(effect: Effect) {
         this.preSelectedEffect = effect;
+        if (effect) {
+            this.updateCustomDuration(effect);
+        }
     }
 
     ngDoCheck() {
