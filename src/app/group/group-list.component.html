@@ -1,10 +1,13 @@
 <div class="groups">
-    <md-card *ngIf="!groups || groups.length === 0">
-        Vous ne possédez aucun personnage.
+    <md-card class="loading-groups" *ngIf="loading">
+        <md-spinner></md-spinner>
+    </md-card>
+    <md-card *ngIf="!loading && (!groups || groups.length === 0)">
+        Vous ne possédez aucun group.
     </md-card>
     <md-card *ngFor="let group of groups" (click)="selectGroup(group)" class="clickable">
         <md-card-title>{{group.name}}</md-card-title>
-        <md-card-subtitle>{{group.groupCount}} joueurs</md-card-subtitle>
+        <md-card-subtitle>{{group.characterCount}} joueurs</md-card-subtitle>
     </md-card>
     <md-card (click)="createGroup()" class="create-group clickable">
         <md-icon>add</md-icon>Créer un groupe

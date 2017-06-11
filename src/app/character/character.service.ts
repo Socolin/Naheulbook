@@ -16,6 +16,7 @@ import {JsonService} from '../shared/json-service';
 import {LoginService} from '../user';
 import {ActiveEffect} from '../effect/effect.model';
 import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {PartialGroup} from '../group/group.model';
 
 @Injectable()
 export class CharacterService extends JsonService {
@@ -243,7 +244,7 @@ export class CharacterService extends JsonService {
         }).map(res => res.json());
     }
 
-    listGroups(): Observable<Object[]> {
+    listGroups(): Observable<PartialGroup[]> {
         return this._http.get('/api/character/listGroups').map(res => res.json());
     }
 

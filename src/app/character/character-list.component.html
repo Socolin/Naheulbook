@@ -1,5 +1,8 @@
 <div class="characters">
-	<md-card *ngIf="!characters || characters.length === 0">
+    <md-card class="loading-characters" *ngIf="loading">
+        <md-spinner></md-spinner>
+    </md-card>
+	<md-card *ngIf="!loading && (!characters || characters.length === 0)">
         Vous ne possédez aucun personnage.
     </md-card>
     <md-card *ngFor="let character of characters" (click)="selectCharacter(character)" class="clickable">

@@ -4,14 +4,15 @@ import {Router} from '@angular/router';
 import {NotificationsService} from '../notifications';
 
 import {CharacterService} from '../character/character.service';
-import {Group} from './group.model';
+import {Group, PartialGroup} from './group.model';
 
 @Component({
     templateUrl: './group-list.component.html',
     styleUrls: ['./group-list.component.scss']
 })
 export class GroupListComponent implements OnInit {
-    public groups: Object[];
+    public groups: PartialGroup[];
+    public loading = true;
 
     constructor(private _characterService: CharacterService
         , private _notification: NotificationsService
@@ -32,6 +33,7 @@ export class GroupListComponent implements OnInit {
         this._characterService.listGroups().subscribe(
             res => {
                 this.groups = res;
+                this.loading = false;
             },
             err => {
                 console.log(err);

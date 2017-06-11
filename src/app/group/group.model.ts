@@ -245,6 +245,12 @@ export class GroupJsonData {
     characters: { id: number }[];
 }
 
+export class PartialGroup {
+    id: number;
+    name: string;
+    characterCount: number;
+}
+
 export class Group extends WsRegistrable {
     public id: number;
     public name: string;

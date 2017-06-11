@@ -11,6 +11,7 @@ import {CharacterResume} from './character.model';
 })
 export class CharacterListComponent implements OnInit {
     public characters: CharacterResume[];
+    public loading = true;
 
     constructor(private _router: Router
         , private _route: ActivatedRoute
@@ -31,6 +32,7 @@ export class CharacterListComponent implements OnInit {
         this._characterService.loadList().subscribe(
             characters => {
                 this.characters = characters;
+                this.loading = false;
             }
         );
     }
