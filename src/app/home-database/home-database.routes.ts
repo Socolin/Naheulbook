@@ -9,6 +9,9 @@ import {LocationListComponent} from '../location/location-list.component';
 import {QuestListComponent} from '../quest/quest-list.component';
 import {HomeDatabaseComponent} from './home-database.component';
 import {EditItemComponent} from '../item/edit-item.component';
+import {EditEffectComponent} from '../effect/edit-effect.component';
+import {CreateEffectComponent} from '../effect/create-effect.component';
+import {CreateItemComponent} from '../item/create-item.component';
 
 export const routes: Routes = [
     {
@@ -40,6 +43,14 @@ export const routes: Routes = [
                 component: EffectListComponent,
             },
             {
+                path: 'create-effect',
+                component: CreateEffectComponent,
+            },
+            {
+                path: 'edit-effect/:id',
+                component: EditEffectComponent,
+            },
+            {
                 path: 'monsters',
                 component: MonsterListComponent
             },
@@ -54,6 +65,10 @@ export const routes: Routes = [
             {
                 path: 'edit-item/:id',
                 component: EditItemComponent,
+            },
+            {
+                path: 'create-item',
+                component: CreateItemComponent,
             }
         ]
     }

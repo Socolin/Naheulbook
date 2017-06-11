@@ -1,6 +1,5 @@
-import {Component, Input, Output, EventEmitter, ViewChild, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import {Fighter, Group} from './group.model';
-import {GroupService} from './group.service';
 import {NotificationsService} from '../notifications/notifications.service';
 import {CharacterService} from '../character/character.service';
 import {GroupActionService} from './group-action.service';
@@ -10,10 +9,8 @@ import {Item} from '../character/item.model';
 import {TargetJsonData} from './target.model';
 import {MdSlideToggleChange, OverlayRef, Portal} from '@angular/material';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {Effect, EffectCategory} from '../effect/effect.model';
-import {EffectService} from '../effect/effect.service';
 import {ActiveStatsModifier} from '../shared/stat-modifier.model';
-import {Monster, MonsterTemplateService} from '../monster';
+import {Monster} from '../monster';
 import {MonsterService} from '../monster/monster.service';
 
 @Component({
@@ -21,7 +18,7 @@ import {MonsterService} from '../monster/monster.service';
     templateUrl: './fighter.component.html',
     styleUrls: ['./fighter.component.scss']
 })
-export class FighterComponent implements OnInit {
+export class FighterComponent {
     @Input() group: Group;
     @Input() fighter: Fighter;
     @Input() fighters: Fighter[];
@@ -35,35 +32,15 @@ export class FighterComponent implements OnInit {
     public editMonsterDialog: Portal<any>;
     public editMonsterOverlayRef: OverlayRef;
 
-    @ViewChild('addEffectDialog')
-    public addEffectDialog: Portal<any>;
-    public addEffectOverlayRef: OverlayRef;
-    public addEffectTypeSelectedTab = 0;
-    public effectCategoriesById: { [categoryId: number]: EffectCategory };
-
-    public newStatsModifier: ActiveStatsModifier = new ActiveStatsModifier();
-
-    constructor(private _groupService: GroupService
-        , private _actionService: GroupActionService
+    constructor(private _actionService: GroupActionService
         , private _characterService: CharacterService
         , private _monsterService: MonsterService
-        , private _monsterTemplateService: MonsterTemplateService
         , private _nhbkDialogService: NhbkDialogService
-        , private _effectService: EffectService
         , private _notification: NotificationsService) {
     }
 
     addItemTo(fighter: Fighter) {
         this._actionService.emitAction('openAddItemForm', this.group, fighter);
-    }
-
-    openAddEffectModal() {
-        this.newStatsModifier = new ActiveStatsModifier();
-        this.addEffectOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addEffectDialog);
-    }
-
-    closeAddEffectDialog() {
-        this.addEffectOverlayRef.detach();
     }
 
     displayCharacterSheet(character: Character) {
@@ -193,14 +170,10 @@ export class FighterComponent implements OnInit {
         return ItemTemplate.hasSlot(template, slot);
     }
 
-    addEffect(newEffect: {effect: Effect, data: any}) {
-        let effect = newEffect.effect;
-        let data = newEffect.data;
-
-        this._monsterService.addModifier(this.fighter.id, ActiveStatsModifier.fromEffect(effect, data)).subscribe(
+    addCustomModifier(modifier: ActiveStatsModifier) {
+        this._monsterService.addModifier(this.fighter.id, modifier).subscribe(
             this.fighter.monster.onAddModifier.bind(this.fighter.monster)
         );
-        this.closeAddEffectDialog();
     }
 
     selectModifier(modifier: ActiveStatsModifier) {
@@ -217,13 +190,6 @@ export class FighterComponent implements OnInit {
         );
     }
 
-    addCustomModifier() {
-        this.closeAddEffectDialog();
-        this._monsterService.addModifier(this.fighter.id, this.newStatsModifier).subscribe(
-             this.fighter.monster.onAddModifier.bind(this.fighter.monster)
-        );
-    }
-
     removeModifier(modifier: ActiveStatsModifier) {
         this._monsterService.removeModifier(this.fighter.id, modifier.id).subscribe((deletedModifier: ActiveStatsModifier) => {
             if (this.selectedModifier && this.selectedModifier.id === deletedModifier.id) {
@@ -233,11 +199,4 @@ export class FighterComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
-        this._effectService.getCategoryList().subscribe(
-            categories => {
-                this.effectCategoriesById = {};
-                categories.map(c => this.effectCategoriesById[c.id] = c);
-            });
-    }
 }

@@ -1,6 +1,6 @@
 <div class="group-component-container">
 <div class="usefull-data">
-    <usefull-data></usefull-data>
+    <usefull-data (onAction)="usefullDataAction($event)"></usefull-data>
 </div>
 <div *ngIf="group" class="group-container">
     <md-tab-group (selectChange)=selectTab($event) [selectedIndex]="currentTabIndex">
@@ -353,3 +353,8 @@
     </md-card>
 </ng-template>
 
+<add-effect-modal #addEffectModal (createModifier)="selectCustomModifier($event)">
+</add-effect-modal>
+
+<fighter-selector #fighterSelector [group]="group" (selectFighters)="onSelectFighters($event)">
+</fighter-selector>

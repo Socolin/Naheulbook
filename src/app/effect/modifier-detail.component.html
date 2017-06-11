@@ -2,7 +2,11 @@
     <md-card-title>
         {{activeModifier.name}}
     </md-card-title>
+    <md-card-subtitle>
+        {{activeModifier.type}}
+    </md-card-subtitle>
     <md-card-content>
+        <p>{{activeModifier.description}}</p>
         <p *ngIf="activeModifier.duration">Durée: {{activeModifier.duration}}</p>
         <p *ngIf="activeModifier.combatCount">Durée: {{activeModifier.combatCount}} combat</p>
         <p *ngIf="activeModifier.timeDuration">Durée: {{activeModifier.timeDuration | nhbkDuration}}</p>

@@ -1,44 +1,79 @@
-<div>
+<div *ngIf="!preSelectedEffect">
     <autocomplete-input [value]="effectFilterName"
                         [placeholder]="'Effet'"
                         (onSelect)="selectEffectInAutocompleteList($event)"
                         [(callback)]="autocompleteEffectListCallback">
     </autocomplete-input>
 </div>
-<div>
-    <md-slide-toggle color="primary"
-                     *ngIf="reusableToggle"
-                     [(ngModel)]="newEffectReusable">
-        Ré-utilisable
-    </md-slide-toggle>
-</div>
 
-<div *ngIf="preSelectedEffect">
-    <div *ngIf="preSelectedEffect.duration">
-        <label>Durée</label>
-        <div>
-            {{preSelectedEffect.duration}}
+<md-card *ngIf="preSelectedEffect" class="effect-selected">
+    <md-card-title class="effect-name">
+        {{preSelectedEffect.name}}
+        <button md-icon-button (click)="unselectEffect()">
+            <md-icon>close</md-icon>
+        </button>
+    </md-card-title>
+    <md-card-subtitle>
+        {{preSelectedEffect.category.name}}
+    </md-card-subtitle>
+    <md-card-content>
+        <div class="effect-description">
+            {{preSelectedEffect.description}}
         </div>
-    </div>
-    <div *ngIf="preSelectedEffect.combatCount">
-        <label>Durée</label>
-        <div>
-            {{preSelectedEffect.combatCount}} combat
+        <div class="effect-duration">
+            Durée:
+            <span [ngSwitch]="preSelectedEffect.durationType">
+            <ng-template [ngSwitchCase]="'lap'">
+                {{preSelectedEffect.lapCount}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'combat'">
+                {{preSelectedEffect.combatCount}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'custom'">
+                {{preSelectedEffect.duration}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'time'">
+                {{preSelectedEffect.timeDuration | nhbkDuration}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'forever'">
+                permanent
+            </ng-template>
+        </span>
         </div>
-    </div>
-    <div *ngIf="preSelectedEffect.timeDuration">
-        <label>Durée</label>
         <div>
-            {{preSelectedEffect.timeDuration | nhbkDuration}}
+            <span *ngFor="let modifier of preSelectedEffect.modifiers">
+                {{modifier | modifier}}
+            </span>
         </div>
+    </md-card-content>
+</md-card>
+
+<md-card *ngIf="preSelectedEffect">
+    <md-card-subtitle>Customisation</md-card-subtitle>
+    <div class="effect-reusable">
+        <md-slide-toggle color="primary"
+                         *ngIf="reusableToggle"
+                         [(ngModel)]="newEffectReusable">
+            Ré-utilisable
+        </md-slide-toggle>
     </div>
-</div>
-<div *ngIf="preSelectedEffect">
-    <md-checkbox [(ngModel)]="newEffectCustomDuration">
-        Durée personnalisée
-    </md-checkbox>
-</div>
-<div *ngIf="preSelectedEffect && newEffectCustomDuration">
-    <h4>Durée</h4>
-    <duration-selector [durable]="customDuration"></duration-selector>
-</div>
+    <div class="effect-custom-duration">
+        <button md-button *ngIf="!newEffectCustomDuration"
+                (click)="newEffectCustomDuration = true"
+                color="primary">
+            Durée personnalisée
+        </button>
+    </div>
+</md-card>
+
+<md-card *ngIf="preSelectedEffect && newEffectCustomDuration">
+    <md-card-header class="custom-duration-header">
+        <md-card-subtitle>Durée personnalisée</md-card-subtitle>
+        <button md-icon-button (click)="newEffectCustomDuration = false">
+            <md-icon>close</md-icon>
+        </button>
+    </md-card-header>
+    <md-card-content>
+        <duration-selector [durable]="customDuration"></duration-selector>
+    </md-card-content>
+</md-card>

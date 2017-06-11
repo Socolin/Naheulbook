@@ -222,7 +222,11 @@
 
 <ng-template #panelEffects="cdkPortal" cdk-portal>
     <md-card class="panel-content">
-        <effect-list [isOverlay]="true" [inputCategoryId]=effectsCategoryId></effect-list>
+        <effect-list (onAction)="onAction.next($event)"
+                     [isOverlay]="true"
+                     [options]="['applyButton']"
+                     [inputCategoryId]=effectsCategoryId>
+        </effect-list>
     </md-card>
 </ng-template>
 

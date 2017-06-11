@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {Portal} from '@angular/material';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {UsefullDataService} from './usefull-data.service';
@@ -10,6 +10,7 @@ import {CriticalData} from './usefull-data.model';
     templateUrl: './usefull-data.component.html',
 })
 export class UsefullDataComponent implements OnInit {
+    @Output() onAction = new EventEmitter<{action: string, data: any}>();
     public currentPanel: string = null;
     public effectsCategoryId = 1;
     public panelByNames: {[name: string]: Portal<any>} = {};

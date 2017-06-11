@@ -1,0 +1,24 @@
+<ng-template #selectorDialog ="cdkPortal" cdk-portal>
+    <md-card>
+        <md-card-title>{{label}}</md-card-title>
+        <md-card-content>
+            <ng-template ngFor let-fighter [ngForOf]="group.fighters">
+                <div class="fighter-selector">
+                    <md-checkbox color="primary" (change)="selectFighter(fighter, $event)">{{fighter.name}}</md-checkbox>
+                </div>
+            </ng-template>
+        </md-card-content>
+        <md-card-actions>
+            <button md-button
+                    color="primary"
+                    (click)="close()">
+                ANNULER
+            </button>
+            <button md-button
+                    color="primary"
+                    (click)="valid()">
+                VALIDER
+            </button>
+        </md-card-actions>
+    </md-card>
+</ng-template>

@@ -1,0 +1,23 @@
+.effect-selected {
+    .effect-name {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        >h3 {
+            flex: 0 auto;
+        }
+        md-icon {
+            flex: 0 auto;
+        }
+    }
+}
+md-card {
+    margin: 5px
+}
+
+.custom-duration-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+

@@ -175,6 +175,7 @@
                                 (click)="removeModifier(modifier)">
                             SUPPRIMER
                         </button>
+                        <div *ngIf="modifier.type">{{modifier.type}}</div>
                         <div *ngIf="modifier.description">{{modifier.description}}</div>
                         <div *ngIf="modifier.duration">Durée totale: {{modifier.duration}}</div>
                         <div *ngIf="modifier.combatCount">Durée totale: {{modifier.combatCount}} combat</div>
@@ -192,7 +193,7 @@
                         </div>
                     </md-card>
                 </ng-template>
-                <button md-icon-button (click)="openAddEffectModal()">
+                <button md-icon-button (click)="addEffectModal.open()">
                     <md-icon>add</md-icon>
                 </button>
             </div>
@@ -364,42 +365,5 @@
     </md-card>
 </ng-template>
 
-
-<ng-template #addEffectDialog="cdkPortal" cdk-portal>
-    <md-card class="add-effect-dialog">
-        <md-card-title>Ajouter un effet</md-card-title>
-        <md-card-content>
-            <md-tab-group (selectedIndexChange)="addEffectTypeSelectedTab = $event">
-                <md-tab label="Prédéfini">
-                    <active-effect-editor #activeEffectEditor
-                                          (onValidate)="addEffect($event)">
-                    </active-effect-editor>
-                </md-tab>
-
-                <md-tab label="Custom">
-                    <stats-modifier-editor [modifier]="newStatsModifier">
-                    </stats-modifier-editor>
-                </md-tab>
-            </md-tab-group>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
-                    color="primary"
-                    (click)="closeAddEffectDialog()">
-                ANNULER
-            </button>
-            <button md-button
-                    color="primary"
-                    *ngIf="addEffectTypeSelectedTab === 0"
-                    (click)="activeEffectEditor.addEffect()">
-                AJOUTER
-            </button>
-            <button md-button
-                    color="primary"
-                    *ngIf="addEffectTypeSelectedTab === 1"
-                    (click)="addCustomModifier()">
-                AJOUTER
-            </button>
-        </md-card-actions>
-    </md-card>
-</ng-template>
+<add-effect-modal #addEffectModal (createModifier)="addCustomModifier($event)">
+</add-effect-modal>

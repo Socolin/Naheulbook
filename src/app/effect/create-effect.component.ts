@@ -5,7 +5,6 @@ import {EffectService} from './effect.service';
 import {Effect} from './effect.model';
 
 @Component({
-    selector: 'create-effect',
     templateUrl: './create-effect.component.html',
     providers: [EffectService],
 })

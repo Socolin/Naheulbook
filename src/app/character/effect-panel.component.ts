@@ -1,8 +1,8 @@
-import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import {Portal, OverlayRef} from '@angular/material';
 
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {ActiveEffect, EffectCategory} from '../effect/effect.model';
+import {ActiveEffect} from '../effect/effect.model';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
@@ -16,7 +16,6 @@ import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 })
 export class EffectDetailComponent {
     @Input() characterEffect: ActiveEffect;
-    @Input() effectCategoriesById: {[categoryId: number]: EffectCategory};
     @Output() onRemove: EventEmitter<ActiveEffect> = new EventEmitter<ActiveEffect>();
 }
 
@@ -25,7 +24,7 @@ export class EffectDetailComponent {
     templateUrl: './effect-panel.component.html',
     styleUrls: ['./effect-panel.component.scss'],
 })
-export class EffectPanelComponent implements OnInit {
+export class EffectPanelComponent {
     @Input() character: Character;
     public selectedEffect: ActiveEffect;
     public selectedModifier: ActiveStatsModifier;
@@ -35,8 +34,6 @@ export class EffectPanelComponent implements OnInit {
     public addEffectDialog: Portal<any>;
     public addEffectOverlayRef: OverlayRef;
     public addEffectTypeSelectedTab = 0;
-
-    public effectCategoriesById: { [categoryId: number]: EffectCategory };
 
     public newActiveStatsModifier: ActiveStatsModifier = new ActiveStatsModifier();
 
@@ -114,13 +111,5 @@ export class EffectPanelComponent implements OnInit {
         this._characterService.toggleModifier(this.character.id, modifier.id).subscribe(
             this.character.onUpdateModifier.bind(this.character)
         );
-    }
-
-    ngOnInit() {
-        this._effectService.getCategoryList().subscribe(
-            categories => {
-                this.effectCategoriesById = {};
-                categories.map(c => this.effectCategoriesById[c.id] = c);
-            });
     }
 }

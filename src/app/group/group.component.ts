@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
 
-import {Group, CharacterInviteInfo} from '.';
+import {Group, CharacterInviteInfo, Fighter} from '.';
 import {GroupService} from './group.service';
 import {Character} from '../character';
 
@@ -21,6 +21,11 @@ import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {CharacterService} from '../character/character.service';
 import {Subscription} from 'rxjs/Subscription';
 import {WebSocketService} from '../websocket/websocket.service';
+import {Effect} from '../effect/effect.model';
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {AddEffectModalComponent} from '../effect/add-effect-modal.component';
+import {MonsterService} from '../monster/monster.service';
+import {FighterSelectorComponent} from './fighter-selector.component';
 
 @Component({
     templateUrl: './group.component.html',
@@ -67,10 +72,20 @@ export class GroupComponent implements OnInit, OnDestroy {
     private routeSub: Subscription;
     private routeFragmentSub: Subscription;
 
+    @ViewChild('addEffectModal')
+    public addEffectModal: AddEffectModalComponent;
+
+    @ViewChild('fighterSelector')
+    public fighterSelector: FighterSelectorComponent;
+
+    private currentSelectAction: string;
+    private tmpModifier: ActiveStatsModifier;
+
     constructor(private _route: ActivatedRoute
         , private _router: Router
         , public _loginService: LoginService
         , private _groupService: GroupService
+        , private _monsterService: MonsterService
         , private _locationService: LocationService
         , private _notification: NotificationsService
         , private _actionService: GroupActionService
@@ -384,5 +399,41 @@ export class GroupComponent implements OnInit, OnDestroy {
             }
         });
         this.autocompleteLocationsCallback = this.updateLocationListAutocomplete.bind(this);
+    }
+
+    onSelectFighters(fighters: Fighter[]) {
+        if (this.currentSelectAction === 'applyModifier') {
+            for (let fighter of fighters) {
+                if (fighter.isMonster) {
+                    this._monsterService.addModifier(fighter.id, this.tmpModifier).subscribe(
+                        fighter.monster.onAddModifier.bind(fighter.monster)
+                    );
+                }
+                else {
+                    this._characterService.addModifier(fighter.id, this.tmpModifier).subscribe(
+                        fighter.character.onAddModifier.bind(fighter.character)
+                    );
+                }
+            }
+            this.tmpModifier = null;
+        }
+
+        this.currentSelectAction = null;
+    }
+
+    selectCustomModifier(modifier: ActiveStatsModifier) {
+        this.tmpModifier = modifier;
+        this.currentSelectAction = 'applyModifier';
+        this.fighterSelector.open('Choisir sur qui appliquer l\'effet ' + modifier.name);
+    }
+
+    usefullDataAction(event: {action: string, data: any}) {
+        switch (event.action) {
+            case 'applyEffect': {
+                let effect: Effect = event.data;
+                this.addEffectModal.openEffect(effect);
+                break;
+            }
+        }
     }
 }

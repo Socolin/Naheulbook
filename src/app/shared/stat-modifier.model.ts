@@ -54,7 +54,9 @@ export class StatsModifier implements IDurable {
     combatCount = 1;
     lapCount = 1;
     timeDuration: number;
+
     description?: string;
+    type?: string;
 
     values: StatModifier[] = [];
 }
@@ -93,6 +95,7 @@ export class ActiveStatsModifier extends StatsModifier {
         modifier.description = effect.description;
         modifier.permanent = false;
         modifier.reusable = data.reusable;
+        modifier.type = effect.category.name;
         if ('durationType'  in data) {
             modifier.durationType = data.durationType;
             switch (data.durationType) {

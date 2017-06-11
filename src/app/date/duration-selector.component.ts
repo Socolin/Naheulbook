@@ -5,6 +5,7 @@ import {isNullOrUndefined} from 'util';
 import {dateOffset2TimeDuration, timeDuration2DateOffset2} from './util';
 import {NhbkDateOffset} from './date.model';
 import {IDurable} from './durable.model';
+import {MdButtonToggleChange, MdSelectChange} from '@angular/material';
 
 @Component({
     selector: 'duration-selector',
@@ -17,7 +18,11 @@ export class DurationSelectorComponent implements OnChanges {
 
     public dateOffset: NhbkDateOffset = new NhbkDateOffset();
 
-    updateDuration() {
+    updateDuration(event?: MdButtonToggleChange|MdSelectChange) {
+        if (event) {
+            this.durable.durationType = event.value;
+        }
+
         switch (this.durable.durationType) {
             case 'custom':
                 if (isNullOrUndefined(this.durable.duration)) {

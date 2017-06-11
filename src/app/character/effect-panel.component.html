@@ -64,7 +64,7 @@
         </md-card-actions>
     </md-card>
     <div *ngIf="selectedEffect" class="effect-detail-panel">
-        <effect-detail [characterEffect]="selectedEffect" [effectCategoriesById]="effectCategoriesById" (onRemove)="removeEffect($event)"></effect-detail>
+        <effect-detail [characterEffect]="selectedEffect" (onRemove)="removeEffect($event)"></effect-detail>
     </div>
     <div *ngIf="selectedModifier" class="effect-detail-panel">
         <modifier-detail [activeModifier]="selectedModifier" (onRemove)="removeModifier($event)"></modifier-detail>

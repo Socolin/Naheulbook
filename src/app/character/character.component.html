@@ -90,7 +90,7 @@
                         <p>
                             Un score d'adresse (AD) exceptionnelle confère un point <em>bonus</em> en attaque (AT) ou en parade (PRD)
                         </p>
-                        <md-button-toggle-group name="alignment" [(ngModel)]="character.statBonusAD">
+                        <md-button-toggle-group [(ngModel)]="character.statBonusAD">
                             <md-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</md-button-toggle>
                             <md-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</md-button-toggle>
                         </md-button-toggle-group>
@@ -102,7 +102,7 @@
                         <p>
                             Un score d'adresse (AD) inférieur ou égale à 8 induit un point <em>malus</em> en attaque (AT) ou en parade (PRD)
                         </p>
-                        <md-button-toggle-group name="alignment" [(ngModel)]="character.statBonusAD">
+                        <md-button-toggle-group [(ngModel)]="character.statBonusAD">
                             <md-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</md-button-toggle>
                             <md-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</md-button-toggle>
                         </md-button-toggle-group>

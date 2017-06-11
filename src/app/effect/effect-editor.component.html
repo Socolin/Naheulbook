@@ -1,48 +1,49 @@
 <div>
-	<div>
-        <md-input-container style="width: 100%">
-            <input mdInput
-                   [(ngModel)]="effect.name"
-                   placeholder="Nom">
-        </md-input-container>
-	</div>
-	<div>
-        <md-input-container style="width: 100%">
-            <input mdInput
-                   [(ngModel)]="effect.description"
-                   placeholder="Description">
-        </md-input-container>
-	</div>
-	<div>
-        <md-input-container style="width: 100%">
-            <input mdInput
-                   [(ngModel)]="effect.dice"
-                   placeholder="Dé">
-        </md-input-container>
-	</div>
+    <md-card>
+        <md-card-subtitle>
+            Informations de base
+        </md-card-subtitle>
+        <md-card-content>
+            <md-input-container style="width: 100%">
+                <input mdInput
+                       [(ngModel)]="effect.name"
+                       placeholder="Nom">
+            </md-input-container>
+            <md-input-container style="width: 100%">
+                <input mdInput
+                       [(ngModel)]="effect.description"
+                       placeholder="Description">
+            </md-input-container>
+            <md-input-container style="width: 100%">
+                <input mdInput
+                       [(ngModel)]="effect.dice"
+                       placeholder="Dé">
+            </md-input-container>
+            <div *ngIf="categories">
+                <md-select style="width: 100%" placeholder="Catégorie" [ngModel]="effect.categoryId" (onSelectionChange)="selectCategory($event)">
+                    <md-option *ngFor="let category of categories" [value]="category.id">
+                        {{category.name}}
+                    </md-option>
+                </md-select>
+            </div>
+        </md-card-content>
+    </md-card>
 
-    <md-divider></md-divider>
+    <md-card>
+        <md-card-subtitle>
+            Durée
+        </md-card-subtitle>
+        <md-card-content>
+            <duration-selector [durable]="effect"></duration-selector>
+        </md-card-content>
+    </md-card>
 
-	<div>
-        Durée
-        <duration-selector [durable]="effect"></duration-selector>
-	</div>
-
-    <md-divider></md-divider>
-
-	<div *ngIf="categories">
-        Catégorie
-        <md-button-toggle-group name="alignment" [(ngModel)]="effect.category">
-            <md-button-toggle *ngFor="let category of categories" [value]="category.id">{{category.name}}</md-button-toggle>
-        </md-button-toggle-group>
-	</div>
-
-    <md-divider></md-divider>
-
-	<div>
-		<label class="col-sm-2 control-label">Modificateur</label>
-		<div class="col-sm-10">
-			<modifiers-editor [(modifiers)]="effect.modifiers"></modifiers-editor>
-		</div>
-	</div>
+    <md-card>
+        <md-card-subtitle>
+            Modificateurs
+        </md-card-subtitle>
+        <md-card-content>
+            <modifiers-editor [(modifiers)]="effect.modifiers"></modifiers-editor>
+        </md-card-content>
+    </md-card>
 </div>

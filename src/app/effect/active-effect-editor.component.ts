@@ -1,7 +1,7 @@
-import {Component, OnInit, Output, EventEmitter, Input, DoCheck} from '@angular/core';
+import {Component, Output, EventEmitter, Input, DoCheck} from '@angular/core';
 import {Observable} from 'rxjs';
 
-import {EffectCategory, Effect} from './effect.model';
+import {Effect} from './effect.model';
 import {IDurable} from '../date/durable.model';
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
 import {EffectService} from './effect.service';
@@ -11,13 +11,12 @@ import {EffectService} from './effect.service';
     templateUrl: './active-effect-editor.component.html',
     styleUrls: ['./active-effect-editor.component.scss'],
 })
-export class ActiveEffectEditorComponent implements OnInit, DoCheck {
+export class ActiveEffectEditorComponent implements DoCheck {
     @Input() reusableToggle = true;
     @Output() onValidate: EventEmitter<any> = new EventEmitter<any>();
     @Output() onChange: EventEmitter<any> = new EventEmitter<any>();
 
     public effectFilterName: string;
-    public effectCategoriesById: { [categoryId: number]: EffectCategory };
     public autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
     public preSelectedEffect: Effect;
     public newEffectReusable: boolean;
@@ -33,7 +32,7 @@ export class ActiveEffectEditorComponent implements OnInit, DoCheck {
             return Observable.from([]);
         }
         return this._effectService.searchEffect(filter).map(
-            list => list.map(e => new AutocompleteValue(e, this.effectCategoriesById[e.category].name + ': ' + e.name))
+            list => list.map(e => new AutocompleteValue(e, e.category.name + ': ' + e.name))
         );
     }
 
@@ -97,18 +96,18 @@ export class ActiveEffectEditorComponent implements OnInit, DoCheck {
         this.onValidate.emit(this.updateNewEffect());
     }
 
+    unselectEffect() {
+        this.preSelectedEffect = null;
+        this.effectFilterName = '';
+    }
+    selectEffect(effect: Effect) {
+        this.preSelectedEffect = effect;
+    }
+
     ngDoCheck() {
         let newEffect = this.updateNewEffect();
         if (newEffect) {
             this.onChange.emit(newEffect);
         }
-    }
-
-    ngOnInit(): void {
-        this._effectService.getCategoryList().subscribe(
-            categories => {
-                this.effectCategoriesById = {};
-                categories.map(c => this.effectCategoriesById[c.id] = c);
-            });
     }
 }

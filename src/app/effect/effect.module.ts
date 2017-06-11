@@ -1,4 +1,4 @@
-import {NgModule}      from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {MaterialModule} from '@angular/material';
@@ -8,8 +8,15 @@ import {SharedModule} from '../shared/shared.module';
 import {DateModule} from '../date/date.module';
 
 import {
-    EffectEditorComponent, CreateEffectComponent, EffectListComponent, EditEffectComponent,
-    EffectService, ModifierDetailComponent, StatModifierEditorComponent, ActiveEffectEditorComponent
+    ActiveEffectEditorComponent,
+    AddEffectModalComponent,
+    CreateEffectComponent,
+    EditEffectComponent,
+    EffectEditorComponent,
+    EffectListComponent,
+    EffectService,
+    ModifierDetailComponent,
+    StatModifierEditorComponent,
 } from './';
 
 @NgModule({
@@ -22,25 +29,27 @@ import {
         DateModule,
     ],
     declarations: [
-        EffectEditorComponent,
-        CreateEffectComponent,
-        EffectListComponent,
-        EditEffectComponent,
         ActiveEffectEditorComponent,
-        StatModifierEditorComponent,
+        AddEffectModalComponent,
+        CreateEffectComponent,
+        EditEffectComponent,
+        EffectEditorComponent,
+        EffectListComponent,
         ModifierDetailComponent,
+        StatModifierEditorComponent,
     ],
     providers: [
         EffectService
     ],
     exports: [
-        EffectEditorComponent,
-        CreateEffectComponent,
-        EffectListComponent,
-        EditEffectComponent,
         ActiveEffectEditorComponent,
-        StatModifierEditorComponent,
+        AddEffectModalComponent,
+        CreateEffectComponent,
+        EditEffectComponent,
+        EffectEditorComponent,
+        EffectListComponent,
         ModifierDetailComponent,
+        StatModifierEditorComponent,
     ],
 })
 export class EffectModule {
