@@ -89,7 +89,45 @@ export class ModifiersEditorComponent implements OnInit {
         }
     }
 
-    updateSelectedStat(type: string) {
+    private getStatType(selectedStat: string): string {
+        if (this.combatStats.indexOf(selectedStat) !== -1) {
+            return 'combat';
+        }
+        if (this.lifeStats.indexOf(selectedStat) !== -1) {
+            return 'life';
+        }
+        if (this.magicStats.indexOf(selectedStat) !== -1) {
+            return 'magic';
+        }
+        if (this.basicStats.indexOf(selectedStat) !== -1) {
+            return 'basic';
+        }
+        return 'other';
+    }
+
+    selectStat(stat: string) {
+        let type = this.getStatType(this.selectedStat);
+        switch (type) {
+            case 'combat':
+                this.combatSelectedStat = stat;
+                break;
+            case 'life':
+                this.lifeSelectedStat = stat;
+                break;
+            case 'magic':
+                this.magicSelectedStat = stat;
+                break;
+            case 'basic':
+                this.basicSelectedStat = stat;
+                break;
+            case 'other':
+                this.otherSelectedStat = stat;
+                break;
+        }
+        this.clearSelectedStat(type);
+    }
+
+    updateSelectedStat(type?: string) {
         switch (type) {
             case 'combat':
                 if (this.combatSelectedStat !== null) {
@@ -144,6 +182,11 @@ export class ModifiersEditorComponent implements OnInit {
         this.value = null;
         this.selectedStat = null;
         this.clearSelectedStat();
+    }
+
+    selectValue(value: number) {
+        this.value = value;
+        this.addModifier();
     }
 
     ngOnInit() {

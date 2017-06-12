@@ -1,25 +1,50 @@
 <md-card>
     <md-card-title>
-        {{activeModifier.name}}
+        {{modifier.name}}
     </md-card-title>
     <md-card-subtitle>
-        {{activeModifier.type}}
+        {{modifier.type}}
     </md-card-subtitle>
     <md-card-content>
-        <p>{{activeModifier.description}}</p>
-        <p *ngIf="activeModifier.duration">Durée: {{activeModifier.duration}}</p>
-        <p *ngIf="activeModifier.combatCount">Durée: {{activeModifier.combatCount}} combat</p>
-        <p *ngIf="activeModifier.timeDuration">Durée: {{activeModifier.timeDuration | nhbkDuration}}</p>
-        <p *ngIf="activeModifier.currentCombatCount">Actif encore {{activeModifier.currentCombatCount}} combat</p>
-        <p *ngIf="activeModifier.lapCount">Durée: {{activeModifier.lapCount}} tour(s)</p>
-        <p *ngIf="activeModifier.currentLapCount">Actif encore {{activeModifier.currentLapCount}} tour(s)</p>
-        <p *ngIf="activeModifier.currentTimeDuration">Actif encore {{activeModifier.currentTimeDuration | nhbkDuration}}</p>
-
-        <div *ngFor="let modifier of activeModifier.values">
-            {{modifier | modifier}}
+        <p>{{modifier.description}}</p>
+        <div class="effect-total-duration">
+            <span [ngSwitch]="modifier.durationType">
+                <ng-template [ngSwitchCase]="'lap'">
+                    Durée totale: {{modifier.lapCount}}
+                </ng-template>
+                <ng-template [ngSwitchCase]="'combat'">
+                    Durée totale: {{modifier.combatCount}}
+                </ng-template>
+                <ng-template [ngSwitchCase]="'time'">
+                    Durée totale: {{modifier.timeDuration | nhbkDuration}}
+                </ng-template>
+            </span>
+        </div>
+        <div class="effect-duration">
+            Durée:
+            <span [ngSwitch]="modifier.durationType">
+                <ng-template [ngSwitchCase]="'lap'">
+                    {{modifier.currentLapCount}}
+                </ng-template>
+                <ng-template [ngSwitchCase]="'combat'">
+                    {{modifier.currentCombatCount}}
+                </ng-template>
+                <ng-template [ngSwitchCase]="'custom'">
+                    {{modifier.duration}}
+                </ng-template>
+                <ng-template [ngSwitchCase]="'time'">
+                    {{modifier.currentTimeDuration | nhbkDuration}}
+                </ng-template>
+                <ng-template [ngSwitchCase]="'forever'">
+                    permanent
+                </ng-template>
+            </span>
+        </div>
+        <div *ngFor="let mod of modifier.values">
+            {{mod | modifier}}
         </div>
     </md-card-content>
     <md-card-actions align="end">
-        <button md-button color="accent" (click)="onRemove.emit(activeModifier)">SUPPRIMER</button>
+        <button md-button color="accent" (click)="onRemove.emit(modifier)">SUPPRIMER</button>
     </md-card-actions>
 </md-card>

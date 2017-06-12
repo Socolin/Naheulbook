@@ -28,7 +28,7 @@
 		</div>
 	</span>
 </div>
-<div>
+<div class="large-editor">
     <div>Stat:</div>
     <md-button-toggle-group [(ngModel)]="basicSelectedStat" (change)="updateSelectedStat('basic')">
         <md-button-toggle *ngFor="let stat of basicStats" [value]="stat">
@@ -87,4 +87,43 @@
     <md-input-container>
         <input mdInput placeholder="Valeur" [(ngModel)]="value" />
     </md-input-container>
+</div>
+
+<div class="small-editor">
+    <md-select placeholder="Stat" [(ngModel)]="selectedStat" (change)="selectStat($event.value)">
+        <md-option *ngFor="let stat of basicStats" [value]="stat">
+            {{stat}}
+        </md-option>
+        <md-divider></md-divider>
+        <md-option *ngFor="let stat of lifeStats" [value]="stat">
+            {{stat}}
+        </md-option>
+        <md-divider></md-divider>
+        <md-option *ngFor="let stat of combatStats" [value]="stat">
+            {{stat}}
+        </md-option>
+        <md-divider></md-divider>
+        <md-option *ngFor="let stat of magicStats" [value]="stat">
+            {{stat}}
+        </md-option>
+        <md-divider></md-divider>
+        <md-option *ngFor="let stat of stats" [value]="stat">
+            {{stat}}
+        </md-option>
+    </md-select>
+
+    <md-select placeholder="Modification type" [(ngModel)]="selectedType">
+        <md-option [value]="'ADD'">ADD</md-option>
+        <md-option [value]="'MUL'">MUL</md-option>
+        <md-option [value]="'DIV'">DIV</md-option>
+        <md-option [value]="'SET'">SET</md-option>
+        <md-option [value]="'PERCENTAGE'">PERCENTAGE</md-option>
+    </md-select>
+
+    <span class="editor-value">
+        <div class="label secondary-text">Valeur</div>
+        <div class="value">
+            <value-editor [value]="value" (onChange)="selectValue($event)"></value-editor>
+        </div>
+    </span>
 </div>

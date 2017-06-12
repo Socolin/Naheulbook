@@ -1,13 +1,11 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {Portal, OverlayRef, MdCheckboxChange} from '@angular/material';
 
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {ActiveEffect} from '../effect/effect.model';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
-import {EffectService} from '../effect/effect.service';
 import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {AddEffectModalComponent} from '../effect/add-effect-modal.component';
 
 @Component({
     selector: 'effect-detail',
@@ -26,33 +24,15 @@ export class EffectDetailComponent {
 })
 export class EffectPanelComponent {
     @Input() character: Character;
+
     public selectedEffect: ActiveEffect;
     public selectedModifier: ActiveStatsModifier;
 
     // Add effect dialog
-    @ViewChild('addEffectDialog')
-    public addEffectDialog: Portal<any>;
-    public addEffectOverlayRef: OverlayRef;
-    public addEffectTypeSelectedTab = 0;
+    @ViewChild('addEffectModal')
+    public addEffectModal: AddEffectModalComponent;
 
-    public newActiveStatsModifier: ActiveStatsModifier = new ActiveStatsModifier();
-
-    constructor(private _nhbkDialogService: NhbkDialogService
-        , private _effectService: EffectService
-        , private _characterService: CharacterService) {
-    }
-
-    openAddEffectModal() {
-        this.newActiveStatsModifier = new ActiveStatsModifier();
-        this.addEffectOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addEffectDialog);
-    }
-
-    closeAddEffectDialog() {
-        this.addEffectOverlayRef.detach();
-    }
-
-    selectEffectTypeTab(index: number) {
-        this.addEffectTypeSelectedTab = index;
+    constructor(private _characterService: CharacterService) {
     }
 
     // Called by callback from active-effect-editor
@@ -60,7 +40,7 @@ export class EffectPanelComponent {
         let effect = newEffect.effect;
         let data = newEffect.data;
 
-        this.closeAddEffectDialog();
+        this.addEffectModal.close();
 
         let modifier = ActiveStatsModifier.fromEffect(effect, data);
         this._characterService.addModifier(this.character.id, modifier).subscribe(
@@ -89,8 +69,8 @@ export class EffectPanelComponent {
         );
     }
 
-    addCustomModifier() {
-        this._characterService.addModifier(this.character.id, this.newActiveStatsModifier).subscribe(
+    addCustomModifier(modifier: ActiveStatsModifier) {
+        this._characterService.addModifier(this.character.id, modifier).subscribe(
             this.character.onAddModifier.bind(this.character)
         );
     }

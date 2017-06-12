@@ -175,15 +175,41 @@
                                 (click)="removeModifier(modifier)">
                             SUPPRIMER
                         </button>
-                        <div *ngIf="modifier.type">{{modifier.type}}</div>
+                        <div class="secondary-text" *ngIf="modifier.type">{{modifier.type}}</div>
                         <div *ngIf="modifier.description">{{modifier.description}}</div>
-                        <div *ngIf="modifier.duration">Durée totale: {{modifier.duration}}</div>
-                        <div *ngIf="modifier.combatCount">Durée totale: {{modifier.combatCount}} combat</div>
-                        <div *ngIf="modifier.timeDuration">Durée totale: {{modifier.timeDuration | nhbkDuration}}</div>
-                        <div *ngIf="modifier.currentCombatCount">Actif encore {{modifier.currentCombatCount}} combat</div>
-                        <div *ngIf="modifier.lapCount">Durée: {{modifier.lapCount}} tour(s)</div>
-                        <div *ngIf="modifier.currentLapCount">Actif encore {{modifier.currentLapCount}} tour(s)</div>
-                        <div *ngIf="modifier.currentTimeDuration">Actif encore {{modifier.currentTimeDuration | nhbkDuration}}</div>
+                        <div class="effect-total-duration">
+                            <span [ngSwitch]="modifier.durationType">
+                                <ng-template [ngSwitchCase]="'lap'">
+                                    Durée totale: {{modifier.lapCount}}
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'combat'">
+                                    Durée totale: {{modifier.combatCount}}
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'time'">
+                                    Durée totale: {{modifier.timeDuration | nhbkDuration}}
+                                </ng-template>
+                            </span>
+                        </div>
+                        <div class="effect-duration">
+                            Durée:
+                            <span [ngSwitch]="modifier.durationType">
+                                <ng-template [ngSwitchCase]="'lap'">
+                                    {{modifier.currentLapCount}}
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'combat'">
+                                    {{modifier.currentCombatCount}}
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'custom'">
+                                    {{modifier.duration}}
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'time'">
+                                    {{modifier.currentTimeDuration | nhbkDuration}}
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'forever'">
+                                    permanent
+                                </ng-template>
+                            </span>
+                        </div>
 
                         <div *ngIf="modifier.values && modifier.values.length">
                             Effet:

@@ -1,3 +1,37 @@
 md-button-toggle-group {
     flex-wrap: wrap;
 }
+
+@media (min-width: 700px) {
+    .small-editor {
+        display: none;
+    }
+}
+
+@media (max-width: 699px) {
+    .large-editor {
+        display: none;
+    }
+}
+
+.small-editor {
+    display: flex;
+    flex-direction: row;
+
+    .editor-value {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 0 24px;
+        .label {
+            font-size: 16px;
+            position: absolute;
+            transform: scale(.75);
+            top: -18px;
+        }
+        .value {
+            font-size: 24px;
+        }
+    }
+}

@@ -7,6 +7,6 @@ import {ActiveStatsModifier} from '../shared/stat-modifier.model';
     styleUrls: ['./modifier-detail.component.scss'],
 })
 export class ModifierDetailComponent {
-    @Input() activeModifier: ActiveStatsModifier;
+    @Input() modifier: ActiveStatsModifier;
     @Output() onRemove: EventEmitter<ActiveStatsModifier> = new EventEmitter<ActiveStatsModifier>();
 }

@@ -1,26 +1,6 @@
 md-card {
     margin: 5px;
 }
-@media (min-width: 750px) {
-    .add-effect-dialog {
-        width: 700px;
-    }
-}
-
-@media (max-width: 749px) {
-    .add-effect-dialog {
-        width: calc(90vw - 24px);
-    }
-}
-
-.add-effect-dialog {
-    margin: 20px;
-
-    md-card-content {
-        height: 65vh;
-        overflow-y: auto;
-    }
-}
 
 @media (min-width: 700px) {
     .effect-panel {
