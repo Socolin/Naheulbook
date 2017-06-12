@@ -6,6 +6,7 @@ import {Job} from '../job';
 import {JobService} from '../job';
 import {isNullOrUndefined} from 'util';
 import {MiscService} from './misc.service';
+import {MdCheckboxChange} from '@angular/material';
 
 @Component({
     selector: 'modifiers-editor',
@@ -53,12 +54,12 @@ export class ModifiersEditorComponent implements OnInit {
         ];
     }
 
-    toggleSpecial(i: number, v: string) {
+    toggleSpecial(i: number, v: string, event: MdCheckboxChange) {
         if (this.modifiers[i].special) {
             let idx = this.modifiers[i].special.indexOf(v);
-            if (idx === -1) {
+            if (idx === -1 && event.checked) {
                 this.modifiers[i].special.push(v);
-            } else {
+            } else if (idx !== -1 && !event.checked) {
                 this.modifiers[i].special.splice(idx, 1);
             }
         }

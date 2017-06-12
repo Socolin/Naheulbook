@@ -4,16 +4,20 @@ md-button-toggle-group {
 
 @media (min-width: 700px) {
     .small-editor {
-        display: none;
+        display: none !important;
     }
 }
 
 @media (max-width: 699px) {
     .large-editor {
-        display: none;
+        display: none !important;
     }
 }
-
+.stat-modifier {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
 .small-editor {
     display: flex;
     flex-direction: row;
