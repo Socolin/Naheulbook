@@ -25,10 +25,12 @@
                             <dd *ngIf="character.job">{{character.job.name}}</dd>
                             <dd *ngIf="!character.job">aucun</dd>
 
-                            <dt>Specialité</dt>
-                            <dd *ngFor="let speciality of character.specialities">
-                                {{speciality.name}}
-                            </dd>
+                            <ng-template [ngIf]="character.specialities?.length">
+                                <dt>Specialité</dt>
+                                <dd *ngFor="let speciality of character.specialities">
+                                    {{speciality.name}}
+                                </dd>
+                            </ng-template>
 
                             <dt>Groupe</dt>
                             <dd *ngIf="character.group">{{character.group.name}}</dd>
