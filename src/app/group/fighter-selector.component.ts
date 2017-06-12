@@ -44,7 +44,7 @@ export class FighterSelectorComponent {
         }
     }
 
-    private close() {
+    close() {
         this.selectorOverlayRef.detach();
     }
 }

@@ -370,18 +370,6 @@ export class WebSocketService {
                 character.onUpdateModifiers(data);
                 break;
             }
-            case 'addEffect': {
-                character.onAddEffect(data);
-                break;
-            }
-            case 'removeEffect': {
-                character.onRemoveEffect(data);
-                break;
-            }
-            case 'updateEffect': {
-                character.onUpdateEffect(data);
-                break;
-            }
             case 'addModifier': {
                 character.onAddModifier(data);
                 break;

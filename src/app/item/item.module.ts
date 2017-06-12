@@ -11,6 +11,7 @@ import {DateModule} from '../date/date.module';
 import {ItemService} from './item.service';
 
 import {
+    AutocompleteSearchItemTemplateComponent,
     CreateItemComponent,
     EditItemComponent,
     ItemListComponent,
@@ -18,8 +19,6 @@ import {
     ItemTemplateEditorComponent,
     ItemTemplateEditorModuleComponent
 } from './';
-
-import {AutocompleteSearchItemTemplateComponent} from './autocomplete-search-item-template.component';
 
 @NgModule({
     imports: [

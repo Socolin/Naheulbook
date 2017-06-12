@@ -14,7 +14,6 @@ import {WsRegistrable} from '../websocket/websocket.model';
 import {Loot} from '../loot/loot.model';
 import {TargetJsonData} from '../group/target.model';
 import {WebSocketService} from '../websocket/websocket.service';
-import {ActiveEffect} from '../effect/effect.model';
 import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 
 export interface CharacterResume {
@@ -189,7 +188,6 @@ export class CharacterComputedData {
     xpToNextLevel: number;
     tacticalMovement: TacticalMovementInfo = new TacticalMovementInfo();
 
-    effects: ActiveEffect[] = [];
     modifiers: ActiveStatsModifier[] = [];
 
     countExceptionalStats = 0;
@@ -205,7 +203,6 @@ export class CharacterComputedData {
         this.topLevelContainers = [];
         this.containers = [];
         this.skills = [];
-        this.effects = [];
         this.modifiers = [];
         this.tacticalMovement = new TacticalMovementInfo();
     }
@@ -215,7 +212,6 @@ export class CharacterJsonData {
     active: number;
     color: string;
     ea: number;
-    effects: ActiveEffect[];
     ev: number;
     experience: number;
     fatePoint: number;
@@ -253,7 +249,6 @@ export class Character extends WsRegistrable {
     fatePoint: number;
     items: Item[] = [];
     skills: Skill[] = [];
-    effects: ActiveEffect[] = [];
     stats: {[statName: string]: number};
     modifiers: ActiveStatsModifier[] = [];
     specialities: Speciality[] = [];
@@ -769,37 +764,6 @@ export class Character extends WsRegistrable {
             this.computedData.details.add('Malus AD < 9', detailData);
         }
 
-        for (let i = 0; i < this.effects.length; i++) {
-            let characterEffect = this.effects[i];
-            let effect = characterEffect.effect;
-            this.computedData.effects.push(characterEffect);
-            if (!characterEffect.active) {
-                continue;
-            }
-            this.computedData.countActiveEffect++;
-            let detailData = {};
-            for (let j = 0; j < effect.modifiers.length; j++) {
-                let modifier = effect.modifiers[j];
-                if (modifier.type === 'ADD') {
-                    this.computedData.stats[modifier.stat] += modifier.value;
-                }
-                else if (modifier.type === 'SET') {
-                    this.computedData.stats[modifier.stat] = modifier.value;
-                }
-                else if (modifier.type === 'DIV') {
-                    this.computedData.stats[modifier.stat] /= modifier.value;
-                }
-                else if (modifier.type === 'MUL') {
-                    this.computedData.stats[modifier.stat] *= modifier.value;
-                }
-                else if (modifier.type === 'PERCENTAGE') {
-                    this.computedData.stats[modifier.stat] *= (modifier.value / 100);
-                }
-                detailData[modifier.stat] = formatModifierValue(modifier);
-            }
-            this.computedData.details.add(effect.name, detailData);
-        }
-
         this.computedData.stats['MPHYS'] =
             Math.round(
                 (this.computedData.stats['INT'] + this.computedData.stats['AD'])
@@ -1158,18 +1122,6 @@ export class Character extends WsRegistrable {
         }
     }
 
-    onAddEffect(charEffect: ActiveEffect) {
-        for (let i = 0; i < this.effects.length; i++) {
-            if (this.effects[i].id === charEffect.id) {
-                return;
-            }
-        }
-
-        this.notify('addEffect', 'Ajout de l\'effet: ' + charEffect.effect.name);
-        this.effects.push(charEffect);
-        this.update();
-    }
-
     onAddModifier(modifier: ActiveStatsModifier) {
         for (let i = 0 ; i < this.modifiers.length; i++) {
             if (this.modifiers[i].id === modifier.id) {
@@ -1191,34 +1143,6 @@ export class Character extends WsRegistrable {
                 return;
             }
         }
-    }
-
-    onUpdateEffect(charEffect: ActiveEffect)  {
-        for (let i = 0; i < this.effects.length; i++) {
-            if (this.effects[i].id === charEffect.id) {
-                if (this.effects[i].active === charEffect.active
-                    && this.effects[i].currentTimeDuration === charEffect.currentTimeDuration
-                    && this.effects[i].currentCombatCount === charEffect.currentCombatCount
-                    && this.effects[i].currentLapCount === charEffect.currentLapCount) {
-                    return;
-                }
-
-                if (!this.effects[i].active && charEffect.active) {
-                    this.notify('updateEffect', 'Activation de l\'effet: ' + charEffect.effect.name);
-                } else if (this.effects[i].active && !charEffect.active) {
-                    this.notify('updateEffect', 'Désactivation de l\'effet: ' + charEffect.effect.name);
-                } else {
-                    this.notify('updateEffect', 'Mis à jour de l\'effet: ' + charEffect.effect.name);
-                }
-
-                this.effects[i].active = charEffect.active;
-                this.effects[i] .currentCombatCount = charEffect.currentCombatCount;
-                this.effects[i].currentTimeDuration = charEffect.currentTimeDuration;
-                this.effects[i] .currentLapCount = charEffect.currentLapCount;
-                break;
-            }
-        }
-        this.update();
     }
 
     onUpdateModifier(modifier: ActiveStatsModifier) {
@@ -1245,18 +1169,6 @@ export class Character extends WsRegistrable {
             }
         }
         this.update();
-    }
-
-    onRemoveEffect(charEffect: ActiveEffect) {
-        for (let i = 0; i < this.effects.length; i++) {
-            let e = this.effects[i];
-            if (e.id === charEffect.id) {
-                this.notify('removeEffect', 'Suppression de l\'effet: ' + charEffect.effect.name);
-                this.effects.splice(i, 1);
-                this.update();
-                return;
-            }
-        }
     }
 
     /**

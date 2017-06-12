@@ -5,30 +5,30 @@ import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {SharedModule} from '../shared/shared.module';
-
-import {
-    SpecialitySelectorComponent, ItemDetailComponent, CharacterComponent,
-    CharacterColorSelectorComponent, CharacterListComponent
-} from './';
-import {
-    CharacterService
-} from './character.service';
+import {DateModule} from '../date/date.module';
 import {SkillModule} from '../skill/skill.module';
 import {OriginModule} from '../origin/origin.module';
 import {JobModule} from '../job/job.module';
 import {EffectModule} from '../effect/effect.module';
-import {
-    EffectPanelComponent, EffectDetailComponent
-} from './effect-panel.component';
-import {InventoryPanelComponent} from './inventory-panel.component';
-import {SwipeableItemDetailComponent} from './swipeable-item-detail.component';
-import {BagItemViewComponent} from './bag-item-view.component';
-import {DateModule} from '../date/date.module';
-import {CharacterLootPanelComponent} from './character-loot-panel.component';
-import {CharacterHistoryComponent} from './character-history.component';
 import {ActionModule} from '../action/action.module';
+
+import {
+    BagItemViewComponent,
+    CharacterColorSelectorComponent,
+    CharacterComponent,
+    CharacterListComponent,
+    CharacterLootPanelComponent,
+    EffectPanelComponent,
+    InventoryPanelComponent,
+    ItemDetailComponent,
+    SpecialitySelectorComponent,
+    SwipeableItemDetailComponent,
+    CharacterHistoryComponent,
+    CreateCharacterComponent,
+} from './';
+
+import {CharacterService} from './character.service';
 import {CharacterResolve} from './character.resolver';
-import {CreateCharacterComponent} from './create-character.component';
 
 @NgModule({
     imports: [
@@ -37,11 +37,11 @@ import {CreateCharacterComponent} from './create-character.component';
         MaterialModule,
         FlexLayoutModule,
         SharedModule,
+        DateModule,
         SkillModule,
         OriginModule,
         JobModule,
         EffectModule,
-        DateModule,
         ActionModule,
     ],
     declarations: [
@@ -52,7 +52,6 @@ import {CreateCharacterComponent} from './create-character.component';
         CharacterListComponent,
         CharacterLootPanelComponent,
         CreateCharacterComponent,
-        EffectDetailComponent,
         EffectPanelComponent,
         InventoryPanelComponent,
         ItemDetailComponent,

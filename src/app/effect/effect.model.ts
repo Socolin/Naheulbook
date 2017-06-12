@@ -74,13 +74,3 @@ export class Effect implements IDurable {
     }
 }
 
-/** @deprecated */
-export class ActiveEffect {
-    id: number;
-    effect: Effect;
-    active: boolean;
-    reusable: boolean;
-    currentCombatCount: number;
-    currentLapCount: number;
-    currentTimeDuration: number;
-}

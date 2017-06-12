@@ -5,7 +5,6 @@ import {Observable} from 'rxjs/Rx';
 import {IMetadata, HistoryEntry} from '../shared';
 import {Loot} from '../loot/loot.model';
 import {Character, CharacterResume, CharacterJsonData} from './character.model';
-import {Effect} from '../effect';
 import {CharacterInviteInfo} from '../group';
 
 import {Job, JobService} from '../job';
@@ -14,7 +13,6 @@ import {Skill, SkillService} from '../skill';
 import {NotificationsService} from '../notifications';
 import {JsonService} from '../shared/json-service';
 import {LoginService} from '../user';
-import {ActiveEffect, EffectJsonData} from '../effect/effect.model';
 import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 import {PartialGroup} from '../group/group.model';
 
@@ -153,21 +151,6 @@ export class CharacterService extends JsonService {
             characterId: characterId,
             key: key,
             value: value
-        }).map(res => res.json());
-    }
-
-    /** @deprecated */
-    removeEffect(characterId: number, charEffect: ActiveEffect): Observable<EffectJsonData> {
-        return this.postJson('/api/character/removeEffect', {
-            characterId: characterId,
-            charEffectId: charEffect.id,
-        }).map(res => res.json());
-    }
-    /** @deprecated */
-    toggleEffect(characterId: number, charEffect: ActiveEffect): Observable<EffectJsonData> {
-        return this.postJson('/api/character/toggleEffect', {
-            characterId: characterId,
-            charEffectId: charEffect.id,
         }).map(res => res.json());
     }
 

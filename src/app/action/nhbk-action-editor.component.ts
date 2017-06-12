@@ -5,6 +5,7 @@ import {ItemService} from '../item/item.service';
 import {ItemTemplate} from '../item/item-template.model';
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
 import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {MiscService} from '../shared/misc.service';
 
 @Component({
     selector: 'nhbk-action-editor',
@@ -22,7 +23,7 @@ export class NhbkActionEditorComponent implements OnInit {
     public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
     public selectedItemTemplate: ItemTemplate;
 
-    constructor(private _itemService: ItemService) {
+    constructor(private _miscService: MiscService) {
     }
 
     selectItemTemplate(itemTemplate: ItemTemplate) {
@@ -45,7 +46,7 @@ export class NhbkActionEditorComponent implements OnInit {
     }
 
     updateAutocompleteItem(filter: string) {
-        return this._itemService.searchItem(filter).map(
+        return this._miscService.searchItem(filter).map(
             list => list.map(e => new AutocompleteValue(e, e.name))
         );
     }
