@@ -157,11 +157,11 @@
                         <span class="padding">
                             {{modifier.name}}
                         </span>
-                        <span *ngIf="modifier.combatCount">
+                        <span *ngIf="modifier.currentCombatCount">
                             <span class="ra ra-sword duration-icon"></span> {{modifier.currentCombatCount}}
                         </span>
                         <span *ngIf="modifier.currentTimeDuration">
-                            <span class="ra ra-clockwork duration-icon"></span> {{modifier.currentTimeDuration | nhbkDuration}}
+                            <span class="ra ra-clockwork duration-icon"></span> {{modifier.currentTimeDuration | nhbkShortDuration}}
                         </span>
                         <span *ngIf="modifier.currentLapCount">
                             <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{modifier.currentLapCount}}
