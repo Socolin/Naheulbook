@@ -172,18 +172,19 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     }
 
     openCreateCategoryDialog() {
-        this.createTypeOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.createCategoryDialog);
+        this.createCategorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.createCategoryDialog);
     }
 
     closeCreateCategoryDialog() {
-        this.createTypeOverlayRef.detach();
+        this.createCategorOverlayRef.detach();
     }
 
     createCategory(name: string) {
         this.closeCreateCategoryDialog();
         this._monsterTemplateService.createCategory(this.selectedType, name).subscribe(
             category => {
-               this.selectedType.categories.push(category);
+                this.selectedType.categories.push(category);
+                this.monster.category = category;
             });
     }
 
@@ -200,6 +201,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
         this._monsterTemplateService.createType(name).subscribe(
             type => {
                 this.types.push(type);
+                this.selectType(type);
             });
     }
 
