@@ -39,7 +39,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     selectType(type: EffectType) {
         this.selectedType = type;
         if (this.selectedType.categories.length) {
-            this.selectedCategory = this.selectedType.categories[0];
+            this.selectCategory(this.selectedType.categories[0]);
         }
     }
 
