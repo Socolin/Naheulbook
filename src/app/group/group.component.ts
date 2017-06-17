@@ -71,6 +71,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     private removedCharacterSub: Subscription;
     private routeSub: Subscription;
     private routeFragmentSub: Subscription;
+    private groupNotificationSub: Subscription;
 
     @ViewChild('addEffectModal')
     public addEffectModal: AddEffectModalComponent;
@@ -353,6 +354,7 @@ export class GroupComponent implements OnInit, OnDestroy {
             this.unregisterCharacterNotification(character);
         }
 
+        this.groupNotificationSub.unsubscribe();
         this.group.dispose();
         this.addedCharacterSub.unsubscribe();
         this.removedCharacterSub.unsubscribe();
@@ -377,6 +379,9 @@ export class GroupComponent implements OnInit, OnDestroy {
                     group => {
                         this.clearGroupSub();
                         this.group = group;
+                        this.groupNotificationSub = group.onNotification.subscribe(notificationData => {
+                            this._notification.info('', notificationData.message);
+                        });
                         for (let character of this.group.characters) {
                             this.registerCharacterNotification(character);
                         }

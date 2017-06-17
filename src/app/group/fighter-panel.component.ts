@@ -93,6 +93,7 @@ export class FighterPanelComponent implements OnInit {
         this._monsterService.createMonster(this.group.id, this.newMonster).subscribe(
             monster => {
                 this.group.addMonster(monster);
+                this.group.notify('addMonster', 'Nouveau monstre ajouté: ' + monster.name, monster);
             }
         );
         this.randomMonsterInventory();
@@ -114,6 +115,7 @@ export class FighterPanelComponent implements OnInit {
             res => {
                 this.group.removeMonster(monster.id);
                 this.deadMonsters.unshift(monster);
+                this.group.notify('killMonster', 'Monstre tué: ' + monster.name, monster);
             }
         );
     }
@@ -126,6 +128,7 @@ export class FighterPanelComponent implements OnInit {
         this._monsterService.deleteMonster(monster.id).subscribe(
             () => {
                 this.group.removeMonster(monster.id);
+                this.group.notify('deleteMonster', 'Monstre supprimé: ' + monster.name, monster);
             }
         );
     }

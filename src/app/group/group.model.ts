@@ -257,6 +257,8 @@ export class Group extends WsRegistrable {
     public data: GroupData = new GroupData();
     public location: Location;
 
+    public onNotification: Subject<any> = new Subject<any>();
+
     public invited: CharacterInviteInfo[] = [];
     public invites: CharacterInviteInfo[] = [];
 
@@ -288,6 +290,10 @@ export class Group extends WsRegistrable {
         let group = new Group();
         Object.assign(group, jsonData, {data: GroupData.fromJson(jsonData.data), characters: []});
         return group;
+    }
+
+    public notify(type: string, message: string, data?: any) {
+        this.onNotification.next({type: type, message: message, data: data});
     }
 
     /**
