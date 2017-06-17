@@ -2,32 +2,10 @@ import {StatModifier} from '../shared';
 import {DurationType, IDurable} from '../date/durable.model';
 import {isNullOrUndefined} from 'util';
 
-export class EffectCategory {
-    id: number;
-    name: string;
-    diceSize: number;
-    diceCount: number;
-    note: string;
-
-    static fromJson(jsonData: any): EffectCategory {
-        let effectCategory = new EffectCategory();
-        Object.assign(effectCategory, jsonData);
-        return effectCategory;
-    }
-
-    static categoriesFromJson(jsonDatas: any[]): EffectCategory[] {
-        let effectCategories = [];
-        for (let categoryData of jsonDatas) {
-            effectCategories.push(EffectCategory.fromJson(categoryData));
-        }
-        return effectCategories;
-    }
-}
-
 export interface EffectJsonData {
     id: number;
     name: string;
-    category: number;
+    categoryId: number;
     description: string;
     modifiers: StatModifier[];
     dice: number;
@@ -36,6 +14,55 @@ export interface EffectJsonData {
     lapCount: number;
     duration: string;
     timeDuration: number;
+}
+
+export class EffectCategory {
+    id: number;
+    name: string;
+    type: EffectType;
+    diceSize: number;
+    diceCount: number;
+    note: string;
+
+    static fromJson(jsonData: any, type: {[id: number]: EffectType}|EffectType): EffectCategory {
+        let category = new EffectCategory();
+        if (type instanceof  EffectType) {
+            Object.assign(category, jsonData, {type: type});
+        } else {
+            Object.assign(category, jsonData, {type: type[jsonData.typeId]});
+        }
+        return category;
+    }
+
+    static categoriesFromJson(jsonDatas: any[], type: EffectType): EffectCategory[] {
+        let categories: EffectCategory[] = [];
+
+        for (let jsonData of jsonDatas) {
+            categories.push(EffectCategory.fromJson(jsonData, type));
+        }
+
+        return categories;
+    }
+}
+
+export class EffectType {
+    id: number;
+    name: string;
+    categories: EffectCategory[] = [];
+
+    static fromJson(jsonData: any): EffectType {
+        let type = new EffectType();
+        Object.assign(type, jsonData, {categories: EffectCategory.categoriesFromJson(jsonData.categories, type)});
+        return type;
+    }
+
+    static typesFromJson(jsonDatas: any[]): EffectType[] {
+        let types = [];
+        for (let jsonData of jsonDatas) {
+            types.push(EffectType.fromJson(jsonData));
+        }
+        return types;
+    }
 }
 
 export class Effect implements IDurable {
@@ -53,8 +80,7 @@ export class Effect implements IDurable {
 
     static fromJson(effectJsonData: EffectJsonData, categoriesById: { [categoryId: number]: EffectCategory }): Effect {
         let effect = new Effect();
-        Object.assign(effect, effectJsonData);
-        effect.category = categoriesById[effectJsonData.category];
+        Object.assign(effect, effectJsonData, {category: categoriesById[effectJsonData.categoryId]});
         return effect;
     }
 
@@ -66,11 +92,11 @@ export class Effect implements IDurable {
         return effects;
     }
 
-    get categoryId() {
-        if (isNullOrUndefined(this.category)) {
-            return 0;
-        }
-        return this.category.id;
+    toJsonData(): EffectJsonData {
+        let jsonData: any = Object.assign({}, this);
+        jsonData.categoryId = this.category.id;
+        delete jsonData.category;
+        return jsonData;
     }
 }
 

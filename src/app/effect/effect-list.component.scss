@@ -1,0 +1,21 @@
+.effect-category-selector {
+    display: flex;
+    flex-direction: row;
+    .selector {
+        margin: 0 8px;
+        flex: 1 auto;
+        width: 100px;
+        > md-select {
+            width: 100%;
+        }
+    }
+}
+md-card {
+    margin: 5px;
+}
+
+.create-effect {
+    display: flex;
+    align-items: center;
+}
+

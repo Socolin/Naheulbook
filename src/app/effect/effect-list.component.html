@@ -1,53 +1,92 @@
-<md-tab-group #effectTypesTabGroup (selectedIndexChange)="selectTab($event)">
-    <ng-template ngFor let-category [ngForOf]="categories">
-    <md-tab [label]="category.name">
-        <ng-template ngFor [ngForOf]="effects[category.id]" let-effect>
-        <md-card style="margin-bottom: 10px">
+<md-card>
+    <md-card-content class="effect-category-selector">
+        <div class="selector">
+            <md-select
+                [(ngModel)]="selectedType"
+                (change)="selectType($event.value)">
+                <md-option *ngFor="let type of types" [value]="type">
+                    {{type.name}}
+                </md-option>
+            </md-select>
+        </div>
+        <div class="selector">
+            <md-select *ngIf="selectedType"
+                       [(ngModel)]="selectedCategory"
+                       (change)="selectCategory($event.value)">
+                <md-option *ngFor="let category of selectedType.categories" [value]="category">
+                    {{category.name}}
+                </md-option>
+            </md-select>
+        </div>
+    </md-card-content>
+</md-card>
+
+<md-card *ngIf="selectedCategory && (editable || selectedCategory.note)">
+    <md-card-subtitle>Note</md-card-subtitle>
+    <md-card-content>
+        {{selectedCategory.note}}
+    </md-card-content>
+</md-card>
+
+<ng-template [ngIf]="effects && selectedCategory">
+
+    <ng-template ngFor [ngForOf]="effects[selectedCategory.id]" let-effect>
+        <md-card>
             <md-card-title-group>
-                <md-card-title>
-                    {{effect.name}}
-                    <button md-button *ngIf="editable" (click)=editEffect(effect)>
-                        EDIT
-                    </button>
-                    <button md-button *ngIf="hasOption('applyButton')" (click)="emitAction('applyEffect', effect)">
+                <md-card-title class="effect-title">
+                    <button md-raised-button
+                            color="primary"
+                            *ngIf="hasOption('applyButton')"
+                            (click)="emitAction('applyEffect', effect)">
                         APPLIQUER
+                    </button>
+                    {{effect.name}}
+                    <button md-button
+                            *ngIf="editable"
+                            (click)=editEffect(effect)>
+                        EDIT
                     </button>
                 </md-card-title>
                 <md-card-subtitle>
                     {{effect.description}}
                 </md-card-subtitle>
-                <div *ngIf="category.diceCount" style="font-size: 24px; position: relative; width: 40px; height: 40px">
-                    <span style="font-size: 40px; color: #aaa; position: absolute" class="game-icon game-icon-perspective-dice-six-faces-random"></span>
-                    <span style="vertical-align: center; margin-top: 10px" class="number-shadow-24">{{effect.dice}}</span>
+                <div *ngIf="selectedCategory.diceCount"
+                     style="font-size: 24px; position: relative; width: 40px; height: 40px">
+                <span style="font-size: 40px; color: #aaa; position: absolute"
+                      class="game-icon game-icon-perspective-dice-six-faces-random"></span>
+                    <span style="vertical-align: center; margin-top: 10px"
+                          class="number-shadow-24">{{effect.dice}}</span>
                 </div>
             </md-card-title-group>
             <md-card-content>
                 <span *ngFor="let modifier of effect.modifiers">{{modifier | modifier}} </span>
                 <span *ngIf="effect.duration" fxLayout="row" fxLayoutAlign="start center">
-                    <span class="game-icon game-icon-clockwork font-20px"></span>
-                    {{effect.duration}}
-                </span>
+            <span class="game-icon game-icon-clockwork font-20px"></span>
+            {{effect.duration}}
+        </span>
                 <span *ngIf="effect.timeDuration" fxLayout="row" fxLayoutAlign="start center">
-                    <span class="game-icon game-icon-clockwork font-20px"></span>
-                    {{effect.timeDuration | nhbkDuration}}
-                </span>
+            <span class="game-icon game-icon-clockwork font-20px"></span>
+            {{effect.timeDuration | nhbkDuration}}
+        </span>
                 <span *ngIf="effect.combatCount" fxLayout="row" fxLayoutAlign="start center">
-                    <span class="game-icon game-icon-clockwork font-20px"></span>
-                    {{effect.combatCount}} combats
-                </span>
+            <span class="game-icon game-icon-clockwork font-20px"></span>
+            {{effect.combatCount}} combats
+        </span>
                 <span *ngIf="effect.lapCount" fxLayout="row" fxLayoutAlign="start center">
-                    <span class="game-icon game-icon-clockwork font-20px"></span>
-                    {{effect.lapCount}} tours
-                </span>
-                <span *ngIf="!effect.lapCount && !effect.combatCount && !effect.timeDuration && !effect.duration" fxLayout="row" fxLayoutAlign="start center">
-                    <span class="game-icon game-icon-clockwork font-20px"></span>
-                    permanent
-                </span>
+            <span class="game-icon game-icon-clockwork font-20px"></span>
+            {{effect.lapCount}} tours
+        </span>
+                <span *ngIf="!effect.lapCount && !effect.combatCount && !effect.timeDuration && !effect.duration"
+                      fxLayout="row" fxLayoutAlign="start center">
+            <span class="game-icon game-icon-clockwork font-20px"></span>
+            permanent
+        </span>
             </md-card-content>
         </md-card>
-        </ng-template>
-    </md-tab>
     </ng-template>
-</md-tab-group>
 
+</ng-template>
 
+<md-card *ngIf=editable (click)="createEffect()" class="create-effect">
+    <md-icon>add</md-icon>Créer un effet
+</md-card>
