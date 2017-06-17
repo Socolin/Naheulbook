@@ -23,7 +23,7 @@ export class MonsterService extends JsonService {
 
     createMonster(groupId: number, monster): Observable<Monster> {
         return Observable.forkJoin(
-            this.postJson('/api/group/createMonster', {
+            this.postJson('/api/monster/createMonster', {
                 monster: monster,
                 groupId: groupId
             }).map(res => res.json()),
