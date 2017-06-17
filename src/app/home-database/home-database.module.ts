@@ -23,6 +23,7 @@ import {LocationModule} from '../location/location.module';
 
 import {routes} from './home-database.routes';
 import {HomeDatabaseComponent} from './home-database.component';
+import {DatabaseSectionsComponent} from './database-sections.component';
 
 @NgModule({
     imports: [
@@ -48,6 +49,7 @@ import {HomeDatabaseComponent} from './home-database.component';
     ],
     declarations: [
         HomeDatabaseComponent,
+        DatabaseSectionsComponent,
     ],
     exports: [
         HomeDatabaseComponent,

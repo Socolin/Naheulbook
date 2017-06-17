@@ -12,12 +12,17 @@ import {EditItemComponent} from '../item/edit-item.component';
 import {EditEffectComponent} from '../effect/edit-effect.component';
 import {CreateEffectComponent} from '../effect/create-effect.component';
 import {CreateItemComponent} from '../item/create-item.component';
+import {DatabaseSectionsComponent} from './database-sections.component';
 
 export const routes: Routes = [
     {
         path: 'database',
         component: HomeDatabaseComponent,
         children: [
+            {
+                path: '',
+                component: DatabaseSectionsComponent
+            },
             {
                 path: 'skills',
                 component: SkillListComponent
