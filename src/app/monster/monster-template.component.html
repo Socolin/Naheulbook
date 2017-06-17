@@ -1,7 +1,7 @@
 <md-card>
     <md-card-header>
         <md-card-title>{{monster.name}}</md-card-title>
-        <md-card-subtitle>{{monster.type.name}} - {{monster.type.difficulty}}</md-card-subtitle>
+        <md-card-subtitle>{{monster.category.type.name}} - {{monster.category.name}}</md-card-subtitle>
         <button *ngIf="!editing" md-icon-button (click)="editMonster()">
             <md-icon>edit</md-icon>
         </button>
