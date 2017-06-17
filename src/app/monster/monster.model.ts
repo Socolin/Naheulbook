@@ -329,27 +329,77 @@ export class MonsterTemplateData {
     chercheNoise: boolean;
     special: boolean;
     traits: TraitInfo[];
+    page: number;
 }
 export class MonsterTemplateCategory {
-    difficulty: string;
     id: number;
     name: string;
+    type: MonsterTemplateType;
+
+    static fromJson(jsonData: any, type: {[id: number]: MonsterTemplateType}|MonsterTemplateType): MonsterTemplateCategory {
+        let category = new MonsterTemplateCategory();
+        if (type instanceof  MonsterTemplateType) {
+            Object.assign(category, jsonData, {type: type});
+        } else {
+            Object.assign(category, jsonData, {type: type[jsonData.typeId]});
+        }
+        return category;
+    }
+
+    static categoriesFromJson(jsonDatas: any[], type: MonsterTemplateType): MonsterTemplateCategory[] {
+        let categories: MonsterTemplateCategory[] = [];
+
+        for (let jsonData of jsonDatas) {
+            categories.push(MonsterTemplateCategory.fromJson(jsonData, type));
+        }
+
+        return categories;
+    }
 }
+
+export class MonsterTemplateType {
+    id: number;
+    name: string;
+    categories: MonsterTemplateCategory[] = [];
+
+    static fromJson(jsonData: any): MonsterTemplateType {
+        let type = new MonsterTemplateType();
+        Object.assign(type, jsonData, {categories: MonsterTemplateCategory.categoriesFromJson(jsonData.categories, type)});
+        return type;
+    }
+
+    static typesFromJson(jsonDatas: any[]): MonsterTemplateType[] {
+        let types = [];
+        for (let jsonData of jsonDatas) {
+            types.push(MonsterTemplateType.fromJson(jsonData));
+        }
+        return types;
+    }
+}
+
 export class MonsterSimpleInventory {
     id: number;
     itemTemplate: ItemTemplate;
     minCount: number;
     maxCount: number;
     chance: number;
+    equiped: boolean;
+    hidden: boolean;
 }
 
 export class MonsterTemplate {
     id: number;
     name: string;
     data: MonsterTemplateData;
-    type: MonsterTemplateCategory;
+    category: MonsterTemplateCategory;
     simpleInventory: MonsterSimpleInventory[];
     locations: number[];
+
+    static fromJson(jsonData: any, categoriesById: {[id: number]: MonsterTemplateCategory}): MonsterTemplate {
+        let monsterTemplate = new MonsterTemplate();
+        Object.assign(monsterTemplate, jsonData, {category: categoriesById[jsonData.categoryId]});
+        return monsterTemplate;
+    }
 
     constructor() {
         this.data = new MonsterTemplateData();

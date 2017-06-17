@@ -12,31 +12,49 @@ export class MonsterListComponent implements OnInit {
     public categories: MonsterTemplateCategory[] = [];
     public monsterByCategory: {[categoryId: number]: MonsterTemplate[]} = {};
 
-    public newMonster: MonsterTemplate;
+    public newMonsterTemplate: MonsterTemplate;
 
     constructor(private _monsterTemplateService: MonsterTemplateService, private _notifications: NotificationsService) {
     }
 
     startAddMonster() {
-        this.newMonster = new MonsterTemplate();
+        this.newMonsterTemplate = new MonsterTemplate();
     }
 
     cancelAddMonster() {
-        this.newMonster = null;
+        this.newMonsterTemplate = null;
     }
 
     addMonster() {
-        if (!this.newMonster.type) {
+        if (!this.newMonsterTemplate.category) {
             return;
         }
-        this._monsterTemplateService.editMonster(this.newMonster).subscribe(
+        this._monsterTemplateService.editMonster(this.newMonsterTemplate).subscribe(
             monster => {
                 this.monsters.push(monster);
                 this.sortMonsterByCategory();
                 this._notifications.success('Monstre', 'Monstre créée');
             }
         );
-        this.newMonster = null;
+        this.newMonsterTemplate = null;
+    }
+
+    addMonsterContinue() {
+        if (!this.newMonsterTemplate.category) {
+            return;
+        }
+        this._monsterTemplateService.editMonster(this.newMonsterTemplate).subscribe(
+            monster => {
+                this.monsters.push(monster);
+                this.sortMonsterByCategory();
+                this._notifications.success('Monstre', 'Monstre créée');
+            }
+        );
+        let monsterTemplate = new MonsterTemplate();
+        monsterTemplate.category = this.newMonsterTemplate.category;
+        monsterTemplate.data.page = this.newMonsterTemplate.data.page;
+        monsterTemplate.locations = this.newMonsterTemplate.locations;
+        this.newMonsterTemplate = monsterTemplate;
     }
 
     sortMonsterByCategory() {
@@ -44,11 +62,11 @@ export class MonsterListComponent implements OnInit {
         let categories = [];
         for (let i = 0; i < this.monsters.length; i++) {
             let monster = this.monsters[i];
-            if (!(monster.type.id in monsterByCategory)) {
-                categories.push(monster.type);
-                monsterByCategory[monster.type.id] = [];
+            if (!(monster.category.id in monsterByCategory)) {
+                categories.push(monster.category);
+                monsterByCategory[monster.category.id] = [];
             }
-            monsterByCategory[monster.type.id].push(monster);
+            monsterByCategory[monster.category.id].push(monster);
         }
         this.monsterByCategory = monsterByCategory;
         this.categories = categories;

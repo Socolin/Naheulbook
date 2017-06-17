@@ -1,10 +1,28 @@
 <div *ngIf="monster">
     <div>
+        <md-select class="type-selector" (change)="selectType($event.value)" [ngModel]="selectedType" placeholder="Catégorie">
+            <md-option *ngFor="let type of types" [value]="type">{{type.name}}</md-option>
+            <md-option [value]="undefined">Ajouter...</md-option>
+        </md-select>
+        <md-select class="category-selector" *ngIf="selectedType" [ngModel]="monster.category" (change)="selectCategory($event.value)" placeholder="Sous-catégorie">
+            <md-option *ngFor="let category of selectedType.categories" [value]="category">
+                {{category.name}}
+            </md-option>
+            <md-option [value]="undefined">Ajouter...</md-option>
+        </md-select>
+    </div>
+
+    <div>
         <md-input-container>
             <input mdInput
-                   type="text"
                    placeholder="Nom"
                    [(ngModel)]="monster.name">
+        </md-input-container>
+        <md-input-container>
+            <input mdInput
+                   type="number"
+                   placeholder="Page du bestiaire"
+                   [(ngModel)]="monster.data.page">
         </md-input-container>
         <md-button-toggle-group [(ngModel)]="defenseStat" (change)="updateDefenseStat()">
             <md-button-toggle [value]="'PRD'">PRD</md-button-toggle>
@@ -14,6 +32,7 @@
             Chercher des noises
         </md-checkbox>
     </div>
+
     <div>
         <md-input-container>
             <input mdInput
@@ -41,13 +60,6 @@
         </md-input-container>
         <md-input-container>
             <input mdInput
-                   type="number"
-                   placeholder="EA"
-                   [(ngModel)]="monster.data.ea">
-        </md-input-container>
-        <md-input-container>
-            <input mdInput
-                   type="text"
                    placeholder="PR"
                    [(ngModel)]="monster.data.pr">
         </md-input-container>
@@ -65,7 +77,6 @@
         </md-input-container>
         <md-input-container>
             <input mdInput
-                   type="text"
                    placeholder="DMG"
                    [(ngModel)]="monster.data.dmg">
         </md-input-container>
@@ -74,6 +85,12 @@
                    type="number"
                    placeholder="XP"
                    [(ngModel)]="monster.data.xp">
+        </md-input-container>
+        <md-input-container>
+            <input mdInput
+                   type="number"
+                   placeholder="EA"
+                   [(ngModel)]="monster.data.ea">
         </md-input-container>
     </div>
 
@@ -135,18 +152,6 @@
         </div>
     </div>
     <div>
-        <label>Type</label>
-        <div>
-            <select (change)="selectCategory($event)">
-                <option [selected]="!monster.type"></option>
-                <ng-template ngFor let-category [ngForOf]="categories">
-                    <option value="{{category.id}}" [selected]="category.id == monster.type?.id">{{category.name}}
-                    </option>
-                </ng-template>
-            </select>
-        </div>
-    </div>
-    <div>
         <div *ngIf="locationsById">
             <span style="border-radius: 4px; background-color: #7aa09b; margin-right: 5px"
                   *ngFor="let locationId of monster.locations">
@@ -162,35 +167,11 @@
         <div>
             <autocomplete-input [placeholder]="'Ajouter un objet dans l\'inventaire'"
                                 [clearOnSelect]="true"
-                                (onSelect)="selectItemTemplate($event)"
+                                (onSelect)="addItemSimpleInventory($event)"
                                 [(callback)]="autocompleteItemCallback">
             </autocomplete-input>
         </div>
     </div>
-    <md-card *ngIf="newItem">
-        <md-card-subtitle>{{newItem.name}}</md-card-subtitle>
-        <md-card-content>
-            <md-input-container>
-                <input mdInput type="number" min=0 placeholder="Quantité min"
-                          [(ngModel)]="newItemData.minCount" />
-            </md-input-container>
-            <md-input-container>
-                <input mdInput type="number" min=0 placeholder="Quantité max"
-                          [(ngModel)]="newItemData.maxCount" />
-            </md-input-container>
-            <md-input-container>
-                <input mdInput type="number" min=0 max=1 step="0.0001"
-                          placeholder="Chance" [(ngModel)]="newItemData.chance" />
-            </md-input-container>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
-                    color="primary"
-                    (click)="addItemSimpleInventory()">
-                AJOUTER
-            </button>
-        </md-card-actions>
-    </md-card>
     <md-card *ngIf="monster.simpleInventory && monster.simpleInventory.length">
         <md-card-subtitle>Inventaire</md-card-subtitle>
         <ng-template ngFor let-inventory [ngForOf]="monster.simpleInventory" let-i="index">
@@ -210,7 +191,39 @@
                 <md-input-container>
                     <input mdInput type="number" min=0 step="0.0001" [(ngModel)]="inventory.chance" placeholder="Chance" />
                 </md-input-container>
+                <md-checkbox [(ngModel)]="inventory.equiped">Equipé</md-checkbox>
+                <md-checkbox [(ngModel)]="inventory.hidden">Caché</md-checkbox>
             </div>
         </ng-template>
     </md-card>
 </div>
+
+<ng-template cdk-portal #createCategoryDialog="cdkPortal">
+    <md-card>
+        <md-card-title>Créer une sous-catégorie de {{selectedType.name}}</md-card-title>
+        <md-card-content>
+            <md-input-container style="width: 100%">
+                <input mdInput placeholder="Nom" #newCategoryName/>
+            </md-input-container>
+        </md-card-content>
+        <md-card-actions align="right">
+            <button md-button (click)="closeCreateCategoryDialog()" color="primary">Annuler</button>
+            <button md-button (click)="createCategory(newCategoryName.value)" color="primary">Créer</button>
+        </md-card-actions>
+    </md-card>
+</ng-template>
+
+<ng-template cdk-portal #createTypeDialog="cdkPortal">
+    <md-card>
+        <md-card-title>Créer une catégorie</md-card-title>
+        <md-card-content>
+            <md-input-container style="width: 100%">
+                <input mdInput placeholder="Nom" #newTypeName/>
+            </md-input-container>
+        </md-card-content>
+        <md-card-actions align="right">
+            <button md-button (click)="closeCreateTypeDialog()" color="primary">Annuler</button>
+            <button md-button (click)="createType(newTypeName.value)" color="primary">Créer</button>
+        </md-card-actions>
+    </md-card>
+</ng-template>

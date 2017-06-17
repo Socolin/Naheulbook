@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 
 import {
     MonsterTemplate, MonsterTemplateCategory, MonsterTrait, TraitInfo,
@@ -12,6 +12,9 @@ import {ItemService} from '../item/item.service';
 import {LocationService} from '../location/location.service';
 import {Location} from '../location/location.model';
 import {removeDiacritics} from '../shared/remove_diacritics';
+import {MonsterTemplateType} from './monster.model';
+import {OverlayRef, Portal} from '@angular/material';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
     selector: 'monster-editor',
@@ -20,7 +23,8 @@ import {removeDiacritics} from '../shared/remove_diacritics';
 })
 export class MonsterEditorComponent implements OnInit, OnChanges {
     @Input() monster: MonsterTemplate;
-    public categories: MonsterTemplateCategory[] = [];
+    public types: MonsterTemplateType[] = [];
+    public selectedType: MonsterTemplateType;
     public locations: Location[] = [];
     public locationsById: {[id: number]:  Location} = null;
     public defenseStat = 'PRD';
@@ -33,19 +37,20 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     public autocompleteLocationsCallback: Function = this.updateAutocompleteLocation.bind(this);
 
     public autocompleteItemCallback: Function = this.updateAutocompleteItem.bind(this);
-    public newItem: ItemTemplate;
-    public newItemData: any = {};
+
+
+    @ViewChild('createCategoryDialog')
+    public createCategoryDialog: Portal<any>;
+    public createCategorOverlayRef: OverlayRef;
+
+    @ViewChild('createTypeDialog')
+    public createTypeDialog: Portal<any>;
+    public createTypeOverlayRef: OverlayRef;
 
     constructor(private _monsterTemplateService: MonsterTemplateService
         , private _locationService: LocationService
+        , private _nhbkDialogService: NhbkDialogService
         , private _itemService: ItemService) {
-    }
-
-    selectItemTemplate(itemTemplate: ItemTemplate) {
-        this.newItem = itemTemplate;
-        this.newItemData.minCount = 1;
-        this.newItemData.maxCount = 1;
-        this.newItemData.chance = 1;
     }
 
     updateAutocompleteItem(filter: string): Observable<AutocompleteValue[]> {
@@ -54,18 +59,17 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
         );
     }
 
-    addItemSimpleInventory() {
+    addItemSimpleInventory(itemTemplate: ItemTemplate) {
         let inventoryItem = new MonsterSimpleInventory();
-        inventoryItem.itemTemplate = this.newItem;
-        inventoryItem.minCount = this.newItemData.minCount;
-        inventoryItem.maxCount = this.newItemData.maxCount;
-        inventoryItem.chance = this.newItemData.chance;
+        inventoryItem.itemTemplate = itemTemplate;
+        inventoryItem.minCount = 1;
+        inventoryItem.maxCount = 1;
+        inventoryItem.chance = 1;
 
         if (!this.monster.simpleInventory) {
             this.monster.simpleInventory = [];
         }
         this.monster.simpleInventory.push(inventoryItem);
-        this.newItem = null;
     }
 
     removeItemSimpleInventory(index: number) {
@@ -167,14 +171,52 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
         }
     }
 
-    selectCategory(category: any) {
-        let categoryId = category.target.value;
-        for (let i = 0; i < this.categories.length; i++) {
-            let c = this.categories[i];
-            if (c.id === categoryId) {
-                this.monster.type = c;
-                break;
-            }
+    openCreateCategoryDialog() {
+        this.createTypeOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.createCategoryDialog);
+    }
+
+    closeCreateCategoryDialog() {
+        this.createTypeOverlayRef.detach();
+    }
+
+    createCategory(name: string) {
+        this.closeCreateCategoryDialog();
+        this._monsterTemplateService.createCategory(this.selectedType, name).subscribe(
+            category => {
+               this.selectedType.categories.push(category);
+            });
+    }
+
+    openCreateTypeDialog() {
+        this.createTypeOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.createTypeDialog);
+    }
+
+    closeCreateTypeDialog() {
+        this.createTypeOverlayRef.detach();
+    }
+
+    createType(name: string) {
+        this.closeCreateTypeDialog();
+        this._monsterTemplateService.createType(name).subscribe(
+            type => {
+                this.types.push(type);
+            });
+    }
+
+    selectCategory(category: MonsterTemplateCategory) {
+        if (category === undefined) {
+            this.openCreateCategoryDialog();
+        }
+        this.monster.category = category;
+    }
+
+    selectType(type: MonsterTemplateType) {
+        if (type === undefined) {
+            this.openCreateTypeDialog();
+        }
+        this.selectedType = type;
+        if (this.selectedType.categories.length) {
+            this.monster.category = this.selectedType.categories[0];
         }
     }
 
@@ -199,19 +241,25 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        Observable.forkJoin(this._monsterTemplateService.getMonsterCategories()
+        Observable.forkJoin(this._monsterTemplateService.getMonsterTypes()
             , this._locationService.getLocations()
             , this._monsterTemplateService.getMonsterTraits()).subscribe(
-            res => {
-                this.categories = res[0];
-                this.locations = res[1];
+            ([types, locations, traits]: [MonsterTemplateType[], Location[], MonsterTrait[]]) => {
+                this.types = types;
+                if (this.monster.category) {
+                    this.selectedType = this.monster.category.type;
+                }
+                else if (types.length) {
+                    this.selectType(this.types[0]);
+                }
+                this.locations = locations;
                 let locationsById = {};
                 for (let i = 0; i < this.locations.length; i++) {
                     let loc = this.locations[i];
                     locationsById[loc.id] = loc;
                 }
                 this.locationsById = locationsById;
-                this.traits = res[2];
+                this.traits = traits;
                 let simpleTraits = [];
                 let powerTraits = [];
                 for (let i = 0; i < this.traits.length; i++) {

@@ -1,3 +1,18 @@
 md-card {
     margin: 5px;
 }
+
+.type-selector {
+    width: 300px;
+}
+
+.category-selector {
+    width: 300px;
+}
+
+.new-item-name {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+}

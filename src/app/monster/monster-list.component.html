@@ -1,11 +1,11 @@
 <div>
     <md-card>
-        <button md-raised-button color="primary" *ngIf="!newMonster" (click)="startAddMonster()">CRÉÉ UN MONSTRE</button>
-        <md-card-content *ngIf="newMonster">
-            <monster-editor [monster]="newMonster"></monster-editor>
+        <button md-raised-button color="primary" *ngIf="!newMonsterTemplate" (click)="startAddMonster()">CRÉÉ UN MONSTRE</button>
+        <md-card-content *ngIf="newMonsterTemplate">
+            <monster-editor [monster]="newMonsterTemplate"></monster-editor>
 
         </md-card-content>
-        <md-card-actions *ngIf="newMonster" align="end">
+        <md-card-actions *ngIf="newMonsterTemplate" align="end">
             <button md-button
                     color="primary"
                     (click)="cancelAddMonster()">
@@ -13,18 +13,20 @@
             </button>
             <button md-button
                     color="primary"
-                    [disabled]="!newMonster.type || !newMonster.name"
+                    [disabled]="!newMonsterTemplate.category || !newMonsterTemplate.name"
                     (click)="addMonster()">
                 AJOUTER
             </button>
+            <button md-button
+                    color="primary"
+                    [disabled]="!newMonsterTemplate.category || !newMonsterTemplate.name"
+                    (click)="addMonsterContinue()">
+                AJOUTER ET CONTINUER
+            </button>
         </md-card-actions>
     </md-card>
-    <div *ngFor="let category of categories; let lastCategory=last">
-        <h3>{{category.name}}
-            <span *ngIf="category.difficulty == 'low'" class="label label-info">Bas niveau</span>
-            <span *ngIf="category.difficulty == 'medium'" class="label label-warning">Niveau intermédiaire</span>
-            <span *ngIf="category.difficulty == 'high'" class="label label-danger">Haut niveau</span>
-        </h3>
+    <div *ngFor="let category of categories;">
+        <h3>{{category.name}}</h3>
         <div *ngFor="let monster of monsterByCategory[category.id]; let last=last">
             <monster-template [monster]="monster"></monster-template>
         </div>
