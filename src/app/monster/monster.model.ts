@@ -391,6 +391,7 @@ export class MonsterTemplate {
     id: number;
     name: string;
     data: MonsterTemplateData;
+    categoryId: number;
     category: MonsterTemplateCategory;
     simpleInventory: MonsterSimpleInventory[];
     locations: number[];
@@ -401,6 +402,13 @@ export class MonsterTemplate {
         return monsterTemplate;
     }
 
+    static templatessFromJson(jsonDatas: any[], categoriesById: {[id: number]: MonsterTemplateCategory}): MonsterTemplate[] {
+        let templates = [];
+        for (let jsonData of jsonDatas) {
+            templates.push(MonsterTemplate.fromJson(jsonData, categoriesById));
+        }
+        return templates;
+    }
     constructor() {
         this.data = new MonsterTemplateData();
         this.locations = [];

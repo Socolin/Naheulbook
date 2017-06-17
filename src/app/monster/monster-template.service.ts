@@ -20,7 +20,7 @@ export class MonsterTemplateService extends JsonService {
     }
 
     getMonsterCategoriesById(): Observable<{[id: number]: MonsterTemplateCategory}> {
-        return this.monsterTypes
+        return this.getMonsterTypes()
             .map((types: MonsterTemplateType[]) => {
                 let categoriesById = {};
                 for (let type of types) {
@@ -33,7 +33,7 @@ export class MonsterTemplateService extends JsonService {
     }
 
     getMonsterTypesById(): Observable<{[id: number]: MonsterTemplateType}> {
-        return this.monsterTypes
+        return this.getMonsterTypes()
             .map((types: MonsterTemplateType[]) => {
                 let typesById = {};
                 types.map(c => {typesById[c.id] = c});
@@ -62,7 +62,12 @@ export class MonsterTemplateService extends JsonService {
     }
 
     getMonsterList(): Observable<MonsterTemplate[]> {
-        return this.postJson('/api/monsterTemplate/listMonster').map(res => res.json());
+        return Observable.forkJoin(
+            this.getMonsterCategoriesById(),
+            this.postJson('/api/monsterTemplate/listMonster').map(res => res.json())
+        ).map(([categoriesById, monsterTemplatesDatas]: [{[id: number]: MonsterTemplateCategory}, MonsterTemplate[]]) => {
+            return MonsterTemplate.templatessFromJson(monsterTemplatesDatas, categoriesById);
+        });
     }
 
     getMonsterTraits(): Observable<MonsterTrait[]> {
