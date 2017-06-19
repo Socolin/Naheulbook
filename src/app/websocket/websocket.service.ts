@@ -371,15 +371,15 @@ export class WebSocketService {
                 break;
             }
             case 'addModifier': {
-                character.onAddModifier(data);
+                character.onAddModifier(ActiveStatsModifier.fromJson(data));
                 break;
             }
             case 'removeModifier': {
-                character.onRemoveModifier(data);
+                character.onRemoveModifier(ActiveStatsModifier.fromJson(data));
                 break;
             }
             case 'updateModifier': {
-                character.onUpdateModifier(data);
+                character.onUpdateModifier(ActiveStatsModifier.fromJson(data));
                 break;
             }
             case 'active': {

@@ -158,7 +158,7 @@ export class CharacterService extends JsonService {
         return this.postJson('/api/character/addModifier', {
             characterId: characterId,
             modifier: modifier,
-        }).map(res => res.json());
+        }).map(res => ActiveStatsModifier.fromJson(res.json()));
     }
 
     removeModifier(characterId: number, modifierId: number): Observable<ActiveStatsModifier> {
