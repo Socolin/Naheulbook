@@ -23,7 +23,6 @@ import {isNullOrUndefined} from 'util';
 export class FighterPanelComponent implements OnInit {
     @Input() group: Group;
 
-    public currentFighterIndex = 0;
     public loadingNextLap = false;
 
     public deadMonsters: Monster[] = [];
@@ -200,23 +199,15 @@ export class FighterPanelComponent implements OnInit {
     }
 
     selectNextFighter() {
-        if (this.currentFighterIndex == null) {
-            return;
-        }
-        if (this.currentFighterIndex < this.group.fighters.length - 1) {
-            this.currentFighterIndex++;
-        } else {
-            this.loadingNextLap = true;
-            this._groupService.nextLap(this.group.id).subscribe(
-                () => {
-                    this.loadingNextLap = false;
-                    this.currentFighterIndex = 0;
-                },
-                () => {
-                    this.loadingNextLap = false;
-                }
-            );
-        }
+        let result = this.group.nextFighter();
+        this.loadingNextLap = true;
+
+        Observable.forkJoin(
+            this._groupService.nextFighter(this.group.id, result.fighterIndex),
+            this._groupService.saveChangedTime(this.group.id, result.modifiersDurationUpdated))
+            .subscribe(() => {
+            this.loadingNextLap = false;
+        });
     }
 
     selectMonsterInAutocompleteList(monster: MonsterTemplate) {
@@ -268,17 +259,6 @@ export class FighterPanelComponent implements OnInit {
                 }
             }
         );
-
-        this.group.data.onChange.subscribe((v: {key: string, value: any}) => {
-           if (v.key === 'inCombat') {
-               this.currentFighterIndex = 0;
-           }
-        });
-
-
-        if (this.group.data.inCombat) {
-            this.currentFighterIndex = 0;
-        }
 
         this._groupService.loadDeadMonsters(this.group.id, 0, 10).subscribe(
             monsters => {

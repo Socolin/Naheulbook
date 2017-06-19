@@ -15,6 +15,7 @@ import {Loot} from '../loot/loot.model';
 import {TargetJsonData} from '../group/target.model';
 import {WebSocketService} from '../websocket/websocket.service';
 import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {Fighter} from '../group/group.model';
 
 export interface CharacterResume {
     id: number;
@@ -274,7 +275,11 @@ export class Character extends WsRegistrable {
 
     static fromJson(jsonData: CharacterJsonData, origins: Origin[], jobs: Job[], skillsById: {[skillId: number]: Skill}): Character {
         let character = new Character();
-        Object.assign(character, jsonData, {skills: [], items: []});
+        Object.assign(character, jsonData, {
+            skills: [],
+            items: [],
+            modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers)
+        });
         character.origin = origins.find(o => o.id === jsonData.originId);
         character.job = jobs.find(j => j.id === jsonData.jobId);
 
@@ -1094,7 +1099,7 @@ export class Character extends WsRegistrable {
         for (let i = 0; i < this.items.length; i++) {
             let it = this.items[i];
             if (it.id === item.id) {
-                it.modifiers = item.modifiers;
+                it.modifiers = ActiveStatsModifier.modifiersFromJson(item.modifiers);
                 this.update();
                 break;
             }
@@ -1235,6 +1240,22 @@ export class Character extends WsRegistrable {
     public changeTarget(target: TargetJsonData) {
         this.target = target;
         this.targetChanged.next(target);
+    }
+
+    public updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any[] {
+        let changes = [];
+        for (let item of this.items) {
+            let itemChanges = item.updateTime(type, data);
+            for (let itemChange of itemChanges) {
+                changes.push(itemChange);
+            }
+        }
+        for (let modifier of this.modifiers) {
+            if (modifier.updateDuration(type, data)) {
+                changes.push({type: 'modifier', modifier: modifier});
+            }
+        }
+        return changes;
     }
 
     dispose() {

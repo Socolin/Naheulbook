@@ -18,15 +18,15 @@
             </div>
         </div>
     </div>
-    <div *ngIf="group.data.inCombat && group.fighters[currentFighterIndex]" class="current-fighter">
+    <div *ngIf="group.data.inCombat && group.currentFighter" class="current-fighter">
         <fighter [selected]="false"
                  [group]="group"
-                 [fighter]="group.fighters[currentFighterIndex]"
+                 [fighter]="group.currentFighter"
                  [expandedView]="true"
                  [fighters]="group.fighters">
         </fighter>
     </div>
-    <div *ngIf="group.data.inCombat && group.fighters[currentFighterIndex]" class="next-fighter">
+    <div *ngIf="group.data.inCombat && group.currentFighter" class="next-fighter">
         <button md-raised-button
                 color="primary"
                 [disabled]="loadingNextLap"
@@ -34,9 +34,9 @@
             Suivant
         </button>
     </div>
-    <hr *ngIf="group.data.inCombat && group.fighters[currentFighterIndex]">
+    <hr *ngIf="group.data.inCombat && group.currentFighter">
     <ng-template ngFor let-fighter [ngForOf]="group.fighters" let-i=index>
-        <fighter [selected]="(!group.data.inCombat && selectedCombatRow === i) || (group.data.inCombat && currentFighterIndex === i)"
+        <fighter [selected]="(!group.data.inCombat && selectedCombatRow === i) || (group.data.inCombat && group.data.currentFighterIndex === i)"
                  [group]="group"
                  [fighter]="fighter"
                  [fighters]="group.fighters"

@@ -1,5 +1,6 @@
 import {DurationType, IDurable} from '../date/durable.model';
 import {Effect} from '../effect/effect.model';
+import {Fighter} from '../group/group.model';
 
 export type StatModificationOperand =
     'ADD'
@@ -51,14 +52,20 @@ export class StatsModifier implements IDurable {
 
     durationType: DurationType = 'combat';
     duration: string;
-    combatCount = 1;
-    lapCount = 1;
+    combatCount: number;
+    lapCount: number;
     timeDuration: number;
 
     description?: string;
     type?: string;
 
     values: StatModifier[] = [];
+}
+
+export class LapCountDecrement {
+    when: 'BEFORE'|'AFTER';
+    fighterId: number;
+    fighterIsMonster: boolean;
 }
 
 export class ActiveStatsModifier extends StatsModifier {
@@ -69,6 +76,8 @@ export class ActiveStatsModifier extends StatsModifier {
     currentCombatCount: number;
     currentLapCount: number;
     currentTimeDuration: number;
+
+    lapCountDecrement: LapCountDecrement;
 
     static fromJson(jsonData: any) {
         let modifier = new ActiveStatsModifier();
@@ -90,7 +99,6 @@ export class ActiveStatsModifier extends StatsModifier {
 
     static fromEffect(effect: Effect, data: any): ActiveStatsModifier {
         let modifier = new ActiveStatsModifier();
-        Object.assign(modifier, effect);
         modifier.name = effect.name;
         modifier.description = effect.description;
         modifier.permanent = false;
@@ -131,5 +139,81 @@ export class ActiveStatsModifier extends StatsModifier {
             modifier.values = JSON.parse(JSON.stringify(effect.modifiers));
         }
         return modifier;
+    }
+
+    public updateDuration(durationType: string, data: number|{previous: Fighter, next: Fighter}): boolean {
+        if (!this.active) {
+            return false;
+        }
+        if (durationType === 'combat' && this.durationType === 'lap') {
+            this.currentLapCount = 0;
+            this.active = false;
+            return true;
+        }
+
+        if (durationType !== this.durationType) {
+            return false;
+        }
+
+        let lapDecrement: {previous: Fighter, next: Fighter};
+        if (typeof(data) !== 'number') {
+            lapDecrement = data;
+        }
+
+        switch (this.durationType) {
+            case 'combat': {
+                if (this.currentCombatCount > 0 && typeof(data) === 'number') {
+                    this.currentCombatCount -= data;
+                    if (this.currentCombatCount <= 0) {
+                        this.currentCombatCount = 0;
+                        this.active = false;
+                    }
+                    return true;
+                }
+                break;
+            }
+            case 'time': {
+                if (this.currentTimeDuration > 0 && typeof(data) === 'number') {
+                    this.currentTimeDuration -= data;
+                    if (this.currentTimeDuration <= 0) {
+                        this.currentTimeDuration = 0;
+                        this.active = false;
+                    }
+                    return true;
+                }
+                break;
+            }
+            case 'lap': {
+                if (this.currentLapCount > 0) {
+                    let testFighter: Fighter;
+                    if (!this.lapCountDecrement) {
+                        return false;
+                    }
+
+                    if (this.lapCountDecrement.when === 'AFTER') {
+                        testFighter = lapDecrement.previous;
+                    }
+                    else if (this.lapCountDecrement.when === 'BEFORE') {
+                        testFighter = lapDecrement.next;
+                    }
+                    else {
+                        return false;
+                    }
+
+                    if (testFighter.id === this.lapCountDecrement.fighterId
+                        && testFighter.isMonster === this.lapCountDecrement.fighterIsMonster) {
+                        this.currentLapCount--;
+                        if (this.currentLapCount <= 0) {
+                            this.currentLapCount = 0;
+                            this.active = false;
+                        }
+                        return true;
+                    }
+                }
+                break;
+            }
+        }
+
+        return false;
     }
 }

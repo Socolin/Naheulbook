@@ -11,6 +11,7 @@ import {date2Timestamp} from '../date/util';
 import {WebSocketService} from '../websocket/websocket.service';
 import {TargetJsonData} from './target.model';
 import {Observable} from 'rxjs/Observable';
+import {isNullOrUndefined} from 'util';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -184,6 +185,21 @@ export class Fighter {
             this.target = null;
         }
     }
+
+    updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any {
+        if (this.isMonster) {
+            let changes = this.monster.updateTime(type, data);
+            if (changes.length) {
+                return {isMonster: true, monsterId: this.monster.id, changes: changes};
+            }
+        } else {
+            let changes = this.character.updateTime(type, data);
+            if (changes.length) {
+                return {isMonster: false, characterId: this.character.id, changes: changes};
+            }
+        }
+        return undefined;
+    }
 }
 
 export class GroupData {
@@ -191,6 +207,7 @@ export class GroupData {
     public mankdebol: number;
     public inCombat: boolean;
     public date: NhbkDate;
+    public currentFighterIndex = 0;
 
     public onChange: Subject<any> = new Subject();
     public timestamp = 0;
@@ -222,6 +239,9 @@ export class GroupData {
                     return false;
                 }
                 this.inCombat = value;
+                if (value) {
+                    this.currentFighterIndex = 0;
+                }
                 break;
             case 'date':
                 if (value === this.date) {
@@ -232,6 +252,7 @@ export class GroupData {
                 break;
         }
         this.onChange.next({key: key, value: value});
+        return true;
     }
 }
 
@@ -282,6 +303,16 @@ export class Group extends WsRegistrable {
 
     public fighters: Fighter[] = [];
     public fightersSubscriptions: {[fighterUid: string]: Subscription} = {};
+
+    get currentFighter(): Fighter {
+        if (this.fighters.length <= this.data.currentFighterIndex) {
+            return undefined;
+        }
+        if (this.data.currentFighterIndex < 0) {
+            return undefined;
+        }
+        return this.fighters[this.data.currentFighterIndex];
+    }
 
     public pastEventCount = 0;
     public futureEventCount = 0;
@@ -508,9 +539,19 @@ export class Group extends WsRegistrable {
             this.fighters.splice(i, 1);
         }
         this.fighters.forEach(f => f.updateTarget(this.fighters));
+        if (this.data.currentFighterIndex > this.fighters.length) {
+            this.data.currentFighterIndex = -1;
+        }
     }
 
-    public updateFightersOrder() {
+    /**
+     * Update order of fighters, order is not updated during combat except if param force is at true
+     * @param force to ignore chekc if group is in combat
+     */
+    public updateFightersOrder(force?: boolean) {
+        if (this.data.inCombat && !force) {
+            return;
+        }
         this.fighters.sort((first: Fighter, second: Fighter) => {
             if (first.chercheNoise && !second.chercheNoise) {
                 return -1;
@@ -540,6 +581,42 @@ export class Group extends WsRegistrable {
                 }
             }
         });
+    }
+
+    public nextFighter(): {modifiersDurationUpdated: any[], fighterIndex: number} {
+        let previousFighter: Fighter;
+        if (this.data.currentFighterIndex === -1) {
+            previousFighter = undefined;
+        } else {
+            previousFighter = this.fighters[this.data.currentFighterIndex];
+        }
+        this.data.currentFighterIndex++;
+        if (this.data.currentFighterIndex >= this.fighters.length) {
+            this.nextLap();
+        }
+
+        let changes = this.updateTime('lap', {
+            previous: previousFighter,
+            next: this.fighters[this.data.currentFighterIndex]
+        });
+
+        return {modifiersDurationUpdated: changes, fighterIndex: this.data.currentFighterIndex};
+    }
+
+    public nextLap() {
+        this.updateFightersOrder(true);
+        this.data.currentFighterIndex = 0;
+    }
+
+    public updateTime(type: string, data: number|{previous: Fighter; next: Fighter}): any[] {
+        let changes = [];
+        for (let fighter of this.fighters) {
+            let fighterChanges = fighter.updateTime(type, data);
+            if (fighterChanges) {
+                changes.push(fighterChanges);
+            }
+        }
+        return changes;
     }
 
     public getWsTypeName(): string {

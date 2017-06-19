@@ -22,10 +22,12 @@ import {CharacterService} from '../character/character.service';
 import {Subscription} from 'rxjs/Subscription';
 import {WebSocketService} from '../websocket/websocket.service';
 import {Effect} from '../effect/effect.model';
-import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {ActiveStatsModifier, LapCountDecrement} from '../shared/stat-modifier.model';
 import {AddEffectModalComponent} from '../effect/add-effect-modal.component';
 import {MonsterService} from '../monster/monster.service';
 import {FighterSelectorComponent} from './fighter-selector.component';
+import {date2Timestamp} from '../date/util';
+import {Observable} from "rxjs/Observable";
 
 @Component({
     templateUrl: './group.component.html',
@@ -122,11 +124,14 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     addTime(dateOffset: NhbkDateOffset) {
-        this._groupService.addTime(this.group.id, dateOffset).subscribe(
-            data => {
-                this.group.data.changeValue('date', data.date);
-            }
-        );
+        let time = date2Timestamp(dateOffset);
+        let changes = this.group.updateTime('time', time);
+        Observable.forkJoin(
+            this._groupService.addTime(this.group.id, dateOffset),
+            this._groupService.saveChangedTime(this.group.id, changes)
+        ).subscribe(([data]) => {
+            this.group.data.changeValue('date', data.date);
+        });
     }
 
     changeGroupLocation(location: Location) {
@@ -326,6 +331,13 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     endCombat() {
         this.changeGroupValue('inCombat', false);
+        let changes = this.group.updateTime('combat', 1);
+
+        this._groupService.saveChangedTime(this.group.id, changes).subscribe(
+            () => {
+            }
+        );
+
     }
 
 
@@ -409,13 +421,20 @@ export class GroupComponent implements OnInit, OnDestroy {
     onSelectFighters(fighters: Fighter[]) {
         if (this.currentSelectAction === 'applyModifier') {
             for (let fighter of fighters) {
+                let modifier = this.tmpModifier;
+                if (modifier.durationType === 'lap') {
+                    modifier.lapCountDecrement = new LapCountDecrement();
+                    modifier.lapCountDecrement.fighterId = fighter.id;
+                    modifier.lapCountDecrement.fighterIsMonster = fighter.isMonster;
+                    modifier.lapCountDecrement.when = 'BEFORE';
+                }
                 if (fighter.isMonster) {
-                    this._monsterService.addModifier(fighter.id, this.tmpModifier).subscribe(
+                    this._monsterService.addModifier(fighter.id, modifier).subscribe(
                         fighter.monster.onAddModifier.bind(fighter.monster)
                     );
                 }
                 else {
-                    this._characterService.addModifier(fighter.id, this.tmpModifier).subscribe(
+                    this._characterService.addModifier(fighter.id, modifier).subscribe(
                         fighter.character.onAddModifier.bind(fighter.character)
                     );
                 }

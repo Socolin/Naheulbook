@@ -91,6 +91,7 @@ export class GroupService extends JsonService {
                         }
                     }
                 );
+                group.updateFightersOrder(true);
             });
             return group;
         });
@@ -207,15 +208,23 @@ export class GroupService extends JsonService {
         }).map(res => res.json());
     }
 
-    nextLap(groupId: number): Observable<GroupData> {
-        return this.postJson('/api/group/nextLap', {
-            groupId: groupId
+    nextFighter(groupId: number, fighterIndex: number) {
+        return this.postJson('/api/group/nextFighter', {
+            groupId: groupId,
+            fighterIndex: fighterIndex,
         }).map(res => res.json());
     }
 
     listActiveCharactersInGroup(characterId: number): Observable<CharacterGiveDestination[]> {
         return this.postJson('/api/group/listActiveCharacters', {
             characterId: characterId
+        }).map(res => res.json());
+    }
+
+    saveChangedTime(groupId: number, changes: any[]) {
+        return this.postJson('/api/group/saveChangedTime', {
+            groupId: groupId,
+            modifiersDurationUpdated: changes,
         }).map(res => res.json());
     }
 }

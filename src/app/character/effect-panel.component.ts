@@ -2,7 +2,7 @@ import {Component, Input, ViewChild} from '@angular/core';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
-import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {ActiveStatsModifier, LapCountDecrement} from '../shared/stat-modifier.model';
 import {AddEffectModalComponent} from '../effect/add-effect-modal.component';
 
 @Component({
@@ -30,6 +30,13 @@ export class EffectPanelComponent {
         this.addEffectModal.close();
 
         let modifier = ActiveStatsModifier.fromEffect(effect, data);
+        if (modifier.durationType === 'lap') {
+            modifier.lapCountDecrement = new LapCountDecrement();
+            modifier.lapCountDecrement.fighterId = this.character.id;
+            modifier.lapCountDecrement.fighterIsMonster = false;
+            modifier.lapCountDecrement.when = 'BEFORE';
+        }
+
         this._characterService.addModifier(this.character.id, modifier).subscribe(
             (activeModifier: ActiveStatsModifier) => {
                 this.character.onAddModifier(activeModifier);
@@ -38,6 +45,12 @@ export class EffectPanelComponent {
     }
 
     addCustomModifier(modifier: ActiveStatsModifier) {
+        if (modifier.durationType === 'lap') {
+            modifier.lapCountDecrement = new LapCountDecrement();
+            modifier.lapCountDecrement.fighterId = this.character.id;
+            modifier.lapCountDecrement.fighterIsMonster = false;
+            modifier.lapCountDecrement.when = 'BEFORE';
+        }
         this._characterService.addModifier(this.character.id, modifier).subscribe(
             this.character.onAddModifier.bind(this.character)
         );

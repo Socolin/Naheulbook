@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
 import {Fighter, Group} from './group.model';
 import {NotificationsService} from '../notifications/notifications.service';
 import {CharacterService} from '../character/character.service';
@@ -9,7 +9,7 @@ import {Item} from '../character/item.model';
 import {TargetJsonData} from './target.model';
 import {MdSlideToggleChange, OverlayRef, Portal} from '@angular/material';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {ActiveStatsModifier, LapCountDecrement} from '../shared/stat-modifier.model';
 import {Monster} from '../monster';
 import {MonsterService} from '../monster/monster.service';
 
@@ -18,7 +18,7 @@ import {MonsterService} from '../monster/monster.service';
     templateUrl: './fighter.component.html',
     styleUrls: ['./fighter.component.scss']
 })
-export class FighterComponent {
+export class FighterComponent implements OnChanges {
     @Input() group: Group;
     @Input() fighter: Fighter;
     @Input() fighters: Fighter[];
@@ -171,6 +171,16 @@ export class FighterComponent {
     }
 
     addCustomModifier(modifier: ActiveStatsModifier) {
+        if (modifier.durationType === 'lap') {
+            let fighter = this.group.currentFighter;
+            if (!fighter) {
+                fighter = this.fighter;
+            }
+            modifier.lapCountDecrement = new LapCountDecrement();
+            modifier.lapCountDecrement.fighterId = fighter.id;
+            modifier.lapCountDecrement.fighterIsMonster = fighter.isMonster;
+            modifier.lapCountDecrement.when = 'BEFORE';
+        }
         this._monsterService.addModifier(this.fighter.id, modifier).subscribe(
             this.fighter.monster.onAddModifier.bind(this.fighter.monster)
         );
@@ -198,5 +208,9 @@ export class FighterComponent {
             this.fighter.monster.onRemoveModifier(deletedModifier);
         });
     }
-
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('fighter' in changes) {
+            this.selectedItem = null;
+        }
+    }
 }

@@ -6,10 +6,11 @@ import {Portal, OverlayRef} from '@angular/material';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {ItemService, ItemCategory} from '../item';
 import {GroupService} from '../group/group.service';
-import {Item, ItemModifier} from './item.model';
+import {Item} from './item.model';
 import {Character, CharacterGiveDestination} from './character.model';
 import {ItemActionService} from './item-action.service';
 import {IDurable} from '../date/durable.model';
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 
 @Component({
     selector: 'item-detail',
@@ -41,7 +42,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     @ViewChild('addModifierDialog')
     public addModifierDialog: Portal<any>;
     public addModifierOverlayRef: OverlayRef;
-    public newItemModifier: ItemModifier;
+    public newItemModifier: ActiveStatsModifier;
 
     @ViewChild('lifetimeDialog')
     public lifetimeDialog: Portal<any>;
@@ -134,7 +135,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
      */
 
     openModifierDialog() {
-        this.newItemModifier = new ItemModifier();
+        this.newItemModifier = new ActiveStatsModifier();
         this.addModifierOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addModifierDialog);
     }
 
@@ -142,7 +143,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         this.addModifierOverlayRef.detach();
     }
 
-    activeModifier(modifier: ItemModifier) {
+    activeModifier(modifier: ActiveStatsModifier) {
         modifier.active = true;
         switch (modifier.durationType) {
             case 'time':

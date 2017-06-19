@@ -7,6 +7,7 @@ import {WebSocketService} from '../websocket/websocket.service';
 import {Skill} from '../skill/skill.model';
 import {ActiveStatsModifier, StatModifier} from '../shared/stat-modifier.model';
 import {isNullOrUndefined} from 'util';
+import {Fighter} from '../group/group.model';
 
 export class MonsterData {
     at: number;
@@ -301,6 +302,24 @@ export class Monster extends WsRegistrable {
         this.targetChanged.unsubscribe();
         this.onNotification.unsubscribe();
         this.onChange.unsubscribe();
+    }
+
+    public updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any[] {
+        let changes = [];
+        for (let item of this.items) {
+            for (let i = 0; i < item.modifiers.length; i++) {
+                let modifier = item.modifiers[i];
+                if (modifier.updateDuration(type, data)) {
+                    changes.push({type: 'item', itemId: item.id, modifierIdx: i, modifier: modifier});
+                }
+            }
+        }
+        for (let modifier of this.modifiers) {
+            if (modifier.updateDuration(type, data)) {
+                changes.push({type: 'modifier', modifier: modifier});
+            }
+        }
+        return changes;
     }
 }
 

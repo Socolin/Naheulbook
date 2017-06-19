@@ -1,9 +1,10 @@
 import {ItemTemplate} from '../item';
 import {IMetadata} from '../shared/misc.model';
 import {IconDescription} from '../shared/icon.model';
-import {StatsModifier} from '../shared/stat-modifier.model';
+import {ActiveStatsModifier, LapCountDecrement, StatsModifier} from '../shared/stat-modifier.model';
 import {IDurable} from '../date/durable.model';
 import {Skill} from '../skill/skill.model';
+import {Fighter} from '../group/group.model';
 
 export class ItemData {
     name: string;
@@ -18,18 +19,10 @@ export class ItemData {
     lifetime: IDurable;
 }
 
-export class ItemModifier extends StatsModifier {
-    active: boolean;
-
-    currentCombatCount: number;
-    currentTimeDuration: number;
-    currentLapCount: number;
-}
-
 export class Item {
     id: number;
     data: ItemData = new ItemData();
-    modifiers: ItemModifier[];
+    modifiers: ActiveStatsModifier[];
     container: number;
     template: ItemTemplate;
 
@@ -55,7 +48,10 @@ export class Item {
 
     static fromJson(jsonData: any, skillsById: {[skillId: number]: Skill}): Item {
         let item = new Item();
-        Object.assign(item, jsonData, {template: ItemTemplate.fromJson(jsonData.template, skillsById)});
+        Object.assign(item, jsonData, {
+            template: ItemTemplate.fromJson(jsonData.template, skillsById),
+            modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers)
+        });
         return item;
     }
 
@@ -66,17 +62,54 @@ export class Item {
         }
         return items;
     }
+
+    updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any[] {
+        let changes = [];
+        for (let i = 0; i < this.modifiers.length; i++) {
+            let modifier = this.modifiers[i];
+            if (modifier.updateDuration(type, data)) {
+                changes.push({type: 'itemModifier', itemId: this.id, modifierIdx: i, modifier: modifier});
+            }
+        }
+
+        if (this.data.lifetime && this.data.lifetime.durationType === type) {
+            switch (type) {
+                case 'combat': {
+                    if (this.data.lifetime.combatCount > 0 && typeof(data) === 'number') {
+                        this.data.lifetime.combatCount -= data;
+                        changes.push({type: 'itemLifetime', itemId: this.id, lifetime: this.data.lifetime});
+                    }
+                    break;
+                }
+                case 'time': {
+                    if (this.data.lifetime.timeDuration > 0 && typeof(data) === 'number') {
+                        this.data.lifetime.timeDuration -= data;
+                        changes.push({type: 'itemLifetime', itemId: this.id, lifetime: this.data.lifetime});
+                    }
+                    break;
+                }
+                case 'lap': {
+                    if (this.data.lifetime.lapCount > 0) {
+                        this.data.lifetime.lapCount--;
+                        changes.push({type: 'itemLifetime', itemId: this.id, lifetime: this.data.lifetime});
+                    }
+                    break;
+                }
+            }
+        }
+        return changes;
+    }
 }
 
 export class PartialItem {
     id: number;
     data: ItemData = new ItemData();
-    modifiers: ItemModifier[];
+    modifiers: ActiveStatsModifier[];
     container: number;
 
     static fromJson(jsonData: any): PartialItem {
         let item = new PartialItem();
-        Object.assign(item, jsonData);
+        Object.assign(item, jsonData, {modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers)});
         return item;
     }
 }
