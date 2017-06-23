@@ -100,27 +100,31 @@
                 <div class="fighter-advanced-data">
                     <span class="label">XP</span>
                     <span class="value">
-                    <value-editor [value]="fighter.monster.data.xp"
-                                  [title]="'XP'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'xp', $event)">
-                    </value-editor>
-                </span>
+                        <value-editor [value]="fighter.monster.data.xp"
+                                      [title]="'XP'"
+                                      (onChange)="updateMonsterField(fighter.monster, 'xp', $event)">
+                        </value-editor>
+                    </span>
                 </div>
                 <div class="fighter-advanced-data">
                     <span class="label">Sexe</span>
                     <span class="value">
-                    <md-select [ngModel]="fighter.monster.data.sex" (ngModelChange)="updateMonsterField(fighter.monster, 'sex', $event)">
-                        <md-option [value]="null">
-                            Non défini
-                        </md-option>
-                        <md-option [value]="'f'">
-                            Femme
-                        </md-option>
-                        <md-option [value]="'h'">
-                            Homme
-                        </md-option>
-                    </md-select>
-                </span>
+                        <md-select [ngModel]="fighter.monster.data.sex" (ngModelChange)="updateMonsterField(fighter.monster, 'sex', $event)">
+                            <md-option [value]="null">
+                                Non défini
+                            </md-option>
+                            <md-option [value]="'f'">
+                                Femme
+                            </md-option>
+                            <md-option [value]="'h'">
+                                Homme
+                            </md-option>
+                        </md-select>
+                    </span>
+                </div>
+                <div class="fighter-advanced-data" *ngIf="fighter.monster.data.page">
+                    <span class="label">Page</span>
+                    <span class="value">{{fighter.monster.data.page}}</span>
                 </div>
 
                 <md-input-container class="fighter-note">

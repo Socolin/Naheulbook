@@ -28,6 +28,7 @@ export class MonsterData {
     color = '000000';
     number: number;
     sex: string;
+    page: number;
 
     static fromJson(jsonData: any): MonsterData {
         let monsterData = new MonsterData();

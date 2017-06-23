@@ -234,6 +234,7 @@ export class FighterPanelComponent implements OnInit {
         this.newMonster.data.cou = monster.data.cou;
         this.newMonster.data.dmg = monster.data.dmg;
         this.newMonster.data.xp = monster.data.xp;
+        this.newMonster.data.page = monster.data.page;
         if (monster.data.resm) {
             this.newMonster.data.resm = monster.data.resm;
         } else {
