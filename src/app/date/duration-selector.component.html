@@ -15,37 +15,41 @@
     <md-option *ngIf="hiddenType.indexOf('forever') === -1" value="forever">Permanent</md-option>
 </md-select>
 
+<div class="duration-value">
+    <div *ngIf="durable.durationType === 'custom'">
+        <md-input-container>
+            <input mdInput placeholder="Durée" [(ngModel)]="durable.duration">
+        </md-input-container>
+    </div>
 
-<div *ngIf="durable.durationType === 'custom'">
-    <md-input-container>
-        <input mdInput placeholder="Durée" [(ngModel)]="durable.duration">
-    </md-input-container>
-</div>
-
-<div *ngIf="durable.durationType === 'time'">
-    <div>
-        <span>Temps</span>
-        <span>
+    <div *ngIf="durable.durationType === 'time'">
+        <div>
+            <span>Temps</span>
+            <span>
                 {{durable.timeDuration | nhbkDuration}}
             </span>
-        <span>
+            <span>
             <date-modifier [resetOnChange]=false
                            [dateOffset]="dateOffset"
                            (onChange)="setTimeDuration($event)">
             </date-modifier>
         </span>
+        </div>
+    </div>
+
+    <div *ngIf="durable.durationType === 'combat'">
+        <value-editor [title]="'Nombre de combat'"
+                      [value]="durable.combatCount"
+                      (onChange)="durable.combatCount = $event">
+        </value-editor>
+        {{durable.combatCount | i18nPlural: ({'=1': 'combat', 'other': 'combats'})}}
+    </div>
+    <div *ngIf="durable.durationType === 'lap'">
+        <value-editor [title]="'Nombre de tours'"
+                      [value]="durable.lapCount"
+                      (onChange)="durable.lapCount = $event">
+        </value-editor>
+        {{durable.lapCount | i18nPlural: ({'=1': 'tour', 'other': 'tours'})}}
     </div>
 </div>
 
-<div *ngIf="durable.durationType === 'combat'">
-    <md-input-container align="end">
-        <input mdInput type="number" min=0 placeholder="Durée" [(ngModel)]="durable.combatCount">
-        <span mdSuffix> combat(s)</span>
-    </md-input-container>
-</div>
-<div *ngIf="durable.durationType === 'lap'">
-    <md-input-container align="end">
-        <input mdInput type="number" min=0 placeholder="Durée" [(ngModel)]="durable.lapCount">
-        <span mdSuffix> tour(s)</span>
-    </md-input-container>
-</div>
