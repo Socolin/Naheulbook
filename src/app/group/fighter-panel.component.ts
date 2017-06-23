@@ -115,6 +115,10 @@ export class FighterPanelComponent implements OnInit {
                 this.group.removeMonster(monster.id);
                 this.deadMonsters.unshift(monster);
                 this.group.notify('killMonster', 'Monstre tué: ' + monster.name, monster);
+                if (this.group.pendingModifierChanges) {
+                    this._groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges).subscribe(() => {});
+                    this.group.pendingModifierChanges = null;
+                }
             }
         );
     }
@@ -128,6 +132,10 @@ export class FighterPanelComponent implements OnInit {
             () => {
                 this.group.removeMonster(monster.id);
                 this.group.notify('deleteMonster', 'Monstre supprimé: ' + monster.name, monster);
+                if (this.group.pendingModifierChanges) {
+                    this._groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges).subscribe(() => {});
+                    this.group.pendingModifierChanges = null;
+                }
             }
         );
     }

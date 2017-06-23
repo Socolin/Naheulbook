@@ -200,6 +200,21 @@ export class Fighter {
         }
         return undefined;
     }
+
+    updateLapDecrement(data: { deleted: Fighter, previous: Fighter; next: Fighter }): any {
+        if (this.isMonster) {
+            let changes = this.monster.updateLapDecrement(data);
+            if (changes.length) {
+                return {isMonster: true, monsterId: this.monster.id, changes: changes};
+            }
+        } else {
+            let changes = this.character.updateLapDecrement(data);
+            if (changes.length) {
+                return {isMonster: false, characterId: this.character.id, changes: changes};
+            }
+        }
+        return undefined;
+    }
 }
 
 export class GroupData {
@@ -303,6 +318,8 @@ export class Group extends WsRegistrable {
 
     public fighters: Fighter[] = [];
     public fightersSubscriptions: {[fighterUid: string]: Subscription} = {};
+
+    public pendingModifierChanges: any[];
 
     get currentFighter(): Fighter {
         if (this.fighters.length <= this.data.currentFighterIndex) {
@@ -523,7 +540,6 @@ export class Group extends WsRegistrable {
         let fighter = new Fighter(element);
         this.fighters.push(fighter);
         this.fightersSubscriptions[fighter.uid] = fighter.onTargetChange.subscribe(() => {
-            console.log('targetChange');
             fighter.updateTarget(this.fighters);
         });
         this.updateFightersOrder();
@@ -535,8 +551,17 @@ export class Group extends WsRegistrable {
         let i = this.fighters.findIndex(f => f.isMonster === isMonster && f.id === element.id);
         if (i !== -1) {
             let fighter = this.fighters[i];
+            let pi = i === 0 ? this.fighters.length - 1 : i - 1;
+            let ni = i === this.fighters.length - 1 ? 0 : i + 1;
+            let previousFighter = this.fighters[pi];
+            let nextFighter = this.fighters[ni];
             this.fightersSubscriptions[fighter.uid].unsubscribe();
             this.fighters.splice(i, 1);
+            this.pendingModifierChanges = this.updateLapDecrement({
+                deleted: fighter,
+                previous: previousFighter,
+                next: nextFighter
+            });
         }
         this.fighters.forEach(f => f.updateTarget(this.fighters));
         if (this.data.currentFighterIndex > this.fighters.length) {
@@ -612,6 +637,17 @@ export class Group extends WsRegistrable {
         let changes = [];
         for (let fighter of this.fighters) {
             let fighterChanges = fighter.updateTime(type, data);
+            if (fighterChanges) {
+                changes.push(fighterChanges);
+            }
+        }
+        return changes;
+    }
+
+    public updateLapDecrement(data: { deleted: Fighter, previous: Fighter; next: Fighter }): any[] {
+        let changes = [];
+        for (let fighter of this.fighters) {
+            let fighterChanges = fighter.updateLapDecrement(data);
             if (fighterChanges) {
                 changes.push(fighterChanges);
             }

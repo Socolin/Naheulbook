@@ -88,13 +88,6 @@ export class Item {
                     }
                     break;
                 }
-                case 'lap': {
-                    if (this.data.lifetime.lapCount > 0) {
-                        this.data.lifetime.lapCount--;
-                        changes.push({type: 'itemLifetime', itemId: this.id, lifetime: this.data.lifetime});
-                    }
-                    break;
-                }
             }
         }
         return changes;

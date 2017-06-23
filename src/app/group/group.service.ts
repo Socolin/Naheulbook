@@ -221,7 +221,7 @@ export class GroupService extends JsonService {
         }).map(res => res.json());
     }
 
-    saveChangedTime(groupId: number, changes: any[]) {
+    saveChangedTime(groupId: number, changes: any[]): Observable<any> {
         return this.postJson('/api/group/saveChangedTime', {
             groupId: groupId,
             modifiersDurationUpdated: changes,

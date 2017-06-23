@@ -3,12 +3,15 @@ import {
     ViewChildren
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
 
 import {NotificationsService} from '../notifications';
 
 import {Group, CharacterInviteInfo, Fighter} from '.';
 import {GroupService} from './group.service';
 import {Character} from '../character';
+
+import {date2Timestamp} from '../date/util';
 
 import {LoginService} from '../user';
 import {AutocompleteValue} from '../shared';
@@ -26,8 +29,6 @@ import {ActiveStatsModifier, LapCountDecrement} from '../shared/stat-modifier.mo
 import {AddEffectModalComponent} from '../effect/add-effect-modal.component';
 import {MonsterService} from '../monster/monster.service';
 import {FighterSelectorComponent} from './fighter-selector.component';
-import {date2Timestamp} from '../date/util';
-import {Observable} from "rxjs/Observable";
 
 @Component({
     templateUrl: './group.component.html',
@@ -203,6 +204,12 @@ export class GroupComponent implements OnInit, OnDestroy {
         this._characterService.changeGmData(character.id, 'active', !character.active).subscribe(
             change => {
                 character.changeActive(change.value);
+                if (!change.value) {
+                    if (this.group.pendingModifierChanges) {
+                        this._groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges).subscribe(() => {});
+                        this.group.pendingModifierChanges = null;
+                    }
+                }
             }
         );
     }
@@ -424,8 +431,12 @@ export class GroupComponent implements OnInit, OnDestroy {
                 let modifier = this.tmpModifier;
                 if (modifier.durationType === 'lap') {
                     modifier.lapCountDecrement = new LapCountDecrement();
-                    modifier.lapCountDecrement.fighterId = fighter.id;
-                    modifier.lapCountDecrement.fighterIsMonster = fighter.isMonster;
+                    let currentFighter = this.group.currentFighter;
+                    if (!currentFighter) {
+                        currentFighter = fighter;
+                    }
+                    modifier.lapCountDecrement.fighterId = currentFighter.id;
+                    modifier.lapCountDecrement.fighterIsMonster = currentFighter.isMonster;
                     modifier.lapCountDecrement.when = 'BEFORE';
                 }
                 if (fighter.isMonster) {

@@ -216,4 +216,28 @@ export class ActiveStatsModifier extends StatsModifier {
 
         return false;
     }
+
+    updateLapDecrement(data: {deleted: Fighter; previous: Fighter; next: Fighter}): boolean {
+        if (this.durationType !== 'lap') {
+            return false;
+        }
+        if (!this.lapCountDecrement) {
+            return false;
+        }
+
+        if (this.lapCountDecrement.fighterId === data.deleted.id
+            && this.lapCountDecrement.fighterIsMonster === data.deleted.isMonster) {
+            if (this.lapCountDecrement.when === 'BEFORE') {
+                this.lapCountDecrement.when = 'AFTER';
+                this.lapCountDecrement.fighterId = data.previous.id;
+                this.lapCountDecrement.fighterIsMonster = data.previous.isMonster;
+            } else {
+                this.lapCountDecrement.when = 'BEFORE';
+                this.lapCountDecrement.fighterId = data.next.id;
+                this.lapCountDecrement.fighterIsMonster = data.next.isMonster;
+            }
+            return true;
+        }
+        return false;
+    }
 }

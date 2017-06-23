@@ -25,7 +25,7 @@ export class MonsterData {
     resm: number;
     xp: number;
     note: string;
-    color: string;
+    color = '000000';
     number: number;
     sex: string;
 
@@ -316,6 +316,24 @@ export class Monster extends WsRegistrable {
         }
         for (let modifier of this.modifiers) {
             if (modifier.updateDuration(type, data)) {
+                changes.push({type: 'modifier', modifier: modifier});
+            }
+        }
+        return changes;
+    }
+
+    updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): any[] {
+        let changes = [];
+        for (let item of this.items) {
+            for (let i = 0; i < item.modifiers.length; i++) {
+                let modifier = item.modifiers[i];
+                if (modifier.updateLapDecrement(data)) {
+                    changes.push({type: 'item', itemId: item.id, modifierIdx: i, modifier: modifier});
+                }
+            }
+        }
+        for (let modifier of this.modifiers) {
+            if (modifier.updateLapDecrement(data)) {
                 changes.push({type: 'modifier', modifier: modifier});
             }
         }

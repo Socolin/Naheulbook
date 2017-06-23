@@ -1258,6 +1258,17 @@ export class Character extends WsRegistrable {
         return changes;
     }
 
+    updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): any[] {
+        let changes = [];
+
+        for (let modifier of this.modifiers) {
+            if (modifier.updateLapDecrement(data)) {
+                changes.push({type: 'modifier', modifier: modifier});
+            }
+        }
+        return changes;
+    }
+
     dispose() {
 
     }
