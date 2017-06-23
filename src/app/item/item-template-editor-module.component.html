@@ -9,8 +9,8 @@
                            placeholder="Nombre de charges"
                            [(ngModel)]="itemTemplate.data.charge"
                            type="number"/>
-                    <span md-prefix>Cet objet a un nombre limité de </span>
-                    <span md-suffix>utilisation(s)</span>
+                    <span mdPrefix>Cet objet a un nombre limité de </span>
+                    <span mdSuffix>utilisation(s)</span>
                 </md-input-container>
             </div>
             <div>
@@ -64,7 +64,7 @@
                            placeholder="Nombre de dé"
                            [(ngModel)]="itemTemplate.data.damageDice"
                            type="number"/>
-                    <span md-suffix>D6</span>
+                    <span mdSuffix>D6</span>
                 </md-input-container>
 
                 <md-input-container align="end">
@@ -282,8 +282,8 @@
                        placeholder="Poids"
                        [(ngModel)]="itemTemplate.data.weight"
                        type="number"/>
-                <span md-prefix>Cet objet pèse </span>
-                <span md-suffix>Kg</span>
+                <span mdPrefix>Cet objet pèse </span>
+                <span mdSuffix>Kg</span>
             </md-input-container>
         </md-card-content>
     </ng-template>

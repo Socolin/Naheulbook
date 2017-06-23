@@ -40,12 +40,12 @@
 <div *ngIf="durable.durationType === 'combat'">
     <md-input-container align="end">
         <input mdInput type="number" min=0 placeholder="Durée" [(ngModel)]="durable.combatCount">
-        <span md-suffix> combat(s)</span>
+        <span mdSuffix> combat(s)</span>
     </md-input-container>
 </div>
 <div *ngIf="durable.durationType === 'lap'">
     <md-input-container align="end">
         <input mdInput type="number" min=0 placeholder="Durée" [(ngModel)]="durable.lapCount">
-        <span md-suffix> tour(s)</span>
+        <span mdSuffix> tour(s)</span>
     </md-input-container>
 </div>
