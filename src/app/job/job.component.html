@@ -1,28 +1,25 @@
-<md-card style="margin-bottom: 10px">
-    <md-card-title-group>
-        <md-card-title>
-            {{job.name}}
-        </md-card-title>
-        <md-card-subtitle>
+<md-expansion-panel>
+    <md-expansion-panel-header>
+        {{job.name}}
+        <span class="secondary-text job-restrictions">
             <span *ngIf="job.originsBlacklist.length"><strong>Excepté:</strong></span>
             <ng-template ngFor let-l="last" let-bl [ngForOf]=job.originsBlacklist>
-            <span>
-                {{bl.name}}<ng-template [ngIf]="!l">,</ng-template>
-            </span>
+                <span>
+                    {{bl.name}}<ng-template [ngIf]="!l">,</ng-template>
+                </span>
             </ng-template>
             <span *ngIf="job.originsWhitelist.length"><strong>Seulement:</strong></span>
             <ng-template ngFor let-l="last" let-wl [ngForOf]=job.originsWhitelist>
-            <span>
-                {{wl.name}}<ng-template [ngIf]="!l">,</ng-template>
-            </span>
+                <span>
+                    {{wl.name}}<ng-template [ngIf]="!l">,</ng-template>
+                </span>
             </ng-template>
-        </md-card-subtitle>
-    </md-card-title-group>
-    <md-card-content>
-        <div [hidden]="folded">
-            <div *ngIf="job.requirements && job.requirements.length > 0">
-                <b>Critères: </b>
-                <span *ngFor="let requirement of job.requirements; let lastReq=last">
+        </span>
+    </md-expansion-panel-header>
+    <div>
+        <div *ngIf="job.requirements && job.requirements.length > 0">
+            <b>Critères: </b>
+            <span *ngFor="let requirement of job.requirements; let lastReq=last">
                     <span *ngIf="requirement.min">
                         {{requirement.stat}} minimum: {{requirement.min}}
                     </span>
@@ -31,66 +28,58 @@
                     </span>
                     <span *ngIf="!lastReq"> et </span>
                 </span>
-            </div>
-
-            <div *ngIf="!job.baseEv && !job.factorEv && !job.bonusEv">
-                EV initiale : selon origine
-            </div>
-            <div *ngIf="!job.baseEv && job.factorEv && !job.bonusEv">
-                EV initiale : EV initiale -{{ (1 - job.factorEv) | percent}}
-            </div>
-            <div *ngIf="!job.baseEv && !job.factorEv && job.bonusEv > 0">
-                EV initiale : EV initiale + {{job.bonusEv}}
-            </div>
-            <div *ngIf="job.baseEv && !job.factorEv && !job.bonusEv">
-                EV initiale : {{job.baseEv}}
-            </div>
-
-            <div *ngIf="job.baseEa != null">
-                EA initiale (mana) : {{job.baseEa}} (+1D{{job.diceEaLevelUp}} par niveau)
-            </div>
-
-            <div *ngIf="job.baseAT != null || job.basePRD != null">
-                Valeur ATTAQUE initiale : {{job.baseAT}} – Valeur PARADE initiale : {{job.basePRD}}
-            </div>
-
-            <div *ngFor="let bonus of job.bonuses">
-                {{bonus.description}}
-            </div>
-
-            <div *ngIf="job.skills && job.skills.length > 0">
-                Compétences de naissance:
-                <ul>
-                    <li *ngFor="let skill of job.skills">
-                        {{skill.name}}
-                    </li>
-                </ul>
-            </div>
-
-            <div *ngIf="job.availableSkills && job.availableSkills.length > 0">
-                Compétences au choix:
-                <ul>
-                    <li *ngFor="let skill of job.availableSkills">
-                        {{skill.name}}
-                    </li>
-                </ul>
-            </div>
-
-            <div *ngIf="job.restricts && job.restricts.length > 0">
-                Restrictions:
-                <ul>
-                    <li *ngFor="let restrict of job.restricts">
-                        {{restrict.text}}
-                    </li>
-                </ul>
-            </div>
         </div>
-    </md-card-content>
-    <md-card-actions>
-        <button md-button color="primary" type="button" (click)=toggleFold($event)>
-            <span *ngIf="folded">PLUS</span>
-            <span *ngIf="!folded">MOINS</span>
-        </button>
-    </md-card-actions>
-</md-card>
 
+        <div *ngIf="!job.baseEv && !job.factorEv && !job.bonusEv">
+            EV initiale : selon origine
+        </div>
+        <div *ngIf="!job.baseEv && job.factorEv && !job.bonusEv">
+            EV initiale : EV initiale -{{ (1 - job.factorEv) | percent}}
+        </div>
+        <div *ngIf="!job.baseEv && !job.factorEv && job.bonusEv > 0">
+            EV initiale : EV initiale + {{job.bonusEv}}
+        </div>
+        <div *ngIf="job.baseEv && !job.factorEv && !job.bonusEv">
+            EV initiale : {{job.baseEv}}
+        </div>
+
+        <div *ngIf="job.baseEa != null">
+            EA initiale (mana) : {{job.baseEa}} (+1D{{job.diceEaLevelUp}} par niveau)
+        </div>
+
+        <div *ngIf="job.baseAT != null || job.basePRD != null">
+            Valeur ATTAQUE initiale : {{job.baseAT}} – Valeur PARADE initiale : {{job.basePRD}}
+        </div>
+
+        <div *ngFor="let bonus of job.bonuses">
+            {{bonus.description}}
+        </div>
+
+        <div *ngIf="job.skills && job.skills.length > 0">
+            Compétences de naissance:
+            <ul>
+                <li *ngFor="let skill of job.skills">
+                    {{skill.name}}
+                </li>
+            </ul>
+        </div>
+
+        <div *ngIf="job.availableSkills && job.availableSkills.length > 0">
+            Compétences au choix:
+            <ul>
+                <li *ngFor="let skill of job.availableSkills">
+                    {{skill.name}}
+                </li>
+            </ul>
+        </div>
+
+        <div *ngIf="job.restricts && job.restricts.length > 0">
+            Restrictions:
+            <ul>
+                <li *ngFor="let restrict of job.restricts">
+                    {{restrict.text}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</md-expansion-panel>

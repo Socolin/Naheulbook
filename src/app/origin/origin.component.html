@@ -1,12 +1,9 @@
-<md-card style="margin-bottom: 10px">
-    <md-card-title>
-        {{origin.name}}
-    </md-card-title>
-    <md-card-content>
-        <div [hidden]="folded">
-            <div *ngIf="origin.requirements.length > 0">
-                <b>Critères: </b>
-                <span *ngFor="let requirement of origin.requirements; let lastReq=last">
+<md-expansion-panel>
+    <md-expansion-panel-header>{{origin.name}}</md-expansion-panel-header>
+    <div>
+        <div *ngIf="origin.requirements.length > 0">
+            <b>Critères: </b>
+            <span *ngFor="let requirement of origin.requirements; let lastReq=last">
                     <span *ngIf="requirement.min">
                         {{requirement.stat}} minimum: {{requirement.min}}
                     </span>
@@ -15,65 +12,59 @@
                     </span>
                     <span *ngIf="!lastReq"> et </span>
                 </span>
-            </div>
+        </div>
 
-            <p>{{origin.advantage}}</p>
+        <p>{{origin.advantage}}</p>
 
-            <p [innerHTML]="origin.description"></p>
+        <p [innerHTML]="origin.description"></p>
 
-            <p *ngIf="origin.size">
-                <b>Taille</b>: {{origin.size}}
-            </p>
+        <p *ngIf="origin.size">
+            <b>Taille</b>: {{origin.size}}
+        </p>
 
-            <div *ngIf="origin.bonuses && origin.bonuses.length">
-                <b>Bonus:</b>
-                <ul>
-                    <li *ngFor="let bonus of origin.bonuses">{{bonus.description}}</li>
-                </ul>
-            </div>
+        <div *ngIf="origin.bonuses && origin.bonuses.length">
+            <b>Bonus:</b>
+            <ul>
+                <li *ngFor="let bonus of origin.bonuses">{{bonus.description}}</li>
+            </ul>
+        </div>
 
-            <div *ngIf="origin.skills.length > 0">
-                Compétences de naissance:
-                <ul>
-                    <li *ngFor="let skill of origin.skills">
-                        {{skill.name}}
-                    </li>
-                </ul>
-            </div>
+        <div *ngIf="origin.skills.length > 0">
+            Compétences de naissance:
+            <ul>
+                <li *ngFor="let skill of origin.skills">
+                    {{skill.name}}
+                </li>
+            </ul>
+        </div>
 
-            <div *ngIf="origin.availableSkills.length > 0">
-                Compétences au choix:
-                <ul>
-                    <li *ngFor="let skill of origin.availableSkills">
-                        {{skill.name}}
-                    </li>
-                </ul>
-            </div>
+        <div *ngIf="origin.availableSkills.length > 0">
+            Compétences au choix:
+            <ul>
+                <li *ngFor="let skill of origin.availableSkills">
+                    {{skill.name}}
+                </li>
+            </ul>
+        </div>
 
-            <div *ngIf="origin.restricts.length > 0">
-                Restrictions:
-                <ul>
-                    <li *ngFor="let restrict of origin.restricts; let lastRes=last">
-                        {{restrict.text}}
-                    </li>
-                </ul>
-            </div>
+        <div *ngIf="origin.restricts.length > 0">
+            Restrictions:
+            <ul>
+                <li *ngFor="let restrict of origin.restricts; let lastRes=last">
+                    {{restrict.text}}
+                </li>
+            </ul>
+        </div>
 
-            <div *ngIf="origin.infos.length > 0">
-                <div *ngFor="let info of origin.infos; let lastInfo=last" class="origin-info">
-                    <b>
-                        {{info.title}}:
-                    </b>
-                    <span [innerHTML]="info.description"></span>
-                </div>
+        <div *ngIf="origin.infos.length > 0">
+            <div *ngFor="let info of origin.infos; let lastInfo=last" class="origin-info">
+                <b>
+                    {{info.title}}:
+                </b>
+                <span [innerHTML]="info.description"></span>
             </div>
         </div>
-    </md-card-content>
-    <md-card-actions>
-        <button md-button color="primary" type="button" (click)=toggleFold($event)>
-            <span *ngIf="folded">PLUS</span>
-            <span *ngIf="!folded">MOINS</span>
-        </button>
-    </md-card-actions>
-</md-card>
+    </div>
+</md-expansion-panel>
+
 

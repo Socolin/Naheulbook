@@ -369,6 +369,7 @@ export class MonsterTemplateData {
     traits: TraitInfo[];
     page: number;
 }
+
 export class MonsterTemplateCategory {
     id: number;
     name: string;

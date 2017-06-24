@@ -8,15 +8,4 @@ import {Origin} from './origin.model';
 })
 export class OriginComponent {
     @Input() origin: Origin;
-    public folded: boolean;
-
-    constructor() {
-        this.folded = true;
-    }
-
-    toggleFold(event: Event) {
-        event.preventDefault();
-        event.stopPropagation();
-        this.folded = !this.folded;
-    }
 }

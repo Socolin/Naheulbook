@@ -9,11 +9,4 @@ import {Job} from './job.model';
 })
 export class JobComponent {
     @Input() job: Job;
-    public folded = true;
-
-    toggleFold(event: Event) {
-        event.preventDefault();
-        event.stopPropagation();
-        this.folded = !this.folded;
-    }
 }
