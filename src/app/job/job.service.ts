@@ -67,4 +67,20 @@ export class JobService {
         }
         return this.jobs;
     }
+
+    getJobsById(): Observable<{[jobId: number]: Job}> {
+        return this.getJobList().map((jobs: Job[]) => {
+            let jobsById = {};
+            jobs.map(j => jobsById[j.id] = j);
+            return jobsById;
+        });
+    }
+
+    getJobsNamesById(): Observable<{[jobId: number]: string}> {
+        return this.getJobList().map((jobs: Job[]) => {
+            let jobNamesById = {};
+            jobs.map(j => jobNamesById[j.id] = j.name);
+            return jobNamesById;
+        });
+    }
 }

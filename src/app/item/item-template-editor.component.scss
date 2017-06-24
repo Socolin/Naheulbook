@@ -22,4 +22,9 @@ md-card {
 }
 
 .section-list {
+    display: flex;
+    flex-direction: row;
+    md-select {
+        flex: 1 auto;
+    }
 }

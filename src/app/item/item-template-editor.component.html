@@ -45,23 +45,17 @@
 
 <md-card>
     <md-card-subtitle>Section</md-card-subtitle>
-    <md-card-content class="section-list">
-        <md-radio-group [(ngModel)]="selectedSection">
-            <md-radio-button *ngFor="let section of sections" [value]="section">
+    <md-card-content class="section-list" *ngIf="sections">
+        <md-select [(ngModel)]="selectedSection" placeholder="Section">
+            <md-option *ngFor="let section of sections" [value]="section">
                 {{section.name}}
-            </md-radio-button>
-        </md-radio-group>
-    </md-card-content>
-</md-card>
-
-<md-card *ngIf="selectedSection">
-    <md-card-subtitle>Sous section</md-card-subtitle>
-    <md-card-content>
-        <md-radio-group [(ngModel)]="itemTemplate.category">
-            <md-radio-button *ngFor="let category of selectedSection.categories" [value]="category.id">
+            </md-option>
+        </md-select>
+        <md-select [(ngModel)]="itemTemplate.category" placeholder="Sous section" *ngIf="selectedSection">
+            <md-option *ngFor="let category of selectedSection.categories" [value]="category.id">
                 {{category.name}}
-            </md-radio-button>
-        </md-radio-group>
+            </md-option>
+        </md-select>
     </md-card-content>
 </md-card>
 

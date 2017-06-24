@@ -1,50 +1,69 @@
-<md-chip-list selectable="true">
-    <ng-template ngFor let-section [ngForOf]="itemSections">
-        <md-chip (click)="selectSection($event, section)"
-                 [selected]="selectedSection && selectedSection.id == section.id"
-                 color="primary">
+<md-card class="section-selector">
+    <md-select [ngModel]="selectedSection" (change)="selectSection($event.value)" style="width: 100%" placeholder="Section">
+        <md-option *ngFor="let section of itemSections" [value]="section">
             {{section.name}}
-        </md-chip>
-    </ng-template>
-</md-chip-list>
+        </md-option>
+    </md-select>
+</md-card>
 
-<div *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
-    <div class="panel-body" [innerHTML]="selectedSection.note|textFormatter">
-    </div>
-</div>
-
-<div>
-    <div *ngIf="hasSpecial('DICE_DROP')" class="cold-md-2">
-        <input class="input-lg form-control" placeholder="dice" [(ngModel)]="filter.dice" type=number min=1 max=100>
-    </div>
-    <md-input-container>
-        <input mdInput placeholder="Filtre" [(ngModel)]="filter.name" type="text" />
-    </md-input-container>
-</div>
-<ng-template ngFor let-category [ngForOf]="selectedSection?.categories">
-    <div *ngIf="itemsByCategory && isItemVisibleInList(itemsByCategory[category.id])">
-        <div class="row">
-            <div class="col-xs-12">
-                <h3>
-                    {{category.name}}
-                </h3>
-                <p>
-                    {{category.note}}
-                </p>
-            </div>
+<md-card *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
+    <md-card-subtitle>Note</md-card-subtitle>
+    <md-card-content>
+        <div class="panel-body" [innerHTML]="selectedSection.note|textFormatter">
         </div>
-        <ng-template [ngIf]="itemsByCategory">
-            <ng-template ngFor let-item [ngForOf]="itemsByCategory[category.id]">
-                <div class="item-element">
-                    <item-template class="item-element"
-                                   *ngIf="isVisible(item)"
-                                   [originsName]="originsName"
-                                   [jobsName]="jobsName"
-                                   [editable]="editable"
-                                   [item]="item"></item-template>
-                </div>
-            </ng-template>
+    </md-card-content>
+</md-card>
+
+<md-card>
+    <md-card-subtitle>Filtre</md-card-subtitle>
+    <md-card-content class="filters">
+        <md-input-container class="name">
+            <input mdInput placeholder="Filtre" [(ngModel)]="filter.name" (change)="updateFilter()"/>
+        </md-input-container>
+        <md-input-container *ngIf="hasSpecial('DICE_DROP')" class="dice-drop">
+            <input mdInput placeholder="Dé" [(ngModel)]="filter.dice" type="number" (change)="updateFilter()"/>
+        </md-input-container>
+        <md-select *ngIf="selectedSection"
+                   class="category"
+                   [ngModel]="filter.category"
+                   (change)="selectCategory($event.value)"
+                   placeholder="Sous-section">
+            <md-option [value]="null"></md-option>
+            <md-option *ngFor="let category of selectedSection.categories" [value]="category">
+                {{category.name}}
+            </md-option>
+        </md-select>
+    </md-card-content>
+</md-card>
+
+<ng-template ngFor let-category [ngForOf]="selectedSection?.categories" [ngForTrackBy]="trackById">
+    <div *ngIf="itemsByCategory && itemsByCategory[category.id]">
+        <div itemCategory [category]="category">
+            <h3>
+                {{category.name}}
+            </h3>
+            <p>
+                {{category.note}}
+            </p>
+        </div>
+        <ng-template ngFor let-item [ngForOf]="itemsByCategory[category.id]" [ngForTrackBy]="trackById">
+            <div class="item-element">
+                <item-template class="item-element"
+                               *ngIf="isVisible(item)"
+                               [originsName]="originsName"
+                               [jobsName]="jobsName"
+                               [editable]="editable"
+                               [item]="item">
+                </item-template>
+            </div>
         </ng-template>
-        <hr>
     </div>
+</ng-template>
+
+<ng-template #stickyContainer="cdkPortal" cdk-portal>
+    <md-toolbar>
+        <h3>
+            {{stickyCategory.name}}
+        </h3>
+    </md-toolbar>
 </ng-template>

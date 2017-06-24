@@ -43,4 +43,20 @@ export class OriginService {
         }
         return this.origins;
     }
+
+    getOriginsById(): Observable<{[originId: number]: Origin}> {
+        return this.getOriginList().map((origins: Origin[]) => {
+            let originsById = {};
+            origins.map(o => originsById[o.id] = o);
+            return originsById;
+        });
+    }
+
+    getOriginsNamesById(): Observable<{[originId: number]: string}> {
+        return this.getOriginList().map((origins: Origin[]) => {
+            let originNamesById = {};
+            origins.map(o => originNamesById[o.id] = o.name);
+            return originNamesById;
+        });
+    }
 }
