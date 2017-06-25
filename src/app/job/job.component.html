@@ -59,7 +59,7 @@
             Compétences de naissance:
             <ul>
                 <li *ngFor="let skill of job.skills">
-                    {{skill.name}}
+                    <strong>{{skill.name}}</strong>: {{skill.playerDescription}}
                 </li>
             </ul>
         </div>
@@ -68,7 +68,7 @@
             Compétences au choix:
             <ul>
                 <li *ngFor="let skill of job.availableSkills">
-                    {{skill.name}}
+                    <strong>{{skill.name}}</strong>: {{skill.playerDescription}}
                 </li>
             </ul>
         </div>
