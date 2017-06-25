@@ -5,7 +5,7 @@ import {ReplaySubject, Observable} from 'rxjs/Rx';
 import {ItemTemplate, ItemSection, ItemSlot} from '../item';
 import {Item} from '../character';
 import {JsonService} from '../shared/json-service';
-import {ItemCategory} from './item-template.model';
+import {ItemCategory, ItemTemplateJsonData} from './item-template.model';
 import {NotificationsService} from '../notifications';
 import {ItemData, PartialItem} from '../character';
 import {LoginService} from '../user';
@@ -69,7 +69,7 @@ export class ItemService extends JsonService {
                 this.postJson('/api/item/list', {typeId: section.id}).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
-                ([itemTemplateDatas, skillsById]: [ItemTemplate[], {[skillId: number]: Skill}]) => {
+                ([itemTemplateDatas, skillsById]: [ItemTemplateJsonData[], {[skillId: number]: Skill}]) => {
                     let items: ItemTemplate[] = [];
                     for (let i = 0; i < itemTemplateDatas.length; i++) {
                         let itemTemplate = ItemTemplate.fromJson(itemTemplateDatas[i], skillsById);
@@ -96,7 +96,7 @@ export class ItemService extends JsonService {
                 this.postJson('/api/item/detail', {id: id}).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
-                ([itemTemplateData, skillsById]: [ItemTemplate, {[skillId: number]: Skill}]) => {
+                ([itemTemplateData, skillsById]: [ItemTemplateJsonData, {[skillId: number]: Skill}]) => {
                     let itemTemplate = ItemTemplate.fromJson(itemTemplateData, skillsById);
                     observer.next(itemTemplate);
                     observer.complete();

@@ -10,7 +10,7 @@ import {MiscService} from './misc.service';
 })
 export class StatRequirementsEditorComponent implements OnInit {
     public stats: Stat[];
-    @Input() requirements: Object[];
+    @Input() requirements: any[];
     public selectedStat: Stat;
     public minValue: number;
     public maxValue: number;

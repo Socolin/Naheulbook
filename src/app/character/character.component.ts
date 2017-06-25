@@ -13,6 +13,7 @@ import {Item} from './item.model';
 import {Skill} from '../skill/skill.model';
 import {WebSocketService} from '../websocket/websocket.service';
 import {Subscription} from 'rxjs/Subscription';
+import {smoothScrollBy} from '../shared/scroll';
 
 export class LevelUpInfo {
     EVorEA = 'EV';
@@ -306,9 +307,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     selectItem(item: Item) {
         this.selectedItem = item;
-        setTimeout(() => {
-            scrollTo(0, this.combatWeaponDetailElement.nativeElement.getBoundingClientRect().bottom);
-        }, 10);
+        smoothScrollBy(0, this.combatWeaponDetailElement.nativeElement.getBoundingClientRect().bottom, 400);
     }
 
     ngOnInit() {

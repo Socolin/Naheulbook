@@ -17,4 +17,4 @@ export * from './icon.component';
 export * from './icon.service';
 export * from './icon-selector.component';
 export * from './random';
-
+export * from './scroll';

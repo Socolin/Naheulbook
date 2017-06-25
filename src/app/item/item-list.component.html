@@ -41,7 +41,7 @@
 
 <ng-template ngFor let-category [ngForOf]="filteredCategories" [ngForTrackBy]="trackById">
     <div itemCategory [category]="category" [id]="category.id">
-        <md-toolbar>
+        <md-toolbar  color="primary">
             <h3>
                 {{category.name}}
             </h3>
@@ -60,7 +60,7 @@
                            [originsName]="originsName"
                            [jobsName]="jobsName"
                            [editable]="editable && !inTab"
-                           [actions]="['addItem']"
+                           [actions]="inTab ? ['addItem'] : []"
                            (onAction)="emitAction($event.action, $event.data)"
                            [item]="item">
             </item-template>
@@ -69,15 +69,22 @@
 </ng-template>
 
 <ng-template #stickyContainer="cdkPortal" cdk-portal>
-    <md-toolbar class="sticky-category">
+    <md-toolbar class="sticky-category" color="primary">
+        <button md-icon-button (click)="backToTop()">
+            <md-icon>arrow_upward</md-icon>
+        </button>
+
         <h3>
             {{stickyCategory.name}}
-            <button md-icon-button (click)="expandStickyCategory()">
-                <md-icon>keyboard_arrow_down</md-icon>
+            <button *ngIf="!expandedSticky" md-icon-button (click)="expandStickyCategory()">
+                <md-icon>expand_more</md-icon>
+            </button>
+            <button *ngIf="expandedSticky" md-icon-button (click)="collapseStickyCategory()">
+                <md-icon>expand_less</md-icon>
             </button>
         </h3>
     </md-toolbar>
-    <div *ngIf="expandedSticky" class="sticky-category-list">
+    <div class="sticky-category-list" [@stickyExpand]="expandedSticky">
         <md-nav-list>
             <ng-template ngFor let-category [ngForOf]="filteredCategories">
                 <a md-list-item

@@ -621,7 +621,6 @@ export class Character extends WsRegistrable {
                 continue;
             }
             if (item.template.data.requireLevel > this.level) {
-                // FIXME: Check if we should ignore this item or do something else.
                 continue;
             }
             let modifications = {};

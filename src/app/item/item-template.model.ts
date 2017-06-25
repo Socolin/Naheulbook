@@ -64,9 +64,32 @@ export class ItemRequirement {
     max: number;
 }
 
-export class ItemSkillModifier {
-    skill: number|Skill;
+export class ItemSkillModifierJsonData {
+    skill: number;
     value: number;
+}
+
+export class ItemTemplateJsonData {
+    id: number;
+    name: string;
+    category: number;
+    data: ItemTemplateData;
+    modifiers: ItemStatModifier[] = [];
+    skills: Skill[];
+    unskills: Skill[];
+    slots: ItemSlot[];
+    requirements: any[];
+    skillModifiers: ItemSkillModifierJsonData[];
+}
+
+export class ItemSkillModifier {
+    skill: Skill;
+    value: number;
+
+    constructor(skill: Skill, value: number) {
+        this.skill = skill;
+        this.value = value;
+    }
 }
 
 export class ItemTemplate {
@@ -97,9 +120,9 @@ export class ItemTemplate {
         return false;
     }
 
-    static fromJson(jsonData: ItemTemplate, skillsById: {[skillId: number]: Skill}): ItemTemplate {
+    static fromJson(jsonData: ItemTemplateJsonData, skillsById: {[skillId: number]: Skill}): ItemTemplate {
         let itemTemplate = new ItemTemplate();
-        Object.assign(itemTemplate, jsonData, {skills: [], unskills: []});
+        Object.assign(itemTemplate, jsonData, {skills: [], unskills: [], skillModifiers: []});
 
         for (let s of jsonData.skills) {
             itemTemplate.skills.push(skillsById[s.id]);
@@ -108,8 +131,8 @@ export class ItemTemplate {
             itemTemplate.unskills.push(skillsById[s.id]);
         }
 
-        for (let skillModifier of itemTemplate.skillModifiers) {
-            skillModifier.skill = skillsById[+skillModifier.skill];
+        for (let skillModifier of jsonData.skillModifiers) {
+            itemTemplate.skillModifiers.push(new ItemSkillModifier(skillsById[+skillModifier.skill], skillModifier.value));
         }
 
         return itemTemplate;

@@ -14,11 +14,27 @@ import {removeDiacritics} from '../shared';
 import {Observable} from 'rxjs/Observable';
 import {Overlay, OverlayRef, OverlayState, Portal} from '@angular/material';
 import {ItemCategoryDirective} from './item-category.directive';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {smoothScrollBy, smoothScrollTo} from '../shared/scroll';
 
 @Component({
     selector: 'item-list',
     templateUrl: './item-list.component.html',
     styleUrls: ['item-list.component.scss'],
+    animations: [
+        trigger('stickyExpand', [
+            state('0', style({
+                height: '0',
+                visibility: 'hidden',
+                overflow: 'hidden'
+            })),
+            state('1',   style({
+                height: '*',
+            })),
+            transition('1 => 0', animate(200, style({height: 0, overflow: 'hidden'}))),
+            transition('0 => 1', animate(200, style({height: '*', visibility: 'visible', overflow: 'hidden'})))
+        ])
+    ]
 })
 export class ItemListComponent implements OnInit, OnDestroy {
     @Input() inTab: boolean;
@@ -107,14 +123,22 @@ export class ItemListComponent implements OnInit, OnDestroy {
         this.expandedSticky = true;
     }
 
+    collapseStickyCategory() {
+        this.expandedSticky = false;
+    }
+
     scrollToCategory(category: ItemCategory) {
         for (let element of this.stickToTopElements.toArray()) {
             if (element.category.id === category.id) {
-                window.scrollBy(0, element.elementRef.nativeElement.getBoundingClientRect().top);
+                smoothScrollBy(0, element.elementRef.nativeElement.getBoundingClientRect().top, 1000);
             }
         }
         this.expandedSticky = false;
         return false;
+    }
+
+    backToTop() {
+        smoothScrollTo(0, 0, 300);
     }
 
     resetFilter() {
@@ -125,6 +149,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
         if (this.selectedSection && this.selectedSection.id === sectionId) {
             return;
         }
+        this.resetFilter();
         let i = this.itemSections.findIndex(s => s.id === sectionId);
         if (i !== -1) {
             this.selectSection(this.itemSections[i]);
@@ -192,7 +217,9 @@ export class ItemListComponent implements OnInit, OnDestroy {
             if (!itemsByCategory[item.category]) {
                 itemsByCategory[item.category] = [];
                 let category = this.selectedSection.categories.find(c => c.id === item.category);
-                filteredCategories.push(category);
+                if (category) {
+                    filteredCategories.push(category);
+                }
             }
             itemsByCategory[item.category].push(item);
         }
@@ -222,7 +249,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
             this.originsName = originsName;
             this.jobsName = jobsName;
             this.itemSections = sections;
-            if (!this._route.snapshot.data['id']) {
+            if (!this._route.snapshot.queryParams['id']) {
                 this.selectSection(sections[0]);
             }
             this.queryParamsSub = this._route.queryParams.subscribe(params => {
