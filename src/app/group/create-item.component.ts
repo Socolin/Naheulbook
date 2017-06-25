@@ -94,16 +94,19 @@ export class CreateItemComponent implements OnChanges {
         }
     }
 
-    selectItemTemplate(itemTemplate: ItemTemplate, input) {
+    selectItemTemplate(itemTemplate: ItemTemplate, input?) {
         this.newItem.template = itemTemplate;
         if (!this.newItem.data.notIdentified) {
             this.newItem.data.name = itemTemplate.name;
-            input.focus();
+            if (input) {
+                input.focus();
+            }
         } else {
             if (this.newItem.template && this.newItem.template.data && this.newItem.template.data.notIdentifiedName) {
                 this.newItem.data.name = this.newItem.template.data.notIdentifiedName;
             }
         }
+        this.newItem.data.icon = JSON.parse(JSON.stringify(itemTemplate.data.icon));
         this.newItem.data.description = itemTemplate.data.description;
         if (itemTemplate.data.quantifiable) {
             this.newItem.data.quantity = 1;

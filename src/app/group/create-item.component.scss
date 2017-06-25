@@ -7,6 +7,17 @@
     md-card-content {
         display: flex;
         flex-direction: column;
+        .name-icon {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            icon-selector{
+                padding-right: 8px;
+            }
+            md-input-container {
+                flex: 1 auto;
+            }
+        }
     }
 }
 .new-item-template {

@@ -59,7 +59,9 @@
                            *ngIf="isVisible(item)"
                            [originsName]="originsName"
                            [jobsName]="jobsName"
-                           [editable]="editable"
+                           [editable]="editable && !inTab"
+                           [actions]="['addItem']"
+                           (onAction)="emitAction($event.action, $event.data)"
                            [item]="item">
             </item-template>
         </div>

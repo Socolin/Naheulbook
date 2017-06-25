@@ -12,6 +12,11 @@
         </md-card-subtitle>
         <span class="padding"></span>
         <button md-icon-button color="primary" *ngIf="editable" (click)=editItem(item)><md-icon>edit</md-icon></button>
+        <button md-raised-button color="primary"
+                *ngIf="hasAction('addItem')"
+                (click)="emitAction('addItem', item)">
+            AJOUTER
+        </button>
     </md-card-header>
 
     <!-- Dice drop -->

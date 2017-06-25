@@ -203,7 +203,7 @@
 
 <ng-template #panelItems="cdkPortal" cdk-portal>
     <md-card class="panel-content">
-        <item-list [inTab]=true></item-list>
+        <item-list (onAction)="onAction.next($event)" [inTab]=true></item-list>
     </md-card>
 </ng-template>
 

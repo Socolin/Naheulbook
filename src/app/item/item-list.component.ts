@@ -1,5 +1,5 @@
 import {
-    Component, OnInit, OnDestroy, Input, ViewChildren, HostListener, QueryList, ViewChild
+    Component, OnInit, OnDestroy, Input, ViewChildren, HostListener, QueryList, ViewChild, EventEmitter, Output
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
@@ -22,6 +22,7 @@ import {ItemCategoryDirective} from './item-category.directive';
 })
 export class ItemListComponent implements OnInit, OnDestroy {
     @Input() inTab: boolean;
+    @Output() onAction = new EventEmitter<{action: string, data: any}>();
     public itemSections: ItemSection[];
     public items: ItemTemplate[] = [];
     public selectedSection: ItemSection;
@@ -206,6 +207,10 @@ export class ItemListComponent implements OnInit, OnDestroy {
             }
         }
         return false;
+    }
+
+    emitAction(actionName: string, data: any) {
+        this.onAction.emit({action: actionName, data: data});
     }
 
     ngOnInit() {

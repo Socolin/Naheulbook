@@ -65,15 +65,18 @@
             <md-card class="new-item-data">
                 <md-card-subtitle>Résumé</md-card-subtitle>
                 <md-card-content>
-                    <md-input-container>
-                        <input mdInput
-                               #newItemName
-                               placeholder="Nom"
-                               [(ngModel)]="newItem.data.name"/>
-                        <md-hint *ngIf="newItem.data.notIdentified" align="end">
-                            {{newItem.template?.name}}
-                        </md-hint>
-                    </md-input-container>
+                    <span class="name-icon">
+                        <icon-selector [icon]="newItem.data.icon"></icon-selector>
+                        <md-input-container>
+                            <input mdInput
+                                   #newItemName
+                                   placeholder="Nom"
+                                   [(ngModel)]="newItem.data.name"/>
+                            <md-hint *ngIf="newItem.data.notIdentified" align="end">
+                                {{newItem.template?.name}}
+                            </md-hint>
+                        </md-input-container>
+                    </span>
                     <md-input-container>
                         <input mdInput
                                placeholder="Description"

@@ -29,6 +29,11 @@ import {ActiveStatsModifier, LapCountDecrement} from '../shared/stat-modifier.mo
 import {AddEffectModalComponent} from '../effect/add-effect-modal.component';
 import {MonsterService} from '../monster/monster.service';
 import {FighterSelectorComponent} from './fighter-selector.component';
+import {ItemTemplate} from '../item/item-template.model';
+import {CreateItemComponent} from './create-item.component';
+import {Monster} from '../monster/monster.model';
+import {Item} from '../character/item.model';
+import {ItemService} from '../item/item.service';
 
 @Component({
     templateUrl: './group.component.html',
@@ -79,11 +84,15 @@ export class GroupComponent implements OnInit, OnDestroy {
     @ViewChild('addEffectModal')
     public addEffectModal: AddEffectModalComponent;
 
+    @ViewChild('createItemModal')
+    public createItemModal: CreateItemComponent;
+
     @ViewChild('fighterSelector')
     public fighterSelector: FighterSelectorComponent;
 
     private currentSelectAction: string;
     private tmpModifier: ActiveStatsModifier;
+    private tmpItem: Item;
 
     constructor(private _route: ActivatedRoute
         , private _router: Router
@@ -96,6 +105,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         , private _websocketService: WebSocketService
         , private _overlay: Overlay
         , private _nhbkDialogService: NhbkDialogService
+        , private _itemService: ItemService
         , private _characterService: CharacterService) {
     }
 
@@ -452,6 +462,17 @@ export class GroupComponent implements OnInit, OnDestroy {
             }
             this.tmpModifier = null;
         }
+        else if (this.currentSelectAction === 'addItem') {
+            for (let fighter of fighters) {
+                if (fighter.isMonster) {
+                    this._itemService.addItemTo('monster', fighter.id, this.tmpItem.template.id, this.tmpItem.data).subscribe();
+                }
+                else {
+                    this._itemService.addItemTo('character', fighter.id, this.tmpItem.template.id, this.tmpItem.data).subscribe();
+                }
+            }
+
+        }
 
         this.currentSelectAction = null;
     }
@@ -462,11 +483,23 @@ export class GroupComponent implements OnInit, OnDestroy {
         this.fighterSelector.open('Choisir sur qui appliquer l\'effet ' + modifier.name);
     }
 
+    onItemAdded(data: {character: Character, monster: Monster, item: Item}) {
+        this.tmpItem = data.item;
+        this.currentSelectAction = 'addItem';
+        this.fighterSelector.open('Choisir à qui donner l\'objet ' + data.item.data.name);
+    }
+
     usefullDataAction(event: {action: string, data: any}) {
         switch (event.action) {
             case 'applyEffect': {
                 let effect: Effect = event.data;
                 this.addEffectModal.openEffect(effect);
+                break;
+            }
+            case 'addItem': {
+                let itemTemplate: ItemTemplate = event.data;
+                this.createItemModal.openDialog();
+                this.createItemModal.selectItemTemplate(itemTemplate);
                 break;
             }
         }
