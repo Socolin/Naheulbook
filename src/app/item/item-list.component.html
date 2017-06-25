@@ -1,5 +1,8 @@
 <md-card class="section-selector">
-    <md-select [ngModel]="selectedSection" (change)="selectSection($event.value)" style="width: 100%" placeholder="Section">
+    <md-select [ngModel]="selectedSection"
+               (change)="selectSection($event.value)"
+               style="width: 100%"
+               placeholder="Section">
         <md-option *ngFor="let section of itemSections" [value]="section">
             {{section.name}}
         </md-option>
@@ -36,34 +39,51 @@
     </md-card-content>
 </md-card>
 
-<ng-template ngFor let-category [ngForOf]="selectedSection?.categories" [ngForTrackBy]="trackById">
-    <div *ngIf="itemsByCategory && itemsByCategory[category.id]">
-        <div itemCategory [category]="category">
+<ng-template ngFor let-category [ngForOf]="filteredCategories" [ngForTrackBy]="trackById">
+    <div itemCategory [category]="category" [id]="category.id">
+        <md-toolbar>
             <h3>
                 {{category.name}}
             </h3>
-            <p>
+        </md-toolbar>
+        <md-card *ngIf="category.note">
+            <md-card-subtitle>Note</md-card-subtitle>
+            <md-card-content>
                 {{category.note}}
-            </p>
-        </div>
-        <ng-template ngFor let-item [ngForOf]="itemsByCategory[category.id]" [ngForTrackBy]="trackById">
-            <div class="item-element">
-                <item-template class="item-element"
-                               *ngIf="isVisible(item)"
-                               [originsName]="originsName"
-                               [jobsName]="jobsName"
-                               [editable]="editable"
-                               [item]="item">
-                </item-template>
-            </div>
-        </ng-template>
+            </md-card-content>
+        </md-card>
     </div>
+    <ng-template ngFor let-item [ngForOf]="itemsByCategory[category.id]" [ngForTrackBy]="trackById">
+        <div class="item-element">
+            <item-template class="item-element"
+                           *ngIf="isVisible(item)"
+                           [originsName]="originsName"
+                           [jobsName]="jobsName"
+                           [editable]="editable"
+                           [item]="item">
+            </item-template>
+        </div>
+    </ng-template>
 </ng-template>
 
 <ng-template #stickyContainer="cdkPortal" cdk-portal>
-    <md-toolbar>
+    <md-toolbar class="sticky-category">
         <h3>
             {{stickyCategory.name}}
+            <button md-icon-button (click)="expandStickyCategory()">
+                <md-icon>keyboard_arrow_down</md-icon>
+            </button>
         </h3>
     </md-toolbar>
+    <div *ngIf="expandedSticky" class="sticky-category-list">
+        <md-nav-list>
+            <ng-template ngFor let-category [ngForOf]="filteredCategories">
+                <a md-list-item
+                   [class.selected]="stickyCategory === category"
+                   (click)="scrollToCategory(category)">
+                    {{category.name}}
+                </a>
+            </ng-template>
+        </md-nav-list>
+    </div>
 </ng-template>

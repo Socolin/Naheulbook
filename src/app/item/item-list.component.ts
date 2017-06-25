@@ -1,6 +1,5 @@
 import {
-    Component, OnInit, OnDestroy, Input, ViewChildren, HostListener, ElementRef, QueryList,
-    ViewChild, Renderer2, Directive
+    Component, OnInit, OnDestroy, Input, ViewChildren, HostListener, QueryList, ViewChild
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
@@ -14,15 +13,7 @@ import {ItemService} from './item.service';
 import {removeDiacritics} from '../shared';
 import {Observable} from 'rxjs/Observable';
 import {Overlay, OverlayRef, OverlayState, Portal} from '@angular/material';
-
-@Directive({
-    selector: '[itemCategory]'
-})
-export class ItemCategoryDirective {
-    @Input() category: ItemCategory;
-    constructor(public elementRef: ElementRef) {
-    }
-}
+import {ItemCategoryDirective} from './item-category.directive';
 
 @Component({
     selector: 'item-list',
@@ -49,17 +40,21 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     public filter: {name: string, dice: number, category: ItemCategory};
     public itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
+    public filteredCategories: ItemCategory[] = [];
 
     public stickyCategory: ItemCategory;
     public sticked: ItemCategoryDirective;
+    public expandedSticky = false;
 
     @HostListener('window:scroll', [])
     onWindowScroll() {
+        if (this.inTab) {
+            return;
+        }
         let lastOutsideScreen: ItemCategoryDirective;
         for (let element of this.stickToTopElements.toArray()) {
-            console.log(element);
             let top = element.elementRef.nativeElement.getBoundingClientRect().top;
-            if (top > 0) {
+            if (top > 20) {
                 break;
             }
             lastOutsideScreen = element;
@@ -105,6 +100,20 @@ export class ItemListComponent implements OnInit, OnDestroy {
             this.stickyContainerOverlay.detach();
             this.stickyContainerOverlay = undefined;
         }
+    }
+
+    expandStickyCategory() {
+        this.expandedSticky = true;
+    }
+
+    scrollToCategory(category: ItemCategory) {
+        for (let element of this.stickToTopElements.toArray()) {
+            if (element.category.id === category.id) {
+                window.scrollBy(0, element.elementRef.nativeElement.getBoundingClientRect().top);
+            }
+        }
+        this.expandedSticky = false;
+        return false;
     }
 
     resetFilter() {
@@ -172,6 +181,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     }
 
     updateFilter() {
+        let filteredCategories = [];
         let itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
@@ -180,10 +190,13 @@ export class ItemListComponent implements OnInit, OnDestroy {
             }
             if (!itemsByCategory[item.category]) {
                 itemsByCategory[item.category] = [];
+                let category = this.selectedSection.categories.find(c => c.id === item.category);
+                filteredCategories.push(category);
             }
             itemsByCategory[item.category].push(item);
         }
         this.itemsByCategory = itemsByCategory;
+        this.filteredCategories = filteredCategories;
     }
 
     hasSpecial(token: string) {
