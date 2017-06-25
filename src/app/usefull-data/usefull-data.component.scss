@@ -42,7 +42,8 @@
 }
 
 .panel-content {
-    max-width: 90vw;
-    max-height: 90vh;
+    min-width: calc(100vw - 120px);
+    max-width: calc(100vw - 120px);
+    max-height: calc(100vh - 80px);;
     overflow: auto;
 }
