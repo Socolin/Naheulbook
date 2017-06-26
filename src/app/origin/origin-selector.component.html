@@ -51,9 +51,9 @@
             <md-action-row *ngIf="originsStates[origin.id].state === 'ok'" align="end">
                 <button color="primary" md-button (click)="selectOrigin(origin)">CHOISIR</button>
             </md-action-row>
-            <md-action-row *ngIf="originsStates[origin.id].state === 'swap'" align="end">
+            <md-action-row *ngIf="originsStates[origin.id].state === 'swap'" align="end" class="swap-buttons">
                 <ng-template ngFor [ngForOf]="originsStates[origin.id].changes" let-change>
-                    <button class="swap-button" color="primary" md-button (click)="doSwapStats(change)">INVERSER {{change[0]}} avec {{change[1]}}</button>
+                    <button class="swap-button" color="primary" md-button (click)="doSwapStats(change)">INVERSER {{change[0]}} et {{change[1]}}</button>
                 </ng-template>
             </md-action-row>
         </md-expansion-panel>

@@ -66,7 +66,7 @@
             <md-action-row *ngIf="jobsStates[job.id].state === 'ok'" align="end">
                 <button color="primary" md-button (click)="selectJob(job)">CHOISIR</button>
             </md-action-row>
-            <md-action-row *ngIf="jobsStates[job.id].state === 'swap'" align="end">
+            <md-action-row *ngIf="jobsStates[job.id].state === 'swap'" align="end" class="swap-buttons">
                 <ng-template ngFor [ngForOf]="jobsStates[job.id].changes" let-change>
                     <button class="swap-button" color="primary" md-button (click)="doSwapStats(change)">INVERSER {{change[0]}} avec {{change[1]}}</button>
                 </ng-template>

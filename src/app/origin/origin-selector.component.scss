@@ -32,3 +32,8 @@ md-expansion-panel {
 .swap-button {
     text-transform: uppercase;
 }
+
+.swap-buttons {
+    display: flex;
+    flex-wrap: wrap;
+}
