@@ -1,28 +1,40 @@
-<div class="credit">
-    <h2>Crédit</h2>
-    <div class="credits">
-        <p>
-            Les icônes des objets proviennent de <a href="http://game-icons.net/">game-icons.net</a>
-        </p>
-        <p>
-            Les données présentent sur le site proviennent de la documentation de
-            <a href="http://naheulbeuk.com/">Naheulbeuk</a>
-        </p>
-        <p>
-            Certaines images proviennent de la documentation de <a href="http://naheulbeuk.com/">Naheulbeuk</a>
-            ainsi que du <a href="http://naheulbeuk.com/doc-publi.htm">bestiaire</a>
-        </p>
+<md-sidenav-container style="min-height: 100vh">
+    <md-toolbar color="primary">
+        <div class="app-toolbar">
+            <h1>
+                Naheulbook
+            </h1>
+            <a class="home-link" [routerLink]="['/']">
+                <md-icon class="md-24">home</md-icon>
+            </a>
+        </div>
+    </md-toolbar>
+    <div class="credit">
+        <h2>Crédit</h2>
+        <div class="credits">
+            <p>
+                Les icônes des objets proviennent de <a href="http://game-icons.net/">game-icons.net</a>
+            </p>
+            <p>
+                Les données présentent sur le site proviennent de la documentation de
+                <a href="http://naheulbeuk.com/">Naheulbeuk</a>
+            </p>
+            <p>
+                Certaines images proviennent de la documentation de <a href="http://naheulbeuk.com/">Naheulbeuk</a>
+                ainsi que du <a href="http://naheulbeuk.com/doc-publi.htm">bestiaire</a>
+            </p>
+        </div>
+        <h2>Info technique</h2>
+        <div class="credits">
+            <p>
+                Frontend: <a href="https://angular.io">Angular</a>
+                <br>
+                Backend: <a href="https://www.microsoft.com/net/core">.NET Core</a>
+                <br>
+                Database: <a href="https://www.mysql.com/">MySQL</a>
+                <br>
+                Source: <a href="https://bitbucket.org/naheulbook/">Héberger sur Bitbucket</a>
+            </p>
+        </div>
     </div>
-    <h2>Info technique</h2>
-    <div class="credits">
-        <p>
-            Frontend: <a href="https://angular.io">Angular</a>
-            <br>
-            Backend: <a href="https://www.microsoft.com/net/core">.NET Core</a>
-            <br>
-            Database: <a href="https://www.mysql.com/">MySQL</a>
-            <br>
-            Source: <a href="https://bitbucket.org/naheulbook/">Héberger sur Bitbucket</a>
-        </p>
-    </div>
-</div>
+</md-sidenav-container>
