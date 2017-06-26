@@ -56,6 +56,23 @@ export class LoginService extends JsonService {
         return googleLogin;
     }
 
+    doLiveLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
+        let liveLogin = this.postJson('/api/user/liveLogin', {
+                code: code,
+                loginToken: loginToken,
+                redirectUri: redirectUri
+            })
+            .map(res => res.json())
+            .share();
+
+        liveLogin.subscribe(user => {
+            this.loggedUser.next(user);
+            this.currentLoggedUser = user;
+        });
+
+        return liveLogin;
+    }
+
     doTwitterLogin(oauthToken: string, oauthVerifier: string): Observable<User> {
         let twitterLogin = this.postJson('/api/user/twitterLogin', {
             oauthToken: oauthToken,
@@ -132,6 +149,18 @@ export class LoginService extends JsonService {
             window.location.href = 'https://accounts.google.com/o/oauth2/auth?client_id=' + authInfos.appKey
                 + '&state=' + state
                 + '&scope=profile'
+                + '&response_type=code'
+                + '&redirect_uri=' + window.location.origin + '/logged';
+        });
+    }
+
+    redirectToLiveLogin(redirectPage: string) {
+        localStorage.setItem('redirectPage', redirectPage);
+        this.getLoginToken('live').subscribe(authInfos => {
+            let state = 'live:' + authInfos.loginToken;
+                window.location.href = 'https://login.live.com/oauth20_authorize.srf?client_id=' + authInfos.appKey
+                + '&state=' + state
+                + '&scope=wl.signin'
                 + '&response_type=code'
                 + '&redirect_uri=' + window.location.origin + '/logged';
         });
