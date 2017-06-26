@@ -1,7 +1,6 @@
 import {Component, Input, Output, EventEmitter, OnInit, OnChanges} from '@angular/core';
 
 import {Origin} from './origin.model';
-import {StatRequirement} from '../shared';
 import {OriginService} from './origin.service';
 import {getRandomInt} from '../shared/random';
 
@@ -19,67 +18,89 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
 
     @Input() selectedOrigin: Origin = null;
     @Output() originChange: EventEmitter<Origin> = new EventEmitter<Origin>();
+    @Output() swapStats: EventEmitter<string[]> = new EventEmitter<string[]>();
 
+    public stats: { [statName: string]: number } = {};
     public origins: Origin[] = [];
-    public invalidStats: Object;
-    public stats: Object;
-    public detail: {[originId: number]: boolean} = {};
-    public viewNotAvailable = false;
+    public originsStates: { [originId: number]: { state: string, changes?: any[] } };
+    public swapList: string[][];
 
-    constructor(private _originService: OriginService) {
-        this.stats = this;
-        this.invalidStats = [];
+    static generateAllStatsInverse(): string[][] {
+        let inverses = [];
+        let statNames = ['cou', 'int', 'fo', 'ad', 'cou'];
+        for (let i = 0; i < 5; i++) {
+            for (let j = 0; j < i; j++) {
+                inverses.push([statNames[i], statNames[j]]);
+            }
+        }
+        return inverses;
     }
 
-    updateInvalidStats(origin: Origin) {
-        let invalids = [];
-        if (!origin.requirements) {
-            return invalids;
-        }
-        for (let i = 0; i < origin.requirements.length; i++) {
-            let req: StatRequirement;
-            req = origin.requirements[i];
+    static isOriginValid(origin: Origin, stats: { [statName: string]: number }): boolean {
+        for (let req of origin.requirements) {
             let statName = req.stat.toLowerCase();
-            let statValue = this[statName];
+            let statValue = stats[statName];
             if (statValue) {
                 if (req.min && statValue < req.min) {
-                    invalids.push({stat: statName, min: req.min});
+                    return false;
                 }
                 if (req.max && statValue > req.max) {
-                    invalids.push({stat: statName, max: req.min});
+                    return false;
                 }
             }
         }
-        return invalids;
+        return true;
     }
 
-    isAvailable(origin: Origin) {
-        if (this.selectedOrigin) {
-            return (this.selectedOrigin.id === origin.id);
+    constructor(private _originService: OriginService) {
+        this.swapList = OriginSelectorComponent.generateAllStatsInverse();
+    }
+
+    updateStatOrigins() {
+        let originsStates = {};
+        for (let origin of this.origins) {
+            if (OriginSelectorComponent.isOriginValid(origin, this.stats)) {
+                originsStates[origin.id] = {state: 'ok'};
+            }
+            else {
+                let validSwap = [];
+                for (let swap of this.swapList) {
+                    let testStats = Object.assign({}, this.stats);
+                    let tmp = testStats[swap[0]];
+                    testStats[swap[0]] = testStats[swap[1]];
+                    testStats[swap[1]] = tmp;
+                    if (OriginSelectorComponent.isOriginValid(origin, testStats)) {
+                        validSwap.push(swap);
+                    }
+                }
+                if (validSwap.length) {
+                    originsStates[origin.id] = {state: 'swap', changes: validSwap};
+                } else {
+                    originsStates[origin.id] = {state: 'ko'};
+                }
+            }
         }
-        return !(this.invalidStats[origin.id] && this.invalidStats[origin.id].length);
+        this.originsStates = originsStates;
+    }
+
+    doSwapStats(change: string[]) {
+        this.swapStats.emit(change);
     }
 
     selectOrigin(origin: Origin) {
-        if (this.isAvailable(origin)) {
+        if (this.originsStates[origin.id].state === 'ok') {
             this.selectedOrigin = origin;
             this.originChange.emit(origin);
         }
         return false;
     }
 
-    updateInvalids() {
-        for (let i = 0; i < this.origins.length; i++) {
-            let origin = this.origins[i];
-            this.invalidStats[origin.id] = this.updateInvalidStats(origin);
-        }
-    }
 
     getOrigins() {
         this._originService.getOriginList().subscribe(
             origins => {
                 this.origins = origins;
-                this.updateInvalids();
+                this.updateStatOrigins();
             },
             err => {
                 console.log(err);
@@ -90,14 +111,14 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
     randomSelect(): void {
         let count = 0;
         for (let i = 0; i < this.origins.length; i++) {
-            if (this.isAvailable(this.origins[i])) {
+            if (this.originsStates[this.origins[i].id].state === 'ok') {
                 count++;
             }
         }
         let rnd = getRandomInt(1, count);
         count = 0;
         for (let i = 0; i < this.origins.length; i++) {
-            if (this.isAvailable(this.origins[i])) {
+            if (this.originsStates[this.origins[i].id].state === 'ok') {
                 count++;
                 if (count === rnd) {
                     this.selectOrigin(this.origins[i]);
@@ -106,23 +127,25 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
         }
     }
 
-    toggleViewAll(): void {
-        this.viewNotAvailable = !this.viewNotAvailable;
-    }
-
-    toggleDetail(origin: Origin) {
-        this.detail[origin.id] = !this.detail[origin.id];
-    }
-
-    displayDetail(origin: Origin) {
-        return this.detail[origin.id];
-    }
-
     ngOnChanges() {
-        this.updateInvalids();
+        this.stats = {
+            cou: this.cou,
+            cha: this.cha,
+            fo: this.fo,
+            ad: this.ad,
+            int: this.int
+        };
+        this.updateStatOrigins();
     }
 
     ngOnInit() {
+        this.stats = {
+            cou: this.cou,
+            cha: this.cha,
+            fo: this.fo,
+            ad: this.ad,
+            int: this.int
+        };
         this.getOrigins();
     }
 }

@@ -139,10 +139,6 @@ export class JobSelectorComponent implements OnInit, OnChanges {
         );
     }
 
-    toggleViewAll(): void {
-        this.viewNotAvailable = !this.viewNotAvailable;
-    }
-
     randomSelect(): void {
         let count = 1;
         for (let i = 0; i < this.jobs.length; i++) {

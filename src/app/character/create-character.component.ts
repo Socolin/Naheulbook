@@ -139,6 +139,14 @@ export class CreateCharacterComponent {
         this.step = step;
     }
 
+    swapStats(change: string[]) {
+        let tmp = this[change[0]];
+        this[change[0]] = this[change[1]];
+        this[change[1]] = tmp;
+
+        this.setStep(1);
+    }
+
     // Bonuses management
 
     hasBonus(bonus: string) {
@@ -175,10 +183,6 @@ export class CreateCharacterComponent {
         this.originSelectorComponent.randomSelect();
     }
 
-    toggleViewAllOrigins() {
-        this.originSelectorComponent.toggleViewAll();
-    }
-
     // Step 2: Select job
 
     onSelectJob(job) {
@@ -201,11 +205,6 @@ export class CreateCharacterComponent {
     selectRandomJob() {
         this.jobSelectorComponent.randomSelect();
     }
-
-    toggleViewAllJobs() {
-        this.jobSelectorComponent.toggleViewAll();
-    }
-
 
     // Step 3: Select skills
 

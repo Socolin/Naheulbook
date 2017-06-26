@@ -77,13 +77,6 @@
         <span fxFlex="auto">Origine</span>
         <button *ngIf="(step === 1)"
                 fxFlex="nogrow"
-                md-icon-button
-                type="button"
-                (click)="toggleViewAllOrigins()">
-            <md-icon>filter_list</md-icon>
-        </button>
-        <button *ngIf="(step === 1)"
-                fxFlex="nogrow"
                 md-mini-fab
                 type="button"
                 (click)="selectRandomOrigin()">
@@ -97,10 +90,11 @@
             <md-icon>edit</md-icon>
         </button>
     </md-toolbar>
-    <md-card-content>
-        <div *ngIf="(step == 1)">
+    <md-card-content [class.no-card-padding]="step === 1">
+        <div *ngIf="(step === 1)">
             <origin-selector [selectedOrigin]="selectedOrigin"
                              (originChange)="onSelectOrigin($event)"
+                             (swapStats)="swapStats($event)"
                              [cou]="cou"
                              [int]="int"
                              [cha]="cha"
@@ -118,13 +112,6 @@
 <md-card *ngIf="(step >= 2)">
     <md-toolbar color="primary">
         <span fxFlex="auto">Métier</span>
-        <button *ngIf="(step === 2)"
-                fxFlex="nogrow"
-                md-icon-button
-                type="button"
-                (click)="toggleViewAllJobs()">
-            <md-icon>filter_list</md-icon>
-        </button>
         <button *ngIf="(step === 2)"
                 fxFlex="nogrow"
                 md-mini-fab

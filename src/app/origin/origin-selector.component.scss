@@ -1,33 +1,34 @@
-md-card {
-    margin-bottom: 10px;
-    &.disabled {
-        color: rgba(1, 0, 0, 0.54);
+.origin-title {
+    display: flex;
+    align-items: center;
+    .icon-available {
+        display: flex;
+        padding-right: 8px;
+    }
+}
+
+md-expansion-panel {
+    text-align: justify;
+
+    .description {
+        margin-bottom: 14px;
     }
 
-    button[md-mini-fab] {
-        float: right;
+    .skill-name {
+        text-transform: uppercase;
+    }
+}
+
+.prereq {
+    .invalid-stat {
+        color: #d43f3a;
     }
 
-    md-card-subtitle {
-        .invalid-stat {
-            color: #d43f3a;
-        }
-
-        .valid-stat {
-            color: #3c763d;
-        }
+    .valid-stat {
+        color: #3c763d;
     }
+}
 
-    md-card-content {
-        text-align: justify;
-        line-height: 150%;
-
-        .description {
-            margin-bottom: 14px;
-        }
-
-        .skill-name {
-            text-transform: uppercase;
-        }
-    }
+.swap-button {
+    text-transform: uppercase;
 }

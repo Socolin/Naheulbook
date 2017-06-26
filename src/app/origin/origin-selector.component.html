@@ -1,43 +1,61 @@
-<ng-template ngFor [ngForOf]="origins" let-origin>
-    <md-card *ngIf="viewNotAvailable || isAvailable(origin)" [class.disabled]="!isAvailable(origin)">
-        <button md-mini-fab color="primary" (click)="toggleDetail(origin)">
-            <md-icon *ngIf="displayDetail(origin)">remove</md-icon>
-            <md-icon *ngIf="!displayDetail(origin)">add</md-icon>
-        </button>
-        <md-card-title>{{origin.name}}</md-card-title>
-        <md-card-subtitle>
-            Prérequis:
-            <ng-template ngFor [ngForOf]="origin.requirements" let-req let-last="last">
-                <span class="invalid-stat"    *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
-                    {{req.stat|uppercase}} &ge; {{req.min}}
-                </span>
-                <span class="invalid-stat"    *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
-                    {{req.stat|uppercase}} &le; {{req.max}}
-                </span>
-                <span class="valid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
-                    {{req.stat|uppercase}} &ge; {{req.min}}
-                </span>
-                <span class="valid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
-                    {{req.stat|uppercase}} &le; {{req.max}}
-                </span>
-                <span *ngIf="!last">,</span>
-            </ng-template>
-            <span *ngIf="!origin.requirements.length">aucun</span>
-        </md-card-subtitle>
-        <md-card-content *ngIf="displayDetail(origin)">
-            <div class="description" [innerHTML]="origin.playerDescription | textFormatter"></div>
+<md-accordion [multi]="false">
+    <ng-template ngFor [ngForOf]="origins" let-origin>
+        <md-expansion-panel>
+            <md-expansion-panel-header>
+                <div class="origin-title">
+                    <span *ngIf="originsStates[origin.id].state === 'ok'" class="icon-available">
+                        <md-icon>check</md-icon>
+                    </span>
+                    <span *ngIf="originsStates[origin.id].state === 'ko'" class="icon-available">
+                        <md-icon>close</md-icon>
+                    </span>
+                    <span *ngIf="originsStates[origin.id].state === 'swap'" class="icon-available">
+                        <md-icon>sync</md-icon>
+                    </span>
+                    <span>
+                        {{origin.name}}
+                    </span>
+                </div>
+            </md-expansion-panel-header>
+
+            <p class="prereq">
+                Prérequis:
+                <ng-template ngFor [ngForOf]="origin.requirements" let-req let-last="last">
+                    <span class="invalid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
+                        {{req.stat|uppercase}} &ge; {{req.min}}
+                    </span>
+                    <span class="invalid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
+                        {{req.stat|uppercase}} &le; {{req.max}}
+                    </span>
+                    <span class="valid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
+                        {{req.stat|uppercase}} &ge; {{req.min}}
+                    </span>
+                    <span class="valid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
+                        {{req.stat|uppercase}} &le; {{req.max}}
+                    </span>
+                    <span *ngIf="!last">,</span>
+                </ng-template>
+                <span *ngIf="!origin.requirements.length">aucun</span>
+            </p>
+            <p class="description" [innerHTML]="origin.playerDescription | textFormatter"></p>
             <div class="skills" *ngIf="origin.skills.length">
                 Je suis né avec les compétences suivantes :
                 <ul>
                     <li *ngFor="let skill of origin.skills">
-                        <span class="skill-name">{{skill.name}}</span>
-                        <span *ngIf="skill.playerDescription"> : {{skill.playerDescription}}</span>
+                        <div class="skill-name">{{skill.name}}</div>
+                        <span *ngIf="skill.playerDescription"> {{skill.playerDescription}}</span>
                     </li>
                 </ul>
             </div>
-        </md-card-content>
-        <md-card-actions *ngIf="isAvailable(origin)" align="end">
-            <button color="primary" md-button (click)="selectOrigin(origin)">CHOISIR</button>
-        </md-card-actions>
-    </md-card>
-</ng-template>
+
+            <md-action-row *ngIf="originsStates[origin.id].state === 'ok'" align="end">
+                <button color="primary" md-button (click)="selectOrigin(origin)">CHOISIR</button>
+            </md-action-row>
+            <md-action-row *ngIf="originsStates[origin.id].state === 'swap'" align="end">
+                <ng-template ngFor [ngForOf]="originsStates[origin.id].changes" let-change>
+                    <button class="swap-button" color="primary" md-button (click)="doSwapStats(change)">INVERSER {{change[0]}} avec {{change[1]}}</button>
+                </ng-template>
+            </md-action-row>
+        </md-expansion-panel>
+    </ng-template>
+</md-accordion>
