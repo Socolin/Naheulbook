@@ -202,19 +202,19 @@
 </ng-template>
 
 <ng-template #panelItems="cdkPortal" cdk-portal>
-    <md-card class="panel-content">
+    <md-card class="panel-content no-padding">
         <item-list (onAction)="onAction.next($event)" [inTab]=true></item-list>
     </md-card>
 </ng-template>
 
 <ng-template #panelJobs="cdkPortal" cdk-portal>
-    <md-card class="panel-content">
+    <md-card class="panel-content no-padding">
         <job-list></job-list>
     </md-card>
 </ng-template>
 
 <ng-template #panelOrigins="cdkPortal" cdk-portal>
-    <md-card class="panel-content">
+    <md-card class="panel-content no-padding">
         <origin-list></origin-list>
     </md-card>
 </ng-template>
