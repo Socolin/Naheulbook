@@ -40,14 +40,19 @@ export class GroupService extends JsonService {
 
             let group = Group.fromJson(groupData);
 
+            if (charactersLoading.length == 0) {
+                charactersLoading.push(Observable.of(null));
+            }
             Observable.forkJoin(
                 Observable.forkJoin(charactersLoading),
                 this.loadMonsters(group.id),
                 this.loadLoots(group.id),
                 this._eventService.loadEvents(group.id)
             ).subscribe(([characters, monsters, loots, events]: [Character[], Monster[], Loot[], NEvent[]]) => {
-                for (let i = 0; i < characters.length; i++) {
-                    let character = characters[i];
+                for (let character of characters) {
+                    if (character === null) {
+                        break;
+                    }
                     group.addCharacter(character);
                 }
                 for (let i = 0; i < monsters.length; i++) {
