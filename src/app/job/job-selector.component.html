@@ -1,53 +1,76 @@
-<md-card>
-    <md-card-title>Aucun</md-card-title>
-    <md-card-subtitle>
-        Prérequis: aucun
-    </md-card-subtitle>
-    <md-card-actions align="end">
-        <button color="primary" md-button (click)="selectJob(null)">CHOISIR</button>
-    </md-card-actions>
-</md-card>
-<ng-template ngFor [ngForOf]="jobs" let-job>
-    <md-card *ngIf=isVisible(job) [class.disabled]="!isAvailable(job)">
-        <button md-mini-fab color="primary" (click)="toggleDetail(job)">
-            <md-icon *ngIf="displayDetail(job)">remove</md-icon>
-            <md-icon *ngIf="!displayDetail(job)">add</md-icon>
-        </button>
-        <md-card-title>{{job.name}}</md-card-title>
-        <md-card-subtitle>
+<md-accordion [multi]="false">
+    <md-expansion-panel>
+        <md-expansion-panel-header>
+            <div class="job-title">
+                <span class="icon-available">
+                    <md-icon>check</md-icon>
+                </span>
+                <span>
+                    Aucun
+                </span>
+            </div>
+        </md-expansion-panel-header>
+        <md-action-row align="end">
+            <button color="primary" md-button (click)="selectJob(null)">CHOISIR</button>
+        </md-action-row>
+    </md-expansion-panel>
+    <ng-template ngFor [ngForOf]="jobs" let-job>
+        <md-expansion-panel>
+            <md-expansion-panel-header>
+                <div class="job-title">
+                    <span *ngIf="jobsStates[job.id].state === 'ok'" class="icon-available">
+                        <md-icon>check</md-icon>
+                    </span>
+                    <span *ngIf="jobsStates[job.id].state === 'ko'" class="icon-available">
+                        <md-icon>close</md-icon>
+                    </span>
+                    <span *ngIf="jobsStates[job.id].state === 'swap'" class="icon-available">
+                        <md-icon>sync</md-icon>
+                    </span>
+                    <span>
+                        {{job.name}}
+                    </span>
+                </div>
+            </md-expansion-panel-header>
 
-            Prérequis:
-            <ng-template ngFor [ngForOf]="job.requirements" let-req let-last="last">
-                <span class="invalid-stat"    *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
-                    {{req.stat|uppercase}} &ge; {{req.min}}
-                </span>
-                <span class="invalid-stat"    *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
-                    {{req.stat|uppercase}} &le; {{req.max}}
-                </span>
-                <span class="valid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
-                    {{req.stat|uppercase}} &ge; {{req.min}}
-                </span>
-                <span class="valid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
-                    {{req.stat|uppercase}} &le; {{req.max}}
-                </span>
-                <span *ngIf="!last">,</span>
-            </ng-template>
-            <span *ngIf="!job.requirements.length">aucun</span>
-        </md-card-subtitle>
-        <md-card-content *ngIf="displayDetail(job)">
-            <div class="description" [innerHTML]="job.playerDescription | textFormatter"></div>
-            <div class="skills">
+            <p class="prereq">
+                Prérequis:
+                <ng-template ngFor [ngForOf]="job.requirements" let-req let-last="last">
+                    <span class="invalid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
+                        {{req.stat|uppercase}} &ge; {{req.min}}
+                    </span>
+                    <span class="invalid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
+                        {{req.stat|uppercase}} &le; {{req.max}}
+                    </span>
+                    <span class="valid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
+                        {{req.stat|uppercase}} &ge; {{req.min}}
+                    </span>
+                    <span class="valid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
+                        {{req.stat|uppercase}} &le; {{req.max}}
+                    </span>
+                    <span *ngIf="!last">,</span>
+                </ng-template>
+                <span *ngIf="!job.requirements.length">aucun</span>
+            </p>
+            <p class="description" [innerHTML]="job.playerDescription | textFormatter"></p>
+            <div class="skills" *ngIf="job.skills.length">
                 Je suis né avec les compétences suivantes :
                 <ul>
                     <li *ngFor="let skill of job.skills">
-                        <span class="skill-name">{{skill.name}}</span>
-                        <span *ngIf="skill.playerDescription"> : {{skill.playerDescription}}</span>
+                        <div class="skill-name">{{skill.name}}</div>
+                        <span *ngIf="skill.playerDescription"> {{skill.playerDescription}}</span>
                     </li>
                 </ul>
             </div>
-        </md-card-content>
-        <md-card-actions *ngIf="isAvailable(job)" align="end">
-            <button color="primary" md-button (click)="selectJob(job)">CHOISIR</button>
-        </md-card-actions>
-    </md-card>
-</ng-template>
+
+            <md-action-row *ngIf="jobsStates[job.id].state === 'ok'" align="end">
+                <button color="primary" md-button (click)="selectJob(job)">CHOISIR</button>
+            </md-action-row>
+            <md-action-row *ngIf="jobsStates[job.id].state === 'swap'" align="end">
+                <ng-template ngFor [ngForOf]="jobsStates[job.id].changes" let-change>
+                    <button class="swap-button" color="primary" md-button (click)="doSwapStats(change)">INVERSER {{change[0]}} avec {{change[1]}}</button>
+                </ng-template>
+            </md-action-row>
+        </md-expansion-panel>
+    </ng-template>
+</md-accordion>

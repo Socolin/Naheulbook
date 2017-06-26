@@ -127,10 +127,11 @@
             <md-icon>edit</md-icon>
         </button>
     </md-toolbar>
-    <md-card-content>
+    <md-card-content [class.no-card-padding]="step === 2">
         <div *ngIf="(step == 2)">
             <job-selector [selectedOrigin]="selectedOrigin"
                           (jobChange)="onSelectJob($event)"
+                          (swapStats)="swapStats($event)"
                           [cou]="cou"
                           [int]="int"
                           [cha]="cha"
@@ -167,7 +168,7 @@
             <md-icon>edit</md-icon>
         </button>
     </md-toolbar>
-    <md-card-content>
+    <md-card-content [class.no-card-padding]="step === 3">
         <div *ngIf="(step == 3)">
             <skill-selector [selectedOrigin]="selectedOrigin"
                             [selectedJob]="selectedJob"

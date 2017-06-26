@@ -56,7 +56,8 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
         this.swapList = OriginSelectorComponent.generateAllStatsInverse();
     }
 
-    updateStatOrigins() {
+    updateOriginStates() {
+        this.updateStats();
         let originsStates = {};
         for (let origin of this.origins) {
             if (OriginSelectorComponent.isOriginValid(origin, this.stats)) {
@@ -100,7 +101,7 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
         this._originService.getOriginList().subscribe(
             origins => {
                 this.origins = origins;
-                this.updateStatOrigins();
+                this.updateOriginStates();
             },
             err => {
                 console.log(err);
@@ -127,7 +128,7 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
         }
     }
 
-    ngOnChanges() {
+    private updateStats() {
         this.stats = {
             cou: this.cou,
             cha: this.cha,
@@ -135,17 +136,13 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
             ad: this.ad,
             int: this.int
         };
-        this.updateStatOrigins();
+    }
+
+    ngOnChanges() {
+        this.updateOriginStates();
     }
 
     ngOnInit() {
-        this.stats = {
-            cou: this.cou,
-            cha: this.cha,
-            fo: this.fo,
-            ad: this.ad,
-            int: this.int
-        };
         this.getOrigins();
     }
 }

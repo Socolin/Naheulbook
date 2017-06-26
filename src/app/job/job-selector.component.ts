@@ -12,25 +12,52 @@ import {getRandomInt} from '../shared/random';
     styleUrls: ['./job-selector.component.scss'],
 })
 export class JobSelectorComponent implements OnInit, OnChanges {
-    @Input('cou') cou: string;
-    @Input('cha') cha: string;
-    @Input('int') int: string;
-    @Input('ad') ad: string;
-    @Input('fo') fo: string;
+    @Input('cou') cou: number;
+    @Input('cha') cha: number;
+    @Input('int') int: number;
+    @Input('ad') ad: number;
+    @Input('fo') fo: number;
 
     @Output() jobChange: EventEmitter<Job> = new EventEmitter<Job>();
+    @Output() swapStats: EventEmitter<string[]> = new EventEmitter<string[]>();
     @Input() selectedJob: Job;
     @Input() selectedOrigin: Origin;
-    public detail: {[originId: number]: boolean} = {};
 
+    public stats: { [statName: string]: number } = {};
+    public allJobs: Job[] = [];
     public jobs: Job[] = [];
-    public stats: any;
+    public jobsStates: { [jobId: number]: { state: string, changes?: any[] } };
+    public swapList: string[][];
 
-    public invalidStats: any[] = [];
-    public viewNotAvailable = false;
+    static generateAllStatsInverse(): string[][] {
+        let inverses = [];
+        let statNames = ['cou', 'int', 'fo', 'ad', 'cou'];
+        for (let i = 0; i < 5; i++) {
+            for (let j = 0; j < i; j++) {
+                inverses.push([statNames[i], statNames[j]]);
+            }
+        }
+        return inverses;
+    }
+
+    static isJobValid(job: Job, stats: { [statName: string]: number }): boolean {
+        for (let req of job.requirements) {
+            let statName = req.stat.toLowerCase();
+            let statValue = stats[statName];
+            if (statValue) {
+                if (req.min && statValue < req.min) {
+                    return false;
+                }
+                if (req.max && statValue > req.max) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     constructor(private _jobService: JobService) {
-        this.stats = this;
+        this.swapList = JobSelectorComponent.generateAllStatsInverse();
     }
 
     isVisible(job: Job) {
@@ -56,55 +83,39 @@ export class JobSelectorComponent implements OnInit, OnChanges {
             }
 
         }
-        if (!this.viewNotAvailable && !this.isAvailable(job)) {
-            return false;
-        }
         return true;
     }
 
-    updateInvalidStats(job: Job) {
-        if (!this.isVisible(job)) {
-            return [];
-        }
-
-        let invalids = [];
-        if (this.selectedOrigin) {
-            if (job.isMagic) {
-                if (this.selectedOrigin.restrictsTokens) {
-                    for (let i = 0; i < this.selectedOrigin.restrictsTokens.length; i++) {
-                        if (this.selectedOrigin.restrictsTokens[i] === 'NO_MAGIC') {
-                            invalids.push({stat: 'MAGIC'});
-                        }
+    updateJobStates() {
+        this.updateStats();
+        let jobsStates = {};
+        for (let job of this.jobs) {
+            if (JobSelectorComponent.isJobValid(job, this.stats)) {
+                jobsStates[job.id] = {state: 'ok'};
+            }
+            else {
+                let validSwap = [];
+                for (let swap of this.swapList) {
+                    let testStats = Object.assign({}, this.stats);
+                    let tmp = testStats[swap[0]];
+                    testStats[swap[0]] = testStats[swap[1]];
+                    testStats[swap[1]] = tmp;
+                    if (JobSelectorComponent.isJobValid(job, testStats)) {
+                        validSwap.push(swap);
                     }
+                }
+                if (validSwap.length) {
+                    jobsStates[job.id] = {state: 'swap', changes: validSwap};
+                } else {
+                    jobsStates[job.id] = {state: 'ko'};
                 }
             }
         }
-
-        if (job.requirements) {
-            for (let i = 0; i < job.requirements.length; i++) {
-                let req: StatRequirement;
-                req = job.requirements[i];
-                let statName = req.stat.toLowerCase();
-                let statValue = this[statName];
-                if (statValue) {
-                    if (req.min && statValue < req.min) {
-                        invalids.push({stat: statName, min: req.min});
-                    }
-                    if (req.max && statValue > req.max) {
-                        invalids.push({stat: statName, max: req.min});
-                    }
-
-                }
-            }
-        }
-        return invalids;
+        this.jobsStates = jobsStates;
     }
 
     isAvailable(job: Job) {
-        if (this.selectedJob) {
-            return (this.selectedJob.id === job.id);
-        }
-        return !(this.invalidStats[job.id] && this.invalidStats[job.id].length);
+        return this.jobsStates[job.id].state === 'ok';
     }
 
     selectJob(job: Job) {
@@ -120,18 +131,22 @@ export class JobSelectorComponent implements OnInit, OnChanges {
         return false;
     }
 
-    updateInvalids() {
-        for (let i = 0; i < this.jobs.length; i++) {
-            let job = this.jobs[i];
-            this.invalidStats[job.id] = this.updateInvalidStats(job);
+    updateJobs() {
+        let jobs = [];
+        for (let job of this.allJobs) {
+            if (this.isVisible(job)) {
+                jobs.push(job);
+            }
         }
+        this.jobs = jobs;
     }
 
     getJobs() {
         this._jobService.getJobList().subscribe(
             jobs => {
-                this.jobs = jobs;
-                this.updateInvalids();
+                this.allJobs = jobs;
+                this.updateJobs();
+                this.updateJobStates();
             },
             err => {
                 console.log(err);
@@ -162,16 +177,23 @@ export class JobSelectorComponent implements OnInit, OnChanges {
         this.selectJob(null);
     }
 
-    toggleDetail(origin: Origin) {
-        this.detail[origin.id] = !this.detail[origin.id];
+    private updateStats() {
+        this.stats = {
+            cou: this.cou,
+            cha: this.cha,
+            fo: this.fo,
+            ad: this.ad,
+            int: this.int
+        };
     }
 
-    displayDetail(origin: Origin) {
-        return this.detail[origin.id];
+    doSwapStats(change: string[]) {
+        this.swapStats.emit(change);
     }
 
     ngOnChanges() {
-        this.updateInvalids();
+        this.updateJobs();
+        this.updateJobStates();
     }
 
     ngOnInit() {
