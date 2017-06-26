@@ -5,6 +5,7 @@ import {CreditComponent} from './home/credit.component';
 import {HomeComponent} from './home/home.component';
 import {UserProfileComponent} from './user/user-profile.component';
 import {LoginComponent} from './user/login.component';
+import {LogoutComponent} from './user/logout.component';
 
 export const routes: Routes = [
     {
@@ -22,6 +23,10 @@ export const routes: Routes = [
     {
         path: 'logged',
         component: LoggedComponent,
+    },
+    {
+        path: 'logout',
+        component: LogoutComponent,
     },
     {
         path: 'credit',

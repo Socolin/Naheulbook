@@ -6,7 +6,8 @@ import {User} from './user.model';
 
 @Component({
     selector: 'user-profile',
-    templateUrl: './user-profile.component.html'
+    templateUrl: './user-profile.component.html',
+    styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
     public profile: User;

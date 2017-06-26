@@ -1,0 +1,21 @@
+
+
+md-toolbar {
+    md-icon {
+        cursor: pointer;
+    }
+
+    .app-toolbar {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        > a {
+            padding-right: 10px;
+        }
+    }
+
+    .home-link {
+        color: inherit;
+    }
+}

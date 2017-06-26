@@ -79,6 +79,7 @@ export class LoginService extends JsonService {
             .share();
 
         logout.subscribe(() => {
+            this.currentLoggedUser = null;
             this.loggedUser.next(null);
         });
 
