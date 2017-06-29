@@ -520,9 +520,9 @@ export class CreateCharacterComponent {
         creationData['skills'] = [];
         creationData['skills'].push(this.selectedSkills[0].id);
         creationData['skills'].push(this.selectedSkills[1].id);
-        creationData['money'] = this.money;
+        creationData['money'] = this.money * 10;
         if (this.money2) {
-            creationData['money2'] = this.money2;
+            creationData['money'] += this.money2 * 10;
         }
         if (this.modifiedStat) {
             creationData['modifiedStat'] = this.modifiedStat;

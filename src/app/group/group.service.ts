@@ -40,7 +40,7 @@ export class GroupService extends JsonService {
 
             let group = Group.fromJson(groupData);
 
-            if (charactersLoading.length == 0) {
+            if (charactersLoading.length === 0) {
                 charactersLoading.push(Observable.of(null));
             }
             Observable.forkJoin(
