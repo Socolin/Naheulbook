@@ -14,6 +14,7 @@ import {Skill} from '../skill/skill.model';
 import {WebSocketService} from '../websocket/websocket.service';
 import {Subscription} from 'rxjs/Subscription';
 import {smoothScrollBy} from '../shared/scroll';
+import {InventoryPanelComponent} from './inventory-panel.component';
 
 export class LevelUpInfo {
     EVorEA = 'EV';
@@ -39,6 +40,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     @ViewChild('mainTabGroup')
     private mainTabGroup: MdTabGroup;
+
+    @ViewChild('inventoryPanel')
+    private inventoryPanel: InventoryPanelComponent;
 
     @ViewChild('levelUpDialog')
     public levelUpDialog: Portal<any>;
@@ -267,6 +271,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     selectTab(tabChangeEvent: MdTabChangeEvent): boolean {
         this.currentTab = this.tabs[tabChangeEvent.index].hash;
+        this.inventoryPanel.selectedItem = null;
         if (!this.inGroupTab) {
             this._router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this._route});
         }
