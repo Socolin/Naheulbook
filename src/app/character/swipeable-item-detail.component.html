@@ -1,11 +1,18 @@
-<div style="position: relative">
-    <div
-        class="item-detail"
-        [class.item-detail-swipe]="_swipeService.swipedLeft"
-        (swipeleft)="_swipeService.onSwipeLeft()"
-        (swiperight)="_swipeService.onSwipeRight()">
-        <div class="item-detail-swipe-container bg-info">
-            <item-detail [gmView]="gmView" [character]="character" [item]="item" [readonly]="readonly"></item-detail>
+<ng-template cdk-connected-overlay
+             [open]="true"
+             [offsetY]="itemDetailOffsetY"
+             #currentItemDetailOverlay="cdkConnectedOverlay"
+             [origin]="origin"
+             (positionChange)="updateItemDetailPosition(currentItemDetailOverlay)">
+    <div style="position: relative" #currentItemDetail>
+        <div
+            class="item-detail"
+            [class.item-detail-swipe]="_swipeService.swipedLeft"
+            (swipeleft)="_swipeService.onSwipeLeft()"
+            (swiperight)="_swipeService.onSwipeRight()">
+            <div class="item-detail-swipe-container">
+                <item-detail [gmView]="gmView" [character]="character" [item]="item" [readonly]="readonly"></item-detail>
+            </div>
         </div>
     </div>
-</div>
+</ng-template>

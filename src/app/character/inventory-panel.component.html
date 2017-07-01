@@ -33,7 +33,7 @@
             </md-button-toggle>
         </md-button-toggle-group>
 
-        <button md-raised-button (click)="toggleIconMode()" *ngIf="selectedInventoryTab === 'all' || selectedInventoryTab === 'bags'">
+        <button md-raised-button (click)="toggleIconMode()" *ngIf="selectedInventoryTab === 'all' || selectedInventoryTab === 'bags' || selectedInventoryTab === 'currency'">
             <md-icon *ngIf="iconMode" class="md-24">list</md-icon>
             <md-icon *ngIf="!iconMode" class="md-24">view_module</md-icon>
         </button>
@@ -56,7 +56,9 @@
                     <ng-template ngFor let-item [ngForOf]="character.items">
                         <div class="items-list-element" *ngIf="isItemFilteredByName(item)">
                             <div class="item-line"
-                                 [class.selected]="selectedItem && selectedItem.id === item.id"
+                                 cdk-overlay-origin
+                                 #itemLine="cdkOverlayOrigin"
+                                 [class.selected]="item === selectedItem"
                                  (click)="selectItem(item)">
                                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                                 <md-icon *ngIf="item.data.notIdentified">help</md-icon>
@@ -65,13 +67,12 @@
                                 <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                 {{item.data.name}}
                             </div>
-                            <ng-template [ngIf]="item === selectedItem">
-                                <swipeable-item-detail style="position: absolute; right: 0"
-                                                       [gmView]="inGroupTab"
-                                                       [character]="character"
-                                                       [item]="item">
-                                </swipeable-item-detail>
-                            </ng-template>
+                            <swipeable-item-detail *ngIf="item === selectedItem"
+                                                   [gmView]="inGroupTab"
+                                                   [character]="character"
+                                                   [origin]="itemLine"
+                                                   [item]="item">
+                            </swipeable-item-detail>
                         </div>
                     </ng-template>
                 </div>
@@ -79,18 +80,19 @@
             <div *ngIf="iconMode">
                 <ng-template ngFor let-item [ngForOf]="character.items">
                     <div class="item-icon"
+                         cdk-overlay-origin
+                         #itemLine="cdkOverlayOrigin"
                          [class.selected]="item === selectedItem"
                          (click)="selectItem(item)"
                          *ngIf="isItemFilteredByName(item)">
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                    </div>
-                    <ng-template [ngIf]="item === selectedItem">
-                        <swipeable-item-detail style="position: absolute; right: 0"
+                        <swipeable-item-detail *ngIf="item === selectedItem"
                                                [gmView]="inGroupTab"
                                                [character]="character"
+                                               [origin]="itemLine"
                                                [item]="item">
                         </swipeable-item-detail>
-                    </ng-template>
+                    </div>
                 </ng-template>
             </div>
         </div>
@@ -101,7 +103,9 @@
                     <ng-template ngFor let-item [ngForOf]="character.computedData.currencyItems">
                         <div class="items-list-element">
                             <div class="item-line"
-                                 [class.selected]="selectedItem && selectedItem.id === item.id"
+                                 cdk-overlay-origin
+                                 #itemLine="cdkOverlayOrigin"
+                                 [class.selected]="item === selectedItem"
                                  (click)="selectItem(item)">
                                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                                 <md-icon *ngIf="item.data.notIdentified">help</md-icon>
@@ -109,32 +113,32 @@
                                 <md-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</md-icon>
                                 <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                 {{item.data.name}}
-                            </div>
-                            <ng-template [ngIf]="item === selectedItem">
-                                <swipeable-item-detail style="position: absolute; right: 0"
+                                <swipeable-item-detail *ngIf="item === selectedItem"
                                                        [gmView]="inGroupTab"
                                                        [character]="character"
+                                                       [origin]="itemLine"
                                                        [item]="item">
                                 </swipeable-item-detail>
-                            </ng-template>
+                            </div>
                         </div>
                     </ng-template>
                 </div>
             </div>
             <div *ngIf="iconMode">
-                <ng-template ngFor let-item [ngForOf]="character.items">
+                <ng-template ngFor let-item [ngForOf]="character.computedData.currencyItems">
                     <div class="item-icon"
+                         cdk-overlay-origin
+                         #itemLine="cdkOverlayOrigin"
                          [class.selected]="item === selectedItem"
                          (click)="selectItem(item)">
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                    </div>
-                    <ng-template [ngIf]="item === selectedItem">
-                        <swipeable-item-detail style="position: absolute; right: 0"
+                        <swipeable-item-detail *ngIf="item === selectedItem"
                                                [gmView]="inGroupTab"
                                                [character]="character"
+                                               [origin]="itemLine"
                                                [item]="item">
                         </swipeable-item-detail>
-                    </ng-template>
+                    </div>
                 </ng-template>
             </div>
         </div>
@@ -154,7 +158,9 @@
                     <ng-template ngFor let-item [ngForOf]="character.computedData.itemsBySlots[slot.id]" let-i="index" let-last="last">
                         <div class="items-list-element">
                             <div class="item-line"
-                                 [class.selected]="selectedItem && selectedItem.id === item.id"
+                                 cdk-overlay-origin
+                                 #itemLine="cdkOverlayOrigin"
+                                 [class.selected]="item === selectedItem"
                                  (click)="selectItem(item)">
                                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                                 <md-icon *ngIf="item.data.notIdentified">help</md-icon>
@@ -167,11 +173,14 @@
                                 <button md-icon-button *ngIf="!last && character.computedData.itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="_itemActionService.onAction('equip', item, {level: -1})">
                                     <md-icon>keyboard_arrow_down</md-icon>
                                 </button>
+                                <swipeable-item-detail *ngIf="item === selectedItem"
+                                                       [gmView]="inGroupTab"
+                                                       [character]="character"
+                                                       [origin]="itemLine"
+                                                       [item]="item">
+                                </swipeable-item-detail>
                             </div>
 
-                            <ng-template [ngIf]="item === selectedItem">
-                                <swipeable-item-detail [gmView]="inGroupTab" [character]="character" [item]="item"></swipeable-item-detail>
-                            </ng-template>
                         </div>
                     </ng-template>
                 </div>

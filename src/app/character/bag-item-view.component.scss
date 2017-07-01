@@ -1,7 +1,16 @@
+.item-bag-line {
+    display: flex;
+    height: 42px;
+    width: 100%;
+    .padding {
+        flex: 1 auto;
+    }
+}
+
 .item-line {
     display: flex;
     align-items: center;
-    height: 41px;
+    height: 40px;
     width: 100%;
     border-bottom-width: 1px;
     border-bottom-style: solid;
@@ -10,7 +19,6 @@
         flex: 1 auto;
     }
 }
-
 .item-icon-container {
     border-left-width: 1px;
     border-left-style: solid;

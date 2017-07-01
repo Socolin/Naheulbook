@@ -6,12 +6,12 @@
     border-top-left-radius: 7px;
 }
 .item-detail {
-    position: absolute;
+    position: fixed;
     right: 0;
-    top: -90px;
     color: #555;
     z-index: 100;
     width: 20vw;
+    overflow-x: hidden;
     touch-action: none;
     -webkit-transition: width 0.5s; /* Safari */
     transition: width 0.5s;

@@ -1,8 +1,8 @@
 import {
     Input, OnInit, Component, HostListener, ElementRef, ViewChild,
-    OnChanges, SimpleChanges
+    OnChanges, SimpleChanges, ChangeDetectorRef, NgZone
 } from '@angular/core';
-import {OverlayRef, Portal, Overlay, OverlayState} from '@angular/material';
+import {OverlayRef, Portal, Overlay, OverlayState, ConnectedOverlayDirective} from '@angular/material';
 
 import {Character} from './character.model';
 import {ItemService} from '../item/item.service';
