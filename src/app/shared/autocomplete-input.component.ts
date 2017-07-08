@@ -3,10 +3,12 @@ import {Component, Input, Output, EventEmitter, ViewChild, ElementRef} from '@an
 export class AutocompleteValue {
     public value: any;
     public text: string;
+    public secondaryText: string;
 
-    constructor(value: any, text: string) {
+    constructor(value: any, text: string, secondaryText?: string) {
         this.value = value;
         this.text = text;
+        this.secondaryText = secondaryText;
     }
 }
 

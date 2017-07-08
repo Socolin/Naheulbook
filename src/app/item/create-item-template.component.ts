@@ -5,10 +5,10 @@ import {ItemTemplate} from './item-template.model';
 
 @Component({
     selector: 'create-item-template',
-    templateUrl: './create-item.component.html',
+    templateUrl: './create-item-template.component.html',
     providers: [ItemService],
 })
-export class CreateItemComponent {
+export class CreateItemTemplateComponent {
     public item: ItemTemplate = new ItemTemplate();
     public lastItem: ItemTemplate;
     public saving = false;

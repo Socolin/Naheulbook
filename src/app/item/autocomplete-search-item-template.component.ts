@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
 import {ItemService} from './item.service';
-import {ItemTemplate} from './item-template.model';
+import {ItemCategory, ItemTemplate} from './item-template.model';
 
 @Component({
     selector: 'autocomplete-search-item-template',
@@ -24,8 +24,14 @@ export class AutocompleteSearchItemTemplateComponent {
     }
 
     updateAutocompleteItem(filter: string) {
-        return this._itemService.searchItem(filter).map(
-            list => list.map(e => new AutocompleteValue(e, e.name))
+        return Observable.forkJoin(
+            this._itemService.getCategoriesById(),
+            this._itemService.searchItem(filter)
+        ).map(
+            ([categoriesById, list]: [{[categoryId: number]: ItemCategory}, ItemTemplate[]]) => {
+                return list.map(e => new AutocompleteValue(e, e.name,
+                    categoriesById[e.category].type.name + ' - ' + categoriesById[e.category].name));
+            }
         );
     }
 }

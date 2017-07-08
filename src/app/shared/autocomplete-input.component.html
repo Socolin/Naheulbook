@@ -13,14 +13,16 @@
 
     <ng-template cdk-connected-overlay
               [origin]="autocompleteOrigin"
-              [open]="matchingValues !== null && matchingValues?.length > 0"
+              [open]="value && matchingValues !== null && matchingValues?.length > 0"
+              [offsetY]="-20"
               hasBackdrop
               backdropClass="cdk-overlay-transparent-backdrop"
               (backdropClick)="matchingValues = null">
         <md-nav-list dense class="autocomplete-overlay">
             <ng-template ngFor let-item [ngForOf]="matchingValues" let-i="index">
                 <md-list-item (click)="selectValue(item)" [class.active]="preSelectedValueIndex === i">
-                    {{item.text}}
+                    <span md-line>{{item.text}}</span>
+                    <span md-line *ngIf="item.secondaryText" class="secondary-text">{{item.secondaryText}}</span>
                 </md-list-item>
             </ng-template>
         </md-nav-list>

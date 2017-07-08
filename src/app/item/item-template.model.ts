@@ -137,4 +137,12 @@ export class ItemTemplate {
 
         return itemTemplate;
     }
+
+    static itemTemplatesFromJson(jsonDatas: ItemTemplateJsonData[], skillsById: {[skillId: number]: Skill}): ItemTemplate[] {
+        let itemTemplates = [];
+        for (let jsonData of jsonDatas) {
+            itemTemplates.push(ItemTemplate.fromJson(jsonData, skillsById));
+        }
+        return itemTemplates;
+    }
 }

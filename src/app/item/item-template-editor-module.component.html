@@ -4,13 +4,14 @@
         <md-card-subtitle>Charges / Utilisations</md-card-subtitle>
         <md-card-content>
             <div>
-                <md-input-container align="end">
+                <md-input-container>
                     <input mdInput
+                           class="input-center-align"
                            placeholder="Nombre de charges"
                            [(ngModel)]="itemTemplate.data.charge"
                            type="number"/>
                     <span mdPrefix>Cet objet a un nombre limité de </span>
-                    <span mdSuffix>utilisation(s)</span>
+                    <span mdSuffix> utilisation(s)</span>
                 </md-input-container>
             </div>
             <div>
@@ -59,23 +60,26 @@
                 <span *ngIf="itemTemplate.data.damageType">de {{itemTemplate.data.damageType}}</span>.
             </div>
             <div>
-                <md-input-container align="end">
+                <md-input-container>
                     <input mdInput
+                           class="input-center-align"
                            placeholder="Nombre de dé"
                            [(ngModel)]="itemTemplate.data.damageDice"
                            type="number"/>
                     <span mdSuffix>D6</span>
                 </md-input-container>
 
-                <md-input-container align="end">
+                <md-input-container>
                     <input mdInput
+                           class="input-center-align"
                            placeholder="Dégât fixe"
                            [(ngModel)]="itemTemplate.data.bonusDamage"
                            type="number"/>
                 </md-input-container>
 
-                <md-input-container align="end">
+                <md-input-container>
                     <input mdInput
+                           class="input-center-align"
                            placeholder="Type de dégât"
                            [(ngModel)]="itemTemplate.data.damageType"
                            type="text"/>
@@ -87,8 +91,9 @@
         <md-card-subtitle>Dé</md-card-subtitle>
         <md-card-content>
             Cet objet s'obtient en lancant un dé avec une valeur de
-            <md-input-container align="end">
+            <md-input-container>
                 <input mdInput
+                       class="input-center-align"
                        placeholder="Valeur du dé"
                        [(ngModel)]="itemTemplate.data.diceDrop"
                        type="number"/>
@@ -140,28 +145,32 @@
                 contre la magie de type {{itemTemplate.data.protectionAgainstType}}
             </div>
             <div>
-                <md-input-container align="end">
+                <md-input-container>
                     <input mdInput
+                           class="input-center-align"
                            placeholder="Protection"
                            [(ngModel)]="itemTemplate.data.protection"
                            type="number"/>
                 </md-input-container>
-                <md-input-container align="end">
+                <md-input-container>
                     <input mdInput
+                           class="input-center-align"
                            placeholder="Protection magique"
                            [(ngModel)]="itemTemplate.data.magicProtection"
                            type="number"/>
                 </md-input-container>
             </div>
             <div>
-                <md-input-container align="end">
+                <md-input-container>
                     <input mdInput
+                           class="input-center-align"
                            placeholder="Protection contre une magie"
                            [(ngModel)]="itemTemplate.data.protectionAgainstMagic"
                            type="number"/>
                 </md-input-container>
-                <md-input-container align="end">
+                <md-input-container>
                     <input mdInput
+                           class="input-center-align"
                            placeholder="Type de protection"
                            [(ngModel)]="itemTemplate.data.protectionAgainstType"
                            type="number"/>
@@ -227,10 +236,10 @@
                 </div>
 
                 Permet de gagner la compétence
-                <select (change)=addSkill($event.target.value)>
-                    <option></option>
-                    <option *ngFor="let skill of skills" [value]="skill.id" >{{skill.name}}</option>
-                </select>
+                <md-select (change)=addSkill($event.target.value) style="min-width: 300px">
+                    <md-option></md-option>
+                    <md-option *ngFor="let skill of skills" [value]="skill.id" >{{skill.name}}</md-option>
+                </md-select>
             </div>
 
             <div>
@@ -240,10 +249,10 @@
                 </div>
 
                 Permet d'annuler la compétence
-                <select (change)=addUnskill($event.target.value)>
-                    <option></option>
-                    <option *ngFor="let skill of skills" [value]="skill.id" >{{skill.name}}</option>
-                </select>
+                <md-select (change)=addUnskill($event.target.value) style="min-width: 300px">
+                    <md-option></md-option>
+                    <md-option *ngFor="let skill of skills" [value]="skill.id" >{{skill.name}}</md-option>
+                </md-select>
             </div>
 
             <div>
@@ -277,8 +286,9 @@
     <ng-template [ngSwitchCase]="'weight'">
         <md-card-subtitle>Poids</md-card-subtitle>
         <md-card-content>
-            <md-input-container align="end">
+            <md-input-container>
                 <input mdInput
+                       class="input-center-align"
                        placeholder="Poids"
                        [(ngModel)]="itemTemplate.data.weight"
                        type="number"/>

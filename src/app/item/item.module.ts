@@ -12,7 +12,7 @@ import {ItemService} from './item.service';
 
 import {
     AutocompleteSearchItemTemplateComponent,
-    CreateItemComponent,
+    CreateItemTemplateComponent,
     EditItemComponent,
     ItemCategoryDirective,
     ItemListComponent,
@@ -32,7 +32,7 @@ import {
         ActionModule,
     ],
     declarations: [
-        CreateItemComponent,
+        CreateItemTemplateComponent,
         EditItemComponent,
         ItemCategoryDirective,
         ItemListComponent,

@@ -143,6 +143,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     resetFilter() {
         this.filter = {name: null, dice: null, category: null};
+        this.updateFilter();
     }
 
     selectSectionById(sectionId: number) {
@@ -238,6 +239,30 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     emitAction(actionName: string, data: any) {
         this.onAction.emit({action: actionName, data: data});
+    }
+
+    getCategoryFromId(categoryId: number): [ItemSection, ItemCategory ]| undefined {
+        for (let ci = 0; ci < this.itemSections.length; ci++) {
+            let itemSection = this.itemSections[ci];
+            for (let i = 0; i < itemSection.categories.length; i++) {
+                let itemCategory = itemSection.categories[i];
+                if (itemCategory.id === categoryId) {
+                    return [itemSection, itemCategory];
+                }
+            }
+        }
+        return undefined;
+    }
+
+    selectItemTemplate(itemTemplate: ItemTemplate) {
+        let result = this.getCategoryFromId(itemTemplate.category);
+        if (!result) {
+            return;
+        }
+        let [itemSection, itemCategory] = result;
+        this.selectSection(itemSection);
+        this.filter.name = itemTemplate.name;
+        this.filter.category = itemCategory;
     }
 
     ngOnInit() {

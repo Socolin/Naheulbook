@@ -112,8 +112,13 @@ export class ItemService extends JsonService {
         if (!filter) {
             return Observable.from([]);
         }
-        return this.postJson('/api/item/search', {filter: filter})
-            .map(res => res.json());
+
+        return Observable.forkJoin(
+            this.postJson('/api/item/search', {filter: filter}).map(res => res.json()),
+            this._skillService.getSkillsById()
+        ).map(([itemTemplateDatas, skillsById]: [ItemTemplateJsonData[], {[skillId: number]: Skill}]) => {
+            return ItemTemplate.itemTemplatesFromJson(itemTemplateDatas, skillsById);
+        });
     }
 
     getSlots(): Observable<ItemSlot[]> {

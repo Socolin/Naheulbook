@@ -7,6 +7,9 @@
             {{section.name}}
         </md-option>
     </md-select>
+
+    <autocomplete-search-item-template [clearOnSelect]=true (onSelect)="selectItemTemplate($event)">
+    </autocomplete-search-item-template>
 </md-card>
 
 <md-card *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
@@ -37,6 +40,9 @@
             </md-option>
         </md-select>
     </md-card-content>
+    <md-card-actions align="end">
+        <button md-button color="primary" (click)="resetFilter()">RESET</button>
+    </md-card-actions>
 </md-card>
 
 <ng-template ngFor let-category [ngForOf]="filteredCategories" [ngForTrackBy]="trackById">

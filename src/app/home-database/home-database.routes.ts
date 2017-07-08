@@ -11,7 +11,7 @@ import {HomeDatabaseComponent} from './home-database.component';
 import {EditItemComponent} from '../item/edit-item.component';
 import {EditEffectComponent} from '../effect/edit-effect.component';
 import {CreateEffectComponent} from '../effect/create-effect.component';
-import {CreateItemComponent} from '../item/create-item.component';
+import {CreateItemTemplateComponent} from '../item/create-item-template.component';
 import {DatabaseSectionsComponent} from './database-sections.component';
 
 export const routes: Routes = [
@@ -73,7 +73,7 @@ export const routes: Routes = [
             },
             {
                 path: 'create-item',
-                component: CreateItemComponent,
+                component: CreateItemTemplateComponent,
             }
         ]
     }

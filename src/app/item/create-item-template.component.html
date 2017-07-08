@@ -1,0 +1,14 @@
+<div>
+    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{errorMessage}}
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success" role="alert">
+        {{successMessage}}
+    </div>
+</div>
+<div>
+    <item-template-editor [(itemTemplate)]="item"></item-template-editor>
+    <button style="width: 100%" md-raised-button (click)="create()">
+        <button md-button>Créer</button>
+    </button>
+</div>

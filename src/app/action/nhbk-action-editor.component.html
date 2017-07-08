@@ -7,9 +7,9 @@
     </md-card-subtitle>
     <md-card-content>
 
-        <select [(ngModel)]="action.type" (change)="updateActionType()">
-            <option *ngFor="let action of validActions" [value]="action.type">{{action.displayName}}</option>
-        </select>
+        <md-select style="min-width: 300px" [(ngModel)]="action.type" (change)="updateActionType()">
+            <md-option *ngFor="let action of validActions" [value]="action.type">{{action.displayName}}</md-option>
+        </md-select>
 
         <md-checkbox [(ngModel)]="action.hidden">Cacher</md-checkbox>
         <div [ngSwitch]="action.type">
