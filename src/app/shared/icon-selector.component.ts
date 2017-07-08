@@ -12,6 +12,7 @@ import {IconDescription} from './icon.model';
 })
 export class IconSelectorComponent implements OnInit, OnChanges {
     @Input() icon: IconDescription;
+    @Input() size = '32px';
     @Input() readonly: boolean;
     @Output() onChange: EventEmitter<IconDescription> = new EventEmitter<IconDescription>();
 

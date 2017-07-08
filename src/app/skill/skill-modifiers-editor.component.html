@@ -23,9 +23,9 @@
 
 <div>
     Modifie la competence
-    <select [(ngModel)] ="selectedSkill">
-        <option *ngFor="let skill of skills" [value]="skill.id">{{skill.name}}</option>
-    </select>
+    <md-select [(ngModel)] ="selectedSkill"  style="min-width: 250px">
+        <md-option *ngFor="let skill of skills" [value]="skill.id">{{skill.name}}</md-option>
+    </md-select>
     de
     <md-input-container>
         <input mdInput

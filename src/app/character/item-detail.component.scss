@@ -55,17 +55,13 @@ md-card {
     color: #c72b2b;
 }
 
-
 .list-available-containers {
     display: flex;
     flex-direction: column;
     .target-container {
-        padding-top: 10px;
-        height: 22px;
+        display: flex;
+        align-items: center;
         cursor: pointer;
-    }
-    .target-container:hover {
-        background-color: #dfdfdf;
     }
 }
 

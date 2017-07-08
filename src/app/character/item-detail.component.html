@@ -1,6 +1,6 @@
 <md-card>
     <md-card-header class="item-detail-header">
-        <icon-selector md-card-avatar [icon]="item.data.icon" [readonly]="readonly"
+        <icon-selector md-card-avatar [icon]="item.data.icon" [size]="'48px'" [readonly]="readonly"
                        (onChange)="_itemActionService.onAction('change_icon', item, {icon: $event})">
         </icon-selector>
         <div>
@@ -313,6 +313,7 @@
                                   let-last="last">
                             <div class="target-container"
                                (click)="_itemActionService.onAction('move_to_container', item, {container: container.id})">
+                                <icon-selector [icon]="container.data.icon" [readonly]="true"></icon-selector>
                                 {{container.data.name}}
                                 <md-divider></md-divider>
                             </div>
