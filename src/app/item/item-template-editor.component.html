@@ -12,33 +12,30 @@
         <md-input-container>
             <input mdInput
                    placeholder="Nom quand non identifié"
-                   [(ngModel)]="itemTemplate.data.notIdentifiedName"
-                   type="text"/>
+                   [(ngModel)]="itemTemplate.data.notIdentifiedName"/>
         </md-input-container>
         <button md-icon-button (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"><md-icon>content_copy</md-icon></button>
         <button md-icon-button (click)="automaticNotIdentifiedName()"><md-icon>refresh</md-icon></button>
     </div>
-    <div>
-        <md-input-container align="end">
+    <div style="display: flex; flex-direction: row">
+        <md-input-container>
             <input mdInput
                    placeholder="Prix"
                    [(ngModel)]="itemTemplate.data.price"
                    type="number"/>
             <span mdSuffix>P.O.</span>
         </md-input-container>
-        <md-input-container>
+        <md-input-container style="flex: 1 auto; margin-left: 10px">
             <input mdInput
                    placeholder="Description"
-                   [(ngModel)]="itemTemplate.data.description"
-                   type="text"/>
+                   [(ngModel)]="itemTemplate.data.description"/>
         </md-input-container>
     </div>
     <div>
-        <md-input-container>
+        <md-input-container style="width: 100%">
             <input mdInput
                    placeholder="Note"
-                   [(ngModel)]="itemTemplate.data.note"
-                   type="text"/>
+                   [(ngModel)]="itemTemplate.data.note"/>
         </md-input-container>
     </div>
 </md-card>
@@ -69,7 +66,7 @@
     </item-template-editor-module>
 </ng-template>
 
-<md-card>
+<md-card style="background-color: rgb(196, 255, 231)">
     Ajouter un module
     <autocomplete-input [clearOnSelect]="true"
                         [placeholder]="'Module'"
@@ -88,21 +85,7 @@
         </autocomplete-input>
     </md-card>
 </ng-template>
-<md-card>
-	<div class="form-group">
-		<label for="inputAvailableLocation" class="col-sm-2 control-label">Possibilités de récolte</label>
-		<div class="col-sm-10">
-			<input id="inputAvailableLocation" [(ngModel)]="itemTemplate.data.availableLocation" type="text" class="form-control" />
-		</div>
-	</div>
 
-	<div class="form-group">
-		<label for="inputLoad" class="col-sm-2 control-label">Encombrement</label>
-		<div class="col-sm-10">
-			<input id="inputLoad" [(ngModel)]="itemTemplate.data.space" type="text" class="form-control" />
-		</div>
-	</div>
-</md-card>
-Preview
+<h3>Preview</h3>
 <item-template [jobsName]="jobsName" [originsName]="originsName" [item]="itemTemplate"></item-template>
 

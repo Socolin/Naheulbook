@@ -35,6 +35,15 @@
             </nhbk-action-editor>
         </ng-template>
     </ng-template>
+    <ng-template [ngSwitchCase]="'collect'">
+        <md-card-subtitle>Possibilités de récolte</md-card-subtitle>
+        <md-card-content>
+            <md-input-container style="width: 100%">
+                <input mdInput
+                       [(ngModel)]="itemTemplate.data.availableLocation"/>
+            </md-input-container>
+        </md-card-content>
+    </ng-template>
     <ng-template [ngSwitchCase]="'container'">
         <md-card-subtitle>Conteneur</md-card-subtitle>
         <md-card-content>
@@ -90,7 +99,7 @@
     <ng-template [ngSwitchCase]="'diceDrop'">
         <md-card-subtitle>Dé</md-card-subtitle>
         <md-card-content>
-            Cet objet s'obtient en lancant un dé avec une valeur de
+            Cet objet s'obtient en lançant un dé avec une valeur de
             <md-input-container>
                 <input mdInput
                        class="input-center-align"
@@ -275,6 +284,15 @@
                     {{slot.name}}
                 </md-checkbox>
             </div>
+        </md-card-content>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'space'">
+        <md-card-subtitle>Encombrement</md-card-subtitle>
+        <md-card-content>
+            <md-input-container style="width: 100%">
+                <input mdInput
+                       [(ngModel)]="itemTemplate.data.space"/>
+            </md-input-container>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'throwable'">

@@ -49,6 +49,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
     private modulesDef: any[] = [
         {name: 'charge',       displayName: 'Charges/Utilisations'},
+        {name: 'collect',      displayName: 'Possibilités de récolte'},
         {name: 'container',    displayName: 'Conteneur'},
         {name: 'currency',     displayName: 'Monnaie'},
         {name: 'damage',       displayName: 'Dégât'},
@@ -66,6 +67,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         {name: 'skill',        displayName: 'Compétences'},
         {name: 'skillBook',    displayName: 'Livre de compétences'},
         {name: 'slots',        displayName: 'Equipement'},
+        {name: 'space',        displayName: 'Encombrement'},
         {name: 'throwable',    displayName: 'Prévue pour le jet'},
         {name: 'weight',       displayName: 'Poids'}
     ];
@@ -172,6 +174,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'charge':
                 this.itemTemplate.data.charge = 1;
                 break;
+            case 'collect':
+                this.itemTemplate.data.availableLocation = '';
+                break;
             case 'container':
                 this.itemTemplate.data.container = true;
                 break;
@@ -225,6 +230,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'slots':
                 this.itemTemplate.slots = [];
                 break;
+            case 'space':
+                this.itemTemplate.data.space = '';
+                break;
             case 'throwable':
                 this.itemTemplate.data.throwable = true;
                 break;
@@ -245,6 +253,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         switch (moduleName) {
             case 'charge':
                 this.itemTemplate.data.charge = null;
+                break;
+            case 'collect':
+                this.itemTemplate.data.availableLocation = null;
                 break;
             case 'container':
                 this.itemTemplate.data.container = null;
@@ -304,6 +315,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'slots':
                 this.itemTemplate.slots = null;
                 break;
+            case 'space':
+                this.itemTemplate.data.space = null;
+                break;
             case 'throwable':
                 this.itemTemplate.data.throwable = null;
                 break;
@@ -320,6 +334,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
         if (this.itemTemplate.data.charge) {
             modules.push('charge');
+        }
+        if (this.itemTemplate.data.availableLocation) {
+            modules.push('collect');
         }
         if (this.itemTemplate.data.container) {
             modules.push('container');
@@ -376,6 +393,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
         if (!isNullOrUndefined(this.itemTemplate.slots) && this.itemTemplate.slots.length) {
             modules.push('slots');
+        }
+        if (this.itemTemplate.data.space) {
+            modules.push('space');
         }
         if (this.itemTemplate.data.throwable) {
             modules.push('throwable');
