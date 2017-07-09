@@ -47,7 +47,7 @@ export class EditItemComponent implements OnInit {
                         }
                         setTimeout((function () {
                             if (showNext) {
-                                this._router.navigate(['/edit-item', this.item.id + 1]);
+                                this._router.navigate(['/database/edit-item', this.item.id + 1]);
                             } else {
                                 this._router.navigate(['/database/items'], {queryParams: {id: sectionId}});
                             }
