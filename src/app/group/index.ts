@@ -1,6 +1,7 @@
 export * from './group.model';
 
 export * from './group.service';
+export * from './group-action.service';
 
 export * from './create-group.component';
 export * from './create-item.component';

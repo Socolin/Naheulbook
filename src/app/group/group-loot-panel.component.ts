@@ -1,16 +1,14 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {OverlayRef, Portal} from '@angular/material';
 
-import {NotificationsService} from '../notifications/notifications.service';
+import {NotificationsService} from '../notifications';
+import {NhbkDialogService} from '../shared';
 
-import {GroupService} from './group.service';
-import {Group} from './group.model';
-import {ItemService} from '../item/item.service';
-import {Item} from '../character/item.model';
-import {LootPanelComponent} from '../loot/loot-panel.component';
-import {Loot} from '../loot/loot.model';
-import {Monster} from '../monster/monster.model';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {Item, ItemService} from '../character';
+import {Loot, LootPanelComponent} from '../loot';
+import {Monster} from '../monster';
+
+import {Group, GroupService} from '.';
 
 @Component({
     selector: 'group-loot-panel',

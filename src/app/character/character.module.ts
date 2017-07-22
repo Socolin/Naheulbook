@@ -11,6 +11,7 @@ import {OriginModule} from '../origin/origin.module';
 import {JobModule} from '../job/job.module';
 import {EffectModule} from '../effect/effect.module';
 import {ActionModule} from '../action/action.module';
+import {ItemModule} from '../item/item.module';
 
 import {
     BagItemViewComponent,
@@ -29,6 +30,7 @@ import {
 
 import {CharacterService} from './character.service';
 import {CharacterResolve} from './character.resolver';
+import {ItemService} from './item.service';
 
 @NgModule({
     imports: [
@@ -43,6 +45,7 @@ import {CharacterResolve} from './character.resolver';
         JobModule,
         EffectModule,
         ActionModule,
+        ItemModule,
     ],
     declarations: [
         BagItemViewComponent,
@@ -70,6 +73,7 @@ import {CharacterResolve} from './character.resolver';
     providers: [
         CharacterService,
         CharacterResolve,
+        ItemService,
     ],
 })
 export class CharacterModule {

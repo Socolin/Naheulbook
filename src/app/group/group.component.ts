@@ -33,7 +33,7 @@ import {ItemTemplate} from '../item/item-template.model';
 import {CreateItemComponent} from './create-item.component';
 import {Monster} from '../monster/monster.model';
 import {Item} from '../character/item.model';
-import {ItemService} from '../item/item.service';
+import {ItemService} from '../character/item.service';
 
 @Component({
     templateUrl: './group.component.html',

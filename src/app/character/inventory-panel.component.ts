@@ -1,19 +1,14 @@
 import {
     Input, OnInit, Component, HostListener, ElementRef, ViewChild,
-    OnChanges, SimpleChanges, ChangeDetectorRef, NgZone
+    OnChanges, SimpleChanges
 } from '@angular/core';
-import {OverlayRef, Portal, Overlay, OverlayState, ConnectedOverlayDirective} from '@angular/material';
-
-import {Character} from './character.model';
-import {ItemService} from '../item/item.service';
-import {ItemTemplate} from '../item/item-template.model';
-import {Item, ItemData} from './item.model';
-import {removeDiacritics} from '../shared/remove_diacritics';
-import {SwipeService} from './swipe.service';
-import {ItemActionService} from './item-action.service';
+import {OverlayRef, Portal, Overlay, OverlayState} from '@angular/material';
 import {isNullOrUndefined} from 'util';
-import {Observable} from 'rxjs';
-import {AutocompleteValue} from '../shared/autocomplete-input.component';
+
+import {removeDiacritics} from '../shared';
+import {ItemTemplate} from '../item';
+
+import {Character, Item, ItemData, ItemService, SwipeService, ItemActionService} from '.';
 
 @Component({
     selector: 'inventory-panel',
@@ -44,8 +39,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     public addItemOverlayRef: OverlayRef;
     public addItemSearch: string;
     public filteredItems: ItemTemplate[] = [];
-
-    public autocompleteAddItemListCallback: Function = this.updateItemListAutocomplete.bind(this);
 
     public itemAddCustomName: string;
     public itemAddCustomDescription: string;
@@ -97,7 +90,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         config.positionStrategy = this._overlay.position()
             .global()
             .centerHorizontally()
-            .centerVertically();
+            .top('32px');
         config.hasBackdrop = true;
 
         let overlayRef = this._overlay.create(config);
@@ -108,18 +101,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
 
     closeAddItemDialog() {
         this.addItemOverlayRef.detach();
-    }
-
-    updateItemListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
-        this.addItemSearch = filter;
-        if (filter === '') {
-            return Observable.from([]);
-        }
-        return this._itemService.searchItem(this.addItemSearch).map(
-            items => {
-                return items.map(e => new AutocompleteValue(e, e.name));
-            }
-        );
     }
 
     trackById(index, element) {

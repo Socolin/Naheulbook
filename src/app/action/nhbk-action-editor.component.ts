@@ -1,11 +1,10 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {NhbkAction, NhbkActionType} from './nhbk-action.model';
 import {Observable} from 'rxjs';
-import {ItemService} from '../item/item.service';
-import {ItemTemplate} from '../item/item-template.model';
-import {AutocompleteValue} from '../shared/autocomplete-input.component';
-import {ActiveStatsModifier} from '../shared/stat-modifier.model';
-import {MiscService} from '../shared/misc.service';
+
+import {ActiveStatsModifier, AutocompleteValue, MiscService} from '../shared';
+
+import {ItemTemplate} from '../item';
 
 @Component({
     selector: 'nhbk-action-editor',

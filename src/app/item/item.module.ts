@@ -8,8 +8,6 @@ import {SharedModule} from '../shared/shared.module';
 import {SkillModule} from '../skill/skill.module';
 import {DateModule} from '../date/date.module';
 
-import {ItemService} from './item.service';
-
 import {
     AutocompleteSearchItemTemplateComponent,
     CreateItemTemplateComponent,
@@ -18,7 +16,8 @@ import {
     ItemListComponent,
     ItemTemplateComponent,
     ItemTemplateEditorComponent,
-    ItemTemplateEditorModuleComponent
+    ItemTemplateEditorModuleComponent,
+    ItemTemplateService,
 } from './';
 
 @NgModule({
@@ -46,7 +45,7 @@ import {
         AutocompleteSearchItemTemplateComponent,
     ],
     providers: [
-        ItemService,
+        ItemTemplateService,
     ]
 })
 export class ItemModule {

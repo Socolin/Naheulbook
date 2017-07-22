@@ -3,6 +3,9 @@ export * from './item.model';
 export * from './speciality.model';
 
 export * from './character.service';
+export * from './item.service';
+export * from './item-action.service';
+export * from './swipe.service';
 
 export * from './character.resolver';
 

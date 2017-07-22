@@ -3,14 +3,13 @@ import {
 } from '@angular/core';
 import {Portal, OverlayRef} from '@angular/material';
 
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {ItemService, ItemCategory} from '../item';
-import {GroupService} from '../group/group.service';
-import {Item} from './item.model';
-import {Character, CharacterGiveDestination} from './character.model';
-import {ItemActionService} from './item-action.service';
+import {ActiveStatsModifier, NhbkDialogService} from '../shared';
+
 import {IDurable} from '../date/durable.model';
-import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {ItemTemplateService, ItemCategory} from '../item';
+import {GroupService} from '../group';
+
+import {Character, CharacterGiveDestination, Item, ItemActionService} from '.';
 
 @Component({
     selector: 'item-detail',
@@ -49,7 +48,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public lifetimeOverlayRef: OverlayRef;
     public previousLifetime: IDurable;
 
-    constructor(private _itemService: ItemService
+    constructor(private _itemTemplateService: ItemTemplateService
         , @Optional() public _itemActionService: ItemActionService
         , private _groupService: GroupService
         , private _nhbkDialogService: NhbkDialogService) {
@@ -226,7 +225,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     ngOnInit() {
-        this._itemService.getCategoriesById().subscribe(
+        this._itemTemplateService.getCategoriesById().subscribe(
             categoriesById => {
                 this.itemCategoriesById = categoriesById;
             },

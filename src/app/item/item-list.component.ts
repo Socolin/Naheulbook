@@ -1,21 +1,26 @@
 import {
     Component, OnInit, OnDestroy, Input, ViewChildren, HostListener, QueryList, ViewChild, EventEmitter, Output
 } from '@angular/core';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {Overlay, OverlayRef, OverlayState, Portal} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Rx';
+
+import {smoothScrollBy, smoothScrollTo} from '../shared/scroll';
+import {removeDiacritics} from '../shared';
 
 import {LoginService} from '../user/login.service';
 import {OriginService} from '../origin/origin.service';
 import {JobService} from '../job/job.service';
 
-import {ItemCategory, ItemSection, ItemTemplate} from './item-template.model';
-import {ItemService} from './item.service';
-import {removeDiacritics} from '../shared';
-import {Observable} from 'rxjs/Observable';
-import {Overlay, OverlayRef, OverlayState, Portal} from '@angular/material';
-import {ItemCategoryDirective} from './item-category.directive';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {smoothScrollBy, smoothScrollTo} from '../shared/scroll';
+import {
+    ItemTemplateService,
+    ItemCategoryDirective,
+    ItemCategory,
+    ItemSection,
+    ItemTemplate
+} from '.';
 
 @Component({
     selector: 'item-list',
@@ -91,7 +96,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
         , public overlay: Overlay
         , private _route: ActivatedRoute
         , private _loginService: LoginService
-        , private _itemService: ItemService
+        , private _itemTemplateService: ItemTemplateService
         , private _originService: OriginService
         , private _jobService: JobService) {
         this.resetFilter();
@@ -159,7 +164,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     selectSection(section: ItemSection) {
         if (this.selectedSection && this.selectedSection.id === section.id) {
-            this._itemService.clearItemSectionCache(section.id);
+            this._itemTemplateService.clearItemSectionCache(section.id);
             this.loadSection(section);
         } else {
             if (!this.inTab) {
@@ -201,7 +206,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     loadSection(section: ItemSection) {
         this.selectedSection = section;
-        this._itemService.getItems(section).subscribe(items => {
+        this._itemTemplateService.getItems(section).subscribe(items => {
             this.items = items;
             this.updateFilter();
         });
@@ -269,7 +274,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
         Observable.forkJoin(
             this._jobService.getJobsNamesById(),
             this._originService.getOriginsNamesById(),
-            this._itemService.getSectionsList()
+            this._itemTemplateService.getSectionsList()
         ).subscribe(([jobsName, originsName, sections]: [{[jobId: number]: string}, {[jobId: number]: string}, ItemSection[]]) => {
             this.originsName = originsName;
             this.jobsName = jobsName;

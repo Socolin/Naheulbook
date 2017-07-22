@@ -2,8 +2,12 @@ import {Component, Input, EventEmitter, Output} from '@angular/core';
 import {Observable} from 'rxjs';
 
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
-import {ItemService} from './item.service';
-import {ItemCategory, ItemTemplate} from './item-template.model';
+
+import {
+    ItemCategory,
+    ItemTemplate,
+    ItemTemplateService
+} from './';
 
 @Component({
     selector: 'autocomplete-search-item-template',
@@ -16,7 +20,7 @@ export class AutocompleteSearchItemTemplateComponent {
 
     public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
 
-    constructor(private _itemService: ItemService) {
+    constructor(private _itemTemplateService: ItemTemplateService) {
     }
 
     selectItemTemplate(itemTemplate: ItemTemplate) {
@@ -25,8 +29,8 @@ export class AutocompleteSearchItemTemplateComponent {
 
     updateAutocompleteItem(filter: string) {
         return Observable.forkJoin(
-            this._itemService.getCategoriesById(),
-            this._itemService.searchItem(filter)
+            this._itemTemplateService.getCategoriesById(),
+            this._itemTemplateService.searchItem(filter)
         ).map(
             ([categoriesById, list]: [{[categoryId: number]: ItemCategory}, ItemTemplate[]]) => {
                 return list.map(e => new AutocompleteValue(e, e.name,

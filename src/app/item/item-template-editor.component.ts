@@ -1,19 +1,23 @@
 import {
     Component, Input, OnInit, OnChanges, SimpleChanges, HostListener, ViewChild
 } from '@angular/core';
-
-import {ItemTemplate, ItemSection, ItemSlot} from '../item';
-import {Effect, EffectService} from '../effect';
-import {Skill, SkillService} from '../skill';
-import {ItemService} from './item.service';
-import {Observable} from 'rxjs';
-import {JobService} from '../job/job.service';
-import {OriginService} from '../origin/origin.service';
-import {isNullOrUndefined} from 'util';
-import {AutocompleteValue, AutocompleteInputComponent} from '../shared/autocomplete-input.component';
 import {Portal, OverlayRef} from '@angular/material';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {removeDiacritics} from '../shared/remove_diacritics';
+import {Observable} from 'rxjs';
+
+import {isNullOrUndefined} from 'util';
+import {
+    removeDiacritics, NhbkDialogService, AutocompleteValue, AutocompleteInputComponent
+} from '../shared';
+import {Skill, SkillService} from '../skill';
+import {JobService} from '../job';
+import {OriginService} from '../origin';
+
+import {
+    ItemSection,
+    ItemSlot,
+    ItemTemplate,
+    ItemTemplateService,
+} from './';
 
 @Component({
     selector: 'item-template-editor',
@@ -35,8 +39,6 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
     public selectedSection: ItemSection;
     public form: { levels: number[], protection: number[], damage: number[], dices: number[] };
-
-    public filteredEffects: Effect[];
 
     public autocompleteModuleCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteModule.bind(this);
 
@@ -73,8 +75,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         {name: 'weight',       displayName: 'Poids'}
     ];
 
-    constructor(private _itemService: ItemService
-        , private _effectService: EffectService
+    constructor(private _itemTemplateservice: ItemTemplateService
         , private _originService: OriginService
         , private _nhbkDialogService: NhbkDialogService
         , private _jobService: JobService
@@ -416,10 +417,10 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             this.determineModulesFromItemTemplate();
         }
         Observable.forkJoin(
-            this._itemService.getSectionsList(),
+            this._itemTemplateservice.getSectionsList(),
             this._skillService.getSkills(),
             this._skillService.getSkillsById(),
-            this._itemService.getSlots(),
+            this._itemTemplateservice.getSlots(),
             this._jobService.getJobList(),
             this._originService.getOriginList()
         ).subscribe(([sections, skills, skillsById, slots, jobs, origins]) => {

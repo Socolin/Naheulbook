@@ -1,9 +1,8 @@
 import {Component, Output, EventEmitter, SimpleChanges, OnChanges, ViewChild} from '@angular/core';
 import {OverlayRef, Portal} from '@angular/material';
 
-import {ItemService} from '../item';
 import {Character, Item} from '../character';
-import {ItemTemplate} from '../item';
+import {ItemTemplate, ItemTemplateService} from '../item';
 import {Loot} from '../loot';
 import {getRandomInt} from '../shared/random';
 import {Monster} from '../monster/monster.model';
@@ -28,7 +27,7 @@ export class CreateItemComponent implements OnChanges {
     public newItem: Item = new Item();
     public gemOption: any = {};
 
-    constructor(private _itemService: ItemService,
+    constructor(private _itemTemplateService: ItemTemplateService,
                 private _nhbkDialogService: NhbkDialogService) {
     }
 
@@ -189,7 +188,7 @@ export class CreateItemComponent implements OnChanges {
     updateGem() {
         if (this.gemOption['type'] && this.gemOption['number']) {
 
-            this._itemService.getGem(this.gemOption['type'], this.gemOption['number']).subscribe(
+            this._itemTemplateService.getGem(this.gemOption['type'], this.gemOption['number']).subscribe(
                 itemTemplate => {
                     this.newItem.template = itemTemplate;
                     if (this.newItem.data.notIdentified) {

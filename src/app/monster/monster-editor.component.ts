@@ -1,20 +1,15 @@
 import {Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {OverlayRef, Portal} from '@angular/material';
+import {Observable} from 'rxjs';
+
+import {removeDiacritics, NhbkDialogService, AutocompleteValue} from '../shared';
+import {Location, LocationService} from '../location';
+import {ItemTemplate, ItemTemplateService} from '../item';
 
 import {
     MonsterTemplate, MonsterTemplateCategory, MonsterTrait, TraitInfo,
-    MonsterSimpleInventory, MonsterTemplateService
+    MonsterSimpleInventory, MonsterTemplateService, MonsterTemplateType
 } from '.';
-
-import {Observable} from 'rxjs';
-import {AutocompleteValue} from '../shared/autocomplete-input.component';
-import {ItemTemplate} from '../item/item-template.model';
-import {ItemService} from '../item/item.service';
-import {LocationService} from '../location/location.service';
-import {Location} from '../location/location.model';
-import {removeDiacritics} from '../shared/remove_diacritics';
-import {MonsterTemplateType} from './monster.model';
-import {OverlayRef, Portal} from '@angular/material';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
     selector: 'monster-editor',
@@ -50,11 +45,12 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     constructor(private _monsterTemplateService: MonsterTemplateService
         , private _locationService: LocationService
         , private _nhbkDialogService: NhbkDialogService
-        , private _itemService: ItemService) {
+        , private _itemTemplateService: ItemTemplateService) {
     }
 
+    // FIXME: Replace with component that do it in item/
     updateAutocompleteItem(filter: string): Observable<AutocompleteValue[]> {
-        return this._itemService.searchItem(filter).map(
+        return this._itemTemplateService.searchItem(filter).map(
             list => list.map(e => new AutocompleteValue(e, e.name))
         );
     }

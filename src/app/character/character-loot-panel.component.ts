@@ -7,7 +7,7 @@ import {Character} from './character.model';
 import {Loot} from '../loot/loot.model';
 import {Item} from './item.model';
 import {Monster} from '../monster/monster.model';
-import {ItemService} from '../item/item.service';
+import {ItemService} from './item.service';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({

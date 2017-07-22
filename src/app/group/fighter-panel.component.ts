@@ -1,19 +1,13 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {OverlayRef, Portal} from '@angular/material';
-
-import {Group, Fighter} from './group.model';
-import {GroupService} from './group.service';
-import {ItemData, Item} from '../character/item.model';
-import {Monster, MonsterTemplate, MonsterService, MonsterTemplateService} from '../monster';
 import {Observable} from 'rxjs';
-import {AutocompleteValue} from '../shared/autocomplete-input.component';
-import {Character} from '../character/character.model';
-import {GroupActionService} from './group-action.service';
-import {ItemService} from '../item/item.service';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {CreateItemComponent} from './create-item.component';
-import {getRandomInt} from '../shared/random';
 import {isNullOrUndefined} from 'util';
+
+import {getRandomInt, NhbkDialogService, AutocompleteValue} from '../shared';
+import {Character, ItemData, Item, ItemService} from '../character';
+import {Monster, MonsterTemplate, MonsterService, MonsterTemplateService} from '../monster';
+
+import {Group, Fighter, GroupActionService, GroupService, CreateItemComponent} from '.';
 
 @Component({
     selector: 'fighter-panel',

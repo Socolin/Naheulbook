@@ -1,12 +1,13 @@
 import {Component} from '@angular/core';
 
-import {ItemService} from './item.service';
-import {ItemTemplate} from './item-template.model';
+import {
+    ItemTemplate,
+    ItemTemplateService
+} from '.';
 
 @Component({
     selector: 'create-item-template',
-    templateUrl: './create-item-template.component.html',
-    providers: [ItemService],
+    templateUrl: './create-item-template.component.html'
 })
 export class CreateItemTemplateComponent {
     public item: ItemTemplate = new ItemTemplate();
@@ -15,7 +16,7 @@ export class CreateItemTemplateComponent {
     public errorMessage: string;
     public successMessage: string;
 
-    constructor(private _itemService: ItemService) {
+    constructor(private _itemTemplateService: ItemTemplateService) {
     }
 
     create() {
@@ -29,7 +30,7 @@ export class CreateItemTemplateComponent {
         this.saving = true;
         this.errorMessage = null;
         this.successMessage = null;
-        this._itemService.create(this.item).subscribe(
+        this._itemTemplateService.create(this.item).subscribe(
             item => {
                 this.successMessage = 'Objet créé: ' + item.name;
                 this.lastItem = item;

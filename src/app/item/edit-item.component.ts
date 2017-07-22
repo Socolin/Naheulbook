@@ -2,8 +2,7 @@ import {Component, OnInit, HostListener} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from '../notifications';
 
-import {ItemTemplate} from './item-template.model';
-import {ItemService} from './item.service';
+import {ItemTemplate, ItemTemplateService} from '.';
 
 @Component({
     selector: 'edit-item',
@@ -16,7 +15,7 @@ export class EditItemComponent implements OnInit {
     constructor(private _router: Router
         , private _route: ActivatedRoute
         , private _notification: NotificationsService
-        , private _itemService: ItemService) {
+        , private _itemTemplateService: ItemTemplateService) {
     }
 
     @HostListener('window:keydown', ['$event'])
@@ -32,16 +31,16 @@ export class EditItemComponent implements OnInit {
 
     edit(showNext: boolean) {
         this.saving = true;
-        this._itemService.editItemTemplate(this.item).subscribe(
+        this._itemTemplateService.editItemTemplate(this.item).subscribe(
             item => {
                 this._notification.success('Objet', 'Objet bien sauvegarde: ' + item.name);
                 this.saving = false;
-                this._itemService.getSectionFromCategory(item.category).subscribe(
+                this._itemTemplateService.getSectionFromCategory(item.category).subscribe(
                     section => {
                         let sectionId = null;
                         if (section) {
                             sectionId = section.id;
-                            this._itemService.clearItemSectionCache(section.id);
+                            this._itemTemplateService.clearItemSectionCache(section.id);
                         } else {
                             sectionId = 1;
                         }
@@ -61,7 +60,7 @@ export class EditItemComponent implements OnInit {
     ngOnInit() {
         this._route.params.subscribe(params => {
             let id = +params['id'];
-            this._itemService.getItem(id).subscribe(
+            this._itemTemplateService.getItem(id).subscribe(
                 item => {
                     this.item = item;
                 }

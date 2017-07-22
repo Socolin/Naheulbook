@@ -1,6 +1,6 @@
 export * from './item-template.model';
 
-export * from './item.service';
+export * from './item-template.service';
 
 export * from './autocomplete-search-item-template.component';
 export * from './create-item-template.component';
