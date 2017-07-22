@@ -3,10 +3,14 @@
     padding: 2px;
     cursor: pointer;
 }
+$ve-button-width: 70px;
+$ve-button-height: 45px;
+$ve-summary-height: 25px;
+
 .ve-container {
     position: absolute;
     width: 244px;
-    height: 176px;
+    height: 221px;
     -webkit-box-shadow: 3px 4px 5px -1px rgba(0,0,0,0.6);
     -moz-box-shadow: 3px 4px 5px -1px rgba(0,0,0,0.6);
     box-shadow: 3px 4px 5px -1px rgba(0,0,0,0.6);
@@ -14,23 +18,25 @@
     .ve-delta-value {
         padding-top: 13px;
         padding-bottom: 11px;
-        width: 60px;
+        width: $ve-button-width;
         text-align: center;
         font-size: large;
         position: absolute;
-        left: 60px;
-        bottom: 25px;
+        left: $ve-button-width;
+        bottom: $ve-summary-height;
     }
 
     .ve-summary {
         position: absolute;
+        display: flex;
+        flex-direction: column;
         left: 0;
         bottom: 0;
 
         div {
             padding-top: 5px;
             padding-bottom: 4px;
-            width: 180px;
+            width: $ve-button-width * 3;
             font-size: 14px;
             text-align: center;
         }
@@ -39,12 +45,12 @@
     .ve-title {
         position: absolute;
         left: 0;
-        bottom: 160px;
+        bottom: $ve-summary-height + ($ve-button-height * 4);
 
         div {
             padding-left: 0;
             padding-right: 0;
-            width: 180px;
+            width: $ve-button-width * 3;
             font-size: 14px;
             text-align: center;
         }
@@ -58,49 +64,55 @@
         .minus-buttons {
             position: relative;
             left: 0;
-            bottom: 25px;
-            width: 60px;
+            bottom: $ve-summary-height;
+            width: $ve-button-width;
 
             button {
-                width: 60px;
-                height: 45px;
+                width: $ve-button-width;
+                height: $ve-button-height;
                 border: 0;
             }
         }
 
         .plus-buttons {
             position: absolute;
-            left: 120px;
-            bottom: 25px;
-            width: 60px;
+            left: $ve-button-width * 2;
+            bottom: $ve-summary-height;
+            width: $ve-button-width;
 
             button {
-                width: 60px;
-                height: 45px;
+                width: $ve-button-width;
+                height: $ve-button-height;
                 border: 0;
             }
         }
 
         .max-zero-buttons {
             position: absolute;
-            left: 60px;
-            bottom: 70px;
+            left: $ve-button-width;
+            bottom: $ve-summary-height + $ve-button-height;
 
             button {
-                width: 60px;
-                height: 45px;
+                width: $ve-button-width;
+                height: $ve-button-height;
                 border: 0;
+                &.btn-reset {
+                    font-size: 16px;
+                }
+                &.btn-max {
+                    font-size: 16px;
+                }
             }
         }
 
         .valid-button {
             position: absolute;
-            left: 180px;
+            left: $ve-button-width * 3;
             bottom: 0;
 
             button {
                 width: 64px;
-                height: 176px;
+                height: 221px;
                 border: 0;
             }
         }

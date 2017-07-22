@@ -140,6 +140,9 @@ export class ValueEditorComponent implements OnChanges {
                 this.valueDelta = '+' + t;
             }
         }
+        else if (val === 'reset') {
+            this.valueDelta = undefined;
+        }
         else if (!this.valueDelta) {
             this.valueDelta = val;
         }

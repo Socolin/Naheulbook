@@ -9,11 +9,11 @@
              [style.left]="(40 + xOffset)+ 'px'">
 
             <div class="ve-delta-value">
-                {{valueDelta ? valueDelta : "0"}}
+                {{newValue}}
             </div>
             <div class="ve-summary">
                 <div>
-                    {{value}} <span *ngIf="maxValue">/{{maxValue}}</span> -> {{newValue}} <span *ngIf="maxValue">/{{maxValue}}</span>
+                    {{value}} <span *ngIf="maxValue">/{{maxValue}}</span> -> {{newValue}} <span *ngIf="maxValue">/{{maxValue}}</span> ({{valueDelta ? valueDelta : "0"}})
                 </div>
             </div>
             <div *ngIf="title" class="ve-title">
@@ -21,6 +21,9 @@
             </div>
             <div class="ve-actions">
                 <div class="minus-buttons">
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('-500')">
+                        -500
+                    </button>
                     <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('-50')">
                         -50
                     </button>
@@ -32,6 +35,9 @@
                     </button>
                 </div>
                 <div class="plus-buttons">
+                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('+500')">
+                        +500
+                    </button>
                     <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('+50')">
                         +50
                     </button>
@@ -43,8 +49,11 @@
                     </button>
                 </div>
                 <div class="max-zero-buttons">
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('max')" [disabled]="!maxValue">
-                        Max
+                    <button md-ripple [mdRippleColor]="'primary'" class="btn-reset" (click)="changeValue('reset')">
+                        RESET
+                    </button>
+                    <button md-ripple [mdRippleColor]="'primary'" class="btn-max" (click)="changeValue('max')" [disabled]="!maxValue">
+                        MAX
                     </button>
                     <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('zero')">
                         0
