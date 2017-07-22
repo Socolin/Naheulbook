@@ -16,6 +16,7 @@ import {
 })
 export class AutocompleteSearchItemTemplateComponent {
     @Input() clearOnSelect: boolean;
+    @Input() placeholder = 'Chercher un objet';
     @Output() onSelect: EventEmitter<ItemTemplate> = new EventEmitter<ItemTemplate>();
 
     public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);

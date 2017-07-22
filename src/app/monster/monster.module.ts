@@ -1,19 +1,20 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {MaterialModule} from '@angular/material';
+
+import {ItemModule} from '../item/item.module';
+import {SharedModule} from '../shared/shared.module';
 
 import {
     MonsterColorSelectorComponent,
+    MonsterEditorComponent,
     MonsterListComponent,
     MonsterTemplateComponent,
+    MonsterTraitComponent,
     MonsterService,
     MonsterTemplateService
 } from './';
-
-import {SharedModule} from '../shared/shared.module';
-import {MonsterEditorComponent} from './monster-editor.component';
-import {MaterialModule} from '@angular/material';
-import {MonsterTraitComponent} from './monster-trait.component';
 
 @NgModule({
     imports: [
@@ -21,6 +22,7 @@ import {MonsterTraitComponent} from './monster-trait.component';
         FormsModule,
         SharedModule,
         MaterialModule,
+        ItemModule,
     ],
     declarations: [
         MonsterColorSelectorComponent,

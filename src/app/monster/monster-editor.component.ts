@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 
 import {removeDiacritics, NhbkDialogService, AutocompleteValue} from '../shared';
 import {Location, LocationService} from '../location';
-import {ItemTemplate, ItemTemplateService} from '../item';
+import {ItemTemplate} from '../item';
 
 import {
     MonsterTemplate, MonsterTemplateCategory, MonsterTrait, TraitInfo,
@@ -31,9 +31,6 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
 
     public autocompleteLocationsCallback: Function = this.updateAutocompleteLocation.bind(this);
 
-    public autocompleteItemCallback: Function = this.updateAutocompleteItem.bind(this);
-
-
     @ViewChild('createCategoryDialog')
     public createCategoryDialog: Portal<any>;
     public createCategorOverlayRef: OverlayRef;
@@ -44,15 +41,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
 
     constructor(private _monsterTemplateService: MonsterTemplateService
         , private _locationService: LocationService
-        , private _nhbkDialogService: NhbkDialogService
-        , private _itemTemplateService: ItemTemplateService) {
-    }
-
-    // FIXME: Replace with component that do it in item/
-    updateAutocompleteItem(filter: string): Observable<AutocompleteValue[]> {
-        return this._itemTemplateService.searchItem(filter).map(
-            list => list.map(e => new AutocompleteValue(e, e.name))
-        );
+        , private _nhbkDialogService: NhbkDialogService) {
     }
 
     addItemSimpleInventory(itemTemplate: ItemTemplate) {

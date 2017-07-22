@@ -172,13 +172,10 @@
         </div>
     </div>
     <div>
-        <div>
-            <autocomplete-input [placeholder]="'Ajouter un objet dans l\'inventaire'"
-                                [clearOnSelect]="true"
-                                (onSelect)="addItemSimpleInventory($event)"
-                                [(callback)]="autocompleteItemCallback">
-            </autocomplete-input>
-        </div>
+        <autocomplete-search-item-template [clearOnSelect]="true"
+                                           [placeholder]="'Ajouter un objet dans l\'inventaire'"
+                                           (onSelect)="addItemSimpleInventory($event)">
+        </autocomplete-search-item-template>
     </div>
     <md-card *ngIf="monster.simpleInventory && monster.simpleInventory.length">
         <md-card-subtitle>Inventaire</md-card-subtitle>
