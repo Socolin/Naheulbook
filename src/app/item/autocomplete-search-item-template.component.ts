@@ -32,9 +32,15 @@ export class AutocompleteSearchItemTemplateComponent {
             this._itemTemplateService.getCategoriesById(),
             this._itemTemplateService.searchItem(filter)
         ).map(
-            ([categoriesById, list]: [{[categoryId: number]: ItemCategory}, ItemTemplate[]]) => {
-                return list.map(e => new AutocompleteValue(e, e.name,
-                    categoriesById[e.category].type.name + ' - ' + categoriesById[e.category].name));
+            ([categoriesById, list]: [{ [categoryId: number]: ItemCategory }, ItemTemplate[]]) => {
+                return list.map(e => {
+                    let name = e.name;
+                    if (e.data.enchantment !== undefined) {
+                        name += ' (Ench. ' + e.data.enchantment + ')';
+                    }
+                    let category = categoriesById[e.category].type.name + ' - ' + categoriesById[e.category].name;
+                    return new AutocompleteValue(e, name, category, e.data.icon);
+                });
             }
         );
     }

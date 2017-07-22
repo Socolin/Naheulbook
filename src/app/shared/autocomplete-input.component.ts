@@ -4,11 +4,13 @@ export class AutocompleteValue {
     public value: any;
     public text: string;
     public secondaryText: string;
+    public icon: string;
 
-    constructor(value: any, text: string, secondaryText?: string) {
+    constructor(value: any, text: string, secondaryText?: string, icon?: any) {
         this.value = value;
         this.text = text;
         this.secondaryText = secondaryText;
+        this.icon = icon;
     }
 }
 

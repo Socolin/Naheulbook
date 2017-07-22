@@ -20,7 +20,8 @@
               (backdropClick)="matchingValues = null">
         <md-nav-list dense class="autocomplete-overlay">
             <ng-template ngFor let-item [ngForOf]="matchingValues" let-i="index">
-                <md-list-item (click)="selectValue(item)" [class.active]="preSelectedValueIndex === i">
+                <md-list-item (click)="selectValue(item)" [class.selected]="preSelectedValueIndex === i">
+                    <span *ngIf="item.icon" md-list-avatar><icon [size]="'40px'" [icon]="item.icon"></icon></span>
                     <span md-line>{{item.text}}</span>
                     <span md-line *ngIf="item.secondaryText" class="secondary-text">{{item.secondaryText}}</span>
                 </md-list-item>
