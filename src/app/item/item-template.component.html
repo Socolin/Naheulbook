@@ -1,6 +1,6 @@
 <md-card>
     <md-card-header>
-        <icon md-card-avatar [icon]="item.data.icon" [size]="'32px'"></icon>
+        <icon md-card-avatar [enchanted]="item.data.enchantment !== undefined" [icon]="item.data.icon" [size]="'32px'"></icon>
         <md-card-title>
             {{item.name}}
             <span *ngIf="item.data.enchantment !== undefined">(Ench. {{item.data.enchantment}})</span>
