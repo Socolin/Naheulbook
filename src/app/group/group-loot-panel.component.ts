@@ -45,6 +45,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
             }
         );
         this.newLootName = null;
+        this.closeAddLootDialog();
     }
 
     deleteLoot(loot: Loot) {
