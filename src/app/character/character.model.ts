@@ -1002,7 +1002,7 @@ export class Character extends WsRegistrable {
         }
 
         if (item.template.data.quantifiable) {
-            this.notify('addItem', 'Ajout de l\'objet: ' + item.data.quantity + item.data.name);
+            this.notify('addItem', 'Ajout de l\'objet: ' + item.data.quantity + ' ' + item.data.name);
         }
         else {
             this.notify('addItem', 'Ajout de l\'objet: ' + item.data.name);

@@ -109,6 +109,18 @@
             </md-input-container>
         </md-card-content>
     </ng-template>
+    <ng-template [ngSwitchCase]="'enchantment'">
+        <md-card-subtitle>Enchanté</md-card-subtitle>
+        <md-card-content>
+            Cet objet est enchanté
+            <md-input-container>
+                <input mdInput
+                       class="input-center-align"
+                       placeholder="Details"
+                       [(ngModel)]="itemTemplate.data.enchantment"/>
+            </md-input-container>
+        </md-card-content>
+    </ng-template>
     <ng-template [ngSwitchCase]="'gem'">
         <md-card-subtitle>Gemmes</md-card-subtitle>
         <md-card-content>

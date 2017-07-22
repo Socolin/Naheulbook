@@ -292,6 +292,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
         if (this.queryParamsSub) {
             this.queryParamsSub.unsubscribe();
         }
+        this.closeStickyContainer();
     }
 }
 

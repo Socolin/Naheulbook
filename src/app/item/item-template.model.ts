@@ -1,5 +1,6 @@
 import {ItemStatModifier} from '../shared/stat-modifier.model';
 import {Skill} from '../skill';
+import {Job} from '../job';
 import {IconDescription} from '../shared/icon.model';
 import {IDurable} from '../date/durable.model';
 
@@ -54,6 +55,7 @@ export class ItemTemplateData {
     space: string;
     useUG: boolean;
     lifetime: IDurable;
+    enchantment?: string;
     icon: IconDescription;
 }
 
@@ -75,10 +77,11 @@ export class ItemTemplateJsonData {
     category: number;
     data: ItemTemplateData;
     modifiers: ItemStatModifier[] = [];
-    skills: Skill[];
-    unskills: Skill[];
+    skills: {id: number}[];
+    unskills: {id: number}[];
     slots: ItemSlot[];
-    requirements: any[];
+    restrictJobs: {id: number}[];
+    requirements: ItemRequirement[];
     skillModifiers: ItemSkillModifierJsonData[];
 }
 
@@ -101,6 +104,7 @@ export class ItemTemplate {
     skills: Skill[];
     unskills: Skill[];
     slots: ItemSlot[];
+    restrictJobs: Job[];
     requirements: any[];
     skillModifiers: ItemSkillModifier[];
 

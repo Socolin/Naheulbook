@@ -62,8 +62,8 @@
                 <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
                 <ng-template [ngIf]="!readonly">
                     <div style="margin-left: 20px">
-                        <span *ngIf="character.computedData.stats['PI'] > 0" class="text-info">+{{character.computedData.stats['PI']}} (Bonus personnage)</span>
-                        <span *ngIf="character.computedData.stats['PI'] < 0" class="text-warning">{{character.computedData.stats['PI']}} (Malus personnage)</span>
+                        <span *ngIf="character.computedData.stats['PI'] > 0" class="valid-level">+{{character.computedData.stats['PI']}} (Bonus personnage)</span>
+                        <span *ngIf="character.computedData.stats['PI'] < 0" class="invalid-level">{{character.computedData.stats['PI']}} (Malus personnage)</span>
                     </div>
                 </ng-template>
             </div>
@@ -283,16 +283,16 @@
                 <span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
                 <span *ngIf="requirement.max">Max {{requirement.stat}}: {{requirement.max}}</span>
                 <span *ngIf="requirement.min && character.computedData.stats[requirement.stat] < requirement.min"
-                      class="text-danger">Non utilisable</span>
+                      class="invalid-level">Non utilisable</span>
                 <span *ngIf="requirement.max && character.computedData.stats[requirement.stat] > requirement.max"
-                      class="text-danger">Non utilisable</span>
+                      class="invalid-level">Non utilisable</span>
             </div>
         </div>
 
         <div *ngIf="item.data.lifetime?.durationType === 'time'">
             <span class="game-icon game-icon-stopwatch"></span>Temps de conservation:
             <span *ngIf="item.data.lifetime.timeDuration > 0">{{item.data.lifetime.timeDuration | nhbkDuration}}</span>
-            <span *ngIf="item.data.lifetime.timeDuration === 0" class="text-danger">expiré</span>
+            <span *ngIf="item.data.lifetime.timeDuration === 0" class="invalid-level">expiré</span>
         </div>
 
         <ng-template [ngIf]="!readonly">

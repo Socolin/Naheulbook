@@ -54,6 +54,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         {name: 'currency',     displayName: 'Monnaie'},
         {name: 'damage',       displayName: 'Dégât'},
         {name: 'diceDrop',     displayName: 'Dé'},
+        {name: 'enchantment',  displayName: 'Enchantement'},
         {name: 'gem',          displayName: 'Gemme'},
         {name: 'level',        displayName: 'Niveau requis'},
         {name: 'lifetime',     displayName: 'Temps de conservation'},
@@ -128,14 +129,6 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         return Observable.of(filtered);
     }
 
-    searchEffect(filterName) {
-        this._effectService.searchEffect(filterName).subscribe(
-            effects => {
-                this.filteredEffects = effects;
-            }
-        );
-    }
-
     automaticNotIdentifiedName() {
         [this.itemTemplate.data.notIdentifiedName] = this.itemTemplate.name.split(' ');
     }
@@ -188,6 +181,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 break;
             case 'diceDrop':
                 this.itemTemplate.data.diceDrop = 1;
+                break;
+            case 'enchantment':
+                this.itemTemplate.data.enchantment = '';
                 break;
             case 'gem':
                 this.itemTemplate.data.useUG = true;
@@ -252,77 +248,80 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
         switch (moduleName) {
             case 'charge':
-                this.itemTemplate.data.charge = null;
+                this.itemTemplate.data.charge = undefined;
                 break;
             case 'collect':
-                this.itemTemplate.data.availableLocation = null;
+                this.itemTemplate.data.availableLocation = undefined;
                 break;
             case 'container':
-                this.itemTemplate.data.container = null;
+                this.itemTemplate.data.container = undefined;
                 break;
             case 'currency':
-                this.itemTemplate.data.isCurrency = null;
+                this.itemTemplate.data.isCurrency = undefined;
                 break;
             case 'damage':
-                this.itemTemplate.data.damageDice = null;
-                this.itemTemplate.data.bonusDamage = null;
-                this.itemTemplate.data.damageType = null;
+                this.itemTemplate.data.damageDice = undefined;
+                this.itemTemplate.data.bonusDamage = undefined;
+                this.itemTemplate.data.damageType = undefined;
                 break;
             case 'diceDrop':
-                this.itemTemplate.data.diceDrop = null;
+                this.itemTemplate.data.diceDrop = undefined;
+                break;
+            case 'enchantment':
+                this.itemTemplate.data.enchantment = undefined;
                 break;
             case 'gem':
-                this.itemTemplate.data.useUG = null;
+                this.itemTemplate.data.useUG = undefined;
                 break;
             case 'level':
-                this.itemTemplate.data.requireLevel = null;
+                this.itemTemplate.data.requireLevel = undefined;
                 break;
             case 'lifetime':
-                this.itemTemplate.data.lifetime = null;
+                this.itemTemplate.data.lifetime = undefined;
                 break;
             case 'modifiers':
-                this.itemTemplate.modifiers = null;
+                this.itemTemplate.modifiers = undefined;
                 break;
             case 'prereq':
-                this.itemTemplate.requirements = null;
+                this.itemTemplate.requirements = undefined;
                 break;
             case 'protection':
-                this.itemTemplate.data.protection = null;
-                this.itemTemplate.data.protectionAgainstMagic = null;
-                this.itemTemplate.data.magicProtection = null;
-                this.itemTemplate.data.protectionAgainstType = null;
+                this.itemTemplate.data.protection = undefined;
+                this.itemTemplate.data.protectionAgainstMagic = undefined;
+                this.itemTemplate.data.magicProtection = undefined;
+                this.itemTemplate.data.protectionAgainstType = undefined;
                 break;
             case 'quantifiable':
-                this.itemTemplate.data.quantifiable = null;
+                this.itemTemplate.data.quantifiable = undefined;
                 break;
             case 'relic':
-                this.itemTemplate.data.relic = null;
+                this.itemTemplate.data.relic = undefined;
                 break;
             case 'rupture':
-                this.itemTemplate.data.rupture = null;
+                this.itemTemplate.data.rupture = undefined;
                 break;
             case 'sex':
-                this.itemTemplate.data.sex = null;
+                this.itemTemplate.data.sex = undefined;
                 break;
             case 'skill':
-                this.itemTemplate.skills = null;
-                this.itemTemplate.unskills = null;
-                this.itemTemplate.skillModifiers = null;
+                this.itemTemplate.skills = undefined;
+                this.itemTemplate.unskills = undefined;
+                this.itemTemplate.skillModifiers = undefined;
                 break;
             case 'skillBook':
-                this.itemTemplate.data.skillBook = null;
+                this.itemTemplate.data.skillBook = undefined;
                 break;
             case 'slots':
-                this.itemTemplate.slots = null;
+                this.itemTemplate.slots = undefined;
                 break;
             case 'space':
-                this.itemTemplate.data.space = null;
+                this.itemTemplate.data.space = undefined;
                 break;
             case 'throwable':
-                this.itemTemplate.data.throwable = null;
+                this.itemTemplate.data.throwable = undefined;
                 break;
             case 'weight':
-                this.itemTemplate.data.weight = null;
+                this.itemTemplate.data.weight = undefined;
                 break;
         }
 
@@ -349,6 +348,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
         if (this.itemTemplate.data.diceDrop) {
             modules.push('diceDrop');
+        }
+        if (!isNullOrUndefined(this.itemTemplate.data.enchantment)) {
+            modules.push('enchantment');
         }
         if (this.itemTemplate.data.useUG) {
             modules.push('gem');

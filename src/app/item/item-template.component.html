@@ -3,8 +3,10 @@
         <icon md-card-avatar [icon]="item.data.icon" [size]="'32px'"></icon>
         <md-card-title>
             {{item.name}}
+            <span *ngIf="item.data.enchantment !== undefined">(Ench. {{item.data.enchantment}})</span>
         </md-card-title>
         <md-card-subtitle>
+            <span *ngIf="item.data.enchantment !== undefined">Enchanté </span>
             <span *ngIf="item.data.requireLevel">Niveau {{item.data.requireLevel}} </span>
             <span *ngIf="item.data.relic">Relique </span>
             <span *ngIf="item.data.sex == 'h'">Homme uniq. </span>
