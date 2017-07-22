@@ -122,6 +122,10 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         );
     }
 
+    trackById(index, element) {
+        return element.id;
+    }
+
     addItem() {
         let itemData = new ItemData();
         itemData['name'] = this.itemAddCustomName;

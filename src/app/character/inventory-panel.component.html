@@ -53,7 +53,7 @@
         <div *ngIf="selectedInventoryTab === 'all'" class="inventory-content">
             <div *ngIf="!iconMode">
                 <div class="items-list">
-                    <ng-template ngFor let-item [ngForOf]="character.items">
+                    <ng-template ngFor let-item [ngForOf]="character.items" [ngForTrackBy]="trackById">
                         <div class="items-list-element" *ngIf="isItemFilteredByName(item)">
                             <div class="item-line"
                                  cdk-overlay-origin
@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div *ngIf="iconMode">
-                <ng-template ngFor let-item [ngForOf]="character.items">
+                <ng-template ngFor let-item [ngForOf]="character.items" [ngForTrackBy]="trackById">
                     <div class="item-icon"
                          cdk-overlay-origin
                          #itemLine="cdkOverlayOrigin"
@@ -100,7 +100,7 @@
         <div *ngIf="selectedInventoryTab === 'currency'" class="inventory-content">
             <div *ngIf="!iconMode">
                 <div class="items-list">
-                    <ng-template ngFor let-item [ngForOf]="character.computedData.currencyItems">
+                    <ng-template ngFor let-item [ngForOf]="character.computedData.currencyItems" [ngForTrackBy]="trackById">
                         <div class="items-list-element">
                             <div class="item-line"
                                  cdk-overlay-origin
@@ -125,7 +125,7 @@
                 </div>
             </div>
             <div *ngIf="iconMode">
-                <ng-template ngFor let-item [ngForOf]="character.computedData.currencyItems">
+                <ng-template ngFor let-item [ngForOf]="character.computedData.currencyItems" [ngForTrackBy]="trackById">
                     <div class="item-icon"
                          cdk-overlay-origin
                          #itemLine="cdkOverlayOrigin"
@@ -155,7 +155,7 @@
             <div *ngFor="let slot of character.computedData.itemSlots">
                 {{slot.name}}:
                 <div class="items-list equiped-items">
-                    <ng-template ngFor let-item [ngForOf]="character.computedData.itemsBySlots[slot.id]" let-i="index" let-last="last">
+                    <ng-template ngFor let-item [ngForOf]="character.computedData.itemsBySlots[slot.id]" let-i="index" let-last="last" [ngForTrackBy]="trackById">
                         <div class="items-list-element">
                             <div class="item-line"
                                  cdk-overlay-origin

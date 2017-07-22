@@ -1,5 +1,5 @@
 <ng-template [ngIf]="iconMode">
-    <ng-template ngFor let-item [ngForOf]="itemsContained" let-indexItem="index" let-lastItem="last">
+    <ng-template ngFor let-item [ngForOf]="itemsContained" let-lastItem="last">
         <div class="item-icon"
              cdk-overlay-origin
              #itemLine="cdkOverlayOrigin"
@@ -15,7 +15,7 @@
         </div>
     </ng-template>
     <md-divider *ngIf="itemsContained.length"></md-divider>
-    <ng-template ngFor let-item [ngForOf]="itemsContainer" let-indexItem="index" let-lastItem="last">
+    <ng-template ngFor let-item [ngForOf]="itemsContainer" let-lastItem="last">
         <div class="item-bag-line"
              (click)="selectItem(item)"
              [class.selected]="selectedItem && selectedItem.id === item.id">
@@ -43,7 +43,7 @@
     </ng-template>
 </ng-template>
 <ng-template [ngIf]="!iconMode">
-    <ng-template ngFor let-item [ngForOf]="items" let-indexItem="index" let-lastItem="last">
+    <ng-template ngFor let-item [ngForOf]="items" let-lastItem="last">
         <div class="item-bag-line">
             <ng-template ngFor let-l [ngForOf]="ends" let-i="index" let-last="last">
                 <span style="display: flex">
