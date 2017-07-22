@@ -31,7 +31,7 @@
         <button md-icon-button [mdMenuTriggerFor]="itemMenu" *ngIf="!readonly">
             <md-icon>more_vert</md-icon>
         </button>
-        <md-menu x-position="before" #itemMenu="mdMenu">
+        <md-menu xPosition="before" #itemMenu="mdMenu">
             <button md-menu-item (click)="editItem()">Editer</button>
             <button md-menu-item (click)="openModifierDialog()">Ajouter un modificateur</button>
             <button md-menu-item (click)="openLifetimeDialog()">Editer temps de conservation</button>
