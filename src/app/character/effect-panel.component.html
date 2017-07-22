@@ -8,7 +8,7 @@
                 <ng-template ngFor let-modifier [ngForOf]="character.computedData.modifiers">
                     <div *ngIf="!modifier.permanent"
                          (click)="selectModifier(modifier)"
-                             class="effect-element"
+                         class="effect-element"
                          [class.selected]="selectedModifier === modifier">
                         <div class="modifier-toggle">
                             <md-checkbox color="primary"

@@ -32,6 +32,7 @@ md-card {
     .inventory-content {
         .items-list {
             .items-list-element {
+                cursor: pointer;
                 border-bottom-width: 1px;
                 border-bottom-style: solid;
                 display: flex;
