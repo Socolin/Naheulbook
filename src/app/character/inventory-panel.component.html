@@ -201,11 +201,8 @@
     <md-card class="add-item-dialog">
         <md-card-title>Ajouter un objet</md-card-title>
         <md-card-content>
-            <autocomplete-input [value]="addItemSearch"
-                                [placeholder]="'Rechercher'"
-                                (onSelect)="selectAddItem($event)"
-                                [(callback)]="autocompleteAddItemListCallback">
-            </autocomplete-input>
+            <autocomplete-search-item-template [clearOnSelect]=true (onSelect)="selectAddItem($event)">
+            </autocomplete-search-item-template>
 
             <div *ngIf="selectedAddItem">
                 <md-input-container style="width: 100%">
