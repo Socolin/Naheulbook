@@ -1,16 +1,19 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
+import {IconDescription} from './icon.model';
 
 export class AutocompleteValue {
     public value: any;
     public text: string;
     public secondaryText: string;
-    public icon: string;
+    public icon: IconDescription;
+    public mdIcon: string;
 
-    constructor(value: any, text: string, secondaryText?: string, icon?: any) {
+    constructor(value: any, text: string, secondaryText?: string, icon?: IconDescription, mdIcon?: string) {
         this.value = value;
         this.text = text;
         this.secondaryText = secondaryText;
         this.icon = icon;
+        this.mdIcon = mdIcon;
     }
 }
 

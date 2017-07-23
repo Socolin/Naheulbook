@@ -22,7 +22,9 @@
             <ng-template ngFor let-item [ngForOf]="matchingValues" let-i="index">
                 <md-list-item (click)="selectValue(item)" [class.selected]="preSelectedValueIndex === i">
                     <span *ngIf="item.icon" md-list-avatar><icon [size]="'40px'" [icon]="item.icon"></icon></span>
-                    <span md-line>{{item.text}}</span>
+                    <span md-line style="display: flex; align-items: center">
+                        <md-icon *ngIf="item.mdIcon">{{item.mdIcon}}</md-icon>{{item.text}}
+                    </span>
                     <span md-line *ngIf="item.secondaryText" class="secondary-text">{{item.secondaryText}}</span>
                 </md-list-item>
             </ng-template>
