@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         return this._loginService.isLogged().map((logged: boolean) => {
             if (!logged) {
                 let redirect = route.data['authGuardRedirect'];
-                this._router.navigate([redirect]);
+                this._router.navigateByUrl(redirect);
             }
             return logged;
         });

@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
     ngOnInit() {
         this._route.params.subscribe(params => {
             this.redirectPage = params['redirect'];
+            this.redirectPage = this.redirectPage.replace('@', '/');
         });
         this._loginService.loggedUser.subscribe(
             user => {

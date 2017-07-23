@@ -1,4 +1,7 @@
 import {Routes} from '@angular/router';
+
+import {AuthGuard} from '../user/auth-guard';
+
 import {SkillListComponent} from '../skill/skill-list.component';
 import {OriginListComponent} from '../origin/origin-list.component';
 import {JobListComponent} from '../job/job-list.component';
@@ -73,6 +76,10 @@ export const routes: Routes = [
             },
             {
                 path: 'create-item',
+                canActivate: [AuthGuard],
+                data: {
+                    authGuardRedirect: '/login/database@create-item'
+                },
                 component: CreateItemTemplateComponent,
             }
         ]
