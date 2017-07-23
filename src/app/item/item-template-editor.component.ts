@@ -8,6 +8,7 @@ import {isNullOrUndefined} from 'util';
 import {
     removeDiacritics, NhbkDialogService, AutocompleteValue, AutocompleteInputComponent
 } from '../shared';
+import {User, LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
@@ -49,6 +50,8 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     public addModuleDialog: Portal<any>;
     public addModuleOverlayRef: OverlayRef;
 
+    public currentUser: User;
+
     private modulesDef: any[] = [
         {name: 'charge',       displayName: 'Charges/Utilisations'},
         {name: 'collect',      displayName: 'Possibilités de récolte'},
@@ -79,6 +82,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         , private _originService: OriginService
         , private _nhbkDialogService: NhbkDialogService
         , private _jobService: JobService
+        , public _loginService: LoginService
         , private _skillService: SkillService) {
         this.itemTemplate = new ItemTemplate();
         this.form = {
@@ -146,6 +150,17 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                     }
                 }
             }
+        }
+    }
+
+    changeSource(source: 'official' | 'community' | 'private') {
+        this.itemTemplate.source = source;
+        if (source === 'official') {
+            this.itemTemplate.sourceUser = null;
+            this.itemTemplate.sourceUserId = null;
+        } else {
+            this.itemTemplate.sourceUser = this._loginService.currentLoggedUser.displayName;
+            this.itemTemplate.sourceUserId = this._loginService.currentLoggedUser.id;
         }
     }
 

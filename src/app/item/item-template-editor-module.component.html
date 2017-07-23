@@ -135,7 +135,9 @@
         <md-card-subtitle>Niveau requis</md-card-subtitle>
         <md-card-content>
             Cet objet est utilisable a partir du niveaux:
-            <input placeholder="Niveau requis" [(ngModel)]="itemTemplate.data.requireLevel" />
+            <md-input-container>
+                <input mdInput placeholder="Niveau requis" [(ngModel)]="itemTemplate.data.requireLevel" />
+            </md-input-container>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'modifiers'">

@@ -16,6 +16,11 @@
         </md-input-container>
         <button md-icon-button (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"><md-icon>content_copy</md-icon></button>
         <button md-icon-button (click)="automaticNotIdentifiedName()"><md-icon>refresh</md-icon></button>
+        <md-select placeholder="Source" [(ngModel)]="itemTemplate.source" (change)="changeSource($event.value)" required>
+            <md-option value="official" *ngIf="_loginService.currentLoggedUser.admin">Officiel</md-option>
+            <md-option value="community">Communautaire</md-option>
+            <md-option value="private">Privé</md-option>
+        </md-select>
     </div>
     <div style="display: flex; flex-direction: row">
         <md-input-container>
@@ -42,8 +47,8 @@
 
 <md-card>
     <md-card-subtitle>Section</md-card-subtitle>
-    <md-card-content class="section-list" *ngIf="sections">
-        <md-select [(ngModel)]="selectedSection" placeholder="Section">
+    <md-card-content class="section-list">
+        <md-select [(ngModel)]="selectedSection" placeholder="Section" *ngIf="sections" style="width: 50%">
             <md-option *ngFor="let section of sections" [value]="section">
                 {{section.name}}
             </md-option>

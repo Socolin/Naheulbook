@@ -10,6 +10,9 @@
 
     <autocomplete-search-item-template [clearOnSelect]=true (onSelect)="selectItemTemplate($event)">
     </autocomplete-search-item-template>
+    <md-card-actions align="end">
+        <button color="primary" md-button (click)="createItem()">CREER UN OBJET</button>
+    </md-card-actions>
 </md-card>
 
 <md-card *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
@@ -65,7 +68,7 @@
                            *ngIf="isVisible(item)"
                            [originsName]="originsName"
                            [jobsName]="jobsName"
-                           [editable]="editable && !inTab"
+                           [editable]="isEditable(item) && !inTab"
                            [actions]="inTab ? ['addItem'] : []"
                            (onAction)="emitAction($event.action, $event.data)"
                            [item]="item">

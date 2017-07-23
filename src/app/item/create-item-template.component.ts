@@ -1,5 +1,8 @@
 import {Component} from '@angular/core';
 
+import {NotificationsService} from '../notifications';
+import {LoginService} from '../user';
+
 import {
     ItemTemplate,
     ItemTemplateService
@@ -13,10 +16,16 @@ export class CreateItemTemplateComponent {
     public item: ItemTemplate = new ItemTemplate();
     public lastItem: ItemTemplate;
     public saving = false;
-    public errorMessage: string;
-    public successMessage: string;
 
-    constructor(private _itemTemplateService: ItemTemplateService) {
+    constructor(private _itemTemplateService: ItemTemplateService,
+                private _notifications: NotificationsService,
+                private _loginService: LoginService) {
+        if (this._loginService.currentLoggedUser && this._loginService.currentLoggedUser.admin) {
+            this.item.source = 'official';
+        }
+        else {
+            this.item.source = 'community';
+        }
     }
 
     create() {
@@ -28,13 +37,12 @@ export class CreateItemTemplateComponent {
         }
 
         this.saving = true;
-        this.errorMessage = null;
-        this.successMessage = null;
         this._itemTemplateService.create(this.item).subscribe(
             item => {
-                this.successMessage = 'Objet créé: ' + item.name;
+                this._notifications.info('Objet', 'Objet créé: ' + item.name);
                 this.lastItem = item;
                 this.item = new ItemTemplate();
+                this.item.source = this.lastItem.source;
                 this.item.data.price = this.lastItem.data.price;
                 if (this.lastItem.data.diceDrop) {
                     this.item.data.diceDrop = this.lastItem.data.diceDrop + 1;

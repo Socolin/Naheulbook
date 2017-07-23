@@ -50,7 +50,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
     public originsName: {[originId: number]: string};
     public jobsName: {[jobId: number]: string};
 
-    public editable: boolean;
     public queryParamsSub: Subscription;
 
     @ViewChild('stickyContainer')
@@ -270,6 +269,27 @@ export class ItemListComponent implements OnInit, OnDestroy {
         this.filter.category = itemCategory;
     }
 
+    createItem() {
+        this._router.navigateByUrl('/database/create-item');
+    }
+
+    isEditable(itemTemplate: ItemTemplate): boolean {
+        if (this.inTab) {
+            return false;
+        }
+        if (!this._loginService.currentLoggedUser) {
+            return false;
+        }
+        if (this._loginService.currentLoggedUser.admin) {
+            return true;
+        }
+        if (itemTemplate.source !== 'official'
+            && this._loginService.currentLoggedUser.id === itemTemplate.sourceUserId) {
+            return true;
+        }
+        return false;
+    }
+
     ngOnInit() {
         Observable.forkJoin(
             this._jobService.getJobsNamesById(),
@@ -286,11 +306,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
                 this.selectSectionById(+params['id']);
             });
         });
-
-        this._loginService.loggedUser.subscribe(
-            user => {
-                this.editable = user && user.admin;
-            });
     }
 
     ngOnDestroy() {

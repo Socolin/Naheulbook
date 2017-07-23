@@ -28,7 +28,7 @@ export class ItemTemplateService extends JsonService {
         if (!this.itemSections) {
             this.itemSections = new ReplaySubject<ItemSection[]>(1);
 
-            this._http.get('/api/item/categorylist')
+            this._http.get('/api/itemtemplate/categorylist')
                 .map(res => res.json())
                 .subscribe(
                     categoryList => {
@@ -63,7 +63,7 @@ export class ItemTemplateService extends JsonService {
 
             this.itemBySection[section.id] = new ReplaySubject<ItemTemplate[]>(1);
             Observable.forkJoin(
-                this.postJson('/api/item/list', {typeId: section.id}).map(res => res.json()),
+                this.postJson('/api/itemtemplate/list', {typeId: section.id}).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
                 ([itemTemplateDatas, skillsById]: [ItemTemplateJsonData[], {[skillId: number]: Skill}]) => {
@@ -83,14 +83,14 @@ export class ItemTemplateService extends JsonService {
     }
 
     create(item): Observable<ItemTemplate> {
-        return this.postJson('/api/item/create', {item: item})
+        return this.postJson('/api/itemtemplate/create', {item: item})
             .map(res => res.json());
     }
 
     getItem(id: number): Observable<ItemTemplate> {
         return Observable.create((function (observer) {
             Observable.forkJoin(
-                this.postJson('/api/item/detail', {id: id}).map(res => res.json()),
+                this.postJson('/api/itemtemplate/detail', {id: id}).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
                 ([itemTemplateData, skillsById]: [ItemTemplateJsonData, {[skillId: number]: Skill}]) => {
@@ -111,7 +111,7 @@ export class ItemTemplateService extends JsonService {
         }
 
         return Observable.forkJoin(
-            this.postJson('/api/item/search', {filter: filter}).map(res => res.json()),
+            this.postJson('/api/itemtemplate/search', {filter: filter}).map(res => res.json()),
             this._skillService.getSkillsById()
         ).map(([itemTemplateDatas, skillsById]: [ItemTemplateJsonData[], {[skillId: number]: Skill}]) => {
             return ItemTemplate.itemTemplatesFromJson(itemTemplateDatas, skillsById);
@@ -122,7 +122,7 @@ export class ItemTemplateService extends JsonService {
         if (!this.slots) {
             this.slots = new ReplaySubject<ItemSlot[]>(1);
 
-            this._http.get('/api/item/slotList')
+            this._http.get('/api/itemtemplate/slotList')
                 .map(res => res.json())
                 .subscribe(
                     categoryList => {
@@ -138,7 +138,7 @@ export class ItemTemplateService extends JsonService {
     }
 
     editItemTemplate(item): Observable<ItemTemplate> {
-        return this.postJson('/api/item/edit', {item: item})
+        return this.postJson('/api/itemtemplate/edit', {item: item})
             .map(res => res.json());
     }
 
@@ -169,7 +169,7 @@ export class ItemTemplateService extends JsonService {
     }
 
     getGem(type: string, dice: number): Observable<ItemTemplate> {
-        return this.postJson('/api/item/getGem', {
+        return this.postJson('/api/itemtemplate/getGem', {
             type: type,
             dice: dice
         }).map(res => res.json());

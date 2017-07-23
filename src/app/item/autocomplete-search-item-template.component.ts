@@ -40,7 +40,14 @@ export class AutocompleteSearchItemTemplateComponent {
                         name += ' (Ench. ' + e.data.enchantment + ')';
                     }
                     let category = categoriesById[e.category].type.name + ' - ' + categoriesById[e.category].name;
-                    return new AutocompleteValue(e, name, category, e.data.icon);
+                    let mdIcon;
+                    if (e.source === 'community') {
+                        mdIcon = 'group';
+                    }
+                    else if (e.source === 'private') {
+                        mdIcon = 'lock';
+                    }
+                    return new AutocompleteValue(e, name, category, e.data.icon, mdIcon);
                 });
             }
         );

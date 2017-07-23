@@ -100,6 +100,9 @@ export class ItemTemplate {
     name: string;
     category: number;
     data: ItemTemplateData = new ItemTemplateData();
+    source: 'official'|'community'|'private';
+    sourceUser: string;
+    sourceUserId: number;
     modifiers: ItemStatModifier[] = [];
     skills: Skill[];
     unskills: Skill[];
