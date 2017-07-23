@@ -6,10 +6,11 @@
 $ve-button-width: 70px;
 $ve-button-height: 45px;
 $ve-summary-height: 25px;
+$ve-valid-button-width: 64px;
 
 .ve-container {
     position: absolute;
-    width: 244px;
+    width: $ve-valid-button-width + $ve-button-width * 3;
     height: 221px;
     -webkit-box-shadow: 3px 4px 5px -1px rgba(0,0,0,0.6);
     -moz-box-shadow: 3px 4px 5px -1px rgba(0,0,0,0.6);
@@ -111,7 +112,7 @@ $ve-summary-height: 25px;
             bottom: 0;
 
             button {
-                width: 64px;
+                width: $ve-valid-button-width;
                 height: 221px;
                 border: 0;
             }
