@@ -1,17 +1,28 @@
 import {NgModule}      from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {
-    AutocompleteInputComponent, ModifierPipe, ModifiersEditorComponent, PlusMinusPipe,
-    StatRequirementsEditorComponent, TextareaAutosizeDirective, TextFormatterPipe, ValueEditorComponent
-} from './';
-import {IconSelectorComponent} from './icon-selector.component';
-import {IconService} from './icon.service';
-import {IconComponent} from './icon.component';
-import {MiscService} from './misc.service';
+import {RouterModule} from '@angular/router';
 import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {NhbkDialogService} from './nhbk-dialog.service';
+
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+
+import {
+    AutocompleteInputComponent,
+    CommonNavComponent,
+    IconComponent,
+    IconSelectorComponent,
+    IconService,
+    MiscService,
+    ModifierPipe,
+    ModifiersEditorComponent,
+    NhbkDialogService,
+    PlusMinusPipe,
+    StatRequirementsEditorComponent,
+    TextareaAutosizeDirective,
+    TextFormatterPipe,
+    ValueEditorComponent,
+} from './';
+
 
 @NgModule({
     imports: [
@@ -19,9 +30,13 @@ import {NhbkDialogService} from './nhbk-dialog.service';
         FormsModule,
         MaterialModule,
         FlexLayoutModule,
+        RouterModule,
     ],
     declarations: [
         AutocompleteInputComponent,
+        CommonNavComponent,
+        IconComponent,
+        IconSelectorComponent,
         ModifierPipe,
         ModifiersEditorComponent,
         PlusMinusPipe,
@@ -29,11 +44,12 @@ import {NhbkDialogService} from './nhbk-dialog.service';
         TextareaAutosizeDirective,
         TextFormatterPipe,
         ValueEditorComponent,
-        IconSelectorComponent,
-        IconComponent,
     ],
     exports: [
         AutocompleteInputComponent,
+        CommonNavComponent,
+        IconComponent,
+        IconSelectorComponent,
         ModifierPipe,
         ModifiersEditorComponent,
         PlusMinusPipe,
@@ -41,8 +57,6 @@ import {NhbkDialogService} from './nhbk-dialog.service';
         TextareaAutosizeDirective,
         TextFormatterPipe,
         ValueEditorComponent,
-        IconSelectorComponent,
-        IconComponent,
     ],
     providers: [
         IconService,

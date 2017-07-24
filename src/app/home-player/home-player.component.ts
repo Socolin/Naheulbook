@@ -17,7 +17,6 @@ export class HomePlayerComponent implements OnInit {
     public start: MdSidenav;
 
     constructor(private _characterService: CharacterService
-        , private _themeService: ThemeService
         , public _router: Router) {
         this._router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
@@ -25,10 +24,6 @@ export class HomePlayerComponent implements OnInit {
             }
         })
     };
-
-    changeTheme(theme: string) {
-        this._themeService.setTheme(theme);
-    }
 
     ngOnInit() {
         this._characterService.loadList().subscribe(

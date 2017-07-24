@@ -34,18 +34,41 @@ $nhbk-theme: mat-light-theme($nhbk-primary, $nhbk-accent, $nhbk-warn);
 
 // Define an alternate dark theme.
 
-$dark-primary: mat-palette($mat-blue-grey);
-$dark-accent:  mat-palette($mat-amber, A200, A100, A400);
-$dark-warn:    mat-palette($mat-deep-orange);
+@mixin add-theme($isDark, $primary, $accent, $warn, $name) {
+    $theme-primary: mat-palette($primary);
+    $theme-accent:  mat-palette($accent, A200, A100, A400);
+    $theme-warn:    mat-palette($warn);
 
-$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+    @if ($isDark) {
+        $dark-theme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
-.nhbk-dark-theme {
-    @include angular-material-theme($dark-theme);
-    @include global-theme($dark-theme);
-    @include value-selector-theme($dark-theme);
-    @include character-theme($dark-theme);
-    @include usefull-data-theme($dark-theme);
-    @include item-theme($dark-theme);
-    @include group-theme($dark-theme);
+        .#{$name} {
+            @include angular-material-theme($dark-theme);
+            @include global-theme($dark-theme);
+            @include value-selector-theme($dark-theme);
+            @include character-theme($dark-theme);
+            @include usefull-data-theme($dark-theme);
+            @include item-theme($dark-theme);
+            @include group-theme($dark-theme);
+        }
+    }
+    @else {
+
+        $light-theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
+
+        .#{$name} {
+            @include angular-material-theme($light-theme);
+            @include global-theme($light-theme);
+            @include value-selector-theme($light-theme);
+            @include character-theme($light-theme);
+            @include usefull-data-theme($light-theme);
+            @include item-theme($light-theme);
+            @include group-theme($light-theme);
+        }
+    }
 }
+
+@include add-theme(true, $mat-blue-grey, $mat-amber, $mat-deep-orange, 'nhbk-dark-theme');
+@include add-theme(true, $mat-green, $mat-teal, $mat-deep-orange, 'nhbk-dark2-theme');
+
+@include add-theme(false, $mat-green, $mat-orange, $mat-deep-orange, 'nhbk-light2-theme');

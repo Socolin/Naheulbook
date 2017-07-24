@@ -2,6 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
 
 import {MdSidenav} from '@angular/material';
+import {LoginService} from '../user';
+import {ThemeService} from '../theme.service';
 
 @Component({
     templateUrl: './home-database.component.html',

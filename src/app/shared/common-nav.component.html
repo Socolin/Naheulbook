@@ -1,0 +1,29 @@
+<h4>Autre</h4>
+<md-nav-list>
+    <a md-list-item (click)="openThemeSelector()">Theme</a>
+    <a md-list-item [routerLink]="['/credit']">Crédits</a>
+    <a md-list-item *ngIf="_loginService.currentLoggedUser" [routerLink]="['/profile']">Profile</a>
+    <a md-list-item [routerLink]="['/logout']">Déconnexion</a>
+</md-nav-list>
+
+
+<ng-template #themeSelectorDialog="cdkPortal" cdk-portal>
+    <md-card>
+        <md-card-header>
+            Choix du theme
+        </md-card-header>
+        <md-card-content style="display: flex; flex-direction: column">
+            <button md-raised-button color="primary" (click)="changeTheme('nhbk-dark-theme')">Sombre 1</button>
+            <button md-raised-button color="primary" (click)="changeTheme('nhbk-dark2-theme')">Sombre 2</button>
+            <button md-raised-button color="primary" (click)="changeTheme('nhbk-light-theme')">Clair 1</button>
+            <button md-raised-button color="primary" (click)="changeTheme('nhbk-light2-theme')">Clair 2</button>
+        </md-card-content>
+        <md-card-actions>
+            <button md-button
+                    color="primary"
+                    (click)="closeThemeSelector()">
+                FERMER
+            </button>
+        </md-card-actions>
+    </md-card>
+</ng-template>

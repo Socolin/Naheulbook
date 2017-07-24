@@ -61,24 +61,24 @@
             <md-card-content>
                 <span *ngFor="let modifier of effect.modifiers">{{modifier | modifier}} </span>
                 <span *ngIf="effect.duration" fxLayout="row" fxLayoutAlign="start center">
-            <span class="game-icon game-icon-clockwork font-20px"></span>
+            <md-icon>timelapse</md-icon>
             {{effect.duration}}
         </span>
                 <span *ngIf="effect.timeDuration" fxLayout="row" fxLayoutAlign="start center">
-            <span class="game-icon game-icon-clockwork font-20px"></span>
+            <md-icon>timelapse</md-icon>
             {{effect.timeDuration | nhbkDuration}}
         </span>
                 <span *ngIf="effect.combatCount" fxLayout="row" fxLayoutAlign="start center">
-            <span class="game-icon game-icon-clockwork font-20px"></span>
+            <md-icon>timelapse</md-icon>
             {{effect.combatCount}} combats
         </span>
                 <span *ngIf="effect.lapCount" fxLayout="row" fxLayoutAlign="start center">
-            <span class="game-icon game-icon-clockwork font-20px"></span>
+            <md-icon>timelapse</md-icon>
             {{effect.lapCount}} tours
         </span>
                 <span *ngIf="!effect.lapCount && !effect.combatCount && !effect.timeDuration && !effect.duration"
                       fxLayout="row" fxLayoutAlign="start center">
-            <span class="game-icon game-icon-clockwork font-20px"></span>
+            <md-icon>timelapse</md-icon>
             permanent
         </span>
             </md-card-content>
