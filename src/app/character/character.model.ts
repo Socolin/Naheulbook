@@ -14,7 +14,7 @@ import {WsRegistrable} from '../websocket/websocket.model';
 import {Loot} from '../loot/loot.model';
 import {TargetJsonData} from '../group/target.model';
 import {WebSocketService} from '../websocket/websocket.service';
-import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {ActiveStatsModifier, StatModifier} from '../shared/stat-modifier.model';
 import {Fighter} from '../group/group.model';
 
 export interface CharacterResume {
@@ -548,7 +548,7 @@ export class Character extends WsRegistrable {
                 for (let j = 0; j < speciality.modifiers.length; j++) {
                     let modifier = speciality.modifiers[j];
                     this.computedData.stats[modifier.stat] += modifier.value;
-                    detailData[modifier.stat] = modifier.value;
+                    detailData[modifier.stat] = formatModifierValue(modifier);
                 }
             }
             this.computedData.details.add('Specialite: ' + speciality.name, detailData);
@@ -570,21 +570,7 @@ export class Character extends WsRegistrable {
             let detailData = {};
             for (let j = 0; j < modifier.values.length; j++) {
                 let value = modifier.values[j];
-                if (value.type === 'ADD') {
-                    this.computedData.stats[value.stat] += value.value;
-                }
-                else if (value.type === 'SET') {
-                    this.computedData.stats[value.stat] = value.value;
-                }
-                else if (value.type === 'DIV') {
-                    this.computedData.stats[value.stat] /= value.value;
-                }
-                else if (value.type === 'MUL') {
-                    this.computedData.stats[value.stat] *= value.value;
-                }
-                else if (value.type === 'PERCENTAGE') {
-                    this.computedData.stats[value.stat] *= (value.value / 100);
-                }
+                StatModifier.applyInPlace(this.computedData.stats, value);
                 detailData[value.stat] = formatModifierValue(value);
             }
             this.computedData.details.add(modifier.name, detailData);
@@ -659,21 +645,7 @@ export class Character extends WsRegistrable {
                     let detailData = {};
                     for (let k = 0; k < modifier.values.length; k++) {
                         let mod = modifier.values[k];
-                        if (mod.type === 'ADD') {
-                            this.computedData.stats[mod.stat] += mod.value;
-                        }
-                        else if (mod.type === 'SET') {
-                            this.computedData.stats[mod.stat] = mod.value;
-                        }
-                        else if (mod.type === 'DIV') {
-                            this.computedData.stats[mod.stat] /= mod.value;
-                        }
-                        else if (mod.type === 'MUL') {
-                            this.computedData.stats[mod.stat] *= mod.value;
-                        }
-                        else if (mod.type === 'PERCENTAGE') {
-                            this.computedData.stats[mod.stat] *= (mod.value / 100);
-                        }
+                        StatModifier.applyInPlace(this.computedData.stats, mod);
                         detailData[mod.stat] = formatModifierValue(mod);
                     }
                     this.computedData.details.add(item.data.name + '/' + modifier.name, detailData);
@@ -723,21 +695,11 @@ export class Character extends WsRegistrable {
                     }
                 }
                 if (affectStats) {
-                    if (modifier.type === 'ADD') {
-                        this.computedData.stats[overrideStatName] += modifier.value;
-                    }
-                    else if (modifier.type === 'SET') {
-                        this.computedData.stats[overrideStatName] = modifier.value;
-                    }
-                    else if (modifier.type === 'DIV') {
-                        this.computedData.stats[overrideStatName] /= modifier.value;
-                    }
-                    else if (modifier.type === 'MUL') {
-                        this.computedData.stats[overrideStatName] *= modifier.value;
-                    }
-                    else if (modifier.type === 'PERCENTAGE') {
-                        this.computedData.stats[overrideStatName] *= (modifier.value / 100);
-                    }
+                    StatModifier.applyInPlace(this.computedData.stats, {
+                        stat: overrideStatName,
+                        value: modifier.value,
+                        type: modifier.type
+                    });
                     if (modifications[overrideStatName] === null) {
                         modifications[overrideStatName] = 0;
                     }
@@ -758,7 +720,7 @@ export class Character extends WsRegistrable {
         if (this.computedData.stats['AD'] > 12 && this.statBonusAD) {
             this.computedData.stats[this.statBonusAD] += 1;
             let detailData = {};
-            detailData[this.statBonusAD] = 1;
+            detailData[this.statBonusAD] = '+1';
             this.computedData.details.add('Bonus AD > 12', detailData);
         }
         if (this.computedData.stats['AD'] < 9 && this.statBonusAD) {

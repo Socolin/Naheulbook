@@ -11,7 +11,7 @@ export type StatModificationOperand =
 
 export class StatModifier {
     stat: string;
-    type: StatModificationOperand;
+    type: StatModificationOperand = 'ADD';
     value: number;
     special?: string[];
 
@@ -32,6 +32,10 @@ export class StatModifier {
             return value * (mod.value / 100);
         }
         throw new Error('Invalid stat modifier')
+    }
+
+    static applyInPlace(stats: {[statName: string]: number}, mod: StatModifier) {
+        stats[mod.stat] = StatModifier.apply(stats[mod.stat], mod);
     }
 }
 
