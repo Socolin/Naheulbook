@@ -233,7 +233,7 @@
         </div>
     </md-card-content>
     <md-card-actions *ngIf="step == 4" align="end">
-        <button md-button type="button" color="primary" (click)="setStep(5)" [disabled]="!money || (!money2 && has2MoneyRoll())">
+        <button md-button type="button" color="primary" (click)="validMondey()" [disabled]="!money || (!money2 && has2MoneyRoll())">
             VALIDER
         </button>
     </md-card-actions>
