@@ -1,10 +1,9 @@
 import {Component, Input, EventEmitter, Output, OnInit, OnChanges} from '@angular/core';
 
 import {Origin} from '../origin';
-import {StatRequirement} from '../shared';
 import {Job} from './job.model';
 import {JobService} from './job.service';
-import {getRandomInt} from '../shared/random';
+import {generateAllStatsPair, getRandomInt} from '../shared';
 
 @Component({
     selector: 'job-selector',
@@ -29,17 +28,6 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     public jobsStates: { [jobId: number]: { state: string, changes?: any[] } };
     public swapList: string[][];
 
-    static generateAllStatsInverse(): string[][] {
-        let inverses = [];
-        let statNames = ['cou', 'int', 'fo', 'ad', 'cou'];
-        for (let i = 0; i < 5; i++) {
-            for (let j = 0; j < i; j++) {
-                inverses.push([statNames[i], statNames[j]]);
-            }
-        }
-        return inverses;
-    }
-
     static isJobValid(job: Job, stats: { [statName: string]: number }): boolean {
         for (let req of job.requirements) {
             let statName = req.stat.toLowerCase();
@@ -57,7 +45,7 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     }
 
     constructor(private _jobService: JobService) {
-        this.swapList = JobSelectorComponent.generateAllStatsInverse();
+        this.swapList = generateAllStatsPair();
     }
 
     isVisible(job: Job) {

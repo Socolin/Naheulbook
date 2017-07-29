@@ -2,7 +2,7 @@ import {Component, Input, Output, EventEmitter, OnInit, OnChanges} from '@angula
 
 import {Origin} from './origin.model';
 import {OriginService} from './origin.service';
-import {getRandomInt} from '../shared/random';
+import {generateAllStatsPair, getRandomInt} from '../shared';
 
 @Component({
     selector: 'origin-selector',
@@ -25,17 +25,6 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
     public originsStates: { [originId: number]: { state: string, changes?: any[] } };
     public swapList: string[][];
 
-    static generateAllStatsInverse(): string[][] {
-        let inverses = [];
-        let statNames = ['cou', 'int', 'fo', 'ad', 'cou'];
-        for (let i = 0; i < 5; i++) {
-            for (let j = 0; j < i; j++) {
-                inverses.push([statNames[i], statNames[j]]);
-            }
-        }
-        return inverses;
-    }
-
     static isOriginValid(origin: Origin, stats: { [statName: string]: number }): boolean {
         for (let req of origin.requirements) {
             let statName = req.stat.toLowerCase();
@@ -53,7 +42,7 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
     }
 
     constructor(private _originService: OriginService) {
-        this.swapList = OriginSelectorComponent.generateAllStatsInverse();
+        this.swapList = generateAllStatsPair();
     }
 
     updateOriginStates() {
