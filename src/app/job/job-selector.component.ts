@@ -19,6 +19,7 @@ export class JobSelectorComponent implements OnInit, OnChanges {
 
     @Output() jobChange: EventEmitter<Job> = new EventEmitter<Job>();
     @Output() swapStats: EventEmitter<string[]> = new EventEmitter<string[]>();
+    @Input() allowSwapStats = true;
     @Input() selectedJob: Job;
     @Input() selectedOrigin: Origin;
 
@@ -82,6 +83,10 @@ export class JobSelectorComponent implements OnInit, OnChanges {
                 jobsStates[job.id] = {state: 'ok'};
             }
             else {
+                if (!this.allowSwapStats) {
+                    jobsStates[job.id] = {state: 'ko'};
+                    continue;
+                }
                 let validSwap = [];
                 for (let swap of this.swapList) {
                     let testStats = Object.assign({}, this.stats);
