@@ -300,6 +300,11 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this.skillInfoOverlayRef.detach();
     }
 
+    selectItem(item: Item) {
+        this.selectedItem = item;
+        smoothScrollBy(0, this.combatWeaponDetailElement.nativeElement.getBoundingClientRect().bottom, 400);
+    }
+
     ngOnDestroy() {
         if (this.character && !this.inGroupTab) {
             this._websocketService.unregisterElement(this.character);
@@ -308,11 +313,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         if (this.notificationSub) {
             this.notificationSub.unsubscribe();
         }
-    }
-
-    selectItem(item: Item) {
-        this.selectedItem = item;
-        smoothScrollBy(0, this.combatWeaponDetailElement.nativeElement.getBoundingClientRect().bottom, 400);
     }
 
     ngOnInit() {
