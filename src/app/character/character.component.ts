@@ -15,6 +15,8 @@ import {WebSocketService} from '../websocket/websocket.service';
 import {Subscription} from 'rxjs/Subscription';
 import {smoothScrollBy} from '../shared/scroll';
 import {InventoryPanelComponent} from './inventory-panel.component';
+import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {Job} from '../job/job.model';
 
 export class LevelUpInfo {
     EVorEA = 'EV';
@@ -69,12 +71,28 @@ export class CharacterComponent implements OnInit, OnDestroy {
         {hash: 'history'},
     ];
 
+    @ViewChild('changeNameDialog')
+    public changeNameDialog: Portal<any>;
+    public changeNameOverlayRef: OverlayRef;
+    public newCharacterName: string;
+
+    @ViewChild('changeSexDialog')
+    public changeSexDialog: Portal<any>;
+    public changeSexOverlayRef: OverlayRef;
+    public newCharacterSex: string;
+
+    @ViewChild('changeJobDialog')
+    public changeJobDialog: Portal<any>;
+    public changeJobOverlayRef: OverlayRef;
+    public newCharacterJob: Job;
+
     private notificationSub: Subscription;
 
     constructor(private _route: ActivatedRoute
         , private _router: Router
         , private _notification: NotificationsService
         , private _websocketService: WebSocketService
+        , private _nhbkDialogService: NhbkDialogService
         , private _overlay: Overlay
         , private _characterService: CharacterService) {
     }
@@ -303,6 +321,57 @@ export class CharacterComponent implements OnInit, OnDestroy {
     selectItem(item: Item) {
         this.selectedItem = item;
         smoothScrollBy(0, this.combatWeaponDetailElement.nativeElement.getBoundingClientRect().bottom, 400);
+    }
+
+    openChangeNameDialog() {
+        this.newCharacterName = this.character.name;
+        this.changeNameOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeNameDialog);
+    }
+
+    closeChangeNameDialog() {
+        this.changeNameOverlayRef.detach();
+    }
+
+    changeName() {
+        this.changeStat('name', this.newCharacterName);
+        this.closeChangeNameDialog();
+    }
+
+    openChangeSexDialog() {
+        this.newCharacterSex = this.character.sex;
+        console.log(this.newCharacterSex);
+        this.changeSexOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeSexDialog);
+    }
+
+    closeChangeSexDialog() {
+        this.changeSexOverlayRef.detach();
+    }
+
+    changeSex() {
+        this.changeStat('sex', this.newCharacterSex);
+        this.closeChangeSexDialog();
+    }
+
+    openChangeJobDialog() {
+        this.newCharacterJob = this.character.job;
+        this.changeJobOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeJobDialog);
+    }
+
+    closeChangeJobDialog() {
+        this.changeJobOverlayRef.detach();
+    }
+
+    selectNewJob(job: Job|undefined) {
+        this.newCharacterJob = job;
+    }
+
+    changeJob() {
+        this._characterService.changeJob(
+            this.character.id,
+            this.newCharacterJob ? this.newCharacterJob.id : null).subscribe(job => {
+                this.character.onChangeJob(job);
+            });
+        this.closeChangeJobDialog();
     }
 
     ngOnDestroy() {

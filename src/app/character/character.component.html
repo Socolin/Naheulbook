@@ -15,7 +15,24 @@
                 </md-card>
 
                 <md-card>
-                    <md-card-title>{{character.name}}</md-card-title>
+                    <md-card-title style="display: flex; justify-content: space-between; align-items: center">
+                        {{character.name}}
+                        <button md-icon-button [mdMenuTriggerFor]="characterBasicChange">
+                            <md-icon>more_vert</md-icon>
+                        </button>
+                    </md-card-title>
+
+                    <md-menu xPosition="before" #characterBasicChange="mdMenu">
+                        <button md-menu-item (click)="openChangeNameDialog()">
+                            Changer le nom
+                        </button>
+                        <button md-menu-item (click)="openChangeSexDialog()">
+                            Changer de sexe
+                        </button>
+                        <button md-menu-item (click)="openChangeJobDialog()">
+                            Changer de métier
+                        </button>
+                    </md-menu>
                     <md-card-content>
                         <dl>
                             <dt>Origine</dt>
@@ -779,6 +796,99 @@
                 ANNULER
             </button>
             <button md-button color="primary"  [disabled]="!levelUpFormReady()" (click)="levelUp()">
+                VALIDER
+            </button>
+        </md-card-actions>
+    </md-card>
+</ng-template>
+
+
+
+<!-- Change name dialog -->
+<ng-template #changeNameDialog="cdkPortal" cdk-portal>
+    <md-card>
+        <md-card-title>
+            Changer de nom
+        </md-card-title>
+        <md-card-content>
+            <md-input-container>
+                <input mdInput
+                       placeholder="Nouveau nom"
+                       [(ngModel)]="newCharacterName"/>
+            </md-input-container>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button color="primary" (click)="closeChangeNameDialog()">
+                ANNULER
+            </button>
+            <button md-button [disabled]="character.name === newCharacterName" color="primary" (click)="changeName()">
+                VALIDER
+            </button>
+        </md-card-actions>
+    </md-card>
+</ng-template>
+
+<!-- Change sex dialog -->
+<ng-template #changeSexDialog="cdkPortal" cdk-portal>
+    <md-card>
+        <md-card-title>
+            Changer de sexe
+        </md-card-title>
+        <md-card-content>
+            <md-radio-group [(ngModel)]="newCharacterSex">
+                <md-radio-button name="sexe" [value]="'Homme'">
+                    Homme
+                </md-radio-button>
+                <md-radio-button name="sexe" [value]="'Femme'">
+                    Femme
+                </md-radio-button>
+            </md-radio-group>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button color="primary" (click)="closeChangeSexDialog()">
+                ANNULER
+            </button>
+            <button md-button [disabled]="character.sex === newCharacterSex" color="primary" (click)="changeSex()">
+                VALIDER
+            </button>
+        </md-card-actions>
+    </md-card>
+</ng-template>
+
+<!-- Change job dialog -->
+<ng-template #changeJobDialog="cdkPortal" cdk-portal>
+    <md-card class="modal-max-height">
+        <md-card-title>
+            Changer de métier
+        </md-card-title>
+        <md-card-content>
+            <md-radio-group *ngIf="character.job" [(ngModel)]="newCharacterJob">
+                <md-radio-button [value]="null">Aucun</md-radio-button>
+                <md-radio-button [value]="character.job">{{character.job.name}}</md-radio-button>
+            </md-radio-group>
+            <job-selector *ngIf="!character.job && !newCharacterJob"
+                          [ad]="character.computedData.baseStat['AD']"
+                          [fo]="character.computedData.baseStat['FO']"
+                          [int]="character.computedData.baseStat['INT']"
+                          [cha]="character.computedData.baseStat['CHA']"
+                          [cou]="character.computedData.baseStat['COU']"
+                          [selectedOrigin]="character.origin"
+                          [selectedJob]="character.job"
+                          [allowSwapStats]="false"
+                          (jobChange)="selectNewJob($event)">
+           </job-selector>
+            <div *ngIf="!character.job && newCharacterJob">
+                {{newCharacterJob.name}}
+                <button md-icon-button (click)="selectNewJob(undefined)">
+                    <md-icon>delete</md-icon>
+                </button>
+            </div>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button color="primary" (click)="closeChangeJobDialog()">
+                ANNULER
+            </button>
+            <button md-button [disabled]="character.job === newCharacterJob" color="primary" (click)="changeJob()">
                 VALIDER
             </button>
         </md-card-actions>

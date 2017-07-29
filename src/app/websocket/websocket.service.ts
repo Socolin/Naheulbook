@@ -2,16 +2,16 @@ import {Injectable} from '@angular/core';
 import {Subject, Observable, Observer} from 'rxjs/Rx';
 
 import {WsMessage, WsEvent, WsRegistrable} from './websocket.model';
+import {MiscService, ActiveStatsModifier} from '../shared';
 import {NotificationsService} from '../notifications/notifications.service';
 import {Monster} from '../monster/monster.model';
 import {Character} from '../character/character.model';
+import {JobService} from '../job';
 import {Loot} from '../loot/loot.model';
 import {Item, PartialItem} from '../character/item.model';
 import {SkillService} from '../skill/skill.service';
-import {MiscService} from '../shared/misc.service';
 import {Group} from '../group/group.model';
 import {NEvent} from '../event/event.model';
-import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 
 @Injectable()
 export class WebSocketService {
@@ -23,6 +23,7 @@ export class WebSocketService {
 
     constructor(private _notification: NotificationsService
         , private _skillService: SkillService
+        , private _jobService: JobService
         , private _miscService: MiscService) {
     }
 
@@ -332,10 +333,20 @@ export class WebSocketService {
                 character.onEquipItem(data);
                 break;
             }
+            case 'changeJob': {
+                if (!data.jobId) {
+                    character.onChangeJob(null);
+                }
+                else {
+                    this._jobService.getJobsById().subscribe(jobsById => {
+                        character.onChangeJob(jobsById[data.jobId]);
+                    });
+                }
+                break;
+            }
             case 'addItem': {
                 this._skillService.getSkillsById().subscribe(skillsById => {
                     character.onAddItem(Item.fromJson(data, skillsById));
-
                 });
                 break;
             }

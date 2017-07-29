@@ -154,6 +154,21 @@ export class CharacterService extends JsonService {
         }).map(res => res.json());
     }
 
+    changeJob(characterId: number, jobId: number|null): Observable<Job> {
+        return Observable.forkJoin(
+            this.postJson('/api/character/changeJob', {
+                characterId: characterId,
+                jobId: jobId,
+            }).map(res => res.json()),
+            this._jobService.getJobsById()
+        ).map(([data, jobsById]: [any, {[jobId: number]: Job}]) => {
+            if (!data.jobId) {
+                return null;
+            }
+            return jobsById[data.jobId];
+        });
+    }
+
     addModifier(characterId: number, modifier: ActiveStatsModifier): Observable<ActiveStatsModifier> {
         return this.postJson('/api/character/addModifier', {
             characterId: characterId,

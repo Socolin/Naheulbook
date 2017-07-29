@@ -173,6 +173,7 @@ export class TacticalMovementInfo {
 }
 
 export class CharacterComputedData {
+    baseStat: {[statName: string]: number} = {};
     stats: {[statName: string]: number} = {};
     skills: SkillDetail[] = [];
     containers: Object[];
@@ -488,6 +489,7 @@ export class Character extends WsRegistrable {
     private updateStats() {
         this.computedData.countActiveEffect = 0;
         this.computedData.stats = JSON.parse(JSON.stringify(this.stats));
+        this.computedData.baseStat = JSON.parse(JSON.stringify(this.stats));
         this.computedData.details.add('Jet de dé initial', this.stats);
         this.computedData.stats['AT'] = 8;
         this.computedData.stats['PRD'] = 10;
@@ -570,6 +572,9 @@ export class Character extends WsRegistrable {
             let detailData = {};
             for (let j = 0; j < modifier.values.length; j++) {
                 let value = modifier.values[j];
+                if (modifier.permanent) {
+                    StatModifier.applyInPlace(this.computedData.baseStat, value);
+                }
                 StatModifier.applyInPlace(this.computedData.stats, value);
                 detailData[value.stat] = formatModifierValue(value);
             }
@@ -1172,6 +1177,11 @@ export class Character extends WsRegistrable {
             return true;
         }
         return false;
+    }
+
+    public onChangeJob(job: Job): void {
+        this.job = job;
+        this.update();
     }
 
     public getWsTypeName(): string {

@@ -257,3 +257,11 @@ md-card {
         max-height: 70vh;
     }
 }
+
+.modal-max-height {
+    md-card-content {
+        max-width: 90vw;
+        max-height: calc(100vh - 150px);
+        overflow: auto;
+    }
+}
