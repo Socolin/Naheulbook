@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {getRandomInt} from '../shared/random';
@@ -18,7 +18,7 @@ import {SkillSelectorComponent} from '../skill/skill-selector.component';
     templateUrl: './create-character.component.html',
     styleUrls: ['./create-character.component.scss']
 })
-export class CreateCharacterComponent {
+export class CreateCharacterComponent implements OnInit {
     public step: number;
     public creating = false;
 
@@ -96,8 +96,36 @@ export class CreateCharacterComponent {
         this.setStep(0);
     }
 
+    saveStats() {
+        localStorage.setItem('savedStats', JSON.stringify({
+            cou: this.cou,
+            int: this.int,
+            cha: this.cha,
+            ad: this.ad,
+            fo: this.fo,
+        }));
+    }
+
+    clearSavedStats() {
+        localStorage.removeItem('savedStats');
+    }
+
+    loadSavedStats() {
+        let statsJson = localStorage.getItem('savedStats');
+        if (statsJson) {
+            let stats = JSON.parse(statsJson);
+            this.cou = stats.cou;
+            this.int = stats.int;
+            this.cha = stats.cha;
+            this.ad = stats.ad;
+            this.fo = stats.fo;
+            this.setStep(1);
+        }
+    }
+
     setStep(step: number) {
         if (step === 1) {
+            this.saveStats();
             this.selectedOrigin = null;
         }
         if (step === 2) {
@@ -542,6 +570,7 @@ export class CreateCharacterComponent {
             creationData['groupId'] = null;
         }
 
+        this.clearSavedStats();
         this._characterService.createCharacter(creationData).subscribe(
             res => {
                 if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
@@ -555,6 +584,10 @@ export class CreateCharacterComponent {
                 this.creating = false;
             }
         );
+    }
+
+    ngOnInit() {
+        this.loadSavedStats();
     }
 }
 
