@@ -105,7 +105,9 @@ export class CreateItemComponent implements OnChanges {
                 this.newItem.data.name = this.newItem.template.data.notIdentifiedName;
             }
         }
-        this.newItem.data.icon = JSON.parse(JSON.stringify(itemTemplate.data.icon));
+        if (itemTemplate.data.icon) {
+            this.newItem.data.icon = JSON.parse(JSON.stringify(itemTemplate.data.icon));
+        }
         this.newItem.data.description = itemTemplate.data.description;
         if (itemTemplate.data.quantifiable) {
             this.newItem.data.quantity = 1;
