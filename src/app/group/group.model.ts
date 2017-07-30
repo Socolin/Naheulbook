@@ -655,6 +655,33 @@ export class Group extends WsRegistrable {
         return changes;
     }
 
+    public onAddInvite(data: any) {
+        if (data.fromGroup) {
+            if (this.invited.findIndex(d => d.id === data.id) === -1) {
+                this.invited.push(data);
+            }
+        } else {
+            if (this.invites.findIndex(d => d.id === data.id) === -1) {
+                this.invites.push(data);
+            }
+        }
+    }
+
+    public onCancelInvite(data: any): void {
+        if (data.fromGroup) {
+            let i = this.invited.findIndex(d => d.id === data.character.id);
+            if (i !== -1) {
+                this.invited.splice(i, 1);
+            }
+        }
+        else {
+            let i = this.invites.findIndex(d => d.id === data.character.id);
+            if (i !== -1) {
+                this.invites.splice(i, 1);
+            }
+        }
+    }
+
     public getWsTypeName(): string {
         return 'group';
     }

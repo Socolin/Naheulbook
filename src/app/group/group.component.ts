@@ -313,9 +313,10 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     inviteCharacter(character) {
+        this.closeInviteCharacterModal();
         this._characterService.inviteCharacter(this.group.id, character.id).subscribe(
             res => {
-                this.group.invited.push(res);
+                this.group.onAddInvite(res);
                 for (let i = 0; i < this.filteredInvitePlayers.length; i++) {
                     let char = this.filteredInvitePlayers[i];
                     if (char.id === res.id) {

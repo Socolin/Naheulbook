@@ -175,15 +175,16 @@
                             <h4>Invitation à valider</h4>
                             <div class="list-group">
                                 <ng-template ngFor let-character [ngForOf]="group.invites">
-                                    <div class="list-group-item">
-                                        <button class="glyphicon glyphicon-remove btn btn-danger pull-right"
-                                                (click)="cancelInvite(character)"></button>
-                                        <button class="glyphicon glyphicon-remove btn btn-success pull-right"
-                                                (click)="acceptInvite(character)"></button>
-                                        <h4 class="list-group-item-heading">{{character.name}}</h4>
-                                        <p class="list-group-item-text">{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
-                                        </p>
-                                    </div>
+                                    <md-expansion-panel>
+                                        <md-expansion-panel-header>
+                                            <mat-panel-description>{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span></mat-panel-description>
+                                            <mat-panel-title>{{character.name}}</mat-panel-title>
+                                        </md-expansion-panel-header>
+                                        <md-action-row>
+                                            <button md-button (click)="cancelInvite(character)">REFUSER</button>
+                                            <button md-button (click)="acceptInvite(character)">ACCEPTER</button>
+                                        </md-action-row>
+                                    </md-expansion-panel>
                                 </ng-template>
                             </div>
                             <hr>
@@ -192,13 +193,15 @@
                             <h4>Invitation en attente</h4>
                             <div class="list-group">
                                 <ng-template ngFor let-character [ngForOf]="group.invited">
-                                    <div class="list-group-item">
-                                        <button class="glyphicon glyphicon-remove btn btn-danger pull-right"
-                                                (click)="cancelInvite(character)"></button>
-                                        <h4 class="list-group-item-heading">{{character.name}}</h4>
-                                        <p class="list-group-item-text">{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
-                                        </p>
-                                    </div>
+                                    <md-expansion-panel>
+                                        <md-expansion-panel-header>
+                                            <mat-panel-description>{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span></mat-panel-description>
+                                            <mat-panel-title>{{character.name}}</mat-panel-title>
+                                        </md-expansion-panel-header>
+                                        <md-action-row>
+                                            <button md-button (click)="cancelInvite(character)">ANNULER</button>
+                                        </md-action-row>
+                                    </md-expansion-panel>
                                 </ng-template>
                             </div>
                             <hr>

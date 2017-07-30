@@ -5,13 +5,15 @@ import {WsMessage, WsEvent, WsRegistrable} from './websocket.model';
 import {MiscService, ActiveStatsModifier} from '../shared';
 import {NotificationsService} from '../notifications/notifications.service';
 import {Monster} from '../monster/monster.model';
-import {Character} from '../character/character.model';
+import {Character, CharacterJsonData} from '../character/character.model';
 import {JobService} from '../job';
 import {Loot} from '../loot/loot.model';
 import {Item, PartialItem} from '../character/item.model';
-import {SkillService} from '../skill/skill.service';
 import {Group} from '../group/group.model';
 import {NEvent} from '../event/event.model';
+import {Job} from '../job/job.model';
+import {Skill, SkillService} from '../skill';
+import {Origin, OriginService} from '../origin';
 
 @Injectable()
 export class WebSocketService {
@@ -24,6 +26,7 @@ export class WebSocketService {
     constructor(private _notification: NotificationsService
         , private _skillService: SkillService
         , private _jobService: JobService
+        , private _originService: OriginService
         , private _miscService: MiscService) {
     }
 
@@ -298,6 +301,42 @@ export class WebSocketService {
                 group.data.changeValue(data.key, data.value);
                 break;
             }
+            case 'joinCharacter': {
+                let characterData: CharacterJsonData = data;
+                Observable.forkJoin(
+                    this._jobService.getJobList(),
+                    this._originService.getOriginList(),
+                    this._skillService.getSkillsById()
+                ).subscribe(([jobs, origins, skillsById]: [Job[], Origin[], {[skillId: number]: Skill}]) => {
+                    let character = Character.fromJson(characterData, origins, jobs, skillsById);
+
+                    try {
+                        character.update();
+                    } catch (e) {
+                        console.log(e, e.stack);
+                        throw e;
+                    }
+                    group.addCharacter(character);
+                });
+
+                let i = group.invited.findIndex(d => d.id === characterData.id);
+                if (i !== -1) {
+                    group.invited.splice(i, 1);
+                }
+                let j = group.invites.findIndex(d => d.id === characterData.id);
+                if (j !== -1) {
+                    group.invites.splice(j, 1);
+                }
+                break;
+            }
+            case 'groupInvite': {
+                group.onAddInvite(data);
+                break;
+            }
+            case 'cancelInvite': {
+                group.onCancelInvite(data);
+                break;
+            }
             default: {
                 console.warn('Opcode not handle: `' + opcode + '`');
                 break;
@@ -403,6 +442,22 @@ export class WebSocketService {
             }
             case 'changeTarget': {
                 character.changeTarget(data);
+                break;
+            }
+            case 'joinGroup': {
+                character.group = data.group;
+                character.invites = [];
+                break;
+            }
+            case 'groupInvite': {
+                character.invites.push(data);
+                break;
+            }
+            case 'cancelInvite': {
+                let i = character.invites.findIndex(d => d.id === data.group.id);
+                if (i !== -1) {
+                    character.invites.splice(i, 1);
+                }
                 break;
             }
             default:
