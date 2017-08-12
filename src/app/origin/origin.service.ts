@@ -1,9 +1,9 @@
-import {Injectable, forwardRef, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable, ReplaySubject} from 'rxjs/Rx';
 
-import {Origin} from './origin.model';
 import {Skill, SkillService} from '../skill';
+import {Origin} from '.';
 
 @Injectable()
 export class OriginService {

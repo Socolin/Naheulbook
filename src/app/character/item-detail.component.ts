@@ -7,9 +7,11 @@ import {ActiveStatsModifier, NhbkDialogService} from '../shared';
 
 import {IDurable} from '../date/durable.model';
 import {ItemTemplateService, ItemCategory} from '../item';
-import {GroupService} from '../group';
 
-import {Character, CharacterGiveDestination, Item, ItemActionService} from '.';
+import {Character, CharacterGiveDestination} from './character.model';
+import {CharacterService} from './character.service';
+import {Item} from './item.model';
+import {ItemActionService} from './item-action.service';
 
 @Component({
     selector: 'item-detail',
@@ -50,7 +52,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
 
     constructor(private _itemTemplateService: ItemTemplateService
         , @Optional() public _itemActionService: ItemActionService
-        , private _groupService: GroupService
+        , private _characterService: CharacterService
         , private _nhbkDialogService: NhbkDialogService) {
     }
 
@@ -113,7 +115,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         this.giveQuantity = item.data.quantity;
         this.giveItemOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.giveItemDialog);
 
-        this._groupService.listActiveCharactersInGroup(this.character.id).subscribe(
+        this._characterService.listActiveCharactersInGroup(this.character.id).subscribe(
             characters => {
                 this.giveDestination = characters;
             }

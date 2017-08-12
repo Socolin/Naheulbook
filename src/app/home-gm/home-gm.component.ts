@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
+import {MdSidenav} from '@angular/material';
+
 import {NotificationsService} from '../notifications';
 
-import {MdSidenav} from '@angular/material';
-import {CharacterService} from '../character/character.service';
-import {ThemeService} from '../theme.service';
+import {GroupService} from '../group';
 
 @Component({
     templateUrl: './home-gm.component.html',
@@ -16,7 +16,7 @@ export class HomeGmComponent implements OnInit {
     @ViewChild('start', {read: MdSidenav})
     public start: MdSidenav;
 
-    constructor(private _characterService: CharacterService
+    constructor(private _groupService: GroupService
         , private _notifications: NotificationsService
         , public _router: Router) {
         this._router.events.subscribe(event => {
@@ -27,7 +27,7 @@ export class HomeGmComponent implements OnInit {
     };
 
     loadGroups() {
-        this._characterService.listGroups().subscribe(
+        this._groupService.listGroups().subscribe(
             res => {
                 this.groups = res.slice(0, 5);
             },

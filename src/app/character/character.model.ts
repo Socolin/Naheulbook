@@ -1,7 +1,6 @@
-import {Speciality} from './speciality.model';
 import {Item, PartialItem} from './item.model';
 import {Origin} from '../origin';
-import {Job} from '../job';
+import {Job, Speciality} from '../job';
 import {
     IMetadata
     , ItemStatModifier

@@ -2,10 +2,11 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {ReplaySubject, Observable} from 'rxjs/Rx';
 
-import {Skill} from './skill.model';
-import {JsonService} from '../shared/json-service';
-import {NotificationsService} from '../notifications/notifications.service';
-import {LoginService} from '../user/login.service';
+import {JsonService} from '../shared';
+import {NotificationsService} from '../notifications';
+import {LoginService} from '../user';
+
+import {Skill} from '.';
 
 @Injectable()
 export class SkillService extends JsonService {

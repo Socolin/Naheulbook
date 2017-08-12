@@ -8,7 +8,11 @@ import {isNullOrUndefined} from 'util';
 import {removeDiacritics} from '../shared';
 import {ItemTemplate} from '../item';
 
-import {Character, Item, ItemData, ItemService, SwipeService, ItemActionService} from '.';
+import {Character} from './character.model';
+import {Item, ItemData} from './item.model';
+import {ItemActionService} from './item-action.service';
+import {ItemService} from './item.service';
+import {SwipeService} from './swipe.service';
 
 @Component({
     selector: 'inventory-panel',

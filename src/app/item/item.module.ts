@@ -7,6 +7,7 @@ import {ActionModule} from '../action/action.module';
 import {SharedModule} from '../shared/shared.module';
 import {SkillModule} from '../skill/skill.module';
 import {DateModule} from '../date/date.module';
+import {EffectModule} from '../effect/effect.module';
 
 import {
     AutocompleteSearchItemTemplateComponent,
@@ -29,6 +30,7 @@ import {
         SkillModule,
         DateModule,
         ActionModule,
+        EffectModule,
     ],
     declarations: [
         CreateItemTemplateComponent,

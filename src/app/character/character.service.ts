@@ -2,19 +2,21 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 
-import {IMetadata, ActiveStatsModifier, HistoryEntry} from '../shared';
+import {JsonService, IMetadata, ActiveStatsModifier, HistoryEntry} from '../shared';
 import {NotificationsService} from '../notifications';
 
 import {LoginService} from '../user';
 import {Job, JobService} from '../job';
 import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
-import {JsonService} from '../shared/json-service';
 import {Loot} from '../loot';
 
-import {CharacterInviteInfo, PartialGroup} from '../group';
-
-import {Character, CharacterResume, CharacterJsonData} from '.';
+import {
+    Character,
+    CharacterResume,
+    CharacterGiveDestination,
+    CharacterJsonData,
+} from './character.model';
 
 @Injectable()
 export class CharacterService extends JsonService {
@@ -197,25 +199,10 @@ export class CharacterService extends JsonService {
         }).map(res => res.json());
     }
 
-    searchPlayersForInvite(name: string, groupId: number): Observable<CharacterInviteInfo[]> {
-        return this.postJson('/api/character/searchForInvite', {
-            name: name,
-            groupId: groupId
-        }).map(res => res.json());
-    }
-
     cancelInvite(characterId: number, groupId: number): Observable<{group: IMetadata; character: IMetadata}> {
         return this.postJson('/api/character/cancelInvite', {
             characterId: characterId,
             groupId: groupId
-        }).map(res => res.json());
-    }
-
-    inviteCharacter(groupId: number, characterId: number): Observable<CharacterInviteInfo> {
-        return this.postJson('/api/character/invite', {
-            characterId: characterId,
-            groupId: groupId,
-            fromGroup: true
         }).map(res => res.json());
     }
 
@@ -234,10 +221,6 @@ export class CharacterService extends JsonService {
         }).map(res => res.json());
     }
 
-    listGroups(): Observable<PartialGroup[]> {
-        return this._http.get('/api/character/listGroups').map(res => res.json());
-    }
-
     createCharacter(creationData): Observable<{id: number}> {
         return this.postJson('/api/character/create', creationData).map(res => res.json());
     }
@@ -251,5 +234,11 @@ export class CharacterService extends JsonService {
         ).map(([lootsJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
             return Loot.lootsFromJson(lootsJsonData, skillsById)
         });
+    }
+
+    listActiveCharactersInGroup(characterId: number): Observable<CharacterGiveDestination[]> {
+        return this.postJson('/api/group/listActiveCharacters', {
+            characterId: characterId
+        }).map(res => res.json());
     }
 }

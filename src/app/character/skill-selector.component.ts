@@ -1,10 +1,11 @@
 import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
 
+import {getRandomInt} from '../shared';
+
 import {Job} from '../job';
 import {Origin} from '../origin';
-import {Skill} from './skill.model';
-import {SkillService} from './skill.service';
-import {getRandomInt} from '../shared/random';
+
+import {Skill, SkillService} from '../skill';
 
 @Component({
     selector: 'skill-selector',

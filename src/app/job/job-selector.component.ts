@@ -1,9 +1,11 @@
 import {Component, Input, EventEmitter, Output, OnInit, OnChanges} from '@angular/core';
 
+import {generateAllStatsPair, getRandomInt} from '../shared';
+
 import {Origin} from '../origin';
+
 import {Job} from './job.model';
 import {JobService} from './job.service';
-import {generateAllStatsPair, getRandomInt} from '../shared';
 
 @Component({
     selector: 'job-selector',

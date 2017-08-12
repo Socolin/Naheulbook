@@ -16,6 +16,7 @@ import {
     EffectListComponent,
     EffectService,
     ModifierDetailComponent,
+    ModifiersEditorComponent,
     StatModifierEditorComponent,
 } from './';
 
@@ -36,6 +37,7 @@ import {
         EffectEditorComponent,
         EffectListComponent,
         ModifierDetailComponent,
+        ModifiersEditorComponent,
         StatModifierEditorComponent,
     ],
     providers: [
@@ -49,6 +51,7 @@ import {
         EffectEditorComponent,
         EffectListComponent,
         ModifierDetailComponent,
+        ModifiersEditorComponent,
         StatModifierEditorComponent,
     ],
 })

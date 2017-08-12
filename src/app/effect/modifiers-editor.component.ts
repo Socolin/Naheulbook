@@ -1,11 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {ItemStatModifier, StatModificationOperand} from './stat-modifier.model';
+import {ItemStatModifier, StatModificationOperand, MiscService} from '../shared';
 import {Origin, OriginService} from '../origin';
-import {Job} from '../job';
-import {JobService} from '../job';
+import {Job, JobService} from '../job';
 import {isNullOrUndefined} from 'util';
-import {MiscService} from './misc.service';
 import {MdCheckboxChange} from '@angular/material';
 
 @Component({

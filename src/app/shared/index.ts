@@ -21,7 +21,6 @@ export * from './autocomplete-input.component';
 export * from './common-nav.component';
 export * from './icon-selector.component';
 export * from './icon.component';
-export * from './modifiers-editor.component';
 export * from './stat-requirements-editor.component';
 export * from './textarea-autosize.directive';
 export * from './value-editor.component';

@@ -3,11 +3,8 @@ import {Observable} from 'rxjs';
 
 import {AutocompleteValue} from '../shared/autocomplete-input.component';
 
-import {
-    ItemCategory,
-    ItemTemplate,
-    ItemTemplateService
-} from './';
+import {ItemCategory, ItemTemplate} from './item-template.model';
+import {ItemTemplateService} from './item-template.service';
 
 @Component({
     selector: 'autocomplete-search-item-template',

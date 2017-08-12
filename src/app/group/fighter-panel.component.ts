@@ -7,7 +7,10 @@ import {getRandomInt, NhbkDialogService, AutocompleteValue} from '../shared';
 import {Character, ItemData, Item, ItemService} from '../character';
 import {Monster, MonsterTemplate, MonsterService, MonsterTemplateService} from '../monster';
 
-import {Group, Fighter, GroupActionService, GroupService, CreateItemComponent} from '.';
+import {CreateItemComponent} from './create-item.component';
+import {Group, Fighter} from './group.model';
+import {GroupActionService} from './group-action.service';
+import {GroupService} from './group.service';
 
 @Component({
     selector: 'fighter-panel',

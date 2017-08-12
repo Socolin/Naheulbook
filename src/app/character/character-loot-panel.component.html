@@ -5,9 +5,9 @@
             <md-card-content>
                 <div class="loot-items">
                     <ng-template ngFor let-item [ngForOf]="loot.items">
-                        <div (click)="selectItem(item)"
+                        <div class="loot-item"
+                             (click)="selectItem(item)"
                              cdk-overlay-origin
-                             class="loot-item"
                              #itemLine="cdkOverlayOrigin"
                              [class.active]="item.id == selectedItem?.id">
                             <button md-icon-button

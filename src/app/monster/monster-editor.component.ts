@@ -7,9 +7,14 @@ import {Location, LocationService} from '../location';
 import {ItemTemplate} from '../item';
 
 import {
-    MonsterTemplate, MonsterTemplateCategory, MonsterTrait, TraitInfo,
-    MonsterSimpleInventory, MonsterTemplateService, MonsterTemplateType
-} from '.';
+    MonsterTemplate,
+    MonsterTemplateCategory,
+    MonsterTrait,
+    TraitInfo,
+    MonsterSimpleInventory,
+    MonsterTemplateType
+} from './monster.model';
+import {MonsterTemplateService} from './monster-template.service';
 
 @Component({
     selector: 'monster-editor',

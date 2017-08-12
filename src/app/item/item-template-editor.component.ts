@@ -13,12 +13,8 @@ import {Skill, SkillService} from '../skill';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
 
-import {
-    ItemSection,
-    ItemSlot,
-    ItemTemplate,
-    ItemTemplateService,
-} from './';
+import {ItemSection, ItemSlot, ItemTemplate} from './item-template.model';
+import {ItemTemplateService} from './item-template.service'
 
 @Component({
     selector: 'item-template-editor',

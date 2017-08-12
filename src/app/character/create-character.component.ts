@@ -3,15 +3,12 @@ import {Router} from '@angular/router';
 
 import {getRandomInt} from '../shared/random';
 
-import {Origin} from '../origin';
-import {Job} from '../job';
+import {Origin, OriginSelectorComponent} from '../origin';
+import {Job, JobSelectorComponent, Speciality} from '../job';
 import {Skill} from '../skill';
-import {Speciality} from './speciality.model';
 
 import {CharacterService} from './character.service';
-import {OriginSelectorComponent} from '../origin/origin-selector.component';
-import {JobSelectorComponent} from '../job/job-selector.component';
-import {SkillSelectorComponent} from '../skill/skill-selector.component';
+import {SkillSelectorComponent} from './skill-selector.component';
 
 @Component({
     selector: 'create-character',

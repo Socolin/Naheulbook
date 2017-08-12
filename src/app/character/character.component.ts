@@ -1,22 +1,22 @@
-import {Component, Input, OnInit, OnDestroy, ViewChild, ElementRef} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MdTabChangeEvent, Portal, OverlayRef, OverlayState, Overlay, MdTabGroup} from '@angular/material';
+import {MdTabChangeEvent, MdTabGroup, Overlay, OverlayRef, OverlayState, Portal} from '@angular/material';
+import {Subscription} from 'rxjs/Subscription';
 
 import {NotificationsService} from '../notifications';
+import {WebSocketService} from '../websocket';
+import {smoothScrollBy} from '../shared';
+
+import {IMetadata, NhbkDialogService} from '../shared';
+import {Skill} from '../skill';
+import {Job} from '../job';
 
 import {CharacterService} from './character.service';
 import {Character} from './character.model';
-import {IMetadata} from '../shared';
-import {SwipeService} from './swipe.service';
+import {InventoryPanelComponent} from './inventory-panel.component';
 import {ItemActionService} from './item-action.service';
 import {Item} from './item.model';
-import {Skill} from '../skill/skill.model';
-import {WebSocketService} from '../websocket/websocket.service';
-import {Subscription} from 'rxjs/Subscription';
-import {smoothScrollBy} from '../shared/scroll';
-import {InventoryPanelComponent} from './inventory-panel.component';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {Job} from '../job/job.model';
+import {SwipeService} from './swipe.service';
 
 export class LevelUpInfo {
     EVorEA = 'EV';
@@ -369,8 +369,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this._characterService.changeJob(
             this.character.id,
             this.newCharacterJob ? this.newCharacterJob.id : null).subscribe(job => {
-                this.character.onChangeJob(job);
-            });
+            this.character.onChangeJob(job);
+        });
         this.closeChangeJobDialog();
     }
 

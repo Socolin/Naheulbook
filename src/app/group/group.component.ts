@@ -271,7 +271,7 @@ export class GroupComponent implements OnInit, OnDestroy {
             this.filteredInvitePlayers = [];
             return;
         }
-        this._characterService.searchPlayersForInvite(this.searchNameInvite, this.group.id).subscribe(
+        this._groupService.searchPlayersForInvite(this.searchNameInvite, this.group.id).subscribe(
             res => {
                 this.filteredInvitePlayers = res;
             }
@@ -314,7 +314,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     inviteCharacter(character) {
         this.closeInviteCharacterModal();
-        this._characterService.inviteCharacter(this.group.id, character.id).subscribe(
+        this._groupService.inviteCharacter(this.group.id, character.id).subscribe(
             res => {
                 this.group.onAddInvite(res);
                 for (let i = 0; i < this.filteredInvitePlayers.length; i++) {

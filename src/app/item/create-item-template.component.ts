@@ -3,10 +3,8 @@ import {Component} from '@angular/core';
 import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
 
-import {
-    ItemTemplate,
-    ItemTemplateService
-} from '.';
+import {ItemTemplate} from './item-template.model';
+import {ItemTemplateService} from './item-template.service';
 
 @Component({
     selector: 'create-item-template',

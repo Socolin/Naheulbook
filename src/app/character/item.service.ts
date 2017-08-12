@@ -9,7 +9,7 @@ import {LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
 import {LootTookItemMsg} from '../loot';
 
-import {ItemData, PartialItem, Item} from '.';
+import {ItemData, PartialItem, Item} from './item.model';
 
 @Injectable()
 export class ItemService extends JsonService {

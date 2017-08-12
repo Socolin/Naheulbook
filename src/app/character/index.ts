@@ -1,6 +1,5 @@
 export * from './character.model';
 export * from './item.model';
-export * from './speciality.model';
 
 export * from './character.service';
 export * from './item.service';
@@ -19,5 +18,6 @@ export * from './create-character.component';
 export * from './effect-panel.component';
 export * from './inventory-panel.component';
 export * from './item-detail.component';
+export * from './skill-selector.component';
 export * from './speciality-selector.component';
 export * from './swipeable-item-detail.component';

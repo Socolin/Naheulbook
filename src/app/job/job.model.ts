@@ -1,6 +1,7 @@
 import {StatRequirement} from '../shared/stat-requirement.model';
-import {Speciality} from '../character';
 import {Skill} from '../skill';
+
+import {Speciality} from '.';
 
 export interface JobRestrict {
     text: string;

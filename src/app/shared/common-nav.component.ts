@@ -4,7 +4,7 @@ import {OverlayRef, Portal} from '@angular/material';
 import {LoginService} from '../user';
 import {ThemeService} from '../theme.service';
 
-import {NhbkDialogService} from '.';
+import {NhbkDialogService} from './nhbk-dialog.service';
 
 @Component({
     selector: 'common-nav',

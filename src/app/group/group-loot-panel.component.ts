@@ -8,7 +8,8 @@ import {Item, ItemService} from '../character';
 import {Loot, LootPanelComponent} from '../loot';
 import {Monster} from '../monster';
 
-import {Group, GroupService} from '.';
+import {Group} from './group.model';
+import {GroupService} from './group.service';
 
 @Component({
     selector: 'group-loot-panel',

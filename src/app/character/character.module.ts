@@ -17,15 +17,16 @@ import {
     BagItemViewComponent,
     CharacterColorSelectorComponent,
     CharacterComponent,
+    CharacterHistoryComponent,
     CharacterListComponent,
     CharacterLootPanelComponent,
+    CreateCharacterComponent,
     EffectPanelComponent,
     InventoryPanelComponent,
     ItemDetailComponent,
+    SkillSelectorComponent,
     SpecialitySelectorComponent,
     SwipeableItemDetailComponent,
-    CharacterHistoryComponent,
-    CreateCharacterComponent,
 } from './';
 
 import {CharacterService} from './character.service';
@@ -58,6 +59,7 @@ import {ItemService} from './item.service';
         EffectPanelComponent,
         InventoryPanelComponent,
         ItemDetailComponent,
+        SkillSelectorComponent,
         SpecialitySelectorComponent,
         SwipeableItemDetailComponent,
     ],

@@ -7,8 +7,10 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {SharedModule} from '../shared/shared.module';
 
 import {
-    SkillComponent, SkillListComponent, SkillModifiersEditorComponent, SkillSelectorComponent,
-    SkillService
+    SkillComponent,
+    SkillListComponent,
+    SkillModifiersEditorComponent,
+    SkillService,
 } from './';
 
 @NgModule({
@@ -23,7 +25,6 @@ import {
         SkillComponent,
         SkillListComponent,
         SkillModifiersEditorComponent,
-        SkillSelectorComponent,
     ],
     providers: [
         SkillService
@@ -32,7 +33,6 @@ import {
         SkillComponent,
         SkillListComponent,
         SkillModifiersEditorComponent,
-        SkillSelectorComponent,
     ]
 })
 export class SkillModule {

@@ -14,13 +14,10 @@ import {LoginService} from '../user/login.service';
 import {OriginService} from '../origin/origin.service';
 import {JobService} from '../job/job.service';
 
-import {
-    ItemTemplateService,
-    ItemCategoryDirective,
-    ItemCategory,
-    ItemSection,
-    ItemTemplate
-} from '.';
+import {ItemCategory, ItemTemplate} from './item-template.model';
+import {ItemTemplateService} from './item-template.service';
+import {ItemCategoryDirective} from './item-category.directive';
+import {ItemSection} from './item-template.model';
 
 @Component({
     selector: 'item-list',

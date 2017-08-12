@@ -8,7 +8,7 @@ import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
 
-import {ItemCategory, ItemTemplateJsonData, ItemTemplate, ItemSection, ItemSlot} from '.';
+import {ItemCategory, ItemTemplateJsonData, ItemTemplate, ItemSection, ItemSlot} from './item-template.model';
 
 @Injectable()
 export class ItemTemplateService extends JsonService {

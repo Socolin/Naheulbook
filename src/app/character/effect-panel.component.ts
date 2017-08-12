@@ -1,9 +1,10 @@
 import {Component, Input, ViewChild} from '@angular/core';
 
+import {ActiveStatsModifier, LapCountDecrement} from '../shared';
+import {AddEffectModalComponent} from '../effect';
+
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
-import {ActiveStatsModifier, LapCountDecrement} from '../shared/stat-modifier.model';
-import {AddEffectModalComponent} from '../effect/add-effect-modal.component';
 
 @Component({
     selector: 'effect-panel',

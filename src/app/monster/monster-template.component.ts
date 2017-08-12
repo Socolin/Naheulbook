@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 
+import {NotificationsService} from '../notifications';
+import {removeDiacritics} from '../shared';
+
 import {MonsterTemplate, MonsterTrait} from './monster.model';
-import {MonsterTemplateService} from '.';
-import {NotificationsService} from '../notifications/notifications.service';
-import {removeDiacritics} from '../shared/remove_diacritics';
+import {MonsterTemplateService} from './monster-template.service';
 
 @Component({
     selector: 'monster-template',

@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 
 import {NotificationsService} from '../notifications/notifications.service';
-import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateService} from '.';
+
+import {MonsterTemplate, MonsterTemplateCategory} from './monster.model';
+import {MonsterTemplateService} from './monster-template.service';
 
 @Component({
     selector: 'monster-list',

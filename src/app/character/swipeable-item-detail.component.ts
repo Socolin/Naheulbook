@@ -1,9 +1,9 @@
 import {Input, Component, ElementRef, ViewChild} from '@angular/core';
 import {ConnectedOverlayDirective, OverlayOrigin} from '@angular/material';
 
-import {SwipeService} from './swipe.service';
 import {Character} from './character.model';
 import {Item} from './item.model';
+import {SwipeService} from './swipe.service';
 
 @Component({
     selector: 'swipeable-item-detail',

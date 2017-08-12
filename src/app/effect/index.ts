@@ -9,4 +9,5 @@ export * from './edit-effect.component';
 export * from './effect-editor.component';
 export * from './effect-list.component';
 export * from './modifier-detail.component';
+export * from './modifiers-editor.component';
 export * from './stats-modifier-editor.component';

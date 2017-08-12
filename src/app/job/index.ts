@@ -1,4 +1,5 @@
 export * from './job.model';
+export * from './speciality.model';
 
 export * from './job.service';
 

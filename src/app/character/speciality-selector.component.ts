@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 
-import {Speciality} from './speciality.model';
+import {Speciality} from '../job';
 
 @Component({
     selector: 'speciality-selector',

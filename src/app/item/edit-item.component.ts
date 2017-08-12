@@ -2,7 +2,8 @@ import {Component, OnInit, HostListener} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from '../notifications';
 
-import {ItemTemplate, ItemTemplateService} from '.';
+import {ItemTemplate} from './item-template.model';
+import {ItemTemplateService} from './item-template.service';
 
 @Component({
     selector: 'edit-item',
