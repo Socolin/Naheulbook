@@ -1,5 +1,7 @@
 {
-	"name": "Naheulbook",
+    "name": "Naheulbook",
+    "short_name": "Naheulbook",
+    "start_url": "/",
 	"icons": [
 		{
 			"src": "\/favicon\/android-chrome-36x36.png",
