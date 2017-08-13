@@ -10,8 +10,8 @@ import {SkillService} from './skill.service';
 })
 export class SkillModifiersEditorComponent implements OnInit {
     @Input() modifiers: any[];
-    public selectedSkill: number;
-    public value: number;
+    public selectedSkill?: number;
+    public value?: number;
     public skills: Skill[];
 
     constructor(private _skillService: SkillService) {
@@ -29,7 +29,7 @@ export class SkillModifiersEditorComponent implements OnInit {
     addModifier() {
         if (this.value && this.selectedSkill) {
             this.selectedSkill = +this.selectedSkill;
-            let skill = null;
+            let skill: Skill | undefined;
             for (let i = 0; i < this.skills.length; i++) {
                 let s = this.skills[i];
                 if (s.id === this.selectedSkill) {
@@ -42,8 +42,8 @@ export class SkillModifiersEditorComponent implements OnInit {
                     this.modifiers = [];
                 }
                 this.modifiers.push({skill: skill, value: this.value});
-                this.value = null;
-                this.selectedSkill = null;
+                this.value = undefined;
+                this.selectedSkill = undefined;
             }
         }
         return true;

@@ -37,11 +37,11 @@ export class FighterPanelComponent implements OnInit {
 
     @ViewChild('addMonsterDialog')
     public addMonsterDialog: Portal<any>;
-    public addMonsterOverlayRef: OverlayRef;
+    public addMonsterOverlayRef: OverlayRef | undefined;
 
     @ViewChild('deadMonstersDialog')
     public deadMonstersDialog: Portal<any>;
-    public deadMonstersOverlayRef: OverlayRef;
+    public deadMonstersOverlayRef: OverlayRef | undefined;
 
     constructor(private _actionService: GroupActionService,
                 private _groupService: GroupService,
@@ -65,8 +65,11 @@ export class FighterPanelComponent implements OnInit {
     }
 
     closeAddMonsterDialog() {
+        if (!this.addMonsterOverlayRef) {
+            return;
+        }
         this.addMonsterOverlayRef.detach();
-        this.addMonsterOverlayRef = null;
+        this.addMonsterOverlayRef = undefined;
     }
 
     openDeadMonstersDialog() {
@@ -74,8 +77,11 @@ export class FighterPanelComponent implements OnInit {
     }
 
     closeDeadMonstersDialog() {
+        if (!this.deadMonstersOverlayRef) {
+            return;
+        }
         this.deadMonstersOverlayRef.detach();
-        this.deadMonstersOverlayRef = null;
+        this.deadMonstersOverlayRef = undefined;
     }
 
     selectFighter(fighter: Fighter) {
@@ -108,7 +114,7 @@ export class FighterPanelComponent implements OnInit {
      */
     killMonster(monster: Monster) {
         this._monsterService.killMonster(monster.id).subscribe(
-            res => {
+            () => {
                 this.group.removeMonster(monster.id);
                 this.deadMonsters.unshift(monster);
                 this.group.notify('killMonster', 'Monstre tué: ' + monster.name, monster);
@@ -205,6 +211,9 @@ export class FighterPanelComponent implements OnInit {
 
     selectNextFighter() {
         let result = this.group.nextFighter();
+        if (!result) {
+            return;
+        }
         this.loadingNextLap = true;
 
         Observable.forkJoin(

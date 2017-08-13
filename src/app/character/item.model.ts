@@ -1,22 +1,22 @@
 import {ItemTemplate} from '../item';
 import {IMetadata} from '../shared/misc.model';
 import {IconDescription} from '../shared/icon.model';
-import {ActiveStatsModifier, LapCountDecrement, StatsModifier} from '../shared/stat-modifier.model';
+import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 import {IDurable} from '../date/durable.model';
 import {Skill} from '../skill/skill.model';
 import {Fighter} from '../group/group.model';
 
 export class ItemData {
     name: string;
-    description: string;
-    quantity: number;
+    description?: string;
+    quantity?: number;
     icon: IconDescription;
-    charge: number;
+    charge?: number;
     ug: number;
     equiped: number;
     readCount: number;
     notIdentified: boolean;
-    lifetime: IDurable;
+    lifetime: IDurable | null;
 }
 
 export class Item {
@@ -32,8 +32,8 @@ export class Item {
         }
 
         let quantity = 1;
-        if (this.template.data.quantifiable || this.data.quantity) {
-            quantity = +this.data.quantity;
+        if (this.data.quantity) {
+            quantity = this.data.quantity;
         }
         if (this.template.data.useUG) {
             quantity = this.data.ug;
@@ -64,7 +64,7 @@ export class Item {
     }
 
     updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any[] {
-        let changes = [];
+        let changes: any[] = [];
         for (let i = 0; i < this.modifiers.length; i++) {
             let modifier = this.modifiers[i];
             if (modifier.updateDuration(type, data)) {
@@ -75,6 +75,10 @@ export class Item {
         if (this.data.lifetime && this.data.lifetime.durationType === type) {
             switch (type) {
                 case 'combat': {
+                    if (this.data.lifetime.combatCount === undefined) {
+                        console.error('Invalid duration', this.data);
+                        break;
+                    }
                     if (this.data.lifetime.combatCount > 0 && typeof(data) === 'number') {
                         this.data.lifetime.combatCount -= data;
                         changes.push({type: 'itemLifetime', itemId: this.id, lifetime: this.data.lifetime});
@@ -82,6 +86,10 @@ export class Item {
                     break;
                 }
                 case 'time': {
+                    if (this.data.lifetime.timeDuration === undefined) {
+                        console.error('Invalid duration', this.data);
+                        break;
+                    }
                     if (this.data.lifetime.timeDuration > 0 && typeof(data) === 'number') {
                         this.data.lifetime.timeDuration -= data;
                         changes.push({type: 'itemLifetime', itemId: this.id, lifetime: this.data.lifetime});

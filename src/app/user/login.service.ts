@@ -9,8 +9,8 @@ import {isNullOrUndefined} from 'util';
 
 @Injectable()
 export class LoginService extends JsonService {
-    public loggedUser: ReplaySubject<User> = new ReplaySubject<User>(1);
-    public currentLoggedUser: User;
+    public loggedUser: ReplaySubject<User | null> = new ReplaySubject<User>(1);
+    public currentLoggedUser?: User;
 
     constructor(http: Http
         , notification: NotificationsService) {
@@ -96,7 +96,7 @@ export class LoginService extends JsonService {
             .share();
 
         logout.subscribe(() => {
-            this.currentLoggedUser = null;
+            this.currentLoggedUser = undefined;
             this.loggedUser.next(null);
         });
 

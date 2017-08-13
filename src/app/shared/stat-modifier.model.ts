@@ -90,7 +90,7 @@ export class ActiveStatsModifier extends StatsModifier {
     }
 
     static modifiersFromJson(modifiersJsonData: undefined|null|any[]) {
-        let modifiers = [];
+        let modifiers: ActiveStatsModifier[] = [];
 
         if (modifiersJsonData) {
             for (let modifierJsonData of modifiersJsonData) {
@@ -159,11 +159,6 @@ export class ActiveStatsModifier extends StatsModifier {
             return false;
         }
 
-        let lapDecrement: {previous: Fighter, next: Fighter};
-        if (typeof(data) !== 'number') {
-            lapDecrement = data;
-        }
-
         switch (this.durationType) {
             case 'combat': {
                 if (this.currentCombatCount > 0 && typeof(data) === 'number') {
@@ -191,6 +186,14 @@ export class ActiveStatsModifier extends StatsModifier {
                 if (this.currentLapCount > 0) {
                     let testFighter: Fighter;
                     if (!this.lapCountDecrement) {
+                        return false;
+                    }
+
+                    let lapDecrement: {previous: Fighter, next: Fighter};
+                    if (typeof(data) !== 'number') {
+                        lapDecrement = data;
+                    }
+                    else {
                         return false;
                     }
 

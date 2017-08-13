@@ -16,7 +16,7 @@ export class WsEvent {
 
 export abstract class WsRegistrable {
     public id: number;
-    public wsSubscribtion: {sub: Subscription, service: WebSocketService} = null;
+    public wsSubscribtion: {sub: Subscription, service: WebSocketService} | undefined;
 
     public wsRegister(sub: Subscription, service: WebSocketService) {
         this.wsSubscribtion = {
@@ -27,9 +27,12 @@ export abstract class WsRegistrable {
     }
 
     public wsUnregister() {
+        if (!this.wsSubscribtion) {
+            return;
+        }
         this.onWsUnregister();
         this.wsSubscribtion.sub.unsubscribe();
-        this.wsSubscribtion = null;
+        this.wsSubscribtion = undefined;
     }
 
     abstract getWsTypeName(): string;

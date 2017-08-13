@@ -1,9 +1,10 @@
 import {OnDestroy} from '@angular/core';
-import {NotificationsService} from '../notifications/notifications.service';
-import {Loot} from './loot.model';
 import {Subscription} from 'rxjs';
-import {Item} from '../character/item.model';
-import {CharacterResume} from '../character/character.model';
+
+import {NotificationsService} from '../notifications';
+import {CharacterResume, Item} from '../character';
+
+import {Loot} from './loot.model';
 
 export class LootPanelComponent implements OnDestroy {
     public loots: Loot[] = [];
@@ -13,7 +14,7 @@ export class LootPanelComponent implements OnDestroy {
     constructor(protected _notification: NotificationsService) {
     }
 
-    lootAdded(loot: Loot, noNotifications?: boolean): boolean {
+    lootAdded(loot: Loot, noNotifications: boolean): boolean {
         let i = this.loots.findIndex(l => l.id === loot.id);
         if (i !== -1) {
             return false;

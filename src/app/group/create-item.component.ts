@@ -18,11 +18,11 @@ export class CreateItemComponent implements OnChanges {
 
     @ViewChild('addItemDialog')
     public addItemDialog: Portal<any>;
-    public addItemOverlayRef: OverlayRef;
+    public addItemOverlayRef: OverlayRef | undefined;
 
-    public character: Character;
-    public loot: Loot;
-    public monster: Monster;
+    public character: Character | undefined;
+    public loot: Loot | undefined;
+    public monster: Monster | undefined;
     public mode = 'normal';
     public newItem: Item = new Item();
     public gemOption: any = {};
@@ -41,23 +41,23 @@ export class CreateItemComponent implements OnChanges {
     }
 
     openDialogForCharacter(character: Character) {
-        this.loot = null;
-        this.monster = null;
+        this.loot = undefined;
+        this.monster = undefined;
         this.character = character;
         this.openDialog();
     }
 
     openDialogForLoot(loot: Loot) {
         this.loot = loot;
-        this.monster = null;
-        this.character = null;
+        this.monster = undefined;
+        this.character = undefined;
         this.openDialog();
     }
 
     openDialogForMonster(monster: Monster) {
-        this.loot = null;
+        this.loot = undefined;
         this.monster = monster;
-        this.character = null;
+        this.character = undefined;
         this.openDialog();
     }
 
@@ -67,7 +67,11 @@ export class CreateItemComponent implements OnChanges {
     }
 
     closeDialog() {
+        if (!this.addItemOverlayRef) {
+            return;
+        }
         this.addItemOverlayRef.detach();
+        this.addItemOverlayRef = undefined;
     }
 
     addItem(keepOpen: boolean) {

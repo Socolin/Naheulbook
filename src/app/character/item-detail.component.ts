@@ -30,25 +30,25 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public modifiers: any[];
 
     public itemEditName: string;
-    public itemEditDescription: string;
+    public itemEditDescription: string | undefined;
     public editing: boolean;
 
     @ViewChild('giveItemDialog')
     public giveItemDialog: Portal<any>;
-    public giveItemOverlayRef: OverlayRef;
-    public giveDestination: CharacterGiveDestination[] = null;
+    public giveItemOverlayRef: OverlayRef | undefined;
+    public giveDestination: CharacterGiveDestination[] | undefined;
     public giveTarget: CharacterGiveDestination;
-    public giveQuantity: number;
+    public giveQuantity: number | undefined;
 
     @ViewChild('addModifierDialog')
     public addModifierDialog: Portal<any>;
-    public addModifierOverlayRef: OverlayRef;
+    public addModifierOverlayRef: OverlayRef | undefined;
     public newItemModifier: ActiveStatsModifier;
 
     @ViewChild('lifetimeDialog')
     public lifetimeDialog: Portal<any>;
-    public lifetimeOverlayRef: OverlayRef;
-    public previousLifetime: IDurable;
+    public lifetimeOverlayRef: OverlayRef | undefined;
+    public previousLifetime: IDurable | null;
 
     constructor(private _itemTemplateService: ItemTemplateService
         , @Optional() public _itemActionService: ItemActionService
@@ -66,7 +66,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         if (this.item && this.item.template.modifiers) {
             for (let i = 0; i < this.item.template.modifiers.length; i++) {
                 let modifier = this.item.template.modifiers[i];
-                if (modifier.job && modifier.job !== this.character.job.id) {
+                if (modifier.job && (!this.character.job || modifier.job !== this.character.job.id)) {
                     continue;
                 }
                 if (modifier.origin && modifier.origin !== this.character.origin.id) {
@@ -123,7 +123,11 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     closeGiveItemDialog() {
+        if (!this.giveItemOverlayRef) {
+            return;
+        }
         this.giveItemOverlayRef.detach();
+        this.giveItemOverlayRef = undefined;
     }
 
     giveItem() {
@@ -141,7 +145,11 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     closeModifierDialog() {
+        if (!this.addModifierOverlayRef) {
+            return;
+        }
         this.addModifierOverlayRef.detach();
+        this.addModifierOverlayRef = undefined;
     }
 
     activeModifier(modifier: ActiveStatsModifier) {
@@ -176,9 +184,6 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     removeModifier(index: number) {
         if (this.item.modifiers) {
             this.item.modifiers.splice(index, 1);
-            if (this.item.modifiers.length === 0) {
-                this.item.modifiers = null;
-            }
             this._itemActionService.onAction('update_modifiers', this.item);
         }
     }
@@ -210,7 +215,11 @@ export class ItemDetailComponent implements OnChanges, OnInit {
 
 
     closeLifetimeDialog() {
+        if (!this.lifetimeOverlayRef) {
+            return;
+        }
         this.lifetimeOverlayRef.detach();
+        this.lifetimeOverlayRef = undefined;
     }
 
     cancelLifetimeDialog() {
@@ -219,7 +228,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     updateLifetime() {
-        if (this.item.data.lifetime.durationType === 'forever') {
+        if (this.item.data.lifetime && this.item.data.lifetime.durationType === 'forever') {
             this.item.data.lifetime = null;
         }
         this._itemActionService.onAction('update_data', this.item);

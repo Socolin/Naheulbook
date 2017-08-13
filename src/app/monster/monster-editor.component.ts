@@ -10,9 +10,9 @@ import {
     MonsterTemplate,
     MonsterTemplateCategory,
     MonsterTrait,
-    TraitInfo,
     MonsterSimpleInventory,
-    MonsterTemplateType
+    MonsterTemplateType,
+    TraitInfo,
 } from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
 
@@ -26,7 +26,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     public types: MonsterTemplateType[] = [];
     public selectedType: MonsterTemplateType;
     public locations: Location[] = [];
-    public locationsById: {[id: number]:  Location} = null;
+    public locationsById: {[id: number]:  Location} | undefined;
     public defenseStat = 'PRD';
     public locationSearchName: string;
 
@@ -85,7 +85,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
 
     updateAutocompleteLocation(filter: string) {
         return Observable.create((function (observer) {
-            let result = [];
+            let result: AutocompleteValue[] = [];
             if (!filter) {
                 observer.next(result);
                 return;
@@ -105,9 +105,9 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
         }).bind(this));
     }
 
-    hasTrait(trait: MonsterTrait): TraitInfo {
+    hasTrait(trait: MonsterTrait): TraitInfo | undefined {
         if (!this.monster.data.traits) {
-            return null;
+            return undefined;
         }
         let i = 0;
         let traits = this.monster.data.traits;
@@ -117,7 +117,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
                 return t;
             }
         }
-        return null;
+        return undefined;
     }
 
     hasTraitLevel(trait: MonsterTrait, level: number): boolean {
@@ -134,7 +134,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
             this.monster.data.traits = [];
         }
 
-        let currentTrait = null;
+        let currentTrait: TraitInfo | undefined;
         let i = 0;
         let traits = this.monster.data.traits;
         for (; i < traits.length; i++) {
@@ -214,10 +214,10 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
 
     updateDefenseStat() {
         if (this.defenseStat === 'PRD') {
-            this.monster.data.esq = null;
+            this.monster.data.esq = undefined;
         }
         if (this.defenseStat === 'ESQ') {
-            this.monster.data.prd = null;
+            this.monster.data.prd = undefined;
         }
     }
 
@@ -252,8 +252,8 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
                 }
                 this.locationsById = locationsById;
                 this.traits = traits;
-                let simpleTraits = [];
-                let powerTraits = [];
+                let simpleTraits: MonsterTrait[] = [];
+                let powerTraits: MonsterTrait[] = [];
                 for (let i = 0; i < this.traits.length; i++) {
                     let trait = this.traits[i];
                     if (!trait.levels || trait.levels.length === 0) {

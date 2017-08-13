@@ -21,17 +21,17 @@ export class ModifiersEditorComponent implements OnInit {
     public lifeStats: string[] = ['EA', 'EV'];
     public magicStats: string[] = ['MPHYS', 'MPSY', 'RESM'];
 
-    public otherSelectedStat: string;
-    public basicSelectedStat: string;
-    public lifeSelectedStat: string;
-    public combatSelectedStat: string;
-    public magicSelectedStat: string;
+    public otherSelectedStat: string | undefined;
+    public basicSelectedStat: string | undefined;
+    public lifeSelectedStat: string | undefined;
+    public combatSelectedStat: string | undefined;
+    public magicSelectedStat: string | undefined;
 
-    public selectedStat: string;
+    public selectedStat: string | undefined;
 
     public specialsValue: string[] = [];
     public selectedType: StatModificationOperand = 'ADD';
-    public value: number;
+    public value: number | undefined;
     public origins: Origin[];
     public jobs: Job[];
 
@@ -72,19 +72,19 @@ export class ModifiersEditorComponent implements OnInit {
 
     clearSelectedStat(type?: string) {
         if (type !== 'combat') {
-            this.combatSelectedStat = null;
+            this.combatSelectedStat = undefined;
         }
         if (type !== 'life') {
-            this.lifeSelectedStat = null;
+            this.lifeSelectedStat = undefined;
         }
         if (type !== 'magic') {
-            this.magicSelectedStat = null;
+            this.magicSelectedStat = undefined;
         }
         if (type !== 'basic') {
-            this.basicSelectedStat = null;
+            this.basicSelectedStat = undefined;
         }
         if (type !== 'other') {
-            this.otherSelectedStat = null;
+            this.otherSelectedStat = undefined;
         }
     }
 
@@ -105,7 +105,7 @@ export class ModifiersEditorComponent implements OnInit {
     }
 
     selectStat(stat: string) {
-        let type = this.getStatType(this.selectedStat);
+        let type = this.getStatType(stat);
         switch (type) {
             case 'combat':
                 this.combatSelectedStat = stat;
@@ -129,31 +129,31 @@ export class ModifiersEditorComponent implements OnInit {
     updateSelectedStat(type?: string) {
         switch (type) {
             case 'combat':
-                if (this.combatSelectedStat !== null) {
+                if (this.combatSelectedStat != null) {
                     this.selectedStat = this.combatSelectedStat;
                     this.clearSelectedStat(type);
                 }
                 break;
             case 'life':
-                if (this.lifeSelectedStat !== null) {
+                if (this.lifeSelectedStat != null) {
                     this.selectedStat = this.lifeSelectedStat;
                     this.clearSelectedStat(type);
                 }
                 break;
             case 'magic':
-                if (this.magicSelectedStat !== null) {
+                if (this.magicSelectedStat != null) {
                     this.selectedStat = this.magicSelectedStat;
                     this.clearSelectedStat(type);
                 }
                 break;
             case 'basic':
-                if (this.basicSelectedStat !== null) {
+                if (this.basicSelectedStat != null) {
                     this.selectedStat = this.basicSelectedStat;
                     this.clearSelectedStat(type);
                 }
                 break;
             case 'other':
-                if (this.otherSelectedStat !== null) {
+                if (this.otherSelectedStat != null) {
                     this.selectedStat = this.otherSelectedStat;
                     this.clearSelectedStat(type);
                 }
@@ -163,7 +163,7 @@ export class ModifiersEditorComponent implements OnInit {
     }
 
     addModifier() {
-        if (isNullOrUndefined(this.selectedStat) || isNullOrUndefined(this.selectedType) || isNullOrUndefined(this.value)) {
+        if (!this.selectedStat || !this.selectedType || this.value == null) {
             return true;
         }
 
@@ -178,8 +178,8 @@ export class ModifiersEditorComponent implements OnInit {
 
         this.modifiers.push(modifier);
 
-        this.value = null;
-        this.selectedStat = null;
+        this.value = undefined;
+        this.selectedStat = undefined;
         this.clearSelectedStat();
     }
 

@@ -40,7 +40,7 @@ export class LocationListComponent implements OnInit {
         this.getLocations();
         this._loginService.loggedUser.subscribe(
             user => {
-                this.editable = user && user.admin;
+                this.editable = (user != null && user.admin);
             },
             err => {
                 this.editable = false;

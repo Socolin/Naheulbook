@@ -29,29 +29,29 @@ export class CreateCharacterComponent implements OnInit {
 
     // Step 1: Select origin
 
-    public selectedOrigin: Origin;
+    public selectedOrigin: Origin | undefined;
 
     @ViewChild(OriginSelectorComponent)
     private originSelectorComponent: OriginSelectorComponent;
 
     // Step 2: Select job
 
-    public selectedJob: Job;
+    public selectedJob: Job | undefined;
 
     @ViewChild(JobSelectorComponent)
     private jobSelectorComponent: JobSelectorComponent;
 
     // Step 3: Select skills
 
-    public selectedSkills: Skill[];
+    public selectedSkills: Skill[] | undefined;
 
     @ViewChild(SkillSelectorComponent)
     private skillsSelectorComponent: SkillSelectorComponent;
 
     // Step 4: Select fortune
 
-    public money: number;
-    public money2: number;
+    public money = 0;
+    public money2 = 0;
 
     // Step 5: Stats modification due to bonus
 
@@ -60,29 +60,29 @@ export class CreateCharacterComponent implements OnInit {
     /// MOVE_1_POINT_STAT
     public move1PointStatValues: {[statName: string]: number};
     /// SUPER_BOURRIN
-    public superBourrinValueAt: number;
-    public superBourrinValuePrd: number;
+    public superBourrinValueAt = 0;
+    public superBourrinValuePrd = 0;
     /// CHANGE_1_AT_PRD
-    public changeAtPrdValue: number;
+    public changeAtPrdValue = 0;
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA
-    public removeAttOrPrdToIntOrChaRemoveStat: string;
-    public removeAttOrPrdToIntOrChaAddStat: string;
+    public removeAttOrPrdToIntOrChaRemoveStat = 'AT';
+    public removeAttOrPrdToIntOrChaAddStat = 'INT';
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_AD
-    public removeAttOrPrdToIntOrAdRemoveStat: string;
-    public removeAttOrPrdToIntOrAdAddStat: string;
+    public removeAttOrPrdToIntOrAdRemoveStat = 'AT';
+    public removeAttOrPrdToIntOrAdAddStat = 'INT';
 
     // Step 6: Select speciality
 
-    public selectedSpeciality: Speciality;
+    public selectedSpeciality: Speciality | undefined;
 
     // Step 7: Name
 
-    public name: string;
-    public sex: string;
+    public name: string | undefined;
+    public sex = 'Homme';
 
     // Step 8: FatePoint
 
-    public fatePoint: number;
+    public fatePoint: number | undefined;
 
     // Bonuses management
 
@@ -123,13 +123,13 @@ export class CreateCharacterComponent implements OnInit {
     setStep(step: number) {
         if (step === 1) {
             this.saveStats();
-            this.selectedOrigin = null;
+            this.selectedOrigin = undefined;
         }
         if (step === 2) {
-            this.selectedJob = null;
+            this.selectedJob = undefined;
         }
         if (step === 3) {
-            this.selectedSkills = null;
+            this.selectedSkills = undefined;
         }
         if (step === 4) {
             this.money = 0;
@@ -155,10 +155,10 @@ export class CreateCharacterComponent implements OnInit {
             }
         }
         if (step === 7) {
-            this.name = null;
+            this.name = undefined;
         }
         if (step === 8) {
-            this.fatePoint = null;
+            this.fatePoint = undefined;
         }
 
         this.step = step;
@@ -211,6 +211,9 @@ export class CreateCharacterComponent implements OnInit {
     // Step 2: Select job
 
     onSelectJob(job) {
+        if (!this.selectedOrigin) {
+            throw new Error('selectedOrigin should not be undef');
+        }
         this.bonuses = [];
         if (this.selectedOrigin.bonuses) {
             for (let i = 0; i < this.selectedOrigin.bonuses.length; i++) {
@@ -223,7 +226,6 @@ export class CreateCharacterComponent implements OnInit {
             }
         }
         this.selectedJob = job;
-        this.selectedSkills = null;
         this.setStep(3);
     }
 
@@ -482,7 +484,7 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     initSelectSpeciality() {
-        this.selectedSpeciality = null;
+        this.selectedSpeciality = undefined;
     }
 
     selectSpeciality(speciality: Speciality) {
@@ -527,6 +529,13 @@ export class CreateCharacterComponent implements OnInit {
     // Step 9: Confirm
 
     createCharacter() {
+        if (!this.selectedOrigin) {
+            throw new Error('createCharacter: `selectedOrigin` should not be undef');
+        }
+        if (!this.selectedSkills) {
+            throw new Error('createCharacter: `selectedSkills` should not be undef');
+        }
+
         this.creating = true;
         let creationData = {};
         creationData['name'] = this.name;

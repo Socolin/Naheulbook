@@ -14,7 +14,7 @@ import {Skill, SkillService} from '../skill';
 })
 export class SkillSelectorComponent implements OnInit {
     // Inputs
-    @Input() selectedJob: Job;
+    @Input() selectedJob: Job | undefined;
     @Input() selectedOrigin: Origin;
     @Input() knownSkills: Skill[];
     @Input() skillCount = 2;
@@ -61,7 +61,7 @@ export class SkillSelectorComponent implements OnInit {
 
     getSkills() {
         this._skillService.getSkills().subscribe(tmpSkills => {
-            let availableSkills = [];
+            let availableSkills: number[] = [];
 
             if (!this.selectedJob) {
                 if (this.selectedOrigin && this.selectedOrigin.availableSkills) {
@@ -92,7 +92,7 @@ export class SkillSelectorComponent implements OnInit {
                 }
             }
 
-            let skills = [];
+            let skills: Skill[] = [];
             for (let i = 0; i < tmpSkills.length; i++) {
                 let skill = tmpSkills[i];
                 if (availableSkills.indexOf(skill.id) !== -1) {

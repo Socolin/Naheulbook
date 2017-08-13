@@ -58,7 +58,7 @@
                 <span class="ra ra-broadsword ra-lg"></span>
                 <span *ngIf="item.template.data.damageDice">{{item.template.data.damageDice}}<span
                     class="ra ra-perspective-dice-random"></span></span>
-                <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
+                <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage > 0">+</span>
                 <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
                 <ng-template [ngIf]="!readonly">
                     <div style="margin-left: 20px">

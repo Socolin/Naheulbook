@@ -14,7 +14,7 @@ export class NotificationsService {
         if (this.notifications.length === 1) {
             let config = new MdSnackBarConfig();
             config.duration = 2500;
-            this._snackBar.open(n.title + ' ' + n.message, null, config).afterDismissed().subscribe(
+            this._snackBar.open(n.title + ' ' + n.message, undefined, config).afterDismissed().subscribe(
                 () => {
                     this.notifications.shift();
                     this.proceedNextNotification();
@@ -31,7 +31,7 @@ export class NotificationsService {
         let n = this.notifications[0];
         let config = new MdSnackBarConfig();
         config.duration = 2500;
-        this._snackBar.open(n.title + ' ' + n.message, null, config).afterDismissed().subscribe(
+        this._snackBar.open(n.title + ' ' + n.message, undefined, config).afterDismissed().subscribe(
             () => {
                 this.notifications.shift();
                 this.proceedNextNotification();

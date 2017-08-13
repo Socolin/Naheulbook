@@ -26,37 +26,37 @@ export class ItemSlot {
 }
 
 export class ItemTemplateData {
-    actions: any[];
-    description: string;
-    note: string;
-    notIdentifiedName: string;
-    diceDrop: number;
-    price: number;
-    container: boolean;
-    isCurrency: boolean;
-    throwable: boolean;
-    rupture: number;
-    damageDice: number;
-    damageType: any;
-    bonusDamage: number;
-    magicProtection: number;
-    protection: number;
-    protectionAgainstMagic: any;
-    protectionAgainstType: any;
-    charge: any;
-    availableLocation: string;
-    requireLevel: number;
-    relic: boolean;
-    sex: string;
-    quantifiable: boolean;
-    skillBook: boolean;
-    weight: number;
-    duration: string;
-    space: string;
-    useUG: boolean;
-    lifetime: IDurable;
+    actions?: any[];
+    description?: string;
+    note?: string;
+    notIdentifiedName?: string;
+    diceDrop?: number;
+    price?: number;
+    container?: boolean;
+    isCurrency?: boolean;
+    throwable?: boolean;
+    rupture?: number;
+    damageDice?: number;
+    damageType?: any;
+    bonusDamage?: number;
+    magicProtection?: number;
+    protection?: number;
+    protectionAgainstMagic?: any;
+    protectionAgainstType?: any;
+    charge?: number;
+    availableLocation?: string;
+    requireLevel?: number;
+    relic?: boolean;
+    sex?: string;
+    quantifiable?: boolean;
+    skillBook?: boolean;
+    weight?: number;
+    duration?: string;
+    space?: string;
+    useUG?: boolean;
+    lifetime?: IDurable;
     enchantment?: string;
-    icon: IconDescription;
+    icon?: IconDescription;
 }
 
 // FIXME: Is this used and checked ?
@@ -101,14 +101,14 @@ export class ItemTemplate {
     category: number;
     data: ItemTemplateData = new ItemTemplateData();
     source: 'official'|'community'|'private';
-    sourceUser: string;
-    sourceUserId: number;
+    sourceUser?: string;
+    sourceUserId?: number;
     modifiers: ItemStatModifier[] = [];
-    skills: Skill[];
-    unskills: Skill[];
-    slots: ItemSlot[];
-    restrictJobs: Job[];
-    requirements: any[];
+    skills: Skill[] = [];
+    unskills: Skill[] = [];
+    slots: ItemSlot[] = [];
+    restrictJobs: Job[] = [];
+    requirements: any[] = [];
     skillModifiers: ItemSkillModifier[];
 
     static hasSlot(template: ItemTemplate, slotName: string): boolean {
@@ -146,7 +146,7 @@ export class ItemTemplate {
     }
 
     static itemTemplatesFromJson(jsonDatas: ItemTemplateJsonData[], skillsById: {[skillId: number]: Skill}): ItemTemplate[] {
-        let itemTemplates = [];
+        let itemTemplates: ItemTemplate[] = [];
         for (let jsonData of jsonDatas) {
             itemTemplates.push(ItemTemplate.fromJson(jsonData, skillsById));
         }

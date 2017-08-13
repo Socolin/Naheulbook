@@ -51,12 +51,12 @@ export class Loot extends WsRegistrable {
         return loots;
     }
 
-    public getItem(itemId: number): Item {
+    public getItem(itemId: number): Item | undefined {
         let i = this.items.findIndex(item => item.id === itemId);
         if (i !== -1) {
             return this.items[i];
         }
-        return null;
+        return undefined;
     }
 
     /**
@@ -144,17 +144,21 @@ export class Loot extends WsRegistrable {
         this.computedXp = xp;
     }
 
-    public takeItem(leftItem: Item, takenItem: PartialItem, character: object) {
+    public takeItem(leftItem: Item | PartialItem | undefined, takenItem: PartialItem, character: object) {
         if (leftItem) {
             let currentItem = this.getItem(leftItem.id);
-            currentItem.data.quantity = leftItem.data.quantity;
+            if (currentItem) {
+                currentItem.data.quantity = leftItem.data.quantity;
+            }
         }
         else {
-            let currentItem = this.getItem(takenItem.id);
-            let i = this.items.findIndex(item => item.id === currentItem.id);
-            let removedItem = this.items[i];
-            this.items.splice(i, 1);
-            this.itemRemoved.next(removedItem);
+            const currentItem = this.getItem(takenItem.id);
+            if (currentItem) {
+                let i = this.items.findIndex(item => item.id === currentItem.id);
+                let removedItem = this.items[i];
+                this.items.splice(i, 1);
+                this.itemRemoved.next(removedItem);
+            }
         }
         this.onTookItem.next({character: character, item: takenItem});
     }
@@ -170,6 +174,10 @@ export class Loot extends WsRegistrable {
     }
 
     public onWsUnregister(): void {
+        if (!this.wsSubscribtion) {
+            return;
+        }
+
         for (let monster of this.monsters) {
             this.wsSubscribtion.service.unregisterElement(monster);
         }

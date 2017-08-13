@@ -1,7 +1,10 @@
 import {Input, Component, OnInit} from '@angular/core';
+
+import {NotificationsService} from '../notifications';
+import {HistoryEntry} from '../shared';
+
 import {Group} from './group.model';
 import {GroupService} from './group.service';
-import {NotificationsService} from '../notifications/notifications.service';
 
 @Component({
     selector: 'group-history',
@@ -11,11 +14,11 @@ export class GroupHistoryComponent implements OnInit {
     @Input() group: Group;
 
     public historyPage = 0;
-    public currentDay: string = null;
+    public currentDay: string|null = null;
     public history: any[];
     public loadMore = true;
 
-    public historyNewEntryText: string = null;
+    public historyNewEntryText = '';
     public historyNewEntryGm = false;
 
     constructor(private _groupService: GroupService, private _notification: NotificationsService) {
@@ -29,13 +32,13 @@ export class GroupHistoryComponent implements OnInit {
         }
 
         this._groupService.loadHistory(this.group.id, this.historyPage).subscribe(
-            res => {
+            (res: HistoryEntry[]) => {
                 if (res.length === 0) {
                     this.loadMore = false;
                     return;
                 }
                 this.loadMore = true;
-                let logs = [];
+                let logs: HistoryEntry[] = [];
                 if (this.currentDay) {
                     logs = this.history[this.history.length - 1].logs;
                 }
@@ -60,7 +63,7 @@ export class GroupHistoryComponent implements OnInit {
     addLog() {
         this._groupService.addLog(this.group.id, this.historyNewEntryText, this.historyNewEntryGm).subscribe(
             () => {
-                this.historyNewEntryText = null;
+                this.historyNewEntryText = '';
                 this._notification.success('Historique', 'Entrée ajoutée');
                 this.loadHistory();
             }

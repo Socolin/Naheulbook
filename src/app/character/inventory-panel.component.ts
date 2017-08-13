@@ -25,7 +25,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     @Input() inGroupTab: boolean;
 
     // Inventory
-    public selectedItem: Item;
+    public selectedItem: Item | undefined;
     public selectedInventoryTab = 'all';
     public sortType = 'none';
 
@@ -40,14 +40,14 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
 
     @ViewChild('addItemDialog')
     public addItemDialog: Portal<any>;
-    public addItemOverlayRef: OverlayRef;
-    public addItemSearch: string;
+    public addItemOverlayRef: OverlayRef | undefined;
+    public addItemSearch: string | undefined;
     public filteredItems: ItemTemplate[] = [];
 
-    public itemAddCustomName: string;
-    public itemAddCustomDescription: string;
-    public selectedAddItem: ItemTemplate;
-    public itemAddQuantity: number;
+    public itemAddCustomName: string | undefined;
+    public itemAddCustomDescription: string | undefined;
+    public selectedAddItem: ItemTemplate | undefined;
+    public itemAddQuantity: number | undefined;
 
     constructor(
         private _itemService: ItemService
@@ -63,8 +63,8 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             } else {
                 this.itemDetailOffset = 0;
             }
-            return true;
         }
+        return true;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -80,13 +80,13 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         if (item.data.quantifiable) {
             this.itemAddQuantity = 1;
         } else {
-            this.itemAddQuantity = null;
+            this.itemAddQuantity = undefined;
         }
         return false;
     }
 
     openAddItemModal() {
-        this.addItemSearch = null;
+        this.addItemSearch = undefined;
         this.filteredItems = [];
 
         let config = new OverlayState();
@@ -104,7 +104,11 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     closeAddItemDialog() {
+        if (!this.addItemOverlayRef) {
+            return;
+        }
         this.addItemOverlayRef.detach();
+        this.addItemOverlayRef = undefined;
     }
 
     trackById(index, element) {
@@ -112,10 +116,16 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     addItem() {
+        if (!this.selectedAddItem) {
+            return;
+        }
+        if (!this.itemAddCustomName) {
+            return;
+        }
         let itemData = new ItemData();
-        itemData['name'] = this.itemAddCustomName;
-        itemData['description'] = this.itemAddCustomDescription;
-        itemData['quantity'] = this.itemAddQuantity;
+        itemData.name = this.itemAddCustomName;
+        itemData.description = this.itemAddCustomDescription;
+        itemData.quantity = this.itemAddQuantity;
         this._itemService.addItemTo('character', this.character.id
             , this.selectedAddItem.id
             , itemData)
@@ -124,10 +134,10 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                     this.character.onAddItem(item);
                     this.selectedItem = item;
                     this.addItemSearch = '';
-                    this.selectedAddItem = null;
-                    this.itemAddCustomName = null;
-                    this.itemAddCustomDescription = null;
-                    this.itemAddQuantity = null;
+                    this.selectedAddItem = undefined;
+                    this.itemAddCustomName = undefined;
+                    this.itemAddCustomDescription = undefined;
+                    this.itemAddQuantity = undefined;
                 }
             );
         this.closeAddItemDialog();
@@ -224,7 +234,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             this._itemService.deleteItem(item.id).subscribe(
                 deletedItem => {
                     if (this.selectedItem && this.selectedItem.id === item.id) {
-                        this.selectedItem = null;
+                        this.selectedItem = undefined;
                     }
                     this.character.onDeleteItem(deletedItem);
                 }
@@ -256,8 +266,11 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         });
         this._itemActionService.registerAction('use_charge').subscribe((event: {item: Item, data: any}) => {
             let item = event.item;
-            if (isNullOrUndefined(item.data.charge)) {
+            if (item.data.charge != null) {
                 item.data.charge = item.template.data.charge;
+            }
+            if (!item.data.charge) {
+                throw new Error('Cannot use charge on item whith no defined charge. itemId: ' + item.id);
             }
             this._itemService.updateCharge(item.id, item.data.charge - 1).subscribe(
                 this.character.onUseItemCharge.bind(this.character)
@@ -290,7 +303,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 givenItem => {
                     // FIXME Do not unselect item if only a part of the stack is given
                     if (this.selectedItem && this.selectedItem.id === item.id) {
-                        this.selectedItem = null;
+                        this.selectedItem = undefined;
                     }
                     this.character.onDeleteItem(givenItem);
                 }

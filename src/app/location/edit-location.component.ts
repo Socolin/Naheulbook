@@ -11,7 +11,7 @@ import {NotificationsService} from '../notifications';
 export class EditLocationComponent implements OnInit {
     public location: Location;
     public maps: Map[] = [];
-    public newLocationName: string;
+    public newLocationName: string | undefined;
 
     constructor(private _route: ActivatedRoute
         , private _router: Router
@@ -20,23 +20,31 @@ export class EditLocationComponent implements OnInit {
     }
 
     addLocation() {
+        if (!this.newLocationName) {
+            throw new Error('addLocation: `newLocationName` should be defined');
+        }
+
         this._locationService.addLocation(this.newLocationName, this.location.id).subscribe(
             location => {
                 this._locationService.clearLocations();
                 this._notifications.success('Cartographie', 'Lieu ajotuer');
                 this.location.sons.push(location);
-                this.newLocationName = null;
+                this.newLocationName = undefined;
             }
         );
     }
 
     addLocationAndEdit() {
+        if (!this.newLocationName) {
+            throw new Error('addLocationAndEdit: `newLocationName` should be defined');
+        }
+
         this._locationService.addLocation(this.newLocationName, this.location.id).subscribe(
             location => {
                 this._locationService.clearLocations();
                 this._notifications.success('Cartographie', 'Lieu ajotuer');
                 this._router.navigate(['/edit-location', location.id]);
-                this.newLocationName = null;
+                this.newLocationName = undefined;
             }
         );
     }

@@ -29,8 +29,8 @@ export class BagItemViewComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if ('items' in changes) {
-            let container = [];
-            let contained = [];
+            let container: Item[] = [];
+            let contained: Item[] = [];
 
             for (let i = 0; i < this.items.length; i++) {
                 let item = this.items[i];

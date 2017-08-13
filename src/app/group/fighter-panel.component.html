@@ -29,7 +29,7 @@
     <div *ngIf="group.data.inCombat && group.currentFighter" class="next-fighter">
         <button md-raised-button
                 color="primary"
-                [disabled]="loadingNextLap"
+                [disabled]="loadingNextLap || group.fighters.length < 2"
                 (click)="selectNextFighter()">
             Suivant
         </button>

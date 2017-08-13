@@ -15,6 +15,7 @@ import {TargetJsonData} from '../group/target.model';
 import {WebSocketService} from '../websocket/websocket.service';
 import {ActiveStatsModifier, StatModifier} from '../shared/stat-modifier.model';
 import {Fighter} from '../group/group.model';
+import {ItemSlot} from '../item/item-template.model';
 
 export interface CharacterResume {
     id: number;
@@ -184,8 +185,8 @@ export class CharacterComputedData {
     itemsEquiped: Item[] = [];
     currencyItems: Item[] = [];
     totalMoney = 0;
-    itemSlots = [];
-    topLevelContainers = [];
+    itemSlots: ItemSlot[] = [];
+    topLevelContainers: Item[] = [];
     xpToNextLevel: number;
     tacticalMovement: TacticalMovementInfo = new TacticalMovementInfo();
 
@@ -242,7 +243,7 @@ export class Character extends WsRegistrable {
     ev: number;
     ea: number;
     origin: Origin;
-    job: Job;
+    job: Job | undefined;
     level: number;
     sex: string;
     experience: number;
@@ -280,7 +281,11 @@ export class Character extends WsRegistrable {
             items: [],
             modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers)
         });
-        character.origin = origins.find(o => o.id === jsonData.originId);
+        let origin = origins.find(o => o.id === jsonData.originId);
+        if (!origin) {
+            throw new Error('Invalid originId: ' + jsonData.originId);
+        }
+        character.origin = origin;
         character.job = jobs.find(j => j.id === jsonData.jobId);
 
         for (let sk of jsonData.skills) {
@@ -328,7 +333,7 @@ export class Character extends WsRegistrable {
         if (item.template.modifiers) {
             for (let i = 0; i < item.template.modifiers.length; i++) {
                 let modifier = item.template.modifiers[i];
-                if (modifier.job && modifier.job !== this.job.id) {
+                if (modifier.job && (!this.job || modifier.job !== this.job.id)) {
                     continue;
                 }
                 if (modifier.origin && modifier.origin !== this.origin.id) {
@@ -372,11 +377,11 @@ export class Character extends WsRegistrable {
     private updateInventory() {
         let itemsBySlots = {};
         let itemsBySlotsAll = {};
-        let equiped = [];
-        let slots = [];
+        let equiped: Item[] = [];
+        let slots: ItemSlot[] = [];
         let containers: Item[] = [];
-        let topLevelContainers = [];
-        let currencyItems = [];
+        let topLevelContainers: Item[] = [];
+        let currencyItems: Item[] = [];
         let totalMoney = 0;
         let content: {[itemId: number]: Item[]} = {};
         let itemsById: {[itemId: number]: Item} = {};
@@ -384,7 +389,7 @@ export class Character extends WsRegistrable {
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
 
-            if (item.template.data.isCurrency) {
+            if (item.template.data.isCurrency && item.template.data.price != null) {
                 totalMoney += item.template.data.price * (item.data.quantity || 1);
                 currencyItems.push(item);
             }
@@ -513,7 +518,7 @@ export class Character extends WsRegistrable {
         }
         this.computedData.details.add('Valeurs initial', {AT: this.computedData.stats['AT'], PRD: this.computedData.stats['PRD']});
         this.computedData.stats['EV'] = this.origin.baseEV;
-        this.computedData.stats['EA'] = null;
+        this.computedData.stats['EA'] = 0;
         this.computedData.details.add('Origine', {EV: this.origin.baseEV});
 
         if (this.origin) {
@@ -610,7 +615,7 @@ export class Character extends WsRegistrable {
             if (item.template.data.charge) {
                 continue;
             }
-            if (item.template.data.requireLevel > this.level) {
+            if (item.template.data.requireLevel && item.template.data.requireLevel > this.level) {
                 continue;
             }
             let modifications = {};
@@ -659,7 +664,7 @@ export class Character extends WsRegistrable {
             let cleanModifiers = this.cleanItemModifiers(item);
             for (let m = 0; m < cleanModifiers.length; m++) {
                 let modifier = cleanModifiers[m];
-                if (modifier.job && modifier.job !== this.job.id) {
+                if (modifier.job && (!this.job || modifier.job !== this.job.id)) {
                     continue;
                 }
                 if (modifier.origin && modifier.origin !== this.origin.id) {
@@ -801,7 +806,7 @@ export class Character extends WsRegistrable {
             return a.skillDef.name.localeCompare(b.skillDef.name);
         });
 
-        let prevSkill: SkillDetail = null;
+        let prevSkill: SkillDetail|null = null;
         for (let i = 0; i < this.computedData.skills.length; i++) {
             let skill = this.computedData.skills[i];
             if (skill.skillDef.id in canceledSkills) {
@@ -1076,12 +1081,14 @@ export class Character extends WsRegistrable {
             let it = this.items[i];
             if (it.id === item.id) {
                 if (it.data.quantity !== item.data.quantity) {
-                    let diff = item.data.quantity - it.data.quantity;
-                    if (diff > 0) {
-                        this.notify('addItem', 'Ajout de ' + diff + item.data.name);
-                    }
-                    else {
-                        this.notify('deleteItem', 'Suppression de ' + (-diff) + ' ' + item.data.name);
+                    if (item.data.quantity != null && it.data.quantity != null) {
+                        let diff = item.data.quantity - it.data.quantity;
+                        if (diff > 0) {
+                            this.notify('addItem', 'Ajout de ' + diff + ' ' + item.data.name);
+                        }
+                        else {
+                            this.notify('deleteItem', 'Suppression de ' + (-diff) + ' ' + item.data.name);
+                        }
                     }
                     it.data.quantity = item.data.quantity;
                     it.data.charge = item.data.charge;
@@ -1178,7 +1185,7 @@ export class Character extends WsRegistrable {
         return false;
     }
 
-    public onChangeJob(job: Job): void {
+    public onChangeJob(job: Job | undefined): void {
         this.job = job;
         this.update();
     }
@@ -1194,6 +1201,9 @@ export class Character extends WsRegistrable {
     }
 
     public onWsUnregister(): void {
+        if (!this.wsSubscribtion) {
+            return;
+        }
         for (let loot of this.loots) {
             this.wsSubscribtion.service.unregisterElement(loot);
         }
@@ -1213,7 +1223,7 @@ export class Character extends WsRegistrable {
     }
 
     public updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any[] {
-        let changes = [];
+        let changes: any[] = [];
         for (let item of this.items) {
             let itemChanges = item.updateTime(type, data);
             for (let itemChange of itemChanges) {
@@ -1229,7 +1239,7 @@ export class Character extends WsRegistrable {
     }
 
     updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): any[] {
-        let changes = [];
+        let changes: any[] = [];
 
         for (let modifier of this.modifiers) {
             if (modifier.updateLapDecrement(data)) {

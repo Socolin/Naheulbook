@@ -12,7 +12,7 @@ export class ValueEditorComponent implements OnChanges {
     @Input() hideMaxValue: boolean;
     @Output() onChange: EventEmitter<number> = new EventEmitter<number>();
 
-    public valueDelta: string;
+    public valueDelta: string | undefined;
     public newValue = 0;
     public displayEditor = false;
     public xOffset = 0;
@@ -48,7 +48,7 @@ export class ValueEditorComponent implements OnChanges {
         this.displayEditor = false;
     }
 
-    searchVeContainer(elements: HTMLCollectionOf<Element>) {
+    searchVeContainer(elements: HTMLCollectionOf<Element>|HTMLCollection) {
         for (let i = 0; i < elements.length; i++) {
             let element = elements[i];
             if (element.classList.contains('ve-container')) {
@@ -100,7 +100,7 @@ export class ValueEditorComponent implements OnChanges {
     commitValue() {
         this.displayEditor = false;
         this.onChange.emit(this.newValue);
-        this.valueDelta = null;
+        this.valueDelta = undefined;
     }
 
     isRelative(val: string) {

@@ -18,7 +18,7 @@ import {isNullOrUndefined} from 'util';
     styleUrls: ['../shared/number-shadow.scss', './effect-list.component.scss'],
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
-    @Input() inputCategoryId = null;
+    @Input() inputCategoryId: number | undefined;
     @Input() isOverlay = false;
     @Input() options: string[] = [];
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
@@ -97,7 +97,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
             if (types.length) {
                 this.selectType(types[0]);
             }
-            if (this.isOverlay) {
+            if (this.isOverlay && this.inputCategoryId != null) {
                 this.selectCategoryId(this.inputCategoryId);
             } else {
                 if (!this._route.snapshot.data['id']) {
@@ -111,7 +111,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
         if (!this.isOverlay) {
             this._loginService.loggedUser.subscribe(
                 user => {
-                    this.editable = user && user.admin;
+                    this.editable = (user != null && user.admin);
                 });
         }
     }

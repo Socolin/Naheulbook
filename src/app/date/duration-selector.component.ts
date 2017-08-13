@@ -1,7 +1,5 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 
-import {isNullOrUndefined} from 'util';
-
 import {dateOffset2TimeDuration, timeDuration2DateOffset2} from './util';
 import {NhbkDateOffset} from './date.model';
 import {IDurable} from './durable.model';
@@ -25,7 +23,7 @@ export class DurationSelectorComponent implements OnChanges {
 
         switch (this.durable.durationType) {
             case 'custom':
-                if (isNullOrUndefined(this.durable.duration)) {
+                if (this.durable.duration == null) {
                     this.durable.duration = '';
                 }
                 delete this.durable.lapCount;
@@ -33,7 +31,7 @@ export class DurationSelectorComponent implements OnChanges {
                 delete this.durable.combatCount;
                 break;
             case 'time':
-                if (isNullOrUndefined(this.durable.timeDuration)) {
+                if (this.durable.timeDuration == null) {
                     this.durable.timeDuration = 0;
                 }
                 this.dateOffset = timeDuration2DateOffset2(this.durable.timeDuration);
@@ -42,7 +40,7 @@ export class DurationSelectorComponent implements OnChanges {
                 delete this.durable.duration;
                 break;
             case 'combat':
-                if (isNullOrUndefined(this.durable.combatCount)) {
+                if (this.durable.combatCount == null) {
                     this.durable.combatCount = 1;
                 }
                 delete this.durable.lapCount;
@@ -50,7 +48,7 @@ export class DurationSelectorComponent implements OnChanges {
                 delete this.durable.duration;
                 break;
             case 'lap':
-                if (isNullOrUndefined(this.durable.lapCount)) {
+                if (this.durable.lapCount == null) {
                     this.durable.lapCount = 1;
                 }
                 delete this.durable.timeDuration;

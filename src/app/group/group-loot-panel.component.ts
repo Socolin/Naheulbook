@@ -18,7 +18,7 @@ import {GroupService} from './group.service';
 })
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() group: Group;
-    public newLootName: string;
+    public newLootName: string|null;
 
     @ViewChild('addLootDialog')
     public addLootDialog: Portal<any>;
@@ -40,9 +40,12 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     createLoot() {
+        if (!this.newLootName) {
+            return;
+        }
         this._groupService.createLoot(this.group.id, this.newLootName).subscribe(
             loot => {
-                this.lootAdded(loot);
+                this.lootAdded(loot, false);
             }
         );
         this.newLootName = null;

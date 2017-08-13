@@ -34,10 +34,10 @@ export class TextFormatterPipe implements PipeTransform {
 
         let tags: string[] = [];
         let openTag = false;
-        let lastChar: string = null;
-        let currentTag: string = null;
+        let lastChar: string | undefined;
+        let currentTag = '';
         let isClosingTag = false;
-        let currentTagInfo: any = null;
+        let currentTagInfo: any | undefined;
         for (let i = 0; i < text.length; i++) {
             let currentChar = text.charAt(i);
             if (currentChar === '\n') {
@@ -48,14 +48,14 @@ export class TextFormatterPipe implements PipeTransform {
                         currentTag = tags[tags.length - 1];
                         currentTagInfo = this.tagsInfo[currentTag];
                     } else {
-                        currentTag = null;
-                        currentTagInfo = null;
+                        currentTag = '';
+                        currentTagInfo = undefined;
                     }
                 } else {
                     result += '<br>';
                 }
             }
-            else if (lastChar !== '\'' && currentChar === '[') {
+            else if (lastChar !== '\\' && currentChar === '[') {
                 if (openTag) {
                     console.log('Error in text at char: ' + i);
                 }
@@ -73,7 +73,7 @@ export class TextFormatterPipe implements PipeTransform {
                     }
                     if (currentTag in this.tagsInfo) {
                         if (this.tagsInfo[currentTag].close) {
-                            result += this.tagsInfo[lastOpenTag].close;
+                            result += this.tagsInfo[currentTag].close;
                         }
                     } else {
                         console.log('unknown closing tag: ' + currentTag + 'at pos: ' + i);

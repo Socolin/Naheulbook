@@ -51,17 +51,17 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     @ViewChild('stickyContainer')
     public stickyContainer: Portal<any>;
-    public stickyContainerOverlay: OverlayRef;
+    public stickyContainerOverlay?: OverlayRef;
 
     @ViewChildren(ItemCategoryDirective)
     public stickToTopElements: QueryList<ItemCategoryDirective>;
 
-    public filter: {name: string, dice: number, category: ItemCategory};
+    public filter: {name?: string, dice?: number, category?: ItemCategory};
     public itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
     public filteredCategories: ItemCategory[] = [];
 
     public stickyCategory: ItemCategory;
-    public sticked: ItemCategoryDirective;
+    public sticked?: ItemCategoryDirective;
     public expandedSticky = false;
 
     @HostListener('window:scroll', [])
@@ -69,7 +69,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
         if (this.inTab) {
             return;
         }
-        let lastOutsideScreen: ItemCategoryDirective;
+        let lastOutsideScreen: ItemCategoryDirective | undefined;
         for (let element of this.stickToTopElements.toArray()) {
             let top = element.elementRef.nativeElement.getBoundingClientRect().top;
             if (top > 20) {
@@ -143,7 +143,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     }
 
     resetFilter() {
-        this.filter = {name: null, dice: null, category: null};
+        this.filter = {name: undefined, dice: undefined, category: undefined};
         this.updateFilter();
     }
 
@@ -168,7 +168,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
             }
 
             this.selectedSection = section;
-            this.filter.category = null;
+            this.filter.category = undefined;
             this.resetFilter();
             this.loadSection(section);
         }
@@ -209,7 +209,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     }
 
     updateFilter() {
-        let filteredCategories = [];
+        let filteredCategories: ItemCategory[] = [];
         let itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];

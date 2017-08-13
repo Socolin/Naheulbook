@@ -4,9 +4,9 @@ import {IconDescription} from './icon.model';
 export class AutocompleteValue {
     public value: any;
     public text: string;
-    public secondaryText: string;
-    public icon: IconDescription;
-    public mdIcon: string;
+    public secondaryText?: string;
+    public icon?: IconDescription;
+    public mdIcon?: string;
 
     constructor(value: any, text: string, secondaryText?: string, icon?: IconDescription, mdIcon?: string) {
         this.value = value;
@@ -33,7 +33,7 @@ export class AutocompleteInputComponent {
     @ViewChild('inputField')
     public inputField: ElementRef;
 
-    public matchingValues: AutocompleteValue[];
+    public matchingValues?: AutocompleteValue[];
     public preSelectedValueIndex: number;
 
     focus() {
@@ -52,12 +52,12 @@ export class AutocompleteInputComponent {
         else {
             this.value = value.text;
         }
-        this.matchingValues = null;
+        this.matchingValues = undefined;
         return false;
     }
 
     close() {
-        this.matchingValues = null;
+        this.matchingValues = undefined;
     }
 
     onKey(event: KeyboardEvent) {

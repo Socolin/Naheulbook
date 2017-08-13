@@ -10,10 +10,10 @@ import {MiscService} from './misc.service';
 })
 export class StatRequirementsEditorComponent implements OnInit {
     public stats: Stat[];
-    @Input() requirements: any[];
-    public selectedStat: Stat;
-    public minValue: number;
-    public maxValue: number;
+    @Input() requirements: any[] | undefined;
+    public selectedStat: Stat | undefined;
+    public minValue: number | undefined;
+    public maxValue: number | undefined;
 
     constructor(private _miscService: MiscService) {
         this.requirements = [];
@@ -25,6 +25,9 @@ export class StatRequirementsEditorComponent implements OnInit {
     }
 
     removeRequirement(i: number) {
+        if (!this.requirements) {
+            return;
+        }
         this.requirements.splice(i, 1);
     }
 
@@ -38,9 +41,9 @@ export class StatRequirementsEditorComponent implements OnInit {
                 this.requirements = [];
             }
             this.requirements.push({ stat: this.selectedStat.name, min: this.minValue, max: this.maxValue });
-            this.selectedStat = null;
-            this.minValue = null;
-            this.maxValue = null;
+            this.selectedStat = undefined;
+            this.minValue = undefined;
+            this.maxValue = undefined;
         }
         return true;
     }

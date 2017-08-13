@@ -11,7 +11,7 @@ import {MdDialog} from '@angular/material';
     styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-    public user: User;
+    public user: User|null;
     public redirectPage: string;
 
     constructor(public dialog: MdDialog

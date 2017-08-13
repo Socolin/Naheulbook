@@ -1,10 +1,11 @@
 import {Component, Output, EventEmitter, Input, DoCheck} from '@angular/core';
 import {Observable} from 'rxjs';
 
-import {Effect} from './effect.model';
+import {AutocompleteValue} from '../shared';
 import {IDurable} from '../date/durable.model';
-import {AutocompleteValue} from '../shared/autocomplete-input.component';
+
 import {EffectService} from './effect.service';
+import {Effect} from './effect.model';
 
 @Component({
     selector: 'active-effect-editor',
@@ -13,12 +14,12 @@ import {EffectService} from './effect.service';
 })
 export class ActiveEffectEditorComponent implements DoCheck {
     @Input() reusableToggle = true;
-    @Output() onValidate: EventEmitter<any> = new EventEmitter<any>();
-    @Output() onChange: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onValidate: EventEmitter<{effect: Effect, data: any}> = new EventEmitter<{effect: Effect, data: any}>();
+    @Output() onChange: EventEmitter<{effect: Effect, data: any}> = new EventEmitter<{effect: Effect, data: any}>();
 
     public effectFilterName: string;
     public autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
-    public preSelectedEffect: Effect;
+    public preSelectedEffect: Effect | undefined;
     public newEffectReusable: boolean;
     public newEffectCustomDuration = false;
     public customDuration: IDurable;
@@ -64,7 +65,11 @@ export class ActiveEffectEditorComponent implements DoCheck {
         }
     }
 
-    updateNewEffect() {
+    updateNewEffect(): {effect: Effect, data: any} | undefined {
+        if (!this.preSelectedEffect) {
+            return undefined;
+        }
+
         let data = {
             reusable: this.newEffectReusable,
         };
@@ -91,16 +96,16 @@ export class ActiveEffectEditorComponent implements DoCheck {
             data: data
         };
     }
-    addEffect() {
-        if (!this.preSelectedEffect) {
-            return null;
-        }
 
-        this.onValidate.emit(this.updateNewEffect());
+    addEffect() {
+        let newEffect = this.updateNewEffect();
+        if (newEffect) {
+            this.onValidate.emit(newEffect);
+        }
     }
 
     unselectEffect() {
-        this.preSelectedEffect = null;
+        this.preSelectedEffect = undefined;
         this.effectFilterName = '';
     }
 

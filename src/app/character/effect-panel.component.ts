@@ -14,7 +14,7 @@ import {CharacterService} from './character.service';
 export class EffectPanelComponent {
     @Input() character: Character;
 
-    public selectedModifier: ActiveStatsModifier;
+    public selectedModifier: ActiveStatsModifier | undefined;
 
     // Add effect dialog
     @ViewChild('addEffectModal')
@@ -58,7 +58,7 @@ export class EffectPanelComponent {
     }
 
     removeModifier(modifier: ActiveStatsModifier) {
-        this.selectedModifier = null;
+        this.selectedModifier = undefined;
         this._characterService.removeModifier(this.character.id, modifier.id).subscribe(
             this.character.onRemoveModifier.bind(this.character)
         );

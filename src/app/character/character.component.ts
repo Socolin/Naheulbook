@@ -20,7 +20,7 @@ import {SwipeService} from './swipe.service';
 
 export class LevelUpInfo {
     EVorEA = 'EV';
-    EVorEAValue: number;
+    EVorEAValue: number | undefined;
     targetLevelUp: number;
     statToUp: string;
     skill: Skill;
@@ -84,7 +84,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     @ViewChild('changeJobDialog')
     public changeJobDialog: Portal<any>;
     public changeJobOverlayRef: OverlayRef;
-    public newCharacterJob: Job;
+    public newCharacterJob: Job | undefined;
 
     private notificationSub: Subscription;
 
@@ -192,7 +192,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     initLevelUp() {
         this.levelUpInfo = new LevelUpInfo();
         this.levelUpInfo.EVorEA = 'EV';
-        this.levelUpInfo.EVorEAValue = null;
+        this.levelUpInfo.EVorEAValue = undefined;
         this.levelUpInfo.targetLevelUp = this.character.level + 1;
         if (this.levelUpInfo.targetLevelUp % 2 === 0) {
             this.levelUpInfo.statToUp = 'FO';
@@ -209,8 +209,10 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 this.levelUpInfo.EVorEAValue = Math.max(1, Math.ceil(Math.random() * diceLevelUp) - 1);
                 return;
             }
-        } else {
+        } else if (this.character.job && this.character.job.diceEaLevelUp) {
             diceLevelUp = this.character.job.diceEaLevelUp;
+        } else {
+            diceLevelUp = 6;
         }
         this.levelUpInfo.EVorEAValue = Math.ceil(Math.random() * diceLevelUp);
     }
@@ -289,7 +291,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     selectTab(tabChangeEvent: MdTabChangeEvent): boolean {
         this.currentTab = this.tabs[tabChangeEvent.index].hash;
-        this.inventoryPanel.selectedItem = null;
+        this.inventoryPanel.selectedItem = undefined;
         if (!this.inGroupTab) {
             this._router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this._route});
         }
@@ -361,14 +363,14 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this.changeJobOverlayRef.detach();
     }
 
-    selectNewJob(job: Job|undefined) {
+    selectNewJob(job: Job | undefined) {
         this.newCharacterJob = job;
     }
 
     changeJob() {
         this._characterService.changeJob(
             this.character.id,
-            this.newCharacterJob ? this.newCharacterJob.id : null).subscribe(job => {
+            this.newCharacterJob ? this.newCharacterJob.id : undefined).subscribe(job => {
             this.character.onChangeJob(job);
         });
         this.closeChangeJobDialog();

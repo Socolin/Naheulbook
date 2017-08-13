@@ -29,7 +29,7 @@ export class GroupService extends JsonService {
         return this.postJson('/api/character/groupDetail', {
             groupId: groupId
         }).map(res => res.json()).map((groupData: Group) => {
-            let charactersLoading: Observable<Character>[] = [];
+            let charactersLoading: Observable<Character|null>[] = [];
             for (let i = 0; i < groupData.characters.length; i++) {
                 let char = groupData.characters[i];
                 charactersLoading.push(this._characterService.getCharacter(char.id));

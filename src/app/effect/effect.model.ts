@@ -57,7 +57,7 @@ export class EffectType {
     }
 
     static typesFromJson(jsonDatas: any[]): EffectType[] {
-        let types = [];
+        let types: EffectType[] = [];
         for (let jsonData of jsonDatas) {
             types.push(EffectType.fromJson(jsonData));
         }
@@ -85,7 +85,7 @@ export class Effect implements IDurable {
     }
 
     static effectsFromJson(categoriesById: {[categoryId: number]: EffectCategory}, effectsJsonData: EffectJsonData[]): Effect[] {
-        let effects = [];
+        let effects: Effect[] = [];
         for (let effectJsonData of effectsJsonData) {
             effects.push(Effect.fromJson(effectJsonData, categoriesById));
         }

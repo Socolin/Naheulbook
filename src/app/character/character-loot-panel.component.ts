@@ -23,8 +23,8 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     @ViewChild('takeItemDialog')
     public takeItemDialog: Portal<any>;
     public takeItemOverlayRef: OverlayRef;
-    public takingItemLoot: Loot;
-    public takingItemMonster: Monster;
+    public takingItemLoot: Loot | undefined;
+    public takingItemMonster: Monster | undefined;
     public takingItem: Item;
     public takingQuantity?: number;
 
@@ -38,14 +38,14 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         this.takingItem = item;
         this.takingQuantity = item.data.quantity;
         this.takingItemLoot = loot;
-        this.takingItemMonster = null;
+        this.takingItemMonster = undefined;
         this.takeItemOverlayRef = this._nhbkDialogservice.openCenteredBackdropDialog(this.takeItemDialog);
     }
 
     openTakeItemMonsterDialog(monster: Monster, item: Item) {
         this.takingItem = item;
         this.takingQuantity = item.data.quantity;
-        this.takingItemLoot = null;
+        this.takingItemLoot = undefined;
         this.takingItemMonster = monster;
         this.takeItemOverlayRef = this._nhbkDialogservice.openCenteredBackdropDialog(this.takeItemDialog);
     }

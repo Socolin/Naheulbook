@@ -15,7 +15,7 @@ export class DateSelectorComponent implements OnInit, OnChanges {
 
     @ViewChild('dateSelectorDialog')
     public dateSelectorDialog: Portal<any>;
-    public dateSelectorOverlayRef: OverlayRef;
+    public dateSelectorOverlayRef: OverlayRef | undefined;
 
     public calendar: CalendarDate[];
     public currentCalendarDate: CalendarDate;
@@ -31,7 +31,11 @@ export class DateSelectorComponent implements OnInit, OnChanges {
     }
 
     closeSelector() {
+        if (!this.dateSelectorOverlayRef) {
+            return;
+        }
         this.dateSelectorOverlayRef.detach();
+        this.dateSelectorOverlayRef = undefined;
     }
 
     validDate() {
@@ -41,15 +45,6 @@ export class DateSelectorComponent implements OnInit, OnChanges {
         this.date.day = this.relativeDay + this.currentCalendarDate.startDay - 1;
         this.onChange.emit(this.date);
         this.closeSelector();
-    }
-
-    setCurrentCalendarDate(cDate: CalendarDate): boolean {
-        if (!cDate) {
-            return;
-        }
-        this.currentCalendarDate = cDate;
-        this.date.day = this.relativeDay + cDate.startDay - 1;
-        return false;
     }
 
     updateCurrentCalendar() {

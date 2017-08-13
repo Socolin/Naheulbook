@@ -11,8 +11,8 @@ import {Fighter} from '../group/group.model';
 
 export class MonsterData {
     at: number;
-    prd: number;
-    esq: number;
+    prd: number | undefined;
+    esq: number | undefined;
     ev: number;
     maxEv: number;
     ea: number;
@@ -108,12 +108,12 @@ export class Monster extends WsRegistrable {
         this.onNotification.next({type: type, message: message, data: data});
     }
 
-    public getItem(itemId: number): Item {
+    public getItem(itemId: number): Item | undefined {
         let i = this.items.findIndex(item => item.id === itemId);
         if (i !== -1) {
             return this.items[i];
         }
-        return null;
+        return undefined;
     }
 
     /**
@@ -149,17 +149,23 @@ export class Monster extends WsRegistrable {
         return false;
     }
 
-    public takeItem(leftItem: Item, takenItem: PartialItem, character: object) {
+    public takeItem(leftItem: PartialItem | Item | undefined, takenItem: PartialItem, character: object) {
         if (leftItem) {
             let currentItem = this.getItem(leftItem.id);
-            currentItem.data.quantity = leftItem.data.quantity;
+            if (currentItem) {
+                currentItem.data.quantity = leftItem.data.quantity;
+            }
         }
         else {
-            let currentItem = this.getItem(takenItem.id);
-            let i = this.items.findIndex(item => item.id === currentItem.id);
-            let removedItem = this.items[i];
-            this.items.splice(i, 1);
-            this.itemRemoved.next(removedItem);
+            const currentItem = this.getItem(takenItem.id);
+            if (currentItem) {
+                let i = this.items.findIndex(item => item.id === currentItem.id);
+                if (i !== -1) {
+                    let removedItem = this.items[i];
+                    this.items.splice(i, 1);
+                    this.itemRemoved.next(removedItem);
+                }
+            }
         }
         this.onChange.next({action: 'tookItem', character: character, item: takenItem});
     }
@@ -252,7 +258,10 @@ export class Monster extends WsRegistrable {
     }
 
     equipItem(partialItem: PartialItem) {
-        let item = this.getItem(partialItem.id);
+        let item = this.getItem(partialItem.id)
+        if (!item) {
+            return;
+        }
         if (item.data.equiped === partialItem.data.equiped) {
             return;
         }
@@ -262,8 +271,8 @@ export class Monster extends WsRegistrable {
 
     update() {
         this.computedData.at =  this.data.at;
-        this.computedData.prd =  this.data.prd;
-        this.computedData.esq =  this.data.esq;
+        this.computedData.prd =  this.data.prd ? this.data.prd : 0;
+        this.computedData.esq =  this.data.esq ? this.data.esq : 0;
         this.computedData.pr =  this.data.pr;
         this.computedData.pr_magic =  this.data.pr_magic;
         this.computedData.dmg =  this.data.dmg;
@@ -279,7 +288,7 @@ export class Monster extends WsRegistrable {
             }
         }
         for (let item of this.items) {
-            if (item.data.equiped) {
+            if (item.data.equiped && item.template.modifiers) {
                 for (let mod of item.template.modifiers) {
                     this.applyStatModifier(mod);
                 }
@@ -306,7 +315,7 @@ export class Monster extends WsRegistrable {
     }
 
     public updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any[] {
-        let changes = [];
+        let changes: any[] = [];
         for (let item of this.items) {
             for (let i = 0; i < item.modifiers.length; i++) {
                 let modifier = item.modifiers[i];
@@ -324,7 +333,7 @@ export class Monster extends WsRegistrable {
     }
 
     updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): any[] {
-        let changes = [];
+        let changes: any[] = [];
         for (let item of this.items) {
             for (let i = 0; i < item.modifiers.length; i++) {
                 let modifier = item.modifiers[i];
@@ -353,8 +362,8 @@ export class TraitInfo {
 }
 export class MonsterTemplateData {
     at: number;
-    prd: number;
-    esq: number;
+    prd: number | undefined;
+    esq: number | undefined;
     ev: number;
     ea: number;
     cou: number;
@@ -408,7 +417,7 @@ export class MonsterTemplateType {
     }
 
     static typesFromJson(jsonDatas: any[]): MonsterTemplateType[] {
-        let types = [];
+        let types: MonsterTemplateType[] = [];
         for (let jsonData of jsonDatas) {
             types.push(MonsterTemplateType.fromJson(jsonData));
         }
@@ -442,7 +451,7 @@ export class MonsterTemplate {
     }
 
     static templatessFromJson(jsonDatas: any[], categoriesById: {[id: number]: MonsterTemplateCategory}): MonsterTemplate[] {
-        let templates = [];
+        let templates: MonsterTemplate[] = [];
         for (let jsonData of jsonDatas) {
             templates.push(MonsterTemplate.fromJson(jsonData, categoriesById));
         }

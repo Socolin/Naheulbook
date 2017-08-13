@@ -156,7 +156,7 @@ export class CharacterService extends JsonService {
         }).map(res => res.json());
     }
 
-    changeJob(characterId: number, jobId: number|null): Observable<Job> {
+    changeJob(characterId: number, jobId: number | undefined): Observable<Job | undefined> {
         return Observable.forkJoin(
             this.postJson('/api/character/changeJob', {
                 characterId: characterId,
@@ -165,7 +165,7 @@ export class CharacterService extends JsonService {
             this._jobService.getJobsById()
         ).map(([data, jobsById]: [any, {[jobId: number]: Job}]) => {
             if (!data.jobId) {
-                return null;
+                return undefined;
             }
             return jobsById[data.jobId];
         });

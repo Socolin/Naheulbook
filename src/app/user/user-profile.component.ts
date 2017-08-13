@@ -10,7 +10,7 @@ import {User} from './user.model';
     styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-    public profile: User;
+    public profile: User|null;
 
     constructor(private _notification: NotificationsService
         , private loginService: LoginService) {

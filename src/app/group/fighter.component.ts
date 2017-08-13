@@ -25,12 +25,12 @@ export class FighterComponent implements OnChanges {
     @Input() selected: boolean;
     @Input() expandedView: boolean;
     @Output() onSelect: EventEmitter<Fighter> = new EventEmitter<Fighter>();
-    @Input() selectedModifier: ActiveStatsModifier;
-    public selectedItem: Item;
+    @Input() selectedModifier: ActiveStatsModifier | undefined;
+    public selectedItem: Item | undefined;
 
     @ViewChild('editMonsterDialog')
     public editMonsterDialog: Portal<any>;
-    public editMonsterOverlayRef: OverlayRef;
+    public editMonsterOverlayRef: OverlayRef | undefined;
 
     constructor(private _actionService: GroupActionService
         , private _characterService: CharacterService
@@ -153,13 +153,16 @@ export class FighterComponent implements OnChanges {
         this._actionService.emitAction('deleteMonster', this.group, monster);
     }
 
-    openEditMonsterDialog(monster: Monster) {
+    openEditMonsterDialog() {
         this.editMonsterOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.editMonsterDialog);
     }
 
     closeEditMonsterDialog() {
+        if (!this.editMonsterOverlayRef) {
+            return;
+        }
         this.editMonsterOverlayRef.detach();
-        this.editMonsterOverlayRef = null;
+        this.editMonsterOverlayRef = undefined;
     }
 
     selectFighter() {
@@ -188,7 +191,7 @@ export class FighterComponent implements OnChanges {
 
     selectModifier(modifier: ActiveStatsModifier) {
         if (modifier === this.selectedModifier) {
-            this.selectedModifier = null;
+            this.selectedModifier = undefined;
         } else {
             this.selectedModifier = modifier;
         }
@@ -210,7 +213,7 @@ export class FighterComponent implements OnChanges {
     }
     ngOnChanges(changes: SimpleChanges): void {
         if ('fighter' in changes) {
-            this.selectedItem = null;
+            this.selectedItem = undefined;
         }
     }
 }

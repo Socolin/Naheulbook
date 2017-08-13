@@ -10,8 +10,8 @@ import {LoginService} from '../user';
 @Injectable()
 export class LocationService extends JsonService {
 
-    public locations: ReplaySubject<Location[]>;
-    public locationsTree: ReplaySubject<Location[]>;
+    public locations: ReplaySubject<Location[]> | undefined;
+    public locationsTree: ReplaySubject<Location[]> | undefined;
 
     constructor(http: Http
         , notification: NotificationsService
@@ -38,10 +38,14 @@ export class LocationService extends JsonService {
                             }
                         });
 
-                        this.locationsTree.next(locations);
+                        if (this.locationsTree) {
+                            this.locationsTree.next(locations);
+                        }
                     },
                     error => {
-                        this.locationsTree.error(error);
+                        if (this.locationsTree) {
+                            this.locationsTree.error(error);
+                        }
                     }
                 );
         }
@@ -56,11 +60,15 @@ export class LocationService extends JsonService {
                 .map(res => res.json())
                 .subscribe(
                     locations => {
-                        this.locations.next(locations);
-                        this.locations.complete();
+                        if (this.locations) {
+                            this.locations.next(locations);
+                            this.locations.complete();
+                        }
                     },
                     error => {
-                        this.locations.error(error);
+                        if (this.locations) {
+                            this.locations.error(error);
+                        }
                     }
                 );
         }
@@ -83,8 +91,8 @@ export class LocationService extends JsonService {
     }
 
     clearLocations() {
-        this.locationsTree = null;
-        this.locations = null;
+        this.locationsTree = undefined;
+        this.locations = undefined;
     }
 
     addLocation(locationName: string, parentId: number): Observable<Location> {

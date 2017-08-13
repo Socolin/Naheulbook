@@ -11,7 +11,7 @@ import {CriticalData} from './usefull-data.model';
 })
 export class UsefullDataComponent implements OnInit {
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
-    public currentPanel: string = null;
+    public currentPanel: string | undefined;
     public effectsCategoryId = 1;
     public panelByNames: {[name: string]: Portal<any>} = {};
 
@@ -56,7 +56,7 @@ export class UsefullDataComponent implements OnInit {
         this._nhbkDialogService.openTopCenteredBackdropDialog(this.panelByNames[name]).detachments().subscribe(
             () =>  {
                 if (this.currentPanel === name) {
-                    this.currentPanel = null;
+                    this.currentPanel = undefined;
                 }
             }
         );

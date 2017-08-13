@@ -64,7 +64,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     public changeOwnershipOverlayRef: OverlayRef;
     public selectedCharacter: Character;
     public changeOwnershipNewOwner: User;
-    public filterSearchUser: string = null;
+    public filterSearchUser: string|null = null;
     public filteredUsers: Object[] = [];
 
     @ViewChild('inviteCharacterModal')
@@ -90,8 +90,8 @@ export class GroupComponent implements OnInit, OnDestroy {
     @ViewChild('fighterSelector')
     public fighterSelector: FighterSelectorComponent;
 
-    private currentSelectAction: string;
-    private tmpModifier: ActiveStatsModifier;
+    private currentSelectAction: string|null;
+    private tmpModifier: ActiveStatsModifier|null;
     private tmpItem: Item;
 
     constructor(private _route: ActivatedRoute
@@ -438,6 +438,9 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     onSelectFighters(fighters: Fighter[]) {
         if (this.currentSelectAction === 'applyModifier') {
+            if (!this.tmpModifier) {
+                return;
+            }
             for (let fighter of fighters) {
                 let modifier = this.tmpModifier;
                 if (modifier.durationType === 'lap') {

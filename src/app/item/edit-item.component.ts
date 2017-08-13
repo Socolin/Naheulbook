@@ -21,7 +21,7 @@ export class EditItemComponent implements OnInit {
 
     @HostListener('window:keydown', ['$event'])
     keyboardInput(event: KeyboardEvent) {
-        if (event.srcElement.tagName === 'BODY') {
+        if (event.srcElement && event.srcElement.tagName === 'BODY') {
             if (event.code === 'Enter') {
                 if (event.ctrlKey) {
                     this.edit(event.shiftKey);
@@ -38,7 +38,7 @@ export class EditItemComponent implements OnInit {
                 this.saving = false;
                 this._itemTemplateService.getSectionFromCategory(item.category).subscribe(
                     section => {
-                        let sectionId = null;
+                        let sectionId: number;
                         if (section) {
                             sectionId = section.id;
                             this._itemTemplateService.clearItemSectionCache(section.id);

@@ -2,6 +2,7 @@ import {Input, Component, OnInit} from '@angular/core';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
+import {HistoryEntry} from '../shared/history-entry.model';
 
 @Component({
     selector: 'character-history',
@@ -11,7 +12,7 @@ export class CharacterHistoryComponent implements OnInit {
     @Input() character: Character;
 
     public historyPage = 0;
-    public currentDay: string = null;
+    public currentDay: string | undefined;
     public history: any[];
     public loadMore: boolean;
     public loading: boolean;
@@ -23,7 +24,7 @@ export class CharacterHistoryComponent implements OnInit {
         this.loading = true;
         if (!next) {
             this.historyPage = 0;
-            this.currentDay = null;
+            this.currentDay = undefined;
             this.history = [];
         }
 
@@ -34,7 +35,7 @@ export class CharacterHistoryComponent implements OnInit {
                     return;
                 }
                 this.loadMore = true;
-                let logs = [];
+                let logs: HistoryEntry[] = [];
                 if (this.currentDay) {
                     logs = this.history[this.history.length - 1].logs;
                 }

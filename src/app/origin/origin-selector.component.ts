@@ -16,7 +16,7 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
     @Input('ad') ad: number;
     @Input('fo') fo: number;
 
-    @Input() selectedOrigin: Origin = null;
+    @Input() selectedOrigin?: Origin;
     @Output() originChange: EventEmitter<Origin> = new EventEmitter<Origin>();
     @Output() swapStats: EventEmitter<string[]> = new EventEmitter<string[]>();
 
@@ -53,7 +53,7 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
                 originsStates[origin.id] = {state: 'ok'};
             }
             else {
-                let validSwap = [];
+                let validSwap: string[][] = [];
                 for (let swap of this.swapList) {
                     let testStats = Object.assign({}, this.stats);
                     let tmp = testStats[swap[0]];

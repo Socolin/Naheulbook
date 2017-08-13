@@ -89,7 +89,7 @@ export class JobSelectorComponent implements OnInit, OnChanges {
                     jobsStates[job.id] = {state: 'ko'};
                     continue;
                 }
-                let validSwap = [];
+                let validSwap: string[][] = [];
                 for (let swap of this.swapList) {
                     let testStats = Object.assign({}, this.stats);
                     let tmp = testStats[swap[0]];
@@ -113,8 +113,8 @@ export class JobSelectorComponent implements OnInit, OnChanges {
         return this.jobsStates[job.id].state === 'ok';
     }
 
-    selectJob(job: Job) {
-        if (job == null) {
+    selectJob(job: Job | undefined) {
+        if (!job) {
             this.jobChange.emit(job);
             return false;
         }
@@ -127,7 +127,7 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     }
 
     updateJobs() {
-        let jobs = [];
+        let jobs: Job[] = [];
         for (let job of this.allJobs) {
             if (this.isVisible(job)) {
                 jobs.push(job);
@@ -169,7 +169,7 @@ export class JobSelectorComponent implements OnInit, OnChanges {
                 }
             }
         }
-        this.selectJob(null);
+        this.selectJob(undefined);
     }
 
     private updateStats() {

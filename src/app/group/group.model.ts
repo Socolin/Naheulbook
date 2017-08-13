@@ -86,7 +86,7 @@ export class Target {
 
 export class Fighter {
     stats: FighterStat = new FighterStat(this);
-    target: Target;
+    target: Target|null;
 
     isMonster: boolean;
     monster: Monster;
@@ -319,9 +319,9 @@ export class Group extends WsRegistrable {
     public fighters: Fighter[] = [];
     public fightersSubscriptions: {[fighterUid: string]: Subscription} = {};
 
-    public pendingModifierChanges: any[];
+    public pendingModifierChanges: any[]|null;
 
-    get currentFighter(): Fighter {
+    get currentFighter(): Fighter|undefined {
         if (this.fighters.length <= this.data.currentFighterIndex) {
             return undefined;
         }
@@ -608,10 +608,14 @@ export class Group extends WsRegistrable {
         });
     }
 
-    public nextFighter(): {modifiersDurationUpdated: any[], fighterIndex: number} {
+    public nextFighter(): {modifiersDurationUpdated: any[], fighterIndex: number} | undefined {
+        if (this.fighters.length < 2) {
+            return undefined;
+        }
+
         let previousFighter: Fighter;
         if (this.data.currentFighterIndex === -1) {
-            previousFighter = undefined;
+            previousFighter = this.fighters[this.fighters.length - 1];
         } else {
             previousFighter = this.fighters[this.data.currentFighterIndex];
         }
@@ -634,7 +638,7 @@ export class Group extends WsRegistrable {
     }
 
     public updateTime(type: string, data: number|{previous: Fighter; next: Fighter}): any[] {
-        let changes = [];
+        let changes: any[] = [];
         for (let fighter of this.fighters) {
             let fighterChanges = fighter.updateTime(type, data);
             if (fighterChanges) {
@@ -645,7 +649,7 @@ export class Group extends WsRegistrable {
     }
 
     public updateLapDecrement(data: { deleted: Fighter, previous: Fighter; next: Fighter }): any[] {
-        let changes = [];
+        let changes: any[] = [];
         for (let fighter of this.fighters) {
             let fighterChanges = fighter.updateLapDecrement(data);
             if (fighterChanges) {
@@ -699,6 +703,9 @@ export class Group extends WsRegistrable {
     }
 
     public onWsUnregister(): void {
+        if (!this.wsSubscribtion) {
+            return;
+        }
         for (let loot of this.loots) {
             this.wsSubscribtion.service.unregisterElement(loot);
         }

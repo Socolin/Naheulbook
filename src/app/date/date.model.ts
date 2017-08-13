@@ -13,10 +13,18 @@ export class NhbkDate {
     public year = 1498;
 
     constructor(minute?: number, hour?: number, day?: number, year?: number) {
-        this.minute = minute;
-        this.hour = hour;
-        this.day = day;
-        this.year = year;
+        if (minute) {
+            this.minute = minute;
+        }
+        if (hour) {
+            this.hour = hour;
+        }
+        if (day) {
+            this.day = day;
+        }
+        if (year) {
+            this.year = year;
+        }
     }
 }
 

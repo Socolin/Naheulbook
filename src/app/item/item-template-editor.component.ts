@@ -44,9 +44,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
     @ViewChild('addModuleDialog')
     public addModuleDialog: Portal<any>;
-    public addModuleOverlayRef: OverlayRef;
-
-    public currentUser: User;
+    public addModuleOverlayRef?: OverlayRef;
 
     private modulesDef: any[] = [
         {name: 'charge',       displayName: 'Charges/Utilisations'},
@@ -114,7 +112,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     closeAddModuleDialog() {
         if (this.addModuleOverlayRef) {
             this.addModuleOverlayRef.detach();
-            this.addModuleOverlayRef = null;
+            this.addModuleOverlayRef = undefined;
         }
     }
 
@@ -150,10 +148,13 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     }
 
     changeSource(source: 'official' | 'community' | 'private') {
+        if (!this._loginService.currentLoggedUser) {
+            throw new Error('changeSource: No logged user');
+        }
         this.itemTemplate.source = source;
         if (source === 'official') {
-            this.itemTemplate.sourceUser = null;
-            this.itemTemplate.sourceUserId = null;
+            this.itemTemplate.sourceUser = undefined;
+            this.itemTemplate.sourceUserId = undefined;
         } else {
             this.itemTemplate.sourceUser = this._loginService.currentLoggedUser.displayName;
             this.itemTemplate.sourceUserId = this._loginService.currentLoggedUser.id;
@@ -292,10 +293,10 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 this.itemTemplate.data.lifetime = undefined;
                 break;
             case 'modifiers':
-                this.itemTemplate.modifiers = undefined;
+                this.itemTemplate.modifiers = [];
                 break;
             case 'prereq':
-                this.itemTemplate.requirements = undefined;
+                this.itemTemplate.requirements = [];
                 break;
             case 'protection':
                 this.itemTemplate.data.protection = undefined;
@@ -316,15 +317,15 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 this.itemTemplate.data.sex = undefined;
                 break;
             case 'skill':
-                this.itemTemplate.skills = undefined;
-                this.itemTemplate.unskills = undefined;
-                this.itemTemplate.skillModifiers = undefined;
+                this.itemTemplate.skills = [];
+                this.itemTemplate.unskills = [];
+                this.itemTemplate.skillModifiers = [];
                 break;
             case 'skillBook':
                 this.itemTemplate.data.skillBook = undefined;
                 break;
             case 'slots':
-                this.itemTemplate.slots = undefined;
+                this.itemTemplate.slots = [];
                 break;
             case 'space':
                 this.itemTemplate.data.space = undefined;

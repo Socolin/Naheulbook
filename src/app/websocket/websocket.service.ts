@@ -186,7 +186,10 @@ export class WebSocketService {
         let sub = this.register(registrable.getWsTypeName(), registrable.id).subscribe(
             res => {
                 try {
-                    if (registrable instanceof Character) {
+                    if (!res.opcode) {
+                        console.error('Invalid packet, no opcode', res);
+                    }
+                    else if (registrable instanceof Character) {
                         this.handleWebsocketCharacterEvent(registrable, res.opcode, res.data);
                     }
                     else if (registrable instanceof Group) {
@@ -235,7 +238,7 @@ export class WebSocketService {
             }
             case 'tookItem': {
                 let takenItem = PartialItem.fromJson(data.item);
-                let leftItem = null;
+                let leftItem: PartialItem | undefined;
                 if (data.leftItem) {
                     leftItem = PartialItem.fromJson(data.leftItem);
                 }
@@ -374,7 +377,7 @@ export class WebSocketService {
             }
             case 'changeJob': {
                 if (!data.jobId) {
-                    character.onChangeJob(null);
+                    character.onChangeJob(undefined);
                 }
                 else {
                     this._jobService.getJobsById().subscribe(jobsById => {
@@ -499,7 +502,7 @@ export class WebSocketService {
             }
             case 'tookItem': {
                 let takenItem = PartialItem.fromJson(data.item);
-                let leftItem = null;
+                let leftItem: PartialItem | undefined;
                 if (data.leftItem) {
                     leftItem = PartialItem.fromJson(data.leftItem);
                 }
