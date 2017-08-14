@@ -33,6 +33,7 @@ import {GmHomeModule} from './home-gm/home-gm.module';
 import {DatabaseHomeModule} from './home-database/home-database.module';
 import {ThemeService} from './theme.service';
 import {WebsocketModule} from './websocket/websocket.module';
+import {ErrorReportService} from './error-report.service';
 
 @NgModule({
     imports: [
@@ -70,6 +71,7 @@ import {WebsocketModule} from './websocket/websocket.module';
     ],
     providers: [
         ThemeService,
+        ErrorReportService,
         {
             provide: ErrorHandler,
             useClass: NhbkErrorHandler
