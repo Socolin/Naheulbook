@@ -40,18 +40,12 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     }
 
     addChargeAction(action: NhbkAction) {
-        if (!this.itemTemplate.data.actions) {
-            throw new Error('addChargeAction: `actions` should be defined');
-        }
-        this.itemTemplate.data.actions.push(action);
+        this.itemTemplate.data.actions!.push(action);
         this.closeAddChargeActionModal();
     }
 
     removeChargeAction(index: number) {
-        if (!this.itemTemplate.data.actions) {
-            throw new Error('removeChargeAction: `actions` should be defined');
-        }
-        this.itemTemplate.data.actions.splice(index, 1);
+        this.itemTemplate.data.actions!.splice(index, 1);
     }
 
     isInSlot(slot) {

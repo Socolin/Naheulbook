@@ -16,7 +16,7 @@ export class NhbkErrorHandler extends ErrorHandler {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
-        let cache = [];
+        let cache: any[] = [];
         let json = JSON.stringify(data, function(key, value) {
             if (typeof value === 'object' && value !== null) {
                 if (cache.indexOf(value) !== -1) {
@@ -28,7 +28,6 @@ export class NhbkErrorHandler extends ErrorHandler {
             }
             return value;
         });
-        cache = null;
 
         return this._http.post(url, json, {
             headers: headers
