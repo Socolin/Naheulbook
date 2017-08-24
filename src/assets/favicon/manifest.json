@@ -2,6 +2,8 @@
     "name": "Naheulbook",
     "short_name": "Naheulbook",
     "start_url": "/",
+    "display": "standalone",
+    "description": "Gestion des fiches personnage du jdr Naheulbeuk",
 	"icons": [
 		{
 			"src": "\/favicon\/android-chrome-36x36.png",
