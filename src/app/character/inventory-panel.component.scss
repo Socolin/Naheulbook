@@ -38,6 +38,7 @@ md-card {
                 display: flex;
 
                 .item-line {
+                    position: relative;
                     flex: 1 auto;
                     display: flex;
                     flex-direction: row;
@@ -79,6 +80,7 @@ md-card {
     }
 
     .item-icon {
+        position: relative;
         display: inline-block;
         width: 32px;
         height: 32px;

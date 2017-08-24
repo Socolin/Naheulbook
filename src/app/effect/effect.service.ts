@@ -124,7 +124,6 @@ export class EffectService extends JsonService {
                 return Effect.fromJson(effectJsonData, categoriesById);
             }).subscribe(
                 (effect: Effect) => {
-                    console.log(effect);
                     this.effectsById[effectId].next(effect);
                     this.effectsById[effectId].complete();
                 },

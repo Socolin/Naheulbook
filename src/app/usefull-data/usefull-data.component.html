@@ -760,25 +760,34 @@
 </div>
 <div class="tabs-category">
     <div [class.tab-icon-critic-selected]="currentPanel==='critic'"
+         md-ripple
          class="tab-icon game-icon tab-icon-critic game-icon-spiky-eclipse"
          (click)="openPanel('critic')"></div>
     <div [class.tab-icon-epicfail-selected]="currentPanel==='epicfail'"
+         md-ripple
          class="tab-icon game-icon tab-icon-epicfail game-icon-dripping-blade"
          (click)="openPanel('epicfail')"></div>
     <div [class.tab-icon-effects-selected]="currentPanel==='effects'"
+         md-ripple
          class="tab-icon game-icon tab-icon-effects game-icon-pierced-body"
          (click)="openPanel('effects')"></div>
     <div [class.tab-icon-entropic-selected]="currentPanel==='entropic'"
+         md-ripple
          class="tab-icon game-icon tab-icon-entropic game-icon-bolt-spell-cast"
          (click)="openPanel('entropic')"></div>
     <div [class.tab-icon-skills-selected]="currentPanel==='skills'" class="tab-icon game-icon tab-icon-skills game-icon-gears"
+         md-ripple
          (click)="openPanel('skills')"></div>
     <div [class.tab-icon-sleep-selected]="currentPanel==='sleep'" class="tab-icon game-icon tab-icon-sleep game-icon-sliced-bread"
+         md-ripple
          (click)="openPanel('sleep')"></div>
     <div [class.tab-icon-items-selected]="currentPanel==='items'" class="tab-icon game-icon tab-icon-items game-icon-beer-stein"
+         md-ripple
          (click)="openPanel('items')"></div>
     <div [class.tab-icon-jobs-selected]="currentPanel==='jobs'" class="tab-icon game-icon tab-icon-jobs game-icon-gear-hammer"
+         md-ripple
          (click)="openPanel('jobs')"></div>
     <div [class.tab-icon-origins-selected]="currentPanel==='origins'" class="tab-icon game-icon tab-icon-origins game-icon-woman-elf-face"
+         md-ripple
          (click)="openPanel('origins')"></div>
 </div>

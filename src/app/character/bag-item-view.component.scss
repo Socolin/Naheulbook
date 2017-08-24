@@ -8,6 +8,7 @@
 }
 
 .item-line {
+    position: relative;
     display: flex;
     align-items: center;
     height: 40px;
@@ -26,6 +27,7 @@
     padding-left: 15px;
 }
 .item-icon {
+    position: relative;
     display: inline-block;
     width: 32px;
     height: 32px;

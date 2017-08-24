@@ -191,6 +191,7 @@ md-card {
         .weapons-list {
             flex: 1 0 auto;
             .item-line {
+                position: relative;
                 cursor: pointer;
                 display: flex;
                 flex-direction: row;

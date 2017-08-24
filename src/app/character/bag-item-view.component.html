@@ -1,6 +1,10 @@
 <ng-template [ngIf]="iconMode">
     <ng-template ngFor let-item [ngForOf]="itemsContained" let-lastItem="last">
         <div class="item-icon"
+             md-ripple
+             mdRippleCentered="true"
+             mdRippleUnbounded="true"
+             mdRippleRadius="24"
              cdk-overlay-origin
              #itemLine="cdkOverlayOrigin"
              [class.selected]="item === selectedItem"
@@ -66,6 +70,7 @@
             </ng-template>
             <div
                 class="item-line"
+                md-ripple
                 (click)="selectItem(item)"
                 cdk-overlay-origin
                 #itemLine="cdkOverlayOrigin"

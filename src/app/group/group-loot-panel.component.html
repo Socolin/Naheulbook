@@ -47,11 +47,11 @@
             <span class="padding"></span>
 
 
-            <button md-icon-button *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">
+            <button md-icon-button color="primary" *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">
                 <md-icon fontSet="game-icon" fontIcon="game-icon-locked-chest" class="ra-md-button-icon-32">
                 </md-icon>
             </button>
-            <button md-icon-button *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">
+            <button md-icon-button color="accent" *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">
                 <md-icon fontSet="game-icon" fontIcon="game-icon-open-treasure-chest" class="ra-md-button-icon-32">
                 </md-icon>
             </button>

@@ -13,6 +13,7 @@ import {Item, ItemData} from './item.model';
 import {ItemActionService} from './item-action.service';
 import {ItemService} from './item.service';
 import {SwipeService} from './swipe.service';
+import {AutocompleteSearchItemTemplateComponent} from '../item/autocomplete-search-item-template.component';
 
 @Component({
     selector: 'inventory-panel',
@@ -44,10 +45,14 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     public addItemSearch: string | undefined;
     public filteredItems: ItemTemplate[] = [];
 
+    @ViewChild('autocompleteSearchItemTemplate')
+    public autocompleteSearchItemTemplate: AutocompleteSearchItemTemplateComponent;
+
     public itemAddCustomName: string | undefined;
     public itemAddCustomDescription: string | undefined;
     public selectedAddItem: ItemTemplate | undefined;
     public itemAddQuantity: number | undefined;
+
 
     constructor(
         private _itemService: ItemService
@@ -101,6 +106,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         overlayRef.attach(this.addItemDialog);
         overlayRef.backdropClick().subscribe(() => overlayRef.detach());
         this.addItemOverlayRef = overlayRef;
+        setTimeout(() => {
+            this.autocompleteSearchItemTemplate.focus();
+        }, 0);
     }
 
     closeAddItemDialog() {

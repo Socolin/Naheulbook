@@ -1,7 +1,7 @@
-import {Component, Input, EventEmitter, Output} from '@angular/core';
+import {Component, Input, EventEmitter, Output, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 
-import {AutocompleteValue} from '../shared/autocomplete-input.component';
+import {AutocompleteInputComponent, AutocompleteValue} from '../shared/autocomplete-input.component';
 
 import {ItemCategory, ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
@@ -15,6 +15,8 @@ export class AutocompleteSearchItemTemplateComponent {
     @Input() clearOnSelect: boolean;
     @Input() placeholder = 'Chercher un objet';
     @Output() onSelect: EventEmitter<ItemTemplate> = new EventEmitter<ItemTemplate>();
+    @ViewChild('autocomplete')
+    autocomplete: AutocompleteInputComponent;
 
     public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
 
@@ -23,6 +25,10 @@ export class AutocompleteSearchItemTemplateComponent {
 
     selectItemTemplate(itemTemplate: ItemTemplate) {
         this.onSelect.emit(itemTemplate);
+    }
+
+    focus() {
+        this.autocomplete.focus();
     }
 
     updateAutocompleteItem(filter: string) {

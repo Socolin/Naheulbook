@@ -1,4 +1,5 @@
-<autocomplete-input [clearOnSelect]="clearOnSelect"
+<autocomplete-input #autocomplete
+                    [clearOnSelect]="clearOnSelect"
                     [placeholder]="placeholder"
                     (onSelect)="selectItemTemplate($event)"
                     [(callback)]="autocompleteItemCallback">
