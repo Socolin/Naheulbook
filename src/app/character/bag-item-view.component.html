@@ -24,7 +24,7 @@
              (click)="selectItem(item)"
              [class.selected]="selectedItem && selectedItem.id === item.id">
             <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-            <span *ngIf="item.data.quantity">{{item.data.quantity}}</span>
+            <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
             {{item.data.name}}
             <span class="padding"></span>
             <ng-template [ngIf]="item === selectedItem">
@@ -76,7 +76,7 @@
                 #itemLine="cdkOverlayOrigin"
                 [class.selected]="selectedItem && selectedItem.id === item.id">
                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                <span *ngIf="item.data.quantity || item.template.data.quantifiable">{{item.data.quantity}}</span>
+                <span *ngIf="item.data.quantity || item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
                 {{item.data.name}}
                 <span class="padding"></span>
                 <swipeable-item-detail *ngIf="item === selectedItem"
