@@ -1,6 +1,28 @@
 .date-selector-dialog {
     md-card-content {
         max-height: 65vh;
+        max-width: calc(100vh - 40px);
         overflow-y: auto;
     }
+}
+
+.hour-minute {
+    display: flex;
+    >md-input-container {
+        flex: 0 70px;
+    }
+    .padding {
+        flex: 1 auto;
+    }
+}
+.day {
+    display: flex;
+    align-items: center;
+    >md-input-container {
+        flex: 0 60px;
+    }
+    >md-select {
+        flex: 1 350px;
+    }
+
 }

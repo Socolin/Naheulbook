@@ -3,6 +3,7 @@ import {NhbkDate, CalendarDate} from './date.model';
 import {DateService} from './date.service';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {OverlayRef, Portal} from '@angular/material';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
     selector: 'date-selector',
@@ -18,9 +19,15 @@ export class DateSelectorComponent implements OnInit, OnChanges {
     public dateSelectorOverlayRef: OverlayRef | undefined;
 
     public calendar: CalendarDate[];
-    public currentCalendarDate: CalendarDate;
-    public relativeDay: number;
     public defaultDate: NhbkDate = new NhbkDate(0, 8, Math.floor(Math.random() * 365), 1498);
+
+    public form = new FormGroup({
+        hour: new FormControl('', [Validators.required, Validators.min(0), Validators.max(23)]),
+        minute: new FormControl('', [Validators.required, Validators.min(0), Validators.max(59)]),
+        relativeDay: new FormControl('', [Validators.required, Validators.min(0), Validators.max(250)]),
+        currentCalendarDate: new FormControl('', Validators.required),
+        year: new FormControl('', [Validators.required, Validators.min(0), Validators.max(10000)]),
+    });
 
     constructor(private _dateService: DateService,
                 private _nhbkDialogService: NhbkDialogService) {
@@ -39,10 +46,12 @@ export class DateSelectorComponent implements OnInit, OnChanges {
     }
 
     validDate() {
-        if (!this.currentCalendarDate) {
+        if (!this.form.valid) {
             return;
         }
-        this.date.day = this.relativeDay + this.currentCalendarDate.startDay - 1;
+        this.date.minute = this.form.controls.minute.value;
+        this.date.hour = this.form.controls.hour.value;
+        this.date.day = this.form.controls.relativeDay.value + this.form.controls.currentCalendarDate.value.startDay - 1;
         this.onChange.emit(this.date);
         this.closeSelector();
     }
@@ -54,18 +63,24 @@ export class DateSelectorComponent implements OnInit, OnChanges {
         if (!this.date) {
             return;
         }
+        let currentCalendarDate: CalendarDate = this.calendar[0];
+        let relativeDay = 1;
         for (let i = 0; i < this.calendar.length; i++) {
             let calendarDate = this.calendar[i];
             if (calendarDate.startDay <= this.date.day && this.date.day <= calendarDate.endDay) {
-                this.currentCalendarDate = calendarDate;
-                this.relativeDay = this.date.day - this.currentCalendarDate.startDay + 1;
+                currentCalendarDate = calendarDate;
+                relativeDay = this.date.day - currentCalendarDate.startDay + 1;
                 break;
             }
         }
-        if (this.currentCalendarDate == null) {
-            this.relativeDay = 1;
+        if (currentCalendarDate == null) {
             return;
         }
+        this.form.patchValue(this.date);
+        this.form.patchValue({
+            'relativeDay': relativeDay,
+            'currentCalendarDate': currentCalendarDate
+        });
     }
 
     ngOnChanges(changes: SimpleChanges): void {

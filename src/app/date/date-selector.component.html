@@ -6,52 +6,54 @@
     <md-card class="date-selector-dialog">
         <md-card-title>Définir une date</md-card-title>
         <md-card-content>
-            <div>
-                <md-input-container>
-                    <input mdInput
-                           [(ngModel)]="date.hour"
-                           type="number"
-                           min="0"
-                           max="23"
-                           step="1"
-                           placeholder="Heure">
-                </md-input-container>
-                :
-                <md-input-container>
-                    <input mdInput
-                           [(ngModel)]="date.minute"
-                           type="number"
-                           min="0"
-                           max="59"
-                           step="1"
-                           placeholder="Minutes">
-                </md-input-container>
-            </div>
-            <div>
-                <md-input-container>
-                    <input mdInput
-                           [(ngModel)]="relativeDay"
-                           type="number"
-                           min="1"
-                           step="1"
-                           placeholder="Jour">
-                </md-input-container>
+            <form [formGroup]="form">
+                <div class="hour-minute">
+                    <md-input-container>
+                        <input mdInput
+                               formControlName="hour"
+                               type="number"
+                               min="0"
+                               max="23"
+                               step="1"
+                               placeholder="Heure">
+                    </md-input-container>
+                    <md-input-container>
+                        <input mdInput
+                               formControlName="minute"
+                               type="number"
+                               min="0"
+                               max="59"
+                               step="1"
+                               placeholder="Minutes">
+                    </md-input-container>
+                    <div class="padding">
+                    </div>
+                    <md-input-container>
+                        <input mdInput
+                               formControlName="year"
+                               type="number"
+                               min="0"
+                               step="1"
+                               placeholder="Année">
+                    </md-input-container>
+                </div>
+                <div class="day">
+                    <md-input-container>
+                        <input mdInput
+                               formControlName="relativeDay"
+                               type="number"
+                               min="1"
+                               step="1"
+                               placeholder="Jour">
+                    </md-input-container>
 
-                <md-select placeholder="Période">
-                    <md-option *ngFor="let cDate of calendar" [value]="cDate">
-                        {{cDate.name}}
-                    </md-option>
-                </md-select>
-
-                <md-input-container>
-                    <input mdInput
-                           [(ngModel)]="date.year"
-                           type="number"
-                           min="0"
-                           step="1"
-                           placeholder="Année">
-                </md-input-container>
-            </div>
+                    <md-select placeholder="Période" formControlName="currentCalendarDate">
+                        <md-option *ngFor="let cDate of calendar" [value]="cDate">
+                            {{cDate.name}}
+                        </md-option>
+                    </md-select>
+                </div>
+            </form>
         </md-card-content>
         <md-card-actions align="end">
             <button md-button
@@ -61,6 +63,7 @@
             </button>
             <button md-button
                     color="primary"
+                    [disabled]="!form.valid"
                     (click)="validDate()">
                 VALIDER
             </button>
