@@ -302,6 +302,9 @@ export class WebSocketService {
             }
             case 'changeData': {
                 group.data.changeValue(data.key, data.value);
+                if (data.key === 'date') {
+                    group.updateEvents();
+                }
                 break;
             }
             case 'joinCharacter': {
