@@ -43,6 +43,11 @@
     flex: 1 auto;
     width: 40px;
 }
+.field-extra-large {
+    text-align: center;
+    flex: 5 auto;
+    width: 40px;
+}
 .field-name {
     flex: 4 auto;
     width: 80px;
@@ -191,3 +196,9 @@
     border-top-style: solid;
 }
 
+.damage-weapon-name {
+    font-size: small;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+}

@@ -46,8 +46,8 @@ export class FighterStat {
     get pr_magic(): number {
         return this.fighter.isMonster ? this.fighter.monster.computedData.pr_magic : this.fighter.character.computedData.stats['PR_MAGIC'];
     }
-    get dmg(): string {
-        return this.fighter.isMonster ? this.fighter.monster.computedData.dmg : '';
+    get dmg(): {name: string, damage: string}[] {
+        return this.fighter.isMonster ? this.fighter.monster.computedData.dmg : this.fighter.character.computedData.weaponsDamages;
     }
     get cou(): number {
         return this.fighter.isMonster ? this.fighter.monster.computedData.cou : this.fighter.character.computedData.stats['COU'];

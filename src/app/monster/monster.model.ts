@@ -50,7 +50,7 @@ export class MonsterComputedData {
     esq: number;
     pr: number;
     pr_magic: number;
-    dmg: string;
+    dmg: {name: string, damage: string}[] = [];
     cou: number;
     chercheNoise: boolean;
     resm: number;
@@ -275,7 +275,7 @@ export class Monster extends WsRegistrable {
         this.computedData.esq =  this.data.esq ? this.data.esq : 0;
         this.computedData.pr =  this.data.pr;
         this.computedData.pr_magic =  this.data.pr_magic;
-        this.computedData.dmg =  this.data.dmg;
+        this.computedData.dmg =  [{name: 'base', damage: this.data.dmg}];
         this.computedData.cou =  this.data.cou;
         this.computedData.chercheNoise =  this.data.chercheNoise;
         this.computedData.resm =  this.data.resm;
@@ -288,6 +288,12 @@ export class Monster extends WsRegistrable {
             }
         }
         for (let item of this.items) {
+            if (item.data.equiped) {
+                this.computedData.dmg.push({
+                    name: item.data.name,
+                    damage: item.getDamageString()
+                });
+            }
             if (item.data.equiped && item.template.modifiers) {
                 for (let mod of item.template.modifiers) {
                     this.applyStatModifier(mod);

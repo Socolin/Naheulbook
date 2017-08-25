@@ -41,7 +41,16 @@
             <div class="field">
                 {{fighter.stats.resm}}
             </div>
-            <div class="field-large">{{fighter.stats.dmg}}</div>
+            <div class="field-extra-large">
+                <div *ngFor="let dmg of fighter.stats.dmg">
+                    <div>
+                        {{dmg.damage}}
+                    </div>
+                    <div class="secondary-text damage-weapon-name">
+                        {{dmg.name}}
+                    </div>
+                </div>
+            </div>
             <div class="field">{{fighter.stats.cou}}</div>
             <div class="field-fixed-small"><md-checkbox [checked]="fighter.chercheNoise" disabled></md-checkbox></div>
         </div>

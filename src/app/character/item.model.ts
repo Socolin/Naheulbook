@@ -100,6 +100,23 @@ export class Item {
         }
         return changes;
     }
+
+    public getDamageString(): string {
+        let damage = '';
+        if (this.template.data.damageDice) {
+            damage += this.template.data.damageDice + 'D';
+        }
+        if (this.template.data.bonusDamage) {
+            if (damage) {
+                damage += '+';
+            }
+            damage += this.template.data.bonusDamage;
+        }
+        if (this.template.data.damageType) {
+            damage += '(' + this.template.data.damageType + ')';
+        }
+        return damage;
+    }
 }
 
 export class PartialItem {

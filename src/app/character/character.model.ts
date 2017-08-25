@@ -15,7 +15,7 @@ import {TargetJsonData} from '../group/target.model';
 import {WebSocketService} from '../websocket/websocket.service';
 import {ActiveStatsModifier, StatModifier} from '../shared/stat-modifier.model';
 import {Fighter} from '../group/group.model';
-import {ItemSlot} from '../item/item-template.model';
+import {ItemSlot, ItemTemplate} from '../item/item-template.model';
 
 export interface CharacterResume {
     id: number;
@@ -194,6 +194,7 @@ export class CharacterComputedData {
 
     countExceptionalStats = 0;
     countActiveEffect = 0;
+    weaponsDamages: {name: string, damage: string}[] = [];
 
     init() {
         this.details.init();
@@ -919,7 +920,32 @@ export class Character extends WsRegistrable {
         this.computedData.tacticalMovement.sprintDistance = sprintDistance * speedModifier;
         this.computedData.tacticalMovement.maxDuration = maxDuration * speedModifier;
         this.computedData.tacticalMovement.sprintMaxDuration = sprintMaxDuration * speedModifier;
+
+        let weaponDamages: {name: string, damage: string}[] = [];
+        for (let item of this.items) {
+            if (!item.data.equiped) {
+                continue;
+            }
+
+            if (ItemTemplate.hasSlot(item.template, 'WEAPON')) {
+                let damage = item.getDamageString();
+                if (damage && this.computedData.stats['PI']) {
+                    if (this.computedData.stats['PI'] > 0) {
+                        damage += ' (+' + this.computedData.stats['PI'] + ')';
+                    }
+                    else {
+                        damage += ' (' + this.computedData.stats['PI'] + ')';
+                    }
+                }
+                weaponDamages.push({
+                    name: item.data.name,
+                    damage: damage
+                });
+            }
+        }
+        this.computedData.weaponsDamages = weaponDamages;
     }
+
 
     public update() {
         this.computedData.init();
