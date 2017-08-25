@@ -178,10 +178,18 @@
                                 <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                 {{item.data.name}}
 
-                                <button md-icon-button *ngIf="i > 0 && character.computedData.itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="_itemActionService.onAction('equip', item, {level: 1})">
+                                <button md-icon-button
+                                        *ngIf="i > 0 && character.computedData.itemsBySlots[slot.id].length > 1"
+                                        type="button"
+                                        class="btn btn-default col-md-1 col-xs-2"
+                                        (click)="_itemActionService.onAction('equip', item, {level: 1})">
                                     <md-icon>keyboard_arrow_up</md-icon>
                                 </button>
-                                <button md-icon-button *ngIf="!last && character.computedData.itemsBySlots[slot.id].length > 1" type="button" class="btn btn-default col-md-1 col-xs-2" (click)="_itemActionService.onAction('equip', item, {level: -1})">
+                                <button md-icon-button
+                                        *ngIf="!last && character.computedData.itemsBySlots[slot.id].length > 1"
+                                        type="button"
+                                        class="btn btn-default col-md-1 col-xs-2"
+                                        (click)="_itemActionService.onAction('equip', item, {level: -1})">
                                     <md-icon>keyboard_arrow_down</md-icon>
                                 </button>
                                 <swipeable-item-detail *ngIf="item === selectedItem"

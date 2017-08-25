@@ -57,7 +57,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     constructor(
         private _itemService: ItemService
         , private _overlay: Overlay
-        , private _itemActionService: ItemActionService) {
+        , public _itemActionService: ItemActionService) {
     }
 
     @HostListener('window:scroll') onScroll(): boolean {
