@@ -25,6 +25,8 @@ export interface Job {
     factorEv: number|null;
     id: number;
     information: string;
+    playerDescription: string;
+    playerSummary: string;
     isMagic: boolean;
     name: string;
     originsBlacklist: Array<{

@@ -37,6 +37,7 @@
                 </ng-template>
                 <span *ngIf="!origin.requirements.length">aucun</span>
             </p>
+            <p class="summary" [innerHTML]="origin.playerSummary | textFormatter"></p>
             <p class="description" [innerHTML]="origin.playerDescription | textFormatter"></p>
             <div class="skills" *ngIf="origin.skills.length">
                 Je suis né avec les compétences suivantes :

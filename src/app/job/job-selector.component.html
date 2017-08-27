@@ -52,6 +52,7 @@
                 </ng-template>
                 <span *ngIf="!job.requirements.length">aucun</span>
             </p>
+            <p class="summary" [innerHTML]="job.playerSummary | textFormatter"></p>
             <p class="description" [innerHTML]="job.playerDescription | textFormatter"></p>
             <div class="skills" *ngIf="job.skills.length">
                 Je suis né avec les compétences suivantes :
