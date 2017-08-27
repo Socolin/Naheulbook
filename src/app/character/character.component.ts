@@ -73,18 +73,26 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     @ViewChild('changeNameDialog')
     public changeNameDialog: Portal<any>;
-    public changeNameOverlayRef: OverlayRef;
+    public changeNameOverlayRef: OverlayRef | undefined;
     public newCharacterName: string;
 
     @ViewChild('changeSexDialog')
     public changeSexDialog: Portal<any>;
-    public changeSexOverlayRef: OverlayRef;
+    public changeSexOverlayRef: OverlayRef | undefined;
     public newCharacterSex: string;
 
     @ViewChild('changeJobDialog')
     public changeJobDialog: Portal<any>;
-    public changeJobOverlayRef: OverlayRef;
+    public changeJobOverlayRef: OverlayRef | undefined;
     public newCharacterJob: Job | undefined;
+
+    @ViewChild('jobInfoDialog')
+    public jobInfoDialog: Portal<any>;
+    public jobInfoOverlayRef: OverlayRef | undefined;
+
+    @ViewChild('originInfoDialog')
+    public originInfoDialog: Portal<any>;
+    public originInfoOverlayRef: OverlayRef | undefined;
 
     private notificationSub: Subscription;
 
@@ -332,6 +340,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     closeChangeNameDialog() {
         this.changeNameOverlayRef.detach();
+        this.changeNameOverlayRef = undefined;
     }
 
     changeName() {
@@ -347,6 +356,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     closeChangeSexDialog() {
         this.changeSexOverlayRef.detach();
+        this.changeSexOverlayRef = undefined;
     }
 
     changeSex() {
@@ -361,6 +371,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     closeChangeJobDialog() {
         this.changeJobOverlayRef.detach();
+        this.changeJobOverlayRef = undefined;
     }
 
     selectNewJob(job: Job | undefined) {
@@ -374,6 +385,24 @@ export class CharacterComponent implements OnInit, OnDestroy {
             this.character.onChangeJob(job);
         });
         this.closeChangeJobDialog();
+    }
+
+    openJobInfoDialog() {
+        this.jobInfoOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.jobInfoDialog);
+    }
+
+    closeJobInfoDialog() {
+        this.jobInfoOverlayRef.detach();
+        this.jobInfoOverlayRef = undefined;
+    }
+
+    openOriginInfoDialog() {
+        this.originInfoOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.originInfoDialog);
+    }
+
+    closeOriginInfoDialog() {
+        this.originInfoOverlayRef.detach();
+        this.originInfoOverlayRef = undefined;
     }
 
     ngOnDestroy() {
