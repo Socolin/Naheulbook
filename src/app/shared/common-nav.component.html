@@ -1,6 +1,6 @@
 <h4>Autre</h4>
 <md-nav-list>
-    <a md-list-item (click)="openThemeSelector()">Theme</a>
+    <a md-list-item (click)="openThemeSelector()">Thème</a>
     <a md-list-item [routerLink]="['/credit']">Crédits</a>
     <a md-list-item *ngIf="_loginService.currentLoggedUser" [routerLink]="['/profile']">Profile</a>
     <a md-list-item [routerLink]="['/logout']">Déconnexion</a>
