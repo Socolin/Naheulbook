@@ -213,8 +213,12 @@
         <md-divider></md-divider>
         Munitions
         <dl>
-            <dt>Combustion par coup:</dt>
-            <dd>{{itemTemplate.data.gun.fuelPerShot}}</dd>
+            <dt *ngIf="itemTemplate.data.gun.fuelPerShot">
+                Combustion par coup:
+            </dt>
+            <dd *ngIf="itemTemplate.data.gun.fuelPerShot">
+                {{itemTemplate.data.gun.fuelPerShot}}
+            </dd>
             <dt>Munitions par coup:</dt>
             <dd>{{itemTemplate.data.gun.ammunitionPerShot}}</dd>
         </dl>
