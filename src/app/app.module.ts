@@ -4,6 +4,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule}  from '@angular/router';
 import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
 
 import {AppComponent}  from './app.component';
 import {routes} from './app.routes';
@@ -28,12 +29,15 @@ import {DateModule} from './date/date.module';
 import {NhbkErrorHandler} from './nhbk-error-handler';
 
 import 'hammerjs';
+import {CustomHammerConfig} from './hammer-js-config';
+
 import {PlayerHomeModule} from './home-player/home-player.module';
 import {GmHomeModule} from './home-gm/home-gm.module';
 import {DatabaseHomeModule} from './home-database/home-database.module';
 import {ThemeService} from './theme.service';
 import {WebsocketModule} from './websocket/websocket.module';
 import {ErrorReportService} from './error-report.service';
+
 
 @NgModule({
     imports: [
@@ -75,6 +79,10 @@ import {ErrorReportService} from './error-report.service';
         {
             provide: ErrorHandler,
             useClass: NhbkErrorHandler
+        },
+        {
+            provide: HAMMER_GESTURE_CONFIG,
+            useClass: CustomHammerConfig
         }
     ]
 })
