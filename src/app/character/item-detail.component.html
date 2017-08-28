@@ -1,4 +1,4 @@
-<md-card>
+<md-card (swipeleft)="nothing()" (swiperight)="nothing()">
     <md-card-header class="item-detail-header">
         <icon-selector md-card-avatar [icon]="item.data.icon" [size]="'40px'" [readonly]="readonly"
                        (onChange)="_itemActionService.onAction('change_icon', item, {icon: $event})">

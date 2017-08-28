@@ -235,6 +235,10 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         this.closeLifetimeDialog();
     }
 
+    nothing() {
+        // This function allow to propagate swipeleft/right event to top, blocked due to overflow auto
+    }
+
     ngOnInit() {
         this._itemTemplateService.getCategoriesById().subscribe(
             categoriesById => {
