@@ -1,4 +1,7 @@
 <md-card>
+    <md-card-title *ngIf="title">
+        {{title}}
+    </md-card-title>
     <div class="name-line">
         <md-input-container>
             <input mdInput
@@ -92,5 +95,5 @@
 </ng-template>
 
 <h3>Preview</h3>
-<item-template [jobsName]="jobsName" [originsName]="originsName" [item]="itemTemplate"></item-template>
+<item-template [jobsName]="jobsName" [originsName]="originsName" [itemTemplate]="itemTemplate"></item-template>
 

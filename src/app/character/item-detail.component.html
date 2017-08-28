@@ -28,14 +28,22 @@
                 </span>
             </md-card-subtitle>
         </div>
-        <button md-icon-button [mdMenuTriggerFor]="itemMenu" *ngIf="!readonly">
+        <button md-icon-button [mdMenuTriggerFor]="itemMenu" (click)="$event.stopPropagation()" *ngIf="!readonly">
             <md-icon>more_vert</md-icon>
         </button>
-        <md-menu xPosition="before" #itemMenu="mdMenu">
-            <button md-menu-item (click)="editItem()">Editer</button>
-            <button md-menu-item (click)="openModifierDialog()">Ajouter un modificateur</button>
-            <button md-menu-item (click)="openLifetimeDialog()">Editer temps de conservation</button>
-            <button md-menu-item (click)="openGiveItemDialog(item)">Donner</button>
+        <md-menu xPosition="before" #itemMenu="mdMenu" (click)="$event.stopPropagation()">
+            <button md-menu-item (click)="editItem()">
+                Editer
+            </button>
+            <button md-menu-item (click)="openModifierDialog()">
+                Ajouter un modificateur
+            </button>
+            <button md-menu-item (click)="openLifetimeDialog()">
+                Editer temps de conservation
+            </button>
+            <button md-menu-item (click)="openGiveItemDialog(item)">
+                Donner
+            </button>
             <button md-menu-item *ngIf="item.template.data.skillBook"
                     (click)="_itemActionService.onAction('read_skill_book', item)">
                 Lire
@@ -49,7 +57,9 @@
                     md-menu-item>
                 Utiliser sur...
             </button>
-            <button md-menu-item (click)="_itemActionService.onAction('delete', item)">Supprimer</button>
+            <button md-menu-item (click)="_itemActionService.onAction('delete', item)">
+                Supprimer
+            </button>
         </md-menu>
     </md-card-header>
     <md-card-content>
@@ -240,7 +250,7 @@
                         <span *ngIf="modifier.active && modifier.durationType === 'time'">
                             <span class="ra ra-clockwork"></span>{{modifier.currentTimeDuration | nhbkDuration}}
                         </span>
-                        <button md-icon-button (click)="removeModifier(i)">
+                        <button md-icon-button (click)="removeModifier(i); $event.stopPropagation()">
                             <md-icon>delete</md-icon>
                         </button>
                     </div>
@@ -288,6 +298,49 @@
                 <span *ngIf="requirement.max && character.computedData.stats[requirement.stat] > requirement.max"
                       class="invalid-level">Non utilisable</span>
             </div>
+
+            <!-- Origine -->
+            <div *ngIf="item.template.data.origin">
+                Origine: {{item.template.data.origin}}
+            </div>
+
+            <!-- Gun -->
+            <div *ngIf="item.template.data.gun">
+                Arme à poudre:
+                <dl>
+                    <dt>Portée utile:</dt>
+                    <dd>{{item.template.data.gun.range}}</dd>
+                    <dt>Dégâts:</dt>
+                    <dd>{{item.template.data.gun.damages}}</dd>
+                    <dt>+Spécial:</dt>
+                    <dd>{{item.template.data.gun.special}}</dd>
+                    <dt>Cadence de tir:</dt>
+                    <dd>{{item.template.data.gun.rateOfFire}}</dd>
+                    <dt>Délai de rechargement:</dt>
+                    <dd>{{item.template.data.gun.reloadDelay}}</dd>
+                    <dt>Épreuve de tir:</dt>
+                    <dd>{{item.template.data.gun.shootTest}}</dd>
+                </dl>
+                <md-divider></md-divider>
+                Munitions
+                <dl>
+                    <dt>Combustion par coup:</dt>
+                    <dd>{{item.template.data.gun.fuelPerShot}}</dd>
+                    <dt>Munitions par coup:</dt>
+                    <dd>{{item.template.data.gun.ammunitionPerShot}}</dd>
+                </dl>
+                <md-divider></md-divider>
+                <dl>
+                    <dt>Chances de fonctionnement:</dt>
+                    <dd>{{item.template.data.gun.workLuck}}</dd>
+                </dl>
+            </div>
+
+            <!-- Indice de rareté -->
+            <div *ngIf="item.template.data.rarityIndicator">
+                Indice de rareté: {{item.template.data.rarityIndicator}}
+            </div>
+
         </div>
 
         <div *ngIf="item.data.lifetime?.durationType === 'time'">
@@ -303,7 +356,7 @@
                     <button md-button
                             *ngIf="!item.content?.length"
                             color="primary"
-                            (click)="_itemActionService.onAction('move_to_container', item, {container: null})">
+                            (click)="_itemActionService.onAction('move_to_container', item, {container: null}); $event.stopPropagation()">
                         Retirer
                     </button>
                 </ng-template>
@@ -313,7 +366,7 @@
                         <ng-template ngFor let-container [ngForOf]="character.computedData.containers" let-i="index"
                                   let-last="last">
                             <div class="target-container"
-                               (click)="_itemActionService.onAction('move_to_container', item, {container: container.id})">
+                               (click)="_itemActionService.onAction('move_to_container', item, {container: container.id}); $event.stopPropagation()">
                                 <icon-selector [icon]="container.data.icon" [readonly]="true"></icon-selector>
                                 {{container.data.name}}
                                 <md-divider></md-divider>
@@ -329,13 +382,13 @@
             <button md-button
                     [color]="'primary'"
                     *ngIf="_itemActionService && !item.data.equiped && !item.content?.length"
-                    (click)="_itemActionService.onAction('equip', item)">
+                    (click)="_itemActionService.onAction('equip', item); $event.stopPropagation()">
                 ÉQUIPER
             </button>
             <button md-button
                     [color]="'primary'"
                     *ngIf="_itemActionService && item.data.equiped && !item.content?.length"
-                    (click)="_itemActionService.onAction('unequip', item)">
+                    (click)="_itemActionService.onAction('unequip', item); $event.stopPropagation()">
                 DÉSÉQUIPER
             </button>
         </span>
@@ -343,7 +396,7 @@
         <button md-button
                 [color]="'accent'"
                 *ngIf="gmView && item.data.notIdentified"
-                (click)="_itemActionService.onAction('identify', item)">
+                (click)="_itemActionService.onAction('identify', item); $event.stopPropagation()">
             IDENTIFIER
         </button>
 
@@ -362,12 +415,12 @@
         <md-card-actions align="end">
             <button md-button
                     color="primary"
-                    (click)="closeModifierDialog()">
+                    (click)="closeModifierDialog(); $event.stopPropagation()">
                 ANNULER
             </button>
             <button md-button
                     color="primary"
-                    (click)="addModifier()">
+                    (click)="addModifier(); $event.stopPropagation()">
                 AJOUTER
             </button>
         </md-card-actions>
@@ -406,13 +459,13 @@
         <md-card-actions align="end">
             <button md-button
                     color="primary"
-                    (click)="closeGiveItemDialog()">
+                    (click)="closeGiveItemDialog(); $event.stopPropagation()">
                 ANNULER
             </button>
             <button md-button
                     color="primary"
                     [disabled]="!giveTarget"
-                    (click)="giveItem()">
+                    (click)="giveItem(); $event.stopPropagation()">
                 DONNER
             </button>
         </md-card-actions>
@@ -428,10 +481,10 @@
             <duration-selector [hiddenType]="['combat','lap']" [durable]="item.data.lifetime"></duration-selector>
         </md-card-content>
         <md-card-actions align="end">
-            <button md-button color="primary" (click)="cancelLifetimeDialog()">
+            <button md-button color="primary" (click)="cancelLifetimeDialog(); $event.stopPropagation()">
                 ANNULER
             </button>
-            <button md-button color="primary" (click)="updateLifetime()">
+            <button md-button color="primary" (click)="updateLifetime(); $event.stopPropagation()">
                 VALIDER
             </button>
         </md-card-actions>

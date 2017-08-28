@@ -8,7 +8,7 @@ import {Router} from '@angular/router';
     templateUrl: './item-template.component.html',
 })
 export class ItemTemplateComponent {
-    @Input() item: ItemTemplate;
+    @Input() itemTemplate: ItemTemplate;
     @Input() editable: boolean;
     @Input() originsName: {[originId: number]: string};
     @Input() jobsName: {[jobId: number]: string};

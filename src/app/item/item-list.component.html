@@ -71,7 +71,7 @@
                            [editable]="isEditable(item) && !inTab"
                            [actions]="inTab ? ['addItem'] : []"
                            (onAction)="emitAction($event.action, $event.data)"
-                           [item]="item">
+                           [itemTemplate]="item">
             </item-template>
         </div>
     </ng-template>

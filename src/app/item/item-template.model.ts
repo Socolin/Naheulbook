@@ -25,6 +25,27 @@ export class ItemSlot {
     techName: string;
 }
 
+export class ItemTemplateGunData {
+    range: string;
+    damages: string;
+    special: string;
+    rateOfFire: string;
+    reloadDelay: string;
+    shootTest: string;
+    fuelPerShot: string;
+    ammunitionPerShot: string;
+    workLuck: string;
+
+    static fromJson(jsonData: ItemTemplateGunData): ItemTemplateGunData | undefined {
+        if (!jsonData) {
+            return undefined;
+        }
+        let gunData = new ItemTemplateGunData();
+        Object.assign(gunData, jsonData);
+        return gunData;
+    }
+}
+
 export class ItemTemplateData {
     actions?: any[];
     description?: string;
@@ -57,6 +78,15 @@ export class ItemTemplateData {
     lifetime?: IDurable;
     enchantment?: string;
     icon?: IconDescription;
+    gun?: ItemTemplateGunData;
+    rarityIndicator?: string;
+    origin?: string;
+
+    static fromJson(jsonData: ItemTemplateData): ItemTemplateData {
+        let itemTemplateData = new ItemTemplateData();
+        Object.assign(itemTemplateData, jsonData, {gun: ItemTemplateGunData.fromJson(jsonData.gun)});
+        return itemTemplateData;
+    }
 }
 
 // FIXME: Is this used and checked ?
@@ -129,7 +159,12 @@ export class ItemTemplate {
 
     static fromJson(jsonData: ItemTemplateJsonData, skillsById: {[skillId: number]: Skill}): ItemTemplate {
         let itemTemplate = new ItemTemplate();
-        Object.assign(itemTemplate, jsonData, {skills: [], unskills: [], skillModifiers: []});
+        Object.assign(itemTemplate, jsonData, {
+            skills: [],
+            unskills: [],
+            skillModifiers: [],
+            data: ItemTemplateData.fromJson(jsonData.data)
+        });
 
         for (let s of jsonData.skills) {
             itemTemplate.skills.push(skillsById[s.id]);

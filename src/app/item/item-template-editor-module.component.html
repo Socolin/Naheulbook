@@ -127,6 +127,61 @@
             Cet objet est une gemme pouvant avoir un poix en U.G.
         </md-card-content>
     </ng-template>
+
+    <ng-template [ngSwitchCase]="'gun'">
+        <md-card-subtitle>Arme à poudre</md-card-subtitle>
+        <md-card-content style="display: flex; flex-direction: column">
+            Statistiques de combat
+            <md-input-container>
+                <input mdInput
+                       placeholder="Portée utile"
+                       [(ngModel)]="itemTemplate.data.gun.range"/>
+            </md-input-container>
+            <md-input-container>
+                <input mdInput
+                       placeholder="Dégâts"
+                       [(ngModel)]="itemTemplate.data.gun.damages"/>
+            </md-input-container>
+            <md-input-container>
+                <input mdInput
+                       placeholder="+Spécial"
+                       [(ngModel)]="itemTemplate.data.gun.special"/>
+            </md-input-container>
+            <md-input-container>
+                <input mdInput
+                       placeholder="Cadence de tir"
+                       [(ngModel)]="itemTemplate.data.gun.rateOfFire"/>
+            </md-input-container>
+            <md-input-container>
+                <input mdInput
+                       placeholder="Délai de rechargement"
+                       [(ngModel)]="itemTemplate.data.gun.reloadDelay"/>
+            </md-input-container>
+            <md-input-container>
+                <input mdInput
+                       placeholder="Épreuve de tir"
+                       [(ngModel)]="itemTemplate.data.gun.shootTest"/>
+            </md-input-container>
+            <md-divider></md-divider>
+            Munitions
+            <md-input-container>
+                <input mdInput
+                       placeholder="Combustion par coup"
+                       [(ngModel)]="itemTemplate.data.gun.fuelPerShot"/>
+            </md-input-container>
+            <md-input-container>
+                <input mdInput
+                       placeholder="Munitions par coup"
+                       [(ngModel)]="itemTemplate.data.gun.ammunitionPerShot"/>
+            </md-input-container>
+            <md-divider></md-divider>
+            <md-input-container>
+                <input mdInput
+                       placeholder="Chances de fonctionnement"
+                       [(ngModel)]="itemTemplate.data.gun.workLuck"/>
+            </md-input-container>
+        </md-card-content>
+    </ng-template>
     <ng-template [ngSwitchCase]="'lifetime'">
         <md-card-subtitle>Duree de conservation</md-card-subtitle>
         <duration-selector [durable]="itemTemplate.data.lifetime"></duration-selector>
@@ -145,6 +200,17 @@
         <md-card-content>
             <modifiers-editor [options]="['job','origin','special']" [(modifiers)]="itemTemplate.modifiers">
             </modifiers-editor>
+        </md-card-content>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'origin'">
+        <md-card-subtitle>Origine</md-card-subtitle>
+        <md-card-subtitle>Méthode d'obtention</md-card-subtitle>
+        <md-card-content>
+            <md-input-container style="width: 100%">
+                <input mdInput
+                       placeholder="Origine"
+                       [(ngModel)]="itemTemplate.data.origin"/>
+            </md-input-container>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'prereq'">
@@ -205,6 +271,16 @@
         <md-card-subtitle>Quantifiable</md-card-subtitle>
         <md-card-content>
             Il est possible de posséder cet objet dans une certaines quantité dans un seul slot de l'inventaire (piece d'or, ingredient magique...)
+        </md-card-content>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'rarity'">
+        <md-card-subtitle>Indice de rareté</md-card-subtitle>
+        <md-card-content>
+            <md-input-container style="width: 100%">
+                <input mdInput
+                       placeholder="Indice de rareté"
+                       [(ngModel)]="itemTemplate.data.rarityIndicator"/>
+            </md-input-container>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'relic'">

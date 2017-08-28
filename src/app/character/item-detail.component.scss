@@ -1,5 +1,7 @@
 md-card {
     margin: 5px;
+    max-height: calc(100vh - 80px);
+    overflow: auto;
     md-card-header {
         display: flex;
 

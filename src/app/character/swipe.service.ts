@@ -17,4 +17,9 @@ export class SwipeService {
         this.swipedLeft = false;
         this.swipedRight = true;
     }
+
+    toggleSwipe() {
+        this.swipedLeft = !this.swipedLeft;
+        this.swipedRight = !this.swipedRight;
+    }
 }

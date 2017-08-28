@@ -9,6 +9,7 @@
             class="item-detail"
             [class.item-detail-swipe]="_swipeService.swipedLeft"
             (swipeleft)="_swipeService.onSwipeLeft()"
+            (click)="_swipeService.toggleSwipe()"
             (swiperight)="_swipeService.onSwipeRight()">
             <div class="item-detail-swipe-container">
                 <item-detail [gmView]="gmView" [character]="character" [item]="item" [readonly]="readonly"></item-detail>

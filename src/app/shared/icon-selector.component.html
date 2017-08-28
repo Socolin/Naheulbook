@@ -1,10 +1,12 @@
-<span (click)="openIconSelectorDialog()"><icon [class.clickable]="!readonly" [size]="size" [icon]="icon"></icon></span>
+<span (click)="openIconSelectorDialog(); $event.stopPropagation()">
+    <icon [class.clickable]="!readonly" [size]="size" [icon]="icon"></icon>
+</span>
 <ng-template #iconSelectorDialog="cdkPortal" cdk-portal>
     <md-card class="selector-panel">
         <md-card-title>Selection de l'icone</md-card-title>
         <md-card-content>
             <md-card>
-                <md-card-subtitle>Icone</md-card-subtitle>
+                <md-card-subtitle>Icône</md-card-subtitle>
                 <div>
                     <div>
                         <md-input-container align="end">

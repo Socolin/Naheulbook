@@ -8,12 +8,12 @@ import {isNullOrUndefined} from 'util';
 import {
     removeDiacritics, NhbkDialogService, AutocompleteValue, AutocompleteInputComponent
 } from '../shared';
-import {User, LoginService} from '../user';
+import {LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
 
-import {ItemSection, ItemSlot, ItemTemplate} from './item-template.model';
+import {ItemSection, ItemSlot, ItemTemplate, ItemTemplateGunData} from './item-template.model';
 import {ItemTemplateService} from './item-template.service'
 
 @Component({
@@ -23,6 +23,7 @@ import {ItemTemplateService} from './item-template.service'
 })
 export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     @Input() itemTemplate: ItemTemplate;
+    @Input() title: string|undefined;
 
     public modules: string[] = [];
 
@@ -55,13 +56,16 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         {name: 'diceDrop',     displayName: 'Dé'},
         {name: 'enchantment',  displayName: 'Enchantement'},
         {name: 'gem',          displayName: 'Gemme'},
+        {name: 'gun',          displayName: 'Arme à poudre'},
         {name: 'level',        displayName: 'Niveau requis'},
         {name: 'lifetime',     displayName: 'Temps de conservation'},
         {name: 'modifiers',    displayName: 'Modificateurs'},
+        {name: 'origin',       displayName: 'Origine'},
         {name: 'prereq',       displayName: 'Prérequis'},
         {name: 'protection',   displayName: 'Protection'},
         {name: 'quantifiable', displayName: 'Quantifiable'},
         {name: 'relic',        displayName: 'Relique'},
+        {name: 'rarity',       displayName: 'Indice de rareté'},
         {name: 'rupture',      displayName: 'Rupture'},
         {name: 'sex',          displayName: 'Sexe'},
         {name: 'skill',        displayName: 'Compétences'},
@@ -201,6 +205,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'gem':
                 this.itemTemplate.data.useUG = true;
                 break;
+            case 'gun':
+                this.itemTemplate.data.gun = new ItemTemplateGunData();
+                break;
             case 'level':
                 this.itemTemplate.data.requireLevel = 1;
                 break;
@@ -210,6 +217,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'modifiers':
                 this.itemTemplate.modifiers = [];
                 break;
+            case 'origin':
+                this.itemTemplate.data.origin = '';
+                break;
             case 'prereq':
                 this.itemTemplate.requirements = [];
                 break;
@@ -218,6 +228,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 break;
             case 'quantifiable':
                 this.itemTemplate.data.quantifiable = true;
+                break;
+            case 'rarity':
+                this.itemTemplate.data.rarityIndicator = '';
                 break;
             case 'relic':
                 this.itemTemplate.data.relic = true;
@@ -286,6 +299,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'gem':
                 this.itemTemplate.data.useUG = undefined;
                 break;
+            case 'gun':
+                this.itemTemplate.data.gun = undefined;
+                break;
             case 'level':
                 this.itemTemplate.data.requireLevel = undefined;
                 break;
@@ -294,6 +310,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 break;
             case 'modifiers':
                 this.itemTemplate.modifiers = [];
+                break;
+            case 'origin':
+                this.itemTemplate.data.origin = undefined;
                 break;
             case 'prereq':
                 this.itemTemplate.requirements = [];
@@ -306,6 +325,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 break;
             case 'quantifiable':
                 this.itemTemplate.data.quantifiable = undefined;
+                break;
+            case 'rarity':
+                this.itemTemplate.data.rarityIndicator = undefined;
                 break;
             case 'relic':
                 this.itemTemplate.data.relic = undefined;
@@ -368,6 +390,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (this.itemTemplate.data.useUG) {
             modules.push('gem');
         }
+        if (this.itemTemplate.data.gun) {
+            modules.push('gun');
+        }
         if (this.itemTemplate.data.requireLevel) {
             modules.push('level');
         }
@@ -376,6 +401,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
         if (!isNullOrUndefined(this.itemTemplate.modifiers) && this.itemTemplate.modifiers.length) {
             modules.push('modifiers');
+        }
+        if (!isNullOrUndefined(this.itemTemplate.data.origin)) {
+            modules.push('origin');
         }
         if (!isNullOrUndefined(this.itemTemplate.requirements)
             && this.itemTemplate.requirements.length) {
@@ -388,6 +416,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
         if (this.itemTemplate.data.quantifiable) {
             modules.push('quantifiable');
+        }
+        if (!isNullOrUndefined(this.itemTemplate.data.rarityIndicator)) {
+            modules.push('rarity');
         }
         if (this.itemTemplate.data.relic) {
             modules.push('relic');
