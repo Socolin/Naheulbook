@@ -384,6 +384,7 @@ export class GroupComponent implements OnInit, OnDestroy {
             this.unregisterCharacterNotification(character);
         }
 
+        this._websocketService.unregisterElement(this.group);
         this.groupNotificationSub.unsubscribe();
         this.group.dispose();
         this.addedCharacterSub.unsubscribe();
