@@ -91,46 +91,6 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
         this.closeCreateItemTypeDialog();
     }
 
-    addSkill(skillId: number) {
-        let skill = this.skillsById[skillId];
-        if (!this.itemTemplate.skills) {
-            this.itemTemplate.skills = [];
-        }
-        this.itemTemplate.skills.push(skill);
-    }
-
-    removeSkill(skillId: number) {
-        if (this.itemTemplate.skills) {
-            for (let i = 0; i < this.itemTemplate.skills.length; i++) {
-                let skill = this.itemTemplate.skills[i];
-                if (skill.id === skillId) {
-                    this.itemTemplate.skills.splice(i, 1);
-                    break;
-                }
-            }
-        }
-    }
-
-    addUnskill(skillId: number) {
-        let skill = this.skillsById[skillId];
-        if (!this.itemTemplate.unskills) {
-            this.itemTemplate.unskills = [];
-        }
-        this.itemTemplate.unskills.push(skill);
-    }
-
-    removeUnskill(skillId: number) {
-        if (this.itemTemplate.unskills) {
-            for (let i = 0; i < this.itemTemplate.unskills.length; i++) {
-                let skill = this.itemTemplate.unskills[i];
-                if (skill.id === skillId) {
-                    this.itemTemplate.unskills.splice(i, 1);
-                    break;
-                }
-            }
-        }
-    }
-
     deleteModule() {
         this.onDelete.emit(true);
     }

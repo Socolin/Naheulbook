@@ -343,27 +343,25 @@
         <md-card-content *ngIf="skills">
             <div>
                 <div *ngFor="let skill of itemTemplate.skills">
-                    <button md-icon-button color="accent" (click)="removeSkill(skill.id)"><md-icon>delete</md-icon></button>
+                    <button md-icon-button color="accent" (click)="itemTemplate.removeSkill(skill)"><md-icon>delete</md-icon></button>
                     Permet de gagner la compétence <em>{{skill.name}}</em>
                 </div>
 
                 Permet de gagner la compétence
-                <md-select (change)=addSkill($event.target.value) style="min-width: 300px">
-                    <md-option></md-option>
-                    <md-option *ngFor="let skill of skills" [value]="skill.id" >{{skill.name}}</md-option>
+                <md-select (change)=itemTemplate.addSkill($event.value) style="min-width: 300px">
+                    <md-option *ngFor="let skill of skills" [value]="skill" >{{skill.name}}</md-option>
                 </md-select>
             </div>
 
             <div>
                 <div *ngFor="let skill of itemTemplate.unskills">
-                    <button md-icon-button color="accent" (click)="removeUnskill(skill.id)"><md-icon>delete</md-icon></button>
+                    <button md-icon-button color="accent" (click)="itemTemplate.removeUnskill(skill)"><md-icon>delete</md-icon></button>
                     Permet d'annuler la compétence <em>{{skill.name}}</em>
                 </div>
 
                 Permet d'annuler la compétence
-                <md-select (change)=addUnskill($event.target.value) style="min-width: 300px">
-                    <md-option></md-option>
-                    <md-option *ngFor="let skill of skills" [value]="skill.id" >{{skill.name}}</md-option>
+                <md-select (change)=itemTemplate.addUnskill($event.value) style="min-width: 300px">
+                    <md-option *ngFor="let skill of skills" [value]="skill" >{{skill.name}}</md-option>
                 </md-select>
             </div>
 

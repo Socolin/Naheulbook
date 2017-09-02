@@ -247,4 +247,36 @@ export class ItemTemplate {
             this.slots.push(slot);
         }
     }
+
+    addSkill(skill: Skill) {
+        if (!this.skills) {
+            this.skills = [];
+        }
+        this.skills.push(skill);
+    }
+
+    removeSkill(skill: Skill) {
+        if (this.skills) {
+            let i = this.skills.findIndex(s => s.id === skill.id);
+            if (i !== -1) {
+                this.skills.splice(i, 1);
+            }
+        }
+    }
+
+    addUnskill(skill: Skill) {
+        if (!this.unskills) {
+            this.unskills = [];
+        }
+        this.unskills.push(skill);
+    }
+
+    removeUnskill(skill: Skill) {
+        if (this.unskills) {
+            let i = this.unskills.findIndex(s => s.id === skill.id);
+            if (i !== -1) {
+                this.unskills.splice(i, 1);
+            }
+        }
+    }
 }
