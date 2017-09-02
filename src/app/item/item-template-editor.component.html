@@ -67,6 +67,7 @@
 <ng-template ngFor let-moduleName [ngForOf]="modules">
     <item-template-editor-module [itemTemplate]="itemTemplate"
                                  [slots]="slots"
+                                 [itemTypes]="itemTypes"
                                  [skills]="skills"
                                  [skillsById]="skillsById"
                                  (onDelete)="removeModule(moduleName)"

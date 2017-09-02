@@ -42,7 +42,7 @@ export class AutocompleteSearchItemTemplateComponent {
                     if (e.data.enchantment !== undefined) {
                         name += ' (Ench. ' + e.data.enchantment + ')';
                     }
-                    let category = categoriesById[e.category].type.name + ' - ' + categoriesById[e.category].name;
+                    let category = categoriesById[e.category].section.name + ' - ' + categoriesById[e.category].name;
                     let mdIcon;
                     if (e.source === 'community') {
                         mdIcon = 'group';

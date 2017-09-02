@@ -8,13 +8,14 @@ import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
 
-import {ItemCategory, ItemTemplateJsonData, ItemTemplate, ItemSection, ItemSlot} from './item-template.model';
+import {ItemCategory, ItemTemplateJsonData, ItemTemplate, ItemSection, ItemSlot, ItemType} from './item-template.model';
 
 @Injectable()
 export class ItemTemplateService extends JsonService {
     private itemBySection: {[sectionId: number]: ReplaySubject<ItemTemplate[]>} = {};
-    private itemSections: ReplaySubject<ItemSection[]>;
-    private slots: ReplaySubject<ItemSlot[]>;
+    private itemSections?: ReplaySubject<ItemSection[]>;
+    private slots?: ReplaySubject<ItemSlot[]>;
+    private itemTypes?: ReplaySubject<ItemType[]>;
 
     constructor(http: Http
         , notification: NotificationsService
@@ -51,7 +52,7 @@ export class ItemTemplateService extends JsonService {
                 for (let j = 0; j < section.categories.length; j++) {
                     let category = section.categories[j];
                     categories[category.id] = category;
-                    category.type = section;
+                    category.section = section;
                 }
             }
             return categories;
@@ -60,7 +61,6 @@ export class ItemTemplateService extends JsonService {
 
     getItems(section: ItemSection): Observable<ItemTemplate[]> {
         if (!(section.id in this.itemBySection)) {
-
             this.itemBySection[section.id] = new ReplaySubject<ItemTemplate[]>(1);
             Observable.forkJoin(
                 this.postJson('/api/itemtemplate/list', {typeId: section.id}).map(res => res.json()),
@@ -125,8 +125,8 @@ export class ItemTemplateService extends JsonService {
             this._http.get('/api/itemtemplate/slotList')
                 .map(res => res.json())
                 .subscribe(
-                    categoryList => {
-                        this.slots.next(categoryList);
+                    slots => {
+                        this.slots.next(slots);
                         this.slots.complete();
                     },
                     error => {
@@ -135,6 +135,35 @@ export class ItemTemplateService extends JsonService {
                 );
         }
         return this.slots;
+    }
+
+    getItemTypes(): Observable<ItemType[]> {
+        if (!this.itemTypes) {
+            this.itemTypes = new ReplaySubject<ItemType[]>(1);
+
+            this._http.get('/api/itemtemplate/itemTypesList')
+                .map(res => res.json())
+                .subscribe(
+                    itemTypes => {
+                        this.itemTypes.next(itemTypes);
+                        this.itemTypes.complete();
+                    },
+                    error => {
+                        this.itemTypes.error(error);
+                    }
+                );
+        }
+        return this.itemTypes;
+    }
+
+    createItemType(displayName: string, techName: string): Observable<ItemType> {
+        this.itemTypes = undefined;
+        let itemType = {
+            techName: techName,
+            displayName: displayName
+        };
+        return this.postJson('/api/itemtemplate/createItemType', {itemType: itemType})
+            .map(res => res.json());
     }
 
     editItemTemplate(item): Observable<ItemTemplate> {

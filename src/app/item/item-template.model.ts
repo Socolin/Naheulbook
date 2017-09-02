@@ -16,7 +16,14 @@ export class ItemCategory {
     name: string;
     description: string;
     note: string;
-    type: any;
+    section: ItemSection;
+    sectionId: number;
+}
+
+export class ItemType {
+    id: number;
+    displayName: string;
+    techName: string;
 }
 
 export class ItemSlot {
@@ -48,44 +55,75 @@ export class ItemTemplateGunData {
 
 export class ItemTemplateData {
     actions?: any[];
-    description?: string;
-    note?: string;
-    notIdentifiedName?: string;
-    diceDrop?: number;
-    price?: number;
+    availableLocation?: string;
+    bonusDamage?: number;
+    charge?: number;
     container?: boolean;
-    isCurrency?: boolean;
-    throwable?: boolean;
-    rupture?: number;
     damageDice?: number;
     damageType?: any;
-    bonusDamage?: number;
+    description?: string;
+    diceDrop?: number;
+    duration?: string;
+    enchantment?: string;
+    gun?: ItemTemplateGunData;
+    icon?: IconDescription;
+    isCurrency?: boolean;
+    itemTypes?: string[];
+    lifetime?: IDurable;
     magicProtection?: number;
+    note?: string;
+    notIdentifiedName?: string;
+    origin?: string;
+    price?: number;
     protection?: number;
     protectionAgainstMagic?: any;
     protectionAgainstType?: any;
-    charge?: number;
-    availableLocation?: string;
-    requireLevel?: number;
-    relic?: boolean;
-    sex?: string;
     quantifiable?: boolean;
-    skillBook?: boolean;
-    weight?: number;
-    duration?: string;
-    space?: string;
-    useUG?: boolean;
-    lifetime?: IDurable;
-    enchantment?: string;
-    icon?: IconDescription;
-    gun?: ItemTemplateGunData;
     rarityIndicator?: string;
-    origin?: string;
+    relic?: boolean;
+    requireLevel?: number;
+    rupture?: number;
+    sex?: string;
+    skillBook?: boolean;
+    space?: string;
+    throwable?: boolean;
+    useUG?: boolean;
+    weight?: number;
 
     static fromJson(jsonData: ItemTemplateData): ItemTemplateData {
         let itemTemplateData = new ItemTemplateData();
         Object.assign(itemTemplateData, jsonData, {gun: ItemTemplateGunData.fromJson(jsonData.gun)});
         return itemTemplateData;
+    }
+
+    isItemTypeName(itemTypeName: string): boolean {
+        if (!this.itemTypes) {
+            return false;
+        }
+        let i = this.itemTypes.findIndex(name => name === itemTypeName);
+        return i !== -1;
+    }
+
+    isItemType(itemType: ItemType): boolean {
+        if (!this.itemTypes) {
+            return false;
+        }
+        let i = this.itemTypes.findIndex(name => name === itemType.techName);
+        return i !== -1;
+    }
+
+    toggleItemType(itemType: ItemType): void {
+        if (!this.itemTypes) {
+            this.itemTypes = [];
+        }
+        if (this.isItemType(itemType)) {
+            let i = this.itemTypes.findIndex(name => name === itemType.techName);
+            if (i !== -1) {
+                this.itemTypes.splice(i, 1);
+            }
+        } else {
+            this.itemTypes.push(itemType.techName);
+        }
     }
 }
 
@@ -186,5 +224,27 @@ export class ItemTemplate {
             itemTemplates.push(ItemTemplate.fromJson(jsonData, skillsById));
         }
         return itemTemplates;
+    }
+
+    isInSlot(slot: ItemSlot): boolean {
+        if (!this.slots) {
+            return false;
+        }
+        let i = this.slots.findIndex(s => s.id === slot.id);
+        return i !== -1;
+    }
+
+    toggleSlot(slot: ItemSlot): void {
+        if (!this.slots) {
+            this.slots = [];
+        }
+        if (this.isInSlot(slot)) {
+            let i = this.slots.findIndex(s => s.id === slot.id);
+            if (i !== -1) {
+                this.slots.splice(i, 1);
+            }
+        } else {
+            this.slots.push(slot);
+        }
     }
 }

@@ -1,10 +1,12 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import {OverlayRef, Portal} from '@angular/material';
 
-import {ItemTemplate, ItemSlot} from './item-template.model';
+import {ItemTemplate, ItemSlot, ItemType} from './item-template.model';
 import {Skill} from '../skill/skill.model';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {NhbkAction} from '../action/nhbk-action.model';
+import {removeDiacritics} from '../shared/remove_diacritics';
+import {ItemTemplateService} from './item-template.service';
 
 @Component({
     selector: 'item-template-editor-module',
@@ -16,6 +18,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     @Input() moduleName: string;
 
     @Input() slots: ItemSlot[];
+    @Input() itemTypes: ItemType[];
     @Input() skills: Skill[] = [];
     @Input() skillsById: { [skillId: number]: Skill } = {};
 
@@ -25,7 +28,14 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     public addChargeActionModal: Portal<any>;
     public addChargeActionOverlayRef: OverlayRef;
 
-    constructor(private _nhbkDialogService: NhbkDialogService) {
+    @ViewChild('createItemTypeDialog')
+    public createItemTypeDialog: Portal<any>;
+    public createItemTypeOverlayRef?: OverlayRef;
+    public newItemTypeDisplayName = '';
+    public newItemTypeTechName = '';
+
+    constructor(private _nhbkDialogService: NhbkDialogService,
+                private _itemTemplateService: ItemTemplateService) {
     }
 
     openAddChargeActionModal() {
@@ -48,32 +58,37 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
         this.itemTemplate.data.actions!.splice(index, 1);
     }
 
-    isInSlot(slot) {
-        if (!this.itemTemplate.slots) {
-            return false;
+    updateNewItemTypeDisplayName(newName: string) {
+        let previousTechName = removeDiacritics(this.newItemTypeDisplayName)
+            .replace(' ', '_')
+            .toUpperCase();
+        if (previousTechName === this.newItemTypeTechName) {
+            this.newItemTypeTechName = removeDiacritics(newName)
+                .replace(' ', '_')
+                .toUpperCase();
         }
-        for (let i = 0; i < this.itemTemplate.slots.length; i++) {
-            if (this.itemTemplate.slots[i].id === slot.id) {
-                return true;
-            }
-        }
-        return false;
+        this.newItemTypeDisplayName = newName;
     }
 
-    toggleSlot(slot) {
-        if (!this.itemTemplate.slots) {
-            this.itemTemplate.slots = [];
+    openCreateItemTypeDialog() {
+        this.createItemTypeOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.createItemTypeDialog, true);
+    }
+
+    closeCreateItemTypeDialog() {
+        if (this.createItemTypeOverlayRef) {
+            this.createItemTypeOverlayRef.detach();
+            this.createItemTypeOverlayRef = undefined;
         }
-        if (this.isInSlot(slot)) {
-            for (let i = 0; i < this.itemTemplate.slots.length; i++) {
-                if (this.itemTemplate.slots[i].id === slot.id) {
-                    this.itemTemplate.slots.splice(i, 1);
-                    break;
-                }
-            }
-        } else {
-            this.itemTemplate.slots.push(slot);
-        }
+    }
+
+    public createItemType() {
+        this._itemTemplateService.createItemType(this.newItemTypeDisplayName, this.newItemTypeTechName)
+            .subscribe(itemType => {
+                this.itemTypes.push(itemType);
+            });
+        this.newItemTypeDisplayName = '';
+        this.newItemTypeTechName = '';
+        this.closeCreateItemTypeDialog();
     }
 
     addSkill(skillId: number) {

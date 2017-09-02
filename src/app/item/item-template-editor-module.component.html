@@ -182,6 +182,19 @@
             </md-input-container>
         </md-card-content>
     </ng-template>
+    <ng-template [ngSwitchCase]="'itemTypes'">
+        <md-card-subtitle>Type d'objet</md-card-subtitle>
+        <md-card-content>
+            <div class="slots-list">
+                <md-checkbox *ngFor="let itemType of itemTypes" [checked]="itemTemplate.data.isItemType(itemType)" (change)="itemTemplate.data.toggleItemType(itemType)">
+                    {{itemType.displayName}}
+                </md-checkbox>
+            </div>
+        </md-card-content>
+        <md-card-actions>
+            <button md-button color="primary" (click)="openCreateItemTypeDialog()">AJOUTER UN TYPE</button>
+        </md-card-actions>
+    </ng-template>
     <ng-template [ngSwitchCase]="'lifetime'">
         <md-card-subtitle>Duree de conservation</md-card-subtitle>
         <duration-selector [durable]="itemTemplate.data.lifetime"></duration-selector>
@@ -370,7 +383,7 @@
         <md-card-content>
             Cet objet peut être équipé, et occupe les emplacement suivant:
             <div class="slots-list">
-                <md-checkbox *ngFor="let slot of slots" [checked]="isInSlot(slot)" (change)="toggleSlot(slot)">
+                <md-checkbox *ngFor="let slot of slots" [checked]="itemTemplate.isInSlot(slot)" (change)="itemTemplate.toggleSlot(slot)">
                     {{slot.name}}
                 </md-checkbox>
             </div>
@@ -409,3 +422,25 @@
         <div>Unknow module {{moduleName}}</div>
     </ng-template>
 </md-card>
+
+<ng-template cdk-portal #createItemTypeDialog="cdkPortal">
+    <md-card>
+        <md-input-container>
+            <input mdInput
+                   [ngModel]="newItemTypeDisplayName"
+                   (ngModelChange)="updateNewItemTypeDisplayName($event)"
+                   class="form-control"
+                   placeholder="Nom"/>
+        </md-input-container>
+        <md-input-container>
+            <input mdInput
+                   [(ngModel)]="newItemTypeTechName"
+                   class="form-control"
+                   placeholder="Nom technique"/>
+        </md-input-container>
+        <md-action-row align="end">
+            <button color="primary" md-button (click)="closeCreateItemTypeDialog()">FERMER</button>
+            <button color="primary" md-button (click)="createItemType()">AJOUTER</button>
+        </md-action-row>
+    </md-card>
+</ng-template>

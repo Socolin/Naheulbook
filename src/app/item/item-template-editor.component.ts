@@ -13,7 +13,7 @@ import {Skill, SkillService} from '../skill';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
 
-import {ItemSection, ItemSlot, ItemTemplate, ItemTemplateGunData} from './item-template.model';
+import {ItemSection, ItemSlot, ItemTemplate, ItemTemplateGunData, ItemType} from './item-template.model';
 import {ItemTemplateService} from './item-template.service'
 
 @Component({
@@ -32,6 +32,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     public skillsById: { [skillId: number]: Skill } = {};
     public sections: ItemSection[];
     public slots: ItemSlot[];
+    public itemTypes: ItemType[];
     public originsName: { [originId: number]: string };
     public jobsName: { [jobId: number]: string };
 
@@ -57,6 +58,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         {name: 'enchantment',  displayName: 'Enchantement'},
         {name: 'gem',          displayName: 'Gemme'},
         {name: 'gun',          displayName: 'Arme à poudre'},
+        {name: 'itemTypes',    displayName: 'Type d\'objet'},
         {name: 'level',        displayName: 'Niveau requis'},
         {name: 'lifetime',     displayName: 'Temps de conservation'},
         {name: 'modifiers',    displayName: 'Modificateurs'},
@@ -217,6 +219,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'modifiers':
                 this.itemTemplate.modifiers = [];
                 break;
+            case 'itemTypes':
+                this.itemTemplate.data.itemTypes = [];
+                break;
             case 'origin':
                 this.itemTemplate.data.origin = '';
                 break;
@@ -311,6 +316,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'modifiers':
                 this.itemTemplate.modifiers = [];
                 break;
+            case 'itemTypes':
+                this.itemTemplate.data.itemTypes = undefined;
+                break;
             case 'origin':
                 this.itemTemplate.data.origin = undefined;
                 break;
@@ -402,6 +410,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (!isNullOrUndefined(this.itemTemplate.modifiers) && this.itemTemplate.modifiers.length) {
             modules.push('modifiers');
         }
+        if (!isNullOrUndefined(this.itemTemplate.data.itemTypes) && this.itemTemplate.data.itemTypes.length) {
+            modules.push('itemTypes');
+        }
         if (!isNullOrUndefined(this.itemTemplate.data.origin)) {
             modules.push('origin');
         }
@@ -460,33 +471,38 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             this.determineModulesFromItemTemplate();
         }
         Observable.forkJoin(
-            this._itemTemplateservice.getSectionsList(),
-            this._skillService.getSkills(),
-            this._skillService.getSkillsById(),
-            this._itemTemplateservice.getSlots(),
-            this._jobService.getJobList(),
-            this._originService.getOriginList()
-        ).subscribe(([sections, skills, skillsById, slots, jobs, origins]) => {
-            this.sections = sections;
-            this.skills = skills;
-            this.skillsById = skillsById;
-            this.slots = slots;
+            this._itemTemplateservice.getItemTypes(),
+        ).subscribe(([itemTypes]) => {
+            Observable.forkJoin(
+                this._itemTemplateservice.getSectionsList(),
+                this._skillService.getSkills(),
+                this._skillService.getSkillsById(),
+                this._itemTemplateservice.getSlots(),
+                this._jobService.getJobList(),
+                this._originService.getOriginList()
+            ).subscribe(([sections, skills, skillsById, slots, jobs, origins]) => {
+                this.sections = sections;
+                this.skills = skills;
+                this.skillsById = skillsById;
+                this.slots = slots;
+                this.itemTypes = itemTypes;
 
-            let jobsName: { [jobId: number]: string } = {};
-            for (let i = 0; i < jobs.length; i++) {
-                let job = jobs[i];
-                jobsName[job.id] = job.name;
-            }
-            this.jobsName = jobsName;
+                let jobsName: { [jobId: number]: string } = {};
+                for (let i = 0; i < jobs.length; i++) {
+                    let job = jobs[i];
+                    jobsName[job.id] = job.name;
+                }
+                this.jobsName = jobsName;
 
-            let originsName: { [originId: number]: string } = {};
-            for (let i = 0; i < origins.length; i++) {
-                let origin = origins[i];
-                originsName[origin.id] = origin.name;
-            }
-            this.originsName = originsName;
+                let originsName: { [originId: number]: string } = {};
+                for (let i = 0; i < origins.length; i++) {
+                    let origin = origins[i];
+                    originsName[origin.id] = origin.name;
+                }
+                this.originsName = originsName;
 
-            this.updateSelectedSection();
+                this.updateSelectedSection();
+            });
         });
     }
 }
