@@ -329,6 +329,21 @@ export class Character extends WsRegistrable {
         return Character.hasSkill(this, 14);
     }
 
+    hasFlag(flagName: string) {
+        if (this.origin && this.origin.hasFlag(flagName)) {
+            return true;
+        }
+        if (this.job && this.job.hasFlag(flagName)) {
+            return true;
+        }
+        for (let speciality of this.specialities) {
+            if (speciality.hasFlag(flagName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Concatenate modifiers like [-2 PRD] and [+2 PRD for dwarf]
     private cleanItemModifiers(item: Item): ItemStatModifier[] {
         let cleanModifiers: ItemStatModifier[] = [];

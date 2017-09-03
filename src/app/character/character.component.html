@@ -889,6 +889,9 @@
             Changer de métier
         </md-card-title>
         <md-card-content>
+            <div *ngIf="character.hasFlag('CAN_CHANGE_JOB')" class="text-warning">
+                Ne peux pas changer de métier
+            </div>
             <md-radio-group *ngIf="character.job" [(ngModel)]="newCharacterJob">
                 <md-radio-button [value]="null">Aucun</md-radio-button>
                 <md-radio-button [value]="character.job">{{character.job.name}}</md-radio-button>
