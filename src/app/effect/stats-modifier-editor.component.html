@@ -2,20 +2,20 @@
     <md-card>
         <md-card-content>
             <div>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput placeholder="Nom" [(ngModel)]="modifier.name" required>
-                </md-input-container>
-                <md-input-container>
+                </md-form-field>
+                <md-form-field>
                     <input mdInput placeholder="Type" [(ngModel)]="modifier.type">
-                </md-input-container>
+                </md-form-field>
                 <md-slide-toggle *ngIf="reusableToggle" color="primary" [(ngModel)]="modifier.reusable">
                     Ré-utilisable
                 </md-slide-toggle>
             </div>
             <div>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput placeholder="Description" [(ngModel)]="modifier.description">
-                </md-input-container>
+                </md-form-field>
             </div>
         </md-card-content>
     </md-card>

@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Overlay, Portal, OverlayRef, OverlayState} from '@angular/material';
+import {Overlay, OverlayRef, OverlayState} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 
 @Injectable()
 export class NhbkDialogService {

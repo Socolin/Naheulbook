@@ -1,6 +1,6 @@
 <md-card (swipeleft)="nothing()" (swiperight)="nothing()">
     <md-card-header class="item-detail-header">
-        <icon-selector md-card-avatar [icon]="item.data.icon" [size]="'40px'" [readonly]="readonly"
+        <icon-selector mdCardAvatar [icon]="item.data.icon" [size]="'40px'" [readonly]="readonly"
                        (onChange)="_itemActionService.onAction('change_icon', item, {icon: $event})">
         </icon-selector>
         <div>
@@ -11,11 +11,11 @@
                 <span style="vertical-align: top;" *ngIf="!editing">
                     {{item.data.name}}
                 </span>
-                <md-input-container *ngIf="editing">
+                <md-form-field *ngIf="editing">
                     <input mdInput
                            placeholder="Nom"
                            [(ngModel)]="itemEditName">
-                </md-input-container>
+                </md-form-field>
             </md-card-title>
             <md-card-subtitle *ngIf="!editing">
                 <div *ngIf="itemCategoriesById">
@@ -80,11 +80,11 @@
             </div>
             <div>
                 <span *ngIf="!editing">{{item.data.description}}</span>
-                <md-input-container *ngIf="editing">
+                <md-form-field *ngIf="editing">
                     <input mdInput
                            placeholder="Description"
                            [(ngModel)]="itemEditDescription">
-                </md-input-container>
+                </md-form-field>
             </div>
         </div>
         <div *ngIf="!item.data.notIdentified || gmView">
@@ -95,11 +95,11 @@
             <div *ngIf="item.template.data.description">{{item.template.data.description}}</div>
             <div>
                 <span *ngIf="!editing">{{item.data.description}}</span>
-                <md-input-container *ngIf="editing">
+                <md-form-field *ngIf="editing">
                     <input mdInput
                            placeholder="Description"
                            [(ngModel)]="itemEditDescription">
-                </md-input-container>
+                </md-form-field>
             </div>
 
             <div>

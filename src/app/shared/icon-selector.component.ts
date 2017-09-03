@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges, ViewChild} from '@angular/core';
-import {Portal, OverlayRef, Overlay, OverlayState} from '@angular/material';
+import {Overlay, OverlayRef, OverlayState} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 
 import {IconService} from './icon.service';
 import {removeDiacritics} from './remove_diacritics';

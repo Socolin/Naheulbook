@@ -26,20 +26,20 @@
 
 <div>
     <div>
-        <md-input-container>
+        <md-form-field>
             <input mdInput
                    [(ngModel)]="minValue"
                    type="number"
                    min="0"
                    placeholder="min"/>
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input mdInput
                    [(ngModel)]="maxValue"
                    type="number"
                    min="0"
                    placeholder="max"/>
-        </md-input-container>
+        </md-form-field>
     </div>
     <md-button-toggle-group [(ngModel)]="selectedStat">
         <md-button-toggle *ngFor="let stat of stats"

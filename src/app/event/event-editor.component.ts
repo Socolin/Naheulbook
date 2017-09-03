@@ -1,5 +1,6 @@
 import {Component, Output, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
-import {Portal, OverlayRef} from '@angular/material';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 
 import {NEvent} from './event.model';
 import {NhbkDateOffset, NhbkDate} from '../date/date.model';

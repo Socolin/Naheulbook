@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {OverlayRef, Portal} from '@angular/material';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 
 import {ItemTemplate, ItemSlot, ItemType} from './item-template.model';
 import {Skill} from '../skill/skill.model';

@@ -3,6 +3,9 @@ import {
     ViewChildren
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {MdTabChangeEvent, TemplatePortalDirective} from '@angular/material';
+import {Overlay, OverlayRef, OverlayState} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 import {Observable} from 'rxjs/Observable';
 
 import {NotificationsService} from '../notifications';
@@ -18,7 +21,6 @@ import {AutocompleteValue} from '../shared';
 import {LocationService, Location} from '../location';
 import {NhbkDateOffset} from '../date';
 import {GroupActionService} from './group-action.service';
-import {MdTabChangeEvent, OverlayRef, Portal, Overlay, OverlayState, TemplatePortalDirective} from '@angular/material';
 import {User} from '../user/user.model';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {CharacterService} from '../character/character.service';

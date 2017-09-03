@@ -3,20 +3,20 @@
         {{title}}
     </md-card-title>
     <div class="name-line">
-        <md-input-container>
+        <md-form-field>
             <input mdInput
                    placeholder="Nom de l'objet"
                    [(ngModel)]="itemTemplate.name"
                    type="text"/>
-        </md-input-container>
+        </md-form-field>
         <icon-selector [icon]="itemTemplate.data.icon" (onChange)="itemTemplate.data.icon = $event"></icon-selector>
     </div>
     <div class="not-identified-name-line">
-        <md-input-container>
+        <md-form-field>
             <input mdInput
                    placeholder="Nom quand non identifié"
                    [(ngModel)]="itemTemplate.data.notIdentifiedName"/>
-        </md-input-container>
+        </md-form-field>
         <button md-icon-button (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"><md-icon>content_copy</md-icon></button>
         <button md-icon-button (click)="automaticNotIdentifiedName()"><md-icon>refresh</md-icon></button>
         <md-select placeholder="Source" [(ngModel)]="itemTemplate.source" (change)="changeSource($event.value)" required>
@@ -26,25 +26,25 @@
         </md-select>
     </div>
     <div style="display: flex; flex-direction: row">
-        <md-input-container>
+        <md-form-field>
             <input mdInput
                    placeholder="Prix"
                    [(ngModel)]="itemTemplate.data.price"
                    type="number"/>
             <span mdSuffix>P.O.</span>
-        </md-input-container>
-        <md-input-container style="flex: 1 auto; margin-left: 10px">
+        </md-form-field>
+        <md-form-field style="flex: 1 auto; margin-left: 10px">
             <input mdInput
                    placeholder="Description"
                    [(ngModel)]="itemTemplate.data.description"/>
-        </md-input-container>
+        </md-form-field>
     </div>
     <div>
-        <md-input-container style="width: 100%">
+        <md-form-field style="width: 100%">
             <input mdInput
                    placeholder="Note"
                    [(ngModel)]="itemTemplate.data.note"/>
-        </md-input-container>
+        </md-form-field>
     </div>
 </md-card>
 

@@ -1,5 +1,6 @@
 import {Component, Output, EventEmitter, SimpleChanges, OnChanges, ViewChild} from '@angular/core';
-import {OverlayRef, Portal} from '@angular/material';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 
 import {Character, Item} from '../character';
 import {ItemTemplate, ItemTemplateService} from '../item';

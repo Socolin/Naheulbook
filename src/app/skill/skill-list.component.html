@@ -1,9 +1,9 @@
-<md-input-container style="width: 100%">
+<md-form-field style="width: 100%">
     <input mdInput
            placeholder="Filtre"
            (keydown.esc)="filter = null"
            [(ngModel)]="filter">
-</md-input-container>
+</md-form-field>
 <div *ngFor="let skill of skills">
 	<div *ngIf="isFiltered(skill)">
         <md-card style="margin-bottom: 10px">

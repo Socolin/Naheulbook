@@ -1,12 +1,12 @@
 <md-card>
     <md-card-title>Ajouter une entrée</md-card-title>
     <md-card-content style="display: flex">
-        <md-input-container style="flex: 1 auto">
+        <md-form-field style="flex: 1 auto">
             <input mdInput
                    type="text"
                    placeholder="Message"
                    [(ngModel)]="historyNewEntryText"/>
-        </md-input-container>
+        </md-form-field>
         <md-checkbox [(ngModel)]=historyNewEntryGm style="flex: 0 auto">
             Visible par le DM seulement
         </md-checkbox>

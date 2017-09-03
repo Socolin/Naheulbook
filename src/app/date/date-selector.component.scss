@@ -8,7 +8,7 @@
 
 .hour-minute {
     display: flex;
-    >md-input-container {
+    >md-form-field {
         flex: 0 70px;
     }
     .padding {
@@ -18,7 +18,7 @@
 .day {
     display: flex;
     align-items: center;
-    >md-input-container {
+    >md-form-field {
         flex: 0 60px;
     }
     >md-select {

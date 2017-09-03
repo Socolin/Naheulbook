@@ -2,7 +2,8 @@ import {
     Input, OnInit, Component, HostListener, ElementRef, ViewChild,
     OnChanges, SimpleChanges
 } from '@angular/core';
-import {OverlayRef, Portal, Overlay, OverlayState} from '@angular/material';
+import {Overlay, OverlayRef, OverlayState} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 import {isNullOrUndefined} from 'util';
 
 import {removeDiacritics} from '../shared';

@@ -1,5 +1,7 @@
 import {Component, ViewChild, EventEmitter, Output} from '@angular/core';
-import {OverlayRef, Portal} from '@angular/material';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
+
 import {Effect} from './effect.model';
 import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';

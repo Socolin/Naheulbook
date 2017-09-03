@@ -136,7 +136,7 @@
                     <span class="value">{{fighter.monster.data.page}}</span>
                 </div>
 
-                <md-input-container class="fighter-note">
+                <md-form-field class="fighter-note">
                 <textarea mdInput
                           mdTextareaAutosize
                           mdAutosizeMinRows="2"
@@ -144,7 +144,7 @@
                           [ngModel]="fighter.monster.data.note"
                           (blur)="updateMonsterField(fighter.monster, 'note', $event.target.value)">
                 </textarea>
-                </md-input-container>
+                </md-form-field>
             </div>
         </md-card-content>
     </md-card>
@@ -313,13 +313,13 @@
         <md-card-content>
             <div class="editable-data">
                 <div class="fighter-row">
-                    <md-input-container class="name">
+                    <md-form-field class="name">
                         <input mdInput
                                placeholder="Nom"
                                [ngModel]="fighter.monster.name"
                                (ngModelChange)="changeStat('name', $event)"
                         />
-                    </md-input-container>
+                    </md-form-field>
                 </div>
             </div>
             <div class="fighter-row">
@@ -379,13 +379,13 @@
                 </div>
             </div>
             <div class="fighter-row">
-                <md-input-container class="dmg">
+                <md-form-field class="dmg">
                     <input mdInput
                            placeholder="Dmg"
                            [ngModel]="fighter.monster.data.dmg"
                            (ngModelChange)="changeStat('dmg', $event)"
                     />
-                </md-input-container>
+                </md-form-field>
                 <div class="cou">
                     COU:
                     <value-editor [value]="fighter.monster.data.cou"

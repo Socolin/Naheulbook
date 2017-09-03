@@ -1,8 +1,10 @@
 import {Component, Output, EventEmitter, Input, ViewChild} from '@angular/core';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
+
+import {NhbkDialogService} from '../shared';
 
 import {NhbkDateOffset} from './date.model';
-import {OverlayRef, Portal} from '@angular/material';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
     selector: 'date-modifier',

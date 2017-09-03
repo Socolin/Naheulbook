@@ -1,8 +1,10 @@
 import {Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild} from '@angular/core';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
+
 import {NhbkDate, CalendarDate} from './date.model';
 import {DateService} from './date.service';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {OverlayRef, Portal} from '@angular/material';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({

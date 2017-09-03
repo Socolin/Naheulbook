@@ -1,5 +1,5 @@
 <span class="autocomplete-container">
-    <md-input-container #autocompleteOrigin="cdkOverlayOrigin" cdk-overlay-origin>
+    <md-form-field #autocompleteOrigin="cdkOverlayOrigin" cdk-overlay-origin>
         <input mdInput
                #inputField
                [disabled]="disabled"
@@ -9,7 +9,7 @@
                (ngModelChange)="updateList()"
                (click)="updateList()"
                autocomplete="false"/>
-    </md-input-container>
+    </md-form-field>
 
     <ng-template cdk-connected-overlay
               [origin]="autocompleteOrigin"

@@ -20,43 +20,43 @@
                                     [(callback)]="autocompleteItemCallback">
                 </autocomplete-input>
                 <div *ngIf="selectedItemTemplate?.data?.quantifiable">
-                    <md-input-container align="end">
+                    <md-form-field align="end">
                         <input mdInput
                                type="number"
                                placeholder="Quantité"
                                [(ngModel)]="action.data.quantity"/>
-                    </md-input-container>
+                    </md-form-field>
                 </div>
             </ng-template>
             <ng-template [ngSwitchCase]="'removeItem'">
             </ng-template>
             <ng-template [ngSwitchCase]="'addEv'">
-                <md-input-container align="end">
+                <md-form-field align="end">
                     <input mdInput
                            type="number"
                            placeholder="Energie vitale"
                            [(ngModel)]="action.data.ev"/>
                     <span mdPrefix>Redonner</span>
                     <span mdSuffix>E.V.</span>
-                </md-input-container>
+                </md-form-field>
             </ng-template>
             <ng-template [ngSwitchCase]="'addEa'">
-                <md-input-container align="end">
+                <md-form-field align="end">
                     <input mdInput
                            type="number"
                            placeholder="Energie astrale"
                            [(ngModel)]="action.data.ea"/>
                     <span mdPrefix>Redonner</span>
                     <span mdSuffix>E.A.</span>
-                </md-input-container>
+                </md-form-field>
             </ng-template>
             <ng-template [ngSwitchCase]="'custom'">
-                <md-input-container align="end">
+                <md-form-field align="end">
                     <input mdInput
                            type="text"
                            placeholder="Action"
                            [(ngModel)]="action.data.text"/>
-                </md-input-container>
+                </md-form-field>
             </ng-template>
             <ng-template [ngSwitchCase]="'addCustomModifier'">
                 <stats-modifier-editor [modifier]="activeModifier" [reusableToggle]="false">

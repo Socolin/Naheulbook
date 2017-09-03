@@ -2,7 +2,8 @@ import {
     Component, OnInit, OnDestroy, Input, ViewChildren, HostListener, QueryList, ViewChild, EventEmitter, Output
 } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Overlay, OverlayRef, OverlayState, Portal} from '@angular/material';
+import {Overlay, OverlayRef, OverlayState} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Rx';

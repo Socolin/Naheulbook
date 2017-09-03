@@ -27,24 +27,24 @@
                                         </md-button-toggle>
                                     </md-button-toggle-group>
 
-                                    <md-input-container>
+                                    <md-form-field>
                                         <input mdInput
                                                type="number"
                                                [(ngModel)]="gemOption['number']"
                                                class="form-control"
                                                placeholder="D20"/>
-                                    </md-input-container>
+                                    </md-form-field>
 
                                 </div>
 
                                 <div>
-                                    <md-input-container>
+                                    <md-form-field>
                                         <input mdInput
                                                type="number"
                                                [(ngModel)]="gemOption['ug']"
                                                class="form-control"
                                                placeholder="U.G."/>
-                                    </md-input-container>
+                                    </md-form-field>
                                     <button md-mini-fab [color]="gemOption['maxUg'] == 2 ? 'accent' : 'primary'" (click)="setGemRandomUg(2)">D2</button>
                                     <button md-mini-fab [color]="gemOption['maxUg'] == 4 ? 'accent' : 'primary'" (click)="setGemRandomUg(4)">D4</button>
                                     <button md-mini-fab [color]="gemOption['maxUg'] == 6 ? 'accent' : 'primary'" (click)="setGemRandomUg(6)">D6</button>
@@ -67,7 +67,7 @@
                 <md-card-content>
                     <span class="name-icon">
                         <icon-selector [icon]="newItem.data.icon"></icon-selector>
-                        <md-input-container>
+                        <md-form-field>
                             <input mdInput
                                    #newItemName
                                    placeholder="Nom"
@@ -75,19 +75,19 @@
                             <md-hint *ngIf="newItem.data.notIdentified" align="end">
                                 {{newItem.template?.name}}
                             </md-hint>
-                        </md-input-container>
+                        </md-form-field>
                     </span>
-                    <md-input-container>
+                    <md-form-field>
                         <input mdInput
                                placeholder="Description"
                                [(ngModel)]="newItem.data.description"/>
-                    </md-input-container>
-                    <md-input-container *ngIf="newItem.template?.data?.quantifiable">
+                    </md-form-field>
+                    <md-form-field *ngIf="newItem.template?.data?.quantifiable">
                         <input mdInput
                                type="number"
                                placeholder="Quantité"
                                [(ngModel)]="newItem.data.quantity"/>
-                    </md-input-container>
+                    </md-form-field>
                     <div>
                         <md-slide-toggle color="primary"
                                          [(ngModel)]="newItem.data.notIdentified"

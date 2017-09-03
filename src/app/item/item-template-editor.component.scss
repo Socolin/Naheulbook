@@ -5,7 +5,7 @@ md-card {
 .name-line {
     display: flex;
 
-    md-input-container {
+    md-form-field {
         flex: 1 auto;
     }
 }
@@ -14,7 +14,7 @@ md-card {
     display: flex;
     align-items: center;
 
-    md-input-container {
+    md-form-field {
         flex: 1 auto;
     }
     button {

@@ -1,4 +1,8 @@
 import {Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
+import {MdSlideToggleChange} from '@angular/material';
+
 import {Fighter, Group} from './group.model';
 import {NotificationsService} from '../notifications/notifications.service';
 import {CharacterService} from '../character/character.service';
@@ -7,7 +11,7 @@ import {Character} from '../character/character.model';
 import {ItemTemplate} from '../item/item-template.model';
 import {Item} from '../character/item.model';
 import {TargetJsonData} from './target.model';
-import {MdSlideToggleChange, OverlayRef, Portal} from '@angular/material';
+
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {ActiveStatsModifier, LapCountDecrement} from '../shared/stat-modifier.model';
 import {Monster} from '../monster';

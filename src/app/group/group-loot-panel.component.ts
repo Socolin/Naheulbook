@@ -1,5 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {OverlayRef, Portal} from '@angular/material';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 
 import {NotificationsService} from '../notifications';
 import {NhbkDialogService} from '../shared';

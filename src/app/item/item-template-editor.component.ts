@@ -1,7 +1,8 @@
 import {
     Component, Input, OnInit, OnChanges, SimpleChanges, HostListener, ViewChild
 } from '@angular/core';
-import {Portal, OverlayRef} from '@angular/material';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 import {Observable} from 'rxjs';
 
 import {isNullOrUndefined} from 'util';

@@ -8,7 +8,7 @@
         <md-card-content>
             <form [formGroup]="form">
                 <div class="hour-minute">
-                    <md-input-container>
+                    <md-form-field>
                         <input mdInput
                                formControlName="hour"
                                type="number"
@@ -16,8 +16,8 @@
                                max="23"
                                step="1"
                                placeholder="Heure">
-                    </md-input-container>
-                    <md-input-container>
+                    </md-form-field>
+                    <md-form-field>
                         <input mdInput
                                formControlName="minute"
                                type="number"
@@ -25,27 +25,27 @@
                                max="59"
                                step="1"
                                placeholder="Minutes">
-                    </md-input-container>
+                    </md-form-field>
                     <div class="padding">
                     </div>
-                    <md-input-container>
+                    <md-form-field>
                         <input mdInput
                                formControlName="year"
                                type="number"
                                min="0"
                                step="1"
                                placeholder="Année">
-                    </md-input-container>
+                    </md-form-field>
                 </div>
                 <div class="day">
-                    <md-input-container>
+                    <md-form-field>
                         <input mdInput
                                formControlName="relativeDay"
                                type="number"
                                min="1"
                                step="1"
                                placeholder="Jour">
-                    </md-input-container>
+                    </md-form-field>
 
                     <md-select placeholder="Période" formControlName="currentCalendarDate">
                         <md-option *ngFor="let cDate of calendar" [value]="cDate">

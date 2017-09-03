@@ -38,7 +38,7 @@
             <md-icon *ngIf="!iconMode" class="md-24">view_module</md-icon>
         </button>
 
-        <md-input-container *ngIf="selectedInventoryTab === 'all'">
+        <md-form-field *ngIf="selectedInventoryTab === 'all'">
             <input mdInput
                       placeholder="Filtre"
                       [(ngModel)]="itemFilterName"
@@ -46,7 +46,7 @@
             <span mdSuffix>&nbsp;
                 <md-icon>search</md-icon>
             </span>
-        </md-input-container>
+        </md-form-field>
     </div>
 
     <div class="inventory">
@@ -224,22 +224,22 @@
             </autocomplete-search-item-template>
 
             <div *ngIf="selectedAddItem">
-                <md-input-container style="width: 100%">
+                <md-form-field style="width: 100%">
                     <input mdInput type="text"
                            placeholder="Nom personnalisé"
                            [(ngModel)]="itemAddCustomName"/>
-                </md-input-container>
-                <md-input-container style="width: 100%">
+                </md-form-field>
+                <md-form-field style="width: 100%">
                     <input mdInput type="text"
                            placeholder="Description personnalisé"
                            [(ngModel)]="itemAddCustomDescription"/>
-                </md-input-container>
+                </md-form-field>
 
-                <md-input-container *ngIf="selectedAddItem.data.quantifiable" style="width: 100%">
+                <md-form-field *ngIf="selectedAddItem.data.quantifiable" style="width: 100%">
                     <input mdInput type="number"
                            placeholder="Quantité"
                            [(ngModel)]="itemAddQuantity"/>
-                </md-input-container>
+                </md-form-field>
             </div>
         </md-card-content>
         <md-card-actions align="end">

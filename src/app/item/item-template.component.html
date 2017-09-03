@@ -6,7 +6,7 @@
         <md-icon>lock</md-icon> Object privé
     </md-card-subtitle>
     <md-card-header>
-        <icon md-card-avatar [enchanted]="itemTemplate.data.enchantment !== undefined" [icon]="itemTemplate.data.icon" [size]="'32px'"></icon>
+        <icon mdCardAvatar [enchanted]="itemTemplate.data.enchantment !== undefined" [icon]="itemTemplate.data.icon" [size]="'32px'"></icon>
         <md-card-title>
             {{itemTemplate.name}}
             <span *ngIf="itemTemplate.data.enchantment !== undefined">(Ench. {{itemTemplate.data.enchantment}})</span>

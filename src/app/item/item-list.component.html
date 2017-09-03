@@ -26,12 +26,12 @@
 <md-card>
     <md-card-subtitle>Filtre</md-card-subtitle>
     <md-card-content class="filters">
-        <md-input-container class="name">
+        <md-form-field class="name">
             <input mdInput placeholder="Filtre" [(ngModel)]="filter.name" (change)="updateFilter()"/>
-        </md-input-container>
-        <md-input-container *ngIf="hasSpecial('DICE_DROP')" class="dice-drop">
+        </md-form-field>
+        <md-form-field *ngIf="hasSpecial('DICE_DROP')" class="dice-drop">
             <input mdInput placeholder="Dé" [(ngModel)]="filter.dice" type="number" (change)="updateFilter()"/>
-        </md-input-container>
+        </md-form-field>
         <md-select *ngIf="selectedSection"
                    class="category"
                    [ngModel]="filter.category"

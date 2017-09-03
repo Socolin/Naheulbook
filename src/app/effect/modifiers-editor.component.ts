@@ -3,7 +3,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ItemStatModifier, StatModificationOperand, MiscService} from '../shared';
 import {Origin, OriginService} from '../origin';
 import {Job, JobService} from '../job';
-import {isNullOrUndefined} from 'util';
 import {MdCheckboxChange} from '@angular/material';
 
 @Component({

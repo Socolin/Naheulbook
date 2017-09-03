@@ -17,9 +17,9 @@
 
 <div class="duration-value">
     <div *ngIf="durable.durationType === 'custom'">
-        <md-input-container>
+        <md-form-field>
             <input mdInput placeholder="Durée" [(ngModel)]="durable.duration">
-        </md-input-container>
+        </md-form-field>
     </div>
 
     <div *ngIf="durable.durationType === 'time'">

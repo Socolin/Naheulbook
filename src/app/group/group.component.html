@@ -284,13 +284,13 @@
         <md-card-subtitle>{{selectedCharacter?.name}}</md-card-subtitle>
         <md-card-content>
             <div class="modal-body">
-                <md-input-container>
+                <md-form-field>
                     <input mdInput
                            placeholder="Chercher un utilisateur"
                            type="text"
                            [(ngModel)]="filterSearchUser"
                            (ngModelChange)="updateSearchUser()" />
-                </md-input-container>
+                </md-form-field>
                 <div *ngIf="!filteredUsers.length">
                     Aucun utilisateur trouvé
                 </div>
@@ -322,12 +322,12 @@
     <md-card class="invite-character-modal">
         <md-card-title>Inviter un personnage</md-card-title>
         <md-card-content>
-            <md-input-container>
+            <md-form-field>
                 <input mdInput
                        [(ngModel)]="searchNameInvite"
                        (ngModelChange)="updateFilteredPlayer()"
                        placeholder="Nom du personnage"/>
-            </md-input-container>
+            </md-form-field>
 
             <div *ngIf="!filteredInvitePlayers?.length">
                 Aucun personnage trouvé

@@ -1,5 +1,6 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {Portal} from '@angular/material';
+import {Portal} from '@angular/cdk/portal';
+
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {UsefullDataService} from './usefull-data.service';
 import {CriticalData} from './usefull-data.model';

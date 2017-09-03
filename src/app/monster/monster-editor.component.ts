@@ -1,5 +1,7 @@
 import {Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
-import {OverlayRef, Portal} from '@angular/material';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
+
 import {Observable} from 'rxjs';
 
 import {removeDiacritics, NhbkDialogService, AutocompleteValue} from '../shared';

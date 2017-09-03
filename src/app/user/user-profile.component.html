@@ -13,11 +13,11 @@
         <div fxFlex="nogrow" fxLayout="column" fxLayoutAlign="start">
             <h2 fxFlex="auto">Profile</h2>
             <div fxFlex="auto" *ngIf="profile">
-                <md-input-container>
+                <md-form-field>
                     <input mdInput
                            placeholder="Nom / Pseudonyme"
                            [(ngModel)]="profile.displayName">
-                </md-input-container>
+                </md-form-field>
 
                 <div>
                     Lié avec

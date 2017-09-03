@@ -21,17 +21,17 @@
     </div>
 
     <div>
-        <md-input-container>
+        <md-form-field>
             <input mdInput
                    placeholder="Nom"
                    [(ngModel)]="monster.name">
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input mdInput
                    type="number"
                    placeholder="Page du bestiaire"
                    [(ngModel)]="monster.data.page">
-        </md-input-container>
+        </md-form-field>
         <md-button-toggle-group [(ngModel)]="defenseStat" (change)="updateDefenseStat()">
             <md-button-toggle [value]="'PRD'">PRD</md-button-toggle>
             <md-button-toggle [value]="'ESQ'">ESQ</md-button-toggle>
@@ -42,74 +42,74 @@
     </div>
 
     <div>
-        <md-input-container>
+        <md-form-field>
             <input mdInput
                    type="number"
                    placeholder="AT"
                    [(ngModel)]="monster.data.at">
-        </md-input-container>
-        <md-input-container *ngIf="defenseStat === 'PRD'">
+        </md-form-field>
+        <md-form-field *ngIf="defenseStat === 'PRD'">
             <input mdInput
                    type="number"
                    placeholder="PRD"
                    [(ngModel)]="monster.data.prd">
-        </md-input-container>
-        <md-input-container *ngIf="defenseStat === 'ESQ'">
+        </md-form-field>
+        <md-form-field *ngIf="defenseStat === 'ESQ'">
             <input mdInput
                    type="number"
                    placeholder="ESQ"
                    [(ngModel)]="monster.data.esq">
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input mdInput
                    type="number"
                    placeholder="EV"
                    [(ngModel)]="monster.data.ev">
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input mdInput
                    placeholder="PR"
                    [(ngModel)]="monster.data.pr">
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input mdInput
                    type="number"
                    placeholder="COU"
                    [(ngModel)]="monster.data.cou">
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input mdInput
                    type="number"
                    placeholder="RESM"
                    [(ngModel)]="monster.data.resm">
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input mdInput
                    placeholder="DMG"
                    [(ngModel)]="monster.data.dmg">
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input mdInput
                    type="number"
                    placeholder="XP"
                    [(ngModel)]="monster.data.xp">
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input mdInput
                    type="number"
                    placeholder="EA"
                    [(ngModel)]="monster.data.ea">
-        </md-input-container>
+        </md-form-field>
     </div>
 
     <div>
-        <md-input-container style="width: 100%">
+        <md-form-field style="width: 100%">
             <textarea mdInput
                       md-textarea-autosize
                       [(ngModel)]="monster.data.note"
                       placeholder="Note">
             </textarea>
-        </md-input-container>
+        </md-form-field>
     </div>
     <div>
         <div>Traits simple</div>
@@ -187,15 +187,15 @@
                 {{inventory.itemTemplate.name}}
             </div>
             <div>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput type="number" min=0 [(ngModel)]="inventory.minCount" placeholder="Quantité min" />
-                </md-input-container>
-                <md-input-container>
+                </md-form-field>
+                <md-form-field>
                     <input mdInput type="number" min=0 [(ngModel)]="inventory.maxCount" placeholder="Quantité max" />
-                </md-input-container>
-                <md-input-container>
+                </md-form-field>
+                <md-form-field>
                     <input mdInput type="number" min=0 step="0.0001" [(ngModel)]="inventory.chance" placeholder="Chance" />
-                </md-input-container>
+                </md-form-field>
                 <md-checkbox [(ngModel)]="inventory.equiped">Equipé</md-checkbox>
                 <md-checkbox [(ngModel)]="inventory.hidden">Caché</md-checkbox>
             </div>
@@ -207,9 +207,9 @@
     <md-card>
         <md-card-title>Créer une sous-catégorie de {{selectedType.name}}</md-card-title>
         <md-card-content>
-            <md-input-container style="width: 100%">
+            <md-form-field style="width: 100%">
                 <input mdInput placeholder="Nom" #newCategoryName/>
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
         <md-card-actions align="right">
             <button md-button (click)="closeCreateCategoryDialog()" color="primary">Annuler</button>
@@ -222,9 +222,9 @@
     <md-card>
         <md-card-title>Créer une catégorie</md-card-title>
         <md-card-content>
-            <md-input-container style="width: 100%">
+            <md-form-field style="width: 100%">
                 <input mdInput placeholder="Nom" #newTypeName/>
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
         <md-card-actions align="right">
             <button md-button (click)="closeCreateTypeDialog()" color="primary">Annuler</button>

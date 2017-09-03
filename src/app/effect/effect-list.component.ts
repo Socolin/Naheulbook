@@ -1,6 +1,5 @@
 import {
     Component, SimpleChanges, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter,
-    ViewChild
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
@@ -9,7 +8,6 @@ import {LoginService} from '../user';
 
 import {EffectService} from './effect.service';
 import {EffectCategory, Effect, EffectType} from './effect.model';
-import {MdTabGroup} from '@angular/material';
 import {isNullOrUndefined} from 'util';
 
 @Component({

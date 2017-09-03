@@ -4,7 +4,7 @@
         <md-card-subtitle>Charges / Utilisations</md-card-subtitle>
         <md-card-content>
             <div>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput
                            class="input-center-align"
                            placeholder="Nombre de charges"
@@ -12,7 +12,7 @@
                            type="number"/>
                     <span mdPrefix>Cet objet a un nombre limité de </span>
                     <span mdSuffix> utilisation(s)</span>
-                </md-input-container>
+                </md-form-field>
             </div>
             <div>
                 Lors de l'utilisation:
@@ -38,10 +38,10 @@
     <ng-template [ngSwitchCase]="'collect'">
         <md-card-subtitle>Possibilités de récolte</md-card-subtitle>
         <md-card-content>
-            <md-input-container style="width: 100%">
+            <md-form-field style="width: 100%">
                 <input mdInput
                        [(ngModel)]="itemTemplate.data.availableLocation"/>
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'container'">
@@ -69,30 +69,30 @@
                 <span *ngIf="itemTemplate.data.damageType">de {{itemTemplate.data.damageType}}</span>.
             </div>
             <div>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput
                            class="input-center-align"
                            placeholder="Nombre de dé"
                            [(ngModel)]="itemTemplate.data.damageDice"
                            type="number"/>
                     <span mdSuffix>D6</span>
-                </md-input-container>
+                </md-form-field>
 
-                <md-input-container>
+                <md-form-field>
                     <input mdInput
                            class="input-center-align"
                            placeholder="Dégât fixe"
                            [(ngModel)]="itemTemplate.data.bonusDamage"
                            type="number"/>
-                </md-input-container>
+                </md-form-field>
 
-                <md-input-container>
+                <md-form-field>
                     <input mdInput
                            class="input-center-align"
                            placeholder="Type de dégât"
                            [(ngModel)]="itemTemplate.data.damageType"
                            type="text"/>
-                </md-input-container>
+                </md-form-field>
             </div>
         </md-card-content>
     </ng-template>
@@ -100,25 +100,25 @@
         <md-card-subtitle>Dé</md-card-subtitle>
         <md-card-content>
             Cet objet s'obtient en lançant un dé avec une valeur de
-            <md-input-container>
+            <md-form-field>
                 <input mdInput
                        class="input-center-align"
                        placeholder="Valeur du dé"
                        [(ngModel)]="itemTemplate.data.diceDrop"
                        type="number"/>
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'enchantment'">
         <md-card-subtitle>Enchanté</md-card-subtitle>
         <md-card-content>
             Cet objet est enchanté
-            <md-input-container>
+            <md-form-field>
                 <input mdInput
                        class="input-center-align"
                        placeholder="Details"
                        [(ngModel)]="itemTemplate.data.enchantment"/>
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'gem'">
@@ -132,54 +132,54 @@
         <md-card-subtitle>Arme à poudre</md-card-subtitle>
         <md-card-content style="display: flex; flex-direction: column">
             Statistiques de combat
-            <md-input-container>
+            <md-form-field>
                 <input mdInput
                        placeholder="Portée utile"
                        [(ngModel)]="itemTemplate.data.gun.range"/>
-            </md-input-container>
-            <md-input-container>
+            </md-form-field>
+            <md-form-field>
                 <input mdInput
                        placeholder="Dégâts"
                        [(ngModel)]="itemTemplate.data.gun.damages"/>
-            </md-input-container>
-            <md-input-container>
+            </md-form-field>
+            <md-form-field>
                 <input mdInput
                        placeholder="+Spécial"
                        [(ngModel)]="itemTemplate.data.gun.special"/>
-            </md-input-container>
-            <md-input-container>
+            </md-form-field>
+            <md-form-field>
                 <input mdInput
                        placeholder="Cadence de tir"
                        [(ngModel)]="itemTemplate.data.gun.rateOfFire"/>
-            </md-input-container>
-            <md-input-container>
+            </md-form-field>
+            <md-form-field>
                 <input mdInput
                        placeholder="Délai de rechargement"
                        [(ngModel)]="itemTemplate.data.gun.reloadDelay"/>
-            </md-input-container>
-            <md-input-container>
+            </md-form-field>
+            <md-form-field>
                 <input mdInput
                        placeholder="Épreuve de tir"
                        [(ngModel)]="itemTemplate.data.gun.shootTest"/>
-            </md-input-container>
+            </md-form-field>
             <md-divider></md-divider>
             Munitions
-            <md-input-container>
+            <md-form-field>
                 <input mdInput
                        placeholder="Combustion par coup"
                        [(ngModel)]="itemTemplate.data.gun.fuelPerShot"/>
-            </md-input-container>
-            <md-input-container>
+            </md-form-field>
+            <md-form-field>
                 <input mdInput
                        placeholder="Munitions par coup"
                        [(ngModel)]="itemTemplate.data.gun.ammunitionPerShot"/>
-            </md-input-container>
+            </md-form-field>
             <md-divider></md-divider>
-            <md-input-container>
+            <md-form-field>
                 <input mdInput
                        placeholder="Chances de fonctionnement"
                        [(ngModel)]="itemTemplate.data.gun.workLuck"/>
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'itemTypes'">
@@ -203,9 +203,9 @@
         <md-card-subtitle>Niveau requis</md-card-subtitle>
         <md-card-content>
             Cet objet est utilisable a partir du niveaux:
-            <md-input-container>
+            <md-form-field>
                 <input mdInput placeholder="Niveau requis" [(ngModel)]="itemTemplate.data.requireLevel" />
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'modifiers'">
@@ -219,11 +219,11 @@
         <md-card-subtitle>Origine</md-card-subtitle>
         <md-card-subtitle>Méthode d'obtention</md-card-subtitle>
         <md-card-content>
-            <md-input-container style="width: 100%">
+            <md-form-field style="width: 100%">
                 <input mdInput
                        placeholder="Origine"
                        [(ngModel)]="itemTemplate.data.origin"/>
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'prereq'">
@@ -247,36 +247,36 @@
                 contre la magie de type {{itemTemplate.data.protectionAgainstType}}
             </div>
             <div>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput
                            class="input-center-align"
                            placeholder="Protection"
                            [(ngModel)]="itemTemplate.data.protection"
                            type="number"/>
-                </md-input-container>
-                <md-input-container>
+                </md-form-field>
+                <md-form-field>
                     <input mdInput
                            class="input-center-align"
                            placeholder="Protection magique"
                            [(ngModel)]="itemTemplate.data.magicProtection"
                            type="number"/>
-                </md-input-container>
+                </md-form-field>
             </div>
             <div>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput
                            class="input-center-align"
                            placeholder="Protection contre une magie"
                            [(ngModel)]="itemTemplate.data.protectionAgainstMagic"
                            type="number"/>
-                </md-input-container>
-                <md-input-container>
+                </md-form-field>
+                <md-form-field>
                     <input mdInput
                            class="input-center-align"
                            placeholder="Type de protection"
                            [(ngModel)]="itemTemplate.data.protectionAgainstType"
                            type="number"/>
-                </md-input-container>
+                </md-form-field>
             </div>
         </md-card-content>
     </ng-template>
@@ -289,11 +289,11 @@
     <ng-template [ngSwitchCase]="'rarity'">
         <md-card-subtitle>Indice de rareté</md-card-subtitle>
         <md-card-content>
-            <md-input-container style="width: 100%">
+            <md-form-field style="width: 100%">
                 <input mdInput
                        placeholder="Indice de rareté"
                        [(ngModel)]="itemTemplate.data.rarityIndicator"/>
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'relic'">
@@ -390,10 +390,10 @@
     <ng-template [ngSwitchCase]="'space'">
         <md-card-subtitle>Encombrement</md-card-subtitle>
         <md-card-content>
-            <md-input-container style="width: 100%">
+            <md-form-field style="width: 100%">
                 <input mdInput
                        [(ngModel)]="itemTemplate.data.space"/>
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'throwable'">
@@ -405,7 +405,7 @@
     <ng-template [ngSwitchCase]="'weight'">
         <md-card-subtitle>Poids</md-card-subtitle>
         <md-card-content>
-            <md-input-container>
+            <md-form-field>
                 <input mdInput
                        class="input-center-align"
                        placeholder="Poids"
@@ -413,7 +413,7 @@
                        type="number"/>
                 <span mdPrefix>Cet objet pèse </span>
                 <span mdSuffix>Kg</span>
-            </md-input-container>
+            </md-form-field>
         </md-card-content>
     </ng-template>
     <ng-template ngSwitchDefault>
@@ -423,19 +423,19 @@
 
 <ng-template cdk-portal #createItemTypeDialog="cdkPortal">
     <md-card>
-        <md-input-container>
+        <md-form-field>
             <input mdInput
                    [ngModel]="newItemTypeDisplayName"
                    (ngModelChange)="updateNewItemTypeDisplayName($event)"
                    class="form-control"
                    placeholder="Nom"/>
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
             <input mdInput
                    [(ngModel)]="newItemTypeTechName"
                    class="form-control"
                    placeholder="Nom technique"/>
-        </md-input-container>
+        </md-form-field>
         <md-action-row align="end">
             <button color="primary" md-button (click)="closeCreateItemTypeDialog()">FERMER</button>
             <button color="primary" md-button (click)="createItemType()">AJOUTER</button>
