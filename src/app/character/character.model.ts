@@ -280,7 +280,8 @@ export class Character extends WsRegistrable {
         Object.assign(character, jsonData, {
             skills: [],
             items: [],
-            modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers)
+            modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers),
+            specialities: Speciality.specialitiesFromJson(jsonData.specialities)
         });
         let origin = origins.find(o => o.id === jsonData.originId);
         if (!origin) {

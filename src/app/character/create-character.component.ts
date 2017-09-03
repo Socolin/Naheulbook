@@ -84,10 +84,6 @@ export class CreateCharacterComponent implements OnInit {
 
     public fatePoint: number | undefined;
 
-    // Bonuses management
-
-    public bonuses: string[];
-
     constructor(private _router: Router
         , private _characterService: CharacterService) {
         this.setStep(0);
@@ -172,10 +168,16 @@ export class CreateCharacterComponent implements OnInit {
         this.setStep(1);
     }
 
-    // Bonuses management
+    // Flags management
 
-    hasBonus(bonus: string) {
-        return this.bonuses && this.bonuses.indexOf(bonus) !== -1;
+    hasFlag(flagName: string) {
+        if (this.selectedOrigin && this.selectedOrigin.hasFlag(flagName)) {
+            return true;
+        }
+        if (this.selectedJob && this.selectedJob.hasFlag(flagName)) {
+            return true;
+        }
+        return this.selectedSpeciality && this.selectedSpeciality.hasFlag(flagName);
     }
 
     // Step 0: Statistics
@@ -195,12 +197,6 @@ export class CreateCharacterComponent implements OnInit {
 
     onSelectOrigin(origin) {
         this.selectedOrigin = origin;
-        this.bonuses = [];
-        if (origin.bonuses) {
-            for (let i = 0; i < origin.bonuses.length; i++) {
-                this.bonuses.push(origin.bonuses[i].token);
-            }
-        }
         this.setStep(2);
     }
 
@@ -213,17 +209,6 @@ export class CreateCharacterComponent implements OnInit {
     onSelectJob(job) {
         if (!this.selectedOrigin) {
             throw new Error('selectedOrigin should not be undef');
-        }
-        this.bonuses = [];
-        if (this.selectedOrigin.bonuses) {
-            for (let i = 0; i < this.selectedOrigin.bonuses.length; i++) {
-                this.bonuses.push(this.selectedOrigin.bonuses[i].token);
-            }
-        }
-        if (job != null && job.bonuses) {
-            for (let i = 0; i < job.bonuses.length; i++) {
-                this.bonuses.push(job.bonuses[i].token);
-            }
         }
         this.selectedJob = job;
         this.setStep(3);
@@ -247,7 +232,7 @@ export class CreateCharacterComponent implements OnInit {
     // Step 4: Select fortune
 
     has2MoneyRoll() {
-        return this.hasBonus('2_ROLL_MONEY');
+        return this.hasFlag('2_ROLL_MONEY');
     }
 
     rollMoney() {
@@ -306,7 +291,7 @@ export class CreateCharacterComponent implements OnInit {
     /// SUPER_BOURRIN
 
     hasSuperBourin() {
-        return this.hasBonus('SUPER_BOURRIN');
+        return this.hasFlag('SUPER_BOURRIN');
     }
 
     isSuperBourrinValid() {
@@ -332,7 +317,7 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     hasMove1PointStat() {
-        return this.hasBonus('MOVE_1_POINT_STAT');
+        return this.hasFlag('MOVE_1_POINT_STAT');
     }
 
     isMove1PointStatValid() {
@@ -405,7 +390,7 @@ export class CreateCharacterComponent implements OnInit {
     /// CHANGE_1_AT_PRD
 
     hasChangeAtPrd() {
-        return this.hasBonus('CHANGE_1_AT_PRD');
+        return this.hasFlag('CHANGE_1_AT_PRD');
     }
 
     isChangeAtPrdValid() {
@@ -429,7 +414,7 @@ export class CreateCharacterComponent implements OnInit {
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA
 
     hasRemoveAttOrPrdToIntOrCha() {
-        return this.hasBonus('REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA');
+        return this.hasFlag('REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA');
     }
 
     isRemoveAttOrPrdToIntOrChaValid() {
@@ -454,7 +439,7 @@ export class CreateCharacterComponent implements OnInit {
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_AD
 
     hasRemoveAttOrPrdToIntOrAd() {
-        return this.hasBonus('REMOVE_1_AT_OR_PRD_TO_INT_OR_AD');
+        return this.hasFlag('REMOVE_1_AT_OR_PRD_TO_INT_OR_AD');
     }
 
     isRemoveAttOrPrdToIntOrAdValid() {

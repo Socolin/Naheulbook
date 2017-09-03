@@ -124,29 +124,17 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(this.character.onLevelUp.bind(this.character));
     }
 
-    characterHasToken(token: string) {
-        if (this.character.origin.specials) {
-            if (this.character.origin.specials.indexOf(token) !== -1) {
-                return true;
-            }
+    characterHasToken(flagName: string) {
+        if (this.character.origin.hasFlag(flagName)) {
+            return true
         }
-        if (this.character.job) {
-            if (this.character.job.specials) {
-                if (this.character.job.specials.indexOf(token) !== -1) {
-                    return true;
-                }
-            }
+        if (this.character.job && this.character.job.hasFlag(flagName)) {
+            return true;
         }
         if (this.character.specialities) {
-            for (let i = 0; i < this.character.specialities.length; i++) {
-                let speciality = this.character.specialities[i];
-                if (speciality.specials) {
-                    for (let j = 0; j < speciality.specials.length; j++) {
-                        let special = speciality.specials[j];
-                        if (special.token === token) {
-                            return true;
-                        }
-                    }
+            for (let speciality of this.character.specialities) {
+                if (speciality.hasFlag(flagName)) {
+                    return true;
                 }
             }
         }

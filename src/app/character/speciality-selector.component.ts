@@ -20,17 +20,11 @@ export class SpecialitySelectorComponent {
 
     isAvailable(speciality: Speciality) {
         if (this.knownSpecialities && this.knownSpecialities.length > 0) {
-            if (speciality.specials) {
-                for (let i = 0; i < speciality.specials.length; i++) {
-                    let special = speciality.specials[i];
-                    if (special.token === 'ONE_SPECIALITY') {
-                        return false;
-                    }
-                }
+            if (speciality.hasFlag('ONE_SPECIALITY')) {
+                return false;
             }
-            for (let i = 0; i < this.knownSpecialities.length; i++) {
-                let spe = this.knownSpecialities[i];
-                if (spe.id === speciality.id) {
+            for (let knownSpeciality of this.knownSpecialities) {
+                if (knownSpeciality.id === speciality.id) {
                     return false;
                 }
             }

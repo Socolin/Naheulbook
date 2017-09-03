@@ -21,22 +21,14 @@ export class JobService {
                 this._skillService.getSkillsById(),
                 this._http.get('/api/job/list').map(res => res.json())
             ).subscribe(
-                res => {
-                    let skillsById: {[skillId: number]: Skill} = res[0];
-                    let jobs: Job[] = res[1];
+                ([skillsById, jobsDatas]: [{[skillId: number]: Skill}, Job[]]) => {
+                    let jobs: Job[] = [];
                     let jobIds: {[jobId: number]: Job} = {};
-                    for (let i = 0; i < jobs.length; i++) {
-                        let job = jobs[i];
-                        for (let s = 0; s < job.skills.length; s++) {
-                            let skill = job.skills[s];
-                            job.skills[s] = skillsById[skill.id];
-                        }
-                        for (let s = 0; s < job.availableSkills.length; s++) {
-                            let skill = job.availableSkills[s];
-                            job.availableSkills[s] = skillsById[skill.id];
-                        }
-                        jobIds[job.id] = job;
+                    for (let jobData of jobsDatas) {
+                        let job = Job.fromJson(jobData, skillsById);
                         Object.freeze(job);
+                        jobIds[job.id] = job;
+                        jobs.push(job);
                     }
 
                     for (let i = 0; i < jobs.length; i++) {
@@ -56,6 +48,7 @@ export class JobService {
                             jobs[i] = jobCopy;
                         }
                     }
+
                     Object.freeze(jobs);
                     this.jobs.next(jobs);
                     this.jobs.complete();

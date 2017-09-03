@@ -6,7 +6,7 @@ import {JsonService} from '../shared';
 import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
 
-import {Skill} from '.';
+import {Skill} from './skill.model';
 
 @Injectable()
 export class SkillService extends JsonService {

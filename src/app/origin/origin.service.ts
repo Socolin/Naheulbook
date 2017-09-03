@@ -3,7 +3,7 @@ import {Http} from '@angular/http';
 import {Observable, ReplaySubject} from 'rxjs/Rx';
 
 import {Skill, SkillService} from '../skill';
-import {Origin} from '.';
+import {Origin} from './origin.model';
 
 @Injectable()
 export class OriginService {
@@ -21,18 +21,14 @@ export class OriginService {
                 this._skillService.getSkillsById(),
                 this._http.get('/api/origin/list').map(res => res.json())
             ).subscribe(
-                ([skillsById, origins]: [{[skillId: number]: Skill}, Origin[]]) => {
-                    for (let i = 0; i < origins.length; i++) {
-                        let origin = origins[i];
-                        for (let s = 0; s < origin.skills.length; s++) {
-                            let skill = origin.skills[s];
-                            origin.skills[s] = skillsById[skill.id];
-                        }
-                        for (let s = 0; s < origin.availableSkills.length; s++) {
-                            let skill = origin.availableSkills[s];
-                            origin.availableSkills[s] = skillsById[skill.id];
-                        }
+                ([skillsById, originsDatas]: [{[skillId: number]: Skill}, Origin[]]) => {
+                    let origins: Origin[] = [];
+                    for (let originData of originsDatas) {
+                        let origin = Origin.fromJson(originData, skillsById);
+                        Object.freeze(origin);
+                        origins.push(origin);
                     }
+                    Object.freeze(origins);
                     this.origins.next(origins);
                     this.origins.complete();
                 },
