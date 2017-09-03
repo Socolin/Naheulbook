@@ -1,6 +1,6 @@
 import {StatRequirement} from '../shared/stat-requirement.model';
 import {Skill} from '../skill';
-import {Flag, DescribedFlag} from '../shared';
+import {Flag, FlagData, DescribedFlag} from '../shared';
 
 import {Speciality} from './speciality.model';
 
@@ -83,27 +83,20 @@ export class Job {
         return false;
     }
 
-    getFlagDatas(flagName: string): any[] {
-        let data: any[] = [];
-
+    getFlagsDatas(data: {[flagName: string]: FlagData[]}): void {
         for (let restrict of this.restricts) {
-            let d = restrict.getFlagDatas(flagName);
-            data.push(...d);
+            restrict.getFlagDatas(data, {type: 'job', name: this.name});
         }
 
         for (let bonus of this.bonuses) {
-            let d = bonus.getFlagDatas(flagName);
-            data.push(...d);
+            bonus.getFlagDatas(data, {type: 'job', name: this.name});
         }
 
         for (let flag of this.flags) {
-            if (flag.type === flagName) {
-                if (flag.data) {
-                    data.push(flag.data);
-                }
+            if (!(flag.type in data)) {
+                data[flag.type] = [];
             }
+            data[flag.type].push({data: flag.data, source: {type: 'job', name: this.name}});
         }
-
-        return data;
     }
 }

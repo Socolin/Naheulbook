@@ -1,4 +1,4 @@
-import {DescribedFlag, Flag, StatRequirement} from '../shared';
+import {DescribedFlag, Flag, FlagData, StatRequirement} from '../shared';
 import {Skill} from '../skill';
 
 export interface OriginInfo {
@@ -74,27 +74,20 @@ export class Origin {
         return false;
     }
 
-    getFlagDatas(flagName: string): any[] {
-        let data: any[] = [];
-
+    getFlagsDatas(data: {[flagName: string]: FlagData[]}): void {
         for (let restrict of this.restricts) {
-            let d = restrict.getFlagDatas(flagName);
-            data.push(...d);
+            restrict.getFlagDatas(data, {type: 'origin', name: this.name});
         }
 
         for (let bonus of this.bonuses) {
-            let d = bonus.getFlagDatas(flagName);
-            data.push(...d);
+            bonus.getFlagDatas(data, {type: 'origin', name: this.name});
         }
 
         for (let flag of this.flags) {
-            if (flag.type === flagName) {
-                if (flag.data) {
-                    data.push(flag.data);
-                }
+            if (!(flag.type in data)) {
+                data[flag.type] = [];
             }
+            data[flag.type].push({data: flag.data, source: {type: 'origin', name: this.name}});
         }
-
-        return data;
     }
 }

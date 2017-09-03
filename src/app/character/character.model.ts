@@ -3,6 +3,7 @@ import {Origin} from '../origin';
 import {Job, Speciality} from '../job';
 import {
     IMetadata
+    , FlagData
     , ItemStatModifier
     , formatModifierValue
 } from '../shared';
@@ -195,6 +196,7 @@ export class CharacterComputedData {
     countExceptionalStats = 0;
     countActiveEffect = 0;
     weaponsDamages: {name: string, damage: string}[] = [];
+    flags: {[flagName: string]: FlagData[]} = {};
 
     init() {
         this.details.init();
@@ -208,6 +210,7 @@ export class CharacterComputedData {
         this.skills = [];
         this.modifiers = [];
         this.tacticalMovement = new TacticalMovementInfo();
+        this.flags = {};
     }
 }
 
@@ -329,19 +332,15 @@ export class Character extends WsRegistrable {
         return Character.hasSkill(this, 14);
     }
 
-    hasFlag(flagName: string) {
-        if (this.origin && this.origin.hasFlag(flagName)) {
-            return true;
+    hasFlag(flagName: string): boolean {
+        return (flagName in this.computedData.flags);
+    }
+
+    getFlagDatas(flagName: string): FlagData[] | undefined {
+        if (this.hasFlag(flagName)) {
+            return this.computedData.flags[flagName];
         }
-        if (this.job && this.job.hasFlag(flagName)) {
-            return true;
-        }
-        for (let speciality of this.specialities) {
-            if (speciality.hasFlag(flagName)) {
-                return true;
-            }
-        }
-        return false;
+        return undefined;
     }
 
     // Concatenate modifiers like [-2 PRD] and [+2 PRD for dwarf]
@@ -505,6 +504,22 @@ export class Character extends WsRegistrable {
         this.computedData.topLevelContainers = topLevelContainers;
         this.computedData.currencyItems = currencyItems;
         this.computedData.totalMoney = totalMoney;
+    }
+
+    private updateFlags() {
+        let flags: {[flagName: string]: FlagData[]} = {};
+
+        this.origin.getFlagsDatas(flags);
+        if (this.job) {
+            this.job.getFlagsDatas(flags);
+        }
+        if (this.specialities) {
+            for (let speciality of this.specialities) {
+                speciality.getFlagsDatas(flags);
+            }
+        }
+
+        this.computedData.flags = flags;
     }
 
     private updateStats() {
@@ -965,6 +980,7 @@ export class Character extends WsRegistrable {
 
     public update() {
         this.computedData.init();
+        this.updateFlags();
         this.updateInventory();
         this.updateStats();
         this.onUpdate.next(this);

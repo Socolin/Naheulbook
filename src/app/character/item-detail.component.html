@@ -294,9 +294,40 @@
                 <span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
                 <span *ngIf="requirement.max">Max {{requirement.stat}}: {{requirement.max}}</span>
                 <span *ngIf="requirement.min && character.computedData.stats[requirement.stat] < requirement.min"
-                      class="invalid-level">Non utilisable</span>
+                      class="text-warning">Non utilisable</span>
                 <span *ngIf="requirement.max && character.computedData.stats[requirement.stat] > requirement.max"
-                      class="invalid-level">Non utilisable</span>
+                      class="text-warning">Non utilisable</span>
+            </div>
+
+            <div *ngIf="item.incompatibleWith(character); let incompatibleData">
+                <span class="text-warning">
+                    Une restriction du personnage s'applique sur cet objet:
+                    <span [ngSwitch]="incompatibleData.reason">
+                        <ng-template [ngSwitchCase]="'no_magic_weapon'">
+                            Pas d'arme enchantée
+                        </ng-template>
+                        <ng-template [ngSwitchCase]="'no_magic_armor'">
+                            Pas d'armure enchantée
+                        </ng-template>
+                        <ng-template [ngSwitchCase]="'no_magic_object'">
+                            Pas d'objet magique
+                        </ng-template>
+                        <ng-template [ngSwitchCase]="'bad_equipment_type'">
+                            Ne peux pas utiliser cet objet
+                        </ng-template>
+                    </span>
+                    <span [ngSwitch]="incompatibleData.source.type">
+                        <ng-template [ngSwitchCase]="'origin'">
+                            (Origine: {{incompatibleData.source.name}})
+                        </ng-template>
+                        <ng-template [ngSwitchCase]="'job'">
+                            (Métier: {{incompatibleData.source.name}})
+                        </ng-template>
+                        <ng-template [ngSwitchCase]="'speciality'">
+                            (Spécialitée: {{incompatibleData.source.name}})
+                        </ng-template>
+                    </span>
+                </span>
             </div>
 
             <!-- Origine -->

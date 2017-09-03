@@ -3,6 +3,14 @@ export class Flag {
     data?: any;
 }
 
+export interface FlagData {
+    source: {
+        type: string,
+        name: string,
+    };
+    data?: any;
+}
+
 export class DescribedFlag {
     description: string;
     flags: Flag[] = [];
@@ -33,17 +41,12 @@ export class DescribedFlag {
         return i !== -1;
     }
 
-    getFlagDatas(flagName: string): any[] {
-        let data: any[] = [];
-
+    getFlagDatas(data: {[flagName: string]: FlagData[]}, source: {type: string, name: string}): void {
         for (let flag of this.flags) {
-            if (flag.type === flagName) {
-                if (flag.data) {
-                    data.push(flag.data);
-                }
+            if (!(flag.type in data)) {
+                data[flag.type] = [];
             }
+            data[flag.type].push({data: flag.data, source: source});
         }
-
-        return data;
     }
 }

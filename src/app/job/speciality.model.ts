@@ -1,4 +1,5 @@
 import {Flag, StatModifier} from '../shared';
+import {FlagData} from '../shared/flag.model';
 
 export class Speciality {
     id: number;
@@ -51,22 +52,17 @@ export class Speciality {
         return false;
     }
 
-    getFlagDatas(flagName: string): any[] {
-        let data: any[] = [];
-
+    getFlagsDatas(data: {[flagName: string]: FlagData[]}): void {
         for (let special of this.specials) {
             if (!special.flags) {
                 continue;
             }
             for (let flag of special.flags) {
-                if (flag.type === flagName) {
-                    if (flag.data) {
-                        data.push(flag.data);
-                    }
+                if (!(flag.type in data)) {
+                    data[flag.type] = [];
                 }
+                data[flag.type].push({data: flag.data, source: {type: 'speciality', name: this.name}});
             }
         }
-
-        return data;
     }
 }

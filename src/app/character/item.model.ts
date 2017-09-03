@@ -5,6 +5,7 @@ import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 import {IDurable} from '../date/durable.model';
 import {Skill} from '../skill/skill.model';
 import {Fighter} from '../group/group.model';
+import {Character} from './character.model';
 
 export class ItemData {
     name: string;
@@ -99,6 +100,42 @@ export class Item {
             }
         }
         return changes;
+    }
+
+    public incompatibleWith(character: Character): {reason: string, source: {type: string, name: string}} | undefined {
+        if (this.template.data.enchantment) {
+            if (ItemTemplate.hasSlot(this.template, 'WEAPON')) {
+                let flag = character.getFlagDatas('NO_MAGIC_WEAPON');
+                if (flag) {
+                    return {reason: 'no_magic_weapon', source: flag[0].source};
+                }
+            }
+            else if (this.template.slots && this.template.slots.length) {
+                let flag = character.getFlagDatas('NO_MAGIC_ARMOR');
+                if (flag) {
+                    return {reason: 'no_magic_armor', source: flag[0].source};
+                }
+            }
+            else {
+                let flag = character.getFlagDatas('NO_MAGIC_OBJECT');
+                if (flag) {
+                    return {reason: 'no_magic_object', source: flag[0].source};
+                }
+            }
+        }
+        const noWeaponTypes = character.getFlagDatas('NO_WEAPON_TYPE');
+        if (noWeaponTypes) {
+            if (this.template.data.itemTypes) {
+                for (let itemType of this.template.data.itemTypes) {
+                    for (let noWeaponType of noWeaponTypes) {
+                        if (itemType === noWeaponType.data) {
+                            return {reason: 'bad_equipment_type', source: noWeaponType.source};
+                        }
+                    }
+                }
+            }
+        }
+        return undefined;
     }
 
     public getDamageString(): string {
