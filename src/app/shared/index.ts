@@ -1,4 +1,5 @@
 export * from './flag.model';
+export * from './god.model';
 export * from './history-entry.model';
 export * from './misc.model';
 export * from './stat-modifier.model';

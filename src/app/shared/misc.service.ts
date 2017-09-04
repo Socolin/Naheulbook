@@ -8,10 +8,12 @@ import {Observable} from 'rxjs/Observable';
 import {Stat} from './stat.model';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {ItemTemplate} from '../item/item-template.model';
+import {God} from './god.model';
 
 @Injectable()
 export class MiscService extends JsonService {
     private stats: ReplaySubject<Stat[]>;
+    private gods: ReplaySubject<God[]>;
 
     constructor(http: Http
         , notification: NotificationsService
@@ -28,6 +30,7 @@ export class MiscService extends JsonService {
                 .subscribe(
                     stats => {
                         this.stats.next(stats);
+                        this.stats.complete();
                     },
                     error => {
                         this.stats.error(error);
@@ -35,6 +38,33 @@ export class MiscService extends JsonService {
                 );
         }
         return this.stats;
+    }
+
+    getGods(): Observable<God[]> {
+        if (!this.gods) {
+            this.gods = new ReplaySubject<God[]>(1);
+
+            this._http.get('/api/misc/godsList')
+                .map(res => res.json())
+                .subscribe(
+                    gods => {
+                        this.gods.next(gods);
+                        this.gods.complete();
+                    },
+                    error => {
+                        this.gods.error(error);
+                    }
+                );
+        }
+        return this.gods;
+    }
+
+    getGodsByTechName(): Observable<{[techName: string]: God}> {
+        return this.getGods().map((gods: God[]) => {
+            let godsByTechName = {};
+            gods.map(g => godsByTechName[g.techName] = g);
+            return godsByTechName;
+        });
     }
 
     searchItem(filter): Observable<ItemTemplate[]> {
