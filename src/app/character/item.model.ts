@@ -102,7 +102,7 @@ export class Item {
         return changes;
     }
 
-    public incompatibleWith(character: Character): {reason: string, source: {type: string, name: string}} | undefined {
+    public incompatibleWith(character: Character): {reason: string, source?: {type: string, name: string}} | undefined {
         if (this.template.data.enchantment) {
             if (ItemTemplate.hasSlot(this.template, 'WEAPON')) {
                 let flag = character.getFlagDatas('NO_MAGIC_WEAPON');
@@ -123,9 +123,9 @@ export class Item {
                 }
             }
         }
-        const noWeaponTypes = character.getFlagDatas('NO_WEAPON_TYPE');
-        if (noWeaponTypes) {
-            if (this.template.data.itemTypes) {
+        if (this.template.data.itemTypes) {
+            const noWeaponTypes = character.getFlagDatas('NO_WEAPON_TYPE');
+            if (noWeaponTypes) {
                 for (let itemType of this.template.data.itemTypes) {
                     for (let noWeaponType of noWeaponTypes) {
                         if (itemType === noWeaponType.data) {
@@ -134,7 +134,13 @@ export class Item {
                     }
                 }
             }
+
+            if (this.template.data.isItemTypeName('LIVRE')
+                && !character.hasFlag('ERUDITION')) {
+                return {reason: 'cant_read'};
+            }
         }
+
         return undefined;
     }
 

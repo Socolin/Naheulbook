@@ -519,6 +519,13 @@ export class Character extends WsRegistrable {
             }
         }
 
+        for (let s of this.computedData.skills) {
+            if (s.canceled) {
+                continue;
+            }
+            s.skillDef.getFlagsDatas(flags);
+        }
+
         this.computedData.flags = flags;
     }
 
@@ -980,9 +987,9 @@ export class Character extends WsRegistrable {
 
     public update() {
         this.computedData.init();
-        this.updateFlags();
         this.updateInventory();
         this.updateStats();
+        this.updateFlags();
         this.onUpdate.next(this);
     }
 

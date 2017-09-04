@@ -315,18 +315,23 @@
                         <ng-template [ngSwitchCase]="'bad_equipment_type'">
                             Ne peux pas utiliser cet objet
                         </ng-template>
-                    </span>
-                    <span [ngSwitch]="incompatibleData.source.type">
-                        <ng-template [ngSwitchCase]="'origin'">
-                            (Origine: {{incompatibleData.source.name}})
-                        </ng-template>
-                        <ng-template [ngSwitchCase]="'job'">
-                            (Métier: {{incompatibleData.source.name}})
-                        </ng-template>
-                        <ng-template [ngSwitchCase]="'speciality'">
-                            (Spécialitée: {{incompatibleData.source.name}})
+                        <ng-template [ngSwitchCase]="'cant_read'">
+                            Ne sait pas lire
                         </ng-template>
                     </span>
+                    <ng-template [ngIf]="incompatibleData.source">
+                        <span [ngSwitch]="incompatibleData.source.type">
+                            <ng-template [ngSwitchCase]="'origin'">
+                                (Origine: {{incompatibleData.source.name}})
+                            </ng-template>
+                            <ng-template [ngSwitchCase]="'job'">
+                                (Métier: {{incompatibleData.source.name}})
+                            </ng-template>
+                            <ng-template [ngSwitchCase]="'speciality'">
+                                (Spécialitée: {{incompatibleData.source.name}})
+                            </ng-template>
+                        </span>
+                    </ng-template>
                 </span>
             </div>
 
@@ -391,8 +396,8 @@
                         Retirer
                     </button>
                 </ng-template>
-                <ng-template [ngIf]="!item.container">
-                    <h4>Ranger dans</h4>
+                <ng-template [ngIf]="!item.container && character.computedData.containers && character.computedData.containers.length">
+                    <span class="mat-subheading-2">Ranger dans</span>
                     <div class="list-available-containers">
                         <ng-template ngFor let-container [ngForOf]="character.computedData.containers" let-i="index"
                                   let-last="last">

@@ -22,11 +22,10 @@ export class SkillService extends JsonService {
             this.skillsById = new ReplaySubject<{[skillId: number]: Skill}>(1);
 
             this.getSkills().subscribe(
-                skills => {
+                skillsJsonData => {
                     let skillsById: {[skillId: number]: Skill} = {};
-                    for (let i = 0; i < skills.length; i++) {
-                        let skill = skills[i];
-                        skillsById[skill.id] = skill;
+                    for (let skillJsonData of skillsJsonData) {
+                        skillsById[skillJsonData.id] = Skill.fromJson(skillJsonData);
                     }
                     this.skillsById.next(skillsById);
                     this.skillsById.complete();
@@ -46,7 +45,11 @@ export class SkillService extends JsonService {
             this.postJson('/api/skill/list')
                 .map(res => res.json())
                 .subscribe(
-                    skills => {
+                    skillsJsonData => {
+                        let skills: Skill[] = [];
+                        for (let skillJsonData of skillsJsonData) {
+                            skills.push(Skill.fromJson(skillJsonData));
+                        }
                         this.skills.next(skills);
                         this.skills.complete();
                     },
