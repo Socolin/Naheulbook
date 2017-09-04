@@ -13,6 +13,7 @@ export class Speciality {
         flags?: Flag[];
     }[];
     modifiers: StatModifier[];
+    flags?: Flag[];
 
     static fromJson(specialityData: any): Speciality {
         let speciality = new Speciality();
@@ -39,12 +40,17 @@ export class Speciality {
     }
 
     hasFlag(flagName: string): boolean {
+        let i = this.flags.findIndex(f => f.type === flagName);
+        if (i !== -1) {
+            return true;
+        }
+
         for (let special of this.specials) {
             if (!special.flags) {
                 continue;
             }
-            let i = special.flags.findIndex(f => f.type === flagName);
-            if (i !== -1) {
+            let j = special.flags.findIndex(f => f.type === flagName);
+            if (j !== -1) {
                 return true;
             }
         }
@@ -53,6 +59,13 @@ export class Speciality {
     }
 
     getFlagsDatas(data: {[flagName: string]: FlagData[]}): void {
+        for (let flag of this.flags) {
+            if (!(flag.type in data)) {
+                data[flag.type] = [];
+            }
+            data[flag.type].push({data: flag.data, source: {type: 'speciality', name: this.name}});
+        }
+
         for (let special of this.specials) {
             if (!special.flags) {
                 continue;
