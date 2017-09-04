@@ -34,7 +34,7 @@ export class JobService {
                     for (let i = 0; i < jobs.length; i++) {
                         let job = jobs[i];
                         if (job.parentJobId) {
-                            let jobCopy: Job = JSON.parse(JSON.stringify(jobIds[job.parentJobId]));
+                            let jobCopy: Job = Job.fromJson(JSON.parse(JSON.stringify(jobIds[job.parentJobId])), skillsById);
                             jobCopy.originsBlacklist = [];
                             jobCopy.originsWhitelist = [];
                             for (let field in job) {
