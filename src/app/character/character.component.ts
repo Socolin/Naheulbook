@@ -94,7 +94,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     public originInfoDialog: Portal<any>;
     public originInfoOverlayRef: OverlayRef | undefined;
 
-    private notificationSub: Subscription;
+    private notificationSub?: Subscription;
 
     constructor(private _route: ActivatedRoute
         , private _router: Router
@@ -358,7 +358,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     closeChangeJobDialog() {
-        this.changeJobOverlayRef.detach();
+        this.changeJobOverlayRef!.detach();
         this.changeJobOverlayRef = undefined;
     }
 
@@ -380,7 +380,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     closeJobInfoDialog() {
-        this.jobInfoOverlayRef.detach();
+        this.jobInfoOverlayRef!.detach();
         this.jobInfoOverlayRef = undefined;
     }
 
@@ -389,7 +389,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     closeOriginInfoDialog() {
-        this.originInfoOverlayRef.detach();
+        this.originInfoOverlayRef!.detach();
         this.originInfoOverlayRef = undefined;
     }
 
