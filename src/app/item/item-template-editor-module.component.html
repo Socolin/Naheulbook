@@ -128,6 +128,18 @@
         </md-card-content>
     </ng-template>
 
+    <ng-template [ngSwitchCase]="'god'">
+        <md-card-subtitle>Dieu</md-card-subtitle>
+        <md-card-content style="display: flex; align-items: center">
+            <span style="padding-top: 15px">
+                Cet objet est lié au dieu&nbsp;
+            </span>
+            <md-select [(ngModel)]="itemTemplate.data.god">
+                <md-option *ngFor="let god of gods" [value]="god.techName" >{{god.displayName}}</md-option>
+            </md-select>
+        </md-card-content>
+    </ng-template>
+
     <ng-template [ngSwitchCase]="'gun'">
         <md-card-subtitle>Arme à poudre</md-card-subtitle>
         <md-card-content style="display: flex; flex-direction: column">
@@ -303,7 +315,6 @@
         <md-card-subtitle>Relique</md-card-subtitle>
         <md-card-content>
             C'est objet est une relique, qui permet a un paladin d'acceder a ses pouvoir<br>
-            FIXME: Définir le dieu associe
         </md-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'rupture'">

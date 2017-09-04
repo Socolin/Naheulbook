@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ItemTemplate} from './item-template.model';
 import {Router} from '@angular/router';
 
+import {God} from '../shared';
+
 @Component({
     selector: 'item-template',
     styleUrls: ['./item-template.component.scss'],
@@ -12,6 +14,7 @@ export class ItemTemplateComponent {
     @Input() editable: boolean;
     @Input() originsName: {[originId: number]: string};
     @Input() jobsName: {[jobId: number]: string};
+    @Input() godsByTechName: {[techName: string]: God};
     @Input() actions: string[];
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
 

@@ -103,6 +103,24 @@ export class Item {
     }
 
     public incompatibleWith(character: Character): {reason: string, source?: {type: string, name: string}} | undefined {
+        if (this.template.data.god) {
+            if (character.hasFlag('USE_RELATED_GOD_STUFF')) {
+                let relatedGods = character.getFlagDatas('RELATED_GOD');
+                if (relatedGods) {
+                    let foundGod = false;
+                    for (let relatedGod of relatedGods) {
+                        if (this.template.data.god === relatedGod.data) {
+                            foundGod = true;
+                            break;
+                        }
+                    }
+                    if (!foundGod) {
+                        return {reason: 'bad_god'};
+                    }
+                }
+            }
+        }
+
         if (this.template.data.enchantment) {
             if (ItemTemplate.hasSlot(this.template, 'WEAPON')) {
                 let flag = character.getFlagDatas('NO_MAGIC_WEAPON');

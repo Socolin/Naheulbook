@@ -68,6 +68,7 @@
                            *ngIf="isVisible(item)"
                            [originsName]="originsName"
                            [jobsName]="jobsName"
+                           [godsByTechName]="godsByTechName"
                            [editable]="isEditable(item) && !inTab"
                            [actions]="inTab ? ['addItem'] : []"
                            (onAction)="emitAction($event.action, $event.data)"

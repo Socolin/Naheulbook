@@ -126,6 +126,13 @@
                 Slot:
                 <span *ngFor="let slot of item.template.slots">{{slot.name}} </span>
             </div>
+
+            <!-- Dieu -->
+            <div *ngIf="item.template.data.god && godsByTechName">
+                <span>Dieu:</span>
+                {{godsByTechName[item.template.data.god].displayName}}
+            </div>
+
             <div *ngIf="item.template.data.note">Note: {{item.template.data.note}}</div>
 
             <div *ngIf="item.template.data.quantifiable">
@@ -317,6 +324,9 @@
                         </ng-template>
                         <ng-template [ngSwitchCase]="'cant_read'">
                             Ne sait pas lire
+                        </ng-template>
+                        <ng-template [ngSwitchCase]="'bad_god'">
+                            L'objet est lié a un autre dieu que celui du personnage
                         </ng-template>
                     </span>
                     <ng-template [ngIf]="incompatibleData.source">

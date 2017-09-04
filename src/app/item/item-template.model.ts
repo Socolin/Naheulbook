@@ -65,6 +65,7 @@ export class ItemTemplateData {
     diceDrop?: number;
     duration?: string;
     enchantment?: string;
+    god?: string;
     gun?: ItemTemplateGunData;
     icon?: IconDescription;
     isCurrency?: boolean;

@@ -9,16 +9,17 @@ import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Rx';
 
 import {smoothScrollBy, smoothScrollTo} from '../shared/scroll';
-import {removeDiacritics} from '../shared';
+import {God, removeDiacritics} from '../shared';
 
-import {LoginService} from '../user/login.service';
-import {OriginService} from '../origin/origin.service';
-import {JobService} from '../job/job.service';
+import {LoginService} from '../user';
+import {OriginService} from '../origin';
+import {JobService} from '../job';
 
 import {ItemCategory, ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 import {ItemCategoryDirective} from './item-category.directive';
 import {ItemSection} from './item-template.model';
+import {MiscService} from '../shared/misc.service';
 
 @Component({
     selector: 'item-list',
@@ -47,6 +48,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     public selectedSection: ItemSection;
     public originsName: {[originId: number]: string};
     public jobsName: {[jobId: number]: string};
+    public godsByTechName: {[techName: string]: God};
 
     public queryParamsSub: Subscription;
 
@@ -93,6 +95,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
         , public overlay: Overlay
         , private _route: ActivatedRoute
         , private _loginService: LoginService
+        , private _miscService: MiscService
         , private _itemTemplateService: ItemTemplateService
         , private _originService: OriginService
         , private _jobService: JobService) {
@@ -292,11 +295,13 @@ export class ItemListComponent implements OnInit, OnDestroy {
         Observable.forkJoin(
             this._jobService.getJobsNamesById(),
             this._originService.getOriginsNamesById(),
-            this._itemTemplateService.getSectionsList()
-        ).subscribe(([jobsName, originsName, sections]: [{[jobId: number]: string}, {[jobId: number]: string}, ItemSection[]]) => {
+            this._itemTemplateService.getSectionsList(),
+            this._miscService.getGodsByTechName(),
+        ).subscribe(([jobsName, originsName, sections, godsByTechName]: [{[jobId: number]: string}, {[jobId: number]: string}, ItemSection[], {[techName: string]: God}]) => {
             this.originsName = originsName;
             this.jobsName = jobsName;
             this.itemSections = sections;
+            this.godsByTechName = godsByTechName;
             if (!this._route.snapshot.queryParams['id']) {
                 this.selectSection(sections[0]);
             }

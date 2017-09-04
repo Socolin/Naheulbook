@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import {Portal, OverlayRef} from '@angular/material';
 
-import {ActiveStatsModifier, NhbkDialogService} from '../shared';
+import {ActiveStatsModifier, God, MiscService, NhbkDialogService} from '../shared';
 
 import {IDurable} from '../date/durable.model';
 import {ItemTemplateService, ItemCategory} from '../item';
@@ -12,6 +12,7 @@ import {Character, CharacterGiveDestination} from './character.model';
 import {CharacterService} from './character.service';
 import {Item} from './item.model';
 import {ItemActionService} from './item-action.service';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
     selector: 'item-detail',
@@ -23,8 +24,9 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() character: Character;
     @Input() gmView: boolean;
     @Input() readonly: boolean;
-    @Input() jobsName: {[id: number]: string};
-    @Input() originsName: {[id: number]: string};
+    @Input() jobsName?: {[id: number]: string};
+    @Input() originsName?: {[id: number]: string};
+    @Input() godsByTechName: {[techName: string]: God};
 
     public itemCategoriesById: {[categoryId: number]: ItemCategory};
     public modifiers: any[];
@@ -53,6 +55,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     constructor(private _itemTemplateService: ItemTemplateService
         , @Optional() public _itemActionService: ItemActionService
         , private _characterService: CharacterService
+        , private _miscService: MiscService
         , private _nhbkDialogService: NhbkDialogService) {
     }
 
@@ -240,10 +243,14 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     ngOnInit() {
-        this._itemTemplateService.getCategoriesById().subscribe(
-            categoriesById => {
+        Observable.forkJoin(
+            this._itemTemplateService.getCategoriesById(),
+            this._miscService.getGodsByTechName(),
+        ).subscribe(
+            ([categoriesById, godsByTechName]) => {
+                this.godsByTechName = godsByTechName;
                 this.itemCategoriesById = categoriesById;
-            },
+            }
         );
     }
 }

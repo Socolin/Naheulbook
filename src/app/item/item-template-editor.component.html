@@ -67,6 +67,7 @@
 <ng-template ngFor let-moduleName [ngForOf]="modules">
     <item-template-editor-module [itemTemplate]="itemTemplate"
                                  [slots]="slots"
+                                 [gods]="gods"
                                  [itemTypes]="itemTypes"
                                  [skills]="skills"
                                  [skillsById]="skillsById"
@@ -96,5 +97,9 @@
 </ng-template>
 
 <h3>Preview</h3>
-<item-template [jobsName]="jobsName" [originsName]="originsName" [itemTemplate]="itemTemplate"></item-template>
+<item-template [jobsName]="jobsName"
+               [originsName]="originsName"
+               [godsByTechName]="godsByTechName"
+               [itemTemplate]="itemTemplate">
+</item-template>
 

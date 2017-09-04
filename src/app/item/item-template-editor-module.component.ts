@@ -2,13 +2,13 @@ import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angula
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
+import {God, NhbkDialogService, removeDiacritics} from '../shared';
+import {Skill} from '../skill';
+import {NhbkAction} from '../action';
+import {LoginService} from '../user';
+
 import {ItemTemplate, ItemSlot, ItemType} from './item-template.model';
-import {Skill} from '../skill/skill.model';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {NhbkAction} from '../action/nhbk-action.model';
-import {removeDiacritics} from '../shared/remove_diacritics';
 import {ItemTemplateService} from './item-template.service';
-import {LoginService} from '../user/login.service';
 
 @Component({
     selector: 'item-template-editor-module',
@@ -21,6 +21,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
 
     @Input() slots: ItemSlot[];
     @Input() itemTypes: ItemType[];
+    @Input() gods: God[];
     @Input() skills: Skill[] = [];
     @Input() skillsById: { [skillId: number]: Skill } = {};
 

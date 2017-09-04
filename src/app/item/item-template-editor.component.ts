@@ -7,7 +7,12 @@ import {Observable} from 'rxjs';
 
 import {isNullOrUndefined} from 'util';
 import {
-    removeDiacritics, NhbkDialogService, AutocompleteValue, AutocompleteInputComponent
+    AutocompleteInputComponent,
+    AutocompleteValue,
+    God,
+    MiscService,
+    NhbkDialogService,
+    removeDiacritics,
 } from '../shared';
 import {LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
@@ -36,6 +41,8 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     public itemTypes: ItemType[];
     public originsName: { [originId: number]: string };
     public jobsName: { [jobId: number]: string };
+    public gods: God[];
+    public godsByTechName: {[techName: string]: God};
 
     public selectedSection: ItemSection;
     public form: { levels: number[], protection: number[], damage: number[], dices: number[] };
@@ -58,6 +65,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         {name: 'diceDrop',     displayName: 'Dé'},
         {name: 'enchantment',  displayName: 'Enchantement'},
         {name: 'gem',          displayName: 'Gemme'},
+        {name: 'god',          displayName: 'Dieu'},
         {name: 'gun',          displayName: 'Arme à poudre'},
         {name: 'itemTypes',    displayName: 'Type d\'objet'},
         {name: 'level',        displayName: 'Niveau requis'},
@@ -83,6 +91,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         , private _originService: OriginService
         , private _nhbkDialogService: NhbkDialogService
         , private _jobService: JobService
+        , private _miscService: MiscService
         , public _loginService: LoginService
         , private _skillService: SkillService) {
         this.itemTemplate = new ItemTemplate();
@@ -208,6 +217,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'gem':
                 this.itemTemplate.data.useUG = true;
                 break;
+            case 'god':
+                this.itemTemplate.data.god = this.gods[0].techName;
+                break;
             case 'gun':
                 this.itemTemplate.data.gun = new ItemTemplateGunData();
                 break;
@@ -305,6 +317,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'gem':
                 this.itemTemplate.data.useUG = undefined;
                 break;
+            case 'god':
+                this.itemTemplate.data.god = undefined;
+                break;
             case 'gun':
                 this.itemTemplate.data.gun = undefined;
                 break;
@@ -399,6 +414,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (this.itemTemplate.data.useUG) {
             modules.push('gem');
         }
+        if (this.itemTemplate.data.god) {
+            modules.push('god');
+        }
         if (this.itemTemplate.data.gun) {
             modules.push('gun');
         }
@@ -473,7 +491,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
         Observable.forkJoin(
             this._itemTemplateservice.getItemTypes(),
-        ).subscribe(([itemTypes]) => {
+            this._miscService.getGods(),
+            this._miscService.getGodsByTechName(),
+        ).subscribe(([itemTypes, gods, godsByTechName]) => {
             Observable.forkJoin(
                 this._itemTemplateservice.getSectionsList(),
                 this._skillService.getSkills(),
@@ -487,6 +507,8 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 this.skillsById = skillsById;
                 this.slots = slots;
                 this.itemTypes = itemTypes;
+                this.gods = gods;
+                this.godsByTechName = godsByTechName;
 
                 let jobsName: { [jobId: number]: string } = {};
                 for (let i = 0; i < jobs.length; i++) {
