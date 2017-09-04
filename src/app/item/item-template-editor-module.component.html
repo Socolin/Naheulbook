@@ -184,6 +184,9 @@
     </ng-template>
     <ng-template [ngSwitchCase]="'itemTypes'">
         <md-card-subtitle>Type d'objet</md-card-subtitle>
+        <md-card-subtitle>
+            Utilisé pour vérifier si un personnage peut se servir de l'objet (cf. restriction métier/origine)
+        </md-card-subtitle>
         <md-card-content>
             <div class="slots-list">
                 <md-checkbox *ngFor="let itemType of itemTypes" [checked]="itemTemplate.data.isItemType(itemType)" (change)="itemTemplate.data.toggleItemType(itemType)">
@@ -191,7 +194,7 @@
                 </md-checkbox>
             </div>
         </md-card-content>
-        <md-card-actions>
+        <md-card-actions *ngIf="_loginService.currentLoggedUser.admin">
             <button md-button color="primary" (click)="openCreateItemTypeDialog()">AJOUTER UN TYPE</button>
         </md-card-actions>
     </ng-template>

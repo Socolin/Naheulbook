@@ -8,6 +8,7 @@ import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 import {NhbkAction} from '../action/nhbk-action.model';
 import {removeDiacritics} from '../shared/remove_diacritics';
 import {ItemTemplateService} from './item-template.service';
+import {LoginService} from '../user/login.service';
 
 @Component({
     selector: 'item-template-editor-module',
@@ -36,6 +37,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     public newItemTypeTechName = '';
 
     constructor(private _nhbkDialogService: NhbkDialogService,
+                public _loginService: LoginService,
                 private _itemTemplateService: ItemTemplateService) {
     }
 
