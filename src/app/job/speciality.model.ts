@@ -23,6 +23,9 @@ export class Speciality {
         if (!speciality.specials) {
             speciality.specials = [];
         }
+        if (!speciality.flags) {
+            speciality.flags = [];
+        }
 
         return speciality;
     }
