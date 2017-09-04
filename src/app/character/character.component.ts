@@ -422,6 +422,10 @@ export class CharacterComponent implements OnInit, OnDestroy {
                     if (this.notificationSub) {
                         this.notificationSub.unsubscribe();
                     }
+                    if (this.character) {
+                        this._websocketService.unregisterElement(this.character);
+                        this.character.dispose();
+                    }
                     this.character = data['character'];
                     this._websocketService.registerElement(this.character);
                     this.mainTabGroup.selectedIndex = 0;
