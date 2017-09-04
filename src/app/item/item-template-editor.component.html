@@ -51,7 +51,7 @@
 <md-card>
     <md-card-subtitle>Section</md-card-subtitle>
     <md-card-content class="section-list">
-        <md-select [(ngModel)]="selectedSection" placeholder="Section" *ngIf="sections" style="width: 50%">
+        <md-select [(ngModel)]="selectedSection" placeholder="Section" *ngIf="sections">
             <md-option *ngFor="let section of sections" [value]="section">
                 {{section.name}}
             </md-option>
