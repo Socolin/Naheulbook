@@ -109,7 +109,7 @@ export class Fighter {
     }
 
     get chercheNoise(): boolean {
-        return this.isMonster ? this.monster.data.chercheNoise : this.character.hasChercherDesNoises();
+        return this.isMonster ? this.monster.data.chercheNoise : this.character.hasFlag('ATTACK_FIRST');
     }
 
     get id(): number {

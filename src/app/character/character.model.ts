@@ -304,34 +304,6 @@ export class Character extends WsRegistrable {
         return character;
     }
 
-    static hasSkill(character: Character, skillId: number): boolean {
-        for (let i = 0; i < character.origin.skills.length; i++) {
-            let skill = character.origin.skills[i];
-            if (skill.id === skillId) {
-                return true;
-            }
-        }
-        if (character.job) {
-            for (let i = 0; i < character.job.skills.length; i++) {
-                let skill = character.job.skills[i];
-                if (skill.id === skillId) {
-                    return true;
-                }
-            }
-        }
-        for (let i = 0; i < character.skills.length; i++) {
-            let skill = character.skills[i];
-            if (skill.id === skillId) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    hasChercherDesNoises(): boolean {
-        return Character.hasSkill(this, 14);
-    }
-
     hasFlag(flagName: string): boolean {
         return (flagName in this.computedData.flags);
     }
