@@ -54,6 +54,11 @@ export class Origin {
     }
 
     hasFlag(flagName: string): boolean {
+        let i = this.flags.findIndex(f => f.type === flagName);
+        if (i !== -1) {
+            return true;
+        }
+
         for (let restrict of this.restricts) {
             if (restrict.hasFlag(flagName)) {
                 return true;
@@ -64,11 +69,6 @@ export class Origin {
             if (bonus.hasFlag(flagName)) {
                 return true;
             }
-        }
-
-        let i = this.flags.findIndex(f => f.type === flagName);
-        if (i !== -1) {
-            return true;
         }
 
         return false;
