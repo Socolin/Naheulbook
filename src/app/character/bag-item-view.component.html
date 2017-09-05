@@ -21,6 +21,8 @@
     <md-divider *ngIf="itemsContained.length"></md-divider>
     <ng-template ngFor let-item [ngForOf]="itemsContainer" let-lastItem="last">
         <div class="item-bag-line"
+             cdk-overlay-origin
+             #itemLine="cdkOverlayOrigin"
              (click)="selectItem(item)"
              [class.selected]="selectedItem && selectedItem.id === item.id">
             <icon [icon]="item.data.icon" [size]="'32px'"></icon>
@@ -28,7 +30,11 @@
             {{item.data.name}}
             <span class="padding"></span>
             <ng-template [ngIf]="item === selectedItem">
-                <swipeable-item-detail [gmView]="gmView" [character]="character" [item]="item"></swipeable-item-detail>
+                <swipeable-item-detail [gmView]="gmView"
+                                       [character]="character"
+                                       [item]="item"
+                                       [origin]="itemLine">
+                </swipeable-item-detail>
             </ng-template>
         </div>
         <div class="item-icon-container">
