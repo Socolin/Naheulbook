@@ -4,15 +4,15 @@
         <md-card-subtitle>Charges / Utilisations</md-card-subtitle>
         <md-card-content>
             <div>
-                <md-form-field>
+                Cet objet a un nombre limité de
+                <md-form-field style="width: 40px">
                     <input mdInput
                            class="input-center-align"
                            placeholder="Nombre de charges"
                            [(ngModel)]="itemTemplate.data.charge"
                            type="number"/>
-                    <span mdPrefix>Cet objet a un nombre limité de </span>
-                    <span mdSuffix> utilisation(s)</span>
                 </md-form-field>
+                utilisation(s)
             </div>
             <div>
                 Lors de l'utilisation:

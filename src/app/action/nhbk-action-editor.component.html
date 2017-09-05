@@ -36,7 +36,7 @@
                            type="number"
                            placeholder="Energie vitale"
                            [(ngModel)]="action.data.ev"/>
-                    <span mdPrefix>Redonner</span>
+                    <span mdPrefix>Redonner&nbsp;</span>
                     <span mdSuffix>E.V.</span>
                 </md-form-field>
             </ng-template>
@@ -46,14 +46,13 @@
                            type="number"
                            placeholder="Energie astrale"
                            [(ngModel)]="action.data.ea"/>
-                    <span mdPrefix>Redonner</span>
+                    <span mdPrefix>Redonner&nbsp;</span>
                     <span mdSuffix>E.A.</span>
                 </md-form-field>
             </ng-template>
             <ng-template [ngSwitchCase]="'custom'">
-                <md-form-field align="end">
+                <md-form-field align="end" style="width: 100%">
                     <input mdInput
-                           type="text"
                            placeholder="Action"
                            [(ngModel)]="action.data.text"/>
                 </md-form-field>
