@@ -154,10 +154,13 @@
     </div>
 
     <!-- Rupture -->
-    <div class="row" *ngIf="itemTemplate.data.rupture">
-        <div class="col-xs-12">
-            <span class="ra ra-broken-shield ra-lg"></span>
+    <div *ngIf="itemTemplate.data.rupture != undefined">
+        <div *ngIf="itemTemplate.data.rupture">
+            Rupture:
             1 à {{itemTemplate.data.rupture}}
+        </div>
+        <div *ngIf="itemTemplate.data.rupture === 0">
+            Rupture: Incassable
         </div>
     </div>
 
