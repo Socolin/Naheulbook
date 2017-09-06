@@ -119,6 +119,23 @@ export class Item {
                     }
                 }
             }
+
+            let relatedGods = character.getFlagDatas('RELATED_GOD');
+            if (relatedGods) {
+                let foundGod = false;
+                for (let relatedGod of relatedGods) {
+                    if (this.template.data.god === relatedGod.data) {
+                        foundGod = true;
+                        break;
+                    }
+                }
+                if (!foundGod) {
+                    return {reason: 'bad_god'};
+                }
+            }
+            else {
+                return {reason: 'no_god'};
+            }
         }
 
         if (this.template.data.enchantment) {

@@ -328,6 +328,9 @@
                         <ng-template [ngSwitchCase]="'bad_god'">
                             L'objet est lié a un autre dieu que celui du personnage
                         </ng-template>
+                        <ng-template [ngSwitchCase]="'no_god'">
+                            L'objet est lié a un dieu, et vous ne faites pas partie de son culte.
+                        </ng-template>
                     </span>
                     <ng-template [ngIf]="incompatibleData.source">
                         <span [ngSwitch]="incompatibleData.source.type">
