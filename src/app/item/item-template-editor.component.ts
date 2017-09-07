@@ -57,6 +57,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     public addModuleOverlayRef?: OverlayRef;
 
     private modulesDef: any[] = [
+        {name: 'bourrin',      displayName: 'Arme de bourrin'},
         {name: 'charge',       displayName: 'Charges/Utilisations'},
         {name: 'collect',      displayName: 'Possibilités de récolte'},
         {name: 'container',    displayName: 'Conteneur'},
@@ -193,6 +194,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         this.closeAddModuleDialog();
 
         switch (moduleName) {
+            case 'bourrin':
+                this.itemTemplate.data.bruteWeapon = true;
+                break;
             case 'charge':
                 this.itemTemplate.data.charge = 1;
                 break;
@@ -291,6 +295,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
 
         switch (moduleName) {
+            case 'bourrin':
+                this.itemTemplate.data.bruteWeapon = undefined;
+                break;
             case 'charge':
                 this.itemTemplate.data.charge = undefined;
                 break;
@@ -390,6 +397,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     determineModulesFromItemTemplate(): void {
         let modules: string[] = [];
 
+        if (this.itemTemplate.data.bruteWeapon) {
+            modules.push('bourrin');
+        }
         if (this.itemTemplate.data.charge) {
             modules.push('charge');
         }

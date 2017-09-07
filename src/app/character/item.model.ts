@@ -138,6 +138,12 @@ export class Item {
             }
         }
 
+        if (this.template.data.bruteWeapon) {
+            if (!character.hasFlag('ARME_BOURRIN')) {
+                return {reason: 'no_arme_bourrin'};
+            }
+        }
+
         if (this.template.data.enchantment) {
             if (ItemTemplate.hasSlot(this.template, 'WEAPON')) {
                 let flag = character.getFlagDatas('NO_MAGIC_WEAPON');

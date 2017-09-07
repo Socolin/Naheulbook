@@ -37,7 +37,7 @@ export interface CharacterGiveDestination {
 export interface SkillDetail {
     from: string[];
     skillDef: Skill;
-    canceled?: boolean;
+    canceled?: string;
 }
 
 export class StaticDetailShow {
@@ -596,7 +596,7 @@ export class Character extends WsRegistrable {
             this.computedData.details.add(modifier.name, detailData);
         }
 
-        let canceledSkills = {};
+        let canceledSkills: {[skillId: number]: Item} = {};
         this.computedData.skills = [];
 
         this.computedData.stats['THROW_MODIFIER'] = 0;
@@ -817,11 +817,27 @@ export class Character extends WsRegistrable {
             return a.skillDef.name.localeCompare(b.skillDef.name);
         });
 
+        let flagsData: {[flagName: string]: FlagData[]} = {};
+        if (this.job) {
+            this.job.getFlagsDatas(flagsData);
+        }
+        this.origin.getFlagsDatas(flagsData);
+
         let prevSkill: SkillDetail|null = null;
         for (let i = 0; i < this.computedData.skills.length; i++) {
             let skill = this.computedData.skills[i];
+            let ignoreSkill = false;
+            if ('NO_SKILL' in flagsData) {
+                let noSkills = flagsData['NO_SKILL'];
+                for (let noSkill of noSkills) {
+                    if (skill.skillDef.hasFlag(noSkill.data)) {
+                        skill.canceled = 'Origine incompatible';
+                        break;
+                    }
+                }
+            }
             if (skill.skillDef.id in canceledSkills) {
-                skill.canceled = canceledSkills[skill.skillDef.id];
+                skill.canceled = 'Annulé par ' + canceledSkills[skill.skillDef.id].data.name;
             }
             if (prevSkill && skill.skillDef.id === prevSkill.skillDef.id) {
                 prevSkill.from.push(skill.from[0]);

@@ -6,6 +6,7 @@ import {Job} from '../job';
 import {Origin} from '../origin';
 
 import {Skill, SkillService} from '../skill';
+import {FlagData} from '../shared/flag.model';
 
 @Component({
     selector: 'skill-selector',
@@ -92,13 +93,37 @@ export class SkillSelectorComponent implements OnInit {
                 }
             }
 
+            let flagsData: {[flagName: string]: FlagData[]} = {};
+            if (this.selectedJob) {
+                this.selectedJob.getFlagsDatas(flagsData);
+            }
+            if (this.selectedOrigin) {
+                this.selectedOrigin.getFlagsDatas(flagsData);
+            }
+
             let skills: Skill[] = [];
             for (let i = 0; i < tmpSkills.length; i++) {
                 let skill = tmpSkills[i];
-                if (availableSkills.indexOf(skill.id) !== -1) {
+
+                if (availableSkills.indexOf(skill.id) === -1) {
+                    continue;
+                }
+
+                let ignoreSkill = false;
+                if ('NO_SKILL' in flagsData) {
+                    let noSkills = flagsData['NO_SKILL'];
+                    for (let noSkill of noSkills) {
+                        if (skill.hasFlag(noSkill.data)) {
+                            ignoreSkill = true;
+                        }
+                    }
+                }
+
+                if (!ignoreSkill) {
                     skills.push(skill);
                 }
             }
+
             this.skills = skills;
         });
     }

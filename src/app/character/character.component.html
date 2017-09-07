@@ -643,8 +643,8 @@
                     <div>
                         <md-list dense>
                             <md-list-item *ngFor="let skill of character.computedData.skills" class="skill-list-item">
-                                <h4 md-line>{{skill?.skillDef?.name}}</h4>
-                                <span *ngIf="skill.canceled">CANCELED</span>
+                                <h4 md-line [class.canceled]="skill.canceled">{{skill?.skillDef?.name}}</h4>
+                                <span *ngIf="skill.canceled">{{skill.canceled}}</span>
                                 <p md-line>
                                     <span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>
                                 </p>

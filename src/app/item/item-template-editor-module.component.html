@@ -1,5 +1,11 @@
 <md-card [ngSwitch]="moduleName">
     <button class="delete-button" md-icon-button (click)="deleteModule()"><md-icon>delete</md-icon></button>
+    <ng-template [ngSwitchCase]="'bourrin'">
+        <md-card-subtitle>Arme de bourrin</md-card-subtitle>
+        <md-card-content>
+            Requiert la compétence Armes de bourrin pour pouvoir utiliser cet objet<br>
+        </md-card-content>
+    </ng-template>
     <ng-template [ngSwitchCase]="'charge'">
         <md-card-subtitle>Charges / Utilisations</md-card-subtitle>
         <md-card-content>

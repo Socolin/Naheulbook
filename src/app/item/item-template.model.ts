@@ -57,6 +57,7 @@ export class ItemTemplateData {
     actions?: any[];
     availableLocation?: string;
     bonusDamage?: number;
+    bruteWeapon?: boolean;
     charge?: number;
     container?: boolean;
     damageDice?: number;
