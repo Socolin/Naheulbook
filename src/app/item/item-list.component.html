@@ -1,5 +1,13 @@
 <md-card>
-    Les joueurs n'achètent JAMAIS le matériel en piochant eux-mêmes dans les tableaux.
+    <md-card-content>
+        Les joueurs n'achètent JAMAIS le matériel en piochant eux-mêmes dans les tableaux. Vous pouvez créer vos propre
+        objets grace à l'éditeur. Ce dernier pouvant être complexe il est conseillé de copié un autre objets,
+        à l'aide du bouton <md-icon>content_copy</md-icon>, puis de le modifier. Si vous souhaitez seulement changer
+        le nom, cet option est déjà disponible lors de l'ajout d'un objet sur un personnage.
+    </md-card-content>
+    <md-card-actions align="end">
+        <button color="primary" md-button (click)="createItem()">CREER UN OBJET</button>
+    </md-card-actions>
 </md-card>
 <md-card class="section-selector">
     <md-select [ngModel]="selectedSection"
@@ -13,9 +21,6 @@
 
     <autocomplete-search-item-template [clearOnSelect]=true (onSelect)="selectItemTemplate($event)">
     </autocomplete-search-item-template>
-    <md-card-actions align="end">
-        <button color="primary" md-button (click)="createItem()">CREER UN OBJET</button>
-    </md-card-actions>
 </md-card>
 
 <md-card *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
