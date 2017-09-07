@@ -488,6 +488,7 @@
                 <icon-selector [icon]="item.data.icon" [readonly]="true"></icon-selector>
                 <span *ngIf="item.template.data.quantifiable || item.data.quantity">
                     <value-editor [value]="giveQuantity"
+                                  [minValue]="1"
                                   [maxValue]="item.data.quantity"
                                   [hideMaxValue]="true"
                                   (onChange)="giveQuantity = $event">

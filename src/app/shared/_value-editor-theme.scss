@@ -36,6 +36,12 @@
                     color: mat-color($primary, default-contrast);
                 }
             }
+            .disabled {
+                button {
+                    background: mat-color($background, disabled-button);
+                    color: mat-color($foreground, disabled-button);
+                }
+            }
             .max-zero-buttons {
                 button {
                     background: mat-color($primary);

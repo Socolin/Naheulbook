@@ -20,17 +20,17 @@
                 <div>{{title}}</div>
             </div>
             <div class="ve-actions">
-                <div class="minus-buttons">
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('-500')">
+                <div class="minus-buttons" [class.disabled]="newValue === minValue">
+                    <button md-ripple [disabled]="newValue === minValue" [mdRippleColor]="'primary'" (click)="changeValue('-500')">
                         -500
                     </button>
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('-50')">
+                    <button md-ripple [disabled]="newValue === minValue" [mdRippleColor]="'primary'" (click)="changeValue('-50')">
                         -50
                     </button>
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('-5')">
+                    <button md-ripple [disabled]="newValue === minValue" [mdRippleColor]="'primary'" (click)="changeValue('-5')">
                         -5
                     </button>
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('-1')">
+                    <button md-ripple [disabled]="newValue === minValue" [mdRippleColor]="'primary'" (click)="changeValue('-1')">
                         -1
                     </button>
                 </div>

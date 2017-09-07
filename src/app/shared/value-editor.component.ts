@@ -7,7 +7,8 @@ import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 })
 export class ValueEditorComponent implements OnChanges {
     @Input() value: number;
-    @Input() maxValue: number;
+    @Input() maxValue?: number;
+    @Input() minValue?: number;
     @Input() title: string;
     @Input() hideMaxValue: boolean;
     @Output() onChange: EventEmitter<number> = new EventEmitter<number>();
@@ -110,6 +111,9 @@ export class ValueEditorComponent implements OnChanges {
     updateNewValue() {
         if (!this.value) {
             this.value = 0;
+        }
+        if (this.minValue != null && (this.value + parseInt(this.valueDelta, 10)) < this.minValue) {
+            this.valueDelta = (this.minValue - this.value).toString();
         }
         if (this.valueDelta) {
             this.newValue = this.value + parseInt(this.valueDelta, 10);
