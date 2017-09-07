@@ -12,6 +12,7 @@ import {God} from '../shared';
 export class ItemTemplateComponent {
     @Input() itemTemplate: ItemTemplate;
     @Input() editable: boolean;
+    @Input() copyable: boolean;
     @Input() originsName: {[originId: number]: string};
     @Input() jobsName: {[jobId: number]: string};
     @Input() godsByTechName: {[techName: string]: God};
@@ -23,6 +24,10 @@ export class ItemTemplateComponent {
 
     editItem(item: ItemTemplate) {
         this._router.navigate(['/database/edit-item', item.id], {queryParams: {}});
+    }
+
+    copyItem(item: ItemTemplate) {
+        this._router.navigate(['/database/create-item'], {queryParams: {copyFrom: item.id}});
     }
 
     hasAction(actionName: string) {

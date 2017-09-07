@@ -19,6 +19,7 @@
             <span *ngIf="itemTemplate.data.sex == 'f'">Femme uniq. </span>
         </md-card-subtitle>
         <span class="padding"></span>
+        <button md-icon-button color="primary" *ngIf="copyable" (click)="copyItem(itemTemplate)"><md-icon>content_copy</md-icon></button>
         <button md-icon-button color="primary" *ngIf="editable" (click)="editItem(itemTemplate)"><md-icon>edit</md-icon></button>
         <button md-raised-button color="primary"
                 *ngIf="hasAction('addItem')"

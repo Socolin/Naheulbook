@@ -1,22 +1,24 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
 
 import {ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'create-item-template',
     templateUrl: './create-item-template.component.html'
 })
-export class CreateItemTemplateComponent {
+export class CreateItemTemplateComponent implements OnInit {
     public item: ItemTemplate = new ItemTemplate();
     public lastItem: ItemTemplate;
     public saving = false;
 
     constructor(private _itemTemplateService: ItemTemplateService,
                 private _notifications: NotificationsService,
+                private _route: ActivatedRoute,
                 private _loginService: LoginService) {
         if (this._loginService.currentLoggedUser && this._loginService.currentLoggedUser.admin) {
             this.item.source = 'official';
@@ -47,5 +49,14 @@ export class CreateItemTemplateComponent {
                 }
             }
         );
+    }
+
+    ngOnInit(): void {
+        if (this._route.snapshot.queryParams['copyFrom']) {
+            this._itemTemplateService.getItem(+this._route.snapshot.queryParams['copyFrom']).subscribe(item => {
+                this.item = item;
+                this.item.source = 'private';
+            });
+        }
     }
 }
