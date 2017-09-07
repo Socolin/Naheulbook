@@ -13,6 +13,7 @@ import {MdDialog} from '@angular/material';
 export class LoginComponent implements OnInit {
     public user: User|null;
     public redirectPage: string;
+    public moreInfo: boolean;
 
     constructor(public dialog: MdDialog
         , private _loginService: LoginService

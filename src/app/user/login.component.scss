@@ -10,5 +10,26 @@
 md-card {
     margin: 5px;
     padding: 20px;
+    max-width: 600px
 }
 
+.auth-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    >button {
+        flex: 1 auto;
+        margin: 8px 8px;
+    }
+}
+
+@media (max-width: 599px) {
+    md-card {
+        max-width: calc(100vw - 60px);
+    }
+
+    .auth-buttons {
+        display: flex;
+        flex-direction: column;
+    }
+}
