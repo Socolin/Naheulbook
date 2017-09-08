@@ -17,6 +17,7 @@ export class ItemData {
     equiped: number;
     readCount: number;
     notIdentified: boolean;
+    ignoreRestrictions?: boolean;
     lifetime: IDurable | null;
 }
 
@@ -102,24 +103,10 @@ export class Item {
         return changes;
     }
 
-    public incompatibleWith(character: Character): {reason: string, source?: {type: string, name: string}} | undefined {
-        if (this.template.data.god) {
-            if (character.hasFlag('USE_RELATED_GOD_STUFF')) {
-                let relatedGods = character.getFlagDatas('RELATED_GOD');
-                if (relatedGods) {
-                    let foundGod = false;
-                    for (let relatedGod of relatedGods) {
-                        if (this.template.data.god === relatedGod.data) {
-                            foundGod = true;
-                            break;
-                        }
-                    }
-                    if (!foundGod) {
-                        return {reason: 'bad_god'};
-                    }
-                }
-            }
+    public incompatibleWith(character: Character): {reason: string, source?: {type: string, name: string}}[] | undefined {
+        let incompatibilities: {reason: string, source?: {type: string, name: string}}[] = [];
 
+        if (this.template.data.god) {
             let relatedGods = character.getFlagDatas('RELATED_GOD');
             if (relatedGods) {
                 let foundGod = false;
@@ -130,17 +117,33 @@ export class Item {
                     }
                 }
                 if (!foundGod) {
-                    return {reason: 'bad_god'};
+                    incompatibilities.push({reason: 'bad_god'});
                 }
             }
             else {
-                return {reason: 'no_god'};
+                incompatibilities.push({reason: 'no_god'});
             }
         }
 
+        if (this.template.requirements) {
+            for (let requirement of this.template.requirements) {
+                if (requirement.max && character.computedData.stats[requirement.stat] > requirement.max) {
+                    incompatibilities.push({reason: 'stat_to_high', source: {type: 'stat', name: requirement.stat}});
+                }
+                if (requirement.min && character.computedData.stats[requirement.stat] < requirement.min) {
+                    incompatibilities.push({reason: 'stat_to_low', source: {type: 'stat', name: requirement.stat}});
+                }
+            }
+        }
         if (this.template.data.bruteWeapon) {
             if (!character.hasFlag('ARME_BOURRIN')) {
-                return {reason: 'no_arme_bourrin'};
+                incompatibilities.push({reason: 'no_arme_bourrin'});
+            }
+        }
+
+        if (this.template.data.requireLevel) {
+            if (character.level < this.template.data.requireLevel) {
+                incompatibilities.push({reason: 'too_low_level'});
             }
         }
 
@@ -148,19 +151,19 @@ export class Item {
             if (ItemTemplate.hasSlot(this.template, 'WEAPON')) {
                 let flag = character.getFlagDatas('NO_MAGIC_WEAPON');
                 if (flag) {
-                    return {reason: 'no_magic_weapon', source: flag[0].source};
+                    incompatibilities.push({reason: 'no_magic_weapon', source: flag[0].source});
                 }
             }
             else if (this.template.slots && this.template.slots.length) {
                 let flag = character.getFlagDatas('NO_MAGIC_ARMOR');
                 if (flag) {
-                    return {reason: 'no_magic_armor', source: flag[0].source};
+                    incompatibilities.push({reason: 'no_magic_armor', source: flag[0].source});
                 }
             }
             else {
                 let flag = character.getFlagDatas('NO_MAGIC_OBJECT');
                 if (flag) {
-                    return {reason: 'no_magic_object', source: flag[0].source};
+                    incompatibilities.push({reason: 'no_magic_object', source: flag[0].source});
                 }
             }
         }
@@ -170,7 +173,7 @@ export class Item {
                 for (let itemType of this.template.data.itemTypes) {
                     for (let noWeaponType of noWeaponTypes) {
                         if (itemType === noWeaponType.data) {
-                            return {reason: 'bad_equipment_type', source: noWeaponType.source};
+                            incompatibilities.push({reason: 'bad_equipment_type', source: noWeaponType.source});
                         }
                     }
                 }
@@ -178,10 +181,13 @@ export class Item {
 
             if (this.template.data.isItemTypeName('LIVRE')
                 && !character.hasFlag('ERUDITION')) {
-                return {reason: 'cant_read'};
+                incompatibilities.push({reason: 'cant_read'});
             }
         }
 
+        if (incompatibilities.length) {
+            return incompatibilities;
+        }
         return undefined;
     }
 

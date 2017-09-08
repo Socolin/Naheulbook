@@ -50,7 +50,7 @@ export class MonsterComputedData {
     esq: number;
     pr: number;
     pr_magic: number;
-    dmg: {name: string, damage: string}[] = [];
+    dmg: {name: string, damage: string, incompatible?: boolean}[] = [];
     cou: number;
     chercheNoise: boolean;
     resm: number;

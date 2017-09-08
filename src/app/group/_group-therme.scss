@@ -4,6 +4,7 @@
     // Extract whichever individual palettes you need from the theme.
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
     $background: map-get($theme, background);
     $foreground: map-get($theme, foreground);
 
@@ -41,7 +42,11 @@
         background: linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
     }
     .fighter-container {
-        border-bottom-color: mat-color($foreground, hint-text);;
+        border-bottom-color: mat-color($foreground, hint-text);
+    }
+
+    .incompatible-item {
+        color: mat-color($warn);
     }
 
     .loot-list {

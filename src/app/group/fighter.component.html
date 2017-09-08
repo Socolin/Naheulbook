@@ -43,10 +43,10 @@
             </div>
             <div class="field-extra-large">
                 <div *ngFor="let dmg of fighter.stats.dmg">
-                    <div>
+                    <div  [class.incompatible-item]="dmg.incompatible">
                         {{dmg.damage}}
                     </div>
-                    <div class="secondary-text damage-weapon-name">
+                    <div class="secondary-text damage-weapon-name"  [class.incompatible-item]="dmg.incompatible">
                         {{dmg.name}}
                     </div>
                 </div>

@@ -298,57 +298,91 @@
 
 
             <div *ngFor="let requirement of item.template.requirements">
-                <span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
-                <span *ngIf="requirement.max">Max {{requirement.stat}}: {{requirement.max}}</span>
-                <span *ngIf="requirement.min && character.computedData.stats[requirement.stat] < requirement.min"
-                      class="text-warning">Non utilisable</span>
-                <span *ngIf="requirement.max && character.computedData.stats[requirement.stat] > requirement.max"
-                      class="text-warning">Non utilisable</span>
+                <span *ngIf="requirement.min">
+                    Min {{requirement.stat}}: {{requirement.min}}
+                </span>
+                <span *ngIf="requirement.max">
+                    Max {{requirement.stat}}: {{requirement.max}}
+                </span>
             </div>
 
-            <div *ngIf="item.incompatibleWith(character); let incompatibleData">
-                <span class="text-warning">
-                    Une restriction du personnage s'applique sur cet objet:
-                    <span [ngSwitch]="incompatibleData.reason">
-                        <ng-template [ngSwitchCase]="'no_magic_weapon'">
-                            Pas d'arme enchantée
-                        </ng-template>
-                        <ng-template [ngSwitchCase]="'no_magic_armor'">
-                            Pas d'armure enchantée
-                        </ng-template>
-                        <ng-template [ngSwitchCase]="'no_magic_object'">
-                            Pas d'objet magique
-                        </ng-template>
-                        <ng-template [ngSwitchCase]="'bad_equipment_type'">
-                            Ne peux pas utiliser cet objet
-                        </ng-template>
-                        <ng-template [ngSwitchCase]="'cant_read'">
-                            Ne sait pas lire
-                        </ng-template>
-                        <ng-template [ngSwitchCase]="'no_arme_bourrin'">
-                            Ne possède pas la compétence Armes de bourrin.
-                        </ng-template>
-                        <ng-template [ngSwitchCase]="'bad_god'">
-                            L'objet est lié a un autre dieu que celui du personnage
-                        </ng-template>
-                        <ng-template [ngSwitchCase]="'no_god'">
-                            L'objet est lié a un dieu, et vous ne faites pas partie de son culte.
-                        </ng-template>
+            <div *ngIf="item.incompatibleWith(character); let incompatibilities">
+                <br>
+                <span [class.text-warning]="!item.data.ignoreRestrictions" [class.text-info]="item.data.ignoreRestrictions">
+                    <span *ngIf="incompatibilities.length === 1">
+                        Une restriction s'applique sur l'utilisation de cet objet:
                     </span>
-                    <ng-template [ngIf]="incompatibleData.source">
-                        <span [ngSwitch]="incompatibleData.source.type">
-                            <ng-template [ngSwitchCase]="'origin'">
-                                (Origine: {{incompatibleData.source.name}})
+                    <span *ngIf="incompatibilities.length > 1">
+                        Plusieurs restrictions s'applique sur l'utilisation cet objet:
+                    </span>
+                    <ul>
+                        <li *ngFor="let incompatibleData of incompatibilities">
+                            <span [ngSwitch]="incompatibleData.reason">
+                                <ng-template [ngSwitchCase]="'no_magic_weapon'">
+                                    Pas d'arme enchantée
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'no_magic_armor'">
+                                    Pas d'armure enchantée
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'no_magic_object'">
+                                    Pas d'objet magique
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'too_low_level'">
+                                    Vous n'avez pas le niveau requis pour utilisé cet objet.
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'bad_equipment_type'">
+                                    Ne peux pas utiliser ce type d'objet
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'cant_read'">
+                                    Ne sait pas lire
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'no_arme_bourrin'">
+                                    Ne possède pas la compétence Armes de bourrin.
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'bad_god'">
+                                    L'objet est lié a un autre dieu que celui du personnage
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'no_god'">
+                                    L'objet est lié a un dieu, et vous ne faites pas partie de son culte.
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'stat_to_high'">
+                                    Une de vos statistique est trop haute:&nbsp;
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'stat_to_low'">
+                                    Une de vos statistique est trop basse:&nbsp;
+                                </ng-template>
+                            </span>
+                            <ng-template [ngIf]="incompatibleData.source">
+                                <span [ngSwitch]="incompatibleData.source.type">
+                                    <ng-template [ngSwitchCase]="'origin'">
+                                        (Origine: {{incompatibleData.source.name}})
+                                    </ng-template>
+                                    <ng-template [ngSwitchCase]="'job'">
+                                        (Métier: {{incompatibleData.source.name}})
+                                    </ng-template>
+                                    <ng-template [ngSwitchCase]="'speciality'">
+                                        (Spécialitée: {{incompatibleData.source.name}})
+                                    </ng-template>
+                                    <ng-template [ngSwitchCase]="'stat'">
+                                        {{incompatibleData.source.name}}
+                                    </ng-template>
+                                </span>
                             </ng-template>
-                            <ng-template [ngSwitchCase]="'job'">
-                                (Métier: {{incompatibleData.source.name}})
-                            </ng-template>
-                            <ng-template [ngSwitchCase]="'speciality'">
-                                (Spécialitée: {{incompatibleData.source.name}})
-                            </ng-template>
-                        </span>
-                    </ng-template>
+                        </li>
+                    </ul>
                 </span>
+                <button md-button
+                        [color]="'primary'"
+                        *ngIf="gmView && !item.data.ignoreRestrictions"
+                        (click)="_itemActionService.onAction('ignoreRestrictions', item); $event.stopPropagation()">
+                    IGNORER RESTRICTIONS
+                </button>
+                <button md-button
+                        [color]="'primary'"
+                        *ngIf="gmView && item.data.ignoreRestrictions"
+                        (click)="_itemActionService.onAction('ignoreRestrictions', item); $event.stopPropagation()">
+                    APPLIQUER RESTRICTIONS
+                </button>
             </div>
 
             <!-- Origine -->

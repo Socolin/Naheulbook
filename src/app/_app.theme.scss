@@ -24,4 +24,8 @@
     .text-warning {
         color:  mat-color($warn, 1);
     }
+
+    .text-info {
+        color:  mat-color($primary, 500);
+    }
 }

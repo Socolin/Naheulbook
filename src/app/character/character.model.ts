@@ -195,7 +195,7 @@ export class CharacterComputedData {
 
     countExceptionalStats = 0;
     countActiveEffect = 0;
-    weaponsDamages: {name: string, damage: string}[] = [];
+    weaponsDamages: {name: string, damage: string, incompatible?: boolean}[] = [];
     flags: {[flagName: string]: FlagData[]} = {};
 
     init() {
@@ -946,14 +946,22 @@ export class Character extends WsRegistrable {
         this.computedData.tacticalMovement.sprintDistance = sprintDistance * speedModifier;
         this.computedData.tacticalMovement.maxDuration = maxDuration * speedModifier;
         this.computedData.tacticalMovement.sprintMaxDuration = sprintMaxDuration * speedModifier;
+    }
 
-        let weaponDamages: {name: string, damage: string}[] = [];
+    updateWeaponsDamages() {
+        let weaponDamages: {name: string, damage: string, incompatible: boolean}[] = [];
         for (let item of this.items) {
             if (!item.data.equiped) {
                 continue;
             }
-
             if (ItemTemplate.hasSlot(item.template, 'WEAPON')) {
+                let incompatible = false;
+                if (!item.data.ignoreRestrictions) {
+                    let incompatibilities = item.incompatibleWith(this);
+                    if (incompatibilities) {
+                        incompatible = true;
+                    }
+                }
                 let damage = item.getDamageString();
                 if (damage && this.computedData.stats['PI']) {
                     if (this.computedData.stats['PI'] > 0) {
@@ -965,19 +973,20 @@ export class Character extends WsRegistrable {
                 }
                 weaponDamages.push({
                     name: item.data.name,
-                    damage: damage
+                    damage: damage,
+                    incompatible: incompatible
                 });
             }
         }
         this.computedData.weaponsDamages = weaponDamages;
     }
 
-
     public update() {
         this.computedData.init();
         this.updateInventory();
         this.updateStats();
         this.updateFlags();
+        this.updateWeaponsDamages();
         this.onUpdate.next(this);
     }
 
