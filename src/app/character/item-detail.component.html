@@ -234,7 +234,7 @@
                 </div>
             </div>
 
-            <div *ngIf="item.modifiers" class="item-modifiers">
+            <div *ngIf="item.modifiers && item.modifiers.length" class="item-modifiers">
                 <md-card *ngFor="let modifier of item.modifiers; let i = index">
                     <div class="item-header">
                         <span>
@@ -438,27 +438,7 @@
         <ng-template [ngIf]="!readonly">
             <div *ngIf="character.computedData.containers && !item.data.equiped">
                 <ng-template [ngIf]="item.container">
-                    Dans: {{item.containerInfo.name}}
-                    <button md-button
-                            *ngIf="!item.content?.length"
-                            color="primary"
-                            (click)="_itemActionService.onAction('move_to_container', item, {container: null}); $event.stopPropagation()">
-                        Retirer
-                    </button>
-                </ng-template>
-                <ng-template [ngIf]="!item.container && character.computedData.containers && character.computedData.containers.length">
-                    <span class="mat-subheading-2">Ranger dans</span>
-                    <div class="list-available-containers">
-                        <ng-template ngFor let-container [ngForOf]="character.computedData.containers" let-i="index"
-                                  let-last="last">
-                            <div class="target-container"
-                               (click)="_itemActionService.onAction('move_to_container', item, {container: container.id}); $event.stopPropagation()">
-                                <icon-selector [icon]="container.data.icon" [readonly]="true"></icon-selector>
-                                {{container.data.name}}
-                                <md-divider></md-divider>
-                            </div>
-                        </ng-template>
-                    </div>
+                    Stocké dans: {{item.containerInfo.name}}
                 </ng-template>
             </div>
         </ng-template>
@@ -486,8 +466,47 @@
             IDENTIFIER
         </button>
 
+        <button md-button
+                *ngIf="_itemActionService && !item.content?.length"
+                [color]="item.container ? 'primary' : 'accent'"
+                (click)="openStoreItemInContainerDialog(); $event.stopPropagation()">
+            RANGER
+        </button>
     </md-card-actions>
 </md-card>
+
+<ng-template #storeItemInContainerDialog="cdkPortal" cdk-portal>
+    <md-card class="store-item-dialog">
+        <md-card-title>
+            Ranger: {{item.data.name}}
+        </md-card-title>
+        <md-card-subtitle>
+            Choisissez dans quel conteneur ranger l'objet
+        </md-card-subtitle>
+        <md-card-content>
+            <ng-template [ngIf]="character.computedData.containers && character.computedData.containers.length">
+                <div class="list-available-containers">
+                    <div *ngFor="let container of character.computedData.containers" class="target-container">
+                        <icon-selector [icon]="container.data.icon" [readonly]="true"></icon-selector>
+                        <button md-raised-button
+                                [disabled]="item.container == container.id"
+                                (click)="_itemActionService.onAction('move_to_container', item, {container: container.id}); $event.stopPropagation()">
+                            {{container.data.name}}
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button color="primary" (click)="removeItemFromContainer()">
+                RETIRER
+            </button>
+            <button md-button color="primary" (click)="closeStoreItemInContainerDialog()">
+                VALIDER
+            </button>
+        </md-card-actions>
+    </md-card>
+</ng-template>
 
 <ng-template #addModifierDialog="cdkPortal" cdk-portal>
     <md-card class="add-modifier-dialog">

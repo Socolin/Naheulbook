@@ -47,6 +47,10 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public addModifierOverlayRef: OverlayRef | undefined;
     public newItemModifier: ActiveStatsModifier;
 
+    @ViewChild('storeItemInContainerDialog')
+    public storeItemInContainerDialog: Portal<any>;
+    public storeItemInContainerOverlayRef: OverlayRef | undefined;
+
     @ViewChild('lifetimeDialog')
     public lifetimeDialog: Portal<any>;
     public lifetimeOverlayRef: OverlayRef | undefined;
@@ -236,6 +240,24 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         }
         this._itemActionService.onAction('update_data', this.item);
         this.closeLifetimeDialog();
+    }
+
+
+    openStoreItemInContainerDialog() {
+        this.storeItemInContainerOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.storeItemInContainerDialog);
+    }
+
+    closeStoreItemInContainerDialog() {
+        if (!this.storeItemInContainerOverlayRef) {
+            return;
+        }
+        this.storeItemInContainerOverlayRef.detach();
+        this.storeItemInContainerOverlayRef = undefined;
+    }
+
+    removeItemFromContainer() {
+        this._itemActionService.onAction('move_to_container', this.item, {container: null})
+        this.closeStoreItemInContainerDialog();
     }
 
     nothing() {
