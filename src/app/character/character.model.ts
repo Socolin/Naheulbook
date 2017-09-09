@@ -374,9 +374,7 @@ export class Character extends WsRegistrable {
         let content: {[itemId: number]: Item[]} = {};
         let itemsById: {[itemId: number]: Item} = {};
 
-        for (let i = 0; i < this.items.length; i++) {
-            let item = this.items[i];
-
+        for (let item of this.items) {
             if (item.template.data.isCurrency && item.template.data.price != null) {
                 totalMoney += item.template.data.price * (item.data.quantity || 1);
                 currencyItems.push(item);
@@ -423,8 +421,7 @@ export class Character extends WsRegistrable {
             }
         }
 
-        for (let i = 0; i < this.items.length; i++) {
-            let item = this.items[i];
+        for (let item of this.items) {
             if (item.container) {
                 item.containerInfo = {
                     name: itemsById[item.container].data.name,
@@ -436,8 +433,7 @@ export class Character extends WsRegistrable {
             }
         }
 
-        for (let i = 0; i < slots.length; i++) {
-            let slot = slots[i];
+        for (let slot of slots) {
             itemsBySlots[slot.id].sort(function (a: Item, b: Item) {
                 if (a.data.equiped === b.data.equiped) {
                     return 0;
@@ -449,8 +445,7 @@ export class Character extends WsRegistrable {
             });
         }
 
-        for (let i = 0; i < containers.length; i++) {
-            let container = containers[i];
+        for (let container of containers) {
             if (container.content) {
                 container.content.sort((a, b) => {
                     if (a.template.data.container === b.template.data.container) {
@@ -558,8 +553,7 @@ export class Character extends WsRegistrable {
                 this.computedData.stats['EA'] = this.job.baseEa;
             }
         }
-        for (let i = 0; i < this.specialities.length; i++) {
-            let speciality = this.specialities[i];
+        for (let speciality of this.specialities) {
             let detailData = {};
             if (speciality.modifiers) {
                 for (let j = 0; j < speciality.modifiers.length; j++) {
@@ -571,9 +565,7 @@ export class Character extends WsRegistrable {
             this.computedData.details.add('Specialite: ' + speciality.name, detailData);
         }
 
-        for (let i = 0; i < this.modifiers.length; i++) {
-            let modifier = this.modifiers[i];
-
+        for (let modifier of this.modifiers) {
             if (modifier.reusable || modifier.active) {
                 this.computedData.modifiers.push(modifier);
             }
@@ -585,8 +577,7 @@ export class Character extends WsRegistrable {
                 this.computedData.countActiveEffect++;
             }
             let detailData = {};
-            for (let j = 0; j < modifier.values.length; j++) {
-                let value = modifier.values[j];
+            for (let value of modifier.values) {
                 if (modifier.permanent) {
                     StatModifier.applyInPlace(this.computedData.baseStat, value);
                 }
@@ -603,9 +594,7 @@ export class Character extends WsRegistrable {
         this.computedData.stats['DISCRETION_MODIFIER'] = 0;
         this.computedData.stats['DANSE_MODIFIER'] = 0;
         this.computedData.stats['CHA_WITHOUT_MAGIEPSY'] = 0;
-        for (let i = 0; i < this.items.length; i++) {
-            let item = this.items[i];
-
+        for (let item of this.items) {
             if (!item.data.equiped && item.data.readCount) {
                 if (item.data.readCount >= 7) {
                     for (let u = 0; u < item.template.unskills.length; u++) {
@@ -635,23 +624,20 @@ export class Character extends WsRegistrable {
         }
 
         if (this.job) {
-            for (let i = 0; i < this.job.skills.length; i++) {
-                let skill = this.job.skills[i];
+            for (let skill of this.job.skills) {
                 this.computedData.skills.push({
                     skillDef: skill,
                     from: [this.job.name]
                 });
             }
         }
-        for (let i = 0; i < this.origin.skills.length; i++) {
-            let skill = this.origin.skills[i];
+        for (let skill of this.origin.skills) {
             this.computedData.skills.push({
                 skillDef: skill,
                 from: [this.origin.name]
             });
         }
-        for (let i = 0; i < this.skills.length; i++) {
-            let skill = this.skills[i];
+        for (let skill of this.skills) {
             this.computedData.skills.push({
                 skillDef: skill,
                 from: ['Choisi']
@@ -752,8 +738,7 @@ export class Character extends WsRegistrable {
             }
 
             if (item.modifiers) {
-                for (let j = 0; j < item.modifiers.length; j++) {
-                    let modifier = item.modifiers[j];
+                for (let modifier of item.modifiers) {
                     if (!modifier.active) {
                         continue;
                     }
