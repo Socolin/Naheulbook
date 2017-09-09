@@ -1,28 +1,25 @@
-import {Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges, OnInit} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 import {MdSlideToggleChange} from '@angular/material';
 
-import {Fighter, Group} from './group.model';
-import {NotificationsService} from '../notifications/notifications.service';
-import {CharacterService} from '../character/character.service';
-import {GroupActionService} from './group-action.service';
-import {Character} from '../character/character.model';
-import {ItemTemplate} from '../item/item-template.model';
-import {Item} from '../character/item.model';
-import {TargetJsonData} from './target.model';
+import {NotificationsService} from '../notifications';
+import {Character, CharacterService, Item, ItemService, ItemActionService} from '../character';
+import {ActiveStatsModifier, LapCountDecrement, NhbkDialogService} from '../shared';
+import {Monster, MonsterService} from '../monster';
+import {ItemTemplate} from '../item';
 
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {ActiveStatsModifier, LapCountDecrement} from '../shared/stat-modifier.model';
-import {Monster} from '../monster';
-import {MonsterService} from '../monster/monster.service';
+import {Fighter, Group} from './group.model';
+import {GroupActionService} from './group-action.service';
+import {TargetJsonData} from './target.model';
 
 @Component({
     selector: 'fighter',
     templateUrl: './fighter.component.html',
-    styleUrls: ['./fighter.component.scss']
+    styleUrls: ['./fighter.component.scss'],
+    providers: [ItemActionService],
 })
-export class FighterComponent implements OnChanges {
+export class FighterComponent implements OnInit, OnChanges {
     @Input() group: Group;
     @Input() fighter: Fighter;
     @Input() fighters: Fighter[];
@@ -39,6 +36,8 @@ export class FighterComponent implements OnChanges {
     constructor(private _actionService: GroupActionService
         , private _characterService: CharacterService
         , private _monsterService: MonsterService
+        , private _itemActionService: ItemActionService
+        , private _itemService: ItemService
         , private _nhbkDialogService: NhbkDialogService
         , private _notification: NotificationsService) {
     }
@@ -219,5 +218,21 @@ export class FighterComponent implements OnChanges {
         if ('fighter' in changes) {
             this.selectedItem = undefined;
         }
+    }
+
+    ngOnInit() {
+        this._itemActionService.registerAction('ignoreRestrictions').subscribe((event: {item: Item, data: any}) => {
+            let item = event.item;
+            item.data.ignoreRestrictions = event.data;
+            this._itemService.updateItem(item.id, item.data).subscribe(
+                this.fighter.character.onUpdateItem.bind(this.fighter.character)
+            );
+        });
+        this._itemActionService.registerAction('identify').subscribe((event: {item: Item, data: any}) => {
+            let item = event.item;
+            this._itemService.identify(item.id).subscribe(
+                this.fighter.character.onIdentifyItem.bind(this.fighter.character)
+            );
+        });
     }
 }

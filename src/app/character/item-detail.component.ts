@@ -27,6 +27,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() jobsName?: {[id: number]: string};
     @Input() originsName?: {[id: number]: string};
     @Input() godsByTechName: {[techName: string]: God};
+    @Input() hiddenActions: string[] = [];
 
     public itemCategoriesById: {[categoryId: number]: ItemCategory};
     public modifiers: any[];
@@ -57,7 +58,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public previousLifetime: IDurable | null;
 
     constructor(private _itemTemplateService: ItemTemplateService
-        , @Optional() public _itemActionService: ItemActionService
+        , public _itemActionService: ItemActionService
         , private _characterService: CharacterService
         , private _miscService: MiscService
         , private _nhbkDialogService: NhbkDialogService) {
@@ -258,6 +259,10 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     removeItemFromContainer() {
         this._itemActionService.onAction('move_to_container', this.item, {container: null})
         this.closeStoreItemInContainerDialog();
+    }
+
+    isActionVisible(actionName: string) {
+        return this.hiddenActions.indexOf(actionName) === -1;
     }
 
     nothing() {

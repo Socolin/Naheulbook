@@ -123,8 +123,10 @@
         }
     }
     .fighter-inventory-item {
+        position: relative;
         display: flex;
         align-items: center;
+        cursor: pointer;
         >icon {
             padding-right: 4px;
         }

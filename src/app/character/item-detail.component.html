@@ -257,7 +257,7 @@
                         <span *ngIf="modifier.active && modifier.durationType === 'time'">
                             <span class="ra ra-clockwork"></span>{{modifier.currentTimeDuration | nhbkDuration}}
                         </span>
-                        <button md-icon-button (click)="removeModifier(i); $event.stopPropagation()">
+                        <button md-icon-button *ngIf="!readonly" (click)="removeModifier(i); $event.stopPropagation()">
                             <md-icon>delete</md-icon>
                         </button>
                     </div>
@@ -447,13 +447,13 @@
         <span *ngIf="item.template.slots?.length > 0">
             <button md-button
                     [color]="'primary'"
-                    *ngIf="_itemActionService && !item.data.equiped && !item.content?.length"
+                    *ngIf="!readonly && !item.data.equiped && !item.content?.length"
                     (click)="_itemActionService.onAction('equip', item); $event.stopPropagation()">
                 ÉQUIPER
             </button>
             <button md-button
                     [color]="'primary'"
-                    *ngIf="_itemActionService && item.data.equiped && !item.content?.length"
+                    *ngIf="!readonly && item.data.equiped && !item.content?.length"
                     (click)="_itemActionService.onAction('unequip', item); $event.stopPropagation()">
                 DÉSÉQUIPER
             </button>
@@ -467,7 +467,7 @@
         </button>
 
         <button md-button
-                *ngIf="_itemActionService && !item.content?.length"
+                *ngIf="!readonly && !item.content?.length"
                 [color]="item.container ? 'primary' : 'accent'"
                 (click)="openStoreItemInContainerDialog(); $event.stopPropagation()">
             RANGER
