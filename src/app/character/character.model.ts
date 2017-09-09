@@ -181,7 +181,7 @@ export class CharacterComputedData {
     details: StatisticDetail = new StatisticDetail();
     selectedItem: Item;
 
-    itemsBySlots = {};
+    itemsBySlots: {[slotId: number]: Item[]} = {};
     itemsBySlotsAll = {};
     itemsEquiped: Item[] = [];
     currencyItems: Item[] = [];
@@ -621,15 +621,7 @@ export class Character extends WsRegistrable {
                 }
             }
         }
-        for (let i = 0; i < this.computedData.itemsEquiped.length; i++) {
-            let item = this.computedData.itemsEquiped[i];
-            if (item.template.data.charge) {
-                continue;
-            }
-            if (item.template.data.requireLevel && item.template.data.requireLevel > this.level) {
-                continue;
-            }
-            let modifications = {};
+        for (let item of this.computedData.itemsEquiped) {
             for (let u = 0; u < item.template.unskills.length; u++) {
                 let skill = item.template.unskills[u];
                 canceledSkills[skill.id] = item;
@@ -640,15 +632,118 @@ export class Character extends WsRegistrable {
                     from: [item.data.name]
                 });
             }
+        }
+
+        if (this.job) {
+            for (let i = 0; i < this.job.skills.length; i++) {
+                let skill = this.job.skills[i];
+                this.computedData.skills.push({
+                    skillDef: skill,
+                    from: [this.job.name]
+                });
+            }
+        }
+        for (let i = 0; i < this.origin.skills.length; i++) {
+            let skill = this.origin.skills[i];
+            this.computedData.skills.push({
+                skillDef: skill,
+                from: [this.origin.name]
+            });
+        }
+        for (let i = 0; i < this.skills.length; i++) {
+            let skill = this.skills[i];
+            this.computedData.skills.push({
+                skillDef: skill,
+                from: ['Choisi']
+            });
+        }
+        this.computedData.skills.sort(function (a, b) {
+            return a.skillDef.name.localeCompare(b.skillDef.name);
+        });
+
+        let flagsData: {[flagName: string]: FlagData[]} = {};
+        if (this.job) {
+            this.job.getFlagsDatas(flagsData);
+        }
+        this.origin.getFlagsDatas(flagsData);
+
+        let prevSkill: SkillDetail|null = null;
+        for (let i = 0; i < this.computedData.skills.length; i++) {
+            let skill = this.computedData.skills[i];
+            let ignoreSkill = false;
+            if ('NO_SKILL' in flagsData) {
+                let noSkills = flagsData['NO_SKILL'];
+                for (let noSkill of noSkills) {
+                    if (skill.skillDef.hasFlag(noSkill.data)) {
+                        skill.canceled = 'Origine incompatible';
+                        break;
+                    }
+                }
+            }
+            if (skill.skillDef.id in canceledSkills) {
+                skill.canceled = 'Annulé par ' + canceledSkills[skill.skillDef.id].data.name;
+            }
+            if (prevSkill && skill.skillDef.id === prevSkill.skillDef.id) {
+                prevSkill.from.push(skill.from[0]);
+                this.computedData.skills.splice(i, 1);
+                i--;
+            } else {
+                prevSkill = skill;
+            }
+        }
+
+        for (let skill of this.computedData.skills) {
+            if (skill.canceled) {
+                continue;
+            }
+            skill.skillDef.getFlagsDatas(this.computedData.flags);
+            if (skill.skillDef.effects && skill.skillDef.effects.length > 0) {
+                let detailData = {};
+                for (let j = 0; j < skill.skillDef.effects.length; j++) {
+                    let modifier = skill.skillDef.effects[j];
+                    this.computedData.stats[modifier.stat] += modifier.value;
+                    detailData[modifier.stat] = modifier.value;
+                }
+                this.computedData.details.add(skill.skillDef.name, detailData);
+            }
+        }
+
+        let equipedSortedItem = this.computedData.itemsEquiped.slice();
+        // Sort items to avoid marking an item as "not usable" when character have requirement stats due to other items
+        equipedSortedItem.sort((a, b) => {
+            if (a.template.requirements && a.template.requirements.length
+                && b.template.requirements && b.template.requirements.length) {
+                return 0;
+            }
+            if (a.template.requirements && a.template.requirements.length) {
+                return 1;
+            }
+            if (b.template.requirements && b.template.requirements.length) {
+                return -1;
+            }
+            return 0;
+        });
+
+        for (let item of equipedSortedItem) {
+            if (item.template.data.charge) {
+                continue;
+            }
+            let modifications = {};
+
+            if (!item.data.ignoreRestrictions) {
+                let incompatibilities = item.incompatibleWith(this);
+                if (incompatibilities) {
+                    item.computedData.incompatible = true;
+                    continue;
+                }
+            }
             let somethingOver = false;
-            for (let s = 0; s < item.template.slots.length; s++) {
-                let slot = item.template.slots[s];
-                for (let i2 = 0; i2 < this.computedData.itemsBySlots[slot.id].length; i2++) {
-                    let item2 = this.computedData.itemsBySlots[slot.id][i2];
+            for (let slot of item.template.slots) {
+                for (let item2 of this.computedData.itemsBySlots[slot.id]) {
                     if (item2.id === item.id) {
                         continue;
                     }
-                    if (item.data.equiped < item2.equiped) {
+                    if (item.data.equiped < item2.data.equiped) {
                         somethingOver = true;
                         break;
                     }
@@ -790,77 +885,6 @@ export class Character extends WsRegistrable {
             this.computedData.details.add('Malus FO < 9', {'PI': -1});
         }
 
-        if (this.job) {
-            for (let i = 0; i < this.job.skills.length; i++) {
-                let skill = this.job.skills[i];
-                this.computedData.skills.push({
-                    skillDef: skill,
-                    from: [this.job.name]
-                });
-            }
-        }
-        for (let i = 0; i < this.origin.skills.length; i++) {
-            let skill = this.origin.skills[i];
-            this.computedData.skills.push({
-                skillDef: skill,
-                from: [this.origin.name]
-            });
-        }
-        for (let i = 0; i < this.skills.length; i++) {
-            let skill = this.skills[i];
-            this.computedData.skills.push({
-                skillDef: skill,
-                from: ['Choisi']
-            });
-        }
-        this.computedData.skills.sort(function (a, b) {
-            return a.skillDef.name.localeCompare(b.skillDef.name);
-        });
-
-        let flagsData: {[flagName: string]: FlagData[]} = {};
-        if (this.job) {
-            this.job.getFlagsDatas(flagsData);
-        }
-        this.origin.getFlagsDatas(flagsData);
-
-        let prevSkill: SkillDetail|null = null;
-        for (let i = 0; i < this.computedData.skills.length; i++) {
-            let skill = this.computedData.skills[i];
-            let ignoreSkill = false;
-            if ('NO_SKILL' in flagsData) {
-                let noSkills = flagsData['NO_SKILL'];
-                for (let noSkill of noSkills) {
-                    if (skill.skillDef.hasFlag(noSkill.data)) {
-                        skill.canceled = 'Origine incompatible';
-                        break;
-                    }
-                }
-            }
-            if (skill.skillDef.id in canceledSkills) {
-                skill.canceled = 'Annulé par ' + canceledSkills[skill.skillDef.id].data.name;
-            }
-            if (prevSkill && skill.skillDef.id === prevSkill.skillDef.id) {
-                prevSkill.from.push(skill.from[0]);
-                this.computedData.skills.splice(i, 1);
-                i--;
-            } else {
-                prevSkill = skill;
-            }
-        }
-
-        for (let i = 0; i < this.computedData.skills.length; i++) {
-            let skill = this.computedData.skills[i];
-            if (!skill.canceled && skill.skillDef.effects && skill.skillDef.effects.length > 0) {
-                let detailData = {};
-                for (let j = 0; j < skill.skillDef.effects.length; j++) {
-                    let modifier = skill.skillDef.effects[j];
-                    this.computedData.stats[modifier.stat] += modifier.value;
-                    detailData[modifier.stat] = modifier.value;
-                }
-                this.computedData.details.add(skill.skillDef.name, detailData);
-            }
-        }
-
         if (isNullOrUndefined(this.ev)) {
             this.ev = this.computedData.stats['EV'];
         }
@@ -955,13 +979,6 @@ export class Character extends WsRegistrable {
                 continue;
             }
             if (ItemTemplate.hasSlot(item.template, 'WEAPON')) {
-                let incompatible = false;
-                if (!item.data.ignoreRestrictions) {
-                    let incompatibilities = item.incompatibleWith(this);
-                    if (incompatibilities) {
-                        incompatible = true;
-                    }
-                }
                 let damage = item.getDamageString();
                 if (damage && this.computedData.stats['PI']) {
                     if (this.computedData.stats['PI'] > 0) {
@@ -974,7 +991,7 @@ export class Character extends WsRegistrable {
                 weaponDamages.push({
                     name: item.data.name,
                     damage: damage,
-                    incompatible: incompatible
+                    incompatible: item.computedData.incompatible
                 });
             }
         }
@@ -983,9 +1000,9 @@ export class Character extends WsRegistrable {
 
     public update() {
         this.computedData.init();
+        this.updateFlags();
         this.updateInventory();
         this.updateStats();
-        this.updateFlags();
         this.updateWeaponsDamages();
         this.onUpdate.next(this);
     }

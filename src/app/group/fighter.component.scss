@@ -196,6 +196,28 @@
     border-top-style: solid;
 }
 
+
+.equiped-weapons-damages {
+    display: flex;
+    overflow:hidden;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    >md-icon {
+        flex-shrink: 0;
+        margin-right: 4px;
+    }
+    >span {
+        overflow:hidden;
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        >span {
+            flex: 1 1 auto
+        }
+    }
+}
+
 .damage-weapon-name {
     font-size: small;
     overflow:hidden;

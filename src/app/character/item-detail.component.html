@@ -374,13 +374,13 @@
                 <button md-button
                         [color]="'primary'"
                         *ngIf="gmView && !item.data.ignoreRestrictions"
-                        (click)="_itemActionService.onAction('ignoreRestrictions', item); $event.stopPropagation()">
+                        (click)="_itemActionService.onAction('ignoreRestrictions', item, true); $event.stopPropagation()">
                     IGNORER RESTRICTIONS
                 </button>
                 <button md-button
                         [color]="'primary'"
                         *ngIf="gmView && item.data.ignoreRestrictions"
-                        (click)="_itemActionService.onAction('ignoreRestrictions', item); $event.stopPropagation()">
+                        (click)="_itemActionService.onAction('ignoreRestrictions', item, undefined); $event.stopPropagation()">
                     APPLIQUER RESTRICTIONS
                 </button>
             </div>

@@ -21,12 +21,17 @@ export class ItemData {
     lifetime: IDurable | null;
 }
 
+export class ItemComputedData {
+    incompatible?: boolean;
+}
+
 export class Item {
     id: number;
     data: ItemData = new ItemData();
     modifiers: ActiveStatsModifier[];
     container: number;
     template: ItemTemplate;
+    computedData: ItemComputedData = new ItemComputedData();
 
     get price(): number|undefined {
         if (!this.template.data.price) {

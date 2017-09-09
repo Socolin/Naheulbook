@@ -259,11 +259,16 @@
                 <md-card *ngIf="character.computedData.weaponsDamages.length" class="equiped-weapons-stats stats-card">
                     <md-card-subtitle>Dégat des armes (bonus compris)</md-card-subtitle>
                     <md-card-content>
-                        <div *ngFor="let dmg of character.computedData.weaponsDamages">
-                            {{dmg.damage}}
-                            <div class="damage-weapon-name secondary-text">
-                                {{dmg.name}}
-                            </div>
+                        <div *ngFor="let dmg of character.computedData.weaponsDamages" class="equiped-weapons-damages">
+                            <md-icon *ngIf="dmg.incompatible" color="warn">warning</md-icon>
+                            <span>
+                                <span>
+                                    {{dmg.damage}}
+                                </span>
+                                <span class="damage-weapon-name secondary-text">
+                                    {{dmg.name}}
+                                </span>
+                            </span>
                         </div>
                     </md-card-content>
                 </md-card>

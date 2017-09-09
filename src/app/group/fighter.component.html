@@ -42,13 +42,16 @@
                 {{fighter.stats.resm}}
             </div>
             <div class="field-extra-large">
-                <div *ngFor="let dmg of fighter.stats.dmg">
-                    <div  [class.incompatible-item]="dmg.incompatible">
-                        {{dmg.damage}}
-                    </div>
-                    <div class="secondary-text damage-weapon-name"  [class.incompatible-item]="dmg.incompatible">
-                        {{dmg.name}}
-                    </div>
+                <div *ngFor="let dmg of fighter.stats.dmg" class="equiped-weapons-damages">
+                    <md-icon *ngIf="dmg.incompatible" color="warn">warning</md-icon>
+                    <span>
+                        <span [class.incompatible-item]="dmg.incompatible">
+                            {{dmg.damage}}
+                        </span>
+                        <span class="secondary-text damage-weapon-name"  [class.incompatible-item]="dmg.incompatible">
+                            {{dmg.name}}
+                        </span>
+                    </span>
                 </div>
             </div>
             <div class="field">{{fighter.stats.cou}}</div>

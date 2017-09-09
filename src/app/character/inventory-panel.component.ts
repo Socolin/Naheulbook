@@ -275,12 +275,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         });
         this._itemActionService.registerAction('ignoreRestrictions').subscribe((event: {item: Item, data: any}) => {
             let item = event.item;
-            if (item.data.ignoreRestrictions) {
-                item.data.ignoreRestrictions = undefined;
-            }
-            else {
-                item.data.ignoreRestrictions = true;
-            }
+            item.data.ignoreRestrictions = event.data;
             this._itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
