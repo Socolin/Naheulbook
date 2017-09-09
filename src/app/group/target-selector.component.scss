@@ -1,0 +1,119 @@
+.target-selector {
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .selector-icon {
+        position: relative;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .selected-fighter {
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        .targeted-icon {
+            height: 24px;
+            width: 24px;
+            margin-right: 4px;
+
+            > i {
+                font-size: 24px;
+            }
+
+            .targeted-number {
+                position: absolute;
+                width: 20px;
+                text-align: center;
+                color: white;
+                text-shadow: 2px    0       0 #000
+                            , -2px  0       0 #000
+                            , 0     2px     0 #000
+                            , 0     -2px    0 #000
+                            , 1px   1px     0 #000
+                            , -1px  -1px    0 #000
+                            , 1px   -1px    0 #000
+                            , -1px  1px     0 #000;
+            }
+
+        }
+
+        .targeted-name {
+
+        }
+    }
+}
+
+.target-tabs {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    font-size: large;
+}
+
+.target-tab {
+    flex: 1 auto;
+    border-bottom: 1px solid #bababa;
+    background: #e7e7e7;
+}
+.target-tab:first-child {
+    border-right: 1px solid #bababa;
+}
+.target-tab:hover {
+    background-color: #bababa;
+}
+.target-tab-selected {
+    border-bottom: 0;
+    background: white;
+}
+.target-tab-selected:hover {
+    background: white;
+}
+
+
+.target-element {
+    display: inline-block;
+    width: 48px;
+}
+.target-element:hover {
+    background: #bababa;
+}
+
+.target-icon {
+    display: flex;
+    justify-content: space-around;
+    width: 48px;
+    height: 48px;
+    text-align: center;
+}
+
+.target-name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-wrap: none;
+    margin-right: 2px;
+    margin-left: 2px;
+    text-align: center;
+    font-size: 12px;
+    width: 48px;
+}
+
+.target-number {
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 40px;
+    text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    width: 48px;
+}
+
+.target-list {
+    max-width: 320px;
+}

@@ -1,28 +1,27 @@
-<div style='width:100%;height:100%;text-align:left; display: flex; align-items: center'>
-    <i cdk-overlay-origin #targetSelectorOrigin="cdkOverlayOrigin" class="ra ra-targeted ra-lg" (click)="displaySelector($event)"></i>
-    <div *ngIf="fighter.target" style="display:inline-block; position: relative" (click)="displaySelector($event)">
-        <div style="display: inline-block; width: 20px; height: 12px">
+<div class="target-selector">
+    <span cdk-overlay-origin #targetSelectorOrigin="cdkOverlayOrigin"></span>
+    <md-icon *ngIf="!fighter.target"
+             fontSet="game-icon"
+             md-ripple
+             fontIcon="game-icon-targeted"
+             class="selector-icon"
+             (click)="displaySelector($event)">
+    </md-icon>
+    <div *ngIf="fighter.target" class="selected-fighter" (click)="displaySelector($event)">
+        <div class="targeted-icon">
             <i [style.color]="'#' + fighter.target.color"
                [class.ra-player]="!fighter.target.isMonster"
                [class.ra-monster-skull]="fighter.target.isMonster"
                style="position: absolute"
                class="ra ra-lg"></i>
             <span *ngIf="fighter.target.number"
-                  style="position: absolute;
-                  color: white;
-                  text-shadow: 2px    0       0 #000
-                              , -2px  0       0 #000
-                              , 0     2px     0 #000
-                              , 0     -2px    0 #000
-                              , 1px   1px     0 #000
-                              , -1px  -1px    0 #000
-                              , 1px   -1px    0 #000
-                              , -1px  1px     0 #000;
-                  font-size:16px; width:20px; text-align: center">
+                  class="targeted-number">
                 {{fighter.target.number}}
             </span>
         </div>
-        {{fighter.target.name}}
+        <div class="targeted-name secondary-text">
+            {{fighter.target.name}}
+        </div>
     </div>
 </div>
 

@@ -5,7 +5,7 @@ import {ConnectionPositionPair} from '@angular/material';
 @Component({
     selector: 'target-selector',
     templateUrl: './target-selector.component.html',
-    styleUrls: ['./target-selector.component.css']
+    styleUrls: ['./target-selector.component.scss']
 })
 export class TargetSelectorComponent implements OnInit {
     @Input() fighter: Fighter;

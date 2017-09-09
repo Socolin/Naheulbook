@@ -14,20 +14,21 @@
         </character-color-selector>
     </div>
 
-    <div class="field-values">
-        <div class="fighter-row">
-            <div class="field-name">{{fighter.name}}</div>
-            <div class="field text-attack">{{fighter.stats.at}}</div>
-            <div class="field"><span class="text-prd">{{fighter.stats.prd}}</span></div>
-            <div class="field"><span class="text-esq">{{fighter.stats.esq}}</span></div>
-            <div class="field-large" [class.text-danger]="fighter.stats.ev < 4">
-                <value-editor [title]="'Energie vitale'"
-                              [value]="fighter.stats.ev"
-                              [maxValue]="fighter.stats.maxEv"
-                              (onChange)="changeStat('ev', $event)">
-                </value-editor>
-            </div>
-            <div class="field-large">
+    <div class="field-datas">
+        <div class="row-first-part">
+            <div>
+                <div class="field-name">{{fighter.name}}</div>
+                <div class="field text-attack">{{fighter.stats.at}}</div>
+                <div class="field"><span class="text-prd">{{fighter.stats.prd}}</span></div>
+                <div class="field"><span class="text-esq">{{fighter.stats.esq}}</span></div>
+                <div class="field-large" [class.text-danger]="fighter.stats.ev < 4">
+                    <value-editor [title]="'Energie vitale'"
+                                  [value]="fighter.stats.ev"
+                                  [maxValue]="fighter.stats.maxEv"
+                                  (onChange)="changeStat('ev', $event)">
+                    </value-editor>
+                </div>
+                <div class="field-large">
                 <span *ngIf="fighter.stats.maxEa">
                     <value-editor [title]="'Energie astrale'"
                                   [value]="fighter.stats.ea"
@@ -35,33 +36,38 @@
                                   (onChange)="changeStat('ea', $event)">
                     </value-editor>
                 </span>
-                <span *ngIf="!fighter.stats.maxEa">-</span>
-            </div>
-            <div class="field-medium">{{fighter.stats.pr}}({{fighter.stats.pr_magic}})</div>
-            <div class="field">
-                {{fighter.stats.resm}}
-            </div>
-            <div class="field-extra-large">
-                <div *ngFor="let dmg of fighter.stats.dmg" class="equiped-weapons-damages">
-                    <md-icon *ngIf="dmg.incompatible" color="warn">warning</md-icon>
-                    <span>
-                        <span [class.incompatible-item]="dmg.incompatible">
-                            {{dmg.damage}}
-                        </span>
-                        <span class="secondary-text damage-weapon-name"  [class.incompatible-item]="dmg.incompatible">
-                            {{dmg.name}}
-                        </span>
-                    </span>
+                    <span *ngIf="!fighter.stats.maxEa">-</span>
+                </div>
+                <div class="field-medium">{{fighter.stats.pr}}({{fighter.stats.pr_magic}})</div>
+                <div class="field">
+                    {{fighter.stats.resm}}
                 </div>
             </div>
+            <div>
+                <div style="display: flex; justify-content: flex-start">
+                    <target-selector [fighter]=fighter
+                                     [targets]=fighters
+                                     (onTargetChange)='changeTarget($event)'>
+                    </target-selector>
+                </div>
+            </div>
+        </div>
+        <div class="row-damage-part">
+            <div *ngFor="let dmg of fighter.stats.dmg" class="equiped-weapons-damages">
+                <md-icon *ngIf="dmg.incompatible" color="warn">warning</md-icon>
+                <span>
+                    <span [class.incompatible-item]="dmg.incompatible">
+                        {{dmg.damage}}
+                    </span>
+                    <span class="secondary-text damage-weapon-name"  [class.incompatible-item]="dmg.incompatible">
+                        {{dmg.name}}
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="row-end-part">
             <div class="field">{{fighter.stats.cou}}</div>
             <div class="field-fixed-small"><md-checkbox [checked]="fighter.chercheNoise" disabled></md-checkbox></div>
-        </div>
-        <div style="display: flex; justify-content: flex-start">
-            <target-selector [fighter]=fighter
-                             [targets]=fighters
-                             (onTargetChange)='changeTarget($event)'>
-            </target-selector>
         </div>
     </div>
 
