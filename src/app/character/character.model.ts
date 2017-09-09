@@ -730,6 +730,7 @@ export class Character extends WsRegistrable {
             }
             let modifications = {};
 
+            item.computedData.incompatible = undefined;
             if (!item.data.ignoreRestrictions) {
                 let incompatibilities = item.incompatibleWith(this);
                 if (incompatibilities) {
