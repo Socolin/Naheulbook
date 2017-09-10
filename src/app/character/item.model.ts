@@ -108,7 +108,10 @@ export class Item {
         return changes;
     }
 
-    public incompatibleWith(character: Character): {reason: string, source?: {type: string, name: string}}[] | undefined {
+    public incompatibleWith(character?: Character): {reason: string, source?: {type: string, name: string}}[] | undefined {
+        if (!character) {
+            return;
+        }
         let incompatibilities: {reason: string, source?: {type: string, name: string}}[] = [];
 
         if (this.template.data.god) {

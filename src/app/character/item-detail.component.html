@@ -71,7 +71,7 @@
                 <span *ngIf="item.template.data.damageDice
                             && item.template.data.bonusDamage > 0">+</span>
                 <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
-                <ng-template [ngIf]="!readonly">
+                <ng-template [ngIf]="character">
                     <div style="margin-left: 20px">
                         <span *ngIf="character.computedData.stats['PI'] > 0">+{{character.computedData.stats['PI']}} (Bonus personnage)</span>
                         <span *ngIf="character.computedData.stats['PI'] < 0">{{character.computedData.stats['PI']}} (Malus personnage)</span>
@@ -435,7 +435,7 @@
             <span *ngIf="item.data.lifetime.timeDuration === 0" class="invalid-level">expiré</span>
         </div>
 
-        <ng-template [ngIf]="!readonly">
+        <ng-template [ngIf]="!readonly && character">
             <div *ngIf="character.computedData.containers && !item.data.equiped">
                 <ng-template [ngIf]="item.container">
                     Stocké dans: {{item.containerInfo.name}}
@@ -461,7 +461,7 @@
 
         <button md-button
                 [color]="'accent'"
-                *ngIf="gmView && item.data.notIdentified"
+                *ngIf="gmView && item.data.notIdentified && character"
                 (click)="_itemActionService.onAction('identify', item); $event.stopPropagation()">
             IDENTIFIER
         </button>
