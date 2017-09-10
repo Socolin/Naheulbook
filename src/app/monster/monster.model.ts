@@ -275,6 +275,9 @@ export class Monster extends WsRegistrable {
         this.computedData.esq =  this.data.esq ? this.data.esq : 0;
         this.computedData.pr =  this.data.pr;
         this.computedData.pr_magic =  this.data.pr_magic;
+        if (!this.computedData.pr_magic) {
+            this.computedData.pr_magic = 0;
+        }
         this.computedData.dmg =  [{name: 'base', damage: this.data.dmg}];
         this.computedData.cou =  this.data.cou;
         this.computedData.chercheNoise =  this.data.chercheNoise;
