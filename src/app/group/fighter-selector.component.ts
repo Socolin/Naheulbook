@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {Fighter, Group} from './group.model';
-import {MdCheckboxChange, OverlayRef, Portal} from '@angular/material';
+import {MatCheckboxChange, OverlayRef, Portal} from '@angular/material';
 import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
@@ -32,7 +32,7 @@ export class FighterSelectorComponent {
         this.close();
     }
 
-    selectFighter(fighter: Fighter, event: MdCheckboxChange) {
+    selectFighter(fighter: Fighter, event: MatCheckboxChange) {
         if (event.checked) {
             this.selectedFighters.push(fighter);
         }

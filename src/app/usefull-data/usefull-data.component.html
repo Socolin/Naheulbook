@@ -1,9 +1,9 @@
 <ng-template #panelCritic="cdkPortal" cdk-portal>
-    <md-card class="panel-content">
-        <md-card-title>
+    <mat-card class="panel-content">
+        <mat-card-title>
             Attaque et parade critique (Réussite critique)
-        </md-card-title>
-        <md-card-content>
+        </mat-card-title>
+        <mat-card-content>
             <ul>
                 <li><strong>Attaque critique</strong> L'attaquant tire <strong>1</strong> au jet d'ATTAQUE sur un ennemi
                 </li>
@@ -12,11 +12,11 @@
                 </li>
                 <li>L'Attaque critique IGNORE L'ARMURE et ne peut être parée ou esquivée</li>
             </ul>
-            <md-tab-group>
-                <md-tab>
-                    <ng-template mdTabLabel>
+            <mat-tab-group>
+                <mat-tab>
+                    <ng-template matTabLabel>
                         <div class="tab-label-with-icon">
-                            <md-icon fontSet="game-icon" fontIcon="game-icon-broad-dagger"></md-icon>
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-broad-dagger"></mat-icon>
                             <span>Arme tranchante</span>
                         </div>
                     </ng-template>
@@ -33,11 +33,11 @@
                         ** Hémorragie, dégâts sur la durée : la victime perd 1 D6 PV chaque minute jusqu'à ce
                         qu'on la soigne
                     </p>
-                </md-tab>
-                <md-tab>
-                    <ng-template mdTabLabel>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template matTabLabel>
                         <div class="tab-label-with-icon">
-                            <md-icon fontSet="game-icon" fontIcon="game-icon-thor-hammer"></md-icon>
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-thor-hammer"></mat-icon>
                             <span>Arme contondante</span>
                         </div>
                     </ng-template>
@@ -49,11 +49,11 @@
                     <p>
                         * voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures graves</a>
                     </p>
-                </md-tab>
-                <md-tab>
-                    <ng-template mdTabLabel>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template matTabLabel>
                         <div class="tab-label-with-icon">
-                            <md-icon fontSet="game-icon" fontIcon="game-icon-shield-reflect"></md-icon>
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-shield-reflect"></mat-icon>
                             <span>Parade</span>
                         </div>
                     </ng-template>
@@ -61,11 +61,11 @@
                         [labels]="['D20', 'Effet sur l\'ennemi', 'Effet sur l\'attaquant']"
                         [datas]="criticData['parade']">
                     </data-array>
-                </md-tab>
-                <md-tab>
-                    <ng-template mdTabLabel>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template matTabLabel>
                         <div class="tab-label-with-icon">
-                            <md-icon fontSet="game-icon" fontIcon="game-icon-punch"></md-icon>
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-punch"></mat-icon>
                             <span>Main nues</span>
                         </div>
                     </ng-template>
@@ -78,11 +78,11 @@
                         * voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
                         graves</a>
                     </p>
-                </md-tab>
-                <md-tab>
-                    <ng-template mdTabLabel>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template matTabLabel>
                         <div class="tab-label-with-icon">
-                            <md-icon fontSet="game-icon" fontIcon="game-icon-high-shot"></md-icon>
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-high-shot"></mat-icon>
                             <span>Projectiles</span>
                         </div>
                     </ng-template>
@@ -98,32 +98,32 @@
                     <p>
                         ** Hémorragie, dégâts sur la durée : la victime perd 1 D6 PV chaque minute jusqu'à ce qu'on la soigne
                     </p>
-                </md-tab>
-            </md-tab-group>
+                </mat-tab>
+            </mat-tab-group>
 
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 </ng-template>
 
 <ng-template #panelEpicfail="cdkPortal" cdk-portal>
-    <md-card class="panel-content">
-        <md-card-title>
+    <mat-card class="panel-content">
+        <mat-card-title>
             Maladresses (Echec critique)
-        </md-card-title>
-        <md-card-content>
+        </mat-card-title>
+        <mat-card-content>
             <ul>
                 <li>Maladresse attaque-parade : tirer 20 au jet d'ATTAQUE ou PARADE</li>
                 <li>Maladresse du sortilège : tirer 20 à l'épreuve au lancement du sort</li>
                 <li>Maladresse à l'arme de jet : tirer 20 au jet d'ADRESSE</li>
                 <li>Maladresse à mains nues : tirer 20 au jet d'ATTAQUE</li>
             </ul>
-        </md-card-content>
+        </mat-card-content>
 
-        <md-tab-group>
-            <md-tab>
-                <ng-template mdTabLabel>
+        <mat-tab-group>
+            <mat-tab>
+                <ng-template matTabLabel>
                     <div class="tab-label-with-icon">
-                        <md-icon fontSet="game-icon" fontIcon="game-icon-broad-dagger"></md-icon>
+                        <mat-icon fontSet="game-icon" fontIcon="game-icon-broad-dagger"></mat-icon>
                         <span>Attaque ou parade</span>
                     </div>
                 </ng-template>
@@ -139,11 +139,11 @@
                     ** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
                     graves</a>
                 </p>
-            </md-tab>
-            <md-tab>
-                <ng-template mdTabLabel>
+            </mat-tab>
+            <mat-tab>
+                <ng-template matTabLabel>
                     <div class="tab-label-with-icon">
-                        <md-icon fontSet="game-icon" fontIcon="game-icon-thunder-struck"></md-icon>
+                        <mat-icon fontSet="game-icon" fontIcon="game-icon-thunder-struck"></mat-icon>
                         <span>Lancement du sort</span>
                     </div>
                 </ng-template>
@@ -160,11 +160,11 @@
                 <p>
                     <a href='#' (click)="openPanel('entropic')">Voir sorts entropiques</a>
                 </p>
-            </md-tab>
-            <md-tab>
-                <ng-template mdTabLabel>
+            </mat-tab>
+            <mat-tab>
+                <ng-template matTabLabel>
                     <div class="tab-label-with-icon">
-                        <md-icon fontSet="game-icon" fontIcon="game-icon-pierced-heart"></md-icon>
+                        <mat-icon fontSet="game-icon" fontIcon="game-icon-pierced-heart"></mat-icon>
                         <span>Arme de jet</span>
                     </div>
                 </ng-template>
@@ -180,11 +180,11 @@
                     ** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
                     graves</a>
                 </p>
-            </md-tab>
-            <md-tab>
-                <ng-template mdTabLabel>
+            </mat-tab>
+            <mat-tab>
+                <ng-template matTabLabel>
                     <div class="tab-label-with-icon">
-                        <md-icon fontSet="game-icon" fontIcon="game-icon-fist"></md-icon>
+                        <mat-icon fontSet="game-icon" fontIcon="game-icon-fist"></mat-icon>
                         <span>Mains nues</span>
                     </div>
                 </ng-template>
@@ -196,57 +196,57 @@
                     ** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
                     graves</a>
                 </p>
-            </md-tab>
-        </md-tab-group>
-    </md-card>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card>
 </ng-template>
 
 <ng-template #panelItems="cdkPortal" cdk-portal>
-    <md-card class="panel-content no-padding">
+    <mat-card class="panel-content no-padding">
         <item-list (onAction)="onAction.next($event)" [inTab]=true></item-list>
-    </md-card>
+    </mat-card>
 </ng-template>
 
 <ng-template #panelJobs="cdkPortal" cdk-portal>
-    <md-card class="panel-content no-padding">
+    <mat-card class="panel-content no-padding">
         <job-list></job-list>
-    </md-card>
+    </mat-card>
 </ng-template>
 
 <ng-template #panelOrigins="cdkPortal" cdk-portal>
-    <md-card class="panel-content no-padding">
+    <mat-card class="panel-content no-padding">
         <origin-list></origin-list>
-    </md-card>
+    </mat-card>
 </ng-template>
 
 
 <ng-template #panelEffects="cdkPortal" cdk-portal>
-    <md-card class="panel-content">
+    <mat-card class="panel-content">
         <effect-list (onAction)="onAction.next($event)"
                      [isOverlay]="true"
                      [options]="['applyButton']"
                      [inputCategoryId]=effectsCategoryId>
         </effect-list>
-    </md-card>
+    </mat-card>
 </ng-template>
 
 <ng-template #panelSkills="cdkPortal" cdk-portal>
-    <md-card class="panel-content">
-        <md-card-title>
+    <mat-card class="panel-content">
+        <mat-card-title>
             Compétences
-        </md-card-title>
-        <md-card-content>
+        </mat-card-title>
+        <mat-card-content>
             <skill-list></skill-list>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 </ng-template>
 
 <ng-template #panelEntropic="cdkPortal" cdk-portal>
-    <md-card class="panel-content">
-        <md-card-title>
+    <mat-card class="panel-content">
+        <mat-card-title>
             Tableau des sorts et prodiges entropiques
-        </md-card-title>
-        <md-card-content>
+        </mat-card-title>
+        <mat-card-content>
             <ul>
                 <li>Les conséquences des sorts bizarres sont laissés à la discrétion du MJ</li>
                 <li>1 personnage = celui qui fait le plus haut score au D6</li>
@@ -650,12 +650,12 @@
                 </tr>
                 </tbody>
             </table>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 </ng-template>
 
 <ng-template #panelSleep="cdkPortal" cdk-portal>
-    <md-card class="panel-content">
+    <mat-card class="panel-content">
         <div>
             <h3>Recuperation</h3>
             <ul>
@@ -752,7 +752,7 @@
                 </li>
             </ul>
         </div>
-    </md-card>
+    </mat-card>
 </ng-template>
 
 <div class="placeholder">
@@ -760,34 +760,34 @@
 </div>
 <div class="tabs-category">
     <div [class.tab-icon-critic-selected]="currentPanel==='critic'"
-         md-ripple
+         matRipple
          class="tab-icon game-icon tab-icon-critic game-icon-spiky-eclipse"
          (click)="openPanel('critic')"></div>
     <div [class.tab-icon-epicfail-selected]="currentPanel==='epicfail'"
-         md-ripple
+         matRipple
          class="tab-icon game-icon tab-icon-epicfail game-icon-dripping-blade"
          (click)="openPanel('epicfail')"></div>
     <div [class.tab-icon-effects-selected]="currentPanel==='effects'"
-         md-ripple
+         matRipple
          class="tab-icon game-icon tab-icon-effects game-icon-pierced-body"
          (click)="openPanel('effects')"></div>
     <div [class.tab-icon-entropic-selected]="currentPanel==='entropic'"
-         md-ripple
+         matRipple
          class="tab-icon game-icon tab-icon-entropic game-icon-bolt-spell-cast"
          (click)="openPanel('entropic')"></div>
     <div [class.tab-icon-skills-selected]="currentPanel==='skills'" class="tab-icon game-icon tab-icon-skills game-icon-gears"
-         md-ripple
+         matRipple
          (click)="openPanel('skills')"></div>
     <div [class.tab-icon-sleep-selected]="currentPanel==='sleep'" class="tab-icon game-icon tab-icon-sleep game-icon-sliced-bread"
-         md-ripple
+         matRipple
          (click)="openPanel('sleep')"></div>
     <div [class.tab-icon-items-selected]="currentPanel==='items'" class="tab-icon game-icon tab-icon-items game-icon-beer-stein"
-         md-ripple
+         matRipple
          (click)="openPanel('items')"></div>
     <div [class.tab-icon-jobs-selected]="currentPanel==='jobs'" class="tab-icon game-icon tab-icon-jobs game-icon-gear-hammer"
-         md-ripple
+         matRipple
          (click)="openPanel('jobs')"></div>
     <div [class.tab-icon-origins-selected]="currentPanel==='origins'" class="tab-icon game-icon tab-icon-origins game-icon-woman-elf-face"
-         md-ripple
+         matRipple
          (click)="openPanel('origins')"></div>
 </div>

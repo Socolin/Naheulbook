@@ -1,18 +1,18 @@
 <div class="stat-requirements">
     <div *ngIf="requirements && requirements.length > 0" class="delete_all_button">
-        <button md-icon-button
+        <button mat-icon-button
                 (click)="clear()"
                 color="warn">
-            <md-icon>delete_forever</md-icon>
+            <mat-icon>delete_forever</mat-icon>
         </button>
     </div>
 
     <div class="requirements-list">
         <div *ngFor="let requirement of requirements; let i=index" class="requirement-line">
-            <button md-icon-button
+            <button mat-icon-button
                     (click)="removeRequirement(i)"
                     color="accent">
-                <md-icon>delete_forever</md-icon>
+                <mat-icon>delete_forever</mat-icon>
             </button>
             <div *ngIf="requirement.min">
                 Min {{requirement.stat}}: {{requirement.min}}
@@ -26,26 +26,26 @@
 
 <div>
     <div>
-        <md-form-field>
-            <input mdInput
+        <mat-form-field>
+            <input matInput
                    [(ngModel)]="minValue"
                    type="number"
                    min="0"
                    placeholder="min"/>
-        </md-form-field>
-        <md-form-field>
-            <input mdInput
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
                    [(ngModel)]="maxValue"
                    type="number"
                    min="0"
                    placeholder="max"/>
-        </md-form-field>
+        </mat-form-field>
     </div>
-    <md-button-toggle-group [(ngModel)]="selectedStat">
-        <md-button-toggle *ngFor="let stat of stats"
+    <mat-button-toggle-group [(ngModel)]="selectedStat">
+        <mat-button-toggle *ngFor="let stat of stats"
                           (click)="setStat(stat)"
                           class="btn btn-primary">
             {{stat.name}}
-        </md-button-toggle>
-    </md-button-toggle-group>
+        </mat-button-toggle>
+    </mat-button-toggle-group>
 </div>

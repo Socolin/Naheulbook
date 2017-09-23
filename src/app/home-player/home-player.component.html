@@ -1,33 +1,33 @@
-<md-sidenav-container style="min-height: 100vh">
-    <md-sidenav #start>
+<mat-sidenav-container style="min-height: 100vh">
+    <mat-sidenav #start>
         <h4>Vos personnages</h4>
-        <md-nav-list>
+        <mat-nav-list>
             <ng-template ngFor [ngForOf]="characters" let-character>
-                <a md-list-item [routerLink]="['character/detail/', character.id]">{{character.name}}</a>
+                <a mat-list-item [routerLink]="['character/detail/', character.id]">{{character.name}}</a>
             </ng-template>
-            <a md-list-item [routerLink]="['character/list']">Tous vos personnages</a>
-            <a md-list-item [routerLink]="['character/create']"><md-icon>add</md-icon>Créer un personnage</a>
-            <md-divider></md-divider>
-        </md-nav-list>
+            <a mat-list-item [routerLink]="['character/list']">Tous vos personnages</a>
+            <a mat-list-item [routerLink]="['character/create']"><mat-icon>add</mat-icon>Créer un personnage</a>
+            <mat-divider></mat-divider>
+        </mat-nav-list>
         <common-nav></common-nav>
-    </md-sidenav>
+    </mat-sidenav>
 
     <div>
-        <md-toolbar color="primary">
-            <button md-icon-button (click)="start.open()">
-                <md-icon class="md-24" >menu</md-icon>
+        <mat-toolbar color="primary">
+            <button mat-icon-button (click)="start.open()">
+                <mat-icon class="md-24" >menu</mat-icon>
             </button>
             <div class="app-toolbar">
                 <h1>
                     Naheulbook
                 </h1>
-                <a class="home-link" [routerLink]="['/']"><md-icon class="md-24">home</md-icon></a>
+                <a class="home-link" [routerLink]="['/']"><mat-icon class="md-24">home</mat-icon></a>
             </div>
-        </md-toolbar>
+        </mat-toolbar>
 
         <div class="app-content">
             <router-outlet></router-outlet>
         </div>
     </div>
-</md-sidenav-container>
+</mat-sidenav-container>
 

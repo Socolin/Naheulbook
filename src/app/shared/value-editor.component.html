@@ -1,4 +1,4 @@
-<span md-ripple cdk-overlay-origin #trigger="cdkOverlayOrigin" (click)="showEditor($event)" class="ve-value">
+<span matRipple cdk-overlay-origin #trigger="cdkOverlayOrigin" (click)="showEditor($event)" class="ve-value">
     {{value|number}}<span *ngIf="maxValue && !hideMaxValue">/{{maxValue}}</span
 ></span
 ><ng-template cdk-connected-overlay [origin]="trigger" hasBackdrop [open]="displayEditor"
@@ -21,46 +21,46 @@
             </div>
             <div class="ve-actions">
                 <div class="minus-buttons" [class.disabled]="newValue === minValue">
-                    <button md-ripple [disabled]="newValue === minValue" [mdRippleColor]="'primary'" (click)="changeValue('-500')">
+                    <button matRipple [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-500')">
                         -500
                     </button>
-                    <button md-ripple [disabled]="newValue === minValue" [mdRippleColor]="'primary'" (click)="changeValue('-50')">
+                    <button matRipple [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-50')">
                         -50
                     </button>
-                    <button md-ripple [disabled]="newValue === minValue" [mdRippleColor]="'primary'" (click)="changeValue('-5')">
+                    <button matRipple [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-5')">
                         -5
                     </button>
-                    <button md-ripple [disabled]="newValue === minValue" [mdRippleColor]="'primary'" (click)="changeValue('-1')">
+                    <button matRipple [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-1')">
                         -1
                     </button>
                 </div>
                 <div class="plus-buttons">
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('+500')">
+                    <button matRipple [matRippleColor]="'primary'" (click)="changeValue('+500')">
                         +500
                     </button>
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('+50')">
+                    <button matRipple [matRippleColor]="'primary'" (click)="changeValue('+50')">
                         +50
                     </button>
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('+5')">
+                    <button matRipple [matRippleColor]="'primary'" (click)="changeValue('+5')">
                         +5
                     </button>
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('+1')">
+                    <button matRipple [matRippleColor]="'primary'" (click)="changeValue('+1')">
                         +1
                     </button>
                 </div>
                 <div class="max-zero-buttons">
-                    <button md-ripple [mdRippleColor]="'primary'" class="btn-reset" (click)="changeValue('reset')">
+                    <button matRipple [matRippleColor]="'primary'" class="btn-reset" (click)="changeValue('reset')">
                         RESET
                     </button>
-                    <button md-ripple [mdRippleColor]="'primary'" class="btn-max" (click)="changeValue('max')" [disabled]="!maxValue">
+                    <button matRipple [matRippleColor]="'primary'" class="btn-max" (click)="changeValue('max')" [disabled]="!maxValue">
                         MAX
                     </button>
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="changeValue('zero')">
+                    <button matRipple [matRippleColor]="'primary'" (click)="changeValue('zero')">
                         0
                     </button>
                 </div>
                 <div class="valid-button">
-                    <button md-ripple [mdRippleColor]="'primary'" (click)="commitValue()"><md-icon>check</md-icon></button>
+                    <button matRipple [matRippleColor]="'primary'" (click)="commitValue()"><mat-icon>check</mat-icon></button>
                 </div>
             </div>
         </div>

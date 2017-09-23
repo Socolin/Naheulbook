@@ -4,7 +4,7 @@
 
 .new-item-data {
     margin: 5px;
-    md-card-content {
+    mat-card-content {
         display: flex;
         flex-direction: column;
         .name-icon {
@@ -14,14 +14,14 @@
             icon-selector{
                 padding-right: 8px;
             }
-            md-form-field {
+            mat-form-field {
                 flex: 1 auto;
             }
         }
     }
 }
 .new-item-template {
-    md-card {
+    mat-card {
         margin: 5px;
     }
 }

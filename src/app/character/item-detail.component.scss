@@ -1,8 +1,8 @@
-md-card {
+mat-card {
     margin: 5px;
     max-height: calc(100vh - 80px);
     overflow: auto;
-    md-card-header {
+    mat-card-header {
         display: flex;
 
         icon-selector {
@@ -27,7 +27,7 @@ md-card {
 }
 
 .give-item-dialog {
-    md-radio-button {
+    mat-radio-button {
         display: block;
     }
 }
@@ -35,7 +35,7 @@ md-card {
     margin: 20px;
     max-width: 700px;
 
-    md-card-content {
+    mat-card-content {
         max-height: 65vh;
         overflow-y: auto;
     }
@@ -43,17 +43,17 @@ md-card {
 
 .store-item-dialog {
     max-width: calc(100vw - 40px);
-    md-card-title {
+    mat-card-title {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
-    md-card-subtitle {
+    mat-card-subtitle {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
-    md-card-content {
+    mat-card-content {
         max-height: calc(100vh - 220px);
         overflow-y: auto;
         button {
@@ -65,7 +65,7 @@ md-card {
 }
 
 .item-modifiers {
-    md-card {
+    mat-card {
         margin-bottom: 5px;
         padding: 0;
         .item-header {

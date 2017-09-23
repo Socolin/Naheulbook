@@ -1,37 +1,37 @@
-<md-accordion [multi]="false">
-    <md-expansion-panel>
-        <md-expansion-panel-header>
+<mat-accordion [multi]="false">
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
             <div class="job-title">
                 <span class="icon-available">
-                    <md-icon>check</md-icon>
+                    <mat-icon>check</mat-icon>
                 </span>
                 <span>
                     Aucun
                 </span>
             </div>
-        </md-expansion-panel-header>
-        <md-action-row align="end">
-            <button color="primary" md-button (click)="selectJob(null)">CHOISIR</button>
-        </md-action-row>
-    </md-expansion-panel>
+        </mat-expansion-panel-header>
+        <mat-action-row align="end">
+            <button color="primary" mat-button (click)="selectJob(null)">CHOISIR</button>
+        </mat-action-row>
+    </mat-expansion-panel>
     <ng-template ngFor [ngForOf]="jobs" let-job>
-        <md-expansion-panel>
-            <md-expansion-panel-header>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
                 <div class="job-title">
                     <span *ngIf="jobsStates[job.id].state === 'ok'" class="icon-available">
-                        <md-icon>check</md-icon>
+                        <mat-icon>check</mat-icon>
                     </span>
                     <span *ngIf="jobsStates[job.id].state === 'ko'" class="icon-available">
-                        <md-icon>close</md-icon>
+                        <mat-icon>close</mat-icon>
                     </span>
                     <span *ngIf="jobsStates[job.id].state === 'swap'" class="icon-available">
-                        <md-icon>sync</md-icon>
+                        <mat-icon>sync</mat-icon>
                     </span>
                     <span>
                         {{job.name}}
                     </span>
                 </div>
-            </md-expansion-panel-header>
+            </mat-expansion-panel-header>
 
             <p class="prereq">
                 Prérequis:
@@ -64,14 +64,14 @@
                 </ul>
             </div>
 
-            <md-action-row *ngIf="jobsStates[job.id].state === 'ok'" align="end">
-                <button color="primary" md-button (click)="selectJob(job)">CHOISIR</button>
-            </md-action-row>
-            <md-action-row *ngIf="jobsStates[job.id].state === 'swap'" align="end" class="swap-buttons">
+            <mat-action-row *ngIf="jobsStates[job.id].state === 'ok'" align="end">
+                <button color="primary" mat-button (click)="selectJob(job)">CHOISIR</button>
+            </mat-action-row>
+            <mat-action-row *ngIf="jobsStates[job.id].state === 'swap'" align="end" class="swap-buttons">
                 <ng-template ngFor [ngForOf]="jobsStates[job.id].changes" let-change>
-                    <button class="swap-button" color="primary" md-button (click)="doSwapStats(change)">INVERSER {{change[0]}} avec {{change[1]}}</button>
+                    <button class="swap-button" color="primary" mat-button (click)="doSwapStats(change)">INVERSER {{change[0]}} avec {{change[1]}}</button>
                 </ng-template>
-            </md-action-row>
-        </md-expansion-panel>
+            </mat-action-row>
+        </mat-expansion-panel>
     </ng-template>
-</md-accordion>
+</mat-accordion>

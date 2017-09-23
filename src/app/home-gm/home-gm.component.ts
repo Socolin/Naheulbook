@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
-import {MdSidenav} from '@angular/material';
+import {MatSidenav} from '@angular/material';
 
 import {NotificationsService} from '../notifications';
 
@@ -13,8 +13,8 @@ import {GroupService} from '../group';
 export class HomeGmComponent implements OnInit {
     public groups: Object[];
 
-    @ViewChild('start', {read: MdSidenav})
-    public start: MdSidenav;
+    @ViewChild('start', {read: MatSidenav})
+    public start: MatSidenav;
 
     constructor(private _groupService: GroupService
         , private _notifications: NotificationsService

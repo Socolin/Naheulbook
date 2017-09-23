@@ -1,10 +1,10 @@
 .selector-panel {
     max-width: 85vw;
-    md-card-content {
+    mat-card-content {
         max-width: 700px;
         max-height: 75vh;
         overflow-y: auto;
-        md-card {
+        mat-card {
             margin-bottom: 5px;
         }
     }

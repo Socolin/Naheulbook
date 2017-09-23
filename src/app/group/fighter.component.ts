@@ -1,7 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges, OnInit} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
-import {MdSlideToggleChange} from '@angular/material';
+import {MatSlideToggleChange} from '@angular/material';
 
 import {NotificationsService} from '../notifications';
 import {Character, CharacterService, Item, ItemService, ItemActionService} from '../character';
@@ -142,7 +142,7 @@ export class FighterComponent implements OnInit, OnChanges {
         }
     }
 
-    equipItem(item: Item, event: MdSlideToggleChange) {
+    equipItem(item: Item, event: MatSlideToggleChange) {
         this._monsterService.equipItem(this.fighter.id, item.id, event.checked).subscribe(res => {
             this.fighter.monster.equipItem(res);
         });

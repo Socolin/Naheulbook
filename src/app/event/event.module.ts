@@ -7,15 +7,15 @@ import {DateModule} from '../date/date.module';
 
 import {EventService} from './event.service';
 
+import {NhbkMaterialModule} from '../nhbk-material.module';
 import {EventEditorComponent} from './event-editor.component';
 import {EventsComponent} from './events.component';
-import {MaterialModule} from '@angular/material';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule,
+        NhbkMaterialModule,
         SharedModule,
         DateModule
     ],

@@ -1,55 +1,55 @@
-<md-card>
-    <md-card-content class="effect-category-selector">
+<mat-card>
+    <mat-card-content class="effect-category-selector">
         <div class="selector">
-            <md-select
+            <mat-select
                 [(ngModel)]="selectedType"
                 (change)="selectType($event.value)">
-                <md-option *ngFor="let type of types" [value]="type">
+                <mat-option *ngFor="let type of types" [value]="type">
                     {{type.name}}
-                </md-option>
-            </md-select>
+                </mat-option>
+            </mat-select>
         </div>
         <div class="selector">
-            <md-select *ngIf="selectedType"
+            <mat-select *ngIf="selectedType"
                        [(ngModel)]="selectedCategory"
                        (change)="selectCategory($event.value)">
-                <md-option *ngFor="let category of selectedType.categories" [value]="category">
+                <mat-option *ngFor="let category of selectedType.categories" [value]="category">
                     {{category.name}}
-                </md-option>
-            </md-select>
+                </mat-option>
+            </mat-select>
         </div>
-    </md-card-content>
-</md-card>
+    </mat-card-content>
+</mat-card>
 
-<md-card *ngIf="selectedCategory && (editable || selectedCategory.note)">
-    <md-card-subtitle>Note</md-card-subtitle>
-    <md-card-content>
+<mat-card *ngIf="selectedCategory && (editable || selectedCategory.note)">
+    <mat-card-subtitle>Note</mat-card-subtitle>
+    <mat-card-content>
         {{selectedCategory.note}}
-    </md-card-content>
-</md-card>
+    </mat-card-content>
+</mat-card>
 
 <ng-template [ngIf]="effects && selectedCategory">
 
     <ng-template ngFor [ngForOf]="effects[selectedCategory.id]" let-effect>
-        <md-card>
-            <md-card-title-group>
-                <md-card-title class="effect-title">
-                    <button md-raised-button
+        <mat-card>
+            <mat-card-title-group>
+                <mat-card-title class="effect-title">
+                    <button mat-raised-button
                             color="primary"
                             *ngIf="hasOption('applyButton')"
                             (click)="emitAction('applyEffect', effect)">
                         APPLIQUER
                     </button>
                     {{effect.name}}
-                    <button md-button
+                    <button mat-button
                             *ngIf="editable"
                             (click)=editEffect(effect)>
                         EDIT
                     </button>
-                </md-card-title>
-                <md-card-subtitle>
+                </mat-card-title>
+                <mat-card-subtitle>
                     {{effect.description}}
-                </md-card-subtitle>
+                </mat-card-subtitle>
                 <div *ngIf="selectedCategory.diceCount"
                      style="font-size: 24px; position: relative; width: 40px; height: 40px">
                 <span style="font-size: 40px; color: #aaa; position: absolute"
@@ -57,36 +57,36 @@
                     <span style="vertical-align: center; margin-top: 10px"
                           class="number-shadow-24">{{effect.dice}}</span>
                 </div>
-            </md-card-title-group>
-            <md-card-content>
+            </mat-card-title-group>
+            <mat-card-content>
                 <span *ngFor="let modifier of effect.modifiers">{{modifier | modifier}} </span>
                 <span *ngIf="effect.duration" fxLayout="row" fxLayoutAlign="start center">
-            <md-icon>timelapse</md-icon>
+            <mat-icon>timelapse</mat-icon>
             {{effect.duration}}
         </span>
                 <span *ngIf="effect.timeDuration" fxLayout="row" fxLayoutAlign="start center">
-            <md-icon>timelapse</md-icon>
+            <mat-icon>timelapse</mat-icon>
             {{effect.timeDuration | nhbkDuration}}
         </span>
                 <span *ngIf="effect.combatCount" fxLayout="row" fxLayoutAlign="start center">
-            <md-icon>timelapse</md-icon>
+            <mat-icon>timelapse</mat-icon>
             {{effect.combatCount}} combats
         </span>
                 <span *ngIf="effect.lapCount" fxLayout="row" fxLayoutAlign="start center">
-            <md-icon>timelapse</md-icon>
+            <mat-icon>timelapse</mat-icon>
             {{effect.lapCount}} tours
         </span>
                 <span *ngIf="!effect.lapCount && !effect.combatCount && !effect.timeDuration && !effect.duration"
                       fxLayout="row" fxLayoutAlign="start center">
-            <md-icon>timelapse</md-icon>
+            <mat-icon>timelapse</mat-icon>
             permanent
         </span>
-            </md-card-content>
-        </md-card>
+            </mat-card-content>
+        </mat-card>
     </ng-template>
 
 </ng-template>
 
-<md-card *ngIf=editable (click)="createEffect()" class="create-effect">
-    <md-icon>add</md-icon>Créer un effet
-</md-card>
+<mat-card *ngIf=editable (click)="createEffect()" class="create-effect">
+    <mat-icon>add</mat-icon>Créer un effet
+</mat-card>

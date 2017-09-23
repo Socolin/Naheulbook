@@ -1,15 +1,26 @@
 <div class="characters">
-    <md-card class="loading-characters" *ngIf="loading">
-        <md-spinner></md-spinner>
-    </md-card>
-	<md-card *ngIf="!loading && (!characters || characters.length === 0)">
+    <mat-card class="loading-characters" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </mat-card>
+	<mat-card *ngIf="!loading && (!characters || characters.length === 0)">
         Vous ne possédez aucun personnage.
-    </md-card>
-    <md-card  md-ripple *ngFor="let character of characters" (click)="selectCharacter(character)" class="clickable">
-        <md-card-title>{{character.name}} - lvl {{character.level}}</md-card-title>
-        <md-card-subtitle>{{character.origin}} {{character.job}}</md-card-subtitle>
-    </md-card>
-    <md-card md-ripple (click)="createCharacter()" class="create-character clickable">
-        <md-icon>add</md-icon>Créer un personnage
-    </md-card>
+    </mat-card>
+    <mat-card  matRipple *ngFor="let character of characters" (click)="selectCharacter(character)" class="clickable">
+        <mat-card-title>{{character.name}} - lvl {{character.level}}</mat-card-title>
+        <mat-card-subtitle>{{character.origin}} {{character.job}}</mat-card-subtitle>
+    </mat-card>
+    <mat-card matRipple (click)="createCharacter()" class="create-character clickable">
+        <mat-icon>add</mat-icon>
+        <div style="display: flex; flex-direction: column">
+            <div>Créer un personnage</div>
+            <div class="mat-caption secondary-text">Création guidé d'un personnage niveau 1</div>
+        </div>
+    </mat-card>
+    <mat-card matRipple (click)="createCustomCharacter()" class="create-character clickable">
+        <mat-icon>create</mat-icon>
+        <div style="display: flex; flex-direction: column">
+            <div>Créer un personnage personnalisé</div>
+            <div class="mat-caption secondary-text">Création libre d'un personnage (pour importer des personnages, basé sur des vielle règles ou ignorant certaines règles)</div>
+        </div>
+    </mat-card>
 </div>

@@ -1,4 +1,4 @@
-md-card {
+mat-card {
     .delete-button {
         float: right;
     }
@@ -10,7 +10,7 @@ md-card {
     flex-wrap: wrap;
     align-content: flex-start;
     justify-content: space-between;
-    md-checkbox {
+    mat-checkbox {
         flex: 0 0 120px;
         min-width: 120px;
     }

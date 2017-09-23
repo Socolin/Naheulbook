@@ -1,9 +1,9 @@
 import {NgModule}      from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
+import {NhbkMaterialModule} from '../nhbk-material.module';
 import {SharedModule} from '../shared/shared.module';
 import {DateModule} from '../date/date.module';
 import {SkillModule} from '../skill/skill.module';
@@ -21,6 +21,7 @@ import {
     CharacterListComponent,
     CharacterLootPanelComponent,
     CreateCharacterComponent,
+    CreateCustomCharacterComponent,
     EffectPanelComponent,
     InventoryPanelComponent,
     ItemDetailComponent,
@@ -37,7 +38,7 @@ import {ItemService} from './item.service';
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule,
+        NhbkMaterialModule,
         FlexLayoutModule,
         SharedModule,
         DateModule,
@@ -56,6 +57,7 @@ import {ItemService} from './item.service';
         CharacterListComponent,
         CharacterLootPanelComponent,
         CreateCharacterComponent,
+        CreateCustomCharacterComponent,
         EffectPanelComponent,
         InventoryPanelComponent,
         ItemDetailComponent,
@@ -68,6 +70,7 @@ import {ItemService} from './item.service';
         CharacterComponent,
         CharacterListComponent,
         CreateCharacterComponent,
+        CreateCustomCharacterComponent,
         EffectModule,
         ItemDetailComponent,
         SkillModule,

@@ -5,24 +5,24 @@
         <div class="event-list">
             <ng-template ngFor let-event [ngForOf]="group.events">
                 <ng-template [ngIf]="event.timestamp <= group.data.timestamp">
-                    <md-card class="past-event">
-                        <md-card-title-group>
-                            <md-card-title>{{event.name}}</md-card-title>
-                            <md-card-subtitle>
+                    <mat-card class="past-event">
+                        <mat-card-title-group>
+                            <mat-card-title>{{event.name}}</mat-card-title>
+                            <mat-card-subtitle>
                                 Il y a : {{group.data.timestamp - event.timestamp | nhbkDuration}}
-                            </md-card-subtitle>
-                        </md-card-title-group>
-                        <md-card-content>
+                            </mat-card-subtitle>
+                        </mat-card-title-group>
+                        <mat-card-content>
                             {{event.description}}
-                        </md-card-content>
-                        <md-card-actions align="end">
-                            <button md-button
+                        </mat-card-content>
+                        <mat-card-actions align="end">
+                            <button mat-button
                                     color="primary"
                                     (click)="deleteEvent(event)">
                                 SUPPRIMER
                             </button>
-                        </md-card-actions>
-                    </md-card>
+                        </mat-card-actions>
+                    </mat-card>
                 </ng-template>
             </ng-template>
         </div>
@@ -32,24 +32,24 @@
         <div class="event-list">
             <ng-template ngFor let-event [ngForOf]="group.events">
                 <ng-template [ngIf]="event.timestamp > group.data.timestamp">
-                    <md-card>
-                        <md-card-title-group>
-                            <md-card-title>{{event.name}}</md-card-title>
-                            <md-card-subtitle>
+                    <mat-card>
+                        <mat-card-title-group>
+                            <mat-card-title>{{event.name}}</mat-card-title>
+                            <mat-card-subtitle>
                                 Dans: {{event.timestamp - group.data.timestamp | nhbkDuration}}
-                            </md-card-subtitle>
-                        </md-card-title-group>
-                        <md-card-content>
+                            </mat-card-subtitle>
+                        </mat-card-title-group>
+                        <mat-card-content>
                             {{event.description}}
-                        </md-card-content>
-                        <md-card-actions align="end">
-                            <button md-button
+                        </mat-card-content>
+                        <mat-card-actions align="end">
+                            <button mat-button
                                     color="primary"
                                     (click)="deleteEvent(event)">
                                 SUPPRIMER
                             </button>
-                        </md-card-actions>
-                    </md-card>
+                        </mat-card-actions>
+                    </mat-card>
 
                 </ng-template>
             </ng-template>

@@ -1,17 +1,17 @@
-<md-card>
-    <md-card-title>
+<mat-card>
+    <mat-card-title>
         Ajouter une action
-    </md-card-title>
-    <md-card-subtitle>
+    </mat-card-title>
+    <mat-card-subtitle>
         Lors de l'utilisation d'une charge
-    </md-card-subtitle>
-    <md-card-content>
+    </mat-card-subtitle>
+    <mat-card-content>
 
-        <md-select style="min-width: 300px" [(ngModel)]="action.type" (change)="updateActionType()">
-            <md-option *ngFor="let action of validActions" [value]="action.type">{{action.displayName}}</md-option>
-        </md-select>
+        <mat-select style="min-width: 300px" [(ngModel)]="action.type" (change)="updateActionType()">
+            <mat-option *ngFor="let action of validActions" [value]="action.type">{{action.displayName}}</mat-option>
+        </mat-select>
 
-        <md-checkbox [(ngModel)]="action.hidden">Cacher</md-checkbox>
+        <mat-checkbox [(ngModel)]="action.hidden">Cacher</mat-checkbox>
         <div [ngSwitch]="action.type">
             <ng-template [ngSwitchCase]="'addItem'">
                 <autocomplete-input [clearOnSelect]="false"
@@ -20,42 +20,42 @@
                                     [(callback)]="autocompleteItemCallback">
                 </autocomplete-input>
                 <div *ngIf="selectedItemTemplate?.data?.quantifiable">
-                    <md-form-field align="end">
-                        <input mdInput
+                    <mat-form-field align="end">
+                        <input matInput
                                type="number"
                                placeholder="Quantité"
                                [(ngModel)]="action.data.quantity"/>
-                    </md-form-field>
+                    </mat-form-field>
                 </div>
             </ng-template>
             <ng-template [ngSwitchCase]="'removeItem'">
             </ng-template>
             <ng-template [ngSwitchCase]="'addEv'">
-                <md-form-field align="end">
-                    <input mdInput
+                <mat-form-field align="end">
+                    <input matInput
                            type="number"
                            placeholder="Energie vitale"
                            [(ngModel)]="action.data.ev"/>
-                    <span mdPrefix>Redonner&nbsp;</span>
-                    <span mdSuffix>E.V.</span>
-                </md-form-field>
+                    <span matPrefix>Redonner&nbsp;</span>
+                    <span matSuffix>E.V.</span>
+                </mat-form-field>
             </ng-template>
             <ng-template [ngSwitchCase]="'addEa'">
-                <md-form-field align="end">
-                    <input mdInput
+                <mat-form-field align="end">
+                    <input matInput
                            type="number"
                            placeholder="Energie astrale"
                            [(ngModel)]="action.data.ea"/>
-                    <span mdPrefix>Redonner&nbsp;</span>
-                    <span mdSuffix>E.A.</span>
-                </md-form-field>
+                    <span matPrefix>Redonner&nbsp;</span>
+                    <span matSuffix>E.A.</span>
+                </mat-form-field>
             </ng-template>
             <ng-template [ngSwitchCase]="'custom'">
-                <md-form-field align="end" style="width: 100%">
-                    <input mdInput
+                <mat-form-field align="end" style="width: 100%">
+                    <input matInput
                            placeholder="Action"
                            [(ngModel)]="action.data.text"/>
-                </md-form-field>
+                </mat-form-field>
             </ng-template>
             <ng-template [ngSwitchCase]="'addCustomModifier'">
                 <stats-modifier-editor [modifier]="activeModifier" [reusableToggle]="false">
@@ -69,17 +69,17 @@
                 No data for {{action.type}}
             </ng-template>
         </div>
-    </md-card-content>
-    <md-card-actions align="end">
-        <button md-button
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-button
                 (click)="close()"
                 color="primary">
             FERMER
         </button>
-        <button md-button
+        <button mat-button
                 (click)="validate()"
                 color="primary">
             AJOUTER
         </button>
-    </md-card-actions>
-</md-card>
+    </mat-card-actions>
+</mat-card>

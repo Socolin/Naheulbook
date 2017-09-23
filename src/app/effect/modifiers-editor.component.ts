@@ -3,7 +3,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ItemStatModifier, StatModificationOperand, MiscService} from '../shared';
 import {Origin, OriginService} from '../origin';
 import {Job, JobService} from '../job';
-import {MdCheckboxChange} from '@angular/material';
+import {MatCheckboxChange} from '@angular/material';
 
 @Component({
     selector: 'modifiers-editor',
@@ -51,7 +51,7 @@ export class ModifiersEditorComponent implements OnInit {
         ];
     }
 
-    toggleSpecial(i: number, v: string, event: MdCheckboxChange) {
+    toggleSpecial(i: number, v: string, event: MatCheckboxChange) {
         if (this.modifiers[i].special) {
             let idx = this.modifiers[i].special.indexOf(v);
             if (idx === -1 && event.checked) {

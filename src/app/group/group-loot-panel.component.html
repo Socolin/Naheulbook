@@ -1,76 +1,76 @@
 <div class="buttons-header">
-    <button md-raised-button (click)="openAddLootDialog()" color="primary">NOUVEAU LOOT</button>
+    <button mat-raised-button (click)="openAddLootDialog()" color="primary">NOUVEAU LOOT</button>
 </div>
 <ng-template #addLootDialog="cdkPortal" cdk-portal>
-    <md-card>
-        <md-card-title>Ajouter un loot</md-card-title>
-        <md-card-content>
-            <md-form-field>
-                <input mdInput type="text" placeholder="Nom du loot" [(ngModel)]="newLootName" />
-            </md-form-field>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+    <mat-card>
+        <mat-card-title>Ajouter un loot</mat-card-title>
+        <mat-card-content>
+            <mat-form-field>
+                <input matInput type="text" placeholder="Nom du loot" [(ngModel)]="newLootName" />
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     color="primary"
                     (click)="closeAddLootDialog()">
                 FERMER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     (click)="createLoot()"
                     [disabled]="!newLootName">
                 CREER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 <div class="loot-list">
-    <md-card *ngFor="let loot of loots" [class.panel-success]="loot.visibleForPlayer">
-        <md-toolbar>
+    <mat-card *ngFor="let loot of loots" [class.panel-success]="loot.visibleForPlayer">
+        <mat-toolbar>
             {{loot.name}}
 
             <span class="padding"></span>
             <span *ngIf="loot.computedXp">XP: {{loot.computedXp}}</span>
             <span class="padding"></span>
 
-            <button md-raised-button (click)="createItemDialog.openDialogForLoot(loot)">
+            <button mat-raised-button (click)="createItemDialog.openDialogForLoot(loot)">
                 Ajouter item
             </button>
-            <button md-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">
+            <button mat-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">
                 Ajouter item inutile
             </button>
-            <button md-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">
+            <button mat-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">
                 Ajouter ingredient magique
             </button>
 
             <span class="padding"></span>
 
 
-            <button md-icon-button color="primary" *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">
-                <md-icon fontSet="game-icon" fontIcon="game-icon-locked-chest" class="ra-md-button-icon-32">
-                </md-icon>
+            <button mat-icon-button color="primary" *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-locked-chest" class="ra-mat-button-icon-32">
+                </mat-icon>
             </button>
-            <button md-icon-button color="accent" *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">
-                <md-icon fontSet="game-icon" fontIcon="game-icon-open-treasure-chest" class="ra-md-button-icon-32">
-                </md-icon>
+            <button mat-icon-button color="accent" *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-open-treasure-chest" class="ra-mat-button-icon-32">
+                </mat-icon>
             </button>
-            <button md-icon-button [mdMenuTriggerFor]="menuLoot" aria-label="Open basic menu">
-                <md-icon>more_vert</md-icon>
+            <button mat-icon-button [matMenuTriggerFor]="menuLoot" aria-label="Open basic menu">
+                <mat-icon>more_vert</mat-icon>
             </button>
-            <md-menu xPosition="before" #menuLoot="mdMenu">
-                <button md-menu-item
+            <mat-menu xPosition="before" #menuLoot="matMenu">
+                <button mat-menu-item
                         (click)=deleteLoot(loot)>
                     Supprimer
                 </button>
-            </md-menu>
+            </mat-menu>
 
-        </md-toolbar>
-        <md-card-content>
+        </mat-toolbar>
+        <mat-card-content>
             <div class="loot-items">
                 <div *ngFor="let item of loot.items" class="loot-item">
-                    <button md-icon-button (click)="removeItemFromLoot(loot, item)">
-                        <md-icon>delete</md-icon>
+                    <button mat-icon-button (click)="removeItemFromLoot(loot, item)">
+                        <mat-icon>delete</mat-icon>
                     </button>
                     <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                     <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
@@ -83,20 +83,20 @@
             <div class="loot-monsters" *ngFor="let monster of loot.monsters">
                 <div class="monster-name">
                     {{monster.name}}
-                    <button md-raised-button (click)="createItemDialog.openDialogForMonster(monster)">
+                    <button mat-raised-button (click)="createItemDialog.openDialogForMonster(monster)">
                         Ajouter item
                     </button>
-                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'USELESS_ITEM')">
+                    <button mat-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'USELESS_ITEM')">
                         Ajouter item inutile
                     </button>
-                    <button md-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'MAGICAL_INGREDIENT')">
+                    <button mat-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'MAGICAL_INGREDIENT')">
                         Ajouter ingredient magique
                     </button>
                 </div>
                 <div>
                     <div class="monster-item loot-item" *ngFor="let item of monster.items">
-                        <button md-icon-button (click)="removeItemFromMonster(monster, item)">
-                            <md-icon>delete</md-icon>
+                        <button mat-icon-button (click)="removeItemFromMonster(monster, item)">
+                            <mat-icon>delete</mat-icon>
                         </button>
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                         <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
@@ -106,8 +106,8 @@
                     </div>
                 </div>
             </div>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 </div>
 
 <create-item #createItemDialog (onAddItem)="onAddItem($event)"></create-item>

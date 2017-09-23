@@ -1,74 +1,74 @@
-<md-card>
-    <md-card-content>
+<mat-card>
+    <mat-card-content>
         Les joueurs n'achètent JAMAIS le matériel en piochant eux-mêmes dans les tableaux. Vous pouvez créer vos propre
         objets grace à l'éditeur. Ce dernier pouvant être complexe il est conseillé de copié un autre objets,
-        à l'aide du bouton <md-icon>content_copy</md-icon>, puis de le modifier. Si vous souhaitez seulement changer
+        à l'aide du bouton <mat-icon>content_copy</mat-icon>, puis de le modifier. Si vous souhaitez seulement changer
         le nom, cet option est déjà disponible lors de l'ajout d'un objet sur un personnage.
-    </md-card-content>
-    <md-card-actions align="end">
-        <button color="primary" md-button (click)="createItem()">CREER UN OBJET</button>
-    </md-card-actions>
-</md-card>
-<md-card class="section-selector">
-    <md-select [ngModel]="selectedSection"
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button color="primary" mat-button (click)="createItem()">CREER UN OBJET</button>
+    </mat-card-actions>
+</mat-card>
+<mat-card class="section-selector">
+    <mat-select [ngModel]="selectedSection"
                (change)="selectSection($event.value)"
                style="width: 100%"
                placeholder="Section">
-        <md-option *ngFor="let section of itemSections" [value]="section">
+        <mat-option *ngFor="let section of itemSections" [value]="section">
             {{section.name}}
-        </md-option>
-    </md-select>
+        </mat-option>
+    </mat-select>
 
     <autocomplete-search-item-template [clearOnSelect]=true (onSelect)="selectItemTemplate($event)">
     </autocomplete-search-item-template>
-</md-card>
+</mat-card>
 
-<md-card *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
-    <md-card-subtitle>Note</md-card-subtitle>
-    <md-card-content>
+<mat-card *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
+    <mat-card-subtitle>Note</mat-card-subtitle>
+    <mat-card-content>
         <div class="panel-body" [innerHTML]="selectedSection.note|textFormatter">
         </div>
-    </md-card-content>
-</md-card>
+    </mat-card-content>
+</mat-card>
 
-<md-card>
-    <md-card-subtitle>Filtre</md-card-subtitle>
-    <md-card-content class="filters">
-        <md-form-field class="name">
-            <input mdInput placeholder="Filtre" [(ngModel)]="filter.name" (change)="updateFilter()"/>
-        </md-form-field>
-        <md-form-field *ngIf="hasSpecial('DICE_DROP')" class="dice-drop">
-            <input mdInput placeholder="Dé" [(ngModel)]="filter.dice" type="number" (change)="updateFilter()"/>
-        </md-form-field>
-        <md-select *ngIf="selectedSection"
+<mat-card>
+    <mat-card-subtitle>Filtre</mat-card-subtitle>
+    <mat-card-content class="filters">
+        <mat-form-field class="name">
+            <input matInput placeholder="Filtre" [(ngModel)]="filter.name" (change)="updateFilter()"/>
+        </mat-form-field>
+        <mat-form-field *ngIf="hasSpecial('DICE_DROP')" class="dice-drop">
+            <input matInput placeholder="Dé" [(ngModel)]="filter.dice" type="number" (change)="updateFilter()"/>
+        </mat-form-field>
+        <mat-select *ngIf="selectedSection"
                    class="category"
                    [ngModel]="filter.category"
                    (change)="selectCategory($event.value)"
                    placeholder="Sous-section">
-            <md-option [value]="null"></md-option>
-            <md-option *ngFor="let category of selectedSection.categories" [value]="category">
+            <mat-option [value]="null"></mat-option>
+            <mat-option *ngFor="let category of selectedSection.categories" [value]="category">
                 {{category.name}}
-            </md-option>
-        </md-select>
-    </md-card-content>
-    <md-card-actions align="end">
-        <button md-button color="primary" (click)="resetFilter()">RESET</button>
-    </md-card-actions>
-</md-card>
+            </mat-option>
+        </mat-select>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-button color="primary" (click)="resetFilter()">RESET</button>
+    </mat-card-actions>
+</mat-card>
 
 <ng-template ngFor let-category [ngForOf]="filteredCategories" [ngForTrackBy]="trackById">
     <div itemCategory [category]="category" [id]="category.id">
-        <md-toolbar  color="primary">
+        <mat-toolbar  color="primary">
             <h3>
                 {{category.name}}
             </h3>
-        </md-toolbar>
-        <md-card *ngIf="category.note">
-            <md-card-subtitle>Note</md-card-subtitle>
-            <md-card-content>
+        </mat-toolbar>
+        <mat-card *ngIf="category.note">
+            <mat-card-subtitle>Note</mat-card-subtitle>
+            <mat-card-content>
                 {{category.note}}
-            </md-card-content>
-        </md-card>
+            </mat-card-content>
+        </mat-card>
     </div>
     <ng-template ngFor let-item [ngForOf]="itemsByCategory[category.id]" [ngForTrackBy]="trackById">
         <div class="item-element">
@@ -88,30 +88,30 @@
 </ng-template>
 
 <ng-template #stickyContainer="cdkPortal" cdk-portal>
-    <md-toolbar class="sticky-category" color="primary">
-        <button md-icon-button (click)="backToTop()">
-            <md-icon>arrow_upward</md-icon>
+    <mat-toolbar class="sticky-category" color="primary">
+        <button mat-icon-button (click)="backToTop()">
+            <mat-icon>arrow_upward</mat-icon>
         </button>
 
         <h3>
             {{stickyCategory.name}}
-            <button *ngIf="!expandedSticky" md-icon-button (click)="expandStickyCategory()">
-                <md-icon>expand_more</md-icon>
+            <button *ngIf="!expandedSticky" mat-icon-button (click)="expandStickyCategory()">
+                <mat-icon>expand_more</mat-icon>
             </button>
-            <button *ngIf="expandedSticky" md-icon-button (click)="collapseStickyCategory()">
-                <md-icon>expand_less</md-icon>
+            <button *ngIf="expandedSticky" mat-icon-button (click)="collapseStickyCategory()">
+                <mat-icon>expand_less</mat-icon>
             </button>
         </h3>
-    </md-toolbar>
+    </mat-toolbar>
     <div class="sticky-category-list" [@stickyExpand]="expandedSticky">
-        <md-nav-list>
+        <mat-nav-list>
             <ng-template ngFor let-category [ngForOf]="filteredCategories">
-                <a md-list-item
+                <a mat-list-item
                    [class.selected]="stickyCategory === category"
                    (click)="scrollToCategory(category)">
                     {{category.name}}
                 </a>
             </ng-template>
-        </md-nav-list>
+        </mat-nav-list>
     </div>
 </ng-template>

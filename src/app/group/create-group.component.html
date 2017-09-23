@@ -1,17 +1,17 @@
-<md-card style="margin: 5px">
-    <md-card-title>Créer un groupe</md-card-title>
-    <md-card-content>
-        <md-form-field style="width: 100%">
-            <input mdInput
+<mat-card style="margin: 5px">
+    <mat-card-title>Créer un groupe</mat-card-title>
+    <mat-card-content>
+        <mat-form-field style="width: 100%">
+            <input matInput
                    [(ngModel)]="groupName"
                    placeholder="Nom du groupe"/>
-        </md-form-field>
-    </md-card-content>
-    <md-card-actions align="end">
-        <button md-button
+        </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-button
                 color="primary"
                 (click)="create()">
             CREER
         </button>
-    </md-card-actions>
-</md-card>
+    </mat-card-actions>
+</mat-card>

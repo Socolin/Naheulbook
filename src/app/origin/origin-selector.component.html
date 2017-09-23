@@ -1,22 +1,22 @@
-<md-accordion [multi]="false">
+<mat-accordion [multi]="false">
     <ng-template ngFor [ngForOf]="origins" let-origin>
-        <md-expansion-panel>
-            <md-expansion-panel-header>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
                 <div class="origin-title">
                     <span *ngIf="originsStates[origin.id].state === 'ok'" class="icon-available">
-                        <md-icon>check</md-icon>
+                        <mat-icon>check</mat-icon>
                     </span>
                     <span *ngIf="originsStates[origin.id].state === 'ko'" class="icon-available">
-                        <md-icon>close</md-icon>
+                        <mat-icon>close</mat-icon>
                     </span>
                     <span *ngIf="originsStates[origin.id].state === 'swap'" class="icon-available">
-                        <md-icon>sync</md-icon>
+                        <mat-icon>sync</mat-icon>
                     </span>
                     <span>
                         {{origin.name}}
                     </span>
                 </div>
-            </md-expansion-panel-header>
+            </mat-expansion-panel-header>
 
             <p class="prereq">
                 Prérequis:
@@ -49,14 +49,14 @@
                 </ul>
             </div>
 
-            <md-action-row *ngIf="originsStates[origin.id].state === 'ok'" align="end">
-                <button color="primary" md-button (click)="selectOrigin(origin)">CHOISIR</button>
-            </md-action-row>
-            <md-action-row *ngIf="originsStates[origin.id].state === 'swap'" align="end" class="swap-buttons">
+            <mat-action-row *ngIf="originsStates[origin.id].state === 'ok'" align="end">
+                <button color="primary" mat-button (click)="selectOrigin(origin)">CHOISIR</button>
+            </mat-action-row>
+            <mat-action-row *ngIf="originsStates[origin.id].state === 'swap'" align="end" class="swap-buttons">
                 <ng-template ngFor [ngForOf]="originsStates[origin.id].changes" let-change>
-                    <button class="swap-button" color="primary" md-button (click)="doSwapStats(change)">INVERSER {{change[0]}} et {{change[1]}}</button>
+                    <button class="swap-button" color="primary" mat-button (click)="doSwapStats(change)">INVERSER {{change[0]}} et {{change[1]}}</button>
                 </ng-template>
-            </md-action-row>
-        </md-expansion-panel>
+            </mat-action-row>
+        </mat-expansion-panel>
     </ng-template>
-</md-accordion>
+</mat-accordion>

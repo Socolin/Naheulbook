@@ -6,17 +6,17 @@
     </autocomplete-input>
 </div>
 
-<md-card *ngIf="preSelectedEffect" class="effect-selected">
-    <md-card-title class="effect-name">
+<mat-card *ngIf="preSelectedEffect" class="effect-selected">
+    <mat-card-title class="effect-name">
         {{preSelectedEffect.name}}
-        <button md-icon-button (click)="unselectEffect()">
-            <md-icon>close</md-icon>
+        <button mat-icon-button (click)="unselectEffect()">
+            <mat-icon>close</mat-icon>
         </button>
-    </md-card-title>
-    <md-card-subtitle>
+    </mat-card-title>
+    <mat-card-subtitle>
         {{preSelectedEffect.category.name}}
-    </md-card-subtitle>
-    <md-card-content>
+    </mat-card-subtitle>
+    <mat-card-content>
         <div class="effect-description">
             {{preSelectedEffect.description}}
         </div>
@@ -45,35 +45,35 @@
                 {{modifier | modifier}}
             </span>
         </div>
-    </md-card-content>
-</md-card>
+    </mat-card-content>
+</mat-card>
 
-<md-card *ngIf="preSelectedEffect">
-    <md-card-subtitle>Customisation</md-card-subtitle>
+<mat-card *ngIf="preSelectedEffect">
+    <mat-card-subtitle>Customisation</mat-card-subtitle>
     <div class="effect-reusable">
-        <md-slide-toggle color="primary"
+        <mat-slide-toggle color="primary"
                          *ngIf="reusableToggle"
                          [(ngModel)]="newEffectReusable">
             Ré-utilisable
-        </md-slide-toggle>
+        </mat-slide-toggle>
     </div>
     <div class="effect-custom-duration">
-        <button md-button *ngIf="!newEffectCustomDuration"
+        <button mat-button *ngIf="!newEffectCustomDuration"
                 (click)="newEffectCustomDuration = true"
                 color="primary">
             Durée personnalisée
         </button>
     </div>
-</md-card>
+</mat-card>
 
-<md-card *ngIf="preSelectedEffect && newEffectCustomDuration">
-    <md-card-header class="custom-duration-header">
-        <md-card-subtitle>Durée personnalisée</md-card-subtitle>
-        <button md-icon-button (click)="newEffectCustomDuration = false">
-            <md-icon>close</md-icon>
+<mat-card *ngIf="preSelectedEffect && newEffectCustomDuration">
+    <mat-card-header class="custom-duration-header">
+        <mat-card-subtitle>Durée personnalisée</mat-card-subtitle>
+        <button mat-icon-button (click)="newEffectCustomDuration = false">
+            <mat-icon>close</mat-icon>
         </button>
-    </md-card-header>
-    <md-card-content>
+    </mat-card-header>
+    <mat-card-content>
         <duration-selector [durable]="customDuration"></duration-selector>
-    </md-card-content>
-</md-card>
+    </mat-card-content>
+</mat-card>

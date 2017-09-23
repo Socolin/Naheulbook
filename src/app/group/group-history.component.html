@@ -1,27 +1,27 @@
-<md-card>
-    <md-card-title>Ajouter une entrée</md-card-title>
-    <md-card-content style="display: flex">
-        <md-form-field style="flex: 1 auto">
-            <input mdInput
+<mat-card>
+    <mat-card-title>Ajouter une entrée</mat-card-title>
+    <mat-card-content style="display: flex">
+        <mat-form-field style="flex: 1 auto">
+            <input matInput
                    type="text"
                    placeholder="Message"
                    [(ngModel)]="historyNewEntryText"/>
-        </md-form-field>
-        <md-checkbox [(ngModel)]=historyNewEntryGm style="flex: 0 auto">
+        </mat-form-field>
+        <mat-checkbox [(ngModel)]=historyNewEntryGm style="flex: 0 auto">
             Visible par le DM seulement
-        </md-checkbox>
-    </md-card-content>
-    <md-card-actions align="end">
-        <button md-button
+        </mat-checkbox>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-button
                 color="primary"
                 (click)="addLog()">
             AJOUTER
         </button>
-    </md-card-actions>
-</md-card>
-<md-card>
-    <md-card-title>Historique</md-card-title>
-    <md-card-content>
+    </mat-card-actions>
+</mat-card>
+<mat-card>
+    <mat-card-title>Historique</mat-card-title>
+    <mat-card-content>
         <div *ngFor="let loggroup of history">
             {{loggroup.date | date:'mediumDate'}}
             <div
@@ -61,13 +61,13 @@
                 </div>
             </div>
         </div>
-    </md-card-content>
-    <md-card-actions align="end">
-        <button md-button
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-button
                 color="primary"
                 [disabled]="!loadMore"
                 (click)="loadHistory(true)">
             Charger plus
         </button>
-    </md-card-actions>
-</md-card>
+    </mat-card-actions>
+</mat-card>

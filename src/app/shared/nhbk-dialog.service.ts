@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Overlay, OverlayRef, OverlayState} from '@angular/cdk/overlay';
+import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class NhbkDialogService {
     }
 
     openCenteredBackdropDialog(portal: Portal<any>, noBackdropEvent?: boolean): OverlayRef {
-        let config = new OverlayState();
+        let config = new OverlayConfig();
 
         config.positionStrategy = this._overlay.position()
             .global()
@@ -25,7 +25,7 @@ export class NhbkDialogService {
     }
 
     openTopCenteredBackdropDialog(portal: Portal<any>, noBackdropEvent?: boolean): OverlayRef {
-        let config = new OverlayState();
+        let config = new OverlayConfig();
 
         config.positionStrategy = this._overlay.position()
             .global()

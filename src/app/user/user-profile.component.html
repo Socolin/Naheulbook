@@ -1,37 +1,37 @@
-<md-sidenav-container style="min-height: 100vh">
-    <md-toolbar color="primary">
+<mat-sidenav-container style="min-height: 100vh">
+    <mat-toolbar color="primary">
         <div class="app-toolbar">
             <h1>
                 Naheulbook
             </h1>
-            <a class="home-link" [routerLink]="['/']"><md-icon class="md-24">home</md-icon></a>
+            <a class="home-link" [routerLink]="['/']"><mat-icon class="md-24">home</mat-icon></a>
         </div>
-    </md-toolbar>
+    </mat-toolbar>
 
     <div fxLayout="row">
         <div fxFlex="auto"></div>
         <div fxFlex="nogrow" fxLayout="column" fxLayoutAlign="start">
             <h2 fxFlex="auto">Profile</h2>
             <div fxFlex="auto" *ngIf="profile">
-                <md-form-field>
-                    <input mdInput
+                <mat-form-field>
+                    <input matInput
                            placeholder="Nom / Pseudonyme"
                            [(ngModel)]="profile.displayName">
-                </md-form-field>
+                </mat-form-field>
 
                 <div>
                     Lié avec
                     <div class="col-sm-10">
-                        <button md-raised-button color="primary" (click)="linkTo('facebook')" [disabled]="profile.linkedWithFb">Facebook</button>
-                        <button md-raised-button color="primary" (click)="linkTo('google')" [disabled]="profile.linkedWithGoogle">Google</button>
-                        <button md-raised-button color="primary" (click)="linkTo('twitter')" [disabled]="profile.linkedWithTwitter">Twitter</button>
-                        <button md-raised-button color="primary" (click)="linkTo('live')" [disabled]="profile.linkedWithLive">Windows Live</button>
+                        <button mat-raised-button color="primary" (click)="linkTo('facebook')" [disabled]="profile.linkedWithFb">Facebook</button>
+                        <button mat-raised-button color="primary" (click)="linkTo('google')" [disabled]="profile.linkedWithGoogle">Google</button>
+                        <button mat-raised-button color="primary" (click)="linkTo('twitter')" [disabled]="profile.linkedWithTwitter">Twitter</button>
+                        <button mat-raised-button color="primary" (click)="linkTo('live')" [disabled]="profile.linkedWithLive">Windows Live</button>
                     </div>
                 </div>
-                <button md-button color="primary" (click)="updateProfile()">EDITER</button>
+                <button mat-button color="primary" (click)="updateProfile()">EDITER</button>
             </div>
         </div>
         <div fxFlex="auto"></div>
     </div>
 
-</md-sidenav-container>
+</mat-sidenav-container>

@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges, ViewChild} from '@angular/core';
-import {Overlay, OverlayRef, OverlayState} from '@angular/cdk/overlay';
+import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
 import {IconService} from './icon.service';
@@ -94,7 +94,7 @@ export class IconSelectorComponent implements OnInit, OnChanges {
             return;
         }
 
-        let config = new OverlayState();
+        let config = new OverlayConfig();
 
         config.positionStrategy = this._overlay.position()
             .global()

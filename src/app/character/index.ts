@@ -15,6 +15,7 @@ export * from './character-list.component';
 export * from './character-loot-panel.component';
 export * from './character.component';
 export * from './create-character.component';
+export * from './create-custom-character.component';
 export * from './effect-panel.component';
 export * from './inventory-panel.component';
 export * from './item-detail.component';

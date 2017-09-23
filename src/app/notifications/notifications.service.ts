@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Notification} from './notification.model';
-import {MdSnackBar, MdSnackBarConfig} from '@angular/material';
+import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ErrorReportService} from '../error-report.service';
 
 @Injectable()
 export class NotificationsService {
     public notifications: Notification[] = [];
 
-    constructor(private _snackBar: MdSnackBar,
+    constructor(private _snackBar: MatSnackBar,
                 private _errorReportService: ErrorReportService) {
         _errorReportService.notifyError.subscribe(msg => {
             this.addNotification(new Notification('error', msg.message, ''));
@@ -18,7 +18,7 @@ export class NotificationsService {
     addNotification(n: Notification) {
         this.notifications.push(n);
         if (this.notifications.length === 1) {
-            let config = new MdSnackBarConfig();
+            let config = new MatSnackBarConfig();
             config.duration = 2500;
             this._snackBar.open(n.title + ' ' + n.message, undefined, config).afterDismissed().subscribe(
                 () => {
@@ -35,7 +35,7 @@ export class NotificationsService {
         }
 
         let n = this.notifications[0];
-        let config = new MdSnackBarConfig();
+        let config = new MatSnackBarConfig();
         config.duration = 2500;
         this._snackBar.open(n.title + ' ' + n.message, undefined, config).afterDismissed().subscribe(
             () => {

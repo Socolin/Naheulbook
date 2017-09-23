@@ -1,23 +1,23 @@
-<md-card (swipeleft)="nothing()" (swiperight)="nothing()">
-    <md-card-header class="item-detail-header">
-        <icon-selector mdCardAvatar [icon]="item.data.icon" [size]="'40px'" [readonly]="readonly"
+<mat-card (swipeleft)="nothing()" (swiperight)="nothing()">
+    <mat-card-header class="item-detail-header">
+        <icon-selector matCardAvatar [icon]="item.data.icon" [size]="'40px'" [readonly]="readonly"
                        (onChange)="_itemActionService.onAction('change_icon', item, {icon: $event})">
         </icon-selector>
         <div>
-            <md-card-title>
+            <mat-card-title>
                 <span *ngIf="item.template.data.quantifiable || item.data.quantity">
                     {{item.data.quantity}}
                 </span>
                 <span style="vertical-align: top;" *ngIf="!editing">
                     {{item.data.name}}
                 </span>
-                <md-form-field *ngIf="editing">
-                    <input mdInput
+                <mat-form-field *ngIf="editing">
+                    <input matInput
                            placeholder="Nom"
                            [(ngModel)]="itemEditName">
-                </md-form-field>
-            </md-card-title>
-            <md-card-subtitle *ngIf="!editing">
+                </mat-form-field>
+            </mat-card-title>
+            <mat-card-subtitle *ngIf="!editing">
                 <div *ngIf="itemCategoriesById">
                     <span class="label label-default">{{itemCategoriesById[item.template.category].section.name}}</span> -
                     <span>{{itemCategoriesById[item.template.category].name}}</span>
@@ -26,43 +26,43 @@
                 <span *ngIf="item.data.notIdentified">
                     Non identifié
                 </span>
-            </md-card-subtitle>
+            </mat-card-subtitle>
         </div>
-        <button md-icon-button [mdMenuTriggerFor]="itemMenu" (click)="$event.stopPropagation()" *ngIf="!readonly">
-            <md-icon>more_vert</md-icon>
+        <button mat-icon-button [matMenuTriggerFor]="itemMenu" (click)="$event.stopPropagation()" *ngIf="!readonly">
+            <mat-icon>more_vert</mat-icon>
         </button>
-        <md-menu xPosition="before" #itemMenu="mdMenu" (click)="$event.stopPropagation()">
-            <button md-menu-item (click)="editItem()">
+        <mat-menu xPosition="before" #itemMenu="matMenu" (click)="$event.stopPropagation()">
+            <button mat-menu-item (click)="editItem()">
                 Editer
             </button>
-            <button md-menu-item (click)="openModifierDialog()">
+            <button mat-menu-item (click)="openModifierDialog()">
                 Ajouter un modificateur
             </button>
-            <button md-menu-item (click)="openLifetimeDialog()">
+            <button mat-menu-item (click)="openLifetimeDialog()">
                 Editer temps de conservation
             </button>
-            <button md-menu-item (click)="openGiveItemDialog(item)">
+            <button mat-menu-item (click)="openGiveItemDialog(item)">
                 Donner
             </button>
-            <button md-menu-item *ngIf="item.template.data.skillBook"
+            <button mat-menu-item *ngIf="item.template.data.skillBook"
                     (click)="_itemActionService.onAction('read_skill_book', item)">
                 Lire
             </button>
             <button *ngIf="item.template.data.charge"
-                    md-menu-item
+                    mat-menu-item
                     (click)="_itemActionService.onAction('use_charge', item)">
                 Utiliser sur soi-meme
             </button>
             <button *ngIf="item.template.data.charge"
-                    md-menu-item>
+                    mat-menu-item>
                 Utiliser sur...
             </button>
-            <button md-menu-item (click)="_itemActionService.onAction('delete', item)">
+            <button mat-menu-item (click)="_itemActionService.onAction('delete', item)">
                 Supprimer
             </button>
-        </md-menu>
-    </md-card-header>
-    <md-card-content class="item-detail-content">
+        </mat-menu>
+    </mat-card-header>
+    <mat-card-content class="item-detail-content">
         <div *ngIf="item.data.notIdentified && !gmView">
             <div *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
                 <span class="ra ra-broadsword ra-lg"></span>
@@ -80,11 +80,11 @@
             </div>
             <div>
                 <span *ngIf="!editing">{{item.data.description}}</span>
-                <md-form-field *ngIf="editing">
-                    <input mdInput
+                <mat-form-field *ngIf="editing">
+                    <input matInput
                            placeholder="Description"
                            [(ngModel)]="itemEditDescription">
-                </md-form-field>
+                </mat-form-field>
             </div>
         </div>
         <div *ngIf="!item.data.notIdentified || gmView">
@@ -95,11 +95,11 @@
             <div *ngIf="item.template.data.description">{{item.template.data.description}}</div>
             <div>
                 <span *ngIf="!editing">{{item.data.description}}</span>
-                <md-form-field *ngIf="editing">
-                    <input mdInput
+                <mat-form-field *ngIf="editing">
+                    <input matInput
                            placeholder="Description"
                            [(ngModel)]="itemEditDescription">
-                </md-form-field>
+                </mat-form-field>
             </div>
 
             <div>
@@ -235,30 +235,30 @@
             </div>
 
             <div *ngIf="item.modifiers && item.modifiers.length" class="item-modifiers">
-                <md-card *ngFor="let modifier of item.modifiers; let i = index">
+                <mat-card *ngFor="let modifier of item.modifiers; let i = index">
                     <div class="item-header">
                         <span>
-                            <md-slide-toggle *ngIf="modifier.reusable"
+                            <mat-slide-toggle *ngIf="modifier.reusable"
                                              color="primary"
                                              (change)="updateModifier(i)"
                                              [(ngModel)]="modifier.active">
-                            </md-slide-toggle>
+                            </mat-slide-toggle>
                         </span>
                         <span>{{modifier.name}}</span>
                         <span class="padding"></span>
                         <span *ngIf="modifier.active && modifier.durationType === 'combat'">
-                            <md-icon fontSet="ra" fontIcon="ra-sword" class="ra-md-button-icon-32"></md-icon>
+                            <mat-icon fontSet="ra" fontIcon="ra-sword" class="ra-mat-button-icon-32"></mat-icon>
                             {{modifier.currentCombatCount}}
                         </span>
                         <span *ngIf="modifier.active && modifier.durationType === 'lap'">
-                            <md-icon fontSet="game-icon" fontIcon="game-icon-clockwise-rotation" class="ra-md-button-icon-32"></md-icon>
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-clockwise-rotation" class="ra-mat-button-icon-32"></mat-icon>
                             {{modifier.currentLapCount}}
                         </span>
                         <span *ngIf="modifier.active && modifier.durationType === 'time'">
                             <span class="ra ra-clockwork"></span>{{modifier.currentTimeDuration | nhbkDuration}}
                         </span>
-                        <button md-icon-button *ngIf="!readonly" (click)="removeModifier(i); $event.stopPropagation()">
-                            <md-icon>delete</md-icon>
+                        <button mat-icon-button *ngIf="!readonly" (click)="removeModifier(i); $event.stopPropagation()">
+                            <mat-icon>delete</mat-icon>
                         </button>
                     </div>
                     <div class="item-detail">
@@ -272,7 +272,7 @@
                             <span class="ra ra-clockwork"></span>{{modifier.timeDuration | nhbkDuration}}
                         </span>
                         <span *ngIf="modifier.durationType === 'lap'">
-                            <md-icon fontSet="game-icon" fontIcon="game-icon-clockwise-rotation" class="ra-md-button-icon-32"></md-icon>
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-clockwise-rotation" class="ra-mat-button-icon-32"></mat-icon>
                             {{modifier.lapCount}}
                         </span>
 
@@ -285,7 +285,7 @@
                     <div *ngFor="let value of modifier.values">
                         {{value | modifier}}
                     </div>
-                </md-card>
+                </mat-card>
             </div>
 
             <ul>
@@ -371,13 +371,13 @@
                         </li>
                     </ul>
                 </span>
-                <button md-button
+                <button mat-button
                         [color]="'primary'"
                         *ngIf="gmView && !item.data.ignoreRestrictions"
                         (click)="_itemActionService.onAction('ignoreRestrictions', item, true); $event.stopPropagation()">
                     IGNORER RESTRICTIONS
                 </button>
-                <button md-button
+                <button mat-button
                         [color]="'primary'"
                         *ngIf="gmView && item.data.ignoreRestrictions"
                         (click)="_itemActionService.onAction('ignoreRestrictions', item, undefined); $event.stopPropagation()">
@@ -407,7 +407,7 @@
                     <dt>Épreuve de tir:</dt>
                     <dd>{{item.template.data.gun.shootTest}}</dd>
                 </dl>
-                <md-divider></md-divider>
+                <mat-divider></mat-divider>
                 Munitions
                 <dl>
                     <dt>Combustion par coup:</dt>
@@ -415,7 +415,7 @@
                     <dt>Munitions par coup:</dt>
                     <dd>{{item.template.data.gun.ammunitionPerShot}}</dd>
                 </dl>
-                <md-divider></md-divider>
+                <mat-divider></mat-divider>
                 <dl>
                     <dt>Chances de fonctionnement:</dt>
                     <dd>{{item.template.data.gun.workLuck}}</dd>
@@ -442,16 +442,16 @@
                 </ng-template>
             </div>
         </ng-template>
-    </md-card-content>
-    <md-card-actions align="start">
+    </mat-card-content>
+    <mat-card-actions align="start">
         <span *ngIf="item.template.slots?.length > 0">
-            <button md-button
+            <button mat-button
                     [color]="'primary'"
                     *ngIf="!readonly && !item.data.equiped && !item.content?.length"
                     (click)="_itemActionService.onAction('equip', item); $event.stopPropagation()">
                 ÉQUIPER
             </button>
-            <button md-button
+            <button mat-button
                     [color]="'primary'"
                     *ngIf="!readonly && item.data.equiped && !item.content?.length"
                     (click)="_itemActionService.onAction('unequip', item); $event.stopPropagation()">
@@ -459,36 +459,36 @@
             </button>
         </span>
 
-        <button md-button
+        <button mat-button
                 [color]="'accent'"
                 *ngIf="gmView && item.data.notIdentified && character != undefined"
                 (click)="_itemActionService.onAction('identify', item); $event.stopPropagation()">
             IDENTIFIER
         </button>
 
-        <button md-button
+        <button mat-button
                 *ngIf="!readonly && !item.content?.length"
                 [color]="item.container ? 'primary' : 'accent'"
                 (click)="openStoreItemInContainerDialog(); $event.stopPropagation()">
             RANGER
         </button>
-    </md-card-actions>
-</md-card>
+    </mat-card-actions>
+</mat-card>
 
 <ng-template #storeItemInContainerDialog="cdkPortal" cdk-portal>
-    <md-card class="store-item-dialog">
-        <md-card-title>
+    <mat-card class="store-item-dialog">
+        <mat-card-title>
             Ranger: {{item.data.name}}
-        </md-card-title>
-        <md-card-subtitle>
+        </mat-card-title>
+        <mat-card-subtitle>
             Choisissez dans quel conteneur ranger l'objet
-        </md-card-subtitle>
-        <md-card-content>
+        </mat-card-subtitle>
+        <mat-card-content>
             <ng-template [ngIf]="character.computedData.containers && character.computedData.containers.length">
                 <div class="list-available-containers">
                     <div *ngFor="let container of character.computedData.containers" class="target-container">
                         <icon-selector [icon]="container.data.icon" [readonly]="true"></icon-selector>
-                        <button md-raised-button
+                        <button mat-raised-button
                                 [disabled]="item.container == container.id"
                                 (click)="_itemActionService.onAction('move_to_container', item, {container: container.id}); $event.stopPropagation()">
                             {{container.data.name}}
@@ -496,47 +496,47 @@
                     </div>
                 </div>
             </ng-template>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button color="primary" (click)="removeItemFromContainer()">
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="removeItemFromContainer()">
                 RETIRER
             </button>
-            <button md-button color="primary" (click)="closeStoreItemInContainerDialog()">
+            <button mat-button color="primary" (click)="closeStoreItemInContainerDialog()">
                 VALIDER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 <ng-template #addModifierDialog="cdkPortal" cdk-portal>
-    <md-card class="add-modifier-dialog">
-        <md-card-title>
+    <mat-card class="add-modifier-dialog">
+        <mat-card-title>
             Ajouter un modificateur
-        </md-card-title>
-        <md-card-content>
+        </mat-card-title>
+        <mat-card-content>
             <stats-modifier-editor [modifier]="newItemModifier">
             </stats-modifier-editor>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     color="primary"
                     (click)="closeModifierDialog(); $event.stopPropagation()">
                 ANNULER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     (click)="addModifier(); $event.stopPropagation()">
                 AJOUTER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 <ng-template #giveItemDialog="cdkPortal" cdk-portal>
-    <md-card class="give-item-dialog">
-        <md-card-title>Donner un objet</md-card-title>
+    <mat-card class="give-item-dialog">
+        <mat-card-title>Donner un objet</mat-card-title>
 
-        <md-card-content>
+        <mat-card-content>
             <div>
                 <icon-selector [icon]="item.data.icon" [readonly]="true"></icon-selector>
                 <span *ngIf="item.template.data.quantifiable || item.data.quantity">
@@ -553,46 +553,46 @@
 
             <span *ngIf="giveDestination === null">Loading...</span>
 
-            <md-radio-group [(ngModel)]="giveTarget">
+            <mat-radio-group [(ngModel)]="giveTarget">
                 <ng-template ngFor let-destination [ngForOf]="giveDestination">
-                    <md-radio-button [value]="destination">
+                    <mat-radio-button [value]="destination">
                         <span *ngIf="destination.isnpc">[NPC]</span>
                         {{destination.name}}
-                    </md-radio-button>
+                    </mat-radio-button>
                 </ng-template>
-            </md-radio-group>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+            </mat-radio-group>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     color="primary"
                     (click)="closeGiveItemDialog(); $event.stopPropagation()">
                 ANNULER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     [disabled]="!giveTarget"
                     (click)="giveItem(); $event.stopPropagation()">
                 DONNER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 <ng-template #lifetimeDialog="cdkPortal" cdk-portal>
-    <md-card>
-        <md-card-title>
+    <mat-card>
+        <mat-card-title>
             Temps de conservation
-        </md-card-title>
-        <md-card-content>
+        </mat-card-title>
+        <mat-card-content>
             <duration-selector [hiddenType]="['combat','lap']" [durable]="item.data.lifetime"></duration-selector>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button color="primary" (click)="cancelLifetimeDialog(); $event.stopPropagation()">
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="cancelLifetimeDialog(); $event.stopPropagation()">
                 ANNULER
             </button>
-            <button md-button color="primary" (click)="updateLifetime(); $event.stopPropagation()">
+            <button mat-button color="primary" (click)="updateLifetime(); $event.stopPropagation()">
                 VALIDER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>

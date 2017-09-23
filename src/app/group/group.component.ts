@@ -3,8 +3,8 @@ import {
     ViewChildren
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MdTabChangeEvent, TemplatePortalDirective} from '@angular/material';
-import {Overlay, OverlayRef, OverlayState} from '@angular/cdk/overlay';
+import {MatTabChangeEvent, TemplatePortalDirective} from '@angular/material';
+import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 import {Observable} from 'rxjs/Observable';
 
@@ -118,7 +118,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         return this.tabs.findIndex(t => t.hash === hash);
     }
 
-    selectTab(tabChangeEvent: MdTabChangeEvent): boolean {
+    selectTab(tabChangeEvent: MatTabChangeEvent): boolean {
         if (tabChangeEvent.index < this.tabs.length) {
             this.currentTab = this.tabs[tabChangeEvent.index].hash;
             window.location.hash = this.currentTab;
@@ -177,7 +177,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         }
 
         if (index < characterSheetDialog.length) {
-            let config = new OverlayState();
+            let config = new OverlayConfig();
 
             config.positionStrategy = this._overlay.position()
                 .global()

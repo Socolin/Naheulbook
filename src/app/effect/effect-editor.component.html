@@ -1,102 +1,102 @@
 <div>
-    <md-card>
-        <md-card-subtitle>
+    <mat-card>
+        <mat-card-subtitle>
             Informations de base
-        </md-card-subtitle>
-        <md-card-content>
-            <md-form-field style="width: 100%">
-                <input mdInput
+        </mat-card-subtitle>
+        <mat-card-content>
+            <mat-form-field style="width: 100%">
+                <input matInput
                        [(ngModel)]="effect.name"
                        placeholder="Nom">
-            </md-form-field>
-            <md-form-field style="width: 100%">
-                <input mdInput
+            </mat-form-field>
+            <mat-form-field style="width: 100%">
+                <input matInput
                        [(ngModel)]="effect.description"
                        placeholder="Description">
-            </md-form-field>
-            <md-form-field style="width: 100%">
-                <input mdInput
+            </mat-form-field>
+            <mat-form-field style="width: 100%">
+                <input matInput
                        [(ngModel)]="effect.dice"
                        placeholder="Dé">
-            </md-form-field>
+            </mat-form-field>
 
             <div *ngIf="types">
-                <md-select class="type-selector"
+                <mat-select class="type-selector"
                            [ngModel]="selectedType"
                            (change)="selectType($event.value)"
                            placeholder="Catégorie">
-                    <md-option *ngFor="let type of types" [value]="type">{{type.name}}</md-option>
-                    <md-option [value]="undefined">
+                    <mat-option *ngFor="let type of types" [value]="type">{{type.name}}</mat-option>
+                    <mat-option [value]="undefined">
                         <span class="secondary-text">
                             Ajouter...
                         </span>
-                    </md-option>
-                </md-select>
-                <md-select class="category-selector"
+                    </mat-option>
+                </mat-select>
+                <mat-select class="category-selector"
                            *ngIf="selectedType"
                            [ngModel]="effect.category"
                            (change)="selectCategory($event.value)"
                            placeholder="Sous-catégorie">
-                    <md-option *ngFor="let category of selectedType.categories" [value]="category">
+                    <mat-option *ngFor="let category of selectedType.categories" [value]="category">
                         {{category.name}}
-                    </md-option>
-                    <md-option [value]="undefined">
+                    </mat-option>
+                    <mat-option [value]="undefined">
                         <span class="secondary-text">
                             Ajouter...
                         </span>
-                    </md-option>
-                </md-select>
+                    </mat-option>
+                </mat-select>
             </div>
 
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 
-    <md-card>
-        <md-card-subtitle>
+    <mat-card>
+        <mat-card-subtitle>
             Durée
-        </md-card-subtitle>
-        <md-card-content>
+        </mat-card-subtitle>
+        <mat-card-content>
             <duration-selector [durable]="effect"></duration-selector>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 
-    <md-card>
-        <md-card-subtitle>
+    <mat-card>
+        <mat-card-subtitle>
             Modificateurs
-        </md-card-subtitle>
-        <md-card-content>
+        </mat-card-subtitle>
+        <mat-card-content>
             <modifiers-editor [(modifiers)]="effect.modifiers"></modifiers-editor>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 </div>
 
 
 <ng-template cdk-portal #createCategoryDialog="cdkPortal">
-    <md-card>
-        <md-card-title>Créer une sous-catégorie de {{selectedType.name}}</md-card-title>
-        <md-card-content>
-            <md-form-field style="width: 100%">
-                <input mdInput placeholder="Nom" #newCategoryName (keydown.enter)="createCategory(newCategoryName.value)"/>
-            </md-form-field>
-        </md-card-content>
-        <md-card-actions align="right">
-            <button md-button (click)="closeCreateCategoryDialog()" color="primary">Annuler</button>
-            <button md-button (click)="createCategory(newCategoryName.value)" color="primary">Créer</button>
-        </md-card-actions>
-    </md-card>
+    <mat-card>
+        <mat-card-title>Créer une sous-catégorie de {{selectedType.name}}</mat-card-title>
+        <mat-card-content>
+            <mat-form-field style="width: 100%">
+                <input matInput placeholder="Nom" #newCategoryName (keydown.enter)="createCategory(newCategoryName.value)"/>
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions align="right">
+            <button mat-button (click)="closeCreateCategoryDialog()" color="primary">Annuler</button>
+            <button mat-button (click)="createCategory(newCategoryName.value)" color="primary">Créer</button>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 <ng-template cdk-portal #createTypeDialog="cdkPortal">
-    <md-card>
-        <md-card-title>Créer une catégorie</md-card-title>
-        <md-card-content>
-            <md-form-field style="width: 100%">
-                <input mdInput placeholder="Nom" #newTypeName (keydown.enter)="createType(newTypeName.value)"/>
-            </md-form-field>
-        </md-card-content>
-        <md-card-actions align="right">
-            <button md-button (click)="closeCreateTypeDialog()" color="primary">Annuler</button>
-            <button md-button (click)="createType(newTypeName.value)" color="primary">Créer</button>
-        </md-card-actions>
-    </md-card>
+    <mat-card>
+        <mat-card-title>Créer une catégorie</mat-card-title>
+        <mat-card-content>
+            <mat-form-field style="width: 100%">
+                <input matInput placeholder="Nom" #newTypeName (keydown.enter)="createType(newTypeName.value)"/>
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions align="right">
+            <button mat-button (click)="closeCreateTypeDialog()" color="primary">Annuler</button>
+            <button mat-button (click)="createType(newTypeName.value)" color="primary">Créer</button>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>

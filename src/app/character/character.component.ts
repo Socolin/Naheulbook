@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MdTabChangeEvent, MdTabGroup, Overlay, OverlayRef, OverlayState, Portal} from '@angular/material';
+import {MatTabChangeEvent, MatTabGroup, Overlay, OverlayRef, OverlayConfig, Portal} from '@angular/material';
 import {Subscription} from 'rxjs/Subscription';
 
 import {NotificationsService} from '../notifications';
@@ -41,7 +41,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     private combatWeaponDetailElement: ElementRef;
 
     @ViewChild('mainTabGroup')
-    private mainTabGroup: MdTabGroup;
+    private mainTabGroup: MatTabGroup;
 
     @ViewChild('inventoryPanel')
     private inventoryPanel: InventoryPanelComponent;
@@ -167,7 +167,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     openLevelUpDialog() {
         this.initLevelUp();
 
-        let config = new OverlayState();
+        let config = new OverlayConfig();
 
         config.positionStrategy = this._overlay.position()
             .global()
@@ -285,7 +285,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return this.tabs.findIndex(t => t.hash === hash);
     }
 
-    selectTab(tabChangeEvent: MdTabChangeEvent): boolean {
+    selectTab(tabChangeEvent: MatTabChangeEvent): boolean {
         this.currentTab = this.tabs[tabChangeEvent.index].hash;
         this.inventoryPanel.selectedItem = undefined;
         if (!this.inGroupTab) {
@@ -298,7 +298,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     openSkillInfoDialog(skill: Skill) {
         this.selectedSkillInfo = skill;
-        let config = new OverlayState();
+        let config = new OverlayConfig();
 
         config.positionStrategy = this._overlay.position()
             .global()

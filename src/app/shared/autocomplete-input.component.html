@@ -1,6 +1,6 @@
 <span class="autocomplete-container">
-    <md-form-field #autocompleteOrigin="cdkOverlayOrigin" cdk-overlay-origin>
-        <input mdInput
+    <mat-form-field #autocompleteOrigin="cdkOverlayOrigin" cdk-overlay-origin>
+        <input matInput
                #inputField
                [disabled]="disabled"
                [placeholder]="placeholder"
@@ -9,7 +9,7 @@
                (ngModelChange)="updateList()"
                (click)="updateList()"
                autocomplete="false"/>
-    </md-form-field>
+    </mat-form-field>
 
     <ng-template cdk-connected-overlay
               [origin]="autocompleteOrigin"
@@ -18,16 +18,16 @@
               hasBackdrop
               backdropClass="cdk-overlay-transparent-backdrop"
               (backdropClick)="matchingValues = null">
-        <md-nav-list dense class="autocomplete-overlay">
+        <mat-nav-list dense class="autocomplete-overlay">
             <ng-template ngFor let-item [ngForOf]="matchingValues" let-i="index">
-                <md-list-item (click)="selectValue(item)" [class.selected]="preSelectedValueIndex === i">
-                    <span *ngIf="item.icon" md-list-avatar><icon [size]="'40px'" [icon]="item.icon"></icon></span>
-                    <span md-line style="display: flex; align-items: center">
-                        <md-icon *ngIf="item.mdIcon">{{item.mdIcon}}</md-icon>{{item.text}}
+                <mat-list-item (click)="selectValue(item)" [class.selected]="preSelectedValueIndex === i">
+                    <span *ngIf="item.icon" mat-list-avatar><icon [size]="'40px'" [icon]="item.icon"></icon></span>
+                    <span matLine style="display: flex; align-items: center">
+                        <mat-icon *ngIf="item.mdIcon">{{item.mdIcon}}</mat-icon>{{item.text}}
                     </span>
-                    <span md-line *ngIf="item.secondaryText" class="secondary-text">{{item.secondaryText}}</span>
-                </md-list-item>
+                    <span matLine *ngIf="item.secondaryText" class="secondary-text">{{item.secondaryText}}</span>
+                </mat-list-item>
             </ng-template>
-        </md-nav-list>
+        </mat-nav-list>
     </ng-template>
 </span>

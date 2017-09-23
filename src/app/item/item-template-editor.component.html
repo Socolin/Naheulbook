@@ -1,68 +1,68 @@
-<md-card>
-    <md-card-title *ngIf="title">
+<mat-card>
+    <mat-card-title *ngIf="title">
         {{title}}
-    </md-card-title>
+    </mat-card-title>
     <div class="name-line">
-        <md-form-field>
-            <input mdInput
+        <mat-form-field>
+            <input matInput
                    placeholder="Nom de l'objet"
                    [(ngModel)]="itemTemplate.name"
                    type="text"/>
-        </md-form-field>
+        </mat-form-field>
         <icon-selector [icon]="itemTemplate.data.icon" (onChange)="itemTemplate.data.icon = $event"></icon-selector>
     </div>
     <div class="not-identified-name-line">
-        <md-form-field>
-            <input mdInput
+        <mat-form-field>
+            <input matInput
                    placeholder="Nom quand non identifié"
                    [(ngModel)]="itemTemplate.data.notIdentifiedName"/>
-        </md-form-field>
-        <button md-icon-button (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"><md-icon>content_copy</md-icon></button>
-        <button md-icon-button (click)="automaticNotIdentifiedName()"><md-icon>refresh</md-icon></button>
-        <md-select placeholder="Source" [(ngModel)]="itemTemplate.source" (change)="changeSource($event.value)" required>
-            <md-option value="official" *ngIf="_loginService.currentLoggedUser.admin">Officiel</md-option>
-            <md-option value="community">Communautaire</md-option>
-            <md-option value="private">Privé</md-option>
-        </md-select>
+        </mat-form-field>
+        <button mat-icon-button (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"><mat-icon>content_copy</mat-icon></button>
+        <button mat-icon-button (click)="automaticNotIdentifiedName()"><mat-icon>refresh</mat-icon></button>
+        <mat-select placeholder="Source" [(ngModel)]="itemTemplate.source" (change)="changeSource($event.value)" required>
+            <mat-option value="official" *ngIf="_loginService.currentLoggedUser.admin">Officiel</mat-option>
+            <mat-option value="community">Communautaire</mat-option>
+            <mat-option value="private">Privé</mat-option>
+        </mat-select>
     </div>
     <div style="display: flex; flex-direction: row">
-        <md-form-field>
-            <input mdInput
+        <mat-form-field>
+            <input matInput
                    placeholder="Prix"
                    [(ngModel)]="itemTemplate.data.price"
                    type="number"/>
-            <span mdSuffix>P.O.</span>
-        </md-form-field>
-        <md-form-field style="flex: 1 auto; margin-left: 10px">
-            <input mdInput
+            <span matSuffix>P.O.</span>
+        </mat-form-field>
+        <mat-form-field style="flex: 1 auto; margin-left: 10px">
+            <input matInput
                    placeholder="Description"
                    [(ngModel)]="itemTemplate.data.description"/>
-        </md-form-field>
+        </mat-form-field>
     </div>
     <div>
-        <md-form-field style="width: 100%">
-            <input mdInput
+        <mat-form-field style="width: 100%">
+            <input matInput
                    placeholder="Note"
                    [(ngModel)]="itemTemplate.data.note"/>
-        </md-form-field>
+        </mat-form-field>
     </div>
-</md-card>
+</mat-card>
 
-<md-card>
-    <md-card-subtitle>Section</md-card-subtitle>
-    <md-card-content class="section-list">
-        <md-select [(ngModel)]="selectedSection" placeholder="Section" *ngIf="sections">
-            <md-option *ngFor="let section of sections" [value]="section">
+<mat-card>
+    <mat-card-subtitle>Section</mat-card-subtitle>
+    <mat-card-content class="section-list">
+        <mat-select [(ngModel)]="selectedSection" placeholder="Section" *ngIf="sections">
+            <mat-option *ngFor="let section of sections" [value]="section">
                 {{section.name}}
-            </md-option>
-        </md-select>
-        <md-select [(ngModel)]="itemTemplate.category" placeholder="Sous section" *ngIf="selectedSection">
-            <md-option *ngFor="let category of selectedSection.categories" [value]="category.id">
+            </mat-option>
+        </mat-select>
+        <mat-select [(ngModel)]="itemTemplate.category" placeholder="Sous section" *ngIf="selectedSection">
+            <mat-option *ngFor="let category of selectedSection.categories" [value]="category.id">
                 {{category.name}}
-            </md-option>
-        </md-select>
-    </md-card-content>
-</md-card>
+            </mat-option>
+        </mat-select>
+    </mat-card-content>
+</mat-card>
 
 <ng-template ngFor let-moduleName [ngForOf]="modules">
     <item-template-editor-module [itemTemplate]="itemTemplate"
@@ -76,16 +76,16 @@
     </item-template-editor-module>
 </ng-template>
 
-<md-card class="add-module-card">
+<mat-card class="add-module-card">
     Ajouter un module
     <autocomplete-input [clearOnSelect]="true"
                         [placeholder]="'Module'"
                         (onSelect)="addModule($event)"
                         [(callback)]="autocompleteModuleCallback">
     </autocomplete-input>
-</md-card>
+</mat-card>
 <ng-template cdk-portal #addModuleDialog="cdkPortal">
-    <md-card>
+    <mat-card>
         Ajouter un module
         <autocomplete-input #autocompleteModuleModalTextField
                             [clearOnSelect]="true"
@@ -93,7 +93,7 @@
                             (onSelect)="addModule($event)"
                             [(callback)]="autocompleteModuleCallback">
         </autocomplete-input>
-    </md-card>
+    </mat-card>
 </ng-template>
 
 <h3>Preview</h3>

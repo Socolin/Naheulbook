@@ -1,8 +1,8 @@
 import {NgModule}      from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {MaterialModule} from '@angular/material';
 
+import {NhbkMaterialModule} from '../nhbk-material.module';
 import {ActionModule} from '../action/action.module';
 import {SharedModule} from '../shared/shared.module';
 import {SkillModule} from '../skill/skill.module';
@@ -25,7 +25,7 @@ import {
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule,
+        NhbkMaterialModule,
         SharedModule,
         SkillModule,
         DateModule,

@@ -1,5 +1,5 @@
-<md-expansion-panel>
-    <md-expansion-panel-header>
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
         {{job.name}}
         <span class="secondary-text job-restrictions">
             <span *ngIf="job.originsBlacklist.length"><strong>Excepté:</strong></span>
@@ -15,7 +15,7 @@
                 </span>
             </ng-template>
         </span>
-    </md-expansion-panel-header>
+    </mat-expansion-panel-header>
     <div>
         <div *ngIf="job.requirements && job.requirements.length > 0">
             <b>Critères: </b>
@@ -82,4 +82,4 @@
             </ul>
         </div>
     </div>
-</md-expansion-panel>
+</mat-expansion-panel>

@@ -1,8 +1,8 @@
 <div class="loot-tab">
     <div class="loot-list">
-        <md-card *ngFor="let loot of character.loots">
-            <md-card-title>{{loot.name}}</md-card-title>
-            <md-card-content>
+        <mat-card *ngFor="let loot of character.loots">
+            <mat-card-title>{{loot.name}}</mat-card-title>
+            <mat-card-content>
                 <div class="loot-items">
                     <ng-template ngFor let-item [ngForOf]="loot.items">
                         <div class="loot-item"
@@ -10,10 +10,10 @@
                              cdk-overlay-origin
                              #itemLine="cdkOverlayOrigin"
                              [class.active]="item.id == selectedItem?.id">
-                            <button md-icon-button
+                            <button mat-icon-button
                                     (click)="openTakeItemLootDialog(loot, item)">
-                                <md-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-md-button-icon-32">
-                                </md-icon>
+                                <mat-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-mat-button-icon-32">
+                                </mat-icon>
                             </button>
                             <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                             <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
@@ -34,10 +34,10 @@
                     <div class="monster-item loot-item" *ngFor="let item of monster.items"
                          (click)="selectItem(item)"
                          [class.active]="item.id == selectedItem?.id">
-                        <button md-icon-button
+                        <button mat-icon-button
                                 (click)="openTakeItemMonsterDialog(monster, item)">
-                            <md-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-md-button-icon-32">
-                            </md-icon>
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-mat-button-icon-32">
+                            </mat-icon>
                         </button>
 
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
@@ -51,8 +51,8 @@
                     </div>
                 </div>
 
-            </md-card-content>
-        </md-card>
+            </mat-card-content>
+        </mat-card>
     </div>
     <div *ngIf="selectedItem" class="item-detail">
         <item-detail [gmView]="inGroupTab"
@@ -63,12 +63,12 @@
 </div>
 
 <ng-template cdk-portal #takeItemDialog="cdkPortal">
-    <md-card>
-        <md-card-title>Loot</md-card-title>
-        <md-card-content *ngIf="!takingItem.data.quantity || takingItem.data.quantity < 2">
+    <mat-card>
+        <mat-card-title>Loot</mat-card-title>
+        <mat-card-content *ngIf="!takingItem.data.quantity || takingItem.data.quantity < 2">
             Prendre l'objet {{takingItem.data.name}} ?
-        </md-card-content>
-        <md-card-content *ngIf="takingItem.data.quantity > 1">
+        </mat-card-content>
+        <mat-card-content *ngIf="takingItem.data.quantity > 1">
             Prendre l'objet
             <value-editor [title]="'Quantité'"
                           [hideMaxValue]="true"
@@ -77,19 +77,19 @@
                           [maxValue]="takingItem.data.quantity">
             </value-editor>
             {{takingItem.data.name}} ?
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     color="primary"
                     (click)="closeTakeItemDialog()">
                 ANNULER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     (click)="validTakeItem()">
                 PRENDRE
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 

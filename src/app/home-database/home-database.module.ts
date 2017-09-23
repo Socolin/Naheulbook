@@ -2,9 +2,9 @@ import {NgModule}      from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
+import {NhbkMaterialModule} from '../nhbk-material.module';
 import {SharedModule} from '../shared/shared.module';
 import {NotificationsModule} from '../notifications/notifications.module';
 import {CharacterModule} from '../character/character.module';
@@ -30,7 +30,7 @@ import {DatabaseSectionsComponent} from './database-sections.component';
         CommonModule,
         FormsModule,
         SharedModule,
-        MaterialModule,
+        NhbkMaterialModule,
         FlexLayoutModule,
         RouterModule.forChild(routes),
         NotificationsModule,

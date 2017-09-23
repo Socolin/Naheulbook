@@ -1,6 +1,6 @@
-md-card {
+mat-card {
 
-    md-toolbar {
+    mat-toolbar {
         display: flex;
         span {
             flex: 1 auto;
@@ -13,12 +13,12 @@ md-card {
         justify-content: space-between;
         align-items: center;
 
-        md-button-toggle-group {
+        mat-button-toggle-group {
             margin-bottom: 12px;
             margin-top: 12px;
         }
 
-        button[md-raised-button] {
+        button[mat-raised-button] {
             margin-bottom: 12px;
             margin-top: 12px;
         }

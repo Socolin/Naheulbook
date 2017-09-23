@@ -2,13 +2,13 @@
     .inputs {
         display: flex;
         align-items: center;
-        md-radio-group {
+        mat-radio-group {
             margin-left: 5px;
         }
-        md-form-field {
+        mat-form-field {
             margin-left: 5px;
         }
-        md-form-field:first-child {
+        mat-form-field:first-child {
             margin-right: 0;
         }
         input[type=number] {
@@ -16,7 +16,7 @@
         }
     }
 
-    md-card-content {
+    mat-card-content {
         max-height: 75vh;
         overflow-x: auto;
     }

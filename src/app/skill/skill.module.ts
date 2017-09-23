@@ -1,9 +1,9 @@
 import {NgModule}      from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
+import {NhbkMaterialModule} from '../nhbk-material.module';
 import {SharedModule} from '../shared/shared.module';
 
 import {
@@ -17,7 +17,7 @@ import {
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule,
+        NhbkMaterialModule,
         FlexLayoutModule,
         SharedModule,
     ],

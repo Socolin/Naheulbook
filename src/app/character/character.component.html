@@ -1,53 +1,53 @@
 <div class="character-component">
-    <md-tab-group #mainTabGroup (selectChange)=selectTab($event)>
-        <md-tab label="Info">
+    <mat-tab-group #mainTabGroup (selectChange)=selectTab($event)>
+        <mat-tab label="Info">
             <!-- Start of info tab -->
             <div class="info-tab">
-                <md-card *ngFor="let invite of character.invites">
-                    <md-card-title>Invitation</md-card-title>
-                    <md-card-content>
+                <mat-card *ngFor="let invite of character.invites">
+                    <mat-card-title>Invitation</mat-card-title>
+                    <mat-card-content>
                         Rejoindre le groupe <em>{{invite.name}}</em> ?
-                    </md-card-content>
-                    <md-card-actions>
-                        <button md-button color="primary" (click)="cancelInvite(invite)">REFUSER</button>
-                        <button md-button color="primary" (click)="acceptInvite(invite)">ACCEPTER</button>
-                    </md-card-actions>
-                </md-card>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-button color="primary" (click)="cancelInvite(invite)">REFUSER</button>
+                        <button mat-button color="primary" (click)="acceptInvite(invite)">ACCEPTER</button>
+                    </mat-card-actions>
+                </mat-card>
 
-                <md-card>
-                    <md-card-title style="display: flex; justify-content: space-between; align-items: center">
+                <mat-card>
+                    <mat-card-title style="display: flex; justify-content: space-between; align-items: center">
                         {{character.name}}
-                        <button md-icon-button [mdMenuTriggerFor]="characterBasicChange">
-                            <md-icon>more_vert</md-icon>
+                        <button mat-icon-button [matMenuTriggerFor]="characterBasicChange">
+                            <mat-icon>more_vert</mat-icon>
                         </button>
-                    </md-card-title>
+                    </mat-card-title>
 
-                    <md-menu xPosition="before" #characterBasicChange="mdMenu">
-                        <button md-menu-item (click)="openChangeNameDialog()">
+                    <mat-menu xPosition="before" #characterBasicChange="matMenu">
+                        <button mat-menu-item (click)="openChangeNameDialog()">
                             Changer le nom
                         </button>
-                        <button md-menu-item (click)="openChangeSexDialog()">
+                        <button mat-menu-item (click)="openChangeSexDialog()">
                             Changer de sexe
                         </button>
-                        <button md-menu-item (click)="openChangeJobDialog()">
+                        <button mat-menu-item (click)="openChangeJobDialog()">
                             Changer de métier
                         </button>
-                    </md-menu>
-                    <md-card-content>
+                    </mat-menu>
+                    <mat-card-content>
                         <dl>
                             <dt>Origine</dt>
                             <dd style="display: flex; align-items: center">
                                 {{character.origin.name}}
-                                <button md-icon-button (click)="openOriginInfoDialog()">
-                                    <md-icon>info</md-icon>
+                                <button mat-icon-button (click)="openOriginInfoDialog()">
+                                    <mat-icon>info</mat-icon>
                                 </button>
                             </dd>
 
                             <dt>Metier</dt>
                             <dd *ngIf="character.job" style="display: flex; align-items: center">
                                 {{character.job.name}}
-                                <button md-icon-button (click)="openJobInfoDialog()">
-                                    <md-icon>info</md-icon>
+                                <button mat-icon-button (click)="openJobInfoDialog()">
+                                    <mat-icon>info</mat-icon>
                                 </button>
                             </dd>
                             <dd *ngIf="!character.job">aucun</dd>
@@ -78,7 +78,7 @@
                             <dt>Niveau</dt>
                             <dd>{{character.level}}
                                 <button class="level-up-button"
-                                        md-raised-button
+                                        mat-raised-button
                                         *ngIf="canLevelUp()"
                                         color="primary"
                                         (click)="openLevelUpDialog()">
@@ -111,45 +111,45 @@
                                               (onChange)="changeGmData('mankdebol', $event)"></value-editor>
                             </dd>
                         </dl>
-                    </md-card-content>
-                </md-card>
-                <md-card *ngIf="character.computedData.stats['AD'] > 12">
-                    <md-card-title>Adresse exceptionnelle</md-card-title>
-                    <md-card-content>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card *ngIf="character.computedData.stats['AD'] > 12">
+                    <mat-card-title>Adresse exceptionnelle</mat-card-title>
+                    <mat-card-content>
                         <p>
                             Un score d'adresse (AD) exceptionnelle confère un point <em>bonus</em> en attaque (AT) ou en parade (PRD)
                         </p>
-                        <md-button-toggle-group [(ngModel)]="character.statBonusAD">
-                            <md-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</md-button-toggle>
-                            <md-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</md-button-toggle>
-                        </md-button-toggle-group>
-                    </md-card-content>
-                </md-card>
-                <md-card *ngIf="character.computedData.stats['AD'] < 9" class="row">
-                    <md-card-title>Adresse pourri</md-card-title>
-                    <md-card-content>
+                        <mat-button-toggle-group [(ngModel)]="character.statBonusAD">
+                            <mat-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</mat-button-toggle>
+                            <mat-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card *ngIf="character.computedData.stats['AD'] < 9" class="row">
+                    <mat-card-title>Adresse pourri</mat-card-title>
+                    <mat-card-content>
                         <p>
                             Un score d'adresse (AD) inférieur ou égale à 8 induit un point <em>malus</em> en attaque (AT) ou en parade (PRD)
                         </p>
-                        <md-button-toggle-group [(ngModel)]="character.statBonusAD">
-                            <md-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</md-button-toggle>
-                            <md-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</md-button-toggle>
-                        </md-button-toggle-group>
-                    </md-card-content>
-                </md-card>
-                <md-card *ngIf="character.computedData.stats['INT'] > 12">
-                    <md-card-title>Intelligence exceptionnelle</md-card-title>
-                    <md-card-content>
+                        <mat-button-toggle-group [(ngModel)]="character.statBonusAD">
+                            <mat-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</mat-button-toggle>
+                            <mat-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card *ngIf="character.computedData.stats['INT'] > 12">
+                    <mat-card-title>Intelligence exceptionnelle</mat-card-title>
+                    <mat-card-content>
                         <p>
                             Un score d'inteligence (INT) exceptionnelle confère un point de dégâts des sorts
                             (selon sortilège) pour chaque point d'inteligence supérieur à 12.
                         </p>
                         <div>Bonus dégâts des sorts: {{(character.computedData.stats['INT'] - 12)}}</div>
-                    </md-card-content>
-                </md-card>
-                <md-card *ngIf="character.computedData.stats['FO'] > 12">
-                    <md-card-title>Force exceptionnelle</md-card-title>
-                    <md-card-content>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card *ngIf="character.computedData.stats['FO'] > 12">
+                    <mat-card-title>Force exceptionnelle</mat-card-title>
+                    <mat-card-content>
                         <p>
                             Un score exceptionnel offre forcément des avantages dans ce monde violent...
                         </p>
@@ -157,27 +157,27 @@
                             Pour chaque point de force (FO) supérieur à 12 : +1 point d’impact (dégâts des armes améliorés au corps à corps ou à distance)
                         </p>
                         <div>Bonus point d'impact: {{(character.computedData.stats['FO'] - 12)}}</div>
-                    </md-card-content>
-                </md-card>
-                <md-card *ngIf="character.computedData.stats['FO'] <= 8">
-                    <md-card-title>Force de mauviette</md-card-title>
-                    <md-card-content>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card *ngIf="character.computedData.stats['FO'] <= 8">
+                    <mat-card-title>Force de mauviette</mat-card-title>
+                    <mat-card-content>
                         <p>
                             Un score exceptionnel offre forcément des avantages dans ce monde violent...
                             Et au contraire sur une carac. de force (FO) de 8 ou inférieure : -1 point d’impact (dégâts des armes diminués, car mauviette)
                         </p>
                         <div>Malus point d'impact: 1</div>
-                    </md-card-content>
-                </md-card>
+                    </mat-card-content>
+                </mat-card>
             </div>
             <!-- End of infos tab -->
-        </md-tab>
+        </mat-tab>
 
-        <md-tab label="Combat">
+        <mat-tab label="Combat">
             <!-- Start of combat tab -->
             <div class="combat-tab">
-                <md-card class="life-mana stats-card">
-                    <md-card-content>
+                <mat-card class="life-mana stats-card">
+                    <mat-card-content>
                         <div class="stat">
                             <div class="stat-icon">
                                 <span class="game-icon game-icon-hearts"></span>
@@ -208,11 +208,11 @@
                                 <div class="stat-label">E.Astrale</div>
                             </div>
                         </div>
-                    </md-card-content>
-                </md-card>
+                    </mat-card-content>
+                </mat-card>
 
-                <md-card class="combat-stats stats-card">
-                    <md-card-content>
+                <mat-card class="combat-stats stats-card">
+                    <mat-card-content>
                         <div class="stat-row">
                             <div class="stat">
                                 <div class="stat-icon">
@@ -253,14 +253,14 @@
                                 </div>
                             </div>
                         </div>
-                    </md-card-content>
-                </md-card>
+                    </mat-card-content>
+                </mat-card>
 
-                <md-card *ngIf="character.computedData.weaponsDamages.length" class="equiped-weapons-stats stats-card">
-                    <md-card-subtitle>Dégat des armes (bonus compris)</md-card-subtitle>
-                    <md-card-content>
+                <mat-card *ngIf="character.computedData.weaponsDamages.length" class="equiped-weapons-stats stats-card">
+                    <mat-card-subtitle>Dégat des armes (bonus compris)</mat-card-subtitle>
+                    <mat-card-content>
                         <div *ngFor="let dmg of character.computedData.weaponsDamages" class="equiped-weapons-damages">
-                            <md-icon *ngIf="dmg.incompatible" color="warn">warning</md-icon>
+                            <mat-icon *ngIf="dmg.incompatible" color="warn">warning</mat-icon>
                             <span>
                                 <span>
                                     {{dmg.damage}}
@@ -270,10 +270,10 @@
                                 </span>
                             </span>
                         </div>
-                    </md-card-content>
-                </md-card>
-                <md-card class="basic-stats stats-card">
-                    <md-card-content>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="basic-stats stats-card">
+                    <mat-card-content>
                         <div class="stat-row">
                             <div class="stat">
                                 <div class="stat-name">
@@ -328,10 +328,10 @@
                                 </div>
                             </div>
                         </div>
-                    </md-card-content>
-                </md-card>
-                <md-card class="stats-card" *ngIf="character.computedData.stats['INT'] > 12">
-                    <md-card-content>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="stats-card" *ngIf="character.computedData.stats['INT'] > 12">
+                    <mat-card-content>
                         <div class="stat-row" *ngIf="character.computedData.stats['INT'] > 12">
                             <div *ngIf="character.computedData.stats['INT'] > 12" class="stat large-stat">
                                 <div class="stat-name">
@@ -342,10 +342,10 @@
                                 </div>
                             </div>
                         </div>
-                    </md-card-content>
-                </md-card>
-                <md-card class="magic-stat stats-card">
-                    <md-card-content>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="magic-stat stats-card">
+                    <mat-card-content>
                         <div class="stat-row">
                             <div class="stat">
                                 <div class="stat-name">
@@ -382,12 +382,12 @@
                                 </div>
                             </div>
                         </div>
-                    </md-card-content>
-                </md-card>
+                    </mat-card-content>
+                </mat-card>
 
-                <md-card class="stats-card movement-card">
-                    <md-card-title>Déplacement tactique</md-card-title>
-                    <md-card-content>
+                <mat-card class="stats-card movement-card">
+                    <mat-card-title>Déplacement tactique</mat-card-title>
+                    <mat-card-content>
                         <ul>
                             <li>
                                 <strong>Normal</strong>
@@ -400,39 +400,39 @@
                                 {{character.computedData?.tacticalMovement?.sprintMaxDuration?.toFixed(0)}} secondes
                             </li>
                         </ul>
-                    </md-card-content>
-                </md-card>
-                <md-card class="stats-card weapons-card">
-                    <md-card-title>Armes</md-card-title>
-                    <md-card-content>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="stats-card weapons-card">
+                    <mat-card-title>Armes</mat-card-title>
+                    <mat-card-content>
                         <div *ngIf="character.computedData.itemsBySlotsAll[1]" class="weapons-list">
                             <ng-template ngFor let-item [ngForOf]="character.computedData.itemsBySlotsAll[1]" let-i="index" let-last="last">
                                 <div class="item-line"
-                                     md-ripple
+                                     matRipple
                                      [class.selected]="selectedItem && selectedItem.id === item.id"
                                      (click)="selectItem(item)">
                                     <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                                    <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
-                                    <md-icon *ngIf="item.data.notIdentified">help</md-icon>
+                                    <mat-icon *ngIf="item.data.equiped !== undefined">check_circle</mat-icon>
+                                    <mat-icon *ngIf="item.data.notIdentified">help</mat-icon>
                                     <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                     {{item.data.name}}
                                 </div>
                             </ng-template>
                         </div>
-                    </md-card-content>
-                </md-card>
+                    </mat-card-content>
+                </mat-card>
                 <div *ngIf="selectedItem && selectedItem.template.slots.length > 0" class="weapons-detail">
                     <item-detail [gmView]="inGroupTab" [character]="character" [item]="selectedItem"></item-detail>
                 </div>
                 <div #combatWeaponDetail></div>
             </div>
             <!-- End of combat tab -->
-        </md-tab>
-        <md-tab label="Stat">
+        </mat-tab>
+        <mat-tab label="Stat">
             <!-- Start of stats tab -->
             <div class="stat-tab">
-                <md-card>
-                    <md-card-content>
+                <mat-card>
+                    <mat-card-content>
                         <div class="stat-header">
                             <div class="stat-element">EV</div>
                             <div class="stat-element" *ngIf="character.job && character.job.isMagic">EA</div>
@@ -454,16 +454,16 @@
                                 </div>
                             </div>
                         </div>
-                    </md-card-content>
-                    <md-card-actions align="end">
-                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.evea = !character.computedData.details.show.evea">
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-button [color]="'primary'" (click)="character.computedData.details.show.evea = !character.computedData.details.show.evea">
                             <span *ngIf="!character.computedData.details.show.evea">Voir details</span>
                             <span *ngIf="character.computedData.details.show.evea">Cacher details</span>
                         </button>
-                    </md-card-actions>
-                </md-card>
-                <md-card>
-                    <md-card-content>
+                    </mat-card-actions>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content>
                         <div class="stat-header">
                             <div class="stat-element">AT</div>
                             <div class="stat-element">PRD</div>
@@ -491,16 +491,16 @@
                                 </div>
                             </div>
                         </div>
-                    </md-card-content>
-                    <md-card-actions align="end">
-                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.atprd = !character.computedData.details.show.atprd">
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-button [color]="'primary'" (click)="character.computedData.details.show.atprd = !character.computedData.details.show.atprd">
                             <span *ngIf="!character.computedData.details.show.atprd">Voir details</span>
                             <span *ngIf="character.computedData.details.show.atprd">Cacher details</span>
                         </button>
-                    </md-card-actions>
-                </md-card>
-                <md-card>
-                    <md-card-content>
+                    </mat-card-actions>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content>
                         <div class="stat-header">
                             <div class="stat-element-small">COU</div>
                             <div class="stat-element-small">INT</div>
@@ -531,17 +531,17 @@
                                 </div>
                             </div>
                         </div>
-                    </md-card-content>
-                    <md-card-actions align="end">
-                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.stat = !character.computedData.details.show.stat">
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-button [color]="'primary'" (click)="character.computedData.details.show.stat = !character.computedData.details.show.stat">
                             <span *ngIf="!character.computedData.details.show.stat">Voir details</span>
                             <span *ngIf="character.computedData.details.show.stat">Cacher details</span>
                         </button>
-                    </md-card-actions>
-                </md-card>
+                    </mat-card-actions>
+                </mat-card>
 
-                <md-card>
-                    <md-card-content>
+                <mat-card>
+                    <mat-card-content>
                         <div class="stat-header">
                             <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">MagiePhys</div>
                             <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">MagiePsy</div>
@@ -566,21 +566,21 @@
                                 </div>
                             </div>
                         </div>
-                    </md-card-content>
-                    <md-card-actions align="end">
-                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.magic = !character.computedData.details.show.magic">
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-button [color]="'primary'" (click)="character.computedData.details.show.magic = !character.computedData.details.show.magic">
                             <span *ngIf="!character.computedData.details.show.magic">Voir details</span>
                             <span *ngIf="character.computedData.details.show.magic">Cacher details</span>
                         </button>
-                    </md-card-actions>
-                </md-card>
+                    </mat-card-actions>
+                </mat-card>
 
-                <md-card *ngIf="character.computedData.stats['MV'] != 100
+                <mat-card *ngIf="character.computedData.stats['MV'] != 100
                                 || character.computedData.stats['THROW_MODIFIER']
                                 || character.computedData.stats['DISCRETION_MODIFIER']
                                 || character.computedData.stats['DANSE_MODIFIER']
                                 || character.computedData.stats['PI']">
-                    <md-card-content>
+                    <mat-card-content>
                         <div class="stat-header">
                             <div class="stat-element" *ngIf="character.computedData.stats['MV'] !== 100">MV</div>
                             <div class="stat-element" *ngIf="character.computedData.stats['THROW_MODIFIER']">Lancer</div>
@@ -631,96 +631,96 @@
                                 </div>
                             </div>
                         </div>
-                    </md-card-content>
-                    <md-card-actions align="end">
-                        <button md-button [color]="'primary'" (click)="character.computedData.details.show.other = !character.computedData.details.show.other">
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-button [color]="'primary'" (click)="character.computedData.details.show.other = !character.computedData.details.show.other">
                             <span *ngIf="!character.computedData.details.show.other">Voir details</span>
                             <span *ngIf="character.computedData.details.show.other">Cacher details</span>
                         </button>
-                    </md-card-actions>
-                </md-card>
+                    </mat-card-actions>
+                </mat-card>
             </div>
             <div class="stat-tab">
-                <md-card>
+                <mat-card>
                     <div>
                         <strong>Compétence</strong>
                     </div>
                     <div>
-                        <md-list dense>
-                            <md-list-item *ngFor="let skill of character.computedData.skills" class="skill-list-item">
-                                <h4 md-line [class.canceled]="skill.canceled">{{skill?.skillDef?.name}}</h4>
+                        <mat-list dense>
+                            <mat-list-item *ngFor="let skill of character.computedData.skills" class="skill-list-item">
+                                <h4 matLine [class.canceled]="skill.canceled">{{skill?.skillDef?.name}}</h4>
                                 <span *ngIf="skill.canceled">{{skill.canceled}}</span>
-                                <p md-line>
+                                <p matLine>
                                     <span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>
                                 </p>
-                                <button md-icon-button (click)="openSkillInfoDialog(skill.skillDef)">
-                                    <md-icon>info</md-icon>
+                                <button mat-icon-button (click)="openSkillInfoDialog(skill.skillDef)">
+                                    <mat-icon>info</mat-icon>
                                 </button>
-                            </md-list-item>
-                        </md-list>
+                            </mat-list-item>
+                        </mat-list>
                     </div>
-                </md-card>
+                </mat-card>
             </div>
             <!-- End of stats tab -->
-        </md-tab>
-        <md-tab label="Inventaire">
+        </mat-tab>
+        <mat-tab label="Inventaire">
             <!-- Start of inventory tab -->
             <inventory-panel #inventoryPanel [inGroupTab]="inGroupTab" [character]="character"></inventory-panel>
             <!-- End of inventory tab -->
-        </md-tab>
-        <md-tab label="Effet">
+        </mat-tab>
+        <mat-tab label="Effet">
             <!-- Start of effects tab -->
             <effect-panel [character]="character"></effect-panel>
             <!-- End of effects tab -->
-        </md-tab>
-        <md-tab label="Loot">
+        </mat-tab>
+        <mat-tab label="Loot">
             <!-- Start of effects tab -->
             <character-loot-panel [character]="character" [inGroupTab]="inGroupTab"></character-loot-panel>
             <!-- End of effects tab -->
-        </md-tab>
-        <md-tab label="Historique">
+        </mat-tab>
+        <mat-tab label="Historique">
             <character-history [character]="character"></character-history>
-        </md-tab>
-    </md-tab-group>
+        </mat-tab>
+    </mat-tab-group>
 </div>
 
 <!-- Skill info dialog -->
 <ng-template #skillInfoDialog="cdkPortal" cdk-portal>
-    <md-card class="skill-info-dialog">
+    <mat-card class="skill-info-dialog">
 
-        <md-card-title *ngIf="!viewGmSkillInfo && selectedSkillInfo">{{selectedSkillInfo.name}}</md-card-title>
-        <md-card-content *ngIf="!viewGmSkillInfo && selectedSkillInfo">
+        <mat-card-title *ngIf="!viewGmSkillInfo && selectedSkillInfo">{{selectedSkillInfo.name}}</mat-card-title>
+        <mat-card-content *ngIf="!viewGmSkillInfo && selectedSkillInfo">
             {{selectedSkillInfo.playerDescription}}
-        </md-card-content>
+        </mat-card-content>
         <skill *ngIf="viewGmSkillInfo && selectedSkillInfo" [skill]="selectedSkillInfo"></skill>
 
-        <md-card-actions align="end">
-            <button *ngIf="!viewGmSkillInfo" md-button color="primary" (click)="viewGmSkillInfo = true">
+        <mat-card-actions align="end">
+            <button *ngIf="!viewGmSkillInfo" mat-button color="primary" (click)="viewGmSkillInfo = true">
                 INFO GM
             </button>
-            <button *ngIf="viewGmSkillInfo" md-button color="primary" (click)="viewGmSkillInfo = false">
+            <button *ngIf="viewGmSkillInfo" mat-button color="primary" (click)="viewGmSkillInfo = false">
                 INFO JOUEUR
             </button>
-            <button md-button color="primary" (click)="closeSkillInfoDialog()">
+            <button mat-button color="primary" (click)="closeSkillInfoDialog()">
                 FERMER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 
 <!-- Levelup modal -->
 <ng-template #levelUpDialog="cdkPortal" cdk-portal>
-    <md-card class="level-up-dialog">
-        <md-card-title>
+    <mat-card class="level-up-dialog">
+        <mat-card-title>
             Gain d'un niveau
-        </md-card-title>
-        <md-card-content class="level-up-dialog-content">
-            <md-card>
-                <md-card-subtitle>
+        </mat-card-title>
+        <mat-card-content class="level-up-dialog-content">
+            <mat-card>
+                <mat-card-subtitle>
                     Énergie vitale/Énergie Astrale
-                </md-card-subtitle>
-                <md-card-content>
+                </mat-card-subtitle>
+                <mat-card-content>
                     <p>Pour chaque niveau gagné, on ajoute
                         1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')"> -1 </span>
                         à son énergie vitale (EV)
@@ -731,10 +731,10 @@
 
                     <div *ngIf="character.job && character.job.isMagic">
                         Je choisi d'augmenter mon:
-                        <md-button-toggle-group [(ngModel)]="levelUpInfo.EVorEA">
-                            <md-button-toggle value="EV">E.Vitale</md-button-toggle>
-                            <md-button-toggle value="EA">E.Astrale</md-button-toggle>
-                        </md-button-toggle-group>
+                        <mat-button-toggle-group [(ngModel)]="levelUpInfo.EVorEA">
+                            <mat-button-toggle value="EV">E.Vitale</mat-button-toggle>
+                            <mat-button-toggle value="EA">E.Astrale</mat-button-toggle>
+                        </mat-button-toggle-group>
                     </div>
                     <div>
                         <div *ngIf="levelUpInfo.EVorEA === 'EV'">
@@ -745,50 +745,50 @@
                         </div>
 
                         <div class="level-up-ea-ev">
-                            <md-form-field align="end">
-                                <input mdInput placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.EVorEAValue">
-                                <md-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EV'">
+                            <mat-form-field align="end">
+                                <input matInput placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.EVorEAValue">
+                                <mat-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EV'">
                                     Lancer 1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')">-1</span>
-                                </md-hint>
-                                <md-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EA'">
+                                </mat-hint>
+                                <mat-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EA'">
                                     Lancer 1D{{character.job.diceEaLevelUp}}
-                                </md-hint>
-                            </md-form-field>
-                            <button md-raised-button color="primary" (click)="rollLevelUp()">LANCER DÉ</button>
+                                </mat-hint>
+                            </mat-form-field>
+                            <button mat-raised-button color="primary" (click)="rollLevelUp()">LANCER DÉ</button>
                         </div>
                     </div>
-                </md-card-content>
-            </md-card>
+                </mat-card-content>
+            </mat-card>
 
-            <md-card *ngIf="(levelUpInfo.targetLevelUp % 2) === 0">
-                <md-card-subtitle>
+            <mat-card *ngIf="(levelUpInfo.targetLevelUp % 2) === 0">
+                <mat-card-subtitle>
                     Augmenter une caractéristique
-                </md-card-subtitle>
-                <md-card-content>
+                </mat-card-subtitle>
+                <mat-card-content>
                     Je choisi:
-                    <md-button-toggle-group [(ngModel)]="levelUpInfo.statToUp">
-                        <md-button-toggle value="FO">FO</md-button-toggle>
-                        <md-button-toggle value="AD">AD</md-button-toggle>
-                        <md-button-toggle value="COU">COU</md-button-toggle>
-                        <md-button-toggle value="INT">INT</md-button-toggle>
-                    </md-button-toggle-group>
-                </md-card-content>
-            </md-card>
-            <md-card *ngIf="(levelUpInfo.targetLevelUp % 2) === 1">
-                <md-card-subtitle>
+                    <mat-button-toggle-group [(ngModel)]="levelUpInfo.statToUp">
+                        <mat-button-toggle value="FO">FO</mat-button-toggle>
+                        <mat-button-toggle value="AD">AD</mat-button-toggle>
+                        <mat-button-toggle value="COU">COU</mat-button-toggle>
+                        <mat-button-toggle value="INT">INT</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="(levelUpInfo.targetLevelUp % 2) === 1">
+                <mat-card-subtitle>
                     Augmenter Attaque ou parade
-                </md-card-subtitle>
-                <md-card-content>
+                </mat-card-subtitle>
+                <mat-card-content>
                     Je choisi d'augmenter de 1 point:
-                    <md-button-toggle-group [(ngModel)]="levelUpInfo.statToUp">
-                        <md-button-toggle value="AT">AT</md-button-toggle>
-                        <md-button-toggle value="PRD">PRD</md-button-toggle>
-                    </md-button-toggle-group>
-                </md-card-content>
-            </md-card>
-            <md-card *ngIf="levelUpShouldSelectSkill()">
-                <md-card-subtitle>Compétence supplémentaire</md-card-subtitle>
-                <md-card-content>
+                    <mat-button-toggle-group [(ngModel)]="levelUpInfo.statToUp">
+                        <mat-button-toggle value="AT">AT</mat-button-toggle>
+                        <mat-button-toggle value="PRD">PRD</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="levelUpShouldSelectSkill()">
+                <mat-card-subtitle>Compétence supplémentaire</mat-card-subtitle>
+                <mat-card-content>
                     <skill-selector *ngIf="!levelUpInfo.skill"
                                     [selectedOrigin]="character.origin"
                                     [selectedJob]="character.job"
@@ -797,110 +797,110 @@
                                     (skillsSelected)="onLevelUpSelectSkills($event)">
                     </skill-selector>
                     <p *ngIf="levelUpInfo.skill">J'apprends la compétence: {{levelUpInfo.skill.name}}</p>
-                </md-card-content>
-                <md-card-actions *ngIf="levelUpInfo.skill" align="end">
-                    <button md-button
+                </mat-card-content>
+                <mat-card-actions *ngIf="levelUpInfo.skill" align="end">
+                    <button mat-button
                             color="primary"
                             (click)="levelUpInfo.skill = null">
                         CHANGER
                     </button>
-                </md-card-actions>
-            </md-card>
-            <md-card *ngIf="levelUpShouldSelectSpeciality()">
-                <md-card-subtitle>Spécialisation supplémentaire</md-card-subtitle>
-                <md-card-content>
+                </mat-card-actions>
+            </mat-card>
+            <mat-card *ngIf="levelUpShouldSelectSpeciality()">
+                <mat-card-subtitle>Spécialisation supplémentaire</mat-card-subtitle>
+                <mat-card-content>
                     <div *ngIf="!levelUpInfo.speciality">
                         <speciality-selector (specialityChange)="levelUpSelectSpeciality($event)" [knownSpecialities]="character.specialities" [specialities]="character.job.specialities"></speciality-selector>
                     </div>
                     <div *ngIf="levelUpInfo.speciality">Spécialité: {{levelUpInfo.speciality.name}}</div>
-                </md-card-content>
-                <md-card-actions *ngIf="levelUpInfo.speciality" align="end">
-                    <button md-button
+                </mat-card-content>
+                <mat-card-actions *ngIf="levelUpInfo.speciality" align="end">
+                    <button mat-button
                             color="primary"
                             (click)="levelUpInfo.speciality = null">
                         CHANGER
                     </button>
-                </md-card-actions>
-            </md-card>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button color="primary" (click)="closeLevelUpDialog()">
+                </mat-card-actions>
+            </mat-card>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="closeLevelUpDialog()">
                 ANNULER
             </button>
-            <button md-button color="primary"  [disabled]="!levelUpFormReady()" (click)="levelUp()">
+            <button mat-button color="primary"  [disabled]="!levelUpFormReady()" (click)="levelUp()">
                 VALIDER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 
 
 <!-- Change name dialog -->
 <ng-template #changeNameDialog="cdkPortal" cdk-portal>
-    <md-card>
-        <md-card-title>
+    <mat-card>
+        <mat-card-title>
             Changer de nom
-        </md-card-title>
-        <md-card-content>
-            <md-form-field>
-                <input mdInput
+        </mat-card-title>
+        <mat-card-content>
+            <mat-form-field>
+                <input matInput
                        placeholder="Nouveau nom"
                        [(ngModel)]="newCharacterName"/>
-            </md-form-field>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button color="primary" (click)="closeChangeNameDialog()">
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="closeChangeNameDialog()">
                 ANNULER
             </button>
-            <button md-button [disabled]="character.name === newCharacterName" color="primary" (click)="changeName()">
+            <button mat-button [disabled]="character.name === newCharacterName" color="primary" (click)="changeName()">
                 VALIDER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 <!-- Change sex dialog -->
 <ng-template #changeSexDialog="cdkPortal" cdk-portal>
-    <md-card>
-        <md-card-title>
+    <mat-card>
+        <mat-card-title>
             Changer de sexe
-        </md-card-title>
-        <md-card-content>
-            <md-radio-group [(ngModel)]="newCharacterSex">
-                <md-radio-button name="sexe" [value]="'Homme'">
+        </mat-card-title>
+        <mat-card-content>
+            <mat-radio-group [(ngModel)]="newCharacterSex">
+                <mat-radio-button name="sexe" [value]="'Homme'">
                     Homme
-                </md-radio-button>
-                <md-radio-button name="sexe" [value]="'Femme'">
+                </mat-radio-button>
+                <mat-radio-button name="sexe" [value]="'Femme'">
                     Femme
-                </md-radio-button>
-            </md-radio-group>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button color="primary" (click)="closeChangeSexDialog()">
+                </mat-radio-button>
+            </mat-radio-group>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="closeChangeSexDialog()">
                 ANNULER
             </button>
-            <button md-button [disabled]="character.sex === newCharacterSex" color="primary" (click)="changeSex()">
+            <button mat-button [disabled]="character.sex === newCharacterSex" color="primary" (click)="changeSex()">
                 VALIDER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 <!-- Change job dialog -->
 <ng-template #changeJobDialog="cdkPortal" cdk-portal>
-    <md-card class="modal-max-height">
-        <md-card-title>
+    <mat-card class="modal-max-height">
+        <mat-card-title>
             Changer de métier
-        </md-card-title>
-        <md-card-content>
+        </mat-card-title>
+        <mat-card-content>
             <div *ngIf="character.hasFlag('CAN_CHANGE_JOB')" class="text-warning">
                 Ne peux pas changer de métier
             </div>
-            <md-radio-group *ngIf="character.job" [(ngModel)]="newCharacterJob">
-                <md-radio-button [value]="null">Aucun</md-radio-button>
-                <md-radio-button [value]="character.job">{{character.job.name}}</md-radio-button>
-            </md-radio-group>
+            <mat-radio-group *ngIf="character.job" [(ngModel)]="newCharacterJob">
+                <mat-radio-button [value]="null">Aucun</mat-radio-button>
+                <mat-radio-button [value]="character.job">{{character.job.name}}</mat-radio-button>
+            </mat-radio-group>
             <job-selector *ngIf="!character.job && !newCharacterJob"
                           [ad]="character.computedData.baseStat['AD']"
                           [fo]="character.computedData.baseStat['FO']"
@@ -914,28 +914,28 @@
            </job-selector>
             <div *ngIf="!character.job && newCharacterJob">
                 {{newCharacterJob.name}}
-                <button md-icon-button (click)="selectNewJob(undefined)">
-                    <md-icon>delete</md-icon>
+                <button mat-icon-button (click)="selectNewJob(undefined)">
+                    <mat-icon>delete</mat-icon>
                 </button>
             </div>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button color="primary" (click)="closeChangeJobDialog()">
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="closeChangeJobDialog()">
                 ANNULER
             </button>
-            <button md-button [disabled]="character.job === newCharacterJob" color="primary" (click)="changeJob()">
+            <button mat-button [disabled]="character.job === newCharacterJob" color="primary" (click)="changeJob()">
                 VALIDER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 <!-- Origin info panel -->
 <ng-template #originInfoDialog="cdkPortal" cdk-portal>
-    <md-card class="modal-max-height">
-        <md-card-title>
+    <mat-card class="modal-max-height">
+        <mat-card-title>
             {{character.origin.name}}
-        </md-card-title>
-        <md-card-content>
+        </mat-card-title>
+        <mat-card-content>
             <p class="origin-summary" [innerHTML]="character.origin.playerSummary | textFormatter"></p>
             <p class="origin-description" [innerHTML]="character.origin.playerDescription | textFormatter"></p>
             <div class="skills" *ngIf="character.origin.skills.length">
@@ -947,21 +947,21 @@
                     </li>
                 </ul>
             </div>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button color="primary" (click)="closeOriginInfoDialog()">
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="closeOriginInfoDialog()">
                 FERMER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 <!-- Job info panel -->
 <ng-template #jobInfoDialog="cdkPortal" cdk-portal>
-    <md-card class="modal-max-height">
-        <md-card-title>
+    <mat-card class="modal-max-height">
+        <mat-card-title>
             {{character.job.name}}
-        </md-card-title>
-        <md-card-content>
+        </mat-card-title>
+        <mat-card-content>
             <p class="job-summary" [innerHTML]="character.job.playerSummary | textFormatter"></p>
             <p class="job-description" [innerHTML]="character.job.playerDescription | textFormatter"></p>
             <div class="skills" *ngIf="character.job.skills.length">
@@ -973,11 +973,11 @@
                     </li>
                 </ul>
             </div>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button color="primary" (click)="closeJobInfoDialog()">
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="closeJobInfoDialog()">
                 FERMER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>

@@ -2,7 +2,7 @@ import {
     Component, OnInit, OnDestroy, Input, ViewChildren, HostListener, QueryList, ViewChild, EventEmitter, Output
 } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Overlay, OverlayRef, OverlayState} from '@angular/cdk/overlay';
+import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
@@ -106,7 +106,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
         if (this.stickyContainerOverlay) {
             return;
         }
-        let config = new OverlayState();
+        let config = new OverlayConfig();
         config.positionStrategy = this.overlay.position()
             .global()
             .left('0')

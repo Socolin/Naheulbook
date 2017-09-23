@@ -3,12 +3,12 @@
     <usefull-data (onAction)="usefullDataAction($event)"></usefull-data>
 </div>
 <div *ngIf="group" class="group-container">
-    <md-tab-group (selectChange)=selectTab($event) [selectedIndex]="currentTabIndex">
-        <md-tab label="Infos">
+    <mat-tab-group (selectChange)=selectTab($event) [selectedIndex]="currentTabIndex">
+        <mat-tab label="Infos">
             <div class="info-tab">
-                <md-card>
-                    <md-card-title>{{group.name}}
-                    </md-card-title>
+                <mat-card>
+                    <mat-card-title>{{group.name}}
+                    </mat-card-title>
                     <dl>
                         <dt>Mankdebol</dt>
                         <dd>
@@ -46,145 +46,145 @@
                             </autocomplete-input>
                         </dd>
                     </dl>
-                </md-card>
-                <md-card>
-                    <md-card-title>Évènements</md-card-title>
-                    <md-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-title>Évènements</mat-card-title>
+                    <mat-card-content>
                         <events #events [group]="group"></events>
-                    </md-card-content>
-                    <md-card-actions align="end">
-                        <button md-button
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-button
                                 [disabled]="group.data?.date == null"
                                 color="primary"
                                 (click)="events.openAddEventDialog()">
                             AJOUTER UN ÉVÈNEMENT
                         </button>
-                    </md-card-actions>
-                </md-card>
+                    </mat-card-actions>
+                </mat-card>
             </div>
-        </md-tab>
+        </mat-tab>
 
-        <md-tab label="Personnages">
+        <mat-tab label="Personnages">
             <div class="characters-tab">
-                <md-card>
-                    <md-card-title>Joueurs</md-card-title>
-                    <md-card-content class="characters-cards">
+                <mat-card>
+                    <mat-card-title>Joueurs</mat-card-title>
+                    <mat-card-content class="characters-cards">
                         <ng-template ngFor let-character [ngForOf]="group.characters">
-                            <md-card *ngIf="!character.isNpc" class="character-summary-card">
-                                <md-card-header>
-                                    <md-card-title>{{character.name}} - Lvl{{character.level}}</md-card-title>
-                                    <md-card-subtitle>
+                            <mat-card *ngIf="!character.isNpc" class="character-summary-card">
+                                <mat-card-header>
+                                    <mat-card-title>{{character.name}} - Lvl{{character.level}}</mat-card-title>
+                                    <mat-card-subtitle>
                                         {{character.origin.name}}
                                         <span *ngIf="character.job"> - {{character.job.name}} </span>
-                                    </md-card-subtitle>
-                                    <button md-icon-button [mdMenuTriggerFor]="characterActions">
-                                        <md-icon>more_vert</md-icon>
+                                    </mat-card-subtitle>
+                                    <button mat-icon-button [matMenuTriggerFor]="characterActions">
+                                        <mat-icon>more_vert</mat-icon>
                                     </button>
-                                    <md-menu xPosition="before" #characterActions="mdMenu">
-                                        <button md-menu-item
+                                    <mat-menu xPosition="before" #characterActions="matMenu">
+                                        <button mat-menu-item
                                                 (click)="displayCharacterSheet(character)">
                                             Voir la fiche
                                         </button>
-                                        <button md-menu-item
+                                        <button mat-menu-item
                                                 *ngIf="character.user && character.user !== _loginService.currentLoggedUser.id"
                                                 (click)="takeOwnership(character)">
                                             Devenir propriétaire
                                         </button>
-                                        <button md-menu-item
+                                        <button mat-menu-item
                                                 *ngIf="!character.user || character.user === _loginService.currentLoggedUser.id"
                                                 (click)="openChangeOwnershipDialog(character)">
                                             Définir le propriétaire
                                         </button>
-                                    </md-menu>
-                                </md-card-header>
-                                <md-card-actions align="end">
+                                    </mat-menu>
+                                </mat-card-header>
+                                <mat-card-actions align="end">
                                     <button
-                                        md-button
+                                        mat-button
                                         color="primary"
                                         *ngIf="!character.active"
                                         (click)="toggleActiveCharacter(character)">
                                         ACTIVER
                                     </button>
                                     <button
-                                        md-button
+                                        mat-button
                                         *ngIf="character.active"
                                         color="accent"
                                         (click)="toggleActiveCharacter(character)">
                                         DESACTIVER
                                     </button>
-                                </md-card-actions>
-                            </md-card>
+                                </mat-card-actions>
+                            </mat-card>
                         </ng-template>
-                    </md-card-content>
-                    <md-card-actions align="end">
-                        <button md-button
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-button
                                 color="primary"
                                 (click)="activeAllCharacter(false)">
                             DESACTIVER TOUS
                         </button>
-                        <button md-button
+                        <button mat-button
                                 color="primary"
                                 (click)="activeAllCharacter(true)">
                             ACTIVER TOUS
                         </button>
-                    </md-card-actions>
-                </md-card>
+                    </mat-card-actions>
+                </mat-card>
 
-                <md-card>
-                    <md-card-title>PNJs</md-card-title>
-                    <md-card-content class="characters-cards">
+                <mat-card>
+                    <mat-card-title>PNJs</mat-card-title>
+                    <mat-card-content class="characters-cards">
                         <ng-template ngFor let-character [ngForOf]="group.characters">
-                            <md-card *ngIf="character.isNpc" class="character-summary-card">
-                                <md-card-header>
-                                    <md-card-title>{{character.name}}</md-card-title>
-                                    <md-card-subtitle>{{character.origin.name}}
+                            <mat-card *ngIf="character.isNpc" class="character-summary-card">
+                                <mat-card-header>
+                                    <mat-card-title>{{character.name}}</mat-card-title>
+                                    <mat-card-subtitle>{{character.origin.name}}
                                         <span *ngIf="character.job"> - {{character.job.name}} </span> - Lvl{{character.level}}
-                                    </md-card-subtitle>
-                                </md-card-header>
-                                <md-card-actions align="end">
+                                    </mat-card-subtitle>
+                                </mat-card-header>
+                                <mat-card-actions align="end">
                                     <button
-                                        md-button
+                                        mat-button
                                         color="primary"
                                         *ngIf="!character.active"
                                         (click)="toggleActiveCharacter(character)">
                                         ACTIVER
                                     </button>
                                     <button
-                                        md-button
+                                        mat-button
                                         *ngIf="character.active"
                                         color="accent"
                                         (click)="toggleActiveCharacter(character)">
                                         DESACTIVER
                                     </button>
-                                </md-card-actions>
-                            </md-card>
+                                </mat-card-actions>
+                            </mat-card>
                         </ng-template>
-                    </md-card-content>
-                    <md-card-actions align="end">
-                        <button md-button
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-button
                                 color="primary"
                                 (click)="createNpc()">
                             AJOUTER PNJ
                         </button>
-                    </md-card-actions>
-                </md-card>
-                <md-card>
-                    <md-card-title>Invitations</md-card-title>
-                    <md-card-content>
+                    </mat-card-actions>
+                </mat-card>
+                <mat-card>
+                    <mat-card-title>Invitations</mat-card-title>
+                    <mat-card-content>
                         <div *ngIf="group.invites.length">
                             <h4>Invitation à valider</h4>
                             <div class="list-group">
                                 <ng-template ngFor let-character [ngForOf]="group.invites">
-                                    <md-expansion-panel>
-                                        <md-expansion-panel-header>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
                                             <mat-panel-description>{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span></mat-panel-description>
                                             <mat-panel-title>{{character.name}}</mat-panel-title>
-                                        </md-expansion-panel-header>
-                                        <md-action-row>
-                                            <button md-button (click)="cancelInvite(character)">REFUSER</button>
-                                            <button md-button (click)="acceptInvite(character)">ACCEPTER</button>
-                                        </md-action-row>
-                                    </md-expansion-panel>
+                                        </mat-expansion-panel-header>
+                                        <mat-action-row>
+                                            <button mat-button (click)="cancelInvite(character)">REFUSER</button>
+                                            <button mat-button (click)="acceptInvite(character)">ACCEPTER</button>
+                                        </mat-action-row>
+                                    </mat-expansion-panel>
                                 </ng-template>
                             </div>
                             <hr>
@@ -193,51 +193,51 @@
                             <h4>Invitation en attente</h4>
                             <div class="list-group">
                                 <ng-template ngFor let-character [ngForOf]="group.invited">
-                                    <md-expansion-panel>
-                                        <md-expansion-panel-header>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
                                             <mat-panel-description>{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span></mat-panel-description>
                                             <mat-panel-title>{{character.name}}</mat-panel-title>
-                                        </md-expansion-panel-header>
-                                        <md-action-row>
-                                            <button md-button (click)="cancelInvite(character)">ANNULER</button>
-                                        </md-action-row>
-                                    </md-expansion-panel>
+                                        </mat-expansion-panel-header>
+                                        <mat-action-row>
+                                            <button mat-button (click)="cancelInvite(character)">ANNULER</button>
+                                        </mat-action-row>
+                                    </mat-expansion-panel>
                                 </ng-template>
                             </div>
                             <hr>
                         </div>
-                    </md-card-content>
-                    <md-card-actions align="end">
-                        <button md-button
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-button
                                 (click)="openInviteCharacterModal()"
                                 color="primary">
                             INVITER UN JOUEUR
                         </button>
-                    </md-card-actions>
-                </md-card>
+                    </mat-card-actions>
+                </mat-card>
             </div>
-        </md-tab>
+        </mat-tab>
 
-        <md-tab label="Combat">
+        <mat-tab label="Combat">
             <div class="combat-tab-header">
-                <button md-raised-button
+                <button mat-raised-button
                         color="primary"
                         *ngIf="!group?.data?.inCombat"
                         (click)="startCombat()">
                     Debut combat
                 </button>
-                <button md-raised-button
+                <button mat-raised-button
                         color="primary"
                         *ngIf="group.data.inCombat"
                         (click)="endCombat()">
                     Fin combat
                 </button>
-                <button md-raised-button
+                <button mat-raised-button
                         color="primary"
                         (click)="fighterPanel.openAddMonsterDialog()">
                     Ajouter un monstre
                 </button>
-                <button md-raised-button
+                <button mat-raised-button
                         color="primary"
                         (click)="fighterPanel.openDeadMonstersDialog()">
                     Monstres morts
@@ -245,16 +245,16 @@
             </div>
 
             <fighter-panel #fighterPanel [group]="group"></fighter-panel>
-        </md-tab>
+        </mat-tab>
 
-        <md-tab label="Loot">
+        <mat-tab label="Loot">
             <group-loot-panel [group]="group"></group-loot-panel>
-        </md-tab>
+        </mat-tab>
 
-        <md-tab label="Historique">
+        <mat-tab label="Historique">
             <group-history [group]="group"></group-history>
-        </md-tab>
-    </md-tab-group>
+        </mat-tab>
+    </mat-tab-group>
 </div>
 </div>
 
@@ -262,15 +262,15 @@
     <ng-template ngFor let-character [ngForOf]="group.characters">
         <ng-template *ngIf="character.active" #characters="cdkPortal" cdk-portal>
             <div class="character-sheet">
-                <md-card>
-                    <md-card-title>
+                <mat-card>
+                    <mat-card-title>
                         {{character.name}}
-                        <button md-button color="primary" (click)="closeCharacterSheet()">FERMER</button>
-                    </md-card-title>
-                    <md-card-content>
+                        <button mat-button color="primary" (click)="closeCharacterSheet()">FERMER</button>
+                    </mat-card-title>
+                    <mat-card-content>
                         <character [character]="character"></character>
-                    </md-card-content>
-                </md-card>
+                    </mat-card-content>
+                </mat-card>
             </div>
         </ng-template>
     </ng-template>
@@ -279,81 +279,81 @@
 
 <!-- Modal -->
 <ng-template #changeOwnershipDialog="cdkPortal" cdk-portal>
-    <md-card class="change-ownership-dialog">
-        <md-card-title>Définir le propriétaire</md-card-title>
-        <md-card-subtitle>{{selectedCharacter?.name}}</md-card-subtitle>
-        <md-card-content>
+    <mat-card class="change-ownership-dialog">
+        <mat-card-title>Définir le propriétaire</mat-card-title>
+        <mat-card-subtitle>{{selectedCharacter?.name}}</mat-card-subtitle>
+        <mat-card-content>
             <div class="modal-body">
-                <md-form-field>
-                    <input mdInput
+                <mat-form-field>
+                    <input matInput
                            placeholder="Chercher un utilisateur"
                            type="text"
                            [(ngModel)]="filterSearchUser"
                            (ngModelChange)="updateSearchUser()" />
-                </md-form-field>
+                </mat-form-field>
                 <div *ngIf="!filteredUsers.length">
                     Aucun utilisateur trouvé
                 </div>
-                <md-radio-group [(ngModel)]="changeOwnershipNewOwner">
+                <mat-radio-group [(ngModel)]="changeOwnershipNewOwner">
                     <ng-template ngFor let-user [ngForOf]="filteredUsers">
-                        <md-radio-button [value]="user">
+                        <mat-radio-button [value]="user">
                             {{user.displayName}}
-                        </md-radio-button>
+                        </mat-radio-button>
                     </ng-template>
-                </md-radio-group>
+                </mat-radio-group>
             </div>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     (click)="closeChangeOwnershipDialog()"
                     color="primary">
                 ANNULER
             </button>
-            <button md-button
+            <button mat-button
                     (click)="changeOwnershipConfirm()"
                     color="primary">
                 VALIDER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 <ng-template #inviteCharacterModal="cdkPortal" cdk-portal>
-    <md-card class="invite-character-modal">
-        <md-card-title>Inviter un personnage</md-card-title>
-        <md-card-content>
-            <md-form-field>
-                <input mdInput
+    <mat-card class="invite-character-modal">
+        <mat-card-title>Inviter un personnage</mat-card-title>
+        <mat-card-content>
+            <mat-form-field>
+                <input matInput
                        [(ngModel)]="searchNameInvite"
                        (ngModelChange)="updateFilteredPlayer()"
                        placeholder="Nom du personnage"/>
-            </md-form-field>
+            </mat-form-field>
 
             <div *ngIf="!filteredInvitePlayers?.length">
                 Aucun personnage trouvé
             </div>
-            <md-radio-group [(ngModel)]="selectedInviteCharacter">
+            <mat-radio-group [(ngModel)]="selectedInviteCharacter">
                 <ng-template ngFor let-character [ngForOf]="filteredInvitePlayers">
-                    <md-radio-button [value]="character">
+                    <mat-radio-button [value]="character">
                         {{character.name}} - {{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
                         Joueur: {{character.owner}}
-                    </md-radio-button>
+                    </mat-radio-button>
                 </ng-template>
-            </md-radio-group>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+            </mat-radio-group>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     (click)="closeInviteCharacterModal()"
                     color="primary">
                 ANNULER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     (click)="inviteCharacter(selectedInviteCharacter)">
                 INVITER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 <add-effect-modal #addEffectModal (createModifier)="selectCustomModifier($event)">

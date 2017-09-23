@@ -1,12 +1,12 @@
 <div class="target-selector">
     <span cdk-overlay-origin #targetSelectorOrigin="cdkOverlayOrigin"></span>
-    <md-icon *ngIf="!fighter.target"
+    <mat-icon *ngIf="!fighter.target"
              fontSet="game-icon"
-             md-ripple
+             matRipple
              fontIcon="game-icon-targeted"
              class="selector-icon"
              (click)="displaySelector($event)">
-    </md-icon>
+    </mat-icon>
     <div *ngIf="fighter.target" class="selected-fighter" (click)="displaySelector($event)">
         <div class="targeted-icon">
             <i [style.color]="'#' + fighter.target.color"
@@ -33,9 +33,9 @@
           [minHeight]="selectorMinHeight"
           hasBackdrop
           (backdropClick)="hideSelector()">
-    <md-card style="padding: 0">
-        <md-tab-group [selectedIndex]="selectedTabIndex">
-            <md-tab label="Monstres">
+    <mat-card style="padding: 0">
+        <mat-tab-group [selectedIndex]="selectedTabIndex">
+            <mat-tab label="Monstres">
                 <div class="target-list">
                     <ng-template ngFor let-target [ngForOf]="targets">
                         <div *ngIf="target.isMonster" class=target-element (click)="selectTarget(target)">
@@ -55,8 +55,8 @@
                         </div>
                     </ng-template>
                 </div>
-            </md-tab>
-            <md-tab label="Joueurs">
+            </mat-tab>
+            <mat-tab label="Joueurs">
                 <div class="target-list">
                     <ng-template ngFor let-target [ngForOf]="targets">
                         <div *ngIf="!target.isMonster" class=target-element (click)="selectTarget(target)">
@@ -76,7 +76,7 @@
                         </div>
                     </ng-template>
                 </div>
-            </md-tab>
-        </md-tab-group>
-    </md-card>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card>
 </ng-template>

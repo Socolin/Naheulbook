@@ -1,121 +1,121 @@
 <ng-template #addItemDialog="cdkPortal" cdk-portal>
-    <md-card>
-        <md-card-title *ngIf="character">Ajouter un objet a {{character.name}}</md-card-title>
-        <md-card-title *ngIf="loot">Ajouter un objet au loot {{loot.name}}</md-card-title>
-        <md-card-title *ngIf="loot === null && monster">Ajouter un objet au monstre {{monster.name}}</md-card-title>
-        <md-card-content style="display: flex; justify-content: space-around; flex-direction: column">
+    <mat-card>
+        <mat-card-title *ngIf="character">Ajouter un objet a {{character.name}}</mat-card-title>
+        <mat-card-title *ngIf="loot">Ajouter un objet au loot {{loot.name}}</mat-card-title>
+        <mat-card-title *ngIf="loot === null && monster">Ajouter un objet au monstre {{monster.name}}</mat-card-title>
+        <mat-card-content style="display: flex; justify-content: space-around; flex-direction: column">
             <div class="new-item-template">
-                <md-tab-group (selectedIndexChange)="onSelectTab($event)">
-                    <md-tab label="Classique">
-                        <md-card>
-                            <md-card-subtitle>Modèle</md-card-subtitle>
+                <mat-tab-group (selectedIndexChange)="onSelectTab($event)">
+                    <mat-tab label="Classique">
+                        <mat-card>
+                            <mat-card-subtitle>Modèle</mat-card-subtitle>
                             <autocomplete-search-item-template (onSelect)="selectItemTemplate($event, newItemName)">
                             </autocomplete-search-item-template>
-                        </md-card>
-                    </md-tab>
-                    <md-tab label="Pierre précieuse">
-                        <md-card>
-                            <md-card-subtitle>Modèle</md-card-subtitle>
-                            <md-card-content>
+                        </mat-card>
+                    </mat-tab>
+                    <mat-tab label="Pierre précieuse">
+                        <mat-card>
+                            <mat-card-subtitle>Modèle</mat-card-subtitle>
+                            <mat-card-content>
                                 <div>
-                                    <md-button-toggle-group [ngModel]="gemOption['type']">
-                                        <md-button-toggle [value]="'raw'" (click)="setGemOption('type', 'raw')">
+                                    <mat-button-toggle-group [ngModel]="gemOption['type']">
+                                        <mat-button-toggle [value]="'raw'" (click)="setGemOption('type', 'raw')">
                                             Brut
-                                        </md-button-toggle>
-                                        <md-button-toggle [value]="'cut'" (click)="setGemOption('type', 'cut')">
+                                        </mat-button-toggle>
+                                        <mat-button-toggle [value]="'cut'" (click)="setGemOption('type', 'cut')">
                                             Taillé
-                                        </md-button-toggle>
-                                    </md-button-toggle-group>
+                                        </mat-button-toggle>
+                                    </mat-button-toggle-group>
 
-                                    <md-form-field>
-                                        <input mdInput
+                                    <mat-form-field>
+                                        <input matInput
                                                type="number"
                                                [(ngModel)]="gemOption['number']"
                                                class="form-control"
                                                placeholder="D20"/>
-                                    </md-form-field>
+                                    </mat-form-field>
 
                                 </div>
 
                                 <div>
-                                    <md-form-field>
-                                        <input mdInput
+                                    <mat-form-field>
+                                        <input matInput
                                                type="number"
                                                [(ngModel)]="gemOption['ug']"
                                                class="form-control"
                                                placeholder="U.G."/>
-                                    </md-form-field>
-                                    <button md-mini-fab [color]="gemOption['maxUg'] == 2 ? 'accent' : 'primary'" (click)="setGemRandomUg(2)">D2</button>
-                                    <button md-mini-fab [color]="gemOption['maxUg'] == 4 ? 'accent' : 'primary'" (click)="setGemRandomUg(4)">D4</button>
-                                    <button md-mini-fab [color]="gemOption['maxUg'] == 6 ? 'accent' : 'primary'" (click)="setGemRandomUg(6)">D6</button>
-                                    <button md-mini-fab [color]="gemOption['maxUg'] == 10 ? 'accent' : 'primary'" (click)="setGemRandomUg(10)">D10</button>
+                                    </mat-form-field>
+                                    <button mat-mini-fab [color]="gemOption['maxUg'] == 2 ? 'accent' : 'primary'" (click)="setGemRandomUg(2)">D2</button>
+                                    <button mat-mini-fab [color]="gemOption['maxUg'] == 4 ? 'accent' : 'primary'" (click)="setGemRandomUg(4)">D4</button>
+                                    <button mat-mini-fab [color]="gemOption['maxUg'] == 6 ? 'accent' : 'primary'" (click)="setGemRandomUg(6)">D6</button>
+                                    <button mat-mini-fab [color]="gemOption['maxUg'] == 10 ? 'accent' : 'primary'" (click)="setGemRandomUg(10)">D10</button>
                                 </div>
-                            </md-card-content>
-                            <md-card-actions align="end">
-                                <button md-button
+                            </mat-card-content>
+                            <mat-card-actions align="end">
+                                <button mat-button
                                         color="primary"
                                         (click)="randomGem()">
                                     RANDOMISER
                                 </button>
-                            </md-card-actions>
-                        </md-card>
-                    </md-tab>
-                </md-tab-group>
+                            </mat-card-actions>
+                        </mat-card>
+                    </mat-tab>
+                </mat-tab-group>
             </div>
-            <md-card class="new-item-data">
-                <md-card-subtitle>Résumé</md-card-subtitle>
-                <md-card-content>
+            <mat-card class="new-item-data">
+                <mat-card-subtitle>Résumé</mat-card-subtitle>
+                <mat-card-content>
                     <span class="name-icon">
                         <icon-selector [icon]="newItem.data.icon"></icon-selector>
-                        <md-form-field>
-                            <input mdInput
+                        <mat-form-field>
+                            <input matInput
                                    #newItemName
                                    placeholder="Nom"
                                    [(ngModel)]="newItem.data.name"/>
-                            <md-hint *ngIf="newItem.data.notIdentified" align="end">
+                            <mat-hint *ngIf="newItem.data.notIdentified" align="end">
                                 {{newItem.template?.name}}
-                            </md-hint>
-                        </md-form-field>
+                            </mat-hint>
+                        </mat-form-field>
                     </span>
-                    <md-form-field>
-                        <input mdInput
+                    <mat-form-field>
+                        <input matInput
                                placeholder="Description"
                                [(ngModel)]="newItem.data.description"/>
-                    </md-form-field>
-                    <md-form-field *ngIf="newItem.template?.data?.quantifiable">
-                        <input mdInput
+                    </mat-form-field>
+                    <mat-form-field *ngIf="newItem.template?.data?.quantifiable">
+                        <input matInput
                                type="number"
                                placeholder="Quantité"
                                [(ngModel)]="newItem.data.quantity"/>
-                    </md-form-field>
+                    </mat-form-field>
                     <div>
-                        <md-slide-toggle color="primary"
+                        <mat-slide-toggle color="primary"
                                          [(ngModel)]="newItem.data.notIdentified"
                                          (change)="updateItemIdentified()">
                             Non-identifié
-                        </md-slide-toggle>
+                        </mat-slide-toggle>
                     </div>
-                </md-card-content>
-            </md-card>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+                </mat-card-content>
+            </mat-card>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     color="primary"
                     [disabled]="!newItem.template"
                     (click)=addItem(false)>
                 AJOUTER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     [disabled]="!newItem.template"
                     (click)=addItem(true)>
                 AJOUTER ET CONTINUER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     (click)=closeDialog()>ANNULER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 

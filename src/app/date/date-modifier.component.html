@@ -1,52 +1,52 @@
-<button md-icon-button (click)="openSelector()"><md-icon>update</md-icon></button>
+<button mat-icon-button (click)="openSelector()"><mat-icon>update</mat-icon></button>
 
 
 <ng-template #dateSelectorDialog="cdkPortal" cdk-portal>
-    <md-card>
-        <md-card-title>{{title ? title : 'Définir une durée'}}</md-card-title>
-        <md-card-content>
+    <mat-card>
+        <mat-card-title>{{title ? title : 'Définir une durée'}}</mat-card-title>
+        <mat-card-content>
             <div class="time-selector">
                 <div class="element-selector">
                     <span>MINUTE</span>
-                    <span><button md-button color="accent" (click)="updateTime('minute', -5)" [disabled]="!dateOffset['minute']">-5</button></span>
-                    <span><button md-button color="accent" (click)="updateTime('minute', -1)" [disabled]="!dateOffset['minute']">-1</button></span>
+                    <span><button mat-button color="accent" (click)="updateTime('minute', -5)" [disabled]="!dateOffset['minute']">-5</button></span>
+                    <span><button mat-button color="accent" (click)="updateTime('minute', -1)" [disabled]="!dateOffset['minute']">-1</button></span>
                     <span>{{dateOffset.minute}}</span>
-                    <span><button md-button color="primary" (click)="updateTime('minute', 1)">+1</button></span>
-                    <span><button md-button color="primary" (click)="updateTime('minute', 5)">+5</button></span>
+                    <span><button mat-button color="primary" (click)="updateTime('minute', 1)">+1</button></span>
+                    <span><button mat-button color="primary" (click)="updateTime('minute', 5)">+5</button></span>
                 </div>
                 <div class="element-selector">
                     <span>HEURE</span>
-                    <span><button md-button color="accent" (click)="updateTime('hour', -5)" [disabled]="!dateOffset['hour']">-5</button></span>
-                    <span><button md-button color="accent" (click)="updateTime('hour', -1)" [disabled]="!dateOffset['hour']">-1</button></span>
+                    <span><button mat-button color="accent" (click)="updateTime('hour', -5)" [disabled]="!dateOffset['hour']">-5</button></span>
+                    <span><button mat-button color="accent" (click)="updateTime('hour', -1)" [disabled]="!dateOffset['hour']">-1</button></span>
                     <span>{{dateOffset.hour}}</span>
-                    <span><button md-button color="primary" (click)="updateTime('hour', 1)">+1</button></span>
-                    <span><button md-button color="primary" (click)="updateTime('hour', 5)">+5</button></span>
+                    <span><button mat-button color="primary" (click)="updateTime('hour', 1)">+1</button></span>
+                    <span><button mat-button color="primary" (click)="updateTime('hour', 5)">+5</button></span>
                 </div>
                 <div class="element-selector">
                     <span>JOUR</span>
-                    <span><button md-button color="accent" (click)="updateTime('day', -5)" [disabled]="!dateOffset['day']">-5</button></span>
-                    <span><button md-button color="accent" (click)="updateTime('day', -1)" [disabled]="!dateOffset['day']">-1</button></span>
+                    <span><button mat-button color="accent" (click)="updateTime('day', -5)" [disabled]="!dateOffset['day']">-5</button></span>
+                    <span><button mat-button color="accent" (click)="updateTime('day', -1)" [disabled]="!dateOffset['day']">-1</button></span>
                     <span>{{dateOffset.day}}</span>
-                    <span><button md-button color="primary" (click)="updateTime('day', 1)">+1</button></span>
-                    <span><button md-button color="primary" (click)="updateTime('day', 5)">+5</button></span>
+                    <span><button mat-button color="primary" (click)="updateTime('day', 1)">+1</button></span>
+                    <span><button mat-button color="primary" (click)="updateTime('day', 5)">+5</button></span>
                 </div>
                 <div class="element-selector">
                     <span>SEMAINE</span>
-                    <span><button md-button color="accent" (click)="updateTime('week', -5)" [disabled]="!dateOffset['week']">-5</button></span>
-                    <span><button md-button color="accent" (click)="updateTime('week', -1)" [disabled]="!dateOffset['week']">-1</button></span>
+                    <span><button mat-button color="accent" (click)="updateTime('week', -5)" [disabled]="!dateOffset['week']">-5</button></span>
+                    <span><button mat-button color="accent" (click)="updateTime('week', -1)" [disabled]="!dateOffset['week']">-1</button></span>
                     <span>{{dateOffset.week}}</span>
-                    <span><button md-button color="primary" (click)="updateTime('week', 1)">+1</button></span>
-                    <span><button md-button color="primary" (click)="updateTime('week', 5)">+5</button></span>
+                    <span><button mat-button color="primary" (click)="updateTime('week', 1)">+1</button></span>
+                    <span><button mat-button color="primary" (click)="updateTime('week', 5)">+5</button></span>
                 </div>
             </div>
             <div class="form-group">
                 Durée: {{dateOffset | nhbkDuration: forceUpdateDuration}}
             </div>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button color="primary" (click)="resetDate()">RESET</button>
-            <button md-button color="primary" (click)="closeSelector()">FERMER</button>
-            <button md-button color="primary" (click)="validDate()">VALIDER</button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="resetDate()">RESET</button>
+            <button mat-button color="primary" (click)="closeSelector()">FERMER</button>
+            <button mat-button color="primary" (click)="validDate()">VALIDER</button>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>

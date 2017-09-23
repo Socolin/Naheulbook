@@ -1,45 +1,45 @@
-md-card {
+mat-card {
     padding: 0;
     margin-bottom: 10px;
 
-    md-form-field {
+    mat-form-field {
         margin-right: 5px;
     }
 
-    & md-toolbar {
+    & mat-toolbar {
         margin: 0;
 
-        button[md-mini-fab] {
+        button[mat-mini-fab] {
             top: 30px;
         }
     }
 
-    & md-card-content {
+    & mat-card-content {
         padding: 24px;
     }
 
-    & md-card-actions {
+    & mat-card-actions {
         margin-top: -56px;
         padding-right: 24px;
         padding-bottom: 8px;
     }
 }
 
-md-card.stats-card {
+mat-card.stats-card {
     margin-top: 10px;
 }
 
-md-card.speciality {
+mat-card.speciality {
     margin-bottom: 22px;
     padding: 16px;
 
-    & md-card-content {
+    & mat-card-content {
         text-align: justify;
         padding-left: 0;
         padding-right: 0;
     }
 
-    md-card-actions {
+    mat-card-actions {
         margin-top: -48px;
         padding-right: 24px;
         padding-bottom: 8px;

@@ -2,8 +2,7 @@ import {NgModule}      from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
-import {MaterialModule} from '@angular/material';
-
+import {NhbkMaterialModule} from '../nhbk-material.module';
 import {NotificationsModule} from '../notifications/notifications.module';
 import {SharedModule} from '../shared/shared.module';
 import {EventModule} from '../event/event.module';
@@ -33,7 +32,7 @@ import {
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule,
+        NhbkMaterialModule,
         SharedModule,
         CharacterModule,
         MonsterModule,

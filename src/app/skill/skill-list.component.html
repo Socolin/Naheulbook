@@ -1,13 +1,13 @@
-<md-form-field style="width: 100%">
-    <input mdInput
+<mat-form-field style="width: 100%">
+    <input matInput
            placeholder="Filtre"
            (keydown.esc)="filter = null"
            [(ngModel)]="filter">
-</md-form-field>
+</mat-form-field>
 <div *ngFor="let skill of skills">
 	<div *ngIf="isFiltered(skill)">
-        <md-card style="margin-bottom: 10px">
+        <mat-card style="margin-bottom: 10px">
             <skill [skill]="skill"></skill>
-        </md-card>
+        </mat-card>
 	</div>
 </div>

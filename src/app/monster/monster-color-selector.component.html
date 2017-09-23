@@ -24,7 +24,7 @@
           (backdropClick)="closeSelector()"
           [open]="showSelector"
           [origin]="colorSelectorOrigin">
-    <md-card style="padding: 0; display: flex;">
+    <mat-card style="padding: 0; display: flex;">
         <div style="flex: 0 auto; width: 192px">
             <ng-template ngFor let-color [ngForOf]="colors">
                 <div style="float:left; width: 48px; height: 48px">
@@ -49,5 +49,5 @@
                 </div>
             </ng-template>
         </div>
-    </md-card>
+    </mat-card>
 </ng-template>

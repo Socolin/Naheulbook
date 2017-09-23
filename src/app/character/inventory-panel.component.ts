@@ -2,7 +2,7 @@ import {
     Input, OnInit, Component, HostListener, ElementRef, ViewChild,
     OnChanges, SimpleChanges
 } from '@angular/core';
-import {Overlay, OverlayRef, OverlayState} from '@angular/cdk/overlay';
+import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 import {isNullOrUndefined} from 'util';
 
@@ -95,7 +95,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         this.addItemSearch = undefined;
         this.filteredItems = [];
 
-        let config = new OverlayState();
+        let config = new OverlayConfig();
 
         config.positionStrategy = this._overlay.position()
             .global()

@@ -3,7 +3,7 @@ import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {dateOffset2TimeDuration, timeDuration2DateOffset2} from './util';
 import {NhbkDateOffset} from './date.model';
 import {IDurable} from './durable.model';
-import {MdButtonToggleChange, MdSelectChange} from '@angular/material';
+import {MatButtonToggleChange, MatSelectChange} from '@angular/material';
 
 @Component({
     selector: 'duration-selector',
@@ -16,7 +16,7 @@ export class DurationSelectorComponent implements OnChanges {
 
     public dateOffset: NhbkDateOffset = new NhbkDateOffset();
 
-    updateDuration(event?: MdButtonToggleChange|MdSelectChange) {
+    updateDuration(event?: MatButtonToggleChange|MatSelectChange) {
         if (event) {
             this.durable.durationType = event.value;
         }

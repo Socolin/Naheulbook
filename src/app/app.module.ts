@@ -2,10 +2,11 @@ import {NgModule, ErrorHandler} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule}  from '@angular/router';
-import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
+import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 
+import {NhbkMaterialModule} from './nhbk-material.module';
 import {AppComponent}  from './app.component';
 import {routes} from './app.routes';
 import {HttpModule} from '@angular/http';
@@ -44,7 +45,7 @@ import {ErrorReportService} from './error-report.service';
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(routes),
-        MaterialModule,
+        NhbkMaterialModule,
         FlexLayoutModule,
         HttpModule,
         HomeModule,
@@ -76,6 +77,10 @@ import {ErrorReportService} from './error-report.service';
     providers: [
         ThemeService,
         ErrorReportService,
+        {
+            provide: MATERIAL_COMPATIBILITY_MODE,
+            useValue: true
+        },
         {
             provide: ErrorHandler,
             useClass: NhbkErrorHandler

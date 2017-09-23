@@ -1,19 +1,19 @@
-<md-card>
-    <md-card-header>
-        <md-card-title>{{monster.name}}</md-card-title>
-        <md-card-subtitle>{{monster.category.type.name}} - {{monster.category.name}}</md-card-subtitle>
-        <button *ngIf="!editing" md-icon-button (click)="editMonster()">
-            <md-icon>edit</md-icon>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{monster.name}}</mat-card-title>
+        <mat-card-subtitle>{{monster.category.type.name}} - {{monster.category.name}}</mat-card-subtitle>
+        <button *ngIf="!editing" mat-icon-button (click)="editMonster()">
+            <mat-icon>edit</mat-icon>
         </button>
-    </md-card-header>
-    <md-card-content *ngIf="editing">
+    </mat-card-header>
+    <mat-card-content *ngIf="editing">
         <monster-editor [monster]="monster"></monster-editor>
-    </md-card-content>
-    <md-card-actions *ngIf="editing" align="end">
-        <button md-button color=primary (click)="editing=false">ANNULER</button>
-        <button md-button color=primary (click)="saveMonster(monster)">VALIDER</button>
-    </md-card-actions>
-    <md-card-content *ngIf="!editing">
+    </mat-card-content>
+    <mat-card-actions *ngIf="editing" align="end">
+        <button mat-button color=primary (click)="editing=false">ANNULER</button>
+        <button mat-button color=primary (click)="saveMonster(monster)">VALIDER</button>
+    </mat-card-actions>
+    <mat-card-content *ngIf="!editing">
         <div *ngIf="monster.data.special">{{monster.data.note}}</div>
         <div class="monster-stat-row" *ngIf="!monster.data.special">
             <div>
@@ -78,6 +78,6 @@
                 </div>
             </div>
         </div>
-    </md-card-content>
-</md-card>
+    </mat-card-content>
+</mat-card>
 

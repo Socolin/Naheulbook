@@ -1,39 +1,39 @@
 
 <ng-template #addEffectDialog="cdkPortal" cdk-portal>
-    <md-card class="add-effect-dialog">
-        <md-card-title>Ajouter un effet</md-card-title>
-        <md-card-content>
-            <md-tab-group (selectedIndexChange)="addEffectTypeSelectedTab = $event">
-                <md-tab label="Prédéfini">
+    <mat-card class="add-effect-dialog">
+        <mat-card-title>Ajouter un effet</mat-card-title>
+        <mat-card-content>
+            <mat-tab-group (selectedIndexChange)="addEffectTypeSelectedTab = $event">
+                <mat-tab label="Prédéfini">
                     <active-effect-editor #activeEffectEditor
                                           (onValidate)="addEffect($event)">
                     </active-effect-editor>
-                </md-tab>
+                </mat-tab>
 
-                <md-tab label="Custom">
+                <mat-tab label="Custom">
                     <stats-modifier-editor [modifier]="newStatsModifier">
                     </stats-modifier-editor>
-                </md-tab>
-            </md-tab-group>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     color="primary"
                     (click)="close()">
                 ANNULER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     *ngIf="addEffectTypeSelectedTab === 0"
                     (click)="activeEffectEditor.addEffect()">
                 AJOUTER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     *ngIf="addEffectTypeSelectedTab === 1"
                     (click)="addCustomModifier()">
                 AJOUTER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>

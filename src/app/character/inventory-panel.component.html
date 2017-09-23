@@ -1,52 +1,52 @@
-<md-card class="inventory-card">
-    <md-toolbar color="primary">
+<mat-card class="inventory-card">
+    <mat-toolbar color="primary">
         <span>Inventaire</span>
-        <button md-mini-fab color=accent (click)="openAddItemModal()">
-            <md-icon>add</md-icon>
+        <button mat-mini-fab color=accent (click)="openAddItemModal()">
+            <mat-icon>add</mat-icon>
         </button>
-    </md-toolbar>
+    </mat-toolbar>
     <div class="buttons-header">
-        <md-button-toggle-group [(ngModel)]="selectedInventoryTab">
-            <md-button-toggle value="all">
+        <mat-button-toggle-group [(ngModel)]="selectedInventoryTab">
+            <mat-button-toggle value="all">
                 Tout
-            </md-button-toggle>
-            <md-button-toggle value="bags">
+            </mat-button-toggle>
+            <mat-button-toggle value="bags">
                 Sacs
-            </md-button-toggle>
-            <md-button-toggle value="equiped">
+            </mat-button-toggle>
+            <mat-button-toggle value="equiped">
                 Equipé
-            </md-button-toggle>
-            <md-button-toggle value="currency">
+            </mat-button-toggle>
+            <mat-button-toggle value="currency">
                 Monnaie
-            </md-button-toggle>
-        </md-button-toggle-group>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
 
-        <md-button-toggle-group [(ngModel)]="sortType" (click)="sortInventory()">
-            <md-button-toggle *ngIf="!sortType || sortType === 'desc'" [value]="'asc'">
-                <md-icon>sort_by_alpha</md-icon>
-            </md-button-toggle>
-            <md-button-toggle *ngIf="sortType && sortType !== 'desc'" [value]="'desc'">
-                <md-icon>sort_by_alpha</md-icon>
-            </md-button-toggle>
-            <md-button-toggle [value]="'not_identified_first'">
-                <md-icon>sort</md-icon>
-            </md-button-toggle>
-        </md-button-toggle-group>
+        <mat-button-toggle-group [(ngModel)]="sortType" (click)="sortInventory()">
+            <mat-button-toggle *ngIf="!sortType || sortType === 'desc'" [value]="'asc'">
+                <mat-icon>sort_by_alpha</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle *ngIf="sortType && sortType !== 'desc'" [value]="'desc'">
+                <mat-icon>sort_by_alpha</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="'not_identified_first'">
+                <mat-icon>sort</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
 
-        <button md-raised-button (click)="toggleIconMode()" *ngIf="selectedInventoryTab === 'all' || selectedInventoryTab === 'bags' || selectedInventoryTab === 'currency'">
-            <md-icon *ngIf="iconMode" class="md-24">list</md-icon>
-            <md-icon *ngIf="!iconMode" class="md-24">view_module</md-icon>
+        <button mat-raised-button (click)="toggleIconMode()" *ngIf="selectedInventoryTab === 'all' || selectedInventoryTab === 'bags' || selectedInventoryTab === 'currency'">
+            <mat-icon *ngIf="iconMode" class="md-24">list</mat-icon>
+            <mat-icon *ngIf="!iconMode" class="md-24">view_module</mat-icon>
         </button>
 
-        <md-form-field *ngIf="selectedInventoryTab === 'all'">
-            <input mdInput
+        <mat-form-field *ngIf="selectedInventoryTab === 'all'">
+            <input matInput
                       placeholder="Filtre"
                       [(ngModel)]="itemFilterName"
                       (keydown.esc)="itemFilterName = null">
-            <span mdSuffix>&nbsp;
-                <md-icon>search</md-icon>
+            <span matSuffix>&nbsp;
+                <mat-icon>search</mat-icon>
             </span>
-        </md-form-field>
+        </mat-form-field>
     </div>
 
     <div class="inventory">
@@ -56,15 +56,15 @@
                     <ng-template ngFor let-item [ngForOf]="character.items" [ngForTrackBy]="trackById">
                         <div class="items-list-element" *ngIf="isItemFilteredByName(item)">
                             <div class="item-line"
-                                 md-ripple
+                                 matRipple
                                  cdk-overlay-origin
                                  #itemLine="cdkOverlayOrigin"
                                  [class.selected]="item === selectedItem"
                                  (click)="selectItem(item)">
                                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                                <md-icon *ngIf="item.data.notIdentified">help</md-icon>
-                                <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
-                                <md-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</md-icon>
+                                <mat-icon *ngIf="item.data.notIdentified">help</mat-icon>
+                                <mat-icon *ngIf="item.data.equiped !== undefined">check_circle</mat-icon>
+                                <mat-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</mat-icon>
                                 <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                 {{item.data.name}}
                             </div>
@@ -81,10 +81,10 @@
             <div *ngIf="iconMode">
                 <ng-template ngFor let-item [ngForOf]="character.items" [ngForTrackBy]="trackById">
                     <div class="item-icon"
-                         md-ripple
-                         mdRippleCentered="true"
-                         mdRippleUnbounded="true"
-                         mdRippleRadius="24"
+                         matRipple
+                         matRippleCentered="true"
+                         matRippleUnbounded="true"
+                         matRippleRadius="24"
                          cdk-overlay-origin
                          #itemLine="cdkOverlayOrigin"
                          [class.selected]="item === selectedItem"
@@ -108,15 +108,15 @@
                     <ng-template ngFor let-item [ngForOf]="character.computedData.currencyItems" [ngForTrackBy]="trackById">
                         <div class="items-list-element">
                             <div class="item-line"
-                                 md-ripple
+                                 matRipple
                                  cdk-overlay-origin
                                  #itemLine="cdkOverlayOrigin"
                                  [class.selected]="item === selectedItem"
                                  (click)="selectItem(item)">
                                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                                <md-icon *ngIf="item.data.notIdentified">help</md-icon>
-                                <md-icon *ngIf="item.data.equiped !== undefined">check_circle</md-icon>
-                                <md-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</md-icon>
+                                <mat-icon *ngIf="item.data.notIdentified">help</mat-icon>
+                                <mat-icon *ngIf="item.data.equiped !== undefined">check_circle</mat-icon>
+                                <mat-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</mat-icon>
                                 <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                 {{item.data.name}}
                                 <swipeable-item-detail *ngIf="item === selectedItem"
@@ -133,10 +133,10 @@
             <div *ngIf="iconMode">
                 <ng-template ngFor let-item [ngForOf]="character.computedData.currencyItems" [ngForTrackBy]="trackById">
                     <div class="item-icon"
-                         md-ripple
-                         mdRippleCentered="true"
-                         mdRippleUnbounded="true"
-                         mdRippleRadius="24"
+                         matRipple
+                         matRippleCentered="true"
+                         matRippleUnbounded="true"
+                         matRippleRadius="24"
                          cdk-overlay-origin
                          #itemLine="cdkOverlayOrigin"
                          [class.selected]="item === selectedItem"
@@ -168,29 +168,29 @@
                     <ng-template ngFor let-item [ngForOf]="character.computedData.itemsBySlots[slot.id]" let-i="index" let-last="last" [ngForTrackBy]="trackById">
                         <div class="items-list-element">
                             <div class="item-line"
-                                 md-ripple
+                                 matRipple
                                  cdk-overlay-origin
                                  #itemLine="cdkOverlayOrigin"
                                  [class.selected]="item === selectedItem"
                                  (click)="selectItem(item)">
                                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                                <md-icon *ngIf="item.data.notIdentified">help</md-icon>
+                                <mat-icon *ngIf="item.data.notIdentified">help</mat-icon>
                                 <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                 {{item.data.name}}
 
-                                <button md-icon-button
+                                <button mat-icon-button
                                         *ngIf="i > 0 && character.computedData.itemsBySlots[slot.id].length > 1"
                                         type="button"
                                         class="btn btn-default col-md-1 col-xs-2"
                                         (click)="_itemActionService.onAction('equip', item, {level: 1})">
-                                    <md-icon>keyboard_arrow_up</md-icon>
+                                    <mat-icon>keyboard_arrow_up</mat-icon>
                                 </button>
-                                <button md-icon-button
+                                <button mat-icon-button
                                         *ngIf="!last && character.computedData.itemsBySlots[slot.id].length > 1"
                                         type="button"
                                         class="btn btn-default col-md-1 col-xs-2"
                                         (click)="_itemActionService.onAction('equip', item, {level: -1})">
-                                    <md-icon>keyboard_arrow_down</md-icon>
+                                    <mat-icon>keyboard_arrow_down</mat-icon>
                                 </button>
                                 <swipeable-item-detail *ngIf="item === selectedItem"
                                                        [gmView]="inGroupTab"
@@ -214,48 +214,48 @@
         </div>
 
     </div>
-</md-card>
+</mat-card>
 
 <ng-template #addItemDialog="cdkPortal" cdk-portal>
-    <md-card class="add-item-dialog">
-        <md-card-title>Ajouter un objet</md-card-title>
-        <md-card-content>
+    <mat-card class="add-item-dialog">
+        <mat-card-title>Ajouter un objet</mat-card-title>
+        <mat-card-content>
             <autocomplete-search-item-template #autocompleteSearchItemTemplate [clearOnSelect]=true (onSelect)="selectAddItem($event)">
             </autocomplete-search-item-template>
 
             <div *ngIf="selectedAddItem">
-                <md-form-field style="width: 100%">
-                    <input mdInput type="text"
+                <mat-form-field style="width: 100%">
+                    <input matInput type="text"
                            placeholder="Nom personnalisé"
                            [(ngModel)]="itemAddCustomName"/>
-                </md-form-field>
-                <md-form-field style="width: 100%">
-                    <input mdInput type="text"
+                </mat-form-field>
+                <mat-form-field style="width: 100%">
+                    <input matInput type="text"
                            placeholder="Description personnalisé"
                            [(ngModel)]="itemAddCustomDescription"/>
-                </md-form-field>
+                </mat-form-field>
 
-                <md-form-field *ngIf="selectedAddItem.data.quantifiable" style="width: 100%">
-                    <input mdInput type="number"
+                <mat-form-field *ngIf="selectedAddItem.data.quantifiable" style="width: 100%">
+                    <input matInput type="number"
                            placeholder="Quantité"
                            [(ngModel)]="itemAddQuantity"/>
-                </md-form-field>
+                </mat-form-field>
             </div>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     color="primary"
                     type="button"
                     (click)="closeAddItemDialog()">
                 FERMER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     type="button"
                     [disabled]="!selectedAddItem"
                     (click)="addItem()">
                 AJOUTER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>

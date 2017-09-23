@@ -1,5 +1,5 @@
 .date-selector-dialog {
-    md-card-content {
+    mat-card-content {
         max-height: 65vh;
         max-width: calc(100vh - 40px);
         overflow-y: auto;
@@ -8,7 +8,7 @@
 
 .hour-minute {
     display: flex;
-    >md-form-field {
+    >mat-form-field {
         flex: 0 70px;
     }
     .padding {
@@ -18,10 +18,10 @@
 .day {
     display: flex;
     align-items: center;
-    >md-form-field {
+    >mat-form-field {
         flex: 0 60px;
     }
-    >md-select {
+    >mat-select {
         flex: 1 350px;
     }
 

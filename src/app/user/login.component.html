@@ -1,12 +1,12 @@
 <div class="login-form">
-    <md-card>
-        <md-card-title>
+    <mat-card>
+        <mat-card-title>
             Connexion
-        </md-card-title>
-        <md-card-subtitle>
+        </mat-card-title>
+        <mat-card-subtitle>
             Choisissez quelle méthode utiliser pour vous authentifier.
-        </md-card-subtitle>
-        <md-card-content>
+        </mat-card-subtitle>
+        <mat-card-content>
             <p>
                 Si vous n'avez pas encore de compte, un compte sera créer automatiquement lors de
                 l'ídentification avec l'une des méthode ci-dessous. Aucune permissions additionnel n'est demander,
@@ -16,16 +16,16 @@
                 Vous pourrez changer le pseudo du compte dans le profile une fois le compte créer.
             </p>
             <div class="auth-buttons">
-                <button md-raised-button color="primary" (click)="login('facebook')">Facebook</button>
-                <button md-raised-button color="primary" (click)="login('google')">Google</button>
-                <button md-raised-button color="primary" (click)="login('twitter')">Twitter</button>
-                <button md-raised-button color="primary" (click)="login('live')">Windows Live</button>
+                <button mat-raised-button color="primary" (click)="login('facebook')">Facebook</button>
+                <button mat-raised-button color="primary" (click)="login('google')">Google</button>
+                <button mat-raised-button color="primary" (click)="login('twitter')">Twitter</button>
+                <button mat-raised-button color="primary" (click)="login('live')">Windows Live</button>
             </div>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button color=primary (click)="moreInfo = !moreInfo">Plus d'infos</button>
-        </md-card-actions>
-        <md-card-content *ngIf="moreInfo">
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color=primary (click)="moreInfo = !moreInfo">Plus d'infos</button>
+        </mat-card-actions>
+        <mat-card-content *ngIf="moreInfo">
             <p>
                 Avec les méthode d'authentification disponible la seul informations stocké en base non relative à
                 vos personnage sera un id (un grand nombre) et un pseudo.
@@ -43,6 +43,6 @@
                 souhaitez une autres (qui fonctionne sur le même principe OAuth2), vous pouvez en faire la demande
                 <a href="https://bitbucket.org/naheulbook/frontend/issues?status=new&status=open">ici</a>
             </p>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 </div>

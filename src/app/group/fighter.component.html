@@ -54,7 +54,7 @@
         </div>
         <div class="row-damage-part">
             <div *ngFor="let dmg of fighter.stats.dmg" class="equiped-weapons-damages">
-                <md-icon *ngIf="dmg.incompatible" color="warn">warning</md-icon>
+                <mat-icon *ngIf="dmg.incompatible" color="warn">warning</mat-icon>
                 <span>
                     <span [class.incompatible-item]="dmg.incompatible">
                         {{dmg.damage}}
@@ -67,53 +67,53 @@
         </div>
         <div class="row-end-part">
             <div class="field">{{fighter.stats.cou}}</div>
-            <div class="field-fixed-small"><md-checkbox [checked]="fighter.chercheNoise" disabled></md-checkbox></div>
+            <div class="field-fixed-small"><mat-checkbox [checked]="fighter.chercheNoise" disabled></mat-checkbox></div>
         </div>
     </div>
 
     <div *ngIf="!fighter.isMonster" class="field-button">
-        <button md-icon-button [mdMenuTriggerFor]="menuCharacter" aria-label="Open basic menu">
-            <md-icon>more_vert</md-icon>
+        <button mat-icon-button [matMenuTriggerFor]="menuCharacter" aria-label="Open basic menu">
+            <mat-icon>more_vert</mat-icon>
         </button>
-        <md-menu #menuCharacter="mdMenu">
-            <button md-menu-item
+        <mat-menu #menuCharacter="matMenu">
+            <button mat-menu-item
                     (click)="displayCharacterSheet(fighter.character)">
                 Voir la fiche
             </button>
-            <button md-menu-item
+            <button mat-menu-item
                     (click)=addItemTo(fighter)>
                 Ajouter un objet
             </button>
-        </md-menu>
+        </mat-menu>
     </div>
     <div *ngIf="fighter.isMonster" class="field-button">
-        <button md-icon-button [mdMenuTriggerFor]="menuMonster" aria-label="Open basic menu">
-            <md-icon>more_vert</md-icon>
+        <button mat-icon-button [matMenuTriggerFor]="menuMonster" aria-label="Open basic menu">
+            <mat-icon>more_vert</mat-icon>
         </button>
 
-        <md-menu #menuMonster="mdMenu">
-            <button md-menu-item
+        <mat-menu #menuMonster="matMenu">
+            <button mat-menu-item
                     (click)=killMonster(fighter.monster)>
                 Tuer le monstre
             </button>
-            <button md-menu-item
+            <button mat-menu-item
                     (click)=deleteMonster(fighter.monster)>
                 Supprimer le monstre
             </button>
-            <button md-menu-item
+            <button mat-menu-item
                     (click)=openEditMonsterDialog()>
                 Modifier
             </button>
-        </md-menu>
+        </mat-menu>
     </div>
 </div>
 
 <div class="row-stat-modifiers">
-    <md-card class="expanded-data-card"
+    <mat-card class="expanded-data-card"
              [class.combat-row-selected]="selected"
              *ngIf="expandedView && fighter.isMonster">
-        <md-card-subtitle>Informations complémentaires</md-card-subtitle>
-        <md-card-content class="expanded-data">
+        <mat-card-subtitle>Informations complémentaires</mat-card-subtitle>
+        <mat-card-content class="expanded-data">
             <div class="fighter-advanced-datas">
                 <div class="fighter-advanced-data">
                     <span class="label">XP</span>
@@ -127,17 +127,17 @@
                 <div class="fighter-advanced-data">
                     <span class="label">Sexe</span>
                     <span class="value">
-                        <md-select [ngModel]="fighter.monster.data.sex" (ngModelChange)="updateMonsterField(fighter.monster, 'sex', $event)">
-                            <md-option [value]="null">
+                        <mat-select [ngModel]="fighter.monster.data.sex" (ngModelChange)="updateMonsterField(fighter.monster, 'sex', $event)">
+                            <mat-option [value]="null">
                                 Non défini
-                            </md-option>
-                            <md-option [value]="'f'">
+                            </mat-option>
+                            <mat-option [value]="'f'">
                                 Femme
-                            </md-option>
-                            <md-option [value]="'h'">
+                            </mat-option>
+                            <mat-option [value]="'h'">
                                 Homme
-                            </md-option>
-                        </md-select>
+                            </mat-option>
+                        </mat-select>
                     </span>
                 </div>
                 <div class="fighter-advanced-data" *ngIf="fighter.monster.data.page">
@@ -145,24 +145,24 @@
                     <span class="value">{{fighter.monster.data.page}}</span>
                 </div>
 
-                <md-form-field class="fighter-note">
-                <textarea mdInput
-                          mdTextareaAutosize
-                          mdAutosizeMinRows="2"
+                <mat-form-field class="fighter-note">
+                <textarea matInput
+                          matTextareaAutosize
+                          matAutosizeMinRows="2"
                           placeholder="Note"
                           [ngModel]="fighter.monster.data.note"
                           (blur)="updateMonsterField(fighter.monster, 'note', $event.target.value)">
                 </textarea>
-                </md-form-field>
+                </mat-form-field>
             </div>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 
-    <md-card class="expanded-data-card"
+    <mat-card class="expanded-data-card"
              [class.combat-row-selected]="selected"
              *ngIf="expandedView && fighter.isMonster">
-        <md-card-subtitle>Effets</md-card-subtitle>
-        <md-card-content class="monster-effects">
+        <mat-card-subtitle>Effets</mat-card-subtitle>
+        <mat-card-content class="monster-effects">
             <div class="effect-list">
                 <ng-template ngFor let-modifier [ngForOf]="fighter.monster.modifiers" let-i="index" let-last="last">
                     <div *ngIf="!modifier.permanent"
@@ -170,11 +170,11 @@
                          (click)="selectModifier(modifier)"
                          [class.selected]="selectedModifier === modifier">
                         <span *ngIf="modifier.reusable" class="toggle-reusable">
-                            <md-slide-toggle color="primary"
+                            <mat-slide-toggle color="primary"
                                              (change)="toggleReusableModifier(modifier)"
                                              (click)="$event.stopPropagation()"
                                              [ngModel]="modifier.active">
-                            </md-slide-toggle>
+                            </mat-slide-toggle>
                         </span>
                         <span class="padding">
                             {{modifier.name}}
@@ -189,10 +189,10 @@
                             <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{modifier.currentLapCount}}
                         </span>
                     </div>
-                    <md-card *ngIf="selectedModifier === modifier"
+                    <mat-card *ngIf="selectedModifier === modifier"
                          class="effect-detail"
                          [class.selected]="selectedModifier === modifier">
-                        <button md-button color="accent"
+                        <button mat-button color="accent"
                                 class="delete-modifier-button"
                                 (click)="removeModifier(modifier)">
                             SUPPRIMER
@@ -239,45 +239,45 @@
                                 {{modifier | modifier}}
                             </div>
                         </div>
-                    </md-card>
+                    </mat-card>
                 </ng-template>
-                <button md-icon-button (click)="addEffectModal.open()">
-                    <md-icon>add</md-icon>
+                <button mat-icon-button (click)="addEffectModal.open()">
+                    <mat-icon>add</mat-icon>
                 </button>
             </div>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 
 </div>
 
 <div class="row-inventory" *ngIf="expandedView && fighter.isMonster">
-    <md-card class="expanded-data-card"
+    <mat-card class="expanded-data-card"
              [class.combat-row-selected]="selected">
-        <md-card-subtitle>Inventaire</md-card-subtitle>
-        <md-card-content class="expanded-data">
+        <mat-card-subtitle>Inventaire</mat-card-subtitle>
+        <mat-card-content class="expanded-data">
             <div class="fighter-advanced-datas">
                 <div>
                     <div *ngFor="let item of fighter.monster.items"
                          class="fighter-inventory-item"
-                         md-ripple
+                         matRipple
                          [class.selected]="selectedItem === item"
                          (click)="selectedItem = item">
-                        <md-slide-toggle class="equip-toggle"
+                        <mat-slide-toggle class="equip-toggle"
                                          *ngIf="item.template.slots && item.template.slots.length"
                                          [ngModel]="item.data.equiped"
                                          (change)="equipItem(item, $event)">
-                        </md-slide-toggle>
+                        </mat-slide-toggle>
                         <icon [icon]="item.data.icon" [size]="'24px'"></icon>
                         <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}} </span>
                         {{item.data.name}}
                     </div>
-                    <button md-icon-button (click)="addItemTo(fighter)">
-                        <md-icon>add</md-icon>
+                    <button mat-icon-button (click)="addItemTo(fighter)">
+                        <mat-icon>add</mat-icon>
                     </button>
                 </div>
             </div>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
     <div class="item-detail" *ngIf="selectedItem">
         <item-detail [gmView]="true" [character]="fighter.character" [item]="selectedItem" [readonly]="true">
         </item-detail>
@@ -285,19 +285,19 @@
 </div>
 
 <div class="row-inventory" *ngIf="expandedView && !fighter.isMonster">
-    <md-card class="expanded-data-card"
+    <mat-card class="expanded-data-card"
              [class.combat-row-selected]="selected">
-        <md-card-content class="expanded-data">
+        <mat-card-content class="expanded-data">
             <div class="fighter-advanced-datas">
-            <md-tab-group>
-                <md-tab label="Équipé">
+            <mat-tab-group>
+                <mat-tab label="Équipé">
                     <div *ngFor="let item of fighter.character.items"
                          [class.selected]="selectedItem === item">
                         <span *ngIf="item.data.equiped && itemHasSlot(item.template, 'WEAPON')"
                               class="fighter-inventory-item"
-                              md-ripple
+                              matRipple
                               (click)="selectedItem = item">
-                            <md-icon *ngIf="item.computedData.incompatible" color="warn">warning</md-icon>
+                            <mat-icon *ngIf="item.computedData.incompatible" color="warn">warning</mat-icon>
                             <icon [icon]="item.data.icon" [size]="'24px'"></icon>
                             <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
                             {{item.data.name}}
@@ -305,32 +305,32 @@
                         <span
                             *ngIf="item.data.equiped && !itemHasSlot(item.template, 'WEAPON') && !item.template.data.container"
                             class="fighter-inventory-item"
-                            md-ripple
+                            matRipple
                             (click)="selectedItem = item">
-                            <md-icon *ngIf="item.computedData.incompatible" color="warn">warning</md-icon>
+                            <mat-icon *ngIf="item.computedData.incompatible" color="warn">warning</mat-icon>
                             <icon [icon]="item.data.icon" [size]="'24px'"></icon>
                             <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
                             {{item.data.name}}
                         </span>
                     </div>
-                </md-tab>
-                <md-tab label="Non identifié">
+                </mat-tab>
+                <mat-tab label="Non identifié">
                     <div *ngFor="let item of fighter.character.items"
                          [class.selected]="selectedItem === item">
                         <span *ngIf="item.data.notIdentified"
                               class="fighter-inventory-item"
-                              md-ripple
+                              matRipple
                               (click)="selectedItem = item">
                             <icon [icon]="item.data.icon" [size]="'24px'"></icon>
                             <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
                             {{item.data.name}}
                         </span>
                     </div>
-                </md-tab>
-            </md-tab-group>
+                </mat-tab>
+            </mat-tab-group>
             </div>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
     <div class="item-detail" *ngIf="selectedItem">
         <item-detail [gmView]="true"
                      [character]="fighter.character"
@@ -341,17 +341,17 @@
 </div>
 
 <ng-template #editMonsterDialog="cdkPortal" cdk-portal>
-    <md-card>
-        <md-card-content>
+    <mat-card>
+        <mat-card-content>
             <div class="editable-data">
                 <div class="fighter-row">
-                    <md-form-field class="name">
-                        <input mdInput
+                    <mat-form-field class="name">
+                        <input matInput
                                placeholder="Nom"
                                [ngModel]="fighter.monster.name"
                                (ngModelChange)="changeStat('name', $event)"
                         />
-                    </md-form-field>
+                    </mat-form-field>
                 </div>
             </div>
             <div class="fighter-row">
@@ -411,13 +411,13 @@
                 </div>
             </div>
             <div class="fighter-row">
-                <md-form-field class="dmg">
-                    <input mdInput
+                <mat-form-field class="dmg">
+                    <input matInput
                            placeholder="Dmg"
                            [ngModel]="fighter.monster.data.dmg"
                            (ngModelChange)="changeStat('dmg', $event)"
                     />
-                </md-form-field>
+                </mat-form-field>
                 <div class="cou">
                     COU:
                     <value-editor [value]="fighter.monster.data.cou"
@@ -427,13 +427,13 @@
                 </div>
                 <div class="cherchenoise">
                     Chercher des noises:
-                    <md-checkbox [checked]="fighter.monster.data.chercheNoise"
+                    <mat-checkbox [checked]="fighter.monster.data.chercheNoise"
                                  (change)="updateMonsterField(fighter.monster, 'chercheNoise', $event.checked)">
-                    </md-checkbox>
+                    </mat-checkbox>
                 </div>
             </div>
-        </md-card-content>
-    </md-card>
+        </mat-card-content>
+    </mat-card>
 </ng-template>
 
 <add-effect-modal #addEffectModal (createModifier)="addCustomModifier($event)">

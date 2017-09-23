@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
 
-import {MdSidenav} from '@angular/material';
+import {MatSidenav} from '@angular/material';
 import {CharacterService} from '../character/character.service';
 import {CharacterResume} from '../character/character.model';
 import {ThemeService} from '../theme.service';
@@ -13,8 +13,8 @@ import {ThemeService} from '../theme.service';
 export class HomePlayerComponent implements OnInit {
     public characters: CharacterResume[];
 
-    @ViewChild('start', {read: MdSidenav})
-    public start: MdSidenav;
+    @ViewChild('start', {read: MatSidenav})
+    public start: MatSidenav;
 
     constructor(private _characterService: CharacterService
         , public _router: Router) {

@@ -37,7 +37,7 @@
         </fighter>
     </div>
     <div *ngIf="group.data.inCombat && group.currentFighter" class="next-fighter">
-        <button md-raised-button
+        <button mat-raised-button
                 color="primary"
                 [disabled]="loadingNextLap || group.fighters.length < 2"
                 (click)="selectNextFighter()">
@@ -57,9 +57,9 @@
 </div>
 
 <ng-template #deadMonstersDialog="cdkPortal" cdk-portal>
-    <md-card class="dead-monsters-dialog">
-        <md-card-title>Monstres morts</md-card-title>
-        <md-card-content class="dead-monsters-list">
+    <mat-card class="dead-monsters-dialog">
+        <mat-card-title>Monstres morts</mat-card-title>
+        <mat-card-content class="dead-monsters-list">
             <table class="table table-striped table-condensed text-center">
                 <thead>
                 <tr>
@@ -79,132 +79,132 @@
                     </ng-template>
                 </tbody>
             </table>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     color="primary"
                     [disabled]="allDeadMonstersLoaded"
                     (click)="loadMoreDeadMonsters()">CHARGER PLUS</button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     (click)="closeDeadMonstersDialog()">FERMER</button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 
 <ng-template #addMonsterDialog="cdkPortal" cdk-portal>
-    <md-card class="add-monster-dialog">
-        <md-card-title>Ajouter un monstre</md-card-title>
-        <md-card-content>
+    <mat-card class="add-monster-dialog">
+        <mat-card-title>Ajouter un monstre</mat-card-title>
+        <mat-card-content>
             <autocomplete-input [value]="newMonster.name"
                                 [placeholder]="'Nom'"
                                 (onSelect)="selectMonsterInAutocompleteList($event)"
                                 [(callback)]="autocompleteMonsterListCallback">
             </autocomplete-input>
             <div class="inputs">
-                <md-form-field>
-                    <input mdInput
+                <mat-form-field>
+                    <input matInput
                            placeholder="AT"
                            type="number"
                            [(ngModel)]="newMonster.data.at"/>
-                </md-form-field>
-                <md-form-field>
-                    <input mdInput
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
                            placeholder="PRD"
                            type="number"
                            [(ngModel)]="newMonster.data.prd"/>
-                </md-form-field>
-                <md-form-field>
-                    <input mdInput
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
                            placeholder="ESQ"
                            type="number"
                            [(ngModel)]="newMonster.data.esq"/>
-                </md-form-field>
-                <md-form-field>
-                    <input mdInput
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
                            type="number"
                            placeholder="PR"
                            [(ngModel)]="newMonster.data.pr">
-                </md-form-field>
-                <md-form-field>
-                    <input mdInput
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
                            type="number"
                            placeholder="PR_MAGIC"
                            [(ngModel)]="newMonster.data.pr_magic">
-                </md-form-field>
+                </mat-form-field>
             </div>
 
             <div class="inputs">
-                <md-form-field>
-                    <input mdInput
+                <mat-form-field>
+                    <input matInput
                            placeholder="EV"
                            type="number"
                            [(ngModel)]="newMonster.data.ev"/>
-                </md-form-field>
-                <md-form-field>
-                    <input mdInput
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
                            placeholder="EA"
                            type="number"
                            [(ngModel)]="newMonster.data.ea"/>
-                </md-form-field>
-                <md-form-field>
-                    <input mdInput
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
                            placeholder="RESM"
                            type="number"
                            [(ngModel)]="newMonster.data.resm"/>
-                </md-form-field>
-                <md-form-field>
-                    <input mdInput
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
                            placeholder="Degat"
                            [(ngModel)]="newMonster.data.dmg"/>
-                </md-form-field>
+                </mat-form-field>
             </div>
 
             <div class="inputs">
-                <md-form-field>
-                    <input mdInput
+                <mat-form-field>
+                    <input matInput
                            placeholder="XP"
                            type="number"
                            [(ngModel)]="newMonster.data.xp"/>
-                </md-form-field>
-                <md-form-field>
-                    <input mdInput
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
                            placeholder="COU"
                            type="number"
                            [(ngModel)]="newMonster.data.cou"/>
-                </md-form-field>
-                <md-slide-toggle [(ngModel)]="newMonster.data.chercheNoise"
+                </mat-form-field>
+                <mat-slide-toggle [(ngModel)]="newMonster.data.chercheNoise"
                                   color="primary">
                     Chercher des noises
-                </md-slide-toggle>
+                </mat-slide-toggle>
             </div>
             <div class="inputs">
                 Sexe
-                <md-radio-group name="sex" [(ngModel)]="newMonster.data.sex">
-                    <md-radio-button name="sex" [value]="null">
+                <mat-radio-group name="sex" [(ngModel)]="newMonster.data.sex">
+                    <mat-radio-button name="sex" [value]="null">
                         Non défini
-                    </md-radio-button>
-                    <md-radio-button name="sex" [value]="'f'">
+                    </mat-radio-button>
+                    <mat-radio-button name="sex" [value]="'f'">
                         Femme
-                    </md-radio-button>
-                    <md-radio-button name="sex" [value]="'h'">
+                    </mat-radio-button>
+                    <mat-radio-button name="sex" [value]="'h'">
                         Homme
-                    </md-radio-button>
-                </md-radio-group>
+                    </mat-radio-button>
+                </mat-radio-group>
             </div>
             <div class="inputs">
-                <md-form-field style="width: 100%">
-                    <input mdInput
+                <mat-form-field style="width: 100%">
+                    <input matInput
                            placeholder="Note"
                            type="text"
                            [(ngModel)]="newMonster.data.note"/>
-                </md-form-field>
+                </mat-form-field>
             </div>
             <div class="form-group">
                 <h4>
                     Inventaire/Loot
-                    <button md-raised-button (click)="randomMonsterInventory()">Random</button>
+                    <button mat-raised-button (click)="randomMonsterInventory()">Random</button>
                 </h4>
                 <div class="col-xs-9" *ngIf="newMonster.items">
                     <div *ngFor="let item of newMonster.items; let i=index">
@@ -214,19 +214,19 @@
                     </div>
                 </div>
             </div>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     color="primary"
                     (click)="closeAddMonsterDialog()">FERMER</button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     (click)="cleanMonster()">RESET</button>
-            <button md-button
+            <button mat-button
                     color="accent"
                     (click)="addMonster()">AJOUTER</button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>
 
 <create-item #createItemComponent (onAddItem)="onItemAdded($event)"></create-item>

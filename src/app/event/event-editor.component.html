@@ -1,31 +1,31 @@
 <ng-template cdk-portal #eventEditorDialog="cdkPortal">
-    <md-card>
-        <md-card-title>
+    <mat-card>
+        <mat-card-title>
             Ajouter un évènement
-        </md-card-title>
-        <md-card-content>
+        </mat-card-title>
+        <mat-card-content>
             <div>
-                <md-form-field style="width: 100%">
-                    <input mdInput
+                <mat-form-field style="width: 100%">
+                    <input matInput
                            type="text"
                            [(ngModel)]="event.name"
                            placeholder="Nom"/>
-                </md-form-field>
+                </mat-form-field>
             </div>
             <div>
-                <md-form-field style="width: 100%">
-                    <input mdInput
+                <mat-form-field style="width: 100%">
+                    <input matInput
                            type="text"
                            [(ngModel)]="event.description"
                            placeholder="Description"/>
-                </md-form-field>
+                </mat-form-field>
             </div>
             <div>
                 Définir la date
-                <md-button-toggle-group [(ngModel)]="durationType">
-                    <md-button-toggle value="date">Absolu</md-button-toggle>
-                    <md-button-toggle value="offset">Relative</md-button-toggle>
-                </md-button-toggle-group>
+                <mat-button-toggle-group [(ngModel)]="durationType">
+                    <mat-button-toggle value="date">Absolu</mat-button-toggle>
+                    <mat-button-toggle value="offset">Relative</mat-button-toggle>
+                </mat-button-toggle-group>
             </div>
             <div *ngIf="durationType === 'date'">
                 <span class="input-group-addon">Le</span>
@@ -48,20 +48,20 @@
                     </date-modifier>
                 </span>
             </div>
-        </md-card-content>
-        <md-card-actions align="end">
-            <button md-button
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button
                     type="button"
                     color="primary"
                     (click)="closeDialog()">
                 FERMER
             </button>
-            <button md-button
+            <button mat-button
                     type="button"
                     (click)="createEvent()"
                     [disabled]="!event.timestamp || !event.name || !event.description">
                 AJOUTER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
 </ng-template>

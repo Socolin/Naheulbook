@@ -28,6 +28,12 @@ export class CharacterListComponent implements OnInit {
         return false;
     }
 
+    createCustomCharacter() {
+        this._router.navigate(['../create-custom'], {relativeTo: this._route});
+        return false;
+    }
+
+
     loadCharacterList() {
         this._characterService.loadList().subscribe(
             characters => {

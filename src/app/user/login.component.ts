@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 
 import {LoginService} from './login.service';
 import {User} from './user.model';
-import {MdDialog} from '@angular/material';
+import {MatDialog} from '@angular/material';
 
 @Component({
     selector: 'login',
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
     public redirectPage: string;
     public moreInfo: boolean;
 
-    constructor(public dialog: MdDialog
+    constructor(public dialog: MatDialog
         , private _loginService: LoginService
         , private _route: ActivatedRoute) {
     }

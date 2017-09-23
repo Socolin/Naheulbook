@@ -1,10 +1,14 @@
 import {Routes} from '@angular/router';
 
-import {CharacterListComponent, CharacterComponent} from '../character';
-import {CharacterResolve} from '../character/character.resolver';
-import {HomePlayerComponent} from './home-player.component';
-import {CreateCharacterComponent} from '../character/create-character.component';
+import {
+    CharacterListComponent,
+    CharacterComponent,
+    CharacterResolve,
+    CreateCharacterComponent,
+    CreateCustomCharacterComponent,
+} from '../character';
 import {AuthGuard} from '../user/auth-guard';
+import {HomePlayerComponent} from './home-player.component';
 
 export const routes: Routes = [
     {
@@ -26,6 +30,10 @@ export const routes: Routes = [
                     {
                         path: 'create',
                         component: CreateCharacterComponent,
+                    },
+                    {
+                        path: 'create-custom',
+                        component: CreateCustomCharacterComponent,
                     },
                     {
                         path: 'list',

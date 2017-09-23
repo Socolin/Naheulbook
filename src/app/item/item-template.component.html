@@ -1,32 +1,32 @@
-<md-card>
-    <md-card-subtitle *ngIf="itemTemplate.source === 'community'" style="display: flex; align-items: center">
-        <md-icon>group</md-icon>Object communautaire<span *ngIf="itemTemplate.sourceUser">&nbsp;créé par {{itemTemplate.sourceUser}}</span>
-    </md-card-subtitle>
-    <md-card-subtitle *ngIf="itemTemplate.source === 'private'" style="display: flex; align-items: center">
-        <md-icon>lock</md-icon> Object privé
-    </md-card-subtitle>
-    <md-card-header>
-        <icon mdCardAvatar [enchanted]="itemTemplate.data.enchantment !== undefined" [icon]="itemTemplate.data.icon" [size]="'32px'"></icon>
-        <md-card-title>
+<mat-card>
+    <mat-card-subtitle *ngIf="itemTemplate.source === 'community'" style="display: flex; align-items: center">
+        <mat-icon>group</mat-icon>Object communautaire<span *ngIf="itemTemplate.sourceUser">&nbsp;créé par {{itemTemplate.sourceUser}}</span>
+    </mat-card-subtitle>
+    <mat-card-subtitle *ngIf="itemTemplate.source === 'private'" style="display: flex; align-items: center">
+        <mat-icon>lock</mat-icon> Object privé
+    </mat-card-subtitle>
+    <mat-card-header>
+        <icon matCardAvatar [enchanted]="itemTemplate.data.enchantment !== undefined" [icon]="itemTemplate.data.icon" [size]="'32px'"></icon>
+        <mat-card-title>
             {{itemTemplate.name}}
             <span *ngIf="itemTemplate.data.enchantment !== undefined">(Ench. {{itemTemplate.data.enchantment}})</span>
-        </md-card-title>
-        <md-card-subtitle>
+        </mat-card-title>
+        <mat-card-subtitle>
             <span *ngIf="itemTemplate.data.enchantment !== undefined">Enchanté </span>
             <span *ngIf="itemTemplate.data.requireLevel">Niveau {{itemTemplate.data.requireLevel}} </span>
             <span *ngIf="itemTemplate.data.relic">Relique </span>
             <span *ngIf="itemTemplate.data.sex == 'h'">Homme uniq. </span>
             <span *ngIf="itemTemplate.data.sex == 'f'">Femme uniq. </span>
-        </md-card-subtitle>
+        </mat-card-subtitle>
         <span class="padding"></span>
-        <button md-icon-button color="primary" *ngIf="copyable" (click)="copyItem(itemTemplate)"><md-icon>content_copy</md-icon></button>
-        <button md-icon-button color="primary" *ngIf="editable" (click)="editItem(itemTemplate)"><md-icon>edit</md-icon></button>
-        <button md-raised-button color="primary"
+        <button mat-icon-button color="primary" *ngIf="copyable" (click)="copyItem(itemTemplate)"><mat-icon>content_copy</mat-icon></button>
+        <button mat-icon-button color="primary" *ngIf="editable" (click)="editItem(itemTemplate)"><mat-icon>edit</mat-icon></button>
+        <button mat-raised-button color="primary"
                 *ngIf="hasAction('addItem')"
                 (click)="emitAction('addItem', itemTemplate)">
             AJOUTER
         </button>
-    </md-card-header>
+    </mat-card-header>
 
     <!-- Dice drop -->
     <div *ngIf="itemTemplate.data.diceDrop">
@@ -220,7 +220,7 @@
             <dt>Épreuve de tir:</dt>
             <dd>{{itemTemplate.data.gun.shootTest}}</dd>
         </dl>
-        <md-divider></md-divider>
+        <mat-divider></mat-divider>
         Munitions
         <dl>
             <dt *ngIf="itemTemplate.data.gun.fuelPerShot">
@@ -232,7 +232,7 @@
             <dt>Munitions par coup:</dt>
             <dd>{{itemTemplate.data.gun.ammunitionPerShot}}</dd>
         </dl>
-        <md-divider></md-divider>
+        <mat-divider></mat-divider>
         <dl>
             <dt>Chances de fonctionnement:</dt>
             <dd>{{itemTemplate.data.gun.workLuck}}</dd>
@@ -244,4 +244,4 @@
         Indice de rareté: {{itemTemplate.data.rarityIndicator}}
     </div>
 
-</md-card>
+</mat-card>

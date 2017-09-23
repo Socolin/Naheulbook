@@ -1,8 +1,8 @@
 import {NgModule}      from '@angular/core';
 import {RouterModule} from '@angular/router';
-import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
+import {NhbkMaterialModule} from '../nhbk-material.module';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
@@ -27,7 +27,7 @@ import {
     imports: [
         CommonModule,
         FormsModule,
-        MaterialModule,
+        NhbkMaterialModule,
         FlexLayoutModule,
         RouterModule,
     ],

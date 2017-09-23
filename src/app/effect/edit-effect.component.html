@@ -1,14 +1,14 @@
-<md-card *ngIf="effect">
-    <md-card-title>Modification de l'effet: {{effect.name}}</md-card-title>
-    <md-card-content>
+<mat-card *ngIf="effect">
+    <mat-card-title>Modification de l'effet: {{effect.name}}</mat-card-title>
+    <mat-card-content>
         <effect-editor [(effect)]="effect"></effect-editor>
-    </md-card-content>
-    <md-card-actions align="end">
-        <button md-button
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-button
                 color="primary"
                 (click)="edit()"
                 [disabled]="saving">
             ÉDITER
         </button>
-    </md-card-actions>
-</md-card>
+    </mat-card-actions>
+</mat-card>

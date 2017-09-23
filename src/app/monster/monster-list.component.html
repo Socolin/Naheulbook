@@ -1,30 +1,30 @@
 <div>
-    <md-card>
-        <button md-raised-button color="primary" *ngIf="!newMonsterTemplate" (click)="startAddMonster()">CRÉÉ UN MONSTRE</button>
-        <md-card-content *ngIf="newMonsterTemplate">
+    <mat-card>
+        <button mat-raised-button color="primary" *ngIf="!newMonsterTemplate" (click)="startAddMonster()">CRÉÉ UN MONSTRE</button>
+        <mat-card-content *ngIf="newMonsterTemplate">
             <monster-editor [monster]="newMonsterTemplate"></monster-editor>
 
-        </md-card-content>
-        <md-card-actions *ngIf="newMonsterTemplate" align="end">
-            <button md-button
+        </mat-card-content>
+        <mat-card-actions *ngIf="newMonsterTemplate" align="end">
+            <button mat-button
                     color="primary"
                     (click)="cancelAddMonster()">
                 ANNULER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     [disabled]="!newMonsterTemplate.category || !newMonsterTemplate.name"
                     (click)="addMonster()">
                 AJOUTER
             </button>
-            <button md-button
+            <button mat-button
                     color="primary"
                     [disabled]="!newMonsterTemplate.category || !newMonsterTemplate.name"
                     (click)="addMonsterContinue()">
                 AJOUTER ET CONTINUER
             </button>
-        </md-card-actions>
-    </md-card>
+        </mat-card-actions>
+    </mat-card>
     <div *ngFor="let category of categories;">
         <h3>{{category.name}}</h3>
         <div *ngFor="let monster of monsterByCategory[category.id]; let last=last">

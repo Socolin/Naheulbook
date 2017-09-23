@@ -1,15 +1,15 @@
-md-card {
+mat-card {
     margin-bottom: 10px;
 
-    md-card-content {
+    mat-card-content {
         text-align: justify;
     }
 
-    md-card-subtitle::first-letter {
+    mat-card-subtitle::first-letter {
         text-transform: capitalize;
     }
 
-    md-icon {
+    mat-icon {
         color: rgba(0, 0, 0, 0.54);
     }
 }
