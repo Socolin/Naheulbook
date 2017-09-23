@@ -19,6 +19,7 @@ mat-card {
     }
 
     .loot-item {
+        position: relative;
         display: flex;
         align-items: center;
         > icon {
@@ -27,9 +28,6 @@ mat-card {
     }
 
     .loot-monsters {
-        .monster-name {
-            font-weight: bold;
-        }
         .monster-item {
             margin-left: 20px;
             padding-left: 5px;

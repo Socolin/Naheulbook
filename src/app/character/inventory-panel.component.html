@@ -156,7 +156,13 @@
         <div *ngIf="selectedInventoryTab === 'bags'" class="inventory-content">
             <div *ngIf="character.computedData.topLevelContainers">
                 <div class="list-group">
-                    <bag-item-view [iconMode]="iconMode" [items]="character.computedData.topLevelContainers" [character]="character" [gmView]="inGroupTab" [selectedItem]="selectedItem" (itemSelected)="selectItem($event)">Loading</bag-item-view>
+                    <bag-item-view
+                        [iconMode]="iconMode"
+                        [items]="character.computedData.topLevelContainers"
+                        [character]="character"
+                        [gmView]="inGroupTab"
+                        [selectedItem]="selectedItem" (itemSelected)="selectItem($event)">
+                    </bag-item-view>
                 </div>
             </div>
         </div>

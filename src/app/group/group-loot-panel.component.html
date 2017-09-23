@@ -35,13 +35,13 @@
             <span class="padding"></span>
 
             <button mat-raised-button (click)="createItemDialog.openDialogForLoot(loot)">
-                Ajouter item
+                <mat-icon>add</mat-icon>Objet
             </button>
             <button mat-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">
-                Ajouter item inutile
+                <mat-icon>add</mat-icon>Objet inutile
             </button>
             <button mat-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">
-                Ajouter ingredient magique
+                <mat-icon>add</mat-icon>Ingrédient magique
             </button>
 
             <span class="padding"></span>
@@ -76,21 +76,21 @@
                     <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
                     {{item.data.name}}
                     <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
-                    <span *ngIf="item.template.data.price"> {{item.template.data.price}} P.O.</span>
+                    <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
                 </div>
             </div>
 
             <div class="loot-monsters" *ngFor="let monster of loot.monsters">
-                <div class="monster-name">
-                    {{monster.name}}
+                <div>
+                    <span class="mat-title">{{monster.name}}</span>
                     <button mat-raised-button (click)="createItemDialog.openDialogForMonster(monster)">
-                        Ajouter item
+                        <mat-icon>add</mat-icon>Objet
                     </button>
                     <button mat-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'USELESS_ITEM')">
-                        Ajouter item inutile
+                        <mat-icon>add</mat-icon>Objet inutile
                     </button>
                     <button mat-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'MAGICAL_INGREDIENT')">
-                        Ajouter ingredient magique
+                        <mat-icon>add</mat-icon>Ingrédient magique
                     </button>
                 </div>
                 <div>
@@ -99,10 +99,10 @@
                             <mat-icon>delete</mat-icon>
                         </button>
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                        <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}</span>
+                        <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
                         {{item.data.name}}
                         <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
-                        <span *ngIf="item.template.data.price"> {{item.template.data.price}} P.O.</span>
+                        <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
                     </div>
                 </div>
             </div>
