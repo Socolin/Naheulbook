@@ -46,7 +46,11 @@ export class NhbkErrorHandler extends ErrorHandler {
 
         this._errorReportService.notify('An error occurred', error);
 
-        this.postJson('/api/debug/report', {error: error}).subscribe(() => {
+        this.postJson('/api/debug/report', {
+            message: error.toString(),
+            stacktrace: error.stack,
+            url: window.location.toString()
+        }).subscribe(() => {
             console.log('error reported');
         });
         super.handleError(error);
