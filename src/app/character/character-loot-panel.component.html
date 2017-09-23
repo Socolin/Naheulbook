@@ -11,11 +11,12 @@
                              cdk-overlay-origin
                              #itemLine="cdkOverlayOrigin"
                              [class.active]="item.id == selectedItem?.id">
-                            <button mat-icon-button
+                            <button mat-mini-fab
                                     (click)="openTakeItemLootDialog(loot, item)">
-                                <mat-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-mat-button-icon-32">
+                                <mat-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-mat-button-icon-24">
                                 </mat-icon>
                             </button>
+                            &nbsp;
                             <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                             <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
                             {{item.data.name}}
@@ -38,12 +39,12 @@
                          cdk-overlay-origin
                          #itemLine="cdkOverlayOrigin"
                          [class.active]="item.id == selectedItem?.id">
-                        <button mat-icon-button
+                        <button mat-mini-fab
                                 (click)="openTakeItemMonsterDialog(monster, item)">
-                            <mat-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-mat-button-icon-32">
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-mat-button-icon-24">
                             </mat-icon>
                         </button>
-
+                        &nbsp;
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                         <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
                         {{item.data.name}}
