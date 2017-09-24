@@ -1,0 +1,20 @@
+mat-card {
+    margin-bottom: 8px;
+    .stats {
+        display: flex;
+        flex-direction: row;
+        margin: 0 -8px;
+        mat-form-field, mat-select, mat-radio-group {
+            flex: 1 1 auto;
+            margin: 0 8px;
+        }
+    }
+
+    .skill-list {
+        display: flex;
+        flex-direction: column;
+        .skill-description {
+            padding-left: 32px;
+        }
+    }
+}

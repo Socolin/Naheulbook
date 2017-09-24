@@ -1,1 +1,177 @@
-
+<mat-card>
+    <mat-card-title>
+        Caractéristiques
+    </mat-card-title>
+    <mat-card-content class="stats">
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="cou"
+                   placeholder="Courage"
+                   step="1"
+                   min=0 />
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="int"
+                   placeholder="Intelligence"
+                   step="1"
+                   min=0 />
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="cha"
+                   placeholder="Charisme"
+                   step="1"
+                   min=0 />
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="ad"
+                   placeholder="Adresse"
+                   step="1"
+                   min=0 />
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="fo"
+                   placeholder="Force"
+                   step="1"
+                   min=0 />
+        </mat-form-field>
+    </mat-card-content>
+</mat-card>
+<mat-card>
+    <mat-card-title>
+        Origine
+    </mat-card-title>
+    <mat-card-content class="stats">
+        <mat-select placeholder="Origine" [(ngModel)]="selectedOrigin" (change)="updateAvailableJobs()">
+            <mat-option *ngFor="let origin of origins" [value]="origin">
+                {{origin.name}}
+            </mat-option>
+        </mat-select>
+    </mat-card-content>
+</mat-card>
+<mat-card *ngIf="selectedOrigin">
+    <mat-card-title>
+        Métier
+    </mat-card-title>
+    <mat-card-content class="stats">
+        <mat-select placeholder="Métier" [(ngModel)]="selectedJob" (change)="updateAvailableSkills()">
+            <mat-option [value]="undefined">
+                Aucun
+            </mat-option>
+            <mat-option *ngFor="let job of availableJobs" [value]="job">
+                {{job.name}}
+            </mat-option>
+        </mat-select>
+    </mat-card-content>
+</mat-card>
+<mat-card *ngIf="selectedOrigin">
+    <mat-card-title>
+        Compétences
+    </mat-card-title>
+    <mat-card-content class="skill-list">
+        <ng-template ngFor [ngForOf]="knownSkills" let-skill>
+            <mat-checkbox [checked]="true" [disabled]="true">
+                {{skill.name}}
+            </mat-checkbox>
+            <span class="skill-description mat-hint">{{skill.playerDescription}}</span>
+        </ng-template>
+        <ng-template ngFor [ngForOf]="availableSkills" let-skill>
+            <mat-checkbox>
+                {{skill.name}}
+            </mat-checkbox>
+            <span class="skill-description mat-hint">{{skill.playerDescription}}</span>
+        </ng-template>
+    </mat-card-content>
+</mat-card>
+<mat-card>
+    <mat-card-title>
+        Divers
+    </mat-card-title>
+    <mat-card-content>
+        <div class="stats">
+            <mat-form-field>
+                <input matInput
+                       [(ngModel)]="name"
+                       placeholder="Nom" />
+            </mat-form-field>
+        </div>
+        <div class="stats">
+            <mat-radio-group name="sexe" [(ngModel)]="sex">
+                <mat-radio-button name="sexe" [value]="'Homme'">
+                    Homme
+                </mat-radio-button>
+                <mat-radio-button name="sexe" [value]="'Femme'">
+                    Femme
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <div class="stats">
+            <mat-form-field>
+                <input matInput
+                       type="number"
+                       [(ngModel)]="level"
+                       placeholder="Niveau"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                       type="number"
+                       [(ngModel)]="xp"
+                       placeholder="Experience"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                       type="number"
+                       [(ngModel)]="fatePoint"
+                       placeholder="Point de destin"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+        </div>
+        <div class="stats">
+            <mat-form-field>
+                <input matInput
+                       type="number"
+                       [(ngModel)]="ev"
+                       placeholder="Energie Vitale"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                       type="number"
+                       [(ngModel)]="ea"
+                       placeholder="Energie Astrale"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                       type="number"
+                       [(ngModel)]="at"
+                       placeholder="AT"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                       type="number"
+                       [(ngModel)]="prd"
+                       placeholder="PRD"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+        </div>
+    </mat-card-content>
+</mat-card>
