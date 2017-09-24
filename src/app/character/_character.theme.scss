@@ -25,7 +25,7 @@
     }
 
     .skill-list-item {
-        p[md-line] {
+        p[mat-line] {
             color: mat-color($foreground, hint-text);
         }
         button {
@@ -38,7 +38,7 @@
     }
 
     .item-line {
-        md-icon {
+        mat-icon {
             color: mat-color($foreground, text);
         }
         border-bottom-color: mat-color($foreground, hint-text);
@@ -61,7 +61,7 @@
     }
 
     .combat-tab {
-        md-card {
+        mat-card {
 
             &.life-mana {
                 .life-danger {
