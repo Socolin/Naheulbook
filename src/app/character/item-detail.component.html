@@ -104,14 +104,8 @@
 
             <div>
                 <span *ngIf="item.template.data.relic" class="label label-primary">Relique</span>
-                <ng-template [ngIf]="character?.sex === 'Homme'">
-                    <span *ngIf="item.template.data.sex === 'h'" class="label label-success">Homme uniq.</span>
-                    <span *ngIf="item.template.data.sex === 'f'" class="label label-danger">Femme uniq.</span>
-                </ng-template>
-                <ng-template [ngIf]="character?.sex === 'Femme'">
-                    <span *ngIf="item.template.data.sex === 'h'" class="label label-danger">Homme uniq.</span>
-                    <span *ngIf="item.template.data.sex === 'f'" class="label label-success">Femme uniq.</span>
-                </ng-template>
+                <span *ngIf="item.template.data.sex === 'h'">Homme uniq.</span>
+                <span *ngIf="item.template.data.sex === 'f'">Femme uniq.</span>
                 <span *ngIf="item.template.data.requireLevel && character?.level < item.template.data.requireLevel"
                       class="invalid-level">
                     Level: {{item.template.data.requireLevel}}
@@ -341,6 +335,12 @@
                                 </ng-template>
                                 <ng-template [ngSwitchCase]="'bad_god'">
                                     L'objet est lié a un autre dieu que celui du personnage
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'bad_sex_f'">
+                                    L'objet est réservé pour les personnages de sexe féminin
+                                </ng-template>
+                                <ng-template [ngSwitchCase]="'bad_sex_f'">
+                                    L'objet est réservé pour les personnages de sexe masculin
                                 </ng-template>
                                 <ng-template [ngSwitchCase]="'no_god'">
                                     L'objet est lié a un dieu, et vous ne faites pas partie de son culte.

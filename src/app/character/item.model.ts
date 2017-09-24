@@ -133,6 +133,15 @@ export class Item {
             }
         }
 
+        if (this.template.data.sex) {
+            if (this.template.data.sex === 'h' && character.sex !== 'Homme') {
+                incompatibilities.push({reason: 'bad_sex_h'});
+            }
+            if (this.template.data.sex === 'f' && character.sex !== 'Femme') {
+                incompatibilities.push({reason: 'bad_sex_f'});
+            }
+        }
+
         if (this.template.requirements) {
             for (let requirement of this.template.requirements) {
                 if (requirement.max && character.computedData.stats[requirement.stat] > requirement.max) {
