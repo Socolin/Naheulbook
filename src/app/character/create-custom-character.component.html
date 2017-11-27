@@ -59,16 +59,23 @@
 </mat-card>
 <mat-card *ngIf="selectedOrigin">
     <mat-card-title>
-        Métier
+        Métier(s)
     </mat-card-title>
-    <mat-card-content class="stats">
-        <mat-select placeholder="Métier" [(ngModel)]="selectedJob" (change)="updateAvailableSkills()">
-            <mat-option [value]="undefined">
-                Aucun
-            </mat-option>
-            <mat-option *ngFor="let job of availableJobs" [value]="job">
-                {{job.name}}
-            </mat-option>
+    <mat-card-content>
+        <div *ngIf="selectedJobs.length === 0">Aucun</div>
+        <div *ngFor="let job of selectedJobs">
+            <button mat-icon-button (click)="removeJob(job)">
+                <mat-icon>delete</mat-icon>
+            </button>
+            {{job.name}}
+        </div>
+
+        <mat-select placeholder="Métier" (change)="addJob($event.value)">
+            <ng-template ngFor [ngForOf]="availableJobs" let-job>
+                <mat-option *ngIf="!isJobSelected(job)" [value]="job">
+                    {{job.name}}
+                </mat-option>
+            </ng-template>
         </mat-select>
         Specialities if possible
     </mat-card-content>

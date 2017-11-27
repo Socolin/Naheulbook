@@ -32,7 +32,7 @@ export class CreateCustomCharacterComponent implements OnInit {
     public knownSkills: Skill[] = [];
     public availableSkills: Skill[] = [];
     public selectedOrigin?: Origin;
-    public selectedJob?: Job;
+    public selectedJobs: Job[] = [];
     public selectedSkills: Skill[] = [];
     public specialities: Speciality[] = [];
     public ea = 0;
@@ -50,11 +50,12 @@ export class CreateCustomCharacterComponent implements OnInit {
     updateBaseStats(): void {
         this.at = 8;
         this.prd = 10;
-        if (this.selectedJob && this.selectedJob.baseAT) {
-            this.at = this.selectedJob.baseAT;
+
+        if (this.selectedJobs.length && this.selectedJobs[0].baseAT) {
+            this.at = this.selectedJobs[0].baseAT;
         }
-        if (this.selectedJob && this.selectedJob.basePRD) {
-            this.prd = this.selectedJob.basePRD;
+        if (this.selectedJobs.length && this.selectedJobs[0].basePRD) {
+            this.prd = this.selectedJobs[0].basePRD;
         }
         if (this.selectedOrigin) {
             this.at += this.selectedOrigin.bonusAT;
@@ -64,21 +65,39 @@ export class CreateCustomCharacterComponent implements OnInit {
         this.ev = this.selectedOrigin.baseEV;
         this.ea = 0;
 
-        if (this.selectedJob) {
-            if (this.selectedJob.baseEv) {
-                this.ev = this.selectedJob.baseEv;
+        for (let i = 0; i < this.selectedJobs.length; i++) {
+            let job = this.selectedJobs[i];
+            if (i === 0) {
+                if (job.baseEv) {
+                    this.ev = job.baseEv;
+                }
+                if (job.factorEv) {
+                    this.ev *= job.factorEv;
+                    this.ev = Math.round(this.ev);
+                }
+                if (job.bonusEv) {
+                    this.ev += job.bonusEv;
+                }
             }
-            if (this.selectedJob.factorEv) {
-                this.ev *= this.selectedJob.factorEv;
-                this.ev = Math.round(this.ev);
-            }
-            if (this.selectedJob.bonusEv) {
-                this.ev += this.selectedJob.bonusEv;
-            }
-            if (this.selectedJob.baseEa) {
-                this.ea = this.selectedJob.baseEa;
+            if (this.ea === 0) {
+                if (job.baseEa) {
+                    this.ea = job.baseEa;
+                }
             }
         }
+    }
+
+    removeJob(job: Job) {
+        let i = this.selectedJobs.indexOf(job);
+        if (i !== -1) {
+            this.selectedJobs.splice(i, 1);
+            this.updateAvailableSkills();
+        }
+    }
+
+    addJob(job: Job) {
+        this.selectedJobs.push(job);
+        this.updateAvailableSkills();
     }
 
     updateAvailableSkills(): void {
@@ -88,10 +107,20 @@ export class CreateCustomCharacterComponent implements OnInit {
         let knownSkills: Skill[] = [];
         let availableSkills: Skill[] = [];
         for (let skill of this.skills) {
+            let known = false;
             if (this.selectedOrigin.skills.findIndex(s => s.id === skill.id) !== -1) {
-                knownSkills.push(skill);
+                known = true;
             }
-            else if (this.selectedJob && this.selectedJob.skills.findIndex(s => s.id === skill.id) !== -1) {
+            else {
+                for (let job of this.selectedJobs) {
+                    if (job.skills.findIndex(s => s.id === skill.id) !== -1) {
+                        known = true;
+                        break;
+                    }
+                }
+            }
+
+            if (known) {
                 knownSkills.push(skill);
             }
             else {
@@ -121,9 +150,12 @@ export class CreateCustomCharacterComponent implements OnInit {
             }
         }
         this.availableJobs = availableJobs;
-        if (this.selectedJob) {
-            if (availableJobs.findIndex(j => j.id === this.selectedJob.id) === -1) {
-                this.selectedJob = undefined;
+
+        for (let i = 0; i < this.selectedJobs.length; i++) {
+            let job = this.selectedJobs[i];
+            if (availableJobs.findIndex(j => j.id === job.id) === -1) {
+                this.selectedJobs.splice(i, 1);
+                i--;
             }
         }
 
@@ -140,5 +172,9 @@ export class CreateCustomCharacterComponent implements OnInit {
             this.origins = origins;
             this.skills = skills;
         });
+    }
+
+    isJobSelected(job: Job) {
+        return this.selectedJobs.indexOf(job) !== -1;
     }
 }
