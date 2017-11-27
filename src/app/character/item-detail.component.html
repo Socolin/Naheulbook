@@ -300,7 +300,7 @@
                 </span>
             </div>
 
-            <div *ngIf="item.incompatibleWith(character); let incompatibilities">
+            <div *ngIf="character.checkItemIncompatibilities(item); let incompatibilities">
                 <br>
                 <span [class.text-warning]="!item.data.ignoreRestrictions" [class.text-info]="item.data.ignoreRestrictions">
                     <span *ngIf="incompatibilities.length === 1">
