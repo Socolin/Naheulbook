@@ -179,6 +179,7 @@ export class CharacterComputedData {
     itemsBySlots: {[slotId: number]: Item[]} = {};
     itemsBySlotsAll = {};
     itemsEquiped: Item[] = [];
+    notIdentifiedItems: Item[] = [];
     currencyItems: Item[] = [];
     totalMoney = 0;
     itemSlots: ItemSlot[] = [];
@@ -388,6 +389,7 @@ export class Character extends WsRegistrable {
         let itemsBySlots = {};
         let itemsBySlotsAll = {};
         let equiped: Item[] = [];
+        let notIdentified: Item[] = [];
         let slots: ItemSlot[] = [];
         let containers: Item[] = [];
         let topLevelContainers: Item[] = [];
@@ -431,6 +433,7 @@ export class Character extends WsRegistrable {
                 }
                 itemsBySlots[slot.id].push(item);
             }
+
             if (item.data.equiped) {
                 equiped.push(item);
             } else {
@@ -440,6 +443,10 @@ export class Character extends WsRegistrable {
                     }
                     content[item.container].push(item);
                 }
+            }
+
+            if (item.data.notIdentified) {
+                notIdentified.push(item);
             }
         }
 
@@ -486,6 +493,7 @@ export class Character extends WsRegistrable {
 
         this.computedData.xpToNextLevel = this.getXpForNextLevel();
         this.computedData.itemsEquiped = equiped;
+        this.computedData.notIdentifiedItems = notIdentified;
         this.computedData.itemSlots = slots;
         this.computedData.itemsBySlots = itemsBySlots;
         this.computedData.itemsBySlotsAll = itemsBySlotsAll;

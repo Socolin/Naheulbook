@@ -314,11 +314,11 @@
                         </span>
                     </div>
                 </mat-tab>
-                <mat-tab label="Non identifié">
-                    <div *ngFor="let item of fighter.character.items"
+                <mat-tab *ngIf="fighter.character.computedData.notIdentifiedItems.length"
+                         label="Non identifié ({{fighter.character.computedData.notIdentifiedItems.length}})">
+                    <div *ngFor="let item of fighter.character.computedData.notIdentifiedItems"
                          [class.selected]="selectedItem === item">
-                        <span *ngIf="item.data.notIdentified"
-                              class="fighter-inventory-item"
+                        <span class="fighter-inventory-item"
                               matRipple
                               (click)="selectedItem = item">
                             <icon [icon]="item.data.icon" [size]="'24px'"></icon>
