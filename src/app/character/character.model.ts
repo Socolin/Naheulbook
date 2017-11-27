@@ -1,32 +1,27 @@
-import {Item, PartialItem} from './item.model';
-import {Origin} from '../origin';
-import {Job, Speciality} from '../job';
+import {Subject} from 'rxjs/Subject';
+
+import {isNullOrUndefined} from 'util';
 import {
     IMetadata
     , FlagData
     , ItemStatModifier
     , formatModifierValue
+    , ActiveStatsModifier
+    , StatModifier
 } from '../shared';
-import {Skill} from '../skill';
-import {isNullOrUndefined} from 'util';
-import {Subject} from 'rxjs/Subject';
-import {WsRegistrable} from '../websocket/websocket.model';
-import {Loot} from '../loot/loot.model';
-import {TargetJsonData} from '../group/target.model';
-import {WebSocketService} from '../websocket/websocket.service';
-import {ActiveStatsModifier, StatModifier} from '../shared/stat-modifier.model';
-import {Fighter} from '../group/group.model';
-import {ItemSlot, ItemTemplate} from '../item/item-template.model';
 
-export interface CharacterResume {
-    id: number;
-    name: string;
-    originId: number;
-    origin: string;
-    jobId: number;
-    job: string;
-    level: number;
-}
+import {Origin} from '../origin';
+import {Job, Speciality} from '../job';
+import {Skill} from '../skill';
+import {Loot} from '../loot';
+import {ItemSlot, ItemTemplate} from '../item-template';
+import {Fighter} from '../group';
+
+import {Item, PartialItem} from '../item';
+import {TargetJsonData} from '../group/target.model';
+
+import {WsRegistrable, WebSocketService} from '../websocket';
+import {WsEventServices} from '../websocket';
 
 export interface CharacterGiveDestination {
     id: number;
@@ -227,7 +222,7 @@ export class CharacterJsonData {
     invites: IMetadata[];
     isNpc: boolean;
     items: Item[];
-    jobId: number;
+    jobIds: number[];
     level: number;
     modifiers: ActiveStatsModifier[];
     name: string;
@@ -247,7 +242,7 @@ export class Character extends WsRegistrable {
     ev: number;
     ea: number;
     origin: Origin;
-    job: Job | undefined;
+    jobs: Job[];
     level: number;
     sex: string;
     experience: number;
@@ -291,7 +286,11 @@ export class Character extends WsRegistrable {
             throw new Error('Invalid originId: ' + jsonData.originId);
         }
         character.origin = origin;
-        character.job = jobs.find(j => j.id === jsonData.jobId);
+        character.jobs = [];
+        for (let jobId of jsonData.jobIds) {
+            let job = jobs.find(j => j.id === jobId);
+            character.jobs.push(job);
+        }
 
         for (let sk of jsonData.skills) {
             character.skills.push(skillsById[sk.id]);
@@ -302,6 +301,29 @@ export class Character extends WsRegistrable {
         }
 
         return character;
+    }
+
+    hasJob(job: number|Job): boolean {
+        if (job instanceof Job) {
+            return this.jobs.findIndex(j => j.id === job.id) !== -1;
+        }
+        return this.jobs.findIndex(j => j.id === job) !== -1;
+    }
+
+    hasMagic(): boolean {
+        return 'EA' in this.computedData.stats && this.computedData.stats['EA'] > 0;
+    }
+
+    hasMagicJob(): boolean {
+        return this.jobs.findIndex(j => j.isMagic) !== -1;
+    }
+
+    get diceEaLevelUp(): number | undefined{
+        let job = this.jobs.find(j => j.isMagic);
+        if (!job) {
+            return undefined;
+        }
+        return job.diceEaLevelUp;
     }
 
     hasFlag(flagName: string): boolean {
@@ -321,7 +343,7 @@ export class Character extends WsRegistrable {
         if (item.template.modifiers) {
             for (let i = 0; i < item.template.modifiers.length; i++) {
                 let modifier = item.template.modifiers[i];
-                if (modifier.job && (!this.job || modifier.job !== this.job.id)) {
+                if (modifier.job && !this.hasJob(modifier.job )) {
                     continue;
                 }
                 if (modifier.origin && modifier.origin !== this.origin.id) {
@@ -477,9 +499,7 @@ export class Character extends WsRegistrable {
         let flags: {[flagName: string]: FlagData[]} = {};
 
         this.origin.getFlagsDatas(flags);
-        if (this.job) {
-            this.job.getFlagsDatas(flags);
-        }
+        this.jobs.forEach(j => j.getFlagsDatas(flags));
         if (this.specialities) {
             for (let speciality of this.specialities) {
                 speciality.getFlagsDatas(flags);
@@ -496,6 +516,104 @@ export class Character extends WsRegistrable {
         this.computedData.flags = flags;
     }
 
+
+    public checkItemIncompatibilities(item: Item): {reason: string, source?: {type: string, name: string}}[] | undefined {
+        let incompatibilities: {reason: string, source?: {type: string, name: string}}[] = [];
+
+        if (item.template.data.god) {
+            let relatedGods = this.getFlagDatas('RELATED_GOD');
+            if (relatedGods) {
+                let foundGod = false;
+                for (let relatedGod of relatedGods) {
+                    if (item.template.data.god === relatedGod.data) {
+                        foundGod = true;
+                        break;
+                    }
+                }
+                if (!foundGod) {
+                    incompatibilities.push({reason: 'bad_god'});
+                }
+            }
+            else {
+                incompatibilities.push({reason: 'no_god'});
+            }
+        }
+
+        if (item.template.data.sex) {
+            if (item.template.data.sex === 'h' && this.sex !== 'Homme') {
+                incompatibilities.push({reason: 'bad_sex_h'});
+            }
+            if (item.template.data.sex === 'f' && this.sex !== 'Femme') {
+                incompatibilities.push({reason: 'bad_sex_f'});
+            }
+        }
+
+        if (item.template.requirements) {
+            for (let requirement of item.template.requirements) {
+                if (requirement.max && this.computedData.stats[requirement.stat] > requirement.max) {
+                    incompatibilities.push({reason: 'stat_to_high', source: {type: 'stat', name: requirement.stat}});
+                }
+                if (requirement.min && this.computedData.stats[requirement.stat] < requirement.min) {
+                    incompatibilities.push({reason: 'stat_to_low', source: {type: 'stat', name: requirement.stat}});
+                }
+            }
+        }
+        if (item.template.data.bruteWeapon) {
+            if (!this.hasFlag('ARME_BOURRIN')) {
+                incompatibilities.push({reason: 'no_arme_bourrin'});
+            }
+        }
+
+        if (item.template.data.requireLevel) {
+            if (this.level < item.template.data.requireLevel) {
+                incompatibilities.push({reason: 'too_low_level'});
+            }
+        }
+
+        if (item.template.data.enchantment) {
+            if (ItemTemplate.hasSlot(item.template, 'WEAPON')) {
+                let flag = this.getFlagDatas('NO_MAGIC_WEAPON');
+                if (flag) {
+                    incompatibilities.push({reason: 'no_magic_weapon', source: flag[0].source});
+                }
+            }
+            else if (item.template.slots && item.template.slots.length) {
+                let flag = this.getFlagDatas('NO_MAGIC_ARMOR');
+                if (flag) {
+                    incompatibilities.push({reason: 'no_magic_armor', source: flag[0].source});
+                }
+            }
+            else {
+                let flag = this.getFlagDatas('NO_MAGIC_OBJECT');
+                if (flag) {
+                    incompatibilities.push({reason: 'no_magic_object', source: flag[0].source});
+                }
+            }
+        }
+        if (item.template.data.itemTypes) {
+            const noWeaponTypes = this.getFlagDatas('NO_WEAPON_TYPE');
+            if (noWeaponTypes) {
+                for (let itemType of item.template.data.itemTypes) {
+                    for (let noWeaponType of noWeaponTypes) {
+                        if (itemType === noWeaponType.data) {
+                            incompatibilities.push({reason: 'bad_equipment_type', source: noWeaponType.source});
+                        }
+                    }
+                }
+            }
+
+            if (item.template.data.isItemTypeName('LIVRE')
+                && !this.hasFlag('ERUDITION')) {
+                incompatibilities.push({reason: 'cant_read'});
+            }
+        }
+
+        if (incompatibilities.length) {
+            return incompatibilities;
+        }
+        return undefined;
+    }
+
     private updateStats() {
         this.computedData.countActiveEffect = 0;
         this.computedData.stats = JSON.parse(JSON.stringify(this.stats));
@@ -503,11 +621,14 @@ export class Character extends WsRegistrable {
         this.computedData.details.add('Jet de dé initial', this.stats);
         this.computedData.stats['AT'] = 8;
         this.computedData.stats['PRD'] = 10;
-        if (this.job && this.job.baseAT) {
-            this.computedData.stats['AT'] = this.job.baseAT;
-        }
-        if (this.job && this.job.basePRD) {
-            this.computedData.stats['PRD'] = this.job.basePRD;
+        if (this.jobs.length > 0) {
+            let job = this.jobs[0];
+            if (job.baseAT) {
+                this.computedData.stats['AT'] = job.baseAT;
+            }
+            if (job.basePRD) {
+                this.computedData.stats['PRD'] = job.basePRD;
+            }
         }
         this.computedData.stats['MV'] = 100;
         this.computedData.stats['PR'] = 0;
@@ -534,23 +655,26 @@ export class Character extends WsRegistrable {
                 this.computedData.details.add('Origine', {AT: this.origin.bonusAT, PRD: this.origin.bonusPRD});
             }
         }
-        if (this.job) {
-            if (this.job.baseEv) {
-                this.computedData.stats['EV'] = this.job.baseEv;
-                this.computedData.details.add('Métiers (changement de la valeur de base)', {EV: this.origin.baseEV});
+        for (let i = 0; i < this.jobs.length; i++) {
+            let job = this.jobs[i];
+            if (i === 0) {
+                if (job.baseEv) {
+                    this.computedData.stats['EV'] = job.baseEv;
+                    this.computedData.details.add('Métiers (changement de la valeur de base)', {EV: this.origin.baseEV});
+                }
+                if (job.factorEv) {
+                    this.computedData.stats['EV'] *= job.factorEv;
+                    this.computedData.stats['EV'] = Math.round(this.computedData.stats['EV']);
+                    this.computedData.details.add('Métiers (% de vie)', {EV: (Math.round((1 - job.factorEv) * 100)) + '%'});
+                }
+                if (job.bonusEv) {
+                    this.computedData.stats['EV'] += job.bonusEv;
+                    this.computedData.details.add('Métiers (bonus de EV)', {EV: job.bonusEv});
+                }
             }
-            if (this.job.factorEv) {
-                this.computedData.stats['EV'] *= this.job.factorEv;
-                this.computedData.stats['EV'] = Math.round(this.computedData.stats['EV']);
-                this.computedData.details.add('Métiers (% de vie)', {EV: (Math.round((1 - this.job.factorEv) * 100)) + '%'});
-            }
-            if (this.job.bonusEv) {
-                this.computedData.stats['EV'] += this.job.bonusEv;
-                this.computedData.details.add('Métiers (bonus de EV)', {EV: this.job.bonusEv});
-            }
-            if (this.job.baseEa) {
-                this.computedData.details.add('Métiers (EA de base)', {EA: this.job.baseEa});
-                this.computedData.stats['EA'] = this.job.baseEa;
+            if (job.baseEa && !this.computedData.stats['EA']) {
+                this.computedData.details.add('Métiers (EA de base)', {EA: job.baseEa});
+                this.computedData.stats['EA'] = job.baseEa;
             }
         }
         for (let speciality of this.specialities) {
@@ -623,11 +747,11 @@ export class Character extends WsRegistrable {
             }
         }
 
-        if (this.job) {
-            for (let skill of this.job.skills) {
+        for (let job of this.jobs) {
+            for (let skill of job.skills) {
                 this.computedData.skills.push({
                     skillDef: skill,
-                    from: [this.job.name]
+                    from: [job.name]
                 });
             }
         }
@@ -648,9 +772,8 @@ export class Character extends WsRegistrable {
         });
 
         let flagsData: {[flagName: string]: FlagData[]} = {};
-        if (this.job) {
-            this.job.getFlagsDatas(flagsData);
-        }
+
+        this.jobs.forEach(j => j.getFlagsDatas(flagsData));
         this.origin.getFlagsDatas(flagsData);
 
         let prevSkill: SkillDetail|null = null;
@@ -718,7 +841,7 @@ export class Character extends WsRegistrable {
 
             item.computedData.incompatible = undefined;
             if (!item.data.ignoreRestrictions) {
-                let incompatibilities = item.incompatibleWith(this);
+                let incompatibilities = this.checkItemIncompatibilities(item);
                 if (incompatibilities) {
                     item.computedData.incompatible = true;
                     continue;
@@ -756,7 +879,7 @@ export class Character extends WsRegistrable {
             let cleanModifiers = this.cleanItemModifiers(item);
             for (let m = 0; m < cleanModifiers.length; m++) {
                 let modifier = cleanModifiers[m];
-                if (modifier.job && (!this.job || modifier.job !== this.job.id)) {
+                if (modifier.job && !this.hasJob(modifier.job)) {
                     continue;
                 }
                 if (modifier.origin && modifier.origin !== this.origin.id) {
@@ -1250,9 +1373,21 @@ export class Character extends WsRegistrable {
         return false;
     }
 
-    public onChangeJob(job: Job | undefined): void {
-        this.job = job;
-        this.update();
+    public onAddJob(job: Job): void {
+        let jobIndex = this.jobs.findIndex(j => j.id === job.id);
+        if (jobIndex === -1) {
+            this.jobs.push(job);
+            this.update();
+        }
+    }
+
+    public onRemoveJob(job: Job | number): void {
+        let jobId: number = job instanceof Job ? job.id : job;
+        let jobIndex = this.jobs.findIndex(j => j.id === jobId);
+        if (jobIndex !== -1) {
+            this.jobs.splice(jobIndex, 1);
+            this.update();
+        }
     }
 
     public getWsTypeName(): string {
@@ -1312,6 +1447,127 @@ export class Character extends WsRegistrable {
             }
         }
         return changes;
+    }
+
+    handleWebsocketEvent(opcode: string, data: any, services: WsEventServices) {
+        switch (opcode) {
+            case 'showLoot': {
+                services['skill'].getSkillsById().subscribe(skillsById => {
+                    this.addLoot(Loot.fromJson(data, skillsById));
+                });
+                break;
+            }
+            case 'hideLoot': {
+                this.removeLoot(data.id);
+                break;
+            }
+            case 'update': {
+                this.onChangeCharacterStat(data);
+                break;
+            }
+            case 'statBonusAd': {
+                this.onSetStatBonusAD(data);
+                break;
+            }
+            case 'levelUp': {
+                this.onPartialLevelUp(data);
+                break;
+            }
+            case 'equipItem': {
+                this.onEquipItem(data);
+                break;
+            }
+            case 'addJob': {
+                services.job.getJobsById().subscribe(jobsById => {
+                    this.onAddJob(jobsById[data.jobId]);
+                });
+                break;
+            }
+            case 'removeJob': {
+                this.onRemoveJob(data.jobId);
+                break;
+            }
+            case 'addItem': {
+                services.skill.getSkillsById().subscribe(skillsById => {
+                    this.onAddItem(Item.fromJson(data, skillsById));
+                });
+                break;
+            }
+            case 'deleteItem': {
+                this.onDeleteItem(data);
+                break;
+            }
+            case 'identifyItem': {
+                services.skill.getSkillsById().subscribe(skillsById => {
+                    this.onIdentifyItem(Item.fromJson(data, skillsById));
+
+                });
+                break;
+            }
+            case 'useCharge': {
+                this.onUseItemCharge(data);
+                break;
+            }
+            case 'changeContainer': {
+                this.onChangeContainer(data);
+                break;
+            }
+            case 'updateItem': {
+                this.onUpdateItem(data);
+                break;
+            }
+            case 'changeQuantity': {
+                this.onUpdateQuantity(data);
+                break;
+            }
+            case 'updateItemModifiers': {
+                this.onUpdateModifiers(data);
+                break;
+            }
+            case 'addModifier': {
+                this.onAddModifier(ActiveStatsModifier.fromJson(data));
+                break;
+            }
+            case 'removeModifier': {
+                this.onRemoveModifier(ActiveStatsModifier.fromJson(data));
+                break;
+            }
+            case 'updateModifier': {
+                this.onUpdateModifier(ActiveStatsModifier.fromJson(data));
+                break;
+            }
+            case 'active': {
+                this.changeActive(data);
+                break;
+            }
+            case 'changeColor': {
+                this.color = data;
+                break;
+            }
+            case 'changeTarget': {
+                this.changeTarget(data);
+                break;
+            }
+            case 'joinGroup': {
+                this.group = data.group;
+                this.invites = [];
+                break;
+            }
+            case 'groupInvite': {
+                this.invites.push(data);
+                break;
+            }
+            case 'cancelInvite': {
+                let i = this.invites.findIndex(d => d.id === data.group.id);
+                if (i !== -1) {
+                    this.invites.splice(i, 1);
+                }
+                break;
+            }
+            default:
+                console.warn('Opcode not handle: `' + opcode + '`');
+                break;
+        }
     }
 
     dispose() {

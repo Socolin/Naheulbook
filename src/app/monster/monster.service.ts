@@ -8,9 +8,8 @@ import {LoginService} from '../user';
 
 import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 import {Monster} from './monster.model';
-import {Skill} from '../skill/skill.model';
-import {SkillService} from '../skill/skill.service';
-import {PartialItem} from '../character/item.model';
+import {Skill, SkillService} from '../skill';
+import {PartialItem} from '../item';
 
 @Injectable()
 export class MonsterService extends JsonService {

@@ -6,7 +6,7 @@ import {Observable} from 'rxjs';
 
 import {removeDiacritics, NhbkDialogService, AutocompleteValue} from '../shared';
 import {Location, LocationService} from '../location';
-import {ItemTemplate} from '../item';
+import {ItemTemplate} from '../item-template';
 
 import {
     MonsterTemplate,

@@ -15,7 +15,7 @@ import {HomeModule} from './home/home.module';
 import {CharacterModule} from './character/character.module';
 import {EffectModule} from './effect/effect.module';
 import {GroupModule} from './group/group.module';
-import {ItemModule} from './item/item.module';
+import {ItemTemplateModule} from './item-template/item-template.module';
 import {JobModule} from './job/job.module';
 import {LocationModule} from './location/location.module';
 import {MonsterModule} from './monster/monster.module';
@@ -39,7 +39,6 @@ import {ThemeService} from './theme.service';
 import {WebsocketModule} from './websocket/websocket.module';
 import {ErrorReportService} from './error-report.service';
 
-
 @NgModule({
     imports: [
         BrowserModule,
@@ -55,7 +54,7 @@ import {ErrorReportService} from './error-report.service';
         CharacterModule,
         EffectModule,
         GroupModule,
-        ItemModule,
+        ItemTemplateModule,
         JobModule,
         LocationModule,
         MonsterModule,

@@ -4,18 +4,17 @@ import {MatTabChangeEvent, MatTabGroup, Overlay, OverlayRef, OverlayConfig, Port
 import {Subscription} from 'rxjs/Subscription';
 
 import {NotificationsService} from '../notifications';
-import {WebSocketService} from '../websocket';
-import {smoothScrollBy} from '../shared';
-
-import {IMetadata, NhbkDialogService} from '../shared';
+import {smoothScrollBy, IMetadata, NhbkDialogService} from '../shared';
 import {Skill} from '../skill';
-import {Job} from '../job';
+import {Job, Speciality} from '../job';
+import {Item} from '../item';
+
+import {WebSocketService} from '../websocket';
 
 import {CharacterService} from './character.service';
 import {Character} from './character.model';
 import {InventoryPanelComponent} from './inventory-panel.component';
 import {ItemActionService} from './item-action.service';
-import {Item} from './item.model';
 import {SwipeService} from './swipe.service';
 
 export class LevelUpInfo {
@@ -24,7 +23,7 @@ export class LevelUpInfo {
     targetLevelUp: number;
     statToUp: string;
     skill: Skill;
-    speciality: any;
+    specialities: { [jobId: number]: Speciality } = {};
 }
 
 @Component({
@@ -73,26 +72,27 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     @ViewChild('changeNameDialog')
     public changeNameDialog: Portal<any>;
-    public changeNameOverlayRef: OverlayRef | undefined;
+    public changeNameOverlayRef?: OverlayRef;
     public newCharacterName: string;
 
     @ViewChild('changeSexDialog')
     public changeSexDialog: Portal<any>;
-    public changeSexOverlayRef: OverlayRef | undefined;
+    public changeSexOverlayRef?: OverlayRef;
     public newCharacterSex: string;
 
     @ViewChild('changeJobDialog')
     public changeJobDialog: Portal<any>;
-    public changeJobOverlayRef: OverlayRef | undefined;
-    public newCharacterJob: Job | undefined;
+    public changeJobOverlayRef?: OverlayRef;
+    public addingJob = false;
 
     @ViewChild('jobInfoDialog')
     public jobInfoDialog: Portal<any>;
-    public jobInfoOverlayRef: OverlayRef | undefined;
+    public jobInfoOverlayRef?: OverlayRef;
+    public selectedJobInfo?: Job;
 
     @ViewChild('originInfoDialog')
     public originInfoDialog: Portal<any>;
-    public originInfoOverlayRef: OverlayRef | undefined;
+    public originInfoOverlayRef?: OverlayRef;
 
     private notificationSub?: Subscription;
 
@@ -128,8 +128,10 @@ export class CharacterComponent implements OnInit, OnDestroy {
         if (this.character.origin.hasFlag(flagName)) {
             return true
         }
-        if (this.character.job && this.character.job.hasFlag(flagName)) {
-            return true;
+        for (let job of this.character.jobs) {
+            if (job.hasFlag(flagName)) {
+                return true;
+            }
         }
         if (this.character.specialities) {
             for (let speciality of this.character.specialities) {
@@ -205,10 +207,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 this.levelUpInfo.EVorEAValue = Math.max(1, Math.ceil(Math.random() * diceLevelUp) - 1);
                 return;
             }
-        } else if (this.character.job && this.character.job.diceEaLevelUp) {
-            diceLevelUp = this.character.job.diceEaLevelUp;
         } else {
-            diceLevelUp = 6;
+            let job = this.character.jobs.find(j => j.diceEaLevelUp > 0);
+            if (job) {
+                diceLevelUp = job.diceEaLevelUp;
+            } else {
+                diceLevelUp = 6;
+            }
         }
         this.levelUpInfo.EVorEAValue = Math.ceil(Math.random() * diceLevelUp);
     }
@@ -223,15 +228,15 @@ export class CharacterComponent implements OnInit, OnDestroy {
             || this.levelUpInfo.targetLevelUp === 10;
     }
 
-    levelUpShouldSelectSpeciality() {
-        return this.characterHasToken('SELECT_SPECIALITY_LVL_5_10')
-            && !this.characterHasToken('ONE_SPECIALITY')
+    levelUpShouldSelectSpeciality(job: Job) {
+        return job.hasFlag('SELECT_SPECIALITY_LVL_5_10')
+            && !job.hasFlag('ONE_SPECIALITY')
             && (this.levelUpInfo.targetLevelUp === 5 || this.levelUpInfo.targetLevelUp === 10);
     }
 
-    levelUpSelectSpeciality(speciality) {
-        if (this.levelUpShouldSelectSpeciality()) {
-            this.levelUpInfo.speciality = speciality;
+    levelUpSelectSpeciality(job: Job, speciality: Speciality) {
+        if (this.levelUpShouldSelectSpeciality(job)) {
+            this.levelUpInfo.specialities[job.id] = speciality;
         }
     }
 
@@ -239,9 +244,11 @@ export class CharacterComponent implements OnInit, OnDestroy {
         if (!this.levelUpInfo.EVorEAValue) {
             return false;
         }
-        if (this.levelUpShouldSelectSpeciality()) {
-            if (!this.levelUpInfo.speciality) {
-                return false;
+        for (let job of this.character.jobs) {
+            if (this.levelUpShouldSelectSpeciality(job)) {
+                if (this.levelUpInfo.specialities[job.id] == null) {
+                    return false;
+                }
             }
         }
         if (this.levelUpShouldSelectSkill()) {
@@ -353,7 +360,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openChangeJobDialog() {
-        this.newCharacterJob = this.character.job;
+        this.addingJob = false;
         this.changeJobOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeJobDialog);
     }
 
@@ -362,20 +369,21 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this.changeJobOverlayRef = undefined;
     }
 
-    selectNewJob(job: Job | undefined) {
-        this.newCharacterJob = job;
-    }
-
-    changeJob() {
-        this._characterService.changeJob(
-            this.character.id,
-            this.newCharacterJob ? this.newCharacterJob.id : undefined).subscribe(job => {
-            this.character.onChangeJob(job);
+    addJob(job: Job) {
+        this._characterService.addJob(this.character.id, job.id).subscribe(addedJob => {
+            this.character.onAddJob(addedJob);
         });
-        this.closeChangeJobDialog();
+        this.addingJob = false;
     }
 
-    openJobInfoDialog() {
+    removeJob(job: Job) {
+        this._characterService.removeJob(this.character.id, job.id).subscribe(removedJob => {
+            this.character.onRemoveJob(removedJob);
+        });
+    }
+
+    openJobInfoDialog(job: Job) {
+        this.selectedJobInfo = job;
         this.jobInfoOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.jobInfoDialog);
     }
 

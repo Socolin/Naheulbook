@@ -1,12 +1,11 @@
 import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
 
-import {getRandomInt} from '../shared';
+import {FlagData, getRandomInt} from '../shared';
 
 import {Job} from '../job';
 import {Origin} from '../origin';
 
 import {Skill, SkillService} from '../skill';
-import {FlagData} from '../shared/flag.model';
 
 @Component({
     selector: 'skill-selector',
@@ -15,7 +14,7 @@ import {FlagData} from '../shared/flag.model';
 })
 export class SkillSelectorComponent implements OnInit {
     // Inputs
-    @Input() selectedJob: Job | undefined;
+    @Input() selectedJobs: Job[];
     @Input() selectedOrigin: Origin;
     @Input() knownSkills: Skill[];
     @Input() skillCount = 2;
@@ -64,7 +63,7 @@ export class SkillSelectorComponent implements OnInit {
         this._skillService.getSkills().subscribe(tmpSkills => {
             let availableSkills: number[] = [];
 
-            if (!this.selectedJob) {
+            if (!this.selectedJobs.length) {
                 if (this.selectedOrigin && this.selectedOrigin.availableSkills) {
                     for (let i = 0; i < this.selectedOrigin.availableSkills.length; i++) {
                         let skill = this.selectedOrigin.availableSkills[i];
@@ -73,11 +72,13 @@ export class SkillSelectorComponent implements OnInit {
                 }
             }
             else {
-                if (this.selectedJob.availableSkills) {
-                    for (let i = 0; i < this.selectedJob.availableSkills.length; i++) {
-                        let skill = this.selectedJob.availableSkills[i];
-                        if (availableSkills.indexOf(skill.id) === -1) {
-                            availableSkills.push(skill.id);
+                for (let job of this.selectedJobs) {
+                    if (job.availableSkills) {
+                        for (let i = 0; i < job.availableSkills.length; i++) {
+                            let skill = job.availableSkills[i];
+                            if (availableSkills.indexOf(skill.id) === -1) {
+                                availableSkills.push(skill.id);
+                            }
                         }
                     }
                 }
@@ -94,8 +95,8 @@ export class SkillSelectorComponent implements OnInit {
             }
 
             let flagsData: {[flagName: string]: FlagData[]} = {};
-            if (this.selectedJob) {
-                this.selectedJob.getFlagsDatas(flagsData);
+            for (let job of this.selectedJobs) {
+                job.getFlagsDatas(flagsData);
             }
             if (this.selectedOrigin) {
                 this.selectedOrigin.getFlagsDatas(flagsData);

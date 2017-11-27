@@ -6,6 +6,7 @@ import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
 import {CharacterService} from './character.service';
 import {Observable} from 'rxjs/Observable';
+import {Speciality} from '../job/speciality.model';
 
 @Component({
     templateUrl: './create-custom-character.component.html',
@@ -33,6 +34,7 @@ export class CreateCustomCharacterComponent implements OnInit {
     public selectedOrigin?: Origin;
     public selectedJob?: Job;
     public selectedSkills: Skill[] = [];
+    public specialities: Speciality[] = [];
     public ea = 0;
     public ev = 0;
     public at = 8;

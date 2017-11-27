@@ -2,7 +2,8 @@ import {OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
-import {CharacterResume, Item} from '../character';
+import {CharacterSummary} from '../shared';
+import {Item} from '../item';
 
 import {Loot} from './loot.model';
 
@@ -29,7 +30,7 @@ export class LootPanelComponent implements OnDestroy {
         this.lootSubscriptions[loot.id] = [];
 
         if (!noNotifications) {
-            sub = loot.onTookItem.subscribe((change: { character: CharacterResume, item: Item }) => {
+            sub = loot.onTookItem.subscribe((change: { character: CharacterSummary, item: Item }) => {
                 let item = change.item;
                 let character = change.character;
                 if (item.data.quantity) {

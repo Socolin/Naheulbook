@@ -2,12 +2,12 @@ import {Component, Output, EventEmitter, SimpleChanges, OnChanges, ViewChild} fr
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
-import {Character, Item} from '../character';
-import {ItemTemplate, ItemTemplateService} from '../item';
+import {getRandomInt, NhbkDialogService} from '../shared';
+import {Character} from '../character';
+import {Item} from '../item';
+import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {Loot} from '../loot';
-import {getRandomInt} from '../shared/random';
-import {Monster} from '../monster/monster.model';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+import {Monster} from '../monster';
 
 @Component({
     selector: 'create-item',

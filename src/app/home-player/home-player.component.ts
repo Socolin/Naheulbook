@@ -3,15 +3,14 @@ import {NavigationStart, Router} from '@angular/router';
 
 import {MatSidenav} from '@angular/material';
 import {CharacterService} from '../character/character.service';
-import {CharacterResume} from '../character/character.model';
-import {ThemeService} from '../theme.service';
+import {CharacterSummary} from '../shared';
 
 @Component({
     templateUrl: './home-player.component.html',
     styleUrls: ['./home-player.component.scss'],
 })
 export class HomePlayerComponent implements OnInit {
-    public characters: CharacterResume[];
+    public characters: CharacterSummary[];
 
     @ViewChild('start', {read: MatSidenav})
     public start: MatSidenav;

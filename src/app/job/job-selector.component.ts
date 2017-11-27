@@ -22,7 +22,8 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     @Output() jobChange: EventEmitter<Job> = new EventEmitter<Job>();
     @Output() swapStats: EventEmitter<string[]> = new EventEmitter<string[]>();
     @Input() allowSwapStats = true;
-    @Input() selectedJob: Job;
+    @Input() displayNoJobOption = true;
+    @Input() selectedJobs?: Job[];
     @Input() selectedOrigin: Origin;
 
     public stats: { [statName: string]: number } = {};
@@ -52,6 +53,9 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     }
 
     isVisible(job: Job) {
+        if (this.selectedJobs && this.selectedJobs.find(j => j.id === job.id)) {
+            return false;
+        }
         if (this.selectedOrigin) {
             if (job.originsWhitelist && job.originsWhitelist.length > 0) {
                 let found = false;
@@ -118,10 +122,6 @@ export class JobSelectorComponent implements OnInit, OnChanges {
             this.jobChange.emit(job);
             return false;
         }
-        if (!this.isVisible(job) || !this.isAvailable(job)) {
-            return false;
-        }
-        this.selectedJob = job;
         this.jobChange.emit(job);
         return false;
     }

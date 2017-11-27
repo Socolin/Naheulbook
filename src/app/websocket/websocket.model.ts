@@ -1,4 +1,9 @@
 import {Subscription} from 'rxjs/Subscription';
+
+import {SkillService} from '../skill';
+import {JobService} from '../job';
+import {OriginService} from '../origin';
+
 import {WebSocketService} from './websocket.service';
 
 export interface WsMessage {
@@ -12,6 +17,12 @@ export class WsEvent {
     id: number;
     opcode?: string;
     data: any;
+}
+
+export interface WsEventServices {
+    skill: SkillService;
+    job: JobService;
+    origin: OriginService
 }
 
 export abstract class WsRegistrable {
@@ -36,6 +47,7 @@ export abstract class WsRegistrable {
     }
 
     abstract getWsTypeName(): string;
-    abstract onWsRegister(service: WebSocketService);
+    abstract onWsRegister(service: WebSocketService): void;
     abstract onWsUnregister(): void;
+    abstract handleWebsocketEvent(opcode: string, data: any, services: WsEventServices);
 }

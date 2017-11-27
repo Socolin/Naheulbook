@@ -6,7 +6,8 @@ import {Observable} from 'rxjs';
 import {isNullOrUndefined} from 'util';
 
 import {getRandomInt, NhbkDialogService, AutocompleteValue} from '../shared';
-import {Character, ItemData, Item, ItemService} from '../character';
+import {Character} from '../character';
+import {ItemData, Item, ItemService} from '../item';
 import {Monster, MonsterTemplate, MonsterService, MonsterTemplateService} from '../monster';
 
 import {CreateItemComponent} from './create-item.component';

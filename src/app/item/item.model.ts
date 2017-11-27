@@ -1,11 +1,9 @@
-import {ItemTemplate} from '../item';
-import {IMetadata} from '../shared/misc.model';
+import {IMetadata, ActiveStatsModifier} from '../shared';
+import {ItemTemplate} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
-import {ActiveStatsModifier} from '../shared/stat-modifier.model';
 import {IDurable} from '../date/durable.model';
-import {Skill} from '../skill/skill.model';
-import {Fighter} from '../group/group.model';
-import {Character} from './character.model';
+import {Skill} from '../skill';
+import {Fighter} from '../group';
 
 export class ItemData {
     name: string;
@@ -106,106 +104,6 @@ export class Item {
             }
         }
         return changes;
-    }
-
-    public incompatibleWith(character?: Character): {reason: string, source?: {type: string, name: string}}[] | undefined {
-        if (!character) {
-            return;
-        }
-        let incompatibilities: {reason: string, source?: {type: string, name: string}}[] = [];
-
-        if (this.template.data.god) {
-            let relatedGods = character.getFlagDatas('RELATED_GOD');
-            if (relatedGods) {
-                let foundGod = false;
-                for (let relatedGod of relatedGods) {
-                    if (this.template.data.god === relatedGod.data) {
-                        foundGod = true;
-                        break;
-                    }
-                }
-                if (!foundGod) {
-                    incompatibilities.push({reason: 'bad_god'});
-                }
-            }
-            else {
-                incompatibilities.push({reason: 'no_god'});
-            }
-        }
-
-        if (this.template.data.sex) {
-            if (this.template.data.sex === 'h' && character.sex !== 'Homme') {
-                incompatibilities.push({reason: 'bad_sex_h'});
-            }
-            if (this.template.data.sex === 'f' && character.sex !== 'Femme') {
-                incompatibilities.push({reason: 'bad_sex_f'});
-            }
-        }
-
-        if (this.template.requirements) {
-            for (let requirement of this.template.requirements) {
-                if (requirement.max && character.computedData.stats[requirement.stat] > requirement.max) {
-                    incompatibilities.push({reason: 'stat_to_high', source: {type: 'stat', name: requirement.stat}});
-                }
-                if (requirement.min && character.computedData.stats[requirement.stat] < requirement.min) {
-                    incompatibilities.push({reason: 'stat_to_low', source: {type: 'stat', name: requirement.stat}});
-                }
-            }
-        }
-        if (this.template.data.bruteWeapon) {
-            if (!character.hasFlag('ARME_BOURRIN')) {
-                incompatibilities.push({reason: 'no_arme_bourrin'});
-            }
-        }
-
-        if (this.template.data.requireLevel) {
-            if (character.level < this.template.data.requireLevel) {
-                incompatibilities.push({reason: 'too_low_level'});
-            }
-        }
-
-        if (this.template.data.enchantment) {
-            if (ItemTemplate.hasSlot(this.template, 'WEAPON')) {
-                let flag = character.getFlagDatas('NO_MAGIC_WEAPON');
-                if (flag) {
-                    incompatibilities.push({reason: 'no_magic_weapon', source: flag[0].source});
-                }
-            }
-            else if (this.template.slots && this.template.slots.length) {
-                let flag = character.getFlagDatas('NO_MAGIC_ARMOR');
-                if (flag) {
-                    incompatibilities.push({reason: 'no_magic_armor', source: flag[0].source});
-                }
-            }
-            else {
-                let flag = character.getFlagDatas('NO_MAGIC_OBJECT');
-                if (flag) {
-                    incompatibilities.push({reason: 'no_magic_object', source: flag[0].source});
-                }
-            }
-        }
-        if (this.template.data.itemTypes) {
-            const noWeaponTypes = character.getFlagDatas('NO_WEAPON_TYPE');
-            if (noWeaponTypes) {
-                for (let itemType of this.template.data.itemTypes) {
-                    for (let noWeaponType of noWeaponTypes) {
-                        if (itemType === noWeaponType.data) {
-                            incompatibilities.push({reason: 'bad_equipment_type', source: noWeaponType.source});
-                        }
-                    }
-                }
-            }
-
-            if (this.template.data.isItemTypeName('LIVRE')
-                && !character.hasFlag('ERUDITION')) {
-                incompatibilities.push({reason: 'cant_read'});
-            }
-        }
-
-        if (incompatibilities.length) {
-            return incompatibilities;
-        }
-        return undefined;
     }
 
     public getDamageString(): string {

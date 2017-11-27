@@ -171,7 +171,7 @@
     <mat-card-content [class.no-card-padding]="step === 3">
         <div *ngIf="(step == 3)">
             <skill-selector [selectedOrigin]="selectedOrigin"
-                            [selectedJob]="selectedJob"
+                            [selectedJobs]="[selectedJob]"
                             (skillsSelected)="onSelectSkills($event)">
             </skill-selector>
         </div>

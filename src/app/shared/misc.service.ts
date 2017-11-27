@@ -7,7 +7,7 @@ import {JsonService} from './json-service';
 import {Observable} from 'rxjs/Observable';
 import {Stat} from './stat.model';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {ItemTemplate} from '../item/item-template.model';
+import {ItemTemplate} from '../item-template/item-template.model';
 import {God} from './god.model';
 
 @Injectable()

@@ -8,8 +8,7 @@ import {Loot, LootPanelComponent} from '../loot';
 import {Monster} from '../monster';
 
 import {Character} from './character.model';
-import {Item} from './item.model';
-import {ItemService} from './item.service';
+import {Item, ItemService} from '../item';
 
 @Component({
     selector: 'character-loot-panel',

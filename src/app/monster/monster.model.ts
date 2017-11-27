@@ -1,13 +1,14 @@
-import {ItemTemplate} from '../item/item-template.model';
-import {Item, PartialItem} from '../character/item.model';
 import {Subject} from 'rxjs/Subject';
-import {WsRegistrable} from '../websocket/websocket.model';
-import {TargetJsonData} from '../group/target.model';
-import {WebSocketService} from '../websocket/websocket.service';
-import {Skill} from '../skill/skill.model';
-import {ActiveStatsModifier, StatModifier} from '../shared/stat-modifier.model';
 import {isNullOrUndefined} from 'util';
-import {Fighter} from '../group/group.model';
+
+import {ActiveStatsModifier, StatModifier} from '../shared';
+import {Skill} from '../skill';
+import {ItemTemplate} from '../item-template';
+import {Item, PartialItem} from '../item';
+import {WsEventServices, WsRegistrable, WebSocketService} from '../websocket';
+
+import {TargetJsonData} from '../group/target.model';
+import {Fighter} from '../group';
 
 export class MonsterData {
     at: number;
@@ -258,7 +259,7 @@ export class Monster extends WsRegistrable {
     }
 
     equipItem(partialItem: PartialItem) {
-        let item = this.getItem(partialItem.id)
+        let item = this.getItem(partialItem.id);
         if (!item) {
             return;
         }
@@ -357,6 +358,64 @@ export class Monster extends WsRegistrable {
             }
         }
         return changes;
+    }
+
+
+    handleWebsocketEvent(opcode: string, data: any, services: WsEventServices) {
+        switch (opcode) {
+            case 'addItem': {
+                services.skill.getSkillsById().subscribe(skillsById => {
+                    this.addItem(Item.fromJson(data, skillsById));
+                });
+                break;
+            }
+            case 'deleteItem': {
+                let item = PartialItem.fromJson(data);
+                this.removeItem(item.id);
+                break;
+            }
+            case 'tookItem': {
+                let takenItem = PartialItem.fromJson(data.item);
+                let leftItem: PartialItem | undefined;
+                if (data.leftItem) {
+                    leftItem = PartialItem.fromJson(data.leftItem);
+                }
+                this.takeItem(leftItem, takenItem, data.character);
+                break;
+            }
+            case 'changeName': {
+                this.name = data;
+                break;
+            }
+            case 'changeTarget': {
+                this.changeTarget(data);
+                break;
+            }
+            case 'changeData': {
+                this.changeData(data.fieldName, data.value);
+                break;
+            }
+            case 'addModifier': {
+                this.onAddModifier(ActiveStatsModifier.fromJson(data));
+                break;
+            }
+            case 'removeModifier': {
+                this.onRemoveModifier(ActiveStatsModifier.fromJson(data));
+                break;
+            }
+            case 'updateModifier': {
+                this.onUpdateModifier(ActiveStatsModifier.fromJson(data));
+                break;
+            }
+            case 'equipItem': {
+                this.equipItem(PartialItem.fromJson(data));
+                break;
+            }
+            default: {
+                console.warn('Opcode not handle: `' + opcode + '`');
+                break;
+            }
+        }
     }
 }
 

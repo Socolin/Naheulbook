@@ -9,10 +9,11 @@ import {EventModule} from '../event/event.module';
 import {DateModule} from '../date/date.module';
 import {JobModule} from '../job/job.module';
 import {OriginModule} from '../origin/origin.module';
-import {ItemModule} from '../item/item.module';
+import {ItemTemplateModule} from '../item-template/item-template.module';
 import {CharacterModule} from '../character/character.module';
 import {MonsterModule} from '../monster/monster.module';
 import {UsefullDataModule} from '../usefull-data/usefull-data.module';
+import {ItemModule} from '../item/item.module';
 
 import {
     CreateGroupComponent,
@@ -38,11 +39,12 @@ import {
         MonsterModule,
         NotificationsModule,
         DateModule,
-        ItemModule,
+        ItemTemplateModule,
         JobModule,
         OriginModule,
         EventModule,
         UsefullDataModule,
+        ItemModule
     ],
     declarations: [
         CreateGroupComponent,

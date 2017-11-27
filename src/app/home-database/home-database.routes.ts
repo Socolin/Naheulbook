@@ -5,16 +5,16 @@ import {AuthGuard} from '../user/auth-guard';
 import {SkillListComponent} from '../skill/skill-list.component';
 import {OriginListComponent} from '../origin/origin-list.component';
 import {JobListComponent} from '../job/job-list.component';
-import {ItemListComponent} from '../item/item-list.component';
+import {ItemListComponent} from '../item-template/item-list.component';
 import {EffectListComponent} from '../effect/effect-list.component';
 import {MonsterListComponent} from '../monster/monster-list.component';
 import {LocationListComponent} from '../location/location-list.component';
 import {QuestListComponent} from '../quest/quest-list.component';
 import {HomeDatabaseComponent} from './home-database.component';
-import {EditItemComponent} from '../item/edit-item.component';
+import {EditItemTemplateComponent} from '../item-template/edit-item-template.component';
 import {EditEffectComponent} from '../effect/edit-effect.component';
 import {CreateEffectComponent} from '../effect/create-effect.component';
-import {CreateItemTemplateComponent} from '../item/create-item-template.component';
+import {CreateItemTemplateComponent} from '../item-template/create-item-template.component';
 import {DatabaseSectionsComponent} from './database-sections.component';
 
 export const routes: Routes = [
@@ -72,7 +72,7 @@ export const routes: Routes = [
             },
             {
                 path: 'edit-item/:id',
-                component: EditItemComponent,
+                component: EditItemTemplateComponent,
             },
             {
                 path: 'create-item',

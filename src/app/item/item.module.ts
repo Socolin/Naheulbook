@@ -1,24 +1,13 @@
 import {NgModule}      from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {NhbkMaterialModule} from '../nhbk-material.module';
-import {ActionModule} from '../action/action.module';
 import {SharedModule} from '../shared/shared.module';
-import {SkillModule} from '../skill/skill.module';
-import {DateModule} from '../date/date.module';
-import {EffectModule} from '../effect/effect.module';
 
 import {
-    AutocompleteSearchItemTemplateComponent,
-    CreateItemTemplateComponent,
-    EditItemComponent,
-    ItemCategoryDirective,
-    ItemListComponent,
-    ItemTemplateComponent,
-    ItemTemplateEditorComponent,
-    ItemTemplateEditorModuleComponent,
-    ItemTemplateService,
+    ItemService,
 } from './';
 
 @NgModule({
@@ -26,28 +15,15 @@ import {
         CommonModule,
         FormsModule,
         NhbkMaterialModule,
+        FlexLayoutModule,
         SharedModule,
-        SkillModule,
-        DateModule,
-        ActionModule,
-        EffectModule,
     ],
     declarations: [
-        CreateItemTemplateComponent,
-        EditItemComponent,
-        ItemCategoryDirective,
-        ItemListComponent,
-        ItemTemplateComponent,
-        ItemTemplateEditorComponent,
-        ItemTemplateEditorModuleComponent,
-        AutocompleteSearchItemTemplateComponent,
-    ],
-    exports: [
-        ItemListComponent,
-        AutocompleteSearchItemTemplateComponent,
     ],
     providers: [
-        ItemTemplateService,
+        ItemService
+    ],
+    exports: [
     ]
 })
 export class ItemModule {

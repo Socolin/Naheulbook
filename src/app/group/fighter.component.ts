@@ -4,10 +4,11 @@ import {Portal} from '@angular/cdk/portal';
 import {MatSlideToggleChange} from '@angular/material';
 
 import {NotificationsService} from '../notifications';
-import {Character, CharacterService, Item, ItemService, ItemActionService} from '../character';
+import {Character, CharacterService, ItemActionService} from '../character';
+import {Item, ItemService} from '../item';
 import {ActiveStatsModifier, LapCountDecrement, NhbkDialogService} from '../shared';
 import {Monster, MonsterService} from '../monster';
-import {ItemTemplate} from '../item';
+import {ItemTemplate} from '../item-template';
 
 import {Fighter, Group} from './group.model';
 import {GroupActionService} from './group-action.service';

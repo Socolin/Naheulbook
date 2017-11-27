@@ -44,13 +44,13 @@
                             </dd>
 
                             <dt>Metier</dt>
-                            <dd *ngIf="character.job" style="display: flex; align-items: center">
-                                {{character.job.name}}
-                                <button mat-icon-button (click)="openJobInfoDialog()">
+                            <dd *ngFor="let job of character.jobs" style="display: flex; align-items: center">
+                                {{job.name}}
+                                <button mat-icon-button (click)="openJobInfoDialog(job)">
                                     <mat-icon>info</mat-icon>
                                 </button>
                             </dd>
-                            <dd *ngIf="!character.job">aucun</dd>
+                            <dd *ngIf="!character.jobs.length">aucun</dd>
 
                             <ng-template [ngIf]="character.specialities?.length">
                                 <dt>Specialité</dt>
@@ -364,7 +364,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="stat-row" *ngIf="character.job && character.job.isMagic">
+                        <div class="stat-row" *ngIf="character.hasMagic()">
                             <div class="stat">
                                 <div class="stat-name">
                                     MPHYS
@@ -435,12 +435,12 @@
                     <mat-card-content>
                         <div class="stat-header">
                             <div class="stat-element">EV</div>
-                            <div class="stat-element" *ngIf="character.job && character.job.isMagic">EA</div>
+                            <div class="stat-element" *ngIf="character.hasMagic()">EA</div>
                         </div>
                         <div class="stat-values">
                             <div class="stat-row">
                                 <div class="stat-element">{{character.computedData.stats['EV']}}</div>
-                                <div *ngIf="character.job && character.job.isMagic" class="stat-element">{{character.computedData.stats['EA']}}</div>
+                                <div *ngIf="character.hasMagic()" class="stat-element">{{character.computedData.stats['EA']}}</div>
                             </div>
                             <div class="stat-details" *ngIf="character.computedData.details.show.evea">
                                 <div class="detail-row" *ngFor="let detail of character.computedData.details.evea">
@@ -449,7 +449,7 @@
                                     </div>
                                     <div class="stat-row">
                                         <div class="stat-element">{{detail.data.EV}}</div>
-                                        <div *ngIf="character.job && character.job.isMagic" class="stat-element">{{detail.data.EA}}</div>
+                                        <div *ngIf="character.hasMagic()" class="stat-element">{{detail.data.EA}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -543,14 +543,14 @@
                 <mat-card>
                     <mat-card-content>
                         <div class="stat-header">
-                            <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">MagiePhys</div>
-                            <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">MagiePsy</div>
+                            <div class="stat-element-large" *ngIf="character.hasMagic()">MagiePhys</div>
+                            <div class="stat-element-large" *ngIf="character.hasMagic()">MagiePsy</div>
                             <div class="stat-element-large">RESM</div>
                         </div>
                         <div class="stat-values">
                             <div class="stat-row">
-                                <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPHYS']}}</div>
-                                <div class="stat-element-large" *ngIf="character.job && character.job.isMagic">{{character.computedData.stats['MPSY']}}</div>
+                                <div class="stat-element-large" *ngIf="character.hasMagic()">{{character.computedData.stats['MPHYS']}}</div>
+                                <div class="stat-element-large" *ngIf="character.hasMagic()">{{character.computedData.stats['MPSY']}}</div>
                                 <div class="stat-element-large">{{character.computedData.stats['RESM']}}</div>
                             </div>
                             <div class="stat-details" *ngIf="character.computedData.details.show.magic">
@@ -559,8 +559,8 @@
                                         {{detail.name}}
                                     </div>
                                     <div class="stat-row">
-                                        <div class="stat-element-large" *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPHYS || ''"></div>
-                                        <div class="stat-element-large" *ngIf="character.job && character.job.isMagic" [innerHTML]="detail.data.MPSY || ''"></div>
+                                        <div class="stat-element-large" *ngIf="character.hasMagic()" [innerHTML]="detail.data.MPHYS || ''"></div>
+                                        <div class="stat-element-large" *ngIf="character.hasMagic()" [innerHTML]="detail.data.MPSY || ''"></div>
                                         <div class="stat-element-large" [innerHTML]="detail.data.RESM || ''"></div>
                                     </div>
                                 </div>
@@ -724,12 +724,12 @@
                     <p>Pour chaque niveau gagné, on ajoute
                         1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')"> -1 </span>
                         à son énergie vitale (EV)
-                        <span *ngIf="character.job && character.job.isMagic">
-                    <strong>OU</strong> 1D{{character.job.diceEaLevelUp}} astrale (EA)
+                        <span *ngIf="character.hasMagicJob()">
+                    <strong>OU</strong> 1D{{character.diceEaLevelUp}} astrale (EA)
                 </span>
                     </p>
 
-                    <div *ngIf="character.job && character.job.isMagic">
+                    <div *ngIf="character.hasMagicJob()">
                         Je choisi d'augmenter mon:
                         <mat-button-toggle-group [(ngModel)]="levelUpInfo.EVorEA">
                             <mat-button-toggle value="EV">E.Vitale</mat-button-toggle>
@@ -741,7 +741,7 @@
                             Augmentation de l'energie vitale (EV) de 1D{{character.origin.diceEVLevelUp}}
                         </div>
                         <div *ngIf="levelUpInfo.EVorEA === 'EA'">
-                            Augmentation de l'energie astrale (EA) de 1D{{character.job.diceEaLevelUp}}
+                            Augmentation de l'energie astrale (EA) de 1D{{character.diceEaLevelUp}}
                         </div>
 
                         <div class="level-up-ea-ev">
@@ -751,7 +751,7 @@
                                     Lancer 1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')">-1</span>
                                 </mat-hint>
                                 <mat-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EA'">
-                                    Lancer 1D{{character.job.diceEaLevelUp}}
+                                    Lancer 1D{{character.diceEaLevelUp}}
                                 </mat-hint>
                             </mat-form-field>
                             <button mat-raised-button color="primary" (click)="rollLevelUp()">LANCER DÉ</button>
@@ -791,7 +791,7 @@
                 <mat-card-content>
                     <skill-selector *ngIf="!levelUpInfo.skill"
                                     [selectedOrigin]="character.origin"
-                                    [selectedJob]="character.job"
+                                    [selectedJobs]="character.jobs"
                                     [knownSkills]="character.skills"
                                     [skillCount]=1
                                     (skillsSelected)="onLevelUpSelectSkills($event)">
@@ -806,22 +806,24 @@
                     </button>
                 </mat-card-actions>
             </mat-card>
-            <mat-card *ngIf="levelUpShouldSelectSpeciality()">
-                <mat-card-subtitle>Spécialisation supplémentaire</mat-card-subtitle>
-                <mat-card-content>
-                    <div *ngIf="!levelUpInfo.speciality">
-                        <speciality-selector (specialityChange)="levelUpSelectSpeciality($event)" [knownSpecialities]="character.specialities" [specialities]="character.job.specialities"></speciality-selector>
-                    </div>
-                    <div *ngIf="levelUpInfo.speciality">Spécialité: {{levelUpInfo.speciality.name}}</div>
-                </mat-card-content>
-                <mat-card-actions *ngIf="levelUpInfo.speciality" align="end">
-                    <button mat-button
-                            color="primary"
-                            (click)="levelUpInfo.speciality = null">
-                        CHANGER
-                    </button>
-                </mat-card-actions>
-            </mat-card>
+            <ng-template ngFor [ngForOf]="charater.jobs" let-job>
+                <mat-card *ngIf="levelUpShouldSelectSpeciality(job)">
+                    <mat-card-subtitle>Spécialisation supplémentaire</mat-card-subtitle>
+                    <mat-card-content>
+                        <div *ngIf="!levelUpInfo.speciality">
+                            <speciality-selector (specialityChange)="levelUpSelectSpeciality(job, $event)" [knownSpecialities]="character.specialities" [specialities]="job.specialities"></speciality-selector>
+                        </div>
+                        <div *ngIf="levelUpInfo.speciality">Spécialité: {{levelUpInfo.speciality.name}}</div>
+                    </mat-card-content>
+                    <mat-card-actions *ngIf="levelUpInfo.speciality" align="end">
+                        <button mat-button
+                                color="primary"
+                                (click)="levelUpInfo.speciality = null">
+                            CHANGER
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+            </ng-template>
         </mat-card-content>
         <mat-card-actions align="end">
             <button mat-button color="primary" (click)="closeLevelUpDialog()">
@@ -893,38 +895,41 @@
         <mat-card-title>
             Changer de métier
         </mat-card-title>
-        <mat-card-content>
+        <mat-card-content style="display: flex; flex-direction: column">
             <div *ngIf="character.hasFlag('CAN_CHANGE_JOB')" class="text-warning">
                 Ne peux pas changer de métier
             </div>
-            <mat-radio-group *ngIf="character.job" [(ngModel)]="newCharacterJob">
-                <mat-radio-button [value]="null">Aucun</mat-radio-button>
-                <mat-radio-button [value]="character.job">{{character.job.name}}</mat-radio-button>
-            </mat-radio-group>
-            <job-selector *ngIf="!character.job && !newCharacterJob"
+            <mat-list>
+                <mat-list-item *ngFor="let job of character.jobs" style="display: flex; align-items: center">
+                    <button mat-icon-button (click)="removeJob(job)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                    {{job.name}}
+                </mat-list-item>
+            </mat-list>
+            <job-selector *ngIf="addingJob"
                           [ad]="character.computedData.baseStat['AD']"
                           [fo]="character.computedData.baseStat['FO']"
                           [int]="character.computedData.baseStat['INT']"
                           [cha]="character.computedData.baseStat['CHA']"
                           [cou]="character.computedData.baseStat['COU']"
+                          [displayNoJobOption]="false"
                           [selectedOrigin]="character.origin"
-                          [selectedJob]="character.job"
+                          [selectedJobs]="character.jobs"
                           [allowSwapStats]="false"
-                          (jobChange)="selectNewJob($event)">
-           </job-selector>
-            <div *ngIf="!character.job && newCharacterJob">
-                {{newCharacterJob.name}}
-                <button mat-icon-button (click)="selectNewJob(undefined)">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </div>
+                          (jobChange)="addJob($event)">
+            </job-selector>
+
+            <button mat-raised-button (click)="addingJob = true" class="clickable" *ngIf="!addingJob">
+                <div style="display: flex; align-items: center">
+                    <mat-icon>add</mat-icon>
+                    Ajouter un métier
+                </div>
+            </button>
         </mat-card-content>
         <mat-card-actions align="end">
             <button mat-button color="primary" (click)="closeChangeJobDialog()">
-                ANNULER
-            </button>
-            <button mat-button [disabled]="character.job === newCharacterJob" color="primary" (click)="changeJob()">
-                VALIDER
+                FERMER
             </button>
         </mat-card-actions>
     </mat-card>
@@ -959,15 +964,15 @@
 <ng-template #jobInfoDialog="cdkPortal" cdk-portal>
     <mat-card class="modal-max-height">
         <mat-card-title>
-            {{character.job.name}}
+            {{selectedJobInfo.name}}
         </mat-card-title>
         <mat-card-content>
-            <p class="job-summary" [innerHTML]="character.job.playerSummary | textFormatter"></p>
-            <p class="job-description" [innerHTML]="character.job.playerDescription | textFormatter"></p>
-            <div class="skills" *ngIf="character.job.skills.length">
+            <p class="job-summary" [innerHTML]="selectedJobInfo.playerSummary | textFormatter"></p>
+            <p class="job-description" [innerHTML]="selectedJobInfo.playerDescription | textFormatter"></p>
+            <div class="skills" *ngIf="selectedJobInfo.skills.length">
                 Je suis né avec les compétences suivantes :
                 <ul>
-                    <li *ngFor="let skill of character.job.skills">
+                    <li *ngFor="let skill of selectedJobInfo.skills">
                         <div class="skill-name">{{skill.name}}</div>
                         <span *ngIf="skill.playerDescription"> {{skill.playerDescription}}</span>
                     </li>

@@ -1,5 +1,5 @@
 import {Input, Output, EventEmitter, OnInit, Component, OnChanges, SimpleChanges} from '@angular/core';
-import {Item} from './item.model';
+import {Item} from '../item';
 
 import {Character} from './character.model';
 

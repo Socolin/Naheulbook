@@ -5,7 +5,7 @@ import {Portal} from '@angular/cdk/portal';
 import {NotificationsService} from '../notifications';
 import {NhbkDialogService} from '../shared';
 
-import {Item, ItemService} from '../character';
+import {Item, ItemService} from '../item';
 import {Loot, LootPanelComponent} from '../loot';
 import {Monster} from '../monster';
 

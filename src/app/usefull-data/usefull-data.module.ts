@@ -9,7 +9,7 @@ import {SharedModule} from '../shared/shared.module';
 import {UsefullDataComponent} from './usefull-data.component';
 import {UsefullDataService} from './usefull-data.service';
 import {DataArrayComponent} from './data-array.component';
-import {ItemModule} from '../item/item.module';
+import {ItemTemplateModule} from '../item-template/item-template.module';
 import {JobModule} from '../job/job.module';
 import {OriginModule} from '../origin/origin.module';
 import {SkillModule} from '../skill/skill.module';
@@ -22,7 +22,7 @@ import {EffectModule} from '../effect/effect.module';
         NhbkMaterialModule,
         FlexLayoutModule,
         SharedModule,
-        ItemModule,
+        ItemTemplateModule,
         JobModule,
         OriginModule,
         SkillModule,

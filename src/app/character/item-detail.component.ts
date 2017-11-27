@@ -6,11 +6,11 @@ import {Portal, OverlayRef} from '@angular/material';
 import {ActiveStatsModifier, God, MiscService, NhbkDialogService} from '../shared';
 
 import {IDurable} from '../date/durable.model';
-import {ItemTemplateService, ItemCategory} from '../item';
+import {ItemTemplateService, ItemCategory} from '../item-template';
 
 import {Character, CharacterGiveDestination} from './character.model';
 import {CharacterService} from './character.service';
-import {Item} from './item.model';
+import {Item} from '../item';
 import {ItemActionService} from './item-action.service';
 import {Observable} from 'rxjs/Observable';
 
@@ -74,7 +74,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         if (this.item && this.item.template.modifiers) {
             for (let i = 0; i < this.item.template.modifiers.length; i++) {
                 let modifier = this.item.template.modifiers[i];
-                if (modifier.job && (!this.character.job || modifier.job !== this.character.job.id)) {
+                if (modifier.job && !this.character.hasJob(modifier.job)) {
                     continue;
                 }
                 if (modifier.origin && modifier.origin !== this.character.origin.id) {

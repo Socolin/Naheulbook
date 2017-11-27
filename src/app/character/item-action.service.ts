@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable, Observer} from 'rxjs';
-import {Item} from './item.model';
+
+import {Item} from '../item';
 
 @Injectable()
 export class ItemActionService {

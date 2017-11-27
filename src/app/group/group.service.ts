@@ -2,14 +2,14 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 
-import {JsonService, HistoryEntry} from '../shared';
+import {CharacterSummary, JsonService, HistoryEntry} from '../shared';
 import {NotificationsService} from '../notifications';
 import {Monster} from '../monster';
 import {LoginService} from '../user';
 import {Loot} from '../loot';
 import {NEvent, EventService} from '../event';
-import {Character, CharacterResume, CharacterService} from '../character';
-import {NhbkDateOffset} from '../date/date.model';
+import {Character, CharacterService} from '../character';
+import {NhbkDateOffset} from '../date';
 import {Skill, SkillService} from '../skill';
 
 import {CharacterInviteInfo, Group, GroupData, GroupJsonData, PartialGroup} from './group.model';
@@ -72,7 +72,7 @@ export class GroupService extends JsonService {
                     charactersId.push(group.invites[i].id);
                 }
                 this._characterService.loadCharactersResume(charactersId).subscribe(
-                    (characterInvite: CharacterResume[]) => {
+                    (characterInvite: CharacterSummary[]) => {
                         for (let i = 0; i < group.invited.length; i++) {
                             let char = group.invited[i];
                             for (let j = 0; j < characterInvite.length; j++) {

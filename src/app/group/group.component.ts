@@ -7,35 +7,34 @@ import {MatTabChangeEvent, TemplatePortalDirective} from '@angular/material';
 import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
 
+import {
+    AutocompleteValue,
+    NhbkDialogService,
+    ActiveStatsModifier,
+    LapCountDecrement
+} from '../shared';
 import {NotificationsService} from '../notifications';
+import {date2Timestamp} from '../date/util';
+import {NhbkDateOffset} from '../date';
+
+import {GroupService} from './group.service';
+import {WebSocketService} from '../websocket';
+import {GroupActionService} from './group-action.service';
+
+import {Character, CharacterService} from '../character';
+import {Effect, AddEffectModalComponent} from '../effect';
+
+import {User, LoginService} from '../user';
+import {Monster, MonsterService} from '../monster';
+import {LocationService, Location} from '../location';
+import {Item, ItemService} from '../item';
+import {ItemTemplate} from '../item-template';
 
 import {Group, CharacterInviteInfo, Fighter} from '.';
-import {GroupService} from './group.service';
-import {Character} from '../character';
-
-import {date2Timestamp} from '../date/util';
-
-import {LoginService} from '../user';
-import {AutocompleteValue} from '../shared';
-import {LocationService, Location} from '../location';
-import {NhbkDateOffset} from '../date';
-import {GroupActionService} from './group-action.service';
-import {User} from '../user/user.model';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
-import {CharacterService} from '../character/character.service';
-import {Subscription} from 'rxjs/Subscription';
-import {WebSocketService} from '../websocket/websocket.service';
-import {Effect} from '../effect/effect.model';
-import {ActiveStatsModifier, LapCountDecrement} from '../shared/stat-modifier.model';
-import {AddEffectModalComponent} from '../effect/add-effect-modal.component';
-import {MonsterService} from '../monster/monster.service';
 import {FighterSelectorComponent} from './fighter-selector.component';
-import {ItemTemplate} from '../item/item-template.model';
 import {CreateItemComponent} from './create-item.component';
-import {Monster} from '../monster/monster.model';
-import {Item} from '../character/item.model';
-import {ItemService} from '../character/item.service';
 
 @Component({
     templateUrl: './group.component.html',

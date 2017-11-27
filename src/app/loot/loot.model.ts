@@ -1,17 +1,17 @@
 import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
 
-import {Item, PartialItem} from '../character/item.model';
-import {Monster} from '../monster/monster.model';
-import {CharacterResume} from '../character/character.model';
-import {WsRegistrable} from '../websocket/websocket.model';
-import {WebSocketService} from '../websocket/websocket.service';
-import {Skill} from '../skill/skill.model';
+import {CharacterSummary} from '../shared';
+import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
+
+import {Skill} from '../skill';
+import {Item, PartialItem} from '../item';
+import {Monster} from '../monster';
 
 export class LootTookItemMsg {
     item: Item;
     leftItem: Item;
-    character: CharacterResume;
+    character: CharacterSummary;
     quantity?: number;
 }
 
@@ -180,6 +180,49 @@ export class Loot extends WsRegistrable {
 
         for (let monster of this.monsters) {
             this.wsSubscribtion.service.unregisterElement(monster);
+        }
+    }
+
+    public handleWebsocketEvent(opcode: string, data: any, services: WsEventServices) {
+        switch (opcode) {
+            case 'addItem': {
+                services.skill.getSkillsById().subscribe(skillsById => {
+                    this.addItem(Item.fromJson(data, skillsById));
+                });
+                break;
+            }
+            case 'deleteItem': {
+                let item = PartialItem.fromJson(data);
+                this.removeItem(item.id);
+                break;
+            }
+            case 'addMonster': {
+                services.skill.getSkillsById().subscribe(skillsById => {
+                    let monster = Monster.fromJson(data, skillsById);
+                    this.addMonster(monster);
+                });
+                break;
+            }
+            case 'deleteMonster': {
+                services.skill.getSkillsById().subscribe(skillsById => {
+                    let monster = Monster.fromJson(data, skillsById);
+                    this.removeMonster(monster.id);
+                });
+                break;
+            }
+            case 'updateLoot': {
+                this.visibleForPlayer = data.visibleForPlayer;
+                break;
+            }
+            case 'tookItem': {
+                let takenItem = PartialItem.fromJson(data.item);
+                let leftItem: PartialItem | undefined;
+                if (data.leftItem) {
+                    leftItem = PartialItem.fromJson(data.leftItem);
+                }
+                this.takeItem(leftItem, takenItem, data.character);
+                break;
+            }
         }
     }
 

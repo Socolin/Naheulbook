@@ -11,6 +11,7 @@ import {OriginModule} from '../origin/origin.module';
 import {JobModule} from '../job/job.module';
 import {EffectModule} from '../effect/effect.module';
 import {ActionModule} from '../action/action.module';
+import {ItemTemplateModule} from '../item-template/item-template.module';
 import {ItemModule} from '../item/item.module';
 
 import {
@@ -32,7 +33,6 @@ import {
 
 import {CharacterService} from './character.service';
 import {CharacterResolve} from './character.resolver';
-import {ItemService} from './item.service';
 
 @NgModule({
     imports: [
@@ -47,6 +47,7 @@ import {ItemService} from './item.service';
         JobModule,
         EffectModule,
         ActionModule,
+        ItemTemplateModule,
         ItemModule,
     ],
     declarations: [
@@ -78,7 +79,6 @@ import {ItemService} from './item.service';
     providers: [
         CharacterService,
         CharacterResolve,
-        ItemService,
     ],
 })
 export class CharacterModule {

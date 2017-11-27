@@ -1,5 +1,5 @@
 <mat-accordion [multi]="false">
-    <mat-expansion-panel>
+    <mat-expansion-panel *ngIf="displayNoJobOption">
         <mat-expansion-panel-header>
             <div class="job-title">
                 <span class="icon-available">
@@ -66,6 +66,9 @@
 
             <mat-action-row *ngIf="jobsStates[job.id].state === 'ok'" align="end">
                 <button color="primary" mat-button (click)="selectJob(job)">CHOISIR</button>
+            </mat-action-row>
+            <mat-action-row *ngIf="jobsStates[job.id].state === 'ko'" align="end">
+                <button color="warn" mat-button (click)="selectJob(job)">CHOISIR (Prérequis non rempli)</button>
             </mat-action-row>
             <mat-action-row *ngIf="jobsStates[job.id].state === 'swap'" align="end" class="swap-buttons">
                 <ng-template ngFor [ngForOf]="jobsStates[job.id].changes" let-change>

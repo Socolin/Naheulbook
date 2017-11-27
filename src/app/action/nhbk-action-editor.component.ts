@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 
 import {ActiveStatsModifier, AutocompleteValue, MiscService} from '../shared';
 
-import {ItemTemplate} from '../item';
+import {ItemTemplate} from '../item-template';
 
 @Component({
     selector: 'nhbk-action-editor',

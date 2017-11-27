@@ -7,14 +7,12 @@ import {Portal} from '@angular/cdk/portal';
 import {isNullOrUndefined} from 'util';
 
 import {removeDiacritics} from '../shared';
-import {ItemTemplate} from '../item';
+import {AutocompleteSearchItemTemplateComponent, ItemTemplate} from '../item-template';
 
 import {Character} from './character.model';
-import {Item, ItemData} from './item.model';
+import {Item, ItemData, ItemService} from '../item';
 import {ItemActionService} from './item-action.service';
-import {ItemService} from './item.service';
 import {SwipeService} from './swipe.service';
-import {AutocompleteSearchItemTemplateComponent} from '../item/autocomplete-search-item-template.component';
 
 @Component({
     selector: 'inventory-panel',

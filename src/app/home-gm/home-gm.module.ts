@@ -14,7 +14,7 @@ import {GroupModule} from '../group/group.module';
 
 import {HomeGmComponent} from './home-gm.component';
 import {EffectModule} from '../effect/effect.module';
-import {ItemModule} from '../item/item.module';
+import {ItemTemplateModule} from '../item-template/item-template.module';
 import {MonsterModule} from '../monster/monster.module';
 import {OriginModule} from '../origin/origin.module';
 import {QuestModule} from '../quest/quest.module';
@@ -38,7 +38,7 @@ import {routes} from './home-gm.routes';
         CharacterModule,
         GroupModule,
         EffectModule,
-        ItemModule,
+        ItemTemplateModule,
         JobModule,
         LocationModule,
         MonsterModule,

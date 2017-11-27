@@ -12,6 +12,11 @@ import {WebSocketService} from '../websocket/websocket.service';
 import {TargetJsonData} from './target.model';
 import {Observable} from 'rxjs/Observable';
 import {isNullOrUndefined} from 'util';
+import {WsEventServices} from '../websocket';
+import {CharacterJsonData} from '../character/character.model';
+import {Skill} from '../skill';
+import {Job} from '../job/job.model';
+import {Origin} from '../origin';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -717,6 +722,76 @@ export class Group extends WsRegistrable {
         }
     }
 
+    handleWebsocketEvent(opcode: string, data: any, services: WsEventServices) {
+        switch (opcode) {
+            case 'addLoot': {
+                services.skill.getSkillsById().subscribe(skillsById => {
+                    this.addLoot(Loot.fromJson(data, skillsById));
+                });
+                break;
+            }
+            case 'deleteLoot': {
+                this.removeLoot(data.id);
+                break;
+            }
+            case 'addEvent': {
+                this.addEvent(NEvent.fromJson(data));
+                break;
+            }
+            case 'deleteEvent': {
+                this.removeEvent(data.id);
+                break;
+            }
+            case 'changeData': {
+                this.data.changeValue(data.key, data.value);
+                if (data.key === 'date') {
+                    this.updateEvents();
+                }
+                break;
+            }
+            case 'joinCharacter': {
+                let characterData: CharacterJsonData = data;
+                Observable.forkJoin(
+                    services.job.getJobList(),
+                    services.origin.getOriginList(),
+                    services.skill.getSkillsById()
+                ).subscribe(([jobs, origins, skillsById]: [Job[], Origin[], {[skillId: number]: Skill}]) => {
+                    let character = Character.fromJson(characterData, origins, jobs, skillsById);
+
+                    try {
+                        character.update();
+                    } catch (e) {
+                        console.log(e, e.stack);
+                        throw e;
+                    }
+                    this.addCharacter(character);
+                });
+
+                let i = this.invited.findIndex(d => d.id === characterData.id);
+                if (i !== -1) {
+                    this.invited.splice(i, 1);
+                }
+                let j = this.invites.findIndex(d => d.id === characterData.id);
+                if (j !== -1) {
+                    this.invites.splice(j, 1);
+                }
+                break;
+            }
+            case 'groupInvite': {
+                this.onAddInvite(data);
+                break;
+            }
+            case 'cancelInvite': {
+                this.onCancelInvite(data);
+                break;
+            }
+            default: {
+                console.warn('Opcode not handle: `' + opcode + '`');
+                break;
+            }
+        }
+    }
+
     dispose() {
         for (let character of this.characters) {
             if (character.id in this.characterSubscriptions) {
@@ -755,7 +830,7 @@ export class Group extends WsRegistrable {
 
 export interface CharacterInviteInfo {
     id: number;
-    job: string;
+    jobs: string[];
     name: string;
     origin: string;
 }

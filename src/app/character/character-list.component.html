@@ -7,7 +7,7 @@
     </mat-card>
     <mat-card  matRipple *ngFor="let character of characters" (click)="selectCharacter(character)" class="clickable">
         <mat-card-title>{{character.name}} - lvl {{character.level}}</mat-card-title>
-        <mat-card-subtitle>{{character.origin}} {{character.job}}</mat-card-subtitle>
+        <mat-card-subtitle>{{character.origin}}<span *ngFor="let job of character.jobs">&nbsp;{{job}}</span></mat-card-subtitle>
     </mat-card>
     <mat-card matRipple (click)="createCharacter()" class="create-character clickable">
         <mat-icon>add</mat-icon>

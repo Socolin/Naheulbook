@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
+import {CharacterSummary} from '../shared';
 import {CharacterService} from './character.service';
-import {CharacterResume} from './character.model';
 
 @Component({
     templateUrl: './character-list.component.html',
@@ -10,7 +10,7 @@ import {CharacterResume} from './character.model';
     providers: [CharacterService]
 })
 export class CharacterListComponent implements OnInit {
-    public characters: CharacterResume[];
+    public characters: CharacterSummary[];
     public loading = true;
 
     constructor(private _router: Router
@@ -18,7 +18,7 @@ export class CharacterListComponent implements OnInit {
         , private _characterService: CharacterService) {
     }
 
-    selectCharacter(character: CharacterResume) {
+    selectCharacter(character: CharacterSummary) {
         this._router.navigate(['../detail', character.id], {relativeTo: this._route});
         return false;
     }

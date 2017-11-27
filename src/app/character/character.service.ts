@@ -2,18 +2,17 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 
-import {JsonService, IMetadata, ActiveStatsModifier, HistoryEntry} from '../shared';
+import {CharacterSummary, JsonService, IMetadata, ActiveStatsModifier, HistoryEntry} from '../shared';
 import {NotificationsService} from '../notifications';
 
 import {LoginService} from '../user';
+import {Skill, SkillService} from '../skill';
 import {Job, JobService} from '../job';
 import {Origin, OriginService} from '../origin';
-import {Skill, SkillService} from '../skill';
 import {Loot} from '../loot';
 
 import {
     Character,
-    CharacterResume,
     CharacterGiveDestination,
     CharacterJsonData,
 } from './character.model';
@@ -85,23 +84,24 @@ export class CharacterService extends JsonService {
         );
     }
 
-    loadCharactersResume(list: number[]): Observable<CharacterResume[]> {
+    loadCharactersResume(list: number[]): Observable<CharacterSummary[]> {
         return Observable.forkJoin(
             this._jobService.getJobList(),
             this._originService.getOriginList(),
             this.postJson('/api/character/resumeList', list).map(res => res.json())
-        ).map(([jobs, origins, characters]: [Job[], Origin[], CharacterResume[]]) => {
+        ).map(([jobs, origins, characters]: [Job[], Origin[], CharacterSummary[]]) => {
                 for (let i = 0; i < characters.length; i++) {
                     let character = characters[i];
-                    for (let j = 0; j < jobs.length; j++) {
-                        let job = jobs[j];
-                        if (job.id === character.jobId) {
-                            character.job = job.name;
-                            break;
+                    character.jobs = [];
+                    for (let jobId of character.jobIds) {
+                        for (let job of jobs) {
+                            if (job.id === jobId) {
+                                character.jobs.push(job.name);
+                            }
                         }
                     }
-                    for (let j = 0; j < origins.length; j++) {
-                        let origin = origins[j];
+
+                    for (let origin of origins) {
                         if (origin.id === character.originId) {
                             character.origin = origin.name;
                             break;
@@ -112,23 +112,25 @@ export class CharacterService extends JsonService {
             }
         );
     }
-    loadList(): Observable<CharacterResume[]> {
+
+    loadList(): Observable<CharacterSummary[]> {
         return Observable.forkJoin(
             this._jobService.getJobList(),
             this._originService.getOriginList(),
             this._http.get('/api/character/list').map(res => res.json())
-        ).map(([jobs, origins, characters]: [Job[], Origin[], CharacterResume[]]) => {
+        ).map(([jobs, origins, characters]: [Job[], Origin[], CharacterSummary[]]) => {
                 for (let i = 0; i < characters.length; i++) {
                     let character = characters[i];
-                    for (let j = 0; j < jobs.length; j++) {
-                        let job = jobs[j];
-                        if (job.id === character.jobId) {
-                            character.job = job.name;
-                            break;
+                    character.jobs = [];
+                    for (let jobId of character.jobIds) {
+                        for (let job of jobs) {
+                            if (job.id === jobId) {
+                                character.jobs.push(job.name);
+                            }
                         }
                     }
-                    for (let j = 0; j < origins.length; j++) {
-                        let origin = origins[j];
+
+                    for (let origin of origins) {
                         if (origin.id === character.originId) {
                             character.origin = origin.name;
                             break;
@@ -156,17 +158,26 @@ export class CharacterService extends JsonService {
         }).map(res => res.json());
     }
 
-    changeJob(characterId: number, jobId: number | undefined): Observable<Job | undefined> {
+    addJob(characterId: number, jobId: number): Observable<Job> {
         return Observable.forkJoin(
-            this.postJson('/api/character/changeJob', {
+            this.postJson('/api/character/addJob', {
                 characterId: characterId,
                 jobId: jobId,
             }).map(res => res.json()),
             this._jobService.getJobsById()
         ).map(([data, jobsById]: [any, {[jobId: number]: Job}]) => {
-            if (!data.jobId) {
-                return undefined;
-            }
+            return jobsById[data.jobId];
+        });
+    }
+
+    removeJob(characterId: number, jobId: number): Observable<Job> {
+        return Observable.forkJoin(
+            this.postJson('/api/character/removeJob', {
+                characterId: characterId,
+                jobId: jobId,
+            }).map(res => res.json()),
+            this._jobService.getJobsById()
+        ).map(([data, jobsById]: [any, {[jobId: number]: Job}]) => {
             return jobsById[data.jobId];
         });
     }

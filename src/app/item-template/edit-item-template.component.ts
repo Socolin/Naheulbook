@@ -6,10 +6,10 @@ import {ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 
 @Component({
-    selector: 'edit-item',
-    templateUrl: './edit-item.component.html',
+    selector: 'edit-item-template',
+    templateUrl: './edit-item-template.component.html',
 })
-export class EditItemComponent implements OnInit {
+export class EditItemTemplateComponent implements OnInit {
     public item: ItemTemplate;
     public saving = false;
 

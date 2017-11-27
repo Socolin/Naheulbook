@@ -75,7 +75,10 @@
                                     <mat-card-title>{{character.name}} - Lvl{{character.level}}</mat-card-title>
                                     <mat-card-subtitle>
                                         {{character.origin.name}}
-                                        <span *ngIf="character.job"> - {{character.job.name}} </span>
+                                        <span *ngIf="character.jobs"> -</span>
+                                        <span *ngFor="let job of character.jobs">
+                                            &nbsp;{{job.name}}
+                                        </span>
                                     </mat-card-subtitle>
                                     <button mat-icon-button [matMenuTriggerFor]="characterActions">
                                         <mat-icon>more_vert</mat-icon>
