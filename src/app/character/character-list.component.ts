@@ -12,6 +12,7 @@ import {CharacterService} from './character.service';
 export class CharacterListComponent implements OnInit {
     public characters: CharacterSummary[];
     public loading = true;
+    public loadingCharacterId?: number;
 
     constructor(private _router: Router
         , private _route: ActivatedRoute
@@ -19,7 +20,15 @@ export class CharacterListComponent implements OnInit {
     }
 
     selectCharacter(character: CharacterSummary) {
-        this._router.navigate(['../detail', character.id], {relativeTo: this._route});
+        if (this.loadingCharacterId) {
+            return false;
+        }
+        this.loadingCharacterId = character.id;
+        this._router.navigate(['../detail', character.id], {relativeTo: this._route})
+            .catch((e) => {
+                this.loadingCharacterId = undefined
+                throw e;
+            });
         return false;
     }
 
