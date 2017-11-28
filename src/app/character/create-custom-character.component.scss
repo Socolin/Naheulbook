@@ -17,4 +17,25 @@ mat-card {
             padding-left: 32px;
         }
     }
+
+}
+
+.origin-card {
+    .selector {
+        width: 100%;
+    }
+}
+.job-card {
+    .job {
+        padding-bottom: 16px;
+        .speciality {
+            padding-left: 24px;
+        }
+        .speciality-selector {
+            width: 100%;
+        }
+    }
+    .job-selector {
+        width: 100%;
+    }
 }

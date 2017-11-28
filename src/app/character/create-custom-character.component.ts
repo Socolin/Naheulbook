@@ -34,7 +34,7 @@ export class CreateCustomCharacterComponent implements OnInit {
     public selectedOrigin?: Origin;
     public selectedJobs: Job[] = [];
     public selectedSkills: Skill[] = [];
-    public specialities: Speciality[] = [];
+    public specialities: {[jobId: number]: Speciality[]} = {};
     public ea = 0;
     public ev = 0;
     public at = 8;
@@ -91,11 +91,13 @@ export class CreateCustomCharacterComponent implements OnInit {
         let i = this.selectedJobs.indexOf(job);
         if (i !== -1) {
             this.selectedJobs.splice(i, 1);
+            delete this.specialities[job.id];
             this.updateAvailableSkills();
         }
     }
 
     addJob(job: Job) {
+        this.specialities[job.id] = [];
         this.selectedJobs.push(job);
         this.updateAvailableSkills();
     }
@@ -176,5 +178,20 @@ export class CreateCustomCharacterComponent implements OnInit {
 
     isJobSelected(job: Job) {
         return this.selectedJobs.indexOf(job) !== -1;
+    }
+
+    addSpeciality(job: Job, speciality: Speciality) {
+        this.specialities[job.id].push(speciality);
+    }
+
+    removeSpeciality(job: Job, speciality: Speciality) {
+        let i = this.specialities[job.id].findIndex(s => s.id === speciality.id);
+        if (i !== -1) {
+            this.specialities[job.id].splice(i, 1);
+        }
+    }
+
+    isSpecialitySelected(job: Job, speciality: Speciality) {
+        return this.specialities[job.id].indexOf(speciality) !== -1;
     }
 }
