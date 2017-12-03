@@ -2,18 +2,23 @@ import {Component, Output, EventEmitter, Input, OnInit, ViewChild} from '@angula
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
-import {NEvent} from './event.model';
-import {NhbkDateOffset, NhbkDate} from '../date/date.model';
-import {Group} from '../group/group.model';
+import {NhbkDialogService} from '../shared';
+import {NhbkDateOffset, NhbkDate} from '../date';
 import {dateOffset2TimeDuration, date2Timestamp, timestamp2Date} from '../date/util';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
+
+import {NEvent} from './event.model';
 
 @Component({
     selector: 'event-editor',
     templateUrl: './event-editor.component.html',
 })
 export class EventEditorComponent implements OnInit {
-    @Input() group: Group;
+    @Input() group: {
+        id: number,
+        data: any;
+        addEvent(event: NEvent): void,
+        removeEvent(eventId: number): void,
+    };
     @Output() onCreate: EventEmitter<NEvent> = new EventEmitter<NEvent>();
     @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
 

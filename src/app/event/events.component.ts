@@ -1,6 +1,5 @@
 import {Component, Input, ViewChild} from '@angular/core';
 
-import {Group} from '../group/group.model';
 import {NEvent} from './event.model';
 import {EventService} from './event.service';
 import {EventEditorComponent} from './event-editor.component';
@@ -11,7 +10,11 @@ import {EventEditorComponent} from './event-editor.component';
     templateUrl: './events.component.html',
 })
 export class EventsComponent {
-    @Input() group: Group;
+    @Input() group: {
+        id: number,
+        addEvent(event: NEvent): void,
+        removeEvent(eventId: number): void,
+    };
 
     @ViewChild('eventEditor')
     private eventEditorComponent: EventEditorComponent;

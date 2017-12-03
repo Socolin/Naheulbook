@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
+import {Observable} from 'rxjs';
 
-import {JsonService} from '../shared/json-service';
+import {JsonService} from '../shared';
 import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
-import {Observable} from 'rxjs';
+
 import {NEvent} from './event.model';
 
 @Injectable()
