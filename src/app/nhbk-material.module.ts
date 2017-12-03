@@ -11,8 +11,8 @@ import {
     MatGridListModule,
     MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule,
     MatProgressSpinnerModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSidenavModule, MatSliderModule,
-    MatSlideToggleModule, MatSnackBarModule, MatSortModule, MdStepperModule,
-    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule, StyleModule
+    MatSlideToggleModule, MatSnackBarModule, MatSortModule,
+    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import {PlatformModule} from '@angular/cdk/platform';
 
@@ -43,7 +43,6 @@ const MATERIAL_MODULES = [
     MatSliderModule,
     MatSlideToggleModule,
     MatSnackBarModule,
-    MdStepperModule,
     MatSortModule,
     MatTabsModule,
     MatToolbarModule,
@@ -51,7 +50,6 @@ const MATERIAL_MODULES = [
     OverlayModule,
     PortalModule,
     BidiModule,
-    StyleModule,
     A11yModule,
     PlatformModule,
     MatCommonModule,

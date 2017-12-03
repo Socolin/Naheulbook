@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
+import {ConnectionPositionPair} from '@angular/cdk/overlay';
+
 import {Fighter} from './group.model';
-import {ConnectionPositionPair} from '@angular/material';
 
 @Component({
     selector: 'target-selector',

@@ -1,7 +1,8 @@
 import {
-    Component, Input, OnChanges, OnInit, Optional, SimpleChanges, ViewChild
+    Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild
 } from '@angular/core';
-import {Portal, OverlayRef} from '@angular/material';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 
 import {ActiveStatsModifier, God, MiscService, NhbkDialogService} from '../shared';
 

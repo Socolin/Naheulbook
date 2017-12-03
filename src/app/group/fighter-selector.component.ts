@@ -1,7 +1,10 @@
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {MatCheckboxChange} from '@angular/material';
+import {OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
+
+import {NhbkDialogService} from '../shared';
 import {Fighter, Group} from './group.model';
-import {MatCheckboxChange, OverlayRef, Portal} from '@angular/material';
-import {NhbkDialogService} from '../shared/nhbk-dialog.service';
 
 @Component({
     selector: 'fighter-selector',

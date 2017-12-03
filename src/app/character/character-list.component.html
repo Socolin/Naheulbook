@@ -5,7 +5,7 @@
 	<mat-card *ngIf="!loading && (!characters || characters.length === 0)">
         Vous ne possédez aucun personnage.
     </mat-card>
-    <mat-card matRipple [mdRippleDisabled]="loadingCharacterId != null"
+    <mat-card matRipple [matRippleDisabled]="loadingCharacterId != null"
               *ngFor="let character of characters"
               (click)="selectCharacter(character)"
               [class.clickable]="loadingCharacterId == null">
@@ -13,7 +13,7 @@
         <mat-card-subtitle>{{character.origin}}<span *ngFor="let job of character.jobs">&nbsp;{{job}}</span></mat-card-subtitle>
         <mat-progress-bar *ngIf="loadingCharacterId === character.id" mode="indeterminate"></mat-progress-bar>
     </mat-card>
-    <mat-card matRipple [mdRippleDisabled]="loadingCharacterId != null"
+    <mat-card matRipple [matRippleDisabled]="loadingCharacterId != null"
               (click)="createCharacter()"
               [class.clickable]="loadingCharacterId == null"
               class="create-character">
@@ -23,7 +23,7 @@
             <div class="mat-caption secondary-text">Création guidé d'un personnage niveau 1</div>
         </div>
     </mat-card>
-    <mat-card matRipple [mdRippleDisabled]="loadingCharacterId != null"
+    <mat-card matRipple [matRippleDisabled]="loadingCharacterId != null"
               (click)="createCustomCharacter()"
               [class.clickable]="loadingCharacterId == null"
               class="create-character">

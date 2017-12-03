@@ -3,9 +3,9 @@ import {
     ViewChildren
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatTabChangeEvent, TemplatePortalDirective} from '@angular/material';
+import {MatTabChangeEvent} from '@angular/material';
 import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import {Portal, TemplatePortalDirective} from '@angular/cdk/portal';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 

@@ -71,4 +71,4 @@ $nhbk-theme: mat-light-theme($nhbk-primary, $nhbk-accent, $nhbk-warn);
 @include add-theme(true, $mat-blue-grey, $mat-amber, $mat-deep-orange, 'nhbk-dark-theme');
 @include add-theme(true, $mat-green, $mat-teal, $mat-deep-orange, 'nhbk-dark2-theme');
 
-@include add-theme(false, $mat-green, $mat-orange, $mat-deep-orange, 'nhbk-light2-theme');
+@include add-theme(false, $mat-teal, $mat-orange, $mat-deep-orange, 'nhbk-light2-theme');

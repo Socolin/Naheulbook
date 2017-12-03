@@ -9,7 +9,7 @@ export class NhbkErrorHandler extends ErrorHandler {
 
     constructor(private _http: Http,
                 private _errorReportService: ErrorReportService) {
-        super(true);
+        super();
     }
 
     postJson(url: string, data: any): Observable<Response> {

@@ -34,8 +34,8 @@
         </mat-button-toggle-group>
 
         <button mat-raised-button (click)="toggleIconMode()" *ngIf="selectedInventoryTab === 'all' || selectedInventoryTab === 'bags' || selectedInventoryTab === 'currency'">
-            <mat-icon *ngIf="iconMode" class="md-24">list</mat-icon>
-            <mat-icon *ngIf="!iconMode" class="md-24">view_module</mat-icon>
+            <mat-icon *ngIf="iconMode">list</mat-icon>
+            <mat-icon *ngIf="!iconMode">view_module</mat-icon>
         </button>
 
         <mat-form-field *ngIf="selectedInventoryTab === 'all'">
@@ -187,14 +187,12 @@
                                 <button mat-icon-button
                                         *ngIf="i > 0 && character.computedData.itemsBySlots[slot.id].length > 1"
                                         type="button"
-                                        class="btn btn-default col-md-1 col-xs-2"
                                         (click)="_itemActionService.onAction('equip', item, {level: 1})">
                                     <mat-icon>keyboard_arrow_up</mat-icon>
                                 </button>
                                 <button mat-icon-button
                                         *ngIf="!last && character.computedData.itemsBySlots[slot.id].length > 1"
                                         type="button"
-                                        class="btn btn-default col-md-1 col-xs-2"
                                         (click)="_itemActionService.onAction('equip', item, {level: -1})">
                                     <mat-icon>keyboard_arrow_down</mat-icon>
                                 </button>

@@ -1,5 +1,5 @@
 import {Input, Component, ElementRef, ViewChild} from '@angular/core';
-import {ConnectedOverlayDirective, OverlayOrigin} from '@angular/material';
+import {ConnectedOverlayDirective, OverlayOrigin} from '@angular/cdk/overlay';
 
 import {Character} from './character.model';
 import {Item} from '../item';
