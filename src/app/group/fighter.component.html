@@ -67,7 +67,12 @@
         </div>
         <div class="row-end-part">
             <div class="field">{{fighter.stats.cou}}</div>
-            <div class="field-fixed-small"><mat-checkbox [checked]="fighter.chercheNoise" disabled></mat-checkbox></div>
+            <div class="field-fixed-small">
+                <mat-checkbox [checked]="fighter.chercheNoise"
+                              (change)="changeStat('chercheNoise', $event.checked)"
+                              [disabled]="fighter.isCharacter">
+                </mat-checkbox>
+            </div>
         </div>
     </div>
 

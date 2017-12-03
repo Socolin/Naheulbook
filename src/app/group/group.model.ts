@@ -141,6 +141,10 @@ export class Fighter {
         return this.isMonster ? this.monster.data.number : 0;
     }
 
+    get isCharacter(): boolean {
+        return !this.isMonster;
+    }
+
     changeTarget(target: TargetJsonData) {
         if (this.isMonster) {
             this.monster.changeTarget(target);
