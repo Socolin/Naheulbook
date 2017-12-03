@@ -1,9 +1,17 @@
 <h4>Autre</h4>
 <mat-nav-list>
-    <a mat-list-item (click)="openThemeSelector()">Thème</a>
-    <a mat-list-item [routerLink]="['/credit']">Crédits</a>
-    <a mat-list-item *ngIf="_loginService.currentLoggedUser" [routerLink]="['/profile']">Profile</a>
-    <a mat-list-item [routerLink]="['/logout']">Déconnexion</a>
+    <a mat-list-item (click)="openThemeSelector()">
+        <mat-icon matListIcon>style</mat-icon>Thème
+    </a>
+    <a mat-list-item [routerLink]="['/credit']">
+        <mat-icon matListIcon>info</mat-icon> Crédits
+    </a>
+    <a mat-list-item *ngIf="_loginService.currentLoggedUser" [routerLink]="['/profile']">
+        <mat-icon matListIcon>account_box</mat-icon> Profile
+    </a>
+    <a mat-list-item [routerLink]="['/logout']">
+        <mat-icon matListIcon>power_settings_new</mat-icon> Déconnexion
+    </a>
 </mat-nav-list>
 
 

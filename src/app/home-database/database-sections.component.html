@@ -1,8 +1,44 @@
-
-<a [routerLink]="['/database/skills']"><mat-card>Compétences</mat-card></a>
-<a [routerLink]="['/database/origins']"><mat-card>Origines</mat-card></a>
-<a [routerLink]="['/database/jobs']"><mat-card>Metiers</mat-card></a>
-<a [routerLink]="['/database/items']"><mat-card>Objets</mat-card></a>
-<a [routerLink]="['/database/effects']"><mat-card>Effets</mat-card></a>
-<a [routerLink]="['/database/monsters']"><mat-card>Bestiaire</mat-card></a>
-<a [routerLink]="['/database/locations']"><mat-card>Cartographie</mat-card></a>
+<div class="database-menu">
+    <a [routerLink]="['/database/skills']">
+        <mat-card>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-32"></mat-icon>
+            Compétences
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/origins']">
+        <mat-card>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-ogre" class="ra-mat-button-icon-32"></mat-icon>
+            Origines
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/jobs']">
+        <mat-card>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-diploma" class="ra-mat-button-icon-32"></mat-icon>
+            Metiers
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/items']">
+        <mat-card>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-32"></mat-icon>
+            Objets
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/effects']">
+        <mat-card>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-broken-bone" class="ra-mat-button-icon-32"></mat-icon>
+            Effets
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/monsters']">
+        <mat-card>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-dragon-head" class="ra-mat-button-icon-32"></mat-icon>
+            Bestiaire
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/locations']">
+        <mat-card>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-compass" class="ra-mat-button-icon-32"></mat-icon>
+            Cartographie
+        </mat-card>
+    </a>
+</div>

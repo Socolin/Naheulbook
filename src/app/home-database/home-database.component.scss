@@ -9,6 +9,10 @@ mat-sidenav {
         bottom: 0;
         margin: 24px 0;
     }
+
+    a {
+        margin-left: -16px;
+    }
 }
 
 @media (min-width: 600px) {

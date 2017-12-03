@@ -3,21 +3,48 @@
         <h4 >MJ</h4>
         <mat-nav-list>
             <ng-template ngFor [ngForOf]="groups" let-group>
-                <a mat-list-item [routerLink]="['/gm/group/', group.id]">{{group.name}}</a>
+                <a mat-list-item [routerLink]="['/gm/group/', group.id]">
+                    <mat-icon matListIcon>group</mat-icon> {{group.name}}
+                </a>
             </ng-template>
-            <a mat-list-item [routerLink]="['/gm/group/list']">Tous vos groupes</a>
-            <a mat-list-item [routerLink]="['/gm/group/create']"><mat-icon>add</mat-icon>Créer un groupe</a>
+            <a mat-list-item [routerLink]="['/gm/group/list']">
+                <mat-icon matListIcon>list</mat-icon> Tous vos groupes
+            </a>
+            <a mat-list-item [routerLink]="['/gm/group/create']">
+                <mat-icon matListIcon>add</mat-icon>Créer un groupe
+            </a>
         </mat-nav-list>
         <mat-divider></mat-divider>
         <h4>Database</h4>
         <mat-nav-list>
-            <a mat-list-item [routerLink]="['/gm/database/skills']">Compétences</a>
-            <a mat-list-item [routerLink]="['/gm/database/origins']">Origines</a>
-            <a mat-list-item [routerLink]="['/gm/database/jobs']">Metiers</a>
-            <a mat-list-item [routerLink]="['/gm/database/items']">Objets</a>
-            <a mat-list-item [routerLink]="['/gm/database/effects']">Effets</a>
-            <a mat-list-item [routerLink]="['/gm/database/monsters']">Bestiaire</a>
-            <a mat-list-item [routerLink]="['/gm/database/locations']">Cartographie</a>
+            <a mat-list-item [routerLink]="['/gm/database/skills']">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
+                Compétences
+            </a>
+            <a mat-list-item [routerLink]="['/gm/database/origins']">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-ogre" class="ra-mat-button-icon-24"></mat-icon>
+                Origines
+            </a>
+            <a mat-list-item [routerLink]="['/gm/database/jobs']">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-diploma" class="ra-mat-button-icon-24"></mat-icon>
+                Metiers
+            </a>
+            <a mat-list-item [routerLink]="['/gm/database/items']">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-24"></mat-icon>
+                Objets
+            </a>
+            <a mat-list-item [routerLink]="['/gm/database/effects']">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-broken-bone" class="ra-mat-button-icon-24"></mat-icon>
+                Effets
+            </a>
+            <a mat-list-item [routerLink]="['/gm/database/monsters']">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-dragon-head" class="ra-mat-button-icon-24"></mat-icon>
+                Bestiaire
+            </a>
+            <a mat-list-item [routerLink]="['/gm/database/locations']">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-compass" class="ra-mat-button-icon-24"></mat-icon>
+                Cartographie
+            </a>
         </mat-nav-list>
         <common-nav></common-nav>
     </mat-sidenav>

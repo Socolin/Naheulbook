@@ -1,3 +1,23 @@
-mat-card {
-    margin: 5px;
+.database-menu {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    a {
+        flex: 1 50%;
+    }
+    mat-card {
+        margin: 5px;
+        display: flex;
+        align-items: center;
+        mat-icon {
+            margin-right: 16px;
+        }
+    }
+}
+
+@media (max-width: 599px) {
+    .database-menu {
+        flex-direction: column;
+    }
+
 }

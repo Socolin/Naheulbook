@@ -2,8 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
 
 import {MatSidenav} from '@angular/material';
-import {CharacterService} from '../character/character.service';
 import {CharacterSummary} from '../shared';
+import {CharacterService} from '../character';
 
 @Component({
     templateUrl: './home-player.component.html',
