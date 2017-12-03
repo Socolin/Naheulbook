@@ -1,21 +1,20 @@
+import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
+import {Subject} from 'rxjs/Subject';
+
+import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
+
 import {Monster} from '../monster';
 import {Character} from '../character';
 import {Location} from '../location';
 import {NhbkDate} from '../date';
-import {Subscription} from 'rxjs/Subscription';
-import {Subject} from 'rxjs/Subject';
-import {WsRegistrable} from '../websocket/websocket.model';
-import {Loot} from '../loot/loot.model';
-import {NEvent} from '../event/event.model';
+import {Loot} from '../loot';
+import {NEvent} from '../event';
 import {date2Timestamp} from '../date/util';
-import {WebSocketService} from '../websocket/websocket.service';
+import {CharacterJsonData} from '../character';
 import {TargetJsonData} from './target.model';
-import {Observable} from 'rxjs/Observable';
-import {isNullOrUndefined} from 'util';
-import {WsEventServices} from '../websocket';
-import {CharacterJsonData} from '../character/character.model';
 import {Skill} from '../skill';
-import {Job} from '../job/job.model';
+import {Job} from '../job';
 import {Origin} from '../origin';
 
 export class FighterStat {
@@ -779,6 +778,10 @@ export class Group extends WsRegistrable {
                 if (j !== -1) {
                     this.invites.splice(j, 1);
                 }
+                break;
+            }
+            case 'removeCharacter': {
+                this.removeCharacter(data.characterId);
                 break;
             }
             case 'groupInvite': {

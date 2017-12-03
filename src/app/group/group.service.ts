@@ -242,4 +242,11 @@ export class GroupService extends JsonService {
     listGroups(): Observable<PartialGroup[]> {
         return this._http.get('/api/character/listGroups').map(res => res.json());
     }
+
+    kickCharacter(groupId: number, characterId: number): Observable<number> {
+        return this.postJson('/api/group/kickCharacter', {
+            groupId: groupId,
+            characterId: characterId,
+        }).map(res => res.json());
+    }
 }

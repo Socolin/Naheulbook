@@ -32,9 +32,9 @@ import {LocationService, Location} from '../location';
 import {Item, ItemService} from '../item';
 import {ItemTemplate} from '../item-template';
 
-import {Group, CharacterInviteInfo, Fighter} from '.';
 import {FighterSelectorComponent} from './fighter-selector.component';
 import {CreateItemComponent} from './create-item.component';
+import {Group, CharacterInviteInfo, Fighter} from './group.model';
 
 @Component({
     templateUrl: './group.component.html',
@@ -248,6 +248,12 @@ export class GroupComponent implements OnInit, OnDestroy {
         this.selectedCharacter = character;
 
         this.changeOwnershipOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeOwnershipDialog);
+    }
+
+    kickCharacter(character: Character) {
+        this._groupService.kickCharacter(this.group.id, character.id).subscribe((characterId) => {
+            this.group.removeCharacter(characterId);
+        });
     }
 
     closeChangeOwnershipDialog() {
