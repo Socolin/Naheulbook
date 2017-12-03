@@ -14,6 +14,7 @@ export class EventsComponent {
         id: number,
         addEvent(event: NEvent): void,
         removeEvent(eventId: number): void,
+        data: any,
     };
 
     @ViewChild('eventEditor')
