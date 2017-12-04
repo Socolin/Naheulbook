@@ -7,13 +7,15 @@
 </mat-button-toggle-group>
 
 
-<mat-select class="duration-type-small" placeholder="Type de durée" [ngModel]="durable.durationType" (change)="updateDuration($event)">
-    <mat-option *ngIf="hiddenType.indexOf('combat') === -1" value="combat">Nombre de combat</mat-option>
-    <mat-option *ngIf="hiddenType.indexOf('lap') === -1" value="lap">Nombre de tour</mat-option>
-    <mat-option *ngIf="hiddenType.indexOf('time') === -1" value="time">Temps</mat-option>
-    <mat-option *ngIf="hiddenType.indexOf('custom') === -1" value="custom">Autre</mat-option>
-    <mat-option *ngIf="hiddenType.indexOf('forever') === -1" value="forever">Permanent</mat-option>
-</mat-select>
+<mat-form-field>
+    <mat-select class="duration-type-small" placeholder="Type de durée" [ngModel]="durable.durationType" (selectionChange)="updateDuration($event)">
+        <mat-option *ngIf="hiddenType.indexOf('combat') === -1" value="combat">Nombre de combat</mat-option>
+        <mat-option *ngIf="hiddenType.indexOf('lap') === -1" value="lap">Nombre de tour</mat-option>
+        <mat-option *ngIf="hiddenType.indexOf('time') === -1" value="time">Temps</mat-option>
+        <mat-option *ngIf="hiddenType.indexOf('custom') === -1" value="custom">Autre</mat-option>
+        <mat-option *ngIf="hiddenType.indexOf('forever') === -1" value="forever">Permanent</mat-option>
+    </mat-select>
+</mat-form-field>
 
 <div class="duration-value">
     <div *ngIf="durable.durationType === 'custom'">

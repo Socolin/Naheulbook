@@ -7,20 +7,24 @@
     <button mat-icon-button (click)="removeModifier(i)"><mat-icon>delete</mat-icon></button>
 	<span>{{modifier | modifier}}</span>
 	<span *ngIf="options.indexOf('job') !== -1">
-        <mat-select #jobSelector [(ngModel)] ="modifier.job" placeholder="Métier">
-            <mat-option [value]="null"></mat-option>
-			<mat-option *ngFor="let job of jobs" [value]="job.id">
-                {{job.name}}
-            </mat-option>
-        </mat-select>
+        <mat-form-field>
+            <mat-select #jobSelector [(ngModel)] ="modifier.job" placeholder="Métier">
+                <mat-option [value]="null"></mat-option>
+                <mat-option *ngFor="let job of jobs" [value]="job.id">
+                    {{job.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
 	</span>
 	<span *ngIf="options.indexOf('origin') !== -1">
-        <mat-select #originSelector [(ngModel)] ="modifier.origin" placeholder="Origine">
-            <mat-option [value]="null"></mat-option>
-			<mat-option *ngFor="let origin of origins" [value]="origin.id">
-                {{origin.name}}
-            </mat-option>
-        </mat-select>
+        <mat-form-field>
+            <mat-select #originSelector [(ngModel)] ="modifier.origin" placeholder="Origine">
+                <mat-option [value]="null"></mat-option>
+                <mat-option *ngFor="let origin of origins" [value]="origin.id">
+                    {{origin.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
 	</span>
 	<div *ngIf="options.indexOf('special') !== -1">
 		<button mat-button color="primary" *ngIf="!modifier.special" (click)="modifier.special = []">
@@ -100,35 +104,39 @@
 </div>
 
 <div class="small-editor">
-    <mat-select placeholder="Stat" [(ngModel)]="selectedStat" (change)="selectStat($event.value)">
-        <mat-option *ngFor="let stat of basicStats" [value]="stat">
-            {{stat}}
-        </mat-option>
-        <mat-divider></mat-divider>
-        <mat-option *ngFor="let stat of lifeStats" [value]="stat">
-            {{stat}}
-        </mat-option>
-        <mat-divider></mat-divider>
-        <mat-option *ngFor="let stat of combatStats" [value]="stat">
-            {{stat}}
-        </mat-option>
-        <mat-divider></mat-divider>
-        <mat-option *ngFor="let stat of magicStats" [value]="stat">
-            {{stat}}
-        </mat-option>
-        <mat-divider></mat-divider>
-        <mat-option *ngFor="let stat of stats" [value]="stat">
-            {{stat}}
-        </mat-option>
-    </mat-select>
+    <mat-form-field>
+        <mat-select placeholder="Stat" [(ngModel)]="selectedStat" (selectionChange)="selectStat($event.value)">
+            <mat-option *ngFor="let stat of basicStats" [value]="stat">
+                {{stat}}
+            </mat-option>
+            <mat-divider></mat-divider>
+            <mat-option *ngFor="let stat of lifeStats" [value]="stat">
+                {{stat}}
+            </mat-option>
+            <mat-divider></mat-divider>
+            <mat-option *ngFor="let stat of combatStats" [value]="stat">
+                {{stat}}
+            </mat-option>
+            <mat-divider></mat-divider>
+            <mat-option *ngFor="let stat of magicStats" [value]="stat">
+                {{stat}}
+            </mat-option>
+            <mat-divider></mat-divider>
+            <mat-option *ngFor="let stat of stats" [value]="stat">
+                {{stat}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
 
-    <mat-select placeholder="Modification type" [(ngModel)]="selectedType">
-        <mat-option [value]="'ADD'">ADD</mat-option>
-        <mat-option [value]="'MUL'">MUL</mat-option>
-        <mat-option [value]="'DIV'">DIV</mat-option>
-        <mat-option [value]="'SET'">SET</mat-option>
-        <mat-option [value]="'PERCENTAGE'">PERCENTAGE</mat-option>
-    </mat-select>
+    <mat-form-field>
+        <mat-select placeholder="Modification type" [(ngModel)]="selectedType">
+            <mat-option [value]="'ADD'">ADD</mat-option>
+            <mat-option [value]="'MUL'">MUL</mat-option>
+            <mat-option [value]="'DIV'">DIV</mat-option>
+            <mat-option [value]="'SET'">SET</mat-option>
+            <mat-option [value]="'PERCENTAGE'">PERCENTAGE</mat-option>
+        </mat-select>
+    </mat-form-field>
 
     <span class="editor-value">
         <div class="label secondary-text">Valeur</div>

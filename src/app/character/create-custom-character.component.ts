@@ -97,6 +97,9 @@ export class CreateCustomCharacterComponent implements OnInit {
     }
 
     addJob(job: Job) {
+        if (this.isJobSelected(job)) {
+            return;
+        }
         this.specialities[job.id] = [];
         this.selectedJobs.push(job);
         this.updateAvailableSkills();

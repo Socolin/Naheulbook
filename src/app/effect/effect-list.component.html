@@ -1,22 +1,25 @@
 <mat-card>
     <mat-card-content class="effect-category-selector">
         <div class="selector">
-            <mat-select
-                [(ngModel)]="selectedType"
-                (change)="selectType($event.value)">
-                <mat-option *ngFor="let type of types" [value]="type">
-                    {{type.name}}
-                </mat-option>
-            </mat-select>
+            <mat-form-field>
+                <mat-select
+                    [(ngModel)]="selectedType"
+                    (change)="selectType($event.value)">
+                    <mat-option *ngFor="let type of types" [value]="type">
+                        {{type.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
         <div class="selector">
-            <mat-select *ngIf="selectedType"
-                       [(ngModel)]="selectedCategory"
-                       (change)="selectCategory($event.value)">
-                <mat-option *ngFor="let category of selectedType.categories" [value]="category">
-                    {{category.name}}
-                </mat-option>
-            </mat-select>
+            <mat-form-field *ngIf="selectedType">
+                <mat-select [(ngModel)]="selectedCategory"
+                           (change)="selectCategory($event.value)">
+                    <mat-option *ngFor="let category of selectedType.categories" [value]="category">
+                        {{category.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
     </mat-card-content>
 </mat-card>

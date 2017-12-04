@@ -47,11 +47,13 @@
                                placeholder="Jour">
                     </mat-form-field>
 
-                    <mat-select placeholder="Période" formControlName="currentCalendarDate">
-                        <mat-option *ngFor="let cDate of calendar" [value]="cDate">
-                            {{cDate.name}}
-                        </mat-option>
-                    </mat-select>
+                    <mat-form-field>
+                        <mat-select placeholder="Période" formControlName="currentCalendarDate">
+                            <mat-option *ngFor="let cDate of calendar" [value]="cDate">
+                                {{cDate.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
             </form>
         </mat-card-content>

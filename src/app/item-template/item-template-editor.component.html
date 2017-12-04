@@ -19,11 +19,13 @@
         </mat-form-field>
         <button mat-icon-button (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"><mat-icon>content_copy</mat-icon></button>
         <button mat-icon-button (click)="automaticNotIdentifiedName()"><mat-icon>refresh</mat-icon></button>
-        <mat-select placeholder="Source" [(ngModel)]="itemTemplate.source" (change)="changeSource($event.value)" required>
-            <mat-option value="official" *ngIf="_loginService.currentLoggedUser.admin">Officiel</mat-option>
-            <mat-option value="community">Communautaire</mat-option>
-            <mat-option value="private">Privé</mat-option>
-        </mat-select>
+        <mat-form-field>
+            <mat-select placeholder="Source" [(ngModel)]="itemTemplate.source" (selectionChange)="changeSource($event.value)" required>
+                <mat-option value="official" *ngIf="_loginService.currentLoggedUser.admin">Officiel</mat-option>
+                <mat-option value="community">Communautaire</mat-option>
+                <mat-option value="private">Privé</mat-option>
+            </mat-select>
+        </mat-form-field>
     </div>
     <div style="display: flex; flex-direction: row">
         <mat-form-field>
@@ -51,16 +53,20 @@
 <mat-card>
     <mat-card-subtitle>Section</mat-card-subtitle>
     <mat-card-content class="section-list">
-        <mat-select [(ngModel)]="selectedSection" placeholder="Section" *ngIf="sections">
-            <mat-option *ngFor="let section of sections" [value]="section">
-                {{section.name}}
-            </mat-option>
-        </mat-select>
-        <mat-select [(ngModel)]="itemTemplate.category" placeholder="Sous section" *ngIf="selectedSection">
-            <mat-option *ngFor="let category of selectedSection.categories" [value]="category.id">
-                {{category.name}}
-            </mat-option>
-        </mat-select>
+        <mat-form-field *ngIf="sections">
+            <mat-select [(ngModel)]="selectedSection" placeholder="Section">
+                <mat-option *ngFor="let section of sections" [value]="section">
+                    {{section.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="selectedSection">
+            <mat-select [(ngModel)]="itemTemplate.category" placeholder="Sous section">
+                <mat-option *ngFor="let category of selectedSection.categories" [value]="category.id">
+                    {{category.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
     </mat-card-content>
 </mat-card>
 

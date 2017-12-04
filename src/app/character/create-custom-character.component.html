@@ -50,11 +50,13 @@
         Origine
     </mat-card-title>
     <mat-card-content>
-        <mat-select class="selector" placeholder="Origine" [(ngModel)]="selectedOrigin" (change)="updateAvailableJobs()">
-            <mat-option *ngFor="let origin of origins" [value]="origin">
-                {{origin.name}}
-            </mat-option>
-        </mat-select>
+        <mat-form-field class="selector">
+            <mat-select placeholder="Origine" [(ngModel)]="selectedOrigin" (selectionChange)="updateAvailableJobs()">
+                <mat-option *ngFor="let origin of origins" [value]="origin">
+                    {{origin.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
     </mat-card-content>
 </mat-card>
 <mat-card *ngIf="selectedOrigin" class="job-card">
@@ -77,23 +79,27 @@
             </div>
 
             <div class="speciality">
-                <mat-select class="speciality-selector" *ngIf="job.specialities.length" placeholder="Spécialité" (change)="addSpeciality(job, $event.value)">
-                    <ng-template ngFor [ngForOf]="job.specialities" let-speciality>
-                        <mat-option *ngIf="!isSpecialitySelected(job, speciality)" [value]="speciality">
-                            {{speciality.name}}
-                        </mat-option>
-                    </ng-template>
-                </mat-select>
+                <mat-form-field class="speciality-selector" *ngIf="job.specialities.length > 0">
+                    <mat-select placeholder="Spécialité" (selectionChange)="addSpeciality(job, $event.value)">
+                        <ng-template ngFor [ngForOf]="job.specialities" let-speciality>
+                            <mat-option *ngIf="!isSpecialitySelected(job, speciality)" [value]="speciality">
+                                {{speciality.name}}
+                            </mat-option>
+                        </ng-template>
+                    </mat-select>
+                </mat-form-field>
             </div>
         </div>
 
-        <mat-select class="job-selector" placeholder="Métier" (change)="addJob($event.value)">
-            <ng-template ngFor [ngForOf]="availableJobs" let-job>
-                <mat-option *ngIf="!isJobSelected(job)" [value]="job">
-                    {{job.name}}
-                </mat-option>
-            </ng-template>
-        </mat-select>
+        <mat-form-field class="job-selector">
+            <mat-select placeholder="Métier" (selectionChange)="addJob($event.value)">
+                <ng-template ngFor [ngForOf]="availableJobs" let-job>
+                    <mat-option *ngIf="!isJobSelected(job)" [value]="job">
+                        {{job.name}}
+                    </mat-option>
+                </ng-template>
+            </mat-select>
+        </mat-form-field>
     </mat-card-content>
 </mat-card>
 <mat-card *ngIf="selectedOrigin">

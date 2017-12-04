@@ -10,14 +10,16 @@
     </mat-card-actions>
 </mat-card>
 <mat-card class="section-selector">
-    <mat-select [ngModel]="selectedSection"
-               (change)="selectSection($event.value)"
-               style="width: 100%"
-               placeholder="Section">
-        <mat-option *ngFor="let section of itemSections" [value]="section">
-            {{section.name}}
-        </mat-option>
-    </mat-select>
+    <mat-form-field>
+        <mat-select [ngModel]="selectedSection"
+                   (change)="selectSection($event.value)"
+                   style="width: 100%"
+                   placeholder="Section">
+            <mat-option *ngFor="let section of itemSections" [value]="section">
+                {{section.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
 
     <autocomplete-search-item-template [clearOnSelect]=true (onSelect)="selectItemTemplate($event)">
     </autocomplete-search-item-template>
@@ -40,16 +42,17 @@
         <mat-form-field *ngIf="hasSpecial('DICE_DROP')" class="dice-drop">
             <input matInput placeholder="Dé" [(ngModel)]="filter.dice" type="number" (change)="updateFilter()"/>
         </mat-form-field>
-        <mat-select *ngIf="selectedSection"
-                   class="category"
-                   [ngModel]="filter.category"
-                   (change)="selectCategory($event.value)"
-                   placeholder="Sous-section">
-            <mat-option [value]="null"></mat-option>
-            <mat-option *ngFor="let category of selectedSection.categories" [value]="category">
-                {{category.name}}
-            </mat-option>
-        </mat-select>
+        <mat-form-field *ngIf="selectedSection">
+            <mat-select class="category"
+                       [ngModel]="filter.category"
+                       (change)="selectCategory($event.value)"
+                       placeholder="Sous-section">
+                <mat-option [value]="null"></mat-option>
+                <mat-option *ngFor="let category of selectedSection.categories" [value]="category">
+                    {{category.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
     </mat-card-content>
     <mat-card-actions align="end">
         <button mat-button color="primary" (click)="resetFilter()">RESET</button>

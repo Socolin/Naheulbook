@@ -132,17 +132,19 @@
                 <div class="fighter-advanced-data">
                     <span class="label">Sexe</span>
                     <span class="value">
-                        <mat-select [ngModel]="fighter.monster.data.sex" (ngModelChange)="updateMonsterField(fighter.monster, 'sex', $event)">
-                            <mat-option [value]="null">
-                                Non défini
-                            </mat-option>
-                            <mat-option [value]="'f'">
-                                Femme
-                            </mat-option>
-                            <mat-option [value]="'h'">
-                                Homme
-                            </mat-option>
-                        </mat-select>
+                        <mat-form-field>
+                            <mat-select [ngModel]="fighter.monster.data.sex" (ngModelChange)="updateMonsterField(fighter.monster, 'sex', $event)">
+                                <mat-option [value]="null">
+                                    Non défini
+                                </mat-option>
+                                <mat-option [value]="'f'">
+                                    Femme
+                                </mat-option>
+                                <mat-option [value]="'h'">
+                                    Homme
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </span>
                 </div>
                 <div class="fighter-advanced-data" *ngIf="fighter.monster.data.page">
