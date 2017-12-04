@@ -7,8 +7,8 @@
 </mat-button-toggle-group>
 
 
-<mat-form-field>
-    <mat-select class="duration-type-small" placeholder="Type de durée" [ngModel]="durable.durationType" (selectionChange)="updateDuration($event)">
+<mat-form-field class="duration-type-small">
+    <mat-select placeholder="Type de durée" [ngModel]="durable.durationType" (selectionChange)="updateDuration($event)">
         <mat-option *ngIf="hiddenType.indexOf('combat') === -1" value="combat">Nombre de combat</mat-option>
         <mat-option *ngIf="hiddenType.indexOf('lap') === -1" value="lap">Nombre de tour</mat-option>
         <mat-option *ngIf="hiddenType.indexOf('time') === -1" value="time">Temps</mat-option>

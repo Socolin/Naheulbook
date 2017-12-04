@@ -1,7 +1,7 @@
 <div *ngIf="monster">
     <div>
-        <mat-form-field>
-            <mat-select class="type-selector" (selectionChange)="selectType($event.value)" [ngModel]="selectedType" placeholder="Catégorie">
+        <mat-form-field class="type-selector">
+            <mat-select (selectionChange)="selectType($event.value)" [ngModel]="selectedType" placeholder="Catégorie">
                 <mat-option *ngFor="let type of types" [value]="type">{{type.name}}</mat-option>
                 <mat-option [value]="undefined">
                     <span class="secondary-text">
@@ -10,8 +10,8 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field *ngIf="selectedType">
-            <mat-select class="category-selector"[ngModel]="monster.category" (selectionChange)="selectCategory($event.value)" placeholder="Sous-catégorie">
+        <mat-form-field *ngIf="selectedType" class="category-selector">
+            <mat-select [ngModel]="monster.category" (selectionChange)="selectCategory($event.value)" placeholder="Sous-catégorie">
                 <mat-option *ngFor="let category of selectedType.categories" [value]="category">
                     {{category.name}}
                 </mat-option>
