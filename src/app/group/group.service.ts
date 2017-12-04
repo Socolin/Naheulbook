@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
+import {Subject} from 'rxjs/Subject';
 
 import {CharacterSummary, JsonService, HistoryEntry} from '../shared';
 import {NotificationsService} from '../notifications';
@@ -26,9 +27,11 @@ export class GroupService extends JsonService {
     }
 
     getGroup(groupId): Observable<Group> {
-        return this.postJson('/api/character/groupDetail', {
+        let subject = new Subject<Group>();
+
+        this.postJson('/api/character/groupDetail', {
             groupId: groupId
-        }).map(res => res.json()).map((groupData: Group) => {
+        }).map(res => res.json()).subscribe((groupData: Group) => {
             let charactersLoading: Observable<Character|null>[] = [];
             for (let i = 0; i < groupData.characters.length; i++) {
                 let char = groupData.characters[i];
@@ -94,9 +97,11 @@ export class GroupService extends JsonService {
                     }
                 );
                 group.updateFightersOrder(true);
+                subject.next(group);
+                subject.complete();
             });
-            return group;
         });
+        return subject;
     }
 
     createGroup(name): Observable<GroupJsonData> {

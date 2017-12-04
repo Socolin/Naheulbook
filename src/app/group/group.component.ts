@@ -56,6 +56,8 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     public autocompleteLocationsCallback: Function;
 
+    public loadingGroup = false;
+
     @ViewChildren('characters')
     public characterSheetsDialog: QueryList<TemplatePortalDirective>;
     private characterSheetOverlayRef: OverlayRef;
@@ -413,6 +415,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         this.routeSub = this._route.params.subscribe(
             params => {
                 let id = +params['id'];
+                this.loadingGroup = true;
                 this._groupService.getGroup(id).subscribe(
                     group => {
                         this.clearGroupSub();
@@ -430,6 +433,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                             this.unregisterCharacterNotification(character);
                         });
                         this._websocketService.registerElement(this.group);
+                        this.loadingGroup = false;
                     }
                 );
             }
