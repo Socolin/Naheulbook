@@ -7,8 +7,8 @@
     </mat-card-subtitle>
     <mat-card-content>
 
-        <mat-form-field>
-            <mat-select style="min-width: 300px" [(ngModel)]="action.type" (selectionChange)="updateActionType()">
+        <mat-form-field style="min-width: 300px">
+            <mat-select [(ngModel)]="action.type" (selectionChange)="updateActionType()">
                 <mat-option *ngFor="let action of validActions" [value]="action.type">{{action.displayName}}</mat-option>
             </mat-select>
         </mat-form-field>
