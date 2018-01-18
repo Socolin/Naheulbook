@@ -1,4 +1,10 @@
 <mat-card>
+    Ce formulaire permet de crée des personnages, étant de niveau supérieur à 1 ou ne respectant pas forcément toutes
+    les restrictions des règles actuelle (personnage crée avec les règles de la 2.0 etc..). Pour les statistiques,
+    il ne faut pas compter les bonus d'équipements, ou les bonus d'agilité exceptionnel / pourri.
+    Ces bonus seront calculé automatiquement ensuite sur la fiche du personnage.
+</mat-card>
+<mat-card>
     <mat-card-title>
         Caractéristiques
     </mat-card-title>
@@ -205,3 +211,11 @@
         </div>
     </mat-card-content>
 </mat-card>
+
+<div class="create-button">
+    <button mat-raised-button
+            [disabled]="creating"
+            (click)="createCustomCharacter()">
+        Creer
+    </button>
+</div>

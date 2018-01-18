@@ -252,4 +252,8 @@ export class CharacterService extends JsonService {
             characterId: characterId
         }).map(res => res.json());
     }
+
+    createCustomCharacter(customCharacterData: any) {
+        return this.postJson('/api/character/createCustom', customCharacterData).map(res => res.json());
+    }
 }

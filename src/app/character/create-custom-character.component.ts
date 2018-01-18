@@ -7,6 +7,7 @@ import {Skill, SkillService} from '../skill';
 import {CharacterService} from './character.service';
 import {Observable} from 'rxjs/Observable';
 import {Speciality} from '../job/speciality.model';
+import {IMetadata} from '../shared';
 
 @Component({
     templateUrl: './create-custom-character.component.html',
@@ -39,6 +40,8 @@ export class CreateCustomCharacterComponent implements OnInit {
     public ev = 0;
     public at = 8;
     public prd = 10;
+
+    public creating = false;
 
     constructor(private _router: Router
         , private _jobService: JobService
@@ -196,5 +199,69 @@ export class CreateCustomCharacterComponent implements OnInit {
 
     isSpecialitySelected(job: Job, speciality: Speciality) {
         return this.specialities[job.id].indexOf(speciality) !== -1;
+    }
+
+    private getIds(elements: IMetadata[]) {
+        let ids = [];
+        for (let e of elements) {
+            ids.push(e.id);
+        }
+        return ids;
+    }
+
+    createCustomCharacter() {
+        this.creating = true;
+
+        let specialitiesIds = {};
+        for (let jobId in this.specialities) {
+            if (!this.specialities.hasOwnProperty(jobId)) {
+                continue;
+            }
+            specialitiesIds[jobId] = [];
+            for (let spe of this.specialities[jobId]) {
+                specialitiesIds[jobId].push(spe.id);
+            }
+        }
+        let creationData = {
+            stats: {
+                cou: this.cou,
+                int: this.int,
+                cha: this.cha,
+                ad: this.ad,
+                fo: this.fo,
+            },
+            name: this.name,
+            fatePoint: this.fatePoint,
+            sex: this.sex,
+            xp: this.xp,
+            level: this.level,
+            at: this.at,
+            prd: this.prd,
+            ev: this.ev,
+            ea: this.ea,
+            originId: this.selectedOrigin.id,
+            jobsIds: this.getIds(this.selectedJobs),
+            skills: this.getIds(this.selectedSkills),
+            specialities: specialitiesIds,
+        };
+        if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('isNpc')) {
+            creationData['isNpc'] = this._router.routerState.snapshot.root.queryParams['isNpc'];
+        }
+        if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
+            creationData['groupId'] = +this._router.routerState.snapshot.root.queryParams['groupId'];
+        } else {
+            creationData['groupId'] = null;
+        }
+
+        this._characterService.createCustomCharacter(creationData).subscribe(res => {
+                if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
+                    this._router.navigate(['/gm/group', +this._router.routerState.snapshot.root.queryParams['groupId']]);
+                } else {
+                    this._router.navigate(['player', 'character', 'detail', res.id]);
+                }
+            },
+            err => {
+                this.creating = false;
+            });
     }
 }
