@@ -12,9 +12,12 @@ import {EventEditorComponent} from './event-editor.component';
 export class EventsComponent {
     @Input() group: {
         id: number,
+        data: any,
+        pastEventCount: number,
+        futureEventCount: number,
+        events: NEvent[],
         addEvent(event: NEvent): void,
         removeEvent(eventId: number): void,
-        data: any,
     };
 
     @ViewChild('eventEditor')

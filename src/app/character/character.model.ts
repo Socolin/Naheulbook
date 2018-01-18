@@ -172,7 +172,7 @@ export class CharacterComputedData {
     baseStat: {[statName: string]: number} = {};
     stats: {[statName: string]: number} = {};
     skills: SkillDetail[] = [];
-    containers: Object[];
+    containers: Item[];
     details: StatisticDetail = new StatisticDetail();
     selectedItem: Item;
 

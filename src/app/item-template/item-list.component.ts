@@ -94,7 +94,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     constructor(private _router: Router
         , public overlay: Overlay
         , private _route: ActivatedRoute
-        , private _loginService: LoginService
+        , public _loginService: LoginService
         , private _miscService: MiscService
         , private _itemTemplateService: ItemTemplateService
         , private _originService: OriginService

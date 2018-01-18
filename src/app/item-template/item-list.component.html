@@ -79,7 +79,7 @@
                            [jobsName]="jobsName"
                            [godsByTechName]="godsByTechName"
                            [editable]="isEditable(item) && !inTab"
-                           [copyable]="this._loginService.currentLoggedUser != undefined"
+                           [copyable]="_loginService.currentLoggedUser != undefined"
                            [actions]="inTab ? ['addItem'] : []"
                            (onAction)="emitAction($event.action, $event.data)"
                            [itemTemplate]="item">

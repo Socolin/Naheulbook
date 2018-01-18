@@ -806,19 +806,19 @@
                     </button>
                 </mat-card-actions>
             </mat-card>
-            <ng-template ngFor [ngForOf]="charater.jobs" let-job>
+            <ng-template ngFor [ngForOf]="character.jobs" let-job>
                 <mat-card *ngIf="levelUpShouldSelectSpeciality(job)">
                     <mat-card-subtitle>Spécialisation supplémentaire</mat-card-subtitle>
                     <mat-card-content>
-                        <div *ngIf="!levelUpInfo.speciality">
+                        <div *ngIf="!levelUpInfo.specialities[job.id]">
                             <speciality-selector (specialityChange)="levelUpSelectSpeciality(job, $event)" [knownSpecialities]="character.specialities" [specialities]="job.specialities"></speciality-selector>
                         </div>
-                        <div *ngIf="levelUpInfo.speciality">Spécialité: {{levelUpInfo.speciality.name}}</div>
+                        <div *ngIf="levelUpInfo.specialities[job.id]">Spécialité: {{levelUpInfo.specialities[job.id].name}}</div>
                     </mat-card-content>
-                    <mat-card-actions *ngIf="levelUpInfo.speciality" align="end">
+                    <mat-card-actions *ngIf="levelUpInfo.specialities[job.id]" align="end">
                         <button mat-button
                                 color="primary"
-                                (click)="levelUpInfo.speciality = null">
+                                (click)="levelUpInfo.specialities[job.id] = null">
                             CHANGER
                         </button>
                     </mat-card-actions>
