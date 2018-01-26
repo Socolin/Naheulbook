@@ -8,12 +8,11 @@
         </div>
     </mat-toolbar>
 
-    <div fxLayout="row">
-        <div fxFlex="auto"></div>
-        <div fxFlex="nogrow" fxLayout="column" fxLayoutAlign="start">
-            <h2 fxFlex="auto">Profile</h2>
-            <div fxFlex="auto" *ngIf="profile">
-                <mat-form-field>
+    <mat-card>
+        <mat-card-title>Profile</mat-card-title>
+        <mat-card-content>
+            <div *ngIf="profile">
+                <mat-form-field style="width: 100%">
                     <input matInput
                            placeholder="Nom / Pseudonyme"
                            [(ngModel)]="profile.displayName">
@@ -21,17 +20,18 @@
 
                 <div>
                     Lié avec
-                    <div class="col-sm-10">
+                    <div class="linked-account-list">
                         <button mat-raised-button color="primary" (click)="linkTo('facebook')" [disabled]="profile.linkedWithFb">Facebook</button>
                         <button mat-raised-button color="primary" (click)="linkTo('google')" [disabled]="profile.linkedWithGoogle">Google</button>
                         <button mat-raised-button color="primary" (click)="linkTo('twitter')" [disabled]="profile.linkedWithTwitter">Twitter</button>
                         <button mat-raised-button color="primary" (click)="linkTo('live')" [disabled]="profile.linkedWithLive">Windows Live</button>
                     </div>
                 </div>
-                <button mat-button color="primary" (click)="updateProfile()">EDITER</button>
             </div>
-        </div>
-        <div fxFlex="auto"></div>
-    </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="updateProfile()">EDITER</button>
+        </mat-card-actions>
+    </mat-card>
 
 </mat-sidenav-container>

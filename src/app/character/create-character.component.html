@@ -1,69 +1,67 @@
 <mat-card class="stats-card">
     <mat-toolbar color="primary">
-        <span fxFlex="auto">Caractéristiques</span>
+        <span>Caractéristiques</span>
         <button *ngIf="(step === 0)"
-                fxFlex="nogrow"
                 mat-mini-fab
                 type="button"
                 (click)="rollStats()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
         <button *ngIf="(step >= 1)"
-                fxFlex="nogrow"
                 mat-icon-button
                 type="button"
                 (click)="setStep(0)">
             <mat-icon>edit</mat-icon>
         </button>
     </mat-toolbar>
-    <mat-card-content>
-        <p *ngIf="step == 0">
+    <mat-card-content *ngIf="step == 0">
+        <p>
             Lancez cinq fois un D6 pour obtenir les caractéristiques principales. Ces jets cruciaux vont définir tout
             le profil du personnage. Vous ajoutez 7 à chaque score pour obtenir les caractéristiques suivantes (ce qui
             donnera une note de 8 à 13) :
         </p>
-        <div fxLayout="row" fxLayoutAlign="space-around center">
-            <mat-form-field fxFlex="auto">
-                <input matInput
-                       type="number"
-                       [(ngModel)]="cou"
-                       [disabled]="step > 0"
-                       placeholder="Courage"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field fxFlex="auto">
-                <input matInput
-                       type="number"
-                       [(ngModel)]="int"
-                       [disabled]="step > 0"
-                       placeholder="Inteligence"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field fxFlex="auto">
-                <input matInput
-                       type="number"
-                       [(ngModel)]="cha"
-                       [disabled]="step > 0"
-                       placeholder="Charisme"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field fxFlex="auto">
-                <input matInput
-                       type="number"
-                       [(ngModel)]="ad"
-                       [disabled]="step > 0"
-                       placeholder="Adresse"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field fxFlex="auto">
-                <input matInput
-                       type="number"
-                       [(ngModel)]="fo"
-                       [disabled]="step > 0"
-                       placeholder="Force"
-                       min=0 />
-            </mat-form-field>
-        </div>
+    </mat-card-content>
+    <mat-card-content>
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="cou"
+                   [disabled]="step > 0"
+                   placeholder="Courage"
+                   min=0 />
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="int"
+                   [disabled]="step > 0"
+                   placeholder="Inteligence"
+                   min=0 />
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="cha"
+                   [disabled]="step > 0"
+                   placeholder="Charisme"
+                   min=0 />
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="ad"
+                   [disabled]="step > 0"
+                   placeholder="Adresse"
+                   min=0 />
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="fo"
+                   [disabled]="step > 0"
+                   placeholder="Force"
+                   min=0 />
+        </mat-form-field>
     </mat-card-content>
     <mat-card-actions *ngIf="step == 0" align="end">
         <button mat-button type="button" color="primary" (click)="setStep(1)" [disabled]="!cou || !cha || !int || !fo || !ad">
@@ -72,18 +70,16 @@
     </mat-card-actions>
 </mat-card>
 
-<mat-card *ngIf="(step >= 1)">
+<mat-card *ngIf="(step >= 1)" class="stats-card">
     <mat-toolbar color="primary">
-        <span fxFlex="auto">Origine</span>
+        <span>Origine</span>
         <button *ngIf="(step === 1)"
-                fxFlex="nogrow"
                 mat-mini-fab
                 type="button"
                 (click)="selectRandomOrigin()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
         <button *ngIf="(step > 1)"
-                fxFlex="nogrow"
                 mat-icon-button
                 type="button"
                 (click)="setStep(1)">
@@ -111,16 +107,14 @@
 
 <mat-card *ngIf="(step >= 2)">
     <mat-toolbar color="primary">
-        <span fxFlex="auto">Métier</span>
+        <span>Métier</span>
         <button *ngIf="(step === 2)"
-                fxFlex="nogrow"
                 mat-mini-fab
                 type="button"
                 (click)="selectRandomJob()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
         <button *ngIf="(step > 2)"
-                fxFlex="nogrow"
                 mat-icon-button
                 type="button"
                 (click)="setStep(2)">
@@ -140,10 +134,10 @@
             </job-selector>
         </div>
         <div *ngIf="(step > 2)">
-            <span *ngIf="selectedJob">
-                {{selectedJob.name}}
+            <span *ngIf="selectedJobs.length">
+                {{selectedJobs[0].name}}
             </span>
-            <span *ngIf="!selectedJob">
+            <span *ngIf="!selectedJobs.length">
                 Aucun
             </span>
         </div>
@@ -152,16 +146,14 @@
 
 <mat-card *ngIf="(step >= 3)">
     <mat-toolbar color="primary">
-        <span fxFlex="auto">Compétences</span>
+        <span>Compétences</span>
         <button *ngIf="(step === 3)"
-                fxFlex="nogrow"
                 mat-mini-fab
                 type="button"
                 (click)="selectRandomSkills()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
         <button *ngIf="(step > 3)"
-                fxFlex="nogrow"
                 mat-icon-button
                 type="button"
                 (click)="setStep(3)">
@@ -171,7 +163,7 @@
     <mat-card-content [class.no-card-padding]="step === 3">
         <div *ngIf="(step == 3)">
             <skill-selector [selectedOrigin]="selectedOrigin"
-                            [selectedJobs]="[selectedJob]"
+                            [selectedJobs]="selectedJobs"
                             (skillsSelected)="onSelectSkills($event)">
             </skill-selector>
         </div>
@@ -185,16 +177,14 @@
 
 <mat-card *ngIf="(step >= 4)">
     <mat-toolbar color="primary">
-        <span fxFlex="auto">Fortune de départ</span>
+        <span>Fortune de départ</span>
         <button *ngIf="(step === 4)"
-                fxFlex="nogrow"
                 mat-mini-fab
                 type="button"
                 (click)="rollMoney()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
         <button *ngIf="(step > 4)"
-                fxFlex="nogrow"
                 mat-icon-button
                 type="button"
                 (click)="setStep(4)">
@@ -209,8 +199,8 @@
         <p *ngIf="step == 4 && has2MoneyRoll()">
             Votre metier vous donne droit a un deuxieme jet de votre fortune initiale qui s'additionne avec le premier.
         </p>
-        <div fxLayout="row" fxLayoutAlign="space-around center">
-            <mat-form-field fxFlex="auto">
+        <div>
+            <mat-form-field>
                 <input matInput
                        type="number"
                        [(ngModel)]="money"
@@ -219,7 +209,7 @@
                        min=0 />
             </mat-form-field>
 
-            <mat-form-field fxFlex="auto" *ngIf="has2MoneyRoll()">
+            <mat-form-field *ngIf="has2MoneyRoll()">
                 <input matInput
                        type="number"
                        [(ngModel)]="money2"
@@ -242,9 +232,8 @@
 
 <mat-card *ngIf="(step >= 5) && hasStatModification()">
     <mat-toolbar color="primary">
-        <span fxFlex="auto">Trucs spéciaux</span>
+        <span>Trucs spéciaux</span>
         <button *ngIf="(step > 5)"
-                fxFlex="nogrow"
                 mat-icon-button
                 type="button"
                 (click)="setStep(5)">
@@ -303,7 +292,7 @@
                 autre (INT, CHA, COU, FO, AD)
             </p>
 
-            <div fxLayout="row" fxLayoutAlign="space-around center">
+            <div>
                 <button mat-icon-button (click)="move1PointStat('cou', 1)">
                     <mat-icon [color]="move1PointStatValues['cou'] == 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
                 </button>
@@ -320,24 +309,24 @@
                     <mat-icon [color]="move1PointStatValues['fo'] == 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
                 </button>
             </div>
-            <div fxLayout="row" fxLayoutAlign="space-around center">
-                <mat-form-field fxFlex="auto">
+            <div>
+                <mat-form-field>
                     <input matInput [ngModel]="cou + move1PointStatValues['cou']" disabled placeholder="Courage"/>
                 </mat-form-field>
-                <mat-form-field fxFlex="auto">
+                <mat-form-field>
                     <input matInput [ngModel]="int + move1PointStatValues['int']" disabled placeholder="Inteligence" />
                 </mat-form-field>
-                <mat-form-field fxFlex="auto">
+                <mat-form-field>
                     <input matInput [ngModel]="cha + move1PointStatValues['cha']" disabled placeholder="Charisme" />
                 </mat-form-field>
-                <mat-form-field fxFlex="auto">
+                <mat-form-field>
                     <input matInput [ngModel]="ad + move1PointStatValues['ad']" disabled placeholder="Adresse" />
                 </mat-form-field>
-                <mat-form-field fxFlex="auto">
+                <mat-form-field>
                     <input matInput [ngModel]="fo + move1PointStatValues['fo']" disabled placeholder="Force" />
                 </mat-form-field>
             </div>
-            <div fxLayout="row" fxLayoutAlign="space-around center">
+            <div>
                 <button mat-icon-button (click)="move1PointStat('cou', -1)">
                     <mat-icon [color]="move1PointStatValues['cou'] == -1 ? 'accent' : null">keyboard_arrow_down</mat-icon>
                 </button>
@@ -435,16 +424,14 @@
 
 <mat-card *ngIf="(step >= 6) && hasSpeciality()">
     <mat-toolbar color="primary">
-        <span fxFlex="auto">Specialité</span>
+        <span>Specialité</span>
         <button *ngIf="(step === 6)"
-                fxFlex="nogrow"
                 mat-mini-fab
                 type="button"
                 (click)="randomSpeciality()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
         <button *ngIf="(step > 6)"
-                fxFlex="nogrow"
                 mat-icon-button
                 type="button"
                 (click)="setStep(6)">
@@ -453,7 +440,7 @@
     </mat-toolbar>
     <mat-card-content>
         <div *ngIf="step == 6">
-            <ng-template ngFor let-speciality [ngForOf]="selectedJob.specialities">
+            <ng-template ngFor let-speciality [ngForOf]="selectedJobs[0].specialities">
                 <mat-card class="speciality">
                     <mat-card-title>
                         {{speciality.name}}
@@ -478,16 +465,14 @@
 
 <mat-card *ngIf="(step >= 7)">
     <mat-toolbar color="primary">
-        <span fxFlex="auto">Nom &amp; sexe</span>
+        <span>Nom &amp; sexe</span>
         <button *ngIf="(step === 7)"
-                fxFlex="nogrow"
                 mat-mini-fab
                 type="button"
                 (click)="randomNameAndSex()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
         <button *ngIf="(step > 7)"
-                fxFlex="nogrow"
                 mat-icon-button
                 type="button"
                 (click)="setStep(7)">
@@ -505,8 +490,8 @@
                 </mat-radio-button>
             </mat-radio-group>
         </div>
-        <div fxLayout="row">
-            <mat-form-field fxFlex="auto">
+        <div>
+            <mat-form-field>
                 <input matInput
                        type="text"
                        [(ngModel)]="name"
@@ -515,8 +500,7 @@
                        required/>
             </mat-form-field>
             <button *ngIf="(step === 7)"
-                    fxFlex="nogrow"
-                    mat-icon-button
+                        mat-icon-button
                     type="button"
                     (click)="randomName()">
                 <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
@@ -534,16 +518,14 @@
 
 <mat-card *ngIf="(step >= 8)">
     <mat-toolbar color="primary">
-        <span fxFlex="auto">Points de destin</span>
+        <span>Points de destin</span>
         <button *ngIf="(step === 8)"
-                fxFlex="nogrow"
                 mat-mini-fab
                 type="button"
                 (click)="rollFatePoint()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
         <button *ngIf="(step > 8)"
-                fxFlex="nogrow"
                 mat-icon-button
                 type="button"
                 (click)="setStep(8)">
@@ -555,8 +537,8 @@
             Tirez 1D4-1 pour determiner votre nombre de point de destins.
             Cela donne un score de 0 à 3... Oui, les guignards n'ont pas de point de destin.
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-around center">
-            <mat-form-field fxFlex="auto">
+        <div>
+            <mat-form-field>
                 <input matInput
                        type="number"
                        [(ngModel)]="fatePoint"
@@ -573,8 +555,8 @@
     </mat-card-actions>
 </mat-card>
 
-<div *ngIf="(step == 9)" fxLayout="row">
-    <button fxFlex="auto"
+<div *ngIf="(step == 9)">
+    <button
             mat-raised-button
             [disabled]="creating"
             (click)="createCharacter()">

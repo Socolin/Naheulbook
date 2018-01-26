@@ -69,10 +69,10 @@
             </div>
         </div>
         <div *ngIf="monster.simpleInventory && monster.simpleInventory.length">
-            <div class="col-sm-3 col-xs-4">
+            <div>
                 <strong>Inventaire</strong>
             </div>
-            <div class="col-xs-8 col-sm-9">
+            <div>
                 <div *ngFor="let inventory of monster.simpleInventory">
                     {{inventory.itemTemplate.name}}
                 </div>

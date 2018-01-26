@@ -36,7 +36,7 @@ export class CreateCharacterComponent implements OnInit {
 
     // Step 2: Select job
 
-    public selectedJob: Job | undefined;
+    public selectedJobs: Job[] = [];
 
     @ViewChild(JobSelectorComponent)
     private jobSelectorComponent: JobSelectorComponent;
@@ -122,7 +122,7 @@ export class CreateCharacterComponent implements OnInit {
             this.selectedOrigin = undefined;
         }
         if (step === 2) {
-            this.selectedJob = undefined;
+            this.selectedJobs = [];
         }
         if (step === 3) {
             this.selectedSkills = undefined;
@@ -174,7 +174,7 @@ export class CreateCharacterComponent implements OnInit {
         if (this.selectedOrigin && this.selectedOrigin.hasFlag(flagName)) {
             return true;
         }
-        if (this.selectedJob && this.selectedJob.hasFlag(flagName)) {
+        if (this.selectedJobs.length && this.selectedJobs[0].hasFlag(flagName)) {
             return true;
         }
         return this.selectedSpeciality && this.selectedSpeciality.hasFlag(flagName);
@@ -210,7 +210,9 @@ export class CreateCharacterComponent implements OnInit {
         if (!this.selectedOrigin) {
             throw new Error('selectedOrigin should not be undef');
         }
-        this.selectedJob = job;
+        if (job) {
+            this.selectedJobs = [job];
+        }
         this.setStep(3);
     }
 
@@ -465,7 +467,7 @@ export class CreateCharacterComponent implements OnInit {
     // Step 6: Select speciality
 
     hasSpeciality() {
-        return this.selectedJob && this.selectedJob.specialities && this.selectedJob.specialities.length > 0;
+        return this.selectedJobs.length && this.selectedJobs[0].specialities && this.selectedJobs[0].specialities.length > 0;
     }
 
     initSelectSpeciality() {
@@ -531,8 +533,8 @@ export class CreateCharacterComponent implements OnInit {
         creationData['stats']['AD'] = this.ad;
         creationData['stats']['FO'] = this.fo;
         creationData['origin'] = this.selectedOrigin.id;
-        if (this.selectedJob) {
-            creationData['job'] = this.selectedJob.id;
+        if (this.selectedJobs.length) {
+            creationData['job'] = this.selectedJobs[0].id;
         }
 
         creationData['sex'] = this.sex;

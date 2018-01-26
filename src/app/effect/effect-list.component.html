@@ -63,24 +63,23 @@
             </mat-card-title-group>
             <mat-card-content>
                 <span *ngFor="let modifier of effect.modifiers">{{modifier | modifier}} </span>
-                <span *ngIf="effect.duration" fxLayout="row" fxLayoutAlign="start center">
+                <span *ngIf="effect.duration">
             <mat-icon>timelapse</mat-icon>
             {{effect.duration}}
         </span>
-                <span *ngIf="effect.timeDuration" fxLayout="row" fxLayoutAlign="start center">
+                <span *ngIf="effect.timeDuration">
             <mat-icon>timelapse</mat-icon>
             {{effect.timeDuration | nhbkDuration}}
         </span>
-                <span *ngIf="effect.combatCount" fxLayout="row" fxLayoutAlign="start center">
+                <span *ngIf="effect.combatCount">
             <mat-icon>timelapse</mat-icon>
             {{effect.combatCount}} combats
         </span>
-                <span *ngIf="effect.lapCount" fxLayout="row" fxLayoutAlign="start center">
+                <span *ngIf="effect.lapCount">
             <mat-icon>timelapse</mat-icon>
             {{effect.lapCount}} tours
         </span>
-                <span *ngIf="!effect.lapCount && !effect.combatCount && !effect.timeDuration && !effect.duration"
-                      fxLayout="row" fxLayoutAlign="start center">
+                <span *ngIf="!effect.lapCount && !effect.combatCount && !effect.timeDuration && !effect.duration">
             <mat-icon>timelapse</mat-icon>
             permanent
         </span>

@@ -22,7 +22,7 @@ export class ValueEditorComponent implements OnChanges {
     constructor() {
     }
 
-    computeEditorBoundingBox(element: any, bbox: ClientRect): void {
+    computeEditorBoundingBox(element: Element, bbox: ClientRect): void {
         for (let i = 0; i < element.children.length; i++) {
             this.computeEditorBoundingBox(element.children[i], bbox);
         }
@@ -49,7 +49,7 @@ export class ValueEditorComponent implements OnChanges {
         this.displayEditor = false;
     }
 
-    searchVeContainer(elements: HTMLCollectionOf<Element>|HTMLCollection) {
+    searchVeContainer(elements: HTMLCollectionOf<Element>|HTMLCollection): Element {
         for (let i = 0; i < elements.length; i++) {
             let element = elements[i];
             if (element.classList.contains('ve-container')) {
@@ -65,37 +65,39 @@ export class ValueEditorComponent implements OnChanges {
     }
 
     onDisplayed() {
-        let elements = document.getElementsByClassName('cdk-overlay-container');
-        let container = this.searchVeContainer(elements);
+        setTimeout(() => { // Workaround, to be able to compute position on first display
+            let elements = document.getElementsByClassName('cdk-overlay-container');
+            let container = this.searchVeContainer(elements);
 
-        let bbox: ClientRect = {
-            bottom: 0,
-            height: 0,
-            left: 0,
-            right: 0,
-            top: 0,
-            width: 0
-        };
+            let bbox: ClientRect = {
+                bottom: 0,
+                height: 0,
+                left: 0,
+                right: 0,
+                top: 0,
+                width: 0
+            };
 
-        this.computeEditorBoundingBox(container, bbox);
+            this.computeEditorBoundingBox(container, bbox);
 
-        bbox.right += 50;
-        bbox.left += 30;
-        bbox.top -= 25;
-        bbox.bottom -= 5;
-        if (bbox.right > window.innerWidth) {
-            this.xOffset = window.innerWidth - bbox.right;
-        }
-        else if (bbox.left < 0) {
-            this.xOffset = -bbox.left;
-        }
+            bbox.right += 50;
+            bbox.left += 30;
+            bbox.top -= 25;
+            bbox.bottom -= 5;
+            if (bbox.right > window.innerWidth) {
+                this.xOffset = window.innerWidth - bbox.right;
+            }
+            else if (bbox.left < 0) {
+                this.xOffset = -bbox.left;
+            }
 
-        if (bbox.bottom > window.innerHeight) {
-            this.yOffset = window.innerHeight - bbox.bottom;
-        }
-        else if (bbox.top < 0) {
-            this.yOffset = -bbox.top;
-        }
+            if (bbox.bottom > window.innerHeight) {
+                this.yOffset = window.innerHeight - bbox.bottom;
+            }
+            else if (bbox.top < 0) {
+                this.yOffset = -bbox.top;
+            }
+        }, 0);
     }
 
     commitValue() {

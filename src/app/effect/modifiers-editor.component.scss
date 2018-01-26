@@ -21,6 +21,12 @@ mat-button-toggle-group {
 .small-editor {
     display: flex;
     flex-direction: row;
+    align-items: center;
+
+    mat-form-field {
+        flex: 1 1 auto;
+        width: 90px;
+    }
 
     .editor-value {
         position: relative;

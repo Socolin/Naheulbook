@@ -7,7 +7,6 @@ import {SharedModule} from '../shared/shared.module';
 
 import {NhbkMaterialModule} from '../nhbk-material.module';
 import {LoggedComponent, LoginComponent, UserProfileComponent, LoginService} from './';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import {AuthGuard} from './auth-guard';
 import {LogoutComponent} from './logout.component';
 
@@ -18,7 +17,6 @@ import {LogoutComponent} from './logout.component';
         FormsModule,
         RouterModule,
         NhbkMaterialModule,
-        FlexLayoutModule
     ],
     declarations: [
         LoggedComponent,

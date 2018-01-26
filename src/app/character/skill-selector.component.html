@@ -1,8 +1,8 @@
 <ng-template ngFor [ngForOf]="skills" let-skill>
     <mat-card>
-        <div fxLayout="row">
-            <mat-icon *ngIf="isSelected(skill)" fxFlex="nogrow">check_circle</mat-icon>
-            <mat-card-title fxFlex="auto">{{skill.name}}</mat-card-title>
+        <div>
+            <mat-icon *ngIf="isSelected(skill)">check_circle</mat-icon>
+            <mat-card-title>{{skill.name}}</mat-card-title>
         </div>
         <mat-card-subtitle *ngIf="skill.playerDescription">
             {{skill.playerDescription}}

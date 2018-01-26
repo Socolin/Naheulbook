@@ -8,6 +8,8 @@ mat-card {
 
     & mat-toolbar {
         margin: 0;
+        display: flex;
+        justify-content: space-between;
 
         button[mat-mini-fab] {
             top: 30px;
@@ -27,6 +29,16 @@ mat-card {
 
 mat-card.stats-card {
     margin-top: 10px;
+    mat-card-content {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        mat-form-field {
+            margin: 0 8px;
+            width: 80px;
+            flex: 1 1 auto;
+        }
+    }
 }
 
 mat-card.speciality {

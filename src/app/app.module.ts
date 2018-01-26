@@ -2,7 +2,6 @@ import {NgModule, ErrorHandler} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule}  from '@angular/router';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import {HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
 
 import {NhbkMaterialModule} from './nhbk-material.module';
@@ -44,7 +43,6 @@ import {ErrorReportService} from './error-report.service';
         BrowserAnimationsModule,
         RouterModule.forRoot(routes),
         NhbkMaterialModule,
-        FlexLayoutModule,
         HttpModule,
         HomeModule,
         DatabaseHomeModule,

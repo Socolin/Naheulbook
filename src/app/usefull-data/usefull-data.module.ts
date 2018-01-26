@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 import {NhbkMaterialModule} from '../nhbk-material.module';
-import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {SharedModule} from '../shared/shared.module';
 import {UsefullDataComponent} from './usefull-data.component';
@@ -20,7 +19,6 @@ import {EffectModule} from '../effect/effect.module';
         CommonModule,
         FormsModule,
         NhbkMaterialModule,
-        FlexLayoutModule,
         SharedModule,
         ItemTemplateModule,
         JobModule,

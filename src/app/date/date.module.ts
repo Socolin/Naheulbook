@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {NhbkMaterialModule} from '../nhbk-material.module';
-import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {SharedModule} from '../shared/shared.module';
 import {NotificationsModule} from '../notifications/notifications.module';
@@ -25,7 +24,6 @@ import {DurationSelectorComponent} from './duration-selector.component';
         NotificationsModule,
         ReactiveFormsModule,
         NhbkMaterialModule,
-        FlexLayoutModule,
     ],
     declarations: [
         DateComponent,

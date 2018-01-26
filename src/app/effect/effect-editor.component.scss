@@ -9,3 +9,11 @@ mat-card {
 .category-selector {
     width: 300px;
 }
+
+.basic-effect-infos {
+    display: flex;
+    flex-direction: row;
+    mat-form-field {
+        flex: 1 auto;
+    }
+}

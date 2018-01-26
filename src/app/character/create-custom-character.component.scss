@@ -3,10 +3,11 @@ mat-card {
     .stats {
         display: flex;
         flex-direction: row;
-        margin: 0 -8px;
-        mat-form-field, mat-select, mat-radio-group {
-            flex: 1 1 auto;
+        flex-wrap: wrap;
+        mat-form-field {
             margin: 0 8px;
+            width: 80px;
+            flex: 1 1 auto;
         }
     }
 

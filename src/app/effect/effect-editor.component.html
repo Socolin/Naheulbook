@@ -4,21 +4,23 @@
             Informations de base
         </mat-card-subtitle>
         <mat-card-content>
-            <mat-form-field style="width: 100%">
-                <input matInput
-                       [(ngModel)]="effect.name"
-                       placeholder="Nom">
-            </mat-form-field>
-            <mat-form-field style="width: 100%">
-                <input matInput
-                       [(ngModel)]="effect.description"
-                       placeholder="Description">
-            </mat-form-field>
-            <mat-form-field style="width: 100%">
-                <input matInput
-                       [(ngModel)]="effect.dice"
-                       placeholder="Dé">
-            </mat-form-field>
+            <div class="basic-effect-infos">
+                <mat-form-field>
+                    <input matInput
+                           [(ngModel)]="effect.name"
+                           placeholder="Nom">
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
+                           [(ngModel)]="effect.description"
+                           placeholder="Description">
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
+                           [(ngModel)]="effect.dice"
+                           placeholder="Dé">
+                </mat-form-field>
+            </div>
 
             <div *ngIf="types">
                <mat-form-field class="type-selector">

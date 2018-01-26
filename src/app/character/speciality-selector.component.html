@@ -1,4 +1,4 @@
-<div class="col-sm-12">
+<div>
 	<div *ngFor="let speciality of specialities">
 		<div *ngIf="isAvailable(speciality)" class="selectable" (click)="selectSpeciality(speciality)">
 			<h3>{{speciality.name}}</h3>
