@@ -230,7 +230,16 @@ export class CharacterComponent implements OnInit, OnDestroy {
             || this.levelUpInfo.targetLevelUp === 10;
     }
 
-    levelUpShouldSelectSpeciality(job: Job) {
+    levelUpShouldSelectSpeciality(job: Job): boolean {
+        if (!job.specialities) {
+            return false;
+        }
+        let specialities = this.character.getJobsSpecialities(job);
+        for (let speciality of specialities) {
+            if (speciality.hasFlag('ONE_SPECIALITY')) {
+                return false;
+            }
+        }
         return job.hasFlag('SELECT_SPECIALITY_LVL_5_10')
             && !job.hasFlag('ONE_SPECIALITY')
             && (this.levelUpInfo.targetLevelUp === 5 || this.levelUpInfo.targetLevelUp === 10);
@@ -347,7 +356,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     openChangeSexDialog() {
         this.newCharacterSex = this.character.sex;
-        console.log(this.newCharacterSex);
         this.changeSexOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeSexDialog);
     }
 

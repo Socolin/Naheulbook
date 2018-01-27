@@ -524,6 +524,17 @@ export class Character extends WsRegistrable {
         this.computedData.flags = flags;
     }
 
+    public getJobsSpecialities(job: Job): Speciality[] {
+        let specialities: Speciality[] = [];
+
+        for (let speciality of job.specialities) {
+            if (this.specialities.findIndex(s => s.id === speciality.id) !== -1) {
+                specialities.push(speciality);
+            }
+        }
+        return specialities;
+    }
+
 
     public checkItemIncompatibilities(item: Item): {reason: string, source?: {type: string, name: string}}[] | undefined {
         let incompatibilities: {reason: string, source?: {type: string, name: string}}[] = [];

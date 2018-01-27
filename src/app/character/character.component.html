@@ -811,7 +811,7 @@
                     <mat-card-subtitle>Spécialisation supplémentaire</mat-card-subtitle>
                     <mat-card-content>
                         <div *ngIf="!levelUpInfo.specialities[job.id]">
-                            <speciality-selector (specialityChange)="levelUpSelectSpeciality(job, $event)" [knownSpecialities]="character.specialities" [specialities]="job.specialities"></speciality-selector>
+                            <speciality-selector (specialityChange)="levelUpSelectSpeciality(job, $event)" [knownSpecialities]="character.getJobsSpecialities(job)" [specialities]="job.specialities"></speciality-selector>
                         </div>
                         <div *ngIf="levelUpInfo.specialities[job.id]">Spécialité: {{levelUpInfo.specialities[job.id].name}}</div>
                     </mat-card-content>
