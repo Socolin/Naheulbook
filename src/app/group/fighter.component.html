@@ -209,10 +209,10 @@
                         <div class="effect-total-duration">
                             <span [ngSwitch]="modifier.durationType">
                                 <ng-template [ngSwitchCase]="'lap'">
-                                    Durée totale: {{modifier.lapCount}}
+                                    Durée totale: {{modifier.lapCount | i18nPlural: ({'=1': '# tour', 'other': '# tours'})}}
                                 </ng-template>
                                 <ng-template [ngSwitchCase]="'combat'">
-                                    Durée totale: {{modifier.combatCount}}
+                                    Durée totale: {{modifier.combatCount | i18nPlural: ({'=1': '# combat', 'other': '# combats'})}}
                                 </ng-template>
                                 <ng-template [ngSwitchCase]="'time'">
                                     Durée totale: {{modifier.timeDuration | nhbkDuration}}
@@ -223,10 +223,10 @@
                             Durée:
                             <span [ngSwitch]="modifier.durationType">
                                 <ng-template [ngSwitchCase]="'lap'">
-                                    {{modifier.currentLapCount}}
+                                    {{modifier.currentLapCount | i18nPlural: ({'=1': '# tour', 'other': '# tours'})}}
                                 </ng-template>
                                 <ng-template [ngSwitchCase]="'combat'">
-                                    {{modifier.currentCombatCount}}
+                                    {{modifier.currentCombatCount | i18nPlural: ({'=1': '# combat', 'other': '# combats'})}}
                                 </ng-template>
                                 <ng-template [ngSwitchCase]="'custom'">
                                     {{modifier.duration}}
