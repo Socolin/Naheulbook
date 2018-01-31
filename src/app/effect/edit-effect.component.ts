@@ -21,7 +21,7 @@ export class EditEffectComponent implements OnInit {
         this._effectService.editEffect(this.effect).subscribe(
             effect => {
                 this._effectService.clearCacheEffect(effect);
-                this._router.navigate(['/database/effects'], {queryParams: {id: effect.category}});
+                this._router.navigate(['/database/effects'], {queryParams: {id: effect.category.id}});
             },
             () => {
                 this.saving = false;
