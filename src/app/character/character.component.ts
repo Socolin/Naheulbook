@@ -18,6 +18,7 @@ import {Character} from './character.model';
 import {InventoryPanelComponent} from './inventory-panel.component';
 import {ItemActionService} from './item-action.service';
 import {SwipeService} from './swipe.service';
+import {CharacterLootPanelComponent} from './character-loot-panel.component';
 
 export class LevelUpInfo {
     EVorEA = 'EV';
@@ -46,6 +47,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     @ViewChild('inventoryPanel')
     private inventoryPanel: InventoryPanelComponent;
+
+    @ViewChild('lootPanel')
+    private lootPanel: CharacterLootPanelComponent;
 
     @ViewChild('levelUpDialog')
     public levelUpDialog: Portal<any>;
@@ -305,7 +309,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     selectTab(tabChangeEvent: MatTabChangeEvent): boolean {
         this.currentTab = this.tabs[tabChangeEvent.index].hash;
-        this.inventoryPanel.selectedItem = undefined;
+        this.inventoryPanel.deselectItem();
+        this.lootPanel.deselectItem();
         if (!this.inGroupTab) {
             this._router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this._route});
         }

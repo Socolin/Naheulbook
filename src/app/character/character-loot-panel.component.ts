@@ -18,7 +18,7 @@ import {Item, ItemService} from '../item';
 export class CharacterLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() character: Character;
     @Input() inGroupTab: boolean;
-    public selectedItem: Item;
+    public selectedItem?: Item;
 
     @ViewChild('takeItemDialog')
     public takeItemDialog: Portal<any>;
@@ -81,6 +81,10 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
                 }
             );
         }
+    }
+
+    deselectItem(): void {
+        this.selectedItem = undefined;
     }
 
     selectItem(item: Item): boolean {

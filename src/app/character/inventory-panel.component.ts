@@ -25,7 +25,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     @Input() inGroupTab: boolean;
 
     // Inventory
-    public selectedItem: Item | undefined;
+    public selectedItem?: Item;
     public selectedInventoryTab = 'all';
     public sortType = 'none';
 
@@ -148,6 +148,10 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 }
             );
         this.closeAddItemDialog();
+    }
+
+    deselectItem(): void {
+        this.selectedItem = undefined;
     }
 
     selectItem(item: Item) {
