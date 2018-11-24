@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="5.4.2" />
+        <PackageReference Include="FluentAssertions.Json" Version="5.0.0" />
+        <PackageReference Include="MySql.Data" Version="8.0.13" />
+        <PackageReference Include="Nunit" Version="3.11.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+        <PackageReference Include="SpecFlow" Version="3.0.132-beta" />
+        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.132-beta" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
+        <ProjectReference Include="..\Naheulbook.Web\Naheulbook.Web.csproj" />
+        <ProjectReference Include="..\Socolin.TestsUtils\Socolin.TestsUtils.csproj" />
+    </ItemGroup>
+
+    <Target Name="AfterUpdateFeatureFilesInProject">
+        <!-- include any files that specflow generated into the compilation of the project -->
+        <ItemGroup>
+            <Compile Include="**\*.feature.cs" />
+        </ItemGroup>
+    </Target>
+</Project>

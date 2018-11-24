@@ -1,0 +1,83 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Naheulbook.Data.Models;
+
+namespace Naheulbook.Data.Configurations
+{
+    public class SkillConfiguration : IEntityTypeConfiguration<Skill>
+    {
+        public void Configure(EntityTypeBuilder<Skill> builder)
+        {
+            builder.ToTable("skill");
+
+            builder.Property(e => e.Id)
+                .HasColumnName("id");
+
+            builder.Property(e => e.Description)
+                .HasColumnName("description");
+
+            builder.Property(e => e.PlayerDescription)
+                .HasColumnName("playerDescription");
+
+            builder.Property(e => e.Name)
+                .IsRequired()
+                .HasColumnName("name")
+                .HasMaxLength(255);
+
+            builder.Property(e => e.Require)
+                .HasColumnName("require");
+
+            builder.Property(e => e.Resist)
+                .HasColumnName("resist");
+
+            builder.Property(e => e.Roleplay)
+                .HasColumnName("roleplay");
+
+            builder.Property(e => e.Stat)
+                .HasColumnName("stat")
+                .HasMaxLength(2048);
+
+            builder.Property(e => e.Test)
+                .HasColumnName("test");
+
+            builder.Property(e => e.Using)
+                .HasColumnName("using");
+
+            builder.Property(e => e.Flags)
+                .HasColumnName("flags")
+                .HasColumnType("json");
+
+            builder.HasMany(e => e.SkillEffects)
+                .WithOne(s => s.Skill)
+                .HasForeignKey(e => e.SkillId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+    }
+
+    public class SkillEffectConfiguration : IEntityTypeConfiguration<SkillEffect>
+    {
+        public void Configure(EntityTypeBuilder<SkillEffect> builder)
+        {
+            builder.ToTable("skill_effect");
+
+            builder.HasKey(e => new {e.SkillId, e.StatName});
+
+            builder.HasIndex(e => e.SkillId);
+
+            builder.HasIndex(e => e.StatName);
+
+            builder.Property(e => e.SkillId)
+                .IsRequired()
+                .HasColumnName("skill");
+
+            builder.Property(e => e.Value)
+                .IsRequired()
+                .HasColumnName("value");
+
+            builder.Property(e => e.StatName)
+                .IsRequired()
+                .HasColumnName("stat")
+                .HasMaxLength(255);
+        }
+    }
+}
