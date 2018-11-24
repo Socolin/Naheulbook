@@ -28,7 +28,20 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public async Task CanGetEffects()
+        public async Task GetEffectCategories()
+        {
+            var expectedEffectCategories = new List<EffectType>();
+
+            _effectRepository.GetCategoriesAsync()
+                .Returns(expectedEffectCategories);
+
+            var effectCategories = await _effectService.GetEffectCategoriesAsync();
+
+            effectCategories.Should().BeSameAs(expectedEffectCategories);
+        }
+
+        [Test]
+        public async Task CanGetEffectsByCategory()
         {
             var expectedEffects = new List<Effect>();
 
@@ -39,7 +52,5 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             effects.Should().BeSameAs(expectedEffects);
         }
-
-
     }
 }

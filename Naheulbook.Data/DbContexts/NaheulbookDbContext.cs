@@ -7,6 +7,7 @@ namespace Naheulbook.Data.DbContexts
     public class NaheulbookDbContext : DbContext
     {
         public DbSet<Effect> Effects { get; set; }
+        public DbSet<EffectType> EffectTypes { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Origin> Origins { get; set; }
         public DbSet<Job> Jobs { get; set; }

@@ -9,6 +9,7 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IEffectRepository : IRepository<Effect>
     {
+        Task<ICollection<EffectType>> GetCategoriesAsync();
         Task<ICollection<Effect>> GetByCategoryWithModifiersAsync(long categoryId);
     }
 
@@ -17,6 +18,13 @@ namespace Naheulbook.Data.Repositories
         public EffectRepository(NaheulbookDbContext naheulbookDbContext)
             : base(naheulbookDbContext)
         {
+        }
+
+        public async Task<ICollection<EffectType>> GetCategoriesAsync()
+        {
+            return await Context.EffectTypes
+                .Include(e => e.Categories)
+                .ToListAsync();
         }
 
         public async Task<ICollection<Effect>> GetByCategoryWithModifiersAsync(long categoryId)

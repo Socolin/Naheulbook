@@ -29,4 +29,7 @@
             <Compile Include="**\*.feature.cs" />
         </ItemGroup>
     </Target>
+    <ItemGroup>
+        <UpToDateCheckInput Include="Functionals\*.feature" />
+    </ItemGroup>
 </Project>

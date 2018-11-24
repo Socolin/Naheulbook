@@ -7,6 +7,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IEffectService
     {
+        Task<ICollection<EffectType>> GetEffectCategoriesAsync();
         Task<ICollection<Effect>> GetEffectsByCategoryAsync(long categoryId);
     }
 
@@ -17,6 +18,14 @@ namespace Naheulbook.Core.Services
         public EffectService(IUnitOfWorkFactory unitOfWorkFactory)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
+        }
+
+        public async Task<ICollection<EffectType>> GetEffectCategoriesAsync()
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.Effects.GetCategoriesAsync();
+            }
         }
 
         public async Task<ICollection<Effect>> GetEffectsByCategoryAsync(long categoryId)
