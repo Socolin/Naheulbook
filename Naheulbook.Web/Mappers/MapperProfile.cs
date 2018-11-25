@@ -65,7 +65,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Stat, opt => opt.MapFrom(s => MapperHelpers.FromCommaSeparatedStringArray(s.Stat)));
 
             CreateMap<Speciality, SpecialityResponse>()
-                .ForMember(m => m.Specials, opt => opt.MapFrom(s => s.Modifiers.OrderBy(m => m.Id)))
+                .ForMember(m => m.Modifiers, opt => opt.MapFrom(s => s.Modifiers.OrderBy(m => m.Id)))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)))
                 .ForMember(m => m.Specials, opt => opt.MapFrom(s => s.Specials.OrderBy(p => p.Id)));
             CreateMap<SpecialitySpecial, SpecialitySpecialResponse>()

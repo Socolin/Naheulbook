@@ -170,6 +170,11 @@ Feature: Job
                 "description": "Pour pratiquer cette discipline, il faut adhérer à la secte. En récompense de vos bons offices (et d'une contribution non\nnégligeable en monnaie), le culte vous permet d'accéder à des sortilèges de combat inédits, plus puissants et plus\néconomiques en énergie astrale. Vous avez aussi accès à du matériel exceptionnel à des prix relativement intéressants.\nC'est une carrière qui ne vous rendra pas populaire – tout comme celle de nécromant – mais qui propose une escalade\nrapide vers la puissance, comme une sorte de « côté obscur de la force », si vous voyez ce que je veux dire. Les sortilèges de\nTzinntch sont très prisés par les mages vicieux désirant s'illustrer au combat. Le gain de puissance se fait en revanche au\ndétriment d'une partie de votre santé.",
                 "modifiers": [
                     {
+                        "stat": "EV",
+                        "type": "Add",
+                        "value": -5
+                    },
+                    {
                         "stat": "EA",
                         "type": "Add",
                         "value": 5
@@ -178,11 +183,6 @@ Feature: Job
                         "stat": "FO",
                         "type": "Add",
                         "value": -2
-                    },
-                    {
-                        "stat": "EV",
-                        "type": "Add",
-                        "value": -5
                     }
                 ],
                 "specials": [
