@@ -1,4 +1,5 @@
 using System.Net;
+using Socolin.TestsUtils.FakeSmtp;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Extensions
@@ -7,6 +8,9 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
     {
         private const string LastHttpResponseStatusCodeKey = "LastHttpResponseStatusCode";
         private const string LastHttpResponseContentKey = "LastHttpResponseContent";
+        private const string LastReceivedMailKey = "LastReceivedMail";
+        private const string UsernameKey = "Username";
+        private const string ActivationCodeKey = "ActivationCode";
 
         public static void SetLastHttpResponseStatusCode(this ScenarioContext scenarioContext, HttpStatusCode response)
         {
@@ -26,6 +30,36 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
         public static string GetLastHttpResponseContent(this ScenarioContext scenarioContext)
         {
             return scenarioContext.Get<string>(LastHttpResponseContentKey);
+        }
+
+        public static void SetLastReceivedMail(this ScenarioContext scenarioContext, FakeSmtpMail mail)
+        {
+            scenarioContext.Set(mail, LastReceivedMailKey);
+        }
+
+        public static FakeSmtpMail GetLastReceivedMail(this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.Get<FakeSmtpMail>(LastReceivedMailKey);
+        }
+
+        public static void SetUsername(this ScenarioContext scenarioContext, string username)
+        {
+            scenarioContext.Set(username, UsernameKey);
+        }
+
+        public static string GetUsername(this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.Get<string>(UsernameKey);
+        }
+
+        public static void SetActivationCode(this ScenarioContext scenarioContext, string activationCode)
+        {
+            scenarioContext.Set(activationCode, ActivationCodeKey);
+        }
+
+        public static string GetActivationCode(this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.Get<string>(ActivationCodeKey);
         }
     }
 }

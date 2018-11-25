@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Naheulbook.Core;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Factories;
@@ -32,6 +34,8 @@ namespace Naheulbook.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            RegisterConfigurations(services);
+
             var naheulbookDbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
                 .UseLoggerFactory(_loggerFactory)
                 .ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning))
@@ -41,14 +45,28 @@ namespace Naheulbook.Web
                 naheulbookDbContextOptionsBuilder.EnableSensitiveDataLogging();
             }
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
             services.AddAutoMapper();
 
             services.AddSingleton<IUnitOfWorkFactory>(new UnitOfWorkFactory(naheulbookDbContextOptionsBuilder.Options));
-            services.AddSingleton<IJobService, JobService>();
-            services.AddSingleton<IOriginService, OriginService>();
-            services.AddSingleton<ISkillService, SkillService>();
+
             services.AddSingleton<IEffectService, EffectService>();
+            services.AddSingleton<IJobService, JobService>();
+            services.AddSingleton<IMailService, MailService>();
+            services.AddSingleton<IOriginService, OriginService>();
+            services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
+            services.AddSingleton<ISkillService, SkillService>();
+            services.AddSingleton<IUserService, UserService>();
+        }
+
+        private void RegisterConfigurations(IServiceCollection services)
+        {
+            var mailConfiguration = new MailConfiguration();
+            _configuration.Bind("Mail", mailConfiguration);
+            services.AddSingleton<IMailConfiguration>(mailConfiguration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

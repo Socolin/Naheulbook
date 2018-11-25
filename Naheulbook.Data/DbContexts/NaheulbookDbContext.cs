@@ -11,8 +11,9 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Origin> Origins { get; set; }
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<User> Users { get; set; }
 
-        public NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options)
+        public NaheulbookDbContext( DbContextOptions<NaheulbookDbContext> options)
             : base(options)
         {
         }
@@ -47,6 +48,8 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new SpecialitySpecialConfiguration());
 
             modelBuilder.ApplyConfiguration(new StatConfiguration());
+
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

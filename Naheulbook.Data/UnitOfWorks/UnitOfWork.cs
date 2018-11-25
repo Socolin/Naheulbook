@@ -11,6 +11,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IJobRepository Jobs { get; }
         IOriginRepository Origins { get; }
         ISkillRepository Skills { get; }
+        IUserRepository Users { get; }
 
         Task<int> CompleteAsync();
     }
@@ -26,12 +27,14 @@ namespace Naheulbook.Data.UnitOfWorks
             Jobs = new JobRepository(naheulbookDbContext);
             Skills = new SkillRepository(naheulbookDbContext);
             Origins = new OriginRepository(naheulbookDbContext);
+            Users = new UserRepository(naheulbookDbContext);
         }
 
         public IEffectRepository Effects { get; }
         public IJobRepository Jobs { get; }
         public IOriginRepository Origins { get; }
         public ISkillRepository Skills { get; }
+        public IUserRepository Users { get; }
 
         public Task<int> CompleteAsync()
         {

@@ -8,20 +8,33 @@ using Naheulbook.Web;
 using Serilog;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
+using Socolin.TestsUtils.FakeSmtp;
 
 namespace Naheulbook.Tests.Functional.Code.Servers
 {
     public class NaheulbookApiServer
     {
+        private readonly FakeSmtpConfig _mailConfig;
         public static readonly Uri Url = new Uri("http://localhost:7894");
 
         private IWebHost _server;
+
+        public NaheulbookApiServer(FakeSmtpConfig mailConfig)
+        {
+            _mailConfig = mailConfig;
+        }
 
         public void Start()
         {
             var testConfiguration = new Dictionary<string, string>
             {
-                ["ConnectionStrings:DefaultConnection"] = DefaultTestConfigurations.NaheulbookTestConnectionString
+                ["ConnectionStrings:DefaultConnection"] = DefaultTestConfigurations.NaheulbookTestConnectionString,
+                ["Mail:Smtp:Host"] = _mailConfig.Host.ToString(),
+                ["Mail:Smtp:Port"] = _mailConfig.Port.ToString(),
+                ["Mail:Smtp:Username"] = _mailConfig.Username,
+                ["Mail:Smtp:Password"] = _mailConfig.Password,
+                ["Mail:Smtp:Ssl"] = false.ToString(),
+                ["Mail:FromAddress"] = "some-address@some-domain.aa",
             };
 
             var configuration = new ConfigurationBuilder()
