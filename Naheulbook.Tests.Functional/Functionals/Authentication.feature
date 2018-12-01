@@ -8,7 +8,7 @@ Feature: Authentication
       "password": "iHE1vAqAKZtoPdWDXW9lgOkI+SWtGV/UB59fPU6Occ602wQs1xsOywVDPLy5z6DS"
     }
     """
-    Then the response status code be 201
+    Then the response status code is 201
     And a mail validation mail has been sent to "test@naheulbook.fr"
 
     When performing a POST to the url "/api/v2/users/test@naheulbook.fr/validate" with the following "application/json" content
@@ -17,4 +17,4 @@ Feature: Authentication
       "activationCode": "${ActivationCode}"
     }
     """
-    Then the response status code be 204
+    Then the response status code is 204

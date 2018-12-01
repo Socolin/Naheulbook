@@ -43,7 +43,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
-        [Then(@"the response status code be (.*)")]
+        [Then(@"the response status code is (.*)")]
         public void ThenTheResponseStatusCodeBe(int expectedStatusCode)
         {
             var lastStatusCode = _scenarioContext.GetLastHttpResponseStatusCode();

@@ -2,7 +2,7 @@ Feature: Origin
 
   Scenario: Listing origins
     When performing a GET to the url "/api/v2/origins"
-    Then the response status code be 200
+    Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
     """
     {

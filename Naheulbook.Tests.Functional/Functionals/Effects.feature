@@ -2,7 +2,7 @@ Feature: Effect
 
   Scenario: Listing effects by category
     When performing a GET to the url "/api/v2/effectCategories/1/effects"
-    Then the response status code be 200
+    Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
     """
     {
@@ -33,7 +33,7 @@ Feature: Effect
 
   Scenario: Listing effect categories
     When performing a GET to the url "/api/v2/effectCategories/"
-    Then the response status code be 200
+    Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
     """
     {

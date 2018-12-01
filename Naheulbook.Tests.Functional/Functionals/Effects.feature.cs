@@ -80,7 +80,7 @@ namespace Naheulbook.Tests.Functional.Functionals
 #line 4
     testRunner.When("performing a GET to the url \"/api/v2/effectCategories/1/effects\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 5
-    testRunner.Then("the response status code be 200", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("the response status code is 200", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 6
     testRunner.And("the response should contains a json array containing the following element identi" +
@@ -123,7 +123,7 @@ namespace Naheulbook.Tests.Functional.Functionals
 #line 35
     testRunner.When("performing a GET to the url \"/api/v2/effectCategories/\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 36
-    testRunner.Then("the response status code be 200", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("the response status code is 200", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 37
     testRunner.And("the response should contains a json array containing the following element identi" +
