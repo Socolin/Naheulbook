@@ -1,4 +1,6 @@
+using System.Linq;
 using BoDi;
+using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Servers;
 using Socolin.TestsUtils.FakeSmtp;
 using TechTalk.SpecFlow;
@@ -39,6 +41,8 @@ namespace Naheulbook.Tests.Functional.Code.Init
         public void InitializeWebDriver()
         {
             _objectContainer.RegisterInstanceAs(_fakeSmtpServer, typeof(IMailReceiver));
+            _objectContainer.RegisterInstanceAs(_naheulbookApiServer, typeof(NaheulbookApiServer));
+            _objectContainer.RegisterInstanceAs(new NaheulbookHttpClient(_naheulbookApiServer.ListenUrls.First()));
         }
     }
 }

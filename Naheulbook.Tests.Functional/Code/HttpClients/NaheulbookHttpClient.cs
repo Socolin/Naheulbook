@@ -1,13 +1,13 @@
+using System;
 using System.Net.Http;
-using Naheulbook.Tests.Functional.Code.Servers;
 
 namespace Naheulbook.Tests.Functional.Code.HttpClients
 {
     public class NaheulbookHttpClient : HttpClient
     {
-        public NaheulbookHttpClient()
+        public NaheulbookHttpClient(string uri)
         {
-            BaseAddress = NaheulbookApiServer.Url;
+            BaseAddress = new Uri(uri);
             DefaultRequestHeaders.UserAgent.ParseAdd("NaheulbookTest");
             DefaultRequestHeaders.AcceptCharset.ParseAdd("utf-8");
             DefaultRequestHeaders.Accept.ParseAdd("application/json");
