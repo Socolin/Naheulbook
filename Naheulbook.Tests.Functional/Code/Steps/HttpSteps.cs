@@ -36,7 +36,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         [When(@"performing a POST to the url ""(.*)"" with the following ""(.+)"" content")]
         public async Task WhenPerformingAPostToTheUrl(string url, string mimeType, string contentData)
         {
-            var requestContent = new StringContent(contentData.ExecuteReplacement(_scenarioContext), Encoding.UTF8, mimeType);
+            var requestContent = new StringContent(contentData, Encoding.UTF8, mimeType);
             var response = await _naheulbookHttpClient.PostAsync(url, requestContent);
             var content = await response.Content.ReadAsStringAsync();
             _scenarioContext.SetLastHttpResponseStatusCode(response.StatusCode);
