@@ -1,10 +1,13 @@
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
+using Naheulbook.Data.Models;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Requests;
+using Naheulbook.Web.Services;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -16,13 +19,15 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         private const string SomePassword = "some-password";
         private const string SomeActivationCode = "some-activation-code";
         private IUserService _userService;
+        private IJwtService _jwtService;
         private UsersController _usersController;
 
         [SetUp]
         public void SetUp()
         {
             _userService = Substitute.For<IUserService>();
-            _usersController = new UsersController(_userService);
+            _jwtService = Substitute.For<IJwtService>();
+            _usersController = new UsersController(_userService, _jwtService);
         }
 
         [Test]
@@ -102,6 +107,48 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var response = await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest);
 
             response.StatusCode.Should().Be((int) HttpStatusCode.Forbidden);
+        }
+
+        [Test]
+        public async Task WhenPostToGenerateUserJwt_CheckPassword_AndGenerateAJwtUsingUserId()
+        {
+            var generateJwtRequest = new GenerateJwtRequest {Password = SomePassword};
+            var user = new User();
+
+            _userService.CheckPasswordAsync(SomeUsername, SomePassword)
+                .Returns(user);
+            _jwtService.GenerateJwtToken(user)
+                .Returns("some-jwt");
+
+            var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
+
+            response.Value.Token.Should().Be("some-jwt");
+        }
+
+        [Test]
+        public async Task WhenPostToGenerateUserJwt_AndPasswordIsInvalid_Return401()
+        {
+            var generateJwtRequest = new GenerateJwtRequest {Password = SomePassword};
+
+            _userService.CheckPasswordAsync(SomeUsername, SomePassword)
+                .Returns(Task.FromException<User>(new InvalidPasswordException()));
+
+            var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
+
+            response.Result.Should().BeOfType<StatusCodeResult>().Subject.StatusCode.Should().Be((int) HttpStatusCode.Unauthorized);
+        }
+
+        [Test]
+        public async Task WhenPostToGenerateUserJwt_AndUsernameIsInvalid_Return401()
+        {
+            var generateJwtRequest = new GenerateJwtRequest {Password = SomePassword};
+
+            _userService.CheckPasswordAsync(SomeUsername, SomePassword)
+                .Returns(Task.FromException<User>(new UserNotFoundException()));
+
+            var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
+
+            response.Result.Should().BeOfType<StatusCodeResult>().Subject.StatusCode.Should().Be((int) HttpStatusCode.Unauthorized);
         }
 
         private static ValidateUserRequest ValidateUserRequest()

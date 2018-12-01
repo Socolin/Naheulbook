@@ -15,6 +15,7 @@ namespace Naheulbook.Tests.Functional.Code.Servers
     public class NaheulbookApiServer
     {
         private readonly FakeSmtpConfig _mailConfig;
+        public const string JwtSigningKey = "jUPS+BG/+FxexuNitsuiIHWXOLTZb3yQSxyLpOfTo2/BB8MNUZcNP+13cvAlPP5O";
         public ICollection<string> ListenUrls => _server.ServerFeatures.Get<IServerAddressesFeature>().Addresses;
         private IWebHost _server;
 
@@ -27,6 +28,7 @@ namespace Naheulbook.Tests.Functional.Code.Servers
         {
             var testConfiguration = new Dictionary<string, string>
             {
+                ["Authentication:JwtSigningKey"] = JwtSigningKey,
                 ["ConnectionStrings:DefaultConnection"] = DefaultTestConfigurations.NaheulbookTestConnectionString,
                 ["Mail:Smtp:Host"] = _mailConfig.Host.ToString(),
                 ["Mail:Smtp:Port"] = _mailConfig.Port.ToString(),

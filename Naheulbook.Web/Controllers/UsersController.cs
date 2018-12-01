@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
 using Naheulbook.Web.Requests;
+using Naheulbook.Web.Responses;
+using Naheulbook.Web.Services;
 
 namespace Naheulbook.Web.Controllers
 {
@@ -12,10 +14,12 @@ namespace Naheulbook.Web.Controllers
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IJwtService _jwtService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IJwtService jwtService)
         {
             _userService = userService;
+            _jwtService = jwtService;
         }
 
         [HttpPost]
@@ -50,6 +54,25 @@ namespace Naheulbook.Web.Controllers
             }
 
             return StatusCode((int) HttpStatusCode.NoContent);
+        }
+
+        [HttpPost("{Username}/jwt")]
+        public async Task<ActionResult<UserJwtResponse>> PostGenerateJwtAsync(string username, GenerateJwtRequest request)
+        {
+            try
+            {
+                var user = await _userService.CheckPasswordAsync(username, request.Password);
+                var token = _jwtService.GenerateJwtToken(user);
+                return new UserJwtResponse() {Token = token};
+            }
+            catch (UserNotFoundException)
+            {
+                return StatusCode((int) HttpStatusCode.Unauthorized);
+            }
+            catch (InvalidPasswordException)
+            {
+                return StatusCode((int) HttpStatusCode.Unauthorized);
+            }
         }
     }
 }

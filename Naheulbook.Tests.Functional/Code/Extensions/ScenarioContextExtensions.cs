@@ -10,7 +10,10 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
         private const string LastHttpResponseContentKey = "LastHttpResponseContent";
         private const string LastReceivedMailKey = "LastReceivedMail";
         private const string UsernameKey = "Username";
+        private const string PasswordKey = "Password";
         private const string ActivationCodeKey = "ActivationCode";
+        private const string JwtKey = "Jwt";
+        private const string JwtPayloadKey = "JwtPayload";
 
         public static void SetLastHttpResponseStatusCode(this ScenarioContext scenarioContext, HttpStatusCode response)
         {
@@ -52,6 +55,16 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
             return scenarioContext.Get<string>(UsernameKey);
         }
 
+        public static void SetPassword(this ScenarioContext scenarioContext, string username)
+        {
+            scenarioContext.Set(username, PasswordKey);
+        }
+
+        public static string GetPassword(this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.Get<string>(PasswordKey);
+        }
+
         public static void SetActivationCode(this ScenarioContext scenarioContext, string activationCode)
         {
             scenarioContext.Set(activationCode, ActivationCodeKey);
@@ -60,6 +73,16 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
         public static string GetActivationCode(this ScenarioContext scenarioContext)
         {
             return scenarioContext.Get<string>(ActivationCodeKey);
+        }
+
+        public static void SetJwt(this ScenarioContext scenarioContext, string jwt)
+        {
+            scenarioContext.Set(jwt, JwtKey);
+        }
+
+        public static string GetJwt(this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.Get<string>(JwtKey);
         }
     }
 }

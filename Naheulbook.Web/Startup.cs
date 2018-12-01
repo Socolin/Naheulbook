@@ -14,7 +14,10 @@ using Naheulbook.Core;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Factories;
+using Naheulbook.Shared.Utils;
+using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Middlewares;
+using Naheulbook.Web.Services;
 using Newtonsoft.Json;
 
 namespace Naheulbook.Web
@@ -60,6 +63,10 @@ namespace Naheulbook.Web
             services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
             services.AddSingleton<ISkillService, SkillService>();
             services.AddSingleton<IUserService, UserService>();
+
+            services.AddSingleton<ITimeService, TimeService>();
+
+            services.AddSingleton<IJwtService, JwtService>();
         }
 
         private void RegisterConfigurations(IServiceCollection services)
@@ -67,6 +74,10 @@ namespace Naheulbook.Web
             var mailConfiguration = new MailConfiguration();
             _configuration.Bind("Mail", mailConfiguration);
             services.AddSingleton<IMailConfiguration>(mailConfiguration);
+
+            var authenticationConfiguration = new AuthenticationConfiguration();
+            _configuration.Bind("Authentication", authenticationConfiguration);
+            services.AddSingleton<IAuthenticationConfiguration>(authenticationConfiguration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

@@ -120,6 +120,47 @@ namespace Naheulbook.Core.Tests.Unit.Services
             act.Should().Throw<UserNotFoundException>();
         }
 
+        [Test]
+        public async Task WhenCheckingPassword_CallPasswordEncryptionService()
+        {
+            const string someHashedPassword = "some-hashed-password";
+            var user = new User {Username = SomeUsername, HashedPassword = someHashedPassword};
+
+            _userRepository.GetByUsernameAsync(SomeUsername)
+                .Returns(user);
+            _passwordHashingService.VerifyPassword(someHashedPassword, SomePassword)
+                .Returns(true);
+
+            var result = await _userService.CheckPasswordAsync(SomeUsername, SomePassword);
+
+            result.Should().Be(user);
+        }
+
+        [Test]
+        public void WhenCheckingPassword_AndPasswordIsInvalid_Throw()
+        {
+            var user = new User {Username = SomeUsername, HashedPassword = "some-hashed-password"};
+
+            _userRepository.GetByUsernameAsync(SomeUsername)
+                .Returns(user);
+            _passwordHashingService.VerifyPassword("some-hashed-password", SomePassword)
+                .Returns(false);
+
+            Func<Task> act = async () => await _userService.CheckPasswordAsync(SomeUsername, SomePassword);
+
+            act.Should().Throw<InvalidPasswordException>();
+        }
+
+        [Test]
+        public void WhenCheckingPassword_AndUserDoesNotExists_Throw()
+        {
+            _userRepository.GetByUsernameAsync(SomeUsername)
+                .Returns((User) null);
+
+            Func<Task> act = async () => await _userService.CheckPasswordAsync(SomeUsername, SomePassword);
+
+            act.Should().Throw<UserNotFoundException>();
+        }
 
         private static User CreateUser()
         {

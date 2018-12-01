@@ -18,3 +18,16 @@ Feature: Authentication
     }
     """
     Then the response status code is 204
+
+  Scenario: A user can request a JWT
+    Given a user identified by a password
+
+    When performing a POST to the url "/api/v2/users/${Username}/jwt" with the following "application/json" content
+    """
+    {
+      "password": "${Password}"
+    }
+    """
+    Then the response status code is 200
+    And the response content contains a valid JWT
+

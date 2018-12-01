@@ -13,10 +13,10 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         private readonly IMailReceiver _mailReceiver;
         private readonly ScenarioContext _scenarioContext;
 
-        public MailSteps(IMailReceiver mailReceiver, ScenarioContext scenarioContext)
+        public MailSteps(ScenarioContext scenarioContext, IMailReceiver mailReceiver)
         {
-            _mailReceiver = mailReceiver;
             _scenarioContext = scenarioContext;
+            _mailReceiver = mailReceiver;
         }
 
         [Then(@"a mail validation mail has been sent to ""(.*)""")]
@@ -29,16 +29,24 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 var mailsDetails = string.Join("\n", _mailReceiver.Mails.Select(m => "'" + string.Join("','", m.To) + "' - " + m.Subject.FirstOrDefault()));
                 Assert.Fail($"Did not received any mail with destination: {email}. Received {_mailReceiver.Mails.Count} mails:\n{mailsDetails}");
             }
+
             _scenarioContext.SetLastReceivedMail(mail);
 
+            var activationCode = ParseActivationCodeFromActivationMail(mail);
+            if (activationCode == null)
+                Assert.Fail($"Fail to find activation code in mail body:\n'{mail.Data}'");
+
+            _scenarioContext.SetActivationCode(activationCode);
+        }
+
+        public static string ParseActivationCodeFromActivationMail(FakeSmtpMail mail)
+        {
             var match = Regex.Match(mail.Data, "ActivationCode: (?<activationCode>[a-f0-9]+)");
             if (!match.Success)
-            {
-                Assert.Fail($"Fail to find activation code in mail body:\n'{mail.Data}'");
-            }
+                return null;
 
             var activationCode = match.Groups["activationCode"].Value;
-            _scenarioContext.SetActivationCode(activationCode);
+            return activationCode;
         }
     }
 }
