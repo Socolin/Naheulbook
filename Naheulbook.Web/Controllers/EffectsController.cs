@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Services;
-using Naheulbook.Data.Models;
 using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
