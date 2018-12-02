@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.1</TargetFramework>
-
+        <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
