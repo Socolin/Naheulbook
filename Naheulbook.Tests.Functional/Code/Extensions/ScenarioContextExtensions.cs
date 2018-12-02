@@ -1,4 +1,5 @@
 using System.Net;
+using Newtonsoft.Json.Linq;
 using Socolin.TestsUtils.FakeSmtp;
 using TechTalk.SpecFlow;
 
@@ -33,6 +34,11 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
         public static string GetLastHttpResponseContent(this ScenarioContext scenarioContext)
         {
             return scenarioContext.Get<string>(LastHttpResponseContentKey);
+        }
+
+        public static JToken GetLastJsonHttpResponseContent(this ScenarioContext scenarioContext)
+        {
+            return JToken.Parse(scenarioContext.Get<string>(LastHttpResponseContentKey));
         }
 
         public static void SetLastReceivedMail(this ScenarioContext scenarioContext, FakeSmtpMail mail)
