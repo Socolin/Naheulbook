@@ -10,6 +10,11 @@ namespace Socolin.TestsUtils.Comparer.Json
 {
     public class JsonComparerOutputFormatter
     {
+        public static string GetReadableMessage(string expectedJson, string actualJson, IEnumerable<IJsonCompareError<JToken>> errors)
+        {
+            return GetReadableMessage(JToken.Parse(expectedJson), JToken.Parse(actualJson), errors);
+        }
+
         public static string GetReadableMessage(JToken expectedJToken, JToken actualJToken, IEnumerable<IJsonCompareError<JToken>> errors)
         {
             var sb = new StringBuilder();
