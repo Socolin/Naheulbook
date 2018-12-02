@@ -38,7 +38,7 @@ namespace Naheulbook.Tests.Functional.Code.Init
         }
 
         [BeforeScenario]
-        public void InitializeWebDriver()
+        public void InitializeIoc()
         {
             _objectContainer.RegisterInstanceAs(_fakeSmtpServer, typeof(IMailReceiver));
             _objectContainer.RegisterInstanceAs(_naheulbookApiServer, typeof(NaheulbookApiServer));
