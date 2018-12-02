@@ -73,9 +73,6 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task WhenCreatingUser_SendMailWithActivationCode()
         {
-            _passwordHashingService.HashPassword(SomePassword)
-                .Returns(SomeEncryptedPassword);
-
             await _userService.CreateUserAsync(SomeUsername, SomePassword);
 
             await _mailService.Received(1)
