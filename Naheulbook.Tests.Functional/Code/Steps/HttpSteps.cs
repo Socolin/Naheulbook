@@ -2,7 +2,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Naheulbook.Tests.Functional.Code.Extensions;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Newtonsoft.Json.Linq;
@@ -17,11 +16,13 @@ namespace Naheulbook.Tests.Functional.Code.Steps
     {
         private readonly ScenarioContext _scenarioContext;
         private readonly NaheulbookHttpClient _naheulbookHttpClient;
+        private readonly IJsonComparer _jsonComparer;
 
-        public HttpSteps(ScenarioContext scenarioContext, NaheulbookHttpClient naheulbookHttpClient)
+        public HttpSteps(ScenarioContext scenarioContext, NaheulbookHttpClient naheulbookHttpClient, IJsonComparer jsonComparer)
         {
             _scenarioContext = scenarioContext;
             _naheulbookHttpClient = naheulbookHttpClient;
+            _jsonComparer = jsonComparer;
         }
 
         [When(@"performing a GET to the url ""(.*)""")]
@@ -52,18 +53,15 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         }
 
         [Then(@"the response should contains the following json")]
-        public void TheResponseShouldContainsTheFollowingJson(int expectedStatusCode, string expectedJson)
+        public void TheResponseShouldContainsTheFollowingJson(JToken expectedJson)
         {
-            var lastStatusCode = _scenarioContext.GetLastHttpResponseStatusCode();
-            var content = _scenarioContext.GetLastHttpResponseContent();
-            lastStatusCode.Should().Be(expectedStatusCode);
+            var jsonContent = _scenarioContext.GetLastJsonHttpResponseContent();
 
-            var jsonComparer = JsonComparer.GetDefault();
-            var errors = jsonComparer.Compare(expectedJson, content);
+            var errors = _jsonComparer.Compare(expectedJson, jsonContent);
             if (errors.Count == 0)
                 return;
 
-            Assert.Fail(string.Join("\n", errors.Select(error => $"{error.Path}: {error.Message}")));
+            Assert.Fail(JsonComparerOutputFormatter.GetReadableMessage(expectedJson, jsonContent, errors));
         }
 
         [Then(@"the response should contains a json array containing the following element identified by (.+)")]
@@ -71,7 +69,6 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         {
             var content = _scenarioContext.GetLastHttpResponseContent();
 
-            var jsonComparer = JsonComparer.GetDefault();
             var expectedObject = JObject.Parse(expectedJson);
             var identityValue = ((JValue) expectedObject.Property(identityField).Value).Value<long>();
             var array = JArray.Parse(content);
@@ -84,7 +81,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 if (identityValue != ((JValue) actualObject.Property(identityField).Value).Value<long>())
                     continue;
 
-                var errors = jsonComparer.Compare(expectedObject, element).ToList();
+                var errors = _jsonComparer.Compare(expectedObject, element).ToList();
                 if (errors.Count == 0)
                     return;
 
@@ -93,6 +90,5 @@ namespace Naheulbook.Tests.Functional.Code.Steps
 
             Assert.Fail($"Failed to find expected element using `{identityField}`.\nExpected identifier value: `{identityValue}` but found values: {string.Join(",", array.Select(s => s[identityField]))}\nResponse:\n{content}");
         }
-
     }
 }
