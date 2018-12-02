@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Socolin.TestsUtils.Comparer.Json;
 using Socolin.TestsUtils.Comparer.Json.Comparers;
 using Socolin.TestsUtils.Comparer.Json.Errors;
+using Socolin.TestsUtils.Comparer.Json.Handlers;
 using Socolin.TestUtils.Tests.Unit.Comparer.Json.Errors;
 
 namespace Socolin.TestUtils.Tests.Unit.Comparer.Json
@@ -17,6 +18,7 @@ namespace Socolin.TestUtils.Tests.Unit.Comparer.Json
         private IJsonObjectComparer _jsonObjectComparer;
         private IJsonArrayComparer _jsonArrayComparer;
         private IJsonValueComparer _jsonValueComparer;
+        private IJsonCaptureHandler _jsonCaptureHandler;
         private JsonComparer _jsonComparer;
 
         [SetUp]
@@ -25,7 +27,11 @@ namespace Socolin.TestUtils.Tests.Unit.Comparer.Json
             _jsonObjectComparer = Substitute.For<IJsonObjectComparer>();
             _jsonArrayComparer = Substitute.For<IJsonArrayComparer>();
             _jsonValueComparer = Substitute.For<IJsonValueComparer>();
-            _jsonComparer = new JsonComparer(_jsonObjectComparer, _jsonArrayComparer, _jsonValueComparer);
+            _jsonCaptureHandler = Substitute.For<IJsonCaptureHandler>();
+            _jsonComparer = new JsonComparer(_jsonObjectComparer, _jsonArrayComparer, _jsonValueComparer, _jsonCaptureHandler);
+
+            _jsonCaptureHandler.HandleCapture(Arg.Any<JToken>(), Arg.Any<JToken>(), Arg.Any<string>())
+                .Returns((false, null));
         }
 
         [Test]
@@ -61,7 +67,7 @@ namespace Socolin.TestUtils.Tests.Unit.Comparer.Json
             var actualJson = JObject.Parse("{}");
 
             _jsonObjectComparer.Compare(expectedJson, actualJson, _jsonComparer)
-                .Returns(new List<JsonCompareError>{new TestJsonCompareError()});
+                .Returns(new List<JsonCompareError> {new TestJsonCompareError()});
 
             var actualErrors = _jsonComparer.Compare(expectedJson, actualJson);
 
@@ -79,7 +85,7 @@ namespace Socolin.TestUtils.Tests.Unit.Comparer.Json
             var actualJson = JArray.Parse("[]");
 
             _jsonArrayComparer.Compare(expectedJson, actualJson, _jsonComparer)
-                .Returns(new List<JsonCompareError>{new TestJsonCompareError()});
+                .Returns(new List<JsonCompareError> {new TestJsonCompareError()});
 
             var actualErrors = _jsonComparer.Compare(expectedJson, actualJson);
 
@@ -105,13 +111,45 @@ namespace Socolin.TestUtils.Tests.Unit.Comparer.Json
         public void WhenComparingJsonValue_UseJsonValueComparer(JValue jValue)
         {
             _jsonValueComparer.Compare(jValue, jValue)
-                .Returns(new List<JsonCompareError>{new TestJsonCompareError()});
+                .Returns(new List<JsonCompareError> {new TestJsonCompareError()});
 
             var actualErrors = _jsonComparer.Compare(jValue, jValue);
 
             using (new AssertionScope())
             {
                 actualErrors.Should().NotBeNullOrEmpty();
+                actualErrors.First().Should().BeOfType<TestJsonCompareError>();
+            }
+        }
+
+        [Test]
+        public void WhenComparingJsonValue_AndTypeMismatch_AndCaptureSucceed_DoNotReturnsError()
+        {
+            var expectedJson = JObject.Parse("{}");
+            var actualJson = JToken.Parse("42");
+
+            _jsonCaptureHandler.HandleCapture(expectedJson, actualJson, "")
+                .Returns((true, null));
+
+            var actualErrors = _jsonComparer.Compare(expectedJson, actualJson);
+
+            actualErrors.Should().BeEmpty();
+        }
+
+        [Test]
+        public void WhenComparingJsonValue_AndTypeMismatch_AndCaptureFail_ReturnCaptureErrors()
+        {
+            var expectedJson = JObject.Parse("{}");
+            var actualJson = JToken.Parse("42");
+
+            _jsonCaptureHandler.HandleCapture(expectedJson, actualJson, "")
+                .Returns((false, new List<JsonCompareError> {new TestJsonCompareError()}));
+
+            var actualErrors = _jsonComparer.Compare(expectedJson, actualJson);
+
+            using (new AssertionScope())
+            {
+                actualErrors.Should().HaveCount(1);
                 actualErrors.First().Should().BeOfType<TestJsonCompareError>();
             }
         }

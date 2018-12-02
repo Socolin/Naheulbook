@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Socolin.TestsUtils.Comparer.Json.Comparers;
 using Socolin.TestsUtils.Comparer.Json.Errors;
+using Socolin.TestsUtils.Comparer.Json.Handlers;
 
 namespace Socolin.TestsUtils.Comparer.Json
 {
@@ -17,21 +18,26 @@ namespace Socolin.TestsUtils.Comparer.Json
 
     public class JsonComparer : IJsonComparer
     {
-        private static readonly JsonCompareError[] EmptyErrors = new JsonCompareError[0];
         private readonly IJsonObjectComparer _jsonObjectComparer;
         private readonly IJsonArrayComparer _jsonArrayComparer;
         private readonly IJsonValueComparer _jsonValueComparer;
+        private readonly IJsonCaptureHandler _jsonCaptureHandler;
 
-        public static JsonComparer GetDefault()
+        public static JsonComparer GetDefault(Action<string, JToken> captureHandler = null)
         {
-            return new JsonComparer(new JsonObjectComparer(), new JsonArrayComparer(), new JsonValueComparer());
+            return new JsonComparer(new JsonObjectComparer(), new JsonArrayComparer(), new JsonValueComparer(), new JsonCaptureHandler(captureHandler));
         }
 
-        public JsonComparer(IJsonObjectComparer jsonObjectComparer, IJsonArrayComparer jsonArrayComparer, IJsonValueComparer jsonValueComparer)
+        public JsonComparer(
+            IJsonObjectComparer jsonObjectComparer,
+            IJsonArrayComparer jsonArrayComparer,
+            IJsonValueComparer jsonValueComparer,
+            IJsonCaptureHandler jsonCaptureHandler)
         {
             _jsonObjectComparer = jsonObjectComparer;
             _jsonArrayComparer = jsonArrayComparer;
             _jsonValueComparer = jsonValueComparer;
+            _jsonCaptureHandler = jsonCaptureHandler;
         }
 
         public IList<IJsonCompareError<JToken>> Compare(string expectedJson, string actualJson)
@@ -50,11 +56,21 @@ namespace Socolin.TestsUtils.Comparer.Json
         {
             if (expected.Type != actual.Type)
             {
+                var (captureSucceeded, captureErrors) = _jsonCaptureHandler.HandleCapture(expected, actual, path);
+                if (captureSucceeded)
+                    yield break;
+                if (captureErrors?.Count > 0)
+                {
+                    foreach (var error in captureErrors)
+                        yield return error;
+                    yield break;
+                }
+
                 yield return new InvalidTypeJsonCompareError(path, expected, actual);
                 yield break;
             }
 
-            IEnumerable<IJsonCompareError<JToken>> errors = EmptyErrors;
+            IEnumerable<IJsonCompareError<JToken>> errors;
             switch (actual.Type)
             {
                 case JTokenType.Object:
