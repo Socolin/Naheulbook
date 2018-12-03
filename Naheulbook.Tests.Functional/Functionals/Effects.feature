@@ -59,3 +59,43 @@ Feature: Effect
         ]
     }
     """
+
+  Scenario: Create an effect category
+    When performing a POST to the url "/api/v2/effectTypes/" with the following "application/json" content
+    """
+    {
+        "name": "some-effect-type-name"
+    }
+    """
+    Then the response status code is 201
+    And the response should contains the following json
+    """
+    {
+        "id": {"__capture": {"name": "effectTypeId", "type": "integer"}},
+        "name": "some-effect-type-name",
+        "categories": []
+    }
+    """
+
+    When performing a POST to the url "/api/v2/effectCategories/" with the following "application/json" content
+    """
+    {
+        "name": "some-effect-category-name",
+        "diceCount": 2,
+        "diceSize": 6,
+        "note": "some-note",
+        "typeId": ${effectTypeId}
+    }
+    """
+    Then the response status code is 201
+    And the response should contains the following json
+    """
+    {
+        "id": {"__capture": {"name": "effectCategoryId", "type": "integer"}},
+        "name": "some-effect-category-name",
+        "diceCount": 2,
+        "diceSize": 6,
+        "note": "some-note",
+        "typeId": ${effectTypeId}
+    }
+    """

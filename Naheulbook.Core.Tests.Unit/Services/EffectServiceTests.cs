@@ -14,16 +14,23 @@ namespace Naheulbook.Core.Tests.Unit.Services
     public class EffectServiceTests
     {
         private IEffectRepository _effectRepository;
+        private IEffectCategoryRepository _effectCategoryRepository;
+        private IEffectTypeRepository _effectTypeRepository;
         private EffectService _effectService;
+        private IUnitOfWork _unitOfWork;
 
         [SetUp]
         public void SetUp()
         {
             var unitOfWorkFactory = Substitute.For<IUnitOfWorkFactory>();
-            var unitOfWork = Substitute.For<IUnitOfWork>();
-            unitOfWorkFactory.CreateUnitOfWork().Returns(unitOfWork);
+            _unitOfWork = Substitute.For<IUnitOfWork>();
+            unitOfWorkFactory.CreateUnitOfWork().Returns(_unitOfWork);
             _effectRepository = Substitute.For<IEffectRepository>();
-            unitOfWork.Effects.Returns(_effectRepository);
+            _unitOfWork.Effects.Returns(_effectRepository);
+            _effectCategoryRepository = Substitute.For<IEffectCategoryRepository>();
+            _unitOfWork.EffectCategories.Returns(_effectCategoryRepository);
+            _effectTypeRepository = Substitute.For<IEffectTypeRepository>();
+            _unitOfWork.EffectTypes.Returns(_effectTypeRepository);
             _effectService = new EffectService(unitOfWorkFactory);
         }
 
@@ -51,6 +58,48 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var effects = await _effectService.GetEffectsByCategoryAsync(42);
 
             effects.Should().BeSameAs(expectedEffects);
+        }
+
+        [Test]
+        public async Task CanCreateEffectType()
+        {
+            var effectType = await _effectService.CreateEffectTypeAsync("some-name");
+
+            Received.InOrder(() =>
+            {
+                _effectTypeRepository.Add(effectType);
+                _unitOfWork.CompleteAsync();
+            });
+            effectType.Name.Should().Be("some-name");
+        }
+
+        [Test]
+        public async Task CanCreateEffectCategory()
+        {
+            var expectedEffectCategory = CreateEffectCategory();
+
+            var effectCategory = await _effectService.CreateEffectCategoryAsync(
+                "some-name", 1, 4, 5, "some-note"
+            );
+
+            Received.InOrder(() =>
+            {
+                _effectCategoryRepository.Add(effectCategory);
+                _unitOfWork.CompleteAsync();
+            });
+            effectCategory.Should().BeEquivalentTo(expectedEffectCategory);
+        }
+
+        private static EffectCategory CreateEffectCategory()
+        {
+            return new EffectCategory
+            {
+                Name = "some-name",
+                TypeId = 1,
+                DiceSize = 4,
+                DiceCount = 5,
+                Note = "some-note"
+            };
         }
     }
 }
