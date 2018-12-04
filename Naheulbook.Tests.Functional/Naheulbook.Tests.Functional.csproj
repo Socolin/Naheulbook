@@ -13,6 +13,8 @@
         <PackageReference Include="Nunit" Version="3.11.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+        <PackageReference Include="Socolin.TestUtils.JsonComparer" Version="1.0.0" />
+        <PackageReference Include="Socolin.TestUtils.FakeSmtp" Version="1.0.0" />
         <PackageReference Include="SpecFlow" Version="3.0.132-beta" />
         <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.132-beta" />
     </ItemGroup>
@@ -20,7 +22,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
         <ProjectReference Include="..\Naheulbook.Web\Naheulbook.Web.csproj" />
-        <ProjectReference Include="..\Socolin.TestsUtils\Socolin.TestsUtils.csproj" />
     </ItemGroup>
 
     <Target Name="AfterUpdateFeatureFilesInProject">

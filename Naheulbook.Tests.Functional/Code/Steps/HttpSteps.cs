@@ -6,7 +6,7 @@ using Naheulbook.Tests.Functional.Code.Extensions;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using Socolin.TestsUtils.Comparer.Json;
+using Socolin.TestsUtils.JsonComparer;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Steps

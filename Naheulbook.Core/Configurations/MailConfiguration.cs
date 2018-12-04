@@ -1,4 +1,4 @@
-namespace Naheulbook.Core
+namespace Naheulbook.Core.Configurations
 {
     public interface IMailConfiguration
     {

@@ -1,6 +1,6 @@
 using BoDi;
 using Newtonsoft.Json.Linq;
-using Socolin.TestsUtils.Comparer.Json;
+using Socolin.TestsUtils.JsonComparer;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Init
