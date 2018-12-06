@@ -6,8 +6,9 @@ using Naheulbook.Tests.Functional.Code.Extensions;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using Socolin.TestsUtils.JsonComparer;
+using Socolin.TestUtils.JsonComparer;
 using TechTalk.SpecFlow;
+using Is = Socolin.TestUtils.JsonComparer.NUnitExtensions.Is;
 
 namespace Naheulbook.Tests.Functional.Code.Steps
 {
@@ -57,11 +58,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         {
             var jsonContent = _scenarioContext.GetLastJsonHttpResponseContent();
 
-            var errors = _jsonComparer.Compare(expectedJson, jsonContent);
-            if (errors.Count == 0)
-                return;
-
-            Assert.Fail(JsonComparerOutputFormatter.GetReadableMessage(expectedJson, jsonContent, errors));
+            Assert.That(jsonContent, Is.JsonEquivalent(expectedJson).WithComparer(_jsonComparer));
         }
 
         [Then(@"the response should contains a json array containing the following element identified by (.+)")]
@@ -81,11 +78,8 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 if (identityValue != ((JValue) actualObject.Property(identityField).Value).Value<long>())
                     continue;
 
-                var errors = _jsonComparer.Compare(expectedObject, element).ToList();
-                if (errors.Count == 0)
-                    return;
-
-                Assert.Fail(JsonComparerOutputFormatter.GetReadableMessage(expectedObject, actualObject, errors));
+                Assert.That(element, Is.JsonEquivalent(expectedObject).WithComparer(_jsonComparer));
+                return;
             }
 
             Assert.Fail($"Failed to find expected element using `{identityField}`.\nExpected identifier value: `{identityValue}` but found values: {string.Join(",", array.Select(s => s[identityField]))}\nResponse:\n{content}");
