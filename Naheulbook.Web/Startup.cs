@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Naheulbook.Core;
 using Naheulbook.Core.Configurations;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.DbContexts;

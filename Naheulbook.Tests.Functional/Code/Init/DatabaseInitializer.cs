@@ -5,9 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.DatabaseMigrator.Migrations;
 using Naheulbook.Tests.Functional.Code.Constants;
-using Naheulbook.Tests.Functional.Code.HttpClients;
-using Naheulbook.Tests.Functional.Code.Servers;
-using Socolin.TestsUtils.FakeSmtp;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Init

@@ -1,5 +1,4 @@
 using BoDi;
-using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.TestServices;
 using TechTalk.SpecFlow;
 
