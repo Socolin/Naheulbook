@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Naheulbook.Tests.Functional.Code.Extensions;
@@ -35,11 +37,28 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
-        [When(@"performing a POST to the url ""(.*)"" with the following ""(.+)"" content")]
-        public async Task WhenPerformingAPostToTheUrl(string url, string mimeType, string contentData)
+        [When(@"performing a POST to the url ""(.*)"" with the following json content")]
+        public async Task WhenPerformingAPostToTheUrlWithContent(string url, string contentData)
         {
-            var requestContent = new StringContent(contentData, Encoding.UTF8, mimeType);
+            var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
             var response = await _naheulbookHttpClient.PostAsync(url, requestContent);
+            var content = await response.Content.ReadAsStringAsync();
+            _scenarioContext.SetLastHttpResponseStatusCode(response.StatusCode);
+            _scenarioContext.SetLastHttpResponseContent(content);
+        }
+
+        [When(@"performing a ([A-Z]+) to the url ""(.*)"" with the following json content and the current jwt")]
+        public async Task WhenPerformingAPostToTheUrlWithContentAndJwt(string method, string url, string contentData)
+        {
+            var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url)
+            {
+                Content = new StringContent(contentData, Encoding.UTF8, "application/json"),
+                Headers =
+                {
+                    Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt())
+                }
+            };
+            var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
             var content = await response.Content.ReadAsStringAsync();
             _scenarioContext.SetLastHttpResponseStatusCode(response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
@@ -50,7 +69,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         {
             var lastStatusCode = _scenarioContext.GetLastHttpResponseStatusCode();
             if ((int) lastStatusCode != expectedStatusCode)
-                Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with content '{_scenarioContext.GetLastHttpResponseContent()}'");
+                Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with content:\n{_scenarioContext.GetLastHttpResponseContent()}\n");
         }
 
         [Then(@"the response should contains the following json")]

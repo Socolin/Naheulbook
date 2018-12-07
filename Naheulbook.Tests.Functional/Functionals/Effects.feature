@@ -61,7 +61,8 @@ Feature: Effect
     """
 
   Scenario: Create an effect category
-    When performing a POST to the url "/api/v2/effectTypes/" with the following "application/json" content
+    Given a JWT for an admin user
+    When performing a POST to the url "/api/v2/effectTypes/" with the following json content and the current jwt
     """
     {
         "name": "some-effect-type-name"
@@ -77,7 +78,7 @@ Feature: Effect
     }
     """
 
-    When performing a POST to the url "/api/v2/effectCategories/" with the following "application/json" content
+    When performing a POST to the url "/api/v2/effectCategories/" with the following json content and the current jwt
     """
     {
         "name": "some-effect-category-name",

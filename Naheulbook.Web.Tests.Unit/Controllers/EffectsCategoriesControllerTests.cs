@@ -8,7 +8,6 @@ using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Requests;
 using Naheulbook.Web.Responses;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers

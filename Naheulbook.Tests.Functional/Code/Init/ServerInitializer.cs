@@ -37,7 +37,7 @@ namespace Naheulbook.Tests.Functional.Code.Init
             _fakeSmtpServer.Dispose();
         }
 
-        [BeforeScenario]
+        [BeforeScenario(Order = 0)]
         public void InitializeIoc()
         {
             _objectContainer.RegisterInstanceAs(_fakeSmtpServer, typeof(IMailReceiver));

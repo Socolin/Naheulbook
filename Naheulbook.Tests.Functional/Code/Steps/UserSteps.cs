@@ -1,16 +1,10 @@
 using System;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Tests.Functional.Code.Extensions;
-using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Servers;
-using Naheulbook.Tests.Functional.Code.Utils;
-using Newtonsoft.Json;
+using Naheulbook.Tests.Functional.Code.TestServices;
 using Newtonsoft.Json.Linq;
-using Socolin.TestsUtils.FakeSmtp;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Steps
@@ -19,30 +13,47 @@ namespace Naheulbook.Tests.Functional.Code.Steps
     public class UserSteps
     {
         private readonly ScenarioContext _scenarioContext;
-        private readonly IMailReceiver _mailReceiver;
-        private readonly NaheulbookHttpClient _naheulbookHttpClient;
+        private readonly UserTestService _userTestService;
 
-        public UserSteps(ScenarioContext scenarioContext, IMailReceiver mailReceiver, NaheulbookHttpClient naheulbookHttpClient)
+        public UserSteps(ScenarioContext scenarioContext, UserTestService userTestService)
         {
             _scenarioContext = scenarioContext;
-            _mailReceiver = mailReceiver;
-            _naheulbookHttpClient = naheulbookHttpClient;
+            _userTestService = userTestService;
         }
 
         [Given("a user identified by a password")]
         public async Task GivenAUserIdentifiedByAPassword()
         {
-            var username = $"user.{RngUtils.GetRandomHexString(16)}@test.ca";
-            var password = RngUtils.GetRandomHexString(32);
+            var (username, password) = await _userTestService.CreateUserAsync();
+
+            _scenarioContext.SetUsername(username);
+            _scenarioContext.SetPassword(password);
+        }
+
+        [Given("a JWT for a user")]
+        public async Task GivenAUser()
+        {
+            var (username, password) = await _userTestService.CreateUserAsync();
 
             _scenarioContext.SetUsername(username);
             _scenarioContext.SetPassword(password);
 
-            var userRequestJson = JsonConvert.SerializeObject(new {username, password});
-            await _naheulbookHttpClient.PostAsync("/api/v2/users/", new StringContent(userRequestJson, Encoding.UTF8, "application/json"));
+            var jwt = await _userTestService.GenerateJwtAsync(username, password);
+            _scenarioContext.SetJwt(jwt);
+        }
 
-            var activationCode = MailSteps.ParseActivationCodeFromActivationMail(_mailReceiver.Mails.LastOrDefault(m => m.To.Contains(username)));
-            _scenarioContext.SetActivationCode(activationCode);
+        [Given("a JWT for an admin user")]
+        public async Task GivenAnAdminUser()
+        {
+            var (username, password) = await _userTestService.CreateUserAsync();
+
+            _scenarioContext.SetUsername(username);
+            _scenarioContext.SetPassword(password);
+
+            await _userTestService.SetUserAdminAsync(username);
+
+            var jwt = await _userTestService.GenerateJwtAsync(username, password);
+            _scenarioContext.SetJwt(jwt);
         }
 
         [Then("the response content contains a valid JWT")]

@@ -1,7 +1,7 @@
 Feature: Authentication
 
   Scenario: Can create a user with a username and a password and validate his email
-    When performing a POST to the url "/api/v2/users/" with the following "application/json" content
+    When performing a POST to the url "/api/v2/users/" with the following json content
     """
     {
       "username": "test@naheulbook.fr",
@@ -11,7 +11,7 @@ Feature: Authentication
     Then the response status code is 201
     And a mail validation mail has been sent to "test@naheulbook.fr"
 
-    When performing a POST to the url "/api/v2/users/test@naheulbook.fr/validate" with the following "application/json" content
+    When performing a POST to the url "/api/v2/users/test@naheulbook.fr/validate" with the following json content
     """
     {
       "activationCode": "${ActivationCode}"
@@ -22,7 +22,7 @@ Feature: Authentication
   Scenario: A user can request a JWT
     Given a user identified by a password
 
-    When performing a POST to the url "/api/v2/users/${Username}/jwt" with the following "application/json" content
+    When performing a POST to the url "/api/v2/users/${Username}/jwt" with the following json content
     """
     {
       "password": "${Password}"
