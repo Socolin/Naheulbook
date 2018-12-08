@@ -117,7 +117,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             _userService.CheckPasswordAsync(SomeUsername, SomePassword)
                 .Returns(user);
-            _jwtService.GenerateJwtToken(user)
+            _jwtService.GenerateJwtToken(user.Id)
                 .Returns("some-jwt");
 
             var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);

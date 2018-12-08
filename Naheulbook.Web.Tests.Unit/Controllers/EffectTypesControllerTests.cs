@@ -12,7 +12,7 @@ using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers
 {
-    public class EffectTypesControllerTests
+    public class EffectTypesControllerTests : BaseControllerTests
     {
         private IEffectService _effectService;
         private IMapper _mapper;
@@ -24,16 +24,17 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService = Substitute.For<IEffectService>();
             _mapper = Substitute.For<IMapper>();
             _effectTypesController = new EffectTypesController(_effectService, _mapper);
+            MockHttpContext(_effectTypesController);
         }
 
         [Test]
-        public async Task CanCreateEffectType()
+        public async Task PostCreateType_CallEffectService()
         {
             var createEffectTypeRequest = new CreateEffectTypeRequest {Name = "some-type-name"};
             var effectType = new EffectType();
             var effectTypeResponse = new EffectTypeResponse();
 
-            _effectService.CreateEffectTypeAsync("some-type-name")
+            _effectService.CreateEffectTypeAsync(ExecutionContext, "some-type-name")
                 .Returns(effectType);
             _mapper.Map<EffectTypeResponse>(effectType)
                 .Returns(effectTypeResponse);

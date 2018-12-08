@@ -12,7 +12,7 @@ using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers
 {
-    public class EffectsControllerTests
+    public class EffectsControllerTests : BaseControllerTests
     {
         private IEffectService _effectService;
         private IMapper _mapper;
@@ -24,10 +24,11 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService = Substitute.For<IEffectService>();
             _mapper = Substitute.For<IMapper>();
             _effectCategoriesController = new EffectCategoriesController(_effectService, _mapper);
+            MockHttpContext(_effectCategoriesController);
         }
 
         [Test]
-        public async Task CanGetEffects()
+        public async Task GetEffects_CallEffectService()
         {
             var effects = new List<Effect>();
             var expectedResponse = new List<EffectResponse>();
@@ -43,16 +44,16 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public async Task CanPostCategory()
+        public async Task PostCreateCategory_CallEffectService()
         {
             var request = CreateEffectCategoryRequest();
             var effectCategory = new EffectCategory();
             var expectedEffectCategoryResponse = new EffectCategoryResponse();
 
-            _effectService.CreateEffectCategoryAsync("some-name", 24, 25, 26, "some-note")
+            _effectService.CreateEffectCategoryAsync(ExecutionContext, "some-name", 24, 25, 26, "some-note")
                 .Returns(effectCategory);
             _mapper.Map<EffectCategoryResponse>(effectCategory)
-                 .Returns(expectedEffectCategoryResponse);
+                .Returns(expectedEffectCategoryResponse);
 
             var result = await _effectCategoriesController.PostCreateCategoryAsync(request);
 

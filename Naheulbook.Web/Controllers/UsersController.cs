@@ -62,7 +62,7 @@ namespace Naheulbook.Web.Controllers
             try
             {
                 var user = await _userService.CheckPasswordAsync(username, request.Password);
-                var token = _jwtService.GenerateJwtToken(user);
+                var token = _jwtService.GenerateJwtToken(user.Id);
                 return new UserJwtResponse() {Token = token};
             }
             catch (UserNotFoundException)

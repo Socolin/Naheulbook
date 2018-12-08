@@ -4,12 +4,15 @@ using Jose;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
+using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Web.Services
 {
     public interface IJwtService
     {
-        string GenerateJwtToken(User user);
+        string GenerateJwtToken(int userId);
+
+        int? DecodeJwt(string jwt);
     }
 
     public class JwtService : IJwtService
@@ -23,17 +26,30 @@ namespace Naheulbook.Web.Services
             _timeService = timeService;
         }
 
-        public string GenerateJwtToken(User user)
+        public string GenerateJwtToken(int userId)
         {
             var expiration = _timeService.UtcNow.AddMinutes(_configuration.JwtExpirationDelayInMinutes).ToUnixTimeSeconds();
 
             var payload = new Dictionary<string, object>()
             {
-                {"sub", user.Id},
+                {"sub", userId},
                 {"exp", expiration}
             };
 
             return JWT.Encode(payload, Convert.FromBase64String(_configuration.JwtSigningKey), JwsAlgorithm.HS256);
+        }
+
+        public int? DecodeJwt(string jwt)
+        {
+            try
+            {
+                var result = JWT.Decode<JObject>(jwt, Convert.FromBase64String(_configuration.JwtSigningKey));
+                return result.Value<int>("sub");
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

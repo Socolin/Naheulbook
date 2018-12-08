@@ -12,10 +12,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Naheulbook.Core.Configurations;
 using Naheulbook.Core.Services;
+using Naheulbook.Core.Utils;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Factories;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
+using Naheulbook.Web.Filters;
 using Naheulbook.Web.Middlewares;
 using Naheulbook.Web.Services;
 using Newtonsoft.Json;
@@ -64,9 +66,12 @@ namespace Naheulbook.Web
             services.AddSingleton<ISkillService, SkillService>();
             services.AddSingleton<IUserService, UserService>();
 
+            services.AddSingleton<IAuthorizationUtil, AuthorizationUtil>();
+
             services.AddSingleton<ITimeService, TimeService>();
 
             services.AddSingleton<IJwtService, JwtService>();
+            services.AddScoped<JwtAuthorizationFilter>();
         }
 
         private void RegisterConfigurations(IServiceCollection services)

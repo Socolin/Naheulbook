@@ -39,7 +39,7 @@ namespace Naheulbook.Web.Tests.Unit.Services
             _timeService.UtcNow
                 .Returns(now);
 
-            var token = _jwtService.GenerateJwtToken(user);
+            var token = _jwtService.GenerateJwtToken(user.Id);
 
             using (new AssertionScope())
             {

@@ -1,7 +1,10 @@
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Services;
+using Naheulbook.Web.Extensions;
+using Naheulbook.Web.Filters;
 using Naheulbook.Web.Requests;
 using Naheulbook.Web.Responses;
 
@@ -20,10 +23,11 @@ namespace Naheulbook.Web.Controllers
             _mapper = mapper;
         }
 
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost]
         public async Task<ActionResult<EffectTypeResponse>> PostCreateTypeAsync(CreateEffectTypeRequest request)
         {
-            var effectType = await _effectService.CreateEffectTypeAsync(request.Name);
+            var effectType = await _effectService.CreateEffectTypeAsync(HttpContext.GetExecutionContext(), request.Name);
             return new JsonResult(_mapper.Map<EffectTypeResponse>(effectType))
             {
                 StatusCode = 201
