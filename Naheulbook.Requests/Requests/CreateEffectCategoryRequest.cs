@@ -1,4 +1,4 @@
-namespace Naheulbook.Web.Requests
+namespace Naheulbook.Requests.Requests
 {
     public class CreateEffectCategoryRequest
     {

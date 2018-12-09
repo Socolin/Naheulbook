@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Naheulbook.Core\Naheulbook.Core.csproj" />
+      <ProjectReference Include="..\Naheulbook.Requests\Naheulbook.Requests.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,7 +1,7 @@
 using FluentValidation;
-using Naheulbook.Web.Requests;
+using Naheulbook.Requests.Requests;
 
-namespace Naheulbook.Web.Validators
+namespace Naheulbook.Requests.Validators
 {
     public class ValidateUserRequestValidator : AbstractValidator<ValidateUserRequest>
     {

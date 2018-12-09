@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
-using Naheulbook.Web.Requests;
+using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Responses;
 using Naheulbook.Web.Services;
 

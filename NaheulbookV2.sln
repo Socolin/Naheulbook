@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naheulbook.Shared", "Naheul
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B600DDBF-28EE-4461-B72F-F0D25A904B50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naheulbook.Requests", "Naheulbook.Requests\Naheulbook.Requests.csproj", "{CD12EB20-6056-42E7-849C-3987B7AB4030}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{BD4176FB-6A40-48BC-B84B-A90B1ACE1B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD4176FB-6A40-48BC-B84B-A90B1ACE1B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD4176FB-6A40-48BC-B84B-A90B1ACE1B45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD12EB20-6056-42E7-849C-3987B7AB4030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD12EB20-6056-42E7-849C-3987B7AB4030}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD12EB20-6056-42E7-849C-3987B7AB4030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD12EB20-6056-42E7-849C-3987B7AB4030}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6D22B854-DD14-415E-9B87-9E574B68F328} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}

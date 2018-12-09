@@ -15,6 +15,7 @@ using Naheulbook.Core.Services;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Factories;
+using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Filters;
@@ -51,7 +52,7 @@ namespace Naheulbook.Web
             }
 
             services.AddMvc()
-                .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<ValidateUserRequest>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddAutoMapper();
