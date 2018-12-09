@@ -1,9 +1,11 @@
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
@@ -25,13 +27,20 @@ namespace Naheulbook.Web.Controllers
 
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost]
-        public async Task<ActionResult<EffectTypeResponse>> PostCreateTypeAsync(CreateEffectTypeRequest request)
+        public async Task<JsonResult> PostCreateTypeAsync(CreateEffectTypeRequest request)
         {
-            var effectType = await _effectService.CreateEffectTypeAsync(HttpContext.GetExecutionContext(), request);
-            return new JsonResult(_mapper.Map<EffectTypeResponse>(effectType))
+            try
             {
-                StatusCode = 201
-            };
+                var effectType = await _effectService.CreateEffectTypeAsync(HttpContext.GetExecutionContext(), request);
+                return new JsonResult(_mapper.Map<EffectTypeResponse>(effectType))
+                {
+                    StatusCode = 201
+                };
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
         }
     }
 }
