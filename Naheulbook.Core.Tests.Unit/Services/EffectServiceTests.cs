@@ -108,6 +108,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             });
             effectCategory.Should().BeEquivalentTo(expectedEffectCategory);
         }
+
         [Test]
         public async Task CreateEffectCategory_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
         {
@@ -115,6 +116,37 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var createEffectCategoryRequest = CreateEffectCategoryRequest();
 
             await _effectService.CreateEffectCategoryAsync(executionContext, createEffectCategoryRequest);
+
+            Received.InOrder(() =>
+            {
+                _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                _unitOfWork.CompleteAsync();
+            });
+        }
+
+        [Test]
+        public async Task CreateEffect_AddANewEffectInDatabase()
+        {
+            var expectedEffect = CreateEffect();
+            var createEffectRequest = CreateEffectRequest();
+
+            var effect = await _effectService.CreateEffectAsync(new NaheulbookExecutionContext(), createEffectRequest);
+
+            Received.InOrder(() =>
+            {
+                _effectRepository.Add(effect);
+                _unitOfWork.CompleteAsync();
+            });
+            effect.Should().BeEquivalentTo(expectedEffect);
+        }
+
+        [Test]
+        public async Task CreateEffect_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
+        {
+            var executionContext = new NaheulbookExecutionContext();
+            var createEffectRequest = CreateEffectRequest();
+
+            await _effectService.CreateEffectAsync(executionContext, createEffectRequest);
 
             Received.InOrder(() =>
             {
@@ -144,6 +176,56 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 DiceSize = 4,
                 DiceCount = 5,
                 Note = "some-note"
+            };
+        }
+
+        private static Effect CreateEffect()
+        {
+            return new Effect
+            {
+                Name = "some-name",
+                CategoryId = 1,
+                Description = "some-description",
+                Dice = 3,
+                TimeDuration = 4,
+                CombatCount = 5,
+                Duration = "some-duration",
+                LapCount = 6,
+                DurationType = "some-durationType",
+                Modifiers = new List<EffectModifier>
+                {
+                    new EffectModifier
+                    {
+                        StatName = "some-stat",
+                        Type = "some-type",
+                        Value = 8
+                    }
+                },
+            };
+        }
+
+        private static CreateEffectRequest CreateEffectRequest()
+        {
+            return new CreateEffectRequest
+            {
+                Name = "some-name",
+                CategoryId = 1,
+                Description = "some-description",
+                Dice = 3,
+                TimeDuration = 4,
+                CombatCount = 5,
+                Duration = "some-duration",
+                LapCount = 6,
+                DurationType = "some-durationType",
+                Modifiers = new List<CreateEffectModifierRequest>
+                {
+                    new CreateEffectModifierRequest
+                    {
+                        Stat = "some-stat",
+                        Type = "some-type",
+                        Value = 8
+                    }
+                },
             };
         }
 

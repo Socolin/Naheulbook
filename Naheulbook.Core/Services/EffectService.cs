@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Utils;
@@ -14,6 +15,7 @@ namespace Naheulbook.Core.Services
         Task<ICollection<Effect>> GetEffectsByCategoryAsync(long categoryId);
         Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
         Task<EffectCategory> CreateEffectCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectCategoryRequest request);
+        Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, CreateEffectRequest request);
     }
 
     public class EffectService : IEffectService
@@ -81,6 +83,33 @@ namespace Naheulbook.Core.Services
             }
 
             return effectCategory;
+        }
+
+        public async Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, CreateEffectRequest request)
+        {
+            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+
+            var effect = new Effect
+            {
+                Name = request.Name,
+                CategoryId = request.CategoryId,
+                Description = request.Description,
+                Dice = request.Dice,
+                TimeDuration = request.TimeDuration,
+                CombatCount = request.CombatCount,
+                Duration = request.Duration,
+                LapCount = request.LapCount,
+                DurationType = request.DurationType,
+                Modifiers = request.Modifiers.Select(s => new EffectModifier {StatName = s.Stat, Type = s.Type, Value = s.Value}).ToList()
+            };
+
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                uow.Effects.Add(effect);
+                await uow.CompleteAsync();
+            }
+
+            return effect;
         }
     }
 }

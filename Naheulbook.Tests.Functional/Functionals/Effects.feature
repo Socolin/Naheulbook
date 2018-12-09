@@ -60,7 +60,7 @@ Feature: Effect
     }
     """
 
-  Scenario: Create an effect category
+  Scenario: Create an effect category and an effect
     Given a JWT for an admin user
     When performing a POST to the url "/api/v2/effectTypes/" with the following json content and the current jwt
     """
@@ -100,3 +100,59 @@ Feature: Effect
         "typeId": ${effectTypeId}
     }
     """
+
+    When performing a POST to the url "/api/v2/effects/" with the following json content and the current jwt
+    """
+    {
+      "combatCount": 1,
+      "categoryId": ${effectCategoryId},
+      "description": "some-description",
+      "duration": "some-duration",
+      "dice": 4,
+      "name": "some-name",
+      "durationType": "custom",
+      "lapCount": 16,
+      "timeDuration": 458,
+      "modifiers": [
+        {
+          "stat": "FO",
+          "value": 5,
+          "type": "ADD"
+        },
+        {
+          "stat": "CHA",
+          "value": -3,
+          "type": "ADD"
+        }
+      ]
+    }
+    """
+    Then the response status code is 201
+    And the response should contains the following json
+    """
+    {
+      "id": {"__capture": {"name": "effectId", "type": "integer"}},
+      "combatCount": 1,
+      "categoryId": ${effectCategoryId},
+      "description": "some-description",
+      "duration": "some-duration",
+      "dice": 4,
+      "durationType": "custom",
+      "lapCount": 16,
+      "name": "some-name",
+      "timeDuration": 458,
+      "modifiers": [
+        {
+          "stat": "FO",
+          "value": 5,
+          "type": "ADD"
+        },
+        {
+          "stat": "CHA",
+          "value": -3,
+          "type": "ADD"
+        },
+      ]
+    }
+    """
+
