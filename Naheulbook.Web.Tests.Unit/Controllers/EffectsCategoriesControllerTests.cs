@@ -12,7 +12,7 @@ using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers
 {
-    public class EffectsControllerTests : BaseControllerTests
+    public class EffectControllerTests : BaseControllerTests
     {
         private IEffectService _effectService;
         private IMapper _mapper;
@@ -50,7 +50,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var effectCategory = new EffectCategory();
             var expectedEffectCategoryResponse = new EffectCategoryResponse();
 
-            _effectService.CreateEffectCategoryAsync(ExecutionContext, "some-name", 24, 25, 26, "some-note")
+            _effectService.CreateEffectCategoryAsync(ExecutionContext, request)
                 .Returns(effectCategory);
             _mapper.Map<EffectCategoryResponse>(effectCategory)
                 .Returns(expectedEffectCategoryResponse);

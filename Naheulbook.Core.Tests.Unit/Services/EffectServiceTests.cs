@@ -8,6 +8,7 @@ using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
 using Naheulbook.Data.UnitOfWorks;
+using Naheulbook.Requests.Requests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -67,7 +68,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task CreateEffectType_AddANewEffectTypeInDatabase()
         {
-            var effectType = await _effectService.CreateEffectTypeAsync(null, "some-name");
+            var createEffectTypeRequest = new CreateEffectTypeRequest {Name = "some-name"};
+            var effectType = await _effectService.CreateEffectTypeAsync(new NaheulbookExecutionContext(), createEffectTypeRequest);
 
             Received.InOrder(() =>
             {
@@ -82,7 +84,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var executionContext = new NaheulbookExecutionContext();
 
-            await _effectService.CreateEffectTypeAsync(executionContext, "some-name");
+            await _effectService.CreateEffectTypeAsync(executionContext, new CreateEffectTypeRequest());
 
             Received.InOrder(() =>
             {
@@ -95,10 +97,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task CreateEffectCategory_AddANewEffectCategoryInDatabase()
         {
             var expectedEffectCategory = CreateEffectCategory();
+            var createEffectCategoryRequest = CreateEffectCategoryRequest();
 
-            var effectCategory = await _effectService.CreateEffectCategoryAsync(
-                null, "some-name", 1, 4, 5, "some-note"
-            );
+            var effectCategory = await _effectService.CreateEffectCategoryAsync(new NaheulbookExecutionContext(), createEffectCategoryRequest);
 
             Received.InOrder(() =>
             {
@@ -107,15 +108,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
             });
             effectCategory.Should().BeEquivalentTo(expectedEffectCategory);
         }
-
         [Test]
         public async Task CreateEffectCategory_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
         {
             var executionContext = new NaheulbookExecutionContext();
+            var createEffectCategoryRequest = CreateEffectCategoryRequest();
 
-            await _effectService.CreateEffectCategoryAsync(
-                executionContext, "some-name", 1, 4, 5, "some-note"
-            );
+            await _effectService.CreateEffectCategoryAsync(executionContext, createEffectCategoryRequest);
 
             Received.InOrder(() =>
             {
@@ -135,5 +134,18 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 Note = "some-note"
             };
         }
+
+        private static CreateEffectCategoryRequest CreateEffectCategoryRequest()
+        {
+            return new CreateEffectCategoryRequest
+            {
+                Name = "some-name",
+                TypeId = 1,
+                DiceSize = 4,
+                DiceCount = 5,
+                Note = "some-note"
+            };
+        }
+
     }
 }

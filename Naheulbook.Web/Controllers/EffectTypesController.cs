@@ -27,7 +27,7 @@ namespace Naheulbook.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<EffectTypeResponse>> PostCreateTypeAsync(CreateEffectTypeRequest request)
         {
-            var effectType = await _effectService.CreateEffectTypeAsync(HttpContext.GetExecutionContext(), request.Name);
+            var effectType = await _effectService.CreateEffectTypeAsync(HttpContext.GetExecutionContext(), request);
             return new JsonResult(_mapper.Map<EffectTypeResponse>(effectType))
             {
                 StatusCode = 201

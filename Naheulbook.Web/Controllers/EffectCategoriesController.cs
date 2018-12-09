@@ -44,7 +44,7 @@ namespace Naheulbook.Web.Controllers
         public async Task<JsonResult> PostCreateCategoryAsync(CreateEffectCategoryRequest request)
         {
             var executionContext = HttpContext.GetExecutionContext();
-            var effectCategory = await _effectService.CreateEffectCategoryAsync(executionContext, request.Name, request.TypeId, request.DiceSize, request.DiceCount, request.Note);
+            var effectCategory = await _effectService.CreateEffectCategoryAsync(executionContext, request);
             var effectCategoryResponse = _mapper.Map<EffectCategoryResponse>(effectCategory);
             return new JsonResult(effectCategoryResponse) {StatusCode = (int) HttpStatusCode.Created};
         }

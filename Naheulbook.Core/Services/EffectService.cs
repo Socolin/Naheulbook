@@ -4,6 +4,7 @@ using Naheulbook.Core.Models;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
+using Naheulbook.Requests.Requests;
 
 namespace Naheulbook.Core.Services
 {
@@ -11,8 +12,8 @@ namespace Naheulbook.Core.Services
     {
         Task<ICollection<EffectType>> GetEffectCategoriesAsync();
         Task<ICollection<Effect>> GetEffectsByCategoryAsync(long categoryId);
-        Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, string effectTypeName);
-        Task<EffectCategory> CreateEffectCategoryAsync(NaheulbookExecutionContext executionContext, string effectCategoryName, int typeId, short diceSize, short diceCount, string note);
+        Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
+        Task<EffectCategory> CreateEffectCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectCategoryRequest request);
     }
 
     public class EffectService : IEffectService
@@ -42,15 +43,13 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<EffectType> CreateEffectTypeAsync(
-            NaheulbookExecutionContext executionContext,
-            string effectTypeName)
+        public async Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
             var effectType = new EffectType
             {
-                Name = effectTypeName
+                Name = request.Name
             };
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
@@ -62,23 +61,17 @@ namespace Naheulbook.Core.Services
             return effectType;
         }
 
-        public async Task<EffectCategory> CreateEffectCategoryAsync(
-            NaheulbookExecutionContext executionContext,
-            string effectCategoryName,
-            int typeId,
-            short diceSize,
-            short diceCount,
-            string note)
+        public async Task<EffectCategory> CreateEffectCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectCategoryRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
             var effectCategory = new EffectCategory
             {
-                Name = effectCategoryName,
-                TypeId = typeId,
-                DiceSize = diceSize,
-                DiceCount = diceCount,
-                Note = note
+                Name = request.Name,
+                TypeId = request.TypeId,
+                DiceSize = request.DiceSize,
+                DiceCount = request.DiceCount,
+                Note = request.Note
             };
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())

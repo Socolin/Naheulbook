@@ -30,11 +30,11 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public async Task PostCreateType_CallEffectService()
         {
-            var createEffectTypeRequest = new CreateEffectTypeRequest {Name = "some-type-name"};
+            var createEffectTypeRequest = new CreateEffectTypeRequest();
             var effectType = new EffectType();
             var effectTypeResponse = new EffectTypeResponse();
 
-            _effectService.CreateEffectTypeAsync(ExecutionContext, "some-type-name")
+            _effectService.CreateEffectTypeAsync(ExecutionContext, createEffectTypeRequest)
                 .Returns(effectType);
             _mapper.Map<EffectTypeResponse>(effectType)
                 .Returns(effectTypeResponse);
