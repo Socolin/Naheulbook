@@ -41,9 +41,8 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             var result = await _effectTypesController.PostCreateTypeAsync(createEffectTypeRequest);
 
-            var jsonResult = ((JsonResult) result.Result);
-            jsonResult.StatusCode.Should().Be(201);
-            jsonResult.Value.Should().Be(effectTypeResponse);
+            result.StatusCode.Should().Be(201);
+            result.Value.Should().Be(effectTypeResponse);
         }
     }
 }

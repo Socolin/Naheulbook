@@ -94,6 +94,8 @@ namespace Naheulbook.Web
                 .AllowAnyHeader()
                 .AllowCredentials());
 
+            app.UseMiddleware<HttpExceptionMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseMiddleware<DevExceptionMiddleware>();

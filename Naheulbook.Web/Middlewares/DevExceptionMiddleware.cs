@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Naheulbook.Web.Exceptions;
 
 namespace Naheulbook.Web.Middlewares
 {
@@ -19,6 +20,10 @@ namespace Naheulbook.Web.Middlewares
             try
             {
                 await _next(context);
+            }
+            catch (HttpErrorException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
