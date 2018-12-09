@@ -15,5 +15,10 @@ namespace Naheulbook.Tests.Functional.Code.Utils
                 sb.Append(b.ToString("x2"));
             return sb.ToString();
         }
+
+        public static string GetRandomString(string prefix)
+        {
+            return prefix + GetRandomHexString(8);
+        }
     }
 }

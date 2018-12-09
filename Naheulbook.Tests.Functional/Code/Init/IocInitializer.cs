@@ -19,6 +19,7 @@ namespace Naheulbook.Tests.Functional.Code.Init
         public void InitializeIoc()
         {
             _objectContainer.RegisterTypeAs<UserTestService, UserTestService>();
+            _objectContainer.RegisterTypeAs<EffectTestService, EffectTestService>();
         }
     }
 }

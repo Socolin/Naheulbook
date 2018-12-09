@@ -6,7 +6,7 @@ namespace Naheulbook.Web.Responses
     public class EffectResponse
     {
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -18,16 +18,16 @@ namespace Naheulbook.Web.Responses
         public string DurationType { get; set; }
 
         [JsonProperty("duration")]
-        public object Duration { get; set; }
+        public string Duration { get; set; }
 
         [JsonProperty("combatCount")]
-        public object CombatCount { get; set; }
+        public int? CombatCount { get; set; }
 
         [JsonProperty("lapCount")]
-        public object LapCount { get; set; }
+        public int? LapCount { get; set; }
 
         [JsonProperty("timeDuration")]
-        public object TimeDuration { get; set; }
+        public int? TimeDuration { get; set; }
 
         [JsonProperty("dice")]
         public long Dice { get; set; }
@@ -43,7 +43,7 @@ namespace Naheulbook.Web.Responses
     public class EffectTypeResponse
     {
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -55,7 +55,7 @@ namespace Naheulbook.Web.Responses
     public class EffectCategoryResponse
     {
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }

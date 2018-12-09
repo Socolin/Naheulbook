@@ -60,8 +60,9 @@ Feature: Effect
     }
     """
 
-  Scenario: Create an effect category and an effect
+  Scenario: Create an effect type
     Given a JWT for an admin user
+
     When performing a POST to the url "/api/v2/effectTypes/" with the following json content and the current jwt
     """
     {
@@ -72,11 +73,16 @@ Feature: Effect
     And the response should contains the following json
     """
     {
-        "id": {"__capture": {"name": "effectTypeId", "type": "integer"}},
+        "id": {"__capture": {"name": "EffectTypeId", "type": "integer"}},
         "name": "some-effect-type-name",
         "categories": []
     }
     """
+
+
+  Scenario: Create an effect category
+    Given a JWT for an admin user
+    And an effect type
 
     When performing a POST to the url "/api/v2/effectCategories/" with the following json content and the current jwt
     """
@@ -85,27 +91,31 @@ Feature: Effect
         "diceCount": 2,
         "diceSize": 6,
         "note": "some-note",
-        "typeId": ${effectTypeId}
+        "typeId": ${EffectTypeId}
     }
     """
     Then the response status code is 201
     And the response should contains the following json
     """
     {
-        "id": {"__capture": {"name": "effectCategoryId", "type": "integer"}},
+        "id": {"__capture": {"name": "EffectCategoryId", "type": "integer"}},
         "name": "some-effect-category-name",
         "diceCount": 2,
         "diceSize": 6,
         "note": "some-note",
-        "typeId": ${effectTypeId}
+        "typeId": ${EffectTypeId}
     }
     """
+
+  Scenario: Create an effect
+    Given a JWT for an admin user
+    And an effect category
 
     When performing a POST to the url "/api/v2/effects/" with the following json content and the current jwt
     """
     {
       "combatCount": 1,
-      "categoryId": ${effectCategoryId},
+      "categoryId": ${EffectCategoryId},
       "description": "some-description",
       "duration": "some-duration",
       "dice": 4,
@@ -131,9 +141,9 @@ Feature: Effect
     And the response should contains the following json
     """
     {
-      "id": {"__capture": {"name": "effectId", "type": "integer"}},
+      "id": {"__capture": {"name": "EffectId", "type": "integer"}},
       "combatCount": 1,
-      "categoryId": ${effectCategoryId},
+      "categoryId": ${EffectCategoryId},
       "description": "some-description",
       "duration": "some-duration",
       "dice": 4,

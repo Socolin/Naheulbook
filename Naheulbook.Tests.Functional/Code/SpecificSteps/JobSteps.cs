@@ -1,6 +1,6 @@
 using TechTalk.SpecFlow;
 
-namespace Naheulbook.Tests.Functional.Code.Steps
+namespace Naheulbook.Tests.Functional.Code.SpecificSteps
 {
     public class JobSteps
     {

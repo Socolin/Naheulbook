@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Naheulbook.Tests.Functional.Code.Extensions;
+using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using NUnit.Framework;
 using Socolin.TestsUtils.FakeSmtp;
 using TechTalk.SpecFlow;

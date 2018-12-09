@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Tests.Functional.Code.Extensions;
+using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.Servers;
 using Naheulbook.Tests.Functional.Code.TestServices;
 using Newtonsoft.Json.Linq;
