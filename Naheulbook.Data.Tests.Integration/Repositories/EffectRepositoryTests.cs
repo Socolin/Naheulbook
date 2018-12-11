@@ -56,6 +56,24 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                     .IgnoringCyclicReferences());
         }
 
+        [Test]
+        public async Task CanGetEffectWithModifiers()
+        {
+            var effectCategory = await CreateEffectCategoryInDb();
+            var effects = await CreateEffectsInDb(effectCategory);
+
+            var actualEffect = await _effectRepository.GetWithModifiersAsync(effects[0].Id);
+
+            actualEffect.Should().BeEquivalentTo(
+                effects[0],
+                config => config
+                    .Excluding(o => o.Id)
+                    .Excluding(o => o.Category)
+                    .Excluding(info => info.SelectedMemberPath.EndsWith(".Effect"))
+                    .Excluding(info => info.SelectedMemberPath.EndsWith(".Stat"))
+                    .IgnoringCyclicReferences());
+        }
+
         private async Task<EffectCategory> CreateEffectCategoryInDb()
         {
             var effectType = new EffectTypeBuilder().WithDefaultTestInfo().Build();

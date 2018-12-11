@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Core.Utils;
@@ -38,6 +40,19 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWork.EffectTypes.Returns(_effectTypeRepository);
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
             _effectService = new EffectService(unitOfWorkFactory, _authorizationUtil);
+        }
+
+        [Test]
+        public async Task GetEffect_LoadEffectFromDatabase()
+        {
+            var expectedEffect = new Effect();
+
+            _effectRepository.GetWithModifiersAsync(42)
+                .Returns(expectedEffect);
+
+            var effect = await _effectService.GetEffectAsync(42);
+
+            effect.Should().BeSameAs(expectedEffect);
         }
 
         [Test]
@@ -158,6 +173,60 @@ namespace Naheulbook.Core.Tests.Unit.Services
             });
         }
 
+        [Test]
+        public async Task EditEffect_UpdateEffectInDatabase()
+        {
+            var expectedEffect = CreateEffect(42);
+            var executionContext = new NaheulbookExecutionContext();
+            var previousEffect = AutoFill<Effect>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt, new AutoFillSettings {MaxDepth = 1}, (i) => new {i.Category});
+            var createEffectRequest = AutoFill<CreateEffectRequest>.One();
+
+            previousEffect.Id = 42;
+
+            _effectRepository.GetWithModifiersAsync(42)
+                .Returns(previousEffect);
+
+            await _effectService.EditEffectAsync(executionContext, 42, createEffectRequest);
+
+            await _unitOfWork.Received(1)
+                .CompleteAsync();
+            previousEffect.Should().BeEquivalentTo(expectedEffect);
+        }
+
+        [Test]
+        public async Task EditEffect_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
+        {
+            var executionContext = new NaheulbookExecutionContext();
+            var previousEffect = AutoFill<Effect>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt);
+            var createEffectRequest = AutoFill<CreateEffectRequest>.One();
+            previousEffect.Id = 42;
+
+            _effectRepository.GetWithModifiersAsync(42)
+                .Returns(previousEffect);
+
+            await _effectService.EditEffectAsync(executionContext, 42, createEffectRequest);
+
+            Received.InOrder(() =>
+            {
+                _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                _unitOfWork.CompleteAsync();
+            });
+        }
+
+        [Test]
+        public void EditEffect_WhenEffectDoesNotExists_Throw()
+        {
+            var executionContext = new NaheulbookExecutionContext();
+            var createEffectRequest = AutoFill<CreateEffectRequest>.One();
+
+            _effectRepository.GetWithModifiersAsync(Arg.Any<int>())
+                .Returns((Effect) null);
+
+            Func<Task> act = () => _effectService.EditEffectAsync(executionContext, 42, createEffectRequest);
+
+            act.Should().Throw<EffectNotFoundException>();
+        }
+
         private static EffectCategory CreateEffectCategory()
         {
             return new EffectCategory
@@ -170,10 +239,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
             };
         }
 
-        private static Effect CreateEffect()
+        private static Effect CreateEffect(int id = 0)
         {
             return new Effect
             {
+                Id = id,
                 Name = "some-name",
                 Description = "some-description",
                 DurationType = "some-duration-type",

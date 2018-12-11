@@ -11,11 +11,12 @@ namespace Socolin.TestUtils.AutoFillTestObjects
     {
         public static T One(AutoFillFlags flags = AutoFillFlags.None, AutoFillSettings settings = null, Expression<Func<T, object>> ignoring = null)
         {
+            var autoFillSettings = settings ?? new AutoFillSettings();
             var context = new AutoFillContext
             {
                 Flags = flags,
-                IntValue = 1,
-                Settings = settings ?? new AutoFillSettings(),
+                IntValue = autoFillSettings.StartIntValue,
+                Settings = autoFillSettings,
                 IgnoredMembers = BuildIgnoredProperties(ignoring)
             };
 

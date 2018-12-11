@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
@@ -11,11 +12,13 @@ namespace Naheulbook.Core.Services
 {
     public interface IEffectService
     {
+        Task<Effect> GetEffectAsync(int effectId);
         Task<ICollection<EffectType>> GetEffectCategoriesAsync();
         Task<ICollection<Effect>> GetEffectsByCategoryAsync(long categoryId);
         Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
         Task<EffectCategory> CreateEffectCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectCategoryRequest request);
         Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, CreateEffectRequest request);
+        Task EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, CreateEffectRequest request);
     }
 
     public class EffectService : IEffectService
@@ -27,6 +30,14 @@ namespace Naheulbook.Core.Services
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizationUtil = authorizationUtil;
+        }
+
+        public async Task<Effect> GetEffectAsync(int effectId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.Effects.GetWithModifiersAsync(effectId);
+            }
         }
 
         public async Task<ICollection<EffectType>> GetEffectCategoriesAsync()
@@ -100,7 +111,10 @@ namespace Naheulbook.Core.Services
                 Duration = request.Duration,
                 LapCount = request.LapCount,
                 DurationType = request.DurationType,
-                Modifiers = request.Modifiers.Select(s => new EffectModifier {StatName = s.Stat, Type = s.Type, Value = s.Value}).ToList()
+                Modifiers = request.Modifiers.Select(s => new EffectModifier
+                {
+                    StatName = s.Stat, Type = s.Type, Value = s.Value
+                }).ToList()
             };
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
@@ -110,6 +124,34 @@ namespace Naheulbook.Core.Services
             }
 
             return effect;
+        }
+
+        public async Task EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, CreateEffectRequest request)
+        {
+            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var effect = await uow.Effects.GetWithModifiersAsync(effectId);
+                if (effect == null)
+                    throw new EffectNotFoundException();
+
+                effect.Name = request.Name;
+                effect.CategoryId = request.CategoryId;
+                effect.Description = request.Description;
+                effect.Dice = request.Dice;
+                effect.TimeDuration = request.TimeDuration;
+                effect.CombatCount = request.CombatCount;
+                effect.Duration = request.Duration;
+                effect.LapCount = request.LapCount;
+                effect.DurationType = request.DurationType;
+                effect.Modifiers = request.Modifiers.Select(s => new EffectModifier
+                {
+                    StatName = s.Stat, Type = s.Type, Value = s.Value
+                }).ToList();
+
+                await uow.CompleteAsync();
+            }
         }
     }
 }

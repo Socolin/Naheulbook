@@ -166,3 +166,64 @@ Feature: Effect
     }
     """
 
+  Scenario: Edit an effect
+    Given a JWT for an admin user
+    Given an effect
+
+    When performing a PUT to the url "/api/v2/effects/${EffectId}" with the following json content and the current jwt
+    """
+    {
+      "combatCount": 1,
+      "name": "some-name",
+      "categoryId": ${EffectCategoryId},
+      "description": "some-description",
+      "duration": "some-duration",
+      "dice": 4,
+      "durationType": "custom",
+      "lapCount": 16,
+      "timeDuration": 458,
+      "modifiers": [
+        {
+          "stat": "FO",
+          "value": 5,
+          "type": "ADD"
+        },
+        {
+          "stat": "CHA",
+          "value": -3,
+          "type": "ADD"
+        }
+      ]
+    }
+    """
+    Then the response status code is 204
+
+    When performing a GET to the url "/api/v2/effects/${EffectId}"
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${EffectId},
+      "categoryId": ${EffectCategoryId},
+      "name": "some-name",
+      "combatCount": 1,
+      "description": "some-description",
+      "duration": "some-duration",
+      "dice": 4,
+      "durationType": "custom",
+      "lapCount": 16,
+      "timeDuration": 458,
+      "modifiers": [
+        {
+          "stat": "CHA",
+          "value": -3,
+          "type": "ADD"
+        },
+        {
+          "stat": "FO",
+          "value": 5,
+          "type": "ADD"
+        }
+      ]
+    }
+    """

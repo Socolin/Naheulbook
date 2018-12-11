@@ -9,7 +9,7 @@ namespace Naheulbook.Data.Models
             Categories = new HashSet<EffectCategory>();
         }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<EffectCategory> Categories { get; set; }
     }
@@ -21,7 +21,7 @@ namespace Naheulbook.Data.Models
             Effects = new HashSet<Effect>();
         }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 
@@ -31,7 +31,7 @@ namespace Naheulbook.Data.Models
 
         public string Note { get; set; }
 
-        public long TypeId { get; set; }
+        public int TypeId { get; set; }
 
         public EffectType Type { get; set; }
 
@@ -45,7 +45,7 @@ namespace Naheulbook.Data.Models
             Modifiers = new HashSet<EffectModifier>();
         }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 
@@ -63,7 +63,7 @@ namespace Naheulbook.Data.Models
 
         public short? Dice { get; set; }
 
-        public long CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         public ICollection<EffectModifier> Modifiers { get; set; }
 
@@ -73,7 +73,7 @@ namespace Naheulbook.Data.Models
 
     public class EffectModifier
     {
-        public long EffectId { get; set; }
+        public int EffectId { get; set; }
 
         public string StatName { get; set; }
 
