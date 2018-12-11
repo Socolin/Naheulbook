@@ -4,6 +4,7 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.TestServices;
 using Naheulbook.Tests.Functional.Code.Utils;
+using Socolin.TestUtils.AutoFillTestObjects;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps
@@ -23,10 +24,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("an effect type")]
         public async Task GivenAnEffectType()
         {
-            var createEffectTypeRequest = new CreateEffectTypeRequest
-            {
-                Name = RngUtils.GetRandomString("some-name")
-            };
+            var createEffectTypeRequest = AutoFill<CreateEffectTypeRequest>.One(AutoFillFlags.RandomizeString);
             var effectType = await _effectTestService.CreateEffectTypeAsync(createEffectTypeRequest, _scenarioContext.GetJwt());
 
             _scenarioContext.SetEffectTypeId(effectType.Id);
@@ -37,14 +35,8 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         {
             await GivenAnEffectType();
 
-            var createEffectCategoryRequest = new CreateEffectCategoryRequest
-            {
-                Name = RngUtils.GetRandomString("some-category-name"),
-                TypeId = _scenarioContext.GetEffectTypeId(),
-                Note = "some-note",
-                DiceSize = 4,
-                DiceCount = 3
-            };
+            var createEffectCategoryRequest = AutoFill<CreateEffectCategoryRequest>.One(AutoFillFlags.RandomizeString);
+            createEffectCategoryRequest.TypeId = _scenarioContext.GetEffectTypeId();
             var effectCategory = await _effectTestService.CreateEffectCategoryAsync(createEffectCategoryRequest, _scenarioContext.GetJwt());
 
             _scenarioContext.SetEffectCategoryId(effectCategory.Id);
@@ -55,13 +47,11 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         {
             await GivenAnEffectCategory();
 
-            var createEffectRequest = new CreateEffectRequest
-            {
-                Name = RngUtils.GetRandomString("some-effect-name"),
-                CategoryId = _scenarioContext.GetEffectCategoryId(),
-                Description = "some-description",
-                Modifiers = new List<CreateEffectModifierRequest>(),
-            };
+            var createEffectRequest = AutoFill<CreateEffectRequest>.One(AutoFillFlags.RandomizeString);
+            createEffectRequest.CategoryId = _scenarioContext.GetEffectTypeId();
+            createEffectRequest.Modifiers[0].Stat = "FO";
+            createEffectRequest.Modifiers[1].Stat = "INT";
+            createEffectRequest.Modifiers[2].Stat = "CHA";
             var effect = await _effectTestService.CreateEffectAsync(createEffectRequest, _scenarioContext.GetJwt());
 
             _scenarioContext.SetEffectId(effect.Id);

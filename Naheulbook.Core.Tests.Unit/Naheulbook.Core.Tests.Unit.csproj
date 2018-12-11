@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Naheulbook.Core\Naheulbook.Core.csproj" />
+      <ProjectReference Include="..\Socolin.TestUtils.AutoFillTestObjects\Socolin.TestUtils.AutoFillTestObjects.csproj" />
     </ItemGroup>
 
 </Project>

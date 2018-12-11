@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NUnit.Framework;
 
 namespace Naheulbook.Tests.Functional.Code.HttpClients
 {
@@ -27,9 +28,12 @@ namespace Naheulbook.Tests.Functional.Code.HttpClients
         public async Task<T> PostAndParseJsonResultAsync<T>(string uri, object requestContent) where T : class
         {
             var response = await base.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(requestContent), Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
-            var contentJson = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(contentJson);
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                Assert.Fail($"Bad status code {response.StatusCode} expected success. Content: \n{content}");
+            }
+            return JsonConvert.DeserializeObject<T>(content);
         }
 
         public async Task<T> PostAndParseJsonResultAsync<T>(string uri, object requestContent, string jwt) where T : class
@@ -38,8 +42,12 @@ namespace Naheulbook.Tests.Functional.Code.HttpClients
             request.Headers.Authorization = new AuthenticationHeaderValue("JWT", jwt);
             request.Content = new StringContent(JsonConvert.SerializeObject(requestContent), Encoding.UTF8, "application/json");
             var response = await SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var contentJson = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                Assert.Fail($"Bad status code {response.StatusCode} expected success. Content: \n{content}");
+            }
+            var contentJson = content;
             return JsonConvert.DeserializeObject<T>(contentJson);
         }
     }

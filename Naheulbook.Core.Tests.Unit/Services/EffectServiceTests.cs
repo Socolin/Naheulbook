@@ -11,6 +11,7 @@ using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
 using NSubstitute;
 using NUnit.Framework;
+using Socolin.TestUtils.AutoFillTestObjects;
 
 namespace Naheulbook.Core.Tests.Unit.Services
 {
@@ -68,7 +69,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task CreateEffectType_AddANewEffectTypeInDatabase()
         {
-            var createEffectTypeRequest = new CreateEffectTypeRequest {Name = "some-name"};
+            var createEffectTypeRequest = AutoFill<CreateEffectTypeRequest>.One();
             var effectType = await _effectService.CreateEffectTypeAsync(new NaheulbookExecutionContext(), createEffectTypeRequest);
 
             Received.InOrder(() =>
@@ -97,7 +98,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task CreateEffectCategory_AddANewEffectCategoryInDatabase()
         {
             var expectedEffectCategory = CreateEffectCategory();
-            var createEffectCategoryRequest = CreateEffectCategoryRequest();
+            expectedEffectCategory.Effects = new List<Effect>();
+            var createEffectCategoryRequest = AutoFill<CreateEffectCategoryRequest>.One();
 
             var effectCategory = await _effectService.CreateEffectCategoryAsync(new NaheulbookExecutionContext(), createEffectCategoryRequest);
 
@@ -113,7 +115,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task CreateEffectCategory_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
         {
             var executionContext = new NaheulbookExecutionContext();
-            var createEffectCategoryRequest = CreateEffectCategoryRequest();
+            var createEffectCategoryRequest = AutoFill<CreateEffectCategoryRequest>.One();
 
             await _effectService.CreateEffectCategoryAsync(executionContext, createEffectCategoryRequest);
 
@@ -128,9 +130,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task CreateEffect_AddANewEffectInDatabase()
         {
             var expectedEffect = CreateEffect();
-            var createEffectRequest = CreateEffectRequest();
+            var createEffectRequest = AutoFill<CreateEffectRequest>.One();
+            var executionContext = new NaheulbookExecutionContext();
 
-            var effect = await _effectService.CreateEffectAsync(new NaheulbookExecutionContext(), createEffectRequest);
+            var effect = await _effectService.CreateEffectAsync(executionContext, createEffectRequest);
 
             Received.InOrder(() =>
             {
@@ -144,7 +147,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task CreateEffect_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
         {
             var executionContext = new NaheulbookExecutionContext();
-            var createEffectRequest = CreateEffectRequest();
+            var createEffectRequest = AutoFill<CreateEffectRequest>.One();
 
             await _effectService.CreateEffectAsync(executionContext, createEffectRequest);
 
@@ -160,22 +163,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
             return new EffectCategory
             {
                 Name = "some-name",
-                TypeId = 1,
-                DiceSize = 4,
-                DiceCount = 5,
-                Note = "some-note"
-            };
-        }
-
-        private static CreateEffectCategoryRequest CreateEffectCategoryRequest()
-        {
-            return new CreateEffectCategoryRequest
-            {
-                Name = "some-name",
-                TypeId = 1,
-                DiceSize = 4,
-                DiceCount = 5,
-                Note = "some-note"
+                Note = "some-note",
+                DiceCount = 1,
+                DiceSize = 2,
+                TypeId = 3
             };
         }
 
@@ -184,16 +175,28 @@ namespace Naheulbook.Core.Tests.Unit.Services
             return new Effect
             {
                 Name = "some-name",
-                CategoryId = 1,
                 Description = "some-description",
-                Dice = 3,
-                TimeDuration = 4,
-                CombatCount = 5,
+                DurationType = "some-duration-type",
                 Duration = "some-duration",
-                LapCount = 6,
-                DurationType = "some-durationType",
+                CombatCount = 1,
+                CategoryId = 2,
+                Dice = 3,
+                LapCount = 4,
+                TimeDuration = 5,
                 Modifiers = new List<EffectModifier>
                 {
+                    new EffectModifier
+                    {
+                        StatName = "some-stat",
+                        Type = "some-type",
+                        Value = 6
+                    },
+                    new EffectModifier
+                    {
+                        StatName = "some-stat",
+                        Type = "some-type",
+                        Value = 7
+                    },
                     new EffectModifier
                     {
                         StatName = "some-stat",
@@ -203,31 +206,5 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 },
             };
         }
-
-        private static CreateEffectRequest CreateEffectRequest()
-        {
-            return new CreateEffectRequest
-            {
-                Name = "some-name",
-                CategoryId = 1,
-                Description = "some-description",
-                Dice = 3,
-                TimeDuration = 4,
-                CombatCount = 5,
-                Duration = "some-duration",
-                LapCount = 6,
-                DurationType = "some-durationType",
-                Modifiers = new List<CreateEffectModifierRequest>
-                {
-                    new CreateEffectModifierRequest
-                    {
-                        Stat = "some-stat",
-                        Type = "some-type",
-                        Value = 8
-                    }
-                },
-            };
-        }
-
     }
 }
