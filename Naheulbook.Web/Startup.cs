@@ -60,6 +60,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IUnitOfWorkFactory>(new UnitOfWorkFactory(naheulbookDbContextOptionsBuilder.Options));
 
             services.AddSingleton<IEffectService, EffectService>();
+            services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();
             services.AddSingleton<IJobService, JobService>();
             services.AddSingleton<IMailService, MailService>();
             services.AddSingleton<IOriginService, OriginService>();

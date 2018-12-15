@@ -13,7 +13,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Job> Jobs { get; set; }
         public DbSet<User> Users { get; set; }
 
-        public NaheulbookDbContext( DbContextOptions<NaheulbookDbContext> options)
+        public NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options)
             : base(options)
         {
         }
@@ -24,6 +24,8 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new EffectCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new EffectModifierConfiguration());
             modelBuilder.ApplyConfiguration(new EffectTypeConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ItemTemplateSectionConfiguration());
 
             modelBuilder.ApplyConfiguration(new JobConfiguration());
             modelBuilder.ApplyConfiguration(new JobBonusConfiguration());

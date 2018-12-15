@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using AutoMapper;
 using Naheulbook.Data.Models;
 using Naheulbook.Web.Responses;
@@ -16,6 +18,9 @@ namespace Naheulbook.Web.Mappers
             CreateMap<EffectModifier, StatModifierResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(se => se.StatName))
                 .ForMember(m => m.Special, opt => opt.Ignore());
+
+            CreateMap<ItemTemplateSection, ItemTemplateSectionResponse>()
+                .ForMember(m => m.Specials, opt => opt.MapFrom(i => i.Special.Split(',', StringSplitOptions.None).ToList()));
 
             CreateMap<Job, JobResponse>()
                 .ForMember(m => m.Requirements, opt => opt.MapFrom(j => j.Requirements.OrderBy(r => r.Id)))

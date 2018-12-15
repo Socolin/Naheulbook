@@ -1,0 +1,14 @@
+using System.Collections.Generic;
+using Naheulbook.Data.Models;
+
+namespace Naheulbook.Web.Responses
+{
+    public class ItemTemplateSectionResponse
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Note { get; set; }
+        public List<string> Specials { get; set; }
+        public List<ItemTemplateCategory> Categories { get; set; }
+    }
+}

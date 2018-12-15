@@ -10,6 +10,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IEffectRepository Effects { get; }
         IEffectCategoryRepository EffectCategories { get; }
         IEffectTypeRepository EffectTypes { get; }
+        IItemTemplateSectionRepository ItemTemplateSections { get; }
         IJobRepository Jobs { get; }
         IOriginRepository Origins { get; }
         ISkillRepository Skills { get; }
@@ -28,6 +29,7 @@ namespace Naheulbook.Data.UnitOfWorks
             Effects = new EffectRepository(naheulbookDbContext);
             EffectCategories = new EffectCategoryRepository(naheulbookDbContext);
             EffectTypes = new EffectTypeRepository(naheulbookDbContext);
+            ItemTemplateSections = new ItemTemplateSectionRepository(naheulbookDbContext);
             Jobs = new JobRepository(naheulbookDbContext);
             Skills = new SkillRepository(naheulbookDbContext);
             Origins = new OriginRepository(naheulbookDbContext);
@@ -37,6 +39,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IEffectRepository Effects { get; }
         public IEffectTypeRepository EffectTypes { get; }
         public IEffectCategoryRepository EffectCategories { get; }
+        public IItemTemplateSectionRepository ItemTemplateSections { get; }
         public IJobRepository Jobs { get; }
         public IOriginRepository Origins { get; }
         public ISkillRepository Skills { get; }
