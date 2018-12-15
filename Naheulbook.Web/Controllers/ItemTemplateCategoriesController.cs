@@ -12,28 +12,28 @@ using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
 {
-    [Route("api/v2/itemTemplateSections")]
+    [Route("api/v2/itemTemplateCategories")]
     [ApiController]
-    public class ItemTemplateSectionsController : Controller
+    public class ItemTemplateCategoriesController : Controller
     {
-        private readonly IItemTemplateSectionService _itemTemplateSectionService;
+        private readonly IItemTemplateCategoryService _itemTemplateCategoryService;
         private readonly IMapper _mapper;
 
-        public ItemTemplateSectionsController(IItemTemplateSectionService itemTemplateSectionService, IMapper mapper)
+        public ItemTemplateCategoriesController(IItemTemplateCategoryService itemTemplateCategoryService, IMapper mapper)
         {
-            _itemTemplateSectionService = itemTemplateSectionService;
+            _itemTemplateCategoryService = itemTemplateCategoryService;
             _mapper = mapper;
         }
 
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost]
-        public async Task<JsonResult> PostCreateSectionAsync(CreateItemTemplateSectionRequest request)
+        public async Task<JsonResult> PostCreateCategoryAsync(CreateItemTemplateCategoryRequest request)
         {
             try
             {
-                var itemTemplateSection = await _itemTemplateSectionService.CreateItemTemplateSectionAsync(HttpContext.GetExecutionContext(), request);
-                var itemTemplateSectionResponse = _mapper.Map<ItemTemplateSectionResponse>(itemTemplateSection);
-                return new JsonResult(itemTemplateSectionResponse)
+                var itemTemplateCategory = await _itemTemplateCategoryService.CreateItemTemplateCategoryAsync(HttpContext.GetExecutionContext(), request);
+                var itemTemplateCategoryResponse = _mapper.Map<ItemTemplateCategoryResponse>(itemTemplateCategory);
+                return new JsonResult(itemTemplateCategoryResponse)
                 {
                     StatusCode = (int?) HttpStatusCode.Created
                 };

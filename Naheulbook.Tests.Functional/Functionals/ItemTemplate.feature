@@ -17,7 +17,7 @@ Feature: ItemTemplate
     And the response should contains the following json
     """
     {
-      "id": {"__capture": {"name": "itemSectionId", "type": "integer"}},
+      "id": {"__capture": {"name": "ItemTemplateSectionId", "type": "integer"}},
       "name": "some-name",
       "note": "some-note",
       "categories": [],
@@ -28,6 +28,32 @@ Feature: ItemTemplate
     """
 
   Scenario: Can create an item category
+    Given a JWT for an admin user
+    And an item template section
+
+    When performing a POST to the url "/api/v2/itemTemplateCategories/" with the following json content and the current jwt
+    """
+    {
+      "sectionId": ${ItemTemplateSectionId},
+      "name": "some-name",
+      "techName": "some-tech-name",
+      "description": "some-description",
+      "note": "some-note"
+    }
+    """
+    Then the response status code is 201
+    And the response should contains the following json
+    """
+    {
+      "id": {"__capture": {"name": "ItemTemplateCategoryId", "type": "integer"}},
+      "sectionId": ${ItemTemplateSectionId},
+      "name": "some-name",
+      "techName": "some-tech-name",
+      "description": "some-description",
+      "note": "some-note",
+      "itemTemplates": []
+    }
+    """
 
   Scenario: Can create an item template
 

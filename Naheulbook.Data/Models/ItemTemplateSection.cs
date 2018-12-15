@@ -15,7 +15,6 @@ namespace Naheulbook.Data.Models
         public string Note { get; set; }
         public string Special { get; set; }
 
-        // FIXME: until its mapped
         [NotMapped]
         public ICollection<ItemTemplateCategory> Categories { get; set; }
     }
