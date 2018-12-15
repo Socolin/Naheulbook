@@ -6,6 +6,7 @@ using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Steps;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Newtonsoft.Json.Linq;
+using NUnit.Framework;
 using Socolin.TestsUtils.FakeSmtp;
 
 namespace Naheulbook.Tests.Functional.Code.TestServices
@@ -25,9 +26,17 @@ namespace Naheulbook.Tests.Functional.Code.TestServices
 
         public async Task CreateUserAsync(string username, string password)
         {
-            await _naheulbookHttpClient.PostAsync("/api/v2/users/", new {username, password});
+            var responseMessage = await _naheulbookHttpClient.PostAsync("/api/v2/users/", new {username, password});
+            if (!responseMessage.IsSuccessStatusCode)
+            {
+                var content = responseMessage.Content.ReadAsStringAsync();
+                Assert.Fail($"Failed to create user {username}. StatusCode: {responseMessage.StatusCode} Content:'\n{content}'\n");
+            }
 
-            var activationCode = MailSteps.ParseActivationCodeFromActivationMail(_mailReceiver.Mails.LastOrDefault(m => m.To.Contains(username)));
+            var mail = _mailReceiver.Mails.LastOrDefault(m => m.To.Contains(username));
+            if (mail == null)
+                Assert.Fail($"No mail received for user: {username}");
+            var activationCode = MailSteps.ParseActivationCodeFromActivationMail(mail);
 
             await _naheulbookHttpClient.PostAsync($"/api/v2/users/{username}/validate", new {activationCode});
         }
