@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Naheulbook.Core.Configurations;
+using Naheulbook.Core.Mappers;
 using Naheulbook.Core.Services;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.DbContexts;
@@ -55,11 +56,12 @@ namespace Naheulbook.Web
                 .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<ValidateUserRequest>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(x => x.AddProfiles(typeof(RequestToEntityProfile).Assembly, typeof(Startup).Assembly));
 
             services.AddSingleton<IUnitOfWorkFactory>(new UnitOfWorkFactory(naheulbookDbContextOptionsBuilder.Options));
 
             services.AddSingleton<IEffectService, EffectService>();
+            services.AddSingleton<IItemTemplateService, ItemTemplateService>();
             services.AddSingleton<IItemTemplateCategoryService, ItemTemplateCategoryService>();
             services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();
             services.AddSingleton<IJobService, JobService>();

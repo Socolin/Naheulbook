@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using AutoMapper;
 using Naheulbook.Data.Models;
 using Naheulbook.Web.Responses;
+using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Web.Mappers
 {
@@ -19,6 +19,24 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Stat, opt => opt.MapFrom(se => se.StatName))
                 .ForMember(m => m.Special, opt => opt.Ignore());
 
+            CreateMap<ItemTemplate, ItemTemplateResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data)));
+            CreateMap<ItemTemplateModifier, ItemTemplateModifierResponse>()
+                .ForMember(m => m.JobId, opt => opt.MapFrom(im => im.RequireJobId))
+                .ForMember(m => m.OriginId, opt => opt.MapFrom(im => im.RequireOriginId))
+                .ForMember(m => m.Special, opt => opt.MapFrom(im => MapperHelpers.FromJson<List<string>>(im.Special)))
+                .ForMember(m => m.Stat, opt => opt.MapFrom(im => im.StatName));
+            CreateMap<ItemTemplateRequirement, ItemTemplateRequirementResponse>()
+                .ForMember(m => m.Stat, opt => opt.MapFrom(ir => ir.StatName))
+                .ForMember(m => m.Min, opt => opt.MapFrom(ir => ir.MinValue))
+                .ForMember(m => m.Max, opt => opt.MapFrom(ir => ir.MaxValue));
+            CreateMap<ItemTemplateSkillModifier, ItemTemplateSkillModifierResponse>();
+            CreateMap<ItemTemplateSlot, IdResponse>()
+                .ForMember(m => m.Id, opt => opt.MapFrom(i => i.SlotId));
+            CreateMap<ItemTemplateSkill, IdResponse>()
+                .ForMember(m => m.Id, opt => opt.MapFrom(i => i.SkillId));
+            CreateMap<ItemTemplateUnSkill, IdResponse>()
+                .ForMember(m => m.Id, opt => opt.MapFrom(i => i.SkillId));
             CreateMap<ItemTemplateSection, ItemTemplateSectionResponse>()
                 .ForMember(m => m.Specials, opt => opt.MapFrom(i => i.Special.Split(',', StringSplitOptions.None).ToList()));
             CreateMap<ItemTemplateCategory, ItemTemplateCategoryResponse>();

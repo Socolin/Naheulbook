@@ -1,6 +1,5 @@
 using System;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -52,7 +51,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PostCreateEffect_WhenCatchForbiddenAccessException_Return403()
+        public void PostCreateCategory_WhenCatchForbiddenAccessException_Return403()
         {
             _itemTemplateCategoryService.CreateItemTemplateCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateCategoryRequest>())
                 .Returns(Task.FromException<ItemTemplateCategory>(new ForbiddenAccessException()));

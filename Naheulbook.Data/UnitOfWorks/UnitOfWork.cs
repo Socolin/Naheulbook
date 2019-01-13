@@ -10,11 +10,13 @@ namespace Naheulbook.Data.UnitOfWorks
         IEffectRepository Effects { get; }
         IEffectCategoryRepository EffectCategories { get; }
         IEffectTypeRepository EffectTypes { get; }
+        IItemTemplateRepository ItemTemplates { get; }
         IItemTemplateCategoryRepository ItemTemplateCategories { get; }
         IItemTemplateSectionRepository ItemTemplateSections { get; }
         IJobRepository Jobs { get; }
         IOriginRepository Origins { get; }
         ISkillRepository Skills { get; }
+        ISlotRepository Slots { get; set; }
         IUserRepository Users { get; }
 
         Task<int> CompleteAsync();
@@ -28,24 +30,28 @@ namespace Naheulbook.Data.UnitOfWorks
         {
             _naheulbookDbContext = naheulbookDbContext ?? throw new ArgumentNullException(nameof(naheulbookDbContext));
             Effects = new EffectRepository(naheulbookDbContext);
+            ItemTemplates = new ItemTemplateRepository(naheulbookDbContext);
             ItemTemplateCategories = new ItemTemplateCategoryRepository(naheulbookDbContext);
             ItemTemplateSections = new ItemTemplateSectionRepository(naheulbookDbContext);
             EffectCategories = new EffectCategoryRepository(naheulbookDbContext);
             EffectTypes = new EffectTypeRepository(naheulbookDbContext);
             Jobs = new JobRepository(naheulbookDbContext);
-            Skills = new SkillRepository(naheulbookDbContext);
             Origins = new OriginRepository(naheulbookDbContext);
+            Skills = new SkillRepository(naheulbookDbContext);
+            Slots = new SlotRepository(naheulbookDbContext);
             Users = new UserRepository(naheulbookDbContext);
         }
 
         public IEffectRepository Effects { get; }
         public IEffectTypeRepository EffectTypes { get; }
         public IEffectCategoryRepository EffectCategories { get; }
+        public IItemTemplateRepository ItemTemplates { get; }
         public IItemTemplateCategoryRepository ItemTemplateCategories { get; }
         public IItemTemplateSectionRepository ItemTemplateSections { get; }
         public IJobRepository Jobs { get; }
         public IOriginRepository Origins { get; }
         public ISkillRepository Skills { get; }
+        public ISlotRepository Slots { get; set; }
         public IUserRepository Users { get; }
 
         public Task<int> CompleteAsync()

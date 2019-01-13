@@ -18,5 +18,10 @@ namespace Naheulbook.Tests.Functional.Code.TestServices
         {
             return _naheulbookHttpClient.PostAndParseJsonResultAsync<ItemTemplateSectionResponse>("/api/v2/itemTemplateSections", request, jwt);
         }
+
+        public Task<ItemTemplateCategoryResponse> CreateEffectCategoryAsync(CreateItemTemplateCategoryRequest request, string jwt)
+        {
+            return _naheulbookHttpClient.PostAndParseJsonResultAsync<ItemTemplateCategoryResponse>("/api/v2/itemTemplateCategories", request, jwt);
+        }
     }
 }

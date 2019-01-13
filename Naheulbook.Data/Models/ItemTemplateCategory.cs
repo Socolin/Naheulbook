@@ -1,10 +1,15 @@
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Naheulbook.Data.Models
 {
     public class ItemTemplateCategory
     {
+        public ItemTemplateCategory()
+        {
+            ItemTemplates = new HashSet<ItemTemplate>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -14,8 +19,6 @@ namespace Naheulbook.Data.Models
         public int SectionId { get; set; }
         public ItemTemplateSection Section { get; set; }
 
-        // FIXME: temp until ItemTemplate is configured in ef context
-        [NotMapped]
-        public Collection<ItemTemplate> ItemTemplates { get; set; }
+        public ICollection<ItemTemplate> ItemTemplates { get; set; }
     }
 }

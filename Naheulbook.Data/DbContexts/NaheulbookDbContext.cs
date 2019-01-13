@@ -11,6 +11,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Origin> Origins { get; set; }
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<Slot> Slots { get; set; }
         public DbSet<User> Users { get; set; }
 
         public NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options)
@@ -25,8 +26,16 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new EffectModifierConfiguration());
             modelBuilder.ApplyConfiguration(new EffectTypeConfiguration());
 
+            modelBuilder.ApplyConfiguration(new ItemTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new ItemTemplateCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemTemplateModifierConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemTemplateRequirementConfiguration());
             modelBuilder.ApplyConfiguration(new ItemTemplateSectionConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemTemplateSkillConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemTemplateSkillModifiersConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemTemplateSlotConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemTemplateUnSkillConfiguration());
+            modelBuilder.ApplyConfiguration(new SlotConfiguration());
 
             modelBuilder.ApplyConfiguration(new JobConfiguration());
             modelBuilder.ApplyConfiguration(new JobBonusConfiguration());
