@@ -30,15 +30,14 @@ namespace Naheulbook.Web.Responses
         public int? TimeDuration { get; set; }
 
         [JsonProperty("dice")]
-        public long Dice { get; set; }
+        public int Dice { get; set; }
 
         [JsonProperty("categoryId")]
-        public long CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         [JsonProperty("modifiers")]
         public IList<StatModifierResponse> Modifiers { get; set; }
     }
-
 
     public class EffectTypeResponse
     {
@@ -70,6 +69,6 @@ namespace Naheulbook.Web.Responses
         public string Note { get; set; }
 
         [JsonProperty("typeId")]
-        public long TypeId { get; set; }
+        public int TypeId { get; set; }
     }
 }

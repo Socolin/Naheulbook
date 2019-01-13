@@ -5,7 +5,7 @@ namespace Naheulbook.Web.Responses
 {
     public class ItemTemplateSectionResponse
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Note { get; set; }
         public List<string> Specials { get; set; }

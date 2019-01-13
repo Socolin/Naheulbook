@@ -5,7 +5,7 @@ namespace Naheulbook.Web.Responses
 {
     public class JobResponse
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         [JsonProperty("internalname")]
         public string InternalName { get; set; }

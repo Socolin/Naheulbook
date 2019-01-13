@@ -2,12 +2,12 @@ namespace Naheulbook.Data.Models
 {
     public class JobOriginWhitelist
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
-        public long JobId { get; set; }
+        public int JobId { get; set; }
         public Job Job { get; set; }
 
-        public long OriginId { get; set; }
+        public int OriginId { get; set; }
         public Origin Origin { get; set; }
     }
 }

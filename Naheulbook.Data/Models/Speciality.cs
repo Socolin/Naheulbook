@@ -10,12 +10,12 @@ namespace Naheulbook.Data.Models
             Specials = new HashSet<SpecialitySpecial>();
         }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Flags { get; set; }
 
-        public long JobId { get; set; }
+        public int JobId { get; set; }
         public virtual Job Job { get; set; }
 
         public ICollection<SpecialityModifier> Modifiers { get; set; }

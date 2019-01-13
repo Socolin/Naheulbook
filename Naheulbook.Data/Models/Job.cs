@@ -15,7 +15,7 @@ namespace Naheulbook.Data.Models
             Specialities = new HashSet<Speciality>();
         }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string InternalName { get; set; }
         public string Information { get; set; }
@@ -23,7 +23,7 @@ namespace Naheulbook.Data.Models
         public string PlayerSummary { get; set; }
         public string Flags { get; set; }
 
-        public long? MaxLoad { get; set; }
+        public int? MaxLoad { get; set; }
         public short? MaxArmorPr { get; set; }
         public bool? IsMagic { get; set; }
         public short? BaseEv { get; set; }
@@ -34,7 +34,7 @@ namespace Naheulbook.Data.Models
         public short? BaseAt { get; set; }
         public short? BasePrd { get; set; }
 
-        public long? ParentJobId { get; set; }
+        public int? ParentJobId { get; set; }
         public Job ParentJob { get; set; }
 
         public ICollection<JobBonus> Bonuses { get; set; }

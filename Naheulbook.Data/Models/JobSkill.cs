@@ -4,10 +4,10 @@ namespace Naheulbook.Data.Models
     {
         public bool Default { get; set; }
 
-        public long JobId { get; set; }
+        public int JobId { get; set; }
         public virtual Job Job { get; set; }
 
-        public long SkillId { get; set; }
+        public int SkillId { get; set; }
         public virtual Skill Skill { get; set; }
     }
 }

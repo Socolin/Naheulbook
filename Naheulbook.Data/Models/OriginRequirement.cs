@@ -2,12 +2,12 @@ namespace Naheulbook.Data.Models
 {
     public class OriginRequirement
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
-        public long? MinValue { get; set; }
-        public long? MaxValue { get; set; }
+        public int? MinValue { get; set; }
+        public int? MaxValue { get; set; }
 
-        public long OriginId { get; set; }
+        public int OriginId { get; set; }
         public Origin Origin { get; set; }
 
         public string StatName { get; set; }

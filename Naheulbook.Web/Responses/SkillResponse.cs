@@ -4,7 +4,7 @@ namespace Naheulbook.Web.Responses
 {
     public class SkillResponse
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string PlayerDescription { get; set; }
@@ -21,7 +21,7 @@ namespace Naheulbook.Web.Responses
     public class SkillEffectResponse
     {
         public string Stat { get; set; }
-        public long Value { get; set; }
+        public int Value { get; set; }
         public string Type { get; set; }
     }
 }

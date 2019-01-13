@@ -13,12 +13,12 @@ namespace Naheulbook.Data.Models
             Skills = new HashSet<OriginSkill>();
         }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string PlayerDescription { get; set; }
         public string PlayerSummary { get; set; }
-        public long? MaxLoad { get; set; }
+        public int? MaxLoad { get; set; }
         public short? MaxArmorPr { get; set; }
         public string Advantage { get; set; }
         public short? BaseEv { get; set; }
