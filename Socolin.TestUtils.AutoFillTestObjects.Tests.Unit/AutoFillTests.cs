@@ -8,10 +8,10 @@ namespace Socolin.TestUtils.AutoFillTestObjects.Tests.Unit
         private class TestIntClass
         {
             public int IntValue { get; set; }
-            public char ShortValue { get; set; }
-            public byte CharValue { get; set; }
-            public short LongValue { get; set; }
-            public long ByteValue { get; set; }
+            public short ShortValue { get; set; }
+            public char CharValue { get; set; }
+            public long LongValue { get; set; }
+            public byte ByteValue { get; set; }
             public float FloatValue { get; set; }
             public double DoubleValue { get; set; }
             public decimal DecimalValue { get; set; }
