@@ -54,9 +54,9 @@ namespace Naheulbook.Web
 
             services.AddMvc()
                 .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<ValidateUserRequest>())
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddAutoMapper(x => x.AddProfiles(typeof(RequestToEntityProfile).Assembly, typeof(Startup).Assembly));
+            services.AddAutoMapper(typeof(RequestToEntityProfile).Assembly, typeof(Startup).Assembly);
 
             services.AddSingleton<IUnitOfWorkFactory>(new UnitOfWorkFactory(naheulbookDbContextOptionsBuilder.Options));
 

@@ -3,14 +3,13 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Naheulbook.Tests.Functional.Code.Extensions;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Socolin.TestUtils.JsonComparer;
+using Socolin.TestUtils.JsonComparer.NUnitExtensions;
 using TechTalk.SpecFlow;
-using Is = Socolin.TestUtils.JsonComparer.NUnitExtensions.Is;
 
 namespace Naheulbook.Tests.Functional.Code.Steps
 {
@@ -77,7 +76,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         {
             var jsonContent = _scenarioContext.GetLastJsonHttpResponseContent();
 
-            Assert.That(jsonContent, Is.JsonEquivalent(expectedJson).WithComparer(_jsonComparer));
+            Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(_jsonComparer));
         }
 
         [Then(@"the response should contains a json array containing the following element identified by (.+)")]
@@ -97,7 +96,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 if (identityValue != ((JValue) actualObject.Property(identityField).Value).Value<long>())
                     continue;
 
-                Assert.That(element, Is.JsonEquivalent(expectedObject).WithComparer(_jsonComparer));
+                Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(_jsonComparer));
                 return;
             }
 
