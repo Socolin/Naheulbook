@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-        <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
@@ -19,23 +18,17 @@
         </PackageReference>
         <PackageReference Include="Socolin.TestUtils.JsonComparer" Version="1.5.0" />
         <PackageReference Include="Socolin.TestUtils.JsonComparer.NUnitExtensions" Version="1.3.0" />
-        <PackageReference Include="SpecFlow" Version="3.0.213" />
-        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.213" />
+        <PackageReference Include="SpecFlow" Version="3.0.220" />
+        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.220" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Content Include="Functionals/*.feature" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
         <ProjectReference Include="..\Naheulbook.Web\Naheulbook.Web.csproj" />
         <ProjectReference Include="..\Socolin.TestUtils.AutoFillTestObjects\Socolin.TestUtils.AutoFillTestObjects.csproj" />
-    </ItemGroup>
-
-    <Target Name="AfterUpdateFeatureFilesInProject">
-        <!-- include any files that specflow generated into the compilation of the project -->
-        <ItemGroup>
-            <Compile Include="**\*.feature.cs" />
-        </ItemGroup>
-    </Target>
-    <ItemGroup>
-        <UpToDateCheckInput Include="Functionals\*.feature" />
     </ItemGroup>
 </Project>
