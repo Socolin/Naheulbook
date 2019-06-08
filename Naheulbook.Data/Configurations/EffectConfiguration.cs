@@ -79,7 +79,7 @@ namespace Naheulbook.Data.Configurations
                 .HasMaxLength(255);
 
             builder.Property(e => e.Note)
-                .IsRequired()
+                .IsRequired(false)
                 .HasColumnName("note");
 
             builder.HasOne(d => d.Type)
