@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
+using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
@@ -28,11 +29,14 @@ namespace Naheulbook.Web.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
-        public async Task<JsonResult> PostCreateEffectAsync(CreateEffectRequest request)
+        public async Task<JsonResult> PostCreateEffectAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            CreateEffectRequest request
+        )
         {
             try
             {
-                var effect = await _effectService.CreateEffectAsync(HttpContext.GetExecutionContext(), request);
+                var effect = await _effectService.CreateEffectAsync(executionContext, request);
                 var effectResponse = _mapper.Map<EffectResponse>(effect);
                 return new JsonResult(effectResponse)
                 {
@@ -47,11 +51,15 @@ namespace Naheulbook.Web.Controllers
 
         [HttpPut("{effectId:int:min(1)}")]
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
-        public async Task<StatusCodeResult> PutEditEffectAsync(int effectId, CreateEffectRequest request)
+        public async Task<StatusCodeResult> PutEditEffectAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            int effectId,
+            CreateEffectRequest request
+        )
         {
             try
             {
-                await _effectService.EditEffectAsync(HttpContext.GetExecutionContext(), effectId, request);
+                await _effectService.EditEffectAsync(executionContext, effectId, request);
                 return NoContent();
             }
             catch (ForbiddenAccessException ex)

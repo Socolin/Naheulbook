@@ -18,11 +18,12 @@ using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers
 {
-    public class EffectControllerTests : BaseControllerTests
+    public class EffectControllerTests
     {
         private IEffectService _effectService;
         private IMapper _mapper;
         private EffectCategoriesController _effectCategoriesController;
+        private NaheulbookExecutionContext _executionContext;
 
         [SetUp]
         public void SetUp()
@@ -30,7 +31,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService = Substitute.For<IEffectService>();
             _mapper = Substitute.For<IMapper>();
             _effectCategoriesController = new EffectCategoriesController(_effectService, _mapper);
-            MockHttpContext(_effectCategoriesController);
+            _executionContext = new NaheulbookExecutionContext();
         }
 
         [Test]
@@ -56,12 +57,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var effectCategory = new EffectCategory();
             var expectedEffectCategoryResponse = new EffectCategoryResponse();
 
-            _effectService.CreateEffectCategoryAsync(ExecutionContext, request)
+            _effectService.CreateEffectCategoryAsync(_executionContext, request)
                 .Returns(effectCategory);
             _mapper.Map<EffectCategoryResponse>(effectCategory)
                 .Returns(expectedEffectCategoryResponse);
 
-            var result = await _effectCategoriesController.PostCreateCategoryAsync(request);
+            var result = await _effectCategoriesController.PostCreateCategoryAsync(_executionContext, request);
 
             result.StatusCode.Should().Be(201);
             result.Value.Should().Be(expectedEffectCategoryResponse);
@@ -73,7 +74,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService.CreateEffectCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectCategoryRequest>())
                 .Returns(Task.FromException<EffectCategory>(new ForbiddenAccessException()));
 
-            Func<Task<JsonResult>> act = () => _effectCategoriesController.PostCreateCategoryAsync(CreateEffectCategoryRequest());
+            Func<Task<JsonResult>> act = () => _effectCategoriesController.PostCreateCategoryAsync(_executionContext, CreateEffectCategoryRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }

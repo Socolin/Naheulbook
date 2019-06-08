@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
+using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
@@ -27,11 +28,14 @@ namespace Naheulbook.Web.Controllers
 
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost]
-        public async Task<JsonResult> PostCreateItemTemplateAsync(CreateItemTemplateRequest request)
+        public async Task<JsonResult> PostCreateItemTemplateAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            CreateItemTemplateRequest request
+        )
         {
             try
             {
-                var itemTemplate = await _itemTemplateService.CreateItemTemplateAsync(HttpContext.GetExecutionContext(), request);
+                var itemTemplate = await _itemTemplateService.CreateItemTemplateAsync(executionContext, request);
                 var itemTemplateResponse = _mapper.Map<ItemTemplateResponse>(itemTemplate);
                 return new JsonResult(itemTemplateResponse)
                 {

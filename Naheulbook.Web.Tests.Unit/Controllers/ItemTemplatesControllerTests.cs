@@ -17,11 +17,12 @@ using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers
 {
-    public class ItemTemplatesControllerTests : BaseControllerTests
+    public class ItemTemplatesControllerTests
     {
         private IItemTemplateService _itemTemplateService;
         private IMapper _mapper;
         private ItemTemplatesController _itemTemplatesController;
+        private NaheulbookExecutionContext _executionContext;
 
         [SetUp]
         public void SetUp()
@@ -29,7 +30,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _itemTemplateService = Substitute.For<IItemTemplateService>();
             _mapper = Substitute.For<IMapper>();
             _itemTemplatesController = new ItemTemplatesController(_itemTemplateService, _mapper);
-            MockHttpContext(_itemTemplatesController);
+            _executionContext = new NaheulbookExecutionContext();
         }
 
         [Test]
@@ -39,12 +40,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var itemTemplate = new ItemTemplate();
             var itemTemplateResponse = new ItemTemplateResponse();
 
-            _itemTemplateService.CreateItemTemplateAsync(ExecutionContext, createItemTemplateRequest)
+            _itemTemplateService.CreateItemTemplateAsync(_executionContext, createItemTemplateRequest)
                 .Returns(itemTemplate);
             _mapper.Map<ItemTemplateResponse>(itemTemplate)
                 .Returns(itemTemplateResponse);
 
-            var result = await _itemTemplatesController.PostCreateItemTemplateAsync(createItemTemplateRequest);
+            var result = await _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, createItemTemplateRequest);
 
             result.StatusCode.Should().Be(201);
             result.Value.Should().Be(itemTemplateResponse);
@@ -56,7 +57,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _itemTemplateService.CreateItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateRequest>())
                 .Returns(Task.FromException<ItemTemplate>(new ForbiddenAccessException()));
 
-            Func<Task<JsonResult>> act = () => _itemTemplatesController.PostCreateItemTemplateAsync(new CreateItemTemplateRequest());
+            Func<Task<JsonResult>> act = () => _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, new CreateItemTemplateRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }

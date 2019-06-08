@@ -2,13 +2,12 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
+using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
 
@@ -43,11 +42,13 @@ namespace Naheulbook.Web.Controllers
 
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost]
-        public async Task<JsonResult> PostCreateCategoryAsync(CreateEffectCategoryRequest request)
+        public async Task<JsonResult> PostCreateCategoryAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            CreateEffectCategoryRequest request
+        )
         {
             try
             {
-                var executionContext = HttpContext.GetExecutionContext();
                 var effectCategory = await _effectService.CreateEffectCategoryAsync(executionContext, request);
                 var effectCategoryResponse = _mapper.Map<EffectCategoryResponse>(effectCategory);
                 return new JsonResult(effectCategoryResponse) {StatusCode = (int) HttpStatusCode.Created};

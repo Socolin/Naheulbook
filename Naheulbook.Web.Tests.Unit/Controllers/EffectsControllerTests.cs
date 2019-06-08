@@ -17,11 +17,12 @@ using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers
 {
-    public class EffectsControllerTests : BaseControllerTests
+    public class EffectsControllerTests
     {
         private IEffectService _effectService;
         private IMapper _mapper;
         private EffectsController _effectsController;
+        private NaheulbookExecutionContext _executionContext;
 
         [SetUp]
         public void SetUp()
@@ -29,7 +30,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService = Substitute.For<IEffectService>();
             _mapper = Substitute.For<IMapper>();
             _effectsController = new EffectsController(_effectService, _mapper);
-            MockHttpContext(_effectsController);
+            _executionContext = new NaheulbookExecutionContext();
         }
 
         [Test]
@@ -39,12 +40,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var expectedEffectResponse = new EffectResponse();
             var effect = new Effect {Id = 42};
 
-            _effectService.CreateEffectAsync(ExecutionContext, createEffectRequest)
+            _effectService.CreateEffectAsync(_executionContext, createEffectRequest)
                 .Returns(effect);
             _mapper.Map<EffectResponse>(effect)
                 .Returns(expectedEffectResponse);
 
-            var result = await _effectsController.PostCreateEffectAsync(createEffectRequest);
+            var result = await _effectsController.PostCreateEffectAsync(_executionContext, createEffectRequest);
 
             result.StatusCode.Should().Be(201);
             result.Value.Should().Be(expectedEffectResponse);
@@ -56,7 +57,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService.CreateEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectRequest>())
                 .Returns(Task.FromException<Effect>(new ForbiddenAccessException()));
 
-            Func<Task<JsonResult>> act = () => _effectsController.PostCreateEffectAsync(new CreateEffectRequest());
+            Func<Task<JsonResult>> act = () => _effectsController.PostCreateEffectAsync(_executionContext, new CreateEffectRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
@@ -71,11 +72,11 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _mapper.Map<EffectResponse>(effect)
                 .Returns(expectedEffectResponse);
 
-            var result = await _effectsController.PutEditEffectAsync(42, createEffectRequest);
+            var result = await _effectsController.PutEditEffectAsync(_executionContext, 42, createEffectRequest);
 
             result.StatusCode.Should().Be(204);
             await _effectService.Received(1)
-                .EditEffectAsync(ExecutionContext, 42, createEffectRequest);
+                .EditEffectAsync(_executionContext, 42, createEffectRequest);
         }
 
         [Test]
@@ -84,7 +85,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateEffectRequest>())
                 .Returns(Task.FromException<Effect>(new ForbiddenAccessException()));
 
-            Func<Task<StatusCodeResult>> act = () => _effectsController.PutEditEffectAsync(42, new CreateEffectRequest());
+            Func<Task<StatusCodeResult>> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new CreateEffectRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
@@ -95,7 +96,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateEffectRequest>())
                 .Returns(Task.FromException<Effect>(new EffectNotFoundException()));
 
-            Func<Task<StatusCodeResult>> act = () => _effectsController.PutEditEffectAsync(42, new CreateEffectRequest());
+            Func<Task<StatusCodeResult>> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new CreateEffectRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }

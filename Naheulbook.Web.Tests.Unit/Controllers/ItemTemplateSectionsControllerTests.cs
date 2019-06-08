@@ -17,11 +17,12 @@ using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers
 {
-    public class ItemTemplateSectionsControllerTests : BaseControllerTests
+    public class ItemTemplateSectionsControllerTests
     {
         private IItemTemplateSectionService _itemTemplateSectionService;
         private IMapper _mapper;
         private ItemTemplateSectionsController _itemTemplateSectionsController;
+        private NaheulbookExecutionContext _executionContext;
 
         [SetUp]
         public void SetUp()
@@ -29,7 +30,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _itemTemplateSectionService = Substitute.For<IItemTemplateSectionService>();
             _mapper = Substitute.For<IMapper>();
             _itemTemplateSectionsController = new ItemTemplateSectionsController(_itemTemplateSectionService, _mapper);
-            MockHttpContext(_itemTemplateSectionsController);
+            _executionContext = new NaheulbookExecutionContext();
         }
 
         [Test]
@@ -39,12 +40,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var itemTemplateSection = new ItemTemplateSection();
             var itemTemplateSectionResponse = new ItemTemplateSectionResponse();
 
-            _itemTemplateSectionService.CreateItemTemplateSectionAsync(ExecutionContext, createItemTemplateSectionRequest)
+            _itemTemplateSectionService.CreateItemTemplateSectionAsync(_executionContext, createItemTemplateSectionRequest)
                 .Returns(itemTemplateSection);
             _mapper.Map<ItemTemplateSectionResponse>(itemTemplateSection)
                 .Returns(itemTemplateSectionResponse);
 
-            var result = await _itemTemplateSectionsController.PostCreateSectionAsync(createItemTemplateSectionRequest);
+            var result = await _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, createItemTemplateSectionRequest);
 
             result.StatusCode.Should().Be(201);
             result.Value.Should().Be(itemTemplateSectionResponse);
@@ -56,7 +57,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _itemTemplateSectionService.CreateItemTemplateSectionAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateSectionRequest>())
                 .Returns(Task.FromException<ItemTemplateSection>(new ForbiddenAccessException()));
 
-            Func<Task<JsonResult>> act = () => _itemTemplateSectionsController.PostCreateSectionAsync(new CreateItemTemplateSectionRequest());
+            Func<Task<JsonResult>> act = () => _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, new CreateItemTemplateSectionRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }

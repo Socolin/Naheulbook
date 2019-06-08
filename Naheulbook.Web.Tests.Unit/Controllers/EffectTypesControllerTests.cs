@@ -17,11 +17,12 @@ using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers
 {
-    public class EffectTypesControllerTests : BaseControllerTests
+    public class EffectTypesControllerTests
     {
         private IEffectService _effectService;
         private IMapper _mapper;
         private EffectTypesController _effectTypesController;
+        private NaheulbookExecutionContext _executionContext;
 
         [SetUp]
         public void SetUp()
@@ -29,7 +30,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService = Substitute.For<IEffectService>();
             _mapper = Substitute.For<IMapper>();
             _effectTypesController = new EffectTypesController(_effectService, _mapper);
-            MockHttpContext(_effectTypesController);
+            _executionContext = new NaheulbookExecutionContext();
         }
 
         [Test]
@@ -39,12 +40,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var effectType = new EffectType();
             var effectTypeResponse = new EffectTypeResponse();
 
-            _effectService.CreateEffectTypeAsync(ExecutionContext, createEffectTypeRequest)
+            _effectService.CreateEffectTypeAsync(_executionContext, createEffectTypeRequest)
                 .Returns(effectType);
             _mapper.Map<EffectTypeResponse>(effectType)
                 .Returns(effectTypeResponse);
 
-            var result = await _effectTypesController.PostCreateTypeAsync(createEffectTypeRequest);
+            var result = await _effectTypesController.PostCreateTypeAsync(_executionContext, createEffectTypeRequest);
 
             result.StatusCode.Should().Be(201);
             result.Value.Should().Be(effectTypeResponse);
@@ -56,7 +57,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService.CreateEffectTypeAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectTypeRequest>())
                 .Returns(Task.FromException<EffectType>(new ForbiddenAccessException()));
 
-            Func<Task<JsonResult>> act = () =>  _effectTypesController.PostCreateTypeAsync(new CreateEffectTypeRequest());
+            Func<Task<JsonResult>> act = () =>  _effectTypesController.PostCreateTypeAsync(_executionContext, new CreateEffectTypeRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }

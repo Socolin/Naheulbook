@@ -17,11 +17,12 @@ using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers
 {
-    public class ItemTemplateCategoriesControllerTests : BaseControllerTests
+    public class ItemTemplateCategoriesControllerTests
     {
         private IItemTemplateCategoryService _itemTemplateCategoryService;
         private IMapper _mapper;
         private ItemTemplateCategoriesController _itemTemplateCategoriesController;
+        private NaheulbookExecutionContext _executionContext;
 
         [SetUp]
         public void SetUp()
@@ -29,7 +30,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _itemTemplateCategoryService = Substitute.For<IItemTemplateCategoryService>();
             _mapper = Substitute.For<IMapper>();
             _itemTemplateCategoriesController = new ItemTemplateCategoriesController(_itemTemplateCategoryService, _mapper);
-            MockHttpContext(_itemTemplateCategoriesController);
+            _executionContext = new NaheulbookExecutionContext();
         }
 
         [Test]
@@ -39,12 +40,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var itemTemplateCategory = new ItemTemplateCategory();
             var itemTemplateCategoryResponse = new ItemTemplateCategoryResponse();
 
-            _itemTemplateCategoryService.CreateItemTemplateCategoryAsync(ExecutionContext, createItemTemplateCategoryRequest)
+            _itemTemplateCategoryService.CreateItemTemplateCategoryAsync(_executionContext, createItemTemplateCategoryRequest)
                 .Returns(itemTemplateCategory);
             _mapper.Map<ItemTemplateCategoryResponse>(itemTemplateCategory)
                 .Returns(itemTemplateCategoryResponse);
 
-            var result = await _itemTemplateCategoriesController.PostCreateCategoryAsync(createItemTemplateCategoryRequest);
+            var result = await _itemTemplateCategoriesController.PostCreateCategoryAsync(_executionContext, createItemTemplateCategoryRequest);
 
             result.StatusCode.Should().Be(201);
             result.Value.Should().Be(itemTemplateCategoryResponse);
@@ -56,7 +57,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _itemTemplateCategoryService.CreateItemTemplateCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateCategoryRequest>())
                 .Returns(Task.FromException<ItemTemplateCategory>(new ForbiddenAccessException()));
 
-            Func<Task<JsonResult>> act = () => _itemTemplateCategoriesController.PostCreateCategoryAsync(new CreateItemTemplateCategoryRequest());
+            Func<Task<JsonResult>> act = () => _itemTemplateCategoriesController.PostCreateCategoryAsync(_executionContext, new CreateItemTemplateCategoryRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
