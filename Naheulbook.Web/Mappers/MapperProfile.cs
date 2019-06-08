@@ -40,6 +40,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<ItemTemplateSection, ItemTemplateSectionResponse>()
                 .ForMember(m => m.Specials, opt => opt.MapFrom(i => i.Special.Split(',', StringSplitOptions.None).ToList()));
             CreateMap<ItemTemplateCategory, ItemTemplateCategoryResponse>();
+            CreateMap<Slot, ItemSlotResponse>();
 
             CreateMap<Job, JobResponse>()
                 .ForMember(m => m.Requirements, opt => opt.MapFrom(j => j.Requirements.OrderBy(r => r.Id)))
