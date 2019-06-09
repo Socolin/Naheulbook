@@ -25,6 +25,11 @@ namespace Naheulbook.TestUtils
             return _allEntities.OfType<T>().Single();
         }
 
+        public bool Contains<T>()
+        {
+            return _allEntities.OfType<T>().Any();
+        }
+
         public T GetLast<T>()
         {
             var last = _allEntities.OfType<T>().LastOrDefault();

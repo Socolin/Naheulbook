@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.TestServices;
+using Naheulbook.Tests.Functional.Code.Utils;
+using Naheulbook.TestUtils;
 using Socolin.TestUtils.AutoFillTestObjects;
 using TechTalk.SpecFlow;
 
@@ -11,49 +14,40 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
     [Binding]
     public class EffectSteps
     {
-        private readonly ScenarioContext _scenarioContext;
         private readonly EffectTestService _effectTestService;
+        private readonly TestDataUtil _testDataUtil;
 
-        public EffectSteps(ScenarioContext scenarioContext, EffectTestService effectTestService)
+        public EffectSteps(EffectTestService effectTestService, TestDataUtil testDataUtil)
         {
-            _scenarioContext = scenarioContext;
             _effectTestService = effectTestService;
+            _testDataUtil = testDataUtil;
         }
 
         [Given("an effect type")]
-        public async Task GivenAnEffectType()
+        public void GivenAnEffectType()
         {
-            var createEffectTypeRequest = AutoFill<CreateEffectTypeRequest>.One(AutoFillFlags.RandomizeString);
-            var effectType = await _effectTestService.CreateEffectTypeAsync(createEffectTypeRequest, _scenarioContext.GetJwt());
-
-            _scenarioContext.SetEffectTypeId(effectType.Id);
+            _testDataUtil.AddEffectType();
         }
 
-        [Given("an effect category")]
-        public async Task GivenAnEffectCategory()
+        [Given(@"(an|\d+) effects? categor(?:y|ies)")]
+        public void GivenAnEffectCategory(string amount)
         {
-            await GivenAnEffectType();
-
-            var createEffectCategoryRequest = AutoFill<CreateEffectCategoryRequest>.One(AutoFillFlags.RandomizeString);
-            createEffectCategoryRequest.TypeId = _scenarioContext.GetEffectTypeId();
-            var effectCategory = await _effectTestService.CreateEffectCategoryAsync(createEffectCategoryRequest, _scenarioContext.GetJwt());
-
-            _scenarioContext.SetEffectCategoryId(effectCategory.Id);
+            if (!_testDataUtil.Contains<EffectType>())
+                _testDataUtil.AddEffectType();
+            for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
+                _testDataUtil.AddEffectCategory();
         }
 
-        [Given("an effect")]
-        public async Task GivenAnEffect()
+        [Given(@"(an|\d+) effects?")]
+        public void GivenAnEffect(string amount)
         {
-            await GivenAnEffectCategory();
+            if (!_testDataUtil.Contains<EffectType>())
+                _testDataUtil.AddEffectType();
+            if (!_testDataUtil.Contains<EffectCategory>())
+                _testDataUtil.AddEffectCategory();
 
-            var createEffectRequest = AutoFill<CreateEffectRequest>.One(AutoFillFlags.RandomizeString);
-            createEffectRequest.CategoryId = _scenarioContext.GetEffectTypeId();
-            createEffectRequest.Modifiers[0].Stat = "FO";
-            createEffectRequest.Modifiers[1].Stat = "INT";
-            createEffectRequest.Modifiers[2].Stat = "CHA";
-            var effect = await _effectTestService.CreateEffectAsync(createEffectRequest, _scenarioContext.GetJwt());
-
-            _scenarioContext.SetEffectId(effect.Id);
+            for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
+                _testDataUtil.AddEffect();
         }
     }
 }
