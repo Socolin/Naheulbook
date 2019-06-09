@@ -7,7 +7,7 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.TestUtils
 {
-    public class TestDataUtil : IDisposable
+    public partial class TestDataUtil : IDisposable
     {
         private readonly List<object> _allEntities;
         private readonly DefaultEntityCreator _defaultEntityCreator;
@@ -42,42 +42,6 @@ namespace Naheulbook.TestUtils
         {
             return _allEntities.OfType<T>().ElementAt(idx);
         }
-
-        public TestDataUtil AddSlot(Action<Slot> customizer = null)
-        {
-            return SaveEntity(_defaultEntityCreator.CreateSlot(), customizer);
-        }
-
-        public TestDataUtil AddItemTemplateSection(Action<ItemTemplateSection> customizer = null)
-        {
-            return SaveEntity(_defaultEntityCreator.CreateItemTemplateSection(), customizer);
-        }
-
-        public TestDataUtil AddItemTemplateCategory(Action<ItemTemplateCategory> customizer = null)
-        {
-            return SaveEntity(_defaultEntityCreator.CreateItemTemplateCategory(GetLast<ItemTemplateSection>()), customizer);
-        }
-
-        public TestDataUtil AddItemTemplate(Action<ItemTemplate> customizer = null)
-        {
-            return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateCategory>()), customizer);
-        }
-
-        public TestDataUtil AddMonsterType(Action<MonsterType> customizer = null)
-        {
-            return SaveEntity(_defaultEntityCreator.CreateMonsterType(), customizer);
-        }
-
-        public TestDataUtil AddMonsterCategory(Action<MonsterCategory> customizer = null)
-        {
-            return SaveEntity(_defaultEntityCreator.CreateMonsterCategory(GetLast<MonsterType>()), customizer);
-        }
-
-        public TestDataUtil AddLocation(Action<Location> customizer = null)
-        {
-            return SaveEntity(_defaultEntityCreator.CreateLocation(), customizer);
-        }
-
 
         private TestDataUtil SaveEntity<T>(T entity, Action<T> customizer)
             where T : class

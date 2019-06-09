@@ -5,7 +5,7 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.TestUtils
 {
-    public class DefaultEntityCreator
+    public partial class DefaultEntityCreator
     {
         public ItemTemplate CreateItemTemplate(ItemTemplateCategory category, string suffix = null)
         {
@@ -51,32 +51,6 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public MonsterCategory CreateMonsterCategory(MonsterType monsterType, string suffix = null)
-        {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
-
-            return new MonsterCategory
-            {
-                MonsterTemplates = new List<MonsterTemplate>(),
-                Name = $"some-name-{suffix}",
-                Type = monsterType,
-                TypeId = monsterType.Id
-            };
-        }
-
-        public MonsterType CreateMonsterType(string suffix = null)
-        {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
-
-            return new MonsterType()
-            {
-                Name = $"some-monster-type-name-{suffix}",
-                Categories = new List<MonsterCategory>()
-            };
-        }
-
         public Slot CreateSlot(string suffix = null)
         {
             if (suffix == null)
@@ -87,19 +61,6 @@ namespace Naheulbook.TestUtils
                 Count = 1,
                 Name = $"some-name-{suffix}",
                 TechName = $"some-tech-name-{suffix}"
-            };
-        }
-
-        public Location CreateLocation(Location parent = null, string suffix = null)
-        {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
-
-            return new Location
-            {
-                Name = $"some-name-{suffix}",
-                Data = "{}",
-                Parent = parent
             };
         }
     }
