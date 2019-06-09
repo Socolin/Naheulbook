@@ -14,6 +14,10 @@ namespace Naheulbook.Data.UnitOfWorks
         IItemTemplateCategoryRepository ItemTemplateCategories { get; }
         IItemTemplateSectionRepository ItemTemplateSections { get; }
         IJobRepository Jobs { get; }
+        ILocationRepository Locations { get; }
+        IMonsterTypeRepository  MonsterTypes { get; }
+        IMonsterCategoryRepository MonsterCategories { get; }
+        IMonsterTemplateRepository MonsterTemplates { get; }
         IOriginRepository Origins { get; }
         ISkillRepository Skills { get; }
         ISlotRepository Slots { get; }
@@ -36,6 +40,10 @@ namespace Naheulbook.Data.UnitOfWorks
             EffectCategories = new EffectCategoryRepository(naheulbookDbContext);
             EffectTypes = new EffectTypeRepository(naheulbookDbContext);
             Jobs = new JobRepository(naheulbookDbContext);
+            Locations = new LocationRepository(naheulbookDbContext);
+            MonsterTypes = new MonsterTypeRepository(naheulbookDbContext);
+            MonsterCategories = new MonsterCategoryRepository(naheulbookDbContext);
+            MonsterTemplates = new MonsterTemplateRepository(naheulbookDbContext);
             Origins = new OriginRepository(naheulbookDbContext);
             Skills = new SkillRepository(naheulbookDbContext);
             Slots = new SlotRepository(naheulbookDbContext);
@@ -49,6 +57,10 @@ namespace Naheulbook.Data.UnitOfWorks
         public IItemTemplateCategoryRepository ItemTemplateCategories { get; }
         public IItemTemplateSectionRepository ItemTemplateSections { get; }
         public IJobRepository Jobs { get; }
+        public ILocationRepository Locations { get; }
+        public IMonsterTypeRepository MonsterTypes { get; }
+        public IMonsterCategoryRepository MonsterCategories { get; }
+        public IMonsterTemplateRepository MonsterTemplates { get; }
         public IOriginRepository Origins { get; }
         public ISkillRepository Skills { get; }
         public ISlotRepository Slots { get; set; }

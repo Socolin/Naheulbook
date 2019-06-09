@@ -18,12 +18,19 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         private readonly ScenarioContext _scenarioContext;
         private readonly ItemTemplateTestService _itemTemplateTestService;
         private readonly DbContextOptions<NaheulbookDbContext> _dbContextOptions;
+        private readonly TestDataUtil _testDataUtil;
 
-        public ItemTemplateSteps(ScenarioContext scenarioContext, ItemTemplateTestService itemTemplateTestService, DbContextOptions<NaheulbookDbContext> dbContextOptions)
+        public ItemTemplateSteps(
+            ScenarioContext scenarioContext,
+            ItemTemplateTestService itemTemplateTestService,
+            DbContextOptions<NaheulbookDbContext> dbContextOptions,
+            TestDataUtil testDataUtil
+        )
         {
             _scenarioContext = scenarioContext;
             _itemTemplateTestService = itemTemplateTestService;
             _dbContextOptions = dbContextOptions;
+            _testDataUtil = testDataUtil;
         }
 
         [Given("an item slot")]
@@ -42,6 +49,15 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             }
         }
 
+        [Given("an item template")]
+        public void GivenAnItemTemplate()
+        {
+            // TODO: Move 2 first to following methods
+            _testDataUtil
+                .AddItemTemplateSection()
+                .AddItemTemplateCategory()
+                .AddItemTemplate();
+        }
 
         [Given("an item template section")]
         public void GivenAnItemTemplateSection()

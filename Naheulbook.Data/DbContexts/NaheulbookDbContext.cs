@@ -8,11 +8,13 @@ namespace Naheulbook.Data.DbContexts
     {
         public DbSet<Effect> Effects { get; set; }
         public DbSet<EffectType> EffectTypes { get; set; }
+        public DbSet<ItemTemplate> ItemTemplates { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Origin> Origins { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Slot> Slots { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Location> Location { get; set; }
 
         public NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options)
             : base(options)
@@ -44,6 +46,16 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new JobRequirementConfiguration());
             modelBuilder.ApplyConfiguration(new JobRestrictConfiguration());
             modelBuilder.ApplyConfiguration(new JobSkillConfiguration());
+
+            modelBuilder.ApplyConfiguration(new LocationConfiguration());
+            modelBuilder.ApplyConfiguration(new LocationMapConfiguration());
+
+            modelBuilder.ApplyConfiguration(new MonsterCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new MonsterLocationConfiguration());
+            modelBuilder.ApplyConfiguration(new MonsterTemplateConfiguration());
+            modelBuilder.ApplyConfiguration(new MonsterTemplateSimpleInventoryConfiguration());
+            modelBuilder.ApplyConfiguration(new MonsterTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new MonsterTraitConfiguration());
 
             modelBuilder.ApplyConfiguration(new OriginConfiguration());
             modelBuilder.ApplyConfiguration(new OriginBonusConfiguration());

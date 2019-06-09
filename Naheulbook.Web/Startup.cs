@@ -71,6 +71,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();
             services.AddSingleton<IJobService, JobService>();
             services.AddSingleton<IMailService, MailService>();
+            services.AddSingleton<IMonsterTemplateService, MonsterTemplateService>();
             services.AddSingleton<IOriginService, OriginService>();
             services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
             services.AddSingleton<ISkillService, SkillService>();
