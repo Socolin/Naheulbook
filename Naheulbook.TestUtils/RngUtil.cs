@@ -2,9 +2,9 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Naheulbook.Tests.Functional.Code.Utils
+namespace Naheulbook.TestUtils
 {
-    public static class RngUtils
+    public static class RngUtil
     {
         public static string GetRandomHexString(int byteCount)
         {

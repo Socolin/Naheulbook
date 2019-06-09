@@ -1,5 +1,6 @@
 using BoDi;
 using Naheulbook.Tests.Functional.Code.TestServices;
+using Naheulbook.TestUtils;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Init
@@ -21,6 +22,7 @@ namespace Naheulbook.Tests.Functional.Code.Init
             _objectContainer.RegisterTypeAs<EffectTestService, EffectTestService>();
             _objectContainer.RegisterTypeAs<ItemTemplateTestService, ItemTemplateTestService>();
             _objectContainer.RegisterTypeAs<UserTestService, UserTestService>();
+            _objectContainer.RegisterTypeAs<TestDataUtil, TestDataUtil>();
         }
     }
 }

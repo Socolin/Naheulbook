@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Socolin.TestUtils.AutoFillT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Socolin.TestUtils.AutoFillTestObjects.Tests.Unit", "Socolin.TestUtils.AutoFillTestObjects.Tests.Unit\Socolin.TestUtils.AutoFillTestObjects.Tests.Unit.csproj", "{C4BD6DD3-8BA3-4A79-B1EF-4835DFB0C175}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naheulbook.TestUtils", "Naheulbook.TestUtils\Naheulbook.TestUtils.csproj", "{82E8C338-DB01-4AED-AACE-F111DFCBCBAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{C4BD6DD3-8BA3-4A79-B1EF-4835DFB0C175}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4BD6DD3-8BA3-4A79-B1EF-4835DFB0C175}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4BD6DD3-8BA3-4A79-B1EF-4835DFB0C175}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82E8C338-DB01-4AED-AACE-F111DFCBCBAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82E8C338-DB01-4AED-AACE-F111DFCBCBAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82E8C338-DB01-4AED-AACE-F111DFCBCBAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82E8C338-DB01-4AED-AACE-F111DFCBCBAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6D22B854-DD14-415E-9B87-9E574B68F328} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}
@@ -88,5 +94,6 @@ Global
 		{4E9732DA-D0A0-40AE-B5C4-7F5B9B9B8712} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}
 		{B0BD51E2-1A2A-4586-9625-70C5F416AB3D} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}
 		{C4BD6DD3-8BA3-4A79-B1EF-4835DFB0C175} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}
+		{82E8C338-DB01-4AED-AACE-F111DFCBCBAA} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}
 	EndGlobalSection
 EndGlobal

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Steps;
-using Naheulbook.Tests.Functional.Code.Utils;
+using Naheulbook.TestUtils;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Socolin.TestsUtils.FakeSmtp;
@@ -43,8 +43,8 @@ namespace Naheulbook.Tests.Functional.Code.TestServices
 
         public async Task<(string username, string password)> CreateUserAsync()
         {
-            var username = $"user.{RngUtils.GetRandomHexString(16)}@test.ca";
-            var password = RngUtils.GetRandomHexString(32);
+            var username = $"user.{RngUtil.GetRandomHexString(16)}@test.ca";
+            var password = RngUtil.GetRandomHexString(32);
 
             await CreateUserAsync(username, password);
 

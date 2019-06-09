@@ -28,6 +28,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
+        <ProjectReference Include="..\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" />
         <ProjectReference Include="..\Naheulbook.Web\Naheulbook.Web.csproj" />
         <ProjectReference Include="..\Socolin.TestUtils.AutoFillTestObjects\Socolin.TestUtils.AutoFillTestObjects.csproj" />
     </ItemGroup>

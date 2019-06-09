@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.TestServices;
-using Naheulbook.Tests.Functional.Code.Utils;
 using Socolin.TestUtils.AutoFillTestObjects;
 using TechTalk.SpecFlow;
 
