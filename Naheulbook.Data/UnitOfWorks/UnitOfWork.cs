@@ -16,7 +16,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IJobRepository Jobs { get; }
         IOriginRepository Origins { get; }
         ISkillRepository Skills { get; }
-        ISlotRepository Slots { get; set; }
+        ISlotRepository Slots { get; }
         IUserRepository Users { get; }
 
         Task<int> CompleteAsync();
