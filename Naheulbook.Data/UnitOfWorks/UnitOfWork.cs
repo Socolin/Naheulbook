@@ -15,7 +15,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IItemTemplateSectionRepository ItemTemplateSections { get; }
         IJobRepository Jobs { get; }
         ILocationRepository Locations { get; }
-        IMonsterTypeRepository  MonsterTypes { get; }
+        IMonsterTypeRepository MonsterTypes { get; }
         IMonsterCategoryRepository MonsterCategories { get; }
         IMonsterTemplateRepository MonsterTemplates { get; }
         IOriginRepository Origins { get; }
@@ -33,38 +33,23 @@ namespace Naheulbook.Data.UnitOfWorks
         public UnitOfWork(NaheulbookDbContext naheulbookDbContext)
         {
             _naheulbookDbContext = naheulbookDbContext ?? throw new ArgumentNullException(nameof(naheulbookDbContext));
-            Effects = new EffectRepository(naheulbookDbContext);
-            ItemTemplates = new ItemTemplateRepository(naheulbookDbContext);
-            ItemTemplateCategories = new ItemTemplateCategoryRepository(naheulbookDbContext);
-            ItemTemplateSections = new ItemTemplateSectionRepository(naheulbookDbContext);
-            EffectCategories = new EffectCategoryRepository(naheulbookDbContext);
-            EffectTypes = new EffectTypeRepository(naheulbookDbContext);
-            Jobs = new JobRepository(naheulbookDbContext);
-            Locations = new LocationRepository(naheulbookDbContext);
-            MonsterTypes = new MonsterTypeRepository(naheulbookDbContext);
-            MonsterCategories = new MonsterCategoryRepository(naheulbookDbContext);
-            MonsterTemplates = new MonsterTemplateRepository(naheulbookDbContext);
-            Origins = new OriginRepository(naheulbookDbContext);
-            Skills = new SkillRepository(naheulbookDbContext);
-            Slots = new SlotRepository(naheulbookDbContext);
-            Users = new UserRepository(naheulbookDbContext);
         }
 
-        public IEffectRepository Effects { get; }
-        public IEffectTypeRepository EffectTypes { get; }
-        public IEffectCategoryRepository EffectCategories { get; }
-        public IItemTemplateRepository ItemTemplates { get; }
-        public IItemTemplateCategoryRepository ItemTemplateCategories { get; }
-        public IItemTemplateSectionRepository ItemTemplateSections { get; }
-        public IJobRepository Jobs { get; }
-        public ILocationRepository Locations { get; }
-        public IMonsterTypeRepository MonsterTypes { get; }
-        public IMonsterCategoryRepository MonsterCategories { get; }
-        public IMonsterTemplateRepository MonsterTemplates { get; }
-        public IOriginRepository Origins { get; }
-        public ISkillRepository Skills { get; }
-        public ISlotRepository Slots { get; set; }
-        public IUserRepository Users { get; }
+        public IEffectRepository Effects => new EffectRepository(_naheulbookDbContext);
+        public IEffectTypeRepository EffectTypes => new EffectTypeRepository(_naheulbookDbContext);
+        public IEffectCategoryRepository EffectCategories => new EffectCategoryRepository(_naheulbookDbContext);
+        public IItemTemplateRepository ItemTemplates => new ItemTemplateRepository(_naheulbookDbContext);
+        public IItemTemplateSectionRepository ItemTemplateSections => new ItemTemplateSectionRepository(_naheulbookDbContext);
+        public IItemTemplateCategoryRepository ItemTemplateCategories => new ItemTemplateCategoryRepository(_naheulbookDbContext);
+        public IJobRepository Jobs => new JobRepository(_naheulbookDbContext);
+        public ILocationRepository Locations => new LocationRepository(_naheulbookDbContext);
+        public IMonsterTypeRepository MonsterTypes => new MonsterTypeRepository(_naheulbookDbContext);
+        public IMonsterCategoryRepository MonsterCategories => new MonsterCategoryRepository(_naheulbookDbContext);
+        public IMonsterTemplateRepository MonsterTemplates => new MonsterTemplateRepository(_naheulbookDbContext);
+        public IOriginRepository Origins => new OriginRepository(_naheulbookDbContext);
+        public ISkillRepository Skills => new SkillRepository(_naheulbookDbContext);
+        public ISlotRepository Slots => new SlotRepository(_naheulbookDbContext);
+        public IUserRepository Users => new UserRepository(_naheulbookDbContext);
 
         public Task<int> CompleteAsync()
         {
