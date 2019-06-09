@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Naheulbook.Data\Naheulbook.Data.csproj" />
+      <ProjectReference Include="..\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" />
     </ItemGroup>
 
 </Project>

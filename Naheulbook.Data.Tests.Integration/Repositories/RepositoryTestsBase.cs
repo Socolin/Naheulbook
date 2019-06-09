@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Naheulbook.TestUtils;
 using NUnit.Framework;
 
 namespace Naheulbook.Data.Tests.Integration.Repositories
@@ -9,6 +10,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
     public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
     {
         protected TDbContext RepositoryDbContext;
+        protected  TestDataUtil TestDataUtil;
         private TDbContext _addEntitiesContext;
         private List<object> _allEntities;
 
@@ -18,6 +20,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             _allEntities = new List<object>();
             _addEntitiesContext = DbUtils.GetTestDbContext<TDbContext>();
             RepositoryDbContext = DbUtils.GetTestDbContext<TDbContext>();
+            TestDataUtil = new TestDataUtil(DbUtils.GetDbContextOptions(), new DefaultEntityCreator());
+
         }
 
         [TearDown]

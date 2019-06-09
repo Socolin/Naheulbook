@@ -13,12 +13,19 @@ namespace Naheulbook.Data.Tests.Integration
         public static TDbContext GetTestDbContext<TDbContext>() where TDbContext : DbContext
         {
             if (typeof(TDbContext) == typeof(NaheulbookDbContext))
-                return GetNaheulbookDbContext() as TDbContext;
+                return CreateNaheulbookDbContext() as TDbContext;
 
             return null;
         }
 
-        public static NaheulbookDbContext GetNaheulbookDbContext()
+        public static NaheulbookDbContext CreateNaheulbookDbContext()
+        {
+            var dbContextOptions = GetDbContextOptions();
+
+            return new NaheulbookDbContext(dbContextOptions);
+        }
+
+        public static DbContextOptions<NaheulbookDbContext> GetDbContextOptions()
         {
             var logger = new LoggerConfiguration()
                 .WriteTo.Console(theme: ConsoleTheme.None)
@@ -33,8 +40,7 @@ namespace Naheulbook.Data.Tests.Integration
                 .UseMySql("Server=127.0.0.1;Database=naheulbook_integration;User=naheulbook;Password=naheulbook;SslMode=None")
                 .UseLoggerFactory(loggerFactory)
                 .Options;
-
-            return new NaheulbookDbContext(dbContextOptions);
+            return dbContextOptions;
         }
     }
 }

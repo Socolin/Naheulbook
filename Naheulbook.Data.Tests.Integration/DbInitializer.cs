@@ -9,7 +9,7 @@ namespace Naheulbook.Data.Tests.Integration
         [OneTimeSetUp]
         public void PrepareTests()
         {
-            var dbContext = DbUtils.GetNaheulbookDbContext();
+            var dbContext = DbUtils.CreateNaheulbookDbContext();
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
             dbContext.Database.Migrate();
