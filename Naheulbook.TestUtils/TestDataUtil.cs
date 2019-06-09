@@ -27,7 +27,10 @@ namespace Naheulbook.TestUtils
 
         public T GetLast<T>()
         {
-            return _allEntities.OfType<T>().LastOrDefault();
+            var last = _allEntities.OfType<T>().LastOrDefault();
+            if (last == null)
+                throw new Exception($"Enable to find a element of type {typeof(T).Name} in the test data. Did you forget to call Add{typeof(T).Name}() before ?");
+            return last;
         }
 
         public List<T> GetAll<T>()

@@ -34,7 +34,7 @@ Feature: ItemTemplate
     When performing a POST to the url "/api/v2/itemTemplateCategories/" with the following json content and the current jwt
     """
     {
-      "sectionId": ${ItemTemplateSectionId},
+      "sectionId": ${ItemTemplateSection.Id},
       "name": "some-name",
       "techName": "some-tech-name",
       "description": "some-description",
@@ -45,8 +45,8 @@ Feature: ItemTemplate
     And the response should contains the following json
     """
     {
-      "id": {"__capture": {"name": "ItemTemplateCategoryId", "type": "integer"}},
-      "sectionId": ${ItemTemplateSectionId},
+      "id": {"__match": {"type": "integer"}},
+      "sectionId": ${ItemTemplateSection.Id},
       "name": "some-name",
       "techName": "some-tech-name",
       "description": "some-description",
@@ -57,13 +57,14 @@ Feature: ItemTemplate
 
   Scenario: Can create an item template
     Given a JWT for an admin user
+    And an item template section
     And an item template category
 
     When performing a POST to the url "/api/v2/itemTemplates/" with the following json content and the current jwt
     """
     {
       "source": "official",
-      "categoryId": ${ItemTemplateCategoryId},
+      "categoryId": ${ItemTemplateCategory.Id},
       "name": "some-name",
       "techName": "some-tech-name",
       "source": "official",
@@ -116,7 +117,7 @@ Feature: ItemTemplate
     {
       "id": {"__capture": {"name": "ItemTemplateId", "type": "integer"}},
       "source": "official",
-      "categoryId": ${ItemTemplateCategoryId},
+      "categoryId": ${ItemTemplateCategory.Id},
       "name": "some-name",
       "techName": "some-tech-name",
       "source": "official",
@@ -174,9 +175,9 @@ Feature: ItemTemplate
     And the response should contains a json array containing the following element identified by id
     """
     {
-        "id": ${ItemSlot.Id},
-        "name": "${ItemSlot.Name}",
-        "techName": "${ItemSlot.TechName}"
+        "id": ${Slot.Id},
+        "name": "${Slot.Name}",
+        "techName": "${Slot.TechName}"
     }
     """
 

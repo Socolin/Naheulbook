@@ -2,6 +2,8 @@ Feature: MonsterTemplates
 
   Scenario: Create a monster template
     Given a JWT for an admin user
+    Given an item template section
+    Given an item template category
     Given an item template
     Given a location
     Given a monster category type
