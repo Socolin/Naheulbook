@@ -1,57 +1,88 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Naheulbook.TestUtils;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Extensions
 {
     public static class StringExtensions
     {
-        public static string ExecuteReplacement(this string str, ScenarioContext context)
+        public static string ExecuteReplacement(this string str, ScenarioContext context, TestDataUtil testDataUtil)
         {
             var replacementTokens = ListReplacementTokens(str);
 
             foreach (var replacementToken in replacementTokens)
             {
-                string replacementValue;
-                if (replacementToken.Contains("."))
-                {
-                    var replacements = replacementToken.Split('.');
-                    if (!context.Keys.Contains(replacements.First()))
-                        throw new Exception($"Failed to find key {replacements.First()} in scenario context when replacing '{str}'");
-                    var rootValue = context[replacements.First()];
-                    replacementValue = GetProperty(rootValue, replacements.Skip(1).ToList());
-                }
-                else
-                {
-                    if (!context.Keys.Contains(replacementToken))
-                        throw new Exception($"Failed to find key {replacementToken} in scenario context when replacing '{str}'");
-                    replacementValue = context[replacementToken].ToString();
-                }
-
+                var replacementValue = GetValue(str, replacementToken, context, testDataUtil).ToString();
                 str = str.Replace($"${{{replacementToken}}}", replacementValue);
             }
 
             return str;
         }
 
-        private static string GetProperty(object rootValue, List<string> propertiesNames)
+        private static object GetValue(string str, string replacementToken, ScenarioContext context, TestDataUtil testDataUtil)
+        {
+            if (replacementToken.Contains("."))
+            {
+                var replacements = replacementToken.Split('.');
+                object rootValue;
+                if (context.Keys.Contains(replacements.First()))
+                    rootValue = context[replacements.First()];
+                else if (IsArrayAccessor(replacements.ElementAt(1)))
+                    rootValue = testDataUtil.GetAllByTypeName(replacements.First());
+                else
+                    rootValue = testDataUtil.GetByTypeName(replacements.First());
+
+                if (rootValue == null)
+                    throw new Exception($"Failed to find key {replacementToken} in ScenarioContext or TestData when replacing '{str}'");
+
+                var propertiesNames = replacements.Skip(1).ToList();
+                return GetProperty(rootValue, propertiesNames);
+            }
+
+            if (context.Keys.Contains(replacementToken))
+                return context[replacementToken].ToString();
+
+            var value = testDataUtil.GetByTypeName(replacementToken);
+            if (value != null)
+                return value;
+
+            throw new Exception($"Failed to find key {replacementToken} in ScenarioContext or TestData when replacing '{str}'");
+        }
+
+
+        private static object GetProperty(object rootValue, List<string> propertiesNames)
         {
             var obj = rootValue;
             try
             {
                 foreach (var propertyName in propertiesNames)
                 {
-                    obj = obj.GetType().GetProperty(propertyName).GetValue(obj);
+                    if (IsArrayAccessor(propertyName))
+                    {
+                        var arrayIndex = propertyName.Substring(1, propertyName.Length - 2);
+                        obj = (obj as IEnumerable)?.OfType<object>().ElementAt(int.Parse(arrayIndex));
+                    }
+                    else
+                    {
+                        obj = obj.GetType().GetProperty(propertyName).GetValue(obj);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to find property `{string.Join('.', propertiesNames.Skip(1))}` in object.", ex);
+                throw new Exception($"Failed to find property `{string.Join('.', propertiesNames)}` in object.", ex);
             }
 
-            return obj.ToString();
+            return obj;
+        }
+
+        private static bool IsArrayAccessor(string propertyName)
+        {
+            return propertyName.StartsWith("[") && propertyName.EndsWith("]");
         }
 
         private static IEnumerable<string> ListReplacementTokens(string str)
