@@ -1,26 +1,36 @@
 Feature: Skill
 
   Scenario: Listing skills
+    Given a skill
+
     When performing a GET to the url "/api/v2/skills"
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
     """
     {
         "stat": [],
-        "id": 49,
-        "name": "Truc de mauviette",
-        "description": "Le héros n'a pas mal, même quand il a mal. Il serre les dents et continue de faire son\nmalin, parce que la douleur est une simple information. Le héros qui rit des trucs de mauviette dispose d'une protection\nnaturelle de 1 point supplémentaire (PR+1).",
-        "playerDescription": "résistance à la douleur",
-        "require": null,
-        "resist": null,
-        "using": "+1 au score de PR totale.",
-        "roleplay": null,
-        "test": null,
-        "flags": [],
+        "id": ${Skill.Id},
+        "name": "${Skill.Name}",
+        "description": "${Skill.Description}",
+        "playerDescription": "${Skill.PlayerDescription}",
+        "require": "${Skill.Require}",
+        "resist": "${Skill.Resist}",
+        "using": "${Skill.Using}",
+        "roleplay": "${Skill.Roleplay}",
+        "test": ${Skill.Test},
+        "stat": [
+          "${Skill.Stat}"
+        ],
+        "flags": [
+          {
+            "type": "value",
+            "data": null
+          }
+        ],
         "effects": [
             {
-                "stat": "PR",
-                "value": 1,
+                "stat": "${Skill.SkillEffects.[0].StatName}",
+                "value": ${Skill.SkillEffects.[0].Value},
                 "type": "Add"
             }
         ]
