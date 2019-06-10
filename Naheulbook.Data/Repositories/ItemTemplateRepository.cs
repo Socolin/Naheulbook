@@ -9,7 +9,8 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IItemTemplateRepository : IRepository<ItemTemplate>
     {
-        Task <List<ItemTemplate>> GetByIdsAsync(IEnumerable<int> ids);
+        Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(int id);
+        Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<int> ids);
     }
 
     public class ItemTemplateRepository : Repository<ItemTemplate, NaheulbookDbContext>, IItemTemplateRepository
@@ -17,6 +18,20 @@ namespace Naheulbook.Data.Repositories
         public ItemTemplateRepository(NaheulbookDbContext context)
             : base(context)
         {
+        }
+
+        public Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(int id)
+        {
+            return Context.ItemTemplates
+                .Include(x => x.Requirements)
+                .Include(x => x.Modifiers)
+                .Include(x => x.Slots)
+                .ThenInclude(x => x.Slot)
+                .Include(x => x.Skills)
+                .Include(x => x.UnSkills)
+                .Include(x => x.SkillModifiers)
+                .Where(x => x.Id == id)
+                .SingleAsync();
         }
 
         public Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<int> ids)

@@ -2,9 +2,11 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Core.Tests.Unit.Exceptions;
+using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
@@ -19,23 +21,42 @@ namespace Naheulbook.Core.Tests.Unit.Services
 {
     public class ItemTemplateServiceTests
     {
-        private IItemTemplateRepository _itemTemplateRepository;
-        private IUnitOfWork _unitOfWork;
         private IAuthorizationUtil _authorizationUtil;
         private ItemTemplateService _itemTemplateService;
         private IMapper _mapper;
+        private FakeUnitOfWorkFactory _unitOfWorkFactory;
 
         [SetUp]
         public void SetUp()
         {
-            var unitOfWorkFactory = Substitute.For<IUnitOfWorkFactory>();
-            _unitOfWork = Substitute.For<IUnitOfWork>();
-            unitOfWorkFactory.CreateUnitOfWork().Returns(_unitOfWork);
-            _itemTemplateRepository = Substitute.For<IItemTemplateRepository>();
-            _unitOfWork.ItemTemplates.Returns(_itemTemplateRepository);
+            _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
             _mapper = Substitute.For<IMapper>();
-            _itemTemplateService = new ItemTemplateService(unitOfWorkFactory, _authorizationUtil, _mapper);
+            _itemTemplateService = new ItemTemplateService(_unitOfWorkFactory, _authorizationUtil, _mapper);
+        }
+
+        [Test]
+        public async Task GetItemTemplateAsync_LoadItemTemplateFromDbWithFullData_AndReturnsIt()
+        {
+            var expectedItemTemplate = new ItemTemplate();
+
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(1)
+                .Returns(expectedItemTemplate);
+
+            var itemTemplate = await _itemTemplateService.GetItemTemplateAsync(1);
+
+            itemTemplate.Should().Be(expectedItemTemplate);
+        }
+
+        [Test]
+        public void GetItemTemplateAsync_WhenItemTemplateIsNotFound_Throw()
+        {
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(1)
+                .Returns((ItemTemplate) null);
+
+            Func<Task> act = () => _itemTemplateService.GetItemTemplateAsync(1);
+
+            act.Should().Throw<ItemTemplateNotFoundException>();
         }
 
         [Test]
@@ -51,10 +72,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Received.InOrder(() =>
             {
-                _itemTemplateRepository.Add(itemTemplate);
-                _unitOfWork.CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Add(itemTemplate);
+                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
             });
-            itemTemplate.Should().BeEquivalentTo(expectedItemTemplate);
+            itemTemplate.Should().Be(expectedItemTemplate);
         }
 
         [Test]
@@ -69,7 +90,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task<ItemTemplate>> act = () => _itemTemplateService.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
 
             act.Should().Throw<TestException>();
-            await _unitOfWork.DidNotReceive().CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
         }
 
         [Test]

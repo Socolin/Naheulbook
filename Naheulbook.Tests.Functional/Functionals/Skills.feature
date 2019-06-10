@@ -8,7 +8,6 @@ Feature: Skill
     And the response should contains a json array containing the following element identified by id
     """
     {
-        "stat": [],
         "id": ${Skill.Id},
         "name": "${Skill.Name}",
         "description": "${Skill.Description}",

@@ -13,6 +13,7 @@ using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers
@@ -31,6 +32,34 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _mapper = Substitute.For<IMapper>();
             _itemTemplatesController = new ItemTemplatesController(_itemTemplateService, _mapper);
             _executionContext = new NaheulbookExecutionContext();
+        }
+
+        [Test]
+        public async Task GetItemTemplateAsync_RetrieveItemInfroFromItemService_AndMapItIntoResponse()
+        {
+            const int itemTemplateId = 42;
+            var itemTemplate = new ItemTemplate();
+            var itemTemplateResponse = new ItemTemplateResponse();
+
+            _itemTemplateService.GetItemTemplateAsync(itemTemplateId)
+                .Returns(itemTemplate);
+            _mapper.Map<ItemTemplateResponse>(itemTemplate)
+                .Returns(itemTemplateResponse);
+
+            var result = await _itemTemplatesController.GetItemTemplateAsync(itemTemplateId);
+
+            result.Value.Should().Be(itemTemplateResponse);
+        }
+
+        [Test]
+        public void GetItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
+        {
+            _itemTemplateService.GetItemTemplateAsync(Arg.Any<int>())
+                .Throws(new ItemTemplateNotFoundException(42));
+
+            Func<Task> act = () => _itemTemplatesController.GetItemTemplateAsync(42);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Test]

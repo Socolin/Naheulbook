@@ -21,7 +21,7 @@ namespace Naheulbook.Web.Responses
         public List<IdResponse> UnSkills { get; set; }
         public List<ItemTemplateSkillModifierResponse> SkillModifiers { get; set; }
         public List<ItemTemplateRequirementResponse> Requirements { get; set; }
-        public List<IdResponse> Slots { get; set; }
+        public List<ItemSlotResponse> Slots { get; set; }
     }
 
     public class ItemTemplateModifierResponse

@@ -19,7 +19,7 @@ namespace Naheulbook.TestUtils
                 CleanName = $"some-clean-name-{suffix}",
                 Name = $"some-item-name-{suffix}",
                 Source = "official",
-                TechName = $"some-tech-name-{suffix}",
+                TechName = $"some-tech-name-{suffix}"
             };
         }
 

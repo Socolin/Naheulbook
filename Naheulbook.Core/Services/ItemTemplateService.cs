@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
@@ -11,6 +12,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IItemTemplateService
     {
+        Task<ItemTemplate> GetItemTemplateAsync(int itemTemplateId);
         Task<ItemTemplate> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateRequest request);
         Task<ICollection<Slot>> GetItemSlots();
     }
@@ -29,6 +31,17 @@ namespace Naheulbook.Core.Services
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizationUtil = authorizationUtil;
             _mapper = mapper;
+        }
+
+        public async Task<ItemTemplate> GetItemTemplateAsync(int itemTemplateId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
+                if (itemTemplate == null)
+                    throw new ItemTemplateNotFoundException(itemTemplateId);
+                return itemTemplate;
+            }
         }
 
         public async Task<ItemTemplate> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateRequest request)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
-using Naheulbook.Data.Models;
 
 namespace Naheulbook.TestUtils
 {
@@ -36,6 +35,11 @@ namespace Naheulbook.TestUtils
             if (last == null)
                 throw new Exception($"Enable to find a element of type {typeof(T).Name} in the test data. Did you forget to call Add{typeof(T).Name}() before ?");
             return last;
+        }
+
+        public T GetFromEnd<T>(int index)
+        {
+            return _allEntities.OfType<T>().Reverse().ElementAt(index);
         }
 
         public List<T> GetAll<T>()

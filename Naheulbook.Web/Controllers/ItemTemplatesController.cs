@@ -7,7 +7,6 @@ using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
 
@@ -26,8 +25,23 @@ namespace Naheulbook.Web.Controllers
             _mapper = mapper;
         }
 
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        [HttpGet("{itemTemplateId}")]
+        public async Task<ActionResult<ItemTemplateResponse>> GetItemTemplateAsync(int itemTemplateId)
+        {
+            try
+            {
+                var itemTemplate = await _itemTemplateService.GetItemTemplateAsync(itemTemplateId);
+
+                return _mapper.Map<ItemTemplateResponse>(itemTemplate);
+            }
+            catch (ItemTemplateNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
         [HttpPost]
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<JsonResult> PostCreateItemTemplateAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             CreateItemTemplateRequest request

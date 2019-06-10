@@ -63,3 +63,18 @@ Feature: MonsterTemplates
     }
     """
 
+
+  Scenario: Listing types
+
+  Scenario: Listing traits
+
+  Scenario: Listing monsters
+
+
+  Scenario: Create monster category type
+
+  Scenario: Create monster category
+
+  Scenario: Search monster template
+
+  Scenario: Edit a monster template

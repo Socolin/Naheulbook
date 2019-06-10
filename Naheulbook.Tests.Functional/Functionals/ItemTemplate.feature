@@ -182,5 +182,64 @@ Feature: ItemTemplate
     """
 
   Scenario: Can get item template details
+    Given an item template with all optional fields set
+
+    When performing a GET to the url "/api/v2/itemTemplates/${ItemTemplate.Id}"
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+        "id": ${ItemTemplate.Id},
+        "name": "${ItemTemplate.Name}",
+        "techName": "${ItemTemplate.TechName}",
+        "source": "official",
+        "sourceUserId": null,
+        "sourceUser": null,
+        "categoryId": ${ItemTemplateCategory.Id},
+        "data": {
+            "key": "value"
+        },
+        "slots": [
+            {
+                "id": ${Slot.[-1].Id},
+                "name": "${Slot.[-1].Name}",
+                "techName": "${Slot.[-1].TechName}"
+            }
+        ],
+        "modifiers": [
+            {
+                "stat": "${Stat.Name}",
+                "value": -2,
+                "job": ${Job.Id},
+                "origin": ${Origin.Id},
+                "special": [],
+                "type": "ADD"
+            }
+        ],
+        "requirements": [
+            {
+                "stat": "${Stat.Name}",
+                "min": 2,
+                "max": 12
+            }
+        ],
+        "skillModifiers": [
+            {
+                "skill": ${Skill.[-3].Id},
+                "value": 2
+            }
+        ],
+        "skills": [
+            {
+                "id":  ${Skill.[-1].Id},
+            }
+        ],
+        "unskills": [
+            {
+                "id":  ${Skill.[-2].Id},
+            }
+        ]
+    }
+    """
 
   Scenario: Can edit item template

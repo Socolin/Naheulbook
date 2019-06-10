@@ -63,8 +63,15 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
                 {
                     if (IsArrayAccessor(propertyName))
                     {
-                        var arrayIndex = propertyName.Substring(1, propertyName.Length - 2);
-                        obj = (obj as IEnumerable)?.OfType<object>().ElementAt(int.Parse(arrayIndex));
+                        var arrayIndex = int.Parse(propertyName.Substring(1, propertyName.Length - 2));
+                        if (arrayIndex < 0)
+                        {
+                            obj = (obj as IEnumerable)?.OfType<object>().Reverse().ElementAt(-arrayIndex - 1);
+                        }
+                        else
+                        {
+                            obj = (obj as IEnumerable)?.OfType<object>().ElementAt(arrayIndex);
+                        }
                     }
                     else
                     {

@@ -20,7 +20,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Special, opt => opt.Ignore());
 
             CreateMap<ItemTemplate, ItemTemplateResponse>()
-                .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data)));
+                .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data)))
+                .ForMember(m => m.Slots, opt => opt.MapFrom(i => i.Slots.Select(x => x.Slot)));
             CreateMap<ItemTemplateModifier, ItemTemplateModifierResponse>()
                 .ForMember(m => m.JobId, opt => opt.MapFrom(im => im.RequireJobId))
                 .ForMember(m => m.OriginId, opt => opt.MapFrom(im => im.RequireOriginId))

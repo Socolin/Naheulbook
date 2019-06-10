@@ -160,7 +160,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("requireorigin");
 
             builder.Property(e => e.Special)
-                .IsRequired()
+                .IsRequired(false)
                 .HasColumnName("special")
                 .HasMaxLength(2048);
 
