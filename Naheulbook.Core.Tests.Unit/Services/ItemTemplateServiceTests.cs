@@ -8,12 +8,8 @@ using Naheulbook.Core.Services;
 using Naheulbook.Core.Tests.Unit.Exceptions;
 using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
-using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
-using Naheulbook.Data.Repositories;
-using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
-using Naheulbook.TestUtils;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
@@ -69,7 +65,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _mapper.Map<ItemTemplate>(createItemTemplateRequest)
                 .Returns(newItemTemplateEntity);
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(newItemTemplateEntity.Id)
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(1)
                 .Returns(fullyLoadedItemTemplate);
 
             var actualItemTemplate = await _itemTemplateService.CreateItemTemplateAsync(new NaheulbookExecutionContext(), createItemTemplateRequest);
@@ -101,15 +97,18 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task CreateItemTemplate_SetSourceUserIdForNonOfficialItem()
         {
             var executionContext = new NaheulbookExecutionContext {UserId = 42};
-            var expectedItemTemplate = new ItemTemplate();
             var createItemTemplateRequest = new CreateItemTemplateRequest {Source = "non-official"};
+            var newItemTemplateEntity = new ItemTemplate {Id = 1};
+            var fullyLoadedItemTemplate = new ItemTemplate {Id = 1};
 
             _mapper.Map<ItemTemplate>(createItemTemplateRequest)
-                .Returns(expectedItemTemplate);
+                .Returns(newItemTemplateEntity);
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+                .Do(callInfo => newItemTemplateEntity.SourceUserId.Should().Be(42));
 
-            var itemTemplate = await _itemTemplateService.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
+            await _itemTemplateService.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
 
-            itemTemplate.SourceUserId.Should().Be(42);
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
         }
     }
 }

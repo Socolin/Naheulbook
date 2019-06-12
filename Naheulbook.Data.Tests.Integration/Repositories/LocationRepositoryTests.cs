@@ -16,7 +16,6 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [SetUp]
         public void SetUp()
         {
-            TestDataUtil.Cleanup();
             _locationRepository = new LocationRepository(RepositoryDbContext);
         }
 

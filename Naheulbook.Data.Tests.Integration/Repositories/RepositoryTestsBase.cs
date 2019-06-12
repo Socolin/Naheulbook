@@ -10,7 +10,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
     public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
     {
         protected TDbContext RepositoryDbContext;
-        protected  TestDataUtil TestDataUtil;
+        protected TestDataUtil TestDataUtil;
         private TDbContext _addEntitiesContext;
         private List<object> _allEntities;
 
@@ -21,7 +21,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             _addEntitiesContext = DbUtils.GetTestDbContext<TDbContext>();
             RepositoryDbContext = DbUtils.GetTestDbContext<TDbContext>();
             TestDataUtil = new TestDataUtil(DbUtils.GetDbContextOptions(), new DefaultEntityCreator());
-
+            TestDataUtil.Cleanup();
         }
 
         [TearDown]
@@ -33,6 +33,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 dbContext.RemoveRange(_allEntities);
                 await dbContext.SaveChangesAsync();
             }
+
             _allEntities.Clear();
             _addEntitiesContext?.Dispose();
         }

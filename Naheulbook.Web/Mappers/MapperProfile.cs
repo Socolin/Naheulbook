@@ -89,7 +89,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<MonsterTemplateSimpleInventory, MonsterTemplateResponse.MonsterSimpleInventoryResponse>();
 
             CreateMap<SkillEffect, SkillEffectResponse>()
-                .ForMember(m => m.Type, opt => opt.MapFrom(x => "Add"))
+                .ForMember(m => m.Type, opt => opt.MapFrom(x => "ADD"))
                 .ForMember(m => m.Stat, opt => opt.MapFrom(s => s.StatName));
             CreateMap<Skill, SkillResponse>()
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)))
@@ -103,7 +103,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<SpecialitySpecial, SpecialitySpecialResponse>()
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)));
             CreateMap<SpecialityModifier, StatModifierResponse>()
-                .ForMember(m => m.Type, opt => opt.MapFrom(x => "Add"))
+                .ForMember(m => m.Type, opt => opt.MapFrom(x => "ADD"))
                 .ForMember(m => m.Special, opt => opt.Ignore());
         }
     }

@@ -37,6 +37,11 @@ namespace Naheulbook.TestUtils
             return last;
         }
 
+        public T GetLastIfExists<T>()
+        {
+            return _allEntities.OfType<T>().LastOrDefault();
+        }
+
         public T GetFromEnd<T>(int index)
         {
             return _allEntities.OfType<T>().Reverse().ElementAt(index);
@@ -65,29 +70,32 @@ namespace Naheulbook.TestUtils
 
         public TestDataUtil Cleanup()
         {
-            using (var cleanupSqlCommand = _dbContext.Database.GetDbConnection().CreateCommand())
+            var dbConnection = _dbContext.Database.GetDbConnection();
+            dbConnection.Open();
+            using (var cleanupSqlCommand = dbConnection.CreateCommand())
             {
                 cleanupSqlCommand.CommandText =
-                    "DELETE FROM `calendar`;" +
-                    "DELETE FROM `character`;" +
-                    "DELETE FROM `character_history`;" +
-                    "DELETE FROM `character_job`;" +
-                    "DELETE FROM `character_modifier`;" +
-                    "DELETE FROM `character_modifier_value`;" +
-                    "DELETE FROM `character_skills`;" +
-                    "DELETE FROM `character_speciality`;" +
+                    "SET FOREIGN_KEY_CHECKS=0;" +
+                    // "DELETE FROM `calendar`;" +
+                    // "DELETE FROM `character`;" +
+                    // "DELETE FROM `character_history`;" +
+                    // "DELETE FROM `character_job`;" +
+                    // "DELETE FROM `character_modifier`;" +
+                    // "DELETE FROM `character_modifier_value`;" +
+                    // "DELETE FROM `character_skills`;" +
+                    // "DELETE FROM `character_speciality`;" +
                     "DELETE FROM `effect`;" +
                     "DELETE FROM `effect_category`;" +
                     "DELETE FROM `effect_modifier`;" +
                     "DELETE FROM `effect_type`;" +
-                    "DELETE FROM `error_report`;" +
-                    "DELETE FROM `event`;" +
-                    "DELETE FROM `god`;" +
-                    "DELETE FROM `group`;" +
-                    "DELETE FROM `group_history`;" +
-                    "DELETE FROM `group_invitations`;" +
-                    "DELETE FROM `icon`;" +
-                    "DELETE FROM `item`;" +
+                    // "DELETE FROM `error_report`;" +
+                    // "DELETE FROM `event`;" +
+                    // "DELETE FROM `god`;" +
+                    // "DELETE FROM `group`;" +
+                    // "DELETE FROM `group_history`;" +
+                    // "DELETE FROM `group_invitations`;" +
+                    // "DELETE FROM `icon`;" +
+                    // "DELETE FROM `item`;" +
                     "DELETE FROM `item_slot`;" +
                     "DELETE FROM `item_template`;" +
                     "DELETE FROM `item_template_category`;" +
@@ -98,7 +106,7 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `item_template_skill_modifiers`;" +
                     "DELETE FROM `item_template_slot`;" +
                     "DELETE FROM `item_template_unskill`;" +
-                    "DELETE FROM `item_type`;" +
+                    // "DELETE FROM `item_type`;" +
                     "DELETE FROM `job`;" +
                     "DELETE FROM `job_bonus`;" +
                     "DELETE FROM `job_origin_blacklist`;" +
@@ -108,8 +116,8 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `job_skill`;" +
                     "DELETE FROM `location`;" +
                     "DELETE FROM `location_map`;" +
-                    "DELETE FROM `loot`;" +
-                    "DELETE FROM `monster`;" +
+                    // "DELETE FROM `loot`;" +
+                    // "DELETE FROM `monster`;" +
                     "DELETE FROM `monster_category`;" +
                     "DELETE FROM `monster_location`;" +
                     "DELETE FROM `monster_template`;" +
@@ -122,18 +130,20 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `origin_requirement`;" +
                     "DELETE FROM `origin_restrict`;" +
                     "DELETE FROM `origin_skill`;" +
-                    "DELETE FROM `quest`;" +
-                    "DELETE FROM `quest_template`;" +
+                    // "DELETE FROM `quest`;" +
+                    // "DELETE FROM `quest_template`;" +
                     "DELETE FROM `skill`;" +
                     "DELETE FROM `skill_effect`;" +
                     "DELETE FROM `speciality`;" +
                     "DELETE FROM `speciality_modifier`;" +
                     "DELETE FROM `speciality_special`;" +
-                    "DELETE FROM `spell`;" +
-                    "DELETE FROM `spell_category`;" +
+                    // "DELETE FROM `spell`;" +
+                    // "DELETE FROM `spell_category`;" +
                     "DELETE FROM `stat`;" +
                     "DELETE FROM `user`;" +
-                    "DELETE FROM `user_session`;";
+                    // "DELETE FROM `user_session`;" +
+                    "SET FOREIGN_KEY_CHECKS=1;";
+                cleanupSqlCommand.ExecuteNonQuery();
             }
 
             return this;

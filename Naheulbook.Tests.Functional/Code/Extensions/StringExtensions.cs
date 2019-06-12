@@ -16,8 +16,29 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
 
             foreach (var replacementToken in replacementTokens)
             {
-                var replacementValue = GetValue(str, replacementToken, context, testDataUtil).ToString();
-                str = str.Replace($"${{{replacementToken}}}", replacementValue);
+                try
+                {
+                    var value = GetValue(str, replacementToken, context, testDataUtil);
+                    string replacementValue;
+                    switch (value)
+                    {
+                        case null:
+                            replacementValue = "null";
+                            break;
+                        case bool _:
+                            replacementValue = value.ToString().ToLowerInvariant();
+                            break;
+                        default:
+                            replacementValue = value.ToString();
+                            break;
+                    }
+
+                    str = str.Replace($"${{{replacementToken}}}", replacementValue);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"An exception occured while replacing '{replacementToken}': {ex.Message}", ex);
+                }
             }
 
             return str;

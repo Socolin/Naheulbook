@@ -30,7 +30,7 @@ Feature: Skill
             {
                 "stat": "${Skill.SkillEffects.[0].StatName}",
                 "value": ${Skill.SkillEffects.[0].Value},
-                "type": "Add"
+                "type": "ADD"
             }
         ]
     }

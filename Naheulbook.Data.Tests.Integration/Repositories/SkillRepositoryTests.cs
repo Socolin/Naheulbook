@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
-using Naheulbook.Data.Tests.Integration.EntityBuilders;
 using NUnit.Framework;
 
 namespace Naheulbook.Data.Tests.Integration.Repositories
@@ -22,7 +20,10 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [Test]
         public async Task CanGetAllWithEffects()
         {
-            var skills = await AddInDbAsync(CreateSkills());
+            var skills = TestDataUtil
+                .AddSkill()
+                .AddSkill()
+                .GetAll<Skill>();
 
             var actualSkills = await _skillRepository.GetAllWithEffectsAsync();
 
@@ -35,18 +36,6 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                     .Excluding(info => info.SelectedMemberPath == "Skill")
                     .IgnoringCyclicReferences()
             );
-        }
-
-        private static List<Skill> CreateSkills(int count = 3)
-        {
-            var skills = new List<Skill>();
-
-            for (var i = 0; i < count; i++)
-            {
-                skills.Add(new SkillBuilder().WithDefaultTestInfo(i + 1).WithSkillEffect($"some-stat-{i + 1}").Build());
-            }
-
-            return skills;
         }
     }
 }

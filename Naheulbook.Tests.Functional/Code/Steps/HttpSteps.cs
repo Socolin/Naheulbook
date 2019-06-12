@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -5,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.HttpClients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Socolin.TestUtils.JsonComparer;
@@ -84,7 +86,16 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         {
             var content = _scenarioContext.GetLastHttpResponseContent();
 
-            var expectedObject = JObject.Parse(expectedJson);
+            JObject expectedObject;
+            try
+            {
+                expectedObject = JObject.Parse(expectedJson);
+            }
+            catch (JsonReaderException ex)
+            {
+                throw new Exception($"Invalid expected JSON: {ex.Message} Line:\n '{expectedJson.Split('\n')[ex.LineNumber - 1]}'", ex);
+            }
+
             var identityValue = ((JValue) expectedObject.Property(identityField).Value).Value<long>();
             var array = JArray.Parse(content);
 
