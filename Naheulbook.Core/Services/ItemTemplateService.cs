@@ -58,6 +58,7 @@ namespace Naheulbook.Core.Services
             {
                 uow.ItemTemplates.Add(itemTemplate);
                 await uow.CompleteAsync();
+                itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplate.Id);
             }
 
             return itemTemplate;

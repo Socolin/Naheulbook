@@ -59,6 +59,8 @@ Feature: ItemTemplate
     Given a JWT for an admin user
     And an item template section
     And an item template category
+    And an item slot
+    And 3 skills
 
     When performing a POST to the url "/api/v2/itemTemplates/" with the following json content and the current jwt
     """
@@ -80,17 +82,17 @@ Feature: ItemTemplate
       ],
       "skills": [
         {
-          "id": 2
+          "id": ${Skill.[0].Id}
         }
       ],
       "unskills": [
         {
-          "id": 1
+          "id": ${Skill.[1].Id}
         }
       ],
       "skillModifiers": [
         {
-          "skill": 4,
+          "skill": ${Skill.[2].Id},
           "value": 1
         }
       ],
@@ -103,7 +105,7 @@ Feature: ItemTemplate
       ],
       "slots": [
         {
-          "id": 1
+          "id": ${Slot.Id}
         }
       ],
       "data": {
@@ -115,7 +117,7 @@ Feature: ItemTemplate
     And the response should contains the following json
     """
     {
-      "id": {"__capture": {"name": "ItemTemplateId", "type": "integer"}},
+      "id": {"__match": {"type": "integer"}},
       "source": "official",
       "categoryId": ${ItemTemplateCategory.Id},
       "name": "some-name",
@@ -135,17 +137,17 @@ Feature: ItemTemplate
       ],
       "skills": [
         {
-          "id": 2
+          "id": ${Skill.[0].Id}
         }
       ],
       "unskills": [
         {
-          "id": 1
+          "id": ${Skill.[1].Id}
         }
       ],
       "skillModifiers": [
         {
-          "skill": 4,
+          "skill": ${Skill.[2].Id},
           "value": 1
         }
       ],
@@ -158,7 +160,9 @@ Feature: ItemTemplate
       ],
       "slots": [
         {
-          "id": 1
+          "id": ${Slot.Id},
+          "name": "${Slot.Name}",
+          "techName": "${Slot.TechName}"
         }
       ],
       "data": {

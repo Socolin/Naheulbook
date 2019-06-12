@@ -1,3 +1,4 @@
+using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
 using TechTalk.SpecFlow;
 
@@ -13,10 +14,11 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil = testDataUtil;
         }
 
-        [Given("a location")]
-        public void GivenALocation()
+        [Given(@"(a|\d+) locations?")]
+        public void GivenXLocation(string amount)
         {
-            _testDataUtil.AddLocation();
+            for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
+                _testDataUtil.AddLocation();
         }
     }
 }

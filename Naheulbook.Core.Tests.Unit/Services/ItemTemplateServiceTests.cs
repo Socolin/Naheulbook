@@ -13,6 +13,7 @@ using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
 using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
+using Naheulbook.TestUtils;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
@@ -60,22 +61,25 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public async Task CreateItemTemplate_AddANewItemTemplateInDatabase()
+        public async Task CreateItemTemplate_AddANewItemTemplateInDatabase_AndReturnFullyLoadedOne()
         {
-            var expectedItemTemplate = new ItemTemplate();
+            var newItemTemplateEntity = new ItemTemplate {Id = 1};
+            var fullyLoadedItemTemplate = new ItemTemplate {Id = 1};
             var createItemTemplateRequest = new CreateItemTemplateRequest();
 
             _mapper.Map<ItemTemplate>(createItemTemplateRequest)
-                .Returns(expectedItemTemplate);
+                .Returns(newItemTemplateEntity);
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(newItemTemplateEntity.Id)
+                .Returns(fullyLoadedItemTemplate);
 
-            var itemTemplate = await _itemTemplateService.CreateItemTemplateAsync(new NaheulbookExecutionContext(), createItemTemplateRequest);
+            var actualItemTemplate = await _itemTemplateService.CreateItemTemplateAsync(new NaheulbookExecutionContext(), createItemTemplateRequest);
 
             Received.InOrder(() =>
             {
-                _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Add(itemTemplate);
+                _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Add(newItemTemplateEntity);
                 _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
             });
-            itemTemplate.Should().Be(expectedItemTemplate);
+            actualItemTemplate.Should().Be(fullyLoadedItemTemplate);
         }
 
         [Test]
