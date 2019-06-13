@@ -73,6 +73,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IJobService, JobService>();
             services.AddSingleton<IMailService, MailService>();
             services.AddSingleton<IMonsterTemplateService, MonsterTemplateService>();
+            services.AddSingleton<IMonsterTypeService, MonsterTypeService>();
             services.AddSingleton<IOriginService, OriginService>();
             services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
             services.AddSingleton<ISkillService, SkillService>();

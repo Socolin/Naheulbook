@@ -10,6 +10,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<EffectType> EffectTypes { get; set; }
         public DbSet<ItemTemplate> ItemTemplates { get; set; }
         public DbSet<Skill> Skills { get; set; }
+        public DbSet<MonsterType> MonsterTypes { get; set; }
         public DbSet<Origin> Origins { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Slot> Slots { get; set; }

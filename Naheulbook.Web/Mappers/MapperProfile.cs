@@ -87,6 +87,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.Locations, opt => opt.MapFrom(m => m.Locations.Select(x => x.LocationId)))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)));
             CreateMap<MonsterTemplateSimpleInventory, MonsterTemplateResponse.MonsterSimpleInventoryResponse>();
+            CreateMap<MonsterType, MonsterTypeResponse>();
+            CreateMap<MonsterCategory, MonsterCategoryResponse>();
 
             CreateMap<SkillEffect, SkillEffectResponse>()
                 .ForMember(m => m.Type, opt => opt.MapFrom(x => "ADD"))

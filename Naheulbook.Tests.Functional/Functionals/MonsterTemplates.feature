@@ -65,6 +65,32 @@ Feature: MonsterTemplates
 
 
   Scenario: Listing types
+    Given a monster category type
+    Given a monster category
+    Given a monster category
+
+    When performing a GET to the url "/api/v2/monsterTypes/"
+
+    Then the response status code is 200
+    And the response should contains a json array containing the following element identified by id
+    """
+    {
+        "id": ${MonsterType.Id},
+        "name": "${MonsterType.Name}",
+        "categories": [
+            {
+                "id": ${MonsterCategory.[0].Id},
+                "name": "${MonsterCategory.[0].Name}",
+                "typeid": ${MonsterType.Id}
+            },
+            {
+                "id": ${MonsterCategory.[1].Id},
+                "name": "${MonsterCategory.[1].Name}",
+                "typeid": ${MonsterType.Id}
+            }
+        ]
+    }
+    """
 
   Scenario: Listing traits
 

@@ -63,5 +63,6 @@ namespace Naheulbook.Core.Services
                 return monsterTemplate;
             }
         }
+
     }
 }
