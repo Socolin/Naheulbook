@@ -53,5 +53,64 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             act.Should().Throw<ForbiddenAccessException>();
         }
+
+
+        [Test]
+        public void EnsureCanEditItemTemplateAsync_WhenUserDoesNotExists_Throw()
+        {
+            var itemTemplate = new ItemTemplate {Source = "official"};
+            var executionContext = new NaheulbookExecutionContext {UserId = 1};
+
+            var user = new User {Admin = false, Id = 1};
+
+            _unitOfWork.Users.GetAsync(1)
+                .Returns(user);
+
+            Func<Task> act = () => _authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, itemTemplate);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureCanEditItemTemplateAsync_WhenSourceIsOfficial_ShouldThrowWhenUserIsNotAdmin()
+        {
+            var itemTemplate = new ItemTemplate {Source = "official"};
+            _unitOfWork.Users.GetAsync(1)
+                .Returns((User) null);
+
+            Func<Task> act = () => _authorizationUtil.EnsureAdminAccessAsync(new NaheulbookExecutionContext {UserId = 1});
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        [TestCase("private")]
+        [TestCase("community")]
+        public void EnsureCanEditItemTemplateAsync_WhenSourceIsPrivateOrCommunity_ShouldThrowWhenUserIsNotTheSame(string source)
+        {
+            var itemTemplate = new ItemTemplate {Source = source, SourceUserId = 2};
+            var executionContext = new NaheulbookExecutionContext {UserId = 1};
+
+            var user = new User {Admin = false, Id = 1};
+
+            _unitOfWork.Users.GetAsync(1)
+                .Returns(user);
+
+            Func<Task> act = () => _authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, itemTemplate);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+
+        [Test]
+        public void EnsureCanEditItemTemplateAsync_WhenSourceIsInvalid_ShouldThrow()
+        {
+            var itemTemplate = new ItemTemplate {Source = "invalid"};
+            var executionContext = new NaheulbookExecutionContext();
+
+            Func<Task> act = () => _authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, itemTemplate);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
     }
 }

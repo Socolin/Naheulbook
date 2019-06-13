@@ -10,14 +10,14 @@ namespace Naheulbook.Core.Mappers
     {
         public RequestToEntityProfile()
         {
-            CreateMap<CreateItemTemplateRequest, ItemTemplate>()
+            CreateMap<ItemTemplateRequest, ItemTemplate>()
                 .ForMember(m => m.Id, opt => opt.Ignore())
                 .ForMember(m => m.CleanName, opt => opt.MapFrom(i => StringCleanupHelper.RemoveAccents(i.Name)))
                 .ForMember(m => m.Category, opt => opt.Ignore())
                 .ForMember(m => m.SourceUserId, opt => opt.Ignore())
                 .ForMember(m => m.SourceUser, opt => opt.Ignore())
                 .ForMember(m => m.Data, opt => opt.MapFrom(i => i.Data.ToString(Formatting.None)));
-            CreateMap<CreateItemTemplateModifierRequest, ItemTemplateModifier>()
+            CreateMap<ItemTemplateModifierRequest, ItemTemplateModifier>()
                 .ForMember(m => m.Id, opt => opt.Ignore())
                 .ForMember(m => m.RequireJobId, opt => opt.MapFrom(im => im.Job))
                 .ForMember(m => m.RequireOriginId, opt => opt.MapFrom(im => im.Origin))
@@ -27,7 +27,7 @@ namespace Naheulbook.Core.Mappers
                 .ForMember(m => m.RequireJob, opt => opt.Ignore())
                 .ForMember(m => m.RequireOrigin, opt => opt.Ignore())
                 .ForMember(m => m.ItemTemplate, opt => opt.Ignore());
-            CreateMap<CreateItemTemplateRequirementRequest, ItemTemplateRequirement>()
+            CreateMap<ItemTemplateRequirementRequest, ItemTemplateRequirement>()
                 .ForMember(m => m.Id, opt => opt.Ignore())
                 .ForMember(m => m.StatName, opt => opt.MapFrom(ir => ir.Stat))
                 .ForMember(m => m.Stat, opt => opt.Ignore())
@@ -35,7 +35,7 @@ namespace Naheulbook.Core.Mappers
                 .ForMember(m => m.MaxValue, opt => opt.MapFrom(ir => ir.Max))
                 .ForMember(m => m.ItemTemplateId, opt => opt.Ignore())
                 .ForMember(m => m.ItemTemplate, opt => opt.Ignore());
-            CreateMap<CreateItemTemplateSkillModifierRequest, ItemTemplateSkillModifier>()
+            CreateMap<ItemTemplateSkillModifierRequest, ItemTemplateSkillModifier>()
                 .ForMember(m => m.Id, opt => opt.Ignore())
                 .ForMember(m => m.SkillId, opt => opt.MapFrom(x => x.Skill))
                 .ForMember(m => m.Skill, opt => opt.Ignore())

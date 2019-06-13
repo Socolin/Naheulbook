@@ -4,11 +4,11 @@ using Naheulbook.Requests.Requests;
 
 namespace Naheulbook.Requests.Validators
 {
-    public class CreateItemTemplateRequestValidator : AbstractValidator<CreateItemTemplateRequest>
+    public class ItemTemplateRequestValidator : AbstractValidator<ItemTemplateRequest>
     {
         private static readonly List<string> ValidSources = new List<string> {"official", "private", "community"};
 
-        public CreateItemTemplateRequestValidator()
+        public ItemTemplateRequestValidator()
         {
             RuleFor(r => r.Name).NotEmpty().Length(1, 255);
             RuleFor(r => r.Source).Must(s => ValidSources.Contains(s));
@@ -23,25 +23,26 @@ namespace Naheulbook.Requests.Validators
         }
     }
 
-    public class CreateItemTemplateModifierRequestValidator : AbstractValidator<CreateItemTemplateModifierRequest>
+    public class ItemTemplateModifierRequestValidator : AbstractValidator<ItemTemplateModifierRequest>
     {
-        public CreateItemTemplateModifierRequestValidator()
+        public ItemTemplateModifierRequestValidator()
         {
             RuleFor(r => r.Type).NotNull().NotEmpty();
             RuleFor(r => r.Stat).NotNull().NotEmpty();
         }
     }
-    public class CreateItemTemplateSkillModifierRequestValidator : AbstractValidator<CreateItemTemplateSkillModifierRequest>
+
+    public class ItemTemplateSkillModifierRequestValidator : AbstractValidator<ItemTemplateSkillModifierRequest>
     {
-        public CreateItemTemplateSkillModifierRequestValidator()
+        public ItemTemplateSkillModifierRequestValidator()
         {
             RuleFor(r => r.Skill).GreaterThan(0);
         }
     }
 
-    public class CreateItemTemplateRequirementRequestValidator : AbstractValidator<CreateItemTemplateRequirementRequest>
+    public class ItemTemplateRequirementRequestValidator : AbstractValidator<ItemTemplateRequirementRequest>
     {
-        public CreateItemTemplateRequirementRequestValidator()
+        public ItemTemplateRequirementRequestValidator()
         {
             RuleFor(r => r.Stat).NotNull().NotEmpty();
         }

@@ -57,12 +57,10 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 .AddSlot()
                 .AddSkill()
                 .AddSkill()
-                .AddSkill();
+                .AddSkill()
+                .AddItemTemplateSection()
+                .AddItemTemplateCategory();
 
-            if (!_testDataUtil.Contains<ItemTemplateSection>())
-                _testDataUtil.AddItemTemplateSection();
-            if (!_testDataUtil.Contains<ItemTemplateCategory>())
-                _testDataUtil.AddItemTemplateCategory();
             _testDataUtil.AddItemTemplate(itemTemplate =>
             {
                 itemTemplate.Requirements = new List<ItemTemplateRequirement>

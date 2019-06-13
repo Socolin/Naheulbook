@@ -247,3 +247,120 @@ Feature: ItemTemplate
     """
 
   Scenario: Can edit item template
+    Given a JWT for an admin user
+    And an item template with all optional fields set
+    And an item template category
+    And an item slot
+    And a stat
+    And 3 skills
+
+    When performing a PUT to the url "/api/v2/itemTemplates/${ItemTemplate.Id}" with the following json content and the current jwt
+    """
+    {
+        "id": ${ItemTemplate.Id},
+        "name": "some-new-name",
+        "techName": "some-new-tech-name",
+        "source": "official",
+        "categoryId": ${ItemTemplateCategory.[-1].Id},
+        "data": {
+            "new-key": "new-value"
+        },
+        "slots": [
+            {
+                "id": ${Slot.[-1].Id},
+                "name": "${Slot.[-1].Name}",
+                "techName": "${Slot.[-1].TechName}"
+            }
+        ],
+        "modifiers": [
+            {
+                "stat": "${Stat.[-1].Name}",
+                "value": 4,
+                "job": null,
+                "origin": null,
+                "special": [],
+                "type": "ADD"
+            }
+        ],
+        "requirements": [
+            {
+                "stat": "${Stat.[-1].Name}",
+                "min": 4,
+                "max": 15
+            }
+        ],
+        "skillModifiers": [
+            {
+                "skill": ${Skill.[-3].Id},
+                "value": 2
+            }
+        ],
+        "skills": [
+            {
+                "id":  ${Skill.[-1].Id},
+            }
+        ],
+        "unskills": [
+            {
+                "id":  ${Skill.[-2].Id},
+            }
+        ]
+    }
+    """
+
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+         "id": ${ItemTemplate.Id},
+         "name": "some-new-name",
+         "techName": "some-new-tech-name",
+         "source": "official",
+         "categoryId": ${ItemTemplateCategory.[-1].Id},
+         "sourceUserId": null,
+         "sourceUser": null,
+         "data": {
+             "new-key": "new-value"
+         },
+         "slots": [
+             {
+                 "id": ${Slot.[-1].Id},
+                 "name": "${Slot.[-1].Name}",
+                 "techName": "${Slot.[-1].TechName}"
+             }
+         ],
+         "modifiers": [
+             {
+                 "stat": "${Stat.[-1].Name}",
+                 "value": 4,
+                 "job": null,
+                 "origin": null,
+                 "special": [],
+                 "type": "ADD"
+             }
+         ],
+         "requirements": [
+             {
+                 "stat": "${Stat.[-1].Name}",
+                 "min": 4,
+                 "max": 15
+             }
+         ],
+         "skillModifiers": [
+             {
+                 "skill": ${Skill.[-3].Id},
+                 "value": 2
+             }
+         ],
+         "skills": [
+             {
+                 "id":  ${Skill.[-1].Id},
+             }
+         ],
+         "unskills": [
+             {
+                 "id":  ${Skill.[-2].Id},
+             }
+         ]
+     }
+     """

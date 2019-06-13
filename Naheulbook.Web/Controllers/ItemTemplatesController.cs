@@ -40,11 +40,39 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpPut("{itemTemplateId}")]
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        public async Task<ActionResult<ItemTemplateResponse>> PutItemTemplateAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int itemTemplateId,
+            ItemTemplateRequest request
+        )
+        {
+            try
+            {
+                var itemTemplate = await _itemTemplateService.EditItemTemplateAsync(
+                    executionContext,
+                    itemTemplateId,
+                    request
+                );
+
+                return _mapper.Map<ItemTemplateResponse>(itemTemplate);
+            }
+            catch (ItemTemplateNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+        }
+
         [HttpPost]
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<JsonResult> PostCreateItemTemplateAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
-            CreateItemTemplateRequest request
+            ItemTemplateRequest request
         )
         {
             try
