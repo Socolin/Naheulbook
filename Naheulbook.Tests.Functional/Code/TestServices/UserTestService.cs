@@ -24,7 +24,7 @@ namespace Naheulbook.Tests.Functional.Code.TestServices
             _dbContextOptions = dbContextOptions;
         }
 
-        public async Task CreateUserAsync(string username, string password)
+        public async Task<int> CreateUserAsync(string username, string password)
         {
             var responseMessage = await _naheulbookHttpClient.PostAsync("/api/v2/users/", new {username, password});
             if (!responseMessage.IsSuccessStatusCode)
@@ -39,16 +39,22 @@ namespace Naheulbook.Tests.Functional.Code.TestServices
             var activationCode = MailSteps.ParseActivationCodeFromActivationMail(mail);
 
             await _naheulbookHttpClient.PostAsync($"/api/v2/users/{username}/validate", new {activationCode});
+
+            using (var dbContext = new NaheulbookDbContext(_dbContextOptions))
+            {
+                var user = await dbContext.Users.FirstAsync(u => u.Username == username);
+                return user.Id;
+            }
         }
 
-        public async Task<(string username, string password)> CreateUserAsync()
+        public async Task<(string username, string password, int userId)> CreateUserAsync()
         {
             var username = $"user.{RngUtil.GetRandomHexString(16)}@test.ca";
             var password = RngUtil.GetRandomHexString(32);
 
-            await CreateUserAsync(username, password);
+            var userId = await CreateUserAsync(username, password);
 
-            return (username, password);
+            return (username, password, userId);
         }
 
         public async Task SetUserAdminAsync(string username)

@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Naheulbook.Core.Configurations;
 using Naheulbook.Core.Mappers;
-using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.DbContexts;
@@ -72,6 +71,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();
             services.AddSingleton<IItemTemplateUtil, ItemTemplateUtil>();
             services.AddSingleton<IJobService, JobService>();
+            services.AddSingleton<ILootService, LootService>();
             services.AddSingleton<IMailService, MailService>();
             services.AddSingleton<IMonsterTemplateService, MonsterTemplateService>();
             services.AddSingleton<IMonsterTraitService, MonsterTraitService>();

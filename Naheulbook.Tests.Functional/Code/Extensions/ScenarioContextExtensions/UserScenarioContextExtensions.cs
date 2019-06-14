@@ -8,6 +8,7 @@ namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions
         private const string LastReceivedMailKey = "LastReceivedMail";
         private const string UsernameKey = "Username";
         private const string PasswordKey = "Password";
+        private const string UserIdKey = "UserId";
         private const string ActivationCodeKey = "ActivationCode";
         private const string JwtKey = "Jwt";
 
@@ -59,6 +60,16 @@ namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions
         public static string GetJwt(this ScenarioContext scenarioContext)
         {
             return scenarioContext.Get<string>(JwtKey);
+        }
+
+        public static void SetUserId(this ScenarioContext scenarioContext, int userId)
+        {
+            scenarioContext.Set(userId, UserIdKey);
+        }
+
+        public static int GetUserId(this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.Get<int>(UserIdKey);
         }
     }
 }

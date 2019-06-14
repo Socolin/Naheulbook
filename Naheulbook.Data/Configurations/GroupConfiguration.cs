@@ -31,6 +31,11 @@ namespace Naheulbook.Data.Configurations
                 .IsRequired(false)
                 .HasColumnName("combatlootid");
 
+            builder.HasOne(e => e.CombatLoot)
+                .WithMany()
+                .HasForeignKey(e => e.CombatLootId)
+                .HasConstraintName("FK_group_loot_combatlootid");
+
             builder.HasOne(e => e.Master)
                 .WithMany(e => e.Groups)
                 .HasForeignKey(e => e.MasterId)

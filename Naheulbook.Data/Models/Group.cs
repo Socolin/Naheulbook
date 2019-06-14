@@ -9,12 +9,14 @@ namespace Naheulbook.Data.Models
         public string Data { get; set; }
 
         public int? CombatLootId { get; set; }
-        // public Loot Loot { get; set; }
+        public Loot CombatLoot { get; set; }
 
         public int MasterId { get; set; }
         public User Master { get; set; }
 
         public int LocationId { get; set; }
         public Location Location { get; set; }
+
+        public ICollection<Loot> Loots { get; set; }
     }
 }

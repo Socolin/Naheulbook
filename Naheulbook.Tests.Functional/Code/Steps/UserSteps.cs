@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Naheulbook.Tests.Functional.Code.Extensions;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.Servers;
 using Naheulbook.Tests.Functional.Code.TestServices;
@@ -25,19 +24,21 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         [Given("a user identified by a password")]
         public async Task GivenAUserIdentifiedByAPassword()
         {
-            var (username, password) = await _userTestService.CreateUserAsync();
+            var (username, password, userId) = await _userTestService.CreateUserAsync();
 
             _scenarioContext.SetUsername(username);
             _scenarioContext.SetPassword(password);
+            _scenarioContext.SetUserId(userId);
         }
 
         [Given("a JWT for a user")]
         public async Task GivenAUser()
         {
-            var (username, password) = await _userTestService.CreateUserAsync();
+            var (username, password, userId) = await _userTestService.CreateUserAsync();
 
             _scenarioContext.SetUsername(username);
             _scenarioContext.SetPassword(password);
+            _scenarioContext.SetUserId(userId);
 
             var jwt = await _userTestService.GenerateJwtAsync(username, password);
             _scenarioContext.SetJwt(jwt);
@@ -46,10 +47,11 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         [Given("a JWT for an admin user")]
         public async Task GivenAnAdminUser()
         {
-            var (username, password) = await _userTestService.CreateUserAsync();
+            var (username, password, userId) = await _userTestService.CreateUserAsync();
 
             _scenarioContext.SetUsername(username);
             _scenarioContext.SetPassword(password);
+            _scenarioContext.SetUserId(userId);
 
             await _userTestService.SetUserAdminAsync(username);
 

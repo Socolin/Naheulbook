@@ -112,5 +112,28 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             act.Should().Throw<ForbiddenAccessException>();
         }
+
+
+        [Test]
+        public void EnsureIsGroupOwner_WhenUserIsDifferentFromGroupMasterId_ShouldThrow()
+        {
+            var group = new Group {MasterId = 10};
+            var executionContext = new NaheulbookExecutionContext {UserId = 15};
+
+            Action act = () => _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureIsGroupOwner_WhenUserIsSameFromGroupMasterId_ShouldNotThrow()
+        {
+            var group = new Group {MasterId = 15};
+            var executionContext = new NaheulbookExecutionContext {UserId = 15};
+
+            Action act = () => _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+            act.Should().NotThrow();
+        }
     }
 }

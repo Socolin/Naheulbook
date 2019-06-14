@@ -91,7 +91,7 @@ namespace Naheulbook.TestUtils
                     // "DELETE FROM `error_report`;" +
                     // "DELETE FROM `event`;" +
                     // "DELETE FROM `god`;" +
-                    // "DELETE FROM `group`;" +
+                    "DELETE FROM `group`;" +
                     // "DELETE FROM `group_history`;" +
                     // "DELETE FROM `group_invitations`;" +
                     // "DELETE FROM `icon`;" +
@@ -116,7 +116,7 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `job_skill`;" +
                     "DELETE FROM `location`;" +
                     "DELETE FROM `location_map`;" +
-                    // "DELETE FROM `loot`;" +
+                    "DELETE FROM `loot`;" +
                     // "DELETE FROM `monster`;" +
                     "DELETE FROM `monster_category`;" +
                     "DELETE FROM `monster_location`;" +

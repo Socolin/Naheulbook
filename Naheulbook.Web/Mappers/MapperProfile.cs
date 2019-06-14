@@ -20,7 +20,10 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Special, opt => opt.Ignore());
 
             CreateMap<Group, GroupResponse>()
-                .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)));
+                .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
+                .ForMember(m => m.Invites, opt => opt.Ignore())
+                .ForMember(m => m.Invited, opt => opt.Ignore())
+                .ForMember(m => m.Characters, opt => opt.Ignore());
 
             CreateMap<ItemTemplate, ItemTemplateResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data)))
@@ -70,7 +73,12 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)));
 
             CreateMap<Location, LocationResponse>()
+                .ForMember(m => m.Children, opt => opt.Ignore())
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)));
+
+            CreateMap<Loot, LootResponse>()
+                .ForMember(m => m.Items, opt => opt.Ignore())
+                .ForMember(m => m.Monsters, opt => opt.Ignore());
 
             CreateMap<Origin, OriginResponse>()
                 .ForMember(m => m.Requirements, opt => opt.MapFrom(o => o.Requirements.OrderBy(r => r.Id)))

@@ -53,6 +53,8 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new LocationConfiguration());
             modelBuilder.ApplyConfiguration(new LocationMapConfiguration());
 
+            modelBuilder.ApplyConfiguration(new LootConfiguration());
+
             modelBuilder.ApplyConfiguration(new MonsterCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterLocationConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTemplateConfiguration());
