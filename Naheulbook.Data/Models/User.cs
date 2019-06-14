@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Naheulbook.Data.Models
 {
     public class User
@@ -19,5 +21,7 @@ namespace Naheulbook.Data.Models
         public string TwitterId { get; set; }
 
         public string DisplayName { get; set; }
+
+        public ICollection<Group> Groups { get; set; }
     }
 }

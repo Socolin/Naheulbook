@@ -29,6 +29,8 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new EffectModifierConfiguration());
             modelBuilder.ApplyConfiguration(new EffectTypeConfiguration());
 
+            modelBuilder.ApplyConfiguration(new GroupConfiguration());
+
             modelBuilder.ApplyConfiguration(new ItemTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new ItemTemplateCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ItemTemplateModifierConfiguration());

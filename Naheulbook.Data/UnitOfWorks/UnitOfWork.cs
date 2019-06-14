@@ -10,6 +10,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IEffectRepository Effects { get; }
         IEffectCategoryRepository EffectCategories { get; }
         IEffectTypeRepository EffectTypes { get; }
+        IGroupRepository Groups { get; }
         IItemTemplateRepository ItemTemplates { get; }
         IItemTemplateCategoryRepository ItemTemplateCategories { get; }
         IItemTemplateSectionRepository ItemTemplateSections { get; }
@@ -39,6 +40,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IEffectRepository Effects => new EffectRepository(_naheulbookDbContext);
         public IEffectTypeRepository EffectTypes => new EffectTypeRepository(_naheulbookDbContext);
         public IEffectCategoryRepository EffectCategories => new EffectCategoryRepository(_naheulbookDbContext);
+        public IGroupRepository Groups => new GroupRepository(_naheulbookDbContext);
         public IItemTemplateRepository ItemTemplates => new ItemTemplateRepository(_naheulbookDbContext);
         public IItemTemplateSectionRepository ItemTemplateSections => new ItemTemplateSectionRepository(_naheulbookDbContext);
         public IItemTemplateCategoryRepository ItemTemplateCategories => new ItemTemplateCategoryRepository(_naheulbookDbContext);

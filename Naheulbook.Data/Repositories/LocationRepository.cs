@@ -10,6 +10,7 @@ namespace Naheulbook.Data.Repositories
     public interface ILocationRepository : IRepository<Location>
     {
         Task<List<Location>> GetByIdsAsync(IEnumerable<int> locationIds);
+        Task<Location> GetNewGroupDefaultLocationAsync();
     }
 
     public class LocationRepository : Repository<Location, NaheulbookDbContext>, ILocationRepository
@@ -24,6 +25,11 @@ namespace Naheulbook.Data.Repositories
             return Context.Location
                 .Where(x => locationIds.Contains(x.Id))
                 .ToListAsync();
+        }
+
+        public Task<Location> GetNewGroupDefaultLocationAsync()
+        {
+            return Context.Location.SingleAsync(x => x.Id == 1);
         }
     }
 }

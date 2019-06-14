@@ -19,6 +19,9 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Stat, opt => opt.MapFrom(se => se.StatName))
                 .ForMember(m => m.Special, opt => opt.Ignore());
 
+            CreateMap<Group, GroupResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)));
+
             CreateMap<ItemTemplate, ItemTemplateResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data)))
                 .ForMember(m => m.Slots, opt => opt.MapFrom(i => i.Slots.Select(x => x.Slot)));
@@ -65,6 +68,9 @@ namespace Naheulbook.Web.Mappers
             CreateMap<JobRestrict, DescribedFlagResponse>()
                 .ForMember(m => m.Description, opt => opt.MapFrom(r => r.Text))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)));
+
+            CreateMap<Location, LocationResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)));
 
             CreateMap<Origin, OriginResponse>()
                 .ForMember(m => m.Requirements, opt => opt.MapFrom(o => o.Requirements.OrderBy(r => r.Id)))
