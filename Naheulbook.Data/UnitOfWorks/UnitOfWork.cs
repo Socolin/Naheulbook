@@ -18,6 +18,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IMonsterTypeRepository MonsterTypes { get; }
         IMonsterCategoryRepository MonsterCategories { get; }
         IMonsterTemplateRepository MonsterTemplates { get; }
+        IMonsterTraitRepository MonsterTraits { get; }
         IOriginRepository Origins { get; }
         ISkillRepository Skills { get; }
         ISlotRepository Slots { get; }
@@ -46,6 +47,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IMonsterTypeRepository MonsterTypes => new MonsterTypeRepository(_naheulbookDbContext);
         public IMonsterCategoryRepository MonsterCategories => new MonsterCategoryRepository(_naheulbookDbContext);
         public IMonsterTemplateRepository MonsterTemplates => new MonsterTemplateRepository(_naheulbookDbContext);
+        public IMonsterTraitRepository MonsterTraits => new MonsterTraitRepository(_naheulbookDbContext);
         public IOriginRepository Origins => new OriginRepository(_naheulbookDbContext);
         public ISkillRepository Skills => new SkillRepository(_naheulbookDbContext);
         public ISlotRepository Slots => new SlotRepository(_naheulbookDbContext);

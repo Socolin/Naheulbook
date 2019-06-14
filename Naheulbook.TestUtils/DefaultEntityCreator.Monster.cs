@@ -32,5 +32,19 @@ namespace Naheulbook.TestUtils
                 Categories = new List<MonsterCategory>()
             };
         }
+
+        public MonsterTrait CreateMonsterTrait(string suffix = null)
+        {
+            if (suffix == null)
+                suffix = RngUtil.GetRandomHexString(8);
+
+            return new MonsterTrait
+            {
+                Name = $"some-monster-trait-name-{suffix}",
+                Description = $"some-monster-trait-description-{suffix}",
+                Levels = @"[""level1"", ""level2""]"
+            };
+
+        }
     }
 }

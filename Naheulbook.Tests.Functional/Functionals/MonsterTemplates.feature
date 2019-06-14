@@ -93,6 +93,21 @@ Feature: MonsterTemplates
     """
 
   Scenario: Listing traits
+    Given a monster trait
+
+    When performing a GET to the url "/api/v2/monsterTraits/"
+
+    Then the response status code is 200
+    And the response should contains a json array containing the following element identified by id
+    """
+    {
+        "id": ${MonsterTrait.Id},
+        "name": "${MonsterTrait.Name}",
+        "description": "${MonsterTrait.Description}",
+        "levels": ["level1", "level2"],
+    }
+    """
+
 
   Scenario: Listing monsters
 

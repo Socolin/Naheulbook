@@ -89,6 +89,8 @@ namespace Naheulbook.Web.Mappers
             CreateMap<MonsterTemplateSimpleInventory, MonsterTemplateResponse.MonsterSimpleInventoryResponse>();
             CreateMap<MonsterType, MonsterTypeResponse>();
             CreateMap<MonsterCategory, MonsterCategoryResponse>();
+            CreateMap<MonsterTrait, MonsterTraitResponse>()
+                .ForMember(m => m.Levels, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<string>>(b.Levels)));
 
             CreateMap<SkillEffect, SkillEffectResponse>()
                 .ForMember(m => m.Type, opt => opt.MapFrom(x => "ADD"))

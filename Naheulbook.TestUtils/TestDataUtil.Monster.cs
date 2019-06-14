@@ -14,5 +14,10 @@ namespace Naheulbook.TestUtils
         {
             return SaveEntity(_defaultEntityCreator.CreateMonsterCategory(GetLast<MonsterType>()), customizer);
         }
+
+        public TestDataUtil AddMonsterTrait(Action<MonsterTrait> customizer = null)
+        {
+            return SaveEntity(_defaultEntityCreator.CreateMonsterTrait(), customizer);
+        }
     }
 }

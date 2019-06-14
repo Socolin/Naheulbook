@@ -24,5 +24,11 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         {
             _testDataUtil.AddMonsterCategory();
         }
+
+        [Given("a monster trait")]
+        public void GivenAMonsterTrait()
+        {
+            _testDataUtil.AddMonsterTrait();
+        }
     }
 }
