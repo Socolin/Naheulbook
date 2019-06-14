@@ -9,12 +9,12 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/monsterTraits")]
     [ApiController]
-    public class MonsterTraitController
+    public class MonsterTraitsController
     {
         private readonly IMonsterTraitService _monsterTraitService;
         private readonly IMapper _mapper;
 
-        public MonsterTraitController(IMonsterTraitService monsterTraitService, IMapper mapper)
+        public MonsterTraitsController(IMonsterTraitService monsterTraitService, IMapper mapper)
         {
             _monsterTraitService = monsterTraitService;
             _mapper = mapper;
