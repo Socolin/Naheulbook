@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Naheulbook.Data.Models;
+using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Responses;
 using Newtonsoft.Json.Linq;
 
@@ -95,6 +97,11 @@ namespace Naheulbook.Web.Mappers
             CreateMap<OriginRestrict, DescribedFlagResponse>()
                 .ForMember(m => m.Description, opt => opt.MapFrom(r => r.Text))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(r => MapperHelpers.FromJson<List<FlagResponse>>(r.Flags)));
+
+            CreateMap<Monster, MonsterResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)))
+                .ForMember(m => m.Modifiers, opt => opt.MapFrom(b => MapperHelpers.FromJson<IList<ActiveStatsModifier>>(b.Modifiers)))
+                .ForMember(m => m.Items, opt => opt.Ignore());;
 
             CreateMap<MonsterTemplate, MonsterTemplateResponse>()
                 .ForMember(x => x.SimpleInventory, opt => opt.MapFrom(m => m.Items))

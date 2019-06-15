@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Requests.Requests
 {
@@ -13,13 +14,6 @@ namespace Naheulbook.Requests.Requests
         public string Name { get; set; }
         public string DurationType { get; set; }
         public int? TimeDuration { get; set; }
-        public List<CreateEffectModifierRequest> Modifiers { get; set; }
-    }
-
-    public class CreateEffectModifierRequest
-    {
-        public string Stat { get; set; }
-        public short Value { get; set; }
-        public string Type { get; set; }
+        public List<StatModifier> Modifiers { get; set; }
     }
 }

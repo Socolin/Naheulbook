@@ -21,8 +21,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
     public class MonsterTemplateServiceTests
     {
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
-        private MonsterTemplateService _service;
         private IAuthorizationUtil _authorizationUtil;
+        private MonsterTemplateService _service;
 
         [SetUp]
         public void SetUp()

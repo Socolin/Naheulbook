@@ -20,6 +20,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
     {
         private IGroupService _groupService;
         private ILootService _lootService;
+        private IMonsterService _monsterService;
         private IMapper _mapper;
         private NaheulbookExecutionContext _executionContext;
 
@@ -30,9 +31,15 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             _groupService = Substitute.For<IGroupService>();
             _lootService = Substitute.For<ILootService>();
+            _monsterService = Substitute.For<IMonsterService>();
             _mapper = Substitute.For<IMapper>();
 
-            _controller = new GroupsController(_groupService, _lootService, _mapper);
+            _controller = new GroupsController(
+                _groupService,
+                _lootService,
+                _monsterService,
+                _mapper
+            );
 
             _executionContext = new NaheulbookExecutionContext();
         }
@@ -83,7 +90,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _lootService.CreateLootAsync(_executionContext, groupId, createLootRequest)
                 .Returns(Task.FromException<Loot>(new ForbiddenAccessException()));
 
-            Func<Task> act = () =>  _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
+            Func<Task> act = () => _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
@@ -97,7 +104,54 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _lootService.CreateLootAsync(_executionContext, groupId, createLootRequest)
                 .Returns(Task.FromException<Loot>(new GroupNotFoundException(groupId)));
 
-            Func<Task> act = () =>  _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
+            Func<Task> act = () => _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task PostCreateMonsterAsync_ShouldCreateMonster_ThenReturnMonsterResponse()
+        {
+            const int groupId = 8;
+            var createMonsterRequest = new CreateMonsterRequest();
+            var createdMonster = new Monster();
+            var monsterResponse = new MonsterResponse();
+
+            _monsterService.CreateMonsterAsync(_executionContext, groupId, createMonsterRequest)
+                .Returns(createdMonster);
+            _mapper.Map<MonsterResponse>(createdMonster)
+                .Returns(monsterResponse);
+
+            var result = await _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
+
+            result.Value.Should().BeSameAs(monsterResponse);
+            result.StatusCode.Should().Be(HttpStatusCode.Created);
+        }
+
+        [Test]
+        public void PostCreateMonsterAsync_ShouldReturn403_WhenUserDoesNotHaveAccess()
+        {
+            const int groupId = 8;
+            var createMonsterRequest = new CreateMonsterRequest();
+
+            _monsterService.CreateMonsterAsync(_executionContext, groupId, createMonsterRequest)
+                .Returns(Task.FromException<Monster>(new ForbiddenAccessException()));
+
+            Func<Task> act = () => _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        [Test]
+        public void PostCreateMonsterAsync_ShouldReturn404_WhenGroupDoesNotExists()
+        {
+            const int groupId = 8;
+            var createMonsterRequest = new CreateMonsterRequest();
+
+            _monsterService.CreateMonsterAsync(_executionContext, groupId, createMonsterRequest)
+                .Returns(Task.FromException<Monster>(new GroupNotFoundException(groupId)));
+
+            Func<Task> act = () => _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }

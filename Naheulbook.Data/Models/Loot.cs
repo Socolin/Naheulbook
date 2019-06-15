@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Naheulbook.Data.Models
 {
@@ -11,5 +12,7 @@ namespace Naheulbook.Data.Models
 
         public int GroupId { get; set; }
         public Group Group { get; set; }
+
+        public ICollection<Monster> Monsters { get; set; }
     }
 }

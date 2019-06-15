@@ -73,6 +73,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IJobService, JobService>();
             services.AddSingleton<ILootService, LootService>();
             services.AddSingleton<IMailService, MailService>();
+            services.AddSingleton<IMonsterService, MonsterService>();
             services.AddSingleton<IMonsterTemplateService, MonsterTemplateService>();
             services.AddSingleton<IMonsterTraitService, MonsterTraitService>();
             services.AddSingleton<IMonsterTypeService, MonsterTypeService>();
@@ -81,6 +82,7 @@ namespace Naheulbook.Web
             services.AddSingleton<ISkillService, SkillService>();
             services.AddSingleton<IUserService, UserService>();
 
+            services.AddSingleton<IActiveStatsModifierUtil, ActiveStatsModifierUtil>();
             services.AddSingleton<IAuthorizationUtil, AuthorizationUtil>();
             services.AddSingleton<IStringCleanupUtil, StringCleanupUtil>();
 

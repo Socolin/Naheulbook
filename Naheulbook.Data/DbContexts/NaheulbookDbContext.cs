@@ -55,6 +55,8 @@ namespace Naheulbook.Data.DbContexts
 
             modelBuilder.ApplyConfiguration(new LootConfiguration());
 
+            modelBuilder.ApplyConfiguration(new MonsterConfiguration());
+
             modelBuilder.ApplyConfiguration(new MonsterCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterLocationConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTemplateConfiguration());

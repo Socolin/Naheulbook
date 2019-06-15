@@ -18,5 +18,6 @@ namespace Naheulbook.Data.Models
         public Location Location { get; set; }
 
         public ICollection<Loot> Loots { get; set; }
+        public ICollection<Monster> Monsters { get; set; }
     }
 }

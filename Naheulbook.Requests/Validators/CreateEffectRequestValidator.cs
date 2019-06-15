@@ -11,6 +11,7 @@ namespace Naheulbook.Requests.Validators
             RuleFor(e => e.CategoryId).GreaterThan(0);
             RuleFor(e => e.Modifiers).NotNull();
             RuleFor(e => e.Dice).GreaterThanOrEqualTo((short) 0);
+            RuleForEach(e => e.Modifiers).SetValidator(new StatModifierValidator());
         }
     }
 }
