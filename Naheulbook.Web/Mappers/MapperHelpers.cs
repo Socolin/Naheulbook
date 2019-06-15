@@ -5,6 +5,11 @@ namespace Naheulbook.Web.Mappers
 {
     public class MapperHelpers
     {
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
+        {
+            NullValueHandling = NullValueHandling.Ignore
+        };
+
         public static string[] FromCommaSeparatedStringArray(string str)
         {
             return str.Split(',', StringSplitOptions.RemoveEmptyEntries);
@@ -12,7 +17,7 @@ namespace Naheulbook.Web.Mappers
 
         public static T FromJson<T>(string json)
         {
-            return JsonConvert.DeserializeObject<T>(json);
+            return JsonConvert.DeserializeObject<T>(json, JsonSerializerSettings);
         }
     }
 }

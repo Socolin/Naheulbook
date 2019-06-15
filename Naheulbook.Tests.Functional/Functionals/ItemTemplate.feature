@@ -123,16 +123,12 @@ Feature: ItemTemplate
       "name": "some-name",
       "techName": "some-tech-name",
       "source": "official",
-      "sourceUser": null,
-      "sourceUserId": null,
       "modifiers": [
         {
           "stat": "FO",
           "value": 1,
           "type": "ADD",
-          "special": ["SOME-SPECIAL"],
-          "job": null,
-          "origin": null
+          "special": ["SOME-SPECIAL"]
         }
       ],
       "skills": [
@@ -197,8 +193,6 @@ Feature: ItemTemplate
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",
-        "sourceUserId": null,
-        "sourceUser": null,
         "categoryId": ${ItemTemplateCategory.Id},
         "data": {
             "key": "value"
@@ -235,12 +229,12 @@ Feature: ItemTemplate
         ],
         "skills": [
             {
-                "id":  ${Skill.[-1].Id},
+                "id":  ${Skill.[-1].Id}
             }
         ],
         "unskills": [
             {
-                "id":  ${Skill.[-2].Id},
+                "id":  ${Skill.[-2].Id}
             }
         ]
     }
@@ -317,8 +311,6 @@ Feature: ItemTemplate
          "techName": "some-new-tech-name",
          "source": "official",
          "categoryId": ${ItemTemplateCategory.[-1].Id},
-         "sourceUserId": null,
-         "sourceUser": null,
          "data": {
              "new-key": "new-value"
          },
@@ -333,8 +325,6 @@ Feature: ItemTemplate
              {
                  "stat": "${Stat.[-1].Name}",
                  "value": 4,
-                 "job": null,
-                 "origin": null,
                  "special": [],
                  "type": "ADD"
              }

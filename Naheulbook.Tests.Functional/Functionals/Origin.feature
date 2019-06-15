@@ -24,8 +24,7 @@ Feature: Origin
         "size": "${Origin.Size}",
         "flags": [
             {
-                "type": "value",
-                "data": null
+                "type": "value"
             }
         ],
         "speedModifier": ${Origin.SpeedModifier},
@@ -60,8 +59,7 @@ Feature: Origin
                 "description": "${Origin.Restrictions.[0].Text}",
                 "flags": [
                     {
-                        "type": "value",
-                        "data": null
+                        "type": "value"
                     }
                 ]
             }

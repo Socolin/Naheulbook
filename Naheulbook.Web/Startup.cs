@@ -54,6 +54,7 @@ namespace Naheulbook.Web
             }
 
             services.AddMvc()
+                .AddJsonOptions(options => { options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore; })
                 .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<ValidateUserRequest>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

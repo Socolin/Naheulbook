@@ -12,10 +12,7 @@ Feature: Effect
         "name": "${Effect.Name}",
         "description": "${Effect.Description}",
         "durationType": "${Effect.DurationType}",
-        "duration": null,
         "combatCount": ${Effect.CombatCount},
-        "lapCount": null,
-        "timeDuration": null,
         "dice": ${Effect.Dice},
         "categoryId": ${EffectCategory.Id},
         "modifiers": [

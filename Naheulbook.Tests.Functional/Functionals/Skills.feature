@@ -22,8 +22,7 @@ Feature: Skill
         ],
         "flags": [
           {
-            "type": "value",
-            "data": null
+            "type": "value"
           }
         ],
         "effects": [

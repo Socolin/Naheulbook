@@ -10,7 +10,6 @@ Feature: Job
     {
         "id": ${Job.Id},
         "name": "${Job.Name}",
-        "internalname": null,
         "informations": "${Job.Information}",
         "playerDescription": "${Job.PlayerDescription}",
         "playerSummary": "${Job.PlayerSummary}",
@@ -24,11 +23,9 @@ Feature: Job
         "diceEaLevelUp": ${Job.DiceEaLevelUp},
         "baseAT": ${Job.BaseAt},
         "basePRD": ${Job.BasePrd},
-        "parentJobId": null,
         "flags": [
             {
-                "type": "value",
-                "data": null
+                "type": "value"
             }
         ],
         "skillIds": [
@@ -90,7 +87,6 @@ Feature: Job
                 ],
                 "flags": [
                     {
-                        "data": null,
                         "type": "value"
                     }
                 ]
