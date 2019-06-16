@@ -20,6 +20,23 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         }
 
         [Test]
+        public async Task GetWithAllDataAsync_ShouldLoadExpectedCharacter_WithAllExpectedData()
+        {
+            TestDataUtil.AddUser();
+            var user = TestDataUtil.GetLast<User>();
+            TestDataUtil.AddCharacterWithAllData(user.Id);
+            var expectedCharacter = TestDataUtil.GetLast<Character>();
+
+            var character = await _characterRepository.GetWithAllDataAsync(user.Id);
+
+            character.Should().BeEquivalentTo(expectedCharacter, config => config.Excluding(x => x.Owner).Excluding(x => x.Jobs).Excluding(x => x.Origin).Excluding(x => x.Modifiers).Excluding(x => x.Skills).Excluding(x => x.Group).Excluding(x => x.Specialities));
+            character.Jobs.Select(x => x.JobId).Should().BeEquivalentTo(TestDataUtil.GetAll<Job>().Select(x => x.Id));
+            character.Specialities.Select(x => x.Speciality).Should().BeEquivalentTo(TestDataUtil.GetAll<Speciality>(), config => config.Excluding(x => x.Job));
+            character.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.Excluding(x => x.Characters).Excluding(x => x.Master).Excluding(x => x.Location));
+            character.Modifiers.Should().BeEquivalentTo(expectedCharacter.Modifiers, config => config.Excluding(x => x.Character));
+        }
+
+        [Test]
         public async Task GetForSummaryByOwnerIdAsync_LoadCharacterOwnedByUser_IncludingJobs()
         {
             TestDataUtil
@@ -46,7 +63,6 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             character.Jobs.First().Job.Should().BeEquivalentTo(TestDataUtil.GetLast<Job>());
             character.Origin.Should().BeEquivalentTo(TestDataUtil.GetLast<Origin>());
         }
-
 
         [Test]
         public async Task GetForSummaryByOwnerIdAsync_ShouldNotReturnsCharacterThatDoesNotBelongToTheUser()

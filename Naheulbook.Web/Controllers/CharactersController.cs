@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.ActionResults;
+using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
 
@@ -36,6 +39,28 @@ namespace Naheulbook.Web.Controllers
         {
             var characters = await _characterService.GetCharacterListAsync(executionContext);
             return _mapper.Map<List<CharacterSummaryResponse>>(characters);
+        }
+
+        [HttpGet("{CharacterId}")]
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        public async Task<ActionResult<CharacterResponse>> GetCharacterDetailsAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId
+        )
+        {
+            try
+            {
+                var characters = await _characterService.LoadCharacterDetailsAsync(executionContext, characterId);
+                return _mapper.Map<CharacterResponse>(characters);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
         }
 
         [HttpPost]

@@ -19,7 +19,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             _allEntities = new List<object>();
             _addEntitiesContext = DbUtils.GetTestDbContext<TDbContext>();
-            RepositoryDbContext = DbUtils.GetTestDbContext<TDbContext>();
+            RepositoryDbContext = DbUtils.GetTestDbContext<TDbContext>(true);
             TestDataUtil = new TestDataUtil(DbUtils.GetDbContextOptions(), new DefaultEntityCreator());
             TestDataUtil.Cleanup();
         }

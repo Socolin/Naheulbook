@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
@@ -12,20 +14,24 @@ namespace Naheulbook.Core.Services
     {
         Task<List<Character>> GetCharacterListAsync(NaheulbookExecutionContext executionContext);
         Task<Character> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request);
+        Task<Character> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId);
     }
 
     public class CharacterService : ICharacterService
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ICharacterFactory _characterFactory;
+        private readonly IAuthorizationUtil _authorizationUtil;
 
         public CharacterService(
             IUnitOfWorkFactory unitOfWorkFactory,
-            ICharacterFactory characterFactory
+            ICharacterFactory characterFactory,
+            IAuthorizationUtil authorizationUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _characterFactory = characterFactory;
+            _authorizationUtil = authorizationUtil;
         }
 
         public async Task<List<Character>> GetCharacterListAsync(NaheulbookExecutionContext executionContext)
@@ -46,6 +52,20 @@ namespace Naheulbook.Core.Services
 
                 uow.Characters.Add(character);
                 await uow.CompleteAsync();
+
+                return character;
+            }
+        }
+
+        public async Task<Character> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithAllDataAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
                 return character;
             }

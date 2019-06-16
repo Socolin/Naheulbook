@@ -18,6 +18,18 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Character, CharacterSummaryResponse>()
                 .ForMember(x => x.JobNames, opt => opt.MapFrom(c => c.Jobs.Select(x => x.Job.Name)))
                 .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name));
+            CreateMap<Character, CharacterResponse>()
+                .ForMember(x => x.Stats, opt => opt.MapFrom(c => new CharacterResponse.BasicStats{Ad = c.Ad, Cou = c.Cou, Cha = c.Cha, Fo = c.Fo, Int = c.Int}))
+                .ForMember(x => x.Items, opt => opt.Ignore())
+                .ForMember(x => x.Invites, opt => opt.Ignore())
+                .ForMember(x => x.SkillIds, opt => opt.MapFrom(c => c.Skills.Select(x => x.SkillId)))
+                .ForMember(x => x.JobIds, opt => opt.MapFrom(c => c.Jobs.Select(x => x.JobId)))
+                .ForMember(x => x.Specialities, opt => opt.MapFrom(c => c.Specialities.Select(x => x.Speciality)));
+            CreateMap<CharacterModifier, ActiveStatsModifier>()
+                .ForMember(x => x.Active, opt => opt.MapFrom(x => x.IsActive));
+            CreateMap<CharacterModifierValue, StatModifier>()
+                .ForMember(x => x.Stat, opt => opt.MapFrom(c => c.StatName))
+                .ForMember(x => x.Special, opt => opt.Ignore());
 
             CreateMap<Effect, EffectResponse>();
             CreateMap<EffectType, EffectTypeResponse>();
@@ -31,6 +43,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Invites, opt => opt.Ignore())
                 .ForMember(m => m.Invited, opt => opt.Ignore())
                 .ForMember(m => m.Characters, opt => opt.Ignore());
+            CreateMap<Group, NamedIdResponse>();
 
             CreateMap<ItemTemplate, ItemTemplateResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data)))
@@ -106,7 +119,8 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Monster, MonsterResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)))
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(b => MapperHelpers.FromJson<IList<ActiveStatsModifier>>(b.Modifiers)))
-                .ForMember(m => m.Items, opt => opt.Ignore());;
+                .ForMember(m => m.Items, opt => opt.Ignore());
+            ;
 
             CreateMap<MonsterTemplate, MonsterTemplateResponse>()
                 .ForMember(x => x.SimpleInventory, opt => opt.MapFrom(m => m.Items))
@@ -135,6 +149,8 @@ namespace Naheulbook.Web.Mappers
             CreateMap<SpecialityModifier, StatModifierResponse>()
                 .ForMember(m => m.Type, opt => opt.MapFrom(x => "ADD"))
                 .ForMember(m => m.Special, opt => opt.Ignore());
+
+            CreateMap<string, LapCountDecrement>().ConvertUsing(c => c == null ? null : MapperHelpers.FromJson<LapCountDecrement>(c));
         }
     }
 }

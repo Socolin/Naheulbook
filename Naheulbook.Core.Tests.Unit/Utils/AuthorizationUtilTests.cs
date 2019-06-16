@@ -113,7 +113,6 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             act.Should().Throw<ForbiddenAccessException>();
         }
 
-
         [Test]
         public void EnsureIsGroupOwner_WhenUserIsDifferentFromGroupMasterId_ShouldThrow()
         {
@@ -132,6 +131,39 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             var executionContext = new NaheulbookExecutionContext {UserId = 15};
 
             Action act = () => _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+            act.Should().NotThrow();
+        }
+
+        [Test]
+        public void EnsureCharacterAccess_WhenUserIsNotMasterOrOwner_ShouldThrow()
+        {
+            var character = new Character {OwnerId = 10, Group = new Group {MasterId = 15}};
+            var executionContext = new NaheulbookExecutionContext {UserId = 5};
+
+            Action act = () => _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureCharacterAccess_WhenUserIsSameAsGroupMasterId_ShouldNotThrow()
+        {
+            var character = new Character {OwnerId = 10, Group = new Group {MasterId = 15}};
+            var executionContext = new NaheulbookExecutionContext {UserId = 15};
+
+            Action act = () => _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+            act.Should().NotThrow();
+        }
+
+        [Test]
+        public void EnsureCharacterAccess_WhenUserIsSameAsOwnerID_ShouldNotThrow()
+        {
+            var character = new Character {OwnerId = 10, Group = new Group {MasterId = 15}};
+            var executionContext = new NaheulbookExecutionContext {UserId = 10};
+
+            Action act = () => _authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             act.Should().NotThrow();
         }

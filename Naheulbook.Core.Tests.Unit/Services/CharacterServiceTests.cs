@@ -1,9 +1,12 @@
+using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Core.Tests.Unit.Exceptions;
 using Naheulbook.Core.Tests.Unit.TestUtils;
+using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using NSubstitute;
@@ -15,6 +18,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
     {
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private ICharacterFactory _characterFactory;
+        private IAuthorizationUtil _authorizationUtil;
         private CharacterService _service;
 
         [SetUp]
@@ -22,8 +26,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _characterFactory = Substitute.For<ICharacterFactory>();
+            _authorizationUtil = Substitute.For<IAuthorizationUtil>();
 
-            _service = new CharacterService(_unitOfWorkFactory, _characterFactory);
+            _service = new CharacterService(_unitOfWorkFactory, _characterFactory, _authorizationUtil);
         }
 
         [Test]
@@ -47,6 +52,23 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             actualCharacter.OwnerId.Should().Be(userId);
             createdCharacter.Should().BeSameAs(actualCharacter);
+        }
+
+        [Test]
+        public void LoadCharacterDetailsAsync_ShouldCall_EnsureCharacterAccess()
+        {
+            const int characterId = 4;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithAllDataAsync(characterId)
+                .Returns(character);
+            _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.LoadCharacterDetailsAsync(executionContext, characterId);
+
+            act.Should().Throw<TestException>();
         }
     }
 }

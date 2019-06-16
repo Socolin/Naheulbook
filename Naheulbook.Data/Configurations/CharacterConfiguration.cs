@@ -144,43 +144,57 @@ namespace Naheulbook.Data.Configurations
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
-            builder.Property(e => e.IsActive)
-                .HasColumnName("active");
-            builder.Property(e => e.CharacterId)
-                .HasColumnName("character");
-            builder.Property(e => e.CombatCount)
-                .HasColumnName("combatcount");
-            builder.Property(e => e.CurrentCombatCount)
-                .HasColumnName("currentcombatcount");
-            builder.Property(e => e.CurrentTimeDuration)
-                .HasColumnName("currenttimeduration");
-            builder.Property(e => e.Duration)
-                .HasColumnName("duration");
+
             builder.Property(e => e.Name)
                 .HasColumnName("name");
-            builder.Property(e => e.Permanent)
-                .HasColumnName("permanent");
-            builder.Property(e => e.Reusable)
-                .HasColumnName("reusable");
-            builder.Property(e => e.TimeDuration)
-                .HasColumnName("timeduration");
-            builder.Property(e => e.LapCount)
-                .HasColumnName("lapcount");
-            builder.Property(e => e.CurrentLapCount)
-                .HasColumnName("currentlapcount");
-            builder.Property(e => e.DurationType)
-                .HasColumnName("durationtype");
             builder.Property(e => e.Type)
                 .HasColumnName("type");
             builder.Property(e => e.Description)
                 .HasColumnName("description");
+
+            builder.Property(e => e.IsActive)
+                .HasColumnName("active");
+            builder.Property(e => e.Permanent)
+                .HasColumnName("permanent");
+            builder.Property(e => e.Reusable)
+                .HasColumnName("reusable");
+
+            builder.Property(e => e.DurationType)
+                .HasColumnName("durationtype");
+
+            builder.Property(e => e.TimeDuration)
+                .IsRequired(false)
+                .HasColumnName("timeduration");
+            builder.Property(e => e.LapCount)
+                .IsRequired(false)
+                .HasColumnName("lapcount");
+            builder.Property(e => e.CombatCount)
+                .IsRequired(false)
+                .HasColumnName("combatcount");
             builder.Property(e => e.LapCountDecrement)
+                .IsRequired(false)
                 .HasColumnName("lapCountDecrement");
+
+            builder.Property(e => e.CurrentLapCount)
+                .IsRequired(false)
+                .HasColumnName("currentlapcount");
+            builder.Property(e => e.CurrentCombatCount)
+                .IsRequired(false)
+                .HasColumnName("currentcombatcount");
+            builder.Property(e => e.CurrentTimeDuration)
+                .IsRequired(false)
+                .HasColumnName("currenttimeduration");
+            builder.Property(e => e.Duration)
+                .IsRequired(false)
+                .HasColumnName("duration");
+
+            builder.Property(e => e.CharacterId)
+                .HasColumnName("character");
 
             builder.HasOne(e => e.Character)
                 .WithMany(e => e.Modifiers)
                 .HasForeignKey(e => e.CharacterId)
-                .HasForeignKey("FK_character_modifier_character_character");
+                .HasConstraintName("FK_character_modifier_character_character");
 
             builder.HasMany(e => e.Values)
                 .WithOne()

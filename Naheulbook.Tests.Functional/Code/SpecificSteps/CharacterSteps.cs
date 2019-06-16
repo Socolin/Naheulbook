@@ -35,5 +35,11 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             else
                 _testDataUtil.AddCharacter(_scenarioContext.GetUserId());
         }
+
+        [Given(@"a character with all possible data")]
+        public void GivenACharacterWithAllPossibleData()
+        {
+            _testDataUtil.AddCharacterWithAllData(_scenarioContext.GetUserId());
+        }
     }
 }
