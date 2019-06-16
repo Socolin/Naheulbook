@@ -110,7 +110,7 @@ namespace Naheulbook.TestUtils
                 new SpecialitySpecial
                 {
                     Description = $"some-speciality-special-description-{suffix}",
-                    Flags = @"[{""data"": null, ""type"": ""ONE_SPECIALITY""}]",
+                    Flags = @"[{""data"": ""some-data"", ""type"": ""ONE_SPECIALITY""}]",
                     IsBonus = true,
                 }
             };

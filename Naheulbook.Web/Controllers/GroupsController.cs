@@ -35,8 +35,8 @@ namespace Naheulbook.Web.Controllers
             _mapper = mapper;
         }
 
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost]
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<CreatedActionResult<GroupResponse>> PostCreateGroupAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             CreateGroupRequest request

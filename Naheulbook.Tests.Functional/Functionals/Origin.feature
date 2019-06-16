@@ -1,7 +1,7 @@
 Feature: Origin
 
   Scenario: Listing origins
-    Given a origin with all possible data
+    Given an origin with all possible data
 
     When performing a GET to the url "/api/v2/origins"
     Then the response status code is 200

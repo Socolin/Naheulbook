@@ -14,6 +14,8 @@ namespace Naheulbook.Web.Mappers
     {
         public MapperProfile()
         {
+            CreateMap<Character, CreateCharacterResponse>();
+
             CreateMap<Effect, EffectResponse>();
             CreateMap<EffectType, EffectTypeResponse>();
             CreateMap<EffectCategory, EffectCategoryResponse>();

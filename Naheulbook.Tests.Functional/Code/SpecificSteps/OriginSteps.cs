@@ -13,8 +13,14 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil = testDataUtil;
         }
 
-        [Given("a origin with all possible data")]
-        public void GivenAJobWithAllPossibleData()
+        [Given("an origin")]
+        public void GivenAnOrigin()
+        {
+            _testDataUtil.AddOrigin();
+        }
+
+        [Given("an origin with all possible data")]
+        public void GivenAnOriginWithAllPossibleData()
         {
             _testDataUtil.AddOriginWithAllData();
         }

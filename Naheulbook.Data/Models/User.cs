@@ -23,5 +23,6 @@ namespace Naheulbook.Data.Models
         public string DisplayName { get; set; }
 
         public ICollection<Group> Groups { get; set; }
+        public ICollection<Character> Characters { get; set; }
     }
 }

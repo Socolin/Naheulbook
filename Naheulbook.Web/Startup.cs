@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Naheulbook.Core.Configurations;
+using Naheulbook.Core.Factories;
 using Naheulbook.Core.Mappers;
 using Naheulbook.Core.Services;
 using Naheulbook.Core.Utils;
@@ -65,6 +66,7 @@ namespace Naheulbook.Web
 
             services.AddSingleton<IUnitOfWorkFactory>(new UnitOfWorkFactory(naheulbookDbContextOptionsBuilder.Options));
 
+            services.AddSingleton<ICharacterService, CharacterService>();
             services.AddSingleton<IEffectService, EffectService>();
             services.AddSingleton<IGroupService, GroupService>();
             services.AddSingleton<IItemTemplateService, ItemTemplateService>();
@@ -86,6 +88,8 @@ namespace Naheulbook.Web
             services.AddSingleton<IActiveStatsModifierUtil, ActiveStatsModifierUtil>();
             services.AddSingleton<IAuthorizationUtil, AuthorizationUtil>();
             services.AddSingleton<IStringCleanupUtil, StringCleanupUtil>();
+
+            services.AddSingleton<ICharacterFactory, CharacterFactory>();
 
             services.AddSingleton<ITimeService, TimeService>();
 

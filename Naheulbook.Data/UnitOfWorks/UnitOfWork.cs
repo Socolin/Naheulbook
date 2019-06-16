@@ -7,6 +7,7 @@ namespace Naheulbook.Data.UnitOfWorks
 {
     public interface IUnitOfWork : IDisposable
     {
+        ICharacterRepository Characters { get; }
         IEffectRepository Effects { get; }
         IEffectCategoryRepository EffectCategories { get; }
         IEffectTypeRepository EffectTypes { get; }
@@ -39,6 +40,7 @@ namespace Naheulbook.Data.UnitOfWorks
             _naheulbookDbContext = naheulbookDbContext ?? throw new ArgumentNullException(nameof(naheulbookDbContext));
         }
 
+        public ICharacterRepository Characters => new CharacterRepository(_naheulbookDbContext);
         public IEffectRepository Effects => new EffectRepository(_naheulbookDbContext);
         public IEffectTypeRepository EffectTypes => new EffectTypeRepository(_naheulbookDbContext);
         public IEffectCategoryRepository EffectCategories => new EffectCategoryRepository(_naheulbookDbContext);

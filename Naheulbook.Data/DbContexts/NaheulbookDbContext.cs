@@ -24,6 +24,13 @@ namespace Naheulbook.Data.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new CharacterConfiguration());
+            modelBuilder.ApplyConfiguration(new CharacterJobConfiguration());
+            modelBuilder.ApplyConfiguration(new CharacterModifierConfiguration());
+            modelBuilder.ApplyConfiguration(new CharacterModifierValueConfiguration());
+            modelBuilder.ApplyConfiguration(new CharacterSkillConfiguration());
+            modelBuilder.ApplyConfiguration(new CharacterSpecialityConfiguration());
+
             modelBuilder.ApplyConfiguration(new EffectConfiguration());
             modelBuilder.ApplyConfiguration(new EffectCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new EffectModifierConfiguration());
