@@ -28,6 +28,8 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("isnpc");
             builder.Property(e => e.Color)
                 .HasDefaultValue("22DD22")
+                .HasColumnType("varchar(255)")
+                .HasMaxLength(255)
                 .HasColumnName("color");
 
             builder.Property(e => e.Ad)

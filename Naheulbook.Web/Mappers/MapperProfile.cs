@@ -15,6 +15,9 @@ namespace Naheulbook.Web.Mappers
         public MapperProfile()
         {
             CreateMap<Character, CreateCharacterResponse>();
+            CreateMap<Character, CharacterSummaryResponse>()
+                .ForMember(x => x.JobNames, opt => opt.MapFrom(c => c.Jobs.Select(x => x.Job.Name)))
+                .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name));
 
             CreateMap<Effect, EffectResponse>();
             CreateMap<EffectType, EffectTypeResponse>();

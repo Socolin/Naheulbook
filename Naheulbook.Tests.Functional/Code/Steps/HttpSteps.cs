@@ -29,10 +29,13 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             _jsonComparer = jsonComparer;
         }
 
-        [When(@"performing a GET to the url ""(.*)""")]
-        public async Task WhenPerformingAGetToTheUrl(string url)
+        [When(@"performing a GET to the url ""(.*)""( with the current jwt)?")]
+        public async Task WhenPerformingAGetToTheUrl(string url, string useCurrentJwt)
         {
-            var response = await _naheulbookHttpClient.GetAsync(url);
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            if (!string.IsNullOrEmpty(useCurrentJwt))
+                httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt());
+            var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
             var content = await response.Content.ReadAsStringAsync();
             _scenarioContext.SetLastHttpResponseStatusCode(response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);

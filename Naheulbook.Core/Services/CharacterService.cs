@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
@@ -9,6 +10,7 @@ namespace Naheulbook.Core.Services
 {
     public interface ICharacterService
     {
+        Task<List<Character>> GetCharacterListAsync(NaheulbookExecutionContext executionContext);
         Task<Character> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request);
     }
 
@@ -24,6 +26,14 @@ namespace Naheulbook.Core.Services
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _characterFactory = characterFactory;
+        }
+
+        public async Task<List<Character>> GetCharacterListAsync(NaheulbookExecutionContext executionContext)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.Characters.GetForSummaryByOwnerIdAsync(executionContext.UserId);
+            }
         }
 
         public async Task<Character> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request)

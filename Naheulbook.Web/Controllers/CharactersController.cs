@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,17 @@ namespace Naheulbook.Web.Controllers
         {
             _characterService = characterService;
             _mapper = mapper;
+        }
+
+
+        [HttpGet]
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        public async Task<ActionResult<List<CharacterSummaryResponse>>> GetCharactersListAsync(
+            [FromServices] NaheulbookExecutionContext executionContext
+        )
+        {
+            var characters = await _characterService.GetCharacterListAsync(executionContext);
+            return _mapper.Map<List<CharacterSummaryResponse>>(characters);
         }
 
         [HttpPost]

@@ -46,3 +46,29 @@ Feature: Character
     }
     """
 
+  Scenario: Load characters list
+    Given a JWT for a user
+    And a job
+    And an origin
+    And a character
+
+    When performing a GET to the url "/api/v2/characters" with the current jwt
+
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    [
+      {
+        "id": ${Character.Id},
+        "jobs": [
+          "${Job.Name}"
+        ],
+        "level": ${Character.Level},
+        "name": "${Character.Name}",
+        "origin": "${Origin.Name}",
+        "originId": ${Origin.Id}
+      }
+    ]
+    """
+
+  Scenario: Load a character details

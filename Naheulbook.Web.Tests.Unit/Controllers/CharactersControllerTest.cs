@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -33,6 +34,22 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             );
 
             _executionContext = new NaheulbookExecutionContext();
+        }
+
+        [Test]
+        public async Task GetCharactersListAsync_ShouldLoadListOfCharacterFromService_ThenMapItIntoSummary()
+        {
+            var characters = new List<Character>();
+            var charactersResponse = new List<CharacterSummaryResponse>();
+
+            _characterService.GetCharacterListAsync(_executionContext)
+                .Returns(characters);
+            _mapper.Map<List<CharacterSummaryResponse>>(characters)
+                .Returns(charactersResponse);
+
+            var result = await _controller.GetCharactersListAsync(_executionContext);
+
+            result.Value.Should().BeSameAs(charactersResponse);
         }
 
         [Test]

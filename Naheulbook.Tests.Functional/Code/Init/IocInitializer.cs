@@ -15,7 +15,6 @@ namespace Naheulbook.Tests.Functional.Code.Init
             _objectContainer = objectContainer;
         }
 
-
         [BeforeScenario(Order = 0)]
         public void InitializeIoc()
         {
