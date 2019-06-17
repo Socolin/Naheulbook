@@ -130,7 +130,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.Locations, opt => opt.MapFrom(m => m.Locations.Select(x => x.LocationId)))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)));
             CreateMap<MonsterTemplateSimpleInventory, MonsterTemplateResponse.MonsterSimpleInventoryResponse>();
-            CreateMap<MonsterType, MonsterTypeResponse>();
+            CreateMap<MonsterType, MonsterTypeResponse>()
+                .ForMember(m => m.Categories, opt => opt.MapFrom(c => c.Categories.OrderBy(ca => ca.Id)));
             CreateMap<MonsterCategory, MonsterCategoryResponse>();
             CreateMap<MonsterTrait, MonsterTraitResponse>()
                 .ForMember(m => m.Levels, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<string>>(b.Levels)));
