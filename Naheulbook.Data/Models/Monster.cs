@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Naheulbook.Data.Models
 {
     public class Monster
@@ -20,5 +22,7 @@ namespace Naheulbook.Data.Models
 
         public int? TargetedMonsterId { get; set; }
         public Monster TargetedMonster { get; set; }
+
+        public ICollection<Item> Items { get; set; }
     }
 }

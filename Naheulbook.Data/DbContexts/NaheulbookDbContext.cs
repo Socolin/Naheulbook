@@ -9,6 +9,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Character> Characters { get; set; }
         public DbSet<Effect> Effects { get; set; }
         public DbSet<EffectType> EffectTypes { get; set; }
+        public DbSet<Item> Items { get; set; }
         public DbSet<ItemTemplate> ItemTemplates { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<MonsterType> MonsterTypes { get; set; }
@@ -38,6 +39,8 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new EffectTypeConfiguration());
 
             modelBuilder.ApplyConfiguration(new GroupConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ItemConfiguration());
 
             modelBuilder.ApplyConfiguration(new ItemTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new ItemTemplateCategoryConfiguration());

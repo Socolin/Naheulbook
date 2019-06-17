@@ -15,22 +15,26 @@ namespace Naheulbook.Core.Services
         Task<List<Character>> GetCharacterListAsync(NaheulbookExecutionContext executionContext);
         Task<Character> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request);
         Task<Character> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId);
+        Task<Item> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request);
     }
 
     public class CharacterService : ICharacterService
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ICharacterFactory _characterFactory;
+        private readonly IItemService _itemService;
         private readonly IAuthorizationUtil _authorizationUtil;
 
         public CharacterService(
             IUnitOfWorkFactory unitOfWorkFactory,
             ICharacterFactory characterFactory,
+            IItemService itemService,
             IAuthorizationUtil authorizationUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _characterFactory = characterFactory;
+            _itemService = itemService;
             _authorizationUtil = authorizationUtil;
         }
 
@@ -69,6 +73,20 @@ namespace Naheulbook.Core.Services
 
                 return character;
             }
+        }
+
+        public async Task<Item> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithGroupAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            }
+
+            return await _itemService.AddItemToAsync(executionContext, ItemOwnerType.Character, characterId, request);
         }
     }
 }

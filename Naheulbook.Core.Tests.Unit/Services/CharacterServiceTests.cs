@@ -18,6 +18,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
     {
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private ICharacterFactory _characterFactory;
+        private IItemService _itemService;
         private IAuthorizationUtil _authorizationUtil;
         private CharacterService _service;
 
@@ -26,9 +27,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _characterFactory = Substitute.For<ICharacterFactory>();
+            _itemService = Substitute.For<IItemService>();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
 
-            _service = new CharacterService(_unitOfWorkFactory, _characterFactory, _authorizationUtil);
+            _service = new CharacterService(_unitOfWorkFactory, _characterFactory, _itemService, _authorizationUtil);
         }
 
         [Test]
@@ -67,6 +69,43 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Throw(new TestException());
 
             Func<Task> act = () => _service.LoadCharacterDetailsAsync(executionContext, characterId);
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public async Task AddItemToCharacterAsync_ShouldCall_ItemService()
+        {
+            const int characterId = 4;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+            var request = new CreateItemRequest();
+            var expectedItem = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _itemService.AddItemToAsync(executionContext, ItemOwnerType.Character, characterId, request)
+                .Returns(expectedItem);
+
+            var item = await _service.AddItemToCharacterAsync(executionContext, characterId, request);
+
+            item.Should().BeSameAs(expectedItem);
+        }
+
+        [Test]
+        public void AddItemToCharacterAsync_ShouldCall_EnsureCharacterAccess()
+        {
+            const int characterId = 4;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+            var request = new CreateItemRequest();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.AddItemToCharacterAsync(executionContext, characterId, request);
 
             act.Should().Throw<TestException>();
         }

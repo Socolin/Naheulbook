@@ -45,7 +45,8 @@ namespace Naheulbook.Data.Models
 
         public ICollection<CharacterJob> Jobs { get; set; }
         public ICollection<CharacterModifier> Modifiers { get; set; }
-        public IEnumerable<CharacterSkill> Skills { get; set; }
-        public IEnumerable<CharacterSpeciality> Specialities { get; set; }
+        public ICollection<CharacterSkill> Skills { get; set; }
+        public ICollection<CharacterSpeciality> Specialities { get; set; }
+        public ICollection<Item> Items { get; set; }
     }
 }

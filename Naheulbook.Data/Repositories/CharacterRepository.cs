@@ -10,6 +10,7 @@ namespace Naheulbook.Data.Repositories
     public interface ICharacterRepository : IRepository<Character>
     {
         Task<Character> GetWithAllDataAsync(int id);
+        Task<Character> GetWithGroupAsync(int id);
         Task<List<Character>> GetForSummaryByOwnerIdAsync(int ownerId);
     }
 
@@ -34,6 +35,13 @@ namespace Naheulbook.Data.Repositories
                 .ThenInclude(s => s.Speciality)
                 .ThenInclude(s => s.Modifiers)
                 .Include(c => c.Jobs)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public Task<Character> GetWithGroupAsync(int id)
+        {
+            return Context.Characters
+                .Include(c => c.Group)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

@@ -62,5 +62,17 @@ namespace Naheulbook.TestUtils
                 TechName = $"some-tech-name-{suffix}"
             };
         }
+
+        public Item CreateItem(ItemTemplate itemTemplate, Character character)
+        {
+            return new Item
+            {
+                Data = @"{""key"":""value""}",
+                Modifiers = @"[{""key"":""value""}]",
+                ItemTemplateId = itemTemplate.Id,
+                CharacterId = character.Id,
+                Character = character
+            };
+        }
     }
 }

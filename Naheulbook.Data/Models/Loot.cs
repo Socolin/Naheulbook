@@ -14,5 +14,6 @@ namespace Naheulbook.Data.Models
         public Group Group { get; set; }
 
         public ICollection<Monster> Monsters { get; set; }
+        public ICollection<Item> Items { get; set; }
     }
 }

@@ -24,6 +24,8 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("a character")]
         public void GivenACharacter()
         {
+            if (!_testDataUtil.Contains<Origin>())
+                _testDataUtil.AddOrigin();
             if (_testDataUtil.Contains<Job>())
                 _testDataUtil.AddCharacter(_scenarioContext.GetUserId(), c =>
                 {

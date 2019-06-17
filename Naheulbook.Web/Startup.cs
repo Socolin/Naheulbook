@@ -69,6 +69,7 @@ namespace Naheulbook.Web
             services.AddSingleton<ICharacterService, CharacterService>();
             services.AddSingleton<IEffectService, EffectService>();
             services.AddSingleton<IGroupService, GroupService>();
+            services.AddSingleton<IItemService, ItemService>();
             services.AddSingleton<IItemTemplateService, ItemTemplateService>();
             services.AddSingleton<IItemTemplateCategoryService, ItemTemplateCategoryService>();
             services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();
@@ -88,8 +89,10 @@ namespace Naheulbook.Web
             services.AddSingleton<IActiveStatsModifierUtil, ActiveStatsModifierUtil>();
             services.AddSingleton<IAuthorizationUtil, AuthorizationUtil>();
             services.AddSingleton<IStringCleanupUtil, StringCleanupUtil>();
+            services.AddSingleton<IJsonUtil, JsonUtil>();
 
             services.AddSingleton<ICharacterFactory, CharacterFactory>();
+            services.AddSingleton<IItemFactory, ItemFactory>();
 
             services.AddSingleton<ITimeService, TimeService>();
 

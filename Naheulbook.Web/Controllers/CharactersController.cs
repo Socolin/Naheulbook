@@ -73,5 +73,33 @@ namespace Naheulbook.Web.Controllers
             var group = await _characterService.CreateCharacterAsync(executionContext, request);
             return _mapper.Map<CreateCharacterResponse>(group);
         }
+
+
+        [HttpPost("{CharacterId}/items")]
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        public async Task<CreatedActionResult<ItemResponse>> PostAddItemToCharacterInventory(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId,
+            CreateItemRequest request
+        )
+        {
+            try
+            {
+                var item = await _characterService.AddItemToCharacterAsync(executionContext, characterId, request);
+                return _mapper.Map<ItemResponse>(item);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (ItemTemplateNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
     }
 }

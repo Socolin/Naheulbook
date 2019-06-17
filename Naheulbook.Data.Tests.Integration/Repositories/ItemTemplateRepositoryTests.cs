@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -22,75 +21,11 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [Test]
         public async Task GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync_LoadEntityWithRelatedEntities()
         {
-            TestDataUtil
-                .AddItemTemplateSection()
-                .AddItemTemplateCategory()
-                .AddStat()
-                .AddJob()
-                .AddOrigin()
-                .AddSkill()
-                .AddSkill()
-                .AddSkill()
-                .AddSlot();
+            TestDataUtil.AddItemTemplateWithAllData();
 
-            TestDataUtil.AddItemTemplate(itemTemplate =>
-            {
-                itemTemplate.Requirements = new List<ItemTemplateRequirement>
-                {
-                    new ItemTemplateRequirement
-                    {
-                        Stat = TestDataUtil.Get<Stat>(),
-                        MinValue = 2,
-                        MaxValue = 12,
-                    }
-                };
-                itemTemplate.Modifiers = new List<ItemTemplateModifier>
-                {
-                    new ItemTemplateModifier
-                    {
-                        Special = null,
-                        RequireJob = TestDataUtil.Get<Job>(),
-                        RequireOrigin = TestDataUtil.Get<Origin>(),
-                        Stat = TestDataUtil.Get<Stat>(),
-                        Value = 2,
-                        Type = "ADD"
-                    }
-                };
-                itemTemplate.Skills = new List<ItemTemplateSkill>
-                {
-                    new ItemTemplateSkill
-                    {
-                        Skill = TestDataUtil.Get<Skill>(0)
-                    }
-                };
-                itemTemplate.UnSkills = new List<ItemTemplateUnSkill>
-                {
-                    new ItemTemplateUnSkill
-                    {
-                        Skill = TestDataUtil.Get<Skill>(1)
-                    }
-                };
-                itemTemplate.Slots = new List<ItemTemplateSlot>
-                {
-                    new ItemTemplateSlot
-                    {
-                        Slot = TestDataUtil.Get<Slot>(0)
-                    }
-                };
-                itemTemplate.SkillModifiers = new List<ItemTemplateSkillModifier>
-                {
-                    new ItemTemplateSkillModifier
-                    {
-                        Skill = TestDataUtil.Get<Skill>(2),
-                        Value = 2
-                    }
-                };
-            });
+            var itemTemplateId = TestDataUtil.Get<ItemTemplate>().Id;
 
-
-            var itemTEmplateId = TestDataUtil.Get<ItemTemplate>().Id;
-
-            var actual = await _itemTemplateRepository.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTEmplateId);
+            var actual = await _itemTemplateRepository.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
 
             actual.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>(), config =>
                 config.Excluding(x => x.Category)

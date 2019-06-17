@@ -45,6 +45,9 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Characters, opt => opt.Ignore());
             CreateMap<Group, NamedIdResponse>();
 
+            CreateMap<Item, ItemResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data)));
+
             CreateMap<ItemTemplate, ItemTemplateResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data)))
                 .ForMember(m => m.Slots, opt => opt.MapFrom(i => i.Slots.Select(x => x.Slot)));

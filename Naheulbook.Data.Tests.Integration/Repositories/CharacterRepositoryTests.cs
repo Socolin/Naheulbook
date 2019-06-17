@@ -27,7 +27,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil.AddCharacterWithAllData(user.Id);
             var expectedCharacter = TestDataUtil.GetLast<Character>();
 
-            var character = await _characterRepository.GetWithAllDataAsync(user.Id);
+            var character = await _characterRepository.GetWithAllDataAsync(expectedCharacter.Id);
 
             character.Should().BeEquivalentTo(expectedCharacter, config => config.Excluding(x => x.Owner).Excluding(x => x.Jobs).Excluding(x => x.Origin).Excluding(x => x.Modifiers).Excluding(x => x.Skills).Excluding(x => x.Group).Excluding(x => x.Specialities));
             character.Jobs.Select(x => x.JobId).Should().BeEquivalentTo(TestDataUtil.GetAll<Job>().Select(x => x.Id));

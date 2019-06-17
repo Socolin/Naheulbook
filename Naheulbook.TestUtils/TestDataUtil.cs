@@ -77,13 +77,13 @@ namespace Naheulbook.TestUtils
                 cleanupSqlCommand.CommandText =
                     "SET FOREIGN_KEY_CHECKS=0;" +
                     // "DELETE FROM `calendar`;" +
-                    // "DELETE FROM `character`;" +
+                    "DELETE FROM `character`;" +
                     // "DELETE FROM `character_history`;" +
-                    // "DELETE FROM `character_job`;" +
-                    // "DELETE FROM `character_modifier`;" +
-                    // "DELETE FROM `character_modifier_value`;" +
-                    // "DELETE FROM `character_skills`;" +
-                    // "DELETE FROM `character_speciality`;" +
+                    "DELETE FROM `character_job`;" +
+                    "DELETE FROM `character_modifier`;" +
+                    "DELETE FROM `character_modifier_value`;" +
+                    "DELETE FROM `character_skills`;" +
+                    "DELETE FROM `character_speciality`;" +
                     "DELETE FROM `effect`;" +
                     "DELETE FROM `effect_category`;" +
                     "DELETE FROM `effect_modifier`;" +
@@ -117,7 +117,7 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `location`;" +
                     "DELETE FROM `location_map`;" +
                     "DELETE FROM `loot`;" +
-                    // "DELETE FROM `monster`;" +
+                    "DELETE FROM `monster`;" +
                     "DELETE FROM `monster_category`;" +
                     "DELETE FROM `monster_location`;" +
                     "DELETE FROM `monster_template`;" +

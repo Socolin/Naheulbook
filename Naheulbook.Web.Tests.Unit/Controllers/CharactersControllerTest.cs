@@ -57,7 +57,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public async Task GetCharactersListAsync_ShouldLoadCharacterFromService_ThenMapItIntoResponse()
+        public async Task GetCharacterDetailsAsync_ShouldLoadCharacterFromService_ThenMapItIntoResponse()
         {
             const int characterId = 2;
             var character = new Character();
@@ -74,7 +74,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void GetCharactersListAsync_WhenCatchForbiddenAccessException_Return403()
+        public void GetCharacterDetailsAsync_WhenCatchForbiddenAccessException_Return403()
         {
             const int characterId = 2;
             _characterService.LoadCharacterDetailsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
@@ -86,7 +86,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void GetCharactersListAsync_WhenCatchCharacterNotFoundException_Return404()
+        public void GetCharacterDetailsAsync_WhenCatchCharacterNotFoundException_Return404()
         {
             const int characterId = 2;
             _characterService.LoadCharacterDetailsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
@@ -113,6 +113,66 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             result.Value.Should().BeSameAs(characterResponse);
             result.StatusCode.Should().Be(HttpStatusCode.Created);
+        }
+
+        [Test]
+        public async Task PostAddItemToCharacterInventory_ShouldLoadCharacterFromService_ThenMapItIntoResponse()
+        {
+            const int characterId = 2;
+            var item = new Item();
+            var itemResponse = new ItemResponse();
+            var request = new CreateItemRequest();
+
+            _characterService.AddItemToCharacterAsync(_executionContext, characterId, request)
+                .Returns(item);
+            _mapper.Map<ItemResponse>(item)
+                .Returns(itemResponse);
+
+            var result = await _controller.PostAddItemToCharacterInventory(_executionContext, characterId, request);
+
+            result.Value.Should().BeSameAs(itemResponse);
+        }
+
+        [Test]
+        public void PostAddItemToCharacterInventory_WhenCatchForbiddenAccessException_Return403()
+        {
+            const int characterId = 2;
+            var request = new CreateItemRequest();
+
+            _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
+                .Returns(Task.FromException<Item>(new ForbiddenAccessException()));
+
+            Func<Task> act = () => _controller.PostAddItemToCharacterInventory(_executionContext, characterId, request);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        [Test]
+        public void PostAddItemToCharacterInventory_WhenCatchCharacterNotFoundException_Return404()
+        {
+            const int characterId = 2;
+            var request = new CreateItemRequest();
+
+            _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
+                .Returns(Task.FromException<Item>(new CharacterNotFoundException(characterId)));
+
+            Func<Task> act = () => _controller.PostAddItemToCharacterInventory(_executionContext, characterId, request);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public void PostAddItemToCharacterInventory_WhenCatchItemTemplateNotFound_Return400()
+        {
+            const int characterId = 2;
+            var request = new CreateItemRequest();
+
+            _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
+                .Returns(Task.FromException<Item>(new ItemTemplateNotFoundException(3)));
+
+            Func<Task> act = () => _controller.PostAddItemToCharacterInventory(_executionContext, characterId, request);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
 }
