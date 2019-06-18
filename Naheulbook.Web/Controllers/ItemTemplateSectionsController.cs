@@ -8,7 +8,6 @@ using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
 
@@ -54,6 +53,13 @@ namespace Naheulbook.Web.Controllers
             {
                 throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
             }
+        }
+
+        [HttpGet("{SectionId}")]
+        public async Task<ActionResult<List<ItemTemplateResponse>>> GetItemTemplatesAsync(int sectionId)
+        {
+            var sections = await _itemTemplateSectionService.GetItemTemplatesBySectionAsync(sectionId);
+            return _mapper.Map<List<ItemTemplateResponse>>(sections);
         }
     }
 }

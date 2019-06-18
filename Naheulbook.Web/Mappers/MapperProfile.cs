@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Naheulbook.Data.Models;
-using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Responses;
 using Newtonsoft.Json.Linq;
@@ -37,6 +36,8 @@ namespace Naheulbook.Web.Mappers
             CreateMap<EffectModifier, StatModifierResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(se => se.StatName))
                 .ForMember(m => m.Special, opt => opt.Ignore());
+
+            CreateMap<God, GodResponse>();
 
             CreateMap<Group, GroupResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
@@ -123,7 +124,6 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)))
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(b => MapperHelpers.FromJson<IList<ActiveStatsModifier>>(b.Modifiers)))
                 .ForMember(m => m.Items, opt => opt.Ignore());
-            ;
 
             CreateMap<MonsterTemplate, MonsterTemplateResponse>()
                 .ForMember(x => x.SimpleInventory, opt => opt.MapFrom(m => m.Items))

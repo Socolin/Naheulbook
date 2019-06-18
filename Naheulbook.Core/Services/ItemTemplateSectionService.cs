@@ -12,6 +12,7 @@ namespace Naheulbook.Core.Services
     {
         Task<IList<ItemTemplateSection>> GetAllSections();
         Task<ItemTemplateSection> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request);
+        Task<List<ItemTemplate>> GetItemTemplatesBySectionAsync(int sectionId);
     }
 
     public class ItemTemplateSectionService : IItemTemplateSectionService
@@ -51,6 +52,14 @@ namespace Naheulbook.Core.Services
             }
 
             return itemTemplateSection;
+        }
+
+        public async Task<List<ItemTemplate>> GetItemTemplatesBySectionAsync(int sectionId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId);
+            }
         }
     }
 }

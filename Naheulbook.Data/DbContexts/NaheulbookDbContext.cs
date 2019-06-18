@@ -39,6 +39,8 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new EffectModifierConfiguration());
             modelBuilder.ApplyConfiguration(new EffectTypeConfiguration());
 
+            modelBuilder.ApplyConfiguration(new GodConfiguration());
+
             modelBuilder.ApplyConfiguration(new GroupConfiguration());
 
             modelBuilder.ApplyConfiguration(new ItemConfiguration());

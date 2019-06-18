@@ -11,6 +11,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IEffectRepository Effects { get; }
         IEffectCategoryRepository EffectCategories { get; }
         IEffectTypeRepository EffectTypes { get; }
+        IGodRepository Gods { get; }
         IGroupRepository Groups { get; }
         IItemRepository Items { get; }
         IItemTemplateRepository ItemTemplates { get; }
@@ -45,6 +46,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IEffectRepository Effects => new EffectRepository(_naheulbookDbContext);
         public IEffectTypeRepository EffectTypes => new EffectTypeRepository(_naheulbookDbContext);
         public IEffectCategoryRepository EffectCategories => new EffectCategoryRepository(_naheulbookDbContext);
+        public IGodRepository Gods => new GodRepository(_naheulbookDbContext);
         public IGroupRepository Groups => new GroupRepository(_naheulbookDbContext);
         public IItemRepository Items=> new ItemRepository(_naheulbookDbContext);
         public IItemTemplateRepository ItemTemplates => new ItemTemplateRepository(_naheulbookDbContext);
