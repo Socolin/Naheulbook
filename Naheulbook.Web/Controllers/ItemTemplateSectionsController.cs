@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -24,6 +25,13 @@ namespace Naheulbook.Web.Controllers
         {
             _itemTemplateSectionService = itemTemplateSectionService;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<ItemTemplateSectionResponse>>> GetItemTemplateSectionsAsync()
+        {
+            var sections = await _itemTemplateSectionService.GetAllSections();
+            return _mapper.Map<List<ItemTemplateSectionResponse>>(sections);
         }
 
         [ServiceFilter(typeof(JwtAuthorizationFilter))]

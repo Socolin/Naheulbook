@@ -9,6 +9,6 @@ namespace Naheulbook.Web.Responses
         public string Name { get; set; }
         public string Note { get; set; }
         public List<string> Specials { get; set; }
-        public List<ItemTemplateCategory> Categories { get; set; }
+        public List<ItemTemplateCategoryResponse> Categories { get; set; }
     }
 }

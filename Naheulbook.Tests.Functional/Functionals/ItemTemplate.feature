@@ -50,8 +50,46 @@ Feature: ItemTemplate
       "name": "some-name",
       "techName": "some-tech-name",
       "description": "some-description",
-      "note": "some-note",
-      "itemTemplates": []
+      "note": "some-note"
+    }
+    """
+
+  Scenario: List item template categories
+    Given an item template section
+    And an item template category
+    And an item template category
+
+    When performing a GET to the url "/api/v2/itemTemplateSections/"
+
+    Then the response status code is 200
+    And the response should contains a json array containing the following element identified by id
+    """
+    {
+        "id": ${ItemTemplateSection.Id},
+        "name": "${ItemTemplateSection.Name}",
+        "note": "${ItemTemplateSection.Note}",
+        "specials": [
+            "${ItemTemplateSection.Special}"
+        ],
+        "categories": [
+            {
+                "id": ${ItemTemplateCategory.[0].Id},
+                "name": "${ItemTemplateCategory.[0].Name}",
+                "techName": "${ItemTemplateCategory.[0].TechName}",
+                "description": "${ItemTemplateCategory.[0].Description}",
+                "note": "${ItemTemplateCategory.[0].Note}",
+                "sectionId": ${ItemTemplateCategory.[0].SectionId}
+            },
+            {
+                "id": ${ItemTemplateCategory.[1].Id},
+                "name": "${ItemTemplateCategory.[1].Name}",
+                "techName": "${ItemTemplateCategory.[1].TechName}",
+                "description": "${ItemTemplateCategory.[1].Description}",
+                "note": "${ItemTemplateCategory.[1].Note}",
+                "sectionId": ${ItemTemplateCategory.[1].SectionId}
+            }
+
+        ]
     }
     """
 

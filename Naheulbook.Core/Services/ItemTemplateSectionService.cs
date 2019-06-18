@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Utils;
@@ -9,6 +10,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IItemTemplateSectionService
     {
+        Task<IList<ItemTemplateSection>> GetAllSections();
         Task<ItemTemplateSection> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request);
     }
 
@@ -21,6 +23,14 @@ namespace Naheulbook.Core.Services
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizationUtil = authorizationUtil;
+        }
+
+        public async Task<IList<ItemTemplateSection>> GetAllSections()
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.ItemTemplateSections.GetAllWithCategoriesAsync();
+            }
         }
 
         public async Task<ItemTemplateSection> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request)
