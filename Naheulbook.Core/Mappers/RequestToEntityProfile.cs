@@ -21,7 +21,7 @@ namespace Naheulbook.Core.Mappers
                 .ForMember(m => m.Id, opt => opt.Ignore())
                 .ForMember(m => m.RequireJobId, opt => opt.MapFrom(im => im.Job))
                 .ForMember(m => m.RequireOriginId, opt => opt.MapFrom(im => im.Origin))
-                .ForMember(m => m.Special, opt => opt.MapFrom(im => JsonConvert.SerializeObject(im.Special)))
+                .ForMember(m => m.Special, opt => opt.MapFrom(im => string.Join(',', im.Special)))
                 .ForMember(m => m.StatName, opt => opt.MapFrom(im => im.Stat))
                 .ForMember(m => m.Stat, opt => opt.Ignore())
                 .ForMember(m => m.RequireJob, opt => opt.Ignore())

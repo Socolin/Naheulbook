@@ -55,7 +55,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<ItemTemplateModifier, ItemTemplateModifierResponse>()
                 .ForMember(m => m.JobId, opt => opt.MapFrom(im => im.RequireJobId))
                 .ForMember(m => m.OriginId, opt => opt.MapFrom(im => im.RequireOriginId))
-                .ForMember(m => m.Special, opt => opt.MapFrom(im => MapperHelpers.FromJson<List<string>>(im.Special)))
+                .ForMember(m => m.Special, opt => opt.MapFrom(im => MapperHelpers.FromCommaSeparatedList(im.Special)))
                 .ForMember(m => m.Stat, opt => opt.MapFrom(im => im.StatName));
             CreateMap<ItemTemplateRequirement, ItemTemplateRequirementResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(ir => ir.StatName))
@@ -69,7 +69,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<ItemTemplateUnSkill, IdResponse>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(i => i.SkillId));
             CreateMap<ItemTemplateSection, ItemTemplateSectionResponse>()
-                .ForMember(m => m.Specials, opt => opt.MapFrom(i => i.Special.Split(',', StringSplitOptions.None).ToList()));
+                .ForMember(m => m.Specials, opt => opt.MapFrom(i => MapperHelpers.FromCommaSeparatedList(i.Special)));
             CreateMap<ItemTemplateCategory, ItemTemplateCategoryResponse>();
             CreateMap<Slot, ItemSlotResponse>();
 
