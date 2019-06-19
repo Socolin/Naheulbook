@@ -369,7 +369,9 @@ Feature: ItemTemplate
                 "value": 4,
                 "job": null,
                 "origin": null,
-                "special": [],
+                "special": [
+                    "SOME_SPECIAL"
+                ],
                 "type": "ADD"
             }
         ],
@@ -422,7 +424,9 @@ Feature: ItemTemplate
              {
                  "stat": "${Stat.[-1].Name}",
                  "value": 4,
-                 "special": [],
+                 "special": [
+                     "SOME_SPECIAL"
+                 ],
                  "type": "ADD"
              }
          ],

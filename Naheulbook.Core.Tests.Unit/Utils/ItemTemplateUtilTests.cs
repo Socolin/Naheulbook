@@ -185,14 +185,14 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                         Id = 1,
                         StatName = "some-stat-name-1",
                         Value = 2,
-                        Special = "[]"
+                        Special = "some-special-1"
                     },
                     new ItemTemplateModifier
                     {
                         Id = 2,
                         StatName = "some-stat-name-2",
                         Value = 3,
-                        Special = "[]",
+                        Special = "some-special-2",
                     }
                 }
             };
@@ -214,7 +214,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                         Origin = 2,
                         Type = "ADD",
                         Value = 3,
-                        Special = new List<string> {"some-special"}
+                        Special = new List<string> {"some-special-3"}
                     }
                 }
             };
@@ -228,7 +228,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                     RequireJobId = 1,
                     Type = "ADD",
                     Value = 3,
-                    Special = "[]"
+                    Special = ""
                 },
                 new ItemTemplateModifier
                 {
@@ -236,7 +236,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                     RequireOriginId = 2,
                     Type = "ADD",
                     Value = 3,
-                    Special = @"[""some-special""]"
+                    Special = "some-special-3"
                 }
             );
         }
@@ -288,7 +288,6 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ApplyChangesFromRequest_UpdateSkillModifiers()
         {
-
             var itemTemplate = new ItemTemplate
             {
                 SkillModifiers = new List<ItemTemplateSkillModifier>

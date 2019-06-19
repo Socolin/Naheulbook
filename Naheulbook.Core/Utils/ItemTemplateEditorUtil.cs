@@ -46,7 +46,7 @@ namespace Naheulbook.Core.Utils
                 RequireOriginId = x.Origin,
                 Value = x.Value,
                 Type = x.Type,
-                Special = x.Special == null ? "[]" : JsonConvert.SerializeObject(x.Special, Formatting.None)
+                Special = x.Special == null ? "" : string.Join(',', x.Special)
             }).ToList();
 
 
