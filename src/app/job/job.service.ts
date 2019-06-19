@@ -19,7 +19,7 @@ export class JobService {
 
             Observable.forkJoin(
                 this._skillService.getSkillsById(),
-                this._http.get('/api/job/list').map(res => res.json())
+                this._http.get('/api/v2/jobs').map(res => res.json())
             ).subscribe(
                 ([skillsById, jobsDatas]: [{[skillId: number]: Skill}, Job[]]) => {
                     let jobs: Job[] = [];

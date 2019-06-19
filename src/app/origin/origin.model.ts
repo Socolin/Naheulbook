@@ -39,11 +39,11 @@ export class Origin {
             restricts: DescribedFlag.flagsFromJson(originData.restricts),
         });
 
-        for (let s of originData.skills) {
-            origin.skills.push(skillsById[s.id]);
+        for (let skillId of originData.skillIds) {
+            origin.skills.push(skillsById[skillId]);
         }
-        for (let s of originData.availableSkills) {
-            origin.availableSkills.push(skillsById[s.id]);
+        for (let skillId of originData.availableSkillIds) {
+            origin.availableSkills.push(skillsById[skillId]);
         }
 
         if (!origin.flags) {

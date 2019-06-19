@@ -29,7 +29,7 @@ export class ItemTemplateService extends JsonService {
         if (!this.itemSections) {
             this.itemSections = new ReplaySubject<ItemSection[]>(1);
 
-            this._http.get('/api/itemtemplate/categorylist')
+            this._http.get('/api/v2/itemTemplateSections')
                 .map(res => res.json())
                 .subscribe(
                     categoryList => {
@@ -63,7 +63,7 @@ export class ItemTemplateService extends JsonService {
         if (!(section.id in this.itemBySection)) {
             this.itemBySection[section.id] = new ReplaySubject<ItemTemplate[]>(1);
             Observable.forkJoin(
-                this.postJson('/api/itemtemplate/list', {typeId: section.id}).map(res => res.json()),
+                this._http.get('/api/v2/itemTemplateSections/' + section.id).map(res => res.json()),
                 this._skillService.getSkillsById()
             ).subscribe(
                 ([itemTemplateDatas, skillsById]: [ItemTemplateJsonData[], {[skillId: number]: Skill}]) => {

@@ -46,7 +46,7 @@ export class EffectService extends JsonService {
         if (!this.effectTypes) {
             this.effectTypes = new ReplaySubject<EffectType[]>(1);
 
-            this.postJson('/api/effect/ListTypes')
+            this._http.get('/api/v2/effectCategories')
                 .map(res => res.json())
                 .subscribe(
                     effectTypesJsonData => {
@@ -83,9 +83,7 @@ export class EffectService extends JsonService {
             this.effectsByCategory[categoryId] = new ReplaySubject<Effect[]>(1);
             Observable.forkJoin(
                 this.getEffectCategoriesById(),
-                this.postJson('/api/effect/list', {
-                    categoryId: categoryId
-                }).map(res => res.json())
+                this._http.get(`/api/v2/effectCategories/${categoryId}/effects`).map(res => res.json())
             ).map(([categoriesById, effectsJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData[]]) =>
                 Effect.effectsFromJson(categoriesById, effectsJsonData)
             ).subscribe(

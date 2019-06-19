@@ -190,7 +190,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     isVisible(item: ItemTemplate) {
         if (this.filter.category) {
-            if (item.category !== this.filter.category.id) {
+            if (item.categoryId !== this.filter.category.id) {
                 return false;
             }
         }
@@ -220,14 +220,14 @@ export class ItemListComponent implements OnInit, OnDestroy {
             if (!this.isVisible(item)) {
                 continue;
             }
-            if (!itemsByCategory[item.category]) {
-                itemsByCategory[item.category] = [];
-                let category = this.selectedSection.categories.find(c => c.id === item.category);
+            if (!itemsByCategory[item.categoryId]) {
+                itemsByCategory[item.categoryId] = [];
+                let category = this.selectedSection.categories.find(c => c.id === item.categoryId);
                 if (category) {
                     filteredCategories.push(category);
                 }
             }
-            itemsByCategory[item.category].push(item);
+            itemsByCategory[item.categoryId].push(item);
         }
         this.itemsByCategory = itemsByCategory;
         this.filteredCategories = filteredCategories;
@@ -235,7 +235,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     hasSpecial(token: string) {
         if (this.selectedSection) {
-            if (this.selectedSection.special.indexOf(token) !== -1) {
+            if (this.selectedSection.specials.indexOf(token) !== -1) {
                 return true;
             }
         }
@@ -260,7 +260,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     }
 
     selectItemTemplate(itemTemplate: ItemTemplate) {
-        let result = this.getCategoryFromId(itemTemplate.category);
+        let result = this.getCategoryFromId(itemTemplate.categoryId);
         if (!result) {
             return;
         }

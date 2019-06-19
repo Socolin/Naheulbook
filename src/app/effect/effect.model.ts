@@ -95,7 +95,7 @@ export class Effect implements IDurable {
     toJsonData(): EffectJsonData {
         let jsonData: any = Object.assign({}, this);
         jsonData.categoryId = this.category.id;
-        delete jsonData.category;
+        delete jsonData.categoryId;
         return jsonData;
     }
 }

@@ -1,5 +1,4 @@
-import {Flag, StatModifier} from '../shared';
-import {FlagData} from '../shared/flag.model';
+import {Flag, FlagData, StatModifier} from '../shared';
 
 export class Speciality {
     id: number;

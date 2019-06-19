@@ -29,6 +29,8 @@ export class Job {
         id: number,
         name: string
     }>;
+    maxLoad?: number; // FIXME Not used
+    maxArmorPR?: number; // FIXME Not used
     parentJob: Job;
     parentJobId: number;
     requirements: Array<StatRequirement>;
@@ -48,11 +50,11 @@ export class Job {
             specialities: Speciality.specialitiesFromJson(jobData.specialities),
         });
 
-        for (let s of jobData.skills) {
-            job.skills.push(skillsById[s.id]);
+        for (let skillId of jobData.skillIds) {
+            job.skills.push(skillsById[skillId]);
         }
-        for (let s of jobData.availableSkills) {
-            job.availableSkills.push(skillsById[s.id]);
+        for (let skillId of jobData.availableSkillIds) {
+            job.availableSkills.push(skillsById[skillId]);
         }
 
         if (!job.flags) {

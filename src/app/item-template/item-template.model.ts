@@ -8,7 +8,7 @@ export class ItemSection {
     id: number;
     name: string;
     note: string;
-    special: string[];
+    specials: string[];
     categories: ItemCategory[];
 }
 export class ItemCategory {
@@ -144,7 +144,7 @@ export class ItemSkillModifierJsonData {
 export class ItemTemplateJsonData {
     id: number;
     name: string;
-    category: number;
+    categoryId: number;
     data: ItemTemplateData;
     modifiers: ItemStatModifier[] = [];
     skills: {id: number}[];
@@ -168,7 +168,7 @@ export class ItemSkillModifier {
 export class ItemTemplate {
     id: number;
     name: string;
-    category: number;
+    categoryId: number;
     data: ItemTemplateData = new ItemTemplateData();
     source: 'official'|'community'|'private';
     sourceUser?: string;

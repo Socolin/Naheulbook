@@ -61,7 +61,7 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field *ngIf="selectedSection">
-            <mat-select [(ngModel)]="itemTemplate.category" placeholder="Sous section">
+            <mat-select [(ngModel)]="itemTemplate.categoryId" placeholder="Sous section">
                 <mat-option *ngFor="let category of selectedSection.categories" [value]="category.id">
                     {{category.name}}
                 </mat-option>

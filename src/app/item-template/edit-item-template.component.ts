@@ -36,7 +36,7 @@ export class EditItemTemplateComponent implements OnInit {
             item => {
                 this._notification.success('Objet', 'Objet bien sauvegarde: ' + item.name);
                 this.saving = false;
-                this._itemTemplateService.getSectionFromCategory(item.category).subscribe(
+                this._itemTemplateService.getSectionFromCategory(item.categoryId).subscribe(
                     section => {
                         let sectionId: number;
                         if (section) {

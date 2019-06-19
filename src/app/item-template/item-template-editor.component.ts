@@ -155,7 +155,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 let section = this.sections[i];
                 for (let j = 0; j < section.categories.length; j++) {
                     let category = section.categories[j];
-                    if (category.id === this.itemTemplate.category) {
+                    if (category.id === this.itemTemplate.categoryId) {
                         this.selectedSection = section;
                         break;
                     }

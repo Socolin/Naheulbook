@@ -45,7 +45,7 @@ export class MonsterTemplateService extends JsonService {
         if (!this.monsterTypes) {
             this.monsterTypes = new ReplaySubject<MonsterTemplateType[]>(1);
 
-            this.postJson('/api/monsterTemplate/ListTypes')
+            this._http.get('/api/v2/monsterTypes')
                 .map(res => res.json())
                 .subscribe(
                     monsterTypesJsonData => {
@@ -64,7 +64,7 @@ export class MonsterTemplateService extends JsonService {
     getMonsterList(): Observable<MonsterTemplate[]> {
         return Observable.forkJoin(
             this.getMonsterCategoriesById(),
-            this.postJson('/api/monsterTemplate/listMonster').map(res => res.json())
+            this._http.get('/api/v2/monsterTemplates').map(res => res.json())
         ).map(([categoriesById, monsterTemplatesDatas]: [{[id: number]: MonsterTemplateCategory}, MonsterTemplate[]]) => {
             return MonsterTemplate.templatessFromJson(monsterTemplatesDatas, categoriesById);
         });
@@ -74,7 +74,7 @@ export class MonsterTemplateService extends JsonService {
         if (!this.monsterTraits) {
             this.monsterTraits = new ReplaySubject<MonsterTrait[]>(1);
 
-            this.postJson('/api/monsterTemplate/listTraits')
+            this._http.get('/api/v2/monsterTraits')
                 .map(res => res.json())
                 .subscribe(
                     monsterTraits => {

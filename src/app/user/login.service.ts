@@ -17,17 +17,17 @@ export class LoginService extends JsonService {
         super(http, notification, null);
     }
 
-    getLoginToken(app: string): Observable<{loginToken: string, appKey: string}> {
+    getLoginToken(app: string): Observable<{ loginToken: string, appKey: string }> {
         return this.postJson('/api/user/loginToken', {app: app})
             .map(res => res.json());
     }
 
     doFBLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
         let fbLogin = this.postJson('/api/user/fblogin', {
-                code: code,
-                loginToken: loginToken,
-                redirectUri: redirectUri
-            })
+            code: code,
+            loginToken: loginToken,
+            redirectUri: redirectUri
+        })
             .map(res => res.json())
             .share();
 
@@ -41,10 +41,10 @@ export class LoginService extends JsonService {
 
     doGoogleLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
         let googleLogin = this.postJson('/api/user/googleLogin', {
-                code: code,
-                loginToken: loginToken,
-                redirectUri: redirectUri
-            })
+            code: code,
+            loginToken: loginToken,
+            redirectUri: redirectUri
+        })
             .map(res => res.json())
             .share();
 
@@ -58,10 +58,10 @@ export class LoginService extends JsonService {
 
     doLiveLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
         let liveLogin = this.postJson('/api/user/liveLogin', {
-                code: code,
-                loginToken: loginToken,
-                redirectUri: redirectUri
-            })
+            code: code,
+            loginToken: loginToken,
+            redirectUri: redirectUri
+        })
             .map(res => res.json())
             .share();
 
@@ -104,8 +104,13 @@ export class LoginService extends JsonService {
     }
 
     checkLogged(): Observable<User> {
-        let checkLogged = this._http.get('/api/user/logged')
-            .map(res => res.json())
+        let checkLogged = this._http.get('/api/v2/users/me')
+            .map(res => {
+                if (res.status === 401) {
+                    return null;
+                }
+                return res.json();
+            })
             .share();
 
         checkLogged.subscribe(user => {
@@ -121,12 +126,12 @@ export class LoginService extends JsonService {
     }
 
 
-    updateProfile(profile): Observable <Response> {
+    updateProfile(profile): Observable<Response> {
         return this.postJson('/api/user/updateProfile', profile)
             .map(res => res.json());
     }
 
-    searchUser(filter: string): Observable <Object[]> {
+    searchUser(filter: string): Observable<Object[]> {
         return this.postJson('/api/user/searchUser', {filter: filter})
             .map(res => res.json());
     }
@@ -158,7 +163,7 @@ export class LoginService extends JsonService {
         localStorage.setItem('redirectPage', redirectPage);
         this.getLoginToken('live').subscribe(authInfos => {
             let state = 'live:' + authInfos.loginToken;
-                window.location.href = 'https://login.live.com/oauth20_authorize.srf?client_id=' + authInfos.appKey
+            window.location.href = 'https://login.live.com/oauth20_authorize.srf?client_id=' + authInfos.appKey
                 + '&state=' + state
                 + '&scope=wl.signin'
                 + '&response_type=code'

@@ -44,7 +44,7 @@ export class MiscService extends JsonService {
         if (!this.gods) {
             this.gods = new ReplaySubject<God[]>(1);
 
-            this._http.get('/api/misc/godsList')
+            this._http.get('/api/v2/gods')
                 .map(res => res.json())
                 .subscribe(
                     gods => {

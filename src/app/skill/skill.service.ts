@@ -42,7 +42,7 @@ export class SkillService extends JsonService {
         if (!this.skills) {
             this.skills = new ReplaySubject<Skill[]>(1);
 
-            this.postJson('/api/skill/list')
+            this._http.get('/api/v2/skills')
                 .map(res => res.json())
                 .subscribe(
                     skillsJsonData => {

@@ -29,7 +29,7 @@ export class CreateItemTemplateComponent implements OnInit {
     }
 
     create() {
-        if (!this.item.category) {
+        if (!this.item.categoryId) {
             return false;
         }
         if (!this.item.name) {

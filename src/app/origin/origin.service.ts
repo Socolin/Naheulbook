@@ -19,7 +19,7 @@ export class OriginService {
 
             Observable.forkJoin(
                 this._skillService.getSkillsById(),
-                this._http.get('/api/origin/list').map(res => res.json())
+                this._http.get('/api/v2/origins').map(res => res.json())
             ).subscribe(
                 ([skillsById, originsDatas]: [{[skillId: number]: Skill}, Origin[]]) => {
                     let origins: Origin[] = [];
