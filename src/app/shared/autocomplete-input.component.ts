@@ -30,7 +30,7 @@ export class AutocompleteInputComponent {
     @Input() clearOnSelect = false;
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
 
-    @ViewChild('inputField')
+    @ViewChild('inputField', {static: true})
     public inputField: ElementRef;
 
     public matchingValues?: AutocompleteValue[];

@@ -1,23 +1,21 @@
+import {throwError as observableThrowError, Observable} from 'rxjs';
 import {ErrorHandler, Injectable} from '@angular/core';
-import {Http, Headers, Response} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
 import {ErrorReportService} from './error-report.service';
+import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class NhbkErrorHandler extends ErrorHandler {
     private count = 0;
 
-    constructor(private _http: Http,
+    constructor(private httpClient: HttpClient,
                 private _errorReportService: ErrorReportService) {
         super();
     }
 
-    postJson(url: string, data: any): Observable<Response> {
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-
+    postJson(url: string, data: any): Observable<any> {
         let cache: any[] = [];
-        let json = JSON.stringify(data, function(key, value) {
+        let json = JSON.stringify(data, function (key, value) {
             if (typeof value === 'object' && value !== null) {
                 if (cache.indexOf(value) !== -1) {
                     // Circular reference found, discard key
@@ -29,13 +27,11 @@ export class NhbkErrorHandler extends ErrorHandler {
             return value;
         });
 
-        return this._http.post(url, json, {
-            headers: headers
-        })
-        .catch((err: any) => {
-            console.log(err);
-            return Observable.throw(err);
-        });
+        return this.httpClient.post(url, json)
+            .pipe(catchError((err: any) => {
+                console.log(err);
+                return observableThrowError(err);
+            }));
     }
 
     handleError(error: any) {

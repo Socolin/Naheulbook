@@ -1,27 +1,23 @@
+import {forkJoin, Observable, ReplaySubject} from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable, ReplaySubject} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
 
 import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateType, MonsterTrait} from './monster.model';
-import {JsonService} from '../shared/json-service';
-import {NotificationsService} from '../notifications';
-import {LoginService} from '../user';
 
 @Injectable()
-export class MonsterTemplateService extends JsonService {
+export class MonsterTemplateService {
     private monsterTypes: ReplaySubject<MonsterTemplateType[]>;
     private monsterTraits: ReplaySubject<MonsterTrait[]>;
-    private monsterTraitsById: ReplaySubject<{[id: number]: MonsterTrait}>;
+    private monsterTraitsById: ReplaySubject<{ [id: number]: MonsterTrait }>;
 
-    constructor(http: Http
-        , notification: NotificationsService
-        , loginService: LoginService) {
-        super(http, notification, loginService);
+    constructor(private httpClient: HttpClient) {
     }
 
-    getMonsterCategoriesById(): Observable<{[id: number]: MonsterTemplateCategory}> {
-        return this.getMonsterTypes()
-            .map((types: MonsterTemplateType[]) => {
+    getMonsterCategoriesById(): Observable<{ [id: number]: MonsterTemplateCategory }> {
+        return this.getMonsterTypes().pipe(
+            map((types: MonsterTemplateType[]) => {
                 let categoriesById = {};
                 for (let type of types) {
                     for (let category of type.categories) {
@@ -29,24 +25,25 @@ export class MonsterTemplateService extends JsonService {
                     }
                 }
                 return categoriesById;
-            });
+            }));
     }
 
-    getMonsterTypesById(): Observable<{[id: number]: MonsterTemplateType}> {
-        return this.getMonsterTypes()
-            .map((types: MonsterTemplateType[]) => {
+    getMonsterTypesById(): Observable<{ [id: number]: MonsterTemplateType }> {
+        return this.getMonsterTypes().pipe(
+            map((types: MonsterTemplateType[]) => {
                 let typesById = {};
-                types.map(c => {typesById[c.id] = c});
+                types.map(c => {
+                    typesById[c.id] = c
+                });
                 return types;
-            });
+            }));
     }
 
     getMonsterTypes(): Observable<MonsterTemplateType[]> {
         if (!this.monsterTypes) {
             this.monsterTypes = new ReplaySubject<MonsterTemplateType[]>(1);
 
-            this._http.get('/api/v2/monsterTypes')
-                .map(res => res.json())
+            this.httpClient.get<MonsterTemplateType[]>('/api/v2/monsterTypes')
                 .subscribe(
                     monsterTypesJsonData => {
                         let monsterTypes = MonsterTemplateType.typesFromJson(monsterTypesJsonData);
@@ -62,20 +59,19 @@ export class MonsterTemplateService extends JsonService {
     }
 
     getMonsterList(): Observable<MonsterTemplate[]> {
-        return Observable.forkJoin(
+        return forkJoin([
             this.getMonsterCategoriesById(),
-            this._http.get('/api/v2/monsterTemplates').map(res => res.json())
-        ).map(([categoriesById, monsterTemplatesDatas]: [{[id: number]: MonsterTemplateCategory}, MonsterTemplate[]]) => {
+            this.httpClient.get<MonsterTemplate[]>('/api/v2/monsterTemplates')
+        ]).pipe(map(([categoriesById, monsterTemplatesDatas]: [{ [id: number]: MonsterTemplateCategory }, MonsterTemplate[]]) => {
             return MonsterTemplate.templatessFromJson(monsterTemplatesDatas, categoriesById);
-        });
+        }));
     }
 
     getMonsterTraits(): Observable<MonsterTrait[]> {
         if (!this.monsterTraits) {
             this.monsterTraits = new ReplaySubject<MonsterTrait[]>(1);
 
-            this._http.get('/api/v2/monsterTraits')
-                .map(res => res.json())
+            this.httpClient.get<MonsterTrait[]>('/api/v2/monsterTraits')
                 .subscribe(
                     monsterTraits => {
                         this.monsterTraits.next(monsterTraits);
@@ -89,7 +85,7 @@ export class MonsterTemplateService extends JsonService {
         return this.monsterTraits;
     }
 
-    getMonsterTraitsById(): Observable<{[id: number]: MonsterTrait}> {
+    getMonsterTraitsById(): Observable<{ [id: number]: MonsterTrait }> {
         if (!this.monsterTraitsById) {
             this.monsterTraitsById = new ReplaySubject<MonsterTrait[]>(1);
 
@@ -112,30 +108,30 @@ export class MonsterTemplateService extends JsonService {
     }
 
     searchMonster(name): Observable<MonsterTemplate[]> {
-        return this.postJson('/api/monsterTemplate/searchMonster', {
+        return this.httpClient.post<MonsterTemplate[]>('/api/monsterTemplate/searchMonster', {
             name: name
-        }).map(res => res.json());
+        });
     }
 
     editMonster(monster: MonsterTemplate): Observable<MonsterTemplate> {
         let category = monster.category;
         delete monster.category;
-        let observable = this.postJson('/api/monsterTemplate/editMonster', {categoryId: category.id, monster: monster})
-            .map(res => res.json());
+        let observable = this.httpClient.post<MonsterTemplate>('/api/monsterTemplate/editMonster',
+            {categoryId: category.id, monster: monster});
         monster.category = category;
         return observable;
     }
 
     createType(name: string): Observable<MonsterTemplateType> {
-        return this.postJson('/api/monsterTemplate/createType', {
+        return this.httpClient.post<MonsterTemplateType>('/api/monsterTemplate/createType', {
             name: name
-        }).map(res => MonsterTemplateType.fromJson(res.json()));
+        }).pipe(map(res => MonsterTemplateType.fromJson(res)));
     }
 
     createCategory(type: MonsterTemplateType, name: string): Observable<MonsterTemplateCategory> {
-        return this.postJson('/api/monsterTemplate/createCategory', {
+        return this.httpClient.post<MonsterTemplateCategory>('/api/monsterTemplate/createCategory', {
             typeId: type.id,
             name: name
-        }).map(res => MonsterTemplateCategory.fromJson(res.json(), type));
+        }).pipe(map(res => MonsterTemplateCategory.fromJson(res, type)));
     }
 }

@@ -1,88 +1,83 @@
+import {forkJoin, Observable} from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
 
-import {JsonService} from '../shared/json-service';
-import {NotificationsService} from '../notifications';
-import {LoginService} from '../user';
-
-import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {ActiveStatsModifier} from '../shared';
 import {Monster} from './monster.model';
 import {Skill, SkillService} from '../skill';
 import {PartialItem} from '../item';
 
 @Injectable()
-export class MonsterService extends JsonService {
-    constructor(http: Http
-        , notification: NotificationsService
-        , loginService: LoginService
+export class MonsterService {
+    constructor(private httpClient: HttpClient
         , private _skillService: SkillService) {
-        super(http, notification, loginService);
     }
 
     createMonster(groupId: number, monster): Observable<Monster> {
-        return Observable.forkJoin(
-            this.postJson('/api/monster/createMonster', {
+        return forkJoin([
+            this.httpClient.post<Monster>('/api/monster/createMonster', {
                 monster: monster,
                 groupId: groupId
-            }).map(res => res.json()),
+            }),
             this._skillService.getSkillsById()
-        ).map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+        ]).pipe(map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
             return Monster.fromJson(monsterJsonData, skillsById)
-        });
+        }));
     }
 
     updateMonster(monsterId: number, fieldName: string, value: any): Observable<{value: any, fieldName: string}> {
-        return this.postJson('/api/monster/updateMonster', {
+        return this.httpClient.post<{value: any, fieldName: string}>('/api/monster/updateMonster', {
             fieldName: fieldName,
             value: value,
             monsterId: monsterId
-        }).map(res => res.json());
-    }
-
-    killMonster(monsterId: number): Observable<Monster> {
-        return Observable.forkJoin(
-            this.postJson('/api/group/killMonster', {
-                monsterId: monsterId
-            }).map(res => res.json()),
-            this._skillService.getSkillsById()
-        ).map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
-            return Monster.fromJson(monsterJsonData, skillsById)
         });
     }
 
+    killMonster(monsterId: number): Observable<Monster> {
+        return forkJoin([
+            this.httpClient.post('/api/group/killMonster', {
+                monsterId: monsterId
+            }),
+            this._skillService.getSkillsById()
+        ]).pipe(map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+            return Monster.fromJson(monsterJsonData, skillsById)
+        }));
+    }
+
     deleteMonster(monsterId: number): Observable<any> {
-        return this.postJson('/api/group/deleteMonster', {
+        return this.httpClient.post('/api/group/deleteMonster', {
             monsterId: monsterId
-        }).map(res => res.json());
+        });
     }
 
     addModifier(monsterId: number, modifier: ActiveStatsModifier): Observable<ActiveStatsModifier> {
-        return this.postJson('/api/monster/addModifier', {
+        return this.httpClient.post('/api/monster/addModifier', {
             monsterId: monsterId,
             modifier: modifier,
-        }).map(res => ActiveStatsModifier.fromJson(res.json()));
+        }).pipe(map(res => ActiveStatsModifier.fromJson(res)));
     }
 
     removeModifier(monsterId: number, modifierId: number): Observable<ActiveStatsModifier> {
-        return this.postJson('/api/monster/removeModifier', {
+        return this.httpClient.post('/api/monster/removeModifier', {
             monsterId: monsterId,
             modifierId: modifierId,
-        }).map(res => ActiveStatsModifier.fromJson(res.json()));
+        }).pipe(map(res => ActiveStatsModifier.fromJson(res)));
     }
 
     toggleModifier(monsterId: number, modifierId: number): Observable<ActiveStatsModifier> {
-        return this.postJson('/api/monster/toggleModifier', {
+        return this.httpClient.post('/api/monster/toggleModifier', {
             monsterId: monsterId,
             modifierId: modifierId,
-        }).map(res => ActiveStatsModifier.fromJson(res.json()));
+        }).pipe(map(res => ActiveStatsModifier.fromJson(res)));
     }
 
     equipItem(monsterId: number, itemId: number, equiped: boolean): Observable<PartialItem> {
-        return this.postJson('/api/monster/equipItem', {
+        return this.httpClient.post('/api/monster/equipItem', {
             monsterId: monsterId,
             itemId: itemId,
             equiped: equiped,
-        }).map(res => PartialItem.fromJson(res.json()));
+        }).pipe(map(res => PartialItem.fromJson(res)));
     }
 }

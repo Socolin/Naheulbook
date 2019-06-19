@@ -1,6 +1,5 @@
-import {Observable} from 'rxjs/Observable';
-import {Subscription} from 'rxjs/Subscription';
-import {Subject} from 'rxjs/Subject';
+
+import {forkJoin, Observable, Subscription, Subject} from 'rxjs';
 
 import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
 
@@ -754,11 +753,11 @@ export class Group extends WsRegistrable {
             }
             case 'joinCharacter': {
                 let characterData: CharacterJsonData = data;
-                Observable.forkJoin(
+                forkJoin([
                     services.job.getJobList(),
                     services.origin.getOriginList(),
                     services.skill.getSkillsById()
-                ).subscribe(([jobs, origins, skillsById]: [Job[], Origin[], {[skillId: number]: Skill}]) => {
+                ]).subscribe(([jobs, origins, skillsById]: [Job[], Origin[], {[skillId: number]: Skill}]) => {
                     let character = Character.fromJson(characterData, origins, jobs, skillsById);
 
                     try {

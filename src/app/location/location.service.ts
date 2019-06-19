@@ -1,30 +1,25 @@
+
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable, ReplaySubject} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
+import {Observable, ReplaySubject} from 'rxjs';
 
 import {Location, Map} from './location.model';
-import {JsonService} from '../shared/json-service';
-import {NotificationsService} from '../notifications';
-import {LoginService} from '../user';
 
 @Injectable()
-export class LocationService extends JsonService {
+export class LocationService {
 
     public locations: ReplaySubject<Location[]> | undefined;
     public locationsTree: ReplaySubject<Location[]> | undefined;
 
-    constructor(http: Http
-        , notification: NotificationsService
-        , loginService: LoginService) {
-        super(http, notification, loginService);
+    constructor(private httpClient: HttpClient) {
     }
 
     getLocationsTree(): Observable<Location[]> {
         if (!this.locationsTree) {
             this.locationsTree = new ReplaySubject<Location[]>(1);
 
-            this._http.get('/api/location/list')
-                .map(res => res.json())
+            this.httpClient.get<Location[]>('/api/location/list')
                 .subscribe(
                     (locations: Location[]) => {
                         let locationsById = {};
@@ -56,8 +51,7 @@ export class LocationService extends JsonService {
         if (!this.locations) {
             this.locations = new ReplaySubject<Location[]>(1);
 
-            this._http.get('/api/location/list')
-                .map(res => res.json())
+            this.httpClient.get<Location[]>('/api/location/list')
                 .subscribe(
                     locations => {
                         if (this.locations) {
@@ -76,18 +70,15 @@ export class LocationService extends JsonService {
     }
 
     getLocation(locationId: number): Observable<Location> {
-        return this.postJson('/api/location/detail', {locationId: locationId})
-            .map(res => res.json());
+        return this.httpClient.post<Location>('/api/location/detail', {locationId: locationId});
     }
 
     getMaps(locationId: number): Observable<Map[]> {
-        return this.postJson('/api/location/maps', {locationId: locationId})
-            .map(res => res.json());
+        return this.httpClient.post<Map[]>('/api/location/maps', {locationId: locationId});
     }
 
     editLocation(location: Location, maps: Map[]): Observable<any> {
-        return this.postJson('/api/location/edit', {location: location, maps: maps})
-            .map(res => res.json());
+        return this.httpClient.post<any>('/api/location/edit', {location: location, maps: maps});
     }
 
     clearLocations() {
@@ -96,20 +87,17 @@ export class LocationService extends JsonService {
     }
 
     addLocation(locationName: string, parentId: number): Observable<Location> {
-        return this.postJson('/api/location/create', {
+        return this.httpClient.post<Location>('/api/location/create', {
                 parentId: parentId,
                 locationName: locationName
-            })
-            .map(res => res.json());
+            });
     }
 
     listMapImages(filter: string): Observable<string[]> {
-        return this.postJson('/api/location/listMapImages', {filter: filter})
-            .map(res => res.json());
+        return this.httpClient.post<string[]>('/api/location/listMapImages', {filter: filter});
     }
 
     searchLocations(filter: string): Observable<Location[]> {
-        return this.postJson('/api/location/search', {filter: filter})
-            .map(res => res.json());
+        return this.httpClient.post<Location[]>('/api/location/search', {filter: filter});
     }
 }

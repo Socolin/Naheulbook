@@ -1,27 +1,27 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 import {QuestTemplate} from './quest.model';
 
 @Injectable()
 export class QuestService {
-    constructor(private _http: Http) {
+    constructor(private httpClient: HttpClient) {
     }
 
     createQuestTemplate(quest: QuestTemplate): Observable<QuestTemplate> {
-        return this._http.post('/api/quest/createQuestTemplate', JSON.stringify({
+        return this.httpClient.post<QuestTemplate>('/api/quest/createQuestTemplate', {
             quest: quest
-        })).map(res => res.json());
+        });
     }
 
-    getQuestList(): Observable < QuestTemplate[] > {
-        return this._http.get('/api/quest/listQuest').map(res => res.json());
+    getQuestList(): Observable<QuestTemplate[]> {
+        return this.httpClient.get<QuestTemplate[]>('/api/quest/listQuest');
     }
 
-    searchQuest(name): Observable < QuestTemplate[] > {
-        return this._http.post('/api/quest/searchQuest', JSON.stringify({
+    searchQuest(name): Observable<QuestTemplate[]> {
+        return this.httpClient.post<QuestTemplate[]>('/api/quest/searchQuest', {
             name: name
-        })).map(res => res.json());
+        });
     }
 }

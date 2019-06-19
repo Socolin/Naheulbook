@@ -1,3 +1,5 @@
+
+import {map} from 'rxjs/operators';
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {NhbkAction, NhbkActionType} from './nhbk-action.model';
 import {Observable} from 'rxjs';
@@ -45,9 +47,9 @@ export class NhbkActionEditorComponent implements OnInit {
     }
 
     updateAutocompleteItem(filter: string) {
-        return this._miscService.searchItem(filter).map(
+        return this._miscService.searchItem(filter).pipe(map(
             list => list.map(e => new AutocompleteValue(e, e.name))
-        );
+        ));
     }
 
     validate() {

@@ -21,7 +21,7 @@ export class EditItemTemplateComponent implements OnInit {
 
     @HostListener('window:keydown', ['$event'])
     keyboardInput(event: KeyboardEvent) {
-        if (event.srcElement && event.srcElement.tagName === 'BODY') {
+        if (event.srcElement && event.srcElement instanceof HTMLElement && event.srcElement.tagName === 'BODY') {
             if (event.code === 'Enter') {
                 if (event.ctrlKey) {
                     this.edit(event.shiftKey);

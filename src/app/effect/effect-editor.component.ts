@@ -16,11 +16,11 @@ export class EffectEditorComponent implements OnInit {
     public types: EffectType[] = [];
     public selectedType: EffectType;
 
-    @ViewChild('createCategoryDialog')
+    @ViewChild('createCategoryDialog', {static: true})
     public createCategoryDialog: Portal<any>;
     public createCategorOverlayRef: OverlayRef;
 
-    @ViewChild('createTypeDialog')
+    @ViewChild('createTypeDialog', {static: true})
     public createTypeDialog: Portal<any>;
     public createTypeOverlayRef: OverlayRef;
 

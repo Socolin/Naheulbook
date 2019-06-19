@@ -1,3 +1,5 @@
+
+import {forkJoin} from 'rxjs';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
@@ -5,7 +7,6 @@ import {Job, JobService} from '../job';
 import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
 import {CharacterService} from './character.service';
-import {Observable} from 'rxjs/Observable';
 import {Speciality} from '../job/speciality.model';
 import {IMetadata} from '../shared';
 
@@ -171,11 +172,11 @@ export class CreateCustomCharacterComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        Observable.forkJoin(
+        forkJoin([
             this._jobService.getJobList(),
             this._originService.getOriginList(),
             this._skillService.getSkills(),
-        ).subscribe(([jobs, origins, skills]) => {
+        ]).subscribe(([jobs, origins, skills]) => {
             this.jobs = jobs;
             this.origins = origins;
             this.skills = skills;

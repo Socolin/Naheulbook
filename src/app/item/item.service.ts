@@ -1,41 +1,37 @@
+
+import {forkJoin, Observable} from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
 
-import {ActiveStatsModifier, JsonService} from '../shared';
-import {NotificationsService} from '../notifications';
+import {ActiveStatsModifier} from '../shared';
 
-import {LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
 import {LootTookItemMsg} from '../loot';
 
 import {ItemData, PartialItem, Item} from './item.model';
 
 @Injectable()
-export class ItemService extends JsonService {
-    constructor(http: Http
-        , notification: NotificationsService
-        , loginService: LoginService
+export class ItemService {
+    constructor(private httpClient: HttpClient
         , private _skillService: SkillService) {
-        super(http, notification, loginService);
     }
 
     deleteItem(itemId: number): Observable<Item> {
-        return this.postJson('/api/item/delete', {itemId: itemId})
-            .map(res => res.json());
+        return this.httpClient.post<Item>('/api/item/delete', {itemId: itemId});
     }
 
     takeItemFromLoot(itemId: number, characterId: number, quantity?: number): Observable<LootTookItemMsg> {
-        return this.postJson('/api/item/takeItemFromLoot', {
+        return this.httpClient.post<LootTookItemMsg>('/api/item/takeItemFromLoot', {
             itemId: itemId,
             quantity: quantity,
             characterId: characterId
-        }).map(res => res.json());
+        });
     }
 
     giveItem(itemId: number, characterId: number, quantity?: number): Observable<Item> {
-        return this.postJson('/api/item/giveItem', {itemId: itemId, characterId: characterId, quantity: quantity})
-            .map(res => res.json());
+        return this.httpClient.post<Item>('/api/item/giveItem', {itemId: itemId, characterId: characterId, quantity: quantity});
     }
 
     addItemTo(targetType: string
@@ -48,15 +44,16 @@ export class ItemService extends JsonService {
             delete itemData['quantity'];
         }
 
-        return Observable.create(observer => {
-            Observable.forkJoin(this.postJson('/api/item/add', {
+        return new Observable(observer => {
+            forkJoin([
+                this.httpClient.post('/api/item/add', {
                     itemTemplateId: itemTemplateId,
                     targetId: targetId,
                     targetType: targetType,
                     itemData: itemData
-                }).map(res => res.json()),
+                }),
                 this._skillService.getSkillsById()
-            ).subscribe(
+            ]).subscribe(
                 ([itemJsonData, skillsById]: [Item, {[skillId: number]: Skill}]) => {
                     let item = Item.fromJson(itemJsonData, skillsById);
                     observer.next(item);
@@ -69,18 +66,19 @@ export class ItemService extends JsonService {
             );
         });
     }
+
     addRandomItemTo(targetType: string
         , targetId: number
         , criteria: any): Observable<Item> {
 
-        return Observable.create(observer => {
-            Observable.forkJoin(this.postJson('/api/item/addRandom', {
+        return new Observable(observer => {
+            forkJoin([this.httpClient.post('/api/item/addRandom', {
                     targetId: targetId,
                     targetType: targetType,
                     criteria: criteria
-                }).map(res => res.json()),
+                }),
                 this._skillService.getSkillsById()
-            ).subscribe(
+            ]).subscribe(
                 ([itemJsonData, skillsById]: [Item, {[skillId: number]: Skill}]) => {
                     let item = Item.fromJson(itemJsonData, skillsById);
                     observer.next(item);
@@ -95,56 +93,56 @@ export class ItemService extends JsonService {
     }
 
     equipItem(itemId: number, level: number): Observable<PartialItem> {
-        return this.postJson('/api/item/equip', {
+        return this.httpClient.post<PartialItem>('/api/item/equip', {
             itemId: itemId,
             level: level
-        }).map(res => res.json());
+        });
     }
 
     moveToContainer(itemId: number, containerId: number): Observable<PartialItem> {
-        return this.postJson('/api/item/moveToContainer', {
+        return this.httpClient.post<PartialItem>('/api/item/moveToContainer', {
             itemId: itemId,
             containerId: containerId
-        }).map(res => res.json());
+        });
     }
 
     updateQuantity(itemId: number, quantity): Observable<PartialItem> {
-        return this.postJson('/api/item/updateQuantity', {
+        return this.httpClient.post<PartialItem>('/api/item/updateQuantity', {
             itemId: itemId,
             quantity: quantity
-        }).map(res => res.json());
+        });
     }
 
     readBook(itemId: number): Observable<PartialItem> {
-        return this.postJson('/api/item/readBook', {
+        return this.httpClient.post<PartialItem>('/api/item/readBook', {
             itemId: itemId,
-        }).map(res => res.json());
+        });
     }
 
     identify(itemId: number): Observable<PartialItem> {
-        return this.postJson('/api/item/identify', {
+        return this.httpClient.post<PartialItem>('/api/item/identify', {
             itemId: itemId,
-        }).map(res => res.json());
+        });
     }
 
     updateCharge(itemId: number, charge): Observable<PartialItem> {
-        return this.postJson('/api/item/updateCharge', {
+        return this.httpClient.post<PartialItem>('/api/item/updateCharge', {
             itemId: itemId,
             charge: charge
-        }).map(res => res.json());
+        });
     }
 
     updateItem(itemId: number, itemData): Observable<PartialItem> {
-        return this.postJson('/api/item/updateItem', {
+        return this.httpClient.post<PartialItem>('/api/item/updateItem', {
             itemId: itemId,
             itemData: itemData
-        }).map(res => res.json());
+        });
     }
 
     updateItemModifiers(itemId: number, modifiers: ActiveStatsModifier[]): Observable<PartialItem> {
-        return this.postJson('/api/item/updateItemModifiers', {
+        return this.httpClient.post<PartialItem>('/api/item/updateItemModifiers', {
             itemId: itemId,
             modifiers: modifiers
-        }).map(res => res.json());
+        });
     }
 }

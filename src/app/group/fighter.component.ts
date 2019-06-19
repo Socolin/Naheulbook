@@ -30,7 +30,7 @@ export class FighterComponent implements OnInit, OnChanges {
     @Input() selectedModifier: ActiveStatsModifier | undefined;
     public selectedItem: Item | undefined;
 
-    @ViewChild('editMonsterDialog')
+    @ViewChild('editMonsterDialog', {static: true})
     public editMonsterDialog: Portal<any>;
     public editMonsterOverlayRef: OverlayRef | undefined;
 

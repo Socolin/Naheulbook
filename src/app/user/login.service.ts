@@ -1,35 +1,31 @@
+import {share, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Response, Http} from '@angular/http';
-import {Observable, ReplaySubject} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
+import {Observable, ReplaySubject} from 'rxjs';
 
 import {User} from './user.model';
-import {JsonService} from '../shared/json-service';
-import {NotificationsService} from '../notifications/notifications.service';
 import {isNullOrUndefined} from 'util';
 
 @Injectable()
-export class LoginService extends JsonService {
+export class LoginService {
     public loggedUser: ReplaySubject<User | null> = new ReplaySubject<User>(1);
     public currentLoggedUser?: User;
 
-    constructor(http: Http
-        , notification: NotificationsService) {
-        super(http, notification, null);
+    constructor(private httpClient: HttpClient) {
     }
 
     getLoginToken(app: string): Observable<{ loginToken: string, appKey: string }> {
-        return this.postJson('/api/user/loginToken', {app: app})
-            .map(res => res.json());
+        return this.httpClient.post<{ loginToken: string, appKey: string }>('/api/user/loginToken', {app: app});
     }
 
     doFBLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
-        let fbLogin = this.postJson('/api/user/fblogin', {
+        let fbLogin = this.httpClient.post<User>('/api/user/fblogin', {
             code: code,
             loginToken: loginToken,
             redirectUri: redirectUri
-        })
-            .map(res => res.json())
-            .share();
+        }).pipe(
+            share()
+        );
 
         fbLogin.subscribe(user => {
             this.loggedUser.next(user);
@@ -40,13 +36,13 @@ export class LoginService extends JsonService {
     }
 
     doGoogleLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
-        let googleLogin = this.postJson('/api/user/googleLogin', {
+        let googleLogin = this.httpClient.post<User>('/api/user/googleLogin', {
             code: code,
             loginToken: loginToken,
             redirectUri: redirectUri
-        })
-            .map(res => res.json())
-            .share();
+        }).pipe(
+            share()
+        );
 
         googleLogin.subscribe(user => {
             this.loggedUser.next(user);
@@ -57,13 +53,13 @@ export class LoginService extends JsonService {
     }
 
     doLiveLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
-        let liveLogin = this.postJson('/api/user/liveLogin', {
+        let liveLogin = this.httpClient.post<User>('/api/user/liveLogin', {
             code: code,
             loginToken: loginToken,
             redirectUri: redirectUri
-        })
-            .map(res => res.json())
-            .share();
+        }).pipe(
+            share()
+        );
 
         liveLogin.subscribe(user => {
             this.loggedUser.next(user);
@@ -74,12 +70,12 @@ export class LoginService extends JsonService {
     }
 
     doTwitterLogin(oauthToken: string, oauthVerifier: string): Observable<User> {
-        let twitterLogin = this.postJson('/api/user/twitterLogin', {
+        let twitterLogin = this.httpClient.post<User>('/api/user/twitterLogin', {
             oauthToken: oauthToken,
             oauthVerifier: oauthVerifier
-        })
-            .map(res => res.json())
-            .share();
+        }).pipe(
+            share()
+        );
 
         twitterLogin.subscribe(user => {
             this.loggedUser.next(user);
@@ -91,9 +87,7 @@ export class LoginService extends JsonService {
 
 
     logout(): Observable<User> {
-        let logout = this._http.get('/api/user/logout')
-            .map(res => res.json())
-            .share();
+        let logout = this.httpClient.get<User>('/api/user/logout').pipe(share());
 
         logout.subscribe(() => {
             this.currentLoggedUser = undefined;
@@ -104,14 +98,12 @@ export class LoginService extends JsonService {
     }
 
     checkLogged(): Observable<User> {
-        let checkLogged = this._http.get('/api/v2/users/me')
-            .map(res => {
-                if (res.status === 401) {
-                    return null;
-                }
-                return res.json();
-            })
-            .share();
+        let checkLogged = this.httpClient.get<User>('/api/v2/users/me').pipe(
+            map(res => {
+                return res;
+            }),
+            share()
+        );
 
         checkLogged.subscribe(user => {
             this.loggedUser.next(user);
@@ -122,18 +114,16 @@ export class LoginService extends JsonService {
     }
 
     isLogged(): Observable<boolean> {
-        return this.checkLogged().map(user => !isNullOrUndefined(user));
+        return this.checkLogged().pipe(map(user => !isNullOrUndefined(user)));
     }
 
 
-    updateProfile(profile): Observable<Response> {
-        return this.postJson('/api/user/updateProfile', profile)
-            .map(res => res.json());
+    updateProfile(profile): Observable<any> {
+        return this.httpClient.post<any>('/api/user/updateProfile', profile);
     }
 
     searchUser(filter: string): Observable<Object[]> {
-        return this.postJson('/api/user/searchUser', {filter: filter})
-            .map(res => res.json());
+        return this.httpClient.post<Object[]>('/api/user/searchUser', {filter: filter});
     }
 
     redirectToFbLogin(redirectPage: string) {

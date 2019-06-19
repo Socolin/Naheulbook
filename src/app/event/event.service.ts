@@ -1,37 +1,32 @@
-import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable} from 'rxjs';
 
-import {JsonService} from '../shared';
-import {NotificationsService} from '../notifications';
-import {LoginService} from '../user';
+import {map} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 import {NEvent} from './event.model';
 
 @Injectable()
-export class EventService extends JsonService {
-    constructor(http: Http
-        , notification: NotificationsService
-        , loginService: LoginService) {
-        super(http, notification, loginService);
+export class EventService {
+    constructor(private httpClient: HttpClient) {
     }
 
     loadEvents(groupId: number): Observable<NEvent[]> {
-        return this.postJson('/api/group/loadEvents', {
+        return this.httpClient.post<NEvent[]>('/api/group/loadEvents', {
             groupId: groupId
-        }).map(res => NEvent.eventsFromJson(res.json()));
+        }).pipe(map(res => NEvent.eventsFromJson(res)));
     }
 
     createEvent(groupId: number, event: NEvent): Observable<NEvent> {
-        return this.postJson('/api/group/createEvent', {
+        return this.httpClient.post<NEvent>('/api/group/createEvent', {
             groupId: groupId,
             event: event
-        }).map(res => NEvent.fromJson(res.json()));
+        }).pipe(map(res => NEvent.fromJson(res)));
     }
 
     deleteEvent(eventId: number): Observable<NEvent> {
-        return this.postJson('/api/group/deleteEvent', {
+        return this.httpClient.post<NEvent>('/api/group/deleteEvent', {
             eventId: eventId
-        }).map(res => res.json());
+        });
     }
 }

@@ -1,28 +1,23 @@
+import {forkJoin, Observable, ReplaySubject} from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable, ReplaySubject} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
 
 import {Effect, EffectCategory, EffectJsonData, EffectType} from './effect.model';
-import {JsonService} from '../shared/json-service';
-import {NotificationsService} from '../notifications';
-import {LoginService} from '../user';
 
 @Injectable()
-export class EffectService extends JsonService {
+export class EffectService {
     private effectsByCategory: {[categoryId: number]: ReplaySubject<Effect[]>} = {};
     private effectTypes: ReplaySubject<EffectType[]>;
-    private effectCategoryList: ReplaySubject<EffectCategory[]>;
     private effectsById: {[effectId: number]: ReplaySubject<Effect>} = {};
 
-    constructor(http: Http
-        , notification: NotificationsService
-        , loginService: LoginService) {
-        super(http, notification, loginService);
+    constructor(private httpClient: HttpClient) {
     }
 
     getEffectCategoriesById(): Observable<{[id: number]: EffectCategory}> {
-        return this.getEffectTypes()
-            .map((types: EffectType[]) => {
+        return this.getEffectTypes().pipe(
+            map((types: EffectType[]) => {
                 let categoriesById = {};
                 for (let type of types) {
                     for (let category of type.categories) {
@@ -30,24 +25,23 @@ export class EffectService extends JsonService {
                     }
                 }
                 return categoriesById;
-            });
+            }));
     }
 
     getEffectTypesById(): Observable<{[id: number]: EffectType}> {
-        return this.getEffectTypes()
-            .map((types: EffectType[]) => {
+        return this.getEffectTypes().pipe(
+            map((types: EffectType[]) => {
                 let typesById = {};
                 types.map(c => {typesById[c.id] = c});
                 return types;
-            });
+            }));
     }
 
     getEffectTypes(): Observable<EffectType[]> {
         if (!this.effectTypes) {
             this.effectTypes = new ReplaySubject<EffectType[]>(1);
 
-            this._http.get('/api/v2/effectCategories')
-                .map(res => res.json())
+            this.httpClient.get<any[]>('/api/v2/effectCategories')
                 .subscribe(
                     effectTypesJsonData => {
                         let effectTypes = EffectType.typesFromJson(effectTypesJsonData);
@@ -81,12 +75,12 @@ export class EffectService extends JsonService {
     getEffects(categoryId: number): Observable<Effect[]> {
         if (!(categoryId in this.effectsByCategory)) {
             this.effectsByCategory[categoryId] = new ReplaySubject<Effect[]>(1);
-            Observable.forkJoin(
+            forkJoin([
                 this.getEffectCategoriesById(),
-                this._http.get(`/api/v2/effectCategories/${categoryId}/effects`).map(res => res.json())
-            ).map(([categoriesById, effectsJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData[]]) =>
+                this.httpClient.get(`/api/v2/effectCategories/${categoryId}/effects`)
+            ]).pipe(map(([categoriesById, effectsJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData[]]) =>
                 Effect.effectsFromJson(categoriesById, effectsJsonData)
-            ).subscribe(
+            )).subscribe(
                     effects => {
                     this.effectsByCategory[categoryId].next(effects);
                     this.effectsByCategory[categoryId].complete();
@@ -100,27 +94,27 @@ export class EffectService extends JsonService {
     }
 
     searchEffect(filter: string): Observable<Effect[]> {
-        return Observable.forkJoin(
+        return forkJoin([
             this.getEffectCategoriesById(),
-            this.postJson('/api/effect/search', {
+            this.httpClient.post<EffectJsonData[]>('/api/effect/search', {
                 filter: filter
-            }).map(res => res.json())
-        ).map(([categoriesById, effectsJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData[]]) => {
+            })
+        ]).pipe(map(([categoriesById, effectsJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData[]]) => {
             return Effect.effectsFromJson(categoriesById, effectsJsonData);
-        });
+        }));
     }
 
     getEffect(effectId: number): Observable<Effect> {
         if (!(effectId in this.effectsById)) {
             this.effectsById[effectId] = new ReplaySubject<Effect>(1);
-            Observable.forkJoin(
+            forkJoin([
                 this.getEffectCategoriesById(),
-                this.postJson('/api/effect/detail', {
+                this.httpClient.post('/api/effect/detail', {
                     effectId: effectId
-                }).map(res => res.json())
-            ).map(([categoriesById, effectJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData]) => {
+                })
+            ]).pipe(map(([categoriesById, effectJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData]) => {
                 return Effect.fromJson(effectJsonData, categoriesById);
-            }).subscribe(
+            })).subscribe(
                 (effect: Effect) => {
                     this.effectsById[effectId].next(effect);
                     this.effectsById[effectId].complete();
@@ -134,37 +128,37 @@ export class EffectService extends JsonService {
     }
 
     createEffect(effect: Effect): Observable<Effect> {
-        return Observable.forkJoin(
+        return forkJoin([
             this.getEffectCategoriesById(),
-            this.postJson('/api/effect/create', {
+            this.httpClient.post('/api/effect/create', {
                 effect: effect.toJsonData()
-            }).map(res => res.json())
-        ).map(([categoriesById, effectJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData]) =>
+            })
+        ]).pipe(map(([categoriesById, effectJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData]) =>
             Effect.fromJson(effectJsonData, categoriesById)
-        );
+        ));
     }
 
     editEffect(effect: Effect): Observable<Effect> {
-        return Observable.forkJoin(
+        return forkJoin([
             this.getEffectCategoriesById(),
-            this.postJson('/api/effect/edit', {
+            this.httpClient.post('/api/effect/edit', {
                 effect: effect.toJsonData()
-            }).map(res => res.json())
-        ).map(([categoriesById, effectJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData]) =>
+            })
+        ]).pipe(map(([categoriesById, effectJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData]) =>
             Effect.fromJson(effectJsonData, categoriesById)
-        );
+        ));
     }
 
     createType(name: string): Observable<EffectType> {
-        return this.postJson('/api/effect/createType', {
+        return this.httpClient.post('/api/effect/createType', {
             name: name
-        }).map(res => EffectType.fromJson(res.json()));
+        }).pipe(map(res => EffectType.fromJson(res)));
     }
 
     createCategory(type: EffectType, name: string): Observable<EffectCategory> {
-        return this.postJson('/api/effect/createCategory', {
+        return this.httpClient.post('/api/effect/createCategory', {
             typeId: type.id,
             name: name
-        }).map(res => EffectCategory.fromJson(res.json(), type));
+        }).pipe(map(res => EffectCategory.fromJson(res, type)));
     }
 }

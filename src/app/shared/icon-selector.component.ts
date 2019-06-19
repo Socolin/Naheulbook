@@ -63,7 +63,7 @@ export class IconSelectorComponent implements OnInit, OnChanges {
         '#08fdcc',
     ];
 
-    @ViewChild('iconSelectorDialog')
+    @ViewChild('iconSelectorDialog', {static: true})
     public iconSelectorDialog: Portal<any>;
     public iconSelectorOverlayRef: OverlayRef;
 

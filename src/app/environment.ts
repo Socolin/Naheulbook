@@ -2,6 +2,8 @@
 // Different environments can be found in config/environment.{dev|prod}.ts
 // The build system defaults to the dev environment
 
+import 'zone.js/dist/zone-error';
+
 export const environment = {
   production: false
 };

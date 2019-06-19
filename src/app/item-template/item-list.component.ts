@@ -1,3 +1,5 @@
+
+import {forkJoin, Subscription} from 'rxjs';
 import {
     Component, OnInit, OnDestroy, Input, ViewChildren, HostListener, QueryList, ViewChild, EventEmitter, Output
 } from '@angular/core';
@@ -5,8 +7,6 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
-import {Subscription} from 'rxjs/Rx';
 
 import {smoothScrollBy, smoothScrollTo} from '../shared/scroll';
 import {God, removeDiacritics} from '../shared';
@@ -52,7 +52,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     public queryParamsSub: Subscription;
 
-    @ViewChild('stickyContainer')
+    @ViewChild('stickyContainer', {static: true})
     public stickyContainer: Portal<any>;
     public stickyContainerOverlay?: OverlayRef;
 
@@ -292,12 +292,12 @@ export class ItemListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        Observable.forkJoin(
+        forkJoin([
             this._jobService.getJobsNamesById(),
             this._originService.getOriginsNamesById(),
             this._itemTemplateService.getSectionsList(),
             this._miscService.getGodsByTechName(),
-        ).subscribe(([jobsName, originsName, sections, godsByTechName]: [{[jobId: number]: string}, {[jobId: number]: string}, ItemSection[], {[techName: string]: God}]) => {
+        ]).subscribe(([jobsName, originsName, sections, godsByTechName]: [{[jobId: number]: string}, {[jobId: number]: string}, ItemSection[], {[techName: string]: God}]) => {
             this.originsName = originsName;
             this.jobsName = jobsName;
             this.itemSections = sections;

@@ -1,9 +1,10 @@
+
+import {forkJoin, of as observableOf, Observable} from 'rxjs';
 import {
     Component, Input, OnInit, OnChanges, SimpleChanges, HostListener, ViewChild
 } from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
-import {Observable} from 'rxjs';
 
 import {isNullOrUndefined} from 'util';
 import {
@@ -49,10 +50,10 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
     public autocompleteModuleCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteModule.bind(this);
 
-    @ViewChild('autocompleteModuleModalTextField')
+    @ViewChild('autocompleteModuleModalTextField', {static: true})
     autocompleteModuleModalTextField: AutocompleteInputComponent;
 
-    @ViewChild('addModuleDialog')
+    @ViewChild('addModuleDialog', {static: true})
     public addModuleDialog: Portal<any>;
     public addModuleOverlayRef?: OverlayRef;
 
@@ -135,14 +136,14 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
     updateAutocompleteModule(filter: string) {
         if (!filter) {
-            return Observable.of([]);
+            return observableOf([]);
         }
         filter = removeDiacritics(filter).toLowerCase();
         let filtered = this.modulesDef
             .filter(m => this.modules.indexOf(m.name) === -1)
             .filter(m => (m.name.indexOf(filter) !== -1 || removeDiacritics(m.displayName.toLowerCase()).indexOf(filter) !== -1))
             .map(m => new AutocompleteValue(m, m.displayName));
-        return Observable.of(filtered);
+        return observableOf(filtered);
     }
 
     automaticNotIdentifiedName() {
@@ -499,19 +500,19 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         } else {
             this.determineModulesFromItemTemplate();
         }
-        Observable.forkJoin(
+        forkJoin([
             this._itemTemplateservice.getItemTypes(),
             this._miscService.getGods(),
             this._miscService.getGodsByTechName(),
-        ).subscribe(([itemTypes, gods, godsByTechName]) => {
-            Observable.forkJoin(
+        ]).subscribe(([itemTypes, gods, godsByTechName]) => {
+            forkJoin([
                 this._itemTemplateservice.getSectionsList(),
                 this._skillService.getSkills(),
                 this._skillService.getSkillsById(),
                 this._itemTemplateservice.getSlots(),
                 this._jobService.getJobList(),
                 this._originService.getOriginList()
-            ).subscribe(([sections, skills, skillsById, slots, jobs, origins]) => {
+            ]).subscribe(([sections, skills, skillsById, slots, jobs, origins]) => {
                 this.sections = sections;
                 this.skills = skills;
                 this.skillsById = skillsById;

@@ -1,3 +1,7 @@
+
+import {forkJoin, Observable, Subscription} from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import {
     Component, OnInit, OnDestroy, ViewChild, QueryList,
     ViewChildren
@@ -6,8 +10,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatTabChangeEvent} from '@angular/material';
 import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
 import {Portal, TemplatePortalDirective} from '@angular/cdk/portal';
-import {Observable} from 'rxjs/Observable';
-import {Subscription} from 'rxjs/Subscription';
 
 import {
     AutocompleteValue,
@@ -58,11 +60,11 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     public loadingGroup = false;
 
-    @ViewChildren('characters')
+    @ViewChildren('characters, {static: true}')
     public characterSheetsDialog: QueryList<TemplatePortalDirective>;
     private characterSheetOverlayRef: OverlayRef;
 
-    @ViewChild('changeOwnershipDialog')
+    @ViewChild('changeOwnershipDialog', {static: true})
     public changeOwnershipDialog: Portal<any>;
     public changeOwnershipOverlayRef: OverlayRef;
     public selectedCharacter: Character;
@@ -70,7 +72,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     public filterSearchUser: string|null = null;
     public filteredUsers: Object[] = [];
 
-    @ViewChild('inviteCharacterModal')
+    @ViewChild('inviteCharacterModal', {static: true})
     public inviteCharacterModal: Portal<any>;
     public inviteCharacterOverlayRef: OverlayRef;
     public searchNameInvite: string;
@@ -84,13 +86,13 @@ export class GroupComponent implements OnInit, OnDestroy {
     private routeFragmentSub: Subscription;
     private groupNotificationSub: Subscription;
 
-    @ViewChild('addEffectModal')
+    @ViewChild('addEffectModal', {static: true})
     public addEffectModal: AddEffectModalComponent;
 
-    @ViewChild('createItemModal')
+    @ViewChild('createItemModal', {static: true})
     public createItemModal: CreateItemComponent;
 
-    @ViewChild('fighterSelector')
+    @ViewChild('fighterSelector', {static: true})
     public fighterSelector: FighterSelectorComponent;
 
     private currentSelectAction: string|null;
@@ -140,10 +142,10 @@ export class GroupComponent implements OnInit, OnDestroy {
     addTime(dateOffset: NhbkDateOffset) {
         let time = date2Timestamp(dateOffset);
         let changes = this.group.updateTime('time', time);
-        Observable.forkJoin(
+        forkJoin([
             this._groupService.addTime(this.group.id, dateOffset),
             this._groupService.saveChangedTime(this.group.id, changes)
-        ).subscribe(([data]) => {
+        ]).subscribe(([data]) => {
             this.group.data.changeValue('date', data.date);
         });
     }
@@ -158,9 +160,9 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     updateLocationListAutocomplete(filter: string) {
-        return this._locationService.searchLocations(filter).map(
+        return this._locationService.searchLocations(filter).pipe(map(
             list => list.map(e => new AutocompleteValue(e, e.name))
-        );
+        ));
     }
 
     /* Characters tab */

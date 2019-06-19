@@ -17,7 +17,7 @@ import {Monster} from '../monster';
 export class CreateItemComponent implements OnChanges {
     @Output() onAddItem: EventEmitter<any> = new EventEmitter<any>();
 
-    @ViewChild('addItemDialog')
+    @ViewChild('addItemDialog', {static: true})
     public addItemDialog: Portal<any>;
     public addItemOverlayRef: OverlayRef | undefined;
 

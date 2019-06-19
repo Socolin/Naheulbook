@@ -21,7 +21,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     @Input() group: Group;
     public newLootName: string|null;
 
-    @ViewChild('addLootDialog')
+    @ViewChild('addLootDialog', {static: true})
     public addLootDialog: Portal<any>;
     public addLootOverlayRef: OverlayRef;
 

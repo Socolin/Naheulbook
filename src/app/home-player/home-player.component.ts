@@ -12,7 +12,7 @@ import {CharacterService} from '../character';
 export class HomePlayerComponent implements OnInit {
     public characters: CharacterSummary[];
 
-    @ViewChild('start', {read: MatSidenav})
+    @ViewChild('start', {static: true, read: MatSidenav})
     public start: MatSidenav;
 
     constructor(private _characterService: CharacterService

@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
-import {Subject} from 'rxjs/Subject';
 
-import {CharacterSummary, JsonService, HistoryEntry} from '../shared';
-import {NotificationsService} from '../notifications';
+import {forkJoin, of as observableOf, Observable, Subject} from 'rxjs';
+
+import {map} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+
+import {CharacterSummary, HistoryEntry} from '../shared';
 import {Monster} from '../monster';
-import {LoginService} from '../user';
 import {Loot} from '../loot';
 import {NEvent, EventService} from '../event';
 import {Character, CharacterService} from '../character';
@@ -16,22 +16,19 @@ import {Skill, SkillService} from '../skill';
 import {CharacterInviteInfo, Group, GroupData, GroupJsonData, PartialGroup} from './group.model';
 
 @Injectable()
-export class GroupService extends JsonService {
-    constructor(http: Http
-        , notification: NotificationsService
+export class GroupService {
+    constructor(private httpClient: HttpClient
         , private _characterService: CharacterService
         , private _eventService: EventService
-        , private _skillService: SkillService
-        , loginService: LoginService) {
-        super(http, notification, loginService);
+        , private _skillService: SkillService) {
     }
 
     getGroup(groupId): Observable<Group> {
         let subject = new Subject<Group>();
 
-        this.postJson('/api/character/groupDetail', {
+        this.httpClient.post<Group>('/api/character/groupDetail', {
             groupId: groupId
-        }).map(res => res.json()).subscribe((groupData: Group) => {
+        }).subscribe((groupData: Group) => {
             let charactersLoading: Observable<Character|null>[] = [];
             for (let i = 0; i < groupData.characters.length; i++) {
                 let char = groupData.characters[i];
@@ -41,14 +38,14 @@ export class GroupService extends JsonService {
             let group = Group.fromJson(groupData);
 
             if (charactersLoading.length === 0) {
-                charactersLoading.push(Observable.of(null));
+                charactersLoading.push(observableOf(null));
             }
-            Observable.forkJoin(
-                Observable.forkJoin(charactersLoading),
+            forkJoin([
+                forkJoin(charactersLoading),
                 this.loadMonsters(group.id),
                 this.loadLoots(group.id),
                 this._eventService.loadEvents(group.id)
-            ).subscribe(([characters, monsters, loots, events]: [Character[], Monster[], Loot[], NEvent[]]) => {
+            ]).subscribe(([characters, monsters, loots, events]: [Character[], Monster[], Loot[], NEvent[]]) => {
                 for (let character of characters) {
                     if (character === null) {
                         break;
@@ -105,153 +102,153 @@ export class GroupService extends JsonService {
     }
 
     createGroup(name): Observable<GroupJsonData> {
-        return this.postJson('/api/character/createGroup', {
+        return this.httpClient.post<GroupJsonData>('/api/character/createGroup', {
             name: name
-        }).map(res => res.json());
+        });
     }
 
     /* Monster */
 
     loadMonsters(groupId: number): Observable<Monster[]> {
-        return Observable.forkJoin(
-            this.postJson('/api/monster/loadMonsters', {
+        return forkJoin([
+            this.httpClient.post<Monster[]>('/api/monster/loadMonsters', {
                 groupId: groupId
-            }).map(res => res.json()),
+            }),
             this._skillService.getSkillsById()
-        ).map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
+        ]).pipe(map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
             return Monster.monstersFromJson(monstersJsonData, skillsById)
-        });
+        }));
     }
 
     loadDeadMonsters(groupId: number, startIndex: number, count: number): Observable<Monster[]> {
-        return Observable.forkJoin(
-            this.postJson('/api/monster/loadDeadMonsters', {
+        return forkJoin([
+            this.httpClient.post<Monster[]>('/api/monster/loadDeadMonsters', {
                 groupId: groupId,
                 startIndex: startIndex,
                 count: count
-            }).map(res => res.json()),
+            }),
             this._skillService.getSkillsById()
-        ).map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
+        ]).pipe(map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
             return Monster.monstersFromJson(monstersJsonData, skillsById)
-        });
+        }));
     }
 
     /* Loot */
 
     loadLoots(groupId: number): Observable<Loot[]> {
-        return Observable.forkJoin(
-            this.postJson('/api/group/loadLoots', {
+        return forkJoin([
+            this.httpClient.post<Loot[]>('/api/group/loadLoots', {
                 groupId: groupId
-            }).map(res => res.json()),
+            }),
             this._skillService.getSkillsById()
-        ).map(([lootsJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
+        ]).pipe(map(([lootsJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
             return Loot.lootsFromJson(lootsJsonData, skillsById)
-        });
+        }));
     }
 
     createLoot(groupId: number, lootName: string): Observable<Loot> {
-        return Observable.forkJoin(
-            this.postJson('/api/group/createLoot', {
+        return forkJoin([
+            this.httpClient.post<Loot>('/api/group/createLoot', {
                 groupId: groupId,
                 name: lootName
-            }).map(res => res.json()),
+            }),
             this._skillService.getSkillsById()
-        ).map(([lootJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+        ]).pipe(map(([lootJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
             return Loot.fromJson(lootJsonData, skillsById)
-        });
+        }));
     }
 
     deleteLoot(lootId: number) {
-        return this.postJson('/api/group/deleteLoot', {
+        return this.httpClient.post('/api/group/deleteLoot', {
             lootId: lootId
         });
     }
 
     updateLoot(loot: Loot): Observable<Loot> {
-        return Observable.forkJoin(
-            this.postJson('/api/group/updateLoot', {
+        return forkJoin([
+            this.httpClient.post<Loot>('/api/group/updateLoot', {
                 loot: {
                     visibleForPlayer: loot.visibleForPlayer,
                     id: loot.id
                 }
-            }).map(res => res.json()),
+            }),
             this._skillService.getSkillsById()
-        ).map(([lootJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+        ]).pipe(map(([lootJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
             return Loot.fromJson(lootJsonData, skillsById)
-        });
+        }));
     }
 
     /* History */
 
     loadHistory(groupId: number, page: number): Observable<HistoryEntry[]> {
-        return this.postJson('/api/group/history', {
+        return this.httpClient.post<HistoryEntry[]>('/api/group/history', {
             groupId: groupId,
             page: page
-        }).map(res => res.json());
+        });
     }
 
     addLog(groupId: number, info: string, is_gm: boolean): Observable<Object> {
-        return this.postJson('/api/group/addLog', {
+        return this.httpClient.post<Object>('/api/group/addLog', {
             groupId: groupId,
             is_gm: is_gm,
             info: info
-        }).map(res => res.json());
+        });
     }
 
     /* Misc */
 
     editGroupValue(groupId: number, key: string, value: any): Observable<GroupData> {
-        return this.postJson('/api/group/edit', {
+        return this.httpClient.post<GroupData>('/api/group/edit', {
             groupId: groupId,
             key: key,
             value: value
-        }).map(res => res.json());
+        });
     }
 
     addTime(groupId: number, dateOffset: NhbkDateOffset): Observable<GroupData> {
-        return this.postJson('/api/group/addTime', {
+        return this.httpClient.post<GroupData>('/api/group/addTime', {
             groupId: groupId,
             dateOffset: dateOffset
-        }).map(res => res.json());
+        });
     }
 
     nextFighter(groupId: number, fighterIndex: number) {
-        return this.postJson('/api/group/nextFighter', {
+        return this.httpClient.post('/api/group/nextFighter', {
             groupId: groupId,
             fighterIndex: fighterIndex,
-        }).map(res => res.json());
+        });
     }
 
     saveChangedTime(groupId: number, changes: any[]): Observable<any> {
-        return this.postJson('/api/group/saveChangedTime', {
+        return this.httpClient.post<any>('/api/group/saveChangedTime', {
             groupId: groupId,
             modifiersDurationUpdated: changes,
-        }).map(res => res.json());
+        });
     }
 
     searchPlayersForInvite(name: string, groupId: number): Observable<CharacterInviteInfo[]> {
-        return this.postJson('/api/character/searchForInvite', {
+        return this.httpClient.post<CharacterInviteInfo[]>('/api/character/searchForInvite', {
             name: name,
             groupId: groupId
-        }).map(res => res.json());
+        });
     }
 
     inviteCharacter(groupId: number, characterId: number): Observable<CharacterInviteInfo> {
-        return this.postJson('/api/character/invite', {
+        return this.httpClient.post<CharacterInviteInfo>('/api/character/invite', {
             characterId: characterId,
             groupId: groupId,
             fromGroup: true
-        }).map(res => res.json());
+        });
     }
 
     listGroups(): Observable<PartialGroup[]> {
-        return this._http.get('/api/character/listGroups').map(res => res.json());
+        return this.httpClient.get<PartialGroup[]>('/api/character/listGroups');
     }
 
     kickCharacter(groupId: number, characterId: number): Observable<number> {
-        return this.postJson('/api/group/kickCharacter', {
+        return this.httpClient.post<number>('/api/group/kickCharacter', {
             groupId: groupId,
             characterId: characterId,
-        }).map(res => res.json());
+        });
     }
 }

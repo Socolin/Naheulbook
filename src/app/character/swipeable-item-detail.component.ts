@@ -1,5 +1,5 @@
 import {Input, Component, ElementRef, ViewChild} from '@angular/core';
-import {ConnectedOverlayDirective, OverlayOrigin} from '@angular/cdk/overlay';
+import {CdkConnectedOverlay, CdkOverlayOrigin} from '@angular/cdk/overlay';
 
 import {Character} from './character.model';
 import {Item} from '../item';
@@ -15,9 +15,9 @@ export class SwipeableItemDetailComponent {
     @Input() item: Item;
     @Input() gmView: boolean;
     @Input() readonly: boolean;
-    @Input() origin: OverlayOrigin;
+    @Input() origin: CdkOverlayOrigin;
 
-    @ViewChild('currentItemDetail', {read: ElementRef})
+    @ViewChild('currentItemDetail', {read: ElementRef, static: true})
     public currentItemDetail: ElementRef;
     public itemDetailOffsetY = -30;
 
@@ -25,7 +25,7 @@ export class SwipeableItemDetailComponent {
     }
 
 
-    public updateItemDetailPosition(currentItemDetailOverlay: ConnectedOverlayDirective) {
+    public updateItemDetailPosition(currentItemDetailOverlay: CdkConnectedOverlay) {
         setTimeout(() => {
             if (!this.currentItemDetail) {
                 return;

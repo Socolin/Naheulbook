@@ -20,10 +20,10 @@
 </div>
 
 <ng-template cdk-connected-overlay
-          hasBackdrop
-          (backdropClick)="closeSelector()"
-          [open]="showSelector"
-          [origin]="colorSelectorOrigin">
+             cdkConnectedOverlayHasBackdrop
+             (backdropClick)="closeSelector()"
+             [cdkConnectedOverlayOpen]="showSelector"
+             [cdkConnectedOverlayOrigin]="colorSelectorOrigin">
     <mat-card style="padding: 0; display: flex;">
         <div style="flex: 0 auto; width: 192px">
             <ng-template ngFor let-color [ngForOf]="colors">

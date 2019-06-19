@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatTabChangeEvent, MatTabGroup} from '@angular/material';
 import {Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
 import {smoothScrollBy, IMetadata, NhbkDialogService} from '../shared';
@@ -39,24 +39,24 @@ export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
     @Input() character: Character;
 
-    @ViewChild('combatWeaponDetail')
+    @ViewChild('combatWeaponDetail', {static: true})
     private combatWeaponDetailElement: ElementRef;
 
-    @ViewChild('mainTabGroup')
+    @ViewChild('mainTabGroup', {static: true})
     private mainTabGroup: MatTabGroup;
 
-    @ViewChild('inventoryPanel')
+    @ViewChild('inventoryPanel', {static: true})
     private inventoryPanel: InventoryPanelComponent;
 
-    @ViewChild('lootPanel')
+    @ViewChild('lootPanel', {static: true})
     private lootPanel: CharacterLootPanelComponent;
 
-    @ViewChild('levelUpDialog')
+    @ViewChild('levelUpDialog', {static: true})
     public levelUpDialog: Portal<any>;
     public levelUpOverlayRef: OverlayRef;
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
 
-    @ViewChild('skillInfoDialog')
+    @ViewChild('skillInfoDialog', {static: true})
     public skillInfoDialog: Portal<any>;
     public skillInfoOverlayRef: OverlayRef;
     public selectedSkillInfo: Skill;
@@ -76,27 +76,27 @@ export class CharacterComponent implements OnInit, OnDestroy {
         {hash: 'history'},
     ];
 
-    @ViewChild('changeNameDialog')
+    @ViewChild('changeNameDialog', {static: true})
     public changeNameDialog: Portal<any>;
     public changeNameOverlayRef?: OverlayRef;
     public newCharacterName: string;
 
-    @ViewChild('changeSexDialog')
+    @ViewChild('changeSexDialog', {static: true})
     public changeSexDialog: Portal<any>;
     public changeSexOverlayRef?: OverlayRef;
     public newCharacterSex: string;
 
-    @ViewChild('changeJobDialog')
+    @ViewChild('changeJobDialog', {static: true})
     public changeJobDialog: Portal<any>;
     public changeJobOverlayRef?: OverlayRef;
     public addingJob = false;
 
-    @ViewChild('jobInfoDialog')
+    @ViewChild('jobInfoDialog', {static: true})
     public jobInfoDialog: Portal<any>;
     public jobInfoOverlayRef?: OverlayRef;
     public selectedJobInfo?: Job;
 
-    @ViewChild('originInfoDialog')
+    @ViewChild('originInfoDialog', {static: true})
     public originInfoDialog: Portal<any>;
     public originInfoOverlayRef?: OverlayRef;
 

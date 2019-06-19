@@ -20,7 +20,7 @@ export class EventsComponent {
         removeEvent(eventId: number): void,
     };
 
-    @ViewChild('eventEditor')
+    @ViewChild('eventEditor', {static: true})
     private eventEditorComponent: EventEditorComponent;
 
     constructor(private  _eventService: EventService) {

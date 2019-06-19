@@ -1,5 +1,8 @@
+
+import {from as observableFrom, Observable} from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import {Component, Output, EventEmitter, Input, DoCheck} from '@angular/core';
-import {Observable} from 'rxjs';
 
 import {AutocompleteValue} from '../shared';
 import {IDurable} from '../date/durable.model';
@@ -30,11 +33,11 @@ export class ActiveEffectEditorComponent implements DoCheck {
     updateEffectListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
         this.effectFilterName = filter;
         if (filter === '') {
-            return Observable.from([]);
+            return observableFrom([]);
         }
-        return this._effectService.searchEffect(filter).map(
+        return this._effectService.searchEffect(filter).pipe(map(
             list => list.map(e => new AutocompleteValue(e, e.category.name + ': ' + e.name))
-        );
+        ));
     }
 
     selectEffectInAutocompleteList(effect: Effect) {

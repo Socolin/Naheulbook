@@ -27,11 +27,11 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
 
     @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
 
-    @ViewChild('addChargeActionModal')
+    @ViewChild('addChargeActionModal', {static: true})
     public addChargeActionModal: Portal<any>;
     public addChargeActionOverlayRef: OverlayRef;
 
-    @ViewChild('createItemTypeDialog')
+    @ViewChild('createItemTypeDialog', {static: true})
     public createItemTypeDialog: Portal<any>;
     public createItemTypeOverlayRef?: OverlayRef;
     public newItemTypeDisplayName = '';

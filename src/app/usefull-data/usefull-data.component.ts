@@ -16,33 +16,33 @@ export class UsefullDataComponent implements OnInit {
     public effectsCategoryId = 1;
     public panelByNames: {[name: string]: Portal<any>} = {};
 
-    @ViewChild('panelCritic')
+    @ViewChild('panelCritic', {static: true})
     public panelCriticDialog: Portal<any>;
     public criticData: {[name: string]: CriticalData[]} = {};
 
-    @ViewChild('panelEpicfail')
+    @ViewChild('panelEpicfail', {static: true})
     public panelEpicfailDialog: Portal<any>;
     public epicfailData: {[name: string]: CriticalData[]} = {};
 
-    @ViewChild('panelItems')
+    @ViewChild('panelItems', {static: true})
     public panelItemsDialog: Portal<any>;
 
-    @ViewChild('panelJobs')
+    @ViewChild('panelJobs', {static: true})
     public panelJobsDialog: Portal<any>;
 
-    @ViewChild('panelOrigins')
+    @ViewChild('panelOrigins', {static: true})
     public panelOriginsDialog: Portal<any>;
 
-    @ViewChild('panelEffects')
+    @ViewChild('panelEffects', {static: true})
     public panelEffectsDialog: Portal<any>;
 
-    @ViewChild('panelSkills')
+    @ViewChild('panelSkills', {static: true})
     public panelSkillsDialog: Portal<any>;
 
-    @ViewChild('panelEntropic')
+    @ViewChild('panelEntropic', {static: true})
     public panelEntropicDialog: Portal<any>;
 
-    @ViewChild('panelSleep')
+    @ViewChild('panelSleep', {static: true})
     public panelSleepDialog: Portal<any>;
 
     constructor(private _nhbkDialogService: NhbkDialogService

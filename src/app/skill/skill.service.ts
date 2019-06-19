@@ -1,20 +1,16 @@
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {ReplaySubject, Observable} from 'rxjs/Rx';
-
-import {JsonService} from '../shared';
-import {NotificationsService} from '../notifications';
-import {LoginService} from '../user';
+import {HttpClient} from '@angular/common/http';
+import {ReplaySubject, Observable} from 'rxjs';
 
 import {Skill} from './skill.model';
 
 @Injectable()
-export class SkillService extends JsonService {
+export class SkillService {
     private skills: ReplaySubject<Skill[]>;
     private skillsById: ReplaySubject<{[skillId: number]: Skill}>;
 
-    constructor(http: Http, notifications: NotificationsService, login: LoginService) {
-        super(http, notifications, login);
+    constructor(private httpClient: HttpClient) {
     }
 
     getSkillsById(): Observable<{[skillId: number]: Skill}> {
@@ -42,8 +38,7 @@ export class SkillService extends JsonService {
         if (!this.skills) {
             this.skills = new ReplaySubject<Skill[]>(1);
 
-            this._http.get('/api/v2/skills')
-                .map(res => res.json())
+            this.httpClient.get<any[]>('/api/v2/skills')
                 .subscribe(
                     skillsJsonData => {
                         let skills: Skill[] = [];

@@ -1,8 +1,10 @@
+
+import {forkJoin, from as observableFrom, Observable} from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
-
-import {Observable} from 'rxjs';
 import {isNullOrUndefined} from 'util';
 
 import {getRandomInt, NhbkDialogService, AutocompleteValue} from '../shared';
@@ -35,14 +37,14 @@ export class FighterPanelComponent implements OnInit {
     public monsterAutocompleteShow = false;
     public autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
 
-    @ViewChild('createItemComponent')
+    @ViewChild('createItemComponent', {static: true})
     public createItemComponent: CreateItemComponent;
 
-    @ViewChild('addMonsterDialog')
+    @ViewChild('addMonsterDialog', {static: true})
     public addMonsterDialog: Portal<any>;
     public addMonsterOverlayRef: OverlayRef | undefined;
 
-    @ViewChild('deadMonstersDialog')
+    @ViewChild('deadMonstersDialog', {static: true})
     public deadMonstersDialog: Portal<any>;
     public deadMonstersOverlayRef: OverlayRef | undefined;
 
@@ -162,11 +164,11 @@ export class FighterPanelComponent implements OnInit {
     updateMonsterListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
         this.newMonster.name = filter;
         if (filter === '') {
-            return Observable.from([]);
+            return observableFrom([]);
         }
-        return this._monsterTemplateService.searchMonster(filter).map(
+        return this._monsterTemplateService.searchMonster(filter).pipe(map(
             list => list.map(e => new AutocompleteValue(e, e.name))
-        );
+        ));
     }
 
     randomMonsterInventory() {
@@ -219,10 +221,10 @@ export class FighterPanelComponent implements OnInit {
         }
         this.loadingNextLap = true;
 
-        Observable.forkJoin(
+        forkJoin([
             this._groupService.nextFighter(this.group.id, result.fighterIndex),
-            this._groupService.saveChangedTime(this.group.id, result.modifiersDurationUpdated))
-            .subscribe(() => {
+            this._groupService.saveChangedTime(this.group.id, result.modifiersDurationUpdated)
+        ]).subscribe(() => {
             this.loadingNextLap = false;
         });
     }

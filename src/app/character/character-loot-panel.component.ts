@@ -20,7 +20,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     @Input() inGroupTab: boolean;
     public selectedItem?: Item;
 
-    @ViewChild('takeItemDialog')
+    @ViewChild('takeItemDialog', {static: true})
     public takeItemDialog: Portal<any>;
     public takeItemOverlayRef: OverlayRef;
     public takingItemLoot: Loot | undefined;

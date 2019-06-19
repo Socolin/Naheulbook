@@ -18,7 +18,7 @@ export class DateModifierComponent {
     @Input() title: string;
     public forceUpdateDuration = 0;
 
-    @ViewChild('dateSelectorDialog')
+    @ViewChild('dateSelectorDialog', {static: true})
     public dateSelectorDialog: Portal<any>;
     public dateSelectorOverlayRef: OverlayRef;
 

@@ -1,5 +1,8 @@
+
+import {forkJoin, Observable} from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import {Component, Input, EventEmitter, Output, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
 
 import {AutocompleteInputComponent, AutocompleteValue} from '../shared/autocomplete-input.component';
 
@@ -15,7 +18,7 @@ export class AutocompleteSearchItemTemplateComponent {
     @Input() clearOnSelect: boolean;
     @Input() placeholder = 'Chercher un objet';
     @Output() onSelect: EventEmitter<ItemTemplate> = new EventEmitter<ItemTemplate>();
-    @ViewChild('autocomplete')
+    @ViewChild('autocomplete', {static: true})
     autocomplete: AutocompleteInputComponent;
 
     public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
@@ -32,10 +35,10 @@ export class AutocompleteSearchItemTemplateComponent {
     }
 
     updateAutocompleteItem(filter: string) {
-        return Observable.forkJoin(
+        return forkJoin(
             this._itemTemplateService.getCategoriesById(),
             this._itemTemplateService.searchItem(filter)
-        ).map(
+        ).pipe(map(
             ([categoriesById, list]: [{ [categoryId: number]: ItemCategory }, ItemTemplate[]]) => {
                 return list.map(e => {
                     let name = e.name;
@@ -53,6 +56,6 @@ export class AutocompleteSearchItemTemplateComponent {
                     return new AutocompleteValue(e, name, category, e.data.icon, mdIcon);
                 });
             }
-        );
+        ));
     }
 }

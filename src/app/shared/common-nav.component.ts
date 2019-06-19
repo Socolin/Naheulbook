@@ -13,7 +13,7 @@ import {NhbkDialogService} from './nhbk-dialog.service';
     styleUrls: ['./common-nav.component.scss'],
 })
 export class CommonNavComponent implements OnInit {
-    @ViewChild('themeSelectorDialog')
+    @ViewChild('themeSelectorDialog', {static: true})
     public themeSelectorDialog: Portal<any>;
     public themeSelectorOverlayRef: OverlayRef | undefined;
 

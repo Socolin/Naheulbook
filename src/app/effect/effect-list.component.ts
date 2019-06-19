@@ -2,7 +2,7 @@ import {
     Component, SimpleChanges, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter,
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Subscription} from 'rxjs/Rx';
+import {Subscription} from 'rxjs';
 
 import {LoginService} from '../user';
 

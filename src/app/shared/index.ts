@@ -14,7 +14,6 @@ export * from './scroll';
 export * from './icon.service';
 export * from './misc.service';
 export * from './nhbk-dialog.service';
-export * from './json-service';
 
 export * from './modifier.pipe';
 export * from './plus-minus.pipe';

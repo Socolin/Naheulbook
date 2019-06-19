@@ -10,7 +10,7 @@ import {ThemeService} from '../theme.service';
     styleUrls: ['./home-database.component.scss'],
 })
 export class HomeDatabaseComponent implements OnInit {
-    @ViewChild('start', {read: MatSidenav})
+    @ViewChild('start', {static: true, read: MatSidenav})
     public start: MatSidenav;
 
     constructor(public _router: Router) {

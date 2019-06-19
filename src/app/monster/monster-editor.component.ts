@@ -1,8 +1,7 @@
+import {forkJoin, Observable} from 'rxjs';
 import {Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
-
-import {Observable} from 'rxjs';
 
 import {removeDiacritics, NhbkDialogService, AutocompleteValue} from '../shared';
 import {Location, LocationService} from '../location';
@@ -38,11 +37,11 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
 
     public autocompleteLocationsCallback: Function = this.updateAutocompleteLocation.bind(this);
 
-    @ViewChild('createCategoryDialog')
+    @ViewChild('createCategoryDialog', {static: true})
     public createCategoryDialog: Portal<any>;
     public createCategorOverlayRef: OverlayRef;
 
-    @ViewChild('createTypeDialog')
+    @ViewChild('createTypeDialog', {static: true})
     public createTypeDialog: Portal<any>;
     public createTypeOverlayRef: OverlayRef;
 
@@ -86,7 +85,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     }
 
     updateAutocompleteLocation(filter: string) {
-        return Observable.create((function (observer) {
+        return new Observable((observer) => {
             let result: AutocompleteValue[] = [];
             if (!filter) {
                 observer.next(result);
@@ -104,7 +103,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
                 }
             }
             observer.next(result);
-        }).bind(this));
+        });
     }
 
     hasTrait(trait: MonsterTrait): TraitInfo | undefined {
@@ -235,9 +234,10 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        Observable.forkJoin(this._monsterTemplateService.getMonsterTypes()
+        forkJoin([this._monsterTemplateService.getMonsterTypes()
             , this._locationService.getLocations()
-            , this._monsterTemplateService.getMonsterTraits()).subscribe(
+            , this._monsterTemplateService.getMonsterTraits()
+        ]).subscribe(
             ([types, locations, traits]: [MonsterTemplateType[], Location[], MonsterTrait[]]) => {
                 this.types = types;
                 if (this.monster.category) {

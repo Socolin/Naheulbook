@@ -18,7 +18,7 @@ export class FighterSelectorComponent {
     public label: string;
     public selectedFighters: Fighter[] = [];
 
-    @ViewChild('selectorDialog')
+    @ViewChild('selectorDialog', {static: true})
     public selectorDialog: Portal<any>;
     public selectorOverlayRef: OverlayRef;
 

@@ -1,6 +1,9 @@
+
+import {forkJoin, Observable, ReplaySubject} from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable, ReplaySubject} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
 
 import {Skill, SkillService} from '../skill';
 import {Origin} from './origin.model';
@@ -9,7 +12,7 @@ import {Origin} from './origin.model';
 export class OriginService {
     private origins: ReplaySubject<Origin[]>;
 
-    constructor(private _http: Http
+    constructor(private httpClient: HttpClient
         , private _skillService: SkillService) {
     }
 
@@ -17,10 +20,10 @@ export class OriginService {
         if (!this.origins) {
             this.origins = new ReplaySubject<Origin[]>(1);
 
-            Observable.forkJoin(
+            forkJoin([
                 this._skillService.getSkillsById(),
-                this._http.get('/api/v2/origins').map(res => res.json())
-            ).subscribe(
+                this.httpClient.get<any[]>('/api/v2/origins')
+            ]).subscribe(
                 ([skillsById, originsDatas]: [{[skillId: number]: Skill}, Origin[]]) => {
                     let origins: Origin[] = [];
                     for (let originData of originsDatas) {
@@ -41,18 +44,18 @@ export class OriginService {
     }
 
     getOriginsById(): Observable<{[originId: number]: Origin}> {
-        return this.getOriginList().map((origins: Origin[]) => {
+        return this.getOriginList().pipe(map((origins: Origin[]) => {
             let originsById = {};
             origins.map(o => originsById[o.id] = o);
             return originsById;
-        });
+        }));
     }
 
     getOriginsNamesById(): Observable<{[originId: number]: string}> {
-        return this.getOriginList().map((origins: Origin[]) => {
+        return this.getOriginList().pipe(map((origins: Origin[]) => {
             let originNamesById = {};
             origins.map(o => originNamesById[o.id] = o.name);
             return originNamesById;
-        });
+        }));
     }
 }

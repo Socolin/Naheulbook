@@ -22,7 +22,7 @@ export class EventEditorComponent implements OnInit {
     @Output() onCreate: EventEmitter<NEvent> = new EventEmitter<NEvent>();
     @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
 
-    @ViewChild('eventEditorDialog')
+    @ViewChild('eventEditorDialog', {static: true})
     public eventEditorDialog: Portal<any>;
     public eventEditorOverlayRef: OverlayRef;
 

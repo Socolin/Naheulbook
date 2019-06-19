@@ -16,7 +16,7 @@ export class DateSelectorComponent implements OnInit, OnChanges {
     @Input() date: NhbkDate;
     @Output() onChange: EventEmitter<NhbkDate> = new EventEmitter<NhbkDate>();
 
-    @ViewChild('dateSelectorDialog')
+    @ViewChild('dateSelectorDialog', {static: true})
     public dateSelectorDialog: Portal<any>;
     public dateSelectorOverlayRef: OverlayRef | undefined;
 

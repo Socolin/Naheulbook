@@ -17,7 +17,7 @@ export class EffectPanelComponent {
     public selectedModifier: ActiveStatsModifier | undefined;
 
     // Add effect dialog
-    @ViewChild('addEffectModal')
+    @ViewChild('addEffectModal', {static: true})
     public addEffectModal: AddEffectModalComponent;
 
     constructor(private _characterService: CharacterService) {

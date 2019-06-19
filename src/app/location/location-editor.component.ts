@@ -1,3 +1,5 @@
+
+import {map} from 'rxjs/operators';
 import {Component, Input, OnInit} from '@angular/core';
 
 import {Location, Map} from './location.model';
@@ -24,7 +26,7 @@ export class LocationEditorComponent implements OnInit {
     }
 
     updateAutocomplete(filter: string): Observable<AutocompleteValue[]> {
-        return this._locationService.listMapImages(filter).map(list => list.map(e => new AutocompleteValue(e, e)));
+        return this._locationService.listMapImages(filter).pipe(map(list => list.map(e => new AutocompleteValue(e, e))));
     }
 
     addMap() {

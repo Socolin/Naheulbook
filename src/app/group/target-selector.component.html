@@ -26,13 +26,13 @@
 </div>
 
 <ng-template cdk-connected-overlay
-          [positions]="positions"
-          [origin]="targetSelectorOrigin"
-          [open]="showSelector"
-          [height]="selectorHeight"
-          [minHeight]="selectorMinHeight"
-          hasBackdrop
-          (backdropClick)="hideSelector()">
+             [cdkConnectedOverlayPositions]="positions"
+             [cdkConnectedOverlayOrigin]="targetSelectorOrigin"
+             [cdkConnectedOverlayOpen]="showSelector"
+             [cdkConnectedOverlayHeight]="selectorHeight"
+             [cdkConnectedOverlayMinHeight]="selectorMinHeight"
+             cdkConnectedOverlayHasBackdrop
+             (backdropClick)="hideSelector()">
     <mat-card style="padding: 0">
         <mat-tab-group [selectedIndex]="selectedTabIndex">
             <mat-tab label="Monstres">

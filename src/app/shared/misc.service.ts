@@ -1,32 +1,26 @@
-import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import {from as observableFrom, Observable, ReplaySubject} from 'rxjs';
 
-import {NotificationsService} from '../notifications';
-import {LoginService} from '../user';
-import {JsonService} from './json-service';
-import {Observable} from 'rxjs/Observable';
+import {map} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+
 import {Stat} from './stat.model';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {ItemTemplate} from '../item-template/item-template.model';
+import {ItemTemplate} from '../item-template';
 import {God} from './god.model';
 
 @Injectable()
-export class MiscService extends JsonService {
+export class MiscService {
     private stats: ReplaySubject<Stat[]>;
     private gods: ReplaySubject<God[]>;
 
-    constructor(http: Http
-        , notification: NotificationsService
-        , loginService: LoginService) {
-        super(http, notification, loginService);
+    constructor(private httpClient: HttpClient) {
     }
 
     getStats(): Observable<Stat[]> {
         if (!this.stats) {
             this.stats = new ReplaySubject<Stat[]>(1);
 
-            this._http.get('/api/character/stats')
-                .map(res => res.json())
+            this.httpClient.get<Stat[]>('/api/character/stats')
                 .subscribe(
                     stats => {
                         this.stats.next(stats);
@@ -44,8 +38,7 @@ export class MiscService extends JsonService {
         if (!this.gods) {
             this.gods = new ReplaySubject<God[]>(1);
 
-            this._http.get('/api/v2/gods')
-                .map(res => res.json())
+            this.httpClient.get<God[]>('/api/v2/gods')
                 .subscribe(
                     gods => {
                         this.gods.next(gods);
@@ -59,19 +52,22 @@ export class MiscService extends JsonService {
         return this.gods;
     }
 
-    getGodsByTechName(): Observable<{[techName: string]: God}> {
-        return this.getGods().map((gods: God[]) => {
+    getGodsByTechName(): Observable<{ [techName: string]: God }> {
+        return this.getGods().pipe(map((gods: God[]) => {
             let godsByTechName = {};
             gods.map(g => godsByTechName[g.techName] = g);
             return godsByTechName;
-        });
+        }));
     }
 
     searchItem(filter): Observable<ItemTemplate[]> {
         if (!filter) {
-            return Observable.from([]);
+            return observableFrom([]);
         }
-        return this.postJson('/api/item/search', {filter: filter})
-            .map(res => res.json());
+        return this.httpClient.post<ItemTemplate[]>('/api/item/search', {filter: filter});
+    }
+
+    postError(url, error) {
+        return this.httpClient.post(url, error);
     }
 }

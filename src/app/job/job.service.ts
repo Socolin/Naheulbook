@@ -1,6 +1,9 @@
+
+import {forkJoin, ReplaySubject, Observable} from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {ReplaySubject, Observable} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
 
 import {Job} from './job.model';
 import {Skill, SkillService} from '../skill';
@@ -9,7 +12,7 @@ import {Skill, SkillService} from '../skill';
 export class JobService {
     private jobs: ReplaySubject<Job[]>;
 
-    constructor(private _http: Http
+    constructor(private httpClient: HttpClient
         , private _skillService: SkillService) {
     }
 
@@ -17,10 +20,10 @@ export class JobService {
         if (!this.jobs) {
             this.jobs = new ReplaySubject<Job[]>(1);
 
-            Observable.forkJoin(
+            forkJoin([
                 this._skillService.getSkillsById(),
-                this._http.get('/api/v2/jobs').map(res => res.json())
-            ).subscribe(
+                this.httpClient.get('/api/v2/jobs')
+            ]).subscribe(
                 ([skillsById, jobsDatas]: [{[skillId: number]: Skill}, Job[]]) => {
                     let jobs: Job[] = [];
                     let jobIds: {[jobId: number]: Job} = {};
@@ -62,18 +65,18 @@ export class JobService {
     }
 
     getJobsById(): Observable<{[jobId: number]: Job}> {
-        return this.getJobList().map((jobs: Job[]) => {
+        return this.getJobList().pipe(map((jobs: Job[]) => {
             let jobsById = {};
             jobs.map(j => jobsById[j.id] = j);
             return jobsById;
-        });
+        }));
     }
 
     getJobsNamesById(): Observable<{[jobId: number]: string}> {
-        return this.getJobList().map((jobs: Job[]) => {
+        return this.getJobList().pipe(map((jobs: Job[]) => {
             let jobNamesById = {};
             jobs.map(j => jobNamesById[j.id] = j.name);
             return jobNamesById;
-        });
+        }));
     }
 }

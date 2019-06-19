@@ -1,3 +1,4 @@
+import {forkJoin} from 'rxjs';
 import {
     Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild
 } from '@angular/core';
@@ -13,7 +14,6 @@ import {Character, CharacterGiveDestination} from './character.model';
 import {CharacterService} from './character.service';
 import {Item} from '../item';
 import {ItemActionService} from './item-action.service';
-import {Observable} from 'rxjs/Observable';
 
 @Component({
     selector: 'item-detail',
@@ -37,23 +37,23 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public itemEditDescription: string | undefined;
     public editing: boolean;
 
-    @ViewChild('giveItemDialog')
+    @ViewChild('giveItemDialog', {static: true})
     public giveItemDialog: Portal<any>;
     public giveItemOverlayRef: OverlayRef | undefined;
     public giveDestination: CharacterGiveDestination[] | undefined;
     public giveTarget: CharacterGiveDestination;
     public giveQuantity: number | undefined;
 
-    @ViewChild('addModifierDialog')
+    @ViewChild('addModifierDialog', {static: true})
     public addModifierDialog: Portal<any>;
     public addModifierOverlayRef: OverlayRef | undefined;
     public newItemModifier: ActiveStatsModifier;
 
-    @ViewChild('storeItemInContainerDialog')
+    @ViewChild('storeItemInContainerDialog', {static: true})
     public storeItemInContainerDialog: Portal<any>;
     public storeItemInContainerOverlayRef: OverlayRef | undefined;
 
-    @ViewChild('lifetimeDialog')
+    @ViewChild('lifetimeDialog', {static: true})
     public lifetimeDialog: Portal<any>;
     public lifetimeOverlayRef: OverlayRef | undefined;
     public previousLifetime: IDurable | null;
@@ -271,10 +271,10 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     ngOnInit() {
-        Observable.forkJoin(
+        forkJoin([
             this._itemTemplateService.getCategoriesById(),
             this._miscService.getGodsByTechName(),
-        ).subscribe(
+        ]).subscribe(
             ([categoriesById, godsByTechName]) => {
                 this.godsByTechName = godsByTechName;
                 this.itemCategoriesById = categoriesById;

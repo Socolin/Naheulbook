@@ -6,10 +6,10 @@
 </i>
 
 <ng-template cdk-connected-overlay
-          hasBackdrop
-          (backdropClick)="hideSelector()"
-          [open]="showSelector"
-          [origin]="colorSelectorOrigin">
+             cdkConnectedOverlayHasBackdrop
+             (backdropClick)="hideSelector()"
+             [cdkConnectedOverlayOpen]="showSelector"
+             [cdkConnectedOverlayOrigin]="colorSelectorOrigin">
     <mat-card style="width:194px; display: flex; flex-direction: row; flex-wrap: wrap; padding: 0">
         <div *ngFor="let color of colors" style="width: 48px; height: 48px">
             <i [style.color]=color

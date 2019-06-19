@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Subject, Observable, Observer} from 'rxjs/Rx';
+import {Subject, Observable, Observer} from 'rxjs';
 
 import {MiscService} from '../shared';
 import {NotificationsService} from '../notifications';
@@ -8,6 +8,7 @@ import {JobService} from '../job';
 import {OriginService} from '../origin';
 
 import {WsMessage, WsEvent, WsRegistrable} from './websocket.model';
+import {share} from 'rxjs/operators';
 
 @Injectable()
 export class WebSocketService {
@@ -53,9 +54,9 @@ export class WebSocketService {
 
         this.registerCount[type][elementId] = 1;
 
-        let observable = Observable.create(function (observer: Observer<WsEvent>) {
-            this.registeredObserverElements[type][elementId] = observer;
-        }.bind(this)).share();
+        let observable = new Observable((obs: Observer<WsEvent>) => {
+            this.registeredObserverElements[type][elementId] = obs;
+        }).pipe(share());
         let observer = {
             next: (data: any) => {
                 let message: WsMessage = {
@@ -191,7 +192,7 @@ export class WebSocketService {
                     registrable.handleWebsocketEvent(res.opcode, res.data, services);
                 } catch (err) {
                     this._notification.error('Erreur', 'Erreur WS');
-                    this._miscService.postJson('/api/debug/report', err, true).subscribe();
+                    this._miscService.postError('/api/debug/report', err).subscribe();
                     console.error(err);
                 }
             }

@@ -7,7 +7,7 @@ import {HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
 import {NhbkMaterialModule} from './nhbk-material.module';
 import {AppComponent}  from './app.component';
 import {routes} from './app.routes';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 
 import {HomeModule} from './home/home.module';
 import {CharacterModule} from './character/character.module';
@@ -43,7 +43,7 @@ import {ErrorReportService} from './error-report.service';
         BrowserAnimationsModule,
         RouterModule.forRoot(routes),
         NhbkMaterialModule,
-        HttpModule,
+        HttpClientModule,
         HomeModule,
         DatabaseHomeModule,
         PlayerHomeModule,

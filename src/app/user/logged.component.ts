@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, ActivatedRouteSnapshot, Router} from '@angular/router';
-import {Subscription} from 'rxjs/Rx';
+import {Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
 import {LoginService} from './login.service';

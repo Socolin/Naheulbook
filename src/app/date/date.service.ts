@@ -1,21 +1,22 @@
+
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {ReplaySubject, Observable} from 'rxjs/Rx';
+import {HttpClient} from '@angular/common/http';
+import {ReplaySubject, Observable} from 'rxjs';
 import {CalendarDate} from './date.model';
 
 @Injectable()
 export class DateService {
     private calendarDates: ReplaySubject<CalendarDate[]>;
 
-    constructor(private _http: Http) {
+    constructor(private httpClient: HttpClient) {
     }
 
     getCalendarDates(): Observable<CalendarDate[]> {
         if (!this.calendarDates) {
             this.calendarDates = new ReplaySubject<CalendarDate[]>(1);
 
-            this._http.get('/api/misc/calendar')
-                .map(res => res.json())
+            this.httpClient.get<CalendarDate[]>('/api/misc/calendar')
                 .subscribe(
                     calendarDates => {
                         this.calendarDates.next(calendarDates);

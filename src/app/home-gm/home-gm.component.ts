@@ -13,7 +13,7 @@ import {GroupService} from '../group';
 export class HomeGmComponent implements OnInit {
     public groups: Object[];
 
-    @ViewChild('start', {read: MatSidenav})
+    @ViewChild('start', {static: true, read: MatSidenav})
     public start: MatSidenav;
 
     constructor(private _groupService: GroupService

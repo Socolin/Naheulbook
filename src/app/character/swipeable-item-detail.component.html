@@ -1,8 +1,8 @@
 <ng-template cdk-connected-overlay
-             [open]="true"
-             [offsetY]="itemDetailOffsetY"
+             [cdkConnectedOverlayOpen]="true"
+             [cdkConnectedOverlayOffsetY]="itemDetailOffsetY"
              #currentItemDetailOverlay="cdkConnectedOverlay"
-             [origin]="origin"
+             [cdkConnectedOverlayOrigin]="origin"
              (positionChange)="updateItemDetailPosition(currentItemDetailOverlay)">
     <div style="position: relative" #currentItemDetail>
         <div

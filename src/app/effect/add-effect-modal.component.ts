@@ -15,10 +15,10 @@ import {ActiveEffectEditorComponent} from './active-effect-editor.component';
 export class AddEffectModalComponent {
     @Output() createModifier: EventEmitter<ActiveStatsModifier> = new EventEmitter<ActiveStatsModifier>();
 
-    @ViewChild('activeEffectEditor')
+    @ViewChild('activeEffectEditor', {static: true})
     public activeEffectEditor: ActiveEffectEditorComponent;
 
-    @ViewChild('addEffectDialog')
+    @ViewChild('addEffectDialog', {static: true})
     public addEffectDialog: Portal<any>;
     public addEffectOverlayRef: OverlayRef;
     public addEffectTypeSelectedTab = 0;
