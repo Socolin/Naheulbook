@@ -111,7 +111,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 Monster = new MonsterTemplateRequest
                 {
                     Data = JObject.FromObject(new {key = "value"}),
-                    Locations = new List<int> {locationId},
+                    LocationIds = new List<int> {locationId},
                     Name = "some-monster-name",
                     SimpleInventory = new List<MonsterSimpleInventoryRequest>
                     {

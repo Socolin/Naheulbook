@@ -17,7 +17,7 @@ namespace Naheulbook.Web.Responses
         public int Id { get; set; }
         public string Name { get; set; }
         public int CategoryId { get; set; }
-        public List<int> Locations { get; set; }
+        public List<int> LocationIds { get; set; }
         public JObject Data { get; set; }
         public List<MonsterSimpleInventoryResponse> SimpleInventory { get; set; }
     }

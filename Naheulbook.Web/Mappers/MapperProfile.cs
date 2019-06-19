@@ -127,7 +127,7 @@ namespace Naheulbook.Web.Mappers
 
             CreateMap<MonsterTemplate, MonsterTemplateResponse>()
                 .ForMember(x => x.SimpleInventory, opt => opt.MapFrom(m => m.Items))
-                .ForMember(x => x.Locations, opt => opt.MapFrom(m => m.Locations.Select(x => x.LocationId)))
+                .ForMember(x => x.LocationIds, opt => opt.MapFrom(m => m.Locations.Select(x => x.LocationId)))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)));
             CreateMap<MonsterTemplateSimpleInventory, MonsterTemplateResponse.MonsterSimpleInventoryResponse>();
             CreateMap<MonsterType, MonsterTypeResponse>()

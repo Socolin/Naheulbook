@@ -44,7 +44,19 @@ namespace Naheulbook.TestUtils
                 Description = $"some-monster-trait-description-{suffix}",
                 Levels = @"[""level1"", ""level2""]"
             };
+        }
 
+        public MonsterTemplate CreateMonsterTemplate(MonsterCategory category, string suffix = null)
+        {
+            if (suffix == null)
+                suffix = RngUtil.GetRandomHexString(8);
+
+            return new MonsterTemplate
+            {
+                Name = $"some-monster-template-name-{suffix}",
+                Category = category,
+                Data = @"{""key"":""value""}"
+            };
         }
     }
 }

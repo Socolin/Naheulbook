@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
@@ -13,6 +14,7 @@ namespace Naheulbook.Core.Services
     public interface IMonsterTemplateService
     {
         Task<MonsterTemplate> CreateMonsterTemplate(NaheulbookExecutionContext executionContext, CreateMonsterTemplateRequest request);
+        Task<List<MonsterTemplate>> GetAllMonstersAsync();
     }
 
     public class MonsterTemplateService : IMonsterTemplateService
@@ -35,7 +37,7 @@ namespace Naheulbook.Core.Services
                 var category = await uow.MonsterCategories.GetAsync(request.CategoryId);
                 if (category == null)
                     throw new MonsterCategoryNotFoundException(request.CategoryId);
-                var locations = await uow.Locations.GetByIdsAsync(request.Monster.Locations);
+                var locations = await uow.Locations.GetByIdsAsync(request.Monster.LocationIds);
                 var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(request.Monster.SimpleInventory.Select(x => x.ItemTemplate.Id));
 
                 var monsterTemplate = new MonsterTemplate
@@ -64,5 +66,12 @@ namespace Naheulbook.Core.Services
             }
         }
 
+        public async Task<List<MonsterTemplate>> GetAllMonstersAsync()
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.Monsters.GetAllWithItemsFullDataWithLocationsAsync();
+            }
+        }
     }
 }

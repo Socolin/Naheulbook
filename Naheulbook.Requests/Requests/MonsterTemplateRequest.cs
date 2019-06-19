@@ -9,6 +9,6 @@ namespace Naheulbook.Requests.Requests
         public string Name { get; set; }
         public JObject Data { get; set; }
         public IList<MonsterSimpleInventoryRequest> SimpleInventory { get; set; }
-        public IList<int> Locations { get; set; }
+        public IList<int> LocationIds { get; set; }
     }
 }

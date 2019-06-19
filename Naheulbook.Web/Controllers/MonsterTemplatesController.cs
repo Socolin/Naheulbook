@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -21,6 +22,13 @@ namespace Naheulbook.Web.Controllers
         {
             _mapper = mapper;
             _monsterTemplateService = monsterTemplateService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<MonsterTemplateResponse>>> GetMonsterList()
+        {
+            var monsters = await _monsterTemplateService.GetAllMonstersAsync();
+            return _mapper.Map<List<MonsterTemplateResponse>>(monsters);
         }
 
         [HttpPost]
