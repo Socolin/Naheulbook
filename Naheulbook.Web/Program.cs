@@ -20,6 +20,7 @@ namespace Naheulbook.Web
                 .AddEnvironmentVariables()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{environment}.json")
+                .AddJsonFile($"appsettings.local.json", true)
                 .AddCommandLine(args)
                 .Build();
 

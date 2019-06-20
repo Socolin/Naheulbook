@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Naheulbook.Shared.Utils
 {
-    public class RngUtils
+    public class RngHelper
     {
         public static string GetRandomHexString(int byteCount)
         {

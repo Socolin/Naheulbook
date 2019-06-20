@@ -17,7 +17,11 @@ namespace Naheulbook.TestUtils
                 Username = $"some-username-{suffix}",
                 DisplayName = $"some-display-name-{suffix}",
                 HashedPassword = $"some-hashed-password-{suffix}",
-                ActivationCode = "some-activation-code"
+                ActivationCode = "some-activation-code",
+                FbId = "some-fb-id",
+                GoogleId = "some-google-id",
+                TwitterId = "some-twitter-id",
+                LiveId = "some-live-id"
             };
         }
     }

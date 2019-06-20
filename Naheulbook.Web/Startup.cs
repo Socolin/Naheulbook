@@ -18,6 +18,7 @@ using Naheulbook.Core.Utils;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Factories;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.Clients.Facebook;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Extensions;
@@ -54,6 +55,8 @@ namespace Naheulbook.Web
                 naheulbookDbContextOptionsBuilder.EnableSensitiveDataLogging();
             }
 
+            services.AddSession();
+
             services.AddMvc()
                 .AddJsonOptions(options => { options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore; })
                 .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<ValidateUserRequest>())
@@ -85,6 +88,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IOriginService, OriginService>();
             services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
             services.AddSingleton<ISkillService, SkillService>();
+            services.AddSingleton<ISocialMediaUserLinkService, SocialMediaUserLinkService>();
             services.AddSingleton<IUserService, UserService>();
 
             services.AddSingleton<IActiveStatsModifierUtil, ActiveStatsModifierUtil>();
@@ -96,9 +100,15 @@ namespace Naheulbook.Web
             services.AddSingleton<IItemFactory, ItemFactory>();
 
             services.AddSingleton<ITimeService, TimeService>();
+            services.AddSingleton<IRngUtil, RngUtil>();
 
             services.AddSingleton<IJwtService, JwtService>();
             services.AddScoped<JwtAuthorizationFilter>();
+
+            var facebookConfiguration = new FacebookConfiguration();
+            _configuration.Bind("Authentication:Facebook", facebookConfiguration);
+            services.AddSingleton(facebookConfiguration);
+            services.AddSingleton<IFacebookClient, FacebookClient>();
         }
 
         private void RegisterConfigurations(IServiceCollection services)
@@ -131,6 +141,8 @@ namespace Naheulbook.Web
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
+
+            app.UseSession();
 
             app.UseMvc();
             app.Run(async (context) =>

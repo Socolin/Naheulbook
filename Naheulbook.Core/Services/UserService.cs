@@ -12,6 +12,8 @@ namespace Naheulbook.Core.Services
         Task CreateUserAsync(string username, string password);
         Task ValidateUserAsync(string username, string activationCode);
         Task<User> CheckPasswordAsync(string username, string password);
+        Task<User> GetUserInfoAsync(int userId);
+
     }
 
     public class UserService : IUserService
@@ -23,7 +25,8 @@ namespace Naheulbook.Core.Services
         public UserService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IPasswordHashingService passwordHashingService,
-            IMailService mailService)
+            IMailService mailService
+        )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _passwordHashingService = passwordHashingService;
@@ -86,6 +89,14 @@ namespace Naheulbook.Core.Services
                 if (!success)
                     throw new InvalidPasswordException();
                 return user;
+            }
+        }
+
+        public async Task<User> GetUserInfoAsync(int userId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.Users.GetAsync(userId);
             }
         }
     }

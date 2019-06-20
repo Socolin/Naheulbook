@@ -18,7 +18,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.JobNames, opt => opt.MapFrom(c => c.Jobs.Select(x => x.Job.Name)))
                 .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name));
             CreateMap<Character, CharacterResponse>()
-                .ForMember(x => x.Stats, opt => opt.MapFrom(c => new CharacterResponse.BasicStats{Ad = c.Ad, Cou = c.Cou, Cha = c.Cha, Fo = c.Fo, Int = c.Int}))
+                .ForMember(x => x.Stats, opt => opt.MapFrom(c => new CharacterResponse.BasicStats {Ad = c.Ad, Cou = c.Cou, Cha = c.Cha, Fo = c.Fo, Int = c.Int}))
                 .ForMember(x => x.Items, opt => opt.Ignore())
                 .ForMember(x => x.Invites, opt => opt.Ignore())
                 .ForMember(x => x.SkillIds, opt => opt.MapFrom(c => c.Skills.Select(x => x.SkillId)))
@@ -155,6 +155,13 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Special, opt => opt.Ignore());
 
             CreateMap<string, LapCountDecrement>().ConvertUsing(c => c == null ? null : MapperHelpers.FromJson<LapCountDecrement>(c));
+
+            CreateMap<User, UserInfoResponse>()
+                .ForMember(m => m.LinkedWithFb, opt => opt.MapFrom(u => u.FbId != null))
+                .ForMember(m => m.LinkedWithTwitter, opt => opt.MapFrom(u => u.TwitterId != null))
+                .ForMember(m => m.LinkedWithGoogle, opt => opt.MapFrom(u => u.TwitterId != null))
+                .ForMember(m => m.LinkedWithLive, opt => opt.MapFrom(u => u.LiveId != null))
+                ;
         }
     }
 }

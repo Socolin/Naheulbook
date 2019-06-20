@@ -4,3 +4,4 @@ obj
 .idea
 *.DotSettings.user
 *.feature.cs
+appsettings.local.json

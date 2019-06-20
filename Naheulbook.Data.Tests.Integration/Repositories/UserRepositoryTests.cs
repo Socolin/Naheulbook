@@ -20,23 +20,24 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [Test]
         public async Task CanGetUserByUsername()
         {
-            var user = new User()
-            {
-                Username = "some-username",
-                DisplayName = "some-display-name",
-                ActivationCode = "some-activation-code",
-                Admin = true,
-                HashedPassword = "some-hashed-password",
-                FbId = "some-fb-id",
-                GoogleId = "some-google-id",
-                TwitterId = "some-twitter-id",
-            };
+            TestDataUtil.AddUser(u => u.Admin = true);
+            var expectedUser = TestDataUtil.GetLast<User>();
 
-            await AddInDbAsync(user);
+            var actualUser = await _userRepository.GetByUsernameAsync(expectedUser.Username);
 
-            var actualUser = await _userRepository.GetByUsernameAsync("some-username");
+            actualUser.Should().BeEquivalentTo(expectedUser);
+        }
 
-            actualUser.Should().BeEquivalentTo(user);
+        [Test]
+        public async Task CanGetUserByFacebookId()
+        {
+            TestDataUtil.AddUser();
+            var expectedUser = TestDataUtil.GetLast<User>();
+
+            var actualUser = await _userRepository.GetByFacebookIdAsync(expectedUser.FbId);
+
+            actualUser.Should().BeEquivalentTo(TestDataUtil.GetLast<User>());
+
         }
     }
 }

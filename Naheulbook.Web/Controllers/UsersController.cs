@@ -1,9 +1,11 @@
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Responses;
 using Naheulbook.Web.Services;
 
@@ -15,11 +17,13 @@ namespace Naheulbook.Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IJwtService _jwtService;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUserService userService, IJwtService jwtService)
+        public UsersController(IUserService userService, IJwtService jwtService, IMapper mapper)
         {
             _userService = userService;
             _jwtService = jwtService;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -62,8 +66,9 @@ namespace Naheulbook.Web.Controllers
             try
             {
                 var user = await _userService.CheckPasswordAsync(username, request.Password);
+                HttpContext.Session.SetCurrentUserId(user.Id);
                 var token = _jwtService.GenerateJwtToken(user.Id);
-                return new UserJwtResponse() {Token = token};
+                return new UserJwtResponse {Token = token};
             }
             catch (UserNotFoundException)
             {
@@ -73,6 +78,36 @@ namespace Naheulbook.Web.Controllers
             {
                 return StatusCode((int) HttpStatusCode.Unauthorized);
             }
+        }
+
+        [HttpGet("me")]
+        public async Task<ActionResult<UserInfoResponse>> GetCurrentUserInfo()
+        {
+            // FIXME: userSession if userId is not found, check in db if long duration session still valid
+            var userId = HttpContext.Session.GetCurrentUserId();
+            if (!userId.HasValue)
+                return StatusCode((int) HttpStatusCode.Unauthorized);
+
+            var user = await _userService.GetUserInfoAsync(userId.Value);
+            return _mapper.Map<UserInfoResponse>(user);
+        }
+
+        [HttpPost("jwt")]
+        public async Task<ActionResult<UserJwtResponse>> PostGetAJwt()
+        {
+            // FIXME: userSession if userId is not found, check in db if long duration session still valid
+            var userId = HttpContext.Session.GetCurrentUserId();
+            if (!userId.HasValue)
+                return StatusCode((int) HttpStatusCode.Unauthorized);
+
+            var userInfo = await _userService.GetUserInfoAsync(userId.Value);
+            var token = _jwtService.GenerateJwtToken(userId.Value);
+
+            return new UserJwtResponse
+            {
+                Token = token,
+                UserInfo = _mapper.Map<UserInfoResponse>(userInfo)
+            };
         }
     }
 }

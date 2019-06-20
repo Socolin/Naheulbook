@@ -9,6 +9,7 @@ namespace Naheulbook.Data.Repositories
     public interface IUserRepository : IRepository<User>
     {
         Task<User> GetByUsernameAsync(string username);
+        Task<User> GetByFacebookIdAsync(string facebookId);
     }
 
     public class UserRepository : Repository<User, NaheulbookDbContext>, IUserRepository
@@ -23,6 +24,13 @@ namespace Naheulbook.Data.Repositories
             return Context.Users
                 .Where(u => u.Username == username)
                 .FirstOrDefaultAsync();
+        }
+
+        public Task<User> GetByFacebookIdAsync(string facebookId)
+        {
+            return Context.Users
+                .Where(u => u.FbId == facebookId)
+                .SingleOrDefaultAsync();
         }
     }
 }

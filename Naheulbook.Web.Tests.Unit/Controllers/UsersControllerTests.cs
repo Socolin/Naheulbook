@@ -1,7 +1,11 @@
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Session;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
@@ -21,13 +25,25 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         private IUserService _userService;
         private IJwtService _jwtService;
         private UsersController _usersController;
+        private ISession _session;
+        private HttpContext _httpContext;
 
         [SetUp]
         public void SetUp()
         {
             _userService = Substitute.For<IUserService>();
             _jwtService = Substitute.For<IJwtService>();
-            _usersController = new UsersController(_userService, _jwtService);
+            _session = Substitute.For<ISession>();
+            _httpContext = Substitute.For<HttpContext>();
+            _httpContext.Session.Returns(_session);
+
+            _usersController = new UsersController(_userService, _jwtService, Substitute.For<IMapper>())
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = _httpContext
+                }
+            };
         }
 
         [Test]
@@ -123,6 +139,25 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
 
             response.Value.Token.Should().Be("some-jwt");
+        }
+
+        [Test]
+        public async Task WhenPostToGenerateUserJwt_SaveCurrentUserIdToSession()
+        {
+            var generateJwtRequest = new GenerateJwtRequest {Password = SomePassword};
+            var user = new User
+            {
+                Id = 1
+            };
+
+            _userService.CheckPasswordAsync(SomeUsername, SomePassword)
+                .Returns(user);
+            _jwtService.GenerateJwtToken(user.Id)
+                .Returns("some-jwt");
+
+            await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
+
+            _session.Received(1).Set("userId", Arg.Is<byte[]>(x => x.SequenceEqual(new byte[] {0, 0, 0, 1})));
         }
 
         [Test]

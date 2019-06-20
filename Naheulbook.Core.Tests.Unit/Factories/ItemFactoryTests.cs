@@ -3,6 +3,7 @@ using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Utils;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.Utils;
 using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
