@@ -20,6 +20,7 @@ using Naheulbook.Data.Factories;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Clients.Facebook;
 using Naheulbook.Shared.Clients.Google;
+using Naheulbook.Shared.Clients.Twitter;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Extensions;
@@ -113,15 +114,9 @@ namespace Naheulbook.Web
             services.AddSingleton<IJwtService, JwtService>();
             services.AddScoped<JwtAuthorizationFilter>();
 
-            var facebookConfiguration = new FacebookConfiguration();
-            _configuration.Bind("Authentication:Facebook", facebookConfiguration);
-            services.AddSingleton(facebookConfiguration);
             services.AddSingleton<IFacebookClient, FacebookClient>();
-
-            var googleConfiguration = new GoogleConfiguration();
-            _configuration.Bind("Authentication:Google", googleConfiguration);
-            services.AddSingleton(googleConfiguration);
             services.AddSingleton<IGoogleClient, GoogleClient>();
+            services.AddSingleton<ITwitterClient, TwitterClient>();
         }
 
         private void RegisterConfigurations(IServiceCollection services)
@@ -133,6 +128,18 @@ namespace Naheulbook.Web
             var authenticationConfiguration = new AuthenticationConfiguration();
             _configuration.Bind("Authentication", authenticationConfiguration);
             services.AddSingleton<IAuthenticationConfiguration>(authenticationConfiguration);
+
+            var googleConfiguration = new GoogleConfiguration();
+            _configuration.Bind("Authentication:Google", googleConfiguration);
+            services.AddSingleton(googleConfiguration);
+
+            var facebookConfiguration = new FacebookConfiguration();
+            _configuration.Bind("Authentication:Facebook", facebookConfiguration);
+            services.AddSingleton(facebookConfiguration);
+
+            var twitterConfiguration = new TwitterConfiguration();
+            _configuration.Bind("Authentication:Twitter", twitterConfiguration);
+            services.AddSingleton(twitterConfiguration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

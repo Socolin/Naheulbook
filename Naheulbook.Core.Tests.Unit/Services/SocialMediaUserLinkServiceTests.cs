@@ -59,7 +59,6 @@ namespace Naheulbook.Core.Tests.Unit.Services
             });
         }
 
-
         [Test]
         public async Task GetOrCreateUserFromGoogleAsync_ShouldReturnAlreadyExistingUser()
         {
@@ -93,6 +92,44 @@ namespace Naheulbook.Core.Tests.Unit.Services
             actual.Should().BeEquivalentTo(new User
             {
                 GoogleId = googleId,
+                Admin = false,
+                DisplayName = "some-name"
+            });
+        }
+
+        [Test]
+        public async Task GetOrCreateUserFromTwitterAsync_ShouldReturnAlreadyExistingUser()
+        {
+            const string twitterId = "some-twitter-id";
+            var expectedUser = new User();
+
+            _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByTwitterIdAsync(twitterId)
+                .Returns(expectedUser);
+
+            var actual = await _service.GetOrCreateUserFromTwitterAsync("some-name", twitterId);
+
+            actual.Should().BeSameAs(expectedUser);
+            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+        }
+
+        [Test]
+        public async Task GetOrCreateUserFromTwitterAsync_ShouldCreateUserWhenItDoesNotExists()
+        {
+            const string twitterId = "some-twitter-id";
+
+            _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByTwitterIdAsync(twitterId)
+                .Returns((User) null);
+
+            var actual = await _service.GetOrCreateUserFromTwitterAsync("some-name", twitterId);
+
+            Received.InOrder(() =>
+            {
+                _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
+                _fakeUnitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+            });
+            actual.Should().BeEquivalentTo(new User
+            {
+                TwitterId = twitterId,
                 Admin = false,
                 DisplayName = "some-name"
             });

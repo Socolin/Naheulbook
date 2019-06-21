@@ -109,5 +109,12 @@ namespace Naheulbook.Web.Controllers
                 UserInfo = _mapper.Map<UserInfoResponse>(userInfo)
             };
         }
+
+        [HttpGet("me/logout")]
+        public IActionResult GetLogout()
+        {
+            HttpContext.Session.Clear();
+            return NoContent();
+        }
     }
 }
