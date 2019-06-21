@@ -8,6 +8,8 @@ namespace Naheulbook.Core.Services
     {
         Task<User> GetOrCreateUserFromFacebookAsync(string name, string facebookId);
         Task AssociateUserToFacebookIdAsync(int userId, string facebookId);
+        Task<User> GetOrCreateUserFromGoogleAsync(string name, string googleId);
+        Task AssociateUserToGoogleIdAsync(int userId, string googleId);
     }
 
     public class SocialMediaUserLinkService : ISocialMediaUserLinkService
@@ -46,6 +48,37 @@ namespace Naheulbook.Core.Services
             {
                 var user = await uow.Users.GetAsync(userId);
                 user.FbId = facebookId;
+                await uow.CompleteAsync();
+            }
+        }
+
+        public async Task<User> GetOrCreateUserFromGoogleAsync(string name, string googleId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var user = await uow.Users.GetByGoogleIdAsync(googleId);
+                if (user == null)
+                {
+                    user = new User
+                    {
+                        GoogleId = googleId,
+                        Admin = false,
+                        DisplayName = name
+                    };
+                    uow.Users.Add(user);
+                    await uow.CompleteAsync();
+                }
+
+                return user;
+            }
+        }
+
+        public async Task AssociateUserToGoogleIdAsync(int userId, string googleId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var user = await uow.Users.GetAsync(userId);
+                user.GoogleId = googleId;
                 await uow.CompleteAsync();
             }
         }

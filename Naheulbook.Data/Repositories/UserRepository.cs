@@ -10,6 +10,7 @@ namespace Naheulbook.Data.Repositories
     {
         Task<User> GetByUsernameAsync(string username);
         Task<User> GetByFacebookIdAsync(string facebookId);
+        Task<User> GetByGoogleIdAsync(string googleId);
     }
 
     public class UserRepository : Repository<User, NaheulbookDbContext>, IUserRepository
@@ -30,6 +31,13 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.Users
                 .Where(u => u.FbId == facebookId)
+                .SingleOrDefaultAsync();
+        }
+
+        public Task<User> GetByGoogleIdAsync(string googleId)
+        {
+            return Context.Users
+                .Where(u => u.GoogleId == googleId)
                 .SingleOrDefaultAsync();
         }
     }

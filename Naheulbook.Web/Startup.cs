@@ -19,6 +19,7 @@ using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Factories;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Clients.Facebook;
+using Naheulbook.Shared.Clients.Google;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Extensions;
@@ -109,6 +110,11 @@ namespace Naheulbook.Web
             _configuration.Bind("Authentication:Facebook", facebookConfiguration);
             services.AddSingleton(facebookConfiguration);
             services.AddSingleton<IFacebookClient, FacebookClient>();
+
+            var googleConfiguration = new GoogleConfiguration();
+            _configuration.Bind("Authentication:Google", googleConfiguration);
+            services.AddSingleton(googleConfiguration);
+            services.AddSingleton<IGoogleClient, GoogleClient>();
         }
 
         private void RegisterConfigurations(IServiceCollection services)

@@ -58,5 +58,44 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 DisplayName = "some-name"
             });
         }
+
+
+        [Test]
+        public async Task GetOrCreateUserFromGoogleAsync_ShouldReturnAlreadyExistingUser()
+        {
+            const string googleId = "some-google-id";
+            var expectedUser = new User();
+
+            _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByGoogleIdAsync(googleId)
+                .Returns(expectedUser);
+
+            var actual = await _service.GetOrCreateUserFromGoogleAsync("some-name", googleId);
+
+            actual.Should().BeSameAs(expectedUser);
+            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+        }
+
+        [Test]
+        public async Task GetOrCreateUserFromGoogleAsync_ShouldCreateUserWhenItDoesNotExists()
+        {
+            const string googleId = "some-google-id";
+
+            _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByGoogleIdAsync(googleId)
+                .Returns((User) null);
+
+            var actual = await _service.GetOrCreateUserFromGoogleAsync("some-name", googleId);
+
+            Received.InOrder(() =>
+            {
+                _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
+                _fakeUnitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+            });
+            actual.Should().BeEquivalentTo(new User
+            {
+                GoogleId = googleId,
+                Admin = false,
+                DisplayName = "some-name"
+            });
+        }
     }
 }
