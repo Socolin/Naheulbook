@@ -35,7 +35,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("googleid")
                 .HasMaxLength(255);
 
-            builder.Property(e => e.LiveId)
+            builder.Property(e => e.MicrosoftId)
                 .IsRequired(false)
                 .HasColumnName("liveid")
                 .HasMaxLength(255);

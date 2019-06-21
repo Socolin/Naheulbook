@@ -160,7 +160,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.LinkedWithFb, opt => opt.MapFrom(u => u.FbId != null))
                 .ForMember(m => m.LinkedWithTwitter, opt => opt.MapFrom(u => u.TwitterId != null))
                 .ForMember(m => m.LinkedWithGoogle, opt => opt.MapFrom(u => u.TwitterId != null))
-                .ForMember(m => m.LinkedWithLive, opt => opt.MapFrom(u => u.LiveId != null))
+                .ForMember(m => m.LinkedWithMicrosoft, opt => opt.MapFrom(u => u.MicrosoftId != null))
                 ;
         }
     }

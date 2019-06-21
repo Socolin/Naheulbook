@@ -16,7 +16,7 @@ namespace Naheulbook.Data.Models
 
         public string GoogleId { get; set; }
 
-        public string LiveId { get; set; }
+        public string MicrosoftId { get; set; }
 
         public string TwitterId { get; set; }
 

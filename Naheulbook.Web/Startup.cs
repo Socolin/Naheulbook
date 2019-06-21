@@ -20,6 +20,7 @@ using Naheulbook.Data.Factories;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Clients.Facebook;
 using Naheulbook.Shared.Clients.Google;
+using Naheulbook.Shared.Clients.MicrosoftGraph;
 using Naheulbook.Shared.Clients.Twitter;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
@@ -117,6 +118,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IFacebookClient, FacebookClient>();
             services.AddSingleton<IGoogleClient, GoogleClient>();
             services.AddSingleton<ITwitterClient, TwitterClient>();
+            services.AddSingleton<IMicrosoftGraphClient, MicrosoftGraphClient>();
         }
 
         private void RegisterConfigurations(IServiceCollection services)
@@ -140,6 +142,10 @@ namespace Naheulbook.Web
             var twitterConfiguration = new TwitterConfiguration();
             _configuration.Bind("Authentication:Twitter", twitterConfiguration);
             services.AddSingleton(twitterConfiguration);
+
+            var microsoftConfiguration = new MicrosoftGraphConfiguration();
+            _configuration.Bind("Authentication:MicrosoftGraph", microsoftConfiguration);
+            services.AddSingleton(microsoftConfiguration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

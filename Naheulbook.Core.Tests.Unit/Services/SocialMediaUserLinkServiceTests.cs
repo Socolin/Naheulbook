@@ -134,5 +134,43 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 DisplayName = "some-name"
             });
         }
+
+        [Test]
+        public async Task GetOrCreateUserFromMicrosoftAsync_ShouldReturnAlreadyExistingUser()
+        {
+            const string microsoftId = "some-microsoft-id";
+            var expectedUser = new User();
+
+            _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByMicrosoftIdAsync(microsoftId)
+                .Returns(expectedUser);
+
+            var actual = await _service.GetOrCreateUserFromMicrosoftAsync("some-name", microsoftId);
+
+            actual.Should().BeSameAs(expectedUser);
+            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+        }
+
+        [Test]
+        public async Task GetOrCreateUserFromMicrosoftAsync_ShouldCreateUserWhenItDoesNotExists()
+        {
+            const string microsoftId = "some-microsoft-id";
+
+            _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByMicrosoftIdAsync(microsoftId)
+                .Returns((User) null);
+
+            var actual = await _service.GetOrCreateUserFromMicrosoftAsync("some-name", microsoftId);
+
+            Received.InOrder(() =>
+            {
+                _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
+                _fakeUnitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+            });
+            actual.Should().BeEquivalentTo(new User
+            {
+                MicrosoftId = microsoftId,
+                Admin = false,
+                DisplayName = "some-name"
+            });
+        }
     }
 }

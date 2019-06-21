@@ -8,6 +8,6 @@ namespace Naheulbook.Web.Responses
         public bool LinkedWithFb { get; set; }
         public bool LinkedWithGoogle { get; set; }
         public bool LinkedWithTwitter { get; set; }
-        public bool LinkedWithLive { get; set; }
+        public bool LinkedWithMicrosoft { get; set; }
     }
 }

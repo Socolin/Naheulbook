@@ -12,6 +12,8 @@ namespace Naheulbook.Core.Services
         Task AssociateUserToGoogleIdAsync(int userId, string googleId);
         Task<User> GetOrCreateUserFromTwitterAsync(string name, string twitterId);
         Task AssociateUserToTwitterIdAsync(int userId, string twitterId);
+        Task<User> GetOrCreateUserFromMicrosoftAsync(string name, string microsoftId);
+        Task AssociateUserToMicrosoftIdAsync(int userId, string microsoftId);
     }
 
     public class SocialMediaUserLinkService : ISocialMediaUserLinkService
@@ -112,6 +114,37 @@ namespace Naheulbook.Core.Services
             {
                 var user = await uow.Users.GetAsync(userId);
                 user.TwitterId = twitterId;
+                await uow.CompleteAsync();
+            }
+        }
+
+        public async Task<User> GetOrCreateUserFromMicrosoftAsync(string name, string microsoftId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var user = await uow.Users.GetByMicrosoftIdAsync(microsoftId);
+                if (user == null)
+                {
+                    user = new User
+                    {
+                        MicrosoftId = microsoftId,
+                        Admin = false,
+                        DisplayName = name
+                    };
+                    uow.Users.Add(user);
+                    await uow.CompleteAsync();
+                }
+
+                return user;
+            }
+        }
+
+        public async Task AssociateUserToMicrosoftIdAsync(int userId, string microsoftId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var user = await uow.Users.GetAsync(userId);
+                user.MicrosoftId = microsoftId;
                 await uow.CompleteAsync();
             }
         }

@@ -12,6 +12,7 @@ namespace Naheulbook.Data.Repositories
         Task<User> GetByFacebookIdAsync(string facebookId);
         Task<User> GetByGoogleIdAsync(string googleId);
         Task<User> GetByTwitterIdAsync(string twitterId);
+        Task<User> GetByMicrosoftIdAsync(string microsoftId);
     }
 
     public class UserRepository : Repository<User, NaheulbookDbContext>, IUserRepository
@@ -46,6 +47,13 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.Users
                 .Where(u => u.TwitterId == twitterId)
+                .SingleOrDefaultAsync();
+        }
+
+        public Task<User> GetByMicrosoftIdAsync(string microsoftId)
+        {
+            return Context.Users
+                .Where(u => u.MicrosoftId == microsoftId)
                 .SingleOrDefaultAsync();
         }
     }
