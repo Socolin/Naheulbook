@@ -21,35 +21,42 @@ namespace Naheulbook.Data.Configurations
                 .HasDefaultValueSql("false");
 
             builder.Property(e => e.DisplayName)
+                .IsRequired(false)
                 .HasColumnName("displayname")
                 .HasMaxLength(255);
 
             builder.Property(e => e.FbId)
+                .IsRequired(false)
                 .HasColumnName("fbid")
                 .HasMaxLength(255);
 
             builder.Property(e => e.GoogleId)
+                .IsRequired(false)
                 .HasColumnName("googleid")
                 .HasMaxLength(255);
 
             builder.Property(e => e.LiveId)
+                .IsRequired(false)
                 .HasColumnName("liveid")
                 .HasMaxLength(255);
 
             builder.Property(e => e.TwitterId)
+                .IsRequired(false)
                 .HasColumnName("twitterid")
                 .HasMaxLength(255);
 
             builder.Property(e => e.HashedPassword)
+                .IsRequired(false)
                 .HasColumnName("password")
                 .HasMaxLength(255);
 
             builder.Property(e => e.ActivationCode)
+                .IsRequired(false)
                 .HasColumnName("activationCode")
                 .HasMaxLength(255);
 
             builder.Property(e => e.Username)
-                .IsRequired()
+                .IsRequired(false)
                 .HasColumnName("username")
                 .HasMaxLength(255);
         }
