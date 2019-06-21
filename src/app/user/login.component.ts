@@ -30,8 +30,8 @@ export class LoginComponent implements OnInit {
         else if (method === 'twitter') {
             this._loginService.redirectToTwitterLogin(this.redirectPage);
         }
-        else if (method === 'live') {
-            this._loginService.redirectToLiveLogin(this.redirectPage);
+        else if (method === 'microsoft') {
+            this._loginService.redirectToMicrosoftLogin(this.redirectPage);
         }
     }
 

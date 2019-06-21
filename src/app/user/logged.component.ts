@@ -26,8 +26,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
         if (localStorage.getItem('redirectPage')) {
             redirectUrl = '/' + localStorage.getItem('redirectPage');
             localStorage.removeItem('redirectPage');
-        }
-        else {
+        } else {
             redirectUrl = '/';
         }
 
@@ -48,15 +47,12 @@ export class LoggedComponent implements OnInit, OnDestroy {
                                 this.isInErrorState = true;
                             }
                         );
-                    }
-                    else if (params.hasOwnProperty('error')) {
+                    } else if (params.hasOwnProperty('error')) {
                         this._notification.error('Authentification', 'Erreur: ' + params['error_reason']);
-                    }
-                    else {
+                    } else {
                         console.log('Missing error', params);
                     }
-                }
-                else if (app === 'google') {
+                } else if (app === 'google') {
                     if (params.hasOwnProperty('code')) {
                         this._loginService.doGoogleLogin(
                             params['code']
@@ -68,17 +64,14 @@ export class LoggedComponent implements OnInit, OnDestroy {
                                 this.isInErrorState = true;
                             }
                         );
-                    }
-                    else if (params.hasOwnProperty('error')) {
+                    } else if (params.hasOwnProperty('error')) {
                         this._notification.error('Authentification', 'Erreur: ' + params['error_reason']);
-                    }
-                    else {
+                    } else {
                         console.log('Missing error', params);
                     }
-                }
-                else if (app === 'live') {
+                } else if (app === 'microsoft') {
                     if (params.hasOwnProperty('code')) {
-                        this._loginService.doLiveLogin(
+                        this._loginService.doMicrosoftLogin(
                             params['code']
                             , token
                             , window.location.origin + window.location.pathname).subscribe(
@@ -88,15 +81,12 @@ export class LoggedComponent implements OnInit, OnDestroy {
                                 this.isInErrorState = true;
                             }
                         );
-                    }
-                    else if (params.hasOwnProperty('error')) {
+                    } else if (params.hasOwnProperty('error')) {
                         this._notification.error('Authentification', 'Erreur: ' + params['error_description']);
-                    }
-                    else {
+                    } else {
                         console.log('Missing error', params);
                     }
-                }
-                else if (app === 'twitter') {
+                } else if (app === 'twitter') {
                     if (params.hasOwnProperty('oauth_token') && params.hasOwnProperty('oauth_verifier')) {
                         this._loginService.doTwitterLogin(params['oauth_token'], params['oauth_verifier']).subscribe(
                             () => {
@@ -105,15 +95,12 @@ export class LoggedComponent implements OnInit, OnDestroy {
                                 this.isInErrorState = true;
                             }
                         );
-                    }
-                    else if (params.hasOwnProperty('error')) {
+                    } else if (params.hasOwnProperty('error')) {
                         this._notification.error('Authentification', 'Erreur: ' + params['error_reason']);
-                    }
-                    else {
+                    } else {
                         console.log('Missing error', params);
                     }
-                }
-                else {
+                } else {
                     this.isInErrorState = true;
                     this._notification.error('Error', 'Invalid app', params);
                 }

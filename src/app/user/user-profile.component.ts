@@ -38,8 +38,8 @@ export class UserProfileComponent implements OnInit {
         else if (method === 'twitter') {
             this.loginService.redirectToTwitterLogin('profile');
         }
-        else if (method === 'live') {
-            this.loginService.redirectToLiveLogin('profile');
+        else if (method === 'microsoft') {
+            this.loginService.redirectToMicrosoftLogin('profile');
         }
     }
 

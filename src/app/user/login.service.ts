@@ -12,6 +12,8 @@ export class LoginService {
     public currentJwt?: string;
     private checkingLoggedUser?: Observable<JwtResponse | undefined>;
 
+    // TODO: Renewing token
+
     constructor(private httpClient: HttpClient) {
     }
 
@@ -55,8 +57,8 @@ export class LoginService {
         return googleLogin;
     }
 
-    doLiveLogin(code: string, loginToken: string, redirectUri: string): Observable<JwtResponse> {
-        let liveLogin = this.httpClient.post<JwtResponse>('/api/v2/authentications/live/completeAuthentication', {
+    doMicrosoftLogin(code: string, loginToken: string, redirectUri: string): Observable<JwtResponse> {
+        let microsoftLogin = this.httpClient.post<JwtResponse>('/api/v2/authentications/microsoft/completeAuthentication', {
             code: code,
             loginToken: loginToken,
             redirectUri: redirectUri
@@ -64,13 +66,13 @@ export class LoginService {
             share()
         );
 
-        liveLogin.subscribe(user => {
+        microsoftLogin.subscribe(user => {
             this.loggedUser.next(user.userInfo);
             this.currentLoggedUser = user.userInfo;
             this.currentJwt = user.token;
         });
 
-        return liveLogin;
+        return microsoftLogin;
     }
 
     doTwitterLogin(oauthToken: string, oauthVerifier: string): Observable<JwtResponse> {
@@ -95,6 +97,7 @@ export class LoginService {
 
         logout.subscribe(() => {
             this.currentLoggedUser = undefined;
+            this.currentJwt = undefined;
             this.loggedUser.next(null);
         });
 
@@ -161,13 +164,13 @@ export class LoginService {
         });
     }
 
-    redirectToLiveLogin(redirectPage: string) {
+    redirectToMicrosoftLogin(redirectPage: string) {
         localStorage.setItem('redirectPage', redirectPage);
-        this.getLoginToken('live').subscribe(authInfos => {
-            let state = 'live:' + authInfos.loginToken;
-            window.location.href = 'https://login.live.com/oauth20_authorize.srf?client_id=' + authInfos.appKey
+        this.getLoginToken('microsoft').subscribe(authInfos => {
+            let state = 'microsoft:' + authInfos.loginToken;
+            window.location.href = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=' + authInfos.appKey
                 + '&state=' + state
-                + '&scope=wl.signin'
+                + '&scope=openid,User.Read'
                 + '&response_type=code'
                 + '&redirect_uri=' + window.location.origin + '/logged';
         });

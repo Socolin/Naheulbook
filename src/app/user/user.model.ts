@@ -5,7 +5,7 @@ export interface User {
     linkedWithFb: boolean;
     linkedWithGoogle: boolean;
     linkedWithTwitter: boolean;
-    linkedWithLive: boolean;
+    linkedWithMicrosoft: boolean;
 }
 
 export interface JwtResponse {
