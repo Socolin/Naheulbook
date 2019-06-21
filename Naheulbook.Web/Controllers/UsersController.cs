@@ -92,7 +92,7 @@ namespace Naheulbook.Web.Controllers
             return _mapper.Map<UserInfoResponse>(user);
         }
 
-        [HttpGet("jwt")]
+        [HttpGet("me/jwt")]
         public async Task<ActionResult<UserJwtResponse>> GetAJwt()
         {
             // FIXME: userSession if userId is not found, check in db if long duration session still valid
