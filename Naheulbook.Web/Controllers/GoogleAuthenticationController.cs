@@ -76,6 +76,7 @@ namespace Naheulbook.Web.Controllers
 
             var user = await _socialMediaUserLinkService.GetOrCreateUserFromGoogleAsync(profile.DisplayName, profile.Id);
 
+            HttpContext.Session.SetCurrentUserId(user.Id);
             var token = _jwtService.GenerateJwtToken(user.Id);
 
             return new UserJwtResponse
