@@ -55,8 +55,15 @@ namespace Naheulbook.Web
             {
                 naheulbookDbContextOptionsBuilder.EnableSensitiveDataLogging();
             }
-
-            services.AddSession();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "localhost";
+            });
+            services.AddSession(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             services.AddMvc()
                 .AddJsonOptions(options => { options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore; })
