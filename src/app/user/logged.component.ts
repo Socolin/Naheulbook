@@ -9,6 +9,7 @@ import {LoginService} from './login.service';
     templateUrl: './logged.component.html',
 })
 export class LoggedComponent implements OnInit, OnDestroy {
+    private isInErrorState = false;
     private subscription: Subscription;
 
     constructor(private _loginService: LoginService
@@ -43,6 +44,8 @@ export class LoggedComponent implements OnInit, OnDestroy {
                             , window.location.origin + window.location.pathname).subscribe(
                             () => {
                                 this._router.navigateByUrl(redirectUrl);
+                            }, () => {
+                                this.isInErrorState = true;
                             }
                         );
                     }
@@ -61,6 +64,8 @@ export class LoggedComponent implements OnInit, OnDestroy {
                             , window.location.origin + window.location.pathname).subscribe(
                             () => {
                                 this._router.navigateByUrl(redirectUrl);
+                            }, () => {
+                                this.isInErrorState = true;
                             }
                         );
                     }
@@ -79,6 +84,8 @@ export class LoggedComponent implements OnInit, OnDestroy {
                             , window.location.origin + window.location.pathname).subscribe(
                             () => {
                                 this._router.navigateByUrl(redirectUrl);
+                            }, () => {
+                                this.isInErrorState = true;
                             }
                         );
                     }
@@ -94,6 +101,8 @@ export class LoggedComponent implements OnInit, OnDestroy {
                         this._loginService.doTwitterLogin(params['oauth_token'], params['oauth_verifier']).subscribe(
                             () => {
                                 this._router.navigateByUrl(redirectUrl);
+                            }, () => {
+                                this.isInErrorState = true;
                             }
                         );
                     }
@@ -105,6 +114,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
                     }
                 }
                 else {
+                    this.isInErrorState = true;
                     this._notification.error('Error', 'Invalid app', params);
                 }
             }

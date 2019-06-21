@@ -1,0 +1,8 @@
+<div style="width: 100vw; height: 100vh; display: grid; justify-items: center;  align-items: center;">
+    <div *ngIf="isInErrorState">
+        Une erreur à eu lieu lors de l'authentification.<br>
+        <a class="home-link" [routerLink]="['/']">
+            Retourner sur la page d'accueil
+        </a>
+    </div>
+</div>
