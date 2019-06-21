@@ -1,13 +1,13 @@
 import {NgModule, ErrorHandler} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterModule}  from '@angular/router';
+import {RouterModule} from '@angular/router';
 import {HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
 
 import {NhbkMaterialModule} from './nhbk-material.module';
-import {AppComponent}  from './app.component';
+import {AppComponent} from './app.component';
 import {routes} from './app.routes';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import {HomeModule} from './home/home.module';
 import {CharacterModule} from './character/character.module';
@@ -36,6 +36,7 @@ import {DatabaseHomeModule} from './home-database/home-database.module';
 import {ThemeService} from './theme.service';
 import {WebsocketModule} from './websocket/websocket.module';
 import {ErrorReportService} from './error-report.service';
+import {AuthenticationInterceptor} from './user/authentication.interceptor';
 
 @NgModule({
     imports: [
@@ -80,7 +81,12 @@ import {ErrorReportService} from './error-report.service';
         {
             provide: HAMMER_GESTURE_CONFIG,
             useClass: CustomHammerConfig
-        }
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthenticationInterceptor,
+            multi: true
+        },
     ]
 })
 export class AppModule {

@@ -7,3 +7,8 @@ export interface User {
     linkedWithTwitter: boolean;
     linkedWithLive: boolean;
 }
+
+export interface JwtResponse {
+    token: string;
+    userInfo: User;
+}

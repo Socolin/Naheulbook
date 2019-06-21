@@ -3,23 +3,24 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, ReplaySubject} from 'rxjs';
 
-import {User} from './user.model';
-import {isNullOrUndefined} from 'util';
+import {JwtResponse, User} from './user.model';
 
 @Injectable()
 export class LoginService {
     public loggedUser: ReplaySubject<User | null> = new ReplaySubject<User>(1);
     public currentLoggedUser?: User;
+    public currentJwt?: string;
+    private checkingLoggedUser?: Observable<JwtResponse | undefined>;
 
     constructor(private httpClient: HttpClient) {
     }
 
     getLoginToken(app: string): Observable<{ loginToken: string, appKey: string }> {
-        return this.httpClient.post<{ loginToken: string, appKey: string }>('/api/user/loginToken', {app: app});
+        return this.httpClient.get<{ loginToken: string, appKey: string }>(`/api/v2/authentications/${app}/initOAuthAuthentication`);
     }
 
-    doFBLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
-        let fbLogin = this.httpClient.post<User>('/api/user/fblogin', {
+    doFBLogin(code: string, loginToken: string, redirectUri: string): Observable<JwtResponse> {
+        let fbLogin = this.httpClient.post<JwtResponse>('/api/v2/authentications/facebook/completeAuthentication', {
             code: code,
             loginToken: loginToken,
             redirectUri: redirectUri
@@ -28,15 +29,16 @@ export class LoginService {
         );
 
         fbLogin.subscribe(user => {
-            this.loggedUser.next(user);
-            this.currentLoggedUser = user;
+            this.loggedUser.next(user.userInfo);
+            this.currentLoggedUser = user.userInfo;
+            this.currentJwt = user.token;
         });
 
         return fbLogin;
     }
 
-    doGoogleLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
-        let googleLogin = this.httpClient.post<User>('/api/user/googleLogin', {
+    doGoogleLogin(code: string, loginToken: string, redirectUri: string): Observable<JwtResponse> {
+        let googleLogin = this.httpClient.post<JwtResponse>('/api/v2/authentications/google/completeAuthentication', {
             code: code,
             loginToken: loginToken,
             redirectUri: redirectUri
@@ -45,15 +47,16 @@ export class LoginService {
         );
 
         googleLogin.subscribe(user => {
-            this.loggedUser.next(user);
-            this.currentLoggedUser = user;
+            this.loggedUser.next(user.userInfo);
+            this.currentLoggedUser = user.userInfo;
+            this.currentJwt = user.token;
         });
 
         return googleLogin;
     }
 
-    doLiveLogin(code: string, loginToken: string, redirectUri: string): Observable<User> {
-        let liveLogin = this.httpClient.post<User>('/api/user/liveLogin', {
+    doLiveLogin(code: string, loginToken: string, redirectUri: string): Observable<JwtResponse> {
+        let liveLogin = this.httpClient.post<JwtResponse>('/api/v2/authentications/live/completeAuthentication', {
             code: code,
             loginToken: loginToken,
             redirectUri: redirectUri
@@ -62,15 +65,16 @@ export class LoginService {
         );
 
         liveLogin.subscribe(user => {
-            this.loggedUser.next(user);
-            this.currentLoggedUser = user;
+            this.loggedUser.next(user.userInfo);
+            this.currentLoggedUser = user.userInfo;
+            this.currentJwt = user.token;
         });
 
         return liveLogin;
     }
 
-    doTwitterLogin(oauthToken: string, oauthVerifier: string): Observable<User> {
-        let twitterLogin = this.httpClient.post<User>('/api/user/twitterLogin', {
+    doTwitterLogin(oauthToken: string, oauthVerifier: string): Observable<JwtResponse> {
+        let twitterLogin = this.httpClient.post<JwtResponse>('/api/v2/authentications/twitter/completeAuthentication', {
             oauthToken: oauthToken,
             oauthVerifier: oauthVerifier
         }).pipe(
@@ -78,16 +82,16 @@ export class LoginService {
         );
 
         twitterLogin.subscribe(user => {
-            this.loggedUser.next(user);
-            this.currentLoggedUser = user;
+            this.loggedUser.next(user.userInfo);
+            this.currentLoggedUser = user.userInfo;
+            this.currentJwt = user.token;
         });
 
         return twitterLogin;
     }
 
-
     logout(): Observable<User> {
-        let logout = this.httpClient.get<User>('/api/user/logout').pipe(share());
+        let logout = this.httpClient.get<User>('/api/v2/users/me/logout').pipe(share());
 
         logout.subscribe(() => {
             this.currentLoggedUser = undefined;
@@ -98,23 +102,31 @@ export class LoginService {
     }
 
     checkLogged(): Observable<User> {
-        let checkLogged = this.httpClient.get<User>('/api/v2/users/me').pipe(
-            map(res => {
-                return res;
-            }),
+        if (this.checkingLoggedUser) {
+            return this.loggedUser;
+        }
+
+        this.checkingLoggedUser = this.httpClient.get<JwtResponse>('/api/v2/users/me/jwt').pipe(
             share()
         );
 
-        checkLogged.subscribe(user => {
-            this.loggedUser.next(user);
-            this.currentLoggedUser = user;
+        this.checkingLoggedUser.subscribe(response => {
+            this.loggedUser.next(response.userInfo);
+            this.currentLoggedUser = response.userInfo;
+            this.currentJwt = response.token;
+            this.checkingLoggedUser = undefined;
+        }, () => {
+            this.loggedUser.next(undefined);
+            this.currentLoggedUser = undefined;
+            this.currentJwt = undefined;
+            this.checkingLoggedUser = undefined;
         });
 
-        return checkLogged;
+        return this.loggedUser;
     }
 
     isLogged(): Observable<boolean> {
-        return this.checkLogged().pipe(map(user => !isNullOrUndefined(user)));
+        return this.checkLogged().pipe(map(user => user !== undefined));
     }
 
 

@@ -116,7 +116,7 @@ export class CharacterService {
         return forkJoin([
             this._jobService.getJobList(),
             this._originService.getOriginList(),
-            this.httpClient.get('/api/character/list')
+            this.httpClient.get('/api/v2/characters')
         ]).pipe(map(([jobs, origins, characters]: [Job[], Origin[], CharacterSummary[]]) => {
                 for (let i = 0; i < characters.length; i++) {
                     let character = characters[i];

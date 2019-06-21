@@ -1,6 +1,6 @@
 import {throwError as observableThrowError, Observable} from 'rxjs';
 import {ErrorHandler, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ErrorReportService} from './error-report.service';
 import {catchError} from 'rxjs/operators';
 
@@ -35,6 +35,13 @@ export class NhbkErrorHandler extends ErrorHandler {
     }
 
     handleError(error: any) {
+        if (error instanceof HttpErrorResponse) {
+            if (error.status === 401) {
+                super.handleError(error);
+                return;
+            }
+        }
+
         this.count++;
         if (this.count > 10) {
             return;
