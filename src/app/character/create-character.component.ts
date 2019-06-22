@@ -31,21 +31,21 @@ export class CreateCharacterComponent implements OnInit {
 
     public selectedOrigin: Origin | undefined;
 
-    @ViewChild(OriginSelectorComponent, {static: true})
+    @ViewChild(OriginSelectorComponent, {static: false})
     private originSelectorComponent: OriginSelectorComponent;
 
     // Step 2: Select job
 
     public selectedJobs: Job[] = [];
 
-    @ViewChild(JobSelectorComponent, {static: true})
+    @ViewChild(JobSelectorComponent, {static: false})
     private jobSelectorComponent: JobSelectorComponent;
 
     // Step 3: Select skills
 
     public selectedSkills: Skill[] | undefined;
 
-    @ViewChild(SkillSelectorComponent, {static: true})
+    @ViewChild(SkillSelectorComponent, {static: false})
     private skillsSelectorComponent: SkillSelectorComponent;
 
     // Step 4: Select fortune

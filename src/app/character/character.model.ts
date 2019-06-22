@@ -210,7 +210,7 @@ export class CharacterComputedData {
     }
 }
 
-export class CharacterJsonData {
+export interface CharacterJsonData {
     active: number;
     color: string;
     ea: number;
@@ -229,7 +229,7 @@ export class CharacterJsonData {
     name: string;
     originId: number;
     sex: string;
-    skills: {id: number}[];
+    skillIds: number[];
     specialities: Speciality[];
     statBonusAD: string;
     stats: { [statName: string]: number };
@@ -293,8 +293,8 @@ export class Character extends WsRegistrable {
             character.jobs.push(job);
         }
 
-        for (let sk of jsonData.skills) {
-            character.skills.push(skillsById[sk.id]);
+        for (let skillId of jsonData.skillIds) {
+            character.skills.push(skillsById[skillId]);
         }
 
         for (let itemJsonData of jsonData.items) {
@@ -319,7 +319,7 @@ export class Character extends WsRegistrable {
         return this.jobs.findIndex(j => j.isMagic) !== -1;
     }
 
-    get diceEaLevelUp(): number | undefined{
+    get diceEaLevelUp(): number | undefined {
         let job = this.jobs.find(j => j.isMagic);
         if (!job) {
             return undefined;

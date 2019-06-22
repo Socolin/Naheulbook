@@ -32,7 +32,7 @@ export class CharacterService {
             this._originService.getOriginList(),
             this._skillService.getSkillsById(),
             this.loadLoots(id),
-            this.httpClient.post('/api/character/detail', {id: id})
+            this.httpClient.get(`/api/v2/characters/${id}`)
         ]).pipe(map(([jobs, origins, skillsById, loots, characterData]:
                                             [Job[], Origin[], {[skillId: number]: Skill}, Loot[], CharacterJsonData]) => {
             let character = Character.fromJson(characterData, origins, jobs, skillsById);
@@ -84,61 +84,11 @@ export class CharacterService {
     }
 
     loadCharactersResume(list: number[]): Observable<CharacterSummary[]> {
-        return forkJoin([
-            this._jobService.getJobList(),
-            this._originService.getOriginList(),
-            this.httpClient.post('/api/character/resumeList', list)
-        ]).pipe(map(([jobs, origins, characters]: [Job[], Origin[], CharacterSummary[]]) => {
-                for (let i = 0; i < characters.length; i++) {
-                    let character = characters[i];
-                    character.jobs = [];
-                    for (let jobId of character.jobIds) {
-                        for (let job of jobs) {
-                            if (job.id === jobId) {
-                                character.jobs.push(job.name);
-                            }
-                        }
-                    }
-
-                    for (let origin of origins) {
-                        if (origin.id === character.originId) {
-                            character.origin = origin.name;
-                            break;
-                        }
-                    }
-                }
-                return characters;
-            }
-        ));
+        return this.httpClient.get<CharacterSummary[]>('/api/v2/characters/?characterIds=' + list.join(','));
     }
 
     loadList(): Observable<CharacterSummary[]> {
-        return forkJoin([
-            this._jobService.getJobList(),
-            this._originService.getOriginList(),
-            this.httpClient.get('/api/v2/characters')
-        ]).pipe(map(([jobs, origins, characters]: [Job[], Origin[], CharacterSummary[]]) => {
-                for (let i = 0; i < characters.length; i++) {
-                    let character = characters[i];
-                    character.jobs = [];
-                    for (let jobId of character.jobIds) {
-                        for (let job of jobs) {
-                            if (job.id === jobId) {
-                                character.jobs.push(job.name);
-                            }
-                        }
-                    }
-
-                    for (let origin of origins) {
-                        if (origin.id === character.originId) {
-                            character.origin = origin.name;
-                            break;
-                        }
-                    }
-                }
-                return characters;
-            }
-        ));
+        return this.httpClient.get<CharacterSummary[]>('/api/v2/characters');
     }
 
     changeCharacterStat(characterId: number, stat: string, value: any): Observable<{stat: string, value: any}> {
@@ -232,14 +182,12 @@ export class CharacterService {
     }
 
     createCharacter(creationData): Observable<{id: number}> {
-        return this.httpClient.post<{id: number}>('/api/character/create', creationData);
+        return this.httpClient.post<{id: number}>('/api/v2/characters', creationData);
     }
 
     loadLoots(characterId: number): Observable<Loot[]> {
         return forkJoin([
-            this.httpClient.post('/api/character/loadLoots', {
-                characterId: characterId
-            }),
+            this.httpClient.get(`/api/v2/characters/${characterId}/loots`),
             this._skillService.getSkillsById()
         ]).pipe(map(([lootsJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
             return Loot.lootsFromJson(lootsJsonData, skillsById)
