@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Factories;
@@ -106,6 +107,42 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Throw(new TestException());
 
             Func<Task> act = () => _service.AddItemToCharacterAsync(executionContext, characterId, request);
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public async Task GetCharacterLootsAsync_ShouldCall_ItemService()
+        {
+            const int characterId = 4;
+            const int groupId = 6;
+            var character = new Character {Id = characterId, GroupId = groupId};
+            var executionContext = new NaheulbookExecutionContext();
+            var expectedLoots = new List<Loot>();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _unitOfWorkFactory.GetUnitOfWork().Loots.GetLootsVisibleByCharactersOfGroupAsync(groupId)
+                .Returns(expectedLoots);
+
+            var loots = await _service.GetCharacterLootsAsync(executionContext, characterId);
+
+            loots.Should().BeSameAs(expectedLoots);
+        }
+
+        [Test]
+        public void GetCharacterLootsAsync_ShouldCall_EnsureCharacterAccess()
+        {
+            const int characterId = 4;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.GetCharacterLootsAsync(executionContext, characterId);
 
             act.Should().Throw<TestException>();
         }

@@ -57,6 +57,11 @@ namespace Naheulbook.TestUtils
             return _allEntities.OfType<T>().ElementAt(idx);
         }
 
+        public void SaveChanges()
+        {
+            _dbContext.SaveChanges();
+        }
+
         private TestDataUtil SaveEntity<T>(T entity, Action<T> customizer)
             where T : class
         {
@@ -95,7 +100,7 @@ namespace Naheulbook.TestUtils
                     // "DELETE FROM `group_history`;" +
                     // "DELETE FROM `group_invitations`;" +
                     // "DELETE FROM `icon`;" +
-                    // "DELETE FROM `item`;" +
+                    "DELETE FROM `item`;" +
                     "DELETE FROM `item_slot`;" +
                     "DELETE FROM `item_template`;" +
                     "DELETE FROM `item_template_category`;" +
@@ -145,6 +150,7 @@ namespace Naheulbook.TestUtils
                     "SET FOREIGN_KEY_CHECKS=1;";
                 cleanupSqlCommand.ExecuteNonQuery();
             }
+            dbConnection.Close();
 
             return this;
         }

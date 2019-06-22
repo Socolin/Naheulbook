@@ -74,7 +74,6 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void EnsureCanEditItemTemplateAsync_WhenSourceIsOfficial_ShouldThrowWhenUserIsNotAdmin()
         {
-            var itemTemplate = new ItemTemplate {Source = "official"};
             _unitOfWork.Users.GetAsync(1)
                 .Returns((User) null);
 
@@ -138,7 +137,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void EnsureCharacterAccess_WhenUserIsNotMasterOrOwner_ShouldThrow()
         {
-            var character = new Character {OwnerId = 10, Group = new Group {MasterId = 15}};
+            var character = new Character {OwnerId = 10, GroupId = 8, Group = new Group {MasterId = 15}};
             var executionContext = new NaheulbookExecutionContext {UserId = 5};
 
             Action act = () => _authorizationUtil.EnsureCharacterAccess(executionContext, character);
@@ -147,9 +146,20 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         }
 
         [Test]
+        public void EnsureCharacterAccess_WhenUserIsNotOwnerAndCharacterDoNotHaveAGroup()
+        {
+            var character = new Character {OwnerId = 10, GroupId = null};
+            var executionContext = new NaheulbookExecutionContext {UserId = 15};
+
+            Action act = () => _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+            act.Should().NotThrow();
+        }
+
+        [Test]
         public void EnsureCharacterAccess_WhenUserIsSameAsGroupMasterId_ShouldNotThrow()
         {
-            var character = new Character {OwnerId = 10, Group = new Group {MasterId = 15}};
+            var character = new Character {OwnerId = 10, GroupId = 8, Group = new Group {MasterId = 15}};
             var executionContext = new NaheulbookExecutionContext {UserId = 15};
 
             Action act = () => _authorizationUtil.EnsureCharacterAccess(executionContext, character);
@@ -160,7 +170,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void EnsureCharacterAccess_WhenUserIsSameAsOwnerID_ShouldNotThrow()
         {
-            var character = new Character {OwnerId = 10, Group = new Group {MasterId = 15}};
+            var character = new Character {OwnerId = 10, GroupId = 8, Group = new Group {MasterId = 15}};
             var executionContext = new NaheulbookExecutionContext {UserId = 10};
 
             Action act = () => _authorizationUtil.EnsureCharacterAccess(executionContext, character);

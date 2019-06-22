@@ -1,3 +1,4 @@
+using Naheulbook.Data.Models;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.TestUtils;
 using TechTalk.SpecFlow;
@@ -22,6 +23,19 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddLocation();
 
             _testDataUtil.AddGroup(_scenarioContext.GetUserId());
+        }
+
+        [Given("a loot")]
+        public void GivenALoot()
+        {
+            _testDataUtil.AddLoot();
+        }
+
+        [Given("that the loot is visible for players")]
+        public void GivenThatTheLootIsVisibleForPlayers()
+        {
+            _testDataUtil.GetLast<Loot>().IsVisibleForPlayer = true;
+            _testDataUtil.SaveChanges();
         }
     }
 }

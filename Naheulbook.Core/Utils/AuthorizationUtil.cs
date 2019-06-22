@@ -58,7 +58,9 @@ namespace Naheulbook.Core.Utils
 
         public void EnsureCharacterAccess(NaheulbookExecutionContext executionContext, Character character)
         {
-            if (character.OwnerId != executionContext.UserId && character.Group.MasterId != executionContext.UserId)
+            if (character.OwnerId != executionContext.UserId
+                && character.GroupId != null
+                && character.Group.MasterId != executionContext.UserId)
                 throw new ForbiddenAccessException();
         }
     }

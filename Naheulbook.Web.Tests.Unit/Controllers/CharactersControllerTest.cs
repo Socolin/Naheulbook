@@ -174,5 +174,48 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
+
+        [Test]
+        public async Task GetCharacterLoots_ShouldLoadCharacterLootsFromService_ThenMapItIntoResponse()
+        {
+            const int characterId = 2;
+            var loots = new List<Loot>();
+            var lootsResponse = new List<LootResponse>();
+
+            _characterService.GetCharacterLootsAsync(_executionContext, characterId)
+                .Returns(loots);
+            _mapper.Map<List<LootResponse>>(loots)
+                .Returns(lootsResponse);
+
+            var result = await _controller.GetCharacterLoots(_executionContext, characterId);
+
+            result.Value.Should().BeSameAs(lootsResponse);
+        }
+
+        [Test]
+        public void GetCharacterLoots_WhenCatchForbiddenAccessException_Return403()
+        {
+            const int characterId = 2;
+
+            _characterService.GetCharacterLootsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
+                .Returns(Task.FromException<List<Loot>>(new ForbiddenAccessException()));
+
+            Func<Task> act = () => _controller.GetCharacterLoots(_executionContext, characterId);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        [Test]
+        public void GetCharacterLoots_WhenCatchCharacterNotFoundException_Return404()
+        {
+            const int characterId = 2;
+
+            _characterService.GetCharacterLootsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
+                .Returns(Task.FromException<List<Loot>>(new CharacterNotFoundException(characterId)));
+
+            Func<Task> act = () => _controller.GetCharacterLoots(_executionContext, characterId);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
     }
 }

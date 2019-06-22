@@ -259,3 +259,27 @@ Feature: Character
         }
     }
     """
+
+  Scenario: List loot visible by a character
+    Given a JWT for a user
+    Given a group
+    And a loot
+    And a character
+    And that the character is a member of the group
+    And that the loot is visible for players
+
+    When performing a GET to the url "/api/v2/characters/${Character.Id}/loots" with the current jwt
+
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    [
+      {
+        "id": ${Loot.Id},
+        "visibleForPlayer": true,
+        "name": "${Loot.Name}",
+        "items": [],
+        "monsters": []
+      }
+    ]
+    """

@@ -20,6 +20,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Slot> Slots { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Location> Location { get; set; }
+        public DbSet<Loot> Loots { get; set; }
 
         public NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options)
             : base(options)

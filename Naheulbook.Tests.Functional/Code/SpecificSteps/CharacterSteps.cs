@@ -43,5 +43,13 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         {
             _testDataUtil.AddCharacterWithAllData(_scenarioContext.GetUserId());
         }
+
+        [Given("that the character is a member of the group")]
+        public void GivenThatTheCharacterIsAMemberOfTheGroup()
+        {
+            var character = _testDataUtil.GetLast<Character>();
+            character.GroupId = _testDataUtil.GetLast<Group>().Id;
+            _testDataUtil.SaveChanges();
+        }
     }
 }

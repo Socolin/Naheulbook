@@ -74,5 +74,29 @@ namespace Naheulbook.TestUtils
                 Character = character
             };
         }
+
+        public Item CreateItem(ItemTemplate itemTemplate, Monster monster)
+        {
+            return new Item
+            {
+                Data = @"{""key"":""value""}",
+                Modifiers = @"[{""key"":""value""}]",
+                ItemTemplateId = itemTemplate.Id,
+                MonsterId = monster.Id,
+                Monster = monster
+            };
+        }
+
+        public Item CreateItem(ItemTemplate itemTemplate, Loot loot)
+        {
+            return new Item
+            {
+                Data = @"{""key"":""value""}",
+                Modifiers = @"[{""key"":""value""}]",
+                ItemTemplateId = itemTemplate.Id,
+                LootId = loot.Id,
+                Loot = loot
+            };
+        }
     }
 }

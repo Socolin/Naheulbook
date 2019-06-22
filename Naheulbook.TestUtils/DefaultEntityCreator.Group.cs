@@ -17,5 +17,19 @@ namespace Naheulbook.TestUtils
                 Location = location
             };
         }
+
+        public Loot CreateLoot(Group group, string suffix = null)
+        {
+            if (suffix == null)
+                suffix = RngUtil.GetRandomHexString(8);
+
+            return new Loot
+            {
+                Name = $"some-name-{suffix}",
+                Group = group,
+                GroupId = group.Id,
+                IsVisibleForPlayer = false
+            };
+        }
     }
 }

@@ -58,5 +58,19 @@ namespace Naheulbook.TestUtils
                 Data = @"{""key"":""value""}"
             };
         }
+
+        public Monster CreateMonster(Group group, string suffix = null)
+        {
+            if (suffix == null)
+                suffix = RngUtil.GetRandomHexString(8);
+
+            return new Monster
+            {
+                Name = $"some-monster-name-{suffix}",
+                Group = group,
+                GroupId = group.Id,
+                Data = @"{""key"": ""value""}"
+           };
+        }
     }
 }

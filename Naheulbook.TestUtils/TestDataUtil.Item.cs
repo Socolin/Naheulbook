@@ -99,5 +99,20 @@ namespace Naheulbook.TestUtils
 
             return SaveEntity(item, customizer);
         }
+
+        public TestDataUtil AddItem(Loot loot, Action<Item> customizer = null)
+        {
+            var item = _defaultEntityCreator.CreateItem(GetLast<ItemTemplate>(), loot);
+
+            return SaveEntity(item, customizer);
+        }
+
+        public TestDataUtil AddItem(Monster monster, Action<Item> customizer = null)
+        {
+            var item = _defaultEntityCreator.CreateItem(GetLast<ItemTemplate>(), monster);
+
+            return SaveEntity(item, customizer);
+        }
+
     }
 }

@@ -11,6 +11,11 @@ namespace Naheulbook.TestUtils
             return SaveEntity(_defaultEntityCreator.CreateCharacter(ownerId, GetLast<Origin>()), customizer);
         }
 
+        public TestDataUtil AddCharacter(Action<Character> customizer = null)
+        {
+            return SaveEntity(_defaultEntityCreator.CreateCharacter(GetLast<User>().Id, GetLast<Origin>()), customizer);
+        }
+
         public TestDataUtil AddCharacterWithAllData(int ownerId, Action<Character> customizer = null)
         {
             AddStat().AddStat().AddStat().AddStat();
