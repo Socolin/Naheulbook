@@ -31,5 +31,19 @@ namespace Naheulbook.TestUtils
                 IsVisibleForPlayer = false
             };
         }
+
+        public Event CreateEvent(Group group, string suffix = null)
+        {
+            if (suffix == null)
+                suffix = RngUtil.GetRandomHexString(8);
+
+            return new Event
+            {
+                Name = $"some-event-name-{suffix}",
+                Description = $"some-event-description-{suffix}",
+                GroupId = group.Id,
+                Timestamp = 721487
+            };
+        }
     }
 }

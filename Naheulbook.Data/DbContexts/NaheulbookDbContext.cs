@@ -23,6 +23,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<User> Users { get; set; }
         public DbSet<Location> Location { get; set; }
         public DbSet<Loot> Loots { get; set; }
+        public DbSet<Event> Events { get; set; }
 
         public NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options)
             : base(options)
@@ -42,6 +43,8 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new EffectCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new EffectModifierConfiguration());
             modelBuilder.ApplyConfiguration(new EffectTypeConfiguration());
+
+            modelBuilder.ApplyConfiguration(new EventConfiguration());
 
             modelBuilder.ApplyConfiguration(new GodConfiguration());
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -21,6 +22,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         private IGroupService _groupService;
         private ILootService _lootService;
         private IMonsterService _monsterService;
+        private IEventService _eventService;
         private IMapper _mapper;
         private NaheulbookExecutionContext _executionContext;
 
@@ -32,12 +34,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _groupService = Substitute.For<IGroupService>();
             _lootService = Substitute.For<ILootService>();
             _monsterService = Substitute.For<IMonsterService>();
+            _eventService = Substitute.For<IEventService>();
             _mapper = Substitute.For<IMapper>();
 
             _controller = new GroupsController(
                 _groupService,
                 _lootService,
                 _monsterService,
+                _eventService,
                 _mapper
             );
 
@@ -82,31 +86,18 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PostCreateLootAsync_ShouldReturn403_WhenUserDoesNotHaveAccess()
+        [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
+        public void PostCreateLootAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
         {
             const int groupId = 8;
             var createLootRequest = new CreateLootRequest();
 
             _lootService.CreateLootAsync(_executionContext, groupId, createLootRequest)
-                .Returns(Task.FromException<Loot>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<Loot>(exception));
 
             Func<Task> act = () => _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
-        }
-
-        [Test]
-        public void PostCreateLootAsync_ShouldReturn404_WhenGroupDoesNotExists()
-        {
-            const int groupId = 8;
-            var createLootRequest = new CreateLootRequest();
-
-            _lootService.CreateLootAsync(_executionContext, groupId, createLootRequest)
-                .Returns(Task.FromException<Loot>(new GroupNotFoundException(groupId)));
-
-            Func<Task> act = () => _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
-
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
@@ -129,31 +120,18 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PostCreateMonsterAsync_ShouldReturn403_WhenUserDoesNotHaveAccess()
+        [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
+        public void PostCreateMonsterAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
         {
             const int groupId = 8;
             var createMonsterRequest = new CreateMonsterRequest();
 
             _monsterService.CreateMonsterAsync(_executionContext, groupId, createMonsterRequest)
-                .Returns(Task.FromException<Monster>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<Monster>(exception));
 
             Func<Task> act = () => _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
-        }
-
-        [Test]
-        public void PostCreateMonsterAsync_ShouldReturn404_WhenGroupDoesNotExists()
-        {
-            const int groupId = 8;
-            var createMonsterRequest = new CreateMonsterRequest();
-
-            _monsterService.CreateMonsterAsync(_executionContext, groupId, createMonsterRequest)
-                .Returns(Task.FromException<Monster>(new GroupNotFoundException(groupId)));
-
-            Func<Task> act = () => _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
-
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
@@ -174,29 +152,55 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void GetGroupDetailsAsync_ShouldReturn403_WhenUserDoesNotHaveAccess()
+        [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
+        public void GetGroupDetailsAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
         {
             const int groupId = 8;
 
             _groupService.GetGroupDetailsAsync(_executionContext, groupId)
-                .Returns(Task.FromException<Group>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<Group>(exception));
 
             Func<Task> act = () => _controller.GetGroupDetailsAsync(_executionContext, groupId);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
-        public void GetGroupDetailsAsync_ShouldReturn404_WhenGroupDoesNotExists()
+        public async Task GetEventListAsync_LoadEventThenMapTheResponse()
+        {
+            const int groupId = 8;
+            var events = new List<Event>();
+            var eventsResponse = new List<EventResponse>();
+
+            _eventService.GetEventsForGroupAsync(_executionContext, groupId)
+                .Returns(events);
+            _mapper.Map<List<EventResponse>>(events)
+                .Returns(eventsResponse);
+
+            var result = await _controller.GetEventListAsync(_executionContext, groupId);
+
+            result.Value.Should().BeSameAs(eventsResponse);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
+        public void GetEventListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
         {
             const int groupId = 8;
 
-            _groupService.GetGroupDetailsAsync(_executionContext, groupId)
-                .Returns(Task.FromException<Group>(new GroupNotFoundException(groupId)));
+            _eventService.GetEventsForGroupAsync(_executionContext, groupId)
+                .Returns(Task.FromException<List<Event>>(exception));
 
-            Func<Task> act = () => _controller.GetGroupDetailsAsync(_executionContext, groupId);
+            Func<Task> act = () => _controller.GetEventListAsync(_executionContext, groupId);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }
+
+        private static IEnumerable<TestCaseData> GetCommonGroupExceptionsAndExpectedStatusCode()
+        {
+            yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
+            yield return new TestCaseData(new GroupNotFoundException(42), HttpStatusCode.NotFound);
+        }
+
     }
 }

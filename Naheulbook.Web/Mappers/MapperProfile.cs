@@ -37,6 +37,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Stat, opt => opt.MapFrom(se => se.StatName))
                 .ForMember(m => m.Special, opt => opt.Ignore());
 
+            CreateMap<Event, EventResponse>();
+
             CreateMap<God, GodResponse>();
 
             CreateMap<Group, GroupResponse>()

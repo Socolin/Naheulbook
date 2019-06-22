@@ -21,18 +21,21 @@ namespace Naheulbook.Web.Controllers
         private readonly IGroupService _groupService;
         private readonly ILootService _lootService;
         private readonly IMonsterService _monsterService;
+        private readonly IEventService _eventService;
         private readonly IMapper _mapper;
 
         public GroupsController(
             IGroupService groupService,
             ILootService lootService,
             IMonsterService monsterService,
+            IEventService eventService,
             IMapper mapper
         )
         {
             _groupService = groupService;
             _lootService = lootService;
             _monsterService = monsterService;
+            _eventService = eventService;
             _mapper = mapper;
         }
 
@@ -80,6 +83,27 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        [HttpGet("{GroupId}/events")]
+        public async Task<ActionResult<List<EventResponse>>> GetEventListAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId
+        )
+        {
+            try
+            {
+                var events = await _eventService.GetEventsForGroupAsync(executionContext, groupId);
+                return _mapper.Map<List<EventResponse>>(events);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
 
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost("{GroupId}/monsters")]

@@ -20,7 +20,7 @@ namespace Naheulbook.Data.Models
         public ICollection<Loot> Loots { get; set; }
         public ICollection<Monster> Monsters { get; set; }
         public ICollection<Character> Characters { get; set; }
-
         public ICollection<GroupInvite> Invites { get; set; }
+        public ICollection<Event> Events { get; set; }
     }
 }

@@ -32,5 +32,10 @@ namespace Naheulbook.TestUtils
             };
             return SaveEntity(groupInvite, null);
         }
+
+        public TestDataUtil AddEvent(Action<Event> customizer = null)
+        {
+            return SaveEntity(_defaultEntityCreator.CreateEvent(GetLast<Group>()), customizer);
+        }
     }
 }

@@ -26,6 +26,12 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddGroup(_scenarioContext.GetUserId());
         }
 
+        [Given("an event")]
+        public void GivenAnEvent()
+        {
+            _testDataUtil.AddEvent();
+        }
+
         [Given("a loot")]
         public void GivenALoot()
         {
