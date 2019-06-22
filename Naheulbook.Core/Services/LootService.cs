@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -11,6 +12,7 @@ namespace Naheulbook.Core.Services
     public interface ILootService
     {
         Task<Loot> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request);
+        Task<List<Loot>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
     }
 
     public class LootService : ILootService
@@ -45,6 +47,20 @@ namespace Naheulbook.Core.Services
                 await uow.CompleteAsync();
 
                 return loot;
+            }
+        }
+
+        public async Task<List<Loot>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                return await uow.Loots.GetByGroupIdAsync(groupId);
             }
         }
     }

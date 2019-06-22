@@ -21,3 +21,25 @@ Feature: Loot
       "monsters": []
     }
     """
+
+  Scenario: List group loots
+    Given a JWT for a user
+    Given a group
+    And a loot
+
+    When performing a GET to the url "/api/v2/groups/${Group.Id}/loots" with the current jwt
+
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    [
+      {
+        "id": ${Loot.Id},
+        "visibleForPlayer": false,
+        "name": "${Loot.Name}",
+        "items": [],
+        "monsters": []
+      }
+    ]
+    """
+

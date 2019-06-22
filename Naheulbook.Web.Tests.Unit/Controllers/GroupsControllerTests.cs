@@ -197,6 +197,37 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
+        public async Task GetEventListAsync_LoadLootThenMapTheResponse()
+        {
+            const int groupId = 8;
+            var loots = new List<Loot>();
+            var lootsResponse = new List<LootResponse>();
+
+            _lootService.GetLootsForGroupAsync(_executionContext, groupId)
+                .Returns(loots);
+            _mapper.Map<List<LootResponse>>(loots)
+                .Returns(lootsResponse);
+
+            var result = await _controller.GetLootListAsync(_executionContext, groupId);
+
+            result.Value.Should().BeSameAs(lootsResponse);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
+        public void GetLootListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            const int groupId = 8;
+
+            _lootService.GetLootsForGroupAsync(_executionContext, groupId)
+                .Returns(Task.FromException<List<Loot>>(exception));
+
+            Func<Task> act = () => _controller.GetEventListAsync(_executionContext, groupId);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
         public async Task GetMonsterListAsync_LoadMonsterThenMapTheResponse()
         {
             const int groupId = 8;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Exceptions;
@@ -79,6 +80,56 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Throw(new TestException());
 
             Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, groupId, new CreateLootRequest());
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public async Task GetLootsForGroupAsync_ShouldLoadLootsListAndReturnIt()
+        {
+            const int groupId = 42;
+            var executionContext = new NaheulbookExecutionContext();
+            var group = new Group {Id = groupId};
+            var expectedLoots = new List<Loot>();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+            _unitOfWorkFactory.GetUnitOfWork().Loots.GetByGroupIdAsync(groupId)
+                .Returns(expectedLoots);
+
+            var loots = await _service.GetLootsForGroupAsync(executionContext, groupId);
+
+            loots.Should().BeSameAs(expectedLoots);
+        }
+
+        [Test]
+        public void GetLootsForGroupAsync_ShouldThrowWhenGroupNotFound()
+        {
+            const int groupId = 42;
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns((Group) null);
+
+            Func<Task> act = () => _service.GetLootsForGroupAsync(executionContext, groupId);
+
+            act.Should().Throw<GroupNotFoundException>();
+        }
+
+        [Test]
+        public void GetLootsForGroupAsync_ShouldEnsureGroupAccess()
+        {
+            const int groupId = 42;
+            var naheulbookExecutionContext = new NaheulbookExecutionContext();
+            var group = new Group {Id = groupId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+
+            _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.GetLootsForGroupAsync(naheulbookExecutionContext, groupId);
 
             act.Should().Throw<TestException>();
         }

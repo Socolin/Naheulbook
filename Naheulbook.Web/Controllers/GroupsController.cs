@@ -61,6 +61,28 @@ namespace Naheulbook.Web.Controllers
         }
 
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        [HttpGet("{GroupId}/loots")]
+        public async Task<ActionResult<List<LootResponse>>> GetLootListAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId
+        )
+        {
+            try
+            {
+                var loots = await _lootService.GetLootsForGroupAsync(executionContext, groupId);
+                return _mapper.Map<List<LootResponse>>(loots);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost("{GroupId}/loots")]
         public async Task<CreatedActionResult<LootResponse>> PostCreateLootAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
