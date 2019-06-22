@@ -1,8 +1,12 @@
+using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Core.Tests.Unit.Exceptions;
 using Naheulbook.Core.Tests.Unit.TestUtils;
+using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using NSubstitute;
@@ -14,13 +18,15 @@ namespace Naheulbook.Core.Tests.Unit.Services
     {
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private GroupService _service;
+        private IAuthorizationUtil _authorizationUtil;
 
         [SetUp]
         public void SetUp()
         {
             _unitOfWorkFactory = new FakeUnitOfWorkFactory();
+            _authorizationUtil = Substitute.For<IAuthorizationUtil>();
 
-            _service = new GroupService(_unitOfWorkFactory);
+            _service = new GroupService(_unitOfWorkFactory, _authorizationUtil);
         }
 
         [Test]
@@ -44,6 +50,55 @@ namespace Naheulbook.Core.Tests.Unit.Services
             actualGroup.Location.Should().BeSameAs(location);
             actualGroup.Name.Should().Be("some-name");
             actualGroup.MasterId.Should().Be(10);
+        }
+
+        [Test]
+        public async Task GetGroupDetailsAsync_ShouldLoadGroupDetailsAndReturnIt()
+        {
+            const int groupId = 4;
+            var naheulbookExecutionContext = new NaheulbookExecutionContext();
+            var group = new Group();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetGroupsWithDetailsAsync(groupId)
+                .Returns(group);
+
+            var actualGroup = await _service.GetGroupDetailsAsync(naheulbookExecutionContext, groupId);
+
+            actualGroup.Should().BeSameAs(group);
+        }
+
+
+        [Test]
+        public void GetGroupDetailsAsync_ShouldThrowWhenGroupDoesNotExists()
+        {
+            const int groupId = 4;
+            var naheulbookExecutionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetGroupsWithDetailsAsync(groupId)
+                .Returns((Group) null);
+
+            Func<Task> act = () => _service.GetGroupDetailsAsync(naheulbookExecutionContext, groupId);
+
+            act.Should().Throw<GroupNotFoundException>();
+        }
+
+
+        [Test]
+        public void GetGroupDetailsAsync_ShouldEnsureIsGroupOwner()
+        {
+            const int groupId = 4;
+            var naheulbookExecutionContext = new NaheulbookExecutionContext();
+            var group = new Group();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetGroupsWithDetailsAsync(groupId)
+                .Returns(group);
+
+            _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.GetGroupDetailsAsync(naheulbookExecutionContext, groupId);
+
+            act.Should().Throw<TestException>();
         }
     }
 }

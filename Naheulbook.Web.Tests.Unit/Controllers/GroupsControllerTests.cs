@@ -155,5 +155,48 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
+
+        [Test]
+        public async Task GetGroupDetailsAsync_ShouldCreateLoot_ThenReturnLootResponse()
+        {
+            const int groupId = 8;
+            var group = new Group();
+            var groupResponse = new GroupResponse();
+
+            _groupService.GetGroupDetailsAsync(_executionContext, groupId)
+                .Returns(group);
+            _mapper.Map<GroupResponse>(group)
+                .Returns(groupResponse);
+
+            var result = await _controller.GetGroupDetailsAsync(_executionContext, groupId);
+
+            result.Value.Should().BeSameAs(groupResponse);
+        }
+
+        [Test]
+        public void GetGroupDetailsAsync_ShouldReturn403_WhenUserDoesNotHaveAccess()
+        {
+            const int groupId = 8;
+
+            _groupService.GetGroupDetailsAsync(_executionContext, groupId)
+                .Returns(Task.FromException<Group>(new ForbiddenAccessException()));
+
+            Func<Task> act = () => _controller.GetGroupDetailsAsync(_executionContext, groupId);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        [Test]
+        public void GetGroupDetailsAsync_ShouldReturn404_WhenGroupDoesNotExists()
+        {
+            const int groupId = 8;
+
+            _groupService.GetGroupDetailsAsync(_executionContext, groupId)
+                .Returns(Task.FromException<Group>(new GroupNotFoundException(groupId)));
+
+            Func<Task> act = () => _controller.GetGroupDetailsAsync(_executionContext, groupId);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
     }
 }

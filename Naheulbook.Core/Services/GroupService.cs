@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
@@ -11,15 +13,21 @@ namespace Naheulbook.Core.Services
     {
         Task<Group> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request);
         Task<List<Group>> GetGroupListAsync(NaheulbookExecutionContext executionContext);
+        Task<Group> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId);
     }
 
     public class GroupService : IGroupService
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IAuthorizationUtil _authorizationUtil;
 
-        public GroupService(IUnitOfWorkFactory unitOfWorkFactory)
+        public GroupService(
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IAuthorizationUtil authorizationUtil
+        )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
+            _authorizationUtil = authorizationUtil;
         }
 
         public async Task<Group> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request)
@@ -47,6 +55,20 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 return await uow.Groups.GetGroupsOwnedByAsync(executionContext.UserId);
+            }
+        }
+
+        public async Task<Group> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetGroupsWithDetailsAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                return group;
             }
         }
     }

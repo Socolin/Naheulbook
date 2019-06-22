@@ -19,5 +19,18 @@ namespace Naheulbook.TestUtils
         {
             return SaveEntity(_defaultEntityCreator.CreateLoot(GetLast<Group>()), customizer);
         }
+
+        public TestDataUtil AddGroupInvite(Character character, Group group, bool fromGroup)
+        {
+            var groupInvite = new GroupInvite
+            {
+                FromGroup = fromGroup,
+                Character = character,
+                CharacterId = character.Id,
+                Group = group,
+                GroupId = group.Id
+            };
+            return SaveEntity(groupInvite, null);
+        }
     }
 }

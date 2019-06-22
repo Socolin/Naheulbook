@@ -47,4 +47,33 @@ namespace Naheulbook.Data.Configurations
                 .HasConstraintName("FK_group_location_location");
         }
     }
+
+    public class GroupInviteConfiguration : IEntityTypeConfiguration<GroupInvite>
+    {
+        public void Configure(EntityTypeBuilder<GroupInvite> builder)
+        {
+            builder.ToTable("group_invitations");
+
+            builder.HasKey(e => new {e.GroupId, e.CharacterId});
+
+            builder.Property(e => e.CharacterId)
+                .HasColumnName("character");
+
+            builder.Property(e => e.GroupId)
+                .HasColumnName("group");
+
+            builder.Property(e => e.FromGroup)
+                .HasColumnName("fromgroup");
+
+            builder.HasOne(e => e.Group)
+                .WithMany(g => g.Invites)
+                .HasForeignKey(e => e.GroupId)
+                .HasConstraintName("FK_group_invitations_group_group");
+
+            builder.HasOne(e => e.Character)
+                .WithMany(g => g.Invites)
+                .HasForeignKey(e => e.CharacterId)
+                .HasConstraintName("FK_group_invitations_character_character");
+        }
+    }
 }

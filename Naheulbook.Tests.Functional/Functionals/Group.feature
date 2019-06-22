@@ -17,9 +17,9 @@ Feature: Group
       "id": {"__match": {"type": "integer"}},
       "name": "some-group-name",
       "data": {},
-      "invited": [],
-      "invites": [],
-      "characters": [],
+      "invitedCharacterIds": [],
+      "invitesCharacterIds": [],
+      "characterIds": [],
       "location": { "__partial": {
         "id": 1
       }}
@@ -41,4 +41,41 @@ Feature: Group
         "characterCount": 0
       }
     ]
+    """
+
+
+  Scenario: Can get a group details
+    Given a JWT for a user
+    Given a group
+    And 3 character
+    And an invite from the group to the 1st character
+    And a request from 2nd character to join the group
+    And that the 3rd character is a member of the group
+    And a loot
+    And that the loot is the current group combat loot
+
+    When performing a GET to the url "/api/v2/groups/${Group.Id}" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${Group.Id},
+      "name": "${Group.Name}",
+      "data": {},
+      "location": {
+        "data": ${Location.Data},
+        "id": ${Location.Id},
+        "name": "${Location.Name}",
+        "parent": 0
+      },
+      "characterIds": [
+        ${Character.[2].Id}
+      ],
+      "invitedCharacterIds": [
+        ${Character.[0].Id}
+      ],
+      "invitesCharacterIds": [
+        ${Character.[1].Id}
+      ]
+    }
     """

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Naheulbook.Data.Models;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
+using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
 using TechTalk.SpecFlow;
 
@@ -21,27 +22,43 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _scenarioContext = scenarioContext;
         }
 
-        [Given("a character")]
-        public void GivenACharacter()
+        [Given(@"(a|\d+) characters?")]
+        public void GivenACharacter(string amount)
         {
             if (!_testDataUtil.Contains<Origin>())
                 _testDataUtil.AddOrigin();
             if (_testDataUtil.Contains<Job>())
-                _testDataUtil.AddCharacter(_scenarioContext.GetUserId(), c =>
+            {
+                for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
                 {
-                    c.Jobs = new List<CharacterJob>
+                    _testDataUtil.AddCharacter(_scenarioContext.GetUserId(), c =>
                     {
-                        new CharacterJob {JobId = _testDataUtil.GetLast<Job>().Id}
-                    };
-                });
+                        c.Jobs = new List<CharacterJob>
+                        {
+                            new CharacterJob {JobId = _testDataUtil.GetLast<Job>().Id}
+                        };
+                    });
+                }
+            }
             else
-                _testDataUtil.AddCharacter(_scenarioContext.GetUserId());
+            {
+                for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
+                    _testDataUtil.AddCharacter(_scenarioContext.GetUserId());
+            }
         }
 
         [Given(@"a character with all possible data")]
         public void GivenACharacterWithAllPossibleData()
         {
             _testDataUtil.AddCharacterWithAllData(_scenarioContext.GetUserId());
+        }
+
+        [Given("that the (.+) character is a member of the group")]
+        public void GivenThatXTheCharacterIsAMemberOfTheGroup(string indexString)
+        {
+            var character = _testDataUtil.Get<Character>(StepArgumentUtil.ParseIndex(indexString));
+            character.GroupId = _testDataUtil.GetLast<Group>().Id;
+            _testDataUtil.SaveChanges();
         }
 
         [Given("that the character is a member of the group")]

@@ -10,8 +10,8 @@ namespace Naheulbook.Web.Responses
         public JObject Data { get; set; }
         public LocationResponse Location { get; set; }
 
-        public IList<object> Invites { get; set; } = new List<object>();
-        public IList<object> Invited { get; set; } = new List<object>();
-        public IList<object> Characters { get; set; } = new List<object>();
+        public IList<int> CharacterIds { get; set; }
+        public IList<int> InvitesCharacterIds { get; set; }
+        public IList<int> InvitedCharacterIds { get; set; }
     }
 }

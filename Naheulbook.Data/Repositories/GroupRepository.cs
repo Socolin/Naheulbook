@@ -10,6 +10,7 @@ namespace Naheulbook.Data.Repositories
     public interface IGroupRepository : IRepository<Group>
     {
         Task<List<Group>> GetGroupsOwnedByAsync(int userId);
+        Task<Group> GetGroupsWithDetailsAsync(int groupId);
     }
 
     public class GroupRepository : Repository<Group, NaheulbookDbContext>, IGroupRepository
@@ -25,6 +26,16 @@ namespace Naheulbook.Data.Repositories
                 .Include(g => g.Characters)
                 .Where(g => g.MasterId == userId)
                 .ToListAsync();
+        }
+
+        public Task<Group> GetGroupsWithDetailsAsync(int groupId)
+        {
+            return Context.Groups
+                .Include(g => g.Characters)
+                .Include(g => g.Invites)
+                .Include(g => g.Location)
+                .Where(g => g.Id == groupId)
+                .SingleOrDefaultAsync();
         }
     }
 }

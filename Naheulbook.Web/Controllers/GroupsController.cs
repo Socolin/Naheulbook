@@ -103,5 +103,27 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
+
+        [HttpGet("{GroupId}")]
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        public async Task<ActionResult<GroupResponse>> GetGroupDetailsAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId
+        )
+        {
+            try
+            {
+                var group = await _groupService.GetGroupDetailsAsync(executionContext, groupId);
+                return _mapper.Map<GroupResponse>(group);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }
