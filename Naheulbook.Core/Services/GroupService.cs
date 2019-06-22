@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Naheulbook.Core.Models;
 using Naheulbook.Data.Factories;
@@ -9,6 +10,7 @@ namespace Naheulbook.Core.Services
     public interface IGroupService
     {
         Task<Group> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request);
+        Task<List<Group>> GetGroupListAsync(NaheulbookExecutionContext executionContext);
     }
 
     public class GroupService : IGroupService
@@ -37,6 +39,14 @@ namespace Naheulbook.Core.Services
                 await uow.CompleteAsync();
 
                 return group;
+            }
+        }
+
+        public async Task<List<Group>> GetGroupListAsync(NaheulbookExecutionContext executionContext)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.Groups.GetGroupsOwnedByAsync(executionContext.UserId);
             }
         }
     }

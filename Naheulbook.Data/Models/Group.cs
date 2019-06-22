@@ -19,6 +19,6 @@ namespace Naheulbook.Data.Models
 
         public ICollection<Loot> Loots { get; set; }
         public ICollection<Monster> Monsters { get; set; }
-        public IEnumerable<Character> Characters { get; set; }
+        public ICollection<Character> Characters { get; set; }
     }
 }

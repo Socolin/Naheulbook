@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -33,6 +34,16 @@ namespace Naheulbook.Web.Controllers
             _lootService = lootService;
             _monsterService = monsterService;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        public async Task<List<GroupSummaryResponse>> GetGroupList(
+            [FromServices] NaheulbookExecutionContext executionContext
+        )
+        {
+            var group = await _groupService.GetGroupListAsync(executionContext);
+            return _mapper.Map<List<GroupSummaryResponse>>(group);
         }
 
         [HttpPost]

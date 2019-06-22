@@ -25,3 +25,20 @@ Feature: Group
       }}
     }
     """
+
+  Scenario: List groups owne by a user
+    Given a JWT for a user
+    Given a group
+
+    When performing a GET to the url "/api/v2/groups/" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    [
+      {
+        "id": ${Group.Id},
+        "name": "${Group.Name}",
+        "characterCount": 0
+      }
+    ]
+    """

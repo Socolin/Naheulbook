@@ -9,6 +9,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Character> Characters { get; set; }
         public DbSet<Effect> Effects { get; set; }
         public DbSet<EffectType> EffectTypes { get; set; }
+        public DbSet<Group> Groups { get; set; }
         public DbSet<ItemTemplateSection> ItemTemplateSections { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemTemplate> ItemTemplates { get; set; }
