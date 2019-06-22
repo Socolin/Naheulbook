@@ -10,6 +10,6 @@ namespace Naheulbook.Web.Responses
         public string Name { get; set; }
         public JObject Data { get; set; }
         public IList<ActiveStatsModifier> Modifiers { get; set; }
-        public IList<object> Items { get; set; } = new List<object>();
+        public IList<ItemResponse> Items { get; set; }
     }
 }

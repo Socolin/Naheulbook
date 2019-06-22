@@ -15,6 +15,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemTemplate> ItemTemplates { get; set; }
         public DbSet<Skill> Skills { get; set; }
+        public DbSet<Monster> Monsters { get; set; }
         public DbSet<MonsterType> MonsterTypes { get; set; }
         public DbSet<MonsterTemplate> MonsterTemplates { get; set; }
         public DbSet<Origin> Origins { get; set; }

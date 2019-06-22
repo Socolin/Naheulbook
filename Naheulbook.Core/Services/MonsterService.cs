@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -12,6 +13,7 @@ namespace Naheulbook.Core.Services
     public interface IMonsterService
     {
         Task<Monster> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request);
+        Task<List<Monster>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
     }
 
     public class MonsterService : IMonsterService
@@ -55,6 +57,20 @@ namespace Naheulbook.Core.Services
                 await uow.CompleteAsync();
 
                 return monster;
+            }
+        }
+
+        public async Task<List<Monster>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                return await uow.Monsters.GetByGroupIdWithInventoryAsync(groupId);
             }
         }
     }

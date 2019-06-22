@@ -18,7 +18,7 @@ namespace Naheulbook.Data.Models
         public Loot Loot { get; set; }
 
         public int? TargetedCharacterId { get; set; }
-        // public Character TargetedCharacter { get; set; }
+        public Character TargetedCharacter { get; set; }
 
         public int? TargetedMonsterId { get; set; }
         public Monster TargetedMonster { get; set; }

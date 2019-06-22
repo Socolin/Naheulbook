@@ -106,6 +106,28 @@ namespace Naheulbook.Web.Controllers
         }
 
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        [HttpGet("{GroupId}/monsters")]
+        public async Task<ActionResult<List<MonsterResponse>>> GetMonsterListAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId
+        )
+        {
+            try
+            {
+                var monsters = await _monsterService.GetMonstersForGroupAsync(executionContext, groupId);
+                return _mapper.Map<List<MonsterResponse>>(monsters);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost("{GroupId}/monsters")]
         public async Task<CreatedActionResult<MonsterResponse>> PostCreateMonsterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,

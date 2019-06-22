@@ -196,6 +196,37 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
+        [Test]
+        public async Task GetMonsterListAsync_LoadMonsterThenMapTheResponse()
+        {
+            const int groupId = 8;
+            var monsters = new List<Monster>();
+            var monstersResponse = new List<MonsterResponse>();
+
+            _monsterService.GetMonstersForGroupAsync(_executionContext, groupId)
+                .Returns(monsters);
+            _mapper.Map<List<MonsterResponse>>(monsters)
+                .Returns(monstersResponse);
+
+            var result = await _controller.GetMonsterListAsync(_executionContext, groupId);
+
+            result.Value.Should().BeSameAs(monstersResponse);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
+        public void GetMonsterListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            const int groupId = 8;
+
+            _monsterService.GetMonstersForGroupAsync(_executionContext, groupId)
+                .Returns(Task.FromException<List<Monster>>(exception));
+
+            Func<Task> act = () => _controller.GetMonsterListAsync(_executionContext, groupId);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
         private static IEnumerable<TestCaseData> GetCommonGroupExceptionsAndExpectedStatusCode()
         {
             yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);

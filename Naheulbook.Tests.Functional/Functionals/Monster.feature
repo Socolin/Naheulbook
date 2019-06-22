@@ -79,3 +79,32 @@ Feature: Monster
       ]
     }
     """
+
+  Scenario: Can load group monsters
+    Given a JWT for a user
+    Given a group
+    And an item template
+    And a monster with an item in its inventory
+
+
+    When performing a GET to the url "/api/v2/groups/${Group.Id}/monsters" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    [
+      {
+        "id": ${Monster.Id},
+        "name": "${Monster.Name}",
+        "data": ${Monster.Data},
+        "modifiers": [],
+        "items": [
+          { "__partial": {
+            "id": ${Item.Id},
+            "template": { "__partial": {
+                "id": ${ItemTemplate.Id}
+            }}
+          }}
+        ]
+      }
+    ]
+    """

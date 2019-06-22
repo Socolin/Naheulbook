@@ -100,6 +100,57 @@ namespace Naheulbook.Core.Tests.Unit.Services
             act.Should().Throw<TestException>();
         }
 
+
+        [Test]
+        public async Task GetMonstersForGroupAsync_ShouldLoadMonstersListAndReturnIt()
+        {
+            const int groupId = 42;
+            var executionContext = new NaheulbookExecutionContext();
+            var group = new Group {Id = groupId};
+            var expectedMonsters = new List<Monster>();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+            _unitOfWorkFactory.GetUnitOfWork().Monsters.GetByGroupIdWithInventoryAsync(groupId)
+                .Returns(expectedMonsters);
+
+            var events = await _service.GetMonstersForGroupAsync(executionContext, groupId);
+
+            events.Should().BeSameAs(expectedMonsters);
+        }
+
+        [Test]
+        public void GetMonstersForGroupAsync_ShouldThrowWhenGroupNotFound()
+        {
+            const int groupId = 42;
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns((Group) null);
+
+            Func<Task> act = () => _service.GetMonstersForGroupAsync(executionContext, groupId);
+
+            act.Should().Throw<GroupNotFoundException>();
+        }
+
+        [Test]
+        public void GetMonstersForGroupAsync_ShouldEnsureGroupAccess()
+        {
+            const int groupId = 42;
+            var naheulbookExecutionContext = new NaheulbookExecutionContext();
+            var group = new Group {Id = groupId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+
+            _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.GetMonstersForGroupAsync(naheulbookExecutionContext, groupId);
+
+            act.Should().Throw<TestException>();
+        }
+
         private static CreateMonsterRequest CreateRequest()
         {
             return new CreateMonsterRequest

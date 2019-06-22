@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -51,7 +50,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.CharacterCount, opt => opt.MapFrom(g => g.Characters.Count));
 
             CreateMap<Item, ItemResponse>()
-                .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data)));
+                .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data)))
+                .ForMember(m => m.Modifiers, opt => opt.MapFrom(x => MapperHelpers.FromJson<List<ActiveStatsModifier>>(x.Modifiers)));
 
             CreateMap<ItemTemplate, ItemTemplateResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data)))
@@ -126,8 +126,7 @@ namespace Naheulbook.Web.Mappers
 
             CreateMap<Monster, MonsterResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)))
-                .ForMember(m => m.Modifiers, opt => opt.MapFrom(b => MapperHelpers.FromJson<IList<ActiveStatsModifier>>(b.Modifiers)))
-                .ForMember(m => m.Items, opt => opt.Ignore());
+                .ForMember(m => m.Modifiers, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<ActiveStatsModifier>>(b.Modifiers)));
 
             CreateMap<MonsterTemplate, MonsterTemplateResponse>()
                 .ForMember(x => x.SimpleInventory, opt => opt.MapFrom(m => m.Items))

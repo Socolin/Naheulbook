@@ -71,5 +71,18 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 };
             });
         }
+
+        [Given("a monster")]
+        public void GivenAMonster()
+        {
+            _testDataUtil.AddMonster();
+        }
+
+        [Given("a monster with an item in its inventory")]
+        public void GivenAMonsterWithAnItemInItsInventory()
+        {
+            _testDataUtil.AddMonster();
+            _testDataUtil.AddItem(_testDataUtil.GetLast<Monster>());
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
@@ -8,7 +9,7 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IMonsterRepository : IRepository<Monster>
     {
-        Task<List<MonsterTemplate>> GetAllWithItemsFullDataWithLocationsAsync();
+        Task<List<Monster>> GetByGroupIdWithInventoryAsync(int groupId);
     }
 
     public class MonsterRepository : Repository<Monster, NaheulbookDbContext>, IMonsterRepository
@@ -18,10 +19,9 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public Task<List<MonsterTemplate>> GetAllWithItemsFullDataWithLocationsAsync()
+        public Task<List<Monster>> GetByGroupIdWithInventoryAsync(int groupId)
         {
-            return Context.MonsterTemplates
-                .Include(x => x.Locations)
+            return Context.Monsters
                 .Include(m => m.Items)
                 .ThenInclude(i => i.ItemTemplate)
                 .ThenInclude(i => i.UnSkills)
@@ -44,6 +44,7 @@ namespace Naheulbook.Data.Repositories
                 .Include(m => m.Items)
                 .ThenInclude(i => i.ItemTemplate)
                 .ThenInclude(i => i.Modifiers)
+                .Where(g => g.GroupId == groupId)
                 .ToListAsync();
         }
     }

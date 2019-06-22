@@ -70,7 +70,7 @@ namespace Naheulbook.Core.Services
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                return await uow.Monsters.GetAllWithItemsFullDataWithLocationsAsync();
+                return await uow.MonsterTemplates.GetAllWithItemsFullDataWithLocationsAsync();
             }
         }
     }

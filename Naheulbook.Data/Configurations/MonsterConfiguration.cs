@@ -65,10 +65,10 @@ namespace Naheulbook.Data.Configurations
                 .HasForeignKey(x => x.TargetedMonsterId)
                 .HasConstraintName("FK_monster_monster_targetmonsterid");
 
-            // builder.HasOne(x => x.TargetedCharacter)
-            //     .WithMany()
-            //     .HasForeignKey(x => x.TargetedCharacterId)
-            //     .HasConstraintName("FK_monster_character_targetcharacterid");
+            builder.HasOne(x => x.TargetedCharacter)
+                .WithMany()
+                .HasForeignKey(x => x.TargetedCharacterId)
+                .HasConstraintName("FK_monster_character_targetcharacterid");
         }
     }
 }
