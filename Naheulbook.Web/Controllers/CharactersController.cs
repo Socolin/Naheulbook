@@ -30,7 +30,6 @@ namespace Naheulbook.Web.Controllers
             _mapper = mapper;
         }
 
-
         [HttpGet]
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<List<CharacterSummaryResponse>>> GetCharactersListAsync(

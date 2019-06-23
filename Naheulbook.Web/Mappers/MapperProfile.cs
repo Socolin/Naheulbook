@@ -12,6 +12,8 @@ namespace Naheulbook.Web.Mappers
     {
         public MapperProfile()
         {
+            CreateMap<Calendar, CalendarResponse>();
+
             CreateMap<Character, CreateCharacterResponse>();
             CreateMap<Character, CharacterSummaryResponse>()
                 .ForMember(x => x.JobNames, opt => opt.MapFrom(c => c.Jobs.Select(x => x.Job.Name)))

@@ -9,5 +9,10 @@ namespace Naheulbook.TestUtils
         {
             return SaveEntity(_defaultEntityCreator.CreateGod(), customizer);
         }
+
+        public TestDataUtil AddCalendarEntry(Action<Calendar> customizer = null)
+        {
+            return SaveEntity(_defaultEntityCreator.CreateCalendar(), customizer);
+        }
     }
 }

@@ -7,6 +7,7 @@ namespace Naheulbook.Data.UnitOfWorks
 {
     public interface IUnitOfWork : IDisposable
     {
+        ICalendarRepository Calendar { get; }
         ICharacterRepository Characters { get; }
         IEffectRepository Effects { get; }
         IEffectCategoryRepository EffectCategories { get; }
@@ -44,6 +45,7 @@ namespace Naheulbook.Data.UnitOfWorks
             _naheulbookDbContext = naheulbookDbContext ?? throw new ArgumentNullException(nameof(naheulbookDbContext));
         }
 
+        public ICalendarRepository Calendar => new CalendarRepository(_naheulbookDbContext);
         public ICharacterRepository Characters => new CharacterRepository(_naheulbookDbContext);
         public IEffectRepository Effects => new EffectRepository(_naheulbookDbContext);
         public IEffectTypeRepository EffectTypes => new EffectTypeRepository(_naheulbookDbContext);

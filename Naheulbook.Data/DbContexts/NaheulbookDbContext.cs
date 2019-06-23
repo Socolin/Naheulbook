@@ -6,6 +6,7 @@ namespace Naheulbook.Data.DbContexts
 {
     public class NaheulbookDbContext : DbContext
     {
+        public DbSet<Calendar> Calendars { get; set; }
         public DbSet<Character> Characters { get; set; }
         public DbSet<Effect> Effects { get; set; }
         public DbSet<EffectType> EffectTypes { get; set; }
@@ -33,6 +34,8 @@ namespace Naheulbook.Data.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new CalendarConfiguration());
+
             modelBuilder.ApplyConfiguration(new CharacterConfiguration());
             modelBuilder.ApplyConfiguration(new CharacterJobConfiguration());
             modelBuilder.ApplyConfiguration(new CharacterModifierConfiguration());
