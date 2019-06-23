@@ -76,4 +76,42 @@ namespace Naheulbook.Data.Configurations
                 .HasConstraintName("FK_group_invitations_character_character");
         }
     }
+
+    public class GroupHistoryConfiguration : IEntityTypeConfiguration<GroupHistory>
+    {
+        public void Configure(EntityTypeBuilder<GroupHistory> builder)
+        {
+            builder.ToTable("group_history");
+
+            builder.HasKey(e => e.Id);
+
+            builder.Property(e => e.Id)
+                .HasColumnName("id");
+            builder.Property(e => e.GroupId)
+                .HasColumnName("group");
+            builder.Property(e => e.UserId)
+                .HasColumnName("user");
+            builder.Property(e => e.Data)
+                .HasColumnName("data")
+                .HasColumnType("json");
+            builder.Property(e => e.Date)
+                .HasColumnName("date");
+            builder.Property(e => e.Info)
+                .HasColumnName("info");
+            builder.Property(e => e.Action)
+                .HasColumnName("action");
+            builder.Property(e => e.Gm)
+                .HasColumnName("gm");
+
+            builder.HasOne(e => e.Group)
+                .WithMany(g => g.History)
+                .HasForeignKey(e => e.GroupId)
+                .HasConstraintName("FK_group_history_group_group");
+
+            builder.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .HasConstraintName("FK_group_history_user_user");
+        }
+    }
 }

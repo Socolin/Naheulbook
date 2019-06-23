@@ -29,7 +29,7 @@ namespace Naheulbook.Tests.Functional.Code.TestServices
             var responseMessage = await _naheulbookHttpClient.PostAsync("/api/v2/users/", new {username, password});
             if (!responseMessage.IsSuccessStatusCode)
             {
-                var content = responseMessage.Content.ReadAsStringAsync();
+                var content = await responseMessage.Content.ReadAsStringAsync();
                 Assert.Fail($"Failed to create user {username}. StatusCode: {responseMessage.StatusCode} Content:'\n{content}'\n");
             }
 

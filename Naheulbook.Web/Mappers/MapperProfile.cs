@@ -50,6 +50,9 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Group, NamedIdResponse>();
             CreateMap<Group, GroupSummaryResponse>()
                 .ForMember(m => m.CharacterCount, opt => opt.MapFrom(g => g.Characters.Count));
+            CreateMap<GroupHistory, GroupHistoryResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
+                .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
 
             CreateMap<Item, ItemResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data)))

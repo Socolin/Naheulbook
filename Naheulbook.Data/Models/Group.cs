@@ -22,5 +22,6 @@ namespace Naheulbook.Data.Models
         public ICollection<Character> Characters { get; set; }
         public ICollection<GroupInvite> Invites { get; set; }
         public ICollection<Event> Events { get; set; }
+        public ICollection<GroupHistory> History { get; set; }
     }
 }

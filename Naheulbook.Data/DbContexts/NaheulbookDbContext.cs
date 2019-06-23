@@ -11,6 +11,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Effect> Effects { get; set; }
         public DbSet<EffectType> EffectTypes { get; set; }
         public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupHistory> GroupHistory { get; set; }
         public DbSet<GroupInvite> GroupInvites { get; set; }
         public DbSet<ItemTemplateSection> ItemTemplateSections { get; set; }
         public DbSet<Item> Items { get; set; }
@@ -53,6 +54,7 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new GodConfiguration());
 
             modelBuilder.ApplyConfiguration(new GroupConfiguration());
+            modelBuilder.ApplyConfiguration(new GroupHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new GroupInviteConfiguration());
 
             modelBuilder.ApplyConfiguration(new ItemConfiguration());

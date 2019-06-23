@@ -26,6 +26,12 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddGroup(_scenarioContext.GetUserId());
         }
 
+        [Given("a group history entry")]
+        public void GivenAGroupHistoryEntry()
+        {
+            _testDataUtil.AddGroupHistory();
+        }
+
         [Given("an event")]
         public void GivenAnEvent()
         {

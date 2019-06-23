@@ -14,6 +14,7 @@ namespace Naheulbook.Core.Services
         Task<Group> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request);
         Task<List<Group>> GetGroupListAsync(NaheulbookExecutionContext executionContext);
         Task<Group> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task<List<GroupHistory>> GetGroupHistoryAsync(NaheulbookExecutionContext executionContext, int groupId, int page);
     }
 
     public class GroupService : IGroupService
@@ -69,6 +70,20 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
                 return group;
+            }
+        }
+
+        public async Task<List<GroupHistory>> GetGroupHistoryAsync(NaheulbookExecutionContext executionContext, int groupId, int page)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetGroupsWithDetailsAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                return await uow.GroupHistory.GetByGroupIdAndPageAsync(groupId, page);
             }
         }
     }

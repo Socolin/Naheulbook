@@ -79,3 +79,27 @@ Feature: Group
       ]
     }
     """
+
+
+  Scenario: Load group history
+    Given a JWT for a user
+    Given a group
+    And a group history entry
+
+    When performing a GET to the url "/api/v2/groups/${Group.Id}/history?page=0" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    [
+      {
+        "id": ${GroupHistory.Id},
+        "date": "2020-10-05T05:07:08",
+        "action": "${GroupHistory.Action}",
+        "info": "${GroupHistory.Info}",
+        "gm": ${GroupHistory.Gm},
+        "action": "${GroupHistory.Action}",
+        "isGroup": true,
+        "data": ${GroupHistory.Data}
+      }
+    ]
+    """

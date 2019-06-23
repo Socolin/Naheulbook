@@ -1,3 +1,4 @@
+using System;
 using Naheulbook.Data.Models;
 
 namespace Naheulbook.TestUtils
@@ -43,6 +44,23 @@ namespace Naheulbook.TestUtils
                 Description = $"some-event-description-{suffix}",
                 GroupId = group.Id,
                 Timestamp = 721487
+            };
+        }
+
+        public GroupHistory CreateGroupHistory(Group group, string suffix = null)
+        {
+            if (suffix == null)
+                suffix = RngUtil.GetRandomHexString(8);
+
+            return new GroupHistory
+            {
+                Data = "{}",
+                Gm = true,
+                Date = new DateTime(2020, 10, 5, 5, 7, 8, DateTimeKind.Utc),
+                GroupId = group.Id,
+                Action = $"some-action-{suffix}",
+                Info = $"some-info-{suffix}",
+                UserId = group.MasterId
             };
         }
     }

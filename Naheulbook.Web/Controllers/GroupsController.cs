@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
@@ -185,6 +186,29 @@ namespace Naheulbook.Web.Controllers
             {
                 var monster = await _monsterService.CreateMonsterAsync(executionContext, groupId, request);
                 return _mapper.Map<MonsterResponse>(monster);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        [HttpGet("{GroupId}/history")]
+        public async Task<ActionResult<List<GroupHistoryResponse>>> PostCreateMonsterAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            [FromQuery] int page
+        )
+        {
+            try
+            {
+                var monster = await _groupService.GetGroupHistoryAsync(executionContext, groupId, page);
+                return _mapper.Map<List<GroupHistoryResponse>>(monster);
             }
             catch (ForbiddenAccessException ex)
             {
