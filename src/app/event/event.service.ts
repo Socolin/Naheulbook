@@ -12,9 +12,8 @@ export class EventService {
     }
 
     loadEvents(groupId: number): Observable<NEvent[]> {
-        return this.httpClient.post<NEvent[]>('/api/group/loadEvents', {
-            groupId: groupId
-        }).pipe(map(res => NEvent.eventsFromJson(res)));
+        return this.httpClient.get<NEvent[]>(`/api/v2/groups/${groupId}/events`)
+            .pipe(map(res => NEvent.eventsFromJson(res)));
     }
 
     createEvent(groupId: number, event: NEvent): Observable<NEvent> {

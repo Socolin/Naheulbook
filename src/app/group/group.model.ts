@@ -278,20 +278,22 @@ export class GroupData {
     }
 }
 
-export class GroupJsonData {
-    id: number;
-    name: string;
-    data: GroupData;
-    location: Location;
-    invited: CharacterInviteInfo[];
-    invites: CharacterInviteInfo[];
-    characters: { id: number }[];
-}
-
 export class PartialGroup {
     id: number;
     name: string;
     characterCount: number;
+}
+
+
+export interface GroupResponse {
+    id: number;
+    name: string;
+    data: any;
+    location: Location;
+
+    invitesCharacterIds: number[];
+    invitedCharacterIds: number[];
+    characterIds: number[];
 }
 
 export class Group extends WsRegistrable {
@@ -341,9 +343,11 @@ export class Group extends WsRegistrable {
     public pastEventCount = 0;
     public futureEventCount = 0;
 
-    static fromJson(jsonData: GroupJsonData): Group {
+    static fromJson(jsonData: GroupResponse): Group {
         let group = new Group();
         Object.assign(group, jsonData, {data: GroupData.fromJson(jsonData.data), characters: []});
+        group.invited = jsonData.invitedCharacterIds.map(i => {return {id: i} as CharacterInviteInfo});
+        group.invites = jsonData.invitesCharacterIds.map(i => {return {id: i} as CharacterInviteInfo});
         return group;
     }
 

@@ -13,7 +13,7 @@ import {Character, CharacterService} from '../character';
 import {NhbkDateOffset} from '../date';
 import {Skill, SkillService} from '../skill';
 
-import {CharacterInviteInfo, Group, GroupData, GroupJsonData, PartialGroup} from './group.model';
+import {CharacterInviteInfo, Group, GroupData, GroupResponse, PartialGroup} from './group.model';
 
 @Injectable()
 export class GroupService {
@@ -26,13 +26,11 @@ export class GroupService {
     getGroup(groupId): Observable<Group> {
         let subject = new Subject<Group>();
 
-        this.httpClient.post<Group>('/api/character/groupDetail', {
-            groupId: groupId
-        }).subscribe((groupData: Group) => {
+        this.httpClient.get<GroupResponse>(`/api/v2/groups/${groupId}`).subscribe((groupData: GroupResponse) => {
             let charactersLoading: Observable<Character|null>[] = [];
-            for (let i = 0; i < groupData.characters.length; i++) {
-                let char = groupData.characters[i];
-                charactersLoading.push(this._characterService.getCharacter(char.id));
+            for (let i = 0; i < groupData.characterIds.length; i++) {
+                let characterId = groupData.characterIds[i];
+                charactersLoading.push(this._characterService.getCharacter(characterId));
             }
 
             let group = Group.fromJson(groupData);
@@ -101,8 +99,8 @@ export class GroupService {
         return subject;
     }
 
-    createGroup(name): Observable<GroupJsonData> {
-        return this.httpClient.post<GroupJsonData>('/api/character/createGroup', {
+    createGroup(name): Observable<GroupResponse> {
+        return this.httpClient.post<GroupResponse>('/api/v2/groups', {
             name: name
         });
     }
@@ -111,9 +109,7 @@ export class GroupService {
 
     loadMonsters(groupId: number): Observable<Monster[]> {
         return forkJoin([
-            this.httpClient.post<Monster[]>('/api/monster/loadMonsters', {
-                groupId: groupId
-            }),
+            this.httpClient.get<Monster[]>(`/api/v2/groups/${groupId}/monsters`),
             this._skillService.getSkillsById()
         ]).pipe(map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
             return Monster.monstersFromJson(monstersJsonData, skillsById)
@@ -137,9 +133,7 @@ export class GroupService {
 
     loadLoots(groupId: number): Observable<Loot[]> {
         return forkJoin([
-            this.httpClient.post<Loot[]>('/api/group/loadLoots', {
-                groupId: groupId
-            }),
+            this.httpClient.get<Loot[]>(`/api/v2/groups/${groupId}/loots`),
             this._skillService.getSkillsById()
         ]).pipe(map(([lootsJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
             return Loot.lootsFromJson(lootsJsonData, skillsById)
@@ -242,7 +236,7 @@ export class GroupService {
     }
 
     listGroups(): Observable<PartialGroup[]> {
-        return this.httpClient.get<PartialGroup[]>('/api/character/listGroups');
+        return this.httpClient.get<PartialGroup[]>('/api/v2/groups');
     }
 
     kickCharacter(groupId: number, characterId: number): Observable<number> {

@@ -1,4 +1,3 @@
-
 import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
@@ -16,7 +15,7 @@ export class DateService {
         if (!this.calendarDates) {
             this.calendarDates = new ReplaySubject<CalendarDate[]>(1);
 
-            this.httpClient.get<CalendarDate[]>('/api/misc/calendar')
+            this.httpClient.get<CalendarDate[]>('/api/v2/calendar')
                 .subscribe(
                     calendarDates => {
                         this.calendarDates.next(calendarDates);
