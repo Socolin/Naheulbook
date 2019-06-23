@@ -127,6 +127,11 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Flags, opt => opt.MapFrom(r => MapperHelpers.FromJson<List<FlagResponse>>(r.Flags)));
 
             CreateMap<Monster, MonsterResponse>()
+                .ForMember(m => m.Dead, opt =>
+                {
+                    opt.Condition(b => b.Dead != null);
+                    opt.MapFrom(b => b.Dead.Value.ToString("s"));
+                })
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)))
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<ActiveStatsModifier>>(b.Modifiers)));
 

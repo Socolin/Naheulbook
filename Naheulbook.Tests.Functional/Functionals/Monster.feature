@@ -7,41 +7,41 @@ Feature: Monster
     When performing a POST to the url "/api/v2/groups/${Group.Id}/monsters" with the following json content and the current jwt
     """
     {
-        "name": "some-monster-name",
-        "data": {
-            "key": "value"
-        },
-        "items": [
+      "name": "some-monster-name",
+      "data": {
+        "key": "value"
+      },
+      "items": [
+        {
+          "data": {
+            "name": "some-item-name",
+            "notIdentified": true
+          },
+          "itemTemplateId": 1
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "some-modifier-name",
+          "reusable": false,
+          "durationType": "combat",
+          "combatCount": 2,
+          "description": "some-modifier-description",
+          "type": "some-modifier-type",
+          "values": [
             {
-                "data": {
-                    "name": "some-item-name",
-                    "notIdentified": true
-                },
-                "itemTemplateId": 1
+              "type": "ADD",
+              "stat": "FO",
+              "value": 12,
+              "special": [
+                "something"
+              ]
             }
-        ],
-        "modifiers": [
-            {
-                "name": "some-modifier-name",
-                "reusable": false,
-                "durationType": "combat",
-                "combatCount": 2,
-                "description": "some-modifier-description",
-                "type": "some-modifier-type",
-                "values": [
-                    {
-                        "type": "ADD",
-                        "stat": "FO",
-                        "value": 12,
-                        "special": [
-                            "something"
-                        ]
-                    }
-                ],
-                "active": true,
-                "permanent": false
-            }
-        ]
+          ],
+          "active": true,
+          "permanent": false
+        }
+      ]
     }
     """
     Then the response status code is 201
@@ -86,7 +86,6 @@ Feature: Monster
     And an item template
     And a monster with an item in its inventory
 
-
     When performing a GET to the url "/api/v2/groups/${Group.Id}/monsters" with the current jwt
     Then the response status code is 200
     And the response should contains the following json
@@ -105,6 +104,27 @@ Feature: Monster
             }}
           }}
         ]
+      }
+    ]
+    """
+
+  Scenario: Can load group dead monsters
+    Given a JWT for a user
+    Given a group
+    And a dead monster
+
+    When performing a GET to the url "/api/v2/groups/${Group.Id}/deadMonsters?startIndex=0&count=1" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    [
+      {
+        "id": ${Monster.Id},
+        "dead": "2042-08-06T12:23:24",
+        "name": "${Monster.Name}",
+        "data": ${Monster.Data},
+        "modifiers": [],
+        "items": []
       }
     ]
     """

@@ -150,6 +150,30 @@ namespace Naheulbook.Web.Controllers
         }
 
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        [HttpGet("{GroupId}/deadMonsters")]
+        public async Task<ActionResult<List<MonsterResponse>>> GetDeadMonsterListAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            [FromQuery] int startIndex,
+            [FromQuery] int count
+        )
+        {
+            try
+            {
+                var monsters = await _monsterService.GetDeadMonstersForGroupAsync(executionContext, groupId, startIndex, count);
+                return _mapper.Map<List<MonsterResponse>>(monsters);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost("{GroupId}/monsters")]
         public async Task<CreatedActionResult<MonsterResponse>> PostCreateMonsterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,

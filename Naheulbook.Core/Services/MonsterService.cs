@@ -14,6 +14,7 @@ namespace Naheulbook.Core.Services
     {
         Task<Monster> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request);
         Task<List<Monster>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task<List<Monster>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count);
     }
 
     public class MonsterService : IMonsterService
@@ -71,6 +72,20 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
                 return await uow.Monsters.GetByGroupIdWithInventoryAsync(groupId);
+            }
+        }
+
+        public async Task<List<Monster>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                return await uow.Monsters.GetDeadMonstersByGroupIdAsync(groupId, startIndex, count);
             }
         }
     }

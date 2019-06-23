@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Naheulbook.Data.Models
@@ -7,7 +8,7 @@ namespace Naheulbook.Data.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Data { get; set; }
-        public string Dead { get; set; }
+        public DateTime? Dead { get; set; }
 
         public string Modifiers { get; set; }
 

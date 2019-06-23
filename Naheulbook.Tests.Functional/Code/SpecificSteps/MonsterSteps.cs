@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Naheulbook.Data.Models;
 using Naheulbook.TestUtils;
@@ -76,6 +77,12 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         public void GivenAMonster()
         {
             _testDataUtil.AddMonster();
+        }
+
+        [Given("a dead monster")]
+        public void GivenADeadMonster()
+        {
+            _testDataUtil.AddMonster(m => m.Dead = new DateTime(2042, 8, 6, 12, 23, 24, DateTimeKind.Utc));
         }
 
         [Given("a monster with an item in its inventory")]
