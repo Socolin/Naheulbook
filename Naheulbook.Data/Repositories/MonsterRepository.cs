@@ -44,7 +44,7 @@ namespace Naheulbook.Data.Repositories
                 .Include(m => m.Items)
                 .ThenInclude(i => i.ItemTemplate)
                 .ThenInclude(i => i.Modifiers)
-                .Where(g => g.GroupId == groupId)
+                .Where(g => g.GroupId == groupId && g.Dead == null)
                 .ToListAsync();
         }
     }
