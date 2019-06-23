@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Naheulbook.Core.Exceptions;
@@ -7,6 +9,7 @@ using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Remotion.Linq.Clauses;
 
 namespace Naheulbook.Core.Services
 {
@@ -15,6 +18,7 @@ namespace Naheulbook.Core.Services
         Task<ItemTemplate> GetItemTemplateAsync(int itemTemplateId);
         Task<ItemTemplate> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request);
         Task<ItemTemplate> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, int itemTemplateId, ItemTemplateRequest request);
+        Task<List<ItemTemplate>> SearchItemTemplateAsync(string filter, int maxResultCount);
 
         Task<ICollection<Slot>> GetItemSlots();
     }
@@ -24,19 +28,21 @@ namespace Naheulbook.Core.Services
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IAuthorizationUtil _authorizationUtil;
         private readonly IItemTemplateUtil _itemTemplateUtil;
+        private readonly IStringCleanupUtil _stringCleanupUtil;
         private readonly IMapper _mapper;
 
         public ItemTemplateService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IAuthorizationUtil authorizationUtil,
             IMapper mapper,
-            IItemTemplateUtil itemTemplateUtil
+            IItemTemplateUtil itemTemplateUtil, IStringCleanupUtil stringCleanupUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizationUtil = authorizationUtil;
             _mapper = mapper;
             _itemTemplateUtil = itemTemplateUtil;
+            _stringCleanupUtil = stringCleanupUtil;
         }
 
         public async Task<ItemTemplate> GetItemTemplateAsync(int itemTemplateId)
@@ -84,7 +90,7 @@ namespace Naheulbook.Core.Services
                 {
                     if (request.Source == "official")
                     {
-                        await _authorizationUtil.EnsureAdminAccessAsync(executionContext); // TODO: Test this
+                        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
                         itemTemplate.SourceUserId = null;
                     }
                     else
@@ -97,6 +103,31 @@ namespace Naheulbook.Core.Services
 
                 return await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
             }
+        }
+
+        public async Task<List<ItemTemplate>> SearchItemTemplateAsync(string filter, int maxResultCount)
+        {
+            // TODO: Should filter out ItemTemplate with `Source` == "private" and `SourceUserId` != CurrentUserId when user is logged in
+            // TODO: Should sort result based on source in this order: `private`, `official`, `community`.
+            // Do this in repository if simple enough, or just do multiple call to repository here with `source` argument.
+
+            var matchingItemTemplates = new List<ItemTemplate>();
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var cleanFilter = _stringCleanupUtil.RemoveAccents(filter).ToUpperInvariant();
+
+                var exactMatchingItems = await uow.ItemTemplates.GetItemByCleanNameAsync(cleanFilter, maxResultCount);
+                matchingItemTemplates.AddRange(exactMatchingItems);
+
+                var partialMatchingItems = await uow.ItemTemplates.GetItemByPartialCleanNameAsync(cleanFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id));
+                matchingItemTemplates.AddRange(partialMatchingItems);
+
+                var noSeparatorFilter = _stringCleanupUtil.RemoveSeparators(cleanFilter);
+                var partialMatchingIgnoreSpacesItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorAsync(noSeparatorFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id));
+                matchingItemTemplates.AddRange(partialMatchingIgnoreSpacesItems);
+            }
+
+            return matchingItemTemplates;
         }
 
         public async Task<ICollection<Slot>> GetItemSlots()

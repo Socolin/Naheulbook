@@ -12,6 +12,9 @@ namespace Naheulbook.Data.Repositories
         Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(int id);
         Task<List<ItemTemplate>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId);
         Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<int> ids);
+        Task<List<ItemTemplate>> GetItemByCleanNameAsync(string name, int maxResultCount);
+        Task<List<ItemTemplate>> GetItemByPartialCleanNameAsync(string name, int maxResultCount, IEnumerable<int> excludedIds);
+        Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorAsync(string name, int maxResultCount, IEnumerable<int> excludedIds);
     }
 
     public class ItemTemplateRepository : Repository<ItemTemplate, NaheulbookDbContext>, IItemTemplateRepository
@@ -53,6 +56,38 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.ItemTemplates
                 .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
+        }
+
+        public Task<List<ItemTemplate>> GetItemByCleanNameAsync(string name, int maxResultCount)
+        {
+            return Context.ItemTemplates
+                .Where(x => x.CleanName.ToUpper() == name)
+                .Take(maxResultCount)
+                .ToListAsync();
+        }
+
+        public Task<List<ItemTemplate>> GetItemByPartialCleanNameAsync(string name, int maxResultCount, IEnumerable<int> excludedIds)
+        {
+            return Context.ItemTemplates
+                .Where(x => x.CleanName.ToUpper().Contains(name))
+                .Take(maxResultCount)
+                .Where(i => !excludedIds.Contains(i.Id))
+                .ToListAsync();
+        }
+
+        public Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorAsync(string name, int maxResultCount, IEnumerable<int> excludedIds)
+        {
+            return Context.ItemTemplates
+                .Where(x => x.CleanName
+                    .Replace("'", "")
+                    .Replace("-", "")
+                    .Replace(" ", "")
+                    .ToUpper()
+                    .Contains(name)
+                )
+                .Where(i => !excludedIds.Contains(i.Id))
+                .Take(maxResultCount)
                 .ToListAsync();
         }
     }

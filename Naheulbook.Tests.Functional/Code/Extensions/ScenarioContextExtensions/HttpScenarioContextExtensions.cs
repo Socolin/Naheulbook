@@ -1,4 +1,6 @@
+using System;
 using System.Net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Socolin.TestsUtils.FakeSmtp;
 using TechTalk.SpecFlow;
@@ -32,8 +34,19 @@ namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions
 
         public static JToken GetLastJsonHttpResponseContent(this ScenarioContext scenarioContext)
         {
-            return JToken.Parse(scenarioContext.Get<string>(LastHttpResponseContentKey));
+            var json = scenarioContext.Get<string>(LastHttpResponseContentKey);
+            if (string.IsNullOrEmpty(json))
+            {
+                throw new Exception("Last request returned No Content");
+            }
+            try
+            {
+                return JToken.Parse(json);
+            }
+            catch (JsonReaderException ex)
+            {
+                throw new Exception($"An error occured while parsing json\n\t{ex.Message}\nJson:\n{json}");
+            }
         }
-
     }
 }

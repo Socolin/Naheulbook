@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -25,7 +26,7 @@ namespace Naheulbook.Web.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{itemTemplateId}")]
+        [HttpGet("{itemTemplateId:int:min(1)}")]
         public async Task<ActionResult<ItemTemplateResponse>> GetItemTemplateAsync(int itemTemplateId)
         {
             try
@@ -40,7 +41,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPut("{itemTemplateId}")]
+        [HttpPut("{itemTemplateId:int:min(1)}")]
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<ItemTemplateResponse>> PutItemTemplateAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -66,6 +67,13 @@ namespace Naheulbook.Web.Controllers
             {
                 throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
             }
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<List<ItemTemplateResponse>>> GetSearchItemTemplateAsync([FromQuery] string filter)
+        {
+            var itemTemplates= await _itemTemplateService.SearchItemTemplateAsync(filter, 10);
+            return _mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
         }
 
         [HttpPost]

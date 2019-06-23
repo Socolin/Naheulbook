@@ -56,6 +56,7 @@ namespace Naheulbook.Core.Services
 
         public async Task<List<ItemTemplate>> GetItemTemplatesBySectionAsync(int sectionId)
         {
+            // TODO: Should filter out ItemTemplate with `Source` == "private" and `SourceUserId` != CurrentUserId when user is logged in
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 return await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId);

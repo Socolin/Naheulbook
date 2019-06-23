@@ -15,7 +15,7 @@ namespace Naheulbook.TestUtils
             {
                 Category = category,
                 Data = @"{""key"": ""value""}",
-                CleanName = $"some-clean-name-{suffix}",
+                CleanName = $"some-item-name-{suffix}",
                 Name = $"some-item-name-{suffix}",
                 Source = "official",
                 TechName = $"some-tech-name-{suffix}"

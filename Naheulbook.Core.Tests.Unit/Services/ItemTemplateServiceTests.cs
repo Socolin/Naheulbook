@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -20,10 +21,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
     public class ItemTemplateServiceTests
     {
         private IAuthorizationUtil _authorizationUtil;
-        private ItemTemplateService _itemTemplateService;
         private IMapper _mapper;
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private IItemTemplateUtil _itemTemplateUtil;
+        private IStringCleanupUtil _stringCleanupUtil;
+        private ItemTemplateService _service;
 
         [SetUp]
         public void SetUp()
@@ -32,11 +34,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
             _mapper = Substitute.For<IMapper>();
             _itemTemplateUtil = Substitute.For<IItemTemplateUtil>();
-            _itemTemplateService = new ItemTemplateService(
+            _stringCleanupUtil = Substitute.For<IStringCleanupUtil>();
+            _service = new ItemTemplateService(
                 _unitOfWorkFactory,
                 _authorizationUtil,
                 _mapper,
-                _itemTemplateUtil
+                _itemTemplateUtil,
+                _stringCleanupUtil
             );
         }
 
@@ -48,7 +52,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(1)
                 .Returns(expectedItemTemplate);
 
-            var itemTemplate = await _itemTemplateService.GetItemTemplateAsync(1);
+            var itemTemplate = await _service.GetItemTemplateAsync(1);
 
             itemTemplate.Should().Be(expectedItemTemplate);
         }
@@ -59,7 +63,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(1)
                 .Returns((ItemTemplate) null);
 
-            Func<Task> act = () => _itemTemplateService.GetItemTemplateAsync(1);
+            Func<Task> act = () => _service.GetItemTemplateAsync(1);
 
             act.Should().Throw<ItemTemplateNotFoundException>();
         }
@@ -76,7 +80,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(1)
                 .Returns(fullyLoadedItemTemplate);
 
-            var actualItemTemplate = await _itemTemplateService.CreateItemTemplateAsync(new NaheulbookExecutionContext(), createItemTemplateRequest);
+            var actualItemTemplate = await _service.CreateItemTemplateAsync(new NaheulbookExecutionContext(), createItemTemplateRequest);
 
             Received.InOrder(() =>
             {
@@ -95,7 +99,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil.EnsureAdminAccessAsync(executionContext)
                 .Throws(new TestException());
 
-            Func<Task<ItemTemplate>> act = () => _itemTemplateService.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
+            Func<Task<ItemTemplate>> act = () => _service.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
 
             act.Should().Throw<TestException>();
             await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
@@ -113,7 +117,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
                 .Do(callInfo => newItemTemplateEntity.SourceUserId.Should().Be(42));
 
-            await _itemTemplateService.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
+            await _service.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
 
             await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
         }
@@ -128,7 +132,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
                 .Returns(fullyLoadedItemTemplate);
 
-            await _itemTemplateService.EditItemTemplateAsync(new NaheulbookExecutionContext(), itemTemplateId, itemTemplateRequest);
+            await _service.EditItemTemplateAsync(new NaheulbookExecutionContext(), itemTemplateId, itemTemplateRequest);
 
             Received.InOrder(() =>
             {
@@ -151,7 +155,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
                 .Do(info => fullyLoadedItemTemplate.SourceUserId.Should().Be(userId));
 
-            await _itemTemplateService.EditItemTemplateAsync(naheulbookExecutionContext, itemTemplateId, itemTemplateRequest);
+            await _service.EditItemTemplateAsync(naheulbookExecutionContext, itemTemplateId, itemTemplateRequest);
 
             await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
         }
@@ -169,7 +173,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
                 .Do(info => fullyLoadedItemTemplate.SourceUserId.Should().BeNull());
 
-            await _itemTemplateService.EditItemTemplateAsync(naheulbookExecutionContext, itemTemplateId, itemTemplateRequest);
+            await _service.EditItemTemplateAsync(naheulbookExecutionContext, itemTemplateId, itemTemplateRequest);
 
             await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
         }
@@ -186,7 +190,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, fullyLoadedItemTemplate)
                 .Returns(Task.FromException(new TestException()));
 
-            Func<Task<ItemTemplate>> act = () => _itemTemplateService.EditItemTemplateAsync(executionContext, itemTemplateId, new ItemTemplateRequest());
+            Func<Task<ItemTemplate>> act = () => _service.EditItemTemplateAsync(executionContext, itemTemplateId, new ItemTemplateRequest());
 
             using (new AssertionScope())
             {
@@ -209,13 +213,61 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil.EnsureAdminAccessAsync(executionContext)
                 .Returns(Task.FromException(new TestException()));
 
-            Func<Task<ItemTemplate>> act = () => _itemTemplateService.EditItemTemplateAsync(executionContext, itemTemplateId, request);
+            Func<Task<ItemTemplate>> act = () => _service.EditItemTemplateAsync(executionContext, itemTemplateId, request);
 
             using (new AssertionScope())
             {
                 act.Should().Throw<TestException>();
                 _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
             }
+        }
+
+        [Test]
+        public async Task SearchItemTemplateAsync_ShouldTryToFindItemsInDatabaseWithMoreAccurateSearchFirstThenWithFuzzyFilter()
+        {
+            const string filter = "some-filter";
+            const string cleanFilter = "SOME-CLEAN-FILTER";
+            const string cleanFilterWithoutSeparator = "SOME-CLEAN-FILTER-WITH-NO-SEPARATOR";
+
+            var item1 = new ItemTemplate {Id = 1};
+            var item2 = new ItemTemplate {Id = 2};
+            var item3 = new ItemTemplate {Id = 3};
+
+            _stringCleanupUtil.RemoveAccents(filter)
+                .Returns(cleanFilter);
+            _stringCleanupUtil.RemoveSeparators(cleanFilter)
+                .Returns(cleanFilterWithoutSeparator);
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByCleanNameAsync(cleanFilter, Arg.Any<int>())
+                .Returns(new List<ItemTemplate> {item1});
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameAsync(cleanFilter, Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
+                .Returns(new List<ItemTemplate> {item2});
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorAsync(cleanFilterWithoutSeparator, Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
+                .Returns(new List<ItemTemplate> {item3});
+
+            var actualItemTemplates = await _service.SearchItemTemplateAsync(filter, 10);
+
+            actualItemTemplates.Should().BeEquivalentTo(item1, item2, item3);
+        }
+
+        [Test]
+        public async Task SearchItemTemplateAsync_ShouldLimitResultToGivenMaximumCount()
+        {
+            _stringCleanupUtil.RemoveAccents(Arg.Any<string>())
+                .Returns("some-clean-filter");
+            _stringCleanupUtil.RemoveSeparators(Arg.Any<string>())
+                .Returns("some-clean-name-with-no-separator");
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByCleanNameAsync(Arg.Any<string>(), Arg.Any<int>())
+                .Returns(new List<ItemTemplate> {new ItemTemplate(), new ItemTemplate()});
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
+                .Returns(new List<ItemTemplate> {new ItemTemplate(), new ItemTemplate(), new ItemTemplate()});
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
+                .Returns(new List<ItemTemplate> {new ItemTemplate()});
+
+            await _service.SearchItemTemplateAsync("some-filter", 10);
+
+            await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByCleanNameAsync(Arg.Any<string>(), 10);
+            await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByPartialCleanNameAsync(Arg.Any<string>(), 8, Arg.Any<IEnumerable<int>>());
+            await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByPartialCleanNameWithoutSeparatorAsync(Arg.Any<string>(), 5, Arg.Any<IEnumerable<int>>());
         }
     }
 }
