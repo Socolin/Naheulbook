@@ -115,7 +115,6 @@ namespace Naheulbook.Web
             services.AddSingleton<IRngUtil, RngUtil>();
 
             services.AddSingleton<IJwtService, JwtService>();
-            services.AddScoped<JwtAuthorizationFilter>();
 
             services.AddSingleton<IFacebookClient, FacebookClient>();
             services.AddSingleton<IGoogleClient, GoogleClient>();
@@ -171,6 +170,7 @@ namespace Naheulbook.Web
             }
 
             app.UseSession();
+            app.UseMiddleware<JwtAuthenticationMiddleware>();
 
             app.UseMvc();
             app.Run(async (context) =>

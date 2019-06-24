@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
-using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
@@ -41,7 +39,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<List<GroupSummaryResponse>> GetGroupList(
             [FromServices] NaheulbookExecutionContext executionContext
         )
@@ -51,7 +48,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<CreatedActionResult<GroupResponse>> PostCreateGroupAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             CreateGroupRequest request
@@ -61,7 +57,6 @@ namespace Naheulbook.Web.Controllers
             return _mapper.Map<GroupResponse>(group);
         }
 
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet("{GroupId}/loots")]
         public async Task<ActionResult<List<LootResponse>>> GetLootListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -83,7 +78,6 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost("{GroupId}/loots")]
         public async Task<CreatedActionResult<LootResponse>> PostCreateLootAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -106,7 +100,6 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet("{GroupId}/events")]
         public async Task<ActionResult<List<EventResponse>>> GetEventListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -128,7 +121,6 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet("{GroupId}/monsters")]
         public async Task<ActionResult<List<MonsterResponse>>> GetMonsterListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -150,7 +142,6 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet("{GroupId}/deadMonsters")]
         public async Task<ActionResult<List<MonsterResponse>>> GetDeadMonsterListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -174,7 +165,6 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost("{GroupId}/monsters")]
         public async Task<CreatedActionResult<MonsterResponse>> PostCreateMonsterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -197,7 +187,6 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet("{GroupId}/history")]
         public async Task<ActionResult<List<GroupHistoryEntryResponse>>> PostCreateMonsterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -221,7 +210,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("{GroupId}")]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<GroupResponse>> GetGroupDetailsAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId

@@ -9,7 +9,6 @@ using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
@@ -31,7 +30,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<List<CharacterSummaryResponse>>> GetCharactersListAsync(
             [FromServices] NaheulbookExecutionContext executionContext
         )
@@ -41,7 +39,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("{CharacterId}")]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<CharacterResponse>> GetCharacterDetailsAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId
@@ -63,7 +60,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<CreatedActionResult<CreateCharacterResponse>> PostCreateCharacterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             CreateCharacterRequest request
@@ -75,7 +71,6 @@ namespace Naheulbook.Web.Controllers
 
 
         [HttpPost("{CharacterId}/items")]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<CreatedActionResult<ItemResponse>> PostAddItemToCharacterInventory(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,
@@ -102,7 +97,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("{CharacterId}/loots")]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<List<LootResponse>>> GetCharacterLoots(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId
@@ -124,7 +118,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("{CharacterId}/history")]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<List<HistoryEntryResponse>>> GetCharacterHistoryEntryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,

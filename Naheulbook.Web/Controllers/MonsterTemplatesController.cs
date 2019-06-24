@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
-using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
@@ -32,7 +31,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<MonsterTemplateResponse>> Post(
             [FromServices] NaheulbookExecutionContext executionContext,
             CreateMonsterTemplateRequest request

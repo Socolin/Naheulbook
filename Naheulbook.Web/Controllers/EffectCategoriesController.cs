@@ -8,7 +8,6 @@ using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
@@ -40,7 +39,6 @@ namespace Naheulbook.Web.Controllers
             return _mapper.Map<List<EffectResponse>>(effects);
         }
 
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost]
         public async Task<JsonResult> PostCreateCategoryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,

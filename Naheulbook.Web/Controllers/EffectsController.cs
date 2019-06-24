@@ -5,11 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
-using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Extensions;
-using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
@@ -28,7 +25,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<JsonResult> PostCreateEffectAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             CreateEffectRequest request
@@ -50,7 +46,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPut("{effectId:int:min(1)}")]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<StatusCodeResult> PutEditEffectAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             int effectId,

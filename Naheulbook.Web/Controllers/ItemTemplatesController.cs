@@ -8,7 +8,6 @@ using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Filters;
 using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
@@ -42,7 +41,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPut("{itemTemplateId:int:min(1)}")]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<ItemTemplateResponse>> PutItemTemplateAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int itemTemplateId,
@@ -77,7 +75,6 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<JsonResult> PostCreateItemTemplateAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             ItemTemplateRequest request

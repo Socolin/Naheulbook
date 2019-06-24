@@ -19,6 +19,12 @@ namespace Naheulbook.Web.Exceptions
             StatusCode = statusCode;
         }
 
+        public HttpErrorException(HttpStatusCode statusCode, string message)
+            : base(message)
+        {
+            StatusCode = statusCode;
+        }
+
         private static string GetMessage(HttpStatusCode statusCode)
         {
             switch (statusCode)
