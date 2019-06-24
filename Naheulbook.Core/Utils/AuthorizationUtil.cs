@@ -1,4 +1,6 @@
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.Features;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Data.Factories;
@@ -12,6 +14,7 @@ namespace Naheulbook.Core.Utils
         Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplate itemTemplate);
         void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, Group group);
         void EnsureCharacterAccess(NaheulbookExecutionContext executionContext, Character character);
+        void EnsureIsGroupOwnerOrMember(NaheulbookExecutionContext executionContext, Group group);
     }
 
     public class AuthorizationUtil : IAuthorizationUtil
@@ -62,6 +65,17 @@ namespace Naheulbook.Core.Utils
                 && character.GroupId != null
                 && character.Group.MasterId != executionContext.UserId)
                 throw new ForbiddenAccessException();
+        }
+
+        public void EnsureIsGroupOwnerOrMember(NaheulbookExecutionContext executionContext, Group group)
+        {
+            if (group.MasterId == executionContext.UserId)
+                return;
+
+            if (group.Characters.Any(c => c.OwnerId == executionContext.UserId))
+                return;
+
+            throw new ForbiddenAccessException();
         }
     }
 }

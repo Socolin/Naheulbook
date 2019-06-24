@@ -25,7 +25,7 @@ using Naheulbook.Shared.Clients.Twitter;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Extensions;
-using Naheulbook.Web.Filters;
+using Naheulbook.Web.Hubs;
 using Naheulbook.Web.Middlewares;
 using Naheulbook.Web.Services;
 using Newtonsoft.Json;
@@ -67,6 +67,7 @@ namespace Naheulbook.Web
                 options.Cookie.IsEssential = true;
             });
 
+            services.AddSignalR();
             services.AddMvc()
                 .AddJsonOptions(options => { options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore; })
                 .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<ValidateUserRequest>())
@@ -115,6 +116,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IRngUtil, RngUtil>();
 
             services.AddSingleton<IJwtService, JwtService>();
+            services.AddSingleton<IChangeNotifier, ChangeNotifier>();
 
             services.AddSingleton<IFacebookClient, FacebookClient>();
             services.AddSingleton<IGoogleClient, GoogleClient>();
@@ -171,6 +173,7 @@ namespace Naheulbook.Web
 
             app.UseSession();
             app.UseMiddleware<JwtAuthenticationMiddleware>();
+            app.UseSignalR(options => { options.MapHub<ChangeNotifierHub>("/ws/listen"); });
 
             app.UseMvc();
             app.Run(async (context) =>

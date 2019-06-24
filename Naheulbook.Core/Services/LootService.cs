@@ -13,6 +13,7 @@ namespace Naheulbook.Core.Services
     {
         Task<Loot> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request);
         Task<List<Loot>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId);
     }
 
     public class LootService : ILootService
@@ -61,6 +62,22 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
                 return await uow.Loots.GetByGroupIdAsync(groupId);
+            }
+        }
+
+        public async Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var loot = await uow.Loots.GetAsync(lootId);
+                if (loot == null)
+                    throw new LootNotFoundException(lootId);
+
+                var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+                if (group == null)
+                    throw new GroupNotFoundException(loot.GroupId);
+
+                _authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
             }
         }
     }
