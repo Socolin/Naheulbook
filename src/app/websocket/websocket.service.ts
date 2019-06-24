@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Subject, Observable, Observer} from 'rxjs';
+import * as signalR from '@aspnet/signalr';
 
 import {MiscService} from '../shared';
 import {NotificationsService} from '../notifications';
@@ -9,169 +10,23 @@ import {OriginService} from '../origin';
 
 import {WsMessage, WsEvent, WsRegistrable} from './websocket.model';
 import {share} from 'rxjs/operators';
+import {LoginService} from '../user';
 
 @Injectable()
 export class WebSocketService {
-    private pendingData: string[] = [];
-    private webSocket: WebSocket;
-    public registeredElements: {[type: string]: {[id: number]: Subject<WsEvent>}} = {};
-    public registerCount: {[type: string]: {[id: number]: number}} = {};
-    public registeredObserverElements: {[type: string]: {[id: number]: Observer<WsEvent>}} = {};
+    private pendingMessages: { methodName: string, args: any[] }[] = [];
+    public registeredElements: { [type: string]: { [id: number]: Subject<WsEvent> } } = {};
+    public registerCount: { [type: string]: { [id: number]: number } } = {};
+    public registeredObserverElements: { [type: string]: { [id: number]: Observer<WsEvent> } } = {};
+    private _hubConnection?: signalR.HubConnection;
+    private connecting = false;
 
     constructor(private _notification: NotificationsService
+        , private _loginService: LoginService
         , private _skillService: SkillService
         , private _jobService: JobService
         , private _originService: OriginService
         , private _miscService: MiscService) {
-    }
-
-    public register(type: string, elementId: number): Subject<WsEvent> {
-        if (!this.webSocket) {
-            let loc = window.location;
-            let uri;
-            if (loc.protocol === 'https:') {
-                uri = 'wss:';
-            } else {
-                uri = 'ws:';
-            }
-
-            this.create(uri + '//' + window.location.hostname + '/ws/listen');
-        }
-
-        if (!(type in this.registeredElements)) {
-            this.registeredElements[type] = {};
-        }
-        if (!(type in this.registeredObserverElements)) {
-            this.registeredObserverElements[type] = {};
-        }
-        if (!(type in this.registerCount)) {
-            this.registerCount[type] = {};
-        }
-        if (elementId in this.registeredElements[type]) {
-            this.registerCount[type][elementId]++;
-            return this.registeredElements[type][elementId];
-        }
-
-        this.registerCount[type][elementId] = 1;
-
-        let observable = new Observable((obs: Observer<WsEvent>) => {
-            this.registeredObserverElements[type][elementId] = obs;
-        }).pipe(share());
-        let observer = {
-            next: (data: any) => {
-                let message: WsMessage = {
-                    type: type,
-                    id: elementId,
-                    opcode: data.opcode,
-                    data: data.data
-                };
-                this.sendData(message);
-            },
-        };
-        let subject = Subject.create(observer, observable);
-        this.registeredElements[type][elementId] = subject;
-
-        this.sendData({
-            opcode: 'LISTEN_ELEMENT',
-            id: elementId,
-            type: type,
-            data: null
-        });
-
-        return subject;
-    }
-
-    public unregister(type: string, elementId: number) {
-        if (!(type in this.registeredElements)) {
-            return;
-        }
-        this.registerCount[type][elementId]--;
-        if (this.registerCount[type][elementId] === 0) {
-            delete this.registeredElements[type][elementId];
-            delete this.registeredObserverElements[type][elementId];
-            this.sendData({
-                opcode: 'STOP_LISTEN_ELEMENT',
-                id: elementId,
-                type: type,
-                data: null
-            });
-        }
-    }
-
-    private onConnected(ev: Event) {
-        for (let i = 0; i < this.pendingData.length; i++) {
-            let data = this.pendingData[i];
-            this.webSocket.send(data);
-        }
-    }
-
-    private onMessage(data: MessageEvent) {
-        let message: WsMessage = JSON.parse(data.data);
-        if (message.type in this.registeredObserverElements) {
-            let reg = this.registeredObserverElements[message.type];
-            if (message.id in reg) {
-                reg[message.id].next({id: message.id, opcode: message.opcode, data: message.data});
-            }
-        }
-    }
-
-    private onError(ev: Event) {
-        console.log('error ws', ev);
-    }
-
-    private onClose(ev: Event) {
-        console.log('closed ws', ev);
-        this.reconnect();
-    }
-
-    private reconnect() {
-        setTimeout(() => {
-            let loc = window.location;
-            let uri;
-            if (loc.protocol === 'https:') {
-                uri = 'wss:';
-            } else {
-                uri = 'ws:';
-            }
-
-            this.create(uri + '//' + window.location.hostname + '/ws/listen');
-
-            for (let type in this.registeredElements) {
-                if (!this.registeredElements.hasOwnProperty(type)) {
-                    continue;
-                }
-                for (let id in this.registeredElements[type]) {
-                    if (!this.registeredElements[type].hasOwnProperty(id)) {
-                        continue;
-                    }
-                    this.sendData({
-                        opcode: 'LISTEN_ELEMENT',
-                        id: +id,
-                        type: type,
-                        data: null
-                    });
-                }
-            }
-        }, 1000);
-    }
-
-    private sendData(message: WsMessage) {
-        if (this.webSocket.readyState === WebSocket.OPEN) {
-            this.webSocket.send(JSON.stringify(message));
-        } else if (this.webSocket.readyState === WebSocket.CONNECTING) {
-            this.pendingData.push(JSON.stringify(message));
-        }
-    }
-
-    private create(url) {
-        let ws = new WebSocket(url);
-
-        ws.onopen = this.onConnected.bind(this);
-        ws.onmessage = this.onMessage.bind(this);
-        ws.onerror = this.onError.bind(this);
-        ws.onclose = this.onClose.bind(this);
-
-        this.webSocket = ws;
     }
 
     public registerElement(registrable: WsRegistrable) {
@@ -206,5 +61,136 @@ export class WebSocketService {
         }
         this.unregister(registrable.getWsTypeName(), registrable.id);
         registrable.wsUnregister();
+    }
+
+    private register(type: string, elementId: number): Subject<WsEvent> {
+        if (!this._hubConnection) {
+            this.connect();
+        }
+
+        if (!(type in this.registeredElements)) {
+            this.registeredElements[type] = {};
+        }
+        if (!(type in this.registeredObserverElements)) {
+            this.registeredObserverElements[type] = {};
+        }
+        if (!(type in this.registerCount)) {
+            this.registerCount[type] = {};
+        }
+        if (elementId in this.registeredElements[type]) {
+            this.registerCount[type][elementId]++;
+            return this.registeredElements[type][elementId];
+        }
+
+        this.registerCount[type][elementId] = 1;
+
+        let observable = new Observable((obs: Observer<WsEvent>) => {
+            this.registeredObserverElements[type][elementId] = obs;
+        }).pipe(share());
+
+        let observer = {
+            next: (data: any) => {
+                let message: WsMessage = {
+                    type: type,
+                    id: elementId,
+                    opcode: data.opcode,
+                    data: data.data
+                };
+                this.sendData('Event' + type, message);
+            },
+        };
+        let subject = Subject.create(observer, observable);
+        this.registeredElements[type][elementId] = subject;
+
+        this.sendSubscribe(type, elementId);
+
+        return subject;
+    }
+
+    private connect(reconnect?: boolean) {
+        if (this.connecting) {
+            return;
+        }
+
+        this.connecting = true;
+        this._hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl('/ws/listen', {accessTokenFactory: () => this._loginService.currentJwt})
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+        this._hubConnection.on('event', (data: string) => {
+            let message: WsMessage = JSON.parse(data);
+            if (message.type in this.registeredObserverElements) {
+                let reg = this.registeredObserverElements[message.type];
+                if (message.id in reg) {
+                    reg[message.id].next({id: message.id, opcode: message.opcode, data: message.data});
+                }
+            }
+            console.log(data);
+        });
+        this._hubConnection.onclose(err => {
+            console.error(err);
+            setTimeout(() => this.connect(true), 2000);
+        });
+        this._hubConnection.start()
+            .then(async () => {
+                this.connecting = false;
+                console.log('start');
+                if (reconnect) {
+                    for (let type in this.registeredElements) {
+                        if (!this.registeredElements.hasOwnProperty(type)) {
+                            continue;
+                        }
+                        for (let id in this.registeredElements[type]) {
+                            if (!this.registeredElements[type].hasOwnProperty(id)) {
+                                continue;
+                            }
+                            await this.sendSubscribe(type, +id);
+                        }
+                    }
+                }
+                for (const pendingMessage of this.pendingMessages) {
+                    await this._hubConnection.send.apply(this._hubConnection, [pendingMessage.methodName].concat(pendingMessage.args));
+                }
+            })
+            .catch((err) => {
+                this.connecting = false;
+                console.error(err);
+                setTimeout(() => this.connect(true), 2000);
+            });
+    }
+
+    private unregister(type: string, elementId: number): Promise<void> {
+        if (!(type in this.registeredElements)) {
+            return Promise.resolve();
+        }
+        if (!(elementId in this.registeredElements[type])) {
+            return Promise.resolve();
+        }
+
+        this.registerCount[type][elementId]--;
+        if (this.registerCount[type][elementId] === 0) {
+            delete this.registeredElements[type][elementId];
+            delete this.registeredObserverElements[type][elementId];
+            return this.sendUnsubscribe(type, elementId);
+        }
+    }
+
+    private sendSubscribe(type: string, id: number): Promise<void> {
+        const methodName = 'Subscribe' + type.charAt(0).toUpperCase() + type.slice(1);
+        return this.sendData(methodName, id);
+    }
+
+    private sendUnsubscribe(type: string, id: number): Promise<void> {
+        const methodName = 'Unsubscribe' + type.charAt(0).toUpperCase() + type.slice(1);
+        return this.sendData(methodName, id);
+    }
+
+    private sendData(methodName: string, ...args: any[]): Promise<void> {
+        if (this._hubConnection.state === signalR.HubConnectionState.Connected) {
+            return this._hubConnection.send.apply(this._hubConnection, [methodName].concat(args));
+        } else {
+            this.pendingMessages.push({methodName, args});
+            return Promise.resolve();
+        }
     }
 }
