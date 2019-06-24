@@ -122,5 +122,28 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
+
+        [HttpGet("{CharacterId}/history")]
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+        public async Task<ActionResult<List<HistoryEntryResponse>>> GetCharacterHistoryEntryAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId,
+            [FromQuery] int page
+        )
+        {
+            try
+            {
+                var loots = await _characterService.GetCharacterHistoryEntryAsync(executionContext, characterId, page);
+                return _mapper.Map<List<HistoryEntryResponse>>(loots);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }

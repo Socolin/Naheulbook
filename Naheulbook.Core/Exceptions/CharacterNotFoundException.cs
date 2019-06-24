@@ -6,9 +6,9 @@ namespace Naheulbook.Core.Exceptions
     {
         public int CharacterId { get; }
 
-        public CharacterNotFoundException(int groupId)
+        public CharacterNotFoundException(int characterId)
         {
-            CharacterId = groupId;
+            CharacterId = characterId;
         }
     }
 }

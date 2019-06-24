@@ -16,6 +16,13 @@ namespace Naheulbook.TestUtils
             return SaveEntity(_defaultEntityCreator.CreateCharacter(GetLast<User>().Id, GetLast<Origin>()), customizer);
         }
 
+        public TestDataUtil AddCharacterWithRequiredDependencies(Action<Character> customizer = null)
+        {
+            AddUser();
+            AddOrigin();
+            return SaveEntity(_defaultEntityCreator.CreateCharacter(GetLast<User>().Id, GetLast<Origin>()), customizer);
+        }
+
         public TestDataUtil AddCharacterWithAllData(int ownerId, Action<Character> customizer = null)
         {
             AddStat().AddStat().AddStat().AddStat();
@@ -75,6 +82,11 @@ namespace Naheulbook.TestUtils
             character.Group = GetLast<Group>();
 
             return SaveEntity(character, customizer);
+        }
+
+        public TestDataUtil AddCharacterHistoryEntry(Action<CharacterHistoryEntry> customizer = null)
+        {
+            return SaveEntity(_defaultEntityCreator.CreateCharacterHistoryEntry(GetLast<Character>()), customizer);
         }
     }
 }

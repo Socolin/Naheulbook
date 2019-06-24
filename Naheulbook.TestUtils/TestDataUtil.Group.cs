@@ -38,7 +38,7 @@ namespace Naheulbook.TestUtils
             return SaveEntity(_defaultEntityCreator.CreateEvent(GetLast<Group>()), customizer);
         }
 
-        public TestDataUtil AddGroupHistory(Action<GroupHistory> customizer = null)
+        public TestDataUtil AddGroupHistoryEntry(Action<GroupHistoryEntry> customizer = null)
         {
             return SaveEntity(_defaultEntityCreator.CreateGroupHistory(GetLast<Group>()), customizer);
         }

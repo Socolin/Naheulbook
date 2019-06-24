@@ -68,5 +68,11 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             character.GroupId = _testDataUtil.GetLast<Group>().Id;
             _testDataUtil.SaveChanges();
         }
+
+        [Given("a character history entry")]
+        public void GivenACharacterHistoryEntry()
+        {
+            _testDataUtil.AddCharacterHistoryEntry();
+        }
     }
 }

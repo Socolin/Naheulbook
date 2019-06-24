@@ -92,14 +92,14 @@ Feature: Group
     """
     [
       {
-        "id": ${GroupHistory.Id},
+        "id": ${GroupHistoryEntry.Id},
         "date": "2020-10-05T05:07:08",
-        "action": "${GroupHistory.Action}",
-        "info": "${GroupHistory.Info}",
-        "gm": ${GroupHistory.Gm},
-        "action": "${GroupHistory.Action}",
+        "action": "${GroupHistoryEntry.Action}",
+        "info": "${GroupHistoryEntry.Info}",
+        "gm": ${GroupHistoryEntry.Gm},
+        "action": "${GroupHistoryEntry.Action}",
         "isGroup": true,
-        "data": ${GroupHistory.Data}
+        "data": ${GroupHistoryEntry.Data}
       }
     ]
     """

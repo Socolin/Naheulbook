@@ -29,7 +29,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("a group history entry")]
         public void GivenAGroupHistoryEntry()
         {
-            _testDataUtil.AddGroupHistory();
+            _testDataUtil.AddGroupHistoryEntry();
         }
 
         [Given("an event")]

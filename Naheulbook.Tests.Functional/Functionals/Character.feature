@@ -283,3 +283,41 @@ Feature: Character
       }
     ]
     """
+
+  Scenario: Load character history
+    Given a JWT for a user
+    Given a group
+    And a loot
+    And a character
+    And that the character is a member of the group
+
+    Given a group history entry
+    And a character history entry
+
+    When performing a GET to the url "/api/v2/characters/${Character.Id}/history?page=0" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    [
+      {
+        "id": ${GroupHistoryEntry.Id},
+        "date": "2020-10-05T05:07:08",
+        "action": "${GroupHistoryEntry.Action}",
+        "info": "${GroupHistoryEntry.Info}",
+        "gm": ${GroupHistoryEntry.Gm},
+        "action": "${GroupHistoryEntry.Action}",
+        "isGroup": true,
+        "data": ${GroupHistoryEntry.Data}
+      },
+      {
+        "id": ${CharacterHistoryEntry.Id},
+        "date": "2019-10-05T05:07:08",
+        "action": "${CharacterHistoryEntry.Action}",
+        "info": "${CharacterHistoryEntry.Info}",
+        "gm": ${CharacterHistoryEntry.Gm},
+        "action": "${CharacterHistoryEntry.Action}",
+        "isGroup": false,
+        "data": ${CharacterHistoryEntry.Data}
+      }
+    ]
+    """

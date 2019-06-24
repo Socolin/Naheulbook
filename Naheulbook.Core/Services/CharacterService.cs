@@ -17,6 +17,7 @@ namespace Naheulbook.Core.Services
         Task<Character> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId);
         Task<Item> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request);
         Task<List<Loot>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId);
+        Task<List<IHistoryEntry>> GetCharacterHistoryEntryAsync(NaheulbookExecutionContext executionContext, int characterId, int page);
     }
 
     public class CharacterService : ICharacterService
@@ -104,6 +105,20 @@ namespace Naheulbook.Core.Services
                     return new List<Loot>();
 
                 return await uow.Loots.GetLootsVisibleByCharactersOfGroupAsync(character.GroupId.Value);
+            }
+        }
+
+        public async Task<List<IHistoryEntry>> GetCharacterHistoryEntryAsync(NaheulbookExecutionContext executionContext, int characterId, int page)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithGroupAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+                return await uow.Characters.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, page, character.Group?.MasterId == characterId);
             }
         }
     }

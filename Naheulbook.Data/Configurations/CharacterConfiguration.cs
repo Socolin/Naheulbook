@@ -271,4 +271,63 @@ namespace Naheulbook.Data.Configurations
                 .HasConstraintName("FK_character_speciality_speciality_speciality");
         }
     }
+
+    public class CharacterHistoryEntryConfiguration : IEntityTypeConfiguration<CharacterHistoryEntry>
+    {
+        public void Configure(EntityTypeBuilder<CharacterHistoryEntry> builder)
+        {
+            builder.ToTable("character_history");
+
+            builder.HasKey(e => e.Id);
+
+            builder.Property(e => e.Id)
+                .HasColumnName("id");
+            builder.Property(e => e.CharacterId)
+                .HasColumnName("character");
+            builder.Property(e => e.UserId)
+                .HasColumnName("user");
+            builder.Property(e => e.Data)
+                .HasColumnName("data")
+                .HasColumnType("json");
+            builder.Property(e => e.Date)
+                .HasColumnName("date");
+            builder.Property(e => e.Info)
+                .HasColumnName("info");
+            builder.Property(e => e.Action)
+                .HasColumnName("action");
+            builder.Property(e => e.Gm)
+                .HasColumnName("gm");
+            builder.Property(e => e.EffectId)
+                .HasColumnName("effect");
+            builder.Property(e => e.ItemId)
+                .HasColumnName("item");
+            builder.Property(e => e.CharacterModifierId)
+                .HasColumnName("modifier");
+
+            builder.HasOne(e => e.Character)
+                .WithMany(g => g.HistoryEntries)
+                .HasForeignKey(e => e.CharacterId)
+                .HasConstraintName("FK_character_history_character_character");
+
+            builder.HasOne(e => e.CharacterModifier)
+                .WithMany()
+                .HasForeignKey(e => e.CharacterModifierId)
+                .HasConstraintName("FK_character_history_character_modifier_modifier");
+
+            builder.HasOne(e => e.Effect)
+                .WithMany()
+                .HasForeignKey(e => e.EffectId)
+                .HasConstraintName("FK_character_history_effect_effect");
+
+            builder.HasOne(e => e.Item)
+                .WithMany()
+                .HasForeignKey(e => e.ItemId)
+                .HasConstraintName("FK_character_history_item_item");
+
+            builder.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .HasConstraintName("FK_character_history_user_user");
+        }
+    }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
@@ -112,7 +113,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public async Task GetCharacterLootsAsync_ShouldCall_ItemService()
+        public async Task GetCharacterLootsAsync_ShouldLoadDataFromLootRepository()
         {
             const int characterId = 4;
             const int groupId = 6;
@@ -145,6 +146,58 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task> act = () => _service.GetCharacterLootsAsync(executionContext, characterId);
 
             act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        [TestCase(3, false)]
+        [TestCase(4, true)]
+        public async Task GetCharacterHistoryEntryAsync_ShouldGetResultFromCharacterRepository(int masterId, bool isGm)
+        {
+            const int characterId = 4;
+            const int groupId = 6;
+            var character = new Character {Id = characterId, GroupId = groupId, Group = new Group {Id = groupId, MasterId = masterId}};
+            var executionContext = new NaheulbookExecutionContext();
+            var expectedHistoryEntries = new List<IHistoryEntry>();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetHistoryByCharacterIdAsync(characterId, groupId, 0, isGm)
+                .Returns(expectedHistoryEntries);
+
+            var loots = await _service.GetCharacterHistoryEntryAsync(executionContext, characterId, 0);
+
+            loots.Should().BeSameAs(expectedHistoryEntries);
+        }
+
+        [Test]
+        public void GetCharacterHistoryEntryAsync_ShouldCall_EnsureCharacterAccess()
+        {
+            const int characterId = 4;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.GetCharacterHistoryEntryAsync(executionContext, characterId, 0);
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public void GetCharacterHistoryEntryAsync_ShouldThrowWhenCharacterDoesNotExists()
+        {
+            const int characterId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns((Character) null);
+
+            Func<Task> act = () => _service.GetCharacterHistoryEntryAsync(executionContext, characterId, 0);
+
+            act.Should().Throw<CharacterNotFoundException>();
         }
     }
 }

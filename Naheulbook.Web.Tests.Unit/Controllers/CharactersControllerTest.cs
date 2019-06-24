@@ -134,31 +134,18 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PostAddItemToCharacterInventory_WhenCatchForbiddenAccessException_Return403()
+        [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
+        public void PostAddItemToCharacterInventory_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
         {
             const int characterId = 2;
             var request = new CreateItemRequest();
 
             _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
-                .Returns(Task.FromException<Item>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<Item>(exception));
 
             Func<Task> act = () => _controller.PostAddItemToCharacterInventory(_executionContext, characterId, request);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
-        }
-
-        [Test]
-        public void PostAddItemToCharacterInventory_WhenCatchCharacterNotFoundException_Return404()
-        {
-            const int characterId = 2;
-            var request = new CreateItemRequest();
-
-            _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
-                .Returns(Task.FromException<Item>(new CharacterNotFoundException(characterId)));
-
-            Func<Task> act = () => _controller.PostAddItemToCharacterInventory(_executionContext, characterId, request);
-
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
@@ -193,29 +180,50 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void GetCharacterLoots_WhenCatchForbiddenAccessException_Return403()
+        [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
+        public void GetCharacterLoots_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
         {
-            const int characterId = 2;
-
             _characterService.GetCharacterLootsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
-                .Returns(Task.FromException<List<Loot>>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<List<Loot>>(exception));
 
-            Func<Task> act = () => _controller.GetCharacterLoots(_executionContext, characterId);
+            Func<Task> act = () => _controller.GetCharacterLoots(_executionContext, 2);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
-        public void GetCharacterLoots_WhenCatchCharacterNotFoundException_Return404()
+        public async Task GetCharacterHistoryEntryAsyncShouldLoadCharacterLootsFromService_ThenMapItIntoResponse()
         {
             const int characterId = 2;
+            var historyEntries = new List<IHistoryEntry>();
+            var historyEntriesResponse = new List<HistoryEntryResponse>();
 
-            _characterService.GetCharacterLootsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
-                .Returns(Task.FromException<List<Loot>>(new CharacterNotFoundException(characterId)));
+            _characterService.GetCharacterHistoryEntryAsync(_executionContext, characterId, 8)
+                .Returns(historyEntries);
+            _mapper.Map<List<HistoryEntryResponse>>(historyEntries)
+                .Returns(historyEntriesResponse);
 
-            Func<Task> act = () => _controller.GetCharacterLoots(_executionContext, characterId);
+            var result = await _controller.GetCharacterHistoryEntryAsync(_executionContext, characterId, 8);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            result.Value.Should().BeSameAs(historyEntriesResponse);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
+        public void GetCharacterHistoryEntryAsyncShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _characterService.GetCharacterHistoryEntryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
+                .Returns(Task.FromException<List<IHistoryEntry>>(exception));
+
+            Func<Task> act = () => _controller.GetCharacterHistoryEntryAsync(_executionContext, 42, 0);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        private static IEnumerable<TestCaseData> GetCommonCharacterExceptionsAndExpectedStatusCode()
+        {
+            yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
+            yield return new TestCaseData(new CharacterNotFoundException(42), HttpStatusCode.NotFound);
         }
     }
 }

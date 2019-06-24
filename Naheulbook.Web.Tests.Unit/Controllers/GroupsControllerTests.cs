@@ -222,7 +222,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _lootService.GetLootsForGroupAsync(_executionContext, groupId)
                 .Returns(Task.FromException<List<Loot>>(exception));
 
-            Func<Task> act = () => _controller.GetEventListAsync(_executionContext, groupId);
+            Func<Task> act = () => _controller.GetLootListAsync(_executionContext, groupId);
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }

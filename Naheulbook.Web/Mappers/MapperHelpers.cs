@@ -33,5 +33,10 @@ namespace Naheulbook.Web.Mappers
 
             return list.Split(",").ToList();
         }
+
+        public static string FromDateTimeToString(DateTime? date)
+        {
+            return date?.ToString("s");
+        }
     }
 }

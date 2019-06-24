@@ -49,5 +49,6 @@ namespace Naheulbook.Data.Models
         public ICollection<CharacterSpeciality> Specialities { get; set; }
         public ICollection<Item> Items { get; set; }
         public ICollection<GroupInvite> Invites { get; set; }
+        public ICollection<CharacterHistoryEntry> HistoryEntries { get; set; }
     }
 }

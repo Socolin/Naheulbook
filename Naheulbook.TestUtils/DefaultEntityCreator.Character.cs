@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Naheulbook.Data.Models;
 
@@ -64,6 +65,23 @@ namespace Naheulbook.TestUtils
                 StatName = stat.Name,
                 Value = value,
                 Type = "ADD"
+            };
+        }
+
+        public CharacterHistoryEntry CreateCharacterHistoryEntry(Character character, string suffix = null)
+        {
+            if (suffix == null)
+                suffix = RngUtil.GetRandomHexString(8);
+
+            return new CharacterHistoryEntry
+            {
+                Data = "{}",
+                Gm = false,
+                Date = new DateTime(2019, 10, 5, 5, 7, 8, DateTimeKind.Utc),
+                CharacterId = character.Id,
+                Action = $"some-character-history-action-{suffix}",
+                Info = $"some-info-{suffix}",
+                UserId = character.OwnerId
             };
         }
     }

@@ -30,6 +30,9 @@ namespace Naheulbook.Web.Mappers
             CreateMap<CharacterModifierValue, StatModifier>()
                 .ForMember(x => x.Stat, opt => opt.MapFrom(c => c.StatName))
                 .ForMember(x => x.Special, opt => opt.Ignore());
+            CreateMap<CharacterHistoryEntry, CharacterHistoryEntryResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
+                .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
 
             CreateMap<Effect, EffectResponse>();
             CreateMap<EffectType, EffectTypeResponse>();
@@ -50,9 +53,13 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Group, NamedIdResponse>();
             CreateMap<Group, GroupSummaryResponse>()
                 .ForMember(m => m.CharacterCount, opt => opt.MapFrom(g => g.Characters.Count));
-            CreateMap<GroupHistory, GroupHistoryResponse>()
+            CreateMap<GroupHistoryEntry, GroupHistoryEntryResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
                 .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
+
+            CreateMap<IHistoryEntry, HistoryEntryResponse>()
+                .Include<GroupHistoryEntry, GroupHistoryEntryResponse>()
+                .Include<CharacterHistoryEntry, CharacterHistoryEntryResponse>();
 
             CreateMap<Item, ItemResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data)))
@@ -130,11 +137,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Flags, opt => opt.MapFrom(r => MapperHelpers.FromJson<List<FlagResponse>>(r.Flags)));
 
             CreateMap<Monster, MonsterResponse>()
-                .ForMember(m => m.Dead, opt =>
-                {
-                    opt.Condition(b => b.Dead != null);
-                    opt.MapFrom(b => b.Dead.Value.ToString("s"));
-                })
+                .ForMember(m => m.Dead, opt => opt.MapFrom(b => MapperHelpers.FromDateTimeToString(b.Dead)))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)))
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<ActiveStatsModifier>>(b.Modifiers)));
 

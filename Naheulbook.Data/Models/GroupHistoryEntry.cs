@@ -2,7 +2,7 @@ using System;
 
 namespace Naheulbook.Data.Models
 {
-    public class GroupHistory
+    public class GroupHistoryEntry : IHistoryEntry
     {
         public int Id { get; set; }
         public string Action { get; set; }

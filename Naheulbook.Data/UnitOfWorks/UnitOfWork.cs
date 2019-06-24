@@ -15,7 +15,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IEventRepository Events { get; }
         IGodRepository Gods { get; }
         IGroupRepository Groups { get; }
-        IGroupHistoryRepository GroupHistory { get; }
+        IGroupHistoryEntryRepository GroupHistoryEntries { get; }
         IGroupInviteRepository GroupInvites { get; }
         IItemRepository Items { get; }
         IItemTemplateRepository ItemTemplates { get; }
@@ -54,7 +54,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IEventRepository Events => new EventRepository(_naheulbookDbContext);
         public IGodRepository Gods => new GodRepository(_naheulbookDbContext);
         public IGroupRepository Groups => new GroupRepository(_naheulbookDbContext);
-        public IGroupHistoryRepository GroupHistory => new GroupHistoryRepository(_naheulbookDbContext);
+        public IGroupHistoryEntryRepository GroupHistoryEntries => new GroupHistoryEntryRepository(_naheulbookDbContext);
         public IGroupInviteRepository GroupInvites => new GroupInviteRepository(_naheulbookDbContext);
         public IItemRepository Items=> new ItemRepository(_naheulbookDbContext);
         public IItemTemplateRepository ItemTemplates => new ItemTemplateRepository(_naheulbookDbContext);

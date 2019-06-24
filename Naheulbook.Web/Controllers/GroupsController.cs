@@ -199,7 +199,7 @@ namespace Naheulbook.Web.Controllers
 
         [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet("{GroupId}/history")]
-        public async Task<ActionResult<List<GroupHistoryResponse>>> PostCreateMonsterAsync(
+        public async Task<ActionResult<List<GroupHistoryEntryResponse>>> PostCreateMonsterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
             [FromQuery] int page
@@ -207,8 +207,8 @@ namespace Naheulbook.Web.Controllers
         {
             try
             {
-                var monster = await _groupService.GetGroupHistoryAsync(executionContext, groupId, page);
-                return _mapper.Map<List<GroupHistoryResponse>>(monster);
+                var monster = await _groupService.GetGroupHistoryEntriesAsync(executionContext, groupId, page);
+                return _mapper.Map<List<GroupHistoryEntryResponse>>(monster);
             }
             catch (ForbiddenAccessException ex)
             {

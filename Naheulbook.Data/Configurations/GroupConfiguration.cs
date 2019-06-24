@@ -77,9 +77,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class GroupHistoryConfiguration : IEntityTypeConfiguration<GroupHistory>
+    public class GroupHistoryEntryConfiguration : IEntityTypeConfiguration<GroupHistoryEntry>
     {
-        public void Configure(EntityTypeBuilder<GroupHistory> builder)
+        public void Configure(EntityTypeBuilder<GroupHistoryEntry> builder)
         {
             builder.ToTable("group_history");
 
@@ -104,7 +104,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("gm");
 
             builder.HasOne(e => e.Group)
-                .WithMany(g => g.History)
+                .WithMany(g => g.HistoryEntries)
                 .HasForeignKey(e => e.GroupId)
                 .HasConstraintName("FK_group_history_group_group");
 

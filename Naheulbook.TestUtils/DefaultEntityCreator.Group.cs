@@ -47,18 +47,18 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public GroupHistory CreateGroupHistory(Group group, string suffix = null)
+        public GroupHistoryEntry CreateGroupHistory(Group group, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new GroupHistory
+            return new GroupHistoryEntry
             {
                 Data = "{}",
                 Gm = true,
                 Date = new DateTime(2020, 10, 5, 5, 7, 8, DateTimeKind.Utc),
                 GroupId = group.Id,
-                Action = $"some-action-{suffix}",
+                Action = $"some-group-history-action-{suffix}",
                 Info = $"some-info-{suffix}",
                 UserId = group.MasterId
             };
