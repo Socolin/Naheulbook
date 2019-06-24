@@ -118,11 +118,7 @@ export class GroupService {
 
     loadDeadMonsters(groupId: number, startIndex: number, count: number): Observable<Monster[]> {
         return forkJoin([
-            this.httpClient.post<Monster[]>('/api/monster/loadDeadMonsters', {
-                groupId: groupId,
-                startIndex: startIndex,
-                count: count
-            }),
+            this.httpClient.get<Monster[]>(`/api/v2/groups/${groupId}/deadMonsters?startIndex=${startIndex}&count=${count}`),
             this._skillService.getSkillsById()
         ]).pipe(map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
             return Monster.monstersFromJson(monstersJsonData, skillsById)
@@ -175,10 +171,7 @@ export class GroupService {
     /* History */
 
     loadHistory(groupId: number, page: number): Observable<HistoryEntry[]> {
-        return this.httpClient.post<HistoryEntry[]>('/api/group/history', {
-            groupId: groupId,
-            page: page
-        });
+        return this.httpClient.get<HistoryEntry[]>(`/api/v2/groups/${groupId}/history?page=${page}`);
     }
 
     addLog(groupId: number, info: string, is_gm: boolean): Observable<Object> {

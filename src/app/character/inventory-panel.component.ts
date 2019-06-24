@@ -38,13 +38,13 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     private itemDetailTopDiv: ElementRef;
     public itemDetailOffset = 0;
 
-    @ViewChild('addItemDialog', {static: true})
+    @ViewChild('addItemDialog', {static: false})
     public addItemDialog: Portal<any>;
     public addItemOverlayRef: OverlayRef | undefined;
     public addItemSearch: string | undefined;
     public filteredItems: ItemTemplate[] = [];
 
-    @ViewChild('autocompleteSearchItemTemplate', {static: true})
+    @ViewChild('autocompleteSearchItemTemplate', {static: false})
     public autocompleteSearchItemTemplate: AutocompleteSearchItemTemplateComponent;
 
     public itemAddCustomName: string | undefined;

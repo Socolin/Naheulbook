@@ -153,10 +153,7 @@ export class CharacterService {
     }
 
     loadHistory(characterId, page): Observable<HistoryEntry[]> {
-        return this.httpClient.post<HistoryEntry[]>('/api/character/history', {
-            characterId: characterId,
-            page: page
-        });
+        return this.httpClient.get<HistoryEntry[]>(`/api/v2/characters/${characterId}/history?page=${page}`);
     }
 
     cancelInvite(characterId: number, groupId: number): Observable<{group: IMetadata; character: IMetadata}> {

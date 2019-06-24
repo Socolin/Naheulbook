@@ -104,7 +104,7 @@ export class ItemTemplateService {
         }
 
         return forkJoin([
-            this.httpClient.post('/api/itemtemplate/search', {filter: filter}),
+            this.httpClient.get('/api/v2/itemTemplates/search?filter=' + encodeURIComponent(filter)),
             this._skillService.getSkillsById()
         ]).pipe(map(([itemTemplateDatas, skillsById]: [ItemTemplateJsonData[], { [skillId: number]: Skill }]) => {
             return ItemTemplate.itemTemplatesFromJson(itemTemplateDatas, skillsById);
