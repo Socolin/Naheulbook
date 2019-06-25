@@ -668,8 +668,8 @@ export class Character extends WsRegistrable {
         this.computedData.details.add('Origine', {EV: this.origin.baseEV});
 
         if (this.origin) {
-            this.computedData.stats['AT'] += this.origin.bonusAT;
-            this.computedData.stats['PRD'] += this.origin.bonusPRD;
+            this.computedData.stats['AT'] += this.origin.bonusAT || 0;
+            this.computedData.stats['PRD'] += this.origin.bonusPRD || 0;
             if (this.origin.bonusAT || this.origin.bonusPRD) {
                 this.computedData.details.add('Origine', {AT: this.origin.bonusAT, PRD: this.origin.bonusPRD});
             }

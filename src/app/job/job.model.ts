@@ -6,15 +6,15 @@ import {Speciality} from './speciality.model';
 
 export class Job {
     availableSkills: Array<Skill>;
-    baseAT: number|null;
-    baseEa: number|null;
-    baseEv: number|null;
-    basePRD: number|null;
+    baseAT?: number;
+    baseEa?: number;
+    baseEv?: number;
+    basePRD?: number;
     bonuses: Array<DescribedFlag>;
-    bonusEv: number|null;
+    bonusEv?: number;
     description: string;
-    diceEaLevelUp: number|null;
-    factorEv: number|null;
+    diceEaLevelUp?: number;
+    factorEv?: number;
     id: number;
     information: string;
     playerDescription: string;
