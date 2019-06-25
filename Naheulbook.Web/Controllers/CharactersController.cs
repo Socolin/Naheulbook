@@ -138,5 +138,27 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
+
+        [HttpPatch("{CharacterId}/stats")]
+        public async Task<IActionResult> PatchCharacterStatsAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId,
+            PatchCharacterStatsRequest request
+        )
+        {
+            try
+            {
+                await _characterService.UpdateCharacterStatAsync(executionContext, characterId, request);
+                return new NoContentResult();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }

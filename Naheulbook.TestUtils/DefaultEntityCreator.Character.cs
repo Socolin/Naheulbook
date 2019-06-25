@@ -80,8 +80,7 @@ namespace Naheulbook.TestUtils
                 Date = new DateTime(2019, 10, 5, 5, 7, 8, DateTimeKind.Utc),
                 CharacterId = character.Id,
                 Action = $"some-character-history-action-{suffix}",
-                Info = $"some-info-{suffix}",
-                UserId = character.OwnerId
+                Info = $"some-info-{suffix}"
             };
         }
     }

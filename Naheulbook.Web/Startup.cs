@@ -82,6 +82,7 @@ namespace Naheulbook.Web
 
             services.AddSingleton<ICalendarService, CalendarService>();
             services.AddSingleton<ICharacterService, CharacterService>();
+            services.AddSingleton<ICharacterHistoryUtil, CharacterHistoryUtil>();
             services.AddSingleton<IEventService, EventService>();
             services.AddSingleton<IEffectService, EffectService>();
             services.AddSingleton<IGodService, GodService>();
@@ -117,6 +118,7 @@ namespace Naheulbook.Web
 
             services.AddSingleton<IJwtService, JwtService>();
             services.AddSingleton<IChangeNotifier, ChangeNotifier>();
+            services.AddSingleton<IHubGroupUtil, HubGroupUtil>();
 
             services.AddSingleton<IFacebookClient, FacebookClient>();
             services.AddSingleton<IGoogleClient, GoogleClient>();

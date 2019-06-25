@@ -22,8 +22,5 @@ namespace Naheulbook.Data.Models
 
         public int CharacterId { get; set; }
         public Character Character { get; set; }
-
-        public int UserId { get; set; }
-        public User User { get; set; }
     }
 }

@@ -19,6 +19,7 @@ namespace Naheulbook.Core.Services
         Task<List<Loot>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId);
         Task<List<IHistoryEntry>> GetCharacterHistoryEntryAsync(NaheulbookExecutionContext executionContext, int characterId, int page);
         Task EnsureUserCanAccessCharacterAsync(NaheulbookExecutionContext executionContext, int characterId);
+        Task UpdateCharacterStatAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterStatsRequest request);
     }
 
     public class CharacterService : ICharacterService
@@ -27,18 +28,24 @@ namespace Naheulbook.Core.Services
         private readonly ICharacterFactory _characterFactory;
         private readonly IItemService _itemService;
         private readonly IAuthorizationUtil _authorizationUtil;
+        private readonly ICharacterHistoryUtil _characterHistoryUtil;
+        private readonly IChangeNotifier _changeNotifier;
 
         public CharacterService(
             IUnitOfWorkFactory unitOfWorkFactory,
             ICharacterFactory characterFactory,
             IItemService itemService,
-            IAuthorizationUtil authorizationUtil
+            IAuthorizationUtil authorizationUtil,
+            ICharacterHistoryUtil characterHistoryUtil,
+            IChangeNotifier changeNotifier
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _characterFactory = characterFactory;
             _itemService = itemService;
             _authorizationUtil = authorizationUtil;
+            _characterHistoryUtil = characterHistoryUtil;
+            _changeNotifier = changeNotifier;
         }
 
         public async Task<List<Character>> GetCharacterListAsync(NaheulbookExecutionContext executionContext)
@@ -133,6 +140,67 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureCharacterAccess(executionContext, character);
             }
+        }
+
+        public async Task UpdateCharacterStatAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterStatsRequest request)
+        {
+            var notificationTasks = new List<Task>();
+
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithGroupAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+                if (request.Ev.HasValue)
+                {
+                    uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogChangeEv(character, character.Ev, request.Ev));
+                    character.Ev = request.Ev;
+                    notificationTasks.Add(_changeNotifier.NotifyCharacterChangeEvAsync(character));
+                }
+
+                if (request.Ea.HasValue)
+                {
+                    uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogChangeEa(character, character.Ea, request.Ea));
+                    character.Ea = request.Ea;
+                    notificationTasks.Add(_changeNotifier.NotifyCharacterChangeEaAsync(character));
+                }
+
+                if (request.FatePoint.HasValue)
+                {
+                    uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogChangeFatePoint(character, character.FatePoint, request.FatePoint));
+                    character.FatePoint = request.FatePoint.Value;
+                    notificationTasks.Add(_changeNotifier.NotifyCharacterChangeFatePointAsync(character));
+                }
+
+                if (request.Experience.HasValue)
+                {
+                    uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogChangeExperience(character, character.Experience, request.Experience));
+                    character.Experience = request.Experience.Value;
+                    notificationTasks.Add(_changeNotifier.NotifyCharacterChangeExperienceAsync(character));
+                }
+
+                if (request.Sex != null)
+                {
+                    uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogChangeSex(character, character.Sex, request.Sex));
+                    character.Sex = request.Sex;
+                    notificationTasks.Add(_changeNotifier.NotifyCharacterChangeSexAsync(character));
+                }
+
+                if (request.Name != null)
+                {
+                    uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogChangeName(character, character.Name, request.Name));
+                    character.Name = request.Name;
+                    notificationTasks.Add(_changeNotifier.NotifyCharacterChangeNameAsync(character));
+                }
+
+                await uow.CompleteAsync();
+            }
+
+            await Task.WhenAll(notificationTasks);
         }
     }
 }

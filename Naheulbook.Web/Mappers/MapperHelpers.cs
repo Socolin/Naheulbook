@@ -15,7 +15,7 @@ namespace Naheulbook.Web.Mappers
 
         public static string[] FromCommaSeparatedStringArray(string str)
         {
-            return str.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            return str?.Split(',', StringSplitOptions.RemoveEmptyEntries);
         }
 
         public static T FromJson<T>(string json)

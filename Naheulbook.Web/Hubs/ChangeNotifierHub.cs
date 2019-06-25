@@ -3,23 +3,27 @@ using Microsoft.AspNetCore.SignalR;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
 using Naheulbook.Web.Extensions;
+using Naheulbook.Web.Services;
 
 namespace Naheulbook.Web.Hubs
 {
     public class ChangeNotifierHub : Hub
     {
+        private readonly IHubGroupUtil _hubGroupUtil;
         private readonly ICharacterService _characterService;
         private readonly IGroupService _groupService;
         private readonly ILootService _lootService;
         private readonly IMonsterService _monsterService;
 
         public ChangeNotifierHub(
+            IHubGroupUtil hubGroupUtil,
             ICharacterService characterService,
             IGroupService groupService,
             ILootService lootService,
             IMonsterService monsterService
         )
         {
+            _hubGroupUtil = hubGroupUtil;
             _characterService = characterService;
             _groupService = groupService;
             _lootService = lootService;
@@ -38,7 +42,7 @@ namespace Naheulbook.Web.Hubs
                 throw new HubException("Access to this resources is forbidden", ex);
             }
 
-            await Groups.AddToGroupAsync(Context.ConnectionId, $"characters:{characterId}");
+            await Groups.AddToGroupAsync(Context.ConnectionId, _hubGroupUtil.GetCharacterGroupName(characterId));
         }
 
         public async Task SubscribeGroup(int groupId)
@@ -53,7 +57,7 @@ namespace Naheulbook.Web.Hubs
                 throw new HubException("Access to this resources is forbidden", ex);
             }
 
-            await Groups.AddToGroupAsync(Context.ConnectionId, $"group:{groupId}");
+            await Groups.AddToGroupAsync(Context.ConnectionId, _hubGroupUtil.GetGroupGroupName(groupId));
         }
 
         public async Task SubscribeLoot(int lootId)
@@ -68,7 +72,7 @@ namespace Naheulbook.Web.Hubs
                 throw new HubException("Access to this resources is forbidden", ex);
             }
 
-            await Groups.AddToGroupAsync(Context.ConnectionId, $"loots:{lootId}");
+            await Groups.AddToGroupAsync(Context.ConnectionId, _hubGroupUtil.GetLootGroupName(lootId));
         }
 
         public async Task SubscribeMonster(int monsterId)
@@ -83,7 +87,7 @@ namespace Naheulbook.Web.Hubs
                 throw new HubException("Access to this resources is forbidden", ex);
             }
 
-            await Groups.AddToGroupAsync(Context.ConnectionId, $"monsters:{monsterId}");
+            await Groups.AddToGroupAsync(Context.ConnectionId, _hubGroupUtil.GetMonsterGroupName(monsterId));
         }
     }
 }

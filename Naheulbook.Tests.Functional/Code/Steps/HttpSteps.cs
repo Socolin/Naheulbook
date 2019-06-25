@@ -73,7 +73,12 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         {
             var lastStatusCode = _scenarioContext.GetLastHttpResponseStatusCode();
             if ((int) lastStatusCode != expectedStatusCode)
-                Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with content:\n{_scenarioContext.GetLastHttpResponseContent()}\n");
+            {
+                if (string.IsNullOrEmpty(_scenarioContext.GetLastHttpResponseContent()))
+                    Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with no content");
+                else
+                    Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with content:\n{_scenarioContext.GetLastHttpResponseContent()}\n");
+            }
         }
 
         [Then(@"the response should contains the following json")]

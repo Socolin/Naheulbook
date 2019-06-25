@@ -220,6 +220,19 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
+
+        [Test]
+        [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
+        public void PatchCharacterStatsAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _characterService.UpdateCharacterStatAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PatchCharacterStatsRequest>())
+                .Returns(Task.FromException<List<Loot>>(exception));
+
+            Func<Task> act = () => _controller.PatchCharacterStatsAsync(_executionContext, 2, new PatchCharacterStatsRequest());
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
         private static IEnumerable<TestCaseData> GetCommonCharacterExceptionsAndExpectedStatusCode()
         {
             yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);

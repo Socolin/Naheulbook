@@ -81,9 +81,9 @@ namespace Naheulbook.TestUtils
             {
                 cleanupSqlCommand.CommandText =
                     "SET FOREIGN_KEY_CHECKS=0;" +
-                    // "DELETE FROM `calendar`;" +
+                    "DELETE FROM `calendar`;" +
                     "DELETE FROM `character`;" +
-                    // "DELETE FROM `character_history`;" +
+                    "DELETE FROM `character_history`;" +
                     "DELETE FROM `character_job`;" +
                     "DELETE FROM `character_modifier`;" +
                     "DELETE FROM `character_modifier_value`;" +
@@ -94,11 +94,11 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `effect_modifier`;" +
                     "DELETE FROM `effect_type`;" +
                     // "DELETE FROM `error_report`;" +
-                    // "DELETE FROM `event`;" +
-                    // "DELETE FROM `god`;" +
+                    "DELETE FROM `event`;" +
+                    "DELETE FROM `god`;" +
                     "DELETE FROM `group`;" +
-                    // "DELETE FROM `group_history`;" +
-                    // "DELETE FROM `group_invitations`;" +
+                    "DELETE FROM `group_history`;" +
+                    "DELETE FROM `group_invitations`;" +
                     // "DELETE FROM `icon`;" +
                     "DELETE FROM `item`;" +
                     "DELETE FROM `item_slot`;" +

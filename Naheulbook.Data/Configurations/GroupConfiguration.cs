@@ -89,8 +89,6 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("id");
             builder.Property(e => e.GroupId)
                 .HasColumnName("group");
-            builder.Property(e => e.UserId)
-                .HasColumnName("user");
             builder.Property(e => e.Data)
                 .HasColumnName("data")
                 .HasColumnType("json");
@@ -107,11 +105,6 @@ namespace Naheulbook.Data.Configurations
                 .WithMany(g => g.HistoryEntries)
                 .HasForeignKey(e => e.GroupId)
                 .HasConstraintName("FK_group_history_group_group");
-
-            builder.HasOne(e => e.User)
-                .WithMany()
-                .HasForeignKey(e => e.UserId)
-                .HasConstraintName("FK_group_history_user_user");
         }
     }
 }

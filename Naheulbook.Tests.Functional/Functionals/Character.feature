@@ -321,3 +321,16 @@ Feature: Character
       }
     ]
     """
+
+
+  Scenario: Update character stat
+    Given a JWT for a user
+    And a character
+
+    When performing a PATCH to the url "/api/v2/characters/${Character.Id}/stats" with the following json content and the current jwt
+    """
+    {
+      "ev": 8
+    }
+    """
+    Then the response status code is 204

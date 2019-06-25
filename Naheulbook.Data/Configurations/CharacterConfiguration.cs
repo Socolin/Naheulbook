@@ -284,8 +284,6 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("id");
             builder.Property(e => e.CharacterId)
                 .HasColumnName("character");
-            builder.Property(e => e.UserId)
-                .HasColumnName("user");
             builder.Property(e => e.Data)
                 .HasColumnName("data")
                 .HasColumnType("json");
@@ -323,11 +321,6 @@ namespace Naheulbook.Data.Configurations
                 .WithMany()
                 .HasForeignKey(e => e.ItemId)
                 .HasConstraintName("FK_character_history_item_item");
-
-            builder.HasOne(e => e.User)
-                .WithMany()
-                .HasForeignKey(e => e.UserId)
-                .HasConstraintName("FK_character_history_user_user");
         }
     }
 }

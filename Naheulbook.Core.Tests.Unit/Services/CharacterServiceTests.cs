@@ -22,6 +22,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private ICharacterFactory _characterFactory;
         private IItemService _itemService;
         private IAuthorizationUtil _authorizationUtil;
+        private ICharacterHistoryUtil _characterHistoryUtil;
+        private IChangeNotifier _changeNotifier;
         private CharacterService _service;
 
         [SetUp]
@@ -31,8 +33,17 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _characterFactory = Substitute.For<ICharacterFactory>();
             _itemService = Substitute.For<IItemService>();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
+            _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
+            _changeNotifier = Substitute.For<IChangeNotifier>();
 
-            _service = new CharacterService(_unitOfWorkFactory, _characterFactory, _itemService, _authorizationUtil);
+            _service = new CharacterService(
+                _unitOfWorkFactory,
+                _characterFactory,
+                _itemService,
+                _authorizationUtil,
+                _characterHistoryUtil,
+                _changeNotifier
+            );
         }
 
         [Test]

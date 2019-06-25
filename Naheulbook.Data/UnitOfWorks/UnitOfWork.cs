@@ -9,6 +9,7 @@ namespace Naheulbook.Data.UnitOfWorks
     {
         ICalendarRepository Calendar { get; }
         ICharacterRepository Characters { get; }
+        ICharacterHistoryEntryRepository CharacterHistoryEntries { get; }
         IEffectRepository Effects { get; }
         IEffectCategoryRepository EffectCategories { get; }
         IEffectTypeRepository EffectTypes { get; }
@@ -48,6 +49,7 @@ namespace Naheulbook.Data.UnitOfWorks
 
         public ICalendarRepository Calendar => new CalendarRepository(_naheulbookDbContext);
         public ICharacterRepository Characters => new CharacterRepository(_naheulbookDbContext);
+        public ICharacterHistoryEntryRepository CharacterHistoryEntries => new CharacterHistoryEntryRepository(_naheulbookDbContext);
         public IEffectRepository Effects => new EffectRepository(_naheulbookDbContext);
         public IEffectTypeRepository EffectTypes => new EffectTypeRepository(_naheulbookDbContext);
         public IEffectCategoryRepository EffectCategories => new EffectCategoryRepository(_naheulbookDbContext);
