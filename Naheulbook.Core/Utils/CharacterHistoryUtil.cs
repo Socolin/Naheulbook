@@ -12,10 +12,12 @@ namespace Naheulbook.Core.Utils
         CharacterHistoryEntry CreateLogChangeExperience(Character character, int characterExperience, int? requestExperience);
         CharacterHistoryEntry CreateLogChangeSex(Character character, string characterSex, string requestSex);
         CharacterHistoryEntry CreateLogChangeName(Character character, string characterName, string requestName);
+        CharacterHistoryEntry CreateLogAddItem(int characterId, Item item);
     }
 
     public class CharacterHistoryUtil : ICharacterHistoryUtil
     {
+        private const string AddItemActionName = "ADD_ITEM";
         private const string ChangeEvActionName = "MODIFY_EV";
         private const string ChangeEaActionName = "MODIFY_EA";
         private const string ChangeFatePointActionName = "USE_FATE_POINT";
@@ -94,6 +96,17 @@ namespace Naheulbook.Core.Utils
                 Action = ChangeNameActionName,
                 Date = DateTime.Now,
                 Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogAddItem(int characterId, Item item)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = AddItemActionName,
+                Date = DateTime.Now,
+                ItemId = item.Id
             };
         }
     }

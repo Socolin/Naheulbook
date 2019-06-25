@@ -96,7 +96,17 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureCharacterAccess(executionContext, character);
             }
 
-            return await _itemService.AddItemToAsync(executionContext, ItemOwnerType.Character, characterId, request);
+            var item = await _itemService.AddItemToAsync(executionContext, ItemOwnerType.Character, characterId, request);
+
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogAddItem(characterId, item));
+                await uow.CompleteAsync();
+            }
+
+            await _changeNotifier.NotifyCharacterAddItemAsync(characterId, item);
+
+            return item;
         }
 
         public async Task<List<Loot>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId)

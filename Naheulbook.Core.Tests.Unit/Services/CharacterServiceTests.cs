@@ -106,6 +106,48 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
+        public async Task AddItemToCharacterAsync_ShouldNotifyChanges()
+        {
+            const int characterId = 4;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+            var request = new CreateItemRequest();
+            var expectedItem = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _itemService.AddItemToAsync(executionContext, ItemOwnerType.Character, characterId, request)
+                .Returns(expectedItem);
+
+            await _service.AddItemToCharacterAsync(executionContext, characterId, request);
+
+            await _changeNotifier.Received(1).NotifyCharacterAddItemAsync(characterId, expectedItem);
+        }
+
+        [Test]
+        public async Task AddItemToCharacterAsync_ShouldAddACharacterHistoryEntry()
+        {
+            const int characterId = 4;
+            var item = new Item();
+            var expectedCharacterHistoryEntry = new CharacterHistoryEntry();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
+                .Returns(new Character {Id = characterId});
+            _itemService.AddItemToAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<ItemOwnerType>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
+                .Returns(item);
+            _characterHistoryUtil.CreateLogAddItem(characterId, item)
+                .Returns(expectedCharacterHistoryEntry);
+
+            await _service.AddItemToCharacterAsync(new NaheulbookExecutionContext(), characterId, new CreateItemRequest());
+
+            Received.InOrder(() =>
+            {
+                _unitOfWorkFactory.GetUnitOfWork(1).CharacterHistoryEntries.Add(expectedCharacterHistoryEntry);
+                _unitOfWorkFactory.GetUnitOfWork(1).CompleteAsync();
+            });
+        }
+
+        [Test]
         public void AddItemToCharacterAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;

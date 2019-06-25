@@ -155,11 +155,7 @@ namespace Naheulbook.Web
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod());
 
             app.UseMiddleware<HttpExceptionMiddleware>();
 

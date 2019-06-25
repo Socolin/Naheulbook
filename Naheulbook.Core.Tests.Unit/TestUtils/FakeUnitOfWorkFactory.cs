@@ -18,6 +18,8 @@ namespace Naheulbook.Core.Tests.Unit.TestUtils
 
         public IUnitOfWork CreateUnitOfWork()
         {
+            while (_hubUnitOfWorks.Count <= _uowIndex)
+                _hubUnitOfWorks.Add(CreateSubstituteUnitOfWork());
             return _hubUnitOfWorks[_uowIndex++];
         }
 

@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
 using Naheulbook.Web.Hubs;
+using Naheulbook.Web.Responses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -20,15 +22,18 @@ namespace Naheulbook.Web.Services
 
         private readonly IHubContext<ChangeNotifierHub> _hubContext;
         private readonly IHubGroupUtil _hubGroupUtil;
+        private readonly IMapper _mapper;
         private static JsonSerializerSettings _jsonSerializerSettings;
 
         public ChangeNotifier(
             IHubContext<ChangeNotifierHub> hubContext,
-            IHubGroupUtil hubGroupUtil
+            IHubGroupUtil hubGroupUtil,
+            IMapper mapper
         )
         {
             _hubContext = hubContext;
             _hubGroupUtil = hubGroupUtil;
+            _mapper = mapper;
             _jsonSerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -65,10 +70,20 @@ namespace Naheulbook.Web.Services
             return SendCharacterChangeAsync(character, "update", new {Stat = "name", Value = character.Name});
         }
 
+        public Task NotifyCharacterAddItemAsync(int characterId, Item item)
+        {
+            return SendCharacterChangeAsync(characterId, "addItem", _mapper.Map<ItemResponse>(item));
+        }
+
         private Task SendCharacterChangeAsync(Character character, string action, object data)
         {
-            return _hubContext.Clients.Group(_hubGroupUtil.GetCharacterGroupName(character.Id))
-                .SendAsync("event", GetPacket(ElementType.Character, character.Id, action, data));
+            return SendCharacterChangeAsync(character.Id, action, data);
+        }
+
+        private Task SendCharacterChangeAsync(int characterId, string action, object data)
+        {
+            return _hubContext.Clients.Group(_hubGroupUtil.GetCharacterGroupName(characterId))
+                .SendAsync("event", GetPacket(ElementType.Character, characterId, action, data));
         }
 
         private Task SendGroupChangeAsync(Group group, string action, object data)
