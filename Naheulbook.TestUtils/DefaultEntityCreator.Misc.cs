@@ -32,5 +32,16 @@ namespace Naheulbook.TestUtils
                 EndDay = 10
             };
         }
+
+        public Icon CreateIcon(string suffix = null)
+        {
+            if (suffix == null)
+                suffix = RngUtil.GetRandomHexString(8);
+
+            return new Icon
+            {
+                Name = $"some-icon-name-{suffix}",
+            };
+        }
     }
 }

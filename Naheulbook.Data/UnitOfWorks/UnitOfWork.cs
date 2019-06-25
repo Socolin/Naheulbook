@@ -18,6 +18,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IGroupRepository Groups { get; }
         IGroupHistoryEntryRepository GroupHistoryEntries { get; }
         IGroupInviteRepository GroupInvites { get; }
+        IIconRepository Icons { get; }
         IItemRepository Items { get; }
         IItemTemplateRepository ItemTemplates { get; }
         IItemTemplateCategoryRepository ItemTemplateCategories { get; }
@@ -58,6 +59,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IGroupRepository Groups => new GroupRepository(_naheulbookDbContext);
         public IGroupHistoryEntryRepository GroupHistoryEntries => new GroupHistoryEntryRepository(_naheulbookDbContext);
         public IGroupInviteRepository GroupInvites => new GroupInviteRepository(_naheulbookDbContext);
+        public IIconRepository Icons => new IconRepository(_naheulbookDbContext);
         public IItemRepository Items=> new ItemRepository(_naheulbookDbContext);
         public IItemTemplateRepository ItemTemplates => new ItemTemplateRepository(_naheulbookDbContext);
         public IItemTemplateSectionRepository ItemTemplateSections => new ItemTemplateSectionRepository(_naheulbookDbContext);

@@ -24,10 +24,10 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<GodResponse>>> GetItemTemplateSectionsAsync()
+        public async Task<ActionResult<List<GodResponse>>> GetAllGodsAsync()
         {
-            var sections = await _godService.GetAllGodsAsync();
-            return _mapper.Map<List<GodResponse>>(sections);
+            var gods = await _godService.GetAllGodsAsync();
+            return _mapper.Map<List<GodResponse>>(gods);
         }
     }
 }

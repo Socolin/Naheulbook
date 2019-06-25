@@ -99,7 +99,7 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `group`;" +
                     "DELETE FROM `group_history`;" +
                     "DELETE FROM `group_invitations`;" +
-                    // "DELETE FROM `icon`;" +
+                    "DELETE FROM `icon`;" +
                     "DELETE FROM `item`;" +
                     "DELETE FROM `item_slot`;" +
                     "DELETE FROM `item_template`;" +

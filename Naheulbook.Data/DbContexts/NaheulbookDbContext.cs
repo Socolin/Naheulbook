@@ -59,6 +59,8 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new GroupHistoryEntryConfiguration());
             modelBuilder.ApplyConfiguration(new GroupInviteConfiguration());
 
+            modelBuilder.ApplyConfiguration(new IconConfiguration());
+
             modelBuilder.ApplyConfiguration(new ItemConfiguration());
 
             modelBuilder.ApplyConfiguration(new ItemTemplateConfiguration());
