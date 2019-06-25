@@ -53,6 +53,17 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddCharacterWithAllData(_scenarioContext.GetUserId());
         }
 
+        [Given(@"an item based on that item template in the character inventory")]
+        public void GivenAnItemBasedOnThatItemTemplateInTheCharacterInventory()
+        {
+            _testDataUtil.AddItem(_testDataUtil.GetLast<Character>());
+            _testDataUtil.GetLast<Character>().Items = new List<Item>
+            {
+                _testDataUtil.GetLast<Item>()
+            };
+            _testDataUtil.SaveChanges();
+        }
+
         [Given("that the (.+) character is a member of the group")]
         public void GivenThatXTheCharacterIsAMemberOfTheGroup(string indexString)
         {

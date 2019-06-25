@@ -74,6 +74,8 @@ Feature: Character
   Scenario: Load a character details
     Given a JWT for a user
     Given a character with all possible data
+    And an item template with all optional fields set
+    And an item based on that item template in the character inventory
 
     When performing a GET to the url "/api/v2/characters/${Character.Id}" with the current jwt
 
@@ -176,7 +178,63 @@ Feature: Character
             }
         ],
         "invites": [],
-        "items": [],
+        "items": [
+          {
+            "id": ${Item.Id},
+            "data": ${Item.Data},
+            "modifiers": ${Item.Modifiers},
+            "template": {
+              "id": ${ItemTemplate.Id},
+              "name": "${ItemTemplate.Name}",
+              "techName": "${ItemTemplate.TechName}",
+              "source": "official",
+              "categoryId": ${ItemTemplateCategory.Id},
+              "data": {
+                "key": "value"
+              },
+              "slots": [
+                {
+                  "id": ${Slot.[-1].Id},
+                  "name": "${Slot.[-1].Name}",
+                  "techName": "${Slot.[-1].TechName}"
+                }
+              ],
+              "modifiers": [
+                {
+                  "stat": "${ItemTemplate.Modifiers.[0].StatName}",
+                  "value": ${ItemTemplate.Modifiers.[0].Value},
+                  "job": ${ItemTemplate.Modifiers.[0].RequireJobId},
+                  "origin": ${ItemTemplate.Modifiers.[0].RequireOriginId},
+                  "special": [],
+                  "type": "ADD"
+                }
+              ],
+              "requirements": [
+                {
+                  "stat": "${ItemTemplate.Requirements.[0].StatName}",
+                  "min": ${ItemTemplate.Requirements.[0].MinValue},
+                  "max": ${ItemTemplate.Requirements.[0].MaxValue}
+                }
+              ],
+              "skillModifiers": [
+                {
+                  "skill": ${Skill.[-3].Id},
+                  "value": 2
+                }
+              ],
+              "skills": [
+                {
+                  "id":  ${Skill.[-1].Id}
+                }
+              ],
+              "unskills": [
+                {
+                  "id":  ${Skill.[-2].Id}
+                }
+              ]
+            }
+          }
+        ],
         "group": {
             "id": ${Group.Id},
             "name": "${Group.Name}"

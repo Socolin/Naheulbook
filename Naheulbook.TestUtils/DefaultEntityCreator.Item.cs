@@ -1,4 +1,8 @@
+using System.Collections.Generic;
 using Naheulbook.Data.Models;
+using Naheulbook.Shared.TransientModels;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
 
@@ -68,7 +72,18 @@ namespace Naheulbook.TestUtils
             return new Item
             {
                 Data = @"{""key"":""value""}",
-                Modifiers = @"[{""key"":""value""}]",
+                Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
+                {
+                    new ActiveStatsModifier
+                    {
+                        Active = true,
+                        Description = "some-description"
+                    }
+                }, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                }),
                 ItemTemplateId = itemTemplate.Id,
                 CharacterId = character.Id,
                 Character = character

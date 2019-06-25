@@ -20,7 +20,6 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name));
             CreateMap<Character, CharacterResponse>()
                 .ForMember(x => x.Stats, opt => opt.MapFrom(c => new CharacterResponse.BasicStats {Ad = c.Ad, Cou = c.Cou, Cha = c.Cha, Fo = c.Fo, Int = c.Int}))
-                .ForMember(x => x.Items, opt => opt.Ignore())
                 .ForMember(x => x.Invites, opt => opt.Ignore())
                 .ForMember(x => x.SkillIds, opt => opt.MapFrom(c => c.Skills.Select(x => x.SkillId)))
                 .ForMember(x => x.JobIds, opt => opt.MapFrom(c => c.Jobs.Select(x => x.JobId)))

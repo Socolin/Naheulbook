@@ -46,8 +46,8 @@ namespace Naheulbook.Web.Controllers
         {
             try
             {
-                var characters = await _characterService.LoadCharacterDetailsAsync(executionContext, characterId);
-                return _mapper.Map<CharacterResponse>(characters);
+                var character = await _characterService.LoadCharacterDetailsAsync(executionContext, characterId);
+                return _mapper.Map<CharacterResponse>(character);
             }
             catch (ForbiddenAccessException ex)
             {

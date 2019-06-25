@@ -6,6 +6,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Naheulbook.Data\Naheulbook.Data.csproj" />
+        <ProjectReference Include="..\Naheulbook.Shared\Naheulbook.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
