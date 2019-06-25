@@ -34,7 +34,7 @@ export class ItemService {
         return this.httpClient.post<Item>('/api/item/giveItem', {itemId: itemId, characterId: characterId, quantity: quantity});
     }
 
-    addItemTo(targetType: string
+    addItemTo(targetType: 'character'|'monster'|'loot'
         , targetId: number
         , itemTemplateId: number
         , itemData: ItemData): Observable<Item> {
@@ -45,11 +45,21 @@ export class ItemService {
         }
 
         return new Observable(observer => {
+            let url: string;
+            switch (targetType) {
+                case 'character':
+                    url = `/api/v2/characters/${targetId}/items`;
+                    break;
+                case 'monster':
+                    url = `/api/v2/monsters/${targetId}/items`;
+                    break;
+                case 'loot':
+                    url = `/api/v2/loots/${targetId}/items`;
+                    break;
+            }
             forkJoin([
-                this.httpClient.post('/api/item/add', {
+                this.httpClient.post(url, {
                     itemTemplateId: itemTemplateId,
-                    targetId: targetId,
-                    targetType: targetType,
                     itemData: itemData
                 }),
                 this._skillService.getSkillsById()
