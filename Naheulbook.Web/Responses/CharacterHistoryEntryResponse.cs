@@ -11,5 +11,6 @@ namespace Naheulbook.Web.Responses
         public bool Gm { get; set; }
         public string Info { get; set; }
         public bool IsGroup => false;
+        public ItemResponse Item { get; set; }
     }
 }
