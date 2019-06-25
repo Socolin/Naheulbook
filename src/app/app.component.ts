@@ -11,13 +11,11 @@ import {ThemeService} from './theme.service';
 })
 export class AppComponent implements OnInit {
     constructor(private _themeService: ThemeService
-        , private _loginService: LoginService
         , public _router: Router) {
     };
 
     ngOnInit() {
         this._themeService.updateTheme();
-        this._loginService.checkLogged().subscribe(() => {});
     }
 }
 

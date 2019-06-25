@@ -1,7 +1,7 @@
 import {share, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, ReplaySubject} from 'rxjs';
+import {from, Observable, ReplaySubject} from 'rxjs';
 
 import {JwtResponse, User} from './user.model';
 
@@ -129,6 +129,9 @@ export class LoginService {
     }
 
     isLogged(): Observable<boolean> {
+        if (this.currentJwt) {
+            return from([true]);
+        }
         return this.checkLogged().pipe(map(user => user !== undefined));
     }
 

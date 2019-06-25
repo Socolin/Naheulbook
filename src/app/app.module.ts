@@ -1,4 +1,4 @@
-import {NgModule, ErrorHandler} from '@angular/core';
+import {NgModule, ErrorHandler, APP_INITIALIZER, Injectable} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
@@ -37,6 +37,7 @@ import {ThemeService} from './theme.service';
 import {WebsocketModule} from './websocket/websocket.module';
 import {ErrorReportService} from './error-report.service';
 import {AuthenticationInterceptor} from './user/authentication.interceptor';
+import {LoginService} from './user';
 
 @NgModule({
     imports: [
@@ -87,7 +88,22 @@ import {AuthenticationInterceptor} from './user/authentication.interceptor';
             useClass: AuthenticationInterceptor,
             multi: true
         },
+        {
+            provide: APP_INITIALIZER,
+            useFactory: onAppInit,
+            multi: true,
+            deps: [LoginService]
+        },
     ]
 })
 export class AppModule {
+}
+
+function onAppInit(loginService: LoginService): () => Promise<any> {
+    return () => new Promise((resolve, reject) => {
+        loginService.checkLogged().subscribe(
+            () => resolve(),
+            () => reject()
+        );
+    });
 }

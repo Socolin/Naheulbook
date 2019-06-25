@@ -134,7 +134,6 @@ export class WebSocketService {
         this._hubConnection.start()
             .then(async () => {
                 this.connecting = false;
-                console.log('start');
                 if (reconnect) {
                     for (let type in this.registeredElements) {
                         if (!this.registeredElements.hasOwnProperty(type)) {

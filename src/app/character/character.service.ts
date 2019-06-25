@@ -92,11 +92,9 @@ export class CharacterService {
     }
 
     changeCharacterStat(characterId: number, stat: string, value: any): Observable<{stat: string, value: any}> {
-        return this.httpClient.post<{stat: string, value: any}>('/api/character/update', {
-            characterId: characterId,
-            stat: stat,
-            value: value
-        });
+        return this.httpClient.patch<{stat: string, value: any}>(`/api/v2/characters/${characterId}/stats`, {
+            [stat]: value
+        }).pipe(map(() => {return {stat, value}}));
     }
 
     changeGmData(characterId: number, key: string, value: any): Observable<{key: string, value: any}> {
