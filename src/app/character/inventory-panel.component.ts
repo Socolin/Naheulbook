@@ -277,7 +277,10 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         });
         this._itemActionService.registerAction('ignoreRestrictions').subscribe((event: {item: Item, data: any}) => {
             let item = event.item;
-            item.data.ignoreRestrictions = event.data;
+            item.data = {
+                ...item.data,
+                ignoreRestrictions: event.data
+            };
             this._itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
@@ -305,11 +308,12 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         this._itemActionService.registerAction('edit_item_name').subscribe((event: {item: Item, data: any}) => {
             let eventData = event.data;
             let item = event.item;
-            let data = {
+            item.data = {
+                ...item.data,
                 name: eventData.name,
                 description: eventData.description
             };
-            this._itemService.updateItem(item.id, data).subscribe(
+            this._itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
         });
@@ -331,7 +335,10 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         this._itemActionService.registerAction('change_icon').subscribe((event: {item: Item, data: any}) => {
             let eventData = event.data;
             let item = event.item;
-            item.data.icon = eventData.icon;
+            item.data = {
+                ...item.data,
+                icon: eventData.icon
+            };
             this._itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );

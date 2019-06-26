@@ -224,7 +224,10 @@ export class FighterComponent implements OnInit, OnChanges {
     ngOnInit() {
         this._itemActionService.registerAction('ignoreRestrictions').subscribe((event: {item: Item, data: any}) => {
             let item = event.item;
-            item.data.ignoreRestrictions = event.data;
+            item.data = {
+                ...item.data,
+                ignoreRestrictions: event.data
+            };
             this._itemService.updateItem(item.id, item.data).subscribe(
                 this.fighter.character.onUpdateItem.bind(this.fighter.character)
             );
