@@ -5,14 +5,11 @@ using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Web.Responses
 {
-    public class ItemResponse
+    public class ItemPartialResponse
     {
         public int Id { get; set; }
         public JObject Data { get; set; }
         public List<ActiveStatsModifier> Modifiers { get; set; }
         public int? ContainerId { get; set; }
-
-        [JsonProperty("template")]
-        public ItemTemplateResponse ItemTemplate { get; set; }
     }
 }

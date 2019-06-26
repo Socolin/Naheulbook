@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
@@ -75,6 +76,18 @@ namespace Naheulbook.Web.Services
             return SendCharacterChangeAsync(characterId, "addItem", _mapper.Map<ItemResponse>(item));
         }
 
+        public Task NotifyItemDataChangedAsync(Item item)
+        {
+            if (item.CharacterId != null)
+                return SendCharacterChangeAsync(item.CharacterId.Value, "updateItem", _mapper.Map<ItemResponse>(item));
+            if (item.MonsterId != null)
+                return SendMonsterChangeAsync(item.MonsterId.Value, "updateItem", _mapper.Map<ItemResponse>(item));
+            if (item.LootId != null)
+                return SendLootChangeAsync(item.LootId.Value, "updateItem", _mapper.Map<ItemResponse>(item));
+
+            throw new NotSupportedException();
+        }
+
         private Task SendCharacterChangeAsync(Character character, string action, object data)
         {
             return SendCharacterChangeAsync(character.Id, action, data);
@@ -88,20 +101,35 @@ namespace Naheulbook.Web.Services
 
         private Task SendGroupChangeAsync(Group group, string action, object data)
         {
-            return _hubContext.Clients.Group(_hubGroupUtil.GetGroupGroupName(group.Id))
-                .SendAsync("event", GetPacket(ElementType.Group, group.Id, action, data));
+            return SendGroupChangeAsync(group.Id, action, data);
+        }
+
+        private Task SendGroupChangeAsync(int groupId, string action, object data)
+        {
+            return _hubContext.Clients.Group(_hubGroupUtil.GetGroupGroupName(groupId))
+                .SendAsync("event", GetPacket(ElementType.Group, groupId, action, data));
         }
 
         private Task SendLootChangeAsync(Loot loot, string action, object data)
         {
-            return _hubContext.Clients.Group(_hubGroupUtil.GetLootGroupName(loot.Id))
-                .SendAsync("event", GetPacket(ElementType.Loot, loot.Id, action, data));
+            return SendLootChangeAsync(loot.Id, action, data);
+        }
+
+        private Task SendLootChangeAsync(int lootId, string action, object data)
+        {
+            return _hubContext.Clients.Group(_hubGroupUtil.GetLootGroupName(lootId))
+                .SendAsync("event", GetPacket(ElementType.Loot, lootId, action, data));
         }
 
         private Task SendMonsterChangeAsync(Monster monster, string action, object data)
         {
-            return _hubContext.Clients.Group(_hubGroupUtil.GetMonsterGroupName(monster.Id))
-                .SendAsync("event", GetPacket(ElementType.Monster, monster.Id, action, data));
+            return SendMonsterChangeAsync(monster.Id, action, data);
+        }
+
+        private Task SendMonsterChangeAsync(int monsterId, string action, object data)
+        {
+            return _hubContext.Clients.Group(_hubGroupUtil.GetMonsterGroupName(monsterId))
+                .SendAsync("event", GetPacket(ElementType.Monster, monsterId, action, data));
         }
 
         private static object GetPacket(ElementType elementType, int elementId, string opcode, object data)

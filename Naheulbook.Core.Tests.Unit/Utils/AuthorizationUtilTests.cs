@@ -177,5 +177,82 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             act.Should().NotThrow();
         }
+
+        [Test]
+        public void EnsureItemAccess_WhenItemIsOwnedByACharacter_ShouldThrowIfNotUserIsNotOwnerAndGroupMaster()
+        {
+            var item = new Item {Character = new Character {OwnerId = 10, GroupId = 8, Group = new Group {MasterId = 15}}};
+            var executionContext = new NaheulbookExecutionContext {UserId = 12};
+
+            Action act = () => _authorizationUtil.EnsureItemAccess(executionContext, item);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureItemAccess_WhenItemIsOwnedByACharacter_ShouldNotThrowIfUserIsCharacterOwner()
+        {
+            var item = new Item {CharacterId = 1, Character = new Character {OwnerId = 10, GroupId = 8, Group = new Group {MasterId = 15}}};
+            var executionContext = new NaheulbookExecutionContext {UserId = 10};
+
+            Action act = () => _authorizationUtil.EnsureItemAccess(executionContext, item);
+
+            act.Should().NotThrow();
+        }
+
+        [Test]
+        public void EnsureItemAccess_WhenItemIsOwnedByACharacter_ShouldNotThrowIfUserIsGroupMaster()
+        {
+            var item = new Item {CharacterId = 1, Character = new Character {OwnerId = 10, GroupId = 8, Group = new Group {MasterId = 15}}};
+            var executionContext = new NaheulbookExecutionContext {UserId = 15};
+
+            Action act = () => _authorizationUtil.EnsureItemAccess(executionContext, item);
+
+            act.Should().NotThrow();
+        }
+
+        [Test]
+        public void EnsureItemAccess_WhenItemIsOwnedByALoot_ShouldThrowIfNotUserIsNotOwnerAndGroupMaster()
+        {
+            var item = new Item {LootId = 1, Loot = new Loot {GroupId = 8, Group = new Group {MasterId = 15}}};
+            var executionContext = new NaheulbookExecutionContext {UserId = 12};
+
+            Action act = () => _authorizationUtil.EnsureItemAccess(executionContext, item);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureItemAccess_WhenItemIsOwnedByALoot_ShouldNotThrowIfUserIsLootOwner()
+        {
+            var item = new Item {LootId = 1, Loot = new Loot {GroupId = 8, Group = new Group {MasterId = 15}}};
+            var executionContext = new NaheulbookExecutionContext {UserId = 15};
+
+            Action act = () => _authorizationUtil.EnsureItemAccess(executionContext, item);
+
+            act.Should().NotThrow();
+        }
+
+        [Test]
+        public void EnsureItemAccess_WhenItemIsOwnedByAMonster_ShouldThrowIfNotUserIsNotOwnerAndGroupMaster()
+        {
+            var item = new Item {MonsterId = 1, Monster = new Monster {GroupId = 8, Group = new Group {MasterId = 15}}};
+            var executionContext = new NaheulbookExecutionContext {UserId = 12};
+
+            Action act = () => _authorizationUtil.EnsureItemAccess(executionContext, item);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureItemAccess_WhenItemIsOwnedByAMonster_ShouldNotThrowIfUserIsMonsterOwner()
+        {
+            var item = new Item {MonsterId = 1, Monster = new Monster {GroupId = 8, Group = new Group {MasterId = 15}}};
+            var executionContext = new NaheulbookExecutionContext {UserId = 15};
+
+            Action act = () => _authorizationUtil.EnsureItemAccess(executionContext, item);
+
+            act.Should().NotThrow();
+        }
     }
 }

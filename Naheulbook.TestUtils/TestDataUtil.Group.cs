@@ -15,6 +15,13 @@ namespace Naheulbook.TestUtils
             return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<User>().Id, GetLast<Location>()), customizer);
         }
 
+        public TestDataUtil AddGroupWithRequiredData(Action<Group> customizer = null)
+        {
+            AddUser();
+            AddLocation();
+            return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<User>().Id, GetLast<Location>()), customizer);
+        }
+
         public TestDataUtil AddLoot(Action<Loot> customizer = null)
         {
             return SaveEntity(_defaultEntityCreator.CreateLoot(GetLast<Group>()), customizer);

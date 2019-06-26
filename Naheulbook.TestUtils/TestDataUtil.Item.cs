@@ -26,6 +26,13 @@ namespace Naheulbook.TestUtils
             return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateCategory>()), customizer);
         }
 
+        public TestDataUtil AddItemTemplateAndRequiredData(Action<ItemTemplate> customizer = null)
+        {
+            AddItemTemplateSection();
+            AddItemTemplateCategory();
+            return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateCategory>()), customizer);
+        }
+
         public TestDataUtil AddItemTemplateWithAllData()
         {
             AddItemTemplateSection()

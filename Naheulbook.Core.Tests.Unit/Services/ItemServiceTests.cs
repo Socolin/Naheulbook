@@ -1,11 +1,16 @@
+using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Core.Tests.Unit.Exceptions;
 using Naheulbook.Core.Tests.Unit.TestUtils;
+using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -14,16 +19,25 @@ namespace Naheulbook.Core.Tests.Unit.Services
     public class ItemServiceTests
     {
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
-        private ItemService _service;
         private IItemFactory _itemFactory;
+        private IChangeNotifier _changeNotifier;
+        private IAuthorizationUtil _authorizationUtil;
+        private ItemService _service;
 
         [SetUp]
         public void SetUp()
         {
             _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _itemFactory = Substitute.For<IItemFactory>();
+            _changeNotifier = Substitute.For<IChangeNotifier>();
+            _authorizationUtil = Substitute.For<IAuthorizationUtil>();
 
-            _service = new ItemService(_unitOfWorkFactory, _itemFactory);
+            _service = new ItemService(
+                _unitOfWorkFactory,
+                _itemFactory,
+                _changeNotifier,
+                _authorizationUtil
+            );
         }
 
         [Test]
@@ -49,6 +63,56 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
             });
             actualItem.Should().BeSameAs(fullyLoadedItem);
+        }
+
+        [Test]
+        public async Task UpdateItemDataAsync_ShouldUpdateItemDataFieldAndSaveDb()
+        {
+            const int itemId = 4;
+            var itemData = JObject.FromObject(new {a = "b"});
+            var item = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+                .Do(info => item.Data.Should().Be(itemData.ToString(Formatting.None)));
+
+            var actualItem = await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
+
+            actualItem.Should().BeSameAs(item);
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+        }
+
+        [Test]
+        public void UpdateItemDataAsync_EnsureCurrentUserCanAccessThisItem()
+        {
+            const int itemId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+            var item = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+            _authorizationUtil.When(x => x.EnsureItemAccess(executionContext, item))
+                .Throw(new TestException());
+
+            Func<Task> act = () =>  _service.UpdateItemDataAsync(executionContext, itemId, new JObject());
+
+            act.Should().Throw<TestException>();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+        }
+
+        [Test]
+        public async Task UpdateItemDataAsync_ShouldCallChangeNotifier()
+        {
+            const int itemId = 4;
+            var item = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+
+            await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, new JObject());
+
+            await _changeNotifier.Received(1).NotifyItemDataChangedAsync(item);
         }
     }
 }

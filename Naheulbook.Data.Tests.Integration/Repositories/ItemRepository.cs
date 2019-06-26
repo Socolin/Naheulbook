@@ -4,6 +4,7 @@ using FluentAssertions;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
+using Naheulbook.TestUtils.Extensions;
 using NUnit.Framework;
 
 namespace Naheulbook.Data.Tests.Integration.Repositories
@@ -31,16 +32,65 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             var item = await _itemRepository.GetWithAllDataAsync(TestDataUtil.Get<ItemTemplate>().Id);
 
-            item.Should().BeEquivalentTo(TestDataUtil.GetLast<Item>(), config => config.Excluding(x => x.Character).Excluding(x => x.Loot).Excluding(x => x.Monster).Excluding(x => x.ItemTemplate));
+            item.Should().BeEquivalentTo(TestDataUtil.GetLast<Item>(), config => config.ExcludingChildren());
             var itemTemplate = item.ItemTemplate;
-            itemTemplate.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>(), config => config.Excluding(x => x.Category).Excluding(x => x.Requirements).Excluding(x => x.Modifiers).Excluding(x => x.Skills).Excluding(x => x.UnSkills).Excluding(x => x.SkillModifiers).Excluding(x => x.Slots));
-            itemTemplate.Modifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Modifiers, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.RequireJob).Excluding(x => x.RequireOrigin).Excluding(x => x.Stat));
-            itemTemplate.Requirements.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Requirements, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Stat));
-            itemTemplate.Skills.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Skills, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
-            itemTemplate.UnSkills.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().UnSkills, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
-            itemTemplate.SkillModifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().SkillModifiers, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
-            itemTemplate.Slots.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Slots, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Slot));
+            itemTemplate.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>(), config => config.ExcludingChildren());
+            itemTemplate.Modifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Modifiers, config => config.ExcludingChildren());
+            itemTemplate.Requirements.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Requirements, config => config.ExcludingChildren());
+            itemTemplate.Skills.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Skills, config => config.ExcludingChildren());
+            itemTemplate.UnSkills.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().UnSkills, config => config.ExcludingChildren());
+            itemTemplate.SkillModifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().SkillModifiers, config => config.ExcludingChildren());
+            itemTemplate.Slots.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Slots, config => config.ExcludingChildren());
             itemTemplate.Slots.First().Slot.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Slots.First().Slot);
+        }
+
+        [Test]
+        public async Task GetWithOwnerAsync_ShouldLoadAllRelatedDataUsedForCharacterPermissionCheck()
+        {
+            TestDataUtil.AddItemTemplateAndRequiredData();
+            TestDataUtil.AddGroupWithRequiredData();
+            var user = TestDataUtil.AddUser().GetLast<User>();
+            var character = TestDataUtil.AddOrigin().AddCharacter(user.Id, u => u.Group = TestDataUtil.GetLast<Group>()).GetLast<Character>();
+            TestDataUtil.AddItem(character);
+
+            var item = await _itemRepository.GetWithOwnerAsync(TestDataUtil.Get<ItemTemplate>().Id);
+
+            var expectation = TestDataUtil.GetLast<Item>();
+            item.Should().BeEquivalentTo(expectation, config => config.ExcludingChildren());
+            item.Character.Should().BeEquivalentTo(TestDataUtil.GetLast<Character>(), config => config.ExcludingChildren());
+            item.Character.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
+        }
+
+        [Test]
+        public async Task GetWithOwnerAsync_ShouldLoadAllRelatedDataUsedForLootPermissionCheck()
+        {
+            TestDataUtil.AddItemTemplateAndRequiredData();
+            TestDataUtil.AddGroupWithRequiredData();
+            TestDataUtil.AddLoot();
+            TestDataUtil.AddItem(TestDataUtil.GetLast<Loot>());
+
+            var item = await _itemRepository.GetWithOwnerAsync(TestDataUtil.Get<ItemTemplate>().Id);
+
+            var expectation = TestDataUtil.GetLast<Item>();
+            item.Should().BeEquivalentTo(expectation, config => config.ExcludingChildren());
+            item.Loot.Should().BeEquivalentTo(TestDataUtil.GetLast<Loot>(), config => config.ExcludingChildren());
+            item.Loot.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
+        }
+
+        [Test]
+        public async Task GetWithOwnerAsync_ShouldLoadAllRelatedDataUsedForMonsterPermissionCheck()
+        {
+            TestDataUtil.AddItemTemplateAndRequiredData();
+            TestDataUtil.AddGroupWithRequiredData();
+            TestDataUtil.AddMonster();
+            TestDataUtil.AddItem(TestDataUtil.GetLast<Monster>());
+
+            var item = await _itemRepository.GetWithOwnerAsync(TestDataUtil.Get<ItemTemplate>().Id);
+
+            var expectation = TestDataUtil.GetLast<Item>();
+            item.Should().BeEquivalentTo(expectation, config => config.ExcludingChildren());
+            item.Monster.Should().BeEquivalentTo(TestDataUtil.GetLast<Monster>(), config => config.ExcludingChildren());
+            item.Monster.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
         }
     }
 }

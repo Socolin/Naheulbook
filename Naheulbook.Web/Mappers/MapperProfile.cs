@@ -60,6 +60,9 @@ namespace Naheulbook.Web.Mappers
                 .Include<GroupHistoryEntry, GroupHistoryEntryResponse>()
                 .Include<CharacterHistoryEntry, CharacterHistoryEntryResponse>();
 
+            CreateMap<Item, ItemPartialResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data)))
+                .ForMember(m => m.Modifiers, opt => opt.MapFrom(x => MapperHelpers.FromJson<List<ActiveStatsModifier>>(x.Modifiers)));
             CreateMap<Item, ItemResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data)))
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(x => MapperHelpers.FromJson<List<ActiveStatsModifier>>(x.Modifiers)));

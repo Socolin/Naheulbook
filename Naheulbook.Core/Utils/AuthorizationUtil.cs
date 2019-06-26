@@ -15,6 +15,7 @@ namespace Naheulbook.Core.Utils
         void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, Group group);
         void EnsureCharacterAccess(NaheulbookExecutionContext executionContext, Character character);
         void EnsureIsGroupOwnerOrMember(NaheulbookExecutionContext executionContext, Group group);
+        void EnsureItemAccess(NaheulbookExecutionContext executionContext, Item item);
     }
 
     public class AuthorizationUtil : IAuthorizationUtil
@@ -73,6 +74,26 @@ namespace Naheulbook.Core.Utils
                 return;
 
             if (group.Characters.Any(c => c.OwnerId == executionContext.UserId))
+                return;
+
+            throw new ForbiddenAccessException();
+        }
+
+        public void EnsureItemAccess(NaheulbookExecutionContext executionContext, Item item)
+        {
+            if (item.CharacterId != null)
+            {
+                if (item.Character.OwnerId == executionContext.UserId)
+                    return;
+
+                if (item.Character.GroupId != null && item.Character.Group.MasterId == executionContext.UserId)
+                    return;
+            }
+
+            if (item.MonsterId != null && item.Monster.Group.MasterId == executionContext.UserId)
+                return;
+
+            if (item.LootId != null && item.Loot.Group.MasterId == executionContext.UserId)
                 return;
 
             throw new ForbiddenAccessException();
