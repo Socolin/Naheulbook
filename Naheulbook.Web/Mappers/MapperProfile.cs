@@ -174,6 +174,8 @@ namespace Naheulbook.Web.Mappers
 
             CreateMap<string, LapCountDecrement>().ConvertUsing(c => c == null ? null : MapperHelpers.FromJson<LapCountDecrement>(c));
 
+            CreateMap<Stat, StatResponse>();
+
             CreateMap<User, UserInfoResponse>()
                 .ForMember(m => m.LinkedWithFb, opt => opt.MapFrom(u => u.FbId != null))
                 .ForMember(m => m.LinkedWithTwitter, opt => opt.MapFrom(u => u.TwitterId != null))

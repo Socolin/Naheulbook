@@ -104,6 +104,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
             services.AddSingleton<ISkillService, SkillService>();
             services.AddSingleton<ISocialMediaUserLinkService, SocialMediaUserLinkService>();
+            services.AddSingleton<IStatService, StatService>();
             services.AddSingleton<IUserService, UserService>();
 
             services.AddSingleton<IActiveStatsModifierUtil, ActiveStatsModifierUtil>();

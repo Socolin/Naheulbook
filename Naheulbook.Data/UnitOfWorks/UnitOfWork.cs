@@ -34,6 +34,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IOriginRepository Origins { get; }
         ISkillRepository Skills { get; }
         ISlotRepository Slots { get; }
+        IStatRepository Stats { get; }
         IUserRepository Users { get; }
 
         Task<int> CompleteAsync();
@@ -75,6 +76,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IOriginRepository Origins => new OriginRepository(_naheulbookDbContext);
         public ISkillRepository Skills => new SkillRepository(_naheulbookDbContext);
         public ISlotRepository Slots => new SlotRepository(_naheulbookDbContext);
+        public IStatRepository Stats => new StatRepository(_naheulbookDbContext);
         public IUserRepository Users => new UserRepository(_naheulbookDbContext);
 
         public Task<int> CompleteAsync()
