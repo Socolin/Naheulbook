@@ -89,6 +89,8 @@ namespace Naheulbook.Web
             services.AddSingleton<IGroupService, GroupService>();
             services.AddSingleton<IIconService, IconService>();
             services.AddSingleton<IItemService, ItemService>();
+            services.AddSingleton<IItemUtil, ItemUtil>();
+            services.AddSingleton<IItemDataUtil, ItemDataUtil>();
             services.AddSingleton<IItemTemplateService, ItemTemplateService>();
             services.AddSingleton<IItemTemplateCategoryService, ItemTemplateCategoryService>();
             services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();

@@ -13,6 +13,8 @@ namespace Naheulbook.Core.Utils
         CharacterHistoryEntry CreateLogChangeSex(Character character, string characterSex, string requestSex);
         CharacterHistoryEntry CreateLogChangeName(Character character, string characterName, string requestName);
         CharacterHistoryEntry CreateLogAddItem(int characterId, Item item);
+        CharacterHistoryEntry CreateLogEquipItem(int characterId, int itemId);
+        CharacterHistoryEntry CreateLogUnEquipItem(int characterId, int itemId);
     }
 
     public class CharacterHistoryUtil : ICharacterHistoryUtil
@@ -24,7 +26,8 @@ namespace Naheulbook.Core.Utils
         private const string ChangeExperienceActionName = "ADD_XP";
         private const string ChangeSexActionName = "CHANGE_SEX";
         private const string ChangeNameActionName = "CHANGE_NAME";
-
+        private const string EquipActionName = "CHANGE_NEQUIPAME";
+        private const string UnEquipActionName = "UNEQUIP";
 
         private readonly IJsonUtil _jsonUtil;
 
@@ -107,6 +110,28 @@ namespace Naheulbook.Core.Utils
                 Action = AddItemActionName,
                 Date = DateTime.Now,
                 ItemId = item.Id
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogEquipItem(int characterId, int itemId)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = EquipActionName,
+                Date = DateTime.Now,
+                ItemId = itemId
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogUnEquipItem(int characterId, int itemId)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = UnEquipActionName,
+                Date = DateTime.Now,
+                ItemId = itemId
             };
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
@@ -49,7 +50,6 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-
         [HttpPut("{ItemId}/modifiers")]
         public async Task<ActionResult<ItemPartialResponse>> PutEditItemModifiersAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -73,5 +73,27 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpPost("{ItemId}/equip")]
+        public async Task<ActionResult<ItemPartialResponse>> PostEquipItemAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int itemId,
+            EquipItemRequest request
+        )
+        {
+            try
+            {
+                var item = await _itemService.EquipItemAsync(executionContext, itemId, request);
+
+                return _mapper.Map<ItemPartialResponse>(item);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (ItemNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }

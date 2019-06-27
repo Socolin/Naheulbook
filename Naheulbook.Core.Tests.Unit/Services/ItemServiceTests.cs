@@ -25,6 +25,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private IItemFactory _itemFactory;
         private IChangeNotifier _changeNotifier;
         private IAuthorizationUtil _authorizationUtil;
+        private IItemUtil _itemUtil;
         private IJsonUtil _jsonUtil;
         private ItemService _service;
 
@@ -35,6 +36,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _itemFactory = Substitute.For<IItemFactory>();
             _changeNotifier = Substitute.For<IChangeNotifier>();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
+            _itemUtil = Substitute.For<IItemUtil>();
             _jsonUtil = Substitute.For<IJsonUtil>();
 
             _service = new ItemService(
@@ -42,6 +44,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _itemFactory,
                 _changeNotifier,
                 _authorizationUtil,
+                _itemUtil,
                 _jsonUtil
             );
         }
@@ -127,7 +130,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int itemId = 4;
             var itemModifiers = new List<ActiveStatsModifier>();
             var itemModifiersJson = "some-json";
-            var item = new Item();;
+            var item = new Item();
 
             _jsonUtil.Serialize(itemModifiers)
                 .Returns(itemModifiersJson);
@@ -172,6 +175,56 @@ namespace Naheulbook.Core.Tests.Unit.Services
             await _service.UpdateItemModifiersAsync(new NaheulbookExecutionContext(), itemId, new List<ActiveStatsModifier>());
 
             await _changeNotifier.Received(1).NotifyItemModifiersChangedAsync(item);
+        }
+
+        [Test]
+        public async Task EquipItemAsync_ShouldUpdateItemModifiersFieldAndSaveDb()
+        {
+            const int itemId = 4;
+            var equipRequest = new EquipItemRequest {Level = 24};
+            var item = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+                .Do(info => _itemUtil.Received(1).EquipItem(item, 24));
+
+            var actualItem = await _service.EquipItemAsync(new NaheulbookExecutionContext(), itemId, equipRequest);
+
+            actualItem.Should().BeSameAs(item);
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+        }
+
+        [Test]
+        public void EquipItemAsync_EnsureCurrentUserCanAccessThisItem()
+        {
+            const int itemId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+            var item = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+            _authorizationUtil.When(x => x.EnsureItemAccess(executionContext, item))
+                .Throw(new TestException());
+
+            Func<Task> act = () =>  _service.EquipItemAsync(executionContext, itemId, new EquipItemRequest());
+
+            act.Should().Throw<TestException>();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+        }
+
+        [Test]
+        public async Task EquipItemAsync_ShouldCallChangeNotifier()
+        {
+            const int itemId = 4;
+            var item = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+
+            await _service.EquipItemAsync(new NaheulbookExecutionContext(), itemId, new EquipItemRequest());
+
+            await _changeNotifier.Received(1).NotifyEquipItemAsync(item);
         }
     }
 }

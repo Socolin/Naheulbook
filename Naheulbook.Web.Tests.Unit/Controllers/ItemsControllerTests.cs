@@ -8,6 +8,7 @@ using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
+using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
@@ -53,6 +54,18 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
                 .Returns(Task.FromException<Item>(exception));
 
             Func<Task> act = () => _controller.PutEditItemModifiersAsync(_executionContext, 2, new List<ActiveStatsModifier>());
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetCommonItemExceptionsAndExpectedStatusCode))]
+        public void PostEquipItemAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _itemService.EquipItemAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EquipItemRequest>())
+                .Returns(Task.FromException<Item>(exception));
+
+            Func<Task> act = () => _controller.PostEquipItemAsync(_executionContext, 2, new EquipItemRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }

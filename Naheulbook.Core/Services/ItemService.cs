@@ -19,6 +19,7 @@ namespace Naheulbook.Core.Services
         Task<Item> AddItemToAsync(NaheulbookExecutionContext executionContext, ItemOwnerType ownerType, int ownerId, CreateItemRequest request);
         Task<Item> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, JObject itemData);
         Task<Item> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers);
+        Task<Item> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request);
     }
 
     public class ItemService : IItemService
@@ -27,6 +28,7 @@ namespace Naheulbook.Core.Services
         private readonly IItemFactory _itemFactory;
         private readonly IChangeNotifier _changeNotifier;
         private readonly IAuthorizationUtil _authorizationUtil;
+        private readonly IItemUtil _itemUtil;
         private readonly IJsonUtil _jsonUtil;
 
         public ItemService(
@@ -34,6 +36,7 @@ namespace Naheulbook.Core.Services
             IItemFactory itemFactory,
             IChangeNotifier changeNotifier,
             IAuthorizationUtil authorizationUtil,
+            IItemUtil itemUtil,
             IJsonUtil jsonUtil
         )
         {
@@ -41,6 +44,7 @@ namespace Naheulbook.Core.Services
             _itemFactory = itemFactory;
             _changeNotifier = changeNotifier;
             _authorizationUtil = authorizationUtil;
+            _itemUtil = itemUtil;
             _jsonUtil = jsonUtil;
         }
 
@@ -100,6 +104,26 @@ namespace Naheulbook.Core.Services
                 await uow.CompleteAsync();
 
                 await _changeNotifier.NotifyItemModifiersChangedAsync(item);
+
+                return item;
+            }
+        }
+
+        public async Task<Item> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var item = await uow.Items.GetWithOwnerAsync(itemId);
+                if (item == null)
+                    throw new ItemNotFoundException(itemId);
+
+                _authorizationUtil.EnsureItemAccess(executionContext, item);
+
+                _itemUtil.EquipItem(item, request.Level);
+
+                await uow.CompleteAsync();
+
+                await _changeNotifier.NotifyEquipItemAsync(item);
 
                 return item;
             }
