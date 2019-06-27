@@ -96,9 +96,7 @@ export class EffectService {
     searchEffect(filter: string): Observable<Effect[]> {
         return forkJoin([
             this.getEffectCategoriesById(),
-            this.httpClient.post<EffectJsonData[]>('/api/effect/search', {
-                filter: filter
-            })
+            this.httpClient.get<EffectJsonData[]>('/api/v2/effects/search?filter=' + encodeURIComponent(filter))
         ]).pipe(map(([categoriesById, effectsJsonData]: [{[categoryId: number]: EffectCategory}, EffectJsonData[]]) => {
             return Effect.effectsFromJson(categoriesById, effectsJsonData);
         }));

@@ -103,9 +103,8 @@ export class ItemService {
     }
 
     equipItem(itemId: number, level: number): Observable<PartialItem> {
-        return this.httpClient.post<PartialItem>('/api/item/equip', {
-            itemId: itemId,
-            level: level
+        return this.httpClient.post<PartialItem>(`/api/v2/items/${itemId}/equip`, {
+            level
         });
     }
 
