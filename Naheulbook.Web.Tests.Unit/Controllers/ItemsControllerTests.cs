@@ -8,6 +8,7 @@ using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
 using Newtonsoft.Json.Linq;
@@ -34,12 +35,24 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonItemExceptionsAndExpectedStatusCode))]
-        public void PatchItemStatsAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PutEditItemDataAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
         {
             _itemService.UpdateItemDataAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<JObject>())
                 .Returns(Task.FromException<Item>(exception));
 
             Func<Task> act = () => _controller.PutEditItemDataAsync(_executionContext, 2, new JObject());
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetCommonItemExceptionsAndExpectedStatusCode))]
+        public void PutEditItemModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _itemService.UpdateItemModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<List<ActiveStatsModifier>>())
+                .Returns(Task.FromException<Item>(exception));
+
+            Func<Task> act = () => _controller.PutEditItemModifiersAsync(_executionContext, 2, new List<ActiveStatsModifier>());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }

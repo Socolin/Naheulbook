@@ -380,7 +380,6 @@ Feature: Character
     ]
     """
 
-
   Scenario: Update character stat
     Given a JWT for a user
     And a character

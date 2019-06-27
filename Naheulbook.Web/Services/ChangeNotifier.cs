@@ -88,6 +88,18 @@ namespace Naheulbook.Web.Services
             throw new NotSupportedException();
         }
 
+        public Task NotifyItemModifiersChangedAsync(Item item)
+        {
+            if (item.CharacterId != null)
+                return SendCharacterChangeAsync(item.CharacterId.Value, "updateItemModifiers", _mapper.Map<ItemResponse>(item));
+            if (item.MonsterId != null)
+                return SendMonsterChangeAsync(item.MonsterId.Value, "updateItemModifiers", _mapper.Map<ItemResponse>(item));
+            if (item.LootId != null)
+                return SendLootChangeAsync(item.LootId.Value, "updateItemModifiers", _mapper.Map<ItemResponse>(item));
+
+            throw new NotSupportedException();
+        }
+
         private Task SendCharacterChangeAsync(Character character, string action, object data)
         {
             return SendCharacterChangeAsync(character.Id, action, data);
