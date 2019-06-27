@@ -53,10 +53,9 @@ export class CharacterService {
     }
 
     setStatBonusAD(id: number, stat: string): Observable<string> {
-        return this.httpClient.post<string>('/api/character/setStatBonusAD', {
-            id: id,
+        return this.httpClient.put(`/api/v2/characters/${id}/statBonusAd`, {
             stat: stat
-        });
+        }).pipe(map(() => stat));
     }
 
     LevelUp(id: number, levelUpInfo: Object): Observable<any> {
