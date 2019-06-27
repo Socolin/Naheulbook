@@ -391,3 +391,15 @@ Feature: Character
     }
     """
     Then the response status code is 204
+
+  Scenario:  Can define stat bonus for bad or exceptional AD
+    Given a JWT for a user
+    And a character
+
+    When performing a PUT to the url "/api/v2/characters/${Character.Id}/statBonusAd" with the following json content and the current jwt
+    """
+    {
+      "stat": "AD"
+    }
+    """
+    Then the response status code is 204

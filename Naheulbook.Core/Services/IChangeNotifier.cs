@@ -15,5 +15,6 @@ namespace Naheulbook.Core.Services
         Task NotifyItemDataChangedAsync(Item item);
         Task NotifyItemModifiersChangedAsync(Item item);
         Task NotifyEquipItemAsync(Item item);
+        Task NotifyCharacterSetStatBonusAdAsync(int characterId, string stat);
     }
 }

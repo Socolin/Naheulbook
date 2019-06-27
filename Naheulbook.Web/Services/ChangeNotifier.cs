@@ -112,6 +112,11 @@ namespace Naheulbook.Web.Services
             throw new NotSupportedException();
         }
 
+        public Task NotifyCharacterSetStatBonusAdAsync(int characterId, string stat)
+        {
+            return SendCharacterChangeAsync(characterId, "statBonusAd", stat);
+        }
+
         private Task SendCharacterChangeAsync(Character character, string action, object data)
         {
             return SendCharacterChangeAsync(character.Id, action, data);

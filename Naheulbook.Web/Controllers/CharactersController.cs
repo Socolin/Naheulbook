@@ -160,5 +160,27 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
+
+        [HttpPut("{CharacterId}/statBonusAd")]
+        public async Task<IActionResult> PutStatBonusAdAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId,
+            PutStatBonusAdRequest request
+        )
+        {
+            try
+            {
+                await _characterService.SetCharacterAdBonusStatAsync(executionContext, characterId, request);
+                return new NoContentResult();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }

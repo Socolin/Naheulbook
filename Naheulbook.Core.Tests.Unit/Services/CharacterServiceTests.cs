@@ -252,5 +252,85 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             act.Should().Throw<CharacterNotFoundException>();
         }
+
+        [Test]
+        public void UpdateCharacterStatAsync_ShouldCall_EnsureCharacterAccess()
+        {
+            const int characterId = 4;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.UpdateCharacterStatAsync(executionContext, characterId, new PatchCharacterStatsRequest());
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public void UpdateCharacterStatAsync_ShouldThrowWhenCharacterDoesNotExists()
+        {
+            const int characterId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns((Character) null);
+
+            Func<Task> act = () => _service.UpdateCharacterStatAsync(executionContext, characterId, new PatchCharacterStatsRequest());
+
+            act.Should().Throw<CharacterNotFoundException>();
+        }
+
+        [Test]
+        public async Task SetCharacterAdBonusStatAsync_ShouldChangeStatValueAndSave()
+        {
+            const int characterId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+            var character = new Character();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+                .Do(info => character.StatBonusAd.Should().BeEquivalentTo("some-stat"));
+
+            await _service.SetCharacterAdBonusStatAsync(executionContext, characterId, new PutStatBonusAdRequest {Stat = "some-stat"});
+
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _changeNotifier.Received(1).NotifyCharacterSetStatBonusAdAsync(character.Id, "some-stat");
+        }
+
+        [Test]
+        public void SetCharacterAdBonusStatAsync_ShouldCall_EnsureCharacterAccess()
+        {
+            const int characterId = 4;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.SetCharacterAdBonusStatAsync(executionContext, characterId, new PutStatBonusAdRequest());
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public void SetCharacterAdBonusStatAsync_ShouldThrowWhenCharacterDoesNotExists()
+        {
+            const int characterId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns((Character) null);
+
+            Func<Task> act = () => _service.SetCharacterAdBonusStatAsync(executionContext, characterId, new PutStatBonusAdRequest());
+
+            act.Should().Throw<CharacterNotFoundException>();
+        }
     }
 }

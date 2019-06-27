@@ -20,6 +20,7 @@ namespace Naheulbook.Core.Services
         Task<List<IHistoryEntry>> GetCharacterHistoryEntryAsync(NaheulbookExecutionContext executionContext, int characterId, int page);
         Task EnsureUserCanAccessCharacterAsync(NaheulbookExecutionContext executionContext, int characterId);
         Task UpdateCharacterStatAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterStatsRequest request);
+        Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request);
     }
 
     public class CharacterService : ICharacterService
@@ -162,7 +163,6 @@ namespace Naheulbook.Core.Services
                 if (character == null)
                     throw new CharacterNotFoundException(characterId);
 
-
                 _authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
                 if (request.Ev.HasValue)
@@ -211,6 +211,24 @@ namespace Naheulbook.Core.Services
             }
 
             await Task.WhenAll(notificationTasks);
+        }
+
+        public async Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithGroupAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+                character.StatBonusAd = request.Stat;
+
+                await _changeNotifier.NotifyCharacterSetStatBonusAdAsync(character.Id, request.Stat);
+
+                await uow.CompleteAsync();
+            }
         }
     }
 }
