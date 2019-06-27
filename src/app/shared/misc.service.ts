@@ -20,7 +20,7 @@ export class MiscService {
         if (!this.stats) {
             this.stats = new ReplaySubject<Stat[]>(1);
 
-            this.httpClient.get<Stat[]>('/api/character/stats')
+            this.httpClient.get<Stat[]>('/api/v2/stats')
                 .subscribe(
                     stats => {
                         this.stats.next(stats);

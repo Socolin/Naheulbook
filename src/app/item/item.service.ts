@@ -142,14 +142,11 @@ export class ItemService {
         });
     }
 
-    updateItem(itemId: number, itemData): Observable<PartialItem> {
+    updateItem(itemId: number, itemData: any): Observable<PartialItem> {
         return this.httpClient.put<PartialItem>(`/api/v2/items/${itemId}/data`, itemData);
     }
 
     updateItemModifiers(itemId: number, modifiers: ActiveStatsModifier[]): Observable<PartialItem> {
-        return this.httpClient.post<PartialItem>('/api/item/updateItemModifiers', {
-            itemId: itemId,
-            modifiers: modifiers
-        });
+        return this.httpClient.put<PartialItem>(`/api/v2/items/${itemId}/modifiers`, modifiers);
     }
 }
