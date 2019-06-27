@@ -19,6 +19,7 @@ namespace Naheulbook.Core.Services
         Task<EffectCategory> CreateEffectCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectCategoryRequest request);
         Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, CreateEffectRequest request);
         Task EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, CreateEffectRequest request);
+        Task<List<Effect>> SearchEffectsAsync(string filter);
     }
 
     public class EffectService : IEffectService
@@ -151,6 +152,16 @@ namespace Naheulbook.Core.Services
                 }).ToList();
 
                 await uow.CompleteAsync();
+            }
+        }
+
+        public async Task<List<Effect>> SearchEffectsAsync(string filter)
+        {
+            if (string.IsNullOrEmpty(filter))
+                return new List<Effect>();
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.Effects.SearchByNameAsync(filter, 10);
             }
         }
     }

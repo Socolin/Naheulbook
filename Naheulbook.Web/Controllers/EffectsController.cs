@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -48,7 +49,7 @@ namespace Naheulbook.Web.Controllers
         [HttpPut("{effectId:int:min(1)}")]
         public async Task<StatusCodeResult> PutEditEffectAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
-            int effectId,
+            [FromRoute] int effectId,
             CreateEffectRequest request
         )
         {
@@ -68,7 +69,9 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("{effectId:int:min(1)}")]
-        public async Task<ActionResult<EffectResponse>> GetEffectAsync(int effectId)
+        public async Task<ActionResult<EffectResponse>> GetEffectAsync(
+            [FromRoute] int effectId
+        )
         {
             try
             {
@@ -80,6 +83,15 @@ namespace Naheulbook.Web.Controllers
             {
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<List<EffectResponse>>> GetSearchEffectAsync(
+            [FromQuery] string filter
+        )
+        {
+            var effects = await _effectService.SearchEffectsAsync(filter);
+            return _mapper.Map<List<EffectResponse>>(effects);
         }
     }
 }

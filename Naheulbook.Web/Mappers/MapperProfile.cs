@@ -34,7 +34,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
                 .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
 
-            CreateMap<Effect, EffectResponse>();
+            CreateMap<Effect, EffectResponse>()
+                .ForMember(m => m.Modifiers, opt => opt.MapFrom(e => e.Modifiers.OrderBy(m => m.Stat)));
             CreateMap<EffectType, EffectTypeResponse>();
             CreateMap<EffectCategory, EffectCategoryResponse>();
             CreateMap<EffectModifier, StatModifierResponse>()

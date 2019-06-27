@@ -232,3 +232,38 @@ Feature: Effect
       ]
     }
     """
+
+  Scenario: Can search an effect
+    Given an effect
+
+    When performing a GET to the url "/api/v2/effects/search?filter=${Effect.Name}"
+    Then the response status code is 200
+    And the response should contains a json array containing the following element identified by id
+    """
+    {
+        "id": ${Effect.Id},
+        "name": "${Effect.Name}",
+        "description": "${Effect.Description}",
+        "durationType": "${Effect.DurationType}",
+        "combatCount": ${Effect.CombatCount},
+        "dice": ${Effect.Dice},
+        "categoryId": ${EffectCategory.Id},
+        "modifiers": [
+            {
+                "stat": "${Effect.Modifiers.[0].StatName}",
+                "value": ${Effect.Modifiers.[0].Value},
+                "type": "${Effect.Modifiers.[0].Type}"
+            },
+            {
+                "stat": "${Effect.Modifiers.[1].StatName}",
+                "value": ${Effect.Modifiers.[1].Value},
+                "type": "${Effect.Modifiers.[1].Type}"
+            },
+            {
+                "stat": "${Effect.Modifiers.[2].StatName}",
+                "value": ${Effect.Modifiers.[2].Value},
+                "type": "${Effect.Modifiers.[2].Type}"
+            }
+        ]
+    }
+    """
