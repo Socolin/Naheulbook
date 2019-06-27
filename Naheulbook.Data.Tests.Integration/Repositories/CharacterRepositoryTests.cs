@@ -6,6 +6,7 @@ using FluentAssertions;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
+using Naheulbook.TestUtils.Extensions;
 using NUnit.Framework;
 
 namespace Naheulbook.Data.Tests.Integration.Repositories
@@ -30,11 +31,11 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             var character = await _characterRepository.GetWithAllDataAsync(expectedCharacter.Id);
 
-            character.Should().BeEquivalentTo(expectedCharacter, config => config.Excluding(x => x.Owner).Excluding(x => x.Jobs).Excluding(x => x.Origin).Excluding(x => x.Modifiers).Excluding(x => x.Skills).Excluding(x => x.Group).Excluding(x => x.Specialities));
+            character.Should().BeEquivalentTo(expectedCharacter, config => config.ExcludingChildren());
             character.Jobs.Select(x => x.JobId).Should().BeEquivalentTo(TestDataUtil.GetAll<Job>().Select(x => x.Id));
-            character.Specialities.Select(x => x.Speciality).Should().BeEquivalentTo(TestDataUtil.GetAll<Speciality>(), config => config.Excluding(x => x.Job));
-            character.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.Excluding(x => x.Characters).Excluding(x => x.Master).Excluding(x => x.Location));
-            character.Modifiers.Should().BeEquivalentTo(expectedCharacter.Modifiers, config => config.Excluding(x => x.Character));
+            character.Specialities.Select(x => x.Speciality).Should().BeEquivalentTo(TestDataUtil.GetAll<Speciality>(), config => config.ExcludingChildren());
+            character.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
+            character.Modifiers.Should().BeEquivalentTo(expectedCharacter.Modifiers, config => config.ExcludingChildren());
         }
 
         [Test]
