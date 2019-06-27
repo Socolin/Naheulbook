@@ -25,7 +25,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.JobIds, opt => opt.MapFrom(c => c.Jobs.Select(x => x.JobId)))
                 .ForMember(x => x.Specialities, opt => opt.MapFrom(c => c.Specialities.Select(x => x.Speciality)));
             CreateMap<CharacterModifier, ActiveStatsModifier>()
-                .ForMember(x => x.Active, opt => opt.MapFrom(x => x.IsActive));
+                .ForMember(x => x.Active, opt => opt.MapFrom(x => x.IsActive))
+                .ForMember(x => x.Values, opt => opt.MapFrom(x => x.Values.OrderBy(v => v.Id)));
             CreateMap<CharacterModifierValue, StatModifier>()
                 .ForMember(x => x.Stat, opt => opt.MapFrom(c => c.StatName))
                 .ForMember(x => x.Special, opt => opt.Ignore());
