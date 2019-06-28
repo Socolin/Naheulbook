@@ -129,10 +129,7 @@ export class CharacterService {
     }
 
     addModifier(characterId: number, modifier: ActiveStatsModifier): Observable<ActiveStatsModifier> {
-        return this.httpClient.post('/api/character/addModifier', {
-            characterId: characterId,
-            modifier: modifier,
-        }).pipe(map(res => ActiveStatsModifier.fromJson(res)));
+        return this.httpClient.post<ActiveStatsModifier>(`/api/v2/characters/${characterId}/modifiers`, modifier);
     }
 
     removeModifier(characterId: number, modifierId: number): Observable<ActiveStatsModifier> {
