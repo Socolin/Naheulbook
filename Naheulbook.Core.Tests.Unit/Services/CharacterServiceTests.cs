@@ -12,6 +12,7 @@ using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -367,15 +368,18 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterId = 4;
             var character = new Character();
             var characterModifier = new CharacterModifier();
+            var activeStatsModifier = new ActiveStatsModifier();
 
             _mapper.Map<CharacterModifier>(Arg.Any<AddCharacterModifierRequest>())
                 .Returns(characterModifier);
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
+            _mapper.Map<ActiveStatsModifier>(Arg.Any<CharacterModifier>())
+                .Returns(activeStatsModifier);
 
             await _service.AddModifiersAsync(new NaheulbookExecutionContext(), characterId, new AddCharacterModifierRequest());
 
-            await _changeNotifier.Received(1).NotifyCharacterAddModifierAsync(characterId, characterModifier);
+            await _changeNotifier.Received(1).NotifyCharacterAddModifierAsync(characterId, activeStatsModifier);
         }
 
         [Test]
@@ -431,6 +435,105 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Returns((Character) null);
 
             Func<Task> act = () => _service.AddModifiersAsync(executionContext, characterId, new AddCharacterModifierRequest());
+
+            act.Should().Throw<CharacterNotFoundException>();
+        }
+
+        [Test]
+        public async Task DeleteModifiersAsync_ShouldDeleteCharacterModifier()
+        {
+            const int characterId = 4;
+            const int characterModifierId = 2;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+            var characterModifier = new CharacterModifier {Character = character, CharacterId = characterId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(characterId, characterModifierId)
+                .Returns(characterModifier);
+
+            await _service.DeleteModifiersAsync(executionContext, characterId, characterModifierId);
+
+            Received.InOrder(() =>
+            {
+                _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.Remove(characterModifier);
+                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+            });
+        }
+
+        [Test]
+        public async Task DeleteModifiersAsync_ShouldLogCharacterHistory()
+        {
+            const int characterId = 4;
+            const int characterModifierId = 2;
+            var characterHistoryEntry = new CharacterHistoryEntry();
+
+            await _changeNotifier.NotifyCharacterRemoveModifierAsync(characterId, characterModifierId);
+
+            _characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId)
+                .Returns(characterHistoryEntry);
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
+                .Returns(new Character());
+            _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(Arg.Any<int>(), Arg.Any<int>())
+                .Returns(new CharacterModifier());
+
+            await _service.DeleteModifiersAsync(new NaheulbookExecutionContext(), characterId, characterModifierId);
+
+            Received.InOrder(() =>
+            {
+                _unitOfWorkFactory.GetUnitOfWork().CharacterHistoryEntries.Add(characterHistoryEntry);
+                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+            });
+        }
+
+        [Test]
+        public async Task DeleteModifiersAsync_ShouldNotifyChange()
+        {
+            const int characterId = 4;
+            const int characterModifierId = 2;
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
+                .Returns(new Character());
+            _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(Arg.Any<int>(), Arg.Any<int>())
+                .Returns(new CharacterModifier());
+
+            await _service.DeleteModifiersAsync(new NaheulbookExecutionContext(), characterId, characterModifierId);
+
+            await _changeNotifier.Received(1).NotifyCharacterRemoveModifierAsync(characterId, characterModifierId);
+        }
+
+        [Test]
+        public void DeleteModifiersAsync_ShouldCall_EnsureCharacterAccess()
+        {
+            const int characterId = 4;
+            const int characterModifierId = 2;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+            var characterModifier = new CharacterModifier();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetAsync(characterId)
+                .Returns(characterModifier);
+            _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.DeleteModifiersAsync(executionContext, characterId, characterModifierId);
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public void DeleteModifiersAsync_ShouldThrowWhenCharacterDoesNotExists()
+        {
+            const int characterId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns((Character) null);
+
+            Func<Task> act = () => _service.DeleteModifiersAsync(executionContext, characterId, 2);
 
             act.Should().Throw<CharacterNotFoundException>();
         }

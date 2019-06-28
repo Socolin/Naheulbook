@@ -123,6 +123,11 @@ namespace Naheulbook.Web.Services
             return SendCharacterChangeAsync(characterId, "addModifier", characterModifier);
         }
 
+        public Task NotifyCharacterRemoveModifierAsync(int characterId, int characterModifierId)
+        {
+            return SendCharacterChangeAsync(characterId, "removeModifier", characterModifierId);
+        }
+
         private Task SendCharacterChangeAsync(Character character, string action, object data)
         {
             return SendCharacterChangeAsync(character.Id, action, data);

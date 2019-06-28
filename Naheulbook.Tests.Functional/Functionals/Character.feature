@@ -430,3 +430,11 @@ Feature: Character
       "name": "some-name"
     }}
     """
+
+  Scenario: Can delete a character modifier
+    Given a JWT for a user
+    And a character
+    And a character modifier
+
+    When performing a DELETE to the url "/api/v2/characters/${Character.Id}/modifiers/${CharacterModifier.Id}" with the current jwt
+    Then the response status code is 204

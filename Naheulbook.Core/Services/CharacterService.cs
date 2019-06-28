@@ -24,6 +24,7 @@ namespace Naheulbook.Core.Services
         Task UpdateCharacterStatAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterStatsRequest request);
         Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request);
         Task<CharacterModifier> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request);
+        Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
     }
 
     public class CharacterService : ICharacterService
@@ -258,6 +259,29 @@ namespace Naheulbook.Core.Services
                 await _changeNotifier.NotifyCharacterAddModifierAsync(characterId, _mapper.Map<ActiveStatsModifier>(characterModifier));
 
                 return characterModifier;
+            }
+        }
+
+        public async Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithGroupAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+                var characterModifier = await uow.CharacterModifiers.GetByIdAndCharacterIdAsync(characterId, characterModifierId);
+                if (characterModifier == null)
+                    throw new CharacterModifierNotFoundException(characterModifierId);
+
+                uow.CharacterModifiers.Remove(characterModifier);
+                uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId));
+
+                await _changeNotifier.NotifyCharacterRemoveModifierAsync(characterId, characterModifierId);
+
+                await uow.CompleteAsync();
             }
         }
     }

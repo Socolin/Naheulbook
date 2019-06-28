@@ -8,6 +8,7 @@ namespace Naheulbook.Data.DbContexts
     {
         public DbSet<Calendar> Calendars { get; set; }
         public DbSet<Character> Characters { get; set; }
+        public DbSet<CharacterModifier> CharacterModifiers { get; set; }
         public DbSet<CharacterHistoryEntry> CharacterHistory { get; set; }
         public DbSet<Effect> Effects { get; set; }
         public DbSet<EffectType> EffectTypes { get; set; }

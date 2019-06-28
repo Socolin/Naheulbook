@@ -32,6 +32,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.Stat, opt => opt.MapFrom(c => c.StatName))
                 .ForMember(x => x.Special, opt => opt.Ignore());
             CreateMap<AddCharacterModifierRequest, CharacterModifier>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.Character, opt => opt.Ignore())
                 .ForMember(x => x.CharacterId, opt => opt.Ignore())
                 .ForMember(x => x.Permanent, opt => opt.MapFrom(x => false))

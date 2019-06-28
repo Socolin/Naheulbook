@@ -16,6 +16,7 @@ namespace Naheulbook.Core.Utils
         CharacterHistoryEntry CreateLogEquipItem(int characterId, int itemId);
         CharacterHistoryEntry CreateLogUnEquipItem(int characterId, int itemId);
         CharacterHistoryEntry CreateLogAddModifier(Character character, CharacterModifier characterModifier);
+        CharacterHistoryEntry CreateLogRemoveModifier(int characterId, int characterModifierId);
     }
 
     public class CharacterHistoryUtil : ICharacterHistoryUtil
@@ -30,6 +31,7 @@ namespace Naheulbook.Core.Utils
         private const string EquipActionName = "CHANGE_NEQUIPAME";
         private const string UnEquipActionName = "UNEQUIP";
         private const string ApplyModifierActionName = "APPLY_MODIFIER";
+        private const string RemoveModifierActionName = "REMOVE_MODIFIER";
 
         private readonly IJsonUtil _jsonUtil;
 
@@ -145,6 +147,17 @@ namespace Naheulbook.Core.Utils
                 Action = ApplyModifierActionName,
                 Date = DateTime.Now,
                 CharacterModifier = characterModifier
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogRemoveModifier(int characterId, int characterModifierId)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = RemoveModifierActionName,
+                Date = DateTime.Now,
+                CharacterModifierId = characterModifierId
             };
         }
     }

@@ -47,6 +47,12 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             }
         }
 
+        [Given(@"a character modifier")]
+        public void GivenACharacterModifier()
+        {
+            _testDataUtil.AddCharacterModifier();
+        }
+
         [Given(@"a character with all possible data")]
         public void GivenACharacterWithAllPossibleData()
         {

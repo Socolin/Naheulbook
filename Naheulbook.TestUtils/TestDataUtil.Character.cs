@@ -88,5 +88,12 @@ namespace Naheulbook.TestUtils
         {
             return SaveEntity(_defaultEntityCreator.CreateCharacterHistoryEntry(GetLast<Character>()), customizer);
         }
+
+        public TestDataUtil AddCharacterModifier(Action<CharacterModifier> customizer = null)
+        {
+            var characterModifier = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValue>());
+            characterModifier.Character = GetLast<Character>();
+            return SaveEntity(characterModifier, customizer);
+        }
     }
 }

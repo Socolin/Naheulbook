@@ -119,6 +119,32 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpDelete("{CharacterId}/modifiers/{CharacterModifierId}")]
+        public async Task<IActionResult> DeleteModifiersAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId,
+            [FromRoute] int characterModifierId
+        )
+        {
+            try
+            {
+                await _characterService.DeleteModifiersAsync(executionContext, characterId, characterModifierId);
+                return new NoContentResult();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (CharacterModifierNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
         [HttpGet("{CharacterId}/loots")]
         public async Task<ActionResult<List<LootResponse>>> GetCharacterLoots(
             [FromServices] NaheulbookExecutionContext executionContext,
