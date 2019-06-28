@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentAssertions;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Factories;
@@ -23,6 +24,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private IItemService _itemService;
         private IAuthorizationUtil _authorizationUtil;
         private ICharacterHistoryUtil _characterHistoryUtil;
+        private IMapper _mapper;
         private IChangeNotifier _changeNotifier;
         private CharacterService _service;
 
@@ -34,6 +36,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _itemService = Substitute.For<IItemService>();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
             _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
+            _mapper = Substitute.For<IMapper>();
             _changeNotifier = Substitute.For<IChangeNotifier>();
 
             _service = new CharacterService(
@@ -42,6 +45,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _itemService,
                 _authorizationUtil,
                 _characterHistoryUtil,
+                _mapper,
                 _changeNotifier
             );
         }
@@ -329,6 +333,104 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Returns((Character) null);
 
             Func<Task> act = () => _service.SetCharacterAdBonusStatAsync(executionContext, characterId, new PutStatBonusAdRequest());
+
+            act.Should().Throw<CharacterNotFoundException>();
+        }
+
+        [Test]
+        public async Task AddModifiersAsync_ShouldAddCharacterModifier()
+        {
+            const int characterId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+            var character = new Character();
+            var request = new AddCharacterModifierRequest();
+            var characterModifier = new CharacterModifier();
+
+            _mapper.Map<CharacterModifier>(request)
+                .Returns(characterModifier);
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+
+            var actualCharacterModifier = await _service.AddModifiersAsync(executionContext, characterId, request);
+
+            Received.InOrder(() =>
+            {
+                _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.Add(characterModifier);
+                _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            });
+            actualCharacterModifier.Should().BeSameAs(characterModifier);
+        }
+
+        [Test]
+        public async Task AddModifiersAsync_ShouldNotifyChange()
+        {
+            const int characterId = 4;
+            var character = new Character();
+            var characterModifier = new CharacterModifier();
+
+            _mapper.Map<CharacterModifier>(Arg.Any<AddCharacterModifierRequest>())
+                .Returns(characterModifier);
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+
+            await _service.AddModifiersAsync(new NaheulbookExecutionContext(), characterId, new AddCharacterModifierRequest());
+
+            await _changeNotifier.Received(1).NotifyCharacterAddModifierAsync(characterId, characterModifier);
+        }
+
+        [Test]
+        public async Task AddModifiersAsync_ShouldLog()
+        {
+            const int characterId = 4;
+            var character = new Character();
+            var characterHistoryEntry = new CharacterHistoryEntry();
+            var request = new AddCharacterModifierRequest();
+            var characterModifier = new CharacterModifier();
+
+            _mapper.Map<CharacterModifier>(request)
+                .Returns(characterModifier);
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _characterHistoryUtil.CreateLogAddModifier(character, characterModifier)
+                .Returns(characterHistoryEntry);
+
+            await _service.AddModifiersAsync(new NaheulbookExecutionContext(), characterId, request);
+
+            Received.InOrder(() =>
+            {
+                _unitOfWorkFactory.GetUnitOfWork().CharacterHistoryEntries.Add(characterHistoryEntry);
+                _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            });
+        }
+
+        [Test]
+        public void AddModifiersAsync_ShouldCall_EnsureCharacterAccess()
+        {
+            const int characterId = 4;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.AddModifiersAsync(executionContext, characterId, new AddCharacterModifierRequest());
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public void AddModifiersAsync_ShouldThrowWhenCharacterDoesNotExists()
+        {
+            const int characterId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns((Character) null);
+
+            Func<Task> act = () => _service.AddModifiersAsync(executionContext, characterId, new AddCharacterModifierRequest());
 
             act.Should().Throw<CharacterNotFoundException>();
         }

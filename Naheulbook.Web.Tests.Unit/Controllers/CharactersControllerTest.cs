@@ -10,6 +10,7 @@ using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
@@ -192,6 +193,18 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
+        [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
+        public void PostAddModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _characterService.AddModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<AddCharacterModifierRequest>())
+                .Returns(Task.FromException<CharacterModifier>(exception));
+
+            Func<Task> act = () => _controller.PostAddModifiersAsync(_executionContext, 2, new AddCharacterModifierRequest());
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
         public async Task GetCharacterHistoryEntryAsyncShouldLoadCharacterLootsFromService_ThenMapItIntoResponse()
         {
             const int characterId = 2;
@@ -229,6 +242,18 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
                 .Returns(Task.FromException<List<Loot>>(exception));
 
             Func<Task> act = () => _controller.PatchCharacterStatsAsync(_executionContext, 2, new PatchCharacterStatsRequest());
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
+        public void PutStatBonusAdAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _characterService.SetCharacterAdBonusStatAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PutStatBonusAdRequest>())
+                .Returns(Task.FromException<List<Loot>>(exception));
+
+            Func<Task> act = () => _controller.PutStatBonusAdAsync(_executionContext, 2, new PutStatBonusAdRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }

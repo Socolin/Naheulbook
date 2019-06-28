@@ -403,3 +403,30 @@ Feature: Character
     }
     """
     Then the response status code is 204
+
+  Scenario: Can add a modifier on a character
+    Given a JWT for a user
+    And a character
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/modifiers" with the following json content and the current jwt
+    """
+    {
+      "reusable": false,
+      "durationType": "combat",
+      "values": [],
+      "combatCount": 1,
+      "name": "some-name"
+    }
+    """
+    Then the response status code is 201
+    And the response should contains the following json
+    """
+    { "__partial": {
+      "id": {"__match": {"type": "integer"}},
+      "reusable": false,
+      "durationType": "combat",
+      "values": [],
+      "combatCount": 1,
+      "name": "some-name"
+    }}
+    """

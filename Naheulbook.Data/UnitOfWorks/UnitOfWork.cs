@@ -9,6 +9,7 @@ namespace Naheulbook.Data.UnitOfWorks
     {
         ICalendarRepository Calendar { get; }
         ICharacterRepository Characters { get; }
+        ICharacterModifierRepository CharacterModifiers { get; }
         ICharacterHistoryEntryRepository CharacterHistoryEntries { get; }
         IEffectRepository Effects { get; }
         IEffectCategoryRepository EffectCategories { get; }
@@ -51,6 +52,7 @@ namespace Naheulbook.Data.UnitOfWorks
 
         public ICalendarRepository Calendar => new CalendarRepository(_naheulbookDbContext);
         public ICharacterRepository Characters => new CharacterRepository(_naheulbookDbContext);
+        public ICharacterModifierRepository CharacterModifiers => new CharacterModifierRepository(_naheulbookDbContext);
         public ICharacterHistoryEntryRepository CharacterHistoryEntries => new CharacterHistoryEntryRepository(_naheulbookDbContext);
         public IEffectRepository Effects => new EffectRepository(_naheulbookDbContext);
         public IEffectTypeRepository EffectTypes => new EffectTypeRepository(_naheulbookDbContext);
@@ -61,13 +63,13 @@ namespace Naheulbook.Data.UnitOfWorks
         public IGroupHistoryEntryRepository GroupHistoryEntries => new GroupHistoryEntryRepository(_naheulbookDbContext);
         public IGroupInviteRepository GroupInvites => new GroupInviteRepository(_naheulbookDbContext);
         public IIconRepository Icons => new IconRepository(_naheulbookDbContext);
-        public IItemRepository Items=> new ItemRepository(_naheulbookDbContext);
+        public IItemRepository Items => new ItemRepository(_naheulbookDbContext);
         public IItemTemplateRepository ItemTemplates => new ItemTemplateRepository(_naheulbookDbContext);
         public IItemTemplateSectionRepository ItemTemplateSections => new ItemTemplateSectionRepository(_naheulbookDbContext);
         public IItemTemplateCategoryRepository ItemTemplateCategories => new ItemTemplateCategoryRepository(_naheulbookDbContext);
         public IJobRepository Jobs => new JobRepository(_naheulbookDbContext);
         public ILocationRepository Locations => new LocationRepository(_naheulbookDbContext);
-        public ILootRepository Loots=> new LootRepository(_naheulbookDbContext);
+        public ILootRepository Loots => new LootRepository(_naheulbookDbContext);
         public IMonsterRepository Monsters => new MonsterRepository(_naheulbookDbContext);
         public IMonsterTypeRepository MonsterTypes => new MonsterTypeRepository(_naheulbookDbContext);
         public IMonsterCategoryRepository MonsterCategories => new MonsterCategoryRepository(_naheulbookDbContext);

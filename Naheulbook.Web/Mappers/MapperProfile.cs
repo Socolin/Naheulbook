@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Naheulbook.Data.Models;
+using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Responses;
 using Newtonsoft.Json.Linq;
@@ -30,6 +31,20 @@ namespace Naheulbook.Web.Mappers
             CreateMap<CharacterModifierValue, StatModifier>()
                 .ForMember(x => x.Stat, opt => opt.MapFrom(c => c.StatName))
                 .ForMember(x => x.Special, opt => opt.Ignore());
+            CreateMap<AddCharacterModifierRequest, CharacterModifier>()
+                .ForMember(x => x.Character, opt => opt.Ignore())
+                .ForMember(x => x.CharacterId, opt => opt.Ignore())
+                .ForMember(x => x.Permanent, opt => opt.MapFrom(x => false))
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true))
+                .ForMember(x => x.CurrentCombatCount, opt => opt.MapFrom(x => x.CombatCount))
+                .ForMember(x => x.CurrentTimeDuration, opt => opt.MapFrom(x => x.TimeDuration))
+                .ForMember(x => x.CurrentLapCount, opt => opt.MapFrom(x => x.LapCount))
+                .ForMember(x => x.LapCountDecrement, opt => opt.MapFrom(x => MapperHelpers.ToJson(x.LapCountDecrement)));
+            CreateMap<StatModifier, CharacterModifierValue>()
+                .ForMember(x => x.StatName, opt => opt.MapFrom(c => c.Stat))
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.CharacterModifierId, opt => opt.Ignore());
+
             CreateMap<CharacterHistoryEntry, CharacterHistoryEntryResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
                 .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));

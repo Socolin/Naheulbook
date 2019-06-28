@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
@@ -7,6 +8,7 @@ using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Services
 {
@@ -21,6 +23,7 @@ namespace Naheulbook.Core.Services
         Task EnsureUserCanAccessCharacterAsync(NaheulbookExecutionContext executionContext, int characterId);
         Task UpdateCharacterStatAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterStatsRequest request);
         Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request);
+        Task<CharacterModifier> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request);
     }
 
     public class CharacterService : ICharacterService
@@ -30,6 +33,7 @@ namespace Naheulbook.Core.Services
         private readonly IItemService _itemService;
         private readonly IAuthorizationUtil _authorizationUtil;
         private readonly ICharacterHistoryUtil _characterHistoryUtil;
+        private readonly IMapper _mapper;
         private readonly IChangeNotifier _changeNotifier;
 
         public CharacterService(
@@ -38,6 +42,7 @@ namespace Naheulbook.Core.Services
             IItemService itemService,
             IAuthorizationUtil authorizationUtil,
             ICharacterHistoryUtil characterHistoryUtil,
+            IMapper mapper,
             IChangeNotifier changeNotifier
         )
         {
@@ -46,6 +51,7 @@ namespace Naheulbook.Core.Services
             _itemService = itemService;
             _authorizationUtil = authorizationUtil;
             _characterHistoryUtil = characterHistoryUtil;
+            _mapper = mapper;
             _changeNotifier = changeNotifier;
         }
 
@@ -228,6 +234,30 @@ namespace Naheulbook.Core.Services
                 await _changeNotifier.NotifyCharacterSetStatBonusAdAsync(character.Id, request.Stat);
 
                 await uow.CompleteAsync();
+            }
+        }
+
+        public async Task<CharacterModifier> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithGroupAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+                var characterModifier = _mapper.Map<CharacterModifier>(request);
+                characterModifier.Character = character;
+
+                uow.CharacterModifiers.Add(characterModifier);
+                uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogAddModifier(character, characterModifier));
+
+                await uow.CompleteAsync();
+
+                await _changeNotifier.NotifyCharacterAddModifierAsync(characterId, _mapper.Map<ActiveStatsModifier>(characterModifier));
+
+                return characterModifier;
             }
         }
     }

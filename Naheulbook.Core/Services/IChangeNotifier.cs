@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Naheulbook.Data.Models;
+using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Services
 {
@@ -16,5 +17,6 @@ namespace Naheulbook.Core.Services
         Task NotifyItemModifiersChangedAsync(Item item);
         Task NotifyEquipItemAsync(Item item);
         Task NotifyCharacterSetStatBonusAdAsync(int characterId, string stat);
+        Task NotifyCharacterAddModifierAsync(int characterId, ActiveStatsModifier characterModifier);
     }
 }

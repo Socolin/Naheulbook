@@ -7,6 +7,7 @@ using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
@@ -93,6 +94,28 @@ namespace Naheulbook.Web.Controllers
             catch (ItemTemplateNotFoundException ex)
             {
                 throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpPost("{CharacterId}/modifiers")]
+        public async Task<CreatedActionResult<ActiveStatsModifier>> PostAddModifiersAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId,
+            AddCharacterModifierRequest request
+        )
+        {
+            try
+            {
+                var item = await _characterService.AddModifiersAsync(executionContext, characterId, request);
+                return _mapper.Map<ActiveStatsModifier>(item);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
 

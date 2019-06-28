@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Hubs;
 using Naheulbook.Web.Responses;
 using Newtonsoft.Json;
@@ -115,6 +116,11 @@ namespace Naheulbook.Web.Services
         public Task NotifyCharacterSetStatBonusAdAsync(int characterId, string stat)
         {
             return SendCharacterChangeAsync(characterId, "statBonusAd", stat);
+        }
+
+        public Task NotifyCharacterAddModifierAsync(int characterId, ActiveStatsModifier characterModifier)
+        {
+            return SendCharacterChangeAsync(characterId, "addModifier", characterModifier);
         }
 
         private Task SendCharacterChangeAsync(Character character, string action, object data)
