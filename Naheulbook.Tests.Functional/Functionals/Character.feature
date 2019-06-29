@@ -438,3 +438,33 @@ Feature: Character
 
     When performing a DELETE to the url "/api/v2/characters/${Character.Id}/modifiers/${CharacterModifier.Id}" with the current jwt
     Then the response status code is 204
+
+  Scenario: Can toggle a character modifier
+    Given a JWT for a user
+    And a character
+    And an inactive reusable character modifier that last 2 combat
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/modifiers/${CharacterModifier.Id}/toggle" with the following json content and the current jwt
+    """
+    {}
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    { "__partial": {
+      "currentCombatCount": 2,
+      "active": true
+    }}
+    """
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/modifiers/${CharacterModifier.Id}/toggle" with the following json content and the current jwt
+    """
+    {}
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    { "__partial": {
+      "active": false
+    }}
+    """

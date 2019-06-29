@@ -53,6 +53,17 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddCharacterModifier();
         }
 
+        [Given(@"an inactive reusable character modifier that last 2 combat")]
+        public void GivenAnInactiveReusableCharacterModifierThatLast2Combat()
+        {
+            _testDataUtil.AddCharacterModifier(c =>
+            {
+                c.Reusable = true;
+                c.IsActive = false;
+                c.CombatCount = 2;
+            });
+        }
+
         [Given(@"a character with all possible data")]
         public void GivenACharacterWithAllPossibleData()
         {

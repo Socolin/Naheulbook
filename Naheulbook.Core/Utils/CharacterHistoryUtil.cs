@@ -17,6 +17,8 @@ namespace Naheulbook.Core.Utils
         CharacterHistoryEntry CreateLogUnEquipItem(int characterId, int itemId);
         CharacterHistoryEntry CreateLogAddModifier(Character character, CharacterModifier characterModifier);
         CharacterHistoryEntry CreateLogRemoveModifier(int characterId, int characterModifierId);
+        CharacterHistoryEntry CreateLogActiveModifier(int characterId, int characterModifierId);
+        CharacterHistoryEntry CreateLogDisableModifier(int characterId, int characterModifierId);
     }
 
     public class CharacterHistoryUtil : ICharacterHistoryUtil
@@ -32,6 +34,8 @@ namespace Naheulbook.Core.Utils
         private const string UnEquipActionName = "UNEQUIP";
         private const string ApplyModifierActionName = "APPLY_MODIFIER";
         private const string RemoveModifierActionName = "REMOVE_MODIFIER";
+        private const string ActiveModifierActionName = "ACTIVE_MODIFIER";
+        private const string DisableModifierActionName = "DISABLE_MODIFIER";
 
         private readonly IJsonUtil _jsonUtil;
 
@@ -156,6 +160,28 @@ namespace Naheulbook.Core.Utils
             {
                 CharacterId = characterId,
                 Action = RemoveModifierActionName,
+                Date = DateTime.Now,
+                CharacterModifierId = characterModifierId
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogActiveModifier(int characterId, int characterModifierId)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = ActiveModifierActionName,
+                Date = DateTime.Now,
+                CharacterModifierId = characterModifierId
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogDisableModifier(int characterId, int characterModifierId)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = DisableModifierActionName,
                 Date = DateTime.Now,
                 CharacterModifierId = characterModifierId
             };

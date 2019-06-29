@@ -47,6 +47,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.CharacterModifierId, opt => opt.Ignore());
 
             CreateMap<CharacterHistoryEntry, CharacterHistoryEntryResponse>()
+                .ForMember(m => m.Modifier, opt => opt.MapFrom(im => im.CharacterModifier))
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
                 .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
 

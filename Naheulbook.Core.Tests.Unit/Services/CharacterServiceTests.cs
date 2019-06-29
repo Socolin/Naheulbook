@@ -26,6 +26,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private IAuthorizationUtil _authorizationUtil;
         private ICharacterHistoryUtil _characterHistoryUtil;
         private IMapper _mapper;
+        private ICharacterModifierUtil _characterModifierUtil;
         private IChangeNotifier _changeNotifier;
         private CharacterService _service;
 
@@ -38,6 +39,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
             _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
             _mapper = Substitute.For<IMapper>();
+            _characterModifierUtil = Substitute.For<ICharacterModifierUtil>();
             _changeNotifier = Substitute.For<IChangeNotifier>();
 
             _service = new CharacterService(
@@ -47,6 +49,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _authorizationUtil,
                 _characterHistoryUtil,
                 _mapper,
+                _characterModifierUtil,
                 _changeNotifier
             );
         }
@@ -534,6 +537,85 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Returns((Character) null);
 
             Func<Task> act = () => _service.DeleteModifiersAsync(executionContext, characterId, 2);
+
+            act.Should().Throw<CharacterNotFoundException>();
+        }
+
+
+        [Test]
+        public async Task ToggleModifiersAsync_ShouldToggleModifier()
+        {
+            const int characterId = 4;
+            const int characterModifierId = 2;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+            var characterModifier = new CharacterModifier {Character = character, CharacterId = characterId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(characterId, characterModifierId)
+                .Returns(characterModifier);
+
+            await _service.ToggleModifiersAsync(executionContext, characterId, characterModifierId);
+
+            Received.InOrder(() =>
+            {
+                _characterModifierUtil.ToggleModifier(character, characterModifier);
+                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+            });
+        }
+
+        [Test]
+        public async Task ToggleModifiersAsync_ShouldNotifyChange()
+        {
+            const int characterId = 4;
+            const int characterModifierId = 2;
+            var characterModifier = new CharacterModifier();
+            var expectedStatsModifier = new ActiveStatsModifier();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
+                .Returns(new Character());
+            _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(Arg.Any<int>(), Arg.Any<int>())
+                .Returns(characterModifier);
+            _mapper.Map<ActiveStatsModifier>(characterModifier)
+                .Returns(expectedStatsModifier);
+
+            await _service.ToggleModifiersAsync(new NaheulbookExecutionContext(), characterId, characterModifierId);
+
+            await _changeNotifier.Received(1).NotifyUpdateCharacterModifierAsync(characterId, expectedStatsModifier);
+        }
+
+        [Test]
+        public void ToggleModifiersAsync_ShouldCall_EnsureCharacterAccess()
+        {
+            const int characterId = 4;
+            const int characterModifierId = 2;
+            var character = new Character {Id = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+            var characterModifier = new CharacterModifier();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns(character);
+            _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetAsync(characterId)
+                .Returns(characterModifier);
+            _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.ToggleModifiersAsync(executionContext, characterId, characterModifierId);
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public void ToggleModifiersAsync_ShouldThrowWhenCharacterDoesNotExists()
+        {
+            const int characterId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
+                .Returns((Character) null);
+
+            Func<Task> act = () => _service.ToggleModifiersAsync(executionContext, characterId, 2);
 
             act.Should().Throw<CharacterNotFoundException>();
         }

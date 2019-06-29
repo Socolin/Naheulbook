@@ -4,13 +4,11 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
-using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
@@ -62,7 +60,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             const int characterId = 2;
             var character = new Character();
-            var characterResponse = new CharacterResponse();;
+            var characterResponse = new CharacterResponse();
 
             _characterService.LoadCharacterDetailsAsync(_executionContext, characterId)
                 .Returns(character);
@@ -205,6 +203,30 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
+        [TestCaseSource(nameof(GetCommonCharacterModifierExceptionsAndExpectedStatusCode))]
+        public void DeleteModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _characterService.DeleteModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
+                .Returns(Task.FromException<CharacterModifier>(exception));
+
+            Func<Task> act = () => _controller.DeleteModifiersAsync(_executionContext, 2, 4);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetToggleCharacterModifierExceptionsAndExpectedStatusCode))]
+        public void PostToggleModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _characterService.ToggleModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
+                .Returns(Task.FromException<CharacterModifier>(exception));
+
+            Func<Task> act = () => _controller.PostToggleModifiersAsync(_executionContext, 2, 4);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
         public async Task GetCharacterHistoryEntryAsyncShouldLoadCharacterLootsFromService_ThenMapItIntoResponse()
         {
             const int characterId = 2;
@@ -262,6 +284,20 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
             yield return new TestCaseData(new CharacterNotFoundException(42), HttpStatusCode.NotFound);
+        }
+
+        private static IEnumerable<TestCaseData> GetCommonCharacterModifierExceptionsAndExpectedStatusCode()
+        {
+            foreach (var testCaseData in GetCommonCharacterExceptionsAndExpectedStatusCode())
+                yield return testCaseData;
+            yield return new TestCaseData(new CharacterModifierNotFoundException(42), HttpStatusCode.NotFound);
+        }
+
+        private static IEnumerable<TestCaseData> GetToggleCharacterModifierExceptionsAndExpectedStatusCode()
+        {
+            foreach (var testCaseData in GetCommonCharacterModifierExceptionsAndExpectedStatusCode())
+                yield return testCaseData;
+            yield return new TestCaseData(new CharacterModifierNotReusableException(42), HttpStatusCode.BadRequest);
         }
     }
 }

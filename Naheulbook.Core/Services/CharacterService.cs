@@ -25,6 +25,7 @@ namespace Naheulbook.Core.Services
         Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request);
         Task<CharacterModifier> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request);
         Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
+        Task<CharacterModifier> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
     }
 
     public class CharacterService : ICharacterService
@@ -35,6 +36,7 @@ namespace Naheulbook.Core.Services
         private readonly IAuthorizationUtil _authorizationUtil;
         private readonly ICharacterHistoryUtil _characterHistoryUtil;
         private readonly IMapper _mapper;
+        private readonly ICharacterModifierUtil _characterModifierUtil;
         private readonly IChangeNotifier _changeNotifier;
 
         public CharacterService(
@@ -44,6 +46,7 @@ namespace Naheulbook.Core.Services
             IAuthorizationUtil authorizationUtil,
             ICharacterHistoryUtil characterHistoryUtil,
             IMapper mapper,
+            ICharacterModifierUtil characterModifierUtil,
             IChangeNotifier changeNotifier
         )
         {
@@ -53,6 +56,7 @@ namespace Naheulbook.Core.Services
             _authorizationUtil = authorizationUtil;
             _characterHistoryUtil = characterHistoryUtil;
             _mapper = mapper;
+            _characterModifierUtil = characterModifierUtil;
             _changeNotifier = changeNotifier;
         }
 
@@ -279,9 +283,33 @@ namespace Naheulbook.Core.Services
                 uow.CharacterModifiers.Remove(characterModifier);
                 uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId));
 
+                await uow.CompleteAsync();
+
                 await _changeNotifier.NotifyCharacterRemoveModifierAsync(characterId, characterModifierId);
+            }
+        }
+
+        public async Task<CharacterModifier> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithGroupAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+                var characterModifier = await uow.CharacterModifiers.GetByIdAndCharacterIdAsync(characterId, characterModifierId);
+                if (characterModifier == null)
+                    throw new CharacterModifierNotFoundException(characterModifierId);
+
+                _characterModifierUtil.ToggleModifier(character, characterModifier);
 
                 await uow.CompleteAsync();
+
+                await _changeNotifier.NotifyUpdateCharacterModifierAsync(characterId, _mapper.Map<ActiveStatsModifier>(characterModifier));
+
+                return characterModifier;
             }
         }
     }

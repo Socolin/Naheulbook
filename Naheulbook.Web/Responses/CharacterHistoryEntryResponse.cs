@@ -1,3 +1,4 @@
+using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Web.Responses
@@ -12,5 +13,6 @@ namespace Naheulbook.Web.Responses
         public string Info { get; set; }
         public bool IsGroup => false;
         public ItemResponse Item { get; set; }
+        public ActiveStatsModifier Modifier { get; set; }
     }
 }

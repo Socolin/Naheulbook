@@ -50,5 +50,12 @@ namespace Naheulbook.Data.Models
         public ICollection<Item> Items { get; set; }
         public ICollection<GroupInvite> Invites { get; set; }
         public ICollection<CharacterHistoryEntry> HistoryEntries { get; set; }
+
+        public void AddHistoryEntry(CharacterHistoryEntry entry)
+        {
+            if (HistoryEntries == null)
+                HistoryEntries = new List<CharacterHistoryEntry>();
+            HistoryEntries.Add(entry);
+        }
     }
 }

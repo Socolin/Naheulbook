@@ -145,6 +145,36 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpPost("{CharacterId}/modifiers/{CharacterModifierId}/toggle")]
+        public async Task<ActionResult<ActiveStatsModifier>> PostToggleModifiersAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId,
+            [FromRoute] int characterModifierId
+        )
+        {
+            try
+            {
+                var characterModifier = await _characterService.ToggleModifiersAsync(executionContext, characterId, characterModifierId);
+                return _mapper.Map<ActiveStatsModifier>(characterModifier);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (CharacterModifierNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (CharacterModifierNotReusableException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
         [HttpGet("{CharacterId}/loots")]
         public async Task<ActionResult<List<LootResponse>>> GetCharacterLoots(
             [FromServices] NaheulbookExecutionContext executionContext,
