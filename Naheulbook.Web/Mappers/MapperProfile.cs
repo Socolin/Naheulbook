@@ -51,7 +51,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
 
             CreateMap<Effect, EffectResponse>()
-                .ForMember(m => m.Modifiers, opt => opt.MapFrom(e => e.Modifiers.OrderBy(m => m.Stat)));
+                .ForMember(m => m.Modifiers, opt => opt.MapFrom(e => e.Modifiers.OrderBy(m => m.StatName)));
             CreateMap<EffectType, EffectTypeResponse>();
             CreateMap<EffectCategory, EffectCategoryResponse>();
             CreateMap<EffectModifier, StatModifierResponse>()
