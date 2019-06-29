@@ -132,11 +132,9 @@ export class CharacterService {
         return this.httpClient.post<ActiveStatsModifier>(`/api/v2/characters/${characterId}/modifiers`, modifier);
     }
 
-    removeModifier(characterId: number, modifierId: number): Observable<ActiveStatsModifier> {
-        return this.httpClient.post<ActiveStatsModifier>('/api/character/removeModifier', {
-            characterId: characterId,
-            modifierId: modifierId,
-        });
+    removeModifier(characterId: number, modifierId: number): Observable<number> {
+        return this.httpClient.delete(`/api/v2/characters/${characterId}/modifiers/${modifierId}`)
+            .pipe(map(() => modifierId));
     }
 
     toggleModifier(characterId: number, modifierId: number): Observable<ActiveStatsModifier> {

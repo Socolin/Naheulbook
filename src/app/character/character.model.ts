@@ -1317,13 +1317,13 @@ export class Character extends WsRegistrable {
         this.notify('addModifier' , 'Ajout du modificateur: ' + modifier.name);
     }
 
-    onRemoveModifier(modifier: ActiveStatsModifier) {
+    onRemoveModifier(modifierId: number) {
         for (let i = 0; i < this.modifiers.length; i++) {
             let e = this.modifiers[i];
-            if (e. id === modifier.id) {
+            if (e. id === modifierId) {
                 this.modifiers.splice(i, 1);
                 this.update();
-                this.notify('removeModifier', 'Suppression du modificateur: ' + modifier.name);
+                this.notify('removeModifier', 'Suppression du modificateur: ' + e.name);
                 return;
             }
         }
@@ -1548,7 +1548,7 @@ export class Character extends WsRegistrable {
                 break;
             }
             case 'removeModifier': {
-                this.onRemoveModifier(ActiveStatsModifier.fromJson(data));
+                this.onRemoveModifier(data);
                 break;
             }
             case 'updateModifier': {

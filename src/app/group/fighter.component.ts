@@ -212,7 +212,7 @@ export class FighterComponent implements OnInit, OnChanges {
             if (this.selectedModifier && this.selectedModifier.id === deletedModifier.id) {
                 this.selectedModifier = undefined;
             }
-            this.fighter.monster.onRemoveModifier(deletedModifier);
+            this.fighter.monster.onRemoveModifier(deletedModifier.id);
         });
     }
     ngOnChanges(changes: SimpleChanges): void {
