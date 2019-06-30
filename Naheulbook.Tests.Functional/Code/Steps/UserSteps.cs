@@ -1,9 +1,15 @@
 using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Naheulbook.Core.Services;
+using Naheulbook.Data.Models;
+using Naheulbook.Shared.Utils;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.Servers;
 using Naheulbook.Tests.Functional.Code.TestServices;
+using Naheulbook.TestUtils;
+using Naheulbook.Web.Configurations;
+using Naheulbook.Web.Services;
 using Newtonsoft.Json.Linq;
 using TechTalk.SpecFlow;
 
@@ -14,11 +20,17 @@ namespace Naheulbook.Tests.Functional.Code.Steps
     {
         private readonly ScenarioContext _scenarioContext;
         private readonly UserTestService _userTestService;
+        private readonly TestDataUtil _testDataUtil;
 
-        public UserSteps(ScenarioContext scenarioContext, UserTestService userTestService)
+        public UserSteps(
+            ScenarioContext scenarioContext,
+            UserTestService userTestService,
+            TestDataUtil testDataUtil
+        )
         {
             _scenarioContext = scenarioContext;
             _userTestService = userTestService;
+            _testDataUtil = testDataUtil;
         }
 
         [Given("a user identified by a password")]
@@ -32,30 +44,39 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         }
 
         [Given("a JWT for a user")]
-        public async Task GivenAUser()
+        public void GivenAUser()
         {
-            var (username, password, userId) = await _userTestService.CreateUserAsync();
 
-            _scenarioContext.SetUsername(username);
-            _scenarioContext.SetPassword(password);
-            _scenarioContext.SetUserId(userId);
+            var hasUtil = new PasswordHashingService();
+            _testDataUtil.AddUser(u => u.HashedPassword = hasUtil.HashPassword("some-password"));
 
-            var jwt = await _userTestService.GenerateJwtAsync(username, password);
+            _scenarioContext.SetUsername(_testDataUtil.GetLast<User>().Username);
+            _scenarioContext.SetPassword("some-password");
+            _scenarioContext.SetUserId(_testDataUtil.GetLast<User>().Id);
+
+            var jwtService = new JwtService(new AuthenticationConfiguration {JwtSigningKey = NaheulbookApiServer.JwtSigningKey, JwtExpirationDelayInMinutes = 10}, new TimeService());
+            var jwt = jwtService.GenerateJwtToken(_testDataUtil.GetLast<User>().Id);
+
             _scenarioContext.SetJwt(jwt);
         }
 
         [Given("a JWT for an admin user")]
-        public async Task GivenAnAdminUser()
+        public void GivenAnAdminUser()
         {
-            var (username, password, userId) = await _userTestService.CreateUserAsync();
+            var hasUtil = new PasswordHashingService();
+            _testDataUtil.AddUser(u =>
+            {
+                u.HashedPassword = hasUtil.HashPassword("some-password");
+                u.Admin = true;
+            });
 
-            _scenarioContext.SetUsername(username);
-            _scenarioContext.SetPassword(password);
-            _scenarioContext.SetUserId(userId);
+            _scenarioContext.SetUsername(_testDataUtil.GetLast<User>().Username);
+            _scenarioContext.SetPassword("some-password");
+            _scenarioContext.SetUserId(_testDataUtil.GetLast<User>().Id);
 
-            await _userTestService.SetUserAdminAsync(username);
+            var jwtService = new JwtService(new AuthenticationConfiguration {JwtSigningKey = NaheulbookApiServer.JwtSigningKey, JwtExpirationDelayInMinutes = 10}, new TimeService());
+            var jwt = jwtService.GenerateJwtToken(_testDataUtil.GetLast<User>().Id);
 
-            var jwt = await _userTestService.GenerateJwtAsync(username, password);
             _scenarioContext.SetJwt(jwt);
         }
 
