@@ -92,12 +92,11 @@ namespace Naheulbook.Core.Services
 
         public async Task EnsureUserCanAccessMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId)
         {
-
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var monster = await uow.Monsters.GetAsync(monsterId);
                 if (monster == null)
-                    throw new LootNotFoundException(monsterId);
+                    throw new MonsterNotFoundException(monsterId);
 
                 var group = await uow.Groups.GetGroupsWithCharactersAsync(monster.GroupId);
                 if (group == null)
