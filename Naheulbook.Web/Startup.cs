@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -63,6 +64,7 @@ namespace Naheulbook.Web
             });
             services.AddSession(options =>
             {
+                options.IdleTimeout = TimeSpan.FromHours(4);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
