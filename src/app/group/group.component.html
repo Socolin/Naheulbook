@@ -184,15 +184,15 @@
                         <div *ngIf="group.invites.length">
                             <h4>Invitation à valider</h4>
                             <div class="list-group">
-                                <ng-template ngFor let-character [ngForOf]="group.invites">
+                                <ng-template ngFor let-invite [ngForOf]="group.invites">
                                     <mat-expansion-panel>
                                         <mat-expansion-panel-header>
-                                            <mat-panel-description>{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span></mat-panel-description>
-                                            <mat-panel-title>{{character.name}}</mat-panel-title>
+                                            <mat-panel-description>{{invite.origin}} <span *ngIf="invite.jobs && invite.jobs.length">- {{invite.jobs.join()}}</span></mat-panel-description>
+                                            <mat-panel-title>{{invite.name}}</mat-panel-title>
                                         </mat-expansion-panel-header>
                                         <mat-action-row>
-                                            <button mat-button (click)="cancelInvite(character)">REFUSER</button>
-                                            <button mat-button (click)="acceptInvite(character)">ACCEPTER</button>
+                                            <button mat-button (click)="cancelInvite(invite)">REFUSER</button>
+                                            <button mat-button (click)="acceptInvite(invite)">ACCEPTER</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
                                 </ng-template>
@@ -202,14 +202,14 @@
                         <div *ngIf="group.invited.length">
                             <h4>Invitation en attente</h4>
                             <div class="list-group">
-                                <ng-template ngFor let-character [ngForOf]="group.invited">
+                                <ng-template ngFor let-invite [ngForOf]="group.invited">
                                     <mat-expansion-panel>
                                         <mat-expansion-panel-header>
-                                            <mat-panel-description>{{character.origin}} <span *ngIf="character.job">- {{character.job}}</span></mat-panel-description>
-                                            <mat-panel-title>{{character.name}}</mat-panel-title>
+                                            <mat-panel-description>{{invite.origin}} <span *ngIf="invite.jobs && invite.jobs.length">- {{invite.jobs.join()}}</span></mat-panel-description>
+                                            <mat-panel-title>{{invite.name}}</mat-panel-title>
                                         </mat-expansion-panel-header>
                                         <mat-action-row>
-                                            <button mat-button (click)="cancelInvite(character)">ANNULER</button>
+                                            <button mat-button (click)="cancelInvite(invite)">ANNULER</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
                                 </ng-template>
@@ -345,7 +345,7 @@
             <mat-radio-group [(ngModel)]="selectedInviteCharacter">
                 <ng-template ngFor let-character [ngForOf]="filteredInvitePlayers">
                     <mat-radio-button [value]="character">
-                        {{character.name}} - {{character.origin}} <span *ngIf="character.job">- {{character.job}}</span>
+                        {{character.name}} - {{character.origin}}
                         Joueur: {{character.owner}}
                     </mat-radio-button>
                 </ng-template>

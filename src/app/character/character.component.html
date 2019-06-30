@@ -6,7 +6,7 @@
                 <mat-card *ngFor="let invite of character.invites">
                     <mat-card-title>Invitation</mat-card-title>
                     <mat-card-content>
-                        Rejoindre le groupe <em>{{invite.name}}</em> ?
+                        Rejoindre le groupe <em>{{invite.groupName}}</em> ?
                     </mat-card-content>
                     <mat-card-actions>
                         <button mat-button color="primary" (click)="cancelInvite(invite)">REFUSER</button>

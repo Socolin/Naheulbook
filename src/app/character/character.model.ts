@@ -42,6 +42,13 @@ export class StaticDetailShow {
     other = false;
     magic = false;
 }
+export interface CharacterSearchResponse {
+    id: number;
+    name: string;
+    origin: string;
+    owner: string;
+}
+
 export class StatisticDetail {
     evea: any[] = [];
     atprd: any[] = [];
@@ -220,7 +227,7 @@ export interface CharacterJsonData {
     gmData: any;
     group: IMetadata;
     id: number;
-    invites: IMetadata[];
+    invites: {groupId: number, groupName: string}[];
     isNpc: boolean;
     items: Item[];
     jobIds: number[];
@@ -260,7 +267,7 @@ export class Character extends WsRegistrable {
     color: string;
     gmData: any;
     group: IMetadata;
-    invites: IMetadata[];
+    invites: {groupId: number, groupName: string}[];
     isNpc: boolean;
 
     computedData: CharacterComputedData = new CharacterComputedData();
@@ -1577,7 +1584,7 @@ export class Character extends WsRegistrable {
                 break;
             }
             case 'cancelInvite': {
-                let i = this.invites.findIndex(d => d.id === data.group.id);
+                let i = this.invites.findIndex(d => d.groupId === data.groupId);
                 if (i !== -1) {
                     this.invites.splice(i, 1);
                 }

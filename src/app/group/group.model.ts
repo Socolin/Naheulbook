@@ -1,4 +1,3 @@
-
 import {forkJoin, Observable, Subscription, Subject} from 'rxjs';
 
 import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
@@ -22,39 +21,51 @@ export class FighterStat {
     get at(): number {
         return this.fighter.isMonster ? this.fighter.monster.computedData.at : this.fighter.character.computedData.stats['AT'];
     }
+
     get ad(): number {
         return this.fighter.isMonster ? 10 : this.fighter.character.computedData.stats['AD'];
     }
+
     get prd(): number {
         return this.fighter.isMonster ? this.fighter.monster.computedData.prd : this.fighter.character.computedData.stats['PRD'];
     }
+
     get esq(): number {
         return this.fighter.isMonster ? this.fighter.monster.computedData.esq : this.fighter.character.computedData.stats['AD'];
     }
+
     get ev(): number {
         return this.fighter.isMonster ? this.fighter.monster.data.ev : this.fighter.character.ev;
     }
+
     get ea(): number {
         return this.fighter.isMonster ? this.fighter.monster.data.ea : this.fighter.character.ea;
     }
+
     get maxEv(): number {
         return this.fighter.isMonster ? this.fighter.monster.data.maxEv : this.fighter.character.computedData.stats['EV'];
     }
+
     get maxEa(): number {
         return this.fighter.isMonster ? this.fighter.monster.data.maxEa : this.fighter.character.computedData.stats['EA'];
     }
+
     get pr(): number {
         return this.fighter.isMonster ? this.fighter.monster.computedData.pr : this.fighter.character.computedData.stats['PR'];
     }
+
     get pr_magic(): number {
         return this.fighter.isMonster ? this.fighter.monster.computedData.pr_magic : this.fighter.character.computedData.stats['PR_MAGIC'];
     }
-    get dmg(): {name: string, damage: string, incompatible?: boolean}[] {
+
+    get dmg(): { name: string, damage: string, incompatible?: boolean }[] {
         return this.fighter.isMonster ? this.fighter.monster.computedData.dmg : this.fighter.character.computedData.weaponsDamages;
     }
+
     get cou(): number {
         return this.fighter.isMonster ? this.fighter.monster.computedData.cou : this.fighter.character.computedData.stats['COU'];
     }
+
     get resm(): number {
         return this.fighter.isMonster ? this.fighter.monster.computedData.resm : this.fighter.character.computedData.stats['RESM'];
     }
@@ -70,26 +81,31 @@ export class Target {
     constructor(fighter: Fighter) {
         this.fighter = fighter;
     }
+
     get id(): number {
         return this.fighter.id;
     }
+
     get isMonster(): boolean {
         return this.fighter.isMonster;
     }
+
     get name(): string {
         return this.fighter.name;
     }
+
     get color(): string {
         return this.fighter.color;
     }
-    get number(): number|undefined|null {
+
+    get number(): number | undefined | null {
         return this.fighter.number;
     }
 }
 
 export class Fighter {
     stats: FighterStat = new FighterStat(this);
-    target: Target|null;
+    target: Target | null;
 
     isMonster: boolean;
     monster: Monster;
@@ -99,12 +115,11 @@ export class Fighter {
         return this.isMonster ? this.monster.targetChanged : this.character.targetChanged;
     }
 
-    constructor(element: Monster|Character) {
+    constructor(element: Monster | Character) {
         if (element instanceof Monster) {
             this.isMonster = true;
             this.monster = element;
-        }
-        else {
+        } else {
             this.isMonster = false;
             this.character = element;
         }
@@ -187,8 +202,7 @@ export class Fighter {
         if (fighterIndex !== -1) {
             let fighter = fighters[fighterIndex];
             this.target = new Target(fighter);
-        }
-        else {
+        } else {
             this.target = null;
         }
     }
@@ -291,8 +305,8 @@ export interface GroupResponse {
     data: any;
     location: Location;
 
-    invitesCharacterIds: number[];
-    invitedCharacterIds: number[];
+    invites: GroupInvite[];
+
     characterIds: number[];
 }
 
@@ -304,18 +318,18 @@ export class Group extends WsRegistrable {
 
     public onNotification: Subject<any> = new Subject<any>();
 
-    public invited: CharacterInviteInfo[] = [];
-    public invites: CharacterInviteInfo[] = [];
+    public invited: GroupInvite[] = [];
+    public invites: GroupInvite[] = [];
 
     public characters: Character[] = [];
     public characterAdded: Subject<Character> = new Subject<Character>();
     public characterRemoved: Subject<Character> = new Subject<Character>();
-    public characterSubscriptions: {[characterId: number]: {change: Subscription, active: Subscription}} = {};
+    public characterSubscriptions: { [characterId: number]: { change: Subscription, active: Subscription } } = {};
 
     public monsters: Monster[] = [];
     public monsterAdded: Subject<Monster> = new Subject<Monster>();
     public monsterRemoved: Subject<Monster> = new Subject<Monster>();
-    public monsterSubscriptions: {[monsterId: number]: Subscription} = {};
+    public monsterSubscriptions: { [monsterId: number]: Subscription } = {};
 
     public loots: Loot[] = [];
     public lootAdded: Subject<Loot> = new Subject<Loot>();
@@ -326,11 +340,11 @@ export class Group extends WsRegistrable {
     public eventRemoved: Subject<NEvent> = new Subject<NEvent>();
 
     public fighters: Fighter[] = [];
-    public fightersSubscriptions: {[fighterUid: string]: Subscription} = {};
+    public fightersSubscriptions: { [fighterUid: string]: Subscription } = {};
 
-    public pendingModifierChanges: any[]|null;
+    public pendingModifierChanges: any[] | null;
 
-    get currentFighter(): Fighter|undefined {
+    get currentFighter(): Fighter | undefined {
         if (this.fighters.length <= this.data.currentFighterIndex) {
             return undefined;
         }
@@ -346,8 +360,8 @@ export class Group extends WsRegistrable {
     static fromJson(jsonData: GroupResponse): Group {
         let group = new Group();
         Object.assign(group, jsonData, {data: GroupData.fromJson(jsonData.data), characters: []});
-        group.invited = jsonData.invitedCharacterIds.map(i => {return {id: i} as CharacterInviteInfo});
-        group.invites = jsonData.invitesCharacterIds.map(i => {return {id: i} as CharacterInviteInfo});
+        group.invited = jsonData.invites.filter(i => i.fromGroup);
+        group.invites = jsonData.invites.filter(i => !i.fromGroup);
         return group;
     }
 
@@ -372,8 +386,7 @@ export class Group extends WsRegistrable {
         let activeSub = addedCharacter.onActiveChange.subscribe((active: number) => {
             if (active) {
                 this.addFighter(addedCharacter);
-            }
-            else {
+            } else {
                 this.removeFighter(addedCharacter);
             }
             this.updateFightersOrder();
@@ -547,7 +560,7 @@ export class Group extends WsRegistrable {
         this.futureEventCount = futureEventCount;
     }
 
-    private addFighter(element: Monster|Character) {
+    private addFighter(element: Monster | Character) {
         let fighter = new Fighter(element);
         this.fighters.push(fighter);
         this.fightersSubscriptions[fighter.uid] = fighter.onTargetChange.subscribe(() => {
@@ -557,7 +570,7 @@ export class Group extends WsRegistrable {
         this.fighters.forEach(f => f.updateTarget(this.fighters));
     }
 
-    private removeFighter(element: Monster|Character) {
+    private removeFighter(element: Monster | Character) {
         let isMonster = element instanceof Monster;
         let i = this.fighters.findIndex(f => f.isMonster === isMonster && f.id === element.id);
         if (i !== -1) {
@@ -591,11 +604,9 @@ export class Group extends WsRegistrable {
         this.fighters.sort((first: Fighter, second: Fighter) => {
             if (first.chercheNoise && !second.chercheNoise) {
                 return -1;
-            }
-            else if (!first.chercheNoise && second.chercheNoise) {
+            } else if (!first.chercheNoise && second.chercheNoise) {
                 return 1;
-            }
-            else {
+            } else {
                 let cou1 = first.stats.cou;
                 let cou2 = second.stats.cou;
 
@@ -619,7 +630,7 @@ export class Group extends WsRegistrable {
         });
     }
 
-    public nextFighter(): {modifiersDurationUpdated: any[], fighterIndex: number} | undefined {
+    public nextFighter(): { modifiersDurationUpdated: any[], fighterIndex: number } | undefined {
         if (this.fighters.length < 2) {
             return undefined;
         }
@@ -648,7 +659,7 @@ export class Group extends WsRegistrable {
         this.data.currentFighterIndex = 0;
     }
 
-    public updateTime(type: string, data: number|{previous: Fighter; next: Fighter}): any[] {
+    public updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any[] {
         let changes: any[] = [];
         for (let fighter of this.fighters) {
             let fighterChanges = fighter.updateTime(type, data);
@@ -670,7 +681,7 @@ export class Group extends WsRegistrable {
         return changes;
     }
 
-    public onAddInvite(data: any) {
+    public onAddInvite(data: GroupInvite) {
         if (data.fromGroup) {
             if (this.invited.findIndex(d => d.id === data.id) === -1) {
                 this.invited.push(data);
@@ -682,15 +693,14 @@ export class Group extends WsRegistrable {
         }
     }
 
-    public onCancelInvite(data: any): void {
+    public onCancelInvite(data: DeleteGroupResponse): void {
         if (data.fromGroup) {
-            let i = this.invited.findIndex(d => d.id === data.character.id);
+            let i = this.invited.findIndex(d => d.id === data.characterId);
             if (i !== -1) {
                 this.invited.splice(i, 1);
             }
-        }
-        else {
-            let i = this.invites.findIndex(d => d.id === data.character.id);
+        } else {
+            let i = this.invites.findIndex(d => d.id === data.characterId);
             if (i !== -1) {
                 this.invites.splice(i, 1);
             }
@@ -761,7 +771,7 @@ export class Group extends WsRegistrable {
                     services.job.getJobList(),
                     services.origin.getOriginList(),
                     services.skill.getSkillsById()
-                ]).subscribe(([jobs, origins, skillsById]: [Job[], Origin[], {[skillId: number]: Skill}]) => {
+                ]).subscribe(([jobs, origins, skillsById]: [Job[], Origin[], { [skillId: number]: Skill }]) => {
                     let character = Character.fromJson(characterData, origins, jobs, skillsById);
 
                     try {
@@ -838,9 +848,26 @@ export class Group extends WsRegistrable {
     }
 }
 
-export interface CharacterInviteInfo {
+export interface GroupInviteResponse {
     id: number;
     jobs: string[];
     name: string;
     origin: string;
+    fromGroup: boolean;
+    groupId: number;
+    groupName: string;
+}
+
+export interface GroupInvite {
+    id: number;
+    jobs: string[];
+    name: string;
+    origin: string;
+    fromGroup: boolean;
+}
+
+export interface DeleteGroupResponse {
+    groupId: number;
+    characterId: number;
+    fromGroup: boolean;
 }

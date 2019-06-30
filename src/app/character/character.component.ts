@@ -276,12 +276,12 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     // Group
 
-    cancelInvite(group) {
-        this._characterService.cancelInvite(this.character.id, group.id).subscribe(
+    cancelInvite(group: {groupId: number, groupName: string}) {
+        this._characterService.cancelInvite(this.character.id, group.groupId).subscribe(
             res => {
                 for (let i = 0; i < this.character.invites.length; i++) {
                     let e = this.character.invites[i];
-                    if (e.id === res.group.id) {
+                    if (e.groupId === res.groupId) {
                         this.character.invites.splice(i, 1);
                         break;
                     }
@@ -291,8 +291,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    acceptInvite(group: IMetadata) {
-        this._characterService.joinGroup(this.character.id, group.id).subscribe(
+    acceptInvite(invite: {groupId: number, groupName: string}) {
+        this._characterService.joinGroup(this.character.id, invite.groupId).subscribe(
             res => {
                 this.character.invites = [];
                 this.character.group = res.group;

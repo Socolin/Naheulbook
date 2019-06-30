@@ -9,11 +9,11 @@ import {CharacterSummary, HistoryEntry} from '../shared';
 import {Monster} from '../monster';
 import {Loot} from '../loot';
 import {NEvent, EventService} from '../event';
-import {Character, CharacterService} from '../character';
+import {Character, CharacterSearchResponse, CharacterService} from '../character';
 import {NhbkDateOffset} from '../date';
 import {Skill, SkillService} from '../skill';
 
-import {CharacterInviteInfo, Group, GroupData, GroupResponse, PartialGroup} from './group.model';
+import {Group, GroupData, GroupInvite, GroupInviteResponse, GroupResponse, PartialGroup} from './group.model';
 
 @Injectable()
 export class GroupService {
@@ -62,35 +62,6 @@ export class GroupService {
                     let event = events[i];
                     group.addEvent(event);
                 }
-                let charactersId: number[] = [];
-                for (let i = 0; i < group.invited.length; i++) {
-                    charactersId.push(group.invited[i].id);
-                }
-                for (let i = 0; i < group.invites.length; i++) {
-                    charactersId.push(group.invites[i].id);
-                }
-                this._characterService.loadCharactersResume(charactersId).subscribe(
-                    (characterInvite: CharacterSummary[]) => {
-                        for (let i = 0; i < group.invited.length; i++) {
-                            let char = group.invited[i];
-                            for (let j = 0; j < characterInvite.length; j++) {
-                                let c = characterInvite[j];
-                                if (c.id === char.id) {
-                                    group.invited[i] = c;
-                                }
-                            }
-                        }
-                        for (let i = 0; i < group.invites.length; i++) {
-                            let char = group.invites[i];
-                            for (let j = 0; j < characterInvite.length; j++) {
-                                let c = characterInvite[j];
-                                if (c.id === char.id) {
-                                    group.invites[i] = c;
-                                }
-                            }
-                        }
-                    }
-                );
                 group.updateFightersOrder(true);
                 subject.next(group);
                 subject.complete();
@@ -213,17 +184,13 @@ export class GroupService {
         });
     }
 
-    searchPlayersForInvite(name: string, groupId: number): Observable<CharacterInviteInfo[]> {
-        return this.httpClient.post<CharacterInviteInfo[]>('/api/character/searchForInvite', {
-            name: name,
-            groupId: groupId
-        });
+    searchPlayersForInvite(name: string): Observable<CharacterSearchResponse[]> {
+        return this.httpClient.get<CharacterSearchResponse[]>('/api/v2/characters/search?filter=' + encodeURIComponent(name));
     }
 
-    inviteCharacter(groupId: number, characterId: number): Observable<CharacterInviteInfo> {
-        return this.httpClient.post<CharacterInviteInfo>('/api/character/invite', {
+    inviteCharacter(groupId: number, characterId: number): Observable<GroupInviteResponse> {
+        return this.httpClient.post<GroupInviteResponse>(`/api/v2/groups/${groupId}/invites`, {
             characterId: characterId,
-            groupId: groupId,
             fromGroup: true
         });
     }

@@ -17,6 +17,7 @@ import {
     CharacterGiveDestination,
     CharacterJsonData,
 } from './character.model';
+import {DeleteGroupResponse} from '../group';
 
 @Injectable()
 export class CharacterService {
@@ -82,10 +83,6 @@ export class CharacterService {
         ));
     }
 
-    loadCharactersResume(list: number[]): Observable<CharacterSummary[]> {
-        return this.httpClient.get<CharacterSummary[]>('/api/v2/characters/?characterIds=' + list.join(','));
-    }
-
     loadList(): Observable<CharacterSummary[]> {
         return this.httpClient.get<CharacterSummary[]>('/api/v2/characters');
     }
@@ -138,27 +135,20 @@ export class CharacterService {
     }
 
     toggleModifier(characterId: number, modifierId: number): Observable<ActiveStatsModifier> {
-        return this.httpClient.post<ActiveStatsModifier>('/api/character/toggleModifier', {
-            characterId: characterId,
-            modifierId: modifierId,
-        });
+        return this.httpClient.post<ActiveStatsModifier>(`/api/v2/characters/${characterId}/modifiers/${modifierId}/toggle`, {});
     }
 
     loadHistory(characterId, page): Observable<HistoryEntry[]> {
         return this.httpClient.get<HistoryEntry[]>(`/api/v2/characters/${characterId}/history?page=${page}`);
     }
 
-    cancelInvite(characterId: number, groupId: number): Observable<{group: IMetadata; character: IMetadata}> {
-        return this.httpClient.post<{group: IMetadata; character: IMetadata}>('/api/character/cancelInvite', {
-            characterId: characterId,
-            groupId: groupId
-        });
+    cancelInvite(characterId: number, groupId: number): Observable<DeleteGroupResponse> {
+        return this.httpClient.delete<DeleteGroupResponse>(`/api/v2/groups/${groupId}/invites/${characterId}`);
     }
 
-    askJoinGroup(groupId: number, characterId: number): Observable<IMetadata> {
-        return this.httpClient.post<IMetadata>('/api/character/invite', {
+    askJoinGroup(groupId: number, characterId: number): Observable<void> {
+        return this.httpClient.post<void>(`/api/v2/groups/${groupId}/invites`, {
             characterId: characterId,
-            groupId: groupId,
             fromGroup: false
         });
     }

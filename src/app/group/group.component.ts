@@ -25,7 +25,7 @@ import {GroupService} from './group.service';
 import {WebSocketService} from '../websocket';
 import {GroupActionService} from './group-action.service';
 
-import {Character, CharacterService} from '../character';
+import {Character, CharacterSearchResponse, CharacterService} from '../character';
 import {Effect, AddEffectModalComponent} from '../effect';
 
 import {User, LoginService} from '../user';
@@ -36,7 +36,7 @@ import {ItemTemplate} from '../item-template';
 
 import {FighterSelectorComponent} from './fighter-selector.component';
 import {CreateItemComponent} from './create-item.component';
-import {Group, CharacterInviteInfo, Fighter} from './group.model';
+import {Group, GroupInvite, Fighter} from './group.model';
 
 @Component({
     templateUrl: './group.component.html',
@@ -76,7 +76,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     public inviteCharacterModal: Portal<any>;
     public inviteCharacterOverlayRef: OverlayRef;
     public searchNameInvite: string;
-    public filteredInvitePlayers: CharacterInviteInfo[] = [];
+    public filteredInvitePlayers: CharacterSearchResponse[] = [];
     public selectedInviteCharacter: Character;
 
     private charactersSubscriptions: {[characterId: number]: {notification: Subscription }} = {};
@@ -282,22 +282,22 @@ export class GroupComponent implements OnInit, OnDestroy {
             this.filteredInvitePlayers = [];
             return;
         }
-        this._groupService.searchPlayersForInvite(this.searchNameInvite, this.group.id).subscribe(
+        this._groupService.searchPlayersForInvite(this.searchNameInvite).subscribe(
             res => {
                 this.filteredInvitePlayers = res;
             }
         );
     }
 
-    _removeFromInvited(character): void {
-        let idx = this.group.invited.findIndex(char => char.id === character.id);
+    _removeFromInvited(characterId: number): void {
+        let idx = this.group.invited.findIndex(char => char.id === characterId);
         if (idx !== -1) {
             this.group.invited.splice(idx, 1);
         }
     }
 
-    _removeFromInvites(character): void {
-        let idx = this.group.invites.findIndex(char => char.id === character.id);
+    _removeFromInvites(characterId: number): void {
+        let idx = this.group.invites.findIndex(char => char.id === characterId);
         if (idx !== -1) {
             this.group.invites.splice(idx, 1);
         }
@@ -306,8 +306,8 @@ export class GroupComponent implements OnInit, OnDestroy {
     cancelInvite(character): boolean {
         this._characterService.cancelInvite(character.id, this.group.id).subscribe(
             res => {
-                this._removeFromInvited(res.character);
-                this._removeFromInvites(res.character);
+                this._removeFromInvited(res.characterId);
+                this._removeFromInvites(res.characterId);
             }
         );
         return false;
