@@ -143,6 +143,11 @@ namespace Naheulbook.Web.Services
             return SendCharacterChangeAsync(characterId, "cancelInvite", _mapper.Map<DeleteInviteResponse>(groupInvite));
         }
 
+        public Task NotifyCharacterAcceptGroupInviteAsync(int characterId, GroupInvite groupInvite)
+        {
+            return SendCharacterChangeAsync(characterId, "joinGroup", _mapper.Map<NamedIdResponse>(groupInvite.Group));
+        }
+
         public Task NotifyGroupCharacterInviteAsync(int groupId, GroupInvite groupInvite)
         {
             return SendGroupChangeAsync(groupId, "groupInvite", _mapper.Map<GroupGroupInviteResponse>(groupInvite));
@@ -151,6 +156,11 @@ namespace Naheulbook.Web.Services
         public Task NotifyGroupCancelGroupInviteAsync(int groupId, GroupInvite groupInvite)
         {
             return SendGroupChangeAsync(groupId, "cancelInvite", _mapper.Map<DeleteInviteResponse>(groupInvite));
+        }
+
+        public Task NotifyGroupAcceptGroupInviteAsync(int groupId, GroupInvite groupInvite)
+        {
+            return SendGroupChangeAsync(groupId, "joinCharacter", groupInvite.CharacterId);
         }
 
         private Task SendCharacterChangeAsync(Character character, string action, object data)

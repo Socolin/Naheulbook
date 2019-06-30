@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Exceptions;
@@ -283,7 +284,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void CancelOrRejectInviteAsync_ShouldEnsureUserCanDeleteThisException()
+        public void CancelOrRejectInviteAsync_ShouldEnsureUserCanDeleteGroupInvite()
         {
             const int groupId = 42;
             const int characterId = 24;
@@ -296,6 +297,100 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Throw(new TestException());
 
             Func<Task> act = () => _service.CancelOrRejectInviteAsync(executionContext, groupId, characterId);
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public async Task AcceptInviteAsync_ShouldDeleteInvitesFromDatabase_AndChangeCharacterGroupId()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+            var character = new Character();
+            var executionContext = new NaheulbookExecutionContext();
+            var groupInvite = new GroupInvite {GroupId = groupId, Character = character};
+            var otherGroupInvite = new GroupInvite {GroupId = groupId, Character = character};
+            var groupInvites = new List<GroupInvite> {groupInvite, otherGroupInvite};
+
+            _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
+                .Returns(groupInvite);
+            _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetInvitesByCharacterIdAsync(characterId)
+                .Returns(groupInvites);
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+                .Do(info => character.GroupId.Should().Be(groupId));
+
+            await _service.AcceptInviteAsync(executionContext, groupId, characterId);
+
+            Received.InOrder(() =>
+            {
+                _unitOfWorkFactory.GetUnitOfWork().GroupInvites.RemoveRange(groupInvites);
+                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+            });
+        }
+
+        [Test]
+        public async Task AcceptInviteAsync_ShouldNotifyCharacterAndGroupOfThat()
+        {
+
+            const int groupId = 42;
+            const int characterId = 24;
+            var character = new Character();
+            var executionContext = new NaheulbookExecutionContext();
+            var groupInvite = new GroupInvite {GroupId = groupId, Character = character};
+
+            _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
+                .Returns(groupInvite);
+
+            await _service.AcceptInviteAsync(executionContext, groupId, characterId);
+
+            await _changeNotifier.Received(1).NotifyGroupAcceptGroupInviteAsync(groupId, groupInvite);
+            await _changeNotifier.Received(1).NotifyCharacterAcceptGroupInviteAsync(characterId, groupInvite);
+        }
+
+        [Test]
+        public void AcceptInviteAsync_ShouldThrowIfInviteDoesNotExists()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+
+            _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
+                .Returns((GroupInvite) null);
+
+            Func<Task> act = () => _service.AcceptInviteAsync(new NaheulbookExecutionContext(), groupId, characterId);
+
+            act.Should().Throw<InviteNotFoundException>();
+        }
+
+        [Test]
+        public void AcceptInviteAsync_ShouldThrowIfCharacterIsAlreadyInAGroup()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+            var character = new Character {GroupId = 8};
+            var groupInvite = new GroupInvite {GroupId = groupId, Character = character};
+
+            _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
+                .Returns(groupInvite);
+
+            Func<Task> act = () => _service.AcceptInviteAsync(new NaheulbookExecutionContext(), groupId, characterId);
+
+            act.Should().Throw<CharacterAlreadyInAGroupException>();
+        }
+
+        [Test]
+        public void AcceptInviteAsync_ShouldEnsureUserCanAcceptGroupInvite()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+            var executionContext = new NaheulbookExecutionContext();
+            var groupInvite = new GroupInvite();
+
+            _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
+                .Returns(groupInvite);
+            _authorizationUtil.When(x => x.EnsureCanAcceptGroupInvite(executionContext, groupInvite))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.AcceptInviteAsync(executionContext, groupId, characterId);
 
             act.Should().Throw<TestException>();
         }

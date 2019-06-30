@@ -176,3 +176,14 @@ Feature: Group
     }
     """
 
+  Scenario: Can accept an invite
+    Given a JWT for a user
+    Given a group
+    Given a character
+    And an invite from the group to the 1st character
+
+    When performing a POST to the url "/api/v2/groups/${Group.Id}/invites/${Character.Id}/accept" with the following json content and the current jwt
+    """
+    {}
+    """
+    Then the response status code is 204

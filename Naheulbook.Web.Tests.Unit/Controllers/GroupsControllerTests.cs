@@ -196,6 +196,18 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
+        [TestCaseSource(nameof(GetAcceptInviteExceptionsAndExpectedStatusCode))]
+        public void PostAcceptInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _groupService.AcceptInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<int>())
+                .Returns(Task.FromException<GroupInvite>(exception));
+
+            Func<Task> act = () => _controller.PostAcceptInviteAsync(_executionContext, 8, 12);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
         public async Task GetGroupDetailsAsync_ShouldCreateLoot_ThenReturnLootResponse()
         {
             const int groupId = 8;
@@ -338,6 +350,13 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
             yield return new TestCaseData(new InviteNotFoundException(42, 8), HttpStatusCode.NotFound);
+        }
+
+        private static IEnumerable<TestCaseData> GetAcceptInviteExceptionsAndExpectedStatusCode()
+        {
+            yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
+            yield return new TestCaseData(new InviteNotFoundException(42, 8), HttpStatusCode.NotFound);
+            yield return new TestCaseData(new CharacterAlreadyInAGroupException(42), HttpStatusCode.BadRequest);
         }
     }
 }

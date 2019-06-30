@@ -299,5 +299,84 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             act.Should().NotThrow();
         }
+
+        [Test]
+        public void EnsureCanAcceptGroupInvite_ShouldThrowWhenNotAuthorized()
+        {
+            var groupInvite = new GroupInvite
+            {
+                Group = new Group {MasterId = 1},
+                Character = new Character {OwnerId = 2}
+            };
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 3};
+
+            Action act = () => _authorizationUtil.EnsureCanAcceptGroupInvite(naheulbookExecutionContext, groupInvite);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureCanAcceptGroupInvite_ShouldThrowWhenInviteIsFromCharacter_AndUserIsCharacterOwner()
+        {
+            var groupInvite = new GroupInvite
+            {
+                Group = new Group {MasterId = 1},
+                Character = new Character {OwnerId = 2},
+                FromGroup = false
+            };
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 2};
+
+            Action act = () => _authorizationUtil.EnsureCanAcceptGroupInvite(naheulbookExecutionContext, groupInvite);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureCanAcceptGroupInvite_ShouldThrowWhenInviteIsFromGroup_AndUserIsGroupMaster()
+        {
+            var groupInvite = new GroupInvite
+            {
+                Group = new Group {MasterId = 1},
+                Character = new Character {OwnerId = 2},
+                FromGroup = true
+            };
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 1};
+
+            Action act = () => _authorizationUtil.EnsureCanAcceptGroupInvite(naheulbookExecutionContext, groupInvite);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureCanAcceptGroupInvite_ShouldNotThrowWhenInviteIsFromCharacter_AndUserIsGroupMaster()
+        {
+            var groupInvite = new GroupInvite
+            {
+                Group = new Group {MasterId = 1},
+                Character = new Character {OwnerId = 2},
+                FromGroup = false
+            };
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 1};
+
+            Action act = () => _authorizationUtil.EnsureCanAcceptGroupInvite(naheulbookExecutionContext, groupInvite);
+
+            act.Should().NotThrow();
+        }
+
+        [Test]
+        public void EnsureCanAcceptGroupInvite_ShouldNotThrowWhenInviteIsFromGroup_AndUserIsCharacterOwner()
+        {
+            var groupInvite = new GroupInvite
+            {
+                Group = new Group {MasterId = 1},
+                Character = new Character {OwnerId = 2},
+                FromGroup = true
+            };
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 2};
+
+            Action act = () => _authorizationUtil.EnsureCanAcceptGroupInvite(naheulbookExecutionContext, groupInvite);
+
+            act.Should().NotThrow();
+        }
     }
 }

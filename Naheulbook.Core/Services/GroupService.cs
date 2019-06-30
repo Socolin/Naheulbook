@@ -18,6 +18,7 @@ namespace Naheulbook.Core.Services
         Task EnsureUserCanAccessGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task<GroupInvite> CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request);
         Task<GroupInvite> CancelOrRejectInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId);
+        Task AcceptInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId);
     }
 
     public class GroupService : IGroupService
@@ -161,6 +162,29 @@ namespace Naheulbook.Core.Services
                 await _changeNotifier.NotifyGroupCancelGroupInviteAsync(groupId, groupInvite);
 
                 return groupInvite;
+            }
+        }
+
+        public async Task AcceptInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var groupInvite = await uow.GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId);
+                if (groupInvite == null)
+                    throw new InviteNotFoundException(characterId, groupId);
+                if (groupInvite.Character.GroupId.HasValue)
+                    throw new CharacterAlreadyInAGroupException(characterId);
+
+                _authorizationUtil.EnsureCanAcceptGroupInvite(executionContext, groupInvite);
+
+                var allCharacterInvites = await uow.GroupInvites.GetInvitesByCharacterIdAsync(characterId);
+                uow.GroupInvites.RemoveRange(allCharacterInvites);
+                groupInvite.Character.GroupId = groupInvite.GroupId;
+
+                await uow.CompleteAsync();
+
+                await _changeNotifier.NotifyCharacterAcceptGroupInviteAsync(characterId, groupInvite);
+                await _changeNotifier.NotifyGroupAcceptGroupInviteAsync(groupId, groupInvite);
             }
         }
     }

@@ -239,6 +239,32 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpPost("{GroupId:int:min(1)}/invites/{CharacterId:int:min(1)}/accept")]
+        public async Task<ActionResult> PostAcceptInviteAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            [FromRoute] int characterId
+        )
+        {
+            try
+            {
+                await _groupService.AcceptInviteAsync(executionContext, groupId, characterId);
+                return new NoContentResult();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (InviteNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (CharacterAlreadyInAGroupException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
         [HttpGet("{GroupId:int:min(1)}/history")]
         public async Task<ActionResult<List<GroupHistoryEntryResponse>>> PostCreateMonsterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
