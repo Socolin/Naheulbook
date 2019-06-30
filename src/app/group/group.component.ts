@@ -1,5 +1,5 @@
 
-import {forkJoin, Observable, Subscription} from 'rxjs';
+import {forkJoin, Subscription} from 'rxjs';
 
 import {map} from 'rxjs/operators';
 import {
@@ -60,7 +60,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     public loadingGroup = false;
 
-    @ViewChildren('characters, {static: true}')
+    @ViewChildren('characters')
     public characterSheetsDialog: QueryList<TemplatePortalDirective>;
     private characterSheetOverlayRef: OverlayRef;
 
@@ -169,6 +169,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     displayCharacterSheet(character: Character) {
         let characterSheetDialog = this.characterSheetsDialog.toArray();
+        console.log(characterSheetDialog);
         let index = 0;
         for (let i = 0; i < this.group.characters.length; i++) {
             if (this.group.characters[i] === character) {
@@ -313,11 +314,11 @@ export class GroupComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    acceptInvite(character) {
-        this._characterService.joinGroup(character.id, this.group.id).subscribe(
-            res => {
-                character.invites = [];
-                character.group = res.group;
+    acceptInvite(invite: GroupInvite) {
+        this._characterService.joinGroup(invite.id, this.group.id).subscribe(
+            () => {
+                this._removeFromInvited(invite.id);
+                this._removeFromInvites(invite.id);
             }
         );
         return false;
@@ -436,6 +437,11 @@ export class GroupComponent implements OnInit, OnDestroy {
                         });
                         this._websocketService.registerElement(this.group);
                         this.loadingGroup = false;
+                        this.group.characterJoining.subscribe((characterId) => {
+                            this._characterService.getCharacter(characterId).subscribe((character) => {
+                                this.group.addCharacter(character);
+                            });
+                        })
                     }
                 );
             }

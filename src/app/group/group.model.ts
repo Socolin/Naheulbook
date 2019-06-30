@@ -1,4 +1,4 @@
-import {forkJoin, Observable, Subscription, Subject} from 'rxjs';
+import {Observable, Subscription, Subject} from 'rxjs';
 
 import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
 
@@ -9,11 +9,7 @@ import {NhbkDate} from '../date';
 import {Loot} from '../loot';
 import {NEvent} from '../event';
 import {date2Timestamp} from '../date/util';
-import {CharacterJsonData} from '../character';
 import {TargetJsonData} from './target.model';
-import {Skill} from '../skill';
-import {Job} from '../job';
-import {Origin} from '../origin';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -322,6 +318,7 @@ export class Group extends WsRegistrable {
     public invites: GroupInvite[] = [];
 
     public characters: Character[] = [];
+    public characterJoining: Subject<number> = new Subject<number>();
     public characterAdded: Subject<Character> = new Subject<Character>();
     public characterRemoved: Subject<Character> = new Subject<Character>();
     public characterSubscriptions: { [characterId: number]: { change: Subscription, active: Subscription } } = {};
@@ -766,28 +763,12 @@ export class Group extends WsRegistrable {
                 break;
             }
             case 'joinCharacter': {
-                let characterData: CharacterJsonData = data;
-                forkJoin([
-                    services.job.getJobList(),
-                    services.origin.getOriginList(),
-                    services.skill.getSkillsById()
-                ]).subscribe(([jobs, origins, skillsById]: [Job[], Origin[], { [skillId: number]: Skill }]) => {
-                    let character = Character.fromJson(characterData, origins, jobs, skillsById);
-
-                    try {
-                        character.update();
-                    } catch (e) {
-                        console.log(e, e.stack);
-                        throw e;
-                    }
-                    this.addCharacter(character);
-                });
-
-                let i = this.invited.findIndex(d => d.id === characterData.id);
+                this.characterJoining.next(data);
+                let i = this.invited.findIndex(d => d.id === data);
                 if (i !== -1) {
                     this.invited.splice(i, 1);
                 }
-                let j = this.invites.findIndex(d => d.id === characterData.id);
+                let j = this.invites.findIndex(d => d.id === data);
                 if (j !== -1) {
                     this.invites.splice(j, 1);
                 }

@@ -153,11 +153,8 @@ export class CharacterService {
         });
     }
 
-    joinGroup(characterId, groupId): Observable<{group: IMetadata; character: IMetadata}> {
-        return this.httpClient.post<{group: IMetadata; character: IMetadata}>('/api/character/joinGroup', {
-            characterId: characterId,
-            groupId: groupId
-        });
+    joinGroup(characterId: number, groupId: number): Observable<void> {
+        return this.httpClient.post<void>(`/api/v2/groups/${groupId}/invites/${characterId}/accept`, {});
     }
 
     createCharacter(creationData): Observable<{id: number}> {

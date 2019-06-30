@@ -14,7 +14,7 @@ import {Item} from '../item';
 import {WebSocketService} from '../websocket';
 
 import {CharacterService} from './character.service';
-import {Character} from './character.model';
+import {Character, CharacterGroupInvite} from './character.model';
 import {InventoryPanelComponent} from './inventory-panel.component';
 import {ItemActionService} from './item-action.service';
 import {SwipeService} from './swipe.service';
@@ -276,8 +276,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     // Group
 
-    cancelInvite(group: {groupId: number, groupName: string}) {
-        this._characterService.cancelInvite(this.character.id, group.groupId).subscribe(
+    cancelInvite(invite: CharacterGroupInvite) {
+        this._characterService.cancelInvite(this.character.id, invite.groupId).subscribe(
             res => {
                 for (let i = 0; i < this.character.invites.length; i++) {
                     let e = this.character.invites[i];
@@ -291,11 +291,11 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    acceptInvite(invite: {groupId: number, groupName: string}) {
+    acceptInvite(invite: CharacterGroupInvite) {
         this._characterService.joinGroup(this.character.id, invite.groupId).subscribe(
-            res => {
+            () => {
                 this.character.invites = [];
-                this.character.group = res.group;
+                this.character.group = {id: invite.groupId, name: invite.groupName};
             }
         );
         return false;

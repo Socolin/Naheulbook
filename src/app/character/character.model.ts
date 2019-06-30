@@ -48,6 +48,10 @@ export interface CharacterSearchResponse {
     origin: string;
     owner: string;
 }
+export interface CharacterGroupInvite {
+    groupId: number;
+    groupName: string;
+}
 
 export class StatisticDetail {
     evea: any[] = [];
@@ -227,7 +231,7 @@ export interface CharacterJsonData {
     gmData: any;
     group: IMetadata;
     id: number;
-    invites: {groupId: number, groupName: string}[];
+    invites: CharacterGroupInvite[];
     isNpc: boolean;
     items: Item[];
     jobIds: number[];
@@ -267,7 +271,7 @@ export class Character extends WsRegistrable {
     color: string;
     gmData: any;
     group: IMetadata;
-    invites: {groupId: number, groupName: string}[];
+    invites: CharacterGroupInvite[];
     isNpc: boolean;
 
     computedData: CharacterComputedData = new CharacterComputedData();
