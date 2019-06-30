@@ -30,7 +30,7 @@ namespace Naheulbook.Core.Utils
         private const string ChangeExperienceActionName = "ADD_XP";
         private const string ChangeSexActionName = "CHANGE_SEX";
         private const string ChangeNameActionName = "CHANGE_NAME";
-        private const string EquipActionName = "CHANGE_NEQUIPAME";
+        private const string EquipActionName = "EQUIP";
         private const string UnEquipActionName = "UNEQUIP";
         private const string ApplyModifierActionName = "APPLY_MODIFIER";
         private const string RemoveModifierActionName = "REMOVE_MODIFIER";
