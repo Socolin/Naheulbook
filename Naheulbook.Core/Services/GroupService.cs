@@ -16,6 +16,7 @@ namespace Naheulbook.Core.Services
         Task<Group> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task<List<GroupHistoryEntry>> GetGroupHistoryEntriesAsync(NaheulbookExecutionContext executionContext, int groupId, int page);
         Task EnsureUserCanAccessGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request);
     }
 
     public class GroupService : IGroupService
@@ -97,6 +98,34 @@ namespace Naheulbook.Core.Services
                     throw new GroupNotFoundException(groupId);
 
                 _authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
+            }
+        }
+
+        public async Task CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                var character = await uow.Characters.GetAsync(request.CharacterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(request.CharacterId);
+
+                if (request.FromGroup)
+                    _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+                else
+                    _authorizationUtil.EnsureIsCharacterOwner(executionContext, character);
+
+                uow.GroupInvites.Add(new GroupInvite
+                {
+                    Character = character,
+                    Group = group,
+                    FromGroup = request.FromGroup,
+                });
+
+                await uow.CompleteAsync();
             }
         }
     }

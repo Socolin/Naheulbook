@@ -100,5 +100,107 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             act.Should().Throw<TestException>();
         }
+
+        [Test]
+        public async Task CreateInviteAsync_ShouldCreateANewGroupInviteInDatabase()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+            var request = new CreateInviteRequest {CharacterId = characterId, FromGroup = true};
+            var group = new Group();
+            var character = new Character();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetAsync(characterId)
+                .Returns(character);
+
+            await _service.CreateInviteAsync(new NaheulbookExecutionContext(), groupId, request);
+
+            Received.InOrder(() =>
+            {
+                _unitOfWorkFactory.GetUnitOfWork().GroupInvites.Add(Arg.Is<GroupInvite>(gi => gi.FromGroup && gi.Group == group && gi.Character == character));
+                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+            });
+        }
+
+        [Test]
+        public void CreateInviteAsync_ShouldThrowWhenGroupNotFound()
+        {
+            const int groupId = 42;
+            var request = new CreateInviteRequest();
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns((Group) null);
+
+            Func<Task> act = () => _service.CreateInviteAsync(executionContext, groupId, request);
+
+            act.Should().Throw<GroupNotFoundException>();
+        }
+
+        [Test]
+        public void CreateInviteAsync_ShouldThrowWhenCharacterNotFound()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+            var request = new CreateInviteRequest {CharacterId = characterId};
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(new Group());
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetAsync(characterId)
+                .Returns((Character) null);
+
+            Func<Task> act = () => _service.CreateInviteAsync(executionContext, groupId, request);
+
+            act.Should().Throw<CharacterNotFoundException>();
+        }
+
+        [Test]
+        public void CreateInviteAsync_WhenFromGroup_EnsureUserIsOwnerOfGroup()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
+            var request = new CreateInviteRequest {CharacterId = characterId, FromGroup = true};
+            var group = new Group {Id = groupId};
+            var character = new Character {Id = characterId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetAsync(characterId)
+                .Returns(character);
+            _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.CreateInviteAsync(naheulbookExecutionContext, groupId, request);
+
+            act.Should().Throw<TestException>();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+        }
+
+        [Test]
+        public void CreateInviteAsync_WhenFromCharacter_EnsureUserIsOwnerOfCharacter()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
+            var request = new CreateInviteRequest {CharacterId = characterId, FromGroup = false};
+            var group = new Group {Id = groupId};
+            var character = new Character {Id = characterId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetAsync(characterId)
+                .Returns(character);
+            _authorizationUtil.When(x => x.EnsureIsCharacterOwner(naheulbookExecutionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.CreateInviteAsync(naheulbookExecutionContext, groupId, request);
+
+            act.Should().Throw<TestException>();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+        }
     }
 }

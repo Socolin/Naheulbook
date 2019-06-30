@@ -57,7 +57,7 @@ namespace Naheulbook.Web.Controllers
             return _mapper.Map<GroupResponse>(group);
         }
 
-        [HttpGet("{GroupId}/loots")]
+        [HttpGet("{GroupId:int:min(1)}/loots")]
         public async Task<ActionResult<List<LootResponse>>> GetLootListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId
@@ -78,7 +78,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPost("{GroupId}/loots")]
+        [HttpPost("{GroupId:int:min(1)}/loots")]
         public async Task<CreatedActionResult<LootResponse>> PostCreateLootAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
@@ -100,7 +100,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpGet("{GroupId}/events")]
+        [HttpGet("{GroupId:int:min(1)}/events")]
         public async Task<ActionResult<List<EventResponse>>> GetEventListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId
@@ -121,7 +121,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpGet("{GroupId}/monsters")]
+        [HttpGet("{GroupId:int:min(1)}/monsters")]
         public async Task<ActionResult<List<MonsterResponse>>> GetMonsterListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId
@@ -142,7 +142,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpGet("{GroupId}/deadMonsters")]
+        [HttpGet("{GroupId:int:min(1)}/deadMonsters")]
         public async Task<ActionResult<List<MonsterResponse>>> GetDeadMonsterListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
@@ -165,7 +165,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPost("{GroupId}/monsters")]
+        [HttpPost("{GroupId:int:min(1)}/monsters")]
         public async Task<CreatedActionResult<MonsterResponse>> PostCreateMonsterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
@@ -187,7 +187,33 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpGet("{GroupId}/history")]
+        [HttpPost("{GroupId:int:min(1)}/invites")]
+        public async Task<IActionResult> PostCreateInviteAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            CreateInviteRequest request
+        )
+        {
+            try
+            {
+                await _groupService.CreateInviteAsync(executionContext, groupId, request);
+                return new NoContentResult();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet("{GroupId:int:min(1)}/history")]
         public async Task<ActionResult<List<GroupHistoryEntryResponse>>> PostCreateMonsterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
@@ -209,7 +235,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpGet("{GroupId}")]
+        [HttpGet("{GroupId:int:min(1)}")]
         public async Task<ActionResult<GroupResponse>> GetGroupDetailsAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId

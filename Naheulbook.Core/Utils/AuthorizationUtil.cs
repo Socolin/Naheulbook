@@ -14,6 +14,7 @@ namespace Naheulbook.Core.Utils
         Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplate itemTemplate);
         void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, Group group);
         void EnsureCharacterAccess(NaheulbookExecutionContext executionContext, Character character);
+        void EnsureIsCharacterOwner(NaheulbookExecutionContext executionContext, Character character);
         void EnsureIsGroupOwnerOrMember(NaheulbookExecutionContext executionContext, Group group);
         void EnsureItemAccess(NaheulbookExecutionContext executionContext, Item item);
     }
@@ -65,6 +66,12 @@ namespace Naheulbook.Core.Utils
             if (character.OwnerId != executionContext.UserId
                 && character.GroupId != null
                 && character.Group.MasterId != executionContext.UserId)
+                throw new ForbiddenAccessException();
+        }
+
+        public void EnsureIsCharacterOwner(NaheulbookExecutionContext executionContext, Character character)
+        {
+            if (character.OwnerId != executionContext.UserId)
                 throw new ForbiddenAccessException();
         }
 

@@ -120,3 +120,17 @@ Feature: Group
          }
       ]
       """
+
+  Scenario: Can invite a character to a group
+    Given a JWT for a user
+    Given a group
+    Given a character
+
+    When performing a POST to the url "/api/v2/groups/${Group.Id}/invites/" with the following json content and the current jwt
+    """
+    {
+      "characterId": ${Character.Id},
+      "fromGroup": true
+    }
+    """
+    Then the response status code is 204
