@@ -158,15 +158,15 @@ Feature: Effect
       "timeDuration": 458,
       "modifiers": [
         {
-          "stat": "FO",
-          "value": 5,
-          "type": "ADD"
-        },
-        {
           "stat": "CHA",
           "value": -3,
           "type": "ADD"
         },
+        {
+          "stat": "FO",
+          "value": 5,
+          "type": "ADD"
+        }
       ]
     }
     """
