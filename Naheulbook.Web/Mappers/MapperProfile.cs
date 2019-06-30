@@ -16,6 +16,9 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Calendar, CalendarResponse>();
 
             CreateMap<Character, CreateCharacterResponse>();
+            CreateMap<Character, CharacterSearchResponse>()
+                .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name))
+                .ForMember(x => x.OwnerName, opt => opt.MapFrom(c => c.Owner.DisplayName));
             CreateMap<Character, CharacterSummaryResponse>()
                 .ForMember(x => x.JobNames, opt => opt.MapFrom(c => c.Jobs.Select(x => x.Job.Name)))
                 .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name));

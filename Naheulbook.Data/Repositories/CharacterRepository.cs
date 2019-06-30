@@ -13,6 +13,7 @@ namespace Naheulbook.Data.Repositories
         Task<Character> GetWithGroupAsync(int id);
         Task<List<Character>> GetForSummaryByOwnerIdAsync(int ownerId);
         Task<List<IHistoryEntry>> GetHistoryByCharacterIdAsync(int characterId, int? groupId, int page, bool isGm);
+        Task<List<Character>> SearchCharacterWithNoGroupByNameWithOriginWithOwner(string filter, int maxCount);
     }
 
     public class CharacterRepository : Repository<Character, NaheulbookDbContext>, ICharacterRepository
@@ -107,6 +108,16 @@ namespace Naheulbook.Data.Repositories
             history.Sort((h1, h2) => h2.Date.CompareTo(h1.Date));
 
             return history;
+        }
+
+        public Task<List<Character>> SearchCharacterWithNoGroupByNameWithOriginWithOwner(string filter, int maxCount)
+        {
+            return Context.Characters
+                .Include(x => x.Owner)
+                .Include(x => x.Origin)
+                .Where(x => x.GroupId == null && x.Name.ToUpper().Contains(filter.ToUpper()) && x.IsNpc == false)
+                .Take(maxCount)
+                .ToListAsync();
         }
     }
 }

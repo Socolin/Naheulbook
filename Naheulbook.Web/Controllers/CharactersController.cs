@@ -39,7 +39,7 @@ namespace Naheulbook.Web.Controllers
             return _mapper.Map<List<CharacterSummaryResponse>>(characters);
         }
 
-        [HttpGet("{CharacterId}")]
+        [HttpGet("{CharacterId:int:min(1)}")]
         public async Task<ActionResult<CharacterResponse>> GetCharacterDetailsAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId
@@ -60,6 +60,16 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpGet("search")]
+        public async Task<ActionResult<List<CharacterSearchResponse>>> GetSearchCharacterAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromQuery] string filter
+        )
+        {
+            var characters = await _characterService.SearchCharactersAsync(filter);
+            return _mapper.Map<List<CharacterSearchResponse>>(characters);
+        }
+
         [HttpPost]
         public async Task<CreatedActionResult<CreateCharacterResponse>> PostCreateCharacterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -71,7 +81,7 @@ namespace Naheulbook.Web.Controllers
         }
 
 
-        [HttpPost("{CharacterId}/items")]
+        [HttpPost("{CharacterId:int:min(1)}/items")]
         public async Task<CreatedActionResult<ItemResponse>> PostAddItemToCharacterInventory(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,
@@ -97,7 +107,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPost("{CharacterId}/modifiers")]
+        [HttpPost("{CharacterId:int:min(1)}/modifiers")]
         public async Task<CreatedActionResult<ActiveStatsModifier>> PostAddModifiersAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,
@@ -119,7 +129,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpDelete("{CharacterId}/modifiers/{CharacterModifierId}")]
+        [HttpDelete("{CharacterId:int:min(1)}/modifiers/{CharacterModifierId}")]
         public async Task<IActionResult> DeleteModifiersAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,
@@ -145,7 +155,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPost("{CharacterId}/modifiers/{CharacterModifierId}/toggle")]
+        [HttpPost("{CharacterId:int:min(1)}/modifiers/{CharacterModifierId}/toggle")]
         public async Task<ActionResult<ActiveStatsModifier>> PostToggleModifiersAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,
@@ -175,7 +185,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpGet("{CharacterId}/loots")]
+        [HttpGet("{CharacterId:int:min(1)}/loots")]
         public async Task<ActionResult<List<LootResponse>>> GetCharacterLoots(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId
@@ -196,7 +206,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpGet("{CharacterId}/history")]
+        [HttpGet("{CharacterId:int:min(1)}/history")]
         public async Task<ActionResult<List<HistoryEntryResponse>>> GetCharacterHistoryEntryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,
@@ -218,7 +228,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPatch("{CharacterId}/stats")]
+        [HttpPatch("{CharacterId:int:min(1)}/stats")]
         public async Task<IActionResult> PatchCharacterStatsAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,
@@ -240,7 +250,7 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPut("{CharacterId}/statBonusAd")]
+        [HttpPut("{CharacterId:int:min(1)}/statBonusAd")]
         public async Task<IActionResult> PutStatBonusAdAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,

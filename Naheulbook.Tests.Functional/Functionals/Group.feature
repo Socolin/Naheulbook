@@ -43,7 +43,6 @@ Feature: Group
     ]
     """
 
-
   Scenario: Can get a group details
     Given a JWT for a user
     Given a group
@@ -80,7 +79,6 @@ Feature: Group
     }
     """
 
-
   Scenario: Load group history
     Given a JWT for a user
     Given a group
@@ -103,3 +101,22 @@ Feature: Group
       }
     ]
     """
+
+  Scenario: Can search for character to invite
+    Given a JWT for a user
+    Given a group
+    Given a character
+
+    When performing a GET to the url "/api/v2/characters/search?filter=${Character.Name}" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+      """
+      [
+        {
+          "id": ${Character.Id},
+          "name": "${Character.Name}",
+          "origin": "${Character.Origin.Name}",
+          "owner": {"__match": {"type": "string"}}
+         }
+      ]
+      """

@@ -26,6 +26,7 @@ namespace Naheulbook.Core.Services
         Task<CharacterModifier> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request);
         Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
         Task<CharacterModifier> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
+        Task<List<Character>> SearchCharactersAsync(string filter);
     }
 
     public class CharacterService : ICharacterService
@@ -310,6 +311,17 @@ namespace Naheulbook.Core.Services
                 await _changeNotifier.NotifyUpdateCharacterModifierAsync(characterId, _mapper.Map<ActiveStatsModifier>(characterModifier));
 
                 return characterModifier;
+            }
+        }
+
+        public async Task<List<Character>> SearchCharactersAsync(string filter)
+        {
+            if (string.IsNullOrEmpty(filter))
+                return new List<Character>();
+
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.Characters.SearchCharacterWithNoGroupByNameWithOriginWithOwner(filter, 10);
             }
         }
     }
