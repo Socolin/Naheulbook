@@ -59,6 +59,8 @@ namespace Naheulbook.Data.Repositories
                 .Include(c => c.Items)
                 .ThenInclude(i => i.ItemTemplate)
                 .ThenInclude(i => i.SkillModifiers)
+                .Include(c => c.Invites)
+                .ThenInclude(i => i.Group)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

@@ -34,6 +34,12 @@ namespace Naheulbook.Data.Repositories
             return Context.Groups
                 .Include(g => g.Characters)
                 .Include(g => g.Invites)
+                .ThenInclude(g => g.Character)
+                .ThenInclude(g => g.Origin)
+                .Include(g => g.Invites)
+                .ThenInclude(g => g.Character)
+                .ThenInclude(g => g.Jobs)
+                .ThenInclude(g => g.Job)
                 .Include(g => g.Location)
                 .Where(g => g.Id == groupId)
                 .SingleOrDefaultAsync();

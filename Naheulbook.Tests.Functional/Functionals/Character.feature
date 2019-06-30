@@ -76,6 +76,7 @@ Feature: Character
     Given a character with all possible data
     And an item template with all optional fields set
     And an item based on that item template in the character inventory
+    And an invite from the group to the 1st character
 
     When performing a GET to the url "/api/v2/characters/${Character.Id}" with the current jwt
 
@@ -177,7 +178,13 @@ Feature: Character
                 "flags": ${Speciality.Flags}
             }
         ],
-        "invites": [],
+        "invites": [
+          { "__partial": {
+              "groupId": ${Group.Id},
+              "groupName": "${Group.Name}"
+            }
+          }
+        ],
         "items": [
           {
             "id": ${Item.Id},

@@ -28,6 +28,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var user = TestDataUtil.GetLast<User>();
             TestDataUtil.AddCharacterWithAllData(user.Id);
             var expectedCharacter = TestDataUtil.GetLast<Character>();
+            TestDataUtil.AddGroupInvite(expectedCharacter, TestDataUtil.GetLast<Group>(), true);
 
             var character = await _characterRepository.GetWithAllDataAsync(expectedCharacter.Id);
 
@@ -36,6 +37,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             character.Specialities.Select(x => x.Speciality).Should().BeEquivalentTo(TestDataUtil.GetAll<Speciality>(), config => config.ExcludingChildren());
             character.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
             character.Modifiers.Should().BeEquivalentTo(expectedCharacter.Modifiers, config => config.ExcludingChildren());
+            character.Invites.Should().BeEquivalentTo(TestDataUtil.GetAll<GroupInvite>(), config => config.ExcludingChildren());
+            character.Invites.First().Group.Should().BeEquivalentTo(TestDataUtil.Get<Group>(), config => config.ExcludingChildren());
         }
 
         [Test]

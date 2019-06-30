@@ -135,7 +135,7 @@ namespace Naheulbook.Web.Services
 
         public Task NotifyCharacterGroupInviteAsync(int characterId, GroupInvite groupInvite)
         {
-            return SendCharacterChangeAsync(characterId, "groupInvite", _mapper.Map<GroupInviteResponse>(groupInvite));
+            return SendCharacterChangeAsync(characterId, "groupInvite", _mapper.Map<CharacterGroupInviteResponse>(groupInvite));
         }
 
         public Task NotifyCharacterCancelGroupInviteAsync(int characterId, GroupInvite groupInvite)
@@ -145,7 +145,7 @@ namespace Naheulbook.Web.Services
 
         public Task NotifyGroupCharacterInviteAsync(int groupId, GroupInvite groupInvite)
         {
-            return SendGroupChangeAsync(groupId, "groupInvite", _mapper.Map<GroupInviteResponse>(groupInvite));
+            return SendGroupChangeAsync(groupId, "groupInvite", _mapper.Map<GroupGroupInviteResponse>(groupInvite));
         }
 
         public Task NotifyGroupCancelGroupInviteAsync(int groupId, GroupInvite groupInvite)

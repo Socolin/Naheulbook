@@ -24,7 +24,6 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name));
             CreateMap<Character, CharacterResponse>()
                 .ForMember(x => x.Stats, opt => opt.MapFrom(c => new CharacterResponse.BasicStats {Ad = c.Ad, Cou = c.Cou, Cha = c.Cha, Fo = c.Fo, Int = c.Int}))
-                .ForMember(x => x.Invites, opt => opt.Ignore())
                 .ForMember(x => x.SkillIds, opt => opt.MapFrom(c => c.Skills.Select(x => x.SkillId)))
                 .ForMember(x => x.JobIds, opt => opt.MapFrom(c => c.Jobs.Select(x => x.JobId)))
                 .ForMember(x => x.Specialities, opt => opt.MapFrom(c => c.Specialities.Select(x => x.Speciality)));
@@ -67,6 +66,9 @@ namespace Naheulbook.Web.Mappers
             CreateMap<God, GodResponse>();
 
             CreateMap<GroupInvite, DeleteInviteResponse>();
+            CreateMap<GroupInvite, CharacterGroupInviteResponse>()
+                .ForMember(m => m.GroupId, opt => opt.MapFrom(i => i.Group.Id))
+                .ForMember(m => m.GroupName, opt => opt.MapFrom(i => i.Group.Name));
             CreateMap<GroupInvite, GroupInviteResponse>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(i => i.Character.Id))
                 .ForMember(m => m.Name, opt => opt.MapFrom(i => i.Character.Name))
@@ -74,10 +76,13 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.GroupName, opt => opt.MapFrom(i => i.Group.Name))
                 .ForMember(m => m.OriginName, opt => opt.MapFrom(i => i.Character.Origin.Name))
                 .ForMember(m => m.JobNames, opt => opt.MapFrom(i => i.Character.Jobs.Select(j => j.Job.Name)));
+            CreateMap<GroupInvite, GroupGroupInviteResponse>()
+                .ForMember(m => m.Id, opt => opt.MapFrom(i => i.Character.Id))
+                .ForMember(m => m.Name, opt => opt.MapFrom(i => i.Character.Name))
+                .ForMember(m => m.OriginName, opt => opt.MapFrom(i => i.Character.Origin.Name))
+                .ForMember(m => m.JobNames, opt => opt.MapFrom(i => i.Character.Jobs.Select(j => j.Job.Name)));
             CreateMap<Group, GroupResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
-                .ForMember(m => m.InvitesCharacterIds, opt => opt.MapFrom(g => g.Invites.Where(i => !i.FromGroup).Select(i => i.CharacterId)))
-                .ForMember(m => m.InvitedCharacterIds, opt => opt.MapFrom(g => g.Invites.Where(i => i.FromGroup).Select(i => i.CharacterId)))
                 .ForMember(m => m.CharacterIds , opt => opt.MapFrom(g => g.Characters.Select(c => c.Id)));
             CreateMap<Group, NamedIdResponse>();
             CreateMap<Group, GroupSummaryResponse>()

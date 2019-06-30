@@ -11,7 +11,6 @@ namespace Naheulbook.Web.Responses
         public LocationResponse Location { get; set; }
 
         public IList<int> CharacterIds { get; set; }
-        public IList<int> InvitesCharacterIds { get; set; }
-        public IList<int> InvitedCharacterIds { get; set; }
+        public IList<GroupGroupInviteResponse> Invites { get; set; }
     }
 }

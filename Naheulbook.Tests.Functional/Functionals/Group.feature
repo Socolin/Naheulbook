@@ -17,8 +17,7 @@ Feature: Group
       "id": {"__match": {"type": "integer"}},
       "name": "some-group-name",
       "data": {},
-      "invitedCharacterIds": [],
-      "invitesCharacterIds": [],
+      "invites": [],
       "characterIds": [],
       "location": { "__partial": {
         "id": 1
@@ -70,11 +69,21 @@ Feature: Group
       "characterIds": [
         ${Character.[2].Id}
       ],
-      "invitedCharacterIds": [
-        ${Character.[0].Id}
-      ],
-      "invitesCharacterIds": [
-        ${Character.[1].Id}
+      "invites": [
+        {
+          "id": ${Character.[0].Id},
+          "name": "${Character.[0].Name}",
+          "origin": "${Character.[0].Origin.Name}",
+          "jobs": [],
+          "fromGroup": true
+        },
+        {
+          "id": ${Character.[1].Id},
+          "name": "${Character.[1].Name}",
+          "origin": "${Character.[1].Origin.Name}",
+          "jobs": [],
+          "fromGroup": false
+        }
       ]
     }
     """

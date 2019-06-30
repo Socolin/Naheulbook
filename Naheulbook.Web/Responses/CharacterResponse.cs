@@ -50,6 +50,6 @@ namespace Naheulbook.Web.Responses
         public IList<SpecialityResponse> Specialities { get; set; }
 
         public IList<ItemResponse> Items { get; set; }
-        public IList<object> Invites { get; set; } = new List<object>();
+        public IList<CharacterGroupInviteResponse> Invites { get; set; }
     }
 }
