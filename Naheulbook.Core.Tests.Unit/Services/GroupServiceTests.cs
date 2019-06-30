@@ -228,5 +228,76 @@ namespace Naheulbook.Core.Tests.Unit.Services
             act.Should().Throw<TestException>();
             _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
         }
+
+        [Test]
+        public async Task CancelOrRejectInviteAsync_ShouldDeleteInviteFromDatabase()
+        {
+
+            const int groupId = 42;
+            const int characterId = 24;
+            var executionContext = new NaheulbookExecutionContext();
+            var groupInvite = new GroupInvite();
+
+            _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
+                .Returns(groupInvite);
+
+            await _service.CancelOrRejectInviteAsync(executionContext, groupId, characterId);
+
+            Received.InOrder(() =>
+            {
+                _unitOfWorkFactory.GetUnitOfWork().GroupInvites.Remove(groupInvite);
+                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+            });
+        }
+
+        [Test]
+        public async Task CancelOrRejectInviteAsync_ShouldNotifyCharacterAndGroupOfThat()
+        {
+
+            const int groupId = 42;
+            const int characterId = 24;
+            var executionContext = new NaheulbookExecutionContext();
+            var groupInvite = new GroupInvite();
+
+            _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
+                .Returns(groupInvite);
+
+            await _service.CancelOrRejectInviteAsync(executionContext, groupId, characterId);
+
+            await _changeNotifier.Received(1).NotifyGroupCancelGroupInviteAsync(groupId, groupInvite);
+            await _changeNotifier.Received(1).NotifyCharacterCancelGroupInviteAsync(characterId, groupInvite);
+        }
+
+        [Test]
+        public void CancelOrRejectInviteAsync_ShouldThrowIfInviteDoesNotExists()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+
+            _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
+                .Returns((GroupInvite) null);
+
+            Func<Task> act = () => _service.CancelOrRejectInviteAsync(new NaheulbookExecutionContext(), groupId, characterId);
+
+            act.Should().Throw<InviteNotFoundException>();
+        }
+
+        [Test]
+        public void CancelOrRejectInviteAsync_ShouldEnsureUserCanDeleteThisException()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+            var executionContext = new NaheulbookExecutionContext();
+            var groupInvite = new GroupInvite();
+
+            _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
+                .Returns(groupInvite);
+            _authorizationUtil.When(x => x.EnsureCanDeleteGroupInvite(executionContext, groupInvite))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.CancelOrRejectInviteAsync(executionContext, groupId, characterId);
+
+            act.Should().Throw<TestException>();
+        }
     }
 }

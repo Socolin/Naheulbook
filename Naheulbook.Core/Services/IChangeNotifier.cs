@@ -22,5 +22,7 @@ namespace Naheulbook.Core.Services
         Task NotifyUpdateCharacterModifierAsync(int characterId, ActiveStatsModifier characterModifier);
         Task NotifyCharacterGroupInviteAsync(int characterId, GroupInvite groupInvite);
         Task NotifyGroupCharacterInviteAsync(int groupId, GroupInvite groupInvite);
+        Task NotifyCharacterCancelGroupInviteAsync(int characterId, GroupInvite groupInvite);
+        Task NotifyGroupCancelGroupInviteAsync(int characterId, GroupInvite groupInvite);
     }
 }

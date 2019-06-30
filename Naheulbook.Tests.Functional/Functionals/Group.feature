@@ -149,4 +149,21 @@ Feature: Group
       "fromGroup": true
     }
     """
-    Then the response status code is 204
+
+  Scenario: Can cancel or reject an invite to a group
+    Given a JWT for a user
+    Given a group
+    Given a character
+    And an invite from the group to the 1st character
+
+    When performing a DELETE to the url "/api/v2/groups/${Group.Id}/invites/${Character.Id}" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "groupId": ${Group.Id},
+      "characterId": ${Character.Id},
+      "fromGroup": true
+    }
+    """
+

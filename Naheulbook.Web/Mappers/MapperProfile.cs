@@ -66,6 +66,7 @@ namespace Naheulbook.Web.Mappers
 
             CreateMap<God, GodResponse>();
 
+            CreateMap<GroupInvite, DeleteInviteResponse>();
             CreateMap<GroupInvite, GroupInviteResponse>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(i => i.Character.Id))
                 .ForMember(m => m.Name, opt => opt.MapFrom(i => i.Character.Name))

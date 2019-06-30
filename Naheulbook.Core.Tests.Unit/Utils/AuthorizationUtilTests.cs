@@ -254,5 +254,50 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             act.Should().NotThrow();
         }
+
+        [Test]
+        public void EnsureCanDeleteGroupInvite_ShouldThrowForbiddenException_WhenUserDoesNotMatchOwnerOfGroupOrCharacter()
+        {
+            var groupInvite = new GroupInvite
+            {
+                Group = new Group {MasterId = 1},
+                Character = new Character {OwnerId = 2}
+            };
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 3};
+
+            Action act = () => _authorizationUtil.EnsureCanDeleteGroupInvite(naheulbookExecutionContext, groupInvite);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureCanDeleteGroupInvite_WhenUserIsCharacterOwner_ShouldNotThrow()
+        {
+            var groupInvite = new GroupInvite
+            {
+                Group = new Group {MasterId = 1},
+                Character = new Character {OwnerId = 2}
+            };
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 2};
+
+            Action act = () => _authorizationUtil.EnsureCanDeleteGroupInvite(naheulbookExecutionContext, groupInvite);
+
+            act.Should().NotThrow();
+        }
+
+        [Test]
+        public void EnsureCanDeleteGroupInvite_WhenUserIsGroupMaster_ShouldNotThrow()
+        {
+            var groupInvite = new GroupInvite
+            {
+                Group = new Group {MasterId = 1},
+                Character = new Character {OwnerId = 2}
+            };
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 1};
+
+            Action act = () => _authorizationUtil.EnsureCanDeleteGroupInvite(naheulbookExecutionContext, groupInvite);
+
+            act.Should().NotThrow();
+        }
     }
 }

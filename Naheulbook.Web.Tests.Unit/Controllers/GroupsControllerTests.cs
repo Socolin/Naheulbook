@@ -135,6 +135,67 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
+        public async Task PostCreateInviteAsync_ShouldCreateInvite_ThenReturnInviteResponse()
+        {
+            const int groupId = 8;
+            var createInviteRequest = new CreateInviteRequest();
+            var createdInvite = new GroupInvite();
+            var groupInviteResponse = new GroupInviteResponse();
+
+            _groupService.CreateInviteAsync(_executionContext, groupId, createInviteRequest)
+                .Returns(createdInvite);
+            _mapper.Map<GroupInviteResponse>(createdInvite)
+                .Returns(groupInviteResponse);
+
+            var result = await _controller.PostCreateInviteAsync(_executionContext, groupId, createInviteRequest);
+
+            result.Value.Should().BeSameAs(groupInviteResponse);
+            result.StatusCode.Should().Be(HttpStatusCode.Created);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetPostCreateInviteExceptionsAndExpectedStatusCode))]
+        public void PostCreateInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _groupService.CreateInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<CreateInviteRequest>())
+                .Returns(Task.FromException<GroupInvite>(exception));
+
+            Func<Task> act = () => _controller.PostCreateInviteAsync(_executionContext, 8, new CreateInviteRequest());
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
+        public async Task DeleteInviteAsync_ShouldDeleteInvite_ThenReturnInviteResponse()
+        {
+            const int characterId = 12;
+            const int groupId = 8;
+            var groupInvite = new GroupInvite();
+            var response = new DeleteInviteResponse();
+
+            _groupService.CancelOrRejectInviteAsync(_executionContext, groupId, characterId)
+                .Returns(groupInvite);
+            _mapper.Map<DeleteInviteResponse>(groupInvite)
+                .Returns(response);
+
+            var result = await _controller.DeleteInviteAsync(_executionContext, groupId, characterId);
+
+            result.Value.Should().BeSameAs(response);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetDeleteInviteExceptionsAndExpectedStatusCode))]
+        public void DeleteInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _groupService.CancelOrRejectInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<int>())
+                .Returns(Task.FromException<GroupInvite>(exception));
+
+            Func<Task> act = () => _controller.DeleteInviteAsync(_executionContext, 8, 12);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
         public async Task GetGroupDetailsAsync_ShouldCreateLoot_ThenReturnLootResponse()
         {
             const int groupId = 8;
@@ -264,5 +325,19 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             yield return new TestCaseData(new GroupNotFoundException(42), HttpStatusCode.NotFound);
         }
 
+        private static IEnumerable<TestCaseData> GetPostCreateInviteExceptionsAndExpectedStatusCode()
+        {
+            foreach (var testCaseData in GetCommonGroupExceptionsAndExpectedStatusCode())
+                yield return testCaseData;
+
+            yield return new TestCaseData(new CharacterNotFoundException(42), HttpStatusCode.BadRequest);
+            yield return new TestCaseData(new CharacterAlreadyInAGroupException(42), HttpStatusCode.BadRequest);
+        }
+
+        private static IEnumerable<TestCaseData> GetDeleteInviteExceptionsAndExpectedStatusCode()
+        {
+            yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
+            yield return new TestCaseData(new InviteNotFoundException(42, 8), HttpStatusCode.NotFound);
+        }
     }
 }
