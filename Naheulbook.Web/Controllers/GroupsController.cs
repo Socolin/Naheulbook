@@ -188,7 +188,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{GroupId:int:min(1)}/invites")]
-        public async Task<IActionResult> PostCreateInviteAsync(
+        public async Task<CreatedActionResult<GroupInviteResponse>> PostCreateInviteAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
             CreateInviteRequest request
@@ -196,8 +196,8 @@ namespace Naheulbook.Web.Controllers
         {
             try
             {
-                await _groupService.CreateInviteAsync(executionContext, groupId, request);
-                return new NoContentResult();
+                var invite = await _groupService.CreateInviteAsync(executionContext, groupId, request);
+                return _mapper.Map<GroupInviteResponse>(invite);
             }
             catch (ForbiddenAccessException ex)
             {
@@ -208,6 +208,10 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
             catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+            catch (CharacterAlreadyInAGroupException ex)
             {
                 throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
             }

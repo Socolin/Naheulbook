@@ -66,6 +66,13 @@ namespace Naheulbook.Web.Mappers
 
             CreateMap<God, GodResponse>();
 
+            CreateMap<GroupInvite, GroupInviteResponse>()
+                .ForMember(m => m.Id, opt => opt.MapFrom(i => i.Character.Id))
+                .ForMember(m => m.Name, opt => opt.MapFrom(i => i.Character.Name))
+                .ForMember(m => m.GroupId, opt => opt.MapFrom(i => i.Group.Id))
+                .ForMember(m => m.GroupName, opt => opt.MapFrom(i => i.Group.Name))
+                .ForMember(m => m.OriginName, opt => opt.MapFrom(i => i.Character.Origin.Name))
+                .ForMember(m => m.JobNames, opt => opt.MapFrom(i => i.Character.Jobs.Select(j => j.Job.Name)));
             CreateMap<Group, GroupResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
                 .ForMember(m => m.InvitesCharacterIds, opt => opt.MapFrom(g => g.Invites.Where(i => !i.FromGroup).Select(i => i.CharacterId)))

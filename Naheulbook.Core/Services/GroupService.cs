@@ -16,21 +16,24 @@ namespace Naheulbook.Core.Services
         Task<Group> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task<List<GroupHistoryEntry>> GetGroupHistoryEntriesAsync(NaheulbookExecutionContext executionContext, int groupId, int page);
         Task EnsureUserCanAccessGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
-        Task CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request);
+        Task<GroupInvite> CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request);
     }
 
     public class GroupService : IGroupService
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IAuthorizationUtil _authorizationUtil;
+        private readonly IChangeNotifier _changeNotifier;
 
         public GroupService(
             IUnitOfWorkFactory unitOfWorkFactory,
-            IAuthorizationUtil authorizationUtil
+            IAuthorizationUtil authorizationUtil,
+            IChangeNotifier changeNotifier
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizationUtil = authorizationUtil;
+            _changeNotifier = changeNotifier;
         }
 
         public async Task<Group> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request)
@@ -101,7 +104,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request)
+        public async Task<GroupInvite> CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -109,23 +112,33 @@ namespace Naheulbook.Core.Services
                 if (group == null)
                     throw new GroupNotFoundException(groupId);
 
-                var character = await uow.Characters.GetAsync(request.CharacterId);
+                var character = await uow.Characters.GetWithOriginWithJobsAsync(request.CharacterId);
                 if (character == null)
                     throw new CharacterNotFoundException(request.CharacterId);
+
+                if (character.GroupId != null)
+                    throw new CharacterAlreadyInAGroupException(request.CharacterId);
 
                 if (request.FromGroup)
                     _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
                 else
                     _authorizationUtil.EnsureIsCharacterOwner(executionContext, character);
 
-                uow.GroupInvites.Add(new GroupInvite
+                var groupInvite = new GroupInvite
                 {
                     Character = character,
                     Group = group,
                     FromGroup = request.FromGroup,
-                });
+                };
+
+                uow.GroupInvites.Add(groupInvite);
 
                 await uow.CompleteAsync();
+
+                await _changeNotifier.NotifyCharacterGroupInviteAsync(request.CharacterId, groupInvite);
+                await _changeNotifier.NotifyGroupCharacterInviteAsync(groupId, groupInvite);
+
+                return groupInvite;
             }
         }
     }

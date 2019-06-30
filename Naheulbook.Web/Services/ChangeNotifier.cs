@@ -133,6 +133,16 @@ namespace Naheulbook.Web.Services
             return SendCharacterChangeAsync(characterId, "updateModifier", characterModifier);
         }
 
+        public Task NotifyCharacterGroupInviteAsync(int characterId, GroupInvite groupInvite)
+        {
+            return SendCharacterChangeAsync(characterId, "groupInvite", _mapper.Map<GroupInviteResponse>(groupInvite));
+        }
+
+        public Task NotifyGroupCharacterInviteAsync(int groupId, GroupInvite groupInvite)
+        {
+            return SendGroupChangeAsync(groupId, "groupInvite", _mapper.Map<GroupInviteResponse>(groupInvite));
+        }
+
         private Task SendCharacterChangeAsync(Character character, string action, object data)
         {
             return SendCharacterChangeAsync(character.Id, action, data);

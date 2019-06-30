@@ -124,12 +124,28 @@ Feature: Group
   Scenario: Can invite a character to a group
     Given a JWT for a user
     Given a group
+    Given a job
     Given a character
 
     When performing a POST to the url "/api/v2/groups/${Group.Id}/invites/" with the following json content and the current jwt
     """
     {
       "characterId": ${Character.Id},
+      "fromGroup": true
+    }
+    """
+    Then the response status code is 201
+    And the response should contains the following json
+    """
+    {
+      "id": ${Character.Id},
+      "name": "${Character.Name}",
+      "origin": "${Character.Origin.Name}",
+      "jobs": [
+        "${Job.Name}"
+      ],
+      "groupId": ${Group.Id},
+      "groupName": "${Group.Name}",
       "fromGroup": true
     }
     """

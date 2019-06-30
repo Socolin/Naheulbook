@@ -17,16 +17,22 @@ namespace Naheulbook.Core.Tests.Unit.Services
     public class GroupServiceTests
     {
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
-        private GroupService _service;
         private IAuthorizationUtil _authorizationUtil;
+        private IChangeNotifier _changeNotifier;
+        private GroupService _service;
 
         [SetUp]
         public void SetUp()
         {
             _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
+            _changeNotifier = Substitute.For<IChangeNotifier>();
 
-            _service = new GroupService(_unitOfWorkFactory, _authorizationUtil);
+            _service = new GroupService(
+                _unitOfWorkFactory,
+                _authorizationUtil,
+                _changeNotifier
+            );
         }
 
         [Test]
@@ -112,7 +118,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
-            _unitOfWorkFactory.GetUnitOfWork().Characters.GetAsync(characterId)
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
                 .Returns(character);
 
             await _service.CreateInviteAsync(new NaheulbookExecutionContext(), groupId, request);
@@ -122,6 +128,26 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _unitOfWorkFactory.GetUnitOfWork().GroupInvites.Add(Arg.Is<GroupInvite>(gi => gi.FromGroup && gi.Group == group && gi.Character == character));
                 _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
             });
+        }
+
+        [Test]
+        public async Task CreateInviteAsync_ShouldNotifyChange()
+        {
+            const int groupId = 42;
+            const int characterId = 24;
+            var request = new CreateInviteRequest {CharacterId = characterId, FromGroup = true};
+            var group = new Group();
+            var character = new Character();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+                .Returns(character);
+
+            var groupInvite = await _service.CreateInviteAsync(new NaheulbookExecutionContext(), groupId, request);
+
+            await _changeNotifier.Received(1).NotifyCharacterGroupInviteAsync(characterId, groupInvite);
+            await _changeNotifier.Received(1).NotifyGroupCharacterInviteAsync(groupId, groupInvite);
         }
 
         [Test]
@@ -149,7 +175,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(new Group());
-            _unitOfWorkFactory.GetUnitOfWork().Characters.GetAsync(characterId)
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
                 .Returns((Character) null);
 
             Func<Task> act = () => _service.CreateInviteAsync(executionContext, groupId, request);
@@ -169,7 +195,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
-            _unitOfWorkFactory.GetUnitOfWork().Characters.GetAsync(characterId)
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
                 .Returns(character);
             _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
                 .Throw(new TestException());
@@ -192,7 +218,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
-            _unitOfWorkFactory.GetUnitOfWork().Characters.GetAsync(characterId)
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
                 .Returns(character);
             _authorizationUtil.When(x => x.EnsureIsCharacterOwner(naheulbookExecutionContext, character))
                 .Throw(new TestException());
