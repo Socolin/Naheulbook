@@ -99,6 +99,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();
             services.AddSingleton<IItemTemplateUtil, ItemTemplateUtil>();
             services.AddSingleton<IJobService, JobService>();
+            services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<ILootService, LootService>();
             services.AddSingleton<IMailService, MailService>();
             services.AddSingleton<IMonsterService, MonsterService>();

@@ -11,6 +11,8 @@ namespace Naheulbook.Data.Repositories
     {
         Task<List<Location>> GetByIdsAsync(IEnumerable<int> locationIds);
         Task<Location> GetNewGroupDefaultLocationAsync();
+        Task<List<LocationMap>> GetLocationMapsByLocationIdAsync(int locationId);
+        Task<List<Location>> SearchByNameAsync(string filter, int maxCount);
     }
 
     public class LocationRepository : Repository<Location, NaheulbookDbContext>, ILocationRepository
@@ -22,14 +24,29 @@ namespace Naheulbook.Data.Repositories
 
         public Task<List<Location>> GetByIdsAsync(IEnumerable<int> locationIds)
         {
-            return Context.Location
+            return Context.Locations
                 .Where(x => locationIds.Contains(x.Id))
                 .ToListAsync();
         }
 
         public Task<Location> GetNewGroupDefaultLocationAsync()
         {
-            return Context.Location.SingleAsync(x => x.Id == 1);
+            return Context.Locations.SingleAsync(x => x.Id == 1);
+        }
+
+        public Task<List<LocationMap>> GetLocationMapsByLocationIdAsync(int locationId)
+        {
+            return Context.LocationMaps
+                .Where(x => x.LocationId == locationId)
+                .ToListAsync();
+        }
+
+        public Task<List<Location>> SearchByNameAsync(string partialName, int maxResult)
+        {
+            return Context.Locations
+                .Where(e => e.Name.ToUpper().Contains(partialName.ToUpper()))
+                .Take(maxResult)
+                .ToListAsync();
         }
     }
 }
