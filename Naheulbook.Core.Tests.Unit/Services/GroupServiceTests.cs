@@ -383,7 +383,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 42;
             const int characterId = 24;
             var executionContext = new NaheulbookExecutionContext();
-            var groupInvite = new GroupInvite();
+            var groupInvite = new GroupInvite {Character = new Character()};
 
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
                 .Returns(groupInvite);
