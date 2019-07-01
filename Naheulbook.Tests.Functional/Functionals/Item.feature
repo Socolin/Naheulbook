@@ -94,3 +94,27 @@ Feature: Item
       }},
     }
     """
+
+  Scenario: Can change item container
+    Given a JWT for a user
+    And a character
+    And an item template
+    And an item based on that item template in the character inventory
+    And an item based on that item template in the character inventory
+
+    When performing a PUT to the url "/api/v2/items/${Item.[1].Id}/container" with the following json content and the current jwt
+    """
+    {
+      "containerId": ${Item.[0].Id}
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${Item.[1].Id},
+      "modifiers": ${Item.[1].Modifiers},
+      "data": ${Item.[1].Data},
+      "container": ${Item.[0].Id}
+    }
+    """

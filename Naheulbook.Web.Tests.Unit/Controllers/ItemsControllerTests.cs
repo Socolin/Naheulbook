@@ -70,6 +70,18 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
+        [Test]
+        [TestCaseSource(nameof(GetCommonItemExceptionsAndExpectedStatusCode))]
+        public void PutChangeItemContainerAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            _itemService.ChangeItemContainerAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<ChangeItemContainerRequest>())
+                .Returns(Task.FromException<Item>(exception));
+
+            Func<Task> act = () => _controller.PutChangeItemContainerAsync(_executionContext, 2, new ChangeItemContainerRequest());
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
         private static IEnumerable<TestCaseData> GetCommonItemExceptionsAndExpectedStatusCode()
         {
             yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);

@@ -20,6 +20,7 @@ namespace Naheulbook.Core.Services
         Task<Item> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, JObject itemData);
         Task<Item> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers);
         Task<Item> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request);
+        Task<Item> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request);
     }
 
     public class ItemService : IItemService
@@ -124,6 +125,26 @@ namespace Naheulbook.Core.Services
                 await uow.CompleteAsync();
 
                 await _changeNotifier.NotifyEquipItemAsync(item);
+
+                return item;
+            }
+        }
+
+        public async Task<Item> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var item = await uow.Items.GetWithOwnerAsync(itemId);
+                if (item == null)
+                    throw new ItemNotFoundException(itemId);
+
+                _authorizationUtil.EnsureItemAccess(executionContext, item);
+
+                item.ContainerId = request.ContainerId;
+
+                await uow.CompleteAsync();
+
+                await _changeNotifier.NotifyItemChangeContainer(item);
 
                 return item;
             }

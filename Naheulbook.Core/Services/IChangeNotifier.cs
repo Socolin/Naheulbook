@@ -16,6 +16,7 @@ namespace Naheulbook.Core.Services
         Task NotifyItemDataChangedAsync(Item item);
         Task NotifyItemModifiersChangedAsync(Item item);
         Task NotifyEquipItemAsync(Item item);
+        Task NotifyItemChangeContainer(Item item);
         Task NotifyCharacterSetStatBonusAdAsync(int characterId, string stat);
         Task NotifyCharacterAddModifierAsync(int characterId, ActiveStatsModifier characterModifier);
         Task NotifyCharacterRemoveModifierAsync(int characterId, int characterModifierId);

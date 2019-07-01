@@ -95,5 +95,28 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
+
+        [HttpPut("{ItemId}/container")]
+        public async Task<ActionResult<ItemPartialResponse>> PutChangeItemContainerAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int itemId,
+            ChangeItemContainerRequest request
+        )
+        {
+            try
+            {
+                var item = await _itemService.ChangeItemContainerAsync(executionContext, itemId, request);
+
+                return _mapper.Map<ItemPartialResponse>(item);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (ItemNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }

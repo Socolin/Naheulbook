@@ -80,11 +80,11 @@ namespace Naheulbook.Web.Services
         public Task NotifyItemDataChangedAsync(Item item)
         {
             if (item.CharacterId != null)
-                return SendCharacterChangeAsync(item.CharacterId.Value, "updateItem", _mapper.Map<ItemResponse>(item));
+                return SendCharacterChangeAsync(item.CharacterId.Value, "updateItem", _mapper.Map<ItemPartialResponse>(item));
             if (item.MonsterId != null)
-                return SendMonsterChangeAsync(item.MonsterId.Value, "updateItem", _mapper.Map<ItemResponse>(item));
+                return SendMonsterChangeAsync(item.MonsterId.Value, "updateItem", _mapper.Map<ItemPartialResponse>(item));
             if (item.LootId != null)
-                return SendLootChangeAsync(item.LootId.Value, "updateItem", _mapper.Map<ItemResponse>(item));
+                return SendLootChangeAsync(item.LootId.Value, "updateItem", _mapper.Map<ItemPartialResponse>(item));
 
             throw new NotSupportedException();
         }
@@ -92,11 +92,11 @@ namespace Naheulbook.Web.Services
         public Task NotifyItemModifiersChangedAsync(Item item)
         {
             if (item.CharacterId != null)
-                return SendCharacterChangeAsync(item.CharacterId.Value, "updateItemModifiers", _mapper.Map<ItemResponse>(item));
+                return SendCharacterChangeAsync(item.CharacterId.Value, "updateItemModifiers", _mapper.Map<ItemPartialResponse>(item));
             if (item.MonsterId != null)
-                return SendMonsterChangeAsync(item.MonsterId.Value, "updateItemModifiers", _mapper.Map<ItemResponse>(item));
+                return SendMonsterChangeAsync(item.MonsterId.Value, "updateItemModifiers", _mapper.Map<ItemPartialResponse>(item));
             if (item.LootId != null)
-                return SendLootChangeAsync(item.LootId.Value, "updateItemModifiers", _mapper.Map<ItemResponse>(item));
+                return SendLootChangeAsync(item.LootId.Value, "updateItemModifiers", _mapper.Map<ItemPartialResponse>(item));
 
             throw new NotSupportedException();
         }
@@ -104,11 +104,23 @@ namespace Naheulbook.Web.Services
         public Task NotifyEquipItemAsync(Item item)
         {
             if (item.CharacterId != null)
-                return SendCharacterChangeAsync(item.CharacterId.Value, "equipItem", _mapper.Map<ItemResponse>(item));
+                return SendCharacterChangeAsync(item.CharacterId.Value, "equipItem", _mapper.Map<ItemPartialResponse>(item));
             if (item.MonsterId != null)
-                return SendMonsterChangeAsync(item.MonsterId.Value, "equipItem", _mapper.Map<ItemResponse>(item));
+                return SendMonsterChangeAsync(item.MonsterId.Value, "equipItem", _mapper.Map<ItemPartialResponse>(item));
             if (item.LootId != null)
-                return SendLootChangeAsync(item.LootId.Value, "equipItem", _mapper.Map<ItemResponse>(item));
+                return SendLootChangeAsync(item.LootId.Value, "equipItem", _mapper.Map<ItemPartialResponse>(item));
+
+            throw new NotSupportedException();
+        }
+
+        public Task NotifyItemChangeContainer(Item item)
+        {
+            if (item.CharacterId != null)
+                return SendCharacterChangeAsync(item.CharacterId.Value, "changeContainer", _mapper.Map<ItemPartialResponse>(item));
+            if (item.MonsterId != null)
+                return SendMonsterChangeAsync(item.MonsterId.Value, "changeContainer", _mapper.Map<ItemPartialResponse>(item));
+            if (item.LootId != null)
+                return SendLootChangeAsync(item.LootId.Value, "changeContainer", _mapper.Map<ItemPartialResponse>(item));
 
             throw new NotSupportedException();
         }

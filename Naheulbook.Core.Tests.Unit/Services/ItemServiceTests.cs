@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
@@ -225,6 +226,69 @@ namespace Naheulbook.Core.Tests.Unit.Services
             await _service.EquipItemAsync(new NaheulbookExecutionContext(), itemId, new EquipItemRequest());
 
             await _changeNotifier.Received(1).NotifyEquipItemAsync(item);
+        }
+
+
+        [Test]
+        public async Task ChangeItemContainerAsync_ShouldChangeItemContainerAndSaveItInDb()
+        {
+            const int itemId = 4;
+            const int containerId = 8;
+            var equipRequest = new ChangeItemContainerRequest {ContainerId = containerId};
+            var item = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+                .Do(info => item.ContainerId.Should().Be(containerId));
+
+            var actualItem = await _service.ChangeItemContainerAsync(new NaheulbookExecutionContext(), itemId, equipRequest);
+
+            actualItem.Should().BeSameAs(item);
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+        }
+
+        [Test]
+        public void ChangeItemContainerAsync_ShouldThrowIfItemIsNotFound()
+        {
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(Arg.Any<int>())
+                .Returns((Item) null);
+
+            Func<Task> act = () =>  _service.ChangeItemContainerAsync(new NaheulbookExecutionContext(), 4, new ChangeItemContainerRequest());
+
+            act.Should().Throw<ItemNotFoundException>();
+        }
+
+        [Test]
+        public void ChangeItemContainerAsync_EnsureCurrentUserCanAccessThisItem()
+        {
+            const int itemId = 4;
+            var executionContext = new NaheulbookExecutionContext();
+            var item = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+            _authorizationUtil.When(x => x.EnsureItemAccess(executionContext, item))
+                .Throw(new TestException());
+
+            Func<Task> act = () =>  _service.ChangeItemContainerAsync(executionContext, itemId, new ChangeItemContainerRequest());
+
+            act.Should().Throw<TestException>();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+        }
+
+        [Test]
+        public async Task ChangeItemContainerAsync_ShouldCallChangeNotifier()
+        {
+            const int itemId = 4;
+            var item = new Item();
+
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+
+            await _service.ChangeItemContainerAsync(new NaheulbookExecutionContext(), itemId, new ChangeItemContainerRequest());
+
+            await _changeNotifier.Received(1).NotifyItemChangeContainer(item);
         }
     }
 }
