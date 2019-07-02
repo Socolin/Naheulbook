@@ -133,8 +133,8 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     changeGroupValue(key: string, value: any) {
         this._groupService.editGroupValue(this.group.id, key, value).subscribe(
-            data => {
-                this.group.data.changeValue(key, data[key]);
+            () => {
+                this.group.data.changeValue(key, value);
             }
         );
     }
@@ -151,7 +151,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     changeGroupLocation(location: Location) {
-        this._groupService.editGroupValue(this.group.id, 'location', location.id).subscribe(
+        this._groupService.editGroupLocation(this.group.id, location.id).subscribe(
             () => {
                 this._notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
                 this.group.location = location;
@@ -169,7 +169,6 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     displayCharacterSheet(character: Character) {
         let characterSheetDialog = this.characterSheetsDialog.toArray();
-        console.log(characterSheetDialog);
         let index = 0;
         for (let i = 0; i < this.group.characters.length; i++) {
             if (this.group.characters[i] === character) {
@@ -356,20 +355,25 @@ export class GroupComponent implements OnInit, OnDestroy {
     /* Combat tab */
 
     startCombat() {
-        this.changeGroupValue('inCombat', true);
+        this._groupService.startCombat(this.group.id).subscribe(
+            () => {
+                this.group.data.changeValue('inCombat', true);
+            }
+        );
     }
 
     endCombat() {
-        this.changeGroupValue('inCombat', false);
-        let changes = this.group.updateTime('combat', 1);
-
-        this._groupService.saveChangedTime(this.group.id, changes).subscribe(
+        this._groupService.endCombat(this.group.id).subscribe(
             () => {
+                this.group.data.changeValue('inCombat', false);
+                let changes = this.group.updateTime('combat', 1);
+                this._groupService.saveChangedTime(this.group.id, changes).subscribe(
+                    () => {
+                    }
+                );
             }
         );
-
     }
-
 
     /* Misc */
 

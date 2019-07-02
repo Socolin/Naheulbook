@@ -109,8 +109,7 @@ export class ItemService {
     }
 
     moveToContainer(itemId: number, containerId: number): Observable<PartialItem> {
-        return this.httpClient.post<PartialItem>('/api/item/moveToContainer', {
-            itemId: itemId,
+        return this.httpClient.put<PartialItem>(`/api/v2/items/${itemId}/container`, {
             containerId: containerId
         });
     }

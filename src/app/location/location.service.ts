@@ -19,7 +19,7 @@ export class LocationService {
         if (!this.locationsTree) {
             this.locationsTree = new ReplaySubject<Location[]>(1);
 
-            this.httpClient.get<Location[]>('/api/location/list')
+            this.httpClient.get<Location[]>('/api/v2/locations')
                 .subscribe(
                     (locations: Location[]) => {
                         let locationsById = {};
@@ -51,7 +51,7 @@ export class LocationService {
         if (!this.locations) {
             this.locations = new ReplaySubject<Location[]>(1);
 
-            this.httpClient.get<Location[]>('/api/location/list')
+            this.httpClient.get<Location[]>('/api/v2/locations')
                 .subscribe(
                     locations => {
                         if (this.locations) {
@@ -74,7 +74,7 @@ export class LocationService {
     }
 
     getMaps(locationId: number): Observable<Map[]> {
-        return this.httpClient.post<Map[]>('/api/location/maps', {locationId: locationId});
+        return this.httpClient.get<Map[]>(`/api/v2/locations/${locationId}/maps`);
     }
 
     editLocation(location: Location, maps: Map[]): Observable<any> {
@@ -98,6 +98,6 @@ export class LocationService {
     }
 
     searchLocations(filter: string): Observable<Location[]> {
-        return this.httpClient.post<Location[]>('/api/location/search', {filter: filter});
+        return this.httpClient.get<Location[]>('/api/v2/locations/search?filter=' + encodeURIComponent(filter));
     }
 }

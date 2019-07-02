@@ -155,11 +155,15 @@ export class GroupService {
 
     /* Misc */
 
-    editGroupValue(groupId: number, key: string, value: any): Observable<GroupData> {
-        return this.httpClient.post<GroupData>('/api/group/edit', {
-            groupId: groupId,
-            key: key,
-            value: value
+    editGroupLocation(groupId: number, locationId: number): Observable<void> {
+        return this.httpClient.put<void>(`/api/v2/groups/${groupId}/location`, {
+            locationId
+        });
+    }
+
+    editGroupValue(groupId: number, key: string, value: any): Observable<void> {
+        return this.httpClient.patch<void>(`/api/v2/groups/${groupId}/`, {
+            [key]: value
         });
     }
 
@@ -204,5 +208,13 @@ export class GroupService {
             groupId: groupId,
             characterId: characterId,
         });
+    }
+
+    startCombat(groupId: number): Observable<void> {
+        return this.httpClient.post<void>(`/api/v2/groups/${groupId}/startCombat`, {});
+    }
+
+    endCombat(groupId: number): Observable<void> {
+        return this.httpClient.post<void>(`/api/v2/groups/${groupId}/endCombat`, {});
     }
 }

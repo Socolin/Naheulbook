@@ -755,10 +755,16 @@ export class Group extends WsRegistrable {
                 this.removeEvent(data.id);
                 break;
             }
+            case 'changeLocation': {
+                this.location = data;
+                break;
+            }
             case 'changeData': {
-                this.data.changeValue(data.key, data.value);
-                if (data.key === 'date') {
-                    this.updateEvents();
+                for (let key in data) {
+                    if (!data.hasOwnProperty(key)) {
+                        continue;
+                    }
+                    this.data.changeValue(key, data[key]);
                 }
                 break;
             }
