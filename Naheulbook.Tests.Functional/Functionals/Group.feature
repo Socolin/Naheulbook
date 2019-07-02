@@ -63,8 +63,7 @@ Feature: Group
       "location": {
         "data": ${Location.Data},
         "id": ${Location.Id},
-        "name": "${Location.Name}",
-        "parent": 0
+        "name": "${Location.Name}"
       },
       "characterIds": [
         ${Character.[2].Id}
@@ -185,5 +184,56 @@ Feature: Group
     When performing a POST to the url "/api/v2/groups/${Group.Id}/invites/${Character.Id}/accept" with the following json content and the current jwt
     """
     {}
+    """
+    Then the response status code is 204
+
+  Scenario: Can edit group location
+    Given a JWT for a user
+    Given a group
+    Given a location
+
+    When performing a PUT to the url "/api/v2/groups/${Group.Id}/location" with the following json content and the current jwt
+    """
+    {
+      "locationId": ${Location.[-1].Id}
+    }
+    """
+    Then the response status code is 204
+
+  Scenario: Can edit group properties
+    Given a JWT for a user
+    Given a group
+
+    When performing a PATCH to the url "/api/v2/groups/${Group.Id}/" with the following json content and the current jwt
+    """
+    {
+      "mankdebol": 4,
+      "debilibeuk": 2,
+      "date": {
+        "year": 45,
+        "day": 84,
+        "hour": 4,
+        "minutes": 8
+      }
+    }
+    """
+    Then the response status code is 204
+
+  Scenario: Can start/stop combat
+    Given a JWT for a user
+    Given a group
+    Given a location
+
+    When performing a POST to the url "/api/v2/groups/${Group.Id}/startCombat" with the following json content and the current jwt
+    """
+    {
+    }
+    """
+    Then the response status code is 204
+
+    When performing a POST to the url "/api/v2/groups/${Group.Id}/endCombat" with the following json content and the current jwt
+    """
+    {
+    }
     """
     Then the response status code is 204

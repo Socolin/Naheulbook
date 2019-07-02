@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
+using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.TransientModels;
@@ -173,6 +174,21 @@ namespace Naheulbook.Web.Services
         public Task NotifyGroupAcceptGroupInviteAsync(int groupId, GroupInvite groupInvite)
         {
             return SendGroupChangeAsync(groupId, "joinCharacter", groupInvite.CharacterId);
+        }
+
+        public Task NotifyGroupChangeGroupDataAsync(int groupId, GroupData groupData)
+        {
+            return SendGroupChangeAsync(groupId, "changeData", groupData);
+        }
+
+        public Task NotifyGroupChangeLocationAsync(int groupId, Location location)
+        {
+            return SendGroupChangeAsync(groupId, "changeLocation", _mapper.Map<LocationResponse>(location));
+        }
+
+        public Task NotifyGroupAddLoot(int groupId, Loot loot)
+        {
+            return SendGroupChangeAsync(groupId, "addLoot", _mapper.Map<LootResponse>(loot));
         }
 
         private Task SendCharacterChangeAsync(Character character, string action, object data)

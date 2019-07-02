@@ -301,6 +301,36 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
+        [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
+        public void PatchGroupAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            const int groupId = 8;
+            var request = new PatchGroupRequest();
+
+            _groupService.EditGroupPropertiesAsync(_executionContext, groupId, request)
+                .Returns(Task.FromException<List<Loot>>(exception));
+
+            Func<Task> act = () => _controller.PatchGroupAsync(_executionContext, groupId, request);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetEditGroupLocationExceptionsAndExpectedStatusCode))]
+        public void PutChangeGroupLocationAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        {
+            const int groupId = 8;
+            var request = new PutChangeLocationRequest();
+
+            _groupService.EditGroupLocationAsync(_executionContext, groupId, request)
+                .Returns(Task.FromException<List<Loot>>(exception));
+
+            Func<Task> act = () => _controller.PutChangeGroupLocationAsync(_executionContext, groupId, request);
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Test]
         public async Task GetMonsterListAsync_LoadMonsterThenMapTheResponse()
         {
             const int groupId = 8;
@@ -344,6 +374,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             yield return new TestCaseData(new CharacterNotFoundException(42), HttpStatusCode.BadRequest);
             yield return new TestCaseData(new CharacterAlreadyInAGroupException(42), HttpStatusCode.BadRequest);
+        }
+
+        private static IEnumerable<TestCaseData> GetEditGroupLocationExceptionsAndExpectedStatusCode()
+        {
+            foreach (var testCaseData in GetCommonGroupExceptionsAndExpectedStatusCode())
+                yield return testCaseData;
+
+            yield return new TestCaseData(new LocationNotFoundException(42), HttpStatusCode.BadRequest);
         }
 
         private static IEnumerable<TestCaseData> GetDeleteInviteExceptionsAndExpectedStatusCode()

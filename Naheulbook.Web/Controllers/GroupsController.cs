@@ -57,6 +57,104 @@ namespace Naheulbook.Web.Controllers
             return _mapper.Map<GroupResponse>(group);
         }
 
+        [HttpPatch("{GroupId:int:min(1)}")]
+        public async Task<IActionResult> PatchGroupAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            PatchGroupRequest request
+        )
+        {
+            try
+            {
+                await _groupService.EditGroupPropertiesAsync(executionContext, groupId, request);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [HttpPut("{GroupId:int:min(1)}/location")]
+        public async Task<IActionResult> PutChangeGroupLocationAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            PutChangeLocationRequest request
+        )
+        {
+            try
+            {
+                await _groupService.EditGroupLocationAsync(executionContext, groupId, request);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (LocationNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpPost("{GroupId:int:min(1)}/startCombat")]
+        public async Task<IActionResult> PostStartCombat(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId
+        )
+        {
+            try
+            {
+                await _groupService.StartCombatAsync(executionContext, groupId);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (GroupAlreadyInCombatException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpPost("{GroupId:int:min(1)}/endCombat")]
+        public async Task<IActionResult> PostEndCombat(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId
+        )
+        {
+            try
+            {
+                await _groupService.EndCombatAsync(executionContext, groupId);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (GroupNotInCombatException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
         [HttpGet("{GroupId:int:min(1)}/loots")]
         public async Task<ActionResult<List<LootResponse>>> GetLootListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,

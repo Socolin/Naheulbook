@@ -14,11 +14,15 @@ namespace Naheulbook.Core.Services
         Task<Group> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request);
         Task<List<Group>> GetGroupListAsync(NaheulbookExecutionContext executionContext);
         Task<Group> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task EditGroupPropertiesAsync(NaheulbookExecutionContext executionContext, int groupId, PatchGroupRequest request);
+        Task EditGroupLocationAsync(NaheulbookExecutionContext executionContext, int groupId, PutChangeLocationRequest request);
         Task<List<GroupHistoryEntry>> GetGroupHistoryEntriesAsync(NaheulbookExecutionContext executionContext, int groupId, int page);
         Task EnsureUserCanAccessGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task<GroupInvite> CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request);
         Task<GroupInvite> CancelOrRejectInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId);
         Task AcceptInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId);
+        Task StartCombatAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task EndCombatAsync(NaheulbookExecutionContext executionContext, int groupId);
     }
 
     public class GroupService : IGroupService
@@ -26,16 +30,19 @@ namespace Naheulbook.Core.Services
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IAuthorizationUtil _authorizationUtil;
         private readonly IChangeNotifier _changeNotifier;
+        private readonly IGroupUtil _groupUtil;
 
         public GroupService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IAuthorizationUtil authorizationUtil,
-            IChangeNotifier changeNotifier
+            IChangeNotifier changeNotifier,
+            IGroupUtil groupUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizationUtil = authorizationUtil;
             _changeNotifier = changeNotifier;
+            _groupUtil = groupUtil;
         }
 
         public async Task<Group> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request)
@@ -77,6 +84,44 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
                 return group;
+            }
+        }
+
+        public async Task EditGroupPropertiesAsync(NaheulbookExecutionContext executionContext, int groupId, PatchGroupRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                await _groupUtil.ApplyChangesAndNotifyAsync(group, request);
+
+                await uow.CompleteAsync();
+            }
+        }
+
+        public async Task EditGroupLocationAsync(NaheulbookExecutionContext executionContext, int groupId, PutChangeLocationRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                var location = await uow.Locations.GetAsync(request.LocationId);
+                if (location == null)
+                    throw new LocationNotFoundException(request.LocationId);
+
+                group.LocationId = request.LocationId;
+
+                await uow.CompleteAsync();
+
+                await _changeNotifier.NotifyGroupChangeLocationAsync(groupId, location);
             }
         }
 
@@ -185,6 +230,38 @@ namespace Naheulbook.Core.Services
 
                 await _changeNotifier.NotifyCharacterAcceptGroupInviteAsync(characterId, groupInvite);
                 await _changeNotifier.NotifyGroupAcceptGroupInviteAsync(groupId, groupInvite);
+            }
+        }
+
+        public async Task StartCombatAsync(NaheulbookExecutionContext executionContext, int groupId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                await _groupUtil.StartCombatAsync(group);
+
+                await uow.CompleteAsync();
+            }
+        }
+
+        public async Task EndCombatAsync(NaheulbookExecutionContext executionContext, int groupId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                await _groupUtil.EndCombatAsync(group);
+
+                await uow.CompleteAsync();
             }
         }
     }

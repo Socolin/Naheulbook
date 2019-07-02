@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Naheulbook.Core.Models;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.TransientModels;
 
@@ -25,7 +26,10 @@ namespace Naheulbook.Core.Services
         Task NotifyCharacterCancelGroupInviteAsync(int characterId, GroupInvite groupInvite);
         Task NotifyCharacterAcceptGroupInviteAsync(int characterId, GroupInvite groupInvite);
         Task NotifyGroupCharacterInviteAsync(int groupId, GroupInvite groupInvite);
-        Task NotifyGroupCancelGroupInviteAsync(int characterId, GroupInvite groupInvite);
+        Task NotifyGroupCancelGroupInviteAsync(int groupId, GroupInvite groupInvite);
         Task NotifyGroupAcceptGroupInviteAsync(int groupId, GroupInvite groupInvite);
+        Task NotifyGroupChangeGroupDataAsync(int groupId, GroupData groupData);
+        Task NotifyGroupChangeLocationAsync(int groupId, Location location);
+        Task NotifyGroupAddLoot(int groupId, Loot loot);
     }
 }

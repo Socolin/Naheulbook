@@ -23,5 +23,12 @@ namespace Naheulbook.Data.Models
         public ICollection<GroupInvite> Invites { get; set; }
         public ICollection<Event> Events { get; set; }
         public ICollection<GroupHistoryEntry> HistoryEntries { get; set; }
+
+        public void AddHistoryEntry(GroupHistoryEntry entry)
+        {
+            if (HistoryEntries == null)
+                HistoryEntries = new List<GroupHistoryEntry>();
+            HistoryEntries.Add(entry);
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/origins")]
     [ApiController]
-    public class OriginsController : ControllerBase
+    public class OriginsController : Controller
     {
         private readonly IOriginService _originService;
         private readonly IMapper _mapper;
