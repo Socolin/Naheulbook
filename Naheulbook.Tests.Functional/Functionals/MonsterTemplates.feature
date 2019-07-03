@@ -118,35 +118,60 @@ Feature: MonsterTemplates
     And the response should contains a json array containing the following element identified by id
     """
     {
-        "id": ${MonsterTemplate.Id},
-        "name": "${MonsterTemplate.Name}",
-        "data": ${MonsterTemplate.Data},
-        "categoryId": ${MonsterTemplate.CategoryId},
-        "simpleInventory": [
-          {
-            "id": ${MonsterTemplate.Items.[0].Id},
-            "chance": ${MonsterTemplate.Items.[0].Chance},
-            "maxCount": ${MonsterTemplate.Items.[0].MaxCount},
-            "minCount": ${MonsterTemplate.Items.[0].MinCount},
-            "itemTemplate": { "__partial": {
-              "id": ${ItemTemplate.Id},
-              "name": "${ItemTemplate.Name}"
-            }}
-          },
-        ],
-        "locationIds": [
-          ${Location.Id}
-        ]
+      "id": ${MonsterTemplate.Id},
+      "name": "${MonsterTemplate.Name}",
+      "data": ${MonsterTemplate.Data},
+      "categoryId": ${MonsterTemplate.CategoryId},
+      "simpleInventory": [
+        {
+          "id": ${MonsterTemplate.Items.[0].Id},
+          "chance": ${MonsterTemplate.Items.[0].Chance},
+          "maxCount": ${MonsterTemplate.Items.[0].MaxCount},
+          "minCount": ${MonsterTemplate.Items.[0].MinCount},
+          "itemTemplate": { "__partial": {
+            "id": ${ItemTemplate.Id},
+            "name": "${ItemTemplate.Name}"
+          }}
+        },
+      ],
+      "locationIds": [
+        ${Location.Id}
+      ]
     }
     """
-
-
-
 
   Scenario: Create monster category type
 
   Scenario: Create monster category
 
   Scenario: Search monster template
+    Given a monster template with locations and inventory
+
+    When performing a GET to the url "/api/v2/monsterTemplates/search?filter=${MonsterTemplate.Name}"
+    Then the response status code is 200
+    And the response should contains a json array containing the following element identified by id
+    """
+    {
+      "id": ${MonsterTemplate.Id},
+      "name": "${MonsterTemplate.Name}",
+      "data": ${MonsterTemplate.Data},
+      "categoryId": ${MonsterTemplate.CategoryId},
+      "simpleInventory": [
+        {
+          "id": ${MonsterTemplate.Items.[0].Id},
+          "chance": ${MonsterTemplate.Items.[0].Chance},
+          "maxCount": ${MonsterTemplate.Items.[0].MaxCount},
+          "minCount": ${MonsterTemplate.Items.[0].MinCount},
+          "itemTemplate": { "__partial": {
+            "id": ${ItemTemplate.Id},
+            "name": "${ItemTemplate.Name}"
+          }}
+        },
+      ],
+      "locationIds": [
+        ${Location.Id}
+      ]
+    }
+    """
 
   Scenario: Edit a monster template

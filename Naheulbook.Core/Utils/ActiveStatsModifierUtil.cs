@@ -13,6 +13,8 @@ namespace Naheulbook.Core.Utils
     {
         public void InitializeModifierIds(ICollection<ActiveStatsModifier> modifiers)
         {
+            if (modifiers == null || modifiers.Count == 0)
+                return;
             var nextId = modifiers.Select(x => x.Id).Max() + 1;
             foreach (var statsModifier in modifiers)
             {

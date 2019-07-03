@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Responses;
 
@@ -40,6 +41,15 @@ namespace Naheulbook.Web.Controllers
 
             var result = _mapper.Map<MonsterTemplateResponse>(createdMonster);
             return new JsonResult(result) {StatusCode = (int) HttpStatusCode.Created};
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<List<MonsterTemplateResponse>>> GetSearchMonsterTemplateAsync(
+            [FromQuery] string filter
+        )
+        {
+            var monsterTemplates = await _monsterTemplateService.SearchMonsterAsync(filter);
+            return _mapper.Map<List<MonsterTemplateResponse>>(monsterTemplates);
         }
     }
 }

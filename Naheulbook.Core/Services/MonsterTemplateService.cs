@@ -15,6 +15,7 @@ namespace Naheulbook.Core.Services
     {
         Task<MonsterTemplate> CreateMonsterTemplate(NaheulbookExecutionContext executionContext, CreateMonsterTemplateRequest request);
         Task<List<MonsterTemplate>> GetAllMonstersAsync();
+        Task<List<MonsterTemplate>> SearchMonsterAsync(string filter);
     }
 
     public class MonsterTemplateService : IMonsterTemplateService
@@ -71,6 +72,14 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 return await uow.MonsterTemplates.GetAllWithItemsFullDataWithLocationsAsync();
+            }
+        }
+
+        public async Task<List<MonsterTemplate>> SearchMonsterAsync(string filter)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.MonsterTemplates.SearchByNameAsync(filter, 10);
             }
         }
     }
