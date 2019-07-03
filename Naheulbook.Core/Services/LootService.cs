@@ -14,17 +14,24 @@ namespace Naheulbook.Core.Services
         Task<Loot> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request);
         Task<List<Loot>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId);
+        Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request);
     }
 
     public class LootService : ILootService
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IAuthorizationUtil _authorizationUtil;
+        private readonly IChangeNotifier _changeNotifier;
 
-        public LootService(IUnitOfWorkFactory unitOfWorkFactory, IAuthorizationUtil authorizationUtil)
+        public LootService(
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IAuthorizationUtil authorizationUtil,
+            IChangeNotifier changeNotifier
+        )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizationUtil = authorizationUtil;
+            _changeNotifier = changeNotifier;
         }
 
         public async Task<Loot> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request)
@@ -78,6 +85,40 @@ namespace Naheulbook.Core.Services
                     throw new GroupNotFoundException(loot.GroupId);
 
                 _authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
+            }
+        }
+
+        public async Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var loot = await uow.Loots.GetAsync(lootId);
+                if (loot == null)
+                    throw new LootNotFoundException(lootId);
+
+                var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+                if (group == null)
+                    throw new GroupNotFoundException(loot.GroupId);
+
+                _authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, loot.Group);
+
+                loot.IsVisibleForPlayer = request.VisibleForPlayer;
+
+                await _changeNotifier.NotifyLootUpdateVisibilityAsync(lootId, request.VisibleForPlayer);
+
+                if (loot.IsVisibleForPlayer)
+                {
+                    var fullLootData = await uow.Loots.GetWithAllDataAsync(lootId);
+                    foreach (var character in group.Characters)
+                        await _changeNotifier.NotifyCharacterShowLootAsync(character.Id, fullLootData);
+                }
+                else
+                {
+                    foreach (var character in group.Characters)
+                        await _changeNotifier.NotifyCharacterHideLootAsync(character.Id, loot.Id);
+                }
+
+                await uow.CompleteAsync();
             }
         }
     }

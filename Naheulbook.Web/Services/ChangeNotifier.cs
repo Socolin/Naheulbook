@@ -161,6 +161,16 @@ namespace Naheulbook.Web.Services
             return SendCharacterChangeAsync(characterId, "joinGroup", _mapper.Map<NamedIdResponse>(groupInvite.Group));
         }
 
+        public Task NotifyCharacterShowLootAsync(int characterId, Loot loot)
+        {
+            return SendCharacterChangeAsync(characterId, "showLoot", _mapper.Map<LootResponse>(loot));
+        }
+
+        public Task NotifyCharacterHideLootAsync(int characterId, int lootId)
+        {
+            return SendCharacterChangeAsync(characterId, "hideLoot", lootId);
+        }
+
         public Task NotifyGroupCharacterInviteAsync(int groupId, GroupInvite groupInvite)
         {
             return SendGroupChangeAsync(groupId, "groupInvite", _mapper.Map<GroupGroupInviteResponse>(groupInvite));
@@ -189,6 +199,11 @@ namespace Naheulbook.Web.Services
         public Task NotifyGroupAddLoot(int groupId, Loot loot)
         {
             return SendGroupChangeAsync(groupId, "addLoot", _mapper.Map<LootResponse>(loot));
+        }
+
+        public Task NotifyLootUpdateVisibilityAsync(int lootId, bool visibleForPlayer)
+        {
+            return SendLootChangeAsync(lootId, "updateVisibility", visibleForPlayer);
         }
 
         private Task SendCharacterChangeAsync(Character character, string action, object data)

@@ -11,6 +11,7 @@ namespace Naheulbook.Data.Repositories
     {
         Task<List<Loot>> GetByGroupIdAsync(int groupId);
         Task<List<Loot>> GetLootsVisibleByCharactersOfGroupAsync(int groupId);
+        Task<Loot> GetWithAllDataAsync(int lootId);
     }
 
     public class LootRepository : Repository<Loot, NaheulbookDbContext>, ILootRepository
@@ -43,6 +44,17 @@ namespace Naheulbook.Data.Repositories
                 .Where(l => l.IsVisibleForPlayer)
                 .Where(l => l.GroupId == groupId)
                 .ToListAsync();
+        }
+
+        public Task<Loot> GetWithAllDataAsync(int lootId)
+        {
+            return Context.Loots
+                .Include(l => l.Monsters)
+                .ThenInclude(m => m.Items)
+                .ThenInclude(i => i.ItemTemplate)
+                .Include(l => l.Items)
+                .ThenInclude(i => i.ItemTemplate)
+                .FirstOrDefaultAsync(l => l.Id == lootId);
         }
     }
 }

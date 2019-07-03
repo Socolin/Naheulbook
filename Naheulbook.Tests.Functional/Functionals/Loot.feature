@@ -43,3 +43,15 @@ Feature: Loot
     ]
     """
 
+  Scenario: Can change loot visibility
+    Given a JWT for a user
+    Given a group
+    And a loot
+
+    When performing a PUT to the url "/api/v2/loots/${Loot.Id}/visibility" with the following json content and the current jwt
+    """
+    {
+      "visibleForPlayer": true
+    }
+    """
+    Then the response status code is 204
