@@ -1,5 +1,5 @@
 import {throwError as observableThrowError, Observable} from 'rxjs';
-import {ErrorHandler, Injectable} from '@angular/core';
+import {ErrorHandler, Injectable, NgZone} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ErrorReportService} from './error-report.service';
 import {catchError} from 'rxjs/operators';
@@ -9,6 +9,7 @@ export class NhbkErrorHandler extends ErrorHandler {
     private count = 0;
 
     constructor(private httpClient: HttpClient,
+                private _ngZone: NgZone,
                 private _errorReportService: ErrorReportService) {
         super();
     }
@@ -47,7 +48,9 @@ export class NhbkErrorHandler extends ErrorHandler {
             return;
         }
 
-        this._errorReportService.notify('An error occurred', error);
+        this._ngZone.run(() => {
+            this._errorReportService.notify('An error occurred', error);
+        });
 
         this.postJson('/api/debug/report', {
             message: error.toString(),
