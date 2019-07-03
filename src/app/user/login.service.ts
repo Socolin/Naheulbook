@@ -1,9 +1,10 @@
-import {share, map} from 'rxjs/operators';
+import {share, map, retry, retryWhen, delay, take} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {from, Observable, ReplaySubject} from 'rxjs';
 
 import {JwtResponse, User} from './user.model';
+import {genericRetryStrategy} from '../shared/rxjs-retry-strategy';
 
 @Injectable()
 export class LoginService {
@@ -110,6 +111,9 @@ export class LoginService {
         }
 
         this.checkingLoggedUser = this.httpClient.get<JwtResponse>('/api/v2/users/me/jwt').pipe(
+            retryWhen(genericRetryStrategy({
+                excludedStatusCodes: [401, 400]
+            })),
             share()
         );
 
