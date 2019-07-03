@@ -108,9 +108,7 @@ export class MonsterTemplateService {
     }
 
     searchMonster(name): Observable<MonsterTemplate[]> {
-        return this.httpClient.post<MonsterTemplate[]>('/api/monsterTemplate/searchMonster', {
-            name: name
-        });
+        return this.httpClient.get<MonsterTemplate[]>(`/api/v2/monsterTemplates/search?filter=${encodeURIComponent(name)}`);
     }
 
     editMonster(monster: MonsterTemplate): Observable<MonsterTemplate> {

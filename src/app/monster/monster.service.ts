@@ -17,10 +17,7 @@ export class MonsterService {
 
     createMonster(groupId: number, monster): Observable<Monster> {
         return forkJoin([
-            this.httpClient.post<Monster>('/api/monster/createMonster', {
-                monster: monster,
-                groupId: groupId
-            }),
+            this.httpClient.post<Monster>(`/api/v2/groups/${groupId}/monsters`, monster),
             this._skillService.getSkillsById()
         ]).pipe(map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
             return Monster.fromJson(monsterJsonData, skillsById)

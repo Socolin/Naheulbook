@@ -79,19 +79,17 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     openLoot(loot: Loot) {
-        loot.visibleForPlayer = true;
-        this._groupService.updateLoot(loot).subscribe(
-            updatedLoot => {
-                loot.visibleForPlayer = updatedLoot.visibleForPlayer;
+        this._groupService.updateLootVisibility(loot).subscribe(
+            () => {
+                loot.visibleForPlayer = true;
             }
         );
     }
 
     closeLoot(loot: Loot) {
-        loot.visibleForPlayer = false;
-        this._groupService.updateLoot(loot).subscribe(
-            updatedLoot => {
-                loot.visibleForPlayer = updatedLoot.visibleForPlayer;
+        this._groupService.updateLootVisibility(loot).subscribe(
+            () => {
+                loot.visibleForPlayer = false;
             }
         );
     }

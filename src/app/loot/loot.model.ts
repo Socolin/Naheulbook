@@ -209,8 +209,8 @@ export class Loot extends WsRegistrable {
                 });
                 break;
             }
-            case 'updateLoot': {
-                this.visibleForPlayer = data.visibleForPlayer;
+            case 'updateVisibility': {
+                this.visibleForPlayer = data;
                 break;
             }
             case 'tookItem': {

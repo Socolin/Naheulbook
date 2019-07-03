@@ -109,8 +109,7 @@ export class GroupService {
 
     createLoot(groupId: number, lootName: string): Observable<Loot> {
         return forkJoin([
-            this.httpClient.post<Loot>('/api/group/createLoot', {
-                groupId: groupId,
+            this.httpClient.post<Loot>(`/api/v2/groups/${groupId}/loots`, {
                 name: lootName
             }),
             this._skillService.getSkillsById()
@@ -125,18 +124,10 @@ export class GroupService {
         });
     }
 
-    updateLoot(loot: Loot): Observable<Loot> {
-        return forkJoin([
-            this.httpClient.post<Loot>('/api/group/updateLoot', {
-                loot: {
-                    visibleForPlayer: loot.visibleForPlayer,
-                    id: loot.id
-                }
-            }),
-            this._skillService.getSkillsById()
-        ]).pipe(map(([lootJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
-            return Loot.fromJson(lootJsonData, skillsById)
-        }));
+    updateLootVisibility(loot: Loot): Observable<void> {
+        return this.httpClient.put<void>(`/api/v2/loots/${loot.id}/visibility`, {
+            visibleForPlayer: loot.visibleForPlayer,
+        });
     }
 
     /* History */

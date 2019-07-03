@@ -1488,7 +1488,7 @@ export class Character extends WsRegistrable {
                 break;
             }
             case 'hideLoot': {
-                this.removeLoot(data.id);
+                this.removeLoot(data);
                 break;
             }
             case 'update': {
