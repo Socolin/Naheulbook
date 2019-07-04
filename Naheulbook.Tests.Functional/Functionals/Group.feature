@@ -45,7 +45,7 @@ Feature: Group
   Scenario: Can get a group details
     Given a JWT for a user
     Given a group
-    And 3 character
+    And 3 characters
     And an invite from the group to the 1st character
     And a request from 2nd character to join the group
     And that the 3rd character is a member of the group
@@ -237,3 +237,4 @@ Feature: Group
     }
     """
     Then the response status code is 204
+

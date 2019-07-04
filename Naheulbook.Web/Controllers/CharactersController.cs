@@ -16,7 +16,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/characters")]
     [ApiController]
-    public class CharactersController
+    public class CharactersController : Controller
     {
         private readonly ICharacterService _characterService;
         private readonly IMapper _mapper;
@@ -48,6 +48,10 @@ namespace Naheulbook.Web.Controllers
             try
             {
                 var character = await _characterService.LoadCharacterDetailsAsync(executionContext, characterId);
+
+                if (executionContext.UserId == character.Group.MasterId)
+                    return _mapper.Map<CharacterFoGmResponse>(character);
+
                 return _mapper.Map<CharacterResponse>(character);
             }
             catch (ForbiddenAccessException ex)
@@ -79,7 +83,6 @@ namespace Naheulbook.Web.Controllers
             var group = await _characterService.CreateCharacterAsync(executionContext, request);
             return _mapper.Map<CreateCharacterResponse>(group);
         }
-
 
         [HttpPost("{CharacterId:int:min(1)}/items")]
         public async Task<CreatedActionResult<ItemResponse>> PostAddItemToCharacterInventory(
@@ -139,7 +142,7 @@ namespace Naheulbook.Web.Controllers
             try
             {
                 await _characterService.DeleteModifiersAsync(executionContext, characterId, characterModifierId);
-                return new NoContentResult();
+                return NoContent();
             }
             catch (ForbiddenAccessException ex)
             {
@@ -228,17 +231,17 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPatch("{CharacterId:int:min(1)}/stats")]
-        public async Task<IActionResult> PatchCharacterStatsAsync(
+        [HttpPatch("{CharacterId:int:min(1)}")]
+        public async Task<IActionResult> PatchCharacterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,
-            PatchCharacterStatsRequest request
+            PatchCharacterRequest request
         )
         {
             try
             {
-                await _characterService.UpdateCharacterStatAsync(executionContext, characterId, request);
-                return new NoContentResult();
+                await _characterService.UpdateCharacterAsync(executionContext, characterId, request);
+                return NoContent();
             }
             catch (ForbiddenAccessException ex)
             {
@@ -260,7 +263,7 @@ namespace Naheulbook.Web.Controllers
             try
             {
                 await _characterService.SetCharacterAdBonusStatAsync(executionContext, characterId, request);
-                return new NoContentResult();
+                return NoContent();
             }
             catch (ForbiddenAccessException ex)
             {

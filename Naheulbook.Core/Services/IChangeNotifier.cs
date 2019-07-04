@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Naheulbook.Core.Models;
 using Naheulbook.Data.Models;
+using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Services
@@ -23,6 +24,11 @@ namespace Naheulbook.Core.Services
         Task NotifyCharacterAcceptGroupInviteAsync(int characterId, GroupInvite groupInvite);
         Task NotifyCharacterShowLootAsync(int characterId, Loot loot);
         Task NotifyCharacterHideLootAsync(int characterId, int lootId);
+
+        Task NotifyCharacterGmChangeColorAsync(Character character);
+        Task NotifyCharacterGmChangeTarget(Character character, TargetRequest requestTarget);
+        Task NotifyCharacterGmChangeDataAsync(Character character, CharacterGmData gmData);
+        Task NotifyCharacterGmChangeActive(Character character);
 
         Task NotifyItemDataChangedAsync(Item item);
         Task NotifyItemModifiersChangedAsync(Item item);

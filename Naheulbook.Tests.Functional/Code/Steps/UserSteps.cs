@@ -43,8 +43,14 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             _scenarioContext.SetUserId(userId);
         }
 
-        [Given("a JWT for a user")]
+        [Given("a user")]
         public void GivenAUser()
+        {
+            _testDataUtil.AddUser();
+        }
+
+        [Given("a JWT for a user")]
+        public void GivenAJwtForAUser()
         {
 
             var hasUtil = new PasswordHashingService();

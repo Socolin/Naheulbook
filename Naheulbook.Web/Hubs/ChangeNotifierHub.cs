@@ -35,14 +35,15 @@ namespace Naheulbook.Web.Hubs
             var executionContext = Context.GetHttpContext().GetExecutionContext();
             try
             {
-                await _characterService.EnsureUserCanAccessCharacterAsync(executionContext, characterId);
+                var isGroupMaster = await _characterService.EnsureUserCanAccessCharacterAndGetIfIsGroupMasterAsync(executionContext, characterId);
+                if (isGroupMaster)
+                    await Groups.AddToGroupAsync(Context.ConnectionId, _hubGroupUtil.GetGmCharacterGroupName(characterId));
+                await Groups.AddToGroupAsync(Context.ConnectionId, _hubGroupUtil.GetCharacterGroupName(characterId));
             }
             catch (ForbiddenAccessException ex)
             {
                 throw new HubException("Access to this resources is forbidden", ex);
             }
-
-            await Groups.AddToGroupAsync(Context.ConnectionId, _hubGroupUtil.GetCharacterGroupName(characterId));
         }
 
         public async Task SubscribeGroup(int groupId)

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
+using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Hubs;
 using Naheulbook.Web.Responses;
@@ -76,6 +77,26 @@ namespace Naheulbook.Web.Services
         public Task NotifyCharacterAddItemAsync(int characterId, Item item)
         {
             return SendCharacterChangeAsync(characterId, "addItem", _mapper.Map<ItemResponse>(item));
+        }
+
+        public Task NotifyCharacterGmChangeColorAsync(Character character)
+        {
+            return SendCharacterGmChangeAsync(character.Id, "changeColor", character.Color);
+        }
+
+        public Task NotifyCharacterGmChangeTarget(Character character, TargetRequest targetInfo)
+        {
+            return SendCharacterGmChangeAsync(character.Id, "changeTarget", targetInfo);
+        }
+
+        public Task NotifyCharacterGmChangeDataAsync(Character character, CharacterGmData gmData)
+        {
+            return SendCharacterGmChangeAsync(character.Id, "updateGmData", gmData);
+        }
+
+        public Task NotifyCharacterGmChangeActive(Character character)
+        {
+            return SendCharacterGmChangeAsync(character.Id, "active", character.IsActive);
         }
 
         public Task NotifyItemDataChangedAsync(Item item)
@@ -214,6 +235,17 @@ namespace Naheulbook.Web.Services
         private Task SendCharacterChangeAsync(int characterId, string action, object data)
         {
             return _hubContext.Clients.Group(_hubGroupUtil.GetCharacterGroupName(characterId))
+                .SendAsync("event", GetPacket(ElementType.Character, characterId, action, data));
+        }
+
+        private Task SendCharacterGmChangeAsync(Character character, string action, object data)
+        {
+            return SendCharacterGmChangeAsync(character.Id, action, data);
+        }
+
+        private Task SendCharacterGmChangeAsync(int characterId, string action, object data)
+        {
+            return _hubContext.Clients.Group(_hubGroupUtil.GetGmCharacterGroupName(characterId))
                 .SendAsync("event", GetPacket(ElementType.Character, characterId, action, data));
         }
 

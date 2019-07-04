@@ -28,6 +28,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private IMapper _mapper;
         private ICharacterModifierUtil _characterModifierUtil;
         private IChangeNotifier _changeNotifier;
+        private ICharacterUtil _characterUtil;
         private CharacterService _service;
 
         [SetUp]
@@ -41,6 +42,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _mapper = Substitute.For<IMapper>();
             _characterModifierUtil = Substitute.For<ICharacterModifierUtil>();
             _changeNotifier = Substitute.For<IChangeNotifier>();
+            _characterUtil = Substitute.For<ICharacterUtil>();
 
             _service = new CharacterService(
                 _unitOfWorkFactory,
@@ -50,7 +52,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _characterHistoryUtil,
                 _mapper,
                 _characterModifierUtil,
-                _changeNotifier
+                _changeNotifier,
+                _characterUtil
             );
         }
 
@@ -273,7 +276,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
                 .Throw(new TestException());
 
-            Func<Task> act = () => _service.UpdateCharacterStatAsync(executionContext, characterId, new PatchCharacterStatsRequest());
+            Func<Task> act = () => _service.UpdateCharacterAsync(executionContext, characterId, new PatchCharacterRequest());
 
             act.Should().Throw<TestException>();
         }
@@ -287,7 +290,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns((Character) null);
 
-            Func<Task> act = () => _service.UpdateCharacterStatAsync(executionContext, characterId, new PatchCharacterStatsRequest());
+            Func<Task> act = () => _service.UpdateCharacterAsync(executionContext, characterId, new PatchCharacterRequest());
 
             act.Should().Throw<CharacterNotFoundException>();
         }

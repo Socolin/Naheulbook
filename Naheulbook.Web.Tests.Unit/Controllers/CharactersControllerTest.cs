@@ -258,12 +258,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
-        public void PatchCharacterStatsAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PatchCharacterAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
         {
-            _characterService.UpdateCharacterStatAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PatchCharacterStatsRequest>())
+            _characterService.UpdateCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PatchCharacterRequest>())
                 .Returns(Task.FromException<List<Loot>>(exception));
 
-            Func<Task> act = () => _controller.PatchCharacterStatsAsync(_executionContext, 2, new PatchCharacterStatsRequest());
+            Func<Task> act = () => _controller.PatchCharacterAsync(_executionContext, 2, new PatchCharacterRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }

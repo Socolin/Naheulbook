@@ -391,7 +391,7 @@ Feature: Character
     Given a JWT for a user
     And a character
 
-    When performing a PATCH to the url "/api/v2/characters/${Character.Id}/stats" with the following json content and the current jwt
+    When performing a PATCH to the url "/api/v2/characters/${Character.Id}/" with the following json content and the current jwt
     """
     {
       "ev": 8
@@ -473,5 +473,50 @@ Feature: Character
     """
     { "__partial": {
       "active": false
+    }}
+    """
+
+  Scenario: Group master can change some character data
+    Given a JWT for a user
+    Given a group
+    And a character
+    And that the character is a member of the group
+    And a monster
+    And a user
+
+    When performing a PATCH to the url "/api/v2/characters/${Character.Id}/" with the following json content and the current jwt
+    """
+    {
+      "active": true,
+      "ownerId": ${User.[-1].Id},
+      "target": {
+        "isMonster": true,
+        "id": ${Monster.Id}
+      },
+      "color": "054258",
+      "mankdebol": 4,
+      "debilibeuk": 2
+    }
+    """
+    Then the response status code is 204
+
+    When performing a GET to the url "/api/v2/characters/${Character.Id}" with the current jwt
+
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    { "__partial": {
+      "id": ${Character.Id},
+      "active": true,
+      "ownerId": ${User.[-1].Id},
+      "target": {
+        "isMonster": true,
+        "id": ${Monster.Id}
+      },
+      "color": "054258",
+      "gmData": {
+        "mankdebol": 4,
+        "debilibeuk": 2
+      }
     }}
     """

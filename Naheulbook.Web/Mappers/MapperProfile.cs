@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Naheulbook.Core.Models;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
@@ -22,6 +23,10 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Character, CharacterSummaryResponse>()
                 .ForMember(x => x.JobNames, opt => opt.MapFrom(c => c.Jobs.Select(x => x.Job.Name)))
                 .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name));
+            CreateMap<Character, CharacterFoGmResponse>()
+                .IncludeBase<Character, CharacterResponse>()
+                .ForMember(x => x.GmData, opt => opt.MapFrom(c => MapperHelpers.FromJson<CharacterGmData>(c.GmData) ?? new CharacterGmData()))
+                .ForMember(x => x.Target, opt => opt.MapFrom(c => c.TargetedCharacterId.HasValue ? new TargetResponse {Id = c.TargetedCharacterId.Value, IsMonster = false} : (c.TargetedMonsterId.HasValue ? new TargetResponse {Id = c.TargetedMonsterId.Value, IsMonster = true} : null)));
             CreateMap<Character, CharacterResponse>()
                 .ForMember(x => x.Stats, opt => opt.MapFrom(c => new CharacterResponse.BasicStats {Ad = c.Ad, Cou = c.Cou, Cha = c.Cha, Fo = c.Fo, Int = c.Int}))
                 .ForMember(x => x.SkillIds, opt => opt.MapFrom(c => c.Skills.Select(x => x.SkillId)))
