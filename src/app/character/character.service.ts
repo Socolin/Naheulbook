@@ -88,17 +88,15 @@ export class CharacterService {
     }
 
     changeCharacterStat(characterId: number, stat: string, value: any): Observable<{stat: string, value: any}> {
-        return this.httpClient.patch<{stat: string, value: any}>(`/api/v2/characters/${characterId}/stats`, {
+        return this.httpClient.patch<{stat: string, value: any}>(`/api/v2/characters/${characterId}/`, {
             [stat]: value
         }).pipe(map(() => {return {stat, value}}));
     }
 
     changeGmData(characterId: number, key: string, value: any): Observable<{key: string, value: any}> {
-        return this.httpClient.post<{key: string, value: any}>('/api/character/updateGmData', {
-            characterId: characterId,
-            key: key,
-            value: value
-        });
+        return this.httpClient.patch<{stat: string, value: any}>(`/api/v2/characters/${characterId}/`, {
+            [key]: value
+        }).pipe(map(() => {return {key, value}}));
     }
 
     addJob(characterId: number, jobId: number): Observable<Job> {
