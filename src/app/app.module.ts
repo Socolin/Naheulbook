@@ -99,7 +99,7 @@ import {LoginService} from './user';
 export class AppModule {
 }
 
-function onAppInit(loginService: LoginService): () => Promise<any> {
+export function onAppInit(loginService: LoginService): () => Promise<any> {
     return () => new Promise((resolve, reject) => {
         loginService.checkLogged().subscribe(
             () => resolve(),

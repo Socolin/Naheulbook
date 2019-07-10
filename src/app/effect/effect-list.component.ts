@@ -69,7 +69,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
         this._router.navigate(['/database/edit-effect', effect.id]);
     }
 
-    createEffect(effect: Effect) {
+    createEffect() {
         this._router.navigate(['/database/create-effect']);
     }
 

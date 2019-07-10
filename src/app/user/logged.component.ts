@@ -9,7 +9,7 @@ import {LoginService} from './login.service';
     templateUrl: './logged.component.html',
 })
 export class LoggedComponent implements OnInit, OnDestroy {
-    private isInErrorState = false;
+    public isInErrorState = false;
     private subscription: Subscription;
 
     constructor(private _loginService: LoginService
