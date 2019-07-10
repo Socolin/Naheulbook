@@ -44,6 +44,7 @@ namespace Naheulbook.Core.Notifications
 
         INotificationPacket BuildLootUpdateVisibility(int lootId, bool visibleForPlayer);
 
+        INotificationPacket BuildMonsterAddModifier(int monsterId, ActiveStatsModifier modifier);
         INotificationPacket BuildMonsterUpdateModifier(int monsterId, ActiveStatsModifier modifier);
         INotificationPacket BuildMonsterRemoveModifier(int monsterId, int modifierId);
     }

@@ -46,6 +46,7 @@ namespace Naheulbook.Core.Notifications
 
         void NotifyLootUpdateVisibility(int lootId, bool visibleForPlayer);
 
+        void NotifyMonsterAddModifier(int monsterId, ActiveStatsModifier modifier);
         void NotifyMonsterUpdateModifier(int monsterId, ActiveStatsModifier modifier);
         void NotifyMonsterRemoveModifier(int monsterId, int modifierId);
 
@@ -223,6 +224,11 @@ namespace Naheulbook.Core.Notifications
         public void NotifyLootUpdateVisibility(int lootId, bool visibleForPlayer)
         {
             _packets.Add(_packetBuilder.BuildLootUpdateVisibility(lootId, visibleForPlayer));
+        }
+
+        public void NotifyMonsterAddModifier(int monsterId, ActiveStatsModifier modifier)
+        {
+            _packets.Add(_packetBuilder.BuildMonsterAddModifier(monsterId, modifier));
         }
 
         public void NotifyMonsterUpdateModifier(int monsterId, ActiveStatsModifier modifier)

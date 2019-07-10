@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Naheulbook.Shared.TransientModels;
+using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Utils
 {
     public interface IActiveStatsModifierUtil
     {
         void InitializeModifierIds(ICollection<ActiveStatsModifier> modifiers);
+        void AddModifier(IList<ActiveStatsModifier> modifiers, ActiveStatsModifier newModifier);
     }
 
     public class ActiveStatsModifierUtil : IActiveStatsModifierUtil
@@ -21,6 +23,24 @@ namespace Naheulbook.Core.Utils
                 if (statsModifier.Id == 0)
                     statsModifier.Id = nextId++;
             }
+        }
+
+        public void AddModifier(IList<ActiveStatsModifier> modifiers, ActiveStatsModifier newModifier)
+        {
+            if (modifiers.Count > 0)
+            {
+                newModifier.Id = modifiers.Max(m => m.Id) + 1;
+            }
+            else
+            {
+                newModifier.Id = 1;
+            }
+
+            newModifier.Active = true;
+            newModifier.CurrentLapCount = newModifier.LapCount;
+            newModifier.CurrentCombatCount = newModifier.CombatCount;
+            newModifier.CurrentTimeDuration = newModifier.TimeDuration;
+            modifiers.Add(newModifier);
         }
     }
 }

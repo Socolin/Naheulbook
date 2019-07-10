@@ -11,6 +11,7 @@ using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
+using Naheulbook.Shared.Utils;
 using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
@@ -22,6 +23,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private IAuthorizationUtil _authorizationUtil;
         private IActiveStatsModifierUtil _activeStatsModifierUtil;
+        private FakeNotificationSessionFactory _notificationSessionFactory;
+        private IJsonUtil _jsonUtil;
         private MonsterService _service;
 
         [SetUp]
@@ -30,11 +33,15 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
             _activeStatsModifierUtil = Substitute.For<IActiveStatsModifierUtil>();
+            _notificationSessionFactory = new FakeNotificationSessionFactory();
+            _jsonUtil = Substitute.For<IJsonUtil>();
 
             _service = new MonsterService(
                 _unitOfWorkFactory,
                 _authorizationUtil,
-                _activeStatsModifierUtil
+                _activeStatsModifierUtil,
+                _notificationSessionFactory,
+                _jsonUtil
             );
         }
 
