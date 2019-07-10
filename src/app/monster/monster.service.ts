@@ -50,17 +50,12 @@ export class MonsterService {
     }
 
     addModifier(monsterId: number, modifier: ActiveStatsModifier): Observable<ActiveStatsModifier> {
-        return this.httpClient.post('/api/monster/addModifier', {
-            monsterId: monsterId,
-            modifier: modifier,
-        }).pipe(map(res => ActiveStatsModifier.fromJson(res)));
+        return this.httpClient.post(`/api/v2/monsters/${monsterId}/modifiers`, modifier)
+            .pipe(map(res => ActiveStatsModifier.fromJson(res)));
     }
 
-    removeModifier(monsterId: number, modifierId: number): Observable<ActiveStatsModifier> {
-        return this.httpClient.post('/api/monster/removeModifier', {
-            monsterId: monsterId,
-            modifierId: modifierId,
-        }).pipe(map(res => ActiveStatsModifier.fromJson(res)));
+    removeModifier(monsterId: number, modifierId: number): Observable<void> {
+        return this.httpClient.delete<void>(`/api/v2/monsters/${monsterId}/modifiers/${modifierId}`);
     }
 
     toggleModifier(monsterId: number, modifierId: number): Observable<ActiveStatsModifier> {

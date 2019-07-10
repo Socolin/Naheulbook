@@ -208,13 +208,14 @@ export class FighterComponent implements OnInit, OnChanges {
     }
 
     removeModifier(modifier: ActiveStatsModifier) {
-        this._monsterService.removeModifier(this.fighter.id, modifier.id).subscribe((deletedModifier: ActiveStatsModifier) => {
-            if (this.selectedModifier && this.selectedModifier.id === deletedModifier.id) {
+        this._monsterService.removeModifier(this.fighter.id, modifier.id).subscribe(() => {
+            if (this.selectedModifier && this.selectedModifier.id === modifier.id) {
                 this.selectedModifier = undefined;
             }
-            this.fighter.monster.onRemoveModifier(deletedModifier.id);
+            this.fighter.monster.onRemoveModifier(modifier.id);
         });
     }
+
     ngOnChanges(changes: SimpleChanges): void {
         if ('fighter' in changes) {
             this.selectedItem = undefined;
