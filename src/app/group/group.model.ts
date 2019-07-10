@@ -10,6 +10,7 @@ import {Loot} from '../loot';
 import {NEvent} from '../event';
 import {date2Timestamp} from '../date/util';
 import {TargetJsonData} from './target.model';
+import {FighterDurationChanges} from '../shared';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -203,31 +204,31 @@ export class Fighter {
         }
     }
 
-    updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any {
+    updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): FighterDurationChanges {
         if (this.isMonster) {
             let changes = this.monster.updateTime(type, data);
             if (changes.length) {
-                return {isMonster: true, monsterId: this.monster.id, changes: changes};
+                return {monsterId: this.monster.id, changes: changes};
             }
         } else {
             let changes = this.character.updateTime(type, data);
             if (changes.length) {
-                return {isMonster: false, characterId: this.character.id, changes: changes};
+                return {characterId: this.character.id, changes: changes};
             }
         }
         return undefined;
     }
 
-    updateLapDecrement(data: { deleted: Fighter, previous: Fighter; next: Fighter }): any {
+    updateLapDecrement(data: { deleted: Fighter, previous: Fighter; next: Fighter }): FighterDurationChanges | undefined{
         if (this.isMonster) {
             let changes = this.monster.updateLapDecrement(data);
             if (changes.length) {
-                return {isMonster: true, monsterId: this.monster.id, changes: changes};
+                return {monsterId: this.monster.id, changes: changes};
             }
         } else {
             let changes = this.character.updateLapDecrement(data);
             if (changes.length) {
-                return {isMonster: false, characterId: this.character.id, changes: changes};
+                return {characterId: this.character.id, changes: changes};
             }
         }
         return undefined;
@@ -339,7 +340,7 @@ export class Group extends WsRegistrable {
     public fighters: Fighter[] = [];
     public fightersSubscriptions: { [fighterUid: string]: Subscription } = {};
 
-    public pendingModifierChanges: any[] | null;
+    public pendingModifierChanges?: FighterDurationChanges[];
 
     get currentFighter(): Fighter | undefined {
         if (this.fighters.length <= this.data.currentFighterIndex) {
@@ -667,8 +668,8 @@ export class Group extends WsRegistrable {
         return changes;
     }
 
-    public updateLapDecrement(data: { deleted: Fighter, previous: Fighter; next: Fighter }): any[] {
-        let changes: any[] = [];
+    public updateLapDecrement(data: { deleted: Fighter, previous: Fighter; next: Fighter }): FighterDurationChanges[] {
+        let changes: FighterDurationChanges[] = [];
         for (let fighter of this.fighters) {
             let fighterChanges = fighter.updateLapDecrement(data);
             if (fighterChanges) {

@@ -1,7 +1,7 @@
 import {Subject} from 'rxjs';
 import {isNullOrUndefined} from 'util';
 
-import {ActiveStatsModifier, StatModifier} from '../shared';
+import {ActiveStatsModifier, DurationChange, StatModifier} from '../shared';
 import {Skill} from '../skill';
 import {ItemTemplate} from '../item-template';
 import {Item, PartialItem} from '../item';
@@ -342,13 +342,13 @@ export class Monster extends WsRegistrable {
         return changes;
     }
 
-    updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): any[] {
-        let changes: any[] = [];
+    updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): DurationChange[] {
+        let changes: DurationChange[] = [];
         for (let item of this.items) {
             for (let i = 0; i < item.modifiers.length; i++) {
                 let modifier = item.modifiers[i];
                 if (modifier.updateLapDecrement(data)) {
-                    changes.push({type: 'item', itemId: item.id, modifierIdx: i, modifier: modifier});
+                    changes.push({type: 'itemModifier', itemId: item.id, modifier: modifier});
                 }
             }
         }

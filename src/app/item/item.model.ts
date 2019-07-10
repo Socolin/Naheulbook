@@ -1,4 +1,8 @@
-import {IMetadata, ActiveStatsModifier} from '../shared';
+import {
+    IMetadata,
+    ActiveStatsModifier,
+    DurationChange
+} from '../shared';
 import {ItemTemplate} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
 import {IDurable} from '../date/durable.model';
@@ -68,12 +72,16 @@ export class Item {
         return items;
     }
 
-    updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any[] {
-        let changes: any[] = [];
+    updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): DurationChange[] {
+        let changes: DurationChange[] = [];
         for (let i = 0; i < this.modifiers.length; i++) {
             let modifier = this.modifiers[i];
             if (modifier.updateDuration(type, data)) {
-                changes.push({type: 'itemModifier', itemId: this.id, modifierIdx: i, modifier: modifier});
+                changes.push({
+                    type: 'itemModifier',
+                    itemId: this.id,
+                    modifier: modifier
+                });
             }
         }
 

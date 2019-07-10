@@ -18,23 +18,19 @@ export class StatModifier {
     static apply(value: number, mod: StatModifier) {
         if (mod.type === 'ADD') {
             return value + mod.value;
-        }
-        else if (mod.type === 'SET') {
+        } else if (mod.type === 'SET') {
             return mod.value;
-        }
-        else if (mod.type === 'DIV') {
+        } else if (mod.type === 'DIV') {
             return value / mod.value;
-        }
-        else if (mod.type === 'MUL') {
+        } else if (mod.type === 'MUL') {
             return value * mod.value;
-        }
-        else if (mod.type === 'PERCENTAGE') {
+        } else if (mod.type === 'PERCENTAGE') {
             return value * (mod.value / 100);
         }
         throw new Error('Invalid stat modifier')
     }
 
-    static applyInPlace(stats: {[statName: string]: number}, mod: StatModifier) {
+    static applyInPlace(stats: { [statName: string]: number }, mod: StatModifier) {
         stats[mod.stat] = StatModifier.apply(stats[mod.stat], mod);
     }
 }
@@ -67,7 +63,7 @@ export class StatsModifier implements IDurable {
 }
 
 export class LapCountDecrement {
-    when: 'BEFORE'|'AFTER';
+    when: 'BEFORE' | 'AFTER';
     fighterId: number;
     fighterIsMonster: boolean;
 }
@@ -89,7 +85,7 @@ export class ActiveStatsModifier extends StatsModifier {
         return modifier;
     }
 
-    static modifiersFromJson(modifiersJsonData: undefined|null|any[]) {
+    static modifiersFromJson(modifiersJsonData: undefined | null | any[]) {
         let modifiers: ActiveStatsModifier[] = [];
 
         if (modifiersJsonData) {
@@ -108,7 +104,7 @@ export class ActiveStatsModifier extends StatsModifier {
         modifier.permanent = false;
         modifier.reusable = data.reusable;
         modifier.type = effect.category.name;
-        if ('durationType'  in data) {
+        if ('durationType' in data) {
             modifier.durationType = data.durationType;
             switch (data.durationType) {
                 case 'combat':
@@ -145,7 +141,7 @@ export class ActiveStatsModifier extends StatsModifier {
         return modifier;
     }
 
-    public updateDuration(durationType: string, data: number|{previous: Fighter, next: Fighter}): boolean {
+    public updateDuration(durationType: string, data: number | { previous: Fighter, next: Fighter }): boolean {
         if (!this.active) {
             return false;
         }
@@ -161,7 +157,7 @@ export class ActiveStatsModifier extends StatsModifier {
 
         switch (this.durationType) {
             case 'combat': {
-                if (this.currentCombatCount > 0 && typeof(data) === 'number') {
+                if (this.currentCombatCount > 0 && typeof (data) === 'number') {
                     this.currentCombatCount -= data;
                     if (this.currentCombatCount <= 0) {
                         this.currentCombatCount = 0;
@@ -172,7 +168,7 @@ export class ActiveStatsModifier extends StatsModifier {
                 break;
             }
             case 'time': {
-                if (this.currentTimeDuration > 0 && typeof(data) === 'number') {
+                if (this.currentTimeDuration > 0 && typeof (data) === 'number') {
                     this.currentTimeDuration -= data;
                     if (this.currentTimeDuration <= 0) {
                         this.currentTimeDuration = 0;
@@ -189,21 +185,18 @@ export class ActiveStatsModifier extends StatsModifier {
                         return false;
                     }
 
-                    let lapDecrement: {previous: Fighter, next: Fighter};
-                    if (typeof(data) !== 'number') {
+                    let lapDecrement: { previous: Fighter, next: Fighter };
+                    if (typeof (data) !== 'number') {
                         lapDecrement = data;
-                    }
-                    else {
+                    } else {
                         return false;
                     }
 
                     if (this.lapCountDecrement.when === 'AFTER') {
                         testFighter = lapDecrement.previous;
-                    }
-                    else if (this.lapCountDecrement.when === 'BEFORE') {
+                    } else if (this.lapCountDecrement.when === 'BEFORE') {
                         testFighter = lapDecrement.next;
-                    }
-                    else {
+                    } else {
                         return false;
                     }
 
@@ -224,7 +217,7 @@ export class ActiveStatsModifier extends StatsModifier {
         return false;
     }
 
-    updateLapDecrement(data: {deleted: Fighter; previous: Fighter; next: Fighter}): boolean {
+    updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): boolean {
         if (this.durationType !== 'lap') {
             return false;
         }

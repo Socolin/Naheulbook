@@ -1,4 +1,5 @@
 export * from './character-summary.model';
+export * from './duration-change.model';
 export * from './flag.model';
 export * from './god.model';
 export * from './history-entry.model';

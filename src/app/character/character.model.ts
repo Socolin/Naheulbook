@@ -7,7 +7,7 @@ import {
     , ItemStatModifier
     , formatModifierValue
     , ActiveStatsModifier
-    , StatModifier
+    , StatModifier, DurationChange
 } from '../shared';
 
 import {Origin} from '../origin';
@@ -1452,8 +1452,8 @@ export class Character extends WsRegistrable {
         this.targetChanged.next(target);
     }
 
-    public updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): any[] {
-        let changes: any[] = [];
+    public updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): DurationChange[] {
+        let changes: DurationChange[] = [];
         for (let item of this.items) {
             let itemChanges = item.updateTime(type, data);
             for (let itemChange of itemChanges) {
@@ -1468,8 +1468,8 @@ export class Character extends WsRegistrable {
         return changes;
     }
 
-    updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): any[] {
-        let changes: any[] = [];
+    updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): DurationChange[] {
+        let changes: DurationChange[] = [];
 
         for (let modifier of this.modifiers) {
             if (modifier.updateLapDecrement(data)) {

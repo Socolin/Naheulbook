@@ -221,7 +221,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                 character.changeActive(change.value);
                 if (!change.value) {
                     if (this.group.pendingModifierChanges) {
-                        this._groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges).subscribe(() => {});
+                        this._groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges);
                         this.group.pendingModifierChanges = null;
                     }
                 }
@@ -367,10 +367,7 @@ export class GroupComponent implements OnInit, OnDestroy {
             () => {
                 this.group.data.changeValue('inCombat', false);
                 let changes = this.group.updateTime('combat', 1);
-                this._groupService.saveChangedTime(this.group.id, changes).subscribe(
-                    () => {
-                    }
-                );
+                this._groupService.saveChangedTime(this.group.id, changes);
             }
         );
     }

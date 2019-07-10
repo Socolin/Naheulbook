@@ -1,11 +1,11 @@
 
-import {forkJoin, of as observableOf, Observable, Subject} from 'rxjs';
+import {forkJoin, of as observableOf, Observable, Subject, of} from 'rxjs';
 
 import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {CharacterSummary, HistoryEntry} from '../shared';
+import {CharacterSummary, FighterDurationChanges, HistoryEntry} from '../shared';
 import {Monster} from '../monster';
 import {Loot} from '../loot';
 import {NEvent, EventService} from '../event';
@@ -165,18 +165,11 @@ export class GroupService {
         });
     }
 
-    nextFighter(groupId: number, fighterIndex: number) {
-        return this.httpClient.post('/api/group/nextFighter', {
-            groupId: groupId,
-            fighterIndex: fighterIndex,
-        });
-    }
-
-    saveChangedTime(groupId: number, changes: any[]): Observable<any> {
-        return this.httpClient.post<any>('/api/group/saveChangedTime', {
-            groupId: groupId,
-            modifiersDurationUpdated: changes,
-        });
+    saveChangedTime(groupId: number, changes: FighterDurationChanges[]): Observable<void> {
+        if (changes.length === 0) {
+            return of(void 0);
+        }
+        return this.httpClient.post<void>(`/api/v2/groups/${groupId}/updateDurations`, changes);
     }
 
     searchPlayersForInvite(name: string): Observable<CharacterSearchResponse[]> {
