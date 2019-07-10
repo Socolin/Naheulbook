@@ -203,10 +203,7 @@ export class Loot extends WsRegistrable {
                 break;
             }
             case 'deleteMonster': {
-                services.skill.getSkillsById().subscribe(skillsById => {
-                    let monster = Monster.fromJson(data, skillsById);
-                    this.removeMonster(monster.id);
-                });
+                this.removeMonster(data.id);
                 break;
             }
             case 'updateVisibility': {

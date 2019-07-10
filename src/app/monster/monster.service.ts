@@ -32,21 +32,12 @@ export class MonsterService {
         });
     }
 
-    killMonster(monsterId: number): Observable<Monster> {
-        return forkJoin([
-            this.httpClient.post('/api/group/killMonster', {
-                monsterId: monsterId
-            }),
-            this._skillService.getSkillsById()
-        ]).pipe(map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
-            return Monster.fromJson(monsterJsonData, skillsById)
-        }));
+    killMonster(monsterId: number): Observable<void> {
+        return this.httpClient.post<void>(`/api/v2/monsters/${monsterId}/kill`, {});
     }
 
     deleteMonster(monsterId: number): Observable<any> {
-        return this.httpClient.post('/api/group/deleteMonster', {
-            monsterId: monsterId
-        });
+        return this.httpClient.delete<void>(`/api/v2/monsters/${monsterId}`);
     }
 
     addModifier(monsterId: number, modifier: ActiveStatsModifier): Observable<ActiveStatsModifier> {
