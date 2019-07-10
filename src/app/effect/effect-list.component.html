@@ -4,7 +4,7 @@
             <mat-form-field>
                 <mat-select
                     [(ngModel)]="selectedType"
-                    (change)="selectType($event.value)">
+                    (selectionChange)="selectType($event.value)">
                     <mat-option *ngFor="let type of types" [value]="type">
                         {{type.name}}
                     </mat-option>
@@ -14,7 +14,7 @@
         <div class="selector">
             <mat-form-field *ngIf="selectedType">
                 <mat-select [(ngModel)]="selectedCategory"
-                           (change)="selectCategory($event.value)">
+                           (selectionChange)="selectCategory($event.value)">
                     <mat-option *ngFor="let category of selectedType.categories" [value]="category">
                         {{category.name}}
                     </mat-option>

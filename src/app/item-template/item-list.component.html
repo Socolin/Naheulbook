@@ -12,7 +12,7 @@
 <mat-card class="section-selector">
     <mat-form-field style="width: 100%">
         <mat-select [ngModel]="selectedSection"
-                   (change)="selectSection($event.value)"
+                   (selectionChange)="selectSection($event.value)"
                    placeholder="Section">
             <mat-option *ngFor="let section of itemSections" [value]="section">
                 {{section.name}}
@@ -43,7 +43,7 @@
         </mat-form-field>
         <mat-form-field *ngIf="selectedSection" class="category">
             <mat-select [ngModel]="filter.category"
-                       (change)="selectCategory($event.value)"
+                       (selectionChange)="selectCategory($event.value)"
                        placeholder="Sous-section">
                 <mat-option [value]="null"></mat-option>
                 <mat-option *ngFor="let category of selectedSection.categories" [value]="category">
