@@ -90,5 +90,26 @@ namespace Naheulbook.Web.Hubs
 
             await Groups.AddToGroupAsync(Context.ConnectionId, _hubGroupUtil.GetMonsterGroupName(monsterId));
         }
+
+        public async Task UnsubscribeCharacter(int characterId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, _hubGroupUtil.GetCharacterGroupName(characterId));
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, _hubGroupUtil.GetGmCharacterGroupName(characterId));
+        }
+
+        public async Task UnsubscribeGroup(int groupId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, _hubGroupUtil.GetGroupGroupName(groupId));
+        }
+
+        public async Task UnsubscribeLoot(int lootId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, _hubGroupUtil.GetLootGroupName(lootId));
+        }
+
+        public async Task UnsubscribeMonster(int monsterId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, _hubGroupUtil.GetMonsterGroupName(monsterId));
+        }
     }
 }
