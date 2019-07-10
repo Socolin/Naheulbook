@@ -238,3 +238,45 @@ Feature: Group
     """
     Then the response status code is 204
 
+
+  Scenario: Can update item/character/monster modifiers durations and  item lifetime durations
+    Given a JWT for a user
+    Given a group
+    And a character
+    And an active reusable character modifier active for 2 lap
+    And an active non-reusable character modifier active for 1 lap
+    And that the character is a member of the group
+    And a monster with a modifier active for 2 lap
+
+    When performing a POST to the url "/api/v2/groups/${Group.Id}/updateDurations" with the following json content and the current jwt
+    """
+    [
+      {
+        "monsterId": ${Monster.Id},
+        "changes": [
+          {
+            "type": "modifier",
+            "modifier": {
+              "id": 8,
+              "active": true,
+              "currentLapCount": 1
+            }
+          }
+        ]
+      },
+      {
+        "characterId": ${Character.Id},
+        "changes": [
+          {
+            "type": "modifier",
+            "modifier": {
+              "id": ${Character.Modifiers.[0].Id},
+              "active": true,
+              "currentLapCount": 1
+            }
+          }
+        ]
+      }
+    ]
+    """
+    Then the response status code is 204

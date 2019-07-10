@@ -25,6 +25,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private IMapper _mapper;
         private IGroupUtil _groupUtil;
         private GroupService _service;
+        private IDurationUtil _durationUtil;
 
         [SetUp]
         public void SetUp()
@@ -34,12 +35,14 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _notificationSessionFactory = new FakeNotificationSessionFactory();
             _mapper = Substitute.For<IMapper>();
             _groupUtil = Substitute.For<IGroupUtil>();
+            _durationUtil = Substitute.For<IDurationUtil>();
 
             _service = new GroupService(
                 _unitOfWorkFactory,
                 _authorizationUtil,
                 _notificationSessionFactory,
                 _mapper,
+                _durationUtil,
                 _groupUtil
             );
         }
@@ -544,6 +547,54 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Throw(new TestException());
 
             Func<Task> act = () => _service.AcceptInviteAsync(executionContext, groupId, characterId);
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public async Task UpdateDurationsAsync_ShouldCallGroupUtilUpdateDurationAsync()
+        {
+            const int groupId = 42;
+            var group = new Group();
+            var fighters = new List<FighterDurationChanges>();
+            var request = new List<PostGroupUpdateDurationsRequest>();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+            _mapper.Map<IList<FighterDurationChanges>>(request)
+                .Returns(fighters);
+
+            await _service.UpdateDurationsAsync(new NaheulbookExecutionContext(), groupId, request);
+
+            await _durationUtil.Received(1).UpdateDurationAsync(groupId, fighters);
+        }
+
+        [Test]
+        public void AcceptInviteAsync_ShouldThrowIfGroupDoesNotExists()
+        {
+            const int groupId = 42;
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns((Group) null);
+
+            Func<Task> act = () => _service.UpdateDurationsAsync(new NaheulbookExecutionContext(), groupId, new List<PostGroupUpdateDurationsRequest>());
+
+            act.Should().Throw<GroupNotFoundException>();
+        }
+
+        [Test]
+        public void UpdateDurationsAsync_ShouldEnsureUserIsGroupMaster()
+        {
+            const int groupId = 42;
+            var group = new Group();
+            var executionContext = new NaheulbookExecutionContext();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(Arg.Any<int>())
+                .Returns(group);
+            _authorizationUtil.When(x => x.EnsureIsGroupOwner(executionContext, group))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.UpdateDurationsAsync(executionContext, groupId, new List<PostGroupUpdateDurationsRequest>());
 
             act.Should().Throw<TestException>();
         }

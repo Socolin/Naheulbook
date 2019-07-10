@@ -26,6 +26,7 @@ namespace Naheulbook.Core.Services
         Task AcceptInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId);
         Task StartCombatAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task EndCombatAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task UpdateDurationsAsync(NaheulbookExecutionContext executionContext, int groupId, IList<PostGroupUpdateDurationsRequest> request);
     }
 
     public class GroupService : IGroupService
@@ -34,6 +35,7 @@ namespace Naheulbook.Core.Services
         private readonly IAuthorizationUtil _authorizationUtil;
         private readonly IMapper _mapper;
         private readonly INotificationSessionFactory _notificationSessionFactory;
+        private readonly IDurationUtil _durationUtil;
         private readonly IGroupUtil _groupUtil;
 
         public GroupService(
@@ -41,6 +43,7 @@ namespace Naheulbook.Core.Services
             IAuthorizationUtil authorizationUtil,
             INotificationSessionFactory notificationSessionFactory,
             IMapper mapper,
+            IDurationUtil durationUtil,
             IGroupUtil groupUtil
         )
         {
@@ -48,6 +51,7 @@ namespace Naheulbook.Core.Services
             _authorizationUtil = authorizationUtil;
             _mapper = mapper;
             _notificationSessionFactory = notificationSessionFactory;
+            _durationUtil = durationUtil;
             _groupUtil = groupUtil;
         }
 
@@ -291,5 +295,18 @@ namespace Naheulbook.Core.Services
             await notificationSession.CommitAsync();
         }
 
+        public async Task UpdateDurationsAsync(NaheulbookExecutionContext executionContext, int groupId, IList<PostGroupUpdateDurationsRequest> request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            }
+
+            await _durationUtil.UpdateDurationAsync(groupId, _mapper.Map<IList<FighterDurationChanges>>(request));
+        }
     }
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Naheulbook.Data.Models;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.TestUtils;
+using Newtonsoft.Json;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps
@@ -77,6 +79,23 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         public void GivenAMonster()
         {
             _testDataUtil.AddMonster();
+        }
+
+        [Given(@"a monster with a modifier active for (\d) lap")]
+        public void GivenAMonsterWithAModifierActiveForXLap(int lapCount)
+        {
+            _testDataUtil.AddMonster(m => m.Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
+            {
+                new ActiveStatsModifier
+                {
+                    Active = true,
+                    Id = 8,
+                    LapCount = lapCount,
+                    CurrentLapCount = lapCount,
+                    Name = "some-name",
+                    DurationType = "lap"
+                }
+            }));
         }
 
         [Given("a dead monster")]

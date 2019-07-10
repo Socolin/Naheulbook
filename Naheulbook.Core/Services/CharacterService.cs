@@ -1,16 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Notifications;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
-using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
-using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Services
 {
@@ -41,7 +39,7 @@ namespace Naheulbook.Core.Services
         private readonly ICharacterUtil _characterUtil;
         private readonly IMapper _mapper;
         private readonly ICharacterModifierUtil _characterModifierUtil;
-        private readonly IChangeNotifier _changeNotifier;
+        private readonly INotificationSessionFactory _notificationSessionFactory;
 
         public CharacterService(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -51,7 +49,7 @@ namespace Naheulbook.Core.Services
             ICharacterHistoryUtil characterHistoryUtil,
             IMapper mapper,
             ICharacterModifierUtil characterModifierUtil,
-            IChangeNotifier changeNotifier,
+            INotificationSessionFactory notificationSessionFactory,
             ICharacterUtil characterUtil
         )
         {
@@ -62,7 +60,7 @@ namespace Naheulbook.Core.Services
             _characterHistoryUtil = characterHistoryUtil;
             _mapper = mapper;
             _characterModifierUtil = characterModifierUtil;
-            _changeNotifier = changeNotifier;
+            _notificationSessionFactory = notificationSessionFactory;
             _characterUtil = characterUtil;
         }
 
@@ -122,7 +120,9 @@ namespace Naheulbook.Core.Services
                 await uow.CompleteAsync();
             }
 
-            await _changeNotifier.NotifyCharacterAddItemAsync(characterId, item);
+            var session = _notificationSessionFactory.CreateSession();
+            session.NotifyCharacterAddItem(characterId, item);
+            await session.CommitAsync();
 
             return item;
         }
@@ -174,7 +174,7 @@ namespace Naheulbook.Core.Services
 
         public async Task UpdateCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterRequest request)
         {
-            var notificationTasks = new List<Task>();
+            var notificationSession = _notificationSessionFactory.CreateSession();
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -184,12 +184,12 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-                _characterUtil.ApplyCharactersChange(executionContext, request, character, notificationTasks);
+                _characterUtil.ApplyCharactersChange(executionContext, request, character, notificationSession);
 
                 await uow.CompleteAsync();
             }
 
-            await Task.WhenAll(notificationTasks);
+            await notificationSession.CommitAsync();
         }
 
         public async Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request)
@@ -204,9 +204,11 @@ namespace Naheulbook.Core.Services
 
                 character.StatBonusAd = request.Stat;
 
-                await _changeNotifier.NotifyCharacterSetStatBonusAdAsync(character.Id, request.Stat);
-
                 await uow.CompleteAsync();
+
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyCharacterSetStatBonusAd(characterId, request.Stat);
+                await session.CommitAsync();
             }
         }
 
@@ -228,7 +230,9 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyCharacterAddModifierAsync(characterId, _mapper.Map<ActiveStatsModifier>(characterModifier));
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyCharacterAddModifier(characterId, characterModifier);
+                await session.CommitAsync();
 
                 return characterModifier;
             }
@@ -253,7 +257,9 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyCharacterRemoveModifierAsync(characterId, characterModifierId);
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyCharacterRemoveModifier(characterId, characterModifierId);
+                await session.CommitAsync();
             }
         }
 
@@ -275,7 +281,9 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyUpdateCharacterModifierAsync(characterId, _mapper.Map<ActiveStatsModifier>(characterModifier));
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyCharacterUpdateModifier(characterId, characterModifier);
+                await session.CommitAsync();
 
                 return characterModifier;
             }

@@ -89,6 +89,7 @@ namespace Naheulbook.Web
             services.AddSingleton<ICharacterUtil, CharacterUtil>();
             services.AddSingleton<ICharacterModifierUtil, CharacterModifierUtil>();
             services.AddSingleton<ICharacterHistoryUtil, CharacterHistoryUtil>();
+            services.AddSingleton<IDurationUtil, DurationUtil>();
             services.AddSingleton<IEventService, EventService>();
             services.AddSingleton<IEffectService, EffectService>();
             services.AddSingleton<IGodService, GodService>();

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using Naheulbook.Core.Models;
@@ -99,6 +101,34 @@ namespace Naheulbook.Web.Mappers
             CreateMap<IHistoryEntry, HistoryEntryResponse>()
                 .Include<GroupHistoryEntry, GroupHistoryEntryResponse>()
                 .Include<CharacterHistoryEntry, CharacterHistoryEntryResponse>();
+
+            CreateMap<PostGroupUpdateDurationsRequest, FighterDurationChanges>()
+                .ConstructUsing((request, context) =>
+                {
+                    if (request.MonsterId.HasValue)
+                        return new MonsterUpdateDuration {MonsterId = request.MonsterId.Value, Changes = context.Mapper.Map<IList<IDurationChange>>(request.Changes)};
+                    if (request.CharacterId.HasValue)
+                        return new CharacterUpdateDuration {CharacterId = request.CharacterId.Value, Changes = context.Mapper.Map<IList<IDurationChange>>(request.Changes)};
+                    throw new NotSupportedException("Either MonsterId or CharacterId should be set");
+                });
+            CreateMap<DurationChangeRequest, IDurationChange>()
+                .ConstructUsing((request, context) => {
+                    switch (request.Type)
+                    {
+                        case ItemModifierDurationChange.TypeValue:
+                            if (!request.ItemId.HasValue)
+                                throw new NotSupportedException($"Missing itemId when converting DurationChange of type `{request.Type}`");
+                            return new ItemModifierDurationChange {ItemId = request.ItemId.Value, Modifier = request.Modifier};
+                        case ItemLifetimeDurationChange.TypeValue:
+                            if (!request.ItemId.HasValue)
+                                throw new NotSupportedException($"Missing itemId when converting DurationChange of type `{request.Type}`");
+                            return new ItemLifetimeDurationChange {ItemId = request.ItemId.Value, LifeTime = request.LifeTime};
+                        case ModifierDurationChange.TypeValue:
+                            return new ModifierDurationChange {Modifier = request.Modifier};
+                        default:
+                            throw new NotSupportedException($"Invalid ChangeDurationType `{request.Type}`");
+                    }
+                });
 
             CreateMap<Item, ItemPartialResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data)))

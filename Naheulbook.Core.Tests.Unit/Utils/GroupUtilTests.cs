@@ -1,7 +1,6 @@
-using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Models;
-using Naheulbook.Core.Services;
+using Naheulbook.Core.Notifications;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
@@ -18,26 +17,26 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         private const int GroupId = 8;
 
         private IJsonUtil _jsonUtil;
-        private IChangeNotifier _changeNotifier;
         private IGroupHistoryUtil _groupHistoryUtil;
         private GroupUtil _util;
+        private INotificationSession _notificationSession;
 
         [SetUp]
         public void SetUp()
         {
             _jsonUtil = Substitute.For<IJsonUtil>();
-            _changeNotifier = Substitute.For<IChangeNotifier>();
             _groupHistoryUtil = Substitute.For<IGroupHistoryUtil>();
 
             _util = new GroupUtil(
                 _jsonUtil,
-                _changeNotifier,
                 _groupHistoryUtil
             );
+
+            _notificationSession = Substitute.For<INotificationSession>();
         }
 
         [Test]
-        public async Task ApplyChangesAndNotifyAsync_WhenMankdebolIsSet_UpdateValue_LogInGroupHistory()
+        public void ApplyChangesAndNotifyAsync_WhenMankdebolIsSet_UpdateValue_LogInGroupHistory()
         {
             var group = new Group {Data = GroupDataJson};
             var groupData = new GroupData();
@@ -54,7 +53,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _jsonUtil.Serialize(groupData)
                 .Returns(UpdatedGroupDataJson);
 
-            await _util.ApplyChangesAndNotifyAsync(group, request);
+            _util.ApplyChangesAndNotify(group, request, _notificationSession);
 
             group.Data.Should().BeEquivalentTo(UpdatedGroupDataJson);
             groupData.Mankdebol.Should().Be(4);
@@ -62,7 +61,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         }
 
         [Test]
-        public async Task ApplyChangesAndNotifyAsync_WhenDebilibeukIsSet_UpdateValue_LogInGroupHistory()
+        public void ApplyChangesAndNotifyAsync_WhenDebilibeukIsSet_UpdateValue_LogInGroupHistory()
         {
             var group = new Group {Data = GroupDataJson, Id = GroupId};
             var groupData = new GroupData();
@@ -79,7 +78,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _jsonUtil.Serialize(groupData)
                 .Returns(UpdatedGroupDataJson);
 
-            await _util.ApplyChangesAndNotifyAsync(group, request);
+            _util.ApplyChangesAndNotify(group, request, _notificationSession);
 
             group.Data.Should().BeEquivalentTo(UpdatedGroupDataJson);
             groupData.Debilibeuk.Should().Be(4);
@@ -87,7 +86,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         }
 
         [Test]
-        public async Task ApplyChangesAndNotifyAsync_WhenDateIsSet_UpdateValue_LogInGroupHistory()
+        public void ApplyChangesAndNotifyAsync_WhenDateIsSet_UpdateValue_LogInGroupHistory()
         {
             var group = new Group {Data = GroupDataJson, Id = GroupId};
             var groupData = new GroupData();
@@ -107,7 +106,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _jsonUtil.Serialize(groupData)
                 .Returns(UpdatedGroupDataJson);
 
-            await _util.ApplyChangesAndNotifyAsync(group, request);
+            _util.ApplyChangesAndNotify(group, request, _notificationSession);
 
             group.Data.Should().BeEquivalentTo(UpdatedGroupDataJson);
             groupData.Date.Day.Should().Be(8);
@@ -115,7 +114,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         }
 
         [Test]
-        public async Task ApplyChangesAndNotifyAsync_ShouldNotifyGroupDataChange()
+        public void ApplyChangesAndNotifyAsync_ShouldNotifyGroupDataChange()
         {
             var groupData = new GroupData();
             var group = new Group {Data = GroupDataJson, Id = GroupId};
@@ -123,9 +122,10 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _jsonUtil.Deserialize<GroupData>(GroupDataJson)
                 .Returns(groupData);
 
-            await _util.ApplyChangesAndNotifyAsync(group, new PatchGroupRequest());
+            _util.ApplyChangesAndNotify(group, new PatchGroupRequest(), _notificationSession);
 
-            await _changeNotifier.Received(1).NotifyGroupChangeGroupDataAsync(GroupId, groupData);
+
+            _notificationSession.Received(1).NotifyGroupChangeGroupData(GroupId, groupData);
         }
     }
 }

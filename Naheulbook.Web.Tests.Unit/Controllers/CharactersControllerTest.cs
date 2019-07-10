@@ -59,7 +59,8 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetCharacterDetailsAsync_ShouldLoadCharacterFromService_ThenMapItIntoResponse()
         {
             const int characterId = 2;
-            var character = new Character();
+            const int groupMasterId = 3;
+            var character = new Character {Group = new Group {MasterId = groupMasterId}};
             var characterResponse = new CharacterResponse();
 
             _characterService.LoadCharacterDetailsAsync(_executionContext, characterId)

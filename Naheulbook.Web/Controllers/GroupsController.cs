@@ -405,5 +405,27 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
+
+        [HttpPost("{GroupId:int:min(1)}/updateDurations")]
+        public async Task<ActionResult<List<MonsterResponse>>> PostUpdateDurationsAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            IList<PostGroupUpdateDurationsRequest> request
+        )
+        {
+            try
+            {
+                await _groupService.UpdateDurationsAsync(executionContext, groupId, request);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }

@@ -73,6 +73,9 @@ Feature: Character
 
   Scenario: Load a character details
     Given a JWT for a user
+    And a group
+
+    Given a JWT for a user
     Given a character with all possible data
     And an item template with all optional fields set
     And an item based on that item template in the character inventory

@@ -53,6 +53,18 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddCharacterModifier();
         }
 
+        [Given(@"an (inactive|active) (non-reusable|reusable) character modifier active for (\d) lap")]
+        public void GivenACharacterModifier(string active, string reusable, int lapCount)
+        {
+            _testDataUtil.AddCharacterModifier(c =>
+            {
+                c.Reusable = reusable == "reusable";
+                c.IsActive = active == "active";
+                c.LapCount = lapCount;
+                c.CurrentLapCount = lapCount;
+            });
+        }
+
         [Given(@"an inactive reusable character modifier that last 2 combat")]
         public void GivenAnInactiveReusableCharacterModifierThatLast2Combat()
         {
