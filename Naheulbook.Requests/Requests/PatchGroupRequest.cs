@@ -5,6 +5,7 @@ namespace Naheulbook.Requests.Requests
         public int? Mankdebol { get; set; }
         public int? Debilibeuk { get; set; }
         public NhbkDateRequest Date { get; set; }
+        public int? FighterIndex { get; set; }
     }
 
     public class NhbkDateRequest

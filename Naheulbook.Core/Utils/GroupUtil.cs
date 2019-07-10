@@ -52,6 +52,11 @@ namespace Naheulbook.Core.Utils
                 groupData.Date = newDate;
             }
 
+            if (request.FighterIndex != null)
+            {
+                groupData.CurrentFighterIndex = request.FighterIndex.Value;
+            }
+
             notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
 
             group.Data = _jsonUtil.Serialize(groupData);
