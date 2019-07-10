@@ -16,6 +16,7 @@ namespace Naheulbook.Core.Services
         Task<List<Loot>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId);
         Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request);
+        Task DeleteLootAsync(NaheulbookExecutionContext executionContext, int lootId);
     }
 
     public class LootService : ILootService
@@ -101,7 +102,7 @@ namespace Naheulbook.Core.Services
                 if (group == null)
                     throw new GroupNotFoundException(loot.GroupId);
 
-                _authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, loot.Group);
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
 
                 loot.IsVisibleForPlayer = request.VisibleForPlayer;
 
@@ -122,6 +123,35 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
                 await session.CommitAsync();
+            }
+        }
+
+        public async Task DeleteLootAsync(NaheulbookExecutionContext executionContext, int lootId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var loot = await uow.Loots.GetAsync(lootId);
+                if (loot == null)
+                    throw new LootNotFoundException(lootId);
+
+                var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+                if (group == null)
+                    throw new GroupNotFoundException(loot.GroupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
+
+                uow.Loots.Remove(loot);
+                await uow.CompleteAsync();
+
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyGroupDeleteLoot(group.Id, lootId);
+                if (loot.IsVisibleForPlayer)
+                {
+                    foreach (var character in group.Characters)
+                        session.NotifyCharacterHideLoot(character.Id, loot.Id);
+                }
+                await session.CommitAsync();
+
             }
         }
     }

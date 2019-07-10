@@ -55,3 +55,11 @@ Feature: Loot
     }
     """
     Then the response status code is 204
+
+  Scenario: Can delete a loot
+    Given a JWT for a user
+    Given a group
+    And a loot
+
+    When performing a DELETE to the url "/api/v2/loots/${Loot.Id}" with the current jwt
+    Then the response status code is 204
