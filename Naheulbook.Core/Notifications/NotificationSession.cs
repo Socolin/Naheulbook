@@ -121,10 +121,12 @@ namespace Naheulbook.Core.Notifications
 
         public void NotifyCharacterGmChangeData(Character character, CharacterGmData gmData)
         {
+            _packets.Add(_packetBuilder.BuildCharacterChangeData(character, gmData));
         }
 
         public void NotifyCharacterGmChangeActive(Character character)
         {
+            _packets.Add(_packetBuilder.BuildCharacterChangeActive(character));
         }
 
         public void NotifyItemDataChanged(Item item)
