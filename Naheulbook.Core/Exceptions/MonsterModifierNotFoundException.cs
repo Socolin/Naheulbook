@@ -5,11 +5,11 @@ using System;
 
 namespace Naheulbook.Core.Exceptions
 {
-    public class MonsterModifierNotReusableException : Exception
+    public class MonsterModifierNotFoundException : Exception
     {
         public int MonsterModifierId { get; }
 
-        public MonsterModifierNotReusableException(int characterModifierId)
+        public MonsterModifierNotFoundException(int characterModifierId)
         {
             MonsterModifierId = characterModifierId;
         }

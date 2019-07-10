@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Data { get; set; }
-        public DateTime? Dead { get; set; }
+        public DateTimeOffset? Dead { get; set; }
 
         public string Modifiers { get; set; }
 

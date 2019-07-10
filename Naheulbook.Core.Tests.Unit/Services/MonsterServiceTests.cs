@@ -25,6 +25,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private IActiveStatsModifierUtil _activeStatsModifierUtil;
         private FakeNotificationSessionFactory _notificationSessionFactory;
         private IJsonUtil _jsonUtil;
+        private ITimeService _timeService;
         private MonsterService _service;
 
         [SetUp]
@@ -35,13 +36,15 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _activeStatsModifierUtil = Substitute.For<IActiveStatsModifierUtil>();
             _notificationSessionFactory = new FakeNotificationSessionFactory();
             _jsonUtil = Substitute.For<IJsonUtil>();
+            _timeService = Substitute.For<ITimeService>();
 
             _service = new MonsterService(
                 _unitOfWorkFactory,
                 _authorizationUtil,
                 _activeStatsModifierUtil,
                 _notificationSessionFactory,
-                _jsonUtil
+                _jsonUtil,
+                _timeService
             );
         }
 

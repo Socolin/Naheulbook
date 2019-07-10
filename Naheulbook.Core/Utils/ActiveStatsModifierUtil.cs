@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
 
@@ -49,6 +50,8 @@ namespace Naheulbook.Core.Utils
             var deletedModifier = modifiers.FirstOrDefault(modifier => modifier.Id == modifierId);
             if (deletedModifier != null)
                 modifiers.Remove(deletedModifier);
+            else
+                throw new MonsterModifierNotFoundException(modifierId);
         }
     }
 }

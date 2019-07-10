@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper.Features;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Data.Factories;

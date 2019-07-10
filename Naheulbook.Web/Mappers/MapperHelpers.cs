@@ -46,5 +46,10 @@ namespace Naheulbook.Web.Mappers
         {
             return date?.ToString("s");
         }
+
+        public static string FromDateTimeToString(DateTimeOffset? date)
+        {
+            return date?.ToString("s");
+        }
     }
 }

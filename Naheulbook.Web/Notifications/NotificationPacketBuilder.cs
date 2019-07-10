@@ -224,6 +224,11 @@ namespace Naheulbook.Web.Notifications
             return BuildLootChange(lootId, "updateVisibility", visibleForPlayer);
         }
 
+        public INotificationPacket BuildLootAddMonster(int lootId, Monster monster)
+        {
+            return BuildLootChange(lootId, "addMonster", _mapper.Map<MonsterResponse>(monster));
+        }
+
         public INotificationPacket BuildMonsterAddModifier(int monsterId, ActiveStatsModifier modifier)
         {
             return BuildMonsterChange(monsterId, "addModifier", modifier);

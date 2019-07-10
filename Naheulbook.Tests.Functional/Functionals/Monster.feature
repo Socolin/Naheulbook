@@ -190,3 +190,22 @@ Feature: Monster
 
     When performing a DELETE to the url "/api/v2/monsters/${Monster.Id}/modifiers/8" with the current jwt
     Then the response status code is 204
+
+  Scenario: Can delete a monster
+    Given a JWT for a user
+    Given a group
+    And a monster
+
+    When performing a DELETE to the url "/api/v2/monsters/${Monster.Id}/" with the current jwt
+    Then the response status code is 204
+
+  Scenario: Can kill a monster
+    Given a JWT for a user
+    Given a group
+    And a monster
+
+    When performing a POST to the url "/api/v2/monsters/${Monster.Id}/kill" with the following json content and the current jwt
+    """
+    {}
+    """
+    Then the response status code is 204
