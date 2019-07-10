@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Naheulbook.Core.Configurations;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Mappers;
+using Naheulbook.Core.Notifications;
 using Naheulbook.Core.Services;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.DbContexts;
@@ -28,6 +29,7 @@ using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Hubs;
 using Naheulbook.Web.Middlewares;
+using Naheulbook.Web.Notifications;
 using Naheulbook.Web.Services;
 using Newtonsoft.Json;
 
@@ -128,8 +130,11 @@ namespace Naheulbook.Web
             services.AddSingleton<IRngUtil, RngUtil>();
 
             services.AddSingleton<IJwtService, JwtService>();
-            services.AddSingleton<IChangeNotifier, ChangeNotifier>();
             services.AddSingleton<IHubGroupUtil, HubGroupUtil>();
+
+            services.AddSingleton<INotificationPacketBuilder, NotificationPacketBuilder>();
+            services.AddSingleton<INotificationSessionFactory, NotificationSessionFactory>();
+            services.AddSingleton<INotificationSender, NotificationSender>();
 
             services.AddSingleton<IFacebookClient, FacebookClient>();
             services.AddSingleton<IGoogleClient, GoogleClient>();

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Notifications;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
@@ -21,17 +22,17 @@ namespace Naheulbook.Core.Services
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IAuthorizationUtil _authorizationUtil;
-        private readonly IChangeNotifier _changeNotifier;
+        private readonly INotificationSessionFactory _notificationSessionFactory;
 
         public LootService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IAuthorizationUtil authorizationUtil,
-            IChangeNotifier changeNotifier
+            INotificationSessionFactory notificationSessionFactory
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizationUtil = authorizationUtil;
-            _changeNotifier = changeNotifier;
+            _notificationSessionFactory = notificationSessionFactory;
         }
 
         public async Task<Loot> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request)
@@ -104,21 +105,23 @@ namespace Naheulbook.Core.Services
 
                 loot.IsVisibleForPlayer = request.VisibleForPlayer;
 
-                await _changeNotifier.NotifyLootUpdateVisibilityAsync(lootId, request.VisibleForPlayer);
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyLootUpdateVisibility(lootId, request.VisibleForPlayer);
 
                 if (loot.IsVisibleForPlayer)
                 {
                     var fullLootData = await uow.Loots.GetWithAllDataAsync(lootId);
                     foreach (var character in group.Characters)
-                        await _changeNotifier.NotifyCharacterShowLootAsync(character.Id, fullLootData);
+                        session.NotifyCharacterShowLoot(character.Id, fullLootData);
                 }
                 else
                 {
                     foreach (var character in group.Characters)
-                        await _changeNotifier.NotifyCharacterHideLootAsync(character.Id, loot.Id);
+                        session.NotifyCharacterHideLoot(character.Id, loot.Id);
                 }
 
                 await uow.CompleteAsync();
+                await session.CommitAsync();
             }
         }
     }

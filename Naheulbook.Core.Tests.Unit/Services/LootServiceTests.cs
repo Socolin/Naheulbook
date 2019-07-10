@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Notifications;
 using Naheulbook.Core.Services;
 using Naheulbook.Core.Tests.Unit.Exceptions;
 using Naheulbook.Core.Tests.Unit.TestUtils;
@@ -19,7 +20,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
     {
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private IAuthorizationUtil _authorizationUtil;
-        private IChangeNotifier _changeNotifier;
+        private INotificationSessionFactory _notificationSessionFactory;
         private LootService _service;
 
         [SetUp]
@@ -27,9 +28,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
-            _changeNotifier = Substitute.For<IChangeNotifier>();
+            _notificationSessionFactory = Substitute.For<INotificationSessionFactory>();
 
-            _service = new LootService(_unitOfWorkFactory, _authorizationUtil, _changeNotifier);
+            _service = new LootService(_unitOfWorkFactory, _authorizationUtil, _notificationSessionFactory);
         }
 
         [Test]

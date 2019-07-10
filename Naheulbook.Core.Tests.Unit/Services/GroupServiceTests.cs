@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentAssertions;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -10,6 +11,7 @@ using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -19,7 +21,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
     {
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private IAuthorizationUtil _authorizationUtil;
-        private IChangeNotifier _changeNotifier;
+        private FakeNotificationSessionFactory _notificationSessionFactory;
+        private IMapper _mapper;
         private IGroupUtil _groupUtil;
         private GroupService _service;
 
@@ -28,13 +31,15 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
-            _changeNotifier = Substitute.For<IChangeNotifier>();
+            _notificationSessionFactory = new FakeNotificationSessionFactory();
+            _mapper = Substitute.For<IMapper>();
             _groupUtil = Substitute.For<IGroupUtil>();
 
             _service = new GroupService(
                 _unitOfWorkFactory,
                 _authorizationUtil,
-                _changeNotifier,
+                _notificationSessionFactory,
+                _mapper,
                 _groupUtil
             );
         }
@@ -126,8 +131,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Received.InOrder(() =>
             {
-                _groupUtil.ApplyChangesAndNotifyAsync(group, request);
+                _groupUtil.ApplyChangesAndNotify(group, request, _notificationSessionFactory.NotificationSession);
                 _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _notificationSessionFactory.NotificationSession.CommitAsync();
             });
         }
 
@@ -239,7 +245,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             await _service.EditGroupLocationAsync(naheulbookExecutionContext, groupId, request);
 
-            await _changeNotifier.Received(1).NotifyGroupChangeLocationAsync(groupId, location);
+            _notificationSessionFactory.NotificationSession.Received(1).NotifyGroupChangeLocation(groupId, location);
+            await _notificationSessionFactory.NotificationSession.Received(1).CommitAsync();
         }
 
         [Test]
@@ -281,8 +288,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             var groupInvite = await _service.CreateInviteAsync(new NaheulbookExecutionContext(), groupId, request);
 
-            await _changeNotifier.Received(1).NotifyCharacterGroupInviteAsync(characterId, groupInvite);
-            await _changeNotifier.Received(1).NotifyGroupCharacterInviteAsync(groupId, groupInvite);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyCharacterGroupInvite(characterId, groupInvite);
+                _notificationSessionFactory.NotificationSession.NotifyGroupCharacterInvite(groupId, groupInvite);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
         [Test]
@@ -399,8 +410,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             await _service.CancelOrRejectInviteAsync(executionContext, groupId, characterId);
 
-            await _changeNotifier.Received(1).NotifyGroupCancelGroupInviteAsync(groupId, groupInvite);
-            await _changeNotifier.Received(1).NotifyCharacterCancelGroupInviteAsync(characterId, groupInvite);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyCharacterCancelGroupInvite(characterId, groupInvite);
+                _notificationSessionFactory.NotificationSession.NotifyGroupCancelGroupInvite(groupId, groupInvite);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
         [Test]
@@ -477,8 +492,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             await _service.AcceptInviteAsync(executionContext, groupId, characterId);
 
-            await _changeNotifier.Received(1).NotifyGroupAcceptGroupInviteAsync(groupId, groupInvite);
-            await _changeNotifier.Received(1).NotifyCharacterAcceptGroupInviteAsync(characterId, groupInvite);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyCharacterAcceptGroupInvite(characterId, groupInvite);
+                _notificationSessionFactory.NotificationSession.NotifyGroupAcceptGroupInvite(groupId, groupInvite);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
         [Test]

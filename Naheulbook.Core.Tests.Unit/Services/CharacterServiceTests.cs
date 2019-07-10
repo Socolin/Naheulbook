@@ -12,7 +12,6 @@ using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
-using Naheulbook.Shared.TransientModels;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -27,7 +26,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private ICharacterHistoryUtil _characterHistoryUtil;
         private IMapper _mapper;
         private ICharacterModifierUtil _characterModifierUtil;
-        private IChangeNotifier _changeNotifier;
+        private FakeNotificationSessionFactory _notificationSessionFactory;
         private ICharacterUtil _characterUtil;
         private CharacterService _service;
 
@@ -41,7 +40,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
             _mapper = Substitute.For<IMapper>();
             _characterModifierUtil = Substitute.For<ICharacterModifierUtil>();
-            _changeNotifier = Substitute.For<IChangeNotifier>();
+            _notificationSessionFactory = new FakeNotificationSessionFactory();
             _characterUtil = Substitute.For<ICharacterUtil>();
 
             _service = new CharacterService(
@@ -52,7 +51,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _characterHistoryUtil,
                 _mapper,
                 _characterModifierUtil,
-                _changeNotifier,
+                _notificationSessionFactory,
                 _characterUtil
             );
         }
@@ -132,7 +131,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             await _service.AddItemToCharacterAsync(executionContext, characterId, request);
 
-            await _changeNotifier.Received(1).NotifyCharacterAddItemAsync(characterId, expectedItem);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyCharacterAddItem(characterId, expectedItem);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
         [Test]
@@ -310,7 +313,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
             await _service.SetCharacterAdBonusStatAsync(executionContext, characterId, new PutStatBonusAdRequest {Stat = "some-stat"});
 
             await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
-            await _changeNotifier.Received(1).NotifyCharacterSetStatBonusAdAsync(character.Id, "some-stat");
+
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyCharacterSetStatBonusAd(characterId, "some-stat");
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
         [Test]
@@ -374,18 +382,19 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterId = 4;
             var character = new Character();
             var characterModifier = new CharacterModifier();
-            var activeStatsModifier = new ActiveStatsModifier();
 
             _mapper.Map<CharacterModifier>(Arg.Any<AddCharacterModifierRequest>())
                 .Returns(characterModifier);
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
-            _mapper.Map<ActiveStatsModifier>(Arg.Any<CharacterModifier>())
-                .Returns(activeStatsModifier);
 
             await _service.AddModifiersAsync(new NaheulbookExecutionContext(), characterId, new AddCharacterModifierRequest());
 
-            await _changeNotifier.Received(1).NotifyCharacterAddModifierAsync(characterId, activeStatsModifier);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyCharacterAddModifier(characterId, characterModifier);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
         [Test]
@@ -475,8 +484,6 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterModifierId = 2;
             var characterHistoryEntry = new CharacterHistoryEntry();
 
-            await _changeNotifier.NotifyCharacterRemoveModifierAsync(characterId, characterModifierId);
-
             _characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId)
                 .Returns(characterHistoryEntry);
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
@@ -506,7 +513,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             await _service.DeleteModifiersAsync(new NaheulbookExecutionContext(), characterId, characterModifierId);
 
-            await _changeNotifier.Received(1).NotifyCharacterRemoveModifierAsync(characterId, characterModifierId);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyCharacterRemoveModifier(characterId, characterModifierId);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
         [Test]
@@ -574,18 +585,19 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterId = 4;
             const int characterModifierId = 2;
             var characterModifier = new CharacterModifier();
-            var expectedStatsModifier = new ActiveStatsModifier();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
                 .Returns(new Character());
             _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(Arg.Any<int>(), Arg.Any<int>())
                 .Returns(characterModifier);
-            _mapper.Map<ActiveStatsModifier>(characterModifier)
-                .Returns(expectedStatsModifier);
 
             await _service.ToggleModifiersAsync(new NaheulbookExecutionContext(), characterId, characterModifierId);
 
-            await _changeNotifier.Received(1).NotifyUpdateCharacterModifierAsync(characterId, expectedStatsModifier);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyCharacterUpdateModifier(characterId, characterModifier);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
         [Test]

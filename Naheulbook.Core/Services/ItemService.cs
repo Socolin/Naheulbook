@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Notifications;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
@@ -27,7 +28,7 @@ namespace Naheulbook.Core.Services
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IItemFactory _itemFactory;
-        private readonly IChangeNotifier _changeNotifier;
+        private readonly INotificationSessionFactory _notificationSessionFactory;
         private readonly IAuthorizationUtil _authorizationUtil;
         private readonly IItemUtil _itemUtil;
         private readonly IJsonUtil _jsonUtil;
@@ -35,7 +36,7 @@ namespace Naheulbook.Core.Services
         public ItemService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IItemFactory itemFactory,
-            IChangeNotifier changeNotifier,
+            INotificationSessionFactory notificationSessionFactory,
             IAuthorizationUtil authorizationUtil,
             IItemUtil itemUtil,
             IJsonUtil jsonUtil
@@ -43,7 +44,7 @@ namespace Naheulbook.Core.Services
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _itemFactory = itemFactory;
-            _changeNotifier = changeNotifier;
+            _notificationSessionFactory = notificationSessionFactory;
             _authorizationUtil = authorizationUtil;
             _itemUtil = itemUtil;
             _jsonUtil = jsonUtil;
@@ -84,7 +85,9 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyItemDataChangedAsync(item);
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyItemDataChanged(item);
+                await session.CommitAsync();
 
                 return item;
             }
@@ -104,7 +107,9 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyItemModifiersChangedAsync(item);
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyItemModifiersChanged(item);
+                await session.CommitAsync();
 
                 return item;
             }
@@ -124,7 +129,9 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyEquipItemAsync(item);
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyEquipItem(item);
+                await session.CommitAsync();
 
                 return item;
             }
@@ -144,7 +151,9 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyItemChangeContainer(item);
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyItemChangeContainer(item);
+                await session.CommitAsync();
 
                 return item;
             }

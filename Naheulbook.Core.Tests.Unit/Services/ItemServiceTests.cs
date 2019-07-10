@@ -24,7 +24,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
     {
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private IItemFactory _itemFactory;
-        private IChangeNotifier _changeNotifier;
+        private FakeNotificationSessionFactory _notificationSessionFactory;
         private IAuthorizationUtil _authorizationUtil;
         private IItemUtil _itemUtil;
         private IJsonUtil _jsonUtil;
@@ -35,7 +35,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _itemFactory = Substitute.For<IItemFactory>();
-            _changeNotifier = Substitute.For<IChangeNotifier>();
+            _notificationSessionFactory = new FakeNotificationSessionFactory();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
             _itemUtil = Substitute.For<IItemUtil>();
             _jsonUtil = Substitute.For<IJsonUtil>();
@@ -43,7 +43,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _service = new ItemService(
                 _unitOfWorkFactory,
                 _itemFactory,
-                _changeNotifier,
+                _notificationSessionFactory,
                 _authorizationUtil,
                 _itemUtil,
                 _jsonUtil
@@ -122,7 +122,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, new JObject());
 
-            await _changeNotifier.Received(1).NotifyItemDataChangedAsync(item);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyItemDataChanged(item);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
         [Test]
@@ -175,7 +179,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             await _service.UpdateItemModifiersAsync(new NaheulbookExecutionContext(), itemId, new List<ActiveStatsModifier>());
 
-            await _changeNotifier.Received(1).NotifyItemModifiersChangedAsync(item);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyItemModifiersChanged(item);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
         [Test]
@@ -225,7 +233,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             await _service.EquipItemAsync(new NaheulbookExecutionContext(), itemId, new EquipItemRequest());
 
-            await _changeNotifier.Received(1).NotifyEquipItemAsync(item);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyEquipItem(item);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
 
 
@@ -288,7 +300,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             await _service.ChangeItemContainerAsync(new NaheulbookExecutionContext(), itemId, new ChangeItemContainerRequest());
 
-            await _changeNotifier.Received(1).NotifyItemChangeContainer(item);
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyItemChangeContainer(item);
+                _notificationSessionFactory.NotificationSession.CommitAsync();
+            });
         }
     }
 }

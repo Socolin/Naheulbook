@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
-using Naheulbook.Core.Services;
+using Naheulbook.Core.Notifications;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Utils;
@@ -11,25 +10,26 @@ namespace Naheulbook.Core.Utils
 {
     public interface IGroupUtil
     {
-        Task ApplyChangesAndNotifyAsync(Group group, PatchGroupRequest request);
-        Task StartCombatAsync(Group group);
-        Task EndCombatAsync(Group group);
+        void ApplyChangesAndNotify(Group group, PatchGroupRequest request, INotificationSession notificationSession);
+        void StartCombat(Group group, INotificationSession notificationSession);
+        void EndCombat(Group group, INotificationSession notificationSession);
     }
 
     public class GroupUtil : IGroupUtil
     {
         private readonly IJsonUtil _jsonUtil;
-        private readonly IChangeNotifier _changeNotifier;
         private readonly IGroupHistoryUtil _groupHistoryUtil;
 
-        public GroupUtil(IJsonUtil jsonUtil, IChangeNotifier changeNotifier, IGroupHistoryUtil groupHistoryUtil)
+        public GroupUtil(
+            IJsonUtil jsonUtil,
+            IGroupHistoryUtil groupHistoryUtil
+        )
         {
             _jsonUtil = jsonUtil;
-            _changeNotifier = changeNotifier;
             _groupHistoryUtil = groupHistoryUtil;
         }
 
-        public async Task ApplyChangesAndNotifyAsync(Group group, PatchGroupRequest request)
+        public void ApplyChangesAndNotify(Group group, PatchGroupRequest request, INotificationSession notificationSession)
         {
             var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
 
@@ -52,12 +52,12 @@ namespace Naheulbook.Core.Utils
                 groupData.Date = newDate;
             }
 
-            await _changeNotifier.NotifyGroupChangeGroupDataAsync(group.Id, groupData);
+            notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
 
             group.Data = _jsonUtil.Serialize(groupData);
         }
 
-        public async Task StartCombatAsync(Group group)
+        public void StartCombat(Group group, INotificationSession notificationSession)
         {
             var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
             if (groupData.InCombat == true)
@@ -75,13 +75,13 @@ namespace Naheulbook.Core.Utils
 
             group.AddHistoryEntry(_groupHistoryUtil.CreateLogStartCombat(group));
 
-            await _changeNotifier.NotifyGroupChangeGroupDataAsync(group.Id, groupData);
-            await _changeNotifier.NotifyGroupAddLoot(group.Id, loot);
+            notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
+            notificationSession.NotifyGroupAddLoot(group.Id, loot);
 
             group.Data = _jsonUtil.Serialize(groupData);
         }
 
-        public async Task EndCombatAsync(Group group)
+        public void EndCombat(Group group, INotificationSession notificationSession)
         {
             var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
             if (groupData.InCombat != true)
@@ -91,7 +91,7 @@ namespace Naheulbook.Core.Utils
 
             group.AddHistoryEntry(_groupHistoryUtil.CreateLogEndCombat(group));
 
-            await _changeNotifier.NotifyGroupChangeGroupDataAsync(group.Id, groupData);
+            notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
 
             group.Data = _jsonUtil.Serialize(groupData);
         }

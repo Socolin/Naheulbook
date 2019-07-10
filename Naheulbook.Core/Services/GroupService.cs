@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Notifications;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Services
 {
@@ -29,19 +32,22 @@ namespace Naheulbook.Core.Services
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IAuthorizationUtil _authorizationUtil;
-        private readonly IChangeNotifier _changeNotifier;
+        private readonly IMapper _mapper;
+        private readonly INotificationSessionFactory _notificationSessionFactory;
         private readonly IGroupUtil _groupUtil;
 
         public GroupService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IAuthorizationUtil authorizationUtil,
-            IChangeNotifier changeNotifier,
+            INotificationSessionFactory notificationSessionFactory,
+            IMapper mapper,
             IGroupUtil groupUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizationUtil = authorizationUtil;
-            _changeNotifier = changeNotifier;
+            _mapper = mapper;
+            _notificationSessionFactory = notificationSessionFactory;
             _groupUtil = groupUtil;
         }
 
@@ -89,6 +95,8 @@ namespace Naheulbook.Core.Services
 
         public async Task EditGroupPropertiesAsync(NaheulbookExecutionContext executionContext, int groupId, PatchGroupRequest request)
         {
+            var notificationSession = _notificationSessionFactory.CreateSession();
+
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var group = await uow.Groups.GetAsync(groupId);
@@ -97,10 +105,12 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-                await _groupUtil.ApplyChangesAndNotifyAsync(group, request);
+                _groupUtil.ApplyChangesAndNotify(group, request, notificationSession);
 
                 await uow.CompleteAsync();
             }
+
+            await notificationSession.CommitAsync();
         }
 
         public async Task EditGroupLocationAsync(NaheulbookExecutionContext executionContext, int groupId, PutChangeLocationRequest request)
@@ -121,7 +131,9 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyGroupChangeLocationAsync(groupId, location);
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyGroupChangeLocation(groupId, location);
+                await session.CommitAsync();
             }
         }
 
@@ -182,8 +194,10 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyCharacterGroupInviteAsync(request.CharacterId, groupInvite);
-                await _changeNotifier.NotifyGroupCharacterInviteAsync(groupId, groupInvite);
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyCharacterGroupInvite(request.CharacterId, groupInvite);
+                session.NotifyGroupCharacterInvite(groupId, groupInvite);
+                await session.CommitAsync();
 
                 return groupInvite;
             }
@@ -203,8 +217,10 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyCharacterCancelGroupInviteAsync(characterId, groupInvite);
-                await _changeNotifier.NotifyGroupCancelGroupInviteAsync(groupId, groupInvite);
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyCharacterCancelGroupInvite(characterId, groupInvite);
+                session.NotifyGroupCancelGroupInvite(groupId, groupInvite);
+                await session.CommitAsync();
 
                 return groupInvite;
             }
@@ -228,13 +244,17 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                await _changeNotifier.NotifyCharacterAcceptGroupInviteAsync(characterId, groupInvite);
-                await _changeNotifier.NotifyGroupAcceptGroupInviteAsync(groupId, groupInvite);
+                var notificationSession = _notificationSessionFactory.CreateSession();
+                notificationSession.NotifyCharacterAcceptGroupInvite(characterId, groupInvite);
+                notificationSession.NotifyGroupAcceptGroupInvite(groupId, groupInvite);
+                await notificationSession.CommitAsync();
             }
         }
 
         public async Task StartCombatAsync(NaheulbookExecutionContext executionContext, int groupId)
         {
+            var notificationSession = _notificationSessionFactory.CreateSession();
+
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var group = await uow.Groups.GetAsync(groupId);
@@ -243,14 +263,18 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-                await _groupUtil.StartCombatAsync(group);
+                _groupUtil.StartCombat(group, notificationSession);
 
                 await uow.CompleteAsync();
             }
+
+            await notificationSession.CommitAsync();
         }
 
         public async Task EndCombatAsync(NaheulbookExecutionContext executionContext, int groupId)
         {
+            var notificationSession = _notificationSessionFactory.CreateSession();
+
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var group = await uow.Groups.GetAsync(groupId);
@@ -259,10 +283,13 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-                await _groupUtil.EndCombatAsync(group);
+                _groupUtil.EndCombat(group, notificationSession);
 
                 await uow.CompleteAsync();
             }
+
+            await notificationSession.CommitAsync();
         }
+
     }
 }

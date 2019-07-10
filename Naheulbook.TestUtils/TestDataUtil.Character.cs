@@ -30,7 +30,9 @@ namespace Naheulbook.TestUtils
             AddOrigin();
             AddJob().GetLast<Job>();
             AddJob().GetLast<Job>();
-            AddLocation().AddGroup(ownerId);
+
+            if (!Contains<Group>())
+                AddLocation().AddGroup(ownerId);
 
             AddSpeciality();
 

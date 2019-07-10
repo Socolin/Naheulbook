@@ -15,6 +15,7 @@ namespace Naheulbook.Data.Repositories
         Task<List<IHistoryEntry>> GetHistoryByCharacterIdAsync(int characterId, int? groupId, int page, bool isGm);
         Task<List<Character>> SearchCharacterWithNoGroupByNameWithOriginWithOwner(string filter, int maxCount);
         Task<Character> GetWithOriginWithJobsAsync(int requestCharacterId);
+        Task<List<Character>> GetWithItemsWithModifiersByGroupAndByIdAsync(int groupId, IEnumerable<int> characterIds);
     }
 
     public class CharacterRepository : Repository<Character, NaheulbookDbContext>, ICharacterRepository
@@ -130,6 +131,15 @@ namespace Naheulbook.Data.Repositories
                 .ThenInclude(x => x.Job)
                 .Include(x => x.Origin)
                 .FirstOrDefaultAsync(x => x.Id == characterId);
+        }
+
+        public Task<List<Character>> GetWithItemsWithModifiersByGroupAndByIdAsync(int groupId, IEnumerable<int> characterIds)
+        {
+            return Context.Characters
+                .Include(x => x.Modifiers)
+                .Include(x => x.Items)
+                .Where(x => characterIds.Contains(x.Id) && x.GroupId == groupId)
+                .ToListAsync();
         }
     }
 }
