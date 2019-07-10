@@ -42,5 +42,31 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
+
+        [HttpDelete("{MonsterId}/modifiers/{ModifierId}")]
+        public async Task<CreatedActionResult<ActiveStatsModifier>> PostAddModifier(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int monsterId,
+            [FromRoute] int modifierId
+        )
+        {
+            try
+            {
+                await _monsterService.RemoveModifierAsync(executionContext, monsterId, modifierId);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (CharacterModifierNotReusableException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (MonsterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }

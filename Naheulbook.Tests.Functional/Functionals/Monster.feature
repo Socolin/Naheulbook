@@ -182,3 +182,11 @@ Feature: Monster
       "permanent": false
     }
     """
+
+  Scenario: Can delete a modifier on a monster
+    Given a JWT for a user
+    Given a group
+    And a monster with a modifier active for 2 laps
+
+    When performing a DELETE to the url "/api/v2/monsters/${Monster.Id}/modifiers/8" with the current jwt
+    Then the response status code is 204

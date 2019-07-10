@@ -9,6 +9,7 @@ namespace Naheulbook.Core.Utils
     {
         void InitializeModifierIds(ICollection<ActiveStatsModifier> modifiers);
         void AddModifier(IList<ActiveStatsModifier> modifiers, ActiveStatsModifier newModifier);
+        void RemoveModifier(IList<ActiveStatsModifier> modifiers, int modifierId);
     }
 
     public class ActiveStatsModifierUtil : IActiveStatsModifierUtil
@@ -41,6 +42,13 @@ namespace Naheulbook.Core.Utils
             newModifier.CurrentCombatCount = newModifier.CombatCount;
             newModifier.CurrentTimeDuration = newModifier.TimeDuration;
             modifiers.Add(newModifier);
+        }
+
+        public void RemoveModifier(IList<ActiveStatsModifier> modifiers, int modifierId)
+        {
+            var deletedModifier = modifiers.FirstOrDefault(modifier => modifier.Id == modifierId);
+            if (deletedModifier != null)
+                modifiers.Remove(deletedModifier);
         }
     }
 }

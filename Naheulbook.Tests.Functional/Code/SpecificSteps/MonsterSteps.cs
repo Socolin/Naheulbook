@@ -81,7 +81,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddMonster();
         }
 
-        [Given(@"a monster with a modifier active for (\d) lap")]
+        [Given(@"a monster with a modifier active for (\d) laps?")]
         public void GivenAMonsterWithAModifierActiveForXLap(int lapCount)
         {
             _testDataUtil.AddMonster(m => m.Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>

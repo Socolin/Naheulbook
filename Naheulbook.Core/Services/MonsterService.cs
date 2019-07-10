@@ -20,6 +20,7 @@ namespace Naheulbook.Core.Services
         Task<List<Monster>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count);
         Task EnsureUserCanAccessMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
         Task<ActiveStatsModifier> AddModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, ActiveStatsModifier statsModifier);
+        Task RemoveModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, int modifierId);
     }
 
     public class MonsterService : IMonsterService
@@ -142,6 +143,32 @@ namespace Naheulbook.Core.Services
                 await notificationSession.CommitAsync();
 
                 return statsModifier;
+            }
+        }
+
+        public async Task RemoveModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, int modifierId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var monster = await uow.Monsters.GetAsync(monsterId);
+                if (monster == null)
+                    throw new MonsterNotFoundException(monsterId);
+
+                var group = await uow.Groups.GetAsync(monster.GroupId);
+                if (group == null)
+                    throw new GroupNotFoundException(monster.GroupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                var modifiers = _jsonUtil.Deserialize<List<ActiveStatsModifier>>(monster.Modifiers) ?? new List<ActiveStatsModifier>();
+                _activeStatsModifierUtil.RemoveModifier(modifiers, modifierId);
+                monster.Modifiers = _jsonUtil.Serialize(modifiers);
+
+                await uow.CompleteAsync();
+
+                var notificationSession = _notificationSessionFactory.CreateSession();
+                notificationSession.NotifyMonsterRemoveModifier(monster.Id, modifierId);
+                await notificationSession.CommitAsync();
             }
         }
     }
