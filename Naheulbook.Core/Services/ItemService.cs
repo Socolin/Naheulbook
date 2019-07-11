@@ -59,9 +59,6 @@ namespace Naheulbook.Core.Services
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                // TODO: Check permissions
-                // TODO: Character / Group history ?
-
                 var item = _itemFactory.CreateItemFromRequest(ownerType, ownerId, request);
 
                 uow.Items.Add(item);
