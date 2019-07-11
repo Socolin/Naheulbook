@@ -1219,13 +1219,13 @@ export class Character extends WsRegistrable {
         }
     }
 
-    onDeleteItem(item: PartialItem) {
+    onDeleteItem(itemId: number) {
         for (let i = 0; i < this.items.length; i++) {
-            let it = this.items[i];
-            if (it.id === item.id) {
+            let item = this.items[i];
+            if (item.id === itemId) {
                 this.items.splice(i, 1);
                 this.update();
-                if (it.template.data.quantifiable) {
+                if (item.template.data.quantifiable) {
                     this.notify('deleteItem', 'Suppression de ' + item.data.quantity + ' ' + item.data.name);
                 }
                 else {

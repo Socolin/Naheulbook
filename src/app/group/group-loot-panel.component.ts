@@ -115,8 +115,8 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     removeItemFromLoot(loot: Loot, item: Item) {
         if (item != null) {
             this._itemService.deleteItem(item.id).subscribe(
-                deletedItem => {
-                    loot.removeItem(deletedItem.id);
+                () => {
+                    loot.removeItem(item.id);
                 }
             );
         }
@@ -125,8 +125,8 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     removeItemFromMonster(monster: Monster, item: Item) {
         if (item != null) {
             this._itemService.deleteItem(item.id).subscribe(
-                deletedItem => {
-                    monster.removeItem(deletedItem.id);
+                () => {
+                    monster.removeItem(item.id);
                 }
             );
         }

@@ -19,7 +19,7 @@
                 <autocomplete-input [clearOnSelect]="false"
                                     [placeholder]="'Objet'"
                                     (onSelect)="selectItemTemplate($event)"
-                                    [(callback)]="autocompleteItemCallback">
+                                    [callback]="autocompleteItemCallback">
                 </autocomplete-input>
                 <div *ngIf="selectedItemTemplate?.data?.quantifiable">
                     <mat-form-field align="end">

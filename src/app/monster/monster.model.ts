@@ -87,11 +87,15 @@ export class Monster extends WsRegistrable {
         return monster;
     }
 
-    static monstersFromJson(monstersData: any[], skillsById: {[skillId: number]: Skill}): Monster[] {
+    static monstersFromJson(monstersData: any[] | undefined, skillsById: {[skillId: number]: Skill}): Monster[] {
         let monsters: Monster[] = [];
-        for (let monsterData of monstersData) {
-            monsters.push(Monster.fromJson(monsterData, skillsById));
+
+        if (monstersData) {
+            for (let monsterData of monstersData) {
+                monsters.push(Monster.fromJson(monsterData, skillsById));
+            }
         }
+
         return monsters;
     }
 
@@ -370,8 +374,7 @@ export class Monster extends WsRegistrable {
                 break;
             }
             case 'deleteItem': {
-                let item = PartialItem.fromJson(data);
-                this.removeItem(item.id);
+                this.removeItem(data);
                 break;
             }
             case 'tookItem': {

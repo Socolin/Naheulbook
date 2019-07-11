@@ -18,8 +18,8 @@ export class ItemService {
         , private _skillService: SkillService) {
     }
 
-    deleteItem(itemId: number): Observable<Item> {
-        return this.httpClient.post<Item>('/api/item/delete', {itemId: itemId});
+    deleteItem(itemId: number): Observable<void> {
+        return this.httpClient.delete<void>(`/api/v2/items/${itemId}`);
     }
 
     takeItemFromLoot(itemId: number, characterId: number, quantity?: number): Observable<LootTookItemMsg> {

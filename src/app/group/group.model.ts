@@ -745,7 +745,7 @@ export class Group extends WsRegistrable {
                 break;
             }
             case 'deleteLoot': {
-                this.removeLoot(data.id);
+                this.removeLoot(data);
                 break;
             }
             case 'addEvent': {

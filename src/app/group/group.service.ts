@@ -118,10 +118,8 @@ export class GroupService {
         }));
     }
 
-    deleteLoot(lootId: number) {
-        return this.httpClient.post('/api/group/deleteLoot', {
-            lootId: lootId
-        });
+    deleteLoot(lootId: number): Observable<void> {
+        return this.httpClient.delete<void>(`/api/v2/loots/${lootId}`);
     }
 
     updateLootVisibility(loot: Loot): Observable<void> {

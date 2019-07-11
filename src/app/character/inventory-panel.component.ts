@@ -243,11 +243,11 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         this._itemActionService.registerAction('delete').subscribe((event: {item: Item, data: any}) => {
             let item = event.item;
             this._itemService.deleteItem(item.id).subscribe(
-                deletedItem => {
+                () => {
                     if (this.selectedItem && this.selectedItem.id === item.id) {
                         this.selectedItem = undefined;
                     }
-                    this.character.onDeleteItem(deletedItem);
+                    this.character.onDeleteItem(item.id);
                 }
             );
         });
@@ -327,7 +327,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                     if (this.selectedItem && this.selectedItem.id === item.id) {
                         this.selectedItem = undefined;
                     }
-                    this.character.onDeleteItem(givenItem);
+                    this.character.onDeleteItem(givenItem.id);
                 }
             );
         });

@@ -191,8 +191,7 @@ export class Loot extends WsRegistrable {
                 break;
             }
             case 'deleteItem': {
-                let item = PartialItem.fromJson(data);
-                this.removeItem(item.id);
+                this.removeItem(data);
                 break;
             }
             case 'addMonster': {
