@@ -21,6 +21,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private IAuthorizationUtil _authorizationUtil;
         private INotificationSessionFactory _notificationSessionFactory;
+        private IItemService _itemService;
         private LootService _service;
 
         [SetUp]
@@ -29,8 +30,14 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
             _notificationSessionFactory = Substitute.For<INotificationSessionFactory>();
+            _itemService = Substitute.For<IItemService>();
 
-            _service = new LootService(_unitOfWorkFactory, _authorizationUtil, _notificationSessionFactory);
+            _service = new LootService(
+                _unitOfWorkFactory,
+                _authorizationUtil,
+                _notificationSessionFactory,
+                _itemService
+            );
         }
 
         [Test]
