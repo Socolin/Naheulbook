@@ -37,6 +37,9 @@ namespace Naheulbook.Core.Factories
                 case ItemOwnerType.Loot:
                     item.LootId = ownerId;
                     break;
+                case ItemOwnerType.Monster:
+                    item.MonsterId = ownerId;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(ownerType), ownerType, null);
             }

@@ -50,5 +50,6 @@ namespace Naheulbook.Core.Notifications
         INotificationPacket BuildMonsterAddModifier(int monsterId, ActiveStatsModifier modifier);
         INotificationPacket BuildMonsterUpdateModifier(int monsterId, ActiveStatsModifier modifier);
         INotificationPacket BuildMonsterRemoveModifier(int monsterId, int modifierId);
+        INotificationPacket BuildMonsterAddItem(int monsterId, Item item);
     }
 }

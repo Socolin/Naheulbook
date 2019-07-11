@@ -23,6 +23,7 @@ namespace Naheulbook.Core.Services
         Task RemoveModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, int modifierId);
         Task DeleteMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
         Task KillMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
+        Task<Item> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request);
     }
 
     public class MonsterService : IMonsterService
@@ -33,6 +34,7 @@ namespace Naheulbook.Core.Services
         private readonly INotificationSessionFactory _notificationSessionFactory;
         private readonly IJsonUtil _jsonUtil;
         private readonly ITimeService _timeService;
+        private readonly IItemService _itemService;
 
         public MonsterService(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -40,7 +42,8 @@ namespace Naheulbook.Core.Services
             IActiveStatsModifierUtil activeStatsModifierUtil,
             INotificationSessionFactory notificationSessionFactory,
             IJsonUtil jsonUtil,
-            ITimeService timeService
+            ITimeService timeService,
+            IItemService itemService
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -49,6 +52,7 @@ namespace Naheulbook.Core.Services
             _notificationSessionFactory = notificationSessionFactory;
             _jsonUtil = jsonUtil;
             _timeService = timeService;
+            _itemService = itemService;
         }
 
         public async Task<Monster> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request)
@@ -212,6 +216,30 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
             }
+        }
+
+        public async Task<Item> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var monster = await uow.Monsters.GetAsync(monsterId);
+                if (monster == null)
+                    throw new MonsterNotFoundException(monsterId);
+
+                var group = await uow.Groups.GetGroupsWithCharactersAsync(monster.GroupId);
+                if (group == null)
+                    throw new GroupNotFoundException(monster.GroupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
+            }
+
+            var item = await _itemService.AddItemToAsync(executionContext, ItemOwnerType.Monster, monsterId, request);
+
+            var session = _notificationSessionFactory.CreateSession();
+            session.NotifyMonsterAddItem(monsterId, item);
+            await session.CommitAsync();
+
+            return item;
         }
     }
 }

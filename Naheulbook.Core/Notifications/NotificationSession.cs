@@ -52,6 +52,7 @@ namespace Naheulbook.Core.Notifications
         void NotifyMonsterAddModifier(int monsterId, ActiveStatsModifier modifier);
         void NotifyMonsterUpdateModifier(int monsterId, ActiveStatsModifier modifier);
         void NotifyMonsterRemoveModifier(int monsterId, int modifierId);
+        void NotifyMonsterAddItem(int monsterId, Item item);
 
         Task CommitAsync();
     }
@@ -259,6 +260,11 @@ namespace Naheulbook.Core.Notifications
         public void NotifyMonsterRemoveModifier(int monsterId, int modifierId)
         {
             _packets.Add(_packetBuilder.BuildMonsterRemoveModifier(monsterId, modifierId));
+        }
+
+        public void NotifyMonsterAddItem(int monsterId, Item item)
+        {
+            _packets.Add(_packetBuilder.BuildMonsterAddItem(monsterId, item));
         }
 
         public async Task CommitAsync()

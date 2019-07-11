@@ -254,6 +254,11 @@ namespace Naheulbook.Web.Notifications
             return BuildMonsterChange(monsterId, "removeModifier", modifierId);
         }
 
+        public INotificationPacket BuildMonsterAddItem(int monsterId, Item item)
+        {
+            return BuildMonsterChange(monsterId, "addItem", _mapper.Map<ItemResponse>(item));
+        }
+
         private INotificationPacket BuildCharacterChange(int characterId, string action, object data)
         {
             return new NotificationPacket

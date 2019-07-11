@@ -1,7 +1,6 @@
 using FluentAssertions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
-using Naheulbook.Core.Utils;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Utils;
 using Newtonsoft.Json.Linq;
@@ -53,5 +52,29 @@ namespace Naheulbook.Core.Tests.Unit.Factories
 
             actualItem.CharacterId.Should().Be(characterId);
         }
+
+        [Test]
+        public void CreateItemFromRequest_AndOwnerTypeIsLoot_ShouldSetLootId()
+        {
+            const int lootId = 10;
+            var request = new CreateItemRequest();
+
+            var actualItem = _factory.CreateItemFromRequest(ItemOwnerType.Loot, lootId, request);
+
+            actualItem.LootId.Should().Be(lootId);
+        }
+
+        [Test]
+        public void CreateItemFromRequest_AndOwnerTypeIsMonster_ShouldSetMonsterId()
+        {
+            const int monsterId = 10;
+            var request = new CreateItemRequest();
+
+            var actualItem = _factory.CreateItemFromRequest(ItemOwnerType.Monster, monsterId, request);
+
+            actualItem.MonsterId.Should().Be(monsterId);
+        }
+
+
     }
 }

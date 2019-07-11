@@ -1,12 +1,15 @@
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
+using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
 {
@@ -15,10 +18,15 @@ namespace Naheulbook.Web.Controllers
     public class MonsterController : Controller
     {
         private readonly IMonsterService _monsterService;
+        private readonly IMapper _mapper;
 
-        public MonsterController(IMonsterService monsterService)
+        public MonsterController(
+            IMonsterService monsterService,
+            IMapper mapper
+        )
         {
             _monsterService = monsterService;
+            _mapper = mapper;
         }
 
         [HttpDelete("{MonsterId}")]
@@ -108,6 +116,32 @@ namespace Naheulbook.Web.Controllers
             catch (MonsterNotFoundException ex)
             {
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [HttpPost("{MonsterId:int:min(1)}/items")]
+        public async Task<CreatedActionResult<ItemResponse>> PostAddItemToMonsterInventory(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int monsterId,
+            CreateItemRequest request
+        )
+        {
+            try
+            {
+                var item = await _monsterService.AddItemToMonsterAsync(executionContext, monsterId, request);
+                return _mapper.Map<ItemResponse>(item);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (MonsterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (ItemTemplateNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
             }
         }
     }
