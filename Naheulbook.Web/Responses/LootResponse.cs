@@ -11,7 +11,7 @@ namespace Naheulbook.Web.Responses
         [JsonProperty("visibleForPlayer")]
         public bool IsVisibleForPlayer { get; set; }
 
-        public List<object> Items { get; set; } = new List<object>();
-        public List<object> Monsters { get; set; } = new List<object>();
+        public List<ItemResponse> Items { get; set; }
+        public List<MonsterResponse> Monsters { get; set; }
     }
 }

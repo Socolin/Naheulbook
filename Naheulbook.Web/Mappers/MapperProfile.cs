@@ -189,9 +189,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<LocationMap, LocationMapResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)));
 
-            CreateMap<Loot, LootResponse>()
-                .ForMember(m => m.Items, opt => opt.Ignore())
-                .ForMember(m => m.Monsters, opt => opt.Ignore());
+            CreateMap<Loot, LootResponse>();
 
             CreateMap<Origin, OriginResponse>()
                 .ForMember(m => m.Requirements, opt => opt.MapFrom(o => o.Requirements.OrderBy(r => r.Id)))
