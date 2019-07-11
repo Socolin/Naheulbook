@@ -144,6 +144,18 @@ namespace Naheulbook.Web.Notifications
             throw new NotSupportedException();
         }
 
+        public INotificationPacket BuildItemDeleteItem(Item item)
+        {
+            if (item.CharacterId != null)
+                return BuildCharacterChange(item.CharacterId.Value, "deleteItem", item.Id);
+            if (item.MonsterId != null)
+                return BuildMonsterChange(item.MonsterId.Value, "deleteItem", item.Id);
+            if (item.LootId != null)
+                return BuildLootChange(item.LootId.Value, "deleteItem", item.Id);
+
+            throw new NotSupportedException();
+        }
+
         public INotificationPacket BuildCharacterSetStatBonusAd(int characterId, string stat)
         {
             return BuildCharacterChange(characterId, "statBonusAd", stat);

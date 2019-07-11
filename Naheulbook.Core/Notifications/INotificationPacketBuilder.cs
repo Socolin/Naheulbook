@@ -34,6 +34,7 @@ namespace Naheulbook.Core.Notifications
         INotificationPacket BuildEquipItem(Item item);
         INotificationPacket BuildItemChangeContainer(Item item);
         INotificationPacket BuildItemUpdateModifier(Item item);
+        INotificationPacket BuildItemDeleteItem(Item item);
 
         INotificationPacket BuildGroupCharacterInvite(int groupId, GroupInvite groupInvite);
         INotificationPacket BuildGroupCancelGroupInvite(int groupId, GroupInvite groupInvite);

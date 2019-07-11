@@ -22,6 +22,7 @@ namespace Naheulbook.Core.Services
         Task<Item> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers);
         Task<Item> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request);
         Task<Item> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request);
+        Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId);
     }
 
     public class ItemService : IItemService
@@ -153,6 +154,35 @@ namespace Naheulbook.Core.Services
                 await session.CommitAsync();
 
                 return item;
+            }
+        }
+
+        public async Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var item = await uow.Items.GetWithOwnerAsync(itemId);
+                if (item == null)
+                    throw new ItemNotFoundException(itemId);
+
+                _authorizationUtil.EnsureItemAccess(executionContext, item);
+
+                var session = _notificationSessionFactory.CreateSession();
+                session.NotifyItemDeleteItem(item);
+
+                // TODO: Rework history to be able to delete items in all case
+                if (item.CharacterId.HasValue)
+                {
+                    item.CharacterId = null;
+                    item.ContainerId = null;
+                }
+                else
+                {
+                    uow.Items.Remove(item);
+                }
+
+                await uow.CompleteAsync();
+                await session.CommitAsync();
             }
         }
     }

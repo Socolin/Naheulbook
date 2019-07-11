@@ -36,6 +36,7 @@ namespace Naheulbook.Core.Notifications
         void NotifyEquipItem(Item item);
         void NotifyItemChangeContainer(Item item);
         void NotifyItemUpdateModifier(Item item);
+        void NotifyItemDeleteItem(Item item);
 
         void NotifyGroupCharacterInvite(int groupId, GroupInvite groupInvite);
         void NotifyGroupCancelGroupInvite(int groupId, GroupInvite groupInvite);
@@ -155,6 +156,11 @@ namespace Naheulbook.Core.Notifications
         public void NotifyItemUpdateModifier(Item item)
         {
             _packets.Add(_packetBuilder.BuildItemUpdateModifier(item));
+        }
+
+        public void NotifyItemDeleteItem(Item item)
+        {
+            _packets.Add(_packetBuilder.BuildItemDeleteItem(item));
         }
 
         public void NotifyCharacterSetStatBonusAd(int characterId, string stat)

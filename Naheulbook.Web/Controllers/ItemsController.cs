@@ -16,7 +16,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/items")]
     [ApiController]
-    public class ItemsController
+    public class ItemsController : Controller
     {
         private readonly IItemService _itemService;
         private readonly IMapper _mapper;
@@ -39,6 +39,27 @@ namespace Naheulbook.Web.Controllers
                 var item = await _itemService.UpdateItemDataAsync(executionContext, itemId, itemData);
 
                 return _mapper.Map<ItemPartialResponse>(item);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (ItemNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [HttpDelete("{ItemId}")]
+        public async Task<ActionResult<ItemPartialResponse>> DeleteItemAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int itemId
+        )
+        {
+            try
+            {
+                await _itemService.DeleteItemAsync(executionContext, itemId);
+                return NoContent();
             }
             catch (ForbiddenAccessException ex)
             {

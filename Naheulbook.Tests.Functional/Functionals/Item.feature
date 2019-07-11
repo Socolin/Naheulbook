@@ -118,3 +118,13 @@ Feature: Item
       "container": ${Item.[0].Id}
     }
     """
+
+  Scenario: Can delete an item
+    Given a JWT for a user
+    And a character
+    And an item template
+    And an item based on that item template in the character inventory
+
+    When performing a DELETE to the url "/api/v2/items/${Item.Id}/" with the current jwt
+    Then the response status code is 204
+
