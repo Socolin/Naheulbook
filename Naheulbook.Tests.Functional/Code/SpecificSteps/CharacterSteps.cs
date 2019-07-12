@@ -93,6 +93,15 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.SaveChanges();
         }
 
+        [Given(@"an item in the loot")]
+        public void GivenAnItemInTheLoot()
+        {
+            if (!_testDataUtil.Contains<ItemTemplate>())
+                _testDataUtil.AddItemTemplateSection().AddItemTemplateCategory().AddItemTemplate();
+            _testDataUtil.AddItem(_testDataUtil.GetLast<Loot>());
+            _testDataUtil.SaveChanges();
+        }
+
         [Given("that the (.+) character is a member of the group")]
         public void GivenThatXTheCharacterIsAMemberOfTheGroup(string indexString)
         {

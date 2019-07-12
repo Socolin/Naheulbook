@@ -1,5 +1,6 @@
 using System.Linq;
 using FluentAssertions;
+using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.Utils;
@@ -26,7 +27,9 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _util = new ItemUtil(
                 _characterHistoryUtil,
                 _itemDataUtil,
-                _jsonUtil
+                _jsonUtil,
+                new FakeUnitOfWorkFactory(),
+                new FakeNotificationSessionFactory()
             );
         }
 

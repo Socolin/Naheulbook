@@ -128,3 +128,29 @@ Feature: Item
     When performing a DELETE to the url "/api/v2/items/${Item.Id}/" with the current jwt
     Then the response status code is 204
 
+
+  Scenario: A character can take an item from a loot
+    Given a JWT for a user
+    And a character
+    And a group
+    And that the character is a member of the group
+    And a loot
+    And an item in the loot
+
+
+    When performing a POST to the url "/api/v2/items/${Item.Id}/take" with the following json content and the current jwt
+    """
+    {
+      "characterId": ${Character.Id}
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "remainingQuantity": 0,
+      "takenItem": {"__partial": {
+        "id": ${Item.Id}
+      }}
+    }
+    """

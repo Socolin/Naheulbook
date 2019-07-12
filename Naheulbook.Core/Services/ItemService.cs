@@ -23,6 +23,7 @@ namespace Naheulbook.Core.Services
         Task<Item> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request);
         Task<Item> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request);
         Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId);
+        Task<(Item takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
     }
 
     public class ItemService : IItemService
@@ -184,6 +185,27 @@ namespace Naheulbook.Core.Services
                 await uow.CompleteAsync();
                 await session.CommitAsync();
             }
+        }
+
+        public async Task<(Item takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var item = await uow.Items.GetWithOwnerWitGroupCharactersAsync(itemId);
+                if (item == null)
+                    throw new ItemNotFoundException(itemId);
+
+                _authorizationUtil.EnsureCanTakeItem(executionContext, item);
+
+                var character = await uow.Characters.GetWithGroupAsync(request.CharacterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(request.CharacterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            }
+
+
+            return await _itemUtil.MoveItemToAsync(itemId, request.CharacterId, request.Quantity);
         }
     }
 }

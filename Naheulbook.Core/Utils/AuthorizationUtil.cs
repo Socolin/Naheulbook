@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Data.Factories;
@@ -17,6 +18,7 @@ namespace Naheulbook.Core.Utils
         void EnsureIsCharacterOwner(NaheulbookExecutionContext executionContext, Character character);
         void EnsureIsGroupOwnerOrMember(NaheulbookExecutionContext executionContext, Group group);
         void EnsureItemAccess(NaheulbookExecutionContext executionContext, Item item);
+        void EnsureCanTakeItem(NaheulbookExecutionContext executionContext, Item item);
         void EnsureCanDeleteGroupInvite(NaheulbookExecutionContext executionContext, GroupInvite groupInvite);
         void EnsureCanAcceptGroupInvite(NaheulbookExecutionContext executionContext, GroupInvite groupInvite);
     }
@@ -108,6 +110,23 @@ namespace Naheulbook.Core.Utils
                 return;
 
             if (item.LootId != null && item.Loot.Group.MasterId == executionContext.UserId)
+                return;
+
+            throw new ForbiddenAccessException();
+        }
+
+        public void EnsureCanTakeItem(NaheulbookExecutionContext executionContext, Item item)
+        {
+            if (item.MonsterId.HasValue && item.Monster.Group.MasterId == executionContext.UserId)
+                return;
+
+            if (item.MonsterId.HasValue && item.Monster.Group.Characters.Any(c => c.OwnerId == executionContext.UserId))
+                return;
+
+            if (item.LootId.HasValue && item.Loot.Group.MasterId == executionContext.UserId)
+                return;
+
+            if (item.LootId.HasValue && item.Loot.Group.Characters.Any(c => c.OwnerId == executionContext.UserId))
                 return;
 
             throw new ForbiddenAccessException();

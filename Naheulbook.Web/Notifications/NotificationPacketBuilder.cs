@@ -156,6 +156,18 @@ namespace Naheulbook.Web.Notifications
             throw new NotSupportedException();
         }
 
+        public INotificationPacket BuildItemTakeItem(Item item, Character character, int? remainingQuantity)
+        {
+            if (item.CharacterId != null)
+                return BuildCharacterChange(item.CharacterId.Value, "tookItem", new {Character = _mapper.Map<NamedIdResponse>(character), remainingQuantity, OriginalItem = _mapper.Map<ItemPartialResponse>(item)});
+            if (item.MonsterId != null)
+                return BuildMonsterChange(item.MonsterId.Value, "tookItem", new {Character = _mapper.Map<NamedIdResponse>(character), remainingQuantity, OriginalItem = _mapper.Map<ItemPartialResponse>(item)});
+            if (item.LootId != null)
+                return BuildLootChange(item.LootId.Value, "tookItem", new {Character = _mapper.Map<NamedIdResponse>(character), remainingQuantity, OriginalItem = _mapper.Map<ItemPartialResponse>(item)});
+
+            throw new NotSupportedException();
+        }
+
         public INotificationPacket BuildCharacterSetStatBonusAd(int characterId, string stat)
         {
             return BuildCharacterChange(characterId, "statBonusAd", stat);
