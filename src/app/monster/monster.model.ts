@@ -1,7 +1,7 @@
 import {Subject} from 'rxjs';
 import {isNullOrUndefined} from 'util';
 
-import {ActiveStatsModifier, DurationChange, StatModifier} from '../shared';
+import {ActiveStatsModifier, DurationChange, IMetadata, StatModifier} from '../shared';
 import {Skill} from '../skill';
 import {ItemTemplate} from '../item-template';
 import {Item, PartialItem} from '../item';
@@ -154,25 +154,26 @@ export class Monster extends WsRegistrable {
         return false;
     }
 
-    public takeItem(leftItem: PartialItem | Item | undefined, takenItem: PartialItem, character: object) {
-        if (leftItem) {
-            let currentItem = this.getItem(leftItem.id);
-            if (currentItem) {
-                currentItem.data.quantity = leftItem.data.quantity;
+    public takeItem(itemId: number, remainingQuantity: number | undefined, character: IMetadata) {
+        if (remainingQuantity) {
+            const item = this.getItem(itemId);
+            if (item) {
+                item.data.quantity = remainingQuantity;
+                this.onChange.next({action: 'tookItem', character: character, item: item});
             }
         }
         else {
-            const currentItem = this.getItem(takenItem.id);
-            if (currentItem) {
-                let i = this.items.findIndex(item => item.id === currentItem.id);
+            const item = this.getItem(itemId);
+            if (item) {
+                let i = this.items.findIndex(it => it.id === itemId);
                 if (i !== -1) {
                     let removedItem = this.items[i];
                     this.items.splice(i, 1);
                     this.itemRemoved.next(removedItem);
                 }
+                this.onChange.next({action: 'tookItem', character: character, item: item});
             }
         }
-        this.onChange.next({action: 'tookItem', character: character, item: takenItem});
     }
 
     changeTarget(target: TargetJsonData) {
@@ -378,12 +379,7 @@ export class Monster extends WsRegistrable {
                 break;
             }
             case 'tookItem': {
-                let takenItem = PartialItem.fromJson(data.item);
-                let leftItem: PartialItem | undefined;
-                if (data.leftItem) {
-                    leftItem = PartialItem.fromJson(data.leftItem);
-                }
-                this.takeItem(leftItem, takenItem, data.character);
+                this.takeItem(data.originalItem.id, data.remainingQuantity, data.character);
                 break;
             }
             case 'changeName': {

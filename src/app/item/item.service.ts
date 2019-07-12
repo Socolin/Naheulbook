@@ -1,7 +1,6 @@
 
 import {forkJoin, Observable} from 'rxjs';
 
-import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
@@ -11,6 +10,11 @@ import {Skill, SkillService} from '../skill';
 import {LootTookItemMsg} from '../loot';
 
 import {ItemData, PartialItem, Item} from './item.model';
+
+export interface TakeItemResponse {
+    takenItem: ItemData;
+    remainingQuantity: number;
+}
 
 @Injectable()
 export class ItemService {
@@ -22,9 +26,8 @@ export class ItemService {
         return this.httpClient.delete<void>(`/api/v2/items/${itemId}`);
     }
 
-    takeItemFromLoot(itemId: number, characterId: number, quantity?: number): Observable<LootTookItemMsg> {
-        return this.httpClient.post<LootTookItemMsg>('/api/item/takeItemFromLoot', {
-            itemId: itemId,
+    takeItemFromLoot(itemId: number, characterId: number, quantity?: number): Observable<TakeItemResponse> {
+        return this.httpClient.post<TakeItemResponse>(`/api/v2/items/${itemId}/take`, {
             quantity: quantity,
             characterId: characterId
         });

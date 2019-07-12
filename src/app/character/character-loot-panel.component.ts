@@ -67,7 +67,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         if (item != null) {
             this._itemService.takeItemFromLoot(item.id, this.character.id, quantity).subscribe(
                 takenItemData => {
-                    loot.takeItem(takenItemData.leftItem, takenItemData.item, takenItemData.character);
+                    loot.takeItem(item.id, takenItemData.remainingQuantity, this.character);
                 }
             );
         }
@@ -77,7 +77,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         if (item != null) {
             this._itemService.takeItemFromLoot(item.id, this.character.id, quantity).subscribe(
                 takenItemData => {
-                    monster.takeItem(takenItemData.leftItem, takenItemData.item, takenItemData.character);
+                    monster.takeItem(item.id, takenItemData.remainingQuantity, this.character);
                 }
             );
         }

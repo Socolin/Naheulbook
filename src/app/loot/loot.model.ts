@@ -1,6 +1,6 @@
 import {Subject, Subscription} from 'rxjs';
 
-import {CharacterSummary} from '../shared';
+import {IMetadata} from '../shared';
 import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
 
 import {Skill} from '../skill';
@@ -8,10 +8,9 @@ import {Item, PartialItem} from '../item';
 import {Monster} from '../monster';
 
 export class LootTookItemMsg {
-    item: Item;
-    leftItem: Item;
-    character: CharacterSummary;
-    quantity?: number;
+    originalItem: PartialItem;
+    character: IMetadata;
+    remainingQuantity?: number;
 }
 
 export class Loot extends WsRegistrable {
@@ -143,23 +142,26 @@ export class Loot extends WsRegistrable {
         this.computedXp = xp;
     }
 
-    public takeItem(leftItem: Item | PartialItem | undefined, takenItem: PartialItem, character: object) {
-        if (leftItem) {
-            let currentItem = this.getItem(leftItem.id);
-            if (currentItem) {
-                currentItem.data.quantity = leftItem.data.quantity;
+    public takeItem(itemId: number, remainingQuantity: number | undefined, character: IMetadata) {
+        if (remainingQuantity) {
+            const item = this.getItem(itemId);
+            if (item) {
+                item.data.quantity = remainingQuantity;
+                this.onTookItem.next({character: character, item: item});
             }
         }
         else {
-            const currentItem = this.getItem(takenItem.id);
-            if (currentItem) {
-                let i = this.items.findIndex(item => item.id === currentItem.id);
-                let removedItem = this.items[i];
-                this.items.splice(i, 1);
-                this.itemRemoved.next(removedItem);
+            const item = this.getItem(itemId);
+            if (item) {
+                let i = this.items.findIndex(it => it.id === itemId);
+                if (i !== -1) {
+                    let removedItem = this.items[i];
+                    this.items.splice(i, 1);
+                    this.itemRemoved.next(removedItem);
+                }
+                this.onTookItem.next({character: character, item: item});
             }
         }
-        this.onTookItem.next({character: character, item: takenItem});
     }
 
     public getWsTypeName(): string {
@@ -210,12 +212,7 @@ export class Loot extends WsRegistrable {
                 break;
             }
             case 'tookItem': {
-                let takenItem = PartialItem.fromJson(data.item);
-                let leftItem: PartialItem | undefined;
-                if (data.leftItem) {
-                    leftItem = PartialItem.fromJson(data.leftItem);
-                }
-                this.takeItem(leftItem, takenItem, data.character);
+                this.takeItem(data.originalItem.id, data.remainingQuantity, data.character);
                 break;
             }
         }

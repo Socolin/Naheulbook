@@ -16,7 +16,7 @@ export class ItemData {
     icon: IconDescription;
     charge?: number;
     ug: number;
-    equiped: number;
+    equiped?: number;
     readCount: number;
     notIdentified: boolean;
     ignoreRestrictions?: boolean;
