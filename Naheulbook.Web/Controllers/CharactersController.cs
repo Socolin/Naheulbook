@@ -49,7 +49,7 @@ namespace Naheulbook.Web.Controllers
             {
                 var character = await _characterService.LoadCharacterDetailsAsync(executionContext, characterId);
 
-                if (executionContext.UserId == character.Group.MasterId)
+                if (executionContext.UserId == character.Group?.MasterId)
                     return _mapper.Map<CharacterFoGmResponse>(character);
 
                 return _mapper.Map<CharacterResponse>(character);

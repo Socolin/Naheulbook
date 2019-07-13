@@ -74,6 +74,42 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
+        public async Task GetCharacterDetailsAsync_ShouldLoadCharacterFromService_ThenMapItIntoCharacterResponse_WhenNoGroup()
+        {
+            const int characterId = 2;
+            var character = new Character();
+            var characterResponse = new CharacterResponse();
+
+            _characterService.LoadCharacterDetailsAsync(_executionContext, characterId)
+                .Returns(character);
+            _mapper.Map<CharacterResponse>(character)
+                .Returns(characterResponse);
+
+            var result = await _controller.GetCharacterDetailsAsync(_executionContext, characterId);
+
+            result.Value.Should().BeSameAs(characterResponse);
+        }
+
+        [Test]
+        public async Task GetCharacterDetailsAsync_ShouldLoadCharacterFromService_ThenMapItIntoCharacterForGmResponse()
+        {
+            const int characterId = 2;
+            const int groupMasterId = 3;
+            _executionContext.UserId = groupMasterId;
+            var character = new Character {Group = new Group {MasterId = groupMasterId}};
+            var characterResponse = new CharacterFoGmResponse();
+
+            _characterService.LoadCharacterDetailsAsync(_executionContext, characterId)
+                .Returns(character);
+            _mapper.Map<CharacterFoGmResponse>(character)
+                .Returns(characterResponse);
+
+            var result = await _controller.GetCharacterDetailsAsync(_executionContext, characterId);
+
+            result.Value.Should().BeSameAs(characterResponse);
+        }
+
+        [Test]
         public void GetCharacterDetailsAsync_WhenCatchForbiddenAccessException_Return403()
         {
             const int characterId = 2;
