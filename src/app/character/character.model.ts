@@ -1236,18 +1236,6 @@ export class Character extends WsRegistrable {
         }
     }
 
-    onUseItemCharge(item: PartialItem)  {
-        for (let i = 0; i < this.items.length; i++) {
-            let it = this.items[i];
-            if (it.id === item.id) {
-                it.data.charge = item.data.charge;
-                this.update();
-                this.notify('useObject', 'Utilisation d\'une charge de ' + item.data.name);
-                break;
-            }
-        }
-    }
-
     onChangeContainer(item: PartialItem) {
         for (let i = 0; i < this.items.length; i++) {
             let it = this.items[i];
@@ -1284,6 +1272,10 @@ export class Character extends WsRegistrable {
                         this.notify('deleteItem', 'Suppression de ' + (-diff) + ' ' + item.data.name);
                     }
                 }
+                if (item.data.charge !== it.data.charge) {
+                    this.notify('useObject', 'Utilisation d\'une charge de ' + item.data.name);
+                }
+
                 it.data = item.data;
                 this.update();
                 break;
@@ -1517,10 +1509,6 @@ export class Character extends WsRegistrable {
                     this.onIdentifyItem(Item.fromJson(data, skillsById));
 
                 });
-                break;
-            }
-            case 'useCharge': {
-                this.onUseItemCharge(data);
                 break;
             }
             case 'changeContainer': {

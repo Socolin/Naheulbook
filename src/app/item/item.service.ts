@@ -132,13 +132,6 @@ export class ItemService {
         });
     }
 
-    updateCharge(itemId: number, charge): Observable<PartialItem> {
-        return this.httpClient.post<PartialItem>('/api/item/updateCharge', {
-            itemId: itemId,
-            charge: charge
-        });
-    }
-
     updateItem(itemId: number, itemData: any): Observable<PartialItem> {
         return this.httpClient.put<PartialItem>(`/api/v2/items/${itemId}/data`, itemData);
     }

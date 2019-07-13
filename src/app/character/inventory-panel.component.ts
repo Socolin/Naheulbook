@@ -294,14 +294,14 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         });
         this._itemActionService.registerAction('use_charge').subscribe((event: {item: Item, data: any}) => {
             let item = event.item;
-            if (item.data.charge != null) {
+            if (item.data.charge == null) {
                 item.data.charge = item.template.data.charge;
             }
             if (!item.data.charge) {
-                throw new Error('Cannot use charge on item whith no defined charge. itemId: ' + item.id);
+                throw new Error('Cannot use charge on item with no defined charge. itemId: ' + item.id);
             }
-            this._itemService.updateCharge(item.id, item.data.charge - 1).subscribe(
-                this.character.onUseItemCharge.bind(this.character)
+            this._itemService.updateItem(item.id, {...item.data, charge: item.data.charge - 1}).subscribe(
+                this.character.onUpdateItem.bind(this.character)
             );
         });
         this._itemActionService.registerAction('move_to_container').subscribe((event: {item: Item, data: any}) => {
