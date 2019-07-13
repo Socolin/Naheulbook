@@ -644,7 +644,7 @@ CREATE TABLE `monster_template` (
                                   `categoryid` bigint(20) NOT NULL,
                                   PRIMARY KEY (`id`),
                                   KEY `IX_monster_template_type` (`categoryid`),
-                                  CONSTRAINT `FK_monster_template_monster_type_type` FOREIGN KEY (`categoryid`) REFERENCES `monster_type` (`id`) ON DELETE CASCADE
+                                  CONSTRAINT `FK_monster_template_monster_category_categoryid` FOREIGN KEY (`categoryid`) REFERENCES `monster_category` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `monster_template_simple_inventory`;

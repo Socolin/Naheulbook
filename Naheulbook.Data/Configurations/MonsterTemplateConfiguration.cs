@@ -72,7 +72,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(x => x.Category)
                 .WithMany(x => x.MonsterTemplates)
                 .HasForeignKey(x => x.CategoryId)
-                .HasConstraintName("FK_monster_template_monster_type_type");
+                .HasConstraintName("FK_monster_template_monster_category_categoryid");
         }
     }
 
