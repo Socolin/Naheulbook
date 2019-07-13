@@ -457,7 +457,6 @@ Feature: ItemTemplate
      """
 
     Scenario: Can search an item template
-      Given a clean database
       Given an item template
 
       When performing a GET to the url "/api/v2/itemTemplates/search?filter=${ItemTemplate.Name}"
