@@ -41,7 +41,7 @@
             <button mat-menu-item (click)="openLifetimeDialog()">
                 Editer temps de conservation
             </button>
-            <button mat-menu-item (click)="openGiveItemDialog(item)">
+            <button *ngIf="character.group" mat-menu-item (click)="openGiveItemDialog(item)">
                 Donner
             </button>
             <button mat-menu-item *ngIf="item.template.data.skillBook"
@@ -537,21 +537,26 @@
         <mat-card-title>Donner un objet</mat-card-title>
 
         <mat-card-content>
-            <div>
+            <div class="item-name">
                 <icon-selector [icon]="item.data.icon" [readonly]="true"></icon-selector>
-                <span *ngIf="item.template.data.quantifiable || item.data.quantity">
-                    <value-editor [value]="giveQuantity"
-                                  [minValue]="1"
-                                  [maxValue]="item.data.quantity"
-                                  [hideMaxValue]="true"
-                                  (onChange)="giveQuantity = $event">
-                                  [title]="'Quantité à donner'">
-                    </value-editor>
-                </span>
-                {{item.data.name}}
+                <div>
+                    <span *ngIf="item.template.data.quantifiable || item.data.quantity">
+                        <value-editor [value]="giveQuantity"
+                                      [minValue]="1"
+                                      [maxValue]="item.data.quantity"
+                                      [hideMaxValue]="true"
+                                      (onChange)="giveQuantity = $event">
+                                      [title]="'Quantité à donner'">
+                        </value-editor>
+                    </span>
+                    {{item.data.name}}
+                </div>
             </div>
 
-            <span *ngIf="giveDestination === null">Loading...</span>
+            <div class="destinations-loading">
+                <span *ngIf="giveDestination === undefined"><mat-spinner></mat-spinner></span>
+            </div>
+            <span *ngIf="giveDestination?.length === 0">Aucun personnage disponible</span>
 
             <mat-radio-group [(ngModel)]="giveTarget">
                 <ng-template ngFor let-destination [ngForOf]="giveDestination">

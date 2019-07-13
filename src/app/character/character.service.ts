@@ -168,10 +168,8 @@ export class CharacterService {
         }));
     }
 
-    listActiveCharactersInGroup(characterId: number): Observable<CharacterGiveDestination[]> {
-        return this.httpClient.post<CharacterGiveDestination[]>('/api/group/listActiveCharacters', {
-            characterId: characterId
-        });
+    listActiveCharactersInGroup(groupId: number): Observable<CharacterGiveDestination[]> {
+        return this.httpClient.get<CharacterGiveDestination[]>(`/api/v2/groups/${groupId}/activeCharacters`);
     }
 
     createCustomCharacter(customCharacterData: any): Observable<IMetadata> {

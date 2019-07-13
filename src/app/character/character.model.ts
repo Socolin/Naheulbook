@@ -270,7 +270,7 @@ export class Character extends WsRegistrable {
     target: TargetJsonData;
     color: string;
     gmData: any;
-    group: IMetadata;
+    group?: IMetadata;
     invites: CharacterGroupInvite[];
     isNpc: boolean;
 

@@ -121,12 +121,16 @@ export class ItemDetailComponent implements OnChanges, OnInit {
      */
 
     openGiveItemDialog(item: Item) {
+        if (!this.character.group) {
+            return;
+        }
         this.giveQuantity = item.data.quantity;
         this.giveItemOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.giveItemDialog);
+        this.giveDestination = undefined;
 
-        this._characterService.listActiveCharactersInGroup(this.character.id).subscribe(
+        this._characterService.listActiveCharactersInGroup(this.character.group.id).subscribe(
             characters => {
-                this.giveDestination = characters;
+                this.giveDestination = characters.filter(c => c.id !== this.character.id);
             }
         );
     }
