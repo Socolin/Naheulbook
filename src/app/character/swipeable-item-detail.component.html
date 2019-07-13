@@ -3,6 +3,7 @@
              [cdkConnectedOverlayOffsetY]="itemDetailOffsetY"
              #currentItemDetailOverlay="cdkConnectedOverlay"
              [cdkConnectedOverlayOrigin]="origin"
+             [cdkConnectedOverlayPositions]="[{originX: 'end', overlayX: 'end', originY: 'bottom', overlayY: 'bottom'}]"
              (positionChange)="updateItemDetailPosition(currentItemDetailOverlay)">
     <div style="position: relative" #currentItemDetail>
         <div

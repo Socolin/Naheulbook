@@ -17,13 +17,12 @@ export class SwipeableItemDetailComponent {
     @Input() readonly: boolean;
     @Input() origin: CdkOverlayOrigin;
 
-    @ViewChild('currentItemDetail', {read: ElementRef, static: true})
+    @ViewChild('currentItemDetail', {read: ElementRef, static: false})
     public currentItemDetail: ElementRef;
     public itemDetailOffsetY = -30;
 
     constructor(public _swipeService: SwipeService) {
     }
-
 
     public updateItemDetailPosition(currentItemDetailOverlay: CdkConnectedOverlay) {
         setTimeout(() => {
@@ -40,7 +39,7 @@ export class SwipeableItemDetailComponent {
                 return;
             }
 
-
+            const previousPosition = this.itemDetailOffsetY;
             let originRect = currentItemDetailOverlay.origin.elementRef.nativeElement.getBoundingClientRect();
             let rect = currentItemDetailOverlay.overlayRef.overlayElement.children[0].children[0].children[0].getBoundingClientRect();
             let bottom = (originRect.bottom + rect.height);
@@ -51,7 +50,9 @@ export class SwipeableItemDetailComponent {
                 this.itemDetailOffsetY = -30;
                 currentItemDetailOverlay.offsetY = -30;
             }
-            currentItemDetailOverlay.overlayRef.updatePosition();
+            if (previousPosition !== this.itemDetailOffsetY) {
+                currentItemDetailOverlay.overlayRef.updatePosition();
+            }
         }, 0);
     }
 }
