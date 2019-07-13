@@ -38,10 +38,10 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [TestCaseSource(nameof(GetCommonItemExceptionsAndExpectedStatusCode))]
         public void PutEditItemDataAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
         {
-            _itemService.UpdateItemDataAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<JObject>())
+            _itemService.UpdateItemDataAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<ItemData>())
                 .Returns(Task.FromException<Item>(exception));
 
-            Func<Task> act = () => _controller.PutEditItemDataAsync(_executionContext, 2, new JObject());
+            Func<Task> act = () => _controller.PutEditItemDataAsync(_executionContext, 2, new ItemData());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }

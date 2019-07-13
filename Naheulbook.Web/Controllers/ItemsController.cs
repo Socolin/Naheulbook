@@ -31,7 +31,7 @@ namespace Naheulbook.Web.Controllers
         public async Task<ActionResult<ItemPartialResponse>> PutEditItemDataAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int itemId,
-            JObject itemData
+            ItemData itemData
         )
         {
             try

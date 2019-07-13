@@ -22,12 +22,14 @@ namespace Naheulbook.Core.Tests.Unit.Services
 {
     public class ItemServiceTests
     {
+        private const string ItemDataJson = "some-item-data-json";
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private IItemFactory _itemFactory;
         private FakeNotificationSessionFactory _notificationSessionFactory;
         private IAuthorizationUtil _authorizationUtil;
         private IItemUtil _itemUtil;
         private IJsonUtil _jsonUtil;
+        private ICharacterHistoryUtil _characterHistoryUtil;
         private ItemService _service;
 
         [SetUp]
@@ -38,6 +40,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _notificationSessionFactory = new FakeNotificationSessionFactory();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
             _itemUtil = Substitute.For<IItemUtil>();
+            _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
             _jsonUtil = Substitute.For<IJsonUtil>();
 
             _service = new ItemService(
@@ -46,6 +49,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _notificationSessionFactory,
                 _authorizationUtil,
                 _itemUtil,
+                _characterHistoryUtil,
                 _jsonUtil
             );
         }
@@ -83,18 +87,48 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task UpdateItemDataAsync_ShouldUpdateItemDataFieldAndSaveDb()
         {
-            const int itemId = 4;
-            var itemData = JObject.FromObject(new {a = "b"});
-            var item = new Item();
 
+            const int itemId = 4;
+            var itemData = new ItemData();
+            var item = GivenAnItem(new ItemData());
+
+            _jsonUtil.Serialize(itemData)
+                .Returns("some-new-item-data-json");
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
-                .Do(info => item.Data.Should().Be(itemData.ToString(Formatting.None)));
+                .Do(info => item.Data.Should().Be("some-new-item-data-json"));
 
             var actualItem = await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
 
             actualItem.Should().BeSameAs(item);
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+        }
+
+        [Test]
+        [TestCase(null, 2)]
+        [TestCase(3, 4)]
+        [TestCase(8, 2)]
+        [TestCase(8, null)]
+        public async Task UpdateItemDataAsync_WhenQuantityChange_ShouldLogItInCharacterHistory(int? currentQuantity, int? newQuantity)
+        {
+            const int itemId = 4;
+            const int characterId = 8;
+            var itemData = new ItemData {Quantity = newQuantity};
+            var item = GivenAnItem(new ItemData {Quantity = currentQuantity}, characterId);
+            var characterHistoryEntry = new CharacterHistoryEntry();
+
+            _jsonUtil.Serialize(itemData)
+                .Returns("some-new-item-data-json");
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+            _characterHistoryUtil.CreateLogChangeItemQuantity(characterId, item, currentQuantity, newQuantity)
+                .Returns(characterHistoryEntry);
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+                .Do(info => item.Character.HistoryEntries.Should().Contain(characterHistoryEntry));
+
+            await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
+
             await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
         }
 
@@ -110,7 +144,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil.When(x => x.EnsureItemAccess(executionContext, item))
                 .Throw(new TestException());
 
-            Func<Task> act = () =>  _service.UpdateItemDataAsync(executionContext, itemId, new JObject());
+            Func<Task> act = () => _service.UpdateItemDataAsync(executionContext, itemId, new ItemData());
 
             act.Should().Throw<TestException>();
             _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
@@ -125,7 +159,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
 
-            await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, new JObject());
+            await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, new ItemData());
 
             Received.InOrder(() =>
             {
@@ -167,7 +201,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil.When(x => x.EnsureItemAccess(executionContext, item))
                 .Throw(new TestException());
 
-            Func<Task> act = () =>  _service.UpdateItemModifiersAsync(executionContext, itemId, new List<ActiveStatsModifier>());
+            Func<Task> act = () => _service.UpdateItemModifiersAsync(executionContext, itemId, new List<ActiveStatsModifier>());
 
             act.Should().Throw<TestException>();
             _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
@@ -221,7 +255,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil.When(x => x.EnsureItemAccess(executionContext, item))
                 .Throw(new TestException());
 
-            Func<Task> act = () =>  _service.EquipItemAsync(executionContext, itemId, new EquipItemRequest());
+            Func<Task> act = () => _service.EquipItemAsync(executionContext, itemId, new EquipItemRequest());
 
             act.Should().Throw<TestException>();
             _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
@@ -271,7 +305,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(Arg.Any<int>())
                 .Returns((Item) null);
 
-            Func<Task> act = () =>  _service.ChangeItemContainerAsync(new NaheulbookExecutionContext(), 4, new ChangeItemContainerRequest());
+            Func<Task> act = () => _service.ChangeItemContainerAsync(new NaheulbookExecutionContext(), 4, new ChangeItemContainerRequest());
 
             act.Should().Throw<ItemNotFoundException>();
         }
@@ -288,7 +322,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil.When(x => x.EnsureItemAccess(executionContext, item))
                 .Throw(new TestException());
 
-            Func<Task> act = () =>  _service.ChangeItemContainerAsync(executionContext, itemId, new ChangeItemContainerRequest());
+            Func<Task> act = () => _service.ChangeItemContainerAsync(executionContext, itemId, new ChangeItemContainerRequest());
 
             act.Should().Throw<TestException>();
             _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
@@ -310,6 +344,24 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _notificationSessionFactory.NotificationSession.NotifyItemChangeContainer(item);
                 _notificationSessionFactory.NotificationSession.CommitAsync();
             });
+        }
+
+        private Item GivenAnItem(ItemData itemData = null, int? characterId = null)
+        {
+            _jsonUtil.Deserialize<ItemData>(ItemDataJson)
+                .Returns(itemData ?? new ItemData());
+
+            return new Item
+            {
+                CharacterId = characterId,
+                Character = !characterId.HasValue
+                    ? null
+                    : new Character
+                    {
+                        Id = characterId.Value
+                    },
+                Data = ItemDataJson
+            };
         }
     }
 }

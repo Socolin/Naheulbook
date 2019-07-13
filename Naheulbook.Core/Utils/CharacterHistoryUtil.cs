@@ -22,6 +22,7 @@ namespace Naheulbook.Core.Utils
         CharacterHistoryEntry CreateLogGiveItem(int characterId, Item item);
         CharacterHistoryEntry CreateLogGivenItem(int characterId, Item item);
         CharacterHistoryEntry CreateLogLootItem(int characterId, Item item);
+        CharacterHistoryEntry CreateLogChangeItemQuantity(int characterId, Item item, int? quantity, int? itemDataQuantity);
     }
 
     public class CharacterHistoryUtil : ICharacterHistoryUtil
@@ -42,6 +43,7 @@ namespace Naheulbook.Core.Utils
         private const string GiveItemActionName = "GIVE_ITEM";
         private const string GivenItemActionName = "GIVEN_ITEM";
         private const string LootItemActionName = "LOOT_ITEM";
+        private const string ChangeQuantityActionName = "CHANGE_QUANTITY";
 
         private readonly IJsonUtil _jsonUtil;
 
@@ -223,6 +225,18 @@ namespace Naheulbook.Core.Utils
                 Action = LootItemActionName,
                 Date = DateTime.Now,
                 ItemId = item.Id
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogChangeItemQuantity(int characterId, Item item, int? oldValue, int? newValue)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = ChangeQuantityActionName,
+                Date = DateTime.Now,
+                ItemId = item.Id,
+                Data = _jsonUtil.Serialize(new {oldValue, newValue})
             };
         }
     }

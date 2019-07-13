@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Services
     public interface IItemService
     {
         Task<Item> AddItemToAsync(NaheulbookExecutionContext executionContext, ItemOwnerType ownerType, int ownerId, CreateItemRequest request);
-        Task<Item> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, JObject itemData);
+        Task<Item> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData);
         Task<Item> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers);
         Task<Item> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request);
         Task<Item> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request);
@@ -35,6 +35,7 @@ namespace Naheulbook.Core.Services
         private readonly INotificationSessionFactory _notificationSessionFactory;
         private readonly IAuthorizationUtil _authorizationUtil;
         private readonly IItemUtil _itemUtil;
+        private readonly ICharacterHistoryUtil _characterHistoryUtil;
         private readonly IJsonUtil _jsonUtil;
 
         public ItemService(
@@ -43,6 +44,7 @@ namespace Naheulbook.Core.Services
             INotificationSessionFactory notificationSessionFactory,
             IAuthorizationUtil authorizationUtil,
             IItemUtil itemUtil,
+            ICharacterHistoryUtil characterHistoryUtil,
             IJsonUtil jsonUtil
         )
         {
@@ -51,6 +53,7 @@ namespace Naheulbook.Core.Services
             _notificationSessionFactory = notificationSessionFactory;
             _authorizationUtil = authorizationUtil;
             _itemUtil = itemUtil;
+            _characterHistoryUtil = characterHistoryUtil;
             _jsonUtil = jsonUtil;
         }
 
@@ -76,7 +79,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Item> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, JObject itemData)
+        public async Task<Item> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -86,7 +89,11 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureItemAccess(executionContext, item);
 
-                item.Data = itemData.ToString(Formatting.None);
+                var currentItemData = _jsonUtil.Deserialize<ItemData>(item.Data) ?? new ItemData();
+                if (itemData.Quantity != currentItemData.Quantity && item.CharacterId.HasValue)
+                    item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogChangeItemQuantity(item.CharacterId.Value, item, currentItemData.Quantity, itemData.Quantity));
+
+                item.Data = _jsonUtil.Serialize(itemData);
 
                 await uow.CompleteAsync();
 
