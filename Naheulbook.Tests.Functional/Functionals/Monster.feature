@@ -221,7 +221,7 @@ Feature: Monster
     {
       "itemTemplateId": ${ItemTemplate.Id},
       "itemData": {
-        "some-key": "some-value"
+          "name": "some-name"
       }
     }
     """
@@ -231,7 +231,7 @@ Feature: Monster
     {
         "id": {"__match": {"type": "integer"}},
         "data": {
-            "some-key": "some-value"
+            "name": "some-name"
         },
         "modifiers": [],
         "template": {

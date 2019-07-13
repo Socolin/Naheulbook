@@ -63,7 +63,11 @@ namespace Naheulbook.Core.Services
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var item = _itemFactory.CreateItemFromRequest(ownerType, ownerId, request);
+                var itemTemplate = await uow.ItemTemplates.GetAsync(request.ItemTemplateId);
+                if (itemTemplate == null)
+                    throw new ItemTemplateNotFoundException(request.ItemTemplateId);
+
+                var item = _itemFactory.CreateItemFromRequest(ownerType, ownerId, itemTemplate, request.ItemData);
 
                 uow.Items.Add(item);
                 await uow.CompleteAsync();

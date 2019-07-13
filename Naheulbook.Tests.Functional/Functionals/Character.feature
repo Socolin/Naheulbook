@@ -262,7 +262,7 @@ Feature: Character
     {
       "itemTemplateId": ${ItemTemplate.Id},
       "itemData": {
-        "some-key": "some-value"
+        "name": "some-name"
       }
     }
     """
@@ -272,7 +272,7 @@ Feature: Character
     {
         "id": {"__match": {"type": "integer"}},
         "data": {
-            "some-key": "some-value"
+            "name": "some-name"
         },
         "modifiers": [],
         "template": {

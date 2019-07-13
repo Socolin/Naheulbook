@@ -55,12 +55,17 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int itemId = 25;
             const int characterId = 10;
+            const int itemTemplateId = 12;
             var executionContext = new NaheulbookExecutionContext();
-            var request = new CreateItemRequest();
+            var itemData = new ItemData();
+            var itemTemplate = new ItemTemplate();
+            var request = new CreateItemRequest {ItemData = itemData, ItemTemplateId = itemTemplateId};
             var createdItem = new Item {Id = itemId};
             var fullyLoadedItem = new Item();
 
-            _itemFactory.CreateItemFromRequest(ItemOwnerType.Character, characterId, request)
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetAsync(itemTemplateId)
+                .Returns(itemTemplate);
+            _itemFactory.CreateItemFromRequest(ItemOwnerType.Character, characterId, itemTemplate, itemData)
                 .Returns(createdItem);
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithAllDataAsync(itemId)
                 .Returns(fullyLoadedItem);

@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Naheulbook.Core.Models
+namespace Naheulbook.Shared.TransientModels
 {
     public class ItemData
     {

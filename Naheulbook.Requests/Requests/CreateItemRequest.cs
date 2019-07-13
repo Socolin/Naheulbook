@@ -1,10 +1,10 @@
-using Newtonsoft.Json.Linq;
+using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Requests.Requests
 {
     public class CreateItemRequest
     {
         public int ItemTemplateId { get; set; }
-        public JObject ItemData { get; set; }
+        public ItemData ItemData { get; set; }
     }
 }
