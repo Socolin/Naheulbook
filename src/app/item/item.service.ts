@@ -34,7 +34,10 @@ export class ItemService {
     }
 
     giveItem(itemId: number, characterId: number, quantity?: number): Observable<{remainingQuantity: number}> {
-        return this.httpClient.post<{remainingQuantity:  number}>(`/api/v2/items/${itemId}/give`, {characterId: characterId, quantity: quantity});
+        return this.httpClient.post<{remainingQuantity:  number}>(`/api/v2/items/${itemId}/give`, {
+            characterId: characterId,
+            quantity: quantity
+        });
     }
 
     addItemTo(targetType: 'character'|'monster'|'loot'
@@ -114,13 +117,6 @@ export class ItemService {
     moveToContainer(itemId: number, containerId: number): Observable<PartialItem> {
         return this.httpClient.put<PartialItem>(`/api/v2/items/${itemId}/container`, {
             containerId: containerId
-        });
-    }
-
-    updateQuantity(itemId: number, quantity): Observable<PartialItem> {
-        return this.httpClient.post<PartialItem>('/api/item/updateQuantity', {
-            itemId: itemId,
-            quantity: quantity
         });
     }
 

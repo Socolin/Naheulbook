@@ -253,10 +253,17 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         });
         this._itemActionService.registerAction('update_quantity').subscribe((event: {item: Item, data: any}) => {
             let eventData = event.data;
-            let item = event.item;
-            this._itemService.updateQuantity(item.id, eventData.quantity).subscribe(
+            let item = event.item as Item;
+            let itemData = {
+                ...item.data,
+                quantity: eventData.quantity
+            };
+            if (item.template.data.charge && eventData.quantity === item.data.quantity - 1) {
+                itemData.charge = item.template.data.charge;
+            }
+            this._itemService.updateItem(item.id, itemData).subscribe(
                 res => {
-                    this.character.onUpdateQuantity(res);
+                    this.character.onUpdateItem(res);
                 }
             );
         });

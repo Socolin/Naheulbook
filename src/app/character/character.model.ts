@@ -1276,6 +1276,14 @@ export class Character extends WsRegistrable {
         for (let i = 0; i < this.items.length; i++) {
             let it = this.items[i];
             if (it.id === item.id) {
+                if (item.data.quantity != null && it.data.quantity != null) {
+                    let diff = item.data.quantity - it.data.quantity;
+                    if (diff > 0) {
+                        this.notify('addItem', 'Ajout de ' + diff + ' ' + item.data.name);
+                    } else if (diff < 0) {
+                        this.notify('deleteItem', 'Suppression de ' + (-diff) + ' ' + item.data.name);
+                    }
+                }
                 it.data = item.data;
                 this.update();
                 break;
@@ -1289,29 +1297,6 @@ export class Character extends WsRegistrable {
             if (it.id === item.id) {
                 it.modifiers = ActiveStatsModifier.modifiersFromJson(item.modifiers);
                 this.update();
-                break;
-            }
-        }
-    }
-
-    onUpdateQuantity(item: PartialItem) {
-        for (let i = 0; i < this.items.length; i++) {
-            let it = this.items[i];
-            if (it.id === item.id) {
-                if (it.data.quantity !== item.data.quantity) {
-                    if (item.data.quantity != null && it.data.quantity != null) {
-                        let diff = item.data.quantity - it.data.quantity;
-                        if (diff > 0) {
-                            this.notify('addItem', 'Ajout de ' + diff + ' ' + item.data.name);
-                        }
-                        else {
-                            this.notify('deleteItem', 'Suppression de ' + (-diff) + ' ' + item.data.name);
-                        }
-                    }
-                    it.data.quantity = item.data.quantity;
-                    it.data.charge = item.data.charge;
-                    this.update();
-                }
                 break;
             }
         }
@@ -1544,10 +1529,6 @@ export class Character extends WsRegistrable {
             }
             case 'updateItem': {
                 this.onUpdateItem(data);
-                break;
-            }
-            case 'changeQuantity': {
-                this.onUpdateQuantity(data);
                 break;
             }
             case 'updateItemModifiers': {
