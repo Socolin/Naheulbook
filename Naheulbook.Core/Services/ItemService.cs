@@ -88,8 +88,13 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureItemAccess(executionContext, item);
 
                 var currentItemData = _jsonUtil.Deserialize<ItemData>(item.Data) ?? new ItemData();
-                if (itemData.Quantity != currentItemData.Quantity && item.CharacterId.HasValue)
-                    item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogChangeItemQuantity(item.CharacterId.Value, item, currentItemData.Quantity, itemData.Quantity));
+                if (item.CharacterId.HasValue)
+                {
+                    if (itemData.Quantity != currentItemData.Quantity)
+                        item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogChangeItemQuantity(item.CharacterId.Value, item, currentItemData.Quantity, itemData.Quantity));
+                    if (itemData.Charge == currentItemData.Charge - 1)
+                        item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogUseItemCharge(item.CharacterId.Value, item, currentItemData.Charge, itemData.Charge));
+                }
 
                 item.Data = _jsonUtil.Serialize(itemData);
 

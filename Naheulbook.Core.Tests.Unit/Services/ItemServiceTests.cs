@@ -131,6 +131,29 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
+        public async Task UpdateItemDataAsync_WhenChargeDecrementByOne_ShouldLogItInCharacterHistory()
+        {
+            const int itemId = 4;
+            const int characterId = 8;
+            var itemData = new ItemData {Charge = 3};
+            var item = GivenAnItem(new ItemData {Charge = 4}, characterId);
+            var characterHistoryEntry = new CharacterHistoryEntry();
+
+            _jsonUtil.Serialize(itemData)
+                .Returns("some-new-item-data-json");
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
+                .Returns(item);
+            _characterHistoryUtil.CreateLogUseItemCharge(characterId, item, 4, 3)
+                .Returns(characterHistoryEntry);
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+                .Do(info => item.Character.HistoryEntries.Should().Contain(characterHistoryEntry));
+
+            await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
+
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+        }
+
+        [Test]
         public void UpdateItemDataAsync_EnsureCurrentUserCanAccessThisItem()
         {
             const int itemId = 4;
