@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using Naheulbook.Core.Models;
@@ -100,7 +99,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
                 .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
 
-            CreateMap<IHistoryEntry, HistoryEntryResponse>()
+            CreateMap<IHistoryEntry, IHistoryEntryResponse>()
                 .Include<GroupHistoryEntry, GroupHistoryEntryResponse>()
                 .Include<CharacterHistoryEntry, CharacterHistoryEntryResponse>();
 

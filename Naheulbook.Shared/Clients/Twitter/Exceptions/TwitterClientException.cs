@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global

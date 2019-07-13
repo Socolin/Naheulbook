@@ -5,7 +5,6 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Session;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;

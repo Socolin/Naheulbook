@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Web.Responses
 {
-    public class CharacterHistoryEntryResponse : HistoryEntryResponse
+    public class CharacterHistoryEntryResponse : IHistoryEntryResponse
     {
         public int Id { get; set; }
         public string Action { get; set; }

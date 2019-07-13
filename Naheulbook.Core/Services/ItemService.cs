@@ -11,8 +11,6 @@ using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Core.Services
 {

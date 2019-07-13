@@ -64,7 +64,7 @@ namespace Naheulbook.Core.Utils
         {
             var notificationSession = _notificationSessionFactory.CreateSession();
 
-            Item takenItem = null;
+            Item takenItem;
             var remainingQuantity = 0;
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())

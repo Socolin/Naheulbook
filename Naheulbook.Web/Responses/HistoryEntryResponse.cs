@@ -1,6 +1,6 @@
 namespace Naheulbook.Web.Responses
 {
-    public interface HistoryEntryResponse
+    public interface IHistoryEntryResponse
     {
     }
 }

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Services;
 
@@ -11,15 +10,12 @@ namespace Naheulbook.Web.Controllers
     [ApiController]
     public class IconsController : Controller
     {
-        private readonly IMapper _mapper;
         private readonly IIconService _iconService;
 
         public IconsController(
-            IMapper mapper,
             IIconService iconService
         )
         {
-            _mapper = mapper;
             _iconService = iconService;
         }
 

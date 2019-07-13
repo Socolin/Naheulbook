@@ -62,7 +62,7 @@ namespace Socolin.TestUtils.AutoFillTestObjects
 
             foreach (var propertyInfo in type.GetProperties())
             {
-                context.Levels.Add(propertyInfo.Name);;
+                context.Levels.Add(propertyInfo.Name);
                 propertyInfo.SetValue(element, GetValueForType(propertyInfo.PropertyType, context, propertyInfo.Name));
                 context.Levels.RemoveAt(context.Levels.Count - 1);
             }

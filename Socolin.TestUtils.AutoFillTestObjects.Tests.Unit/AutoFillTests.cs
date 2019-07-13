@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 namespace Socolin.TestUtils.AutoFillTestObjects.Tests.Unit
 {
@@ -149,6 +152,7 @@ namespace Socolin.TestUtils.AutoFillTestObjects.Tests.Unit
 
         private class TestIgnoringRecurse
         {
+            [SuppressMessage("ReSharper", "UnusedMember.Local")]
             public int? Value { get; set; }
             public int? SubIgnored { get; set; }
         }

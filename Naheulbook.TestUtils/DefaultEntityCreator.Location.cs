@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Naheulbook.Data.Models;
 
 // ReSharper disable MemberCanBeMadeStatic.Global

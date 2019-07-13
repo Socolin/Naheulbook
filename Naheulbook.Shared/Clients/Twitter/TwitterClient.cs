@@ -1,13 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Naheulbook.Shared.Clients.Oauth1;
 using Naheulbook.Shared.Clients.Twitter.Exceptions;
 using Naheulbook.Shared.Clients.Twitter.Responses;
-using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Shared.Clients.Twitter
 {

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Naheulbook.Data.Models;
 
 namespace Naheulbook.Web.Responses
 {

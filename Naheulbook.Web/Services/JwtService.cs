@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Jose;
-using Naheulbook.Data.Models;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Newtonsoft.Json.Linq;

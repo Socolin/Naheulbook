@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using FluentValidation;
-using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Requests.Validators

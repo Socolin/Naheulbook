@@ -268,11 +268,11 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             const int characterId = 2;
             var historyEntries = new List<IHistoryEntry>();
-            var historyEntriesResponse = new List<HistoryEntryResponse>();
+            var historyEntriesResponse = new List<IHistoryEntryResponse>();
 
             _characterService.GetCharacterHistoryEntryAsync(_executionContext, characterId, 8)
                 .Returns(historyEntries);
-            _mapper.Map<List<HistoryEntryResponse>>(historyEntries)
+            _mapper.Map<List<IHistoryEntryResponse>>(historyEntries)
                 .Returns(historyEntriesResponse);
 
             var result = await _controller.GetCharacterHistoryEntryAsync(_executionContext, characterId, 8);

@@ -7,6 +7,10 @@ namespace Naheulbook.Requests.Validators
     {
         public CreateCharacterRequestValidator()
         {
+            RuleFor(e => e.Name).NotNull().Length(1, 255);
+            RuleFor(e => e.Money).GreaterThanOrEqualTo(0);
+            RuleFor(e => e.FatePoint).GreaterThanOrEqualTo(0);
+            RuleFor(e => e.OriginId).GreaterThanOrEqualTo(0);
         }
     }
 }

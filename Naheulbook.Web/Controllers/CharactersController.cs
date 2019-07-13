@@ -210,7 +210,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("{CharacterId:int:min(1)}/history")]
-        public async Task<ActionResult<List<HistoryEntryResponse>>> GetCharacterHistoryEntryAsync(
+        public async Task<ActionResult<List<IHistoryEntryResponse>>> GetCharacterHistoryEntryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,
             [FromQuery] int page
@@ -219,7 +219,7 @@ namespace Naheulbook.Web.Controllers
             try
             {
                 var loots = await _characterService.GetCharacterHistoryEntryAsync(executionContext, characterId, page);
-                return _mapper.Map<List<HistoryEntryResponse>>(loots);
+                return _mapper.Map<List<IHistoryEntryResponse>>(loots);
             }
             catch (ForbiddenAccessException ex)
             {

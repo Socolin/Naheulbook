@@ -12,7 +12,6 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
-using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
 

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Services;
 using Naheulbook.Shared.Clients.Twitter;
-using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Requests;
 using Naheulbook.Web.Responses;
@@ -18,27 +17,21 @@ namespace Naheulbook.Web.Controllers
     {
         private const string TwitterOauthTokenKey = "twitterOauthToken";
 
-        private readonly TwitterConfiguration _configuration;
         private readonly ITwitterClient _twitterClient;
         private readonly IJwtService _jwtService;
         private readonly IMapper _mapper;
-        private readonly IRngUtil _rngUtil;
         private readonly ISocialMediaUserLinkService _socialMediaUserLinkService;
 
         public TwitterAuthenticationController(
-            TwitterConfiguration configuration,
             ITwitterClient twitterClient,
             IJwtService jwtService,
             IMapper mapper,
-            IRngUtil rngUtil,
             ISocialMediaUserLinkService socialMediaUserLinkService
         )
         {
-            _configuration = configuration;
             _twitterClient = twitterClient;
             _jwtService = jwtService;
             _mapper = mapper;
-            _rngUtil = rngUtil;
             _socialMediaUserLinkService = socialMediaUserLinkService;
         }
 
