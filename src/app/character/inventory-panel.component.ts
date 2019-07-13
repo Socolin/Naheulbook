@@ -322,12 +322,16 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             let eventData = event.data;
             let item = event.item;
             this._itemService.giveItem(item.id, eventData.characterId, eventData.quantity).subscribe(
-                givenItem => {
-                    // FIXME Do not unselect item if only a part of the stack is given
-                    if (this.selectedItem && this.selectedItem.id === item.id) {
-                        this.selectedItem = undefined;
+                result => {
+                    if (result.remainingQuantity) {
+                        if (this.selectedItem && this.selectedItem.id === item.id) {
+                            this.selectedItem = undefined;
+                        }
+                        item.data.quantity = result.remainingQuantity;
                     }
-                    this.character.onDeleteItem(givenItem.id);
+                    else {
+                        this.character.onDeleteItem(item.id);
+                    }
                 }
             );
         });

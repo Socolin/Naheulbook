@@ -33,8 +33,8 @@ export class ItemService {
         });
     }
 
-    giveItem(itemId: number, characterId: number, quantity?: number): Observable<Item> {
-        return this.httpClient.post<Item>('/api/item/giveItem', {itemId: itemId, characterId: characterId, quantity: quantity});
+    giveItem(itemId: number, characterId: number, quantity?: number): Observable<{remainingQuantity: number}> {
+        return this.httpClient.post<{remainingQuantity:  number}>(`/api/v2/items/${itemId}/give`, {characterId: characterId, quantity: quantity});
     }
 
     addItemTo(targetType: 'character'|'monster'|'loot'
