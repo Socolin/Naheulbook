@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Factories;
@@ -24,6 +25,7 @@ namespace Naheulbook.Core.Services
         Task<Item> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request);
         Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId);
         Task<(Item takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
+        Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
     }
 
     public class ItemService : IItemService
@@ -205,7 +207,29 @@ namespace Naheulbook.Core.Services
             }
 
 
-            return await _itemUtil.MoveItemToAsync(itemId, request.CharacterId, request.Quantity);
+            return await _itemUtil.MoveItemToAsync(itemId, request.CharacterId, request.Quantity, MoveItemTrigger.TakeItemFromLoot);
+        }
+
+        public async Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var item = await uow.Items.GetWithOwnerWitGroupCharactersAsync(itemId);
+                if (item == null)
+                    throw new ItemNotFoundException(itemId);
+                if (item.CharacterId == null)
+                    throw new ForbiddenAccessException();
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, item.Character);
+
+                if (item.Character.Group.Characters.All(x => x.Id != request.CharacterId && x.IsActive))
+                    throw new CharacterNotFoundException(request.CharacterId);
+            }
+
+
+            var (_, remainingQuantity) = await _itemUtil.MoveItemToAsync(itemId, request.CharacterId, request.Quantity, MoveItemTrigger.GiveItem);
+
+            return remainingQuantity;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Naheulbook.Core.Utils
     public interface IItemUtil
     {
         void EquipItem(Item item, int? level);
-        Task<(Item takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity);
+        Task<(Item takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger);
     }
 
     public class ItemUtil : IItemUtil
@@ -59,7 +59,7 @@ namespace Naheulbook.Core.Utils
             item.Data = _jsonUtil.Serialize(itemData);
         }
 
-        public async Task<(Item takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity)
+        public async Task<(Item takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger)
         {
             var notificationSession = _notificationSessionFactory.CreateSession();
 
@@ -69,12 +69,19 @@ namespace Naheulbook.Core.Utils
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var targetCharacter = await uow.Characters.GetAsync(characterId);
-                var originalItem = await uow.Items.GetWithAllDataAsync(itemId);
+                var originalItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId);
                 var originalItemData = _jsonUtil.Deserialize<ItemData>(originalItem.Data) ?? new ItemData();
 
                 if (quantity == null || originalItemData.Quantity == null || quantity >= originalItemData.Quantity)
                 {
-                    notificationSession.NotifyItemTakeItem(originalItem, targetCharacter, null);
+                    if (trigger == MoveItemTrigger.TakeItemFromLoot)
+                        notificationSession.NotifyItemTakeItem(originalItem, targetCharacter, null);
+                    else if (trigger == MoveItemTrigger.GiveItem)
+                    {
+                        notificationSession.NotifyItemDeleteItem(originalItem);
+                        if (originalItem.CharacterId != null)
+                            originalItem.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem));
+                    }
 
                     originalItem.Character = targetCharacter;
                     originalItem.MonsterId = null;
@@ -83,6 +90,10 @@ namespace Naheulbook.Core.Utils
                     takenItem = originalItem;
 
                     notificationSession.NotifyCharacterAddItem(targetCharacter.Id, originalItem);
+                    if (trigger == MoveItemTrigger.TakeItemFromLoot)
+                        targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogLootItem(targetCharacter.Id, takenItem));
+                    else if (trigger == MoveItemTrigger.GiveItem)
+                        targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem));
                 }
                 else
                 {
@@ -93,7 +104,18 @@ namespace Naheulbook.Core.Utils
                     takenItem = splitItem;
                     remainingQuantity = originalItemData.Quantity.Value;
 
-                    notificationSession.NotifyItemTakeItem(originalItem, targetCharacter, remainingQuantity);
+                    if (trigger == MoveItemTrigger.TakeItemFromLoot)
+                    {
+                        targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogLootItem(targetCharacter.Id, takenItem));
+                        notificationSession.NotifyItemTakeItem(originalItem, targetCharacter, remainingQuantity);
+                    }
+                    else if (trigger == MoveItemTrigger.GiveItem)
+                    {
+                        if (originalItem.CharacterId != null)
+                            originalItem.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem));
+                        targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem));
+                        notificationSession.NotifyItemDataChanged(originalItem);
+                    }
                     notificationSession.NotifyCharacterAddItem(targetCharacter.Id, splitItem);
                 }
 

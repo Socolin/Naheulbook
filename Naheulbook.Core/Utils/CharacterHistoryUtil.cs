@@ -19,6 +19,9 @@ namespace Naheulbook.Core.Utils
         CharacterHistoryEntry CreateLogRemoveModifier(int characterId, int characterModifierId);
         CharacterHistoryEntry CreateLogActiveModifier(int characterId, int characterModifierId);
         CharacterHistoryEntry CreateLogDisableModifier(int characterId, int characterModifierId);
+        CharacterHistoryEntry CreateLogGiveItem(int characterId, Item item);
+        CharacterHistoryEntry CreateLogGivenItem(int characterId, Item item);
+        CharacterHistoryEntry CreateLogLootItem(int characterId, Item item);
     }
 
     public class CharacterHistoryUtil : ICharacterHistoryUtil
@@ -36,6 +39,9 @@ namespace Naheulbook.Core.Utils
         private const string RemoveModifierActionName = "REMOVE_MODIFIER";
         private const string ActiveModifierActionName = "ACTIVE_MODIFIER";
         private const string DisableModifierActionName = "DISABLE_MODIFIER";
+        private const string GiveItemActionName = "GIVE_ITEM";
+        private const string GivenItemActionName = "GIVEN_ITEM";
+        private const string LootItemActionName = "LOOT_ITEM";
 
         private readonly IJsonUtil _jsonUtil;
 
@@ -184,6 +190,39 @@ namespace Naheulbook.Core.Utils
                 Action = DisableModifierActionName,
                 Date = DateTime.Now,
                 CharacterModifierId = characterModifierId
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogGiveItem(int characterId, Item item)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = GiveItemActionName,
+                Date = DateTime.Now,
+                ItemId = item.Id
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogGivenItem(int characterId, Item item)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = GivenItemActionName,
+                Date = DateTime.Now,
+                ItemId = item.Id
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogLootItem(int characterId, Item item)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = LootItemActionName,
+                Date = DateTime.Now,
+                ItemId = item.Id
             };
         }
     }

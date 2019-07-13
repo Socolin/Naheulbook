@@ -154,3 +154,26 @@ Feature: Item
       }}
     }
     """
+
+  Scenario: A character can give an item to another character
+    Given a JWT for a user
+    And a group
+    And a character
+    And that the character is a member of the group
+    And a character
+    And that the character is a member of the group
+    And an item in the character inventory
+
+    When performing a POST to the url "/api/v2/items/${Item.Id}/give" with the following json content and the current jwt
+    """
+    {
+      "characterId": ${Character.[0].Id}
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "remainingQuantity": 0
+    }
+    """

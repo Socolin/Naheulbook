@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.Extensions;
 using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
@@ -10,6 +11,7 @@ namespace Naheulbook.Data.Repositories
         Task<Item> GetWithAllDataAsync(int itemId);
         Task<Item> GetWithOwnerAsync(int itemId);
         Task<Item> GetWithOwnerWitGroupCharactersAsync(int itemId);
+        Task<Item> GetWithAllDataWithCharacterAsync(int itemId);
     }
 
     public class ItemRepository : Repository<Item, NaheulbookDbContext>, IItemRepository
@@ -22,21 +24,7 @@ namespace Naheulbook.Data.Repositories
         public Task<Item> GetWithAllDataAsync(int itemId)
         {
             return Context.Items
-                .Include(i => i.ItemTemplate)
-                .ThenInclude(i => i.UnSkills)
-                .Include(i => i.ItemTemplate)
-                .ThenInclude(i => i.Skills)
-                .Include(i => i.ItemTemplate)
-                .ThenInclude(i => i.Modifiers)
-                .Include(i => i.ItemTemplate)
-                .ThenInclude(i => i.SkillModifiers)
-                .Include(i => i.ItemTemplate)
-                .ThenInclude(i => i.Requirements)
-                .Include(i => i.ItemTemplate)
-                .ThenInclude(i => i.Slots)
-                .ThenInclude(i => i.Slot)
-                .Include(i => i.ItemTemplate)
-                .ThenInclude(i => i.Modifiers)
+                .IncludeItemTemplateDetails(i => i.ItemTemplate)
                 .SingleAsync(x => x.Id == itemId);
         }
 
@@ -57,6 +45,7 @@ namespace Naheulbook.Data.Repositories
             return Context.Items
                 .Include(i => i.Character)
                 .ThenInclude(c => c.Group)
+                .ThenInclude(m => m.Characters)
                 .Include(i => i.Monster)
                 .ThenInclude(m => m.Group)
                 .ThenInclude(m => m.Characters)
@@ -64,6 +53,14 @@ namespace Naheulbook.Data.Repositories
                 .ThenInclude(l => l.Group)
                 .ThenInclude(m => m.Characters)
                 .FirstOrDefaultAsync(i => i.Id == itemId);
+        }
+
+        public Task<Item> GetWithAllDataWithCharacterAsync(int itemId)
+        {
+            return Context.Items
+                .IncludeItemTemplateDetails(i => i.ItemTemplate)
+                .Include(i => i.Character)
+                .SingleAsync(x => x.Id == itemId);
         }
     }
 }

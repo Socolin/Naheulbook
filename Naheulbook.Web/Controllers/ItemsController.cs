@@ -166,5 +166,32 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
+
+
+        [HttpPost("{ItemId}/give")]
+        public async Task<ActionResult<GiveItemResponse>> PostGiveItemAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int itemId,
+            TakeItemRequest request
+        )
+        {
+            try
+            {
+                var remainingQuantity = await _itemService.GiveItemAsync(executionContext, itemId, request);
+
+                return new GiveItemResponse
+                {
+                    RemainingQuantity = remainingQuantity
+                };
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (ItemNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }
