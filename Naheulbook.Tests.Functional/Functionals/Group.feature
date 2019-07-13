@@ -280,3 +280,22 @@ Feature: Group
     ]
     """
     Then the response status code is 204
+
+  Scenario: A character can get the list of active characters in the group
+    Given a JWT for a user
+    Given a group
+    And a character
+    And that the character is a member of the group
+
+    When performing a GET to the url "/api/v2/groups/${Group.Id}/activeCharacters" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    [
+      {
+        "id": ${Character.Id},
+        "name": "${Character.Name}",
+        "isNpc": ${Character.IsNpc}
+      }
+    ]
+    """

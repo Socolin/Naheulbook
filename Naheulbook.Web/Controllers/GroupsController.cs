@@ -372,8 +372,8 @@ namespace Naheulbook.Web.Controllers
         {
             try
             {
-                var monster = await _groupService.GetGroupHistoryEntriesAsync(executionContext, groupId, page);
-                return _mapper.Map<List<GroupHistoryEntryResponse>>(monster);
+                var historyEntries = await _groupService.GetGroupHistoryEntriesAsync(executionContext, groupId, page);
+                return _mapper.Map<List<GroupHistoryEntryResponse>>(historyEntries);
             }
             catch (ForbiddenAccessException ex)
             {
@@ -427,5 +427,27 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
+
+        [HttpGet("{GroupId:int:min(1)}/activeCharacters")]
+        public async Task<ActionResult<List<ListActiveCharacterResponse>>> GetActiveCharactersAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId
+        )
+        {
+            try
+            {
+                var characters = await _groupService.ListActiveCharactersAsync(executionContext, groupId);
+                return _mapper.Map<List<ListActiveCharacterResponse>>(characters);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
     }
 }

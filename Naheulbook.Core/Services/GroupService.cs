@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Naheulbook.Core.Exceptions;
@@ -27,6 +28,7 @@ namespace Naheulbook.Core.Services
         Task StartCombatAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task EndCombatAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task UpdateDurationsAsync(NaheulbookExecutionContext executionContext, int groupId, IList<PostGroupUpdateDurationsRequest> request);
+        Task<IEnumerable<Character>> ListActiveCharactersAsync(NaheulbookExecutionContext executionContext, int groupId);
     }
 
     public class GroupService : IGroupService
@@ -307,6 +309,20 @@ namespace Naheulbook.Core.Services
             }
 
             await _durationUtil.UpdateDurationAsync(groupId, _mapper.Map<IList<FighterDurationChanges>>(request));
+        }
+
+        public async Task<IEnumerable<Character>> ListActiveCharactersAsync(NaheulbookExecutionContext executionContext, int groupId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetGroupsWithCharactersAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
+
+                return group.Characters.Where(x => x.IsActive);
+            }
         }
     }
 }

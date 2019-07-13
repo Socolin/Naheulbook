@@ -20,6 +20,7 @@ namespace Naheulbook.Web.Mappers
 
             CreateMap<Character, NamedIdResponse>();
             CreateMap<Character, CreateCharacterResponse>();
+            CreateMap<Character, ListActiveCharacterResponse>();
             CreateMap<Character, CharacterSearchResponse>()
                 .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name))
                 .ForMember(x => x.OwnerName, opt => opt.MapFrom(c => c.Owner.DisplayName));
