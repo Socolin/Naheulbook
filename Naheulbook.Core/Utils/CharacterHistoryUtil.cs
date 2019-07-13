@@ -6,12 +6,12 @@ namespace Naheulbook.Core.Utils
 {
     public interface ICharacterHistoryUtil
     {
-        CharacterHistoryEntry CreateLogChangeEv(Character character, int? characterEv, int? requestEv);
-        CharacterHistoryEntry CreateLogChangeEa(Character character, int? characterEa, int? requestEa);
-        CharacterHistoryEntry CreateLogChangeFatePoint(Character character, short characterFatePoint, short? requestFatePoint);
-        CharacterHistoryEntry CreateLogChangeExperience(Character character, int characterExperience, int? requestExperience);
-        CharacterHistoryEntry CreateLogChangeSex(Character character, string characterSex, string requestSex);
-        CharacterHistoryEntry CreateLogChangeName(Character character, string characterName, string requestName);
+        CharacterHistoryEntry CreateLogChangeEv(Character character, int? oldValue, int? newValue);
+        CharacterHistoryEntry CreateLogChangeEa(Character character, int? oldValue, int? newValue);
+        CharacterHistoryEntry CreateLogChangeFatePoint(Character character, short oldValue, short? newValue);
+        CharacterHistoryEntry CreateLogChangeExperience(Character character, int oldValue, int? newValue);
+        CharacterHistoryEntry CreateLogChangeSex(Character character, string oldValue, string newValue);
+        CharacterHistoryEntry CreateLogChangeName(Character character, string oldValue, string newValue);
         CharacterHistoryEntry CreateLogAddItem(int characterId, Item item);
         CharacterHistoryEntry CreateLogEquipItem(int characterId, int itemId);
         CharacterHistoryEntry CreateLogUnEquipItem(int characterId, int itemId);
@@ -22,7 +22,7 @@ namespace Naheulbook.Core.Utils
         CharacterHistoryEntry CreateLogGiveItem(int characterId, Item item);
         CharacterHistoryEntry CreateLogGivenItem(int characterId, Item item);
         CharacterHistoryEntry CreateLogLootItem(int characterId, Item item);
-        CharacterHistoryEntry CreateLogChangeItemQuantity(int characterId, Item item, int? quantity, int? itemDataQuantity);
+        CharacterHistoryEntry CreateLogChangeItemQuantity(int characterId, Item item, int? oldValue, int? newValue);
         CharacterHistoryEntry CreateLogUseItemCharge(int itemCharacterId, Item item, int? oldValue, int? newValue);
     }
 
