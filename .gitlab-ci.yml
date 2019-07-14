@@ -19,7 +19,7 @@ build:
   stage: build
   script:
     - "dotnet restore --packages ./.nuget"
-    - "dotnet build --no-restore -c Release"
+    - "dotnet build --no-restore -c Release --packages ./.nuget"
 
 test:
   <<: *dotnet_build
@@ -28,8 +28,8 @@ test:
   stage: test
   script:
     - "dotnet restore --packages ./.nuget"
-    - "dotnet test Naheulbook.Core.Tests.Unit --no-restore"
-    - "dotnet test Naheulbook.Web.Tests.Unit --no-restore"
+    - "dotnet test Naheulbook.Core.Tests.Unit --no-restore --packages ./.nuget"
+    - "dotnet test Naheulbook.Web.Tests.Unit --no-restore --packages ./.nuget"
 
 publish:
   <<: *dotnet_build
@@ -38,7 +38,7 @@ publish:
   stage: publish
   script:
     - "dotnet restore --packages ./.nuget"
-    - "dotnet publish --no-restore -c Release"
+    - "dotnet publish --no-restore -c Release --packages ./.nuget"
   artifacts:
     name: "Build"
     paths:
