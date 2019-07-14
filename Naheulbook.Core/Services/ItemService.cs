@@ -92,8 +92,10 @@ namespace Naheulbook.Core.Services
                 {
                     if (itemData.Quantity != currentItemData.Quantity)
                         item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogChangeItemQuantity(item.CharacterId.Value, item, currentItemData.Quantity, itemData.Quantity));
-                    if (itemData.Charge == currentItemData.Charge - 1)
+                    if (itemData.Charge == currentItemData.Charge - 1) // TODO: execute item actions when a charge is used
                         item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogUseItemCharge(item.CharacterId.Value, item, currentItemData.Charge, itemData.Charge));
+                    if (itemData.ReadCount == currentItemData.ReadCount + 1)
+                        item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogReadBook(item.CharacterId.Value, item));
                 }
 
                 item.Data = _jsonUtil.Serialize(itemData);
