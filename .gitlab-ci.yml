@@ -1,0 +1,68 @@
+stages:
+  - build
+  - test
+  - publish
+  - deploy
+
+cache:
+  key: "$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME"
+  paths:
+    - .nuget/
+
+.dotnet_template: &dotnet_build
+  image: microsoft/dotnet:latest
+
+build:
+  <<: *dotnet_build
+  tags:
+    - docker
+  stage: build
+  script:
+    - "dotnet restore --packages ./.nuget"
+    - "dotnet build --no-restore -c Release"
+
+test:
+  <<: *dotnet_build
+  tags:
+    - docker
+  stage: test
+  script:
+    - "dotnet restore --packages ./.nuget"
+    - "dotnet test Naheulbook.Core.Tests.Unit --no-restore"
+    - "dotnet test Naheulbook.Web.Tests.Unit --no-restore"
+
+publish:
+  <<: *dotnet_build
+  tags:
+    - docker
+  stage: publish
+  script:
+    - "dotnet restore --packages ./.nuget"
+    - "dotnet publish --no-restore -c Release"
+  artifacts:
+    name: "Build"
+    paths:
+      - Naheulbook.Web/bin/Release/publish/
+
+deploy:
+  tags:
+    - docker
+  stage: deploy
+  script:
+    - mkdir -p ~/.ssh
+    - echo -e "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 0600 ~/.ssh/known_hosts
+    - echo -e "$SSH_RSYNC_KEY" > rsync_key
+    - chmod 600 rsync_key
+    - echo -e "$SSH_DEPLOY_KEY" > deploy_key
+    - chmod 600 deploy_key
+    - rsync -e 'ssh -i rsync_key' -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_api
+    - dd if=/dev/urandom bs=512 count=2 of=rsync_key
+    - ssh -i deploy_key naheulbook@naheulbook.fr deploy
+    - dd if=/dev/urandom bs=512 count=2 of=deploy_key
+  environment:
+    name: prod
+  when: manual
+  except:
+    variables:
+      - $DEV
