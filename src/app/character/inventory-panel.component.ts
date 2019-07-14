@@ -269,10 +269,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         });
         this._itemActionService.registerAction('read_skill_book').subscribe((event: {item: Item, data: any}) => {
             let item = event.item;
-            this._itemService.readBook(item.id).subscribe(
+            this._itemService.updateItem(item.id, {...item.data, readCount: (item.data.readCount || 0) + 1}).subscribe(
                 res => {
-                    item.data.readCount = res.data.readCount;
-                    this.character.update();
+                    this.character.onUpdateItem(res);
                 }
             );
         });

@@ -120,12 +120,6 @@ export class ItemService {
         });
     }
 
-    readBook(itemId: number): Observable<PartialItem> {
-        return this.httpClient.post<PartialItem>('/api/item/readBook', {
-            itemId: itemId,
-        });
-    }
-
     identify(itemId: number): Observable<PartialItem> {
         return this.httpClient.post<PartialItem>('/api/item/identify', {
             itemId: itemId,
