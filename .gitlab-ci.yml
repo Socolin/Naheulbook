@@ -1,0 +1,41 @@
+image: node:lts
+
+cache:
+  paths:
+    - node_modules/
+
+build:
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+    - node_modules/
+  image: node:latest
+  stage: build
+  tags:
+    - docker
+  script:
+    - npm install
+    - node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --prod
+  artifacts:
+    paths:
+    - dist/
+
+deploy:
+  stage: deploy
+  tags:
+    - docker
+  script:
+    - mkdir -p ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+    - echo -e "$SSH_RSYNC_KEY" > deploy_copy_artifcats_key
+    - chmod 600 deploy_copy_artifcats_key
+    - rsync -a -e 'ssh -i deploy_copy_artifcats_key' dist/ naheulbook@naheulbook.fr:www_block_editor/dist
+    - echo -e "$SSH_DEPLOY_KEY" > deploy_key
+    - chmod 600 deploy_key
+    - ssh -i deploy_key naheulbook@naheulbook.fr deploy
+  environment:
+    name: production
+  when: manual
+  except:
+    variables:
+      - $DEV
