@@ -55,15 +55,15 @@ deploy_staging:
     - apt-get update -y && apt-get install rsync -y
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
-    - echo "$SSH_RSYNC_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
+    - echo "$SSH_RSYNC_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - rsync -a Naheulbook.DatabaseMigrator/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_migrator
     - rsync -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod
     - ssh-add -D
-    - echo "$SSH_DEPLOY_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - echo "$SSH_DEPLOY_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - ssh naheulbook@naheulbook.fr deploy
   environment:
     name: staging
@@ -82,15 +82,15 @@ deploy_prod:
     - apt-get update -y && apt-get install rsync -y
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
-    - echo "$SSH_RSYNC_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
+    - echo "$SSH_RSYNC_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - rsync -a Naheulbook.DatabaseMigrator/bin/Release/publish/ naheulbook@naheulbook.fr:/prod_migrator
     - rsync -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/prod
     - ssh-add -D
-    - echo "$SSH_DEPLOY_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - echo "$SSH_DEPLOY_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - ssh naheulbook@naheulbook.fr deploy
   environment:
     name: prod
