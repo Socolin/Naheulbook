@@ -30,6 +30,12 @@ namespace Naheulbook.Web
                 .CreateLogger();
 
             var server = new WebHostBuilder()
+                .UseLibuv()
+                .ConfigureKestrel((context, options) =>
+                {
+                    if (!string.IsNullOrEmpty(context.Configuration["socket"]))
+                        options.ListenUnixSocket(context.Configuration["socket"]);
+                })
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseEnvironment(environment)
