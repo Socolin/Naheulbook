@@ -64,7 +64,6 @@ deploy:
     - ssh -i deploy_key naheulbook@naheulbook.fr deploy
   environment:
     name: staging
-  when: manual
   except:
     variables:
       - $DEV
