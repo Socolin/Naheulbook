@@ -46,7 +46,7 @@ publish:
       - Naheulbook.Web/bin/Release/publish/
       - Naheulbook.DatabaseMigrator/bin/Release/publish/
 
-deploy:
+deploy_staging:
   tags:
     - docker
   stage: deploy
@@ -67,8 +67,10 @@ deploy:
   except:
     variables:
       - $DEV
+  only:
+    - master
 
-deploy:
+deploy_prod:
   tags:
     - docker
   stage: deploy
@@ -90,3 +92,5 @@ deploy:
   except:
     variables:
       - $DEV
+  only:
+    - master
