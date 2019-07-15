@@ -38,28 +38,53 @@ publish:
   stage: publish
   script:
     - "dotnet restore --packages ./.nuget"
-    - "dotnet publish --no-restore -c Release"
+    - "dotnet publish --no-restore -c Release Naheulbook.Web"
+    - "dotnet publish --no-restore -c Release Naheulbook.DatabaseMigrator"
   artifacts:
     name: "Build"
     paths:
       - Naheulbook.Web/bin/Release/publish/
+      - Naheulbook.DatabaseMigrator/bin/Release/publish/
 
 deploy:
   tags:
     - docker
   stage: deploy
   script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_RSYNC_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - echo "$SSH_DEPLOY_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
-    - echo -e "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    - chmod 0600 ~/.ssh/known_hosts
-    - echo -e "$SSH_RSYNC_KEY" > rsync_key
-    - chmod 600 rsync_key
-    - echo -e "$SSH_DEPLOY_KEY" > deploy_key
-    - chmod 600 deploy_key
-    - rsync -e 'ssh -i rsync_key' -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_api
-    - dd if=/dev/urandom bs=512 count=2 of=rsync_key
+    - chmod 700 ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - rsync -e 'ssh -i rsync_key' -a Naheulbook.DatabaseMigrator/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_migrator
+    - rsync -e 'ssh -i rsync_key' -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod
     - ssh -i deploy_key naheulbook@naheulbook.fr deploy
-    - dd if=/dev/urandom bs=512 count=2 of=deploy_key
+  environment:
+    name: staging
+  when: manual
+  except:
+    variables:
+      - $DEV
+
+deploy:
+  tags:
+    - docker
+  stage: deploy
+  script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_RSYNC_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - echo "$SSH_DEPLOY_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - rsync -e 'ssh -i rsync_key' -a Naheulbook.DatabaseMigrator/bin/Release/publish/ naheulbook@naheulbook.fr:/prod_migrator
+    - rsync -e 'ssh -i rsync_key' -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/prod
+    - ssh -i deploy_key naheulbook@naheulbook.fr deploy
   environment:
     name: prod
   when: manual
