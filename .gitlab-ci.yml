@@ -47,10 +47,12 @@ publish:
       - Naheulbook.DatabaseMigrator/bin/Release/publish/
 
 deploy_staging:
+  image: ubuntu
   tags:
     - docker
   stage: deploy
   script:
+    - apt-get update -y && apt-get install rsync
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - echo "$SSH_RSYNC_KEY" | tr -d '\r' | ssh-add - > /dev/null
@@ -71,10 +73,12 @@ deploy_staging:
     - master
 
 deploy_prod:
+  image: ubuntu
   tags:
     - docker
   stage: deploy
   script:
+    - apt-get update -y && apt-get install rsync 
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - echo "$SSH_RSYNC_KEY" | tr -d '\r' | ssh-add - > /dev/null
