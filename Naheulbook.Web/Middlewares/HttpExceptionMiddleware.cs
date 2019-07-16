@@ -13,10 +13,10 @@ namespace Naheulbook.Web.Middlewares
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
-        public HttpExceptionMiddleware(RequestDelegate next, ILogger logger)
+        public HttpExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
             _next = next;
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger(nameof(HttpExceptionMiddleware));
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -39,7 +39,7 @@ namespace Naheulbook.Web.Middlewares
             {
                 context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
-                _logger.LogError("An unexpected error occured: " + ex.Message, ex);
+                _logger.LogError(ex, "An unexpected error occured: " + ex.Message);
                 await context.Response.WriteAsync(JsonConvert.SerializeObject(new
                 {
                     Message = $"An unexpected error occured, and was logged with reference id: {context.TraceIdentifier}"
