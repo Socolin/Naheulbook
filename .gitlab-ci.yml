@@ -39,12 +39,12 @@ publish:
   script:
     - "dotnet restore --packages ./.nuget"
     - "dotnet publish --no-restore -c Release Naheulbook.Web"
-    - "dotnet publish --no-restore -c Release Naheulbook.DatabaseMigrator"
+    - "dotnet publish --no-restore -c Release Naheulbook.DatabaseMigrator.Cli"
   artifacts:
     name: "Build"
     paths:
       - Naheulbook.Web/bin/Release/publish/
-      - Naheulbook.DatabaseMigrator/bin/Release/publish/
+      - Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/
 
 deploy_staging:
   image: ubuntu
@@ -59,8 +59,9 @@ deploy_staging:
     - chmod 700 ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - echo "$SSH_RSYNC_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - rsync -a Naheulbook.DatabaseMigrator/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_migrator
+    - echo "$SSH_RSYNC_DBMIGRATOR_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - rsync -a Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_migrator
+    - echo "$SSH_RSYNC_WEB_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - rsync -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod
     - ssh-add -D
     - echo "$SSH_DEPLOY_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
@@ -86,8 +87,9 @@ deploy_prod:
     - chmod 700 ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - echo "$SSH_RSYNC_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - rsync -a Naheulbook.DatabaseMigrator/bin/Release/publish/ naheulbook@naheulbook.fr:/prod_migrator
+    - echo "$SSH_RSYNC_DBMIGRATOR_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - rsync -a Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/prod_migrator
+    - echo "$SSH_RSYNC_WEB_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - rsync -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/prod
     - ssh-add -D
     - echo "$SSH_DEPLOY_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
