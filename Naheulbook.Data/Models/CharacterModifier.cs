@@ -24,7 +24,8 @@ namespace Naheulbook.Data.Models
         public int? CurrentTimeDuration { get; set; }
         public int? CurrentLapCount { get; set; }
 
-        public int CharacterId { get; set; }
+        // TODO: Rework Characterhistory so this dont have to be nullable
+        public int? CharacterId { get; set; }
         public Character Character { get; set; }
 
         public ICollection<CharacterModifierValue> Values { get; set; }
