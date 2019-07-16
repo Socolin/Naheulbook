@@ -61,6 +61,7 @@ deploy_staging:
     - chmod 644 ~/.ssh/known_hosts
     - echo "$SSH_RSYNC_DBMIGRATOR_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - rsync -a Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_migrator
+    - ssh-add -D
     - echo "$SSH_RSYNC_WEB_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - rsync -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod
     - ssh-add -D
@@ -89,6 +90,7 @@ deploy_prod:
     - chmod 644 ~/.ssh/known_hosts
     - echo "$SSH_RSYNC_DBMIGRATOR_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - rsync -a Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/prod_migrator
+    - ssh-add -D
     - echo "$SSH_RSYNC_WEB_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - rsync -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/prod
     - ssh-add -D
