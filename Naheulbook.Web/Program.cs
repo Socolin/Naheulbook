@@ -3,6 +3,8 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using Serilog.Exceptions;
+using Serilog.Exceptions.Core;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Naheulbook.Web
@@ -25,6 +27,7 @@ namespace Naheulbook.Web
                 .Build();
 
             var logger = new LoggerConfiguration()
+                .Enrich.WithExceptionDetails()
                 .ReadFrom.Configuration(configuration)
                 .WriteTo.Console(theme: AnsiConsoleTheme.Code)
                 .CreateLogger();
