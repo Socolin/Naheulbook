@@ -416,7 +416,7 @@ export class Character extends WsRegistrable {
             }
 
             itemsById[item.id] = item;
-            if (item.data.equiped || item.container !== null) {
+            if (item.data.equiped || item.containerId !== null) {
                 if (item.template.data.container) {
                     if (item.data.equiped) {
                         topLevelContainers.push(item);
@@ -448,11 +448,11 @@ export class Character extends WsRegistrable {
             if (item.data.equiped) {
                 equiped.push(item);
             } else {
-                if (item.container) {
-                    if (!content[item.container]) {
-                        content[item.container] = [];
+                if (item.containerId) {
+                    if (!content[item.containerId]) {
+                        content[item.containerId] = [];
                     }
-                    content[item.container].push(item);
+                    content[item.containerId].push(item);
                 }
             }
 
@@ -462,10 +462,10 @@ export class Character extends WsRegistrable {
         }
 
         for (let item of this.items) {
-            if (item.container) {
+            if (item.containerId) {
                 item.containerInfo = {
-                    name: itemsById[item.container].data.name,
-                    id: itemsById[item.container].id
+                    name: itemsById[item.containerId].data.name,
+                    id: itemsById[item.containerId].id
                 };
             }
             if (item.id in content) {
@@ -1240,7 +1240,7 @@ export class Character extends WsRegistrable {
         for (let i = 0; i < this.items.length; i++) {
             let it = this.items[i];
             if (it.id === item.id) {
-                it.container = item.container;
+                it.containerId = item.containerId;
                 this.update();
                 break;
             }

@@ -64,7 +64,7 @@
                                 <icon [icon]="item.data.icon" [size]="'32px'"></icon>
                                 <mat-icon *ngIf="item.data.notIdentified">help</mat-icon>
                                 <mat-icon *ngIf="item.data.equiped !== undefined">check_circle</mat-icon>
-                                <mat-icon *ngIf="item.data.equiped === undefined && !item.container">reorder</mat-icon>
+                                <mat-icon *ngIf="item.data.equiped === undefined && !item.containerId">reorder</mat-icon>
                                 <span *ngIf="item.data.quantity">{{item.data.quantity}}&nbsp;</span>
                                 {{item.data.name}}
                             </div>

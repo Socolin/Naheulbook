@@ -188,13 +188,13 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                         return 1;
                     }
 
-                    if ((a.container || a.data.equiped) && (b.container || b.data.equiped)) {
+                    if ((a.containerId || a.data.equiped) && (b.containerId || b.data.equiped)) {
                         return a.data.name.localeCompare(b.data.name);
                     }
-                    if (a.container || a.data.equiped) {
+                    if (a.containerId || a.data.equiped) {
                         return 1;
                     }
-                    if (b.container || b.data.equiped) {
+                    if (b.containerId || b.data.equiped) {
                         return -1;
                     }
 

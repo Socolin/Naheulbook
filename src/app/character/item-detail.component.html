@@ -437,7 +437,7 @@
 
         <ng-template [ngIf]="!readonly && character != undefined">
             <div *ngIf="character.computedData.containers && !item.data.equiped">
-                <ng-template [ngIf]="item.container">
+                <ng-template [ngIf]="item.containerId">
                     Stocké dans: {{item.containerInfo.name}}
                 </ng-template>
             </div>
@@ -468,7 +468,7 @@
 
         <button mat-button
                 *ngIf="!readonly && !item.content?.length"
-                [color]="item.container ? 'primary' : 'accent'"
+                [color]="item.containerId ? 'primary' : 'accent'"
                 (click)="openStoreItemInContainerDialog(); $event.stopPropagation()">
             RANGER
         </button>
@@ -489,7 +489,7 @@
                     <div *ngFor="let container of character.computedData.containers" class="target-container">
                         <icon-selector [icon]="container.data.icon" [readonly]="true"></icon-selector>
                         <button mat-raised-button
-                                [disabled]="item.container == container.id"
+                                [disabled]="item.containerId == container.id"
                                 (click)="_itemActionService.onAction('move_to_container', item, {container: container.id}); $event.stopPropagation()">
                             {{container.data.name}}
                         </button>

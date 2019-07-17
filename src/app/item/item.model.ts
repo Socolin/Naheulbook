@@ -31,7 +31,7 @@ export class Item {
     id: number;
     data: ItemData = new ItemData();
     modifiers: ActiveStatsModifier[];
-    container: number;
+    containerId: number;
     template: ItemTemplate;
     computedData: ItemComputedData = new ItemComputedData();
 
@@ -136,7 +136,7 @@ export class PartialItem {
     id: number;
     data: ItemData = new ItemData();
     modifiers: ActiveStatsModifier[];
-    container: number;
+    containerId: number;
 
     static fromJson(jsonData: any): PartialItem {
         let item = new PartialItem();
