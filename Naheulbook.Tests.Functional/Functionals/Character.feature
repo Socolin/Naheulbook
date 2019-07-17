@@ -6,6 +6,7 @@ Feature: Character
     And a skill
     And a speciality
     And an origin
+    And item templates required for initial inventory
 
     When performing a POST to the url "/api/v2/characters" with the following json content and the current jwt
     """

@@ -15,6 +15,8 @@ namespace Naheulbook.Data.Repositories
         Task<List<ItemTemplate>> GetItemByCleanNameAsync(string name, int maxResultCount);
         Task<List<ItemTemplate>> GetItemByPartialCleanNameAsync(string name, int maxResultCount, IEnumerable<int> excludedIds);
         Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorAsync(string name, int maxResultCount, IEnumerable<int> excludedIds);
+        Task<ItemTemplate> GetPurseItemTemplateBasedOnMoneyAsync(int money);
+        Task<ItemTemplate> GetGoldCoinItemTemplate();
     }
 
     public class ItemTemplateRepository : Repository<ItemTemplate, NaheulbookDbContext>, IItemTemplateRepository
@@ -89,6 +91,28 @@ namespace Naheulbook.Data.Repositories
                 .Where(i => !excludedIds.Contains(i.Id))
                 .Take(maxResultCount)
                 .ToListAsync();
+        }
+
+        public Task<ItemTemplate> GetPurseItemTemplateBasedOnMoneyAsync(int money)
+        {
+            string techName;
+            if (money <= 50)
+                techName = "SMALL_PURSE";
+            else if (money <= 100)
+                techName = "MEDIUM_PURSE";
+            else
+                techName = "BIG_PURSE";
+
+            return Context.ItemTemplates
+                .Where(x => x.TechName == techName)
+                .FirstAsync();
+        }
+
+        public Task<ItemTemplate> GetGoldCoinItemTemplate()
+        {
+            return Context.ItemTemplates
+                .Where(x => x.TechName == "MONEY")
+                .FirstAsync();
         }
     }
 }

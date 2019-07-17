@@ -45,6 +45,10 @@ namespace Naheulbook.Data.Configurations
                 .WithMany()
                 .HasForeignKey(e => e.ItemTemplateId);
 
+            builder.HasOne(e => e.Container)
+                .WithMany()
+                .HasForeignKey(e => e.ContainerId);
+
             builder.HasOne(e => e.Character)
                 .WithMany(e => e.Items)
                 .HasForeignKey(e => e.CharacterId);

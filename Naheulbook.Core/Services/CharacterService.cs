@@ -40,6 +40,7 @@ namespace Naheulbook.Core.Services
         private readonly IMapper _mapper;
         private readonly ICharacterModifierUtil _characterModifierUtil;
         private readonly INotificationSessionFactory _notificationSessionFactory;
+        private readonly IItemUtil _itemUtil;
 
         public CharacterService(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -50,7 +51,8 @@ namespace Naheulbook.Core.Services
             IMapper mapper,
             ICharacterModifierUtil characterModifierUtil,
             INotificationSessionFactory notificationSessionFactory,
-            ICharacterUtil characterUtil
+            ICharacterUtil characterUtil,
+            IItemUtil itemUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -62,6 +64,7 @@ namespace Naheulbook.Core.Services
             _characterModifierUtil = characterModifierUtil;
             _notificationSessionFactory = notificationSessionFactory;
             _characterUtil = characterUtil;
+            _itemUtil = itemUtil;
         }
 
         public async Task<List<Character>> GetCharacterListAsync(NaheulbookExecutionContext executionContext)
@@ -79,8 +82,10 @@ namespace Naheulbook.Core.Services
                 var character = _characterFactory.CreateCharacter(request);
 
                 character.OwnerId = executionContext.UserId;
+                character.Items = await _itemUtil.CreateInitialPlayerInventoryAsync(request.Money);
 
                 uow.Characters.Add(character);
+
                 await uow.CompleteAsync();
 
                 return character;
@@ -167,6 +172,9 @@ namespace Naheulbook.Core.Services
                     throw new CharacterNotFoundException(characterId);
 
                 _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+                if (character.Group == null)
+                    return false;
 
                 return _authorizationUtil.IsGroupOwner(executionContext, character.Group);
             }

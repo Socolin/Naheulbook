@@ -34,7 +34,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
 
             var actualItem = _factory.CreateItemFromRequest(ItemOwnerType.Character, 10, itemTemplate, itemData);
 
-            actualItem.ItemTemplate.Should().BeSameAs(itemTemplate);
+            actualItem.ItemTemplateId.Should().Be(itemTemplate.Id);
             actualItem.Data.Should().BeEquivalentTo(jsonItemData);
         }
 
@@ -130,6 +130,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
         {
             return new ItemTemplate
             {
+                Id = RngHelper.GetRandomInt(),
                 Data = "some-item-template-data"
             };
         }

@@ -37,6 +37,19 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddItemTemplateCategory();
         }
 
+        [Given("item templates required for initial inventory")]
+        public void GivenItemTemplatesRequiredForInitialInventory()
+        {
+            if (!_testDataUtil.Contains<ItemTemplateSection>())
+                _testDataUtil.AddItemTemplateSection();
+            if (!_testDataUtil.Contains<ItemTemplateCategory>())
+                _testDataUtil.AddItemTemplateCategory();
+            _testDataUtil.AddItemTemplate(i => i.TechName = "MONEY");
+            _testDataUtil.AddItemTemplate(i => i.TechName = "BIG_PURSE");
+            _testDataUtil.AddItemTemplate(i => i.TechName = "MEDIUM_PURSE");
+            _testDataUtil.AddItemTemplate(i => i.TechName = "SMALL_PURSE");
+        }
+
         [Given("an item template")]
         public void GivenAnItemTemplate()
         {

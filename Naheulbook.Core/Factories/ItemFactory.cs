@@ -9,6 +9,7 @@ namespace Naheulbook.Core.Factories
     public interface IItemFactory
     {
         Item CreateItemFromRequest(ItemOwnerType ownerType, int ownerId, ItemTemplate itemTemplate, ItemData itemData);
+        Item CreateItem(ItemTemplate itemTemplate, ItemData itemData);
     }
 
     public class ItemFactory : IItemFactory
@@ -22,20 +23,7 @@ namespace Naheulbook.Core.Factories
 
         public Item CreateItemFromRequest(ItemOwnerType ownerType, int ownerId, ItemTemplate itemTemplate, ItemData itemData)
         {
-            var itemTemplateData = _jsonUtil.Deserialize<PartialItemTemplateData>(itemTemplate.Data) ?? new PartialItemTemplateData();
-
-            if (itemTemplateData.Charge.HasValue)
-                itemData.Charge = itemTemplateData.Charge.Value;
-            if (itemTemplateData.Icon != null)
-                itemData.Icon = itemTemplateData.Icon;
-            if (itemTemplateData.Lifetime != null)
-                itemData.Lifetime = itemTemplateData.Lifetime;
-
-            var item = new Item
-            {
-                Data = _jsonUtil.Serialize(itemData),
-                ItemTemplate = itemTemplate
-            };
+            var item = CreateItem(itemTemplate, itemData);
 
             switch (ownerType)
             {
@@ -52,6 +40,32 @@ namespace Naheulbook.Core.Factories
                     throw new ArgumentOutOfRangeException(nameof(ownerType), ownerType, null);
             }
 
+            return item;
+        }
+
+        public Item CreateItem(ItemTemplate itemTemplate, ItemData itemData)
+        {
+            var itemTemplateData = _jsonUtil.Deserialize<PartialItemTemplateData>(itemTemplate.Data) ?? new PartialItemTemplateData();
+
+            if (itemTemplateData.Charge.HasValue)
+                itemData.Charge = itemTemplateData.Charge.Value;
+            if (itemTemplateData.Icon != null)
+                itemData.Icon = itemTemplateData.Icon;
+            if (itemTemplateData.Lifetime != null)
+                itemData.Lifetime = itemTemplateData.Lifetime;
+            if (string.IsNullOrEmpty(itemData.Name))
+            {
+                if (itemData.NotIdentified == true && !string.IsNullOrEmpty(itemTemplateData.NotIdentifiedName))
+                    itemData.Name = itemTemplateData.NotIdentifiedName;
+                else
+                    itemData.Name = itemTemplate.Name;
+            }
+
+            var item = new Item
+            {
+                Data = _jsonUtil.Serialize(itemData),
+                ItemTemplateId = itemTemplate.Id
+            };
             return item;
         }
     }

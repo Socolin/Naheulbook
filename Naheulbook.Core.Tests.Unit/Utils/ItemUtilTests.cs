@@ -1,5 +1,6 @@
 using System.Linq;
 using FluentAssertions;
+using Naheulbook.Core.Factories;
 using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
@@ -15,6 +16,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         private ICharacterHistoryUtil _characterHistoryUtil;
         private IItemDataUtil _itemDataUtil;
         private IJsonUtil _jsonUtil;
+        private IItemFactory _itemFactory;
         private IItemUtil _util;
 
         [SetUp]
@@ -23,13 +25,15 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
             _itemDataUtil = Substitute.For<IItemDataUtil>();
             _jsonUtil = Substitute.For<IJsonUtil>();
+            _itemFactory = Substitute.For<IItemFactory>();
 
             _util = new ItemUtil(
                 _characterHistoryUtil,
                 _itemDataUtil,
                 _jsonUtil,
                 new FakeUnitOfWorkFactory(),
-                new FakeNotificationSessionFactory()
+                new FakeNotificationSessionFactory(),
+                _itemFactory
             );
         }
 

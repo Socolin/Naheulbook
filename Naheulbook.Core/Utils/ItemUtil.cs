@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.Factories;
@@ -14,6 +15,7 @@ namespace Naheulbook.Core.Utils
     {
         void EquipItem(Item item, int? level);
         Task<(Item takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger);
+        Task<IList<Item>> CreateInitialPlayerInventoryAsync(int money);
     }
 
     public class ItemUtil : IItemUtil
@@ -23,13 +25,15 @@ namespace Naheulbook.Core.Utils
         private readonly IJsonUtil _jsonUtil;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly INotificationSessionFactory _notificationSessionFactory;
+        private readonly IItemFactory _itemFactory;
 
         public ItemUtil(
             ICharacterHistoryUtil characterHistoryUtil,
             IItemDataUtil itemDataUtil,
             IJsonUtil jsonUtil,
             IUnitOfWorkFactory unitOfWorkFactory,
-            INotificationSessionFactory notificationSessionFactory
+            INotificationSessionFactory notificationSessionFactory,
+            IItemFactory itemFactory
         )
         {
             _characterHistoryUtil = characterHistoryUtil;
@@ -37,6 +41,7 @@ namespace Naheulbook.Core.Utils
             _jsonUtil = jsonUtil;
             _unitOfWorkFactory = unitOfWorkFactory;
             _notificationSessionFactory = notificationSessionFactory;
+            _itemFactory = itemFactory;
         }
 
         public void EquipItem(Item item, int? level)
@@ -126,6 +131,24 @@ namespace Naheulbook.Core.Utils
             await notificationSession.CommitAsync();
 
             return (takenItem, remainingQuantity);
+        }
+
+        public async Task<IList<Item>> CreateInitialPlayerInventoryAsync(int money)
+        {
+            ItemTemplate purseItemTemplate;
+            ItemTemplate goldCoinItemTemplate;
+
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                purseItemTemplate = await uow.ItemTemplates.GetPurseItemTemplateBasedOnMoneyAsync(money);
+                goldCoinItemTemplate = await uow.ItemTemplates.GetGoldCoinItemTemplate();
+            }
+
+            var purseItem = _itemFactory.CreateItem(purseItemTemplate, new ItemData {Equipped = 1});
+            var moneyItem = _itemFactory.CreateItem(goldCoinItemTemplate, new ItemData {Quantity = money});
+            moneyItem.Container = purseItem;
+
+            return new List<Item> {moneyItem, purseItem};
         }
 
         private Item SplitItem(Item originalItem, ItemData originalItemData, int quantity)

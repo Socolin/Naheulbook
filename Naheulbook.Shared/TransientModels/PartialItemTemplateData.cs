@@ -7,5 +7,6 @@ namespace Naheulbook.Shared.TransientModels
         public int? Charge { get; set; }
         public JObject Icon { get; set; }
         public JObject Lifetime { get; set; }
+        public string NotIdentifiedName { get; set; }
     }
 }

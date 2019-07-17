@@ -28,6 +28,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private ICharacterModifierUtil _characterModifierUtil;
         private FakeNotificationSessionFactory _notificationSessionFactory;
         private ICharacterUtil _characterUtil;
+        private IItemUtil _itemUtil;
         private CharacterService _service;
 
         [SetUp]
@@ -42,6 +43,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _characterModifierUtil = Substitute.For<ICharacterModifierUtil>();
             _notificationSessionFactory = new FakeNotificationSessionFactory();
             _characterUtil = Substitute.For<ICharacterUtil>();
+            _itemUtil = Substitute.For<IItemUtil>();
 
             _service = new CharacterService(
                 _unitOfWorkFactory,
@@ -52,7 +54,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _mapper,
                 _characterModifierUtil,
                 _notificationSessionFactory,
-                _characterUtil
+                _characterUtil,
+                _itemUtil
             );
         }
 
@@ -63,9 +66,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var createCharacterRequest = new CreateCharacterRequest {Name = "some-name"};
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = userId};
             var createdCharacter = new Character();
+            var initialInventory = new List<Item>();
 
             _characterFactory.CreateCharacter(createCharacterRequest)
                 .Returns(createdCharacter);
+            _itemUtil.CreateInitialPlayerInventoryAsync(createCharacterRequest.Money)
+                .Returns(initialInventory);
 
             var actualCharacter = await _service.CreateCharacterAsync(naheulbookExecutionContext, createCharacterRequest);
 
@@ -77,6 +83,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             actualCharacter.OwnerId.Should().Be(userId);
             createdCharacter.Should().BeSameAs(actualCharacter);
+            createdCharacter.Items.Should().BeSameAs(initialInventory);
         }
 
         [Test]
