@@ -115,7 +115,7 @@ Feature: Item
       "id": ${Item.[1].Id},
       "modifiers": ${Item.[1].Modifiers},
       "data": ${Item.[1].Data},
-      "container": ${Item.[0].Id}
+      "containerId": ${Item.[0].Id}
     }
     """
 

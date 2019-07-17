@@ -10,8 +10,6 @@ namespace Naheulbook.Web.Responses
         public int Id { get; set; }
         public JObject Data { get; set; }
         public List<ActiveStatsModifier> Modifiers { get; set; }
-
-        [JsonProperty("container")]
         public int? ContainerId { get; set; }
     }
 }
