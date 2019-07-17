@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentMigrator.Runner;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Naheulbook.DatabaseMigrator.Migrations;
 
@@ -9,7 +10,11 @@ namespace Naheulbook.DatabaseMigrator.Cli
     {
         private static void Main(string[] args)
         {
-            var serviceProvider = CreateServices(args[0]);
+            var config = new ConfigurationBuilder()
+                .AddJsonFile($"appsettings.local.json", true)
+                .AddCommandLine(args)
+                .Build();
+            var serviceProvider = CreateServices(config["ConnectionStrings:DefaultConnection"]);
 
             using (var scope = serviceProvider.CreateScope())
             {
