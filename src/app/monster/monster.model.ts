@@ -181,12 +181,19 @@ export class Monster extends WsRegistrable {
         this.targetChanged.next(target);
     }
 
-    public changeData(fieldName: string, value: any) {
-        this.notify('changeData',
-            'Modification: ' + fieldName.toUpperCase() + ': ' + this.data[fieldName] + ' -> ' + value,
-            {fieldName: fieldName, value: value});
-        this.data[fieldName] = value;
-        this.onChange.next({action: 'changeData', fieldName: fieldName, value: value});
+    public changeData(data: MonsterData) {
+        for (let fieldName in data) {
+            if (!data.hasOwnProperty(fieldName)) {
+                continue;
+            }
+            if (data[fieldName] !== this.data[fieldName]) {
+                this.notify('changeData',
+                    'Modification: ' + fieldName.toUpperCase() + ': ' + this.data[fieldName] + ' -> ' + data[fieldName],
+                    {fieldName: fieldName, value: data[fieldName]});
+                this.onChange.next({action: 'changeData', fieldName: fieldName, value: data[fieldName]});
+            }
+        }
+        this.data = data;
         this.update();
     }
 
@@ -391,7 +398,7 @@ export class Monster extends WsRegistrable {
                 break;
             }
             case 'changeData': {
-                this.changeData(data.fieldName, data.value);
+                this.changeData(MonsterData.fromJson(data));
                 break;
             }
             case 'addModifier': {

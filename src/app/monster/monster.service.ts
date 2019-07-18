@@ -24,12 +24,16 @@ export class MonsterService {
         }));
     }
 
-    updateMonster(monsterId: number, fieldName: string, value: any): Observable<{value: any, fieldName: string}> {
-        return this.httpClient.post<{value: any, fieldName: string}>('/api/monster/updateMonster', {
-            fieldName: fieldName,
-            value: value,
-            monsterId: monsterId
-        });
+    updateMonsterData(monsterId: number, monsterData): Observable<void> {
+        return this.httpClient.put<void>(`/api/v2/monsters/${monsterId}/data`, monsterData);
+    }
+
+    updateMonster(monsterId: number, request: {name?: string}): Observable<void> {
+        return this.httpClient.patch<void>(`/api/v2/monsters/${monsterId}`, request);
+    }
+
+    updateMonsterTarget(monsterId: number, request: {id: number, isMonster: boolean}): Observable<void> {
+        return this.httpClient.put<void>(`/api/v2/monsters/${monsterId}/target`, request);
     }
 
     killMonster(monsterId: number): Observable<void> {

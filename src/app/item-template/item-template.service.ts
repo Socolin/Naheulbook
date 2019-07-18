@@ -156,8 +156,8 @@ export class ItemTemplateService {
         return this.httpClient.post<ItemType>('/api/itemtemplate/createItemType', {itemType: itemType})
     }
 
-    editItemTemplate(item): Observable<ItemTemplate> {
-        return this.httpClient.post<ItemTemplate>('/api/itemtemplate/edit', {item: item})
+    editItemTemplate(itemTemplate: ItemTemplate): Observable<ItemTemplate> {
+        return this.httpClient.put<ItemTemplate>(`/api/v2/itemTemplates/${itemTemplate.id}`, itemTemplate);
     }
 
     clearItemSectionCache(sectionId: number) {

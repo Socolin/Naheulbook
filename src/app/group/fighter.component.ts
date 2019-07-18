@@ -53,7 +53,7 @@ export class FighterComponent implements OnInit, OnChanges {
 
     changeTarget(target: TargetJsonData) {
         if (this.fighter.isMonster) {
-            this._monsterService.updateMonster(this.fighter.id, 'target', {id: target.id, isMonster: target.isMonster})
+            this._monsterService.updateMonsterTarget(this.fighter.id, {id: target.id, isMonster: target.isMonster})
                 .subscribe(
                     () => {
                         this.fighter.changeTarget(target);
@@ -78,10 +78,10 @@ export class FighterComponent implements OnInit, OnChanges {
             color = color.substring(1);
         }
         if (element.isMonster) {
-            this._monsterService.updateMonster(element.id, 'color', color)
+            this._monsterService.updateMonsterData(element.id, {...element.monster.data, color})
                 .subscribe(
-                    res => {
-                        element.changeColor(res.value);
+                    () => {
+                        element.changeColor(color);
                         this._notification.info('Monstre', 'Couleur changé');
                     }
                 );
@@ -99,23 +99,19 @@ export class FighterComponent implements OnInit, OnChanges {
         if (monster.data[fieldName] === newValue) {
             return;
         }
-        this._monsterService.updateMonster(monster.id, fieldName, newValue)
-            .subscribe(
-                res => {
-                    this._notification.info('Monstre: ' + monster.name
-                        , 'Modification: ' + fieldName.toUpperCase() + ': '
-                        + monster.data[fieldName] + ' -> ' + res.value);
-                    monster.changeData(fieldName, res.value);
-                }
-            );
+        const newData = {...monster.data, [fieldName]: newValue};
+        this._monsterService.updateMonsterData(monster.id, newData)
+            .subscribe(() => {
+                monster.changeData(newData);
+            });
     }
 
     changeNumber(element: Fighter, number: number) {
         if (element.isMonster) {
-            this._monsterService.updateMonster(element.id, 'number', number)
+            this._monsterService.updateMonsterData(element.id, {...element.monster.data, number})
                 .subscribe(
-                    res => {
-                        element.changeNumber(res.value);
+                    () => {
+                        element.changeNumber(number);
                         this._notification.info('Monstre', 'Couleur changé');
                     }
                 );
@@ -125,16 +121,18 @@ export class FighterComponent implements OnInit, OnChanges {
     changeStat(stat: string, value: any) {
         if (this.fighter.isMonster) {
             let monster = this.fighter.monster;
-            this._monsterService.updateMonster(monster.id, stat, value)
-                .subscribe(
-                    res => {
-                        if (res.fieldName === 'name') {
-                            monster.name = res.value;
-                        } else {
-                            monster.changeData(res.fieldName, res.value);
-                        }
-                    }
-                );
+            if (stat === 'name') {
+                this._monsterService.updateMonster(monster.id, {name: value})
+                    .subscribe(() => {
+                        monster.name = value;
+                    });
+            } else {
+                let monsterData = {...monster.data, [stat]: value};
+                this._monsterService.updateMonsterData(monster.id, monsterData)
+                    .subscribe(() => {
+                        monster.changeData(monsterData);
+                    });
+            }
         }
         else {
             this._characterService.changeCharacterStat(this.fighter.character.id, stat, value).subscribe(
