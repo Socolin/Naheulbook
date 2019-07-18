@@ -20,6 +20,7 @@ namespace Naheulbook.Core.Utils
         void EnsureCanTakeItem(NaheulbookExecutionContext executionContext, Item item);
         void EnsureCanDeleteGroupInvite(NaheulbookExecutionContext executionContext, GroupInvite groupInvite);
         void EnsureCanAcceptGroupInvite(NaheulbookExecutionContext executionContext, GroupInvite groupInvite);
+        void EnsureCanEditUser(NaheulbookExecutionContext executionContext, User user);
     }
 
     public class AuthorizationUtil : IAuthorizationUtil
@@ -148,6 +149,14 @@ namespace Naheulbook.Core.Utils
                 return;
 
             if (groupInvite.FromGroup && executionContext.UserId == groupInvite.Character.OwnerId)
+                return;
+
+            throw new ForbiddenAccessException();
+        }
+
+        public void EnsureCanEditUser(NaheulbookExecutionContext executionContext, User user)
+        {
+            if (executionContext.UserId == user.Id)
                 return;
 
             throw new ForbiddenAccessException();

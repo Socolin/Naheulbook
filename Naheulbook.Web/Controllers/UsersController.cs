@@ -3,8 +3,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
+using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Data.Repositories;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Responses;
 using Naheulbook.Web.Services;
@@ -115,6 +118,29 @@ namespace Naheulbook.Web.Controllers
         {
             HttpContext.Session.Clear();
             return NoContent();
+        }
+
+
+        [HttpPatch("{UserId:int:min(1)}")]
+        public async Task<IActionResult> PatchUserId(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int userId,
+            UpdateUserRequest request
+        )
+        {
+            try
+            {
+                await _userService.UpdateUserAsync(executionContext, userId, request);
+                return NoContent();
+            }
+            catch (UserNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
         }
     }
 }

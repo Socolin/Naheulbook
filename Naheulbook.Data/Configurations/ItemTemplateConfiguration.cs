@@ -374,7 +374,7 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.DisplayName)
                 .IsRequired()
                 .HasColumnName("displayName")
-                .HasMaxLength(255);;
+                .HasMaxLength(255);
 
             builder.Property(e => e.TechName)
                 .IsRequired()

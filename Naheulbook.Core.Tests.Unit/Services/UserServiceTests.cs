@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
-using Naheulbook.Data.Factories;
+using Naheulbook.Core.Tests.Unit.TestUtils;
+using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
-using Naheulbook.Data.Repositories;
-using Naheulbook.Data.UnitOfWorks;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -19,25 +18,27 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private const string SomeActivationCode = "some-activation-code";
         private const string SomeEncryptedPassword = "some-encrypted-password";
 
-        private IUserRepository _userRepository;
-        private UserService _userService;
-        private IUnitOfWork _unitOfWork;
+        private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private IMailService _mailService;
         private IPasswordHashingService _passwordHashingService;
+        private IAuthorizationUtil _authorizationUtil;
+
+        private UserService _service;
 
         [SetUp]
         public void SetUp()
         {
-            var unitOfWorkFactory = Substitute.For<IUnitOfWorkFactory>();
-            _unitOfWork = Substitute.For<IUnitOfWork>();
-            unitOfWorkFactory.CreateUnitOfWork().Returns(_unitOfWork);
-            _userRepository = Substitute.For<IUserRepository>();
-            _unitOfWork.Users.Returns(_userRepository);
-
+            _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _mailService = Substitute.For<IMailService>();
             _passwordHashingService = Substitute.For<IPasswordHashingService>();
+            _authorizationUtil = Substitute.For<IAuthorizationUtil>();
 
-            _userService = new UserService(unitOfWorkFactory, _passwordHashingService, _mailService);
+            _service = new UserService(
+                _unitOfWorkFactory,
+                _passwordHashingService,
+                _mailService,
+                _authorizationUtil
+            );
         }
 
         [Test]
@@ -46,25 +47,25 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _passwordHashingService.HashPassword(SomePassword)
                 .Returns(SomeEncryptedPassword);
 
-            await _userService.CreateUserAsync(SomeUsername, SomePassword);
+            await _service.CreateUserAsync(SomeUsername, SomePassword);
 
             Received.InOrder(() =>
             {
-                _userRepository.Add(Arg.Is<User>(u =>
+                _unitOfWorkFactory.GetUnitOfWork().Users.Add(Arg.Is<User>(u =>
                     u.Username == SomeUsername
                     && u.HashedPassword == SomeEncryptedPassword
                     && !string.IsNullOrEmpty(u.ActivationCode))
                 );
-                _unitOfWork.CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
             });
         }
         [Test]
         public void WhenCreatingUser_AndUserExists_ThenThrows()
         {
-            _userRepository.GetByUsernameAsync(SomeUsername)
+            _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns(new User());
 
-            Func<Task> act = () => _userService.CreateUserAsync(SomeUsername, SomePassword);
+            Func<Task> act = () => _service.CreateUserAsync(SomeUsername, SomePassword);
 
             act.Should().Throw<UserAlreadyExistsException>();
         }
@@ -73,7 +74,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task WhenCreatingUser_SendMailWithActivationCode()
         {
-            await _userService.CreateUserAsync(SomeUsername, SomePassword);
+            await _service.CreateUserAsync(SomeUsername, SomePassword);
 
             await _mailService.Received(1)
                 .SendCreateUserMailAsync(SomeUsername, Arg.Is<string>(s => !string.IsNullOrEmpty(s)));
@@ -84,13 +85,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var user = CreateUser();
 
-            _userRepository.GetByUsernameAsync(SomeUsername)
+            _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns(user);
 
-            await _userService.ValidateUserAsync(SomeUsername, SomeActivationCode);
+            await _service.ValidateUserAsync(SomeUsername, SomeActivationCode);
 
             user.ActivationCode.Should().BeNull();
-            await _unitOfWork.Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
         }
 
         [Test]
@@ -98,10 +99,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var user = CreateUser();
 
-            _userRepository.GetByUsernameAsync(SomeUsername)
+            _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns(user);
 
-            Func<Task> act = async () => await _userService.ValidateUserAsync(SomeUsername, "some-invalid-code");
+            Func<Task> act = async () => await _service.ValidateUserAsync(SomeUsername, "some-invalid-code");
 
             act.Should().Throw<InvalidUserActivationCodeException>();
         }
@@ -109,10 +110,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public void WhenValidatingUser_AndUserNotFound_Throw()
         {
-            _userRepository.GetByUsernameAsync(SomeUsername)
+            _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns((User) null);
 
-            Func<Task> act = async () => await _userService.ValidateUserAsync(SomeUsername, SomeActivationCode);
+            Func<Task> act = async () => await _service.ValidateUserAsync(SomeUsername, SomeActivationCode);
 
             act.Should().Throw<UserNotFoundException>();
         }
@@ -123,12 +124,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const string someHashedPassword = "some-hashed-password";
             var user = new User {Username = SomeUsername, HashedPassword = someHashedPassword};
 
-            _userRepository.GetByUsernameAsync(SomeUsername)
+            _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns(user);
             _passwordHashingService.VerifyPassword(someHashedPassword, SomePassword)
                 .Returns(true);
 
-            var result = await _userService.CheckPasswordAsync(SomeUsername, SomePassword);
+            var result = await _service.CheckPasswordAsync(SomeUsername, SomePassword);
 
             result.Should().Be(user);
         }
@@ -138,12 +139,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var user = new User {Username = SomeUsername, HashedPassword = "some-hashed-password"};
 
-            _userRepository.GetByUsernameAsync(SomeUsername)
+            _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns(user);
             _passwordHashingService.VerifyPassword("some-hashed-password", SomePassword)
                 .Returns(false);
 
-            Func<Task> act = async () => await _userService.CheckPasswordAsync(SomeUsername, SomePassword);
+            Func<Task> act = async () => await _service.CheckPasswordAsync(SomeUsername, SomePassword);
 
             act.Should().Throw<InvalidPasswordException>();
         }
@@ -151,10 +152,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public void WhenCheckingPassword_AndUserDoesNotExists_Throw()
         {
-            _userRepository.GetByUsernameAsync(SomeUsername)
+            _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns((User) null);
 
-            Func<Task> act = async () => await _userService.CheckPasswordAsync(SomeUsername, SomePassword);
+            Func<Task> act = async () => await _service.CheckPasswordAsync(SomeUsername, SomePassword);
 
             act.Should().Throw<UserNotFoundException>();
         }

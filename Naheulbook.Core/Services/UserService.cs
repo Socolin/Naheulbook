@@ -2,8 +2,11 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
+using Naheulbook.Core.Models;
+using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
+using Naheulbook.Data.Repositories;
 
 namespace Naheulbook.Core.Services
 {
@@ -13,7 +16,7 @@ namespace Naheulbook.Core.Services
         Task ValidateUserAsync(string username, string activationCode);
         Task<User> CheckPasswordAsync(string username, string password);
         Task<User> GetUserInfoAsync(int userId);
-
+        Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request);
     }
 
     public class UserService : IUserService
@@ -21,16 +24,19 @@ namespace Naheulbook.Core.Services
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPasswordHashingService _passwordHashingService;
         private readonly IMailService _mailService;
+        private readonly IAuthorizationUtil _authorizationUtil;
 
         public UserService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IPasswordHashingService passwordHashingService,
-            IMailService mailService
+            IMailService mailService,
+            IAuthorizationUtil authorizationUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _passwordHashingService = passwordHashingService;
             _mailService = mailService;
+            _authorizationUtil = authorizationUtil;
         }
 
         public async Task CreateUserAsync(string username, string password)
@@ -97,6 +103,22 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 return await uow.Users.GetAsync(userId);
+            }
+        }
+
+        public async Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var user = await uow.Users.GetAsync(userId);
+                if (user == null)
+                    throw new UserNotFoundException();
+
+                _authorizationUtil.EnsureCanEditUser(executionContext, user);
+
+                user.DisplayName = request.DisplayName;
+
+                await uow.CompleteAsync();
             }
         }
     }

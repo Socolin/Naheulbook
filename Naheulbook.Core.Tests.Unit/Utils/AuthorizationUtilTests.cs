@@ -378,5 +378,27 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             act.Should().NotThrow();
         }
+
+        [Test]
+        public void EnsureCanEditUser_ShouldThrowIfCurrentUserIdIsNotUserId()
+        {
+            var user = new User {Id = 3};
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 2};
+
+            Action act = () => _authorizationUtil.EnsureCanEditUser(naheulbookExecutionContext, user);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
+        public void EnsureCanEditUser_ShouldNotThrowIfCurrentUserIdIsUserId()
+        {
+            var user = new User {Id = 2};
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 2};
+
+            Action act = () => _authorizationUtil.EnsureCanEditUser(naheulbookExecutionContext, user);
+
+            act.Should().NotThrow();
+        }
     }
 }
