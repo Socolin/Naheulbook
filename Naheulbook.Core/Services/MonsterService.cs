@@ -9,7 +9,6 @@ using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
-using Newtonsoft.Json;
 
 namespace Naheulbook.Core.Services
 {
@@ -25,6 +24,9 @@ namespace Naheulbook.Core.Services
         Task KillMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
         Task<Item> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request);
         Task<Item> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request);
+        Task UpdateMonsterDataAsync(NaheulbookExecutionContext executionContext, int monsterId, MonsterData monsterData);
+        Task UpdateMonsterTargetAsync(NaheulbookExecutionContext executionContext, int monsterId, TargetRequest request);
+        Task UpdateMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, PatchMonsterRequest request);
     }
 
     public class MonsterService : IMonsterService
@@ -72,8 +74,8 @@ namespace Naheulbook.Core.Services
                 {
                     Group = group,
                     Name = request.Name,
-                    Data = JsonConvert.SerializeObject(request.Data),
-                    Modifiers = JsonConvert.SerializeObject(request.Modifiers)
+                    Data = _jsonUtil.Serialize(request.Data),
+                    Modifiers = _jsonUtil.Serialize(request.Modifiers)
                 };
 
                 uow.Monsters.Add(monster);
@@ -265,6 +267,87 @@ namespace Naheulbook.Core.Services
             await session.CommitAsync();
 
             return item;
+        }
+
+        public async Task UpdateMonsterDataAsync(NaheulbookExecutionContext executionContext, int monsterId, MonsterData monsterData)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
+                if (monster == null)
+                    throw new MonsterNotFoundException(monsterId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
+
+                monster.Data = _jsonUtil.Serialize(monsterData);
+
+                var notificationSession = _notificationSessionFactory.CreateSession();
+                notificationSession.NotifyMonsterUpdateData(monster.Id, monsterData);
+
+                await uow.CompleteAsync();
+                await notificationSession.CommitAsync();
+            }
+        }
+
+        public async Task UpdateMonsterTargetAsync(NaheulbookExecutionContext executionContext, int monsterId, TargetRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
+                if (monster == null)
+                    throw new MonsterNotFoundException(monsterId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
+
+                if (request.IsMonster)
+                {
+                    var targetedMonster = await uow.Monsters.GetAsync(request.Id);
+                    if (targetedMonster == null)
+                        throw new TargetNotFoundException();
+                    if (targetedMonster.GroupId != monster.GroupId)
+                        throw new ForbiddenAccessException();
+
+                    monster.TargetedCharacterId = null;
+                    monster.TargetedMonsterId = request.Id;
+                }
+                else
+                {
+                    var targetedCharacter = await uow.Characters.GetAsync(request.Id);
+                    if (targetedCharacter == null)
+                        throw new TargetNotFoundException();
+                    if (targetedCharacter.GroupId != monster.GroupId)
+                        throw new ForbiddenAccessException();
+
+                    monster.TargetedMonsterId = null;
+                    monster.TargetedCharacterId = request.Id;
+                }
+
+                var notificationSession = _notificationSessionFactory.CreateSession();
+                notificationSession.NotifyMonsterChangeTarget(monster.Id, request);
+
+                await uow.CompleteAsync();
+                await notificationSession.CommitAsync();
+            }
+        }
+
+        public async Task UpdateMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, PatchMonsterRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
+                if (monster == null)
+                    throw new MonsterNotFoundException(monsterId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
+
+                monster.Name = request.Name;
+
+                var notificationSession = _notificationSessionFactory.CreateSession();
+                notificationSession.NotifyMonsterChangeName(monster.Id, request.Name);
+
+                await uow.CompleteAsync();
+                await notificationSession.CommitAsync();
+            }
         }
     }
 }

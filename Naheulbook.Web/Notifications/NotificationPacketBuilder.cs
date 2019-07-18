@@ -283,6 +283,21 @@ namespace Naheulbook.Web.Notifications
             return BuildMonsterChange(monsterId, "addItem", _mapper.Map<ItemResponse>(item));
         }
 
+        public INotificationPacket BuildMonsterUpdateData(int monsterId, MonsterData monsterData)
+        {
+            return BuildMonsterChange(monsterId, "changeData", monsterData);
+        }
+
+        public INotificationPacket BuildMonsterChangeTarget(int monsterId, TargetRequest targetInfo)
+        {
+            return BuildMonsterChange(monsterId, "changeTarget", targetInfo);
+        }
+
+        public INotificationPacket BuildMonsterChangeName(int monsterId, string name)
+        {
+            return BuildMonsterChange(monsterId, "changeName", name);
+        }
+
         private INotificationPacket BuildCharacterChange(int characterId, string action, object data)
         {
             return new NotificationPacket

@@ -9,7 +9,25 @@ Feature: Monster
     {
       "name": "some-monster-name",
       "data": {
-        "key": "value"
+        "at": 8,
+        "chercheNoise": false,
+        "color": null,
+        "cou": 0,
+        "dmg": null,
+        "ea": 0,
+        "esq": null,
+        "ev": 0,
+        "maxEa": 0,
+        "maxEv": 0,
+        "note": null,
+        "number": 0,
+        "page": 0,
+        "pr": 0,
+        "pr_magic": 4,
+        "prd": 10,
+        "resm": 0,
+        "sex": null,
+        "xp": 0
       },
       "items": [
         {
@@ -51,7 +69,20 @@ Feature: Monster
       "id": {"__match": {"type": "integer"}},
       "name": "some-monster-name",
       "data": {
-        "key": "value"
+        "at": 8,
+        "chercheNoise": false,
+        "cou": 0,
+        "ea": 0,
+        "ev": 0,
+        "maxEa": 0,
+        "maxEv": 0,
+        "number": 0,
+        "page": 0,
+        "pr": 0,
+        "pr_magic": 4,
+        "prd": 10,
+        "resm": 0,
+        "xp": 0
       },
       items: [],
       modifiers: [
@@ -334,3 +365,38 @@ Feature: Monster
       }
     }
     """
+
+  Scenario: Can update monster
+    Given a JWT for a user
+    Given a group
+    And a monster
+    And a character
+    And that the character is a member of the group
+
+    When performing a PUT to the url "/api/v2/monsters/${Monster.Id}/data" with the following json content and the current jwt
+    """
+    {
+      "at": 5,
+      "prd": 8
+    }
+    """
+    Then the response status code is 204
+
+
+    When performing a PUT to the url "/api/v2/monsters/${Monster.Id}/target" with the following json content and the current jwt
+    """
+    {
+      "isMonster": false,
+      "id": ${Character.Id}
+    }
+    """
+    Then the response status code is 204
+
+
+    When performing a PATCH to the url "/api/v2/monsters/${Monster.Id}/" with the following json content and the current jwt
+    """
+    {
+      "name": "some-new-name"
+    }
+    """
+    Then the response status code is 204

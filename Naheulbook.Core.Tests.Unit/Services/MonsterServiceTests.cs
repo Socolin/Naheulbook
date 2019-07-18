@@ -12,7 +12,6 @@ using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
-using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -169,7 +168,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             return new CreateMonsterRequest
             {
                 Name = "some-monster-name",
-                Data = JObject.FromObject(new {key = "value"}),
+                Data = new MonsterData {At = 8, Prd = 10},
                 Items = new List<object>(),
                 Modifiers = new List<ActiveStatsModifier>()
             };

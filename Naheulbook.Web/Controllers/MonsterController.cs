@@ -119,6 +119,76 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpPut("{MonsterId:int:min(1)}/data")]
+        public async Task<CreatedActionResult<ItemResponse>> PutMonsterDataAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int monsterId,
+            MonsterData request
+        )
+        {
+            try
+            {
+                await _monsterService.UpdateMonsterDataAsync(executionContext, monsterId, request);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (MonsterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [HttpPut("{MonsterId:int:min(1)}/target")]
+        public async Task<CreatedActionResult<ItemResponse>> PutMonsterTargetAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int monsterId,
+            TargetRequest request
+        )
+        {
+            try
+            {
+                await _monsterService.UpdateMonsterTargetAsync(executionContext, monsterId, request);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (MonsterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (TargetNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpPatch("{MonsterId:int:min(1)}")]
+        public async Task<CreatedActionResult<ItemResponse>> PatchMonsterAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int monsterId,
+            PatchMonsterRequest request
+        )
+        {
+            try
+            {
+                await _monsterService.UpdateMonsterAsync(executionContext, monsterId, request);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (MonsterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
         [HttpPost("{MonsterId:int:min(1)}/items")]
         public async Task<CreatedActionResult<ItemResponse>> PostAddItemToMonsterInventory(
             [FromServices] NaheulbookExecutionContext executionContext,
