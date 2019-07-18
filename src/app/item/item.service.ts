@@ -85,13 +85,24 @@ export class ItemService {
 
     addRandomItemTo(targetType: string
         , targetId: number
-        , criteria: any): Observable<Item> {
+        , categoryTechName: string): Observable<Item> {
 
         return new Observable(observer => {
-            forkJoin([this.httpClient.post('/api/item/addRandom', {
-                    targetId: targetId,
-                    targetType: targetType,
-                    criteria: criteria
+            let url: string;
+            switch (targetType) {
+                case 'character':
+                    url = `/api/v2/characters/${targetId}/addRandomItem`;
+                    break;
+                case 'monster':
+                    url = `/api/v2/monsters/${targetId}/addRandomItem`;
+                    break;
+                case 'loot':
+                    url = `/api/v2/loots/${targetId}/addRandomItem`;
+                    break;
+            }
+
+            forkJoin([this.httpClient.post(url, {
+                    categoryTechName
                 }),
                 this._skillService.getSkillsById()
             ]).subscribe(
