@@ -77,7 +77,7 @@ export class ItemTemplateService {
     }
 
     create(item): Observable<ItemTemplate> {
-        return this.httpClient.post<ItemTemplate>('/api/itemtemplate/create', {item: item})
+        return this.httpClient.post<ItemTemplate>('/api/v2/itemTemplates/', item);
     }
 
     getItem(id: number): Observable<ItemTemplate> {
