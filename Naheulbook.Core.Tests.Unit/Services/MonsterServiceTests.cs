@@ -60,6 +60,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
+            _jsonUtil.Serialize(request.Data)
+                .Returns("some-json-data");
+            _jsonUtil.Serialize(request.Modifiers)
+                .Returns("some-json-modifiers");
 
             var actualMonster = await _service.CreateMonsterAsync(executionContext, groupId, request);
 
@@ -73,8 +77,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
             actualMonster.Should().BeEquivalentTo(new Monster
             {
                 Name = "some-monster-name",
-                Data = @"{""key"":""value""}",
-                Modifiers = "[]",
+                Data = "some-json-data",
+                Modifiers = "some-json-modifiers",
                 Group = group
             });
         }
