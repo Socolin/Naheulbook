@@ -18,6 +18,7 @@ namespace Naheulbook.Core.Services
         Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request);
         Task DeleteLootAsync(NaheulbookExecutionContext executionContext, int lootId);
         Task<Item> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request);
+        Task<Item> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request);
     }
 
     public class LootService : ILootService
@@ -174,7 +175,31 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
             }
 
-            var item = await _itemService.AddItemToAsync(executionContext, ItemOwnerType.Loot, lootId, request);
+            var item = await _itemService.AddItemToAsync(ItemOwnerType.Loot, lootId, request);
+
+            var session = _notificationSessionFactory.CreateSession();
+            session.NotifyLootAddItem(lootId, item);
+            await session.CommitAsync();
+
+            return item;
+        }
+
+        public async Task<Item> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var loot = await uow.Loots.GetAsync(lootId);
+                if (loot == null)
+                    throw new LootNotFoundException(lootId);
+
+                var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+                if (group == null)
+                    throw new GroupNotFoundException(loot.GroupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
+            }
+
+            var item = await _itemService.AddRandomItemToAsync(ItemOwnerType.Loot, lootId, request);
 
             var session = _notificationSessionFactory.CreateSession();
             session.NotifyLootAddItem(lootId, item);

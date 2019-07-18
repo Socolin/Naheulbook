@@ -16,7 +16,8 @@ namespace Naheulbook.Core.Services
 {
     public interface IItemService
     {
-        Task<Item> AddItemToAsync(NaheulbookExecutionContext executionContext, ItemOwnerType ownerType, int ownerId, CreateItemRequest request);
+        Task<Item> AddItemToAsync(ItemOwnerType ownerType, int ownerId, CreateItemRequest request);
+        Task<Item> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request);
         Task<Item> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData);
         Task<Item> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers);
         Task<Item> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request);
@@ -35,6 +36,7 @@ namespace Naheulbook.Core.Services
         private readonly IItemUtil _itemUtil;
         private readonly ICharacterHistoryUtil _characterHistoryUtil;
         private readonly IJsonUtil _jsonUtil;
+        private readonly IRngUtil _rngUtil;
 
         public ItemService(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -43,7 +45,8 @@ namespace Naheulbook.Core.Services
             IAuthorizationUtil authorizationUtil,
             IItemUtil itemUtil,
             ICharacterHistoryUtil characterHistoryUtil,
-            IJsonUtil jsonUtil
+            IJsonUtil jsonUtil,
+            IRngUtil rngUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -53,10 +56,10 @@ namespace Naheulbook.Core.Services
             _itemUtil = itemUtil;
             _characterHistoryUtil = characterHistoryUtil;
             _jsonUtil = jsonUtil;
+            _rngUtil = rngUtil;
         }
 
         public async Task<Item> AddItemToAsync(
-            NaheulbookExecutionContext executionContext,
             ItemOwnerType ownerType,
             int ownerId,
             CreateItemRequest request
@@ -68,7 +71,30 @@ namespace Naheulbook.Core.Services
                 if (itemTemplate == null)
                     throw new ItemTemplateNotFoundException(request.ItemTemplateId);
 
-                var item = _itemFactory.CreateItemFromRequest(ownerType, ownerId, itemTemplate, request.ItemData);
+                var item = _itemFactory.CreateItem(ownerType, ownerId, itemTemplate, request.ItemData);
+
+                uow.Items.Add(item);
+                await uow.CompleteAsync();
+
+                return await uow.Items.GetWithAllDataAsync(item.Id);
+            }
+        }
+
+        public async Task<Item> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var itemTemplateCategory = await uow.ItemTemplateCategories.GetWithItemTemplatesByTechNameAsync(request.CategoryTechName);
+                if (itemTemplateCategory == null)
+                    throw new ItemTemplateCategoryNotFoundException(request.CategoryTechName);
+
+                if (itemTemplateCategory.ItemTemplates.Count == 0)
+                    throw new EmptyItemTemplateCategoryException(itemTemplateCategory.Id);
+
+                var itemTemplateIndex = _rngUtil.GetRandomInt(0, itemTemplateCategory.ItemTemplates.Count);
+                var itemTemplate = itemTemplateCategory.ItemTemplates.ElementAt(itemTemplateIndex);
+
+                var item = _itemFactory.CreateItem(ownerType, ownerId, itemTemplate, new ItemData());
 
                 uow.Items.Add(item);
                 await uow.CompleteAsync();

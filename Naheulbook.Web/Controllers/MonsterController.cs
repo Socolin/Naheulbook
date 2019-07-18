@@ -144,5 +144,31 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
             }
         }
+
+        [HttpPost("{MonsterId:int:min(1)}/addRandomItem")]
+        public async Task<CreatedActionResult<ItemResponse>> PostAddRandomItemToMonsterInventory(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int monsterId,
+            CreateRandomItemRequest request
+        )
+        {
+            try
+            {
+                var item = await _monsterService.AddRandomItemToMonsterAsync(executionContext, monsterId, request);
+                return _mapper.Map<ItemResponse>(item);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (MonsterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (ItemTemplateCategoryNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
             _jsonUtil.Serialize(itemData)
                 .Returns(jsonItemData);
 
-            var actualItem = _factory.CreateItemFromRequest(ItemOwnerType.Character, 10, itemTemplate, itemData);
+            var actualItem = _factory.CreateItem(ItemOwnerType.Character, 10, itemTemplate, itemData);
 
             actualItem.ItemTemplateId.Should().Be(itemTemplate.Id);
             actualItem.Data.Should().BeEquivalentTo(jsonItemData);
@@ -53,7 +53,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
             _jsonUtil.When(x => x.Serialize(itemData))
                 .Do(x => itemData.Charge.Should().Be(2));
 
-            var actualItem = _factory.CreateItemFromRequest(ItemOwnerType.Character, 10, itemTemplate, itemData);
+            var actualItem = _factory.CreateItem(ItemOwnerType.Character, 10, itemTemplate, itemData);
 
             actualItem.Data.Should().BeEquivalentTo("some-json");
         }
@@ -73,7 +73,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
             _jsonUtil.When(x => x.Serialize(itemData))
                 .Do(x => itemData.Icon.Should().BeSameAs(icon));
 
-            var actualItem = _factory.CreateItemFromRequest(ItemOwnerType.Character, 10, itemTemplate, itemData);
+            var actualItem = _factory.CreateItem(ItemOwnerType.Character, 10, itemTemplate, itemData);
 
             actualItem.Data.Should().BeEquivalentTo("some-json");
         }
@@ -93,7 +93,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
             _jsonUtil.When(x => x.Serialize(itemData))
                 .Do(x => itemData.Lifetime.Should().BeSameAs(lifetime));
 
-            var actualItem = _factory.CreateItemFromRequest(ItemOwnerType.Character, 10, itemTemplate, itemData);
+            var actualItem = _factory.CreateItem(ItemOwnerType.Character, 10, itemTemplate, itemData);
 
             actualItem.Data.Should().BeEquivalentTo("some-json");
         }
@@ -102,7 +102,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
         {
             const int characterId = 10;
 
-            var actualItem = _factory.CreateItemFromRequest(ItemOwnerType.Character, characterId, new ItemTemplate(), new ItemData());
+            var actualItem = _factory.CreateItem(ItemOwnerType.Character, characterId, new ItemTemplate(), new ItemData());
 
             actualItem.CharacterId.Should().Be(characterId);
         }
@@ -111,7 +111,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
         public void CreateItemFromRequest_AndOwnerTypeIsLoot_ShouldSetLootId()
         {
             const int lootId = 10;
-            var actualItem = _factory.CreateItemFromRequest(ItemOwnerType.Loot, lootId, new ItemTemplate(), new ItemData());
+            var actualItem = _factory.CreateItem(ItemOwnerType.Loot, lootId, new ItemTemplate(), new ItemData());
 
             actualItem.LootId.Should().Be(lootId);
         }
@@ -121,7 +121,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
         {
             const int monsterId = 10;
 
-            var actualItem = _factory.CreateItemFromRequest(ItemOwnerType.Monster, monsterId, new ItemTemplate(), new ItemData());
+            var actualItem = _factory.CreateItem(ItemOwnerType.Monster, monsterId, new ItemTemplate(), new ItemData());
 
             actualItem.MonsterId.Should().Be(monsterId);
         }

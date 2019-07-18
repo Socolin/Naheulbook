@@ -24,6 +24,7 @@ namespace Naheulbook.Core.Services
         Task DeleteMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
         Task KillMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
         Task<Item> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request);
+        Task<Item> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request);
     }
 
     public class MonsterService : IMonsterService
@@ -233,7 +234,31 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
             }
 
-            var item = await _itemService.AddItemToAsync(executionContext, ItemOwnerType.Monster, monsterId, request);
+            var item = await _itemService.AddItemToAsync(ItemOwnerType.Monster, monsterId, request);
+
+            var session = _notificationSessionFactory.CreateSession();
+            session.NotifyMonsterAddItem(monsterId, item);
+            await session.CommitAsync();
+
+            return item;
+        }
+
+        public async Task<Item> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var monster = await uow.Monsters.GetAsync(monsterId);
+                if (monster == null)
+                    throw new MonsterNotFoundException(monsterId);
+
+                var group = await uow.Groups.GetGroupsWithCharactersAsync(monster.GroupId);
+                if (group == null)
+                    throw new GroupNotFoundException(monster.GroupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
+            }
+
+            var item = await _itemService.AddRandomItemToAsync(ItemOwnerType.Monster, monsterId, request);
 
             var session = _notificationSessionFactory.CreateSession();
             session.NotifyMonsterAddItem(monsterId, item);

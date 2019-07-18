@@ -8,5 +8,6 @@ namespace Naheulbook.Shared.TransientModels
         public JObject Icon { get; set; }
         public JObject Lifetime { get; set; }
         public string NotIdentifiedName { get; set; }
+        public bool? Quantifiable { get; set; }
     }
 }

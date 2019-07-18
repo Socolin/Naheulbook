@@ -114,7 +114,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
-            _itemService.AddItemToAsync(executionContext, ItemOwnerType.Character, characterId, request)
+            _itemService.AddItemToAsync(ItemOwnerType.Character, characterId, request)
                 .Returns(expectedItem);
 
             var item = await _service.AddItemToCharacterAsync(executionContext, characterId, request);
@@ -133,7 +133,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
-            _itemService.AddItemToAsync(executionContext, ItemOwnerType.Character, characterId, request)
+            _itemService.AddItemToAsync(ItemOwnerType.Character, characterId, request)
                 .Returns(expectedItem);
 
             await _service.AddItemToCharacterAsync(executionContext, characterId, request);
@@ -154,7 +154,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
                 .Returns(new Character {Id = characterId});
-            _itemService.AddItemToAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<ItemOwnerType>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
+            _itemService.AddItemToAsync(Arg.Any<ItemOwnerType>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
                 .Returns(item);
             _characterHistoryUtil.CreateLogAddItem(characterId, item)
                 .Returns(expectedCharacterHistoryEntry);

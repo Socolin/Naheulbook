@@ -28,6 +28,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private IItemUtil _itemUtil;
         private IJsonUtil _jsonUtil;
         private ICharacterHistoryUtil _characterHistoryUtil;
+        private IRngUtil _rngUtil;
+
         private ItemService _service;
 
         [SetUp]
@@ -41,6 +43,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
             _jsonUtil = Substitute.For<IJsonUtil>();
 
+            _rngUtil = Substitute.For<IRngUtil>();
             _service = new ItemService(
                 _unitOfWorkFactory,
                 _itemFactory,
@@ -48,7 +51,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _authorizationUtil,
                 _itemUtil,
                 _characterHistoryUtil,
-                _jsonUtil
+                _jsonUtil,
+                _rngUtil
             );
         }
 
@@ -58,7 +62,6 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int itemId = 25;
             const int characterId = 10;
             const int itemTemplateId = 12;
-            var executionContext = new NaheulbookExecutionContext();
             var itemData = new ItemData();
             var itemTemplate = new ItemTemplate();
             var request = new CreateItemRequest {ItemData = itemData, ItemTemplateId = itemTemplateId};
@@ -67,12 +70,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetAsync(itemTemplateId)
                 .Returns(itemTemplate);
-            _itemFactory.CreateItemFromRequest(ItemOwnerType.Character, characterId, itemTemplate, itemData)
+            _itemFactory.CreateItem(ItemOwnerType.Character, characterId, itemTemplate, itemData)
                 .Returns(createdItem);
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithAllDataAsync(itemId)
                 .Returns(fullyLoadedItem);
 
-            var actualItem = await _service.AddItemToAsync(executionContext, ItemOwnerType.Character, characterId, request);
+            var actualItem = await _service.AddItemToAsync(ItemOwnerType.Character, characterId, request);
 
             Received.InOrder(() =>
             {

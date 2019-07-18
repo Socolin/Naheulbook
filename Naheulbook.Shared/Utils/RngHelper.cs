@@ -1,3 +1,4 @@
+using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -26,7 +27,31 @@ namespace Naheulbook.Shared.Utils
             var bytes = new byte[4];
             using (var rng = RandomNumberGenerator.Create())
                 rng.GetBytes(bytes);
-            return bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3];
+            return BitConverter.ToInt32(bytes);
+        }
+
+        public static int GetRandomInt(int minValue, int maxValue)
+        {
+            if (minValue > maxValue)
+                throw new ArgumentOutOfRangeException(nameof(minValue));
+            if (minValue == maxValue)
+                return minValue;
+
+            const long max = 1 + (long)uint.MaxValue;
+            var diff = maxValue - minValue;
+            var remainder = max % diff;
+
+            var bytes = new byte[4];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                while (true)
+                {
+                    rng.GetBytes(bytes);
+                    var number = BitConverter.ToUInt32(bytes);
+                    if (number < max - remainder)
+                        return (int)(minValue + (number % diff));
+                }
+            }
         }
     }
 }

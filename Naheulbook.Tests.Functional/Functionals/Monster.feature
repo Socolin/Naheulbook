@@ -286,3 +286,51 @@ Feature: Monster
         }
     }
     """
+
+
+  Scenario: Can add a random item from a category to a monster
+    Given a JWT for a user
+    Given a group
+    And a monster
+
+    Given an item template
+
+    When performing a POST to the url "/api/v2/monsters/${Monster.Id}/addRandomItem" with the following json content and the current jwt
+    """
+    {
+      "categoryTechName": "${ItemTemplateCategory.TechName}"
+    }
+    """
+    Then the response status code is 201
+    And the response should contains the following json
+    """
+    {
+      "id": {"__match": {"type": "integer"}},
+      "data": {
+        "name": "${ItemTemplate.Name}"
+      },
+      "modifiers": [],
+      "template": {
+        "id": ${ItemTemplate.Id},
+        "name": "${ItemTemplate.Name}",
+        "techName": "${ItemTemplate.TechName}",
+        "source": "official",
+        "categoryId": ${ItemTemplateCategory.Id},
+        "data": {
+          "key": "value"
+        },
+        "slots": [
+        ],
+        "modifiers": [
+        ],
+        "requirements": [
+        ],
+        "skillModifiers": [
+        ],
+        "skills": [
+        ],
+        "unskills": [
+        ]
+      }
+    }
+    """

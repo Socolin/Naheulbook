@@ -117,7 +117,7 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureCharacterAccess(executionContext, character);
             }
 
-            var item = await _itemService.AddItemToAsync(executionContext, ItemOwnerType.Character, characterId, request);
+            var item = await _itemService.AddItemToAsync(ItemOwnerType.Character, characterId, request);
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

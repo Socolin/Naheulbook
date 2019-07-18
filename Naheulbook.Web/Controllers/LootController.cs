@@ -96,5 +96,31 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
             }
         }
+
+        [HttpPost("{LootId:int:min(1)}/addRandomItem")]
+        public async Task<CreatedActionResult<ItemResponse>> PostAddRandomItemToLootInventory(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int lootId,
+            CreateRandomItemRequest request
+        )
+        {
+            try
+            {
+                var item = await _lootService.AddRandomItemToLootAsync(executionContext, lootId, request);
+                return _mapper.Map<ItemResponse>(item);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (LootNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (ItemTemplateCategoryNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+        }
     }
 }

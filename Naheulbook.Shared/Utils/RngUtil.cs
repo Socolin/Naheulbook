@@ -5,6 +5,7 @@ namespace Naheulbook.Shared.Utils
         string GetRandomHexString(int byteCount);
         string GetRandomString(string prefix);
         int GetRandomInt();
+        int GetRandomInt(int min, int max);
     }
 
     public class RngUtil : IRngUtil
@@ -22,6 +23,11 @@ namespace Naheulbook.Shared.Utils
         public int GetRandomInt()
         {
             return RngHelper.GetRandomInt();
+        }
+
+        public int GetRandomInt(int min, int max)
+        {
+            return RngHelper.GetRandomInt(min, max);
         }
     }
 }
