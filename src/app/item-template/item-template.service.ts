@@ -83,7 +83,7 @@ export class ItemTemplateService {
     getItem(id: number): Observable<ItemTemplate> {
         return new Observable((observer) => {
             forkJoin([
-                this.httpClient.post('/api/itemtemplate/detail', {id: id}),
+                this.httpClient.get<ItemTemplateJsonData>(`/api/v2/itemTemplates/${id}`),
                 this._skillService.getSkillsById()
             ]).subscribe(
                 ([itemTemplateData, skillsById]: [ItemTemplateJsonData, { [skillId: number]: Skill }]) => {
@@ -115,7 +115,7 @@ export class ItemTemplateService {
         if (!this.slots) {
             this.slots = new ReplaySubject<ItemSlot[]>(1);
 
-            this.httpClient.get<ItemSlot[]>('/api/itemtemplate/slotList')
+            this.httpClient.get<ItemSlot[]>('/api/v2/itemSlots')
                 .subscribe(
                     slots => {
                         this.slots.next(slots);
@@ -133,7 +133,7 @@ export class ItemTemplateService {
         if (!this.itemTypes) {
             this.itemTypes = new ReplaySubject<ItemType[]>(1);
 
-            this.httpClient.get<ItemType[]>('/api/itemtemplate/itemTypesList')
+            this.httpClient.get<ItemType[]>('/api/v2/itemTypes')
                 .subscribe(
                     itemTypes => {
                         this.itemTypes.next(itemTypes);
