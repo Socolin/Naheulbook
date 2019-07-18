@@ -12,9 +12,9 @@ namespace Naheulbook.Data.Repositories
         Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(int id);
         Task<List<ItemTemplate>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId);
         Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<int> ids);
-        Task<List<ItemTemplate>> GetItemByCleanNameAsync(string name, int maxResultCount);
-        Task<List<ItemTemplate>> GetItemByPartialCleanNameAsync(string name, int maxResultCount, IEnumerable<int> excludedIds);
-        Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorAsync(string name, int maxResultCount, IEnumerable<int> excludedIds);
+        Task<List<ItemTemplate>> GetItemByCleanNameAsync(string name, int maxResultCount, int? currentUserId, bool includeCommunityItems);
+        Task<List<ItemTemplate>> GetItemByPartialCleanNameAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems);
+        Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems);
         Task<ItemTemplate> GetPurseItemTemplateBasedOnMoneyAsync(int money);
         Task<ItemTemplate> GetGoldCoinItemTemplate();
     }
@@ -61,24 +61,34 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<List<ItemTemplate>> GetItemByCleanNameAsync(string name, int maxResultCount)
+        public Task<List<ItemTemplate>> GetItemByCleanNameAsync(string name, int maxResultCount, int? currentUserId, bool includeCommunityItems)
         {
             return Context.ItemTemplates
                 .Where(x => x.CleanName.ToUpper() == name)
+                .Where(x => x.Source == ItemTemplate.OfficialSourceValue
+                            || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItems)
+                            || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
+                )
+                .OrderByDescending(x => x.Source)
                 .Take(maxResultCount)
                 .ToListAsync();
         }
 
-        public Task<List<ItemTemplate>> GetItemByPartialCleanNameAsync(string name, int maxResultCount, IEnumerable<int> excludedIds)
+        public Task<List<ItemTemplate>> GetItemByPartialCleanNameAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems)
         {
             return Context.ItemTemplates
                 .Where(x => x.CleanName.ToUpper().Contains(name))
                 .Take(maxResultCount)
                 .Where(i => !excludedIds.Contains(i.Id))
+                .Where(x => x.Source == ItemTemplate.OfficialSourceValue
+                            || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItems)
+                            || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
+                )
+                .OrderByDescending(x => x.Source)
                 .ToListAsync();
         }
 
-        public Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorAsync(string name, int maxResultCount, IEnumerable<int> excludedIds)
+        public Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems)
         {
             return Context.ItemTemplates
                 .Where(x => x.CleanName
@@ -89,6 +99,11 @@ namespace Naheulbook.Data.Repositories
                     .Contains(name)
                 )
                 .Where(i => !excludedIds.Contains(i.Id))
+                .Where(x => x.Source == ItemTemplate.OfficialSourceValue
+                            || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItems)
+                            || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
+                )
+                .OrderByDescending(x => x.Source)
                 .Take(maxResultCount)
                 .ToListAsync();
         }

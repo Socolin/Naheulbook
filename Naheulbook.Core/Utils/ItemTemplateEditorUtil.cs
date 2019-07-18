@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
@@ -8,6 +9,7 @@ namespace Naheulbook.Core.Utils
     public interface IItemTemplateUtil
     {
         void ApplyChangesFromRequest(ItemTemplate itemTemplate, ItemTemplateRequest request);
+        IEnumerable<ItemTemplate> FilterItemTemplatesBySource(IEnumerable<ItemTemplate> itemTemplates, int? currentUserId, bool includeCommunityItem);
     }
 
     public class ItemTemplateUtil : IItemTemplateUtil
@@ -64,6 +66,14 @@ namespace Naheulbook.Core.Utils
                 SkillId = x.Skill,
                 Value = x.Value
             }).ToList();
+        }
+
+        public IEnumerable<ItemTemplate> FilterItemTemplatesBySource(IEnumerable<ItemTemplate> itemTemplates, int? currentUserId, bool includeCommunityItem)
+        {
+            return itemTemplates.Where(x => x.Source == ItemTemplate.OfficialSourceValue
+                                            || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItem)
+                                            || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
+            );
         }
     }
 }

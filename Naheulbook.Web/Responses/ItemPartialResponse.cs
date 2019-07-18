@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Naheulbook.Shared.TransientModels;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Web.Responses

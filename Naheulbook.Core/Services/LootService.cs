@@ -199,7 +199,7 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
             }
 
-            var item = await _itemService.AddRandomItemToAsync(ItemOwnerType.Loot, lootId, request);
+            var item = await _itemService.AddRandomItemToAsync(ItemOwnerType.Loot, lootId, request, executionContext.UserId);
 
             var session = _notificationSessionFactory.CreateSession();
             session.NotifyLootAddItem(lootId, item);

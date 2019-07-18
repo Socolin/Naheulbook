@@ -4,6 +4,10 @@ namespace Naheulbook.Data.Models
 {
     public class ItemTemplate
     {
+        public const string OfficialSourceValue = "official";
+        public const string PrivateSourceValue = "private";
+        public const string CommunitySourceValue = "community";
+
         public ItemTemplate()
         {
             Modifiers = new HashSet<ItemTemplateModifier>();

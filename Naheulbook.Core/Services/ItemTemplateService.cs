@@ -16,7 +16,7 @@ namespace Naheulbook.Core.Services
         Task<ItemTemplate> GetItemTemplateAsync(int itemTemplateId);
         Task<ItemTemplate> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request);
         Task<ItemTemplate> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, int itemTemplateId, ItemTemplateRequest request);
-        Task<List<ItemTemplate>> SearchItemTemplateAsync(string filter, int maxResultCount);
+        Task<List<ItemTemplate>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId);
 
         Task<ICollection<Slot>> GetItemSlots();
     }
@@ -103,25 +103,21 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<ItemTemplate>> SearchItemTemplateAsync(string filter, int maxResultCount)
+        public async Task<List<ItemTemplate>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId)
         {
-            // TODO: Should filter out ItemTemplate with `Source` == "private" and `SourceUserId` != CurrentUserId when user is logged in
-            // TODO: Should sort result based on source in this order: `private`, `official`, `community`.
-            // Do this in repository if simple enough, or just do multiple call to repository here with `source` argument.
-
             var matchingItemTemplates = new List<ItemTemplate>();
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var cleanFilter = _stringCleanupUtil.RemoveAccents(filter).ToUpperInvariant();
 
-                var exactMatchingItems = await uow.ItemTemplates.GetItemByCleanNameAsync(cleanFilter, maxResultCount);
+                var exactMatchingItems = await uow.ItemTemplates.GetItemByCleanNameAsync(cleanFilter, maxResultCount, currentUserId, true);
                 matchingItemTemplates.AddRange(exactMatchingItems);
 
-                var partialMatchingItems = await uow.ItemTemplates.GetItemByPartialCleanNameAsync(cleanFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id));
+                var partialMatchingItems = await uow.ItemTemplates.GetItemByPartialCleanNameAsync(cleanFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true);
                 matchingItemTemplates.AddRange(partialMatchingItems);
 
                 var noSeparatorFilter = _stringCleanupUtil.RemoveSeparators(cleanFilter);
-                var partialMatchingIgnoreSpacesItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorAsync(noSeparatorFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id));
+                var partialMatchingIgnoreSpacesItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorAsync(noSeparatorFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true);
                 matchingItemTemplates.AddRange(partialMatchingIgnoreSpacesItems);
             }
 

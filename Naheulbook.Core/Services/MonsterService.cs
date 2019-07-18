@@ -258,7 +258,7 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
             }
 
-            var item = await _itemService.AddRandomItemToAsync(ItemOwnerType.Monster, monsterId, request);
+            var item = await _itemService.AddRandomItemToAsync(ItemOwnerType.Monster, monsterId, request, executionContext.UserId);
 
             var session = _notificationSessionFactory.CreateSession();
             session.NotifyMonsterAddItem(monsterId, item);

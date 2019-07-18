@@ -17,7 +17,7 @@ namespace Naheulbook.Core.Services
     public interface IItemService
     {
         Task<Item> AddItemToAsync(ItemOwnerType ownerType, int ownerId, CreateItemRequest request);
-        Task<Item> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request);
+        Task<Item> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId);
         Task<Item> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData);
         Task<Item> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers);
         Task<Item> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request);
@@ -37,6 +37,7 @@ namespace Naheulbook.Core.Services
         private readonly ICharacterHistoryUtil _characterHistoryUtil;
         private readonly IJsonUtil _jsonUtil;
         private readonly IRngUtil _rngUtil;
+        private readonly IItemTemplateUtil _itemTemplateUtil;
 
         public ItemService(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -46,7 +47,8 @@ namespace Naheulbook.Core.Services
             IItemUtil itemUtil,
             ICharacterHistoryUtil characterHistoryUtil,
             IJsonUtil jsonUtil,
-            IRngUtil rngUtil
+            IRngUtil rngUtil,
+            IItemTemplateUtil itemTemplateUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -57,6 +59,7 @@ namespace Naheulbook.Core.Services
             _characterHistoryUtil = characterHistoryUtil;
             _jsonUtil = jsonUtil;
             _rngUtil = rngUtil;
+            _itemTemplateUtil = itemTemplateUtil;
         }
 
         public async Task<Item> AddItemToAsync(
@@ -80,7 +83,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Item> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request)
+        public async Task<Item> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -88,11 +91,12 @@ namespace Naheulbook.Core.Services
                 if (itemTemplateCategory == null)
                     throw new ItemTemplateCategoryNotFoundException(request.CategoryTechName);
 
-                if (itemTemplateCategory.ItemTemplates.Count == 0)
+                var itemTemplates = _itemTemplateUtil.FilterItemTemplatesBySource(itemTemplateCategory.ItemTemplates, currentUserId, false).ToList();
+                if (itemTemplates.Count == 0)
                     throw new EmptyItemTemplateCategoryException(itemTemplateCategory.Id);
 
-                var itemTemplateIndex = _rngUtil.GetRandomInt(0, itemTemplateCategory.ItemTemplates.Count);
-                var itemTemplate = itemTemplateCategory.ItemTemplates.ElementAt(itemTemplateIndex);
+                var itemTemplateIndex = _rngUtil.GetRandomInt(0, itemTemplates.Count);
+                var itemTemplate = itemTemplates.ElementAt(itemTemplateIndex);
 
                 var item = _itemFactory.CreateItem(ownerType, ownerId, itemTemplate, new ItemData());
 

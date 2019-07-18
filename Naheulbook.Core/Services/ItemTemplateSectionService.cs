@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Utils;
@@ -12,18 +13,24 @@ namespace Naheulbook.Core.Services
     {
         Task<IList<ItemTemplateSection>> GetAllSections();
         Task<ItemTemplateSection> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request);
-        Task<List<ItemTemplate>> GetItemTemplatesBySectionAsync(int sectionId);
+        Task<List<ItemTemplate>> GetItemTemplatesBySectionAsync(int sectionId, int? currentUserId);
     }
 
     public class ItemTemplateSectionService : IItemTemplateSectionService
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IAuthorizationUtil _authorizationUtil;
+        private readonly IItemTemplateUtil _itemTemplateUtil;
 
-        public ItemTemplateSectionService(IUnitOfWorkFactory unitOfWorkFactory, IAuthorizationUtil authorizationUtil)
+        public ItemTemplateSectionService(
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IAuthorizationUtil authorizationUtil,
+            IItemTemplateUtil itemTemplateUtil
+        )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizationUtil = authorizationUtil;
+            _itemTemplateUtil = itemTemplateUtil;
         }
 
         public async Task<IList<ItemTemplateSection>> GetAllSections()
@@ -54,12 +61,12 @@ namespace Naheulbook.Core.Services
             return itemTemplateSection;
         }
 
-        public async Task<List<ItemTemplate>> GetItemTemplatesBySectionAsync(int sectionId)
+        public async Task<List<ItemTemplate>> GetItemTemplatesBySectionAsync(int sectionId, int? currentUserId)
         {
-            // TODO: Should filter out ItemTemplate with `Source` == "private" and `SourceUserId` != CurrentUserId when user is logged in
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                return await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId);
+                var itemTemplates = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId);
+                return _itemTemplateUtil.FilterItemTemplatesBySource(itemTemplates, currentUserId, true).ToList();
             }
         }
     }

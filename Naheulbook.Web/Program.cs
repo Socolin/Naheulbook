@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Exceptions;
-using Serilog.Exceptions.Core;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Naheulbook.Web

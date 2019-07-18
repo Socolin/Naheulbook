@@ -3,11 +3,9 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
-using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
-using Naheulbook.Data.Repositories;
-using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
 using NSubstitute;
 using NUnit.Framework;
@@ -17,21 +15,24 @@ namespace Naheulbook.Core.Tests.Unit.Services
 {
     public class ItemTemplateSectionServiceTests
     {
-        private IItemTemplateSectionRepository _itemTemplateSectionRepository;
-        private IUnitOfWork _unitOfWork;
+        private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private IAuthorizationUtil _authorizationUtil;
-        private ItemTemplateSectionService _itemTemplateSectionService;
+        private IItemTemplateUtil _itemTemplateUtil;
+
+        private ItemTemplateSectionService _service;
 
         [SetUp]
         public void SetUp()
         {
-            var unitOfWorkFactory = Substitute.For<IUnitOfWorkFactory>();
-            _unitOfWork = Substitute.For<IUnitOfWork>();
-            unitOfWorkFactory.CreateUnitOfWork().Returns(_unitOfWork);
-            _itemTemplateSectionRepository = Substitute.For<IItemTemplateSectionRepository>();
-            _unitOfWork.ItemTemplateSections.Returns(_itemTemplateSectionRepository);
+            _unitOfWorkFactory = new FakeUnitOfWorkFactory();
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
-            _itemTemplateSectionService = new ItemTemplateSectionService(unitOfWorkFactory, _authorizationUtil);
+            _itemTemplateUtil = Substitute.For<IItemTemplateUtil>();
+
+            _service = new ItemTemplateSectionService(
+                _unitOfWorkFactory,
+                _authorizationUtil,
+                _itemTemplateUtil
+            );
         }
 
         [Test]
@@ -40,12 +41,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var expectedItemTemplateSection = CreateItemTemplateSection();
             var createItemTemplateSectionRequest = AutoFill<CreateItemTemplateSectionRequest>.One(settings: new AutoFillSettings {MaxDepth = 0});
 
-            var itemTemplateSection = await _itemTemplateSectionService.CreateItemTemplateSectionAsync(new NaheulbookExecutionContext(), createItemTemplateSectionRequest);
+            var itemTemplateSection = await _service.CreateItemTemplateSectionAsync(new NaheulbookExecutionContext(), createItemTemplateSectionRequest);
 
             Received.InOrder(() =>
             {
-                _itemTemplateSectionRepository.Add(itemTemplateSection);
-                _unitOfWork.CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().ItemTemplateSections.Add(itemTemplateSection);
+                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
             });
             itemTemplateSection.Should().BeEquivalentTo(expectedItemTemplateSection);
         }
@@ -55,13 +56,31 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var executionContext = new NaheulbookExecutionContext();
 
-            await _itemTemplateSectionService.CreateItemTemplateSectionAsync(executionContext, new CreateItemTemplateSectionRequest());
+            await _service.CreateItemTemplateSectionAsync(executionContext, new CreateItemTemplateSectionRequest());
 
             Received.InOrder(() =>
             {
                 _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                _unitOfWork.CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
             });
+        }
+
+        [Test]
+        public async Task GetItemTemplatesBySectionAsync_ShouldFilterItemTemplatesBasedOnSource()
+        {
+            const int sectionId = 8;
+            const int userId = 12;
+            var allSectionItemTemplates = new List<ItemTemplate> {new ItemTemplate(), new ItemTemplate()};
+            var filteredItemTemplate = new List<ItemTemplate> {new ItemTemplate()};
+
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId)
+                .Returns(allSectionItemTemplates);
+            _itemTemplateUtil.FilterItemTemplatesBySource(allSectionItemTemplates, userId, true)
+                .Returns(filteredItemTemplate);
+
+            var actualItemTemplates = await _service.GetItemTemplatesBySectionAsync(sectionId, userId);
+
+            actualItemTemplates.Should().BeEquivalentTo(filteredItemTemplate);
         }
 
         private ItemTemplateSection CreateItemTemplateSection()

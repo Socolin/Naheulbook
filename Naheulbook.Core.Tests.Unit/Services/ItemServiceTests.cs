@@ -29,6 +29,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private IJsonUtil _jsonUtil;
         private ICharacterHistoryUtil _characterHistoryUtil;
         private IRngUtil _rngUtil;
+        private IItemTemplateUtil _itemTemplateUtil;
 
         private ItemService _service;
 
@@ -42,6 +43,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _itemUtil = Substitute.For<IItemUtil>();
             _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
             _jsonUtil = Substitute.For<IJsonUtil>();
+            _itemTemplateUtil = Substitute.For<IItemTemplateUtil>();
 
             _rngUtil = Substitute.For<IRngUtil>();
             _service = new ItemService(
@@ -52,7 +54,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _itemUtil,
                 _characterHistoryUtil,
                 _jsonUtil,
-                _rngUtil
+                _rngUtil,
+                _itemTemplateUtil
             );
         }
 

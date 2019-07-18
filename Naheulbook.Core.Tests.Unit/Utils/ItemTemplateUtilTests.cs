@@ -314,6 +314,85 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             );
         }
 
+        [Test]
+        public void FilterItemTemplatesBySource_ShouldKeepItemTemplateWithSourceOfficial()
+        {
+            var itemTemplate = CreateItemTemplateSource("official");
+            var iteTemplates = new List<ItemTemplate>
+            {
+                itemTemplate
+            };
+
+            var actualItemTemplates = _util.FilterItemTemplatesBySource(iteTemplates, null, false);
+
+            actualItemTemplates.Should().Contain(itemTemplate);
+        }
+
+        [Test]
+        public void FilterItemTemplatesBySource_ShouldKeepItemTemplateWithSourceCommunity_WhenIncludeCommunityItem()
+        {
+            var itemTemplate = CreateItemTemplateSource("community");
+            var iteTemplates = new List<ItemTemplate>
+            {
+                itemTemplate
+            };
+
+            var actualItemTemplates = _util.FilterItemTemplatesBySource(iteTemplates, null, true);
+
+            actualItemTemplates.Should().Contain(itemTemplate);
+        }
+
+        [Test]
+        public void FilterItemTemplatesBySource_ShouldFilterOutItemTemplateWithSourceCommunity_WhenDoNotIncludeSource()
+        {
+            var itemTemplate = CreateItemTemplateSource("community");
+            var iteTemplates = new List<ItemTemplate>
+            {
+                itemTemplate
+            };
+
+            var actualItemTemplates = _util.FilterItemTemplatesBySource(iteTemplates, null, false);
+
+            actualItemTemplates.Should().BeEmpty();
+        }
+
+        [Test]
+        public void FilterItemTemplatesBySource_ShouldFilterOutPrivateItemTemplateThatDoesNotBelongToTheCurrentUser()
+        {
+            var itemTemplate = CreateItemTemplateSource("private", 42);
+            var iteTemplates = new List<ItemTemplate>
+            {
+                itemTemplate
+            };
+
+            var actualItemTemplates = _util.FilterItemTemplatesBySource(iteTemplates, 12, false);
+
+            actualItemTemplates.Should().BeEmpty();
+        }
+
+        [Test]
+        public void FilterItemTemplatesBySource_ShouldKeepPrivateItemTemplate_ThatBelongToCurrentUser()
+        {
+            var itemTemplate = CreateItemTemplateSource("private", 42);
+            var iteTemplates = new List<ItemTemplate>
+            {
+                itemTemplate
+            };
+
+            var actualItemTemplates = _util.FilterItemTemplatesBySource(iteTemplates, 42, false);
+
+            actualItemTemplates.Should().Contain(itemTemplate);
+        }
+
+        private ItemTemplate CreateItemTemplateSource(string source, int? sourceUserId = null)
+        {
+            return new ItemTemplate
+            {
+                Source = source,
+                SourceUserId = sourceUserId
+            };
+        }
+
         private static Slot CreateSlot(int idx)
         {
             return new Slot()

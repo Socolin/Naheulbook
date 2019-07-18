@@ -23,5 +23,13 @@ namespace Naheulbook.Web.Extensions
 
             return (NaheulbookExecutionContext) context.Items[NaheulbookExecutionContextKey];
         }
+
+        public static IOptionalNaheulbookExecutionContext GetIfExistsExecutionContext(this HttpContext context)
+        {
+            if (!context.Items.ContainsKey(NaheulbookExecutionContextKey))
+                return null;
+
+            return (NaheulbookExecutionContext) context.Items[NaheulbookExecutionContextKey];
+        }
     }
 }

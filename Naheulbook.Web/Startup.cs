@@ -81,6 +81,7 @@ namespace Naheulbook.Web
             services.AddAutoMapper(typeof(RequestToEntityProfile).Assembly, typeof(Startup).Assembly);
 
             services.AddScoped(servicesProvider => servicesProvider.GetService<IHttpContextAccessor>().HttpContext.GetExecutionContext());
+            services.AddScoped(servicesProvider => servicesProvider.GetService<IHttpContextAccessor>().HttpContext.GetIfExistsExecutionContext());
 
             services.AddSingleton<IUnitOfWorkFactory>(new UnitOfWorkFactory(naheulbookDbContextOptionsBuilder.Options));
 
