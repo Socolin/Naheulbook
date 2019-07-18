@@ -55,11 +55,11 @@ namespace Naheulbook.Web.Controllers
 
         [HttpGet("{SectionId}")]
         public async Task<ActionResult<List<ItemTemplateResponse>>> GetItemTemplatesAsync(
-            [FromServices] IOptionalNaheulbookExecutionContext executionContext,
+            [FromServices] OptionalNaheulbookExecutionContext executionContext,
             int sectionId
         )
         {
-            var sections = await _itemTemplateSectionService.GetItemTemplatesBySectionAsync(sectionId, executionContext?.UserId);
+            var sections = await _itemTemplateSectionService.GetItemTemplatesBySectionAsync(sectionId, executionContext.ExecutionExecutionContext?.UserId);
             return _mapper.Map<List<ItemTemplateResponse>>(sections);
         }
     }

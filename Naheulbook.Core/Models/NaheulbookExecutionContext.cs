@@ -1,11 +1,20 @@
 namespace Naheulbook.Core.Models
 {
-    public interface IOptionalNaheulbookExecutionContext
+    public class OptionalNaheulbookExecutionContext
     {
-        int UserId { get; set; }
+        public OptionalNaheulbookExecutionContext()
+        {
+        }
+
+        public OptionalNaheulbookExecutionContext(NaheulbookExecutionContext executionContext)
+        {
+            ExecutionExecutionContext = executionContext;
+        }
+
+        public NaheulbookExecutionContext ExecutionExecutionContext { get; set; }
     }
 
-    public class NaheulbookExecutionContext : IOptionalNaheulbookExecutionContext
+    public class NaheulbookExecutionContext
     {
         public int UserId { get; set; }
     }

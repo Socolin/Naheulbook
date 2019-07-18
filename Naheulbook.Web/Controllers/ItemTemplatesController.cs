@@ -69,11 +69,11 @@ namespace Naheulbook.Web.Controllers
 
         [HttpGet("search")]
         public async Task<ActionResult<List<ItemTemplateResponse>>> GetSearchItemTemplateAsync(
-            [FromServices] IOptionalNaheulbookExecutionContext executionContext,
+            [FromServices] OptionalNaheulbookExecutionContext executionContext,
             [FromQuery] string filter
         )
         {
-            var itemTemplates= await _itemTemplateService.SearchItemTemplateAsync(filter, 10, executionContext?.UserId);
+            var itemTemplates= await _itemTemplateService.SearchItemTemplateAsync(filter, 10, executionContext.ExecutionExecutionContext?.UserId);
             return _mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
         }
 
