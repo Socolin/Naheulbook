@@ -75,6 +75,7 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new ItemTemplateSkillModifiersConfiguration());
             modelBuilder.ApplyConfiguration(new ItemTemplateSlotConfiguration());
             modelBuilder.ApplyConfiguration(new ItemTemplateUnSkillConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SlotConfiguration());
 
             modelBuilder.ApplyConfiguration(new JobConfiguration());

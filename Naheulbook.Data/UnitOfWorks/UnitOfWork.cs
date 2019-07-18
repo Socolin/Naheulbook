@@ -24,6 +24,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IItemTemplateRepository ItemTemplates { get; }
         IItemTemplateCategoryRepository ItemTemplateCategories { get; }
         IItemTemplateSectionRepository ItemTemplateSections { get; }
+        IItemTypeRepository ItemTypes { get; }
         IJobRepository Jobs { get; }
         ILocationRepository Locations { get; }
         ILootRepository Loots { get; }
@@ -67,6 +68,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IItemTemplateRepository ItemTemplates => new ItemTemplateRepository(_naheulbookDbContext);
         public IItemTemplateSectionRepository ItemTemplateSections => new ItemTemplateSectionRepository(_naheulbookDbContext);
         public IItemTemplateCategoryRepository ItemTemplateCategories => new ItemTemplateCategoryRepository(_naheulbookDbContext);
+        public IItemTypeRepository ItemTypes => new ItemTypeRepository(_naheulbookDbContext);
         public IJobRepository Jobs => new JobRepository(_naheulbookDbContext);
         public ILocationRepository Locations => new LocationRepository(_naheulbookDbContext);
         public ILootRepository Loots => new LootRepository(_naheulbookDbContext);

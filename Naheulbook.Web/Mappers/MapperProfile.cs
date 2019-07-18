@@ -160,6 +160,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<ItemTemplateSection, ItemTemplateSectionResponse>()
                 .ForMember(m => m.Specials, opt => opt.MapFrom(i => MapperHelpers.FromCommaSeparatedList(i.Special)));
             CreateMap<ItemTemplateCategory, ItemTemplateCategoryResponse>();
+            CreateMap<ItemType, ItemTypeResponse>();
             CreateMap<Slot, ItemSlotResponse>();
 
             CreateMap<Job, JobResponse>()

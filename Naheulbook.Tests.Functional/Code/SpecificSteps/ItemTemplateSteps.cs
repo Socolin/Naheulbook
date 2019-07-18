@@ -17,6 +17,12 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil = testDataUtil;
         }
 
+        [Given("a item type")]
+        public void GivenAItemType()
+        {
+            _testDataUtil.AddItemType();
+        }
+
         [Given("an item slot")]
         public void GivenAnItemSlot()
         {

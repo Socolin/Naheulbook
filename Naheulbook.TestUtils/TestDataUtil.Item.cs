@@ -121,5 +121,9 @@ namespace Naheulbook.TestUtils
             return SaveEntity(item, customizer);
         }
 
+        public TestDataUtil AddItemType(Action<ItemType> customizer = null)
+        {
+            return SaveEntity(_defaultEntityCreator.CreateItemType(), customizer);
+        }
     }
 }

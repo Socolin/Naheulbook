@@ -113,5 +113,17 @@ namespace Naheulbook.TestUtils
                 Loot = loot
             };
         }
+
+        public ItemType CreateItemType(string suffix = null)
+        {
+            if (suffix == null)
+                suffix = RngUtil.GetRandomHexString(8);
+
+            return new ItemType
+            {
+                DisplayName = $"some-display-name-{suffix}",
+                TechName = $"some-tech-name-{suffix}"
+            };
+        }
     }
 }

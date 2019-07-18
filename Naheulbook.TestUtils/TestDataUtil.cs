@@ -111,7 +111,7 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `item_template_skill_modifiers`;" +
                     "DELETE FROM `item_template_slot`;" +
                     "DELETE FROM `item_template_unskill`;" +
-                    // "DELETE FROM `item_type`;" +
+                    "DELETE FROM `item_type`;" +
                     "DELETE FROM `job`;" +
                     "DELETE FROM `job_bonus`;" +
                     "DELETE FROM `job_origin_blacklist`;" +

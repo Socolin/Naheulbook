@@ -362,6 +362,27 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
+    public class ItemTypeConfiguration : IEntityTypeConfiguration<ItemType>
+    {
+        public void Configure(EntityTypeBuilder<ItemType> builder)
+        {
+            builder.ToTable("item_type");
+
+            builder.Property(e => e.Id)
+                .HasColumnName("id");
+
+            builder.Property(e => e.DisplayName)
+                .IsRequired()
+                .HasColumnName("displayName")
+                .HasMaxLength(255);;
+
+            builder.Property(e => e.TechName)
+                .IsRequired()
+                .HasColumnName("techname")
+                .HasMaxLength(255);
+        }
+    }
+
     public class SlotConfiguration : IEntityTypeConfiguration<Slot>
     {
         public void Configure(EntityTypeBuilder<Slot> builder)

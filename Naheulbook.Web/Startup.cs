@@ -105,6 +105,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IItemTemplateCategoryService, ItemTemplateCategoryService>();
             services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();
             services.AddSingleton<IItemTemplateUtil, ItemTemplateUtil>();
+            services.AddSingleton<IItemTypeService, ItemTypeService>();
             services.AddSingleton<IJobService, JobService>();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<ILootService, LootService>();
