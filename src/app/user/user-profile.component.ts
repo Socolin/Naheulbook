@@ -17,9 +17,9 @@ export class UserProfileComponent implements OnInit {
     }
 
     updateProfile() {
-        this.loginService.updateProfile(this.profile).subscribe(
+        this.loginService.updateProfile(this.profile.id, this.profile).subscribe(
             () => {
-                this._notification.success('Succes', 'Profile editer');
+                this._notification.success('Succes', 'Profile édité');
             },
             err => {
                 console.log(err);

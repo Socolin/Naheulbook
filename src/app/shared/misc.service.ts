@@ -64,7 +64,7 @@ export class MiscService {
         if (!filter) {
             return observableFrom([]);
         }
-        return this.httpClient.post<ItemTemplate[]>('/api/item/search', {filter: filter});
+        return this.httpClient.get<ItemTemplate[]>('/api/v2/itemTemplates/search?filter=' + encodeURIComponent(filter));
     }
 
     postError(url, error) {

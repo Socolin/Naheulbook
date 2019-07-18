@@ -140,8 +140,8 @@ export class LoginService {
     }
 
 
-    updateProfile(profile): Observable<any> {
-        return this.httpClient.post<any>('/api/user/updateProfile', profile);
+    updateProfile(userId: number, changeRequest: {displayName: string}): Observable<void> {
+        return this.httpClient.patch<void>(`/api/v2/users/${userId}`, changeRequest);
     }
 
     searchUser(filter: string): Observable<Object[]> {
