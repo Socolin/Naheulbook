@@ -95,6 +95,8 @@ export class CreateItemComponent implements OnChanges {
 
         if (!keepOpen) {
             this.closeDialog();
+        } else {
+            this.randomGem();
         }
     }
 
