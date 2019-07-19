@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -42,6 +43,28 @@ namespace Naheulbook.Web.Controllers
             catch (ForbiddenAccessException ex)
             {
                 throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+        }
+
+        [HttpGet("{ItemTemplateCategoryName}/itemTemplates")]
+        public async Task<ActionResult<List<ItemTemplateResponse>>> GetItemTemplatesByCategoryTechNameAsync(
+            [FromServices] OptionalNaheulbookExecutionContext executionContext,
+            [FromRoute] string itemTemplateCategoryName,
+            [FromQuery] bool includeCommunityItems = true
+        )
+        {
+            try
+            {
+                var itemTemplates = await _itemTemplateCategoryService.GetItemTemplatesByCategoryTechNameAsync(
+                    itemTemplateCategoryName,
+                    executionContext.ExecutionExecutionContext?.UserId,
+                    includeCommunityItems
+                );
+                return _mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
+            }
+            catch (ItemTemplateCategoryNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
     }

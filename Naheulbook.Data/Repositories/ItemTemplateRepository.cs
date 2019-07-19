@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.Extensions;
 using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
@@ -11,6 +12,7 @@ namespace Naheulbook.Data.Repositories
     {
         Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(int id);
         Task<List<ItemTemplate>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId);
+        Task<List<ItemTemplate>> GetWithAllDataByCategoryIdAsync(int categoryId, int? currentUserId, bool includeCommunityItems);
         Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<int> ids);
         Task<List<ItemTemplate>> GetItemByCleanNameAsync(string name, int maxResultCount, int? currentUserId, bool includeCommunityItems);
         Task<List<ItemTemplate>> GetItemByPartialCleanNameAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems);
@@ -29,13 +31,7 @@ namespace Naheulbook.Data.Repositories
         public Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(int id)
         {
             return Context.ItemTemplates
-                .Include(x => x.Requirements)
-                .Include(x => x.Modifiers)
-                .Include(x => x.Slots)
-                .ThenInclude(x => x.Slot)
-                .Include(x => x.Skills)
-                .Include(x => x.UnSkills)
-                .Include(x => x.SkillModifiers)
+                .IncludeItemTemplateDetails()
                 .Where(x => x.Id == id)
                 .SingleAsync();
         }
@@ -43,14 +39,17 @@ namespace Naheulbook.Data.Repositories
         public Task<List<ItemTemplate>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId)
         {
             return Context.ItemTemplates
-                .Include(x => x.Requirements)
-                .Include(x => x.Modifiers)
-                .Include(x => x.Slots)
-                .ThenInclude(x => x.Slot)
-                .Include(x => x.Skills)
-                .Include(x => x.UnSkills)
-                .Include(x => x.SkillModifiers)
+                .IncludeItemTemplateDetails()
                 .Where(x => x.Category.SectionId == sectionId)
+                .ToListAsync();
+        }
+
+        public Task<List<ItemTemplate>> GetWithAllDataByCategoryIdAsync(int categoryId, int? currentUserId, bool includeCommunityItems)
+        {
+            return Context.ItemTemplates
+                .IncludeItemTemplateDetails()
+                .FilterCommunityAndPrivateItemTemplates(currentUserId, includeCommunityItems)
+                .Where(x => x.CategoryId == categoryId)
                 .ToListAsync();
         }
 
@@ -65,10 +64,7 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.ItemTemplates
                 .Where(x => x.CleanName.ToUpper() == name)
-                .Where(x => x.Source == ItemTemplate.OfficialSourceValue
-                            || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItems)
-                            || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
-                )
+                .FilterCommunityAndPrivateItemTemplates(currentUserId, includeCommunityItems)
                 .OrderByDescending(x => x.Source)
                 .Take(maxResultCount)
                 .ToListAsync();
@@ -80,10 +76,7 @@ namespace Naheulbook.Data.Repositories
                 .Where(x => x.CleanName.ToUpper().Contains(name))
                 .Take(maxResultCount)
                 .Where(i => !excludedIds.Contains(i.Id))
-                .Where(x => x.Source == ItemTemplate.OfficialSourceValue
-                            || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItems)
-                            || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
-                )
+                .FilterCommunityAndPrivateItemTemplates(currentUserId, includeCommunityItems)
                 .OrderByDescending(x => x.Source)
                 .ToListAsync();
         }
@@ -99,10 +92,7 @@ namespace Naheulbook.Data.Repositories
                     .Contains(name)
                 )
                 .Where(i => !excludedIds.Contains(i.Id))
-                .Where(x => x.Source == ItemTemplate.OfficialSourceValue
-                            || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItems)
-                            || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
-                )
+                .FilterCommunityAndPrivateItemTemplates(currentUserId, includeCommunityItems)
                 .OrderByDescending(x => x.Source)
                 .Take(maxResultCount)
                 .ToListAsync();

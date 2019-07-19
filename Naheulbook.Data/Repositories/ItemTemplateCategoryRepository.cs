@@ -8,6 +8,7 @@ namespace Naheulbook.Data.Repositories
     public interface IItemTemplateCategoryRepository : IRepository<ItemTemplateCategory>
     {
         Task<ItemTemplateCategory> GetWithItemTemplatesByTechNameAsync(string techName);
+        Task<ItemTemplateCategory> GetByTechNameAsync(string techName);
     }
 
     public class ItemTemplateCategoryRepository : Repository<ItemTemplateCategory, NaheulbookDbContext>, IItemTemplateCategoryRepository
@@ -21,6 +22,12 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.ItemTemplateCategories
                 .Include(c => c.ItemTemplates)
+                .SingleOrDefaultAsync(c => c.TechName == techName);
+        }
+
+        public Task<ItemTemplateCategory> GetByTechNameAsync(string techName)
+        {
+            return Context.ItemTemplateCategories
                 .SingleOrDefaultAsync(c => c.TechName == techName);
         }
     }

@@ -456,12 +456,37 @@ Feature: ItemTemplate
      }
      """
 
-    Scenario: Can search an item template
-      Given an item template
+  Scenario: Can search an item template
+    Given an item template
 
-      When performing a GET to the url "/api/v2/itemTemplates/search?filter=${ItemTemplate.Name}"
-      Then the response status code is 200
-      And the response should contains the following json
+    When performing a GET to the url "/api/v2/itemTemplates/search?filter=${ItemTemplate.Name}"
+    Then the response status code is 200
+    And the response should contains the following json
+      """
+      [
+        {
+           "id": ${ItemTemplate.Id},
+           "name": "${ItemTemplate.Name}",
+           "techName": "${ItemTemplate.TechName}",
+           "source": "official",
+           "categoryId": ${ItemTemplateCategory.Id},
+           "data": ${ItemTemplate.Data},
+           "slots": [],
+           "modifiers": [],
+           "requirements": [],
+           "skillModifiers": [],
+           "skills": [],
+           "unskills": []
+         }
+      ]
+      """
+
+  Scenario: Can get items by category techName
+    Given an item template
+
+    When performing a GET to the url "/api/v2/itemTemplateCategories/${ItemTemplateCategory.TechName}/itemTemplates"
+    Then the response status code is 200
+    And the response should contains the following json
       """
       [
         {

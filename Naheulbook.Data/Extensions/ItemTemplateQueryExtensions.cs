@@ -26,9 +26,33 @@ namespace Naheulbook.Data.Extensions
                 .ThenInclude(i => i.Requirements)
                 .Include(navigationPropertyPath)
                 .ThenInclude(i => i.Slots)
+                .ThenInclude(i => i.Slot);
+        }
+
+        public static IQueryable<ItemTemplate> IncludeItemTemplateDetails(
+            this IQueryable<ItemTemplate> queryable
+        )
+        {
+            return queryable
+                .Include(i => i.Requirements)
+                .Include(i => i.Modifiers)
+                .Include(i => i.Slots)
                 .ThenInclude(i => i.Slot)
-                .Include(navigationPropertyPath)
-                .ThenInclude(i => i.Modifiers);
+                .Include(i => i.Skills)
+                .Include(i => i.UnSkills)
+                .Include(i => i.SkillModifiers);
+        }
+
+        public static IQueryable<ItemTemplate> FilterCommunityAndPrivateItemTemplates(
+            this IQueryable<ItemTemplate> queryable,
+            int? currentUserId,
+            bool includeCommunityItems
+        )
+        {
+            return queryable.Where(x => x.Source == ItemTemplate.OfficialSourceValue
+                                        || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItems)
+                                        || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
+            );
         }
     }
 }
