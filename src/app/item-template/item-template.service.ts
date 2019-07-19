@@ -1,6 +1,6 @@
 import {from as observableFrom, forkJoin, ReplaySubject, Observable} from 'rxjs';
 
-import {map} from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
@@ -11,6 +11,7 @@ import {ItemCategory, ItemTemplateJsonData, ItemTemplate, ItemSection, ItemSlot,
 @Injectable()
 export class ItemTemplateService {
     private itemBySection: { [sectionId: number]: ReplaySubject<ItemTemplate[]> } = {};
+    private itemsByCategoriesName: { [categoryName: string]: ReplaySubject<ItemTemplate[]> } = {};
     private itemSections?: ReplaySubject<ItemSection[]>;
     private slots?: ReplaySubject<ItemSlot[]>;
     private itemTypes?: ReplaySubject<ItemType[]>;
@@ -186,10 +187,29 @@ export class ItemTemplateService {
         });
     }
 
-    getGem(type: string, dice: number): Observable<ItemTemplate> {
-        return this.httpClient.post<ItemTemplate>('/api/itemtemplate/getGem', {
-            type: type,
-            dice: dice
-        });
+    getItemTemplatesByCategoryTechName(categoryTechName: string): Observable<ItemTemplate[]> {
+        if (!(categoryTechName in this.itemsByCategoriesName)) {
+            this.itemsByCategoriesName[categoryTechName] = new ReplaySubject<ItemTemplate[]>(1);
+
+            forkJoin([
+                this.httpClient.get<ItemTemplateJsonData[]>(`/api/v2/itemTemplateCategories/${categoryTechName}/itemTemplates`),
+                this._skillService.getSkillsById()
+            ]).pipe(
+                map(([itemTemplatesData, skillsById]: [ItemTemplateJsonData[], { [skillId: number]: Skill }]) => {
+                    let items: ItemTemplate[] = [];
+                    for (let i = 0; i < itemTemplatesData.length; i++) {
+                        let itemTemplate = ItemTemplate.fromJson(itemTemplatesData[i], skillsById);
+                        items.push(itemTemplate);
+                    }
+                    return items;
+                })
+            ).subscribe(itemTemplates => {
+                this.itemsByCategoriesName[categoryTechName].next(itemTemplates);
+            }, error => {
+                this.itemsByCategoriesName[categoryTechName].error(error);
+            });
+        }
+
+        return this.itemsByCategoriesName[categoryTechName];
     }
 }

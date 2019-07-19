@@ -194,19 +194,23 @@ export class CreateItemComponent implements OnChanges {
 
     updateGem() {
         if (this.gemOption['type'] && this.gemOption['number']) {
-
-            this._itemTemplateService.getGem(this.gemOption['type'], this.gemOption['number']).subscribe(
-                itemTemplate => {
-                    this.newItem.template = itemTemplate;
-                    if (this.newItem.data.notIdentified) {
-                        this.newItem.data.name = 'Pierre précieuse';
-                    } else {
-                        this.newItem.data.name = itemTemplate.name;
-                    }
-                    this.newItem.data.description = itemTemplate.data.description;
-                    this.newItem.data.quantity = 1;
+            const categoryTechName = this.gemOption['type'] === 'cut' ? 'CUT_GEM' : 'RAW_GEM';
+            this._itemTemplateService.getItemTemplatesByCategoryTechName(categoryTechName).subscribe(itemTemplates => {
+                const itemTemplate = itemTemplates.find(i => i.data.diceDrop === this.gemOption['number']);
+                if (!itemTemplate) {
+                    console.log('Could not find ' + this.gemOption['type'] + ' gem number ' + this.gemOption['number']);
+                    return;
                 }
-            );
+                this.newItem.template = itemTemplate;
+                this.newItem.data.icon = itemTemplate.data.icon;
+                if (this.newItem.data.notIdentified) {
+                    this.newItem.data.name = 'Pierre précieuse';
+                } else {
+                    this.newItem.data.name = itemTemplate.name;
+                }
+                this.newItem.data.description = itemTemplate.data.description;
+                this.newItem.data.quantity = 1;
+            });
         }
     }
 }
