@@ -126,6 +126,8 @@ namespace Naheulbook.Core.Services
                         item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogUseItemCharge(item.CharacterId.Value, item, currentItemData.Charge, itemData.Charge));
                     if (itemData.ReadCount == currentItemData.ReadCount + 1)
                         item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogReadBook(item.CharacterId.Value, item));
+                    if (currentItemData.NotIdentified == true && itemData.NotIdentified == null)
+                        item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogIdentifyItem(item.CharacterId.Value, item));
                 }
 
                 item.Data = _jsonUtil.Serialize(itemData);

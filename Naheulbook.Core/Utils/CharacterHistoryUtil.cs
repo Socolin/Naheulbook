@@ -25,6 +25,7 @@ namespace Naheulbook.Core.Utils
         CharacterHistoryEntry CreateLogChangeItemQuantity(int characterId, Item item, int? oldValue, int? newValue);
         CharacterHistoryEntry CreateLogUseItemCharge(int characterId, Item item, int? oldValue, int? newValue);
         CharacterHistoryEntry CreateLogReadBook(int characterId, Item item);
+        CharacterHistoryEntry CreateLogIdentifyItem(int characterId, Item item);
     }
 
     public class CharacterHistoryUtil : ICharacterHistoryUtil
@@ -48,6 +49,7 @@ namespace Naheulbook.Core.Utils
         private const string ChangeQuantityActionName = "CHANGE_QUANTITY";
         private const string UseChargeActionName = "USE_CHARGE";
         private const string ReadBookActionName = "READ_BOOK";
+        private const string IdentifyActionName = "IDENTIFY";
 
         private readonly IJsonUtil _jsonUtil;
 
@@ -262,6 +264,17 @@ namespace Naheulbook.Core.Utils
             {
                 CharacterId = characterId,
                 Action = ReadBookActionName,
+                Date = DateTime.Now,
+                ItemId = item.Id
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogIdentifyItem(int characterId, Item item)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = IdentifyActionName,
                 Date = DateTime.Now,
                 ItemId = item.Id
             };
