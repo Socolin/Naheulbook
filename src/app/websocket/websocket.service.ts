@@ -46,9 +46,12 @@ export class WebSocketService {
                     };
                     registrable.handleWebsocketEvent(res.opcode, res.data, services);
                 } catch (err) {
-                    this._notification.error('Erreur', 'Erreur WS');
-                    this._miscService.postError('/api/debug/report', err).subscribe();
-                    console.error(err);
+                    let error = new Error('An error occured while handling websocket event `' + res.opcode + '\' on '
+                        + registrable.getWsTypeName()
+                    );
+                    error['innerError'] = err;
+                    error['data'] = res.data;
+                    throw error;
                 }
             }
         );

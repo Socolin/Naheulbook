@@ -8,7 +8,23 @@ import * as Sentry from '@sentry/browser';
 import {environment} from '../environments/environment';
 
 Sentry.init({
-    dsn: environment.sentryDsn
+    dsn: environment.sentryDsn,
+    beforeSend(event, hint) {
+        console.log(event);
+        console.log(hint);
+        const processedEvent = { ...event };
+        if (hint.originalException && hint.originalException instanceof Error) {
+            processedEvent.extra = processedEvent.extra || {};
+            for (let key in hint.originalException) {
+                if (!hint.originalException.hasOwnProperty(key)) {
+                    continue;
+                }
+                processedEvent.extra['___error.' + key] = hint.originalException[key];
+            }
+        }
+
+        return processedEvent;
+    },
 });
 
 @Injectable()
