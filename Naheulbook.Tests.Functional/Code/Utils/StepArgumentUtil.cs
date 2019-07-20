@@ -28,5 +28,27 @@ namespace Naheulbook.Tests.Functional.Code.Utils
 
             throw new NotSupportedException(indexString + " is not a recognized string");
         }
+
+
+        public static int ParseNth(string nthString)
+        {
+            if (nthString == "first" || nthString == "1st")
+                return 1;
+
+            if (nthString == "second" || nthString == "2nd")
+                return 2;
+
+            if (nthString == "third" || nthString == "3rd")
+                return 3;
+
+            if (nthString.EndsWith("th"))
+            {
+                var numberString = nthString.Substring(0, nthString.LastIndexOf("th", StringComparison.Ordinal));
+                if (int.TryParse(numberString, out var number))
+                    return number;
+            }
+
+            throw new NotSupportedException(nthString + " is not a recognized string");
+        }
     }
 }

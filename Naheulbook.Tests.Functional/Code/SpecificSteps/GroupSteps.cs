@@ -1,7 +1,10 @@
+using Naheulbook.Core.Models;
 using Naheulbook.Data.Models;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps
@@ -73,6 +76,27 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         public void GivenThatTheLootIsTheCurrentGroupCombatLoot()
         {
             _testDataUtil.GetLast<Group>().CombatLootId = _testDataUtil.GetLast<Loot>().Id;
+            _testDataUtil.SaveChanges();
+        }
+
+        [Given(@"that the group have a date set to the (.+) day of the year (\d+) at (\d+):(\d+)")]
+        public void GivenThatTheGroupHaveADateSet(string day, int year, int hour, int minute)
+        {
+            var group = _testDataUtil.GetLast<Group>();
+            var groupData = JsonConvert.DeserializeObject<GroupData>(group.Data) ?? new GroupData();
+            groupData.Date = new NhbkDate
+            {
+                Day = StepArgumentUtil.ParseNth(day),
+                Hour = hour,
+                Minute = minute,
+                Year = year
+            };
+
+            group.Data = JsonConvert.SerializeObject(groupData, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
             _testDataUtil.SaveChanges();
         }
     }

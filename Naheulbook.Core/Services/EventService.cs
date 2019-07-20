@@ -81,7 +81,7 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
                 var groupEvent = await uow.Events.GetAsync(eventId);
-                if (groupEvent.GroupId != group.Id)
+                if (groupEvent == null || groupEvent.GroupId != group.Id)
                     throw new EventNotFoundException(eventId);
 
                 uow.Events.Remove(groupEvent);

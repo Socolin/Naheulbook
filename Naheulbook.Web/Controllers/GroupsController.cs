@@ -492,5 +492,29 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpPost("{GroupId:int:min(1)}/addTime")]
+        public async Task<ActionResult<NhbkDate>> PostAddTime(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            NhbkDateOffset request
+        )
+        {
+            try
+            {
+                return await _groupService.AddTimeAsync(executionContext, groupId, request);
+            }
+            catch (GroupDateNotSetException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }

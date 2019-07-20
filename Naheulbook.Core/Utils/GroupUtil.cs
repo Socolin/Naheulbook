@@ -13,6 +13,7 @@ namespace Naheulbook.Core.Utils
         void ApplyChangesAndNotify(Group group, PatchGroupRequest request, INotificationSession notificationSession);
         void StartCombat(Group group, INotificationSession notificationSession);
         void EndCombat(Group group, INotificationSession notificationSession);
+        NhbkDate AddTimeAndNotify(Group @group, NhbkDateOffset request, INotificationSession notificationSession);
     }
 
     public class GroupUtil : IGroupUtil
@@ -99,6 +100,22 @@ namespace Naheulbook.Core.Utils
             notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
 
             group.Data = _jsonUtil.Serialize(groupData);
+        }
+
+        public NhbkDate AddTimeAndNotify(Group group, NhbkDateOffset timeOffset, INotificationSession notificationSession)
+        {
+            var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
+            if (groupData.Date == null)
+                throw new GroupDateNotSetException();
+
+            groupData.Date.Add(timeOffset);
+
+            group.AddHistoryEntry(_groupHistoryUtil.CreateAddTimeLog(group, groupData.Date, timeOffset));
+            notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
+
+            group.Data = _jsonUtil.Serialize(groupData);
+
+            return groupData.Date;
         }
     }
 }

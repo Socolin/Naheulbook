@@ -29,6 +29,7 @@ namespace Naheulbook.Core.Services
         Task EndCombatAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task UpdateDurationsAsync(NaheulbookExecutionContext executionContext, int groupId, IList<PostGroupUpdateDurationsRequest> request);
         Task<IEnumerable<Character>> ListActiveCharactersAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task<NhbkDate> AddTimeAsync(NaheulbookExecutionContext executionContext, int groupId, NhbkDateOffset request);
     }
 
     public class GroupService : IGroupService
@@ -322,6 +323,27 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
 
                 return group.Characters.Where(x => x.IsActive);
+            }
+        }
+
+        public async Task<NhbkDate> AddTimeAsync(NaheulbookExecutionContext executionContext, int groupId, NhbkDateOffset request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                var notificationSession = _notificationSessionFactory.CreateSession();
+
+                var newDate = _groupUtil.AddTimeAndNotify(group, request, notificationSession);
+
+                await uow.CompleteAsync();
+                await notificationSession.CommitAsync();
+
+                return newDate;
             }
         }
     }

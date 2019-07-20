@@ -299,3 +299,29 @@ Feature: Group
       }
     ]
     """
+
+  Scenario: Can advance group date
+    Given a JWT for a user
+    Given a group
+    And that the group have a date set to the 5th day of the year 1459 at 8:42
+
+    When performing a POST to the url "/api/v2/groups/${Group.Id}/addTime" with the following json content and the current jwt
+    """
+    {
+      "minute":32,
+      "hour":18,
+      "day":5,
+      "week":2,
+      "year":1
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "minute":14,
+      "hour":3,
+      "day":25,
+      "year":1460
+    }
+    """

@@ -12,6 +12,7 @@ namespace Naheulbook.Core.Utils
         GroupHistoryEntry CreateLogChangeMankdebol(Group group, int? oldValue, int newValue);
         GroupHistoryEntry CreateLogChangeDebilibeuk(Group group, int? oldValue, int newValue);
         GroupHistoryEntry CreateLogChangeDate(Group group, NhbkDate oldValue, NhbkDate newValue);
+        GroupHistoryEntry CreateAddTimeLog(Group group, NhbkDate date, NhbkDateOffset timeOffset);
     }
 
     public class GroupHistoryUtil : IGroupHistoryUtil
@@ -21,6 +22,7 @@ namespace Naheulbook.Core.Utils
         private const string UpdateMankdebolActionName = "MANKDEBOL";
         private const string UpdateDebilibeukActionName = "DEBILIBEUK";
         private const string UpdateDateActionName = "CHANGE_DATE";
+        private const string AddTimeActionName = "ADD_TIME";
 
         private readonly IJsonUtil _jsonUtil;
 
@@ -84,6 +86,18 @@ namespace Naheulbook.Core.Utils
                 Date = DateTime.Now,
                 Gm = false,
                 Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            };
+        }
+
+        public GroupHistoryEntry CreateAddTimeLog(Group group, NhbkDate date, NhbkDateOffset timeOffset)
+        {
+            return new GroupHistoryEntry
+            {
+                Group = group,
+                Action = AddTimeActionName,
+                Date = DateTime.Now,
+                Gm = false,
+                Data = _jsonUtil.Serialize(new {timeOffset, date})
             };
         }
     }
