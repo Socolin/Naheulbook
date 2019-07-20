@@ -7,6 +7,7 @@ using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
@@ -37,6 +38,24 @@ namespace Naheulbook.Web.Controllers
         {
             var effects = await _effectService.GetEffectsByCategoryAsync(categoryId);
             return _mapper.Map<List<EffectResponse>>(effects);
+        }
+
+        [HttpPost("{categoryId:int:min(1)}/effects")]
+        public async Task<CreatedActionResult<EffectResponse>> PostCreateEffectAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int categoryId,
+            CreateEffectRequest request
+        )
+        {
+            try
+            {
+                var effect = await _effectService.CreateEffectAsync(executionContext, categoryId, request);
+                return _mapper.Map<EffectResponse>(effect);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
         }
 
         [HttpPost]

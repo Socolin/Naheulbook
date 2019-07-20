@@ -17,8 +17,8 @@ namespace Naheulbook.Core.Services
         Task<ICollection<Effect>> GetEffectsByCategoryAsync(long categoryId);
         Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
         Task<EffectCategory> CreateEffectCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectCategoryRequest request);
-        Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, CreateEffectRequest request);
-        Task EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, CreateEffectRequest request);
+        Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, int categoryId, CreateEffectRequest request);
+        Task EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request);
         Task<List<Effect>> SearchEffectsAsync(string filter);
     }
 
@@ -97,14 +97,14 @@ namespace Naheulbook.Core.Services
             return effectCategory;
         }
 
-        public async Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, CreateEffectRequest request)
+        public async Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, int categoryId, CreateEffectRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
             var effect = new Effect
             {
                 Name = request.Name,
-                CategoryId = request.CategoryId,
+                CategoryId = categoryId,
                 Description = request.Description,
                 Dice = request.Dice,
                 TimeDuration = request.TimeDuration,
@@ -127,7 +127,7 @@ namespace Naheulbook.Core.Services
             return effect;
         }
 
-        public async Task EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, CreateEffectRequest request)
+        public async Task EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 

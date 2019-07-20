@@ -25,32 +25,11 @@ namespace Naheulbook.Web.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<JsonResult> PostCreateEffectAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            CreateEffectRequest request
-        )
-        {
-            try
-            {
-                var effect = await _effectService.CreateEffectAsync(executionContext, request);
-                var effectResponse = _mapper.Map<EffectResponse>(effect);
-                return new JsonResult(effectResponse)
-                {
-                    StatusCode = (int?) HttpStatusCode.Created
-                };
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
-            }
-        }
-
         [HttpPut("{effectId:int:min(1)}")]
         public async Task<StatusCodeResult> PutEditEffectAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int effectId,
-            CreateEffectRequest request
+            EditEffectRequest request
         )
         {
             try

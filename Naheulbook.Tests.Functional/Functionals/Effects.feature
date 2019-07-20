@@ -116,11 +116,10 @@ Feature: Effect
     Given a JWT for an admin user
     And an effect category
 
-    When performing a POST to the url "/api/v2/effects/" with the following json content and the current jwt
+    When performing a POST to the url "/api/v2/effectCategories/${EffectCategory.Id}/effects" with the following json content and the current jwt
     """
     {
       "combatCount": 1,
-      "categoryId": ${EffectCategory.Id},
       "description": "some-description",
       "duration": "some-duration",
       "dice": 4,

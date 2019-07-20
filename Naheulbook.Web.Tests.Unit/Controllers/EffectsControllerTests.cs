@@ -34,58 +34,29 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public async Task PostCreateEffect_CallEffectService()
-        {
-            var createEffectRequest = new CreateEffectRequest();
-            var expectedEffectResponse = new EffectResponse();
-            var effect = new Effect {Id = 42};
-
-            _effectService.CreateEffectAsync(_executionContext, createEffectRequest)
-                .Returns(effect);
-            _mapper.Map<EffectResponse>(effect)
-                .Returns(expectedEffectResponse);
-
-            var result = await _effectsController.PostCreateEffectAsync(_executionContext, createEffectRequest);
-
-            result.StatusCode.Should().Be(201);
-            result.Value.Should().Be(expectedEffectResponse);
-        }
-
-        [Test]
-        public void PostCreateEffect_WhenCatchForbiddenAccessException_Return403()
-        {
-            _effectService.CreateEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectRequest>())
-                .Returns(Task.FromException<Effect>(new ForbiddenAccessException()));
-
-            Func<Task<JsonResult>> act = () => _effectsController.PostCreateEffectAsync(_executionContext, new CreateEffectRequest());
-
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
-        }
-
-        [Test]
         public async Task PutEditEffect_CallEffectService()
         {
-            var createEffectRequest = new CreateEffectRequest();
+            var editEffectRequest = new EditEffectRequest();
             var expectedEffectResponse = new EffectResponse();
             var effect = new Effect {Id = 42};
 
             _mapper.Map<EffectResponse>(effect)
                 .Returns(expectedEffectResponse);
 
-            var result = await _effectsController.PutEditEffectAsync(_executionContext, 42, createEffectRequest);
+            var result = await _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest);
 
             result.StatusCode.Should().Be(204);
             await _effectService.Received(1)
-                .EditEffectAsync(_executionContext, 42, createEffectRequest);
+                .EditEffectAsync(_executionContext, 42, editEffectRequest);
         }
 
         [Test]
         public void PutEditEffect_WhenCatchForbiddenAccessException_Return403()
         {
-            _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateEffectRequest>())
+            _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
                 .Returns(Task.FromException<Effect>(new ForbiddenAccessException()));
 
-            Func<Task<StatusCodeResult>> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new CreateEffectRequest());
+            Func<Task<StatusCodeResult>> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
@@ -93,10 +64,10 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public void PutEditEffect_WhenCatchEffectNotFoundException_Return404()
         {
-            _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateEffectRequest>())
+            _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
                 .Returns(Task.FromException<Effect>(new EffectNotFoundException()));
 
-            Func<Task<StatusCodeResult>> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new CreateEffectRequest());
+            Func<Task<StatusCodeResult>> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }

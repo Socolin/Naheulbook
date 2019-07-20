@@ -35,6 +35,36 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
+        public async Task PostCreateEffect_CallEffectService()
+        {
+            const int categoryId = 12;
+            var createEffectRequest = new CreateEffectRequest();
+            var expectedEffectResponse = new EffectResponse();
+            var effect = new Effect {Id = 42};
+
+            _effectService.CreateEffectAsync(_executionContext, categoryId, createEffectRequest)
+                .Returns(effect);
+            _mapper.Map<EffectResponse>(effect)
+                .Returns(expectedEffectResponse);
+
+            var result = await _effectCategoriesController.PostCreateEffectAsync(_executionContext, categoryId, createEffectRequest);
+
+            result.StatusCode.Should().Be(201);
+            result.Value.Should().Be(expectedEffectResponse);
+        }
+
+        [Test]
+        public void PostCreateEffect_WhenCatchForbiddenAccessException_Return403()
+        {
+            _effectService.CreateEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateEffectRequest>())
+                .Returns(Task.FromException<Effect>(new ForbiddenAccessException()));
+
+            Func<Task> act = () => _effectCategoriesController.PostCreateEffectAsync(_executionContext, 12, new CreateEffectRequest());
+
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        [Test]
         public async Task GetEffects_CallEffectService()
         {
             var effects = new List<Effect>();

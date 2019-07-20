@@ -148,7 +148,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var createEffectRequest = AutoFill<CreateEffectRequest>.One();
             var executionContext = new NaheulbookExecutionContext();
 
-            var effect = await _effectService.CreateEffectAsync(executionContext, createEffectRequest);
+            var effect = await _effectService.CreateEffectAsync(executionContext, 2, createEffectRequest);
 
             Received.InOrder(() =>
             {
@@ -164,7 +164,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
             var createEffectRequest = AutoFill<CreateEffectRequest>.One();
 
-            await _effectService.CreateEffectAsync(executionContext, createEffectRequest);
+            await _effectService.CreateEffectAsync(executionContext, 2, createEffectRequest);
 
             Received.InOrder(() =>
             {
@@ -176,17 +176,17 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task EditEffect_UpdateEffectInDatabase()
         {
-            var expectedEffect = CreateEffect(42);
+            var expectedEffect = CreateEffect(42, categoryId: 1, offset: 1);
             var executionContext = new NaheulbookExecutionContext();
             var previousEffect = AutoFill<Effect>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt, new AutoFillSettings {MaxDepth = 1}, (i) => new {i.Category});
-            var createEffectRequest = AutoFill<CreateEffectRequest>.One();
+            var editEffectRequest = AutoFill<EditEffectRequest>.One();
 
             previousEffect.Id = 42;
 
             _effectRepository.GetWithModifiersAsync(42)
                 .Returns(previousEffect);
 
-            await _effectService.EditEffectAsync(executionContext, 42, createEffectRequest);
+            await _effectService.EditEffectAsync(executionContext, 42, editEffectRequest);
 
             await _unitOfWork.Received(1)
                 .CompleteAsync();
@@ -198,13 +198,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var executionContext = new NaheulbookExecutionContext();
             var previousEffect = AutoFill<Effect>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt);
-            var createEffectRequest = AutoFill<CreateEffectRequest>.One();
+            var editEffectRequest = AutoFill<EditEffectRequest>.One();
             previousEffect.Id = 42;
 
             _effectRepository.GetWithModifiersAsync(42)
                 .Returns(previousEffect);
 
-            await _effectService.EditEffectAsync(executionContext, 42, createEffectRequest);
+            await _effectService.EditEffectAsync(executionContext, 42, editEffectRequest);
 
             Received.InOrder(() =>
             {
@@ -217,12 +217,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public void EditEffect_WhenEffectDoesNotExists_Throw()
         {
             var executionContext = new NaheulbookExecutionContext();
-            var createEffectRequest = AutoFill<CreateEffectRequest>.One();
+            var editEffectRequest = AutoFill<EditEffectRequest>.One();
 
             _effectRepository.GetWithModifiersAsync(Arg.Any<int>())
                 .Returns((Effect) null);
 
-            Func<Task> act = () => _effectService.EditEffectAsync(executionContext, 42, createEffectRequest);
+            Func<Task> act = () => _effectService.EditEffectAsync(executionContext, 42, editEffectRequest);
 
             act.Should().Throw<EffectNotFoundException>();
         }
@@ -239,7 +239,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             };
         }
 
-        private static Effect CreateEffect(int id = 0)
+        private static Effect CreateEffect(int id = 0, int offset = 0, int categoryId = 0)
         {
             return new Effect
             {
@@ -248,32 +248,32 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 Description = "some-description",
                 DurationType = "some-duration-type",
                 Duration = "some-duration",
-                CombatCount = 1,
-                CategoryId = 2,
-                Dice = 3,
-                LapCount = 4,
-                TimeDuration = 5,
+                CombatCount = 1 + offset,
+                Dice = (short?) (2 + offset),
+                LapCount = 3 + offset,
+                TimeDuration = 4 + offset,
                 Modifiers = new List<EffectModifier>
                 {
                     new EffectModifier
                     {
                         StatName = "some-stat",
                         Type = "some-type",
-                        Value = 6
+                        Value = (short) (5 + offset)
                     },
                     new EffectModifier
                     {
                         StatName = "some-stat",
                         Type = "some-type",
-                        Value = 7
+                        Value = (short) (6 + offset)
                     },
                     new EffectModifier
                     {
                         StatName = "some-stat",
                         Type = "some-type",
-                        Value = 8
+                        Value = (short) (7 + offset)
                     }
                 },
+                CategoryId = categoryId
             };
         }
     }
