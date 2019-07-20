@@ -134,10 +134,9 @@ export class GroupService {
         return this.httpClient.get<HistoryEntry[]>(`/api/v2/groups/${groupId}/history?page=${page}`);
     }
 
-    addLog(groupId: number, info: string, is_gm: boolean): Observable<Object> {
-        return this.httpClient.post<Object>('/api/group/addLog', {
-            groupId: groupId,
-            is_gm: is_gm,
+    addLog(groupId: number, info: string, isGm: boolean): Observable<Object> {
+        return this.httpClient.post<Object>(`/api/v2/groups/${groupId}/history`, {
+            isGm: isGm,
             info: info
         });
     }
