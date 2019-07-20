@@ -9,6 +9,8 @@ namespace Naheulbook.Data.UnitOfWorks
     {
         ICalendarRepository Calendar { get; }
         ICharacterRepository Characters { get; }
+        ICharacterSkillRepository CharacterSkills { get; }
+        ICharacterSpecialityRepository CharacterSpecialities { get; }
         ICharacterModifierRepository CharacterModifiers { get; }
         ICharacterHistoryEntryRepository CharacterHistoryEntries { get; }
         IEffectRepository Effects { get; }
@@ -53,6 +55,8 @@ namespace Naheulbook.Data.UnitOfWorks
 
         public ICalendarRepository Calendar => new CalendarRepository(_naheulbookDbContext);
         public ICharacterRepository Characters => new CharacterRepository(_naheulbookDbContext);
+        public ICharacterSkillRepository CharacterSkills => new CharacterSkillRepository(_naheulbookDbContext);
+        public ICharacterSpecialityRepository CharacterSpecialities => new CharacterSpecialityRepository(_naheulbookDbContext);
         public ICharacterModifierRepository CharacterModifiers => new CharacterModifierRepository(_naheulbookDbContext);
         public ICharacterHistoryEntryRepository CharacterHistoryEntries => new CharacterHistoryEntryRepository(_naheulbookDbContext);
         public IEffectRepository Effects => new EffectRepository(_naheulbookDbContext);

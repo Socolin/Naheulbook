@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.Extensions;
 using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
@@ -41,25 +42,7 @@ namespace Naheulbook.Data.Repositories
                 .ThenInclude(s => s.Speciality)
                 .ThenInclude(s => s.Modifiers)
                 .Include(c => c.Jobs)
-                .Include(c => c.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.UnSkills)
-                .Include(c => c.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Skills)
-                .Include(c => c.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Modifiers)
-                .Include(c => c.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Requirements)
-                .Include(c => c.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Slots)
-                .ThenInclude(s => s.Slot)
-                .Include(c => c.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.SkillModifiers)
+                .IncludeItemDetails(c => c.Items)
                 .Include(c => c.Invites)
                 .ThenInclude(i => i.Group)
                 .FirstOrDefaultAsync(x => x.Id == id);

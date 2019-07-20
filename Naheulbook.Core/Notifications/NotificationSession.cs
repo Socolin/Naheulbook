@@ -25,6 +25,7 @@ namespace Naheulbook.Core.Notifications
         void NotifyCharacterAcceptGroupInvite(int characterId, GroupInvite groupInvite);
         void NotifyCharacterShowLoot(int characterId, Loot loot);
         void NotifyCharacterHideLoot(int characterId, int lootId);
+        void NotifyCharacterLevelUp(int characterId, LevelUpResult levelUpResult);
 
         void NotifyCharacterGmChangeColor(Character character);
         void NotifyCharacterGmChangeTarget(Character character, TargetRequest requestTarget);
@@ -115,6 +116,11 @@ namespace Naheulbook.Core.Notifications
         public void NotifyCharacterUpdateModifier(int characterId, CharacterModifier modifier)
         {
             _packets.Add(_packetBuilder.BuildCharacterUpdateModifier(characterId, modifier));
+        }
+
+        public void NotifyCharacterLevelUp(int characterId, LevelUpResult levelUpResult)
+        {
+            _packets.Add(_packetBuilder.BuildCharacterLevelUp(characterId, levelUpResult));
         }
 
         public void NotifyCharacterGmChangeColor(Character character)

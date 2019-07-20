@@ -26,6 +26,7 @@ namespace Naheulbook.Core.Utils
         CharacterHistoryEntry CreateLogUseItemCharge(int characterId, Item item, int? oldValue, int? newValue);
         CharacterHistoryEntry CreateLogReadBook(int characterId, Item item);
         CharacterHistoryEntry CreateLogIdentifyItem(int characterId, Item item);
+        CharacterHistoryEntry CreateLogLevelUp(int characterId, int characterLevel);
     }
 
     public class CharacterHistoryUtil : ICharacterHistoryUtil
@@ -50,6 +51,7 @@ namespace Naheulbook.Core.Utils
         private const string UseChargeActionName = "USE_CHARGE";
         private const string ReadBookActionName = "READ_BOOK";
         private const string IdentifyActionName = "IDENTIFY";
+        private const string LevelUpActionName = "LEVEL_UP";
 
         private readonly IJsonUtil _jsonUtil;
 
@@ -277,6 +279,17 @@ namespace Naheulbook.Core.Utils
                 Action = IdentifyActionName,
                 Date = DateTime.Now,
                 ItemId = item.Id
+            };
+        }
+
+        public CharacterHistoryEntry CreateLogLevelUp(int characterId, int level)
+        {
+            return new CharacterHistoryEntry
+            {
+                CharacterId = characterId,
+                Action = LevelUpActionName,
+                Date = DateTime.Now,
+                Info = level.ToString()
             };
         }
     }

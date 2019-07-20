@@ -115,6 +115,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IMonsterTraitService, MonsterTraitService>();
             services.AddSingleton<IMonsterTypeService, MonsterTypeService>();
             services.AddSingleton<IOriginService, OriginService>();
+            services.AddSingleton<IOriginUtil, OriginUtil>();
             services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
             services.AddSingleton<ISkillService, SkillService>();
             services.AddSingleton<ISocialMediaUserLinkService, SocialMediaUserLinkService>();

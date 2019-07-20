@@ -26,6 +26,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Origin> Origins { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Slot> Slots { get; set; }
+        public DbSet<Speciality> Specialities { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<LocationMap> LocationMaps { get; set; }

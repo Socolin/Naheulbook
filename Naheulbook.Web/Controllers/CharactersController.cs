@@ -274,5 +274,35 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
         }
+
+        [HttpPost("{CharacterId:int:min(1)}/levelUp")]
+        public async Task<ActionResult<CharacterLevelUpResponse>> PostCharacterLevelUpAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId,
+            CharacterLevelUpRequest request
+        )
+        {
+            try
+            {
+                var levelUpResult = await _characterService.LevelUpCharacterAsync(executionContext, characterId, request);
+                return _mapper.Map<CharacterLevelUpResponse>(levelUpResult);
+            }
+            catch (SpecialityNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+            catch (InvalidTargetLevelUpRequestedException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
     }
 }

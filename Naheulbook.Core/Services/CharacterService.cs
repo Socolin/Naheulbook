@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Naheulbook.Core.Exceptions;
@@ -27,6 +28,7 @@ namespace Naheulbook.Core.Services
         Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
         Task<CharacterModifier> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
         Task<List<Character>> SearchCharactersAsync(string filter);
+        Task<LevelUpResult> LevelUpCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterLevelUpRequest request);
     }
 
     public class CharacterService : ICharacterService
@@ -305,6 +307,42 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 return await uow.Characters.SearchCharacterWithNoGroupByNameWithOriginWithOwner(filter, 10);
+            }
+        }
+
+        public async Task<LevelUpResult> LevelUpCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterLevelUpRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithGroupAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+                if (character.Level + 1 != request.TargetLevelUp)
+                    throw new InvalidTargetLevelUpRequestedException(character.Level, request.TargetLevelUp);
+
+                var specialities = await uow.CharacterSpecialities.GetWithModiferWithSpecialByIdsAsync(request.SpecialityIds);
+                if (specialities.Count < request.SpecialityIds.Distinct().Count())
+                    throw new SpecialityNotFoundException();
+
+                var origin = await uow.Origins.GetWithAllDataAsync(character.OriginId);
+
+                var levelUpResult = _characterUtil.LevelUpCharacter(character, origin, specialities, request);
+
+                uow.CharacterModifiers.AddRange(levelUpResult.NewModifiers);
+                uow.CharacterSkills.AddRange(levelUpResult.NewSkills);
+                uow.CharacterSpecialities.AddRange(levelUpResult.NewSpecialities);
+
+                character.AddHistoryEntry(_characterHistoryUtil.CreateLogLevelUp(character.Id, character.Level));
+                var notificationSession = _notificationSessionFactory.CreateSession();
+                notificationSession.NotifyCharacterLevelUp(character.Id, levelUpResult);
+
+                await uow.CompleteAsync();
+                await notificationSession.CommitAsync();
+
+                return levelUpResult;
             }
         }
     }

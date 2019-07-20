@@ -23,6 +23,7 @@ namespace Naheulbook.Core.Notifications
         INotificationPacket BuildCharacterAcceptGroupInvite(int characterId, GroupInvite groupInvite);
         INotificationPacket BuildCharacterShowLoot(int characterId, Loot loot);
         INotificationPacket BuildCharacterHideLoot(int characterId, int lootId);
+        INotificationPacket BuildCharacterLevelUp(int characterId, LevelUpResult levelUpResult);
 
         INotificationPacket BuildCharacterChangeColor(Character character);
         INotificationPacket BuildCharacterChangeTarget(Character character, TargetRequest requestTarget);

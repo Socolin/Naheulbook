@@ -524,3 +524,52 @@ Feature: Character
       }
     }}
     """
+
+  Scenario: A character can level up
+    Given a JWT for a user
+    And a character
+    And a skill
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/levelUp" with the following json content and the current jwt
+    """
+    {
+      "evOrEa": 'EV',
+      "evOrEaValue": 4,
+      "targetLevelUp": 2,
+      "statToUp": "AD",
+      "skillId": ${Skill.Id},
+      "specialityIds": []
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "newModifiers": [
+        {
+          "id": {"__match": {"type": "integer"}},
+          "active": true,
+          "name": "LevelUp: 2",
+          "reusable": false,
+          "permanent": true,
+          "values": [
+            {
+              "stat": "EV",
+              "value": 4,
+              "type": "ADD"
+            },
+            {
+              "stat": "AD",
+              "value": 1,
+              "type": "ADD"
+            }
+          ]
+        }
+      ],
+      "newSkillIds": [
+        ${Skill.Id}
+      ],
+      "newLevel": 2,
+      "newSpecialities": []
+    }
+    """

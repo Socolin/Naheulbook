@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.Models;
@@ -9,23 +10,27 @@ namespace Naheulbook.Core.Utils
     public interface ICharacterUtil
     {
         void ApplyCharactersChange(NaheulbookExecutionContext executionContext, PatchCharacterRequest request, Character character, INotificationSession notificationSession);
+        LevelUpResult LevelUpCharacter(Character character, Origin origin, List<Speciality> specialities, CharacterLevelUpRequest request);
     }
 
     public class CharacterUtil : ICharacterUtil
     {
         private readonly IAuthorizationUtil _authorizationUtil;
         private readonly IJsonUtil _jsonUtil;
+        private readonly IOriginUtil _originUtil;
         private readonly ICharacterHistoryUtil _characterHistoryUtil;
 
         public CharacterUtil(
             IAuthorizationUtil authorizationUtil,
             ICharacterHistoryUtil characterHistoryUtil,
-            IJsonUtil jsonUtil
+            IJsonUtil jsonUtil,
+            IOriginUtil originUtil
         )
         {
             _authorizationUtil = authorizationUtil;
             _characterHistoryUtil = characterHistoryUtil;
             _jsonUtil = jsonUtil;
+            _originUtil = originUtil;
         }
 
         public void ApplyCharactersChange(NaheulbookExecutionContext executionContext, PatchCharacterRequest request, Character character, INotificationSession notificationSession)
@@ -81,6 +86,7 @@ namespace Naheulbook.Core.Utils
                     character.TargetedMonsterId = null;
                     character.TargetedCharacterId = request.Target.Id;
                 }
+
                 notificationSession.NotifyCharacterGmChangeTarget(character, request.Target);
             }
 
@@ -125,6 +131,91 @@ namespace Naheulbook.Core.Utils
                 character.Name = request.Name;
                 notificationSession.NotifyCharacterChangeName(character);
             }
+        }
+
+        public LevelUpResult LevelUpCharacter(Character character, Origin origin, List<Speciality> specialities, CharacterLevelUpRequest request)
+        {
+            var levelUpResult = new LevelUpResult();
+
+            character.Level++;
+            levelUpResult.NewLevel = character.Level;
+
+            levelUpResult.NewModifiers.Add(CreateLevelUpCharacterModifier(character, request));
+
+            if (request.SkillId.HasValue)
+                levelUpResult.NewSkills.Add(CreateCharacterSkill(character, request.SkillId.Value));
+
+            foreach (var speciality in specialities)
+                levelUpResult.NewSpecialities.Add(CreateCharacterSpeciality(character, speciality));
+
+            if ((character.Level == 2 || character.Level == 3) && _originUtil.HasFlag(origin, "CHA_+1_LVL2_LVL3"))
+                levelUpResult.NewModifiers.Add(CreateChaLevelUpCharacterModifier(character));
+
+            return levelUpResult;
+        }
+
+        private CharacterModifier CreateChaLevelUpCharacterModifier(Character character)
+        {
+            return new CharacterModifier
+            {
+                IsActive = true,
+                CharacterId = character.Id,
+                Permanent = true,
+                Name = "LevelUp charisme: " + character.Level,
+                Values = new List<CharacterModifierValue>
+                {
+                    new CharacterModifierValue
+                    {
+                        StatName = "CHA",
+                        Value = 1,
+                        Type = "ADD"
+                    }
+                }
+            };
+        }
+
+        private static CharacterSpeciality CreateCharacterSpeciality(Character character, Speciality speciality)
+        {
+            return new CharacterSpeciality
+            {
+                SpecialityId = speciality.Id,
+                Speciality = speciality,
+                CharacterId = character.Id
+            };
+        }
+
+        private CharacterSkill CreateCharacterSkill(Character character, int skillId)
+        {
+            return new CharacterSkill
+            {
+                CharacterId = character.Id,
+                SkillId = skillId
+            };
+        }
+
+        private static CharacterModifier CreateLevelUpCharacterModifier(Character character, CharacterLevelUpRequest request)
+        {
+            var levelUpCharacterModifier = new CharacterModifier
+            {
+                IsActive = true,
+                Name = "LevelUp: " + request.TargetLevelUp,
+                Values = new List<CharacterModifierValue>(),
+                Permanent = true,
+                CharacterId = character.Id
+            };
+            levelUpCharacterModifier.Values.Add(new CharacterModifierValue
+            {
+                StatName = request.EvOrEa,
+                Value = request.EvOrEaValue,
+                Type = "ADD"
+            });
+            levelUpCharacterModifier.Values.Add(new CharacterModifierValue
+            {
+                StatName = request.StatToUp,
+                Value = 1,
+                Type = "ADD"
+            });
+            return levelUpCharacterModifier;
         }
     }
 }

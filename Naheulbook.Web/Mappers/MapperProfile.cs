@@ -55,6 +55,9 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.StatName, opt => opt.MapFrom(c => c.Stat))
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.CharacterModifierId, opt => opt.Ignore());
+            CreateMap<LevelUpResult, CharacterLevelUpResponse>()
+                .ForMember(x => x.NewSkillIds, opt => opt.MapFrom(x => x.NewSkills.Select(s => s.SkillId)))
+                .ForMember(x => x.NewSpecialities, opt => opt.MapFrom(x => x.NewSpecialities.Select(s => s.Speciality)));
 
             CreateMap<CharacterHistoryEntry, CharacterHistoryEntryResponse>()
                 .ForMember(m => m.Modifier, opt => opt.MapFrom(im => im.CharacterModifier))
