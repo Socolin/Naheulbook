@@ -17,15 +17,10 @@ export class EventService {
     }
 
     createEvent(groupId: number, event: NEvent): Observable<NEvent> {
-        return this.httpClient.post<NEvent>('/api/group/createEvent', {
-            groupId: groupId,
-            event: event
-        }).pipe(map(res => NEvent.fromJson(res)));
+        return this.httpClient.post<NEvent>(`/api/v2/groups/${groupId}/events`, event).pipe(map(res => NEvent.fromJson(res)));
     }
 
-    deleteEvent(eventId: number): Observable<NEvent> {
-        return this.httpClient.post<NEvent>('/api/group/deleteEvent', {
-            eventId: eventId
-        });
+    deleteEvent(groupId: number, eventId: number): Observable<void> {
+        return this.httpClient.delete<void>(`/api/v2/groups/${groupId}/events/${eventId}`);
     }
 }

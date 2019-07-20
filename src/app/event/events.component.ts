@@ -38,8 +38,8 @@ export class EventsComponent {
     }
 
     deleteEvent(event: NEvent): boolean {
-        this._eventService.deleteEvent(event.id).subscribe(deletedEvent => {
-            this.group.removeEvent(deletedEvent.id)
+        this._eventService.deleteEvent(this.group.id, event.id).subscribe(() => {
+            this.group.removeEvent(event.id)
         });
         return false;
     }
