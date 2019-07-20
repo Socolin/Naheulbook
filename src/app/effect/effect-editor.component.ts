@@ -70,13 +70,14 @@ export class EffectEditorComponent implements OnInit {
         this.effect.category = category;
     }
 
-    selectType(type: EffectType) {
+    selectType(type?: EffectType) {
         if (type === undefined) {
             this.openCreateTypeDialog();
-        }
-        this.selectedType = type;
-        if (this.selectedType.categories.length) {
-            this.effect.category = this.selectedType.categories[0];
+        } else {
+            this.selectedType = type;
+            if (this.selectedType.categories.length) {
+                this.effect.category = this.selectedType.categories[0];
+            }
         }
     }
 
