@@ -10,7 +10,7 @@ namespace Naheulbook.Requests.Requests
         public string Name { get; set; }
         public string Sex { get; set; }
         public int Money { get; set; }
-        public int FatePoint { get; set; }
+        public short FatePoint { get; set; }
         public bool IsNpc { get; set; }
 
         public BasicStats Stats { get; set; }

@@ -30,6 +30,8 @@ namespace Naheulbook.Core.Factories
                 Level = 1,
                 Experience = 0,
 
+                FatePoint = characterRequest.FatePoint,
+
                 OriginId = characterRequest.OriginId,
             };
 
