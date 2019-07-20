@@ -4,6 +4,13 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ErrorReportService} from './error-report.service';
 import {catchError} from 'rxjs/operators';
 
+import * as Sentry from '@sentry/browser';
+import {environment} from '../environments/environment';
+
+Sentry.init({
+    dsn: environment.sentryDsn
+});
+
 @Injectable()
 export class NhbkErrorHandler extends ErrorHandler {
     private count = 0;
@@ -52,13 +59,20 @@ export class NhbkErrorHandler extends ErrorHandler {
             this._errorReportService.notify('An error occurred', error);
         });
 
-        this.postJson('/api/debug/report', {
-            message: error.toString(),
-            stacktrace: error.stack,
-            url: window.location.toString()
-        }).subscribe(() => {
-            console.log('error reported');
-        });
         super.handleError(error);
+
+        if (error instanceof HttpErrorResponse) {
+            if (error.status === 502) {
+                return;
+            }
+        }
+
+        const eventId = Sentry.captureException(error.originalError || error);
+        Sentry.showReportDialog({
+            eventId,
+            lang: 'fr',
+            title: 'Échec Critique',
+            subtitle: 'Une erreur est survenue, les informations de l\'erreur ont été enregistré pour pouvoir la corrigé.'
+        });
     }
 }

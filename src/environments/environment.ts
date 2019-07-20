@@ -4,5 +4,6 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 export const environment = {
-  production: false
+    production: false,
+    sentryDsn: 'https://c63e04108eb14cc3846761c4a37c665c@sentry.io/1509445'
 };
