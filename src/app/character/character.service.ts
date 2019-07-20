@@ -15,9 +15,10 @@ import {Loot} from '../loot';
 import {
     Character,
     CharacterGiveDestination,
-    CharacterJsonData,
+    CharacterJsonData, CharacterLevelUpResponse, LevelUpRequest,
 } from './character.model';
 import {DeleteGroupResponse} from '../group';
+import {LevelUpInfo} from './character.component';
 
 @Injectable()
 export class CharacterService {
@@ -59,28 +60,32 @@ export class CharacterService {
         }).pipe(map(() => stat));
     }
 
-    LevelUp(id: number, levelUpInfo: Object): Observable<any> {
-        return forkJoin([
-            this._skillService.getSkills(),
-            this.httpClient.post('/api/character/levelUp', {
-                id: id,
-                levelUpInfo: levelUpInfo
-            })
-        ]).pipe(
-            map(([skills, character]: [Skill[], Character]) => {
-                for (let i = 0; i < character.skills.length; i++) {
-                    let characterSkill = character.skills[i];
-                    for (let j = 0; j < skills.length; j++) {
-                        let skill = skills[j];
-                        if (skill.id === characterSkill.id) {
-                            character.skills[i] = skill;
-                            break;
-                        }
-                    }
-                }
-                return character;
+    LevelUp(characterId: number, levelUpInfo: LevelUpInfo): Observable<[CharacterLevelUpResponse, {[skillId: number]: Skill}]> {
+        let skillId = undefined;
+        if (levelUpInfo.skill) {
+            skillId = levelUpInfo.skill.id;
+        }
+        let specialityIds = [];
+        for (let jobId in levelUpInfo.specialities) {
+            if (!levelUpInfo.specialities.hasOwnProperty(jobId)) {
+                continue;
             }
-        ));
+            specialityIds.push(levelUpInfo.specialities[jobId].id);
+        }
+
+        let request: LevelUpRequest = {
+            evOrEa: levelUpInfo.evOrEa,
+            evOrEaValue: levelUpInfo.evOrEaValue,
+            targetLevelUp: levelUpInfo.targetLevelUp,
+            statToUp: levelUpInfo.statToUp,
+            skillId: skillId,
+            specialityIds: specialityIds
+        };
+
+        return forkJoin([
+            this.httpClient.post<CharacterLevelUpResponse>(`/api/v2/characters/${characterId}/levelUp`, request),
+            this._skillService.getSkillsById()
+        ]);
     }
 
     loadList(): Observable<CharacterSummary[]> {

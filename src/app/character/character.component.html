@@ -731,26 +731,26 @@
 
                     <div *ngIf="character.hasMagicJob()">
                         Je choisi d'augmenter mon:
-                        <mat-button-toggle-group [(ngModel)]="levelUpInfo.EVorEA">
+                        <mat-button-toggle-group [(ngModel)]="levelUpInfo.evOrEa">
                             <mat-button-toggle value="EV">E.Vitale</mat-button-toggle>
                             <mat-button-toggle value="EA">E.Astrale</mat-button-toggle>
                         </mat-button-toggle-group>
                     </div>
                     <div>
-                        <div *ngIf="levelUpInfo.EVorEA === 'EV'">
+                        <div *ngIf="levelUpInfo.evOrEa === 'EV'">
                             Augmentation de l'energie vitale (EV) de 1D{{character.origin.diceEVLevelUp}}
                         </div>
-                        <div *ngIf="levelUpInfo.EVorEA === 'EA'">
+                        <div *ngIf="levelUpInfo.evOrEa === 'EA'">
                             Augmentation de l'energie astrale (EA) de 1D{{character.diceEaLevelUp}}
                         </div>
 
                         <div class="level-up-ea-ev">
                             <mat-form-field align="end">
-                                <input matInput placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.EVorEAValue">
-                                <mat-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EV'">
+                                <input matInput placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.evOrEaValue">
+                                <mat-hint align="end" *ngIf="levelUpInfo.evOrEa === 'EV'">
                                     Lancer 1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')">-1</span>
                                 </mat-hint>
-                                <mat-hint align="end" *ngIf="levelUpInfo.EVorEA === 'EA'">
+                                <mat-hint align="end" *ngIf="levelUpInfo.evOrEa === 'EA'">
                                     Lancer 1D{{character.diceEaLevelUp}}
                                 </mat-hint>
                             </mat-form-field>

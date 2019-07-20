@@ -53,6 +53,22 @@ export interface CharacterGroupInvite {
     groupName: string;
 }
 
+export interface CharacterLevelUpResponse {
+    newModifiers: ActiveStatsModifier[];
+    newSkillIds: number[];
+    newSpecialities: Speciality[];
+    newLevel: number;
+}
+
+export interface LevelUpRequest {
+    evOrEa: string;
+    evOrEaValue: number;
+    targetLevelUp: number;
+    statToUp: string;
+    skillId?: number;
+    specialityIds: number[];
+}
+
 export class StatisticDetail {
     evea: any[] = [];
     atprd: any[] = [];
@@ -1166,19 +1182,22 @@ export class Character extends WsRegistrable {
         }
     }
 
-    onLevelUp(result: Character)  {
-        if (this.level !== result.level) {
-            this.level = result.level;
-            this.modifiers = result.modifiers;
-            this.skills = result.skills;
-            this.update();
-        }
-    }
-
-    onPartialLevelUp(result: Character) {
-        if (this.level !== result.level) {
-            this.level = result.level;
-            this.modifiers = result.modifiers;
+    onLevelUp(
+        result: CharacterLevelUpResponse,
+        skillsById: { [skillId: number]: Skill }
+    ) {
+        if (this.level !== result.newLevel) {
+            this.level = result.newLevel;
+            for (const modifier of ActiveStatsModifier.modifiersFromJson(result.newModifiers)) {
+                this.modifiers.push(modifier);
+            }
+            for (const skillId of result.newSkillIds) {
+                this.skills.push(skillsById[skillId]);
+            }
+            for (const speciality of result.newSpecialities) {
+                this.specialities.push(Speciality.fromJson(speciality));
+            }
+            this.notify('levelUp', this.name + ' gagne un niveau !');
             this.update();
         }
     }
@@ -1468,7 +1487,9 @@ export class Character extends WsRegistrable {
                 break;
             }
             case 'levelUp': {
-                this.onPartialLevelUp(data);
+                services['skill'].getSkillsById().subscribe(skillsById => {
+                    this.onLevelUp(data, skillsById);
+                });
                 break;
             }
             case 'equipItem': {

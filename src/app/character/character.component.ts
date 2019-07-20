@@ -21,11 +21,11 @@ import {SwipeService} from './swipe.service';
 import {CharacterLootPanelComponent} from './character-loot-panel.component';
 
 export class LevelUpInfo {
-    EVorEA = 'EV';
-    EVorEAValue: number | undefined;
+    evOrEa = 'EV';
+    evOrEaValue: number | undefined;
     targetLevelUp: number;
     statToUp: string;
-    skill: Skill;
+    skill?: Skill;
     specialities: { [jobId: number]: Speciality } = {};
 }
 
@@ -127,7 +127,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     levelUp() {
         this.closeLevelUpDialog();
-        this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(this.character.onLevelUp.bind(this.character));
+        this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(res => {
+            this.character.onLevelUp(res[0], res[1]);
+        });
     }
 
     characterHasToken(flagName: string) {
@@ -195,8 +197,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     initLevelUp() {
         this.levelUpInfo = new LevelUpInfo();
-        this.levelUpInfo.EVorEA = 'EV';
-        this.levelUpInfo.EVorEAValue = undefined;
+        this.levelUpInfo.evOrEa = 'EV';
+        this.levelUpInfo.evOrEaValue = undefined;
         this.levelUpInfo.targetLevelUp = this.character.level + 1;
         if (this.levelUpInfo.targetLevelUp % 2 === 0) {
             this.levelUpInfo.statToUp = 'FO';
@@ -208,9 +210,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     rollLevelUp() {
         let diceLevelUp = this.character.origin.diceEVLevelUp;
-        if (this.levelUpInfo.EVorEA === 'EV') {
+        if (this.levelUpInfo.evOrEa === 'EV') {
             if (this.characterHasToken('LEVELUP_DICE_EV_-1')) {
-                this.levelUpInfo.EVorEAValue = Math.max(1, Math.ceil(Math.random() * diceLevelUp) - 1);
+                this.levelUpInfo.evOrEaValue = Math.max(1, Math.ceil(Math.random() * diceLevelUp) - 1);
                 return;
             }
         } else {
@@ -221,7 +223,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 diceLevelUp = 6;
             }
         }
-        this.levelUpInfo.EVorEAValue = Math.ceil(Math.random() * diceLevelUp);
+        this.levelUpInfo.evOrEaValue = Math.ceil(Math.random() * diceLevelUp);
     }
 
     onLevelUpSelectSkills(skills: Skill[]) {
@@ -256,7 +258,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     levelUpFormReady() {
-        if (!this.levelUpInfo.EVorEAValue) {
+        if (!this.levelUpInfo.evOrEaValue) {
             return false;
         }
         for (let job of this.character.jobs) {
