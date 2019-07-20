@@ -17,7 +17,7 @@ import {Loot} from '../loot';
 import {ItemSlot, ItemTemplate} from '../item-template';
 import {Fighter} from '../group';
 
-import {Item, PartialItem} from '../item';
+import {Item, ItemData, PartialItem} from '../item';
 import {TargetJsonData} from '../group/target.model';
 
 import {WsRegistrable, WebSocketService} from '../websocket';
@@ -1247,40 +1247,31 @@ export class Character extends WsRegistrable {
         }
     }
 
-    onIdentifyItem(item: PartialItem) {
-        for (let i = 0; i < this.items.length; i++) {
-            let it = this.items[i];
-            if (it.id === item.id) {
-                it.data.name = item.data.name;
-                it.data.notIdentified = item.data.notIdentified;
-                this.update();
-                this.notify('identifyObject', 'Objet identifié: ' + item.data.name);
-                break;
+    onUpdateItem(newItem: PartialItem) {
+        let currentItem = this.items.find(i => i.id === newItem.id);
+        if (!currentItem) {
+            throw new Error('Failed to find item ' + newItem.id);
+        }
+
+        if (newItem.data.quantity != null && currentItem.data.quantity != null) {
+            let diff = newItem.data.quantity - currentItem.data.quantity;
+            if (diff > 0) {
+                this.notify('addItem', 'Ajout de ' + diff + ' ' + newItem.data.name);
+            } else if (diff < 0) {
+                this.notify('deleteItem', 'Suppression de ' + (-diff) + ' ' + newItem.data.name);
             }
         }
-    }
 
-    onUpdateItem(item: PartialItem) {
-        for (let i = 0; i < this.items.length; i++) {
-            let it = this.items[i];
-            if (it.id === item.id) {
-                if (item.data.quantity != null && it.data.quantity != null) {
-                    let diff = item.data.quantity - it.data.quantity;
-                    if (diff > 0) {
-                        this.notify('addItem', 'Ajout de ' + diff + ' ' + item.data.name);
-                    } else if (diff < 0) {
-                        this.notify('deleteItem', 'Suppression de ' + (-diff) + ' ' + item.data.name);
-                    }
-                }
-                if (item.data.charge !== it.data.charge) {
-                    this.notify('useObject', 'Utilisation d\'une charge de ' + item.data.name);
-                }
-
-                it.data = item.data;
-                this.update();
-                break;
-            }
+        if (newItem.data.charge !== currentItem.data.charge) {
+            this.notify('useObject', 'Utilisation d\'une charge de ' + newItem.data.name);
         }
+
+        if (newItem.data.notIdentified === undefined && currentItem.data.notIdentified) {
+            this.notify('identifyObject', 'Objet identifié: ' + newItem.data.name);
+        }
+
+        currentItem.data = newItem.data;
+        this.update();
     }
 
     onUpdateModifiers(item: PartialItem) {
@@ -1502,13 +1493,6 @@ export class Character extends WsRegistrable {
             }
             case 'deleteItem': {
                 this.onDeleteItem(data);
-                break;
-            }
-            case 'identifyItem': {
-                services.skill.getSkillsById().subscribe(skillsById => {
-                    this.onIdentifyItem(Item.fromJson(data, skillsById));
-
-                });
                 break;
             }
             case 'changeContainer': {

@@ -233,8 +233,11 @@ export class FighterComponent implements OnInit, OnChanges {
         });
         this._itemActionService.registerAction('identify').subscribe((event: {item: Item, data: any}) => {
             let item = event.item;
-            this._itemService.identify(item.id).subscribe(
-                this.fighter.character.onIdentifyItem.bind(this.fighter.character)
+            let itemData = {...item.data, name: item.template.name};
+            delete itemData.notIdentified;
+
+            this._itemService.updateItem(item.id, itemData).subscribe(
+                this.fighter.character.onUpdateItem.bind(this.fighter.character)
             );
         });
     }

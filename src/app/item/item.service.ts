@@ -131,12 +131,6 @@ export class ItemService {
         });
     }
 
-    identify(itemId: number): Observable<PartialItem> {
-        return this.httpClient.post<PartialItem>('/api/item/identify', {
-            itemId: itemId,
-        });
-    }
-
     updateItem(itemId: number, itemData: any): Observable<PartialItem> {
         return this.httpClient.put<PartialItem>(`/api/v2/items/${itemId}/data`, itemData);
     }
