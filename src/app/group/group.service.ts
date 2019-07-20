@@ -10,7 +10,7 @@ import {Monster} from '../monster';
 import {Loot} from '../loot';
 import {NEvent, EventService} from '../event';
 import {Character, CharacterSearchResponse, CharacterService} from '../character';
-import {NhbkDateOffset} from '../date';
+import {NhbkDate, NhbkDateOffset} from '../date';
 import {Skill, SkillService} from '../skill';
 
 import {Group, GroupData, GroupInvite, GroupInviteResponse, GroupResponse, PartialGroup} from './group.model';
@@ -156,11 +156,8 @@ export class GroupService {
         });
     }
 
-    addTime(groupId: number, dateOffset: NhbkDateOffset): Observable<GroupData> {
-        return this.httpClient.post<GroupData>('/api/group/addTime', {
-            groupId: groupId,
-            dateOffset: dateOffset
-        });
+    addTime(groupId: number, dateOffset: NhbkDateOffset): Observable<NhbkDate> {
+        return this.httpClient.post<NhbkDate>(`/api/v2/groups/${groupId}/addTime`, dateOffset);
     }
 
     saveChangedTime(groupId: number, changes: FighterDurationChanges[]): Observable<void> {

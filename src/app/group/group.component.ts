@@ -18,7 +18,7 @@ import {
     LapCountDecrement
 } from '../shared';
 import {NotificationsService} from '../notifications';
-import {date2Timestamp} from '../date/util';
+import {date2Timestamp, dateOffset2TimeDuration} from '../date/util';
 import {NhbkDateOffset} from '../date';
 
 import {GroupService} from './group.service';
@@ -140,13 +140,13 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     addTime(dateOffset: NhbkDateOffset) {
-        let time = date2Timestamp(dateOffset);
+        let time = dateOffset2TimeDuration(dateOffset);
         let changes = this.group.updateTime('time', time);
         forkJoin([
             this._groupService.addTime(this.group.id, dateOffset),
             this._groupService.saveChangedTime(this.group.id, changes)
-        ]).subscribe(([data]) => {
-            this.group.data.changeValue('date', data.date);
+        ]).subscribe(([newDate]) => {
+            this.group.data.changeValue('date', newDate);
         });
     }
 

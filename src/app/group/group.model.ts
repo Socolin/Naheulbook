@@ -253,6 +253,7 @@ export class GroupData {
         return groupData;
     }
 
+    // TODO: Improve typing based on string
     changeValue(key: string, value: any): boolean {
         switch (key) {
             case 'debilibeuk':
