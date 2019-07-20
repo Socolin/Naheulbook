@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Sentry;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -25,28 +26,32 @@ namespace Naheulbook.Web
                 .AddCommandLine(args)
                 .Build();
 
-            var logger = new LoggerConfiguration()
-                .Enrich.WithExceptionDetails()
-                .ReadFrom.Configuration(configuration)
-                .WriteTo.Console(theme: AnsiConsoleTheme.Code)
-                .CreateLogger();
+            using (SentrySdk.Init(configuration["Sentry:DSN"]))
+            {
+                var logger = new LoggerConfiguration()
+                    .Enrich.WithExceptionDetails()
+                    .ReadFrom.Configuration(configuration)
+                    .WriteTo.Sentry(configuration["Sentry:DSN"])
+                    .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+                    .CreateLogger();
 
-            var server = new WebHostBuilder()
-                .UseLibuv()
-                .ConfigureKestrel((context, options) =>
-                {
-                    if (!string.IsNullOrEmpty(context.Configuration["socket"]))
-                        options.ListenUnixSocket(context.Configuration["socket"]);
-                })
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseEnvironment(environment)
-                .UseStartup<Startup>()
-                .UseSerilog(logger)
-                .UseConfiguration(configuration)
-                .Build();
+                var server = new WebHostBuilder()
+                    .UseLibuv()
+                    .ConfigureKestrel((context, options) =>
+                    {
+                        if (!string.IsNullOrEmpty(context.Configuration["socket"]))
+                            options.ListenUnixSocket(context.Configuration["socket"]);
+                    })
+                    .UseKestrel()
+                    .UseContentRoot(Directory.GetCurrentDirectory())
+                    .UseEnvironment(environment)
+                    .UseStartup<Startup>()
+                    .UseSerilog(logger)
+                    .UseConfiguration(configuration)
+                    .Build();
 
-            server.Run();
+                server.Run();
+            }
         }
     }
 }
