@@ -219,6 +219,49 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpPost("{GroupId:int:min(1)}/events")]
+        public async Task<CreatedActionResult<EventResponse>> PostCreateEventAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            CreateEventRequest request
+        )
+        {
+            try
+            {
+                var groupEvent = await _eventService.CreateEventAsync(executionContext, groupId, request);
+                return _mapper.Map<EventResponse>(groupEvent);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [HttpDelete("{GroupId:int:min(1)}/events/{EventId:int:min(1)}")]
+        public async Task<ActionResult<EventResponse>> PostDeleteEventAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            [FromRoute] int eventId
+        )
+        {
+            try
+            {
+                await _eventService.DeleteEventAsync(executionContext, groupId, eventId);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
         [HttpGet("{GroupId:int:min(1)}/monsters")]
         public async Task<ActionResult<List<MonsterResponse>>> GetMonsterListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
