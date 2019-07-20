@@ -30,6 +30,7 @@ namespace Naheulbook.Core.Services
         Task UpdateDurationsAsync(NaheulbookExecutionContext executionContext, int groupId, IList<PostGroupUpdateDurationsRequest> request);
         Task<IEnumerable<Character>> ListActiveCharactersAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task<NhbkDate> AddTimeAsync(NaheulbookExecutionContext executionContext, int groupId, NhbkDateOffset request);
+        Task AddHistoryEntryAsync(NaheulbookExecutionContext executionContext, int groupId, PostCreateGroupHistoryEntryRequest request);
     }
 
     public class GroupService : IGroupService
@@ -40,6 +41,7 @@ namespace Naheulbook.Core.Services
         private readonly INotificationSessionFactory _notificationSessionFactory;
         private readonly IDurationUtil _durationUtil;
         private readonly IGroupUtil _groupUtil;
+        private readonly IGroupHistoryUtil _groupHistoryUtil;
 
         public GroupService(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -47,7 +49,8 @@ namespace Naheulbook.Core.Services
             INotificationSessionFactory notificationSessionFactory,
             IMapper mapper,
             IDurationUtil durationUtil,
-            IGroupUtil groupUtil
+            IGroupUtil groupUtil,
+            IGroupHistoryUtil groupHistoryUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -56,6 +59,7 @@ namespace Naheulbook.Core.Services
             _notificationSessionFactory = notificationSessionFactory;
             _durationUtil = durationUtil;
             _groupUtil = groupUtil;
+            _groupHistoryUtil = groupHistoryUtil;
         }
 
         public async Task<Group> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request)
@@ -344,6 +348,21 @@ namespace Naheulbook.Core.Services
                 await notificationSession.CommitAsync();
 
                 return newDate;
+            }
+        }
+
+        public async Task AddHistoryEntryAsync(NaheulbookExecutionContext executionContext, int groupId, PostCreateGroupHistoryEntryRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var group = await uow.Groups.GetAsync(groupId);
+                if (group == null)
+                    throw new GroupNotFoundException(groupId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+                group.AddHistoryEntry(_groupHistoryUtil.CreateLogEventRp(group, request.IsGm, request.Info));
+                await uow.CompleteAsync();
             }
         }
     }

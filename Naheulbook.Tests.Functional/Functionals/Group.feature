@@ -325,3 +325,15 @@ Feature: Group
       "year":1460
     }
     """
+
+  Scenario: Can add group log
+    Given a JWT for a user
+    Given a group
+    When performing a POST to the url "/api/v2/groups/${Group.Id}/history" with the following json content and the current jwt
+    """
+    {
+        isGm: true,
+        info: "some-log-info"
+    }
+    """
+    Then the response status code is 204

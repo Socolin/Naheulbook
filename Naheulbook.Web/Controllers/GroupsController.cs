@@ -407,7 +407,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("{GroupId:int:min(1)}/history")]
-        public async Task<ActionResult<List<GroupHistoryEntryResponse>>> PostCreateMonsterAsync(
+        public async Task<ActionResult<List<GroupHistoryEntryResponse>>> GetGroupHistoryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
             [FromQuery] int page
@@ -417,6 +417,28 @@ namespace Naheulbook.Web.Controllers
             {
                 var historyEntries = await _groupService.GetGroupHistoryEntriesAsync(executionContext, groupId, page);
                 return _mapper.Map<List<GroupHistoryEntryResponse>>(historyEntries);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [HttpPost("{GroupId:int:min(1)}/history")]
+        public async Task<ActionResult<List<GroupHistoryEntryResponse>>> PostCreateGroupHistoryLog(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            PostCreateGroupHistoryEntryRequest request
+        )
+        {
+            try
+            {
+                await _groupService.AddHistoryEntryAsync(executionContext, groupId, request);
+                return NoContent();
             }
             catch (ForbiddenAccessException ex)
             {

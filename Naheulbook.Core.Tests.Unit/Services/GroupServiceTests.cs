@@ -26,6 +26,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private IGroupUtil _groupUtil;
         private GroupService _service;
         private IDurationUtil _durationUtil;
+        private IGroupHistoryUtil _groupHistoryUtil;
 
         [SetUp]
         public void SetUp()
@@ -36,6 +37,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _mapper = Substitute.For<IMapper>();
             _groupUtil = Substitute.For<IGroupUtil>();
             _durationUtil = Substitute.For<IDurationUtil>();
+            _groupHistoryUtil = Substitute.For<IGroupHistoryUtil>();
 
             _service = new GroupService(
                 _unitOfWorkFactory,
@@ -43,7 +45,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _notificationSessionFactory,
                 _mapper,
                 _durationUtil,
-                _groupUtil
+                _groupUtil,
+                _groupHistoryUtil
             );
         }
 

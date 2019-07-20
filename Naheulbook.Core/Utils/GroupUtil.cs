@@ -110,7 +110,7 @@ namespace Naheulbook.Core.Utils
 
             groupData.Date.Add(timeOffset);
 
-            group.AddHistoryEntry(_groupHistoryUtil.CreateAddTimeLog(group, groupData.Date, timeOffset));
+            group.AddHistoryEntry(_groupHistoryUtil.CreateLogAddTime(group, groupData.Date, timeOffset));
             notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
 
             group.Data = _jsonUtil.Serialize(groupData);
