@@ -144,7 +144,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task CreateEffect_AddANewEffectInDatabase()
         {
-            var expectedEffect = CreateEffect();
+            var expectedEffect = CreateEffect(categoryId: 2);
             var createEffectRequest = AutoFill<CreateEffectRequest>.One();
             var executionContext = new NaheulbookExecutionContext();
 
