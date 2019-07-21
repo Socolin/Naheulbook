@@ -27,10 +27,7 @@ namespace Naheulbook.Web
                 .AddCommandLine(args)
                 .Build();
 
-            using (SentrySdk.Init(o => {
-                o.Dsn = new Dsn(configuration["Sentry:DSN"]);
-                o.BeforeSend = DefaultSentryEventExceptionProcessor.BeforeSend;
-            }))
+            using (SentrySdk.Init(configuration["Sentry:DSN"]))
             {
                 var logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(configuration)
@@ -46,6 +43,7 @@ namespace Naheulbook.Web
                             options.ListenUnixSocket(context.Configuration["socket"]);
                     })
                     .UseKestrel()
+                    .UseSentry(o => o.BeforeSend = DefaultSentryEventExceptionProcessor.BeforeSend)
                     .UseContentRoot(Directory.GetCurrentDirectory())
                     .UseEnvironment(environment)
                     .UseStartup<Startup>()
