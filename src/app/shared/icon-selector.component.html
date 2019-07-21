@@ -30,7 +30,7 @@
             </mat-card>
             <mat-card>
                 <mat-card-subtitle>Couleur</mat-card-subtitle>
-                <div style="font-size: 32px; ">
+                <div style="font-size: 32px; display: flex; flex-wrap: wrap">
                     <ng-template ngFor let-color [ngForOf]="colors">
                         <span class="game-icon" [ngClass]="'game-icon-' + newIcon.name" (click)="selectColor(color)" [style.color]="color"></span>
                     </ng-template>
