@@ -6,6 +6,7 @@ import {Job} from '../job';
 import {Origin} from '../origin';
 
 import {Skill, SkillService} from '../skill';
+import {MatSelectionListChange} from '@angular/material';
 
 @Component({
     selector: 'skill-selector',
@@ -22,40 +23,14 @@ export class SkillSelectorComponent implements OnInit {
     // Outputs
     @Output() skillsSelected: EventEmitter<Skill[]> = new EventEmitter<Skill[]>();
 
-    public selectedSkills: Skill[] = [];
     public skills: Skill[];
 
     constructor(private _skillService: SkillService) {
     }
 
-    isSelected(skill: Skill) {
-        for (let i = 0; i < this.selectedSkills.length; i++) {
-            if (this.selectedSkills[i].id === skill.id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    selectSkill(skill: Skill) {
-        if (!this.isSelected(skill)) {
-            if (this.selectedSkills.length === this.skillCount) {
-                this.selectedSkills.splice(0, 1);
-            }
-            this.selectedSkills.push(skill);
-            if (this.selectedSkills.length === this.skillCount) {
-                this.skillsSelected.emit(this.selectedSkills);
-            }
-        } else {
-            this.unselectSkill(skill);
-        }
-        return false;
-    }
-
-    unselectSkill(skill: Skill) {
-        let index = this.selectedSkills.indexOf(skill);
-        if (index !== -1) {
-            this.selectedSkills.splice(index, 1);
+    selectionChange(event: MatSelectionListChange) {
+        if (event.source.selectedOptions.selected.length === this.skillCount) {
+            this.skillsSelected.next(event.source.selectedOptions.selected.map(s => s.value));
         }
     }
 
@@ -130,13 +105,15 @@ export class SkillSelectorComponent implements OnInit {
     }
 
     randomSelect(): void {
-        while (this.selectedSkills.length < this.skillCount) {
+        const selectedSkills = [];
+        while (selectedSkills.length < this.skillCount) {
             let rnd = getRandomInt(0, this.skills.length - 1);
             let skill = this.skills[rnd];
-            if (!this.isSelected(skill)) {
-                this.selectSkill(skill);
+            if (selectedSkills.indexOf(skill) === -1) {
+                selectedSkills.push(skill);
             }
         }
+        this.skillsSelected.next(selectedSkills)
     }
 
     ngOnInit() {

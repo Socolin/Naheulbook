@@ -1,15 +1,6 @@
-<ng-template ngFor [ngForOf]="skills" let-skill>
-    <mat-card>
-        <div>
-            <mat-icon *ngIf="isSelected(skill)">check_circle</mat-icon>
-            <mat-card-title>{{skill.name}}</mat-card-title>
-        </div>
-        <mat-card-subtitle *ngIf="skill.playerDescription">
-            {{skill.playerDescription}}
-        </mat-card-subtitle>
-        <mat-card-actions align="end">
-            <button *ngIf=!isSelected(skill) color="primary" mat-button (click)="selectSkill(skill)">SÉLECTIONNER</button>
-            <button *ngIf=isSelected(skill) color="primary" mat-button (click)="unselectSkill(skill)">DE-SÉLECTIONNER</button>
-        </mat-card-actions>
-    </mat-card>
-</ng-template>
+<mat-selection-list (selectionChange)="selectionChange($event)">
+    <mat-list-option *ngFor="let skill of skills" [value]="skill">
+        <h4 mat-line>{{skill.name}}</h4>
+        <p mat-line>{{skill.playerDescription}}</p>
+    </mat-list-option>
+</mat-selection-list>

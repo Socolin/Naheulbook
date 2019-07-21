@@ -1,15 +1,9 @@
-mat-card {
-    margin-bottom: 10px;
-
-    mat-card-content {
-        text-align: justify;
+:host {
+    p.mat-line {
+        white-space: normal;
     }
 
-    mat-card-subtitle::first-letter {
+    p.mat-line::first-letter {
         text-transform: capitalize;
-    }
-
-    mat-icon {
-        color: rgba(0, 0, 0, 0.54);
     }
 }

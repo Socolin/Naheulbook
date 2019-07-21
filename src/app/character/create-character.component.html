@@ -2,7 +2,7 @@
     <mat-toolbar color="primary">
         <span>Caractéristiques</span>
         <button *ngIf="(step === 0)"
-                mat-mini-fab
+                mat-icon-button
                 type="button"
                 (click)="rollStats()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
@@ -74,7 +74,7 @@
     <mat-toolbar color="primary">
         <span>Origine</span>
         <button *ngIf="(step === 1)"
-                mat-mini-fab
+                mat-icon-button
                 type="button"
                 (click)="selectRandomOrigin()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
@@ -109,7 +109,7 @@
     <mat-toolbar color="primary">
         <span>Métier</span>
         <button *ngIf="(step === 2)"
-                mat-mini-fab
+                mat-icon-button
                 type="button"
                 (click)="selectRandomJob()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
@@ -148,7 +148,7 @@
     <mat-toolbar color="primary">
         <span>Compétences</span>
         <button *ngIf="(step === 3)"
-                mat-mini-fab
+                mat-icon-button
                 type="button"
                 (click)="selectRandomSkills()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
@@ -169,7 +169,8 @@
         </div>
         <div *ngIf="(step > 3)">
             <div *ngFor="let skill of selectedSkills">
-                {{skill.name}}
+                <h4 class="mat-h4">{{skill.name}}</h4>
+                <p class="mat-body">{{skill.playerDescription}}</p>
             </div>
         </div>
     </mat-card-content>
@@ -179,7 +180,7 @@
     <mat-toolbar color="primary">
         <span>Fortune de départ</span>
         <button *ngIf="(step === 4)"
-                mat-mini-fab
+                mat-icon-button
                 type="button"
                 (click)="rollMoney()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
@@ -199,12 +200,11 @@
         <p *ngIf="step == 4 && has2MoneyRoll()">
             Votre metier vous donne droit a un deuxieme jet de votre fortune initiale qui s'additionne avec le premier.
         </p>
-        <div>
+        <div [hidden]="step > 4">
             <mat-form-field>
                 <input matInput
                        type="number"
                        [(ngModel)]="money"
-                       [disabled]="step > 4"
                        placeholder="Fortune"
                        min=0 />
             </mat-form-field>
@@ -213,7 +213,6 @@
                 <input matInput
                        type="number"
                        [(ngModel)]="money2"
-                       [disabled]="step > 4"
                        placeholder="Fortune jet 2"
                        min=0 />
             </mat-form-field>
@@ -242,8 +241,8 @@
     </mat-toolbar>
     <mat-card-content>
         <div *ngIf="hasSuperBourin()">
-            <h3>SUPER-BOURRIN</h3>
-            <p *ngIf="step == 5">
+            <h3 class="mat-h3">SUPER-BOURRIN</h3>
+            <p class="mat-body" *ngIf="step == 5">
                 a le droit de retrancher jusqu'à 3 points à son score de base en ATTAQUE et/ou en PARADE
                 pour en faire un bonus de dégâts (au corps à corps, toutes armes confondues). Ainsi il peut avoir +3 en dégâts en plus de ses
                 autres bonus de FORCE, mais son côté bourrin le rend maladroit. Le bonus est à choisir en début de carrière et ne pourra
@@ -286,8 +285,8 @@
         </div>
 
         <div *ngIf="hasMove1PointStat()">
-            <h3>Deplacement d'un point de stat</h3>
-            <p>
+            <h3 class="mat-h3">Déplacement d'un point de stat</h3>
+            <p class="mat-body">
                 En raison de sa polyvalence, au niveau 1 le Ranger peut choisir de soustraire 1 point d'une CARAC pour l'ajouter à une
                 autre (INT, CHA, COU, FO, AD)
             </p>
@@ -345,8 +344,8 @@
             </div>
         </div>
         <div *ngIf="hasChangeAtPrd()">
-            <h3>Deplacement d'un point de d'attaque et de parade</h3>
-            <p *ngIf="step == 5">
+            <h3 class="mat-h3">Déplacement d'un point de d'attaque et de parade</h3>
+            <p class="mat-body" *ngIf="step == 5">
                 Peut choisir au niveau 1 d'échanger 1 point d'ATTAQUE avec 1 point de PARADE, ou inversement
             </p>
 
@@ -363,8 +362,8 @@
             </div>
         </div>
         <div *ngIf="hasRemoveAttOrPrdToIntOrCha()">
-            <h3>Marchand</h3>
-            <p>
+            <h3 class="mat-h3">Marchand</h3>
+            <p class="mat-body">
                 En raison de son érudition, au niveau 1 le marchand doit retirer 1 point à l'attaque ou à la parade,
                 qu'il pourra ajouter au choix à l'intelligence ou au charisme
             </p>
@@ -389,8 +388,8 @@
         </div>
 
         <div *ngIf="hasRemoveAttOrPrdToIntOrAd()">
-            <h3>Ingenieur</h3>
-            <p>
+            <h3 class="mat-h3">Ingénieur</h3>
+            <p class="mat-body">
                 En raison de sa spécialisation technique, au niveau 1 l'ingénieur doit retirer 1 point à l'attaque ou à la parade, qu'il pourra
                 ajouter au choix à l'intelligence ou à l'adresse
             </p>
@@ -426,7 +425,7 @@
     <mat-toolbar color="primary">
         <span>Specialité</span>
         <button *ngIf="(step === 6)"
-                mat-mini-fab
+                mat-icon-button
                 type="button"
                 (click)="randomSpeciality()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
@@ -467,7 +466,7 @@
     <mat-toolbar color="primary">
         <span>Nom &amp; sexe</span>
         <button *ngIf="(step === 7)"
-                mat-mini-fab
+                mat-icon-button
                 type="button"
                 (click)="randomNameAndSex()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
@@ -520,7 +519,7 @@
     <mat-toolbar color="primary">
         <span>Points de destin</span>
         <button *ngIf="(step === 8)"
-                mat-mini-fab
+                mat-icon-button
                 type="button"
                 (click)="rollFatePoint()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
