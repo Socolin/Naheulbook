@@ -121,14 +121,13 @@ export class MonsterTemplateService {
     }
 
     createType(name: string): Observable<MonsterTemplateType> {
-        return this.httpClient.post<MonsterTemplateType>('/api/monsterTemplate/createType', {
+        return this.httpClient.post<MonsterTemplateType>('/api/v2/monsterTypes', {
             name: name
         }).pipe(map(res => MonsterTemplateType.fromJson(res)));
     }
 
     createCategory(type: MonsterTemplateType, name: string): Observable<MonsterTemplateCategory> {
-        return this.httpClient.post<MonsterTemplateCategory>('/api/monsterTemplate/createCategory', {
-            typeId: type.id,
+        return this.httpClient.post<MonsterTemplateCategory>(`/api/v2/monsterTypes/${type.id}/categories`, {
             name: name
         }).pipe(map(res => MonsterTemplateCategory.fromJson(res, type)));
     }

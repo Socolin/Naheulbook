@@ -39,11 +39,11 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
 
     @ViewChild('createCategoryDialog', {static: true})
     public createCategoryDialog: Portal<any>;
-    public createCategorOverlayRef: OverlayRef;
+    public createCategorOverlayRef?: OverlayRef;
 
     @ViewChild('createTypeDialog', {static: true})
     public createTypeDialog: Portal<any>;
-    public createTypeOverlayRef: OverlayRef;
+    public createTypeOverlayRef?: OverlayRef;
 
     constructor(private _monsterTemplateService: MonsterTemplateService
         , private _locationService: LocationService
@@ -163,11 +163,20 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     }
 
     openCreateCategoryDialog() {
+        if (this.createCategorOverlayRef) {
+            return;
+        }
         this.createCategorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.createCategoryDialog);
+        this.createCategorOverlayRef.backdropClick().subscribe(() => this.createCategorOverlayRef = undefined);
+
     }
 
     closeCreateCategoryDialog() {
+        if (!this.createCategorOverlayRef) {
+            return;
+        }
         this.createCategorOverlayRef.detach();
+        this.createCategorOverlayRef = undefined;
     }
 
     createCategory(name: string) {
@@ -180,11 +189,19 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
     }
 
     openCreateTypeDialog() {
+        if (this.createTypeOverlayRef) {
+            return;
+        }
         this.createTypeOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.createTypeDialog);
+        this.createTypeOverlayRef.backdropClick().subscribe(() => this.createTypeOverlayRef = undefined);
     }
 
     closeCreateTypeDialog() {
+        if (!this.createTypeOverlayRef) {
+            return;
+        }
         this.createTypeOverlayRef.detach();
+        this.createTypeOverlayRef = undefined;
     }
 
     createType(name: string) {
@@ -203,13 +220,14 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
         this.monster.category = category;
     }
 
-    selectType(type: MonsterTemplateType) {
+    selectType(type?: MonsterTemplateType) {
         if (type === undefined) {
             this.openCreateTypeDialog();
-        }
-        this.selectedType = type;
-        if (this.selectedType.categories.length) {
-            this.monster.category = this.selectedType.categories[0];
+        } else {
+            this.selectedType = type;
+            if (this.selectedType.categories.length) {
+                this.monster.category = this.selectedType.categories[0];
+            }
         }
     }
 
