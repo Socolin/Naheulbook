@@ -37,27 +37,6 @@ export class NhbkErrorHandler extends ErrorHandler {
         super();
     }
 
-    postJson(url: string, data: any): Observable<any> {
-        let cache: any[] = [];
-        let json = JSON.stringify(data, function (key, value) {
-            if (typeof value === 'object' && value !== null) {
-                if (cache.indexOf(value) !== -1) {
-                    // Circular reference found, discard key
-                    return;
-                }
-                // Store value in our collection
-                cache.push(value);
-            }
-            return value;
-        });
-
-        return this.httpClient.post(url, json)
-            .pipe(catchError((err: any) => {
-                console.log(err);
-                return observableThrowError(err);
-            }));
-    }
-
     handleError(error: any) {
         if (error instanceof HttpErrorResponse) {
             if (error.status === 401) {
