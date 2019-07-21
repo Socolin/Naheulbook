@@ -1,8 +1,14 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Naheulbook.Core.Exceptions;
+using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Requests.Requests;
+using Naheulbook.Web.ActionResults;
+using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
@@ -21,13 +27,46 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<MonsterTypeResponse>> GetMonsterTypes()
+        public async Task<ActionResult<List<MonsterTypeResponse>>> GetMonsterTypes()
         {
-            var createdMonster = await _monsterTypeService.GetMonsterTypesWithCategoriesAsync();
+            var monsterTypes = await _monsterTypeService.GetMonsterTypesWithCategoriesAsync();
+            return _mapper.Map<List<MonsterTypeResponse>>(monsterTypes);
+        }
 
-            var result = _mapper.Map<List<MonsterTypeResponse>>(createdMonster);
 
-            return new JsonResult(result);
+        [HttpPost]
+        public async Task<CreatedActionResult<MonsterTypeResponse>> PostCreateMonsterTypeAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            CreateMonsterTypeRequest request
+        )
+        {
+            try
+            {
+                var monsterType = await _monsterTypeService.CreateMonsterType(executionContext, request);
+                return _mapper.Map<MonsterTypeResponse>(monsterType);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+        }
+
+        [HttpPost("{MonsterTypeId}/categories")]
+        public async Task<CreatedActionResult<MonsterCategoryResponse>> PostCreateMonsterCategoryAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int monsterTypeId,
+            CreateMonsterCategoryRequest request
+        )
+        {
+            try
+            {
+                var monsterCategory = await _monsterTypeService.CreateMonsterCategoryAsync(executionContext, monsterTypeId, request);
+                return _mapper.Map<MonsterCategoryResponse>(monsterCategory);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
         }
     }
 }

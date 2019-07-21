@@ -141,8 +141,44 @@ Feature: MonsterTemplates
     """
 
   Scenario: Create monster category type
+    Given a JWT for an admin user
+
+    When performing a POST to the url "/api/v2/monsterTypes/" with the following json content and the current jwt
+    """
+    {
+      "name": "some-name"
+    }
+    """
+    Then the response status code is 201
+    And the response should contains the following json
+    """
+    {
+      "id": {"__match": {"type": "integer"}},
+      "name": "some-name",
+      "categories": []
+    }
+    """
 
   Scenario: Create monster category
+    Given a JWT for an admin user
+    Given a monster category type
+
+    When performing a POST to the url "/api/v2/monsterTypes/${MonsterType.Id}/categories" with the following json content and the current jwt
+    """
+    {
+      "name": "some-category-name"
+    }
+    """
+    Then the response status code is 201
+    And the response should contains the following json
+    """
+    {
+      "id": {"__match": {"type": "integer"}},
+      "name": "some-category-name",
+      "typeid": ${MonsterType.Id}
+    }
+    """
+
 
   Scenario: Search monster template
     Given a monster template with locations and inventory

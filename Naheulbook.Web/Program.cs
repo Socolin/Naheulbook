@@ -29,8 +29,8 @@ namespace Naheulbook.Web
             using (SentrySdk.Init(configuration["Sentry:DSN"]))
             {
                 var logger = new LoggerConfiguration()
-                    .Enrich.WithExceptionDetails()
                     .ReadFrom.Configuration(configuration)
+                    .Enrich.WithExceptionDetails()
                     .WriteTo.Sentry(configuration["Sentry:DSN"])
                     .WriteTo.Console(theme: AnsiConsoleTheme.Code)
                     .CreateLogger();
