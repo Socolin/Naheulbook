@@ -30,5 +30,15 @@ namespace Naheulbook.TestUtils
                 DiceEvLevelUp = 2,
             };
         }
+
+        public OriginRandomNameUrl CreateOriginRandomNameUrl(Origin origin, string sex)
+        {
+            return new OriginRandomNameUrl
+            {
+                Origin = origin,
+                Sex = sex,
+                Url = "/generateurs/noms/naheulbeuk/sex/originname"
+            };
+        }
     }
 }

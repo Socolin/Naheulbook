@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Naheulbook.Web.Sentry;
 using Sentry;
 using Serilog;
-using Serilog.Exceptions;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Naheulbook.Web

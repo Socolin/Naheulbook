@@ -18,6 +18,7 @@ namespace Naheulbook.Tests.Functional.Code.Init
         }
 
         private static NaheulbookApiServer _naheulbookApiServer;
+        private static LaPageAMelkorStub _laPageAMelkorStub;
         private static FakeSmtpServer _fakeSmtpServer;
 
         [BeforeTestRun]
@@ -25,13 +26,16 @@ namespace Naheulbook.Tests.Functional.Code.Init
         {
             _fakeSmtpServer = new FakeSmtpServer();
             var mailConfig = _fakeSmtpServer.Start();
-            _naheulbookApiServer = new NaheulbookApiServer(mailConfig);
+            _laPageAMelkorStub = new LaPageAMelkorStub();
+            _laPageAMelkorStub.Start();
+            _naheulbookApiServer = new NaheulbookApiServer(mailConfig, _laPageAMelkorStub.ListenUrls.First());
             _naheulbookApiServer.Start();
         }
 
         [AfterTestRun]
         public static void AfterTestRun()
         {
+            _laPageAMelkorStub.Stop();
             _naheulbookApiServer.Stop();
             _fakeSmtpServer.Stop();
             _fakeSmtpServer.Dispose();

@@ -15,6 +15,8 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
     {
         private IOriginService _originService;
         private IMapper _mapper;
+        private ICharacterRandomNameService _characterRandomNameService;
+
         private OriginsController _originsController;
 
         [SetUp]
@@ -22,7 +24,9 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             _originService = Substitute.For<IOriginService>();
             _mapper = Substitute.For<IMapper>();
-            _originsController = new OriginsController(_originService, _mapper);
+            _characterRandomNameService = Substitute.For<ICharacterRandomNameService>();
+
+            _originsController = new OriginsController(_originService, _mapper, _characterRandomNameService);
         }
 
         [Test]

@@ -19,6 +19,13 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddOrigin();
         }
 
+        [Given("an origin with random name api configured")]
+        public void GivenAnOriginWithRandomNameApiConfigured()
+        {
+            _testDataUtil.AddOrigin();
+            _testDataUtil.AddOriginRandomNameUrl();
+        }
+
         [Given("an origin with all possible data")]
         public void GivenAnOriginWithAllPossibleData()
         {

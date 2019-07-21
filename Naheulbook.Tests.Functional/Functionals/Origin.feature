@@ -66,3 +66,15 @@ Feature: Origin
         ]
     }
     """
+
+  Scenario: Can get random name for an origin
+    Given an origin with random name api configured
+
+    When performing a GET to the url "/api/v2/origins/${Origin.Id}/randomCharacterName?sex=some-sex"
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "name": {"__match": {"type": "string"}}
+    }
+    """

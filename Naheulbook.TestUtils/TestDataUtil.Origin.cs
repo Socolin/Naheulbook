@@ -72,5 +72,10 @@ namespace Naheulbook.TestUtils
 
             return this;
         }
+
+        public TestDataUtil AddOriginRandomNameUrl(Action<OriginRandomNameUrl> customizer = null)
+        {
+            return SaveEntity(_defaultEntityCreator.CreateOriginRandomNameUrl(GetLast<Origin>(), "some-sex"), customizer);
+        }
     }
 }

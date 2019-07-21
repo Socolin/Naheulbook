@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Naheulbook.Core.Clients;
 using Naheulbook.Core.Configurations;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Mappers;
@@ -86,6 +87,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IUnitOfWorkFactory>(new UnitOfWorkFactory(naheulbookDbContextOptionsBuilder.Options));
 
             services.AddSingleton<ICalendarService, CalendarService>();
+            services.AddSingleton<ICharacterRandomNameService, CharacterRandomNameService>();
             services.AddSingleton<ICharacterService, CharacterService>();
             services.AddSingleton<ICharacterUtil, CharacterUtil>();
             services.AddSingleton<ICharacterModifierUtil, CharacterModifierUtil>();
@@ -144,6 +146,13 @@ namespace Naheulbook.Web
             services.AddSingleton<IGoogleClient, GoogleClient>();
             services.AddSingleton<ITwitterClient, TwitterClient>();
             services.AddSingleton<IMicrosoftGraphClient, MicrosoftGraphClient>();
+
+            services.AddHttpClient<ILaPageAMelkorClient, LaPageAMelkorClient>(client =>
+            {
+                client.BaseAddress = new Uri(_configuration["LaPageAMelkor:Url"]);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.Add("User-Agent", "Naheulbook");
+            });
         }
 
         private void RegisterConfigurations(IServiceCollection services)

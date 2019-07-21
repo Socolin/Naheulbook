@@ -32,6 +32,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<LocationMap> LocationMaps { get; set; }
         public DbSet<Loot> Loots { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<OriginRandomNameUrl> OriginRandomNameUrls { get; set; }
 
         public NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options)
             : base(options)
@@ -107,6 +108,7 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new OriginRequirementConfiguration());
             modelBuilder.ApplyConfiguration(new OriginRestrictConfiguration());
             modelBuilder.ApplyConfiguration(new OriginSkillConfiguration());
+            modelBuilder.ApplyConfiguration(new OriginRandomNameUrlConfiguration());
 
             modelBuilder.ApplyConfiguration(new SkillConfiguration());
             modelBuilder.ApplyConfiguration(new SkillEffectConfiguration());

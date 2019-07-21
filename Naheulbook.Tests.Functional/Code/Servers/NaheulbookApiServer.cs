@@ -15,13 +15,15 @@ namespace Naheulbook.Tests.Functional.Code.Servers
     public class NaheulbookApiServer
     {
         private readonly FakeSmtpConfig _mailConfig;
+        private readonly string _laPageAMelkorUrl;
         public const string JwtSigningKey = "jUPS+BG/+FxexuNitsuiIHWXOLTZb3yQSxyLpOfTo2/BB8MNUZcNP+13cvAlPP5O";
         public IEnumerable<string> ListenUrls => _server.ServerFeatures.Get<IServerAddressesFeature>().Addresses;
         private IWebHost _server;
 
-        public NaheulbookApiServer(FakeSmtpConfig mailConfig)
+        public NaheulbookApiServer(FakeSmtpConfig mailConfig, string laPageAMelkorUrl)
         {
             _mailConfig = mailConfig;
+            _laPageAMelkorUrl = laPageAMelkorUrl;
         }
 
         public void Start()
@@ -36,6 +38,7 @@ namespace Naheulbook.Tests.Functional.Code.Servers
                 ["Mail:Smtp:Password"] = _mailConfig.Password,
                 ["Mail:Smtp:Ssl"] = false.ToString(),
                 ["Mail:FromAddress"] = "some-address@some-domain.aa",
+                ["LaPageAMelkor:Url"] = _laPageAMelkorUrl,
             };
 
             var configuration = new ConfigurationBuilder()

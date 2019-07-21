@@ -218,4 +218,31 @@ namespace Naheulbook.Data.Configurations
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
+
+    public class OriginRandomNameUrlConfiguration : IEntityTypeConfiguration<OriginRandomNameUrl>
+    {
+        public void Configure(EntityTypeBuilder<OriginRandomNameUrl> builder)
+        {
+            builder.ToTable("origin_random_name_urls");
+
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Sex)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("sex");
+
+            builder.Property(x => x.Url)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("url");
+
+            builder.Property(x => x.OriginId)
+                .HasColumnName("originId");
+
+            builder.HasOne(x => x.Origin)
+                .WithMany()
+                .HasForeignKey(x => x.OriginId);
+        }
+    }
 }
