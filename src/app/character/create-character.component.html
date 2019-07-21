@@ -291,7 +291,7 @@
                 autre (INT, CHA, COU, FO, AD)
             </p>
 
-            <div>
+            <div class="move-stat-point-selector">
                 <button mat-icon-button (click)="move1PointStat('cou', 1)">
                     <mat-icon [color]="move1PointStatValues['cou'] == 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
                 </button>
@@ -308,7 +308,7 @@
                     <mat-icon [color]="move1PointStatValues['fo'] == 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
                 </button>
             </div>
-            <div>
+            <div class="move-stat-point-values">
                 <mat-form-field>
                     <input matInput [ngModel]="cou + move1PointStatValues['cou']" disabled placeholder="Courage"/>
                 </mat-form-field>
@@ -325,7 +325,7 @@
                     <input matInput [ngModel]="fo + move1PointStatValues['fo']" disabled placeholder="Force" />
                 </mat-form-field>
             </div>
-            <div>
+            <div class="move-stat-point-selector">
                 <button mat-icon-button (click)="move1PointStat('cou', -1)">
                     <mat-icon [color]="move1PointStatValues['cou'] == -1 ? 'accent' : null">keyboard_arrow_down</mat-icon>
                 </button>

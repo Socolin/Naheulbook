@@ -37,6 +37,26 @@ mat-card.stats-card {
     }
 }
 
+.move-stat-point-selector {
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    align-content: center;
+    * {
+        width: 100%;
+    }
+}
+
+.move-stat-point-values {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    mat-form-field {
+        width: 30px;
+        flex: 1 1 auto;
+    }
+}
+
 mat-card.speciality {
     margin-bottom: 22px;
     padding: 16px;
