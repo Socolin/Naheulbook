@@ -57,3 +57,19 @@ mat-card.speciality {
 .no-card-padding {
     padding: 0 !important;
 }
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+.sex-name-step {
+    .name-selector {
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        grid-template-columns: 1fr 48px;
+        mat-form-field {
+            width: 100%;
+        }
+    }
+}

@@ -9,6 +9,7 @@ import {Skill} from '../skill';
 
 import {CharacterService} from './character.service';
 import {SkillSelectorComponent} from './skill-selector.component';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
     selector: 'create-character',
@@ -78,6 +79,8 @@ export class CreateCharacterComponent implements OnInit {
     // Step 7: Name
 
     public name: string | undefined;
+    public randomNameAvailable = true;
+    public loadingRandomName = false;
     public sex = 'Homme';
 
     // Step 8: FatePoint
@@ -151,7 +154,7 @@ export class CreateCharacterComponent implements OnInit {
             }
         }
         if (step === 7) {
-            this.name = undefined;
+            this.iniNameAndSex();
         }
         if (step === 8) {
             this.fatePoint = undefined;
@@ -485,6 +488,11 @@ export class CreateCharacterComponent implements OnInit {
 
     // Step 7: Name
 
+    iniNameAndSex() {
+        this.name = undefined;
+        this.randomNameAvailable = true;
+    }
+
     randomNameAndSex() {
         if (getRandomInt(0, 1)) {
             this.sex = 'Homme';
@@ -495,7 +503,19 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     randomName() {
-
+        this.loadingRandomName = true;
+        this._characterService.getRandomName(this.selectedOrigin.id, this.sex).subscribe((name) => {
+            this.name = name
+        }, (err) => {
+            this.loadingRandomName = false;
+            if (err instanceof HttpErrorResponse && err.status === 404) {
+                this.randomNameAvailable = false;
+            } else {
+                throw err;
+            }
+        }, () => {
+            this.loadingRandomName = false;
+        });
     }
 
     validName() {

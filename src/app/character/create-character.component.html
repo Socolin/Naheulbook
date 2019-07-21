@@ -468,6 +468,7 @@
         <button *ngIf="(step === 7)"
                 mat-icon-button
                 type="button"
+                [disabled]="loadingRandomName"
                 (click)="randomNameAndSex()">
             <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
@@ -478,9 +479,9 @@
             <mat-icon>edit</mat-icon>
         </button>
     </mat-toolbar>
-    <mat-card-content>
+    <mat-card-content class="sex-name-step">
         <div>
-            <mat-radio-group name="sexe" [(ngModel)]="sex" [disabled]="step > 7">
+            <mat-radio-group name="sexe" [(ngModel)]="sex" [disabled]="step > 7" aria-label="Choix du sexe du personnage">
                 <mat-radio-button name="sexe" [value]="'Homme'">
                     Homme
                 </mat-radio-button>
@@ -489,7 +490,7 @@
                 </mat-radio-button>
             </mat-radio-group>
         </div>
-        <div>
+        <div class="name-selector">
             <mat-form-field>
                 <input matInput
                        type="text"
@@ -498,12 +499,16 @@
                        placeholder="Nom"
                        required/>
             </mat-form-field>
-            <button *ngIf="(step === 7)"
+            <div  *ngIf="(step === 7)">
+                <button *ngIf="!loadingRandomName"
                         mat-icon-button
-                    type="button"
-                    (click)="randomName()">
-                <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
-            </button>
+                        type="button"
+                        [disabled]="!randomNameAvailable"
+                        (click)="randomName()">
+                    <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+                </button>
+                <mat-spinner *ngIf="loadingRandomName" [diameter]="32"></mat-spinner>
+            </div>
         </div>
     </mat-card-content>
     <mat-card-actions *ngIf="step == 7" align="end">

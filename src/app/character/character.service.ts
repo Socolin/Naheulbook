@@ -15,7 +15,7 @@ import {Loot} from '../loot';
 import {
     Character,
     CharacterGiveDestination,
-    CharacterJsonData, CharacterLevelUpResponse, LevelUpRequest,
+    CharacterJsonData, CharacterLevelUpResponse, LevelUpRequest, RandomNameResponse,
 } from './character.model';
 import {DeleteGroupResponse} from '../group';
 import {LevelUpInfo} from './character.component';
@@ -179,5 +179,13 @@ export class CharacterService {
 
     createCustomCharacter(customCharacterData: any): Observable<IMetadata> {
         return this.httpClient.post<IMetadata>('/api/character/createCustom', customCharacterData);
+    }
+
+    getRandomName(originId: number, sex: string) {
+        return this.httpClient.get<RandomNameResponse>(`/api/v2/origins/${originId}/randomCharacterName`, {
+            params: {
+                sex: sex
+            }
+        }).pipe(map((s) => s.name));
     }
 }

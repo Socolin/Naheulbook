@@ -69,6 +69,10 @@ export interface LevelUpRequest {
     specialityIds: number[];
 }
 
+export interface RandomNameResponse {
+    name: string;
+}
+
 export class StatisticDetail {
     evea: any[] = [];
     atprd: any[] = [];
