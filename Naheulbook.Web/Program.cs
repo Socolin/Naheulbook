@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Naheulbook.Web.Sentry;
 using Sentry;
 using Serilog;
 using Serilog.Exceptions;
@@ -26,12 +27,14 @@ namespace Naheulbook.Web
                 .AddCommandLine(args)
                 .Build();
 
-            using (SentrySdk.Init(configuration["Sentry:DSN"]))
+            using (SentrySdk.Init(o => {
+                o.Dsn = new Dsn(configuration["Sentry:DSN"]);
+                o.BeforeSend = DefaultSentryEventExceptionProcessor.BeforeSend;
+            }))
             {
                 var logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(configuration)
-                    .Enrich.WithExceptionDetails()
-                    .WriteTo.Sentry(configuration["Sentry:DSN"])
+                    .WriteTo.Sentry()
                     .WriteTo.Console(theme: AnsiConsoleTheme.Code)
                     .CreateLogger();
 
