@@ -14,12 +14,6 @@ namespace Naheulbook.Requests.Validators
             RuleFor(r => r.Source).Must(s => ValidSources.Contains(s));
             RuleFor(r => r.CategoryId).GreaterThan(0);
             RuleFor(r => r.Data).NotNull();
-            RuleFor(r => r.Modifiers).NotNull();
-            RuleFor(r => r.Skills).NotNull();
-            RuleFor(r => r.UnSkills).NotNull();
-            RuleFor(r => r.SkillModifiers).NotNull();
-            RuleFor(r => r.Requirements).NotNull();
-            RuleFor(r => r.Slots).NotNull();
         }
     }
 

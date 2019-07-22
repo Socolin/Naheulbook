@@ -9,12 +9,12 @@ namespace Naheulbook.Requests.Requests
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public string TechName { get; set; }
-        public List<ItemTemplateModifierRequest> Modifiers { get; set; }
-        public List<IdRequest> Skills { get; set; }
-        public List<IdRequest> UnSkills { get; set; }
-        public List<ItemTemplateSkillModifierRequest> SkillModifiers { get; set; }
-        public List<ItemTemplateRequirementRequest> Requirements { get; set; }
-        public List<IdRequest> Slots { get; set; }
+        public List<ItemTemplateModifierRequest> Modifiers { get; set; } = new List<ItemTemplateModifierRequest>();
+        public List<IdRequest> Skills { get; set; } = new List<IdRequest>();
+        public List<IdRequest> UnSkills { get; set; } = new List<IdRequest>();
+        public List<ItemTemplateSkillModifierRequest> SkillModifiers { get; set; } = new List<ItemTemplateSkillModifierRequest>();
+        public List<ItemTemplateRequirementRequest> Requirements { get; set; } = new List<ItemTemplateRequirementRequest>();
+        public List<IdRequest> Slots { get; set; } = new List<IdRequest>();
         public JObject Data { get; set; }
     }
 
