@@ -15,6 +15,20 @@
     align-items: center;
 }
 
+.color-list {
+    font-size: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.icon-list {
+    font-size: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
 .clickable {
     cursor: pointer;
 }
