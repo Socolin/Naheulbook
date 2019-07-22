@@ -1,13 +1,15 @@
 <ng-template #selectorDialog ="cdkPortal" cdk-portal>
-    <mat-card>
+    <mat-card class="fighter-selector">
         <mat-card-title>{{label}}</mat-card-title>
+
         <mat-card-content>
-            <ng-template ngFor let-fighter [ngForOf]="group.fighters">
-                <div class="fighter-selector">
-                    <mat-checkbox color="primary" (change)="selectFighter(fighter, $event)">{{fighter.name}}</mat-checkbox>
-                </div>
-            </ng-template>
+            <mat-selection-list (selectionChange)="fighterSelectionChange($event.source.selectedOptions.selected)">
+                <mat-list-option *ngFor="let fighter of group.fighters" [value]="fighter">
+                    {{fighter.name}}
+                </mat-list-option>
+            </mat-selection-list>
         </mat-card-content>
+
         <mat-card-actions>
             <button mat-button
                     color="primary"

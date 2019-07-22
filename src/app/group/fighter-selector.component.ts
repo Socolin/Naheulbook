@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {MatCheckboxChange} from '@angular/material';
+import {MatCheckboxChange, MatListOption} from '@angular/material';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
@@ -30,21 +30,14 @@ export class FighterSelectorComponent {
         this.label = label;
     }
 
-    valid() {
-        this.selectFighters.emit(this.selectedFighters);
-        this.close();
+    fighterSelectionChange(selected: MatListOption[]) {
+        this.selectedFighters = selected.map(s => s.value);
     }
 
-    selectFighter(fighter: Fighter, event: MatCheckboxChange) {
-        if (event.checked) {
-            this.selectedFighters.push(fighter);
-        }
-        else {
-            let i = this.selectedFighters.findIndex(f => f.isMonster === fighter.isMonster && f.id === fighter.id);
-            if (i !== -1) {
-                this.selectedFighters.splice(i, 1);
-            }
-        }
+    valid() {
+        this.selectFighters.emit(this.selectedFighters);
+        this.selectedFighters = [];
+        this.close();
     }
 
     close() {
