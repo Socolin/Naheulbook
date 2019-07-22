@@ -218,6 +218,7 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
             this.openCreateCategoryDialog();
         }
         this.monster.category = category;
+        this.monster.categoryId = category.id;
     }
 
     selectType(type?: MonsterTemplateType) {

@@ -4,7 +4,13 @@ import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateType, MonsterTrait} from './monster.model';
+import {
+    CreateMonsterTemplateRequest,
+    MonsterTemplate,
+    MonsterTemplateCategory,
+    MonsterTemplateType,
+    MonsterTrait
+} from './monster.model';
 
 @Injectable()
 export class MonsterTemplateService {
@@ -109,6 +115,15 @@ export class MonsterTemplateService {
 
     searchMonster(name): Observable<MonsterTemplate[]> {
         return this.httpClient.get<MonsterTemplate[]>(`/api/v2/monsterTemplates/search?filter=${encodeURIComponent(name)}`);
+    }
+
+    addMonster(categoryId: number, monster: CreateMonsterTemplateRequest): Observable<MonsterTemplate> {
+        return forkJoin([
+            this.getMonsterCategoriesById(),
+            this.httpClient.post<MonsterTemplate>(`/api/v2/monsterTemplates/`, {categoryId, monster})
+        ]).pipe(map(([categoriesById, monsterTemplateResponse]: [{ [id: number]: MonsterTemplateCategory }, MonsterTemplate]) => {
+            return MonsterTemplate.fromJson(monsterTemplateResponse, categoriesById);
+        }));
     }
 
     editMonster(monster: MonsterTemplate): Observable<MonsterTemplate> {

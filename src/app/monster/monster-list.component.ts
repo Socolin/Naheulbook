@@ -34,7 +34,12 @@ export class MonsterListComponent implements OnInit {
         if (!this.newMonsterTemplate.category) {
             return;
         }
-        this._monsterTemplateService.editMonster(this.newMonsterTemplate).subscribe(
+        const request = {
+            ...this.newMonsterTemplate
+        };
+        delete request.category;
+        delete request.categoryId;
+        this._monsterTemplateService.addMonster(this.newMonsterTemplate.category.id, request).subscribe(
             monster => {
                 this.monsters.push(monster);
                 this.sortMonsterByCategory();
@@ -51,7 +56,12 @@ export class MonsterListComponent implements OnInit {
         if (!this.newMonsterTemplate.category) {
             return;
         }
-        this._monsterTemplateService.editMonster(this.newMonsterTemplate).subscribe(
+        const request = {
+            ...this.newMonsterTemplate
+        };
+        delete request.category;
+        delete request.categoryId;
+        this._monsterTemplateService.addMonster(this.newMonsterTemplate.category.id, request).subscribe(
             monster => {
                 this.monsters.push(monster);
                 this.sortMonsterByCategory();

@@ -509,6 +509,14 @@ export class MonsterSimpleInventory {
     hidden: boolean;
 }
 
+export interface CreateMonsterTemplateRequest {
+    id: number;
+    name: string;
+    data: MonsterTemplateData;
+    simpleInventory: MonsterSimpleInventory[];
+    locations: number[];
+}
+
 export class MonsterTemplate {
     id: number;
     name: string;
