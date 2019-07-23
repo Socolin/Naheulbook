@@ -82,7 +82,6 @@ namespace Naheulbook.Core.Utils
             group.AddHistoryEntry(_groupHistoryUtil.CreateLogStartCombat(group));
 
             notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
-            notificationSession.NotifyGroupAddLoot(group.Id, loot);
 
             group.Data = _jsonUtil.Serialize(groupData);
         }
