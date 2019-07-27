@@ -1,7 +1,25 @@
 .fighter-selector {
+    max-height: 85vh;
+    max-width: 85vw;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+
     mat-card-content {
-        max-width: 85vw;
-        max-height: 60vh;
         overflow-y: auto;
+    }
+
+    .line {
+        display: grid;
+        grid-template-columns: 32px 1fr;
+        grid-gap: 16px;
+        align-items: center;
+
+        .fighter-name {
+            align-items: center;
+            display: grid;
+            line-height: 1.5em;
+            height: 3em;
+            overflow: hidden;
+        }
     }
 }

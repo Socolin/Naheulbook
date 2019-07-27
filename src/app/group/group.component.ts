@@ -505,13 +505,13 @@ export class GroupComponent implements OnInit, OnDestroy {
     selectCustomModifier(modifier: ActiveStatsModifier) {
         this.tmpModifier = modifier;
         this.currentSelectAction = 'applyModifier';
-        this.fighterSelector.open('Choisir sur qui appliquer l\'effet ' + modifier.name);
+        this.fighterSelector.open('Ajout de l\'effet', modifier.name);
     }
 
     onItemAdded(data: {character: Character, monster: Monster, item: Item}) {
         this.tmpItem = data.item;
         this.currentSelectAction = 'addItem';
-        this.fighterSelector.open('Choisir à qui donner l\'objet ' + data.item.data.name);
+        this.fighterSelector.open('Ajout de l\'objet', data.item.data.name, data.item.data.icon || data.item.template.data.icon);
     }
 
     usefullDataAction(event: {action: string, data: any}) {

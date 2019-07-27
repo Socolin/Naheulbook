@@ -5,6 +5,7 @@ export * from './group-action.service';
 
 export * from './create-group.component';
 export * from './create-item.component';
+export * from './fighter-icon.component'
 export * from './fighter-panel.component'
 export * from './fighter-selector.component'
 export * from './fighter.component'

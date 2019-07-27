@@ -13,7 +13,7 @@ export class ItemData {
     name: string;
     description?: string;
     quantity?: number;
-    icon: IconDescription;
+    icon?: IconDescription;
     charge?: number;
     ug: number;
     equiped?: number;

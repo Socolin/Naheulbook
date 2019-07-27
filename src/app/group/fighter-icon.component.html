@@ -1,0 +1,8 @@
+<i [style.color]="'#' + fighter.color"
+   class="ra ra-2x"
+   [class.ra-monster-skull]=fighter.isMonster
+   [class.ra-player]="fighter.isCharacter">
+</i>
+<span *ngIf="fighter.number" class="number">
+    {{fighter.number}}
+</span>

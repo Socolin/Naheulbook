@@ -1,16 +1,22 @@
 <ng-template #selectorDialog ="cdkPortal" cdk-portal>
     <mat-card class="fighter-selector">
-        <mat-card-title>{{label}}</mat-card-title>
-
+        <mat-card-header>
+            <icon *ngIf="icon" mat-card-avatar [icon]="icon" size="40px"></icon>
+            <mat-card-title>{{title}}</mat-card-title>
+            <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
+        </mat-card-header>
         <mat-card-content>
             <mat-selection-list (selectionChange)="fighterSelectionChange($event.source.selectedOptions.selected)">
                 <mat-list-option *ngFor="let fighter of group.fighters" [value]="fighter">
-                    {{fighter.name}}
+                    <span class="line">
+                        <fighter-icon [fighter]="fighter"></fighter-icon>
+                        <span class="fighter-name">{{fighter.name}}</span>
+                    </span>
                 </mat-list-option>
             </mat-selection-list>
         </mat-card-content>
 
-        <mat-card-actions>
+        <mat-card-actions align="end">
             <button mat-button
                     color="primary"
                     (click)="close()">

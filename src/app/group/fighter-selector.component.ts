@@ -5,6 +5,7 @@ import {Portal} from '@angular/cdk/portal';
 
 import {NhbkDialogService} from '../shared';
 import {Fighter, Group} from './group.model';
+import {IconDescription} from '../shared/icon.model';
 
 @Component({
     selector: 'fighter-selector',
@@ -15,7 +16,9 @@ export class FighterSelectorComponent {
     @Input() group: Group;
     @Output() selectFighters: EventEmitter<Fighter[]> = new EventEmitter<Fighter[]>();
 
-    public label: string;
+    public title: string;
+    public subtitle: string;
+    public icon: IconDescription;
     public selectedFighters: Fighter[] = [];
 
     @ViewChild('selectorDialog', {static: true})
@@ -25,9 +28,11 @@ export class FighterSelectorComponent {
     constructor(private _nhbkDialogService: NhbkDialogService) {
     }
 
-    open(label: string) {
+    open(title: string, subtitle: string, icon?: IconDescription) {
         this.selectorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.selectorDialog);
-        this.label = label;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.icon = icon;
     }
 
     fighterSelectionChange(selected: MatListOption[]) {
