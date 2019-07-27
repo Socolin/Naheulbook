@@ -60,6 +60,9 @@ import {
         GroupLootPanelComponent,
         TargetSelectorComponent,
     ],
+    entryComponents: [
+        FighterSelectorComponent
+    ],
     providers: [GroupService]
 })
 export class GroupModule {

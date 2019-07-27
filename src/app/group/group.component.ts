@@ -1,4 +1,3 @@
-
 import {forkJoin, Subscription} from 'rxjs';
 
 import {map} from 'rxjs/operators';
@@ -7,7 +6,7 @@ import {
     ViewChildren
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatTabChangeEvent} from '@angular/material';
+import {MatDialog, MatTabChangeEvent} from '@angular/material';
 import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
 import {Portal, TemplatePortalDirective} from '@angular/cdk/portal';
 
@@ -18,7 +17,7 @@ import {
     LapCountDecrement
 } from '../shared';
 import {NotificationsService} from '../notifications';
-import {date2Timestamp, dateOffset2TimeDuration} from '../date/util';
+import {dateOffset2TimeDuration} from '../date/util';
 import {NhbkDateOffset} from '../date';
 
 import {GroupService} from './group.service';
@@ -34,7 +33,7 @@ import {LocationService, Location} from '../location';
 import {Item, ItemService} from '../item';
 import {ItemTemplate} from '../item-template';
 
-import {FighterSelectorComponent} from './fighter-selector.component';
+import {FighterSelectorComponent, FighterSelectorDialogData} from './fighter-selector.component';
 import {CreateItemComponent} from './create-item.component';
 import {Group, GroupInvite, Fighter} from './group.model';
 
@@ -92,15 +91,9 @@ export class GroupComponent implements OnInit, OnDestroy {
     @ViewChild('createItemModal', {static: true})
     public createItemModal: CreateItemComponent;
 
-    @ViewChild('fighterSelector', {static: true})
-    public fighterSelector: FighterSelectorComponent;
-
-    private currentSelectAction: string|null;
-    private tmpModifier: ActiveStatsModifier|null;
-    private tmpItem: Item;
-
     constructor(private _route: ActivatedRoute
         , private _router: Router
+        , public dialog: MatDialog
         , public _loginService: LoginService
         , private _groupService: GroupService
         , private _monsterService: MonsterService
@@ -457,13 +450,20 @@ export class GroupComponent implements OnInit, OnDestroy {
         this.autocompleteLocationsCallback = this.updateLocationListAutocomplete.bind(this);
     }
 
-    onSelectFighters(fighters: Fighter[]) {
-        if (this.currentSelectAction === 'applyModifier') {
-            if (!this.tmpModifier) {
+    selectCustomModifier(modifier: ActiveStatsModifier) {
+        const dialogRef = this.dialog.open<FighterSelectorComponent, FighterSelectorDialogData, Fighter[]>(FighterSelectorComponent, {
+            data: {
+                group: this.group,
+                title: 'Ajout de l\'effet',
+                subtitle: modifier.name
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(fighters => {
+            if (!fighters) {
                 return;
             }
             for (let fighter of fighters) {
-                let modifier = this.tmpModifier;
                 if (modifier.durationType === 'lap') {
                     modifier.lapCountDecrement = new LapCountDecrement();
                     let currentFighter = this.group.currentFighter;
@@ -485,33 +485,31 @@ export class GroupComponent implements OnInit, OnDestroy {
                     );
                 }
             }
-            this.tmpModifier = null;
-        }
-        else if (this.currentSelectAction === 'addItem') {
-            for (let fighter of fighters) {
-                if (fighter.isMonster) {
-                    this._itemService.addItemTo('monster', fighter.id, this.tmpItem.template.id, this.tmpItem.data).subscribe();
-                }
-                else {
-                    this._itemService.addItemTo('character', fighter.id, this.tmpItem.template.id, this.tmpItem.data).subscribe();
-                }
-            }
-
-        }
-
-        this.currentSelectAction = null;
-    }
-
-    selectCustomModifier(modifier: ActiveStatsModifier) {
-        this.tmpModifier = modifier;
-        this.currentSelectAction = 'applyModifier';
-        this.fighterSelector.open('Ajout de l\'effet', modifier.name);
+        })
     }
 
     onItemAdded(data: {character: Character, monster: Monster, item: Item}) {
-        this.tmpItem = data.item;
-        this.currentSelectAction = 'addItem';
-        this.fighterSelector.open('Ajout de l\'objet', data.item.data.name, data.item.data.icon || data.item.template.data.icon);
+        const dialogRef = this.dialog.open<FighterSelectorComponent, FighterSelectorDialogData, Fighter[]>(FighterSelectorComponent, {
+            data: {
+                group: this.group,
+                title: 'Ajout de l\'objet',
+                subtitle: data.item.data.name,
+                icon: data.item.data.icon || data.item.template.data.icon
+            }
+        });
+
+        dialogRef.afterClosed().subscribe((fighters) => {
+            if (!fighters) {
+                return;
+            }
+            for (let fighter of fighters) {
+                if (fighter.isMonster) {
+                    this._itemService.addItemTo('monster', fighter.id, data.item.template.id, data.item.data).subscribe();
+                } else {
+                    this._itemService.addItemTo('character', fighter.id, data.item.template.id, data.item.data).subscribe();
+                }
+            }
+        });
     }
 
     usefullDataAction(event: {action: string, data: any}) {

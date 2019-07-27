@@ -1,13 +1,4 @@
-.fighter-selector {
-    max-height: 85vh;
-    max-width: 85vw;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-
-    mat-card-content {
-        overflow-y: auto;
-    }
-
+:host {
     .line {
         display: grid;
         grid-template-columns: 32px 1fr;

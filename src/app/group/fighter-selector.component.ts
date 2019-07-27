@@ -1,51 +1,31 @@
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {MatCheckboxChange, MatListOption} from '@angular/material';
-import {OverlayRef} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import {Component, Inject, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSelectionList} from '@angular/material';
 
-import {NhbkDialogService} from '../shared';
-import {Fighter, Group} from './group.model';
+import {Group} from './group.model';
 import {IconDescription} from '../shared/icon.model';
 
+export interface FighterSelectorDialogData {
+    group: Group;
+    title: string;
+    subtitle: string;
+    icon?: IconDescription;
+}
+
 @Component({
-    selector: 'fighter-selector',
     templateUrl: 'fighter-selector.component.html',
     styleUrls: ['fighter-selector.component.scss']
 })
 export class FighterSelectorComponent {
-    @Input() group: Group;
-    @Output() selectFighters: EventEmitter<Fighter[]> = new EventEmitter<Fighter[]>();
+    @ViewChild(MatSelectionList, {static: true})
+    public fighterSelection: MatSelectionList;
 
-    public title: string;
-    public subtitle: string;
-    public icon: IconDescription;
-    public selectedFighters: Fighter[] = [];
-
-    @ViewChild('selectorDialog', {static: true})
-    public selectorDialog: Portal<any>;
-    public selectorOverlayRef: OverlayRef;
-
-    constructor(private _nhbkDialogService: NhbkDialogService) {
-    }
-
-    open(title: string, subtitle: string, icon?: IconDescription) {
-        this.selectorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.selectorDialog);
-        this.title = title;
-        this.subtitle = subtitle;
-        this.icon = icon;
-    }
-
-    fighterSelectionChange(selected: MatListOption[]) {
-        this.selectedFighters = selected.map(s => s.value);
+    constructor(
+        public dialogRef: MatDialogRef<FighterSelectorComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: FighterSelectorDialogData
+    ) {
     }
 
     valid() {
-        this.selectFighters.emit(this.selectedFighters);
-        this.selectedFighters = [];
-        this.close();
-    }
-
-    close() {
-        this.selectorOverlayRef.detach();
+        this.dialogRef.close(this.fighterSelection.selectedOptions.selected.map(s => s.value));
     }
 }
