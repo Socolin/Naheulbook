@@ -21,7 +21,6 @@ import {
     ValueEditorComponent,
 } from './';
 
-
 @NgModule({
     imports: [
         CommonModule,
@@ -52,6 +51,9 @@ import {
         TextareaAutosizeDirective,
         TextFormatterPipe,
         ValueEditorComponent,
+    ],
+    entryComponents: [
+        IconSelectorComponent
     ],
     providers: [
         IconService,

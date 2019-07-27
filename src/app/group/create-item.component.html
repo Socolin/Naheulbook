@@ -66,7 +66,7 @@
                 <mat-card-subtitle>Résumé</mat-card-subtitle>
                 <mat-card-content>
                     <span class="name-icon">
-                        <icon-selector [icon]="newItem.data.icon"></icon-selector>
+                        <icon (click)="openSelectIconDialog()" [icon]="newItem.data.icon"></icon>
                         <mat-form-field>
                             <input matInput
                                    #newItemName

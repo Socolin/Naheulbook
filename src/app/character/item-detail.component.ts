@@ -5,7 +5,14 @@ import {
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
-import {ActiveStatsModifier, God, MiscService, NhbkDialogService} from '../shared';
+import {
+    ActiveStatsModifier,
+    God,
+    IconSelectorComponent,
+    IconSelectorComponentDialogData,
+    MiscService,
+    NhbkDialogService
+} from '../shared';
 
 import {IDurable} from '../date/durable.model';
 import {ItemTemplateService, ItemCategory} from '../item-template';
@@ -14,6 +21,8 @@ import {Character, CharacterGiveDestination} from './character.model';
 import {CharacterService} from './character.service';
 import {Item} from '../item';
 import {ItemActionService} from './item-action.service';
+import {MatDialog} from '@angular/material';
+import {IconDescription} from '../shared/icon.model';
 
 @Component({
     selector: 'item-detail',
@@ -62,7 +71,9 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         , public _itemActionService: ItemActionService
         , private _characterService: CharacterService
         , private _miscService: MiscService
-        , private _nhbkDialogService: NhbkDialogService) {
+        , private _nhbkDialogService: NhbkDialogService
+        , private dialog: MatDialog
+    ) {
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -284,5 +295,22 @@ export class ItemDetailComponent implements OnChanges, OnInit {
                 this.itemCategoriesById = categoriesById;
             }
         );
+    }
+
+    openSelectIconDialog() {
+        if (this.readonly) {
+            return;
+        }
+
+        const dialogRef = this.dialog.open<IconSelectorComponent, IconSelectorComponentDialogData, IconDescription>(IconSelectorComponent, {
+            data: {icon: this.item.data.icon}
+        });
+
+        dialogRef.afterClosed().subscribe((icon) => {
+            if (!icon) {
+                return;
+            }
+            this._itemActionService.onAction('change_icon', this.item, {icon: icon});
+        })
     }
 }

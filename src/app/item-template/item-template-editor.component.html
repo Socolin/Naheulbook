@@ -9,7 +9,7 @@
                    [(ngModel)]="itemTemplate.name"
                    type="text"/>
         </mat-form-field>
-        <icon-selector [icon]="itemTemplate.data.icon" (onChange)="itemTemplate.data.icon = $event"></icon-selector>
+        <icon [icon]="itemTemplate.data.icon" (click)="openSelectIconDialog()"></icon>
     </div>
     <div class="not-identified-name-line">
         <mat-form-field>

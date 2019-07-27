@@ -1,8 +1,6 @@
 <mat-card (swipeleft)="nothing()" (swiperight)="nothing()">
     <mat-card-header class="item-detail-header">
-        <icon-selector matCardAvatar [icon]="item.data.icon" [size]="'40px'" [readonly]="readonly"
-                       (onChange)="_itemActionService.onAction('change_icon', item, {icon: $event})">
-        </icon-selector>
+        <icon matCardAvatar [icon]="item.data.icon" [size]="'40px'" (click)="openSelectIconDialog()"></icon>
         <div>
             <mat-card-title>
                 <span *ngIf="item.template.data.quantifiable || item.data.quantity">
@@ -487,7 +485,7 @@
             <ng-template [ngIf]="character.computedData.containers && character.computedData.containers.length">
                 <div class="list-available-containers">
                     <div *ngFor="let container of character.computedData.containers" class="target-container">
-                        <icon-selector [icon]="container.data.icon" [readonly]="true"></icon-selector>
+                        <icon [icon]="container.data.icon"></icon>
                         <button mat-raised-button
                                 [disabled]="item.containerId == container.id"
                                 (click)="_itemActionService.onAction('move_to_container', item, {container: container.id}); $event.stopPropagation()">
@@ -538,7 +536,7 @@
 
         <mat-card-content>
             <div class="item-name">
-                <icon-selector [icon]="item.data.icon" [readonly]="true"></icon-selector>
+                <icon [icon]="item.data.icon"></icon>
                 <div>
                     <span *ngIf="item.template.data.quantifiable || item.data.quantity">
                         <value-editor [value]="giveQuantity"

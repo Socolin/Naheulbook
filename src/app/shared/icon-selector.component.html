@@ -1,61 +1,60 @@
-<span (click)="openIconSelectorDialog(); $event.stopPropagation()">
-    <icon [class.clickable]="!readonly" [size]="size" [icon]="icon"></icon>
-</span>
-<ng-template #iconSelectorDialog="cdkPortal" cdk-portal>
-    <mat-card class="selector-panel">
-        <mat-card-title>Selection de l'icone</mat-card-title>
-        <mat-card-content>
-            <mat-card>
-                <mat-card-subtitle>Icône</mat-card-subtitle>
-                <div>
-                    <div>
-                        <mat-form-field align="end">
-                            <input matInput
-                                   placeholder="Icone"
-                                   type="text"
-                                   [(ngModel)]="filter"
-                                   (ngModelChange)="updateFiltered()">
-                            <mat-hint align="end">
-                                Actuelle: {{icon.name}}
-                            </mat-hint>
-                        </mat-form-field>
-                        <button mat-icon-button (click)="selectRandom()"><span class="ra ra-perspective-dice-random ra-2x"></span></button>
-                    </div>
-                </div>
-                <div class="icon-list">
-                    <ng-template ngFor let-iconName [ngForOf]="filteredIcons">
-                        <span class="game-icon" [ngClass]="'game-icon-' + iconName" (click)="selectIcon(iconName)"></span>
-                    </ng-template>
-                </div>
-            </mat-card>
-            <mat-card>
-                <mat-card-subtitle>Couleur</mat-card-subtitle>
-                <div class="color-list">
-                    <ng-template ngFor let-color [ngForOf]="colors">
-                        <span class="game-icon" [ngClass]="'game-icon-' + newIcon.name" (click)="selectColor(color)" [style.color]="color"></span>
-                    </ng-template>
-                </div>
-            </mat-card>
-            <mat-card>
-                <mat-card-subtitle>Orientation</mat-card-subtitle>
-                <span (click)="selectRotation(0)"><icon [size]="'32px'" [icon]="iconRot0"></icon></span>
-                <span (click)="selectRotation(90)"><icon [size]="'32px'" [icon]="iconRot90"></icon></span>
-                <span (click)="selectRotation(180)"><icon [size]="'32px'" [icon]="iconRot180"></icon></span>
-                <span (click)="selectRotation(270)"><icon [size]="'32px'" [icon]="iconRot270"></icon></span>
-            </mat-card>
-            <mat-card>
-                <mat-card-subtitle>Changement</mat-card-subtitle>
-                <div class="summary">
-                    <icon [size]="'32px'" [icon]="icon" (click)="resetNewIcon()"></icon>
-                    ->
-                    <icon [size]="'32px'" [icon]="newIcon"></icon>
-                </div>
-            </mat-card>
-        </mat-card-content>
-        <mat-card-actions align="end">
-            <button mat-button color="primary" (click)="closeIconSelectorDialog()">FERMER</button>
-            <button mat-button color="primary" (click)="resetNewIcon()">RESET</button>
-            <button mat-button color="accent" (click)="saveChange()">VALIDER</button>
-        </mat-card-actions>
-    </mat-card>
-</ng-template>
+<h2 mat-dialog-title>Choisir une icône</h2>
+
+<mat-dialog-content>
+    <h3 class="mat-h3">Image</h3>
+    <div class="icon-filter">
+        <mat-form-field align="end">
+            <input matInput
+                   placeholder="Nom de l'icône"
+                   type="text"
+                   [(ngModel)]="filter"
+                   (ngModelChange)="updateFiltered()">
+            <mat-hint align="end">
+                Actuelle: {{data.icon?.name || 'Non défini'}}
+            </mat-hint>
+        </mat-form-field>
+        <button mat-icon-button (click)="selectRandom()"><span class="ra ra-perspective-dice-random ra-2x"></span></button>
+    </div>
+    <div class="icon-list">
+        <button mat-icon-button *ngFor="let iconName of filteredIcons" (click)="selectIcon(iconName)">
+            <span class="game-icon" [ngClass]="'game-icon-' + iconName"></span>
+        </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <h3 class="mat-h3">Couleur</h3>
+    <div class="icon-list">
+        <button mat-icon-button *ngFor="let color of colors" (click)="selectColor(color)">
+            <span class="game-icon"
+                  [ngClass]="'game-icon-' + newIcon.name"
+                  [style.color]="color">
+            </span>
+        </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <h3 class="mat-h3">Orientation</h3>
+    <div class="icon-list">
+        <button mat-icon-button *ngFor="let rotatedIcon of rotationIcons" (click)="selectRotation(rotatedIcon.rotation)">
+            <icon size="40px" [icon]="rotatedIcon"></icon>
+        </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <h3 class="mat-h3">Changement</h3>
+    <div class="summary">
+        <icon [size]="'40px'" [icon]="data.icon" (click)="resetNewIcon()"></icon>
+        ->
+        <icon [size]="'40px'" [icon]="newIcon"></icon>
+
+        <button mat-button color="primary" [disabled]="isNewIconTheSame()" (click)="resetNewIcon()">RESET</button>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">ANNULER</button>
+    <button mat-button color="primary" (click)="saveChange()">VALIDER</button>
+</mat-dialog-actions>

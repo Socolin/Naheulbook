@@ -1,6 +1,6 @@
 
-export class IconDescription {
-    public name: string;
-    public color: string;
-    public rotation: number;
+export interface IconDescription {
+    name: string;
+    color: string;
+    rotation: number;
 }

@@ -10,7 +10,7 @@ import {isNullOrUndefined} from 'util';
 import {
     AutocompleteInputComponent,
     AutocompleteValue,
-    God,
+    God, IconSelectorComponent, IconSelectorComponentDialogData,
     MiscService,
     NhbkDialogService,
     removeDiacritics,
@@ -22,6 +22,8 @@ import {OriginService} from '../origin';
 
 import {ItemSection, ItemSlot, ItemTemplate, ItemTemplateGunData, ItemType} from './item-template.model';
 import {ItemTemplateService} from './item-template.service'
+import {IconDescription} from '../shared/icon.model';
+import {MatDialog} from '@angular/material';
 
 @Component({
     selector: 'item-template-editor',
@@ -95,7 +97,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         , private _jobService: JobService
         , private _miscService: MiscService
         , public _loginService: LoginService
-        , private _skillService: SkillService) {
+        , private _skillService: SkillService
+        , private dialog: MatDialog
+    ) {
         this.itemTemplate = new ItemTemplate();
         this.form = {
             levels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -115,6 +119,19 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (event.code === 'Escape') {
             this.closeAddModuleDialog();
         }
+    }
+
+    openSelectIconDialog() {
+        const dialogRef = this.dialog.open<IconSelectorComponent, IconSelectorComponentDialogData, IconDescription>(IconSelectorComponent, {
+            data: {icon: this.itemTemplate.data.icon}
+        });
+
+        dialogRef.afterClosed().subscribe((icon) => {
+            if (!icon) {
+                return;
+            }
+            this.itemTemplate.data.icon = icon;
+        })
     }
 
     openAddModuleDialog() {

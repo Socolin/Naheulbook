@@ -1,34 +1,28 @@
-.selector-panel {
-    max-width: 85vw;
-    mat-card-content {
-        max-width: 700px;
-        max-height: 75vh;
-        overflow-y: auto;
-        mat-card {
-            margin-bottom: 5px;
+:host {
+    .icon-filter {
+        display: grid;
+        grid-template-columns: 1fr 32px;
+        align-items: center;
+    }
+    .icon-list {
+        padding-bottom: 8px;
+        font-size: 32px;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        .game-icon {
+            font-size: 40px;
         }
     }
+    .summary {
+        display: flex;
+        align-items: center;
+    }
+
+    .centered ::ng-deep .mat-button-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
 }
 
-.summary {
-    display: flex;
-    align-items: center;
-}
-
-.color-list {
-    font-size: 32px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-}
-
-.icon-list {
-    font-size: 32px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-}
-
-.clickable {
-    cursor: pointer;
-}

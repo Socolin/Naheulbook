@@ -8,7 +8,7 @@ import {IconDescription} from './icon.model';
 })
 export class IconComponent implements OnChanges {
     @Input() icon: IconDescription;
-    @Input() size: string;
+    @Input() size = '32px';
     @Input() enchanted: boolean;
 
     public defaultIcon: IconDescription = {

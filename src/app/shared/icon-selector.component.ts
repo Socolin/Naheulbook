@@ -1,34 +1,29 @@
-import {Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges, ViewChild} from '@angular/core';
-import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import {Component, OnInit, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 import {IconService} from './icon.service';
 import {removeDiacritics} from './remove_diacritics';
 import {IconDescription} from './icon.model';
+
+export interface IconSelectorComponentDialogData {
+    icon: IconDescription;
+}
 
 @Component({
     selector: 'icon-selector',
     templateUrl: './icon-selector.component.html',
     styleUrls: ['./icon-selector.component.scss'],
 })
-export class IconSelectorComponent implements OnInit, OnChanges {
-    @Input() icon: IconDescription;
-    @Input() size = '32px';
-    @Input() readonly: boolean;
-    @Output() onChange: EventEmitter<IconDescription> = new EventEmitter<IconDescription>();
-
-    public filter: string;
-    public icons: string[];
+export class IconSelectorComponent implements OnInit {
+    public filter?: string;
+    public icons?: string[];
     public filteredIcons: string[];
     public defaultIcon: IconDescription = {
         name: 'uncertainty',
         color: '#000000',
         rotation: 0
     };
-    public iconRot0: IconDescription;
-    public iconRot90: IconDescription;
-    public iconRot180: IconDescription;
-    public iconRot270: IconDescription;
+    public rotationIcons: IconDescription[] = [];
     public colors: string[] = [
         '#d6a090',
         '#fe3b1e',
@@ -63,57 +58,24 @@ export class IconSelectorComponent implements OnInit, OnChanges {
         '#08fdcc',
     ];
 
-    @ViewChild('iconSelectorDialog', {static: true})
-    public iconSelectorDialog: Portal<any>;
-    public iconSelectorOverlayRef: OverlayRef;
+    public newIcon: IconDescription;
 
-    public newIcon: IconDescription = new IconDescription();
-
-    constructor(private _iconService: IconService
-                , private _overlay: Overlay) {
+    constructor(
+        private _iconService: IconService,
+        public dialogRef: MatDialogRef<IconSelectorComponentDialogData>,
+        @Inject(MAT_DIALOG_DATA) public data: IconSelectorComponentDialogData) {
+        this.resetNewIcon();
     }
 
     resetNewIcon() {
-        if (this.icon && this.icon.name) {
-            this.filter = this.icon.name;
-        }
-        else {
-            this.filter = this.defaultIcon.name;
-        }
+        this.newIcon = {...this.data.icon || this.defaultIcon};
+        this.filter = this.newIcon.name;
         this.updateFiltered();
-
-        this.newIcon.name = this.icon.name;
-        this.newIcon.color = this.icon.color;
-        this.newIcon.rotation = this.icon.rotation;
-    }
-
-    openIconSelectorDialog() {
-        this.resetNewIcon();
-
-        if (this.readonly) {
-            return;
-        }
-
-        let config = new OverlayConfig();
-
-        config.positionStrategy = this._overlay.position()
-            .global()
-            .centerHorizontally()
-            .centerVertically();
-        config.hasBackdrop = true;
-
-        let overlayRef = this._overlay.create(config);
-        overlayRef.attach(this.iconSelectorDialog);
-        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
-        this.iconSelectorOverlayRef = overlayRef;
-    }
-
-    closeIconSelectorDialog() {
-        this.iconSelectorOverlayRef.detach();
+        this.updateIconRotation();
     }
 
     updateFiltered() {
-        if (!this.filter) {
+        if (!this.filter || !this.icons) {
             return;
         }
 
@@ -146,40 +108,16 @@ export class IconSelectorComponent implements OnInit, OnChanges {
     }
 
     saveChange() {
-        this.onChange.emit(this.newIcon);
-        this.closeIconSelectorDialog();
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        if ('icon' in changes) {
-            if (!changes['icon'].currentValue) {
-                this.icon = this.defaultIcon;
-            }
-            this.updateIconRotation();
-        }
+        this.dialogRef.close(this.newIcon)
     }
 
     updateIconRotation() {
-        this.iconRot0 = {
-            name: this.newIcon.name,
-            color: this.newIcon.color,
-            rotation: 0
-        };
-        this.iconRot90 = {
-            name: this.newIcon.name,
-            color: this.newIcon.color,
-            rotation: 90
-        };
-        this.iconRot180 = {
-            name: this.newIcon.name,
-            color: this.newIcon.color,
-            rotation: 180
-        };
-        this.iconRot270 = {
-            name: this.newIcon.name,
-            color: this.newIcon.color,
-            rotation: 270
-        };
+        this.rotationIcons = [
+            {...this.newIcon, rotation: 0},
+            {...this.newIcon, rotation: 90},
+            {...this.newIcon, rotation: 180},
+            {...this.newIcon, rotation: 270}
+        ];
     }
 
     selectRandom() {
@@ -191,11 +129,21 @@ export class IconSelectorComponent implements OnInit, OnChanges {
         this.updateFiltered();
     }
 
+    isNewIconTheSame(): boolean {
+        if (!this.data.icon) {
+            return true;
+        }
+
+        return this.newIcon.name === this.data.icon.name
+            && this.newIcon.color === this.data.icon.color
+            && this.newIcon.rotation === this.data.icon.rotation;
+    }
 
     ngOnInit() {
         this._iconService.getIcons().subscribe(
             icons => {
                 this.icons = icons;
+                this.updateFiltered();
             }
         );
     }

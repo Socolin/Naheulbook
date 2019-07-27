@@ -2,12 +2,14 @@ import {Component, Output, EventEmitter, SimpleChanges, OnChanges, ViewChild} fr
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
-import {getRandomInt, NhbkDialogService} from '../shared';
+import {getRandomInt, IconSelectorComponent, IconSelectorComponentDialogData, NhbkDialogService} from '../shared';
 import {Character} from '../character';
 import {Item} from '../item';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {Loot} from '../loot';
 import {Monster} from '../monster';
+import {MatDialog} from '@angular/material';
+import {IconDescription} from '../shared/icon.model';
 
 @Component({
     selector: 'create-item',
@@ -28,8 +30,11 @@ export class CreateItemComponent implements OnChanges {
     public newItem: Item = new Item();
     public gemOption: any = {};
 
-    constructor(private _itemTemplateService: ItemTemplateService,
-                private _nhbkDialogService: NhbkDialogService) {
+    constructor(
+        private _itemTemplateService: ItemTemplateService,
+        private _nhbkDialogService: NhbkDialogService,
+        private dialog: MatDialog
+    ) {
     }
 
     onSelectTab(index: number) {
@@ -192,6 +197,19 @@ export class CreateItemComponent implements OnChanges {
         if ('gemOption' in changes) {
             this.updateGem();
         }
+    }
+
+    openSelectIconDialog() {
+        const dialogRef = this.dialog.open<IconSelectorComponent, IconSelectorComponentDialogData, IconDescription>(IconSelectorComponent, {
+            data: {icon: this.newItem.data.icon}
+        });
+
+        dialogRef.afterClosed().subscribe((icon) => {
+            if (!icon) {
+                return;
+            }
+            this.newItem.data.icon = icon;
+        })
     }
 
     updateGem() {
