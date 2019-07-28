@@ -107,11 +107,11 @@ export class ItemListComponent implements OnInit, OnDestroy {
             return;
         }
         let config = new OverlayConfig();
+        config.width = '100%';
         config.positionStrategy = this.overlay.position()
             .global()
             .left('0')
-            .top('0')
-            .width('100%');
+            .top('0');
 
         this.stickyContainerOverlay = this.overlay.create(config);
         this.stickyContainerOverlay.attach(this.stickyContainer);
@@ -135,7 +135,10 @@ export class ItemListComponent implements OnInit, OnDestroy {
     scrollToCategory(category: ItemCategory) {
         for (let element of this.stickToTopElements.toArray()) {
             if (element.category.id === category.id) {
-                smoothScrollBy(0, element.elementRef.nativeElement.getBoundingClientRect().top, 1000);
+                window.scrollBy({
+                    top: element.elementRef.nativeElement.getBoundingClientRect().top,
+                    behavior: 'smooth'
+                });
             }
         }
         this.expandedSticky = false;

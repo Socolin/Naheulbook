@@ -89,30 +89,32 @@
 </ng-template>
 
 <ng-template #stickyContainer="cdkPortal" cdk-portal>
-    <mat-toolbar class="sticky-category" color="primary">
-        <button mat-icon-button (click)="backToTop()">
-            <mat-icon>arrow_upward</mat-icon>
-        </button>
+    <div style="width: 100%">
+        <mat-toolbar class="sticky-category" color="primary">
+            <button mat-icon-button (click)="backToTop()">
+                <mat-icon>arrow_upward</mat-icon>
+            </button>
 
-        <h3>
-            {{stickyCategory.name}}
-            <button *ngIf="!expandedSticky" mat-icon-button (click)="expandStickyCategory()">
-                <mat-icon>expand_more</mat-icon>
-            </button>
-            <button *ngIf="expandedSticky" mat-icon-button (click)="collapseStickyCategory()">
-                <mat-icon>expand_less</mat-icon>
-            </button>
-        </h3>
-    </mat-toolbar>
-    <div class="sticky-category-list" [@stickyExpand]="expandedSticky">
-        <mat-nav-list>
-            <ng-template ngFor let-category [ngForOf]="filteredCategories">
-                <a mat-list-item
-                   [class.selected]="stickyCategory === category"
-                   (click)="scrollToCategory(category)">
-                    {{category.name}}
-                </a>
-            </ng-template>
-        </mat-nav-list>
+            <h3>
+                {{stickyCategory.name}}
+                <button *ngIf="!expandedSticky" mat-icon-button (click)="expandStickyCategory()">
+                    <mat-icon>expand_more</mat-icon>
+                </button>
+                <button *ngIf="expandedSticky" mat-icon-button (click)="collapseStickyCategory()">
+                    <mat-icon>expand_less</mat-icon>
+                </button>
+            </h3>
+        </mat-toolbar>
+        <div class="sticky-category-list" [@stickyExpand]="expandedSticky">
+            <mat-nav-list>
+                <ng-template ngFor let-category [ngForOf]="filteredCategories">
+                    <a mat-list-item
+                       [class.selected]="stickyCategory === category"
+                       (click)="scrollToCategory(category)">
+                        {{category.name}}
+                    </a>
+                </ng-template>
+            </mat-nav-list>
+        </div>
     </div>
 </ng-template>
