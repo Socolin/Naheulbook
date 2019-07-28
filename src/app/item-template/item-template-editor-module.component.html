@@ -214,7 +214,7 @@
                 </mat-checkbox>
             </div>
         </mat-card-content>
-        <mat-card-actions *ngIf="_loginService.currentLoggedUser.admin">
+        <mat-card-actions *ngIf="_loginService.currentLoggedUser?.admin">
             <button mat-button color="primary" (click)="openCreateItemTypeDialog()">AJOUTER UN TYPE</button>
         </mat-card-actions>
     </ng-template>
