@@ -101,7 +101,7 @@
     <autocomplete-input [clearOnSelect]="true"
                         [placeholder]="'Module'"
                         (onSelect)="addModule($event)"
-                        [(callback)]="autocompleteModuleCallback">
+                        [callback]="autocompleteModuleCallback">
     </autocomplete-input>
 </mat-card>
 
@@ -113,7 +113,7 @@
                             [clearOnSelect]="true"
                             [placeholder]="'Module'"
                             (onSelect)="addModule($event)"
-                            [(callback)]="autocompleteModuleCallback">
+                            [callback]="autocompleteModuleCallback">
         </autocomplete-input>
     </mat-card>
 </ng-template>

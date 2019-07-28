@@ -1,6 +1,9 @@
 mat-card {
+    position: relative;
     .delete-button {
-        float: right;
+        position: absolute;
+        right: 16px;
+        top: 8px;
     }
 }
 

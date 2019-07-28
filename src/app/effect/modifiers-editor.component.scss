@@ -1,47 +1,19 @@
-mat-button-toggle-group {
-    flex-wrap: wrap;
-}
-
-@media (min-width: 700px) {
-    .small-editor {
-        display: none !important;
-    }
-}
-
-@media (max-width: 699px) {
-    .large-editor {
-        display: none !important;
-    }
-}
-.stat-modifier {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-}
-.small-editor {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    mat-form-field {
-        flex: 1 1 auto;
-        width: 90px;
-    }
-
-    .editor-value {
-        position: relative;
-        display: flex;
+:host {
+    .stat-modifier {
+        display: grid;
+        grid-template-columns: 100px 1fr minmax(auto, 40px) 40px;
+        grid-gap: 8px;
         align-items: center;
-        flex-direction: column;
-        padding: 0 24px;
-        .label {
-            font-size: 16px;
-            position: absolute;
-            transform: scale(.75);
-            top: -18px;
+
+        .advanced-modifier {
+            margin: 8px 0;
+            display: grid;
+            grid-gap: 8px;
         }
-        .value {
-            font-size: 24px;
-        }
+    }
+
+    .actions {
+        display: flex;
+        flex-direction: row-reverse;
     }
 }

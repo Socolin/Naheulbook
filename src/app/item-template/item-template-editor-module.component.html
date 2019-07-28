@@ -1,5 +1,5 @@
 <mat-card [ngSwitch]="moduleName">
-    <button class="delete-button" mat-icon-button (click)="deleteModule()"><mat-icon>delete</mat-icon></button>
+    <button class="delete-button" mat-icon-button (click)="deleteModule()"><mat-icon>close</mat-icon></button>
     <ng-template [ngSwitchCase]="'bourrin'">
         <mat-card-subtitle>Arme de bourrin</mat-card-subtitle>
         <mat-card-content>
@@ -219,7 +219,7 @@
         </mat-card-actions>
     </ng-template>
     <ng-template [ngSwitchCase]="'lifetime'">
-        <mat-card-subtitle>Duree de conservation</mat-card-subtitle>
+        <mat-card-subtitle>Durée de conservation</mat-card-subtitle>
         <duration-selector [durable]="itemTemplate.data.lifetime"></duration-selector>
     </ng-template>
     <ng-template [ngSwitchCase]="'level'">
@@ -234,7 +234,7 @@
     <ng-template [ngSwitchCase]="'modifiers'">
         <mat-card-subtitle>Modificateurs</mat-card-subtitle>
         <mat-card-content>
-            <modifiers-editor [options]="['job','origin','special']" [(modifiers)]="itemTemplate.modifiers">
+            <modifiers-editor [advancedModifiers]="true" [modifiers]="itemTemplate.modifiers">
             </modifiers-editor>
         </mat-card-content>
     </ng-template>

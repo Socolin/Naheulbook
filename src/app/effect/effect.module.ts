@@ -9,6 +9,7 @@ import {DateModule} from '../date/date.module';
 import {
     ActiveEffectEditorComponent,
     AddEffectModalComponent,
+    AddStatModifierDialogComponent,
     CreateEffectComponent,
     EditEffectComponent,
     EffectEditorComponent,
@@ -16,6 +17,7 @@ import {
     EffectService,
     ModifierDetailComponent,
     ModifiersEditorComponent,
+    StatModifierAdvancedDialogComponent,
     StatModifierEditorComponent,
 } from './';
 
@@ -37,9 +39,15 @@ import {
         ModifierDetailComponent,
         ModifiersEditorComponent,
         StatModifierEditorComponent,
+        StatModifierAdvancedDialogComponent,
+        AddStatModifierDialogComponent,
     ],
     providers: [
         EffectService
+    ],
+    entryComponents: [
+        StatModifierAdvancedDialogComponent,
+        AddStatModifierDialogComponent,
     ],
     exports: [
         ActiveEffectEditorComponent,

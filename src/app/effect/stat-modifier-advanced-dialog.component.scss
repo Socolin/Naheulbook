@@ -1,0 +1,14 @@
+:host {
+    mat-dialog-content {
+        display: grid;
+        grid-template-columns: 1fr;
+
+        .special-description {
+            align-items: center;
+            display: grid;
+            line-height: 1.5em;
+            height: 3em;
+            overflow: hidden;
+        }
+    }
+}
