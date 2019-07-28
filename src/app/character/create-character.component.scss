@@ -76,6 +76,9 @@ mat-card.speciality {
 
 .no-card-padding {
     padding: 0 !important;
+    .mat-body {
+        padding: 24px 24px 0;
+    }
 }
 
 .mat-radio-button ~ .mat-radio-button {
