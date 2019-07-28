@@ -1,20 +1,22 @@
 <mat-card>
-    <mat-card-title *ngIf="title">
-        {{title}}
-    </mat-card-title>
     <div class="name-line">
         <mat-form-field>
+            <!-- placeholder start with an invisible character so chrome autocomplete this field with user name -->
             <input matInput
-                   placeholder="Nom de l'objet"
-                   [(ngModel)]="itemTemplate.name"
-                   type="text"/>
+                   cdkFocusInitial
+                   placeholder="&#x2063;Nom de l'objet"
+                   autocomplete="off"
+                   required
+                   [(ngModel)]="itemTemplate.name"/>
         </mat-form-field>
         <icon [icon]="itemTemplate.data.icon" (click)="openSelectIconDialog()"></icon>
     </div>
     <div class="not-identified-name-line">
         <mat-form-field>
+            <!-- placeholder start with an invisible character so chrome autocomplete this field with user name -->
             <input matInput
-                   placeholder="Nom quand non identifié"
+                   placeholder="&#x2063;Nom quand non identifié"
+                   autocomplete="off"
                    [(ngModel)]="itemTemplate.data.notIdentifiedName"/>
         </mat-form-field>
         <button mat-icon-button
@@ -42,6 +44,7 @@
     <div class="price-line">
         <mat-form-field>
             <input matInput
+                   autocomplete="off"
                    placeholder="Prix"
                    [(ngModel)]="itemTemplate.data.price"
                    type="number"/>
@@ -49,6 +52,7 @@
         </mat-form-field>
         <mat-form-field style="flex: 1 auto; margin-left: 10px">
             <input matInput
+                   autocomplete="off"
                    placeholder="Description"
                    [(ngModel)]="itemTemplate.data.description"/>
         </mat-form-field>
@@ -56,6 +60,7 @@
     <div>
         <mat-form-field style="width: 100%">
             <input matInput
+                   autocomplete="off"
                    placeholder="Note"
                    [(ngModel)]="itemTemplate.data.note"/>
         </mat-form-field>
@@ -66,14 +71,14 @@
     <mat-card-title>Section</mat-card-title>
     <mat-card-content class="section-list">
         <mat-form-field *ngIf="sections">
-            <mat-select [(ngModel)]="selectedSection" placeholder="Section">
+            <mat-select [(ngModel)]="selectedSection" placeholder="Section" required>
                 <mat-option *ngFor="let section of sections" [value]="section">
                     {{section.name}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field *ngIf="selectedSection">
-            <mat-select [(ngModel)]="itemTemplate.categoryId" placeholder="Sous section">
+            <mat-select [(ngModel)]="itemTemplate.categoryId" placeholder="Sous section" required>
                 <mat-option *ngFor="let category of selectedSection.categories" [value]="category.id">
                     {{category.name}}
                 </mat-option>

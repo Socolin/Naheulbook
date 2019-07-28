@@ -11,8 +11,8 @@ import {EffectModule} from '../effect/effect.module';
 
 import {
     AutocompleteSearchItemTemplateComponent,
-    CreateItemTemplateComponent,
-    EditItemTemplateComponent,
+    CreateItemTemplateDialogComponent,
+    EditItemTemplateDialogComponent,
     ItemCategoryDirective,
     ItemListComponent,
     ItemTemplateComponent,
@@ -33,14 +33,18 @@ import {
         EffectModule,
     ],
     declarations: [
-        CreateItemTemplateComponent,
-        EditItemTemplateComponent,
+        CreateItemTemplateDialogComponent,
+        EditItemTemplateDialogComponent,
         ItemCategoryDirective,
         ItemListComponent,
         ItemTemplateComponent,
         ItemTemplateEditorComponent,
         ItemTemplateEditorModuleComponent,
         AutocompleteSearchItemTemplateComponent,
+    ],
+    entryComponents: [
+        CreateItemTemplateDialogComponent,
+        EditItemTemplateDialogComponent,
     ],
     exports: [
         ItemListComponent,

@@ -32,7 +32,6 @@ import {MatDialog} from '@angular/material';
 })
 export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     @Input() itemTemplate: ItemTemplate;
-    @Input() title: string|undefined;
 
     public modules: string[] = [];
 

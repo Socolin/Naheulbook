@@ -1,4 +1,3 @@
-
 import {forkJoin, Subscription} from 'rxjs';
 import {
     Component, OnInit, OnDestroy, Input, ViewChildren, HostListener, QueryList, ViewChild, EventEmitter, Output
@@ -8,7 +7,7 @@ import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {smoothScrollBy, smoothScrollTo} from '../shared/scroll';
+import {smoothScrollTo} from '../shared/scroll';
 import {God, removeDiacritics} from '../shared';
 
 import {LoginService} from '../user';
@@ -20,6 +19,8 @@ import {ItemTemplateService} from './item-template.service';
 import {ItemCategoryDirective} from './item-category.directive';
 import {ItemSection} from './item-template.model';
 import {MiscService} from '../shared/misc.service';
+import {MatDialog} from '@angular/material';
+import {CreateItemTemplateDialogComponent} from './create-item-template-dialog.component';
 
 @Component({
     selector: 'item-list',
@@ -93,6 +94,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     constructor(private _router: Router
         , public overlay: Overlay
+        , public dialog: MatDialog
         , private _route: ActivatedRoute
         , public _loginService: LoginService
         , private _miscService: MiscService
@@ -273,8 +275,8 @@ export class ItemListComponent implements OnInit, OnDestroy {
         this.filter.category = itemCategory;
     }
 
-    createItem() {
-        this._router.navigateByUrl('/database/create-item');
+    openCreateItemTemplateDialog() {
+        this.dialog.open(CreateItemTemplateDialogComponent, {minWidth: '100vw', height: '100vh'});
     }
 
     isEditable(itemTemplate: ItemTemplate): boolean {

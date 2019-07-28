@@ -19,8 +19,8 @@
             <span *ngIf="itemTemplate.data.sex == 'f'">Femme uniq. </span>
         </mat-card-subtitle>
         <span class="padding"></span>
-        <button mat-icon-button color="primary" *ngIf="copyable" (click)="copyItem(itemTemplate)"><mat-icon>content_copy</mat-icon></button>
-        <button mat-icon-button color="primary" *ngIf="editable" (click)="editItem(itemTemplate)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="primary" *ngIf="copyable" (click)="openCreateItemTemplateDialog(itemTemplate)"><mat-icon>content_copy</mat-icon></button>
+        <button mat-icon-button color="primary" *ngIf="editable" (click)="openEditItemTemplateDialog(itemTemplate)"><mat-icon>edit</mat-icon></button>
         <button mat-raised-button color="primary"
                 *ngIf="hasAction('addItem')"
                 (click)="emitAction('addItem', itemTemplate)">

@@ -1,8 +1,11 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {ItemTemplate} from './item-template.model';
-import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material';
 
 import {God} from '../shared';
+import {CreateItemTemplateDialogComponent, CreateItemTemplateDialogData} from './create-item-template-dialog.component';
+import {EditItemTemplateDialogComponent, EditItemTemplateDialogData} from './edit-item-template-dialog.component';
+
+import {ItemTemplate} from './item-template.model';
 
 @Component({
     selector: 'item-template',
@@ -19,15 +22,31 @@ export class ItemTemplateComponent {
     @Input() actions: string[];
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
 
-    constructor(private _router: Router) {
+    constructor(
+        private dialog: MatDialog
+    ) {
     }
 
-    editItem(item: ItemTemplate) {
-        this._router.navigate(['/database/edit-item', item.id], {queryParams: {}});
+    openEditItemTemplateDialog(itemTemplate: ItemTemplate) {
+        this.dialog.open<EditItemTemplateDialogComponent, EditItemTemplateDialogData>(
+            EditItemTemplateDialogComponent,
+            {
+                minWidth: '100vw',
+                height: '100vh',
+                data: {itemTemplateId: itemTemplate.id}
+            }
+        );
     }
 
-    copyItem(item: ItemTemplate) {
-        this._router.navigate(['/database/create-item'], {queryParams: {copyFrom: item.id}});
+    openCreateItemTemplateDialog(sourceItem: ItemTemplate) {
+        this.dialog.open<CreateItemTemplateDialogComponent, CreateItemTemplateDialogData>(
+            CreateItemTemplateDialogComponent,
+            {
+                minWidth: '100vw',
+                height: '100vh',
+                data: {copyFromItemTemplateId: sourceItem.id}
+            }
+        );
     }
 
     hasAction(actionName: string) {
