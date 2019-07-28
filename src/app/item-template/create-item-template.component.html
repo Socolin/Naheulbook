@@ -1,6 +1,4 @@
-<div>
-    <item-template-editor [(itemTemplate)]="item" [title]="'Création d\'un objet'"></item-template-editor>
-    <button style="width: 100%" mat-raised-button (click)="create()">
-        <button mat-button [disabled]="!item.name || !item.categoryId || !item.source">Créer</button>
-    </button>
-</div>
+<item-template-editor [itemTemplate]="item" [title]="'Création d\'un objet'"></item-template-editor>
+<button mat-raised-button (click)="create()" [disabled]="!item.name || !item.categoryId || !item.source">
+    Créer
+</button>

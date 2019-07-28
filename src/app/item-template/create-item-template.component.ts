@@ -9,7 +9,8 @@ import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'create-item-template',
-    templateUrl: './create-item-template.component.html'
+    templateUrl: './create-item-template.component.html',
+    styleUrls: ['./create-item-template.component.scss']
 })
 export class CreateItemTemplateComponent implements OnInit {
     public item: ItemTemplate = new ItemTemplate();

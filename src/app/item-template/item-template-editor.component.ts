@@ -52,7 +52,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
     public autocompleteModuleCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteModule.bind(this);
 
-    @ViewChild('autocompleteModuleModalTextField', {static: true})
+    @ViewChild('autocompleteModuleModalTextField', {static: false})
     autocompleteModuleModalTextField: AutocompleteInputComponent;
 
     @ViewChild('addModuleDialog', {static: true})
@@ -164,6 +164,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     }
 
     automaticNotIdentifiedName() {
+        if (!this.itemTemplate.name) {
+            return;
+        }
         [this.itemTemplate.data.notIdentifiedName] = this.itemTemplate.name.split(' ');
     }
 

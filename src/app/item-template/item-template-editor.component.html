@@ -17,8 +17,20 @@
                    placeholder="Nom quand non identifié"
                    [(ngModel)]="itemTemplate.data.notIdentifiedName"/>
         </mat-form-field>
-        <button mat-icon-button (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"><mat-icon>content_copy</mat-icon></button>
-        <button mat-icon-button (click)="automaticNotIdentifiedName()"><mat-icon>refresh</mat-icon></button>
+        <button mat-icon-button
+                [disabled]="!itemTemplate.name"
+                (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"
+                matTooltip="Copier le nom de l'objet">
+            <mat-icon>content_copy</mat-icon>
+        </button>
+        <button mat-icon-button
+                [disabled]="!itemTemplate.name"
+                (click)="automaticNotIdentifiedName()"
+                matTooltip="Mettre un nom générique">
+            <mat-icon>refresh</mat-icon>
+        </button>
+    </div>
+    <div class="source-line">
         <mat-form-field>
             <mat-select placeholder="Source" [(ngModel)]="itemTemplate.source" (selectionChange)="changeSource($event.value)" required>
                 <mat-option value="official" *ngIf="_loginService.currentLoggedUser.admin">Officiel</mat-option>
@@ -27,7 +39,7 @@
             </mat-select>
         </mat-form-field>
     </div>
-    <div style="display: flex; flex-direction: row">
+    <div class="price-line">
         <mat-form-field>
             <input matInput
                    placeholder="Prix"
@@ -70,17 +82,19 @@
     </mat-card-content>
 </mat-card>
 
-<ng-template ngFor let-moduleName [ngForOf]="modules">
-    <item-template-editor-module [itemTemplate]="itemTemplate"
-                                 [slots]="slots"
-                                 [gods]="gods"
-                                 [itemTypes]="itemTypes"
-                                 [skills]="skills"
-                                 [skillsById]="skillsById"
-                                 (onDelete)="removeModule(moduleName)"
-                                 [moduleName]="moduleName">
-    </item-template-editor-module>
-</ng-template>
+<item-template-editor-module
+    *ngFor="let moduleName of modules"
+    [itemTemplate]="itemTemplate"
+    [slots]="slots"
+    [gods]="gods"
+    [itemTypes]="itemTypes"
+    [skills]="skills"
+    [skillsById]="skillsById"
+    (onDelete)="removeModule(moduleName)"
+    [moduleName]="moduleName">
+</item-template-editor-module>
+
+<mat-divider></mat-divider>
 
 <mat-card class="add-module-card">
     Ajouter un module
@@ -90,6 +104,8 @@
                         [(callback)]="autocompleteModuleCallback">
     </autocomplete-input>
 </mat-card>
+
+
 <ng-template cdk-portal #addModuleDialog="cdkPortal">
     <mat-card>
         Ajouter un module
@@ -102,7 +118,8 @@
     </mat-card>
 </ng-template>
 
-<h3>Preview</h3>
+<h3 class="mat-h3">Aperçu</h3>
+
 <item-template [jobsName]="jobsName"
                [originsName]="originsName"
                [godsByTechName]="godsByTechName"
