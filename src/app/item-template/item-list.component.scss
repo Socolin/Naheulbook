@@ -20,15 +20,13 @@ mat-card {
     font-weight: bold;
 }
 .sticky-category {
-    padding-left: 0;
-    padding-right: 48px;
+    display: grid;
+    grid-template-columns: 40px minmax(200px, 1fr) 40px;
+    grid-gap: 16px;
     h3 {
-        padding-left: 8px;
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }
 .sticky-category-list {
