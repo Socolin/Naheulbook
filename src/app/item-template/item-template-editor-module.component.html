@@ -67,18 +67,19 @@
         <mat-card-content>
             <div>
                 Cet objet permet d'infliger
-                <span *ngIf="itemTemplate.data.damageDice">{{itemTemplate.data.damageDice}}<span
-                    class="ra ra-perspective-dice-random"></span></span>
+                <span *ngIf="itemTemplate.data.damageDice">{{itemTemplate.data.damageDice}}
+                    <span class="ra ra-perspective-dice-random"></span>
+                </span>
                 <span *ngIf="itemTemplate.data.damageDice && itemTemplate.data.bonusDamage > 0">+</span>
                 <span *ngIf="itemTemplate.data.bonusDamage">{{itemTemplate.data.bonusDamage}}</span>
                 points de dégât
                 <span *ngIf="itemTemplate.data.damageType">de {{itemTemplate.data.damageType}}</span>.
             </div>
-            <div>
+            <div class="damage-line">
                 <mat-form-field>
                     <input matInput
                            class="input-center-align"
-                           placeholder="Nombre de dé"
+                           placeholder="Dé(s)"
                            [(ngModel)]="itemTemplate.data.damageDice"
                            type="number"/>
                     <span matSuffix>D6</span>
@@ -214,7 +215,7 @@
                 </mat-checkbox>
             </div>
         </mat-card-content>
-        <mat-card-actions *ngIf="_loginService.currentLoggedUser?.admin">
+        <mat-card-actions *ngIf="_loginService.currentLoggedUser?.admin" align="end">
             <button mat-button color="primary" (click)="openCreateItemTypeDialog()">AJOUTER UN TYPE</button>
         </mat-card-actions>
     </ng-template>
@@ -339,15 +340,17 @@
             <div *ngIf="itemTemplate.data.rupture === 0">
                 L'objet est incassable
             </div>
-            <mat-button-toggle-group [(ngModel)]="itemTemplate.data.rupture">
-                <mat-button-toggle [value]="0">Incassable</mat-button-toggle>
-                <mat-button-toggle [value]="1">1</mat-button-toggle>
-                <mat-button-toggle [value]="2">1 à 2</mat-button-toggle>
-                <mat-button-toggle [value]="3">1 à 3</mat-button-toggle>
-                <mat-button-toggle [value]="4">1 à 4</mat-button-toggle>
-                <mat-button-toggle [value]="5">1 à 5</mat-button-toggle>
-                <mat-button-toggle [value]="6">1 à 6</mat-button-toggle>
-            </mat-button-toggle-group>
+            <mat-form-field>
+                <mat-select [(ngModel)]="itemTemplate.data.rupture">
+                    <mat-option [value]="0">Incassable</mat-option>
+                    <mat-option [value]="1">1</mat-option>
+                    <mat-option [value]="2">1 à 2</mat-option>
+                    <mat-option [value]="3">1 à 3</mat-option>
+                    <mat-option [value]="4">1 à 4</mat-option>
+                    <mat-option [value]="5">1 à 5</mat-option>
+                    <mat-option [value]="6">1 à 6</mat-option>
+                </mat-select>
+            </mat-form-field>
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'sex'">

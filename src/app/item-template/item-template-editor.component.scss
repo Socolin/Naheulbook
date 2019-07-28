@@ -12,9 +12,12 @@
 
     .not-identified-name-line {
         display: grid;
-        grid-template-columns: 1fr 40px 40px;
+        grid-template-columns: minmax(150px, 1fr) 40px 40px;
         grid-gap: 8px;
         align-items: center;
+        > mat-form-field {
+            width: 100%;
+        }
     }
 
     .source-line {
@@ -30,6 +33,6 @@
 
     .price-line {
         display: grid;
-        grid-template-columns: minmax(96px, 1fr) minmax(150px, 2fr);
+        grid-template-columns: minmax(96px, 1fr) minmax(120px, 2fr);
     }
 }
