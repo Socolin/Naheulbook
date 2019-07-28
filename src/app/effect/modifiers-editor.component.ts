@@ -1,17 +1,17 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material';
 
 import {ItemStatModifier} from '../shared';
 import {Origin, OriginService} from '../origin';
 import {Job, JobService} from '../job';
-import {MatDialog} from '@angular/material';
 
-import {
-    StatModifierAdvancedDialogComponent,
-    StatModifierAdvancedDialogData,
-    AddStatModifierDialogComponent
-} from '.';
 
 import {statModifierSpecialsValues} from './stat-modifier-specials.constants';
+import {
+    StatModifierAdvancedDialogComponent,
+    StatModifierAdvancedDialogData
+} from './stat-modifier-advanced-dialog.component';
+import {AddStatModifierDialogComponent} from './add-stat-modifier-dialog.component';
 
 @Component({
     selector: 'modifiers-editor',
