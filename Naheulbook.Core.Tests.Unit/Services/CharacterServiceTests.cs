@@ -479,7 +479,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Received.InOrder(() =>
             {
-                _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.Remove(characterModifier);
+                // TODO: Change after rework of character history
+                characterModifier.CharacterId.Should().BeNull();
+                // _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.Remove(characterModifier);
                 _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
             });
         }

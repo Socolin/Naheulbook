@@ -262,7 +262,9 @@ namespace Naheulbook.Core.Services
                 if (characterModifier == null)
                     throw new CharacterModifierNotFoundException(characterModifierId);
 
-                uow.CharacterModifiers.Remove(characterModifier);
+                // TODO: workaround, will change after character history rework
+                characterModifier.CharacterId = null;
+                // uow.CharacterModifiers.Remove(characterModifier);
                 uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId));
 
                 await uow.CompleteAsync();
