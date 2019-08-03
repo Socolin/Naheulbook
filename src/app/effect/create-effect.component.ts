@@ -30,10 +30,6 @@ export class CreateEffectComponent {
                 if (newEffect.dice) {
                     this.effect.dice = newEffect.dice + 1;
                 }
-            },
-            error => {
-                console.log(error);
-                this._notification.error('Erreur', 'Erreur serveur');
             }
         );
     }

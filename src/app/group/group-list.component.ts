@@ -34,10 +34,6 @@ export class GroupListComponent implements OnInit {
             res => {
                 this.groups = res;
                 this.loading = false;
-            },
-            err => {
-                console.log(err);
-                this._notification.error('Erreur', 'Erreur serveur');
             }
         );
     }

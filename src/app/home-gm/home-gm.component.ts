@@ -16,9 +16,10 @@ export class HomeGmComponent implements OnInit {
     @ViewChild('start', {static: true, read: MatSidenav})
     public start: MatSidenav;
 
-    constructor(private _groupService: GroupService
-        , private _notifications: NotificationsService
-        , public _router: Router) {
+    constructor(
+        private _groupService: GroupService,
+        public _router: Router,
+    ) {
         this._router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
                 this.start.close().then();
@@ -30,10 +31,6 @@ export class HomeGmComponent implements OnInit {
         this._groupService.listGroups().subscribe(
             res => {
                 this.groups = res.slice(0, 5);
-            },
-            err => {
-                console.log(err);
-                this._notifications.error('Erreur', 'Erreur serveur');
             }
         );
     }

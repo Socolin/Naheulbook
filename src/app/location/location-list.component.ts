@@ -14,9 +14,10 @@ export class LocationListComponent implements OnInit {
     public rootLocation: Location;
     public editable: boolean;
 
-    constructor(private _locationService: LocationService
-        , private _loginService: LoginService
-        , private _notification: NotificationsService) {
+    constructor(
+        private _locationService: LocationService,
+        private _loginService: LoginService,
+    ) {
     }
 
     getLocations() {
@@ -28,10 +29,6 @@ export class LocationListComponent implements OnInit {
                         this.rootLocation = l;
                     }
                 });
-            },
-            err => {
-                this._notification.error('Erreur', 'Erreur serveur');
-                console.log(err);
             }
         );
     }

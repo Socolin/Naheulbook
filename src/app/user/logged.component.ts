@@ -47,10 +47,9 @@ export class LoggedComponent implements OnInit, OnDestroy {
                                 this.isInErrorState = true;
                             }
                         );
-                    } else if (params.hasOwnProperty('error')) {
-                        this._notification.error('Authentification', 'Erreur: ' + params['error_reason']);
                     } else {
-                        console.log('Missing error', params);
+                        this.isInErrorState = true;
+                        this._notification.error('Échec de l\'authentification', params);
                     }
                 } else if (app === 'google') {
                     if (params.hasOwnProperty('code')) {
@@ -64,10 +63,9 @@ export class LoggedComponent implements OnInit, OnDestroy {
                                 this.isInErrorState = true;
                             }
                         );
-                    } else if (params.hasOwnProperty('error')) {
-                        this._notification.error('Authentification', 'Erreur: ' + params['error_reason']);
                     } else {
-                        console.log('Missing error', params);
+                        this.isInErrorState = true;
+                        this._notification.error('Échec de l\'authentification', params);
                     }
                 } else if (app === 'microsoft') {
                     if (params.hasOwnProperty('code')) {
@@ -81,10 +79,9 @@ export class LoggedComponent implements OnInit, OnDestroy {
                                 this.isInErrorState = true;
                             }
                         );
-                    } else if (params.hasOwnProperty('error')) {
-                        this._notification.error('Authentification', 'Erreur: ' + params['error_description']);
                     } else {
-                        console.log('Missing error', params);
+                        this.isInErrorState = true;
+                        this._notification.error('Échec de l\'authentification', params);
                     }
                 } else if (app === 'twitter') {
                     if (params.hasOwnProperty('oauth_token') && params.hasOwnProperty('oauth_verifier')) {
@@ -95,15 +92,17 @@ export class LoggedComponent implements OnInit, OnDestroy {
                                 this.isInErrorState = true;
                             }
                         );
-                    } else if (params.hasOwnProperty('error')) {
-                        this._notification.error('Authentification', 'Erreur: ' + params['error_reason']);
                     } else {
-                        console.log('Missing error', params);
+                        this.isInErrorState = true;
+                        this._notification.error('Échec de l\'authentification', params);
                     }
                 } else {
                     this.isInErrorState = true;
-                    this._notification.error('Error', 'Invalid app', params);
+                    this._notification.error('Invalid app', params);
                 }
+            } else {
+                this.isInErrorState = true;
+                this._notification.error('Authentification impossible', params);
             }
         });
     }

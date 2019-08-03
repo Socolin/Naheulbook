@@ -20,10 +20,6 @@ export class OriginListComponent implements OnInit {
         this._originService.getOriginList().subscribe(
             origins => {
                 this.origins = origins;
-            },
-            error => {
-                this._notification.error('Erreur', 'Erreur serveur');
-                console.log(error);
             }
         );
     }

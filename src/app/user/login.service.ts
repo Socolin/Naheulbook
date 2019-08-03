@@ -15,7 +15,9 @@ export class LoginService {
 
     // TODO: Renewing token
 
-    constructor(private httpClient: HttpClient) {
+    constructor(
+        private httpClient: HttpClient
+    ) {
     }
 
     getLoginToken(app: string): Observable<{ loginToken: string, appKey: string }> {
@@ -112,7 +114,8 @@ export class LoginService {
 
         this.checkingLoggedUser = this.httpClient.get<JwtResponse>('/api/v2/users/me/jwt').pipe(
             retryWhen(genericRetryStrategy({
-                excludedStatusCodes: [401, 400]
+                excludedStatusCodes: [401, 400],
+                maxRetryAttempts: 1
             })),
             share()
         );
@@ -122,11 +125,12 @@ export class LoginService {
             this.currentLoggedUser = response.userInfo;
             this.currentJwt = response.token;
             this.checkingLoggedUser = undefined;
-        }, () => {
+        }, (error) => {
             this.loggedUser.next(undefined);
             this.currentLoggedUser = undefined;
             this.currentJwt = undefined;
             this.checkingLoggedUser = undefined;
+            this.loggedUser.error(error);
         });
 
         return this.loggedUser;
@@ -148,7 +152,7 @@ export class LoginService {
         return this.httpClient.post<Object[]>('/api/user/searchUser', {filter: filter});
     }
 
-    redirectToFbLogin(redirectPage: string) {
+    redirectToFbLogin(redirectPage: string, errorCb?: (error) => void) {
         localStorage.setItem('redirectPage', redirectPage);
         this.getLoginToken('facebook').subscribe(authInfos => {
             let state = 'facebook:' + authInfos.loginToken;
@@ -156,10 +160,10 @@ export class LoginService {
                 + '&state=' + state
                 + '&response_type=code'
                 + '&redirect_uri=' + window.location.origin + '/logged';
-        });
+        }, errorCb);
     }
 
-    redirectToGoogleLogin(redirectPage: string) {
+    redirectToGoogleLogin(redirectPage: string, errorCb?: (error) => void) {
         localStorage.setItem('redirectPage', redirectPage);
         this.getLoginToken('google').subscribe(authInfos => {
             let state = 'google:' + authInfos.loginToken;
@@ -168,10 +172,10 @@ export class LoginService {
                 + '&scope=profile'
                 + '&response_type=code'
                 + '&redirect_uri=' + window.location.origin + '/logged';
-        });
+        }, errorCb);
     }
 
-    redirectToMicrosoftLogin(redirectPage: string) {
+    redirectToMicrosoftLogin(redirectPage: string, errorCb?: (error) => void) {
         localStorage.setItem('redirectPage', redirectPage);
         this.getLoginToken('microsoft').subscribe(authInfos => {
             let state = 'microsoft:' + authInfos.loginToken;
@@ -180,13 +184,13 @@ export class LoginService {
                 + '&scope=openid,User.Read'
                 + '&response_type=code'
                 + '&redirect_uri=' + window.location.origin + '/logged';
-        });
+        }, errorCb);
     }
 
-    redirectToTwitterLogin(redirectPage: string) {
+    redirectToTwitterLogin(redirectPage: string, errorCb?: (error) => void) {
         localStorage.setItem('redirectPage', redirectPage);
         this.getLoginToken('twitter').subscribe(authInfos => {
             window.location.href = 'https://api.twitter.com/oauth/authenticate?oauth_token=' + authInfos.loginToken;
-        });
+        }, errorCb);
     }
 }

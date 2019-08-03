@@ -20,10 +20,6 @@ export class UserProfileComponent implements OnInit {
         this.loginService.updateProfile(this.profile.id, this.profile).subscribe(
             () => {
                 this._notification.success('Succes', 'Profile édité');
-            },
-            err => {
-                console.log(err);
-                this._notification.error('Erreur', 'Erreur');
             }
         );
     }

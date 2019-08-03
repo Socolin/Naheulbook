@@ -1,8 +1,6 @@
-import {throwError as observableThrowError, Observable} from 'rxjs';
 import {ErrorHandler, Injectable, NgZone} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ErrorReportService} from './error-report.service';
-import {catchError} from 'rxjs/operators';
 
 import * as Sentry from '@sentry/browser';
 import {environment} from '../environments/environment';
@@ -10,8 +8,6 @@ import {environment} from '../environments/environment';
 Sentry.init({
     dsn: environment.sentryDsn,
     beforeSend(event, hint) {
-        console.log(event);
-        console.log(hint);
         const processedEvent = { ...event };
         if (hint.originalException && hint.originalException instanceof Error) {
             processedEvent.extra = processedEvent.extra || {};
@@ -51,7 +47,7 @@ export class NhbkErrorHandler extends ErrorHandler {
         }
 
         this._ngZone.run(() => {
-            this._errorReportService.notify('An error occurred', error);
+            this._errorReportService.notify('Une erreur est survenue', error);
         });
 
         super.handleError(error);

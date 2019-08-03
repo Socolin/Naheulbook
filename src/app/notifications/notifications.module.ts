@@ -4,6 +4,8 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NhbkMaterialModule} from '../nhbk-material.module';
 
+import { ErrorDetailsDialogComponent } from './error-details-dialog.component';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -15,6 +17,10 @@ import {NhbkMaterialModule} from '../nhbk-material.module';
     ],
     declarations: [
         SimpleNotificationsComponent,
+        ErrorDetailsDialogComponent,
+    ],
+    entryComponents: [
+        ErrorDetailsDialogComponent,
     ],
     exports: [
         SimpleNotificationsComponent,

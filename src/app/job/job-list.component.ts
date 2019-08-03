@@ -11,18 +11,13 @@ import {JobService} from './job.service';
 export class JobListComponent implements OnInit {
     public jobs: Job[];
 
-    constructor(private _jobService: JobService
-        , private _notification: NotificationsService) {
+    constructor(private _jobService: JobService) {
     }
 
     getJobs() {
         this._jobService.getJobList().subscribe(
             jobs => {
                 this.jobs = jobs;
-            },
-            err => {
-                this._notification.error('Erreur', 'Erreur serveur');
-                console.log(err);
             }
         );
     }

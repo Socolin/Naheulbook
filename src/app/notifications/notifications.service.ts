@@ -1,26 +1,35 @@
 import {Injectable} from '@angular/core';
 import {Notification} from './notification.model';
-import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
+import {MatDialog, MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ErrorReportService} from '../error-report.service';
+import {ErrorDetailsDialogComponent} from './error-details-dialog.component';
 
 @Injectable()
 export class NotificationsService {
     public notifications: Notification[] = [];
 
-    constructor(private _snackBar: MatSnackBar,
-                private _errorReportService: ErrorReportService) {
+    constructor(
+        private _snackBar: MatSnackBar,
+        private _errorReportService: ErrorReportService,
+        private dialog: MatDialog,
+    ) {
         _errorReportService.notifyError.subscribe(msg => {
-            this.addNotification(new Notification('error', msg.message, ''));
+            this.addNotification(new Notification('error', msg.message, '', msg.error));
             console.error('==== ERROR ==== ', msg.message, msg.error);
         });
     }
 
-    addNotification(n: Notification) {
-        this.notifications.push(n);
+    addNotification(notification: Notification) {
+        this.notifications.push(notification);
         if (this.notifications.length === 1) {
             let config = new MatSnackBarConfig();
-            config.duration = 2500;
-            this._snackBar.open(n.title + ' ' + n.message, undefined, config).afterDismissed().subscribe(
+            config.duration = notification.type === 'error' ? 5000 : 2500;
+            const action = notification.type === 'error' ? 'DETAILS' : undefined;
+            let snackBarRef = this._snackBar.open(notification.title + ' ' + notification.message, action, config);
+            snackBarRef.onAction().subscribe(() => {
+                this.dialog.open(ErrorDetailsDialogComponent, {data: notification.data});
+            });
+            snackBarRef.afterDismissed().subscribe(
                 () => {
                     this.notifications.shift();
                     this.proceedNextNotification();
@@ -45,22 +54,27 @@ export class NotificationsService {
         );
     }
 
-    error(title: string, message: string, err?: any, data?: any) {
-        this.addNotification(new Notification('error', title, message, data));
-        console.log('ERROR: ' + title + ':' + message);
-        if (err) {
-            console.log(err);
+    error(message: string, err?: any) {
+        this.addNotification(new Notification('error', 'Erreur', message, err));
+        // tslint:disable-next-line:no-console
+        console.info('ERROR: ' + 'Erreur' + ':' + message);
+        if (err instanceof Error) {
+            console.error(err);
+        } else {
+            console.log('Error data:', err);
         }
     }
 
     success(title: string, message: string, data?: any) {
         this.addNotification(new Notification('success', title, message, data));
-        console.log('SUCCESS: ' + title + ':' + message);
+        // tslint:disable-next-line:no-console
+        console.info('SUCCESS: ' + title + ':' + message);
     }
 
     info(title: string, message: string, data?: any) {
         this.addNotification(new Notification('info', title, message, data));
-        console.log('INFO: ' + title + ':' + message);
+        // tslint:disable-next-line:no-console
+        console.info('INFO: ' + title + ':' + message);
     }
 
     update() {

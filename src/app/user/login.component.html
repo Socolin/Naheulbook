@@ -16,14 +16,15 @@
                 Vous pourrez changer le pseudo du compte dans le profile une fois le compte créer.
             </p>
             <div class="auth-buttons">
-                <button mat-raised-button color="primary" (click)="login('facebook')">Facebook</button>
-                <button mat-raised-button color="primary" (click)="login('google')">Google</button>
-                <button mat-raised-button color="primary" (click)="login('twitter')">Twitter</button>
-                <button mat-raised-button color="primary" (click)="login('microsoft')">Microsoft</button>
+                <button mat-raised-button color="primary" [disabled]="loading" (click)="login('facebook')">Facebook</button>
+                <button mat-raised-button color="primary" [disabled]="loading" (click)="login('google')">Google</button>
+                <button mat-raised-button color="primary" [disabled]="loading" (click)="login('twitter')">Twitter</button>
+                <button mat-raised-button color="primary" [disabled]="loading" (click)="login('microsoft')">Microsoft</button>
             </div>
         </mat-card-content>
         <mat-card-actions align="end">
             <button mat-button color=primary (click)="moreInfo = !moreInfo">Plus d'infos</button>
+            <button mat-button color=primary (click)="goToHomePage()">Retour</button>
         </mat-card-actions>
         <mat-card-content *ngIf="moreInfo">
             <p>

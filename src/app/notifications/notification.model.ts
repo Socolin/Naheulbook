@@ -1,11 +1,13 @@
+export type NotificationType = 'error' | 'success' | 'info';
+
 export class Notification {
-    type: string;
+    type: NotificationType;
     title: string;
     message: string;
     data: any;
     time: Date;
 
-    constructor(type: string, title: string, message: string, data?: any) {
+    constructor(type: NotificationType, title: string, message: string, data?: any) {
         this.type = type;
         this.title = title;
         this.message = message;

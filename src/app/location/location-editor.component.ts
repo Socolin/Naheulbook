@@ -31,7 +31,7 @@ export class LocationEditorComponent implements OnInit {
 
     addMap() {
         if (!this.newMap.name || !this.newMap.file) {
-            this._notification.error('Erreur', 'Nom ou fichier manquant');
+            this._notification.error('Nom ou fichier manquant');
             return;
         }
         this.maps.push(this.newMap);
