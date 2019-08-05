@@ -1,0 +1,75 @@
+:host {
+    margin: -24px;
+    display: grid;
+    grid-template-columns: 1fr;
+
+
+    .content {
+        overflow-y: auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-content: center;
+
+        .filter-field {
+            width: 100%;
+        }
+
+        > * {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .filter-result {
+            padding: 8px 0;
+            display: grid;
+            grid-template-columns: 32px 1fr;
+            grid-template-areas: "icon name" "icon category";
+            grid-template-rows: auto;
+            grid-gap: 0 8px;
+            align-items: center;
+
+            icon {
+                grid-area: icon;
+            }
+
+            .name {
+                grid-area: name;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .category {
+                grid-area: category;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .name-line {
+            display: grid;
+            grid-gap: 8px;
+            grid-template-columns: 32px 1fr;
+            align-items: center;
+        }
+
+        .customize-step {
+            > * {
+                width: 100%;
+            }
+        }
+    }
+
+    mat-toolbar {
+        display: grid;
+        grid-template-columns: auto minmax(100px, 1fr) auto auto;
+        grid-gap: 16px;
+
+        span {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
+}

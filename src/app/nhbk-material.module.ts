@@ -11,7 +11,7 @@ import {
     MatGridListModule,
     MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule,
     MatProgressSpinnerModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSidenavModule, MatSliderModule,
-    MatSlideToggleModule, MatSnackBarModule, MatSortModule,
+    MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule,
     MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import {PlatformModule} from '@angular/cdk/platform';
@@ -54,6 +54,7 @@ const MATERIAL_MODULES = [
     PlatformModule,
     MatCommonModule,
     ObserversModule,
+    MatStepperModule,
 ];
 
 @NgModule({

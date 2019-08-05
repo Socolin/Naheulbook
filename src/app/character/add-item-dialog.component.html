@@ -1,0 +1,61 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>Ajouter un objet</span>
+    <button mat-button
+            type="button"
+            [disabled]="!selectedItemTemplate"
+            (click)="addItem()">
+        AJOUTER
+    </button>
+</mat-toolbar>
+
+
+<div class="content">
+    <mat-vertical-stepper>
+        <mat-step linear="true">
+            <ng-template matStepLabel>Chercher un objet</ng-template>
+            <mat-form-field class="filter-field">
+                <input #filter matInput placeholder="Nom de l'objet" (keyup)="updateFilter(filter.value)">
+            </mat-form-field>
+            <mat-action-list>
+                <button mat-list-item *ngFor="let result of filteredItemTemplates" matStepperNext (click)="selectItemTemplate(result.itemTemplate)">
+                    <div class="filter-result">
+                        <icon [icon]="result.icon"></icon>
+                        <div class="name">{{result.name}}</div>
+                        <div class="category mat-caption">{{result.sectionName}} - {{result.categoryName}}</div>
+                    </div>
+                </button>
+                <button disabled *ngIf="filteredItemTemplates && filteredItemTemplates.length == 0">
+                    Aucun objet trouvé
+                </button>
+            </mat-action-list>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Personnaliser l'objet</ng-template>
+            <div class="customize-step" *ngIf="selectedItemTemplate">
+                <div class="name-line">
+                    <icon [icon]="selectedItemTemplate?.data?.icon"></icon>
+                    <mat-form-field>
+                        <input matInput type="text"
+                               placeholder="Nom personnalisé"
+                               [(ngModel)]="itemData.name"/>
+                    </mat-form-field>
+                </div>
+                <mat-form-field>
+                    <input matInput type="text"
+                           placeholder="Description personnalisé"
+                           [(ngModel)]="itemData.description"/>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="selectedItemTemplate.data.quantifiable">
+                    <input matInput type="number"
+                           placeholder="Quantité"
+                           [(ngModel)]="itemData.quantity"/>
+                </mat-form-field>
+            </div>
+        </mat-step>
+    </mat-vertical-stepper>
+
+</div>

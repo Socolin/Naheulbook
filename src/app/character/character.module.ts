@@ -1,4 +1,4 @@
-import {NgModule}      from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
@@ -14,6 +14,7 @@ import {ItemTemplateModule} from '../item-template/item-template.module';
 import {ItemModule} from '../item/item.module';
 
 import {
+    AddItemDialogComponent,
     BagItemViewComponent,
     CharacterColorSelectorComponent,
     CharacterComponent,
@@ -64,6 +65,10 @@ import {CharacterResolve} from './character.resolver';
         SkillSelectorComponent,
         SpecialitySelectorComponent,
         SwipeableItemDetailComponent,
+        AddItemDialogComponent,
+    ],
+    entryComponents: [
+        AddItemDialogComponent,
     ],
     exports: [
         CharacterColorSelectorComponent,

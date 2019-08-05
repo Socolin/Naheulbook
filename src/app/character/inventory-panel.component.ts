@@ -1,18 +1,16 @@
-import {
-    Input, OnInit, Component, HostListener, ElementRef, ViewChild,
-    OnChanges, SimpleChanges
-} from '@angular/core';
-import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import {Component, ElementRef, HostListener, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {Overlay} from '@angular/cdk/overlay';
 import {isNullOrUndefined} from 'util';
 
 import {removeDiacritics} from '../shared';
-import {AutocompleteSearchItemTemplateComponent, ItemTemplate} from '../item-template';
+import {AutocompleteSearchItemTemplateComponent} from '../item-template';
 
 import {Character} from './character.model';
-import {Item, ItemData, ItemService} from '../item';
+import {Item, ItemService} from '../item';
 import {ItemActionService} from './item-action.service';
 import {SwipeService} from './swipe.service';
+import {MatDialog} from '@angular/material';
+import {AddItemDialogComponent} from './add-item-dialog.component';
 
 @Component({
     selector: 'inventory-panel',
@@ -38,25 +36,15 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     private itemDetailTopDiv: ElementRef;
     public itemDetailOffset = 0;
 
-    @ViewChild('addItemDialog', {static: false})
-    public addItemDialog: Portal<any>;
-    public addItemOverlayRef: OverlayRef | undefined;
-    public addItemSearch: string | undefined;
-    public filteredItems: ItemTemplate[] = [];
-
     @ViewChild('autocompleteSearchItemTemplate', {static: false})
     public autocompleteSearchItemTemplate: AutocompleteSearchItemTemplateComponent;
 
-    public itemAddCustomName: string | undefined;
-    public itemAddCustomDescription: string | undefined;
-    public selectedAddItem: ItemTemplate | undefined;
-    public itemAddQuantity: number | undefined;
-
-
     constructor(
-        private _itemService: ItemService
-        , private _overlay: Overlay
-        , public _itemActionService: ItemActionService) {
+        private _itemService: ItemService,
+        private _overlay: Overlay,
+        private dialog: MatDialog,
+        public _itemActionService: ItemActionService,
+    ) {
     }
 
     @HostListener('window:scroll') onScroll(): boolean {
@@ -78,76 +66,28 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         this.iconMode = !this.iconMode;
     }
 
-    selectAddItem(item: ItemTemplate) {
-        this.selectedAddItem = item;
-        this.itemAddCustomName = item.name;
-        if (item.data.quantifiable) {
-            this.itemAddQuantity = 1;
-        } else {
-            this.itemAddQuantity = undefined;
-        }
-        return false;
-    }
 
     openAddItemModal() {
-        this.addItemSearch = undefined;
-        this.filteredItems = [];
+        const dialogRef = this.dialog.open(AddItemDialogComponent, {minWidth: '100vw', height: '100vh'});
 
-        let config = new OverlayConfig();
-
-        config.positionStrategy = this._overlay.position()
-            .global()
-            .centerHorizontally()
-            .top('32px');
-        config.hasBackdrop = true;
-
-        let overlayRef = this._overlay.create(config);
-        overlayRef.attach(this.addItemDialog);
-        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
-        this.addItemOverlayRef = overlayRef;
-        setTimeout(() => {
-            this.autocompleteSearchItemTemplate.focus();
-        }, 0);
-    }
-
-    closeAddItemDialog() {
-        if (!this.addItemOverlayRef) {
-            return;
-        }
-        this.addItemOverlayRef.detach();
-        this.addItemOverlayRef = undefined;
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this._itemService.addItemTo('character', this.character.id
+                , result.itemTemplateId
+                , result.itemData)
+                .subscribe(
+                    item => {
+                        this.character.onAddItem(item);
+                        this.selectedItem = item;
+                    }
+                );
+        })
     }
 
     trackById(index, element) {
         return element.id;
-    }
-
-    addItem() {
-        if (!this.selectedAddItem) {
-            return;
-        }
-        if (!this.itemAddCustomName) {
-            return;
-        }
-        let itemData = new ItemData();
-        itemData.name = this.itemAddCustomName;
-        itemData.description = this.itemAddCustomDescription;
-        itemData.quantity = this.itemAddQuantity;
-        this._itemService.addItemTo('character', this.character.id
-            , this.selectedAddItem.id
-            , itemData)
-            .subscribe(
-                item => {
-                    this.character.onAddItem(item);
-                    this.selectedItem = item;
-                    this.addItemSearch = '';
-                    this.selectedAddItem = undefined;
-                    this.itemAddCustomName = undefined;
-                    this.itemAddCustomDescription = undefined;
-                    this.itemAddQuantity = undefined;
-                }
-            );
-        this.closeAddItemDialog();
     }
 
     deselectItem(): void {
@@ -168,10 +108,8 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         if (removeDiacritics(item.data.name).toLowerCase().indexOf(cleanFilter) > -1) {
             return true;
         }
-        if (removeDiacritics(item.template.name).toLowerCase().indexOf(cleanFilter) > -1) {
-            return true;
-        }
-        return false;
+
+        return removeDiacritics(item.template.name).toLowerCase().indexOf(cleanFilter) > -1;
     }
 
     sortInventory(type?: string) {
@@ -202,16 +140,14 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 }
             );
 
-        }
-        else {
+        } else {
             if (this.sortType !== 'asc') {
                 this.sortType = 'asc';
                 this.character.items.sort((a, b) => {
                         return a.data.name.localeCompare(b.data.name);
                     }
                 );
-            }
-            else {
+            } else {
                 this.sortType = 'desc';
                 this.character.items.sort((a, b) => {
                         return 2 - a.data.name.localeCompare(b.data.name);
@@ -223,7 +159,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this._itemActionService.registerAction('equip').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('equip').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             let level = 1;
@@ -234,13 +170,13 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 this.character.onEquipItem.bind(this.character)
             );
         });
-        this._itemActionService.registerAction('unequip').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('unequip').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             this._itemService.equipItem(item.id, 0).subscribe(
                 this.character.onEquipItem.bind(this.character)
             );
         });
-        this._itemActionService.registerAction('delete').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('delete').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             this._itemService.deleteItem(item.id).subscribe(
                 () => {
@@ -251,7 +187,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 }
             );
         });
-        this._itemActionService.registerAction('update_quantity').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('update_quantity').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item as Item;
             let itemData = {
@@ -267,7 +203,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 }
             );
         });
-        this._itemActionService.registerAction('read_skill_book').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('read_skill_book').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             this._itemService.updateItem(item.id, {...item.data, readCount: (item.data.readCount || 0) + 1}).subscribe(
                 res => {
@@ -275,7 +211,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 }
             );
         });
-        this._itemActionService.registerAction('identify').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('identify').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             let itemData = {...item.data, name: item.template.name};
             delete itemData.notIdentified;
@@ -283,7 +219,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 this.character.onUpdateItem(data)
             );
         });
-        this._itemActionService.registerAction('ignoreRestrictions').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('ignoreRestrictions').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             item.data = {
                 ...item.data,
@@ -293,7 +229,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 this.character.onUpdateItem.bind(this.character)
             );
         });
-        this._itemActionService.registerAction('use_charge').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('use_charge').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             if (item.data.charge == null) {
                 item.data.charge = item.template.data.charge;
@@ -305,7 +241,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 this.character.onUpdateItem.bind(this.character)
             );
         });
-        this._itemActionService.registerAction('move_to_container').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('move_to_container').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             this._itemService.moveToContainer(item.id, eventData.container).subscribe(
@@ -313,7 +249,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             );
         });
 
-        this._itemActionService.registerAction('edit_item_name').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('edit_item_name').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             item.data = {
@@ -326,7 +262,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             );
         });
 
-        this._itemActionService.registerAction('give').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('give').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             this._itemService.giveItem(item.id, eventData.characterId, eventData.quantity).subscribe(
@@ -336,15 +272,14 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                             this.selectedItem = undefined;
                         }
                         item.data.quantity = result.remainingQuantity;
-                    }
-                    else {
+                    } else {
                         this.character.onDeleteItem(item.id);
                     }
                 }
             );
         });
 
-        this._itemActionService.registerAction('change_icon').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('change_icon').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             item.data = {
@@ -356,14 +291,14 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             );
         });
 
-        this._itemActionService.registerAction('update_modifiers').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('update_modifiers').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             this._itemService.updateItemModifiers(item.id, item.modifiers).subscribe(
                 this.character.onUpdateModifiers.bind(this.character)
             );
         });
 
-        this._itemActionService.registerAction('update_data').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('update_data').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             this._itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)

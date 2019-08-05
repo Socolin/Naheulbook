@@ -6,6 +6,7 @@ export * from './swipe.service';
 
 export * from './character.resolver';
 
+export * from './add-item-dialog.component';
 export * from './bag-item-view.component';
 export * from './character-color-selector.component';
 export * from './character-history.component';
