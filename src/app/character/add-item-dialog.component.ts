@@ -1,10 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {ItemCategory, ItemTemplate, ItemTemplateService} from '../item-template';
+import {Component, ViewChild} from '@angular/core';
+import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {ItemData} from '../item';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef, MatStep} from '@angular/material';
 import {forkJoin} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {AutocompleteValue} from '../shared';
 import {IconDescription} from '../shared/icon.model';
 
 export interface AddItemDialogResult {
@@ -18,6 +16,9 @@ export interface AddItemDialogResult {
     styleUrls: ['./add-item-dialog.component.scss']
 })
 export class AddItemDialogComponent {
+    @ViewChild('searchStep', {static: true})
+    public searchStep: MatStep;
+
     public selectedItemTemplate: ItemTemplate | undefined;
     public itemData?: ItemData;
     public filteredItemTemplates: {
@@ -73,6 +74,7 @@ export class AddItemDialogComponent {
         } else {
             delete this.itemData.quantity;
         }
+        this.searchStep.completed = true;
     }
 
     addItem() {

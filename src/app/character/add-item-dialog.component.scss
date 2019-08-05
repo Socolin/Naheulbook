@@ -59,6 +59,11 @@
                 width: 100%;
             }
         }
+
+        .add-button {
+            display: grid;
+            justify-content: right;
+        }
     }
 
     mat-toolbar {
