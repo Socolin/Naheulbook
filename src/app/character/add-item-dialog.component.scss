@@ -1,8 +1,8 @@
 :host {
     margin: -24px;
     display: grid;
+    padding-top: 56px;
     grid-template-columns: 1fr;
-
 
     .content {
         overflow-y: auto;
@@ -22,6 +22,7 @@
         .filter-result {
             padding: 8px 0;
             display: grid;
+            width: 100%;
             grid-template-columns: 32px 1fr;
             grid-template-areas: "icon name" "icon category";
             grid-template-rows: auto;
@@ -67,6 +68,9 @@
     }
 
     mat-toolbar {
+        position: fixed;
+        z-index: 1000;
+        top: 0;
         display: grid;
         grid-template-columns: auto minmax(100px, 1fr) auto auto;
         grid-gap: 16px;
