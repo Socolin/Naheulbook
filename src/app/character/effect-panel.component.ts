@@ -1,10 +1,11 @@
 import {Component, Input, ViewChild} from '@angular/core';
 
 import {ActiveStatsModifier, LapCountDecrement} from '../shared';
-import {AddEffectModalComponent} from '../effect';
+import {AddEffectDialogComponent} from '../effect';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
+import {MatDialog} from '@angular/material';
 
 @Component({
     selector: 'effect-panel',
@@ -16,45 +17,30 @@ export class EffectPanelComponent {
 
     public selectedModifier: ActiveStatsModifier | undefined;
 
-    // Add effect dialog
-    @ViewChild('addEffectModal', {static: true})
-    public addEffectModal: AddEffectModalComponent;
-
-    constructor(private _characterService: CharacterService) {
+    constructor(
+        private _characterService: CharacterService,
+        private dialog: MatDialog,
+    ) {
     }
 
-    // Called by callback from active-effect-editor
-    addEffect(newEffect: any) {
-        let effect = newEffect.effect;
-        let data = newEffect.data;
-
-        this.addEffectModal.close();
-
-        let modifier = ActiveStatsModifier.fromEffect(effect, data);
-        if (modifier.durationType === 'lap') {
-            modifier.lapCountDecrement = new LapCountDecrement();
-            modifier.lapCountDecrement.fighterId = this.character.id;
-            modifier.lapCountDecrement.fighterIsMonster = false;
-            modifier.lapCountDecrement.when = 'BEFORE';
-        }
-
-        this._characterService.addModifier(this.character.id, modifier).subscribe(
-            (activeModifier: ActiveStatsModifier) => {
-                this.character.onAddModifier(activeModifier);
+    openAddEffectDialog() {
+        const dialogRef = this.dialog.open(AddEffectDialogComponent, {minWidth: '100vw', height: '100vh'});
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
             }
-        );
-    }
 
-    addCustomModifier(modifier: ActiveStatsModifier) {
-        if (modifier.durationType === 'lap') {
-            modifier.lapCountDecrement = new LapCountDecrement();
-            modifier.lapCountDecrement.fighterId = this.character.id;
-            modifier.lapCountDecrement.fighterIsMonster = false;
-            modifier.lapCountDecrement.when = 'BEFORE';
-        }
-        this._characterService.addModifier(this.character.id, modifier).subscribe(
-            this.character.onAddModifier.bind(this.character)
-        );
+            if (result.durationType === 'lap') {
+                result.lapCountDecrement = new LapCountDecrement();
+                result.lapCountDecrement.fighterId = this.character.id;
+                result.lapCountDecrement.fighterIsMonster = false;
+                result.lapCountDecrement.when = 'BEFORE';
+            }
+
+            this._characterService.addModifier(this.character.id, result).subscribe(
+                this.character.onAddModifier.bind(this.character)
+            );
+        });
     }
 
     removeModifier(modifier: ActiveStatsModifier) {

@@ -25,7 +25,7 @@ import {WebSocketService} from '../websocket';
 import {GroupActionService} from './group-action.service';
 
 import {Character, CharacterSearchResponse, CharacterService} from '../character';
-import {Effect, AddEffectModalComponent} from '../effect';
+import {Effect, AddEffectDialogComponent} from '../effect';
 
 import {User, LoginService} from '../user';
 import {Monster, MonsterService} from '../monster';
@@ -84,9 +84,6 @@ export class GroupComponent implements OnInit, OnDestroy {
     private routeSub: Subscription;
     private routeFragmentSub: Subscription;
     private groupNotificationSub: Subscription;
-
-    @ViewChild('addEffectModal', {static: true})
-    public addEffectModal: AddEffectModalComponent;
 
     @ViewChild('createItemModal', {static: true})
     public createItemModal: CreateItemComponent;
@@ -450,6 +447,17 @@ export class GroupComponent implements OnInit, OnDestroy {
         this.autocompleteLocationsCallback = this.updateLocationListAutocomplete.bind(this);
     }
 
+    openAddEffectDialog(effect?: Effect) {
+        const dialogRef = this.dialog.open(AddEffectDialogComponent, {minWidth: '100vw', height: '100vh', data: {effect}});
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
+
+            this.selectCustomModifier(result);
+        });
+    }
+
     selectCustomModifier(modifier: ActiveStatsModifier) {
         const dialogRef = this.dialog.open<FighterSelectorComponent, FighterSelectorDialogData, Fighter[]>(FighterSelectorComponent, {
             data: {
@@ -516,7 +524,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         switch (event.action) {
             case 'applyEffect': {
                 let effect: Effect = event.data;
-                this.addEffectModal.openEffect(effect);
+                this.openAddEffectDialog(effect);
                 break;
             }
             case 'addItem': {

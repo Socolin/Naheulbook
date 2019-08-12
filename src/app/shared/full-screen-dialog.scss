@@ -1,0 +1,35 @@
+:host {
+    margin: -24px;
+    display: grid;
+    padding-top: 64px;
+    grid-template-columns: 1fr;
+
+    .content {
+        padding: 0 24px;
+        overflow-y: auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-content: center;
+        justify-items: center;
+
+        > * {
+            width: 100%;
+            max-width: 900px;
+        }
+    }
+
+    mat-toolbar {
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        display: grid;
+        grid-template-columns: auto minmax(100px, 1fr) auto;
+        grid-gap: 16px;
+
+        span {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
+}

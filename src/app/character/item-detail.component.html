@@ -6,16 +6,11 @@
                 <span *ngIf="item.template.data.quantifiable || item.data.quantity">
                     {{item.data.quantity}}
                 </span>
-                <span style="vertical-align: top;" *ngIf="!editing">
+                <span style="vertical-align: top;">
                     {{item.data.name}}
                 </span>
-                <mat-form-field *ngIf="editing">
-                    <input matInput
-                           placeholder="Nom"
-                           [(ngModel)]="itemEditName">
-                </mat-form-field>
             </mat-card-title>
-            <mat-card-subtitle *ngIf="!editing">
+            <mat-card-subtitle>
                 <div *ngIf="itemCategoriesById">
                     <span class="label label-default">{{itemCategoriesById[item.template.categoryId].section.name}}</span> -
                     <span>{{itemCategoriesById[item.template.categoryId].name}}</span>
@@ -77,12 +72,7 @@
                 </ng-template>
             </div>
             <div>
-                <span *ngIf="!editing">{{item.data.description}}</span>
-                <mat-form-field *ngIf="editing">
-                    <input matInput
-                           placeholder="Description"
-                           [(ngModel)]="itemEditDescription">
-                </mat-form-field>
+                <span>{{item.data.description}}</span>
             </div>
         </div>
         <div *ngIf="!item.data.notIdentified || gmView">
@@ -92,12 +82,7 @@
 
             <div *ngIf="item.template.data.description">{{item.template.data.description}}</div>
             <div>
-                <span *ngIf="!editing">{{item.data.description}}</span>
-                <mat-form-field *ngIf="editing">
-                    <input matInput
-                           placeholder="Description"
-                           [(ngModel)]="itemEditDescription">
-                </mat-form-field>
+                <span>{{item.data.description}}</span>
             </div>
 
             <div>
@@ -501,30 +486,6 @@
             </button>
             <button mat-button color="primary" (click)="closeStoreItemInContainerDialog()">
                 VALIDER
-            </button>
-        </mat-card-actions>
-    </mat-card>
-</ng-template>
-
-<ng-template #addModifierDialog="cdkPortal" cdk-portal>
-    <mat-card class="add-modifier-dialog">
-        <mat-card-title>
-            Ajouter un modificateur
-        </mat-card-title>
-        <mat-card-content>
-            <stats-modifier-editor [modifier]="newItemModifier">
-            </stats-modifier-editor>
-        </mat-card-content>
-        <mat-card-actions align="end">
-            <button mat-button
-                    color="primary"
-                    (click)="closeModifierDialog(); $event.stopPropagation()">
-                ANNULER
-            </button>
-            <button mat-button
-                    color="primary"
-                    (click)="addModifier(); $event.stopPropagation()">
-                AJOUTER
             </button>
         </mat-card-actions>
     </mat-card>

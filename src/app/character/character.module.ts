@@ -33,6 +33,8 @@ import {
 
 import {CharacterService} from './character.service';
 import {CharacterResolve} from './character.resolver';
+import {EditItemDialogComponent} from './edit-item-dialog.component';
+import { AddItemModifierDialogComponent } from './add-item-modifier-dialog.component';
 
 @NgModule({
     imports: [
@@ -66,9 +68,13 @@ import {CharacterResolve} from './character.resolver';
         SpecialitySelectorComponent,
         SwipeableItemDetailComponent,
         AddItemDialogComponent,
+        EditItemDialogComponent,
+        AddItemModifierDialogComponent,
     ],
     entryComponents: [
         AddItemDialogComponent,
+        EditItemDialogComponent,
+        AddItemModifierDialogComponent,
     ],
     exports: [
         CharacterColorSelectorComponent,

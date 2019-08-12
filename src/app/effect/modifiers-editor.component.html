@@ -16,7 +16,7 @@
             </button>
         </span>
 
-        <button mat-icon-button (click)="removeModifier(i)">
+        <button mat-icon-button (click)="removeModifier(i)" class="delete-button">
             <mat-icon>delete</mat-icon>
         </button>
     </div>
@@ -24,6 +24,10 @@
     <mat-divider *ngIf="!last"></mat-divider>
 </ng-template>
 
+
 <div class="actions">
-    <button mat-button (click)="openAddStatModifierDialog()">AJOUTER UN MODIFICATEUR</button>
+    <div class="mat-typography" *ngIf="modifiers.length === 0">
+        Aucune caractéristiques affectées
+    </div>
+    <button mat-icon-button class="add-button" (click)="openAddStatModifierDialog()"><mat-icon>add</mat-icon></button>
 </div>

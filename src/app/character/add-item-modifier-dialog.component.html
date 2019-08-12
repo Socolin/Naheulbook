@@ -1,0 +1,17 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>
+        Ajouter un modificateur
+    </span>
+    <button mat-button
+            (click)="valid()">
+        AJOUTER
+    </button>
+</mat-toolbar>
+
+<div class="content">
+    <stats-modifier-editor [modifier]="newItemModifier" [options]="{noDescription: true, noType: true}">
+    </stats-modifier-editor>
+</div>

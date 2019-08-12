@@ -1,0 +1,33 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>
+        Ajouter un effet
+    </span>
+    <button mat-button
+            *ngIf="addEffectTypeSelectedTab === 0"
+            (click)="activeEffectEditor.addEffect()">
+        AJOUTER
+    </button>
+    <button mat-button
+            *ngIf="addEffectTypeSelectedTab === 1"
+            (click)="addCustomModifier()">
+        AJOUTER
+    </button>
+</mat-toolbar>
+
+<div class="content">
+    <mat-tab-group (selectedIndexChange)="addEffectTypeSelectedTab = $event">
+        <mat-tab label="Prédéfini">
+            <active-effect-editor #activeEffectEditor
+                                  (onValidate)="addEffect($event)">
+            </active-effect-editor>
+        </mat-tab>
+
+        <mat-tab label="Nouveau">
+            <stats-modifier-editor [options]="{noType: true}" [modifier]="newStatsModifier">
+            </stats-modifier-editor>
+        </mat-tab>
+    </mat-tab-group>
+</div>

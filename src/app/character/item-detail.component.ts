@@ -23,6 +23,8 @@ import {Item} from '../item';
 import {ItemActionService} from './item-action.service';
 import {MatDialog} from '@angular/material';
 import {IconDescription} from '../shared/icon.model';
+import {EditItemDialogComponent, EditItemDialogData, EditItemDialogResult} from './edit-item-dialog.component';
+import {AddItemModifierDialogComponent} from './add-item-modifier-dialog.component';
 
 @Component({
     selector: 'item-detail',
@@ -42,21 +44,12 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public itemCategoriesById: {[categoryId: number]: ItemCategory};
     public modifiers: any[];
 
-    public itemEditName: string;
-    public itemEditDescription: string | undefined;
-    public editing: boolean;
-
     @ViewChild('giveItemDialog', {static: true})
     public giveItemDialog: Portal<any>;
     public giveItemOverlayRef: OverlayRef | undefined;
     public giveDestination: CharacterGiveDestination[] | undefined;
     public giveTarget: CharacterGiveDestination;
     public giveQuantity: number | undefined;
-
-    @ViewChild('addModifierDialog', {static: true})
-    public addModifierDialog: Portal<any>;
-    public addModifierOverlayRef: OverlayRef | undefined;
-    public newItemModifier: ActiveStatsModifier;
 
     @ViewChild('storeItemInContainerDialog', {static: true})
     public storeItemInContainerDialog: Portal<any>;
@@ -112,19 +105,18 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     editItem() {
-        this.editing = !this.editing;
-        if (this.editing) {
-            this.itemEditName = this.item.data.name;
-            this.itemEditDescription = this.item.data.description;
-        } else {
-            if (this.itemEditName !== this.item.data.name
-                || this.itemEditDescription !== this.item.data.description) {
-                this._itemActionService.onAction('edit_item_name', this.item, {
-                    name: this.itemEditName,
-                    description: this.itemEditDescription
-                });
+        const dialogRef = this.dialog.open<EditItemDialogComponent, EditItemDialogData, EditItemDialogResult>(EditItemDialogComponent, {
+            data: {item: this.item}
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
             }
-        }
+            this._itemActionService.onAction('edit_item_name', this.item, {
+                name: result.name,
+                description: result.description
+            });
+        });
     }
 
     /*
@@ -164,16 +156,22 @@ export class ItemDetailComponent implements OnChanges, OnInit {
      */
 
     openModifierDialog() {
-        this.newItemModifier = new ActiveStatsModifier();
-        this.addModifierOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addModifierDialog);
-    }
+        const dialogRef = this.dialog.open<AddItemModifierDialogComponent, any, ActiveStatsModifier>(AddItemModifierDialogComponent, {
+            minWidth: '100vw',
+            height: '100vh'
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
 
-    closeModifierDialog() {
-        if (!this.addModifierOverlayRef) {
-            return;
-        }
-        this.addModifierOverlayRef.detach();
-        this.addModifierOverlayRef = undefined;
+            if (this.item.modifiers === null) {
+                this.item.modifiers = [];
+            }
+            this.activeModifier(result);
+            this.item.modifiers.push(result);
+            this._itemActionService.onAction('update_modifiers', this.item);
+        });
     }
 
     activeModifier(modifier: ActiveStatsModifier) {
@@ -189,16 +187,6 @@ export class ItemDetailComponent implements OnChanges, OnInit {
                 modifier.currentLapCount = modifier.lapCount;
                 break;
         }
-    }
-
-    addModifier() {
-        if (this.item.modifiers === null) {
-            this.item.modifiers = [];
-        }
-        this.activeModifier(this.newItemModifier);
-        this.item.modifiers.push(this.newItemModifier);
-        this._itemActionService.onAction('update_modifiers', this.item);
-        this.closeModifierDialog();
     }
 
     /*

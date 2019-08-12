@@ -3,7 +3,7 @@ export * from './effect.model';
 export * from './effect.service';
 
 export * from './active-effect-editor.component';
-export * from './add-effect-modal.component';
+export * from './add-effect-dialog.component';
 export * from './add-stat-modifier-dialog.component';
 export * from './create-effect.component';
 export * from './edit-effect.component';

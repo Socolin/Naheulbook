@@ -52,4 +52,8 @@ export class DateModifierComponent {
         }
         this.closeSelector();
     }
+
+    focus() {
+        this.openSelector();
+    }
 }

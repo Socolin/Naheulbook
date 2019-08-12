@@ -1,7 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges, OnInit} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
-import {MatSlideToggleChange} from '@angular/material';
+import {MatDialog, MatSlideToggleChange} from '@angular/material';
 
 import {NotificationsService} from '../notifications';
 import {Character, CharacterService, ItemActionService} from '../character';
@@ -13,6 +13,7 @@ import {ItemTemplate} from '../item-template';
 import {Fighter, Group} from './group.model';
 import {GroupActionService} from './group-action.service';
 import {TargetJsonData} from './target.model';
+import {AddEffectDialogComponent} from '../effect';
 
 @Component({
     selector: 'fighter',
@@ -34,13 +35,16 @@ export class FighterComponent implements OnInit, OnChanges {
     public editMonsterDialog: Portal<any>;
     public editMonsterOverlayRef: OverlayRef | undefined;
 
-    constructor(private _actionService: GroupActionService
-        , private _characterService: CharacterService
-        , private _monsterService: MonsterService
-        , private _itemActionService: ItemActionService
-        , private _itemService: ItemService
-        , private _nhbkDialogService: NhbkDialogService
-        , private _notification: NotificationsService) {
+    constructor(
+        private _actionService: GroupActionService,
+        private _characterService: CharacterService,
+        private _monsterService: MonsterService,
+        private _itemActionService: ItemActionService,
+        private _itemService: ItemService,
+        private _nhbkDialogService: NhbkDialogService,
+        private _notification: NotificationsService,
+        private dialog: MatDialog,
+    ) {
     }
 
     addItemTo(fighter: Fighter) {
@@ -175,20 +179,28 @@ export class FighterComponent implements OnInit, OnChanges {
         return ItemTemplate.hasSlot(template, slot);
     }
 
-    addCustomModifier(modifier: ActiveStatsModifier) {
-        if (modifier.durationType === 'lap') {
-            let fighter = this.group.currentFighter;
-            if (!fighter) {
-                fighter = this.fighter;
+    openAddEffectDialog() {
+        const dialogRef = this.dialog.open(AddEffectDialogComponent, {minWidth: '100vw', height: '100vh'});
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
             }
-            modifier.lapCountDecrement = new LapCountDecrement();
-            modifier.lapCountDecrement.fighterId = fighter.id;
-            modifier.lapCountDecrement.fighterIsMonster = fighter.isMonster;
-            modifier.lapCountDecrement.when = 'BEFORE';
-        }
-        this._monsterService.addModifier(this.fighter.id, modifier).subscribe(
-            this.fighter.monster.onAddModifier.bind(this.fighter.monster)
-        );
+
+            if (result.durationType === 'lap') {
+                let fighter = this.group.currentFighter;
+                if (!fighter) {
+                    fighter = this.fighter;
+                }
+                result.lapCountDecrement = new LapCountDecrement();
+                result.lapCountDecrement.fighterId = fighter.id;
+                result.lapCountDecrement.fighterIsMonster = fighter.isMonster;
+                result.lapCountDecrement.when = 'BEFORE';
+            }
+
+            this._monsterService.addModifier(this.fighter.id, result).subscribe(
+                this.fighter.monster.onAddModifier.bind(this.fighter.monster)
+            );
+        });
     }
 
     selectModifier(modifier: ActiveStatsModifier) {

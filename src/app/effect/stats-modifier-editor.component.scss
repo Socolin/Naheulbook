@@ -1,13 +1,5 @@
-mat-card {
-    margin: 5px;
-}
-
-.basic-effect-infos {
-    mat-card-content {
-        display: flex;
-        flex-direction: column;
-        mat-form-field {
-            flex: 1 auto;
-        }
+:host {
+    mat-form-field {
+        width: 100%;
     }
 }

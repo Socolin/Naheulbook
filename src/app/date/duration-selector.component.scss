@@ -1,20 +1,17 @@
-@media (min-width: 700px) {
-    .duration-type-small {
-        display: none;
+:host {
+    display: grid;
+    grid-template-columns: minmax(120px, 1fr) minmax(0px, auto);
+    align-items: center;
+    grid-gap: 16px;
+
+    mat-form-field {
+        width: 100%;
     }
+
+    .lap-count-input,
+    .combat-count-input {
+        width: 80px;
+    }
+
 }
 
-@media (max-width: 699px) {
-    .duration-type-large {
-        display: none;
-    }
-}
-.duration-type-large {
-
-}
-.duration-type-small {
-    width: 100%
-}
-.duration-value {
-    padding: 8px 0;
-}

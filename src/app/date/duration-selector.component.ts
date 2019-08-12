@@ -1,9 +1,10 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 
 import {dateOffset2TimeDuration, timeDuration2DateOffset2} from './util';
 import {NhbkDateOffset} from './date.model';
 import {IDurable} from './durable.model';
 import {MatButtonToggleChange, MatSelectChange} from '@angular/material';
+import {DateModifierComponent} from './date-modifier.component';
 
 @Component({
     selector: 'duration-selector',
@@ -16,7 +17,16 @@ export class DurationSelectorComponent implements OnChanges {
 
     public dateOffset: NhbkDateOffset = new NhbkDateOffset();
 
-    updateDuration(event?: MatButtonToggleChange|MatSelectChange) {
+    @ViewChild('lapCountInput', {static: true})
+    lapCountInput: ElementRef;
+    @ViewChild('combatCountInput', {static: true})
+    combatCountInput: ElementRef;
+    @ViewChild('customDurationInput', {static: true})
+    customDurationInput: ElementRef;
+    @ViewChild('dateSelector', {static: true})
+    dateSelector: DateModifierComponent;
+
+    updateDuration(event?: MatButtonToggleChange | MatSelectChange) {
         if (event) {
             this.durable.durationType = event.value;
         }
@@ -73,6 +83,23 @@ export class DurationSelectorComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if ('durable' in changes) {
             this.updateDuration();
+        }
+    }
+
+    focusSelector() {
+        switch (this.durable.durationType) {
+            case 'custom':
+                this.customDurationInput.nativeElement.focus();
+                break;
+            case 'time':
+                this.dateSelector.focus();
+                break;
+            case 'combat':
+                this.combatCountInput.nativeElement.focus();
+                break;
+            case 'lap':
+                this.lapCountInput.nativeElement.focus();
+                break;
         }
     }
 }

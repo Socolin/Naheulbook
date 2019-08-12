@@ -2,6 +2,7 @@
     .stat-modifier {
         display: grid;
         grid-template-columns: 100px 1fr minmax(auto, 40px) 40px;
+        grid-template-areas: ". . . delete-button";
         grid-gap: 8px;
         align-items: center;
 
@@ -10,10 +11,19 @@
             display: grid;
             grid-gap: 8px;
         }
+        .delete-button {
+            grid-area: delete-button;
+        }
     }
 
     .actions {
-        display: flex;
-        flex-direction: row-reverse;
+        display: grid;
+        grid-template-columns: 1fr 40px;
+        grid-template-areas: ". add-button";
+        align-items: center;
+
+        .add-button {
+            grid-area: add-button;
+        }
     }
 }

@@ -248,7 +248,7 @@
                         </div>
                     </mat-card>
                 </ng-template>
-                <button mat-icon-button (click)="addEffectModal.open()">
+                <button mat-icon-button (click)="openAddEffectDialog()">
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
@@ -442,6 +442,3 @@
         </mat-card-content>
     </mat-card>
 </ng-template>
-
-<add-effect-modal #addEffectModal (createModifier)="addCustomModifier($event)">
-</add-effect-modal>

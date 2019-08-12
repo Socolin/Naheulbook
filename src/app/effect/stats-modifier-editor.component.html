@@ -1,36 +1,15 @@
-<div>
-    <mat-card class="basic-effect-infos">
-        <mat-card-content>
-            <mat-form-field>
-                <input matInput placeholder="Nom" [(ngModel)]="modifier.name" required>
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput placeholder="Type" [(ngModel)]="modifier.type">
-            </mat-form-field>
-            <mat-slide-toggle *ngIf="reusableToggle" color="primary" [(ngModel)]="modifier.reusable">
-                Ré-utilisable
-            </mat-slide-toggle>
-            <mat-form-field>
-                <input matInput placeholder="Description" [(ngModel)]="modifier.description">
-            </mat-form-field>
-        </mat-card-content>
-    </mat-card>
-
-    <mat-card>
-        <mat-card-subtitle>
-            Durée
-        </mat-card-subtitle>
-        <mat-card-content>
-            <duration-selector [durable]="modifier"></duration-selector>
-        </mat-card-content>
-    </mat-card>
-
-    <mat-card>
-        <mat-card-subtitle>
-            Modificateurs
-        </mat-card-subtitle>
-        <mat-card-content>
-            <modifiers-editor [(modifiers)]="modifier.values"></modifiers-editor>
-        </mat-card-content>
-    </mat-card>
-</div>
+<mat-form-field><input matInput placeholder="Nom" [(ngModel)]="modifier.name" required>
+</mat-form-field>
+<mat-form-field *ngIf="!options?.noType">
+    <input matInput placeholder="Type" [(ngModel)]="modifier.type">
+</mat-form-field>
+<mat-form-field *ngIf="!options?.noDescription">
+    <input matInput placeholder="Description" [(ngModel)]="modifier.description">
+</mat-form-field>
+<duration-selector [durable]="modifier"></duration-selector>
+<mat-checkbox *ngIf="reusableToggle" color="primary" [(ngModel)]="modifier.reusable">
+    Ré-utilisable
+</mat-checkbox>
+<mat-card-content>
+    <modifiers-editor [modifiers]="modifier.values"></modifiers-editor>
+</mat-card-content>
