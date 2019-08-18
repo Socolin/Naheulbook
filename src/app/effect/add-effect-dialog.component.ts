@@ -1,11 +1,11 @@
 import {Component, Inject, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {MatStep, MatStepper} from '@angular/material/stepper';
 
 import {ActiveStatsModifier} from '../shared';
 
 import {Effect} from './effect.model';
 import {EffectService} from './effect.service';
-import {MatStepper} from '@angular/material/stepper';
 
 export interface AddEffectDialogData {
     effect?: Effect
@@ -16,10 +16,12 @@ export interface AddEffectDialogData {
     styleUrls: ['./add-effect-dialog.component.scss', '../shared/full-screen-dialog.scss'],
 })
 export class AddEffectDialogComponent {
-    @ViewChild('stepper', {static: false})
+    @ViewChild('stepper', {static: true})
     private stepper: MatStepper;
+    @ViewChild('searchStep', {static: true})
+    private searchStep: MatStep;
 
-    public fromEffect = false;
+    public fromEffect?: boolean;
     public newStatsModifier: ActiveStatsModifier = new ActiveStatsModifier();
     public filteredEffects?: Effect[];
     public selectedStep = 0;
@@ -39,8 +41,9 @@ export class AddEffectDialogComponent {
     addNewModifier() {
         if (!this.newStatsModifier.name) {
             this.dialogRef.close(undefined);
+        } else {
+            this.dialogRef.close(this.newStatsModifier);
         }
-        this.dialogRef.close(this.newStatsModifier);
     }
 
     updateFilter(filter: string) {
@@ -50,11 +53,14 @@ export class AddEffectDialogComponent {
     selectEffect(effect: Effect) {
         this.newStatsModifier = ActiveStatsModifier.fromEffect(effect, {reusable: false});
         this.fromEffect = true;
+        this.searchStep.completed = true;
         this.stepper.next();
     }
 
     customize() {
         this.newStatsModifier = new ActiveStatsModifier();
         this.fromEffect = false;
+        this.searchStep.completed = true;
+        this.stepper.next();
     }
 }

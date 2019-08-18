@@ -6,6 +6,7 @@
         Ajouter un effet
     </span>
     <button mat-button
+            *ngIf="newStatsModifier?.name"
             (click)="addNewModifier()">
         AJOUTER
     </button>
@@ -13,7 +14,7 @@
 
 <div class="content">
     <mat-vertical-stepper linear="true" #stepper [selectedIndex]="selectedStep">
-        <mat-step [completed]="!!newStatsModifier.name">
+        <mat-step completed="false" #searchStep>
             <ng-template matStepLabel>Chercher un effet pré-existant</ng-template>
             <mat-form-field>
                 <input matInput
@@ -22,7 +23,7 @@
                        (keyup)="updateFilter(filter.value)">
             </mat-form-field>
             <mat-action-list>
-                <div mat-ripple *ngFor="let effect of filteredEffects" (click)="selectEffect(effect); stepper.next()">
+                <div mat-ripple *ngFor="let effect of filteredEffects" (click)="selectEffect(effect)">
                     <div class="filter-result">
                         <div class="name">{{effect.name}}</div>
                         <div class="category mat-caption">{{effect.category.type.name}} - {{effect.category.name}}</div>
@@ -30,7 +31,7 @@
                 </div>
             </mat-action-list>
             <div class="customize-button">
-                <button mat-button color=primary (click)="customize(); stepper.next()">
+                <button mat-button color=primary (click)="customize()">
                     EFFET PERSONNALISÉ
                 </button>
             </div>
