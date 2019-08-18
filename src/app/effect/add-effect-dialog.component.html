@@ -6,28 +6,40 @@
         Ajouter un effet
     </span>
     <button mat-button
-            *ngIf="addEffectTypeSelectedTab === 0"
-            (click)="activeEffectEditor.addEffect()">
-        AJOUTER
-    </button>
-    <button mat-button
-            *ngIf="addEffectTypeSelectedTab === 1"
-            (click)="addCustomModifier()">
+            (click)="addNewModifier()">
         AJOUTER
     </button>
 </mat-toolbar>
 
 <div class="content">
-    <mat-tab-group (selectedIndexChange)="addEffectTypeSelectedTab = $event">
-        <mat-tab label="Prédéfini">
-            <active-effect-editor #activeEffectEditor
-                                  (onValidate)="addEffect($event)">
-            </active-effect-editor>
-        </mat-tab>
-
-        <mat-tab label="Nouveau">
-            <stats-modifier-editor [options]="{noType: true}" [modifier]="newStatsModifier">
+    <mat-vertical-stepper linear="true" #stepper [selectedIndex]="selectedStep">
+        <mat-step [completed]="!!newStatsModifier.name">
+            <ng-template matStepLabel>Chercher un effet pré-existant</ng-template>
+            <mat-form-field>
+                <input matInput
+                       placeholder="Effet"
+                       #filter
+                       (keyup)="updateFilter(filter.value)">
+            </mat-form-field>
+            <mat-action-list>
+                <div mat-ripple *ngFor="let effect of filteredEffects" (click)="selectEffect(effect); stepper.next()">
+                    <div class="filter-result">
+                        <div class="name">{{effect.name}}</div>
+                        <div class="category mat-caption">{{effect.category.type.name}} - {{effect.category.name}}</div>
+                    </div>
+                </div>
+            </mat-action-list>
+            <div class="customize-button">
+                <button mat-button color=primary (click)="customize(); stepper.next()">
+                    EFFET PERSONNALISÉ
+                </button>
+            </div>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Personnalisation</ng-template>
+            <stats-modifier-editor [options]="{noType: !fromEffect}" [modifier]="newStatsModifier">
             </stats-modifier-editor>
-        </mat-tab>
-    </mat-tab-group>
+        </mat-step>
+    </mat-vertical-stepper>
 </div>
+

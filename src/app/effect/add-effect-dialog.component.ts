@@ -1,10 +1,11 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 import {ActiveStatsModifier} from '../shared';
 
 import {Effect} from './effect.model';
-import {ActiveEffectEditorComponent} from './active-effect-editor.component';
+import {EffectService} from './effect.service';
+import {MatStepper} from '@angular/material/stepper';
 
 export interface AddEffectDialogData {
     effect?: Effect
@@ -14,34 +15,46 @@ export interface AddEffectDialogData {
     templateUrl: './add-effect-dialog.component.html',
     styleUrls: ['./add-effect-dialog.component.scss', '../shared/full-screen-dialog.scss'],
 })
-export class AddEffectDialogComponent implements OnInit {
-    @ViewChild('activeEffectEditor', {static: true})
-    public activeEffectEditor: ActiveEffectEditorComponent;
-    public addEffectTypeSelectedTab = 0;
+export class AddEffectDialogComponent {
+    @ViewChild('stepper', {static: false})
+    private stepper: MatStepper;
 
+    public fromEffect = false;
     public newStatsModifier: ActiveStatsModifier = new ActiveStatsModifier();
+    public filteredEffects?: Effect[];
+    public selectedStep = 0;
 
     constructor(
+        private effectService: EffectService,
         public dialogRef: MatDialogRef<AddEffectDialogComponent, ActiveStatsModifier>,
-        @Inject(MAT_DIALOG_DATA) public data: AddEffectDialogData
+        @Inject(MAT_DIALOG_DATA) public data?: AddEffectDialogData
     ) {
-        this.newStatsModifier = new ActiveStatsModifier();
+        if (data && data.effect) {
+            this.newStatsModifier = ActiveStatsModifier.fromEffect(data.effect, {reusable: false});
+            this.fromEffect = true;
+            this.selectedStep = 1;
+        }
     }
 
-    addEffect(newEffect: { effect: Effect, data: any }) {
-        let effect = newEffect.effect;
-        let data = newEffect.data;
-
-        this.dialogRef.close(ActiveStatsModifier.fromEffect(effect, data));
-    }
-
-    addCustomModifier() {
+    addNewModifier() {
+        if (!this.newStatsModifier.name) {
+            this.dialogRef.close(undefined);
+        }
         this.dialogRef.close(this.newStatsModifier);
     }
 
-    ngOnInit() {
-        if (this.data && this.data.effect) {
-            this.activeEffectEditor.selectEffect(this.data.effect);
-        }
+    updateFilter(filter: string) {
+        this.effectService.searchEffect(filter).subscribe(effects => this.filteredEffects = effects);
+    }
+
+    selectEffect(effect: Effect) {
+        this.newStatsModifier = ActiveStatsModifier.fromEffect(effect, {reusable: false});
+        this.fromEffect = true;
+        this.stepper.next();
+    }
+
+    customize() {
+        this.newStatsModifier = new ActiveStatsModifier();
+        this.fromEffect = false;
     }
 }
