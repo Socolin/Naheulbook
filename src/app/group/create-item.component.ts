@@ -26,7 +26,7 @@ export class CreateItemComponent implements OnChanges {
     public character: Character | undefined;
     public loot: Loot | undefined;
     public monster: Monster | undefined;
-    public mode = 'normal';
+    public mode: 'normal' | 'gem' = 'normal';
     public newItem: Item = new Item();
     public gemOption: any = {};
 
@@ -40,8 +40,7 @@ export class CreateItemComponent implements OnChanges {
     onSelectTab(index: number) {
         if (index === 0) {
             this.setMode('normal');
-        }
-        else if (index === 1) {
+        } else if (index === 1) {
             this.setMode('gem');
         }
     }
@@ -101,7 +100,9 @@ export class CreateItemComponent implements OnChanges {
         if (!keepOpen) {
             this.closeDialog();
         } else {
-            this.randomGem();
+            if (this.mode === 'gem') {
+                this.randomGem();
+            }
         }
     }
 
@@ -119,6 +120,8 @@ export class CreateItemComponent implements OnChanges {
         }
         if (itemTemplate.data.icon) {
             this.newItem.data.icon = JSON.parse(JSON.stringify(itemTemplate.data.icon));
+        } else {
+            this.newItem.data.icon = undefined;
         }
         this.newItem.data.description = itemTemplate.data.description;
         if (itemTemplate.data.quantifiable) {
@@ -130,8 +133,7 @@ export class CreateItemComponent implements OnChanges {
         this.newItem.data.notIdentified = true;
         if (this.mode === 'gem') {
             this.newItem.data.name = 'Pierre précieuse';
-        }
-        else {
+        } else {
             if (this.newItem.template && this.newItem.template.data && this.newItem.template.data.notIdentifiedName) {
                 this.newItem.data.name = this.newItem.template.data.notIdentifiedName;
             }
@@ -148,8 +150,7 @@ export class CreateItemComponent implements OnChanges {
     updateItemIdentified() {
         if (this.newItem.data.notIdentified) {
             this.setItemNotIdentified();
-        }
-        else {
+        } else {
             this.setItemIdentified();
         }
     }
