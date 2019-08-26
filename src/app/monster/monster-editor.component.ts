@@ -213,9 +213,10 @@ export class MonsterEditorComponent implements OnInit, OnChanges {
             });
     }
 
-    selectCategory(category: MonsterTemplateCategory) {
+    selectCategory(category?: MonsterTemplateCategory) {
         if (category === undefined) {
             this.openCreateCategoryDialog();
+            return;
         }
         this.monster.category = category;
         this.monster.categoryId = category.id;
