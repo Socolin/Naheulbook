@@ -129,7 +129,7 @@ export class MonsterTemplateService {
     editMonster(monster: MonsterTemplate): Observable<MonsterTemplate> {
         let category = monster.category;
         delete monster.category;
-        let observable = this.httpClient.put<MonsterTemplate>(`/api/v2/monsterTemplates/${monster.id}`, monster);
+        let observable = this.httpClient.put<MonsterTemplate>(`/api/v2/monsterTemplates/${monster.id}`, {...monster});
         monster.category = category;
         return observable;
     }
