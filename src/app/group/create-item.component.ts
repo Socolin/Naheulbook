@@ -155,7 +155,7 @@ export class CreateItemComponent implements OnChanges {
         }
     }
 
-    setMode(m: string) {
+    setMode(m: 'gem' | 'normal') {
         let oldItem = this.newItem;
         this.newItem = new Item();
         this.newItem.data.notIdentified = oldItem.data.notIdentified;
