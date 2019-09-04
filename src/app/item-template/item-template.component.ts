@@ -33,6 +33,7 @@ export class ItemTemplateComponent {
             {
                 minWidth: '100vw',
                 height: '100vh',
+                autoFocus: false,
                 data: {itemTemplateId: itemTemplate.id}
             }
         );

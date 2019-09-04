@@ -12,7 +12,7 @@ export interface EditItemTemplateDialogData {
 
 @Component({
     templateUrl: './edit-item-template-dialog.component.html',
-    styleUrls: ['./edit-item-template-dialog.component.scss'],
+    styleUrls: ['./edit-item-template-dialog.component.scss', '../shared/full-screen-dialog.scss'],
 })
 export class EditItemTemplateDialogComponent implements OnInit {
     public item: ItemTemplate;

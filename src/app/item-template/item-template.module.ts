@@ -10,6 +10,7 @@ import {DateModule} from '../date/date.module';
 import {EffectModule} from '../effect/effect.module';
 
 import {
+    AddItemTemplateEditorModuleDialogComponent,
     AutocompleteSearchItemTemplateComponent,
     CreateItemTemplateDialogComponent,
     EditItemTemplateDialogComponent,
@@ -41,10 +42,12 @@ import {
         ItemTemplateEditorComponent,
         ItemTemplateEditorModuleComponent,
         AutocompleteSearchItemTemplateComponent,
+        AddItemTemplateEditorModuleDialogComponent,
     ],
     entryComponents: [
         CreateItemTemplateDialogComponent,
         EditItemTemplateDialogComponent,
+        AddItemTemplateEditorModuleDialogComponent,
     ],
     exports: [
         ItemListComponent,

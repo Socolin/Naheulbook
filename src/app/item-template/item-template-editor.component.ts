@@ -1,16 +1,13 @@
-
-import {forkJoin, of as observableOf, Observable} from 'rxjs';
-import {
-    Component, Input, OnInit, OnChanges, SimpleChanges, HostListener, ViewChild
-} from '@angular/core';
-import {OverlayRef} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import {forkJoin, Observable, of as observableOf} from 'rxjs';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 
 import {isNullOrUndefined} from 'util';
 import {
     AutocompleteInputComponent,
     AutocompleteValue,
-    God, IconSelectorComponent, IconSelectorComponentDialogData,
+    God,
+    IconSelectorComponent,
+    IconSelectorComponentDialogData,
     MiscService,
     NhbkDialogService,
     removeDiacritics,
@@ -24,6 +21,8 @@ import {ItemSection, ItemSlot, ItemTemplate, ItemTemplateGunData, ItemType} from
 import {ItemTemplateService} from './item-template.service'
 import {IconDescription} from '../shared/icon.model';
 import {MatDialog} from '@angular/material';
+import {itemTemplateModulesDefinitions} from './item-template-modules-definitions';
+import {AddItemTemplateEditorModuleDialogComponent} from './add-item-template-editor-module-dialog.component';
 
 @Component({
     selector: 'item-template-editor',
@@ -54,43 +53,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     @ViewChild('autocompleteModuleModalTextField', {static: false})
     autocompleteModuleModalTextField: AutocompleteInputComponent;
 
-    @ViewChild('addModuleDialog', {static: true})
-    public addModuleDialog: Portal<any>;
-    public addModuleOverlayRef?: OverlayRef;
-
-    private modulesDef: any[] = [
-        {name: 'bourrin',      displayName: 'Arme de bourrin'},
-        {name: 'charge',       displayName: 'Charges/Utilisations'},
-        {name: 'collect',      displayName: 'Possibilités de récolte'},
-        {name: 'container',    displayName: 'Conteneur'},
-        {name: 'currency',     displayName: 'Monnaie'},
-        {name: 'damage',       displayName: 'Dégât'},
-        {name: 'diceDrop',     displayName: 'Dé'},
-        {name: 'enchantment',  displayName: 'Enchantement'},
-        {name: 'gem',          displayName: 'Gemme'},
-        {name: 'god',          displayName: 'Dieu'},
-        {name: 'gun',          displayName: 'Arme à poudre'},
-        {name: 'itemTypes',    displayName: 'Type d\'objet'},
-        {name: 'level',        displayName: 'Niveau requis'},
-        {name: 'lifetime',     displayName: 'Temps de conservation'},
-        {name: 'modifiers',    displayName: 'Modificateurs'},
-        {name: 'origin',       displayName: 'Origine'},
-        {name: 'prereq',       displayName: 'Prérequis'},
-        {name: 'protection',   displayName: 'Protection'},
-        {name: 'quantifiable', displayName: 'Quantifiable'},
-        {name: 'relic',        displayName: 'Relique'},
-        {name: 'rarity',       displayName: 'Indice de rareté'},
-        {name: 'rupture',      displayName: 'Rupture'},
-        {name: 'sex',          displayName: 'Sexe'},
-        {name: 'skill',        displayName: 'Compétences'},
-        {name: 'skillBook',    displayName: 'Livre de compétences'},
-        {name: 'slots',        displayName: 'Equipement'},
-        {name: 'space',        displayName: 'Encombrement'},
-        {name: 'throwable',    displayName: 'Prévue pour le jet'},
-        {name: 'weight',       displayName: 'Poids'}
-    ];
-
-    constructor(private _itemTemplateservice: ItemTemplateService
+    constructor(private _itemTemplateService: ItemTemplateService
         , private _originService: OriginService
         , private _nhbkDialogService: NhbkDialogService
         , private _jobService: JobService
@@ -108,18 +71,6 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         };
     }
 
-    @HostListener('window:keydown', ['$event'])
-    keyboardInput(event: any) {
-        if (event.target.tagName === 'BODY') {
-            if (event.code === 'KeyT') {
-                this.openAddModuleDialog();
-            }
-        }
-        if (event.code === 'Escape') {
-            this.closeAddModuleDialog();
-        }
-    }
-
     openSelectIconDialog() {
         const dialogRef = this.dialog.open<IconSelectorComponent, IconSelectorComponentDialogData, IconDescription>(IconSelectorComponent, {
             data: {icon: this.itemTemplate.data.icon}
@@ -134,20 +85,14 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     }
 
     openAddModuleDialog() {
-        if (this.addModuleOverlayRef == null) {
-            this.addModuleOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addModuleDialog, true);
-            this.addModuleOverlayRef.backdropClick().subscribe(() => this.closeAddModuleDialog());
-            setTimeout(() => {
-                this.autocompleteModuleModalTextField.focus();
-            }, 0);
-        }
-    }
+        const dialogRef = this.dialog.open(AddItemTemplateEditorModuleDialogComponent, {data: {selectedModules: this.modules}});
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
 
-    closeAddModuleDialog() {
-        if (this.addModuleOverlayRef) {
-            this.addModuleOverlayRef.detach();
-            this.addModuleOverlayRef = undefined;
-        }
+            this.addModule(result);
+        })
     }
 
     updateAutocompleteModule(filter: string) {
@@ -155,7 +100,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             return observableOf([]);
         }
         filter = removeDiacritics(filter).toLowerCase();
-        let filtered = this.modulesDef
+        let filtered = itemTemplateModulesDefinitions
             .filter(m => this.modules.indexOf(m.name) === -1)
             .filter(m => (m.name.indexOf(filter) !== -1 || removeDiacritics(m.displayName.toLowerCase()).indexOf(filter) !== -1))
             .map(m => new AutocompleteValue(m, m.displayName));
@@ -205,13 +150,10 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
     }
 
-    addModule(module: any) {
-        if (this.modules.indexOf(module.name) !== -1) {
+    addModule(moduleName: string) {
+        if (this.modules.indexOf(moduleName) !== -1) {
             return;
         }
-
-        let moduleName = module.name;
-        this.closeAddModuleDialog();
 
         switch (moduleName) {
             case 'bourrin':
@@ -520,15 +462,15 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             this.determineModulesFromItemTemplate();
         }
         forkJoin([
-            this._itemTemplateservice.getItemTypes(),
+            this._itemTemplateService.getItemTypes(),
             this._miscService.getGods(),
             this._miscService.getGodsByTechName(),
         ]).subscribe(([itemTypes, gods, godsByTechName]) => {
             forkJoin([
-                this._itemTemplateservice.getSectionsList(),
+                this._itemTemplateService.getSectionsList(),
                 this._skillService.getSkills(),
                 this._skillService.getSkillsById(),
-                this._itemTemplateservice.getSlots(),
+                this._itemTemplateService.getSlots(),
                 this._jobService.getJobList(),
                 this._originService.getOriginList()
             ]).subscribe(([sections, skills, skillsById, slots, jobs, origins]) => {

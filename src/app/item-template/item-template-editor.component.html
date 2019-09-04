@@ -99,29 +99,9 @@
     [moduleName]="moduleName">
 </item-template-editor-module>
 
-<mat-divider></mat-divider>
-
-<mat-card class="add-module-card">
-    Ajouter un module
-    <autocomplete-input [clearOnSelect]="true"
-                        [placeholder]="'Module'"
-                        (onSelect)="addModule($event)"
-                        [callback]="autocompleteModuleCallback">
-    </autocomplete-input>
-</mat-card>
-
-
-<ng-template cdk-portal #addModuleDialog="cdkPortal">
-    <mat-card>
-        Ajouter un module
-        <autocomplete-input #autocompleteModuleModalTextField
-                            [clearOnSelect]="true"
-                            [placeholder]="'Module'"
-                            (onSelect)="addModule($event)"
-                            [callback]="autocompleteModuleCallback">
-        </autocomplete-input>
-    </mat-card>
-</ng-template>
+<button mat-raised-button (click)="openAddModuleDialog()">
+    <mat-icon>add</mat-icon> Ajouter un module
+</button>
 
 <h3 class="mat-h3">Aperçu</h3>
 

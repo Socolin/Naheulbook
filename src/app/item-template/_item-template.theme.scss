@@ -11,13 +11,4 @@
     .sticky-category-list {
         background-color: mat-color($background, background);
     }
-
-    .add-module-card {
-        @if (map_get($theme, is-dark)) {
-            background-color: mat-color($primary, 900);
-        }
-        @else {
-            background-color: mat-color($primary, 100);
-        }
-    }
 }
