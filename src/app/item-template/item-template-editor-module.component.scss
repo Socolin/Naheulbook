@@ -5,6 +5,12 @@ mat-card {
         right: 16px;
         top: 8px;
     }
+
+    mat-card-title {
+        display: grid;
+        grid-template-columns: 24px 1fr;
+        grid-gap: 8px;
+    }
 }
 
 .slots-list {

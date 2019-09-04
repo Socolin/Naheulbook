@@ -9,6 +9,7 @@ import {LoginService} from '../user';
 
 import {ItemTemplate, ItemSlot, ItemType} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
+import {itemTemplateModulesDefinitions} from './item-template-modules-definitions';
 
 @Component({
     selector: 'item-template-editor-module',
@@ -36,6 +37,10 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     public createItemTypeOverlayRef?: OverlayRef;
     public newItemTypeDisplayName = '';
     public newItemTypeTechName = '';
+    public moduleDefinitionByName = itemTemplateModulesDefinitions.reduce((result, value) => {
+        result[value.name] = value;
+        return result;
+    }, {});
 
     constructor(private _nhbkDialogService: NhbkDialogService,
                 public _loginService: LoginService,
