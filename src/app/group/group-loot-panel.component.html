@@ -26,7 +26,7 @@
 </ng-template>
 
 <div class="loot-list">
-    <mat-card *ngFor="let loot of loots" [class.panel-success]="loot.visibleForPlayer">
+    <mat-card *ngFor="let loot of loots">
         <mat-toolbar>
             {{loot.name}}
 
@@ -46,22 +46,22 @@
 
             <span class="padding"></span>
 
+            <mat-icon *ngIf="loot.visibleForPlayer" matTooltip="Loot visible par les joueurs">visibility_on</mat-icon>
+            <mat-icon *ngIf="!loot.visibleForPlayer" matTooltip="Loot non visible par les joueurs">visibility_off</mat-icon>
 
-            <button mat-icon-button color="primary" *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-locked-chest" class="ra-mat-button-icon-32">
-                </mat-icon>
-            </button>
-            <button mat-icon-button color="accent" *ngIf="loot.visibleForPlayer"  (click)="closeLoot(loot)">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-open-treasure-chest" class="ra-mat-button-icon-32">
-                </mat-icon>
-            </button>
-            <button mat-icon-button [matMenuTriggerFor]="menuLoot" aria-label="Open basic menu">
+            <button mat-icon-button [matMenuTriggerFor]="menuLoot" aria-label="Ouvre le menu du loot">
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu xPosition="before" #menuLoot="matMenu">
+                <button mat-menu-item *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">
+                    <mat-icon>visibility_on</mat-icon> Afficher
+                </button>
+                <button mat-menu-item *ngIf="loot.visibleForPlayer" (click)="closeLoot(loot)">
+                    <mat-icon>visibility_off</mat-icon> Cacher
+                </button>
                 <button mat-menu-item
                         (click)=deleteLoot(loot)>
-                    Supprimer
+                    <mat-icon>delete</mat-icon> Supprimer
                 </button>
             </mat-menu>
 

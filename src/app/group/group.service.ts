@@ -122,9 +122,9 @@ export class GroupService {
         return this.httpClient.delete<void>(`/api/v2/loots/${lootId}`);
     }
 
-    updateLootVisibility(loot: Loot): Observable<void> {
-        return this.httpClient.put<void>(`/api/v2/loots/${loot.id}/visibility`, {
-            visibleForPlayer: loot.visibleForPlayer,
+    updateLootVisibility(lootId: number, visibleForPlayer: boolean): Observable<void> {
+        return this.httpClient.put<void>(`/api/v2/loots/${lootId}/visibility`, {
+            visibleForPlayer: visibleForPlayer,
         });
     }
 
