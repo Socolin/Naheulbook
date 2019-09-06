@@ -1,0 +1,81 @@
+:host {
+
+    .filter-field {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 24px;
+        grid-gap: 8px;
+    }
+
+    .filter-result {
+        display: grid;
+        grid-template-columns: 1fr 40px;
+        grid-template-areas: "summary info";
+        align-items: center;
+        width: 100%;
+
+        .item-summary {
+            grid-area: summary;
+            padding: 8px 0;
+            display: grid;
+            width: 100%;
+            grid-template-columns: 32px 1fr;
+            grid-template-areas: "icon name" "icon category";
+            grid-template-rows: auto;
+            grid-gap: 0 8px;
+            align-items: center;
+
+            icon {
+                grid-area: icon;
+            }
+
+            .name {
+                grid-area: name;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .category {
+                grid-area: category;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .info {
+            justify-content: center;
+            align-items: center;
+            display: grid;
+            grid-area: info;
+            cursor: pointer;
+            height: 100%;
+        }
+    }
+
+    .new-item-data {
+        .name-icon {
+            display: grid;
+            grid-gap: 8px;
+            grid-template-columns: 32px 1fr;
+            align-items: center;
+
+            icon {
+                cursor: pointer;
+            }
+        }
+        .description {
+            mat-form-field {
+                width: 100%;
+            }
+        }
+
+        .identifiable-quantifiable {
+            display: grid;
+            grid-gap: 8px;
+            align-items: center;
+            grid-template-columns: auto 1fr;
+        }
+    }
+}

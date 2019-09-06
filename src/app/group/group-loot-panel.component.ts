@@ -1,9 +1,6 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {OverlayRef} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import {Component, Input, OnInit} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
-import {NhbkDialogService} from '../shared';
 
 import {Item, ItemService} from '../item';
 import {Loot, LootPanelComponent} from '../loot';
@@ -11,6 +8,9 @@ import {Monster} from '../monster';
 
 import {Group} from './group.model';
 import {GroupService} from './group.service';
+import {MatDialog} from '@angular/material/dialog';
+import {CreateItemDialogComponent} from './create-item-dialog.component';
+import {Subject} from 'rxjs';
 
 @Component({
     selector: 'group-loot-panel',
@@ -19,25 +19,34 @@ import {GroupService} from './group.service';
 })
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() group: Group;
-    public newLootName: string|null;
-
-    @ViewChild('addLootDialog', {static: true})
-    public addLootDialog: Portal<any>;
-    public addLootOverlayRef: OverlayRef;
+    public newLootName: string | null;
 
     constructor(private notification: NotificationsService
         , private _groupService: GroupService
-        , private _nhbkDialogService: NhbkDialogService
-        , private _itemService: ItemService) {
+        , private _itemService: ItemService
+        , private dialog: MatDialog
+    ) {
         super(notification);
     }
 
-    openAddLootDialog() {
-        this.addLootOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addLootDialog);
+    openAddItemDialog(loot: Loot) {
+        const subject = new Subject<Item>();
+        const dialogRef = this.dialog.open(CreateItemDialogComponent, {data: {onAdd: subject}});
+        const subscription = subject.subscribe((item) => {
+            this.onAddItem({loot: loot, item: item});
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            subscription.unsubscribe();
+            if (!result) {
+                return;
+            }
+            this.onAddItem({loot: loot, item: result});
+        });
+
     }
 
-    closeAddLootDialog() {
-        this.addLootOverlayRef.detach();
+    openAddLootDialog() {
     }
 
     createLoot() {
@@ -50,7 +59,6 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
             }
         );
         this.newLootName = null;
-        this.closeAddLootDialog();
     }
 
     deleteLoot(loot: Loot) {
@@ -61,15 +69,14 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         );
     }
 
-    onAddItem(data: {monster: Monster, loot: Loot, item: Item}) {
+    onAddItem(data: { monster?: Monster, loot?: Loot, item: Item }) {
         if (data.loot) {
             this._itemService.addItemTo('loot', data.loot.id, data.item.template.id, data.item.data).subscribe(
                 item => {
                     data.loot.addItem(item);
                 }
             );
-        }
-        else {
+        } else {
             this._itemService.addItemTo('monster', data.monster.id, data.item.template.id, data.item.data).subscribe(
                 item => {
                     data.monster.addItem(item);
@@ -134,5 +141,9 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
 
     ngOnInit() {
         this.loots = this.group.loots;
+    }
+
+    openAddGemDialog(loot: Loot) {
+        // FIXME
     }
 }

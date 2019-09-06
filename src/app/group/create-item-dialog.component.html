@@ -1,0 +1,90 @@
+<h2 mat-dialog-title>Ajouter un objet</h2>
+<mat-dialog-content>
+    <mat-card-content style="display: flex; justify-content: space-around; flex-direction: column">
+
+        <div class="filter-field">
+            <mat-form-field>
+                <input #filter matInput placeholder="Chercher un objet" (keyup)="updateFilter(filter.value)">
+            </mat-form-field>
+            <button mat-icon-button (click)="updateFilter(filter.value)">
+                <mat-icon>refresh</mat-icon>
+            </button>
+        </div>
+        <mat-action-list *ngIf="filteredItemTemplates !== undefined">
+            <button mat-list-item *ngFor="let result of filteredItemTemplates"
+                    (click)="selectItemTemplate(result.itemTemplate);">
+                <div class="filter-result">
+                    <div class="item-summary">
+                        <icon [icon]="result.icon"></icon>
+                        <div class="name">{{result.name}}</div>
+                        <div class="category mat-caption">{{result.sectionName}} - {{result.categoryName}}</div>
+                    </div>
+                    <div mat-ripple matRippleUnbounded="true" matRippleCentered="true" matRippleRadius="20" class="info"
+                         (click)="showInfo($event, result.itemTemplate)" (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">
+                        <mat-icon>info</mat-icon>
+                    </div>
+                </div>
+            </button>
+            <button disabled *ngIf="filteredItemTemplates && filteredItemTemplates.length == 0">
+                Aucun objet trouvé
+            </button>
+        </mat-action-list>
+        <div class="new-item-data" *ngIf="newItem.template">
+            <h2 class="mat-h3">Personnalisation</h2>
+            <div class="name-icon">
+                <icon (click)="openSelectIconDialog()" [icon]="newItem.data.icon"></icon>
+                <mat-form-field>
+                    <input matInput
+                           #newItemName
+                           placeholder="Nom"
+                           [(ngModel)]="newItem.data.name"/>
+                    <mat-hint *ngIf="newItem.data.notIdentified" align="end">
+                        {{newItem.template?.name}}
+                    </mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="description">
+                <mat-form-field>
+                    <input matInput
+                           placeholder="Description"
+                           [(ngModel)]="newItem.data.description"/>
+                </mat-form-field>
+            </div>
+
+            <div class="identifiable-quantifiable">
+                <mat-checkbox [(ngModel)]="newItem.data.notIdentified"
+                              (change)="updateItemIdentified()">
+                    Non-identifié
+                </mat-checkbox>
+                <mat-form-field *ngIf="newItem.template?.data?.quantifiable">
+                    <input matInput
+                           type="number"
+                           placeholder="Quantité"
+                           [(ngModel)]="newItem.data.quantity"/>
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-card-content>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <mat-card-actions align="end">
+        <button mat-button
+                color="primary"
+                [disabled]="!newItem.template"
+                (click)=addItem(true)>
+            AJOUTER
+        </button>
+        <button mat-button
+                color="primary"
+                [disabled]="!newItem.template"
+                (click)=addItem(false)>
+            AJOUTER+
+        </button>
+        <button mat-button
+                mat-dialog-close
+                color="primary">
+            ANNULER
+        </button>
+    </mat-card-actions>
+</mat-dialog-actions>

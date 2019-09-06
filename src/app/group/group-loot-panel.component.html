@@ -26,24 +26,12 @@
 </ng-template>
 
 <div class="loot-list">
-    <mat-card *ngFor="let loot of loots">
-        <mat-toolbar>
+    <div *ngFor="let loot of loots">
+        <mat-toolbar color="primary">
             {{loot.name}}
 
             <span class="padding"></span>
             <span *ngIf="loot.computedXp">XP: {{loot.computedXp}}</span>
-            <span class="padding"></span>
-
-            <button mat-raised-button (click)="createItemDialog.openDialogForLoot(loot)">
-                <mat-icon>add</mat-icon>Objet
-            </button>
-            <button mat-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">
-                <mat-icon>add</mat-icon>Objet inutile
-            </button>
-            <button mat-raised-button (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">
-                <mat-icon>add</mat-icon>Ingrédient magique
-            </button>
-
             <span class="padding"></span>
 
             <mat-icon *ngIf="loot.visibleForPlayer" matTooltip="Loot visible par les joueurs">visibility_on</mat-icon>
@@ -59,6 +47,20 @@
                 <button mat-menu-item *ngIf="loot.visibleForPlayer" (click)="closeLoot(loot)">
                     <mat-icon>visibility_off</mat-icon> Cacher
                 </button>
+
+                <button mat-menu-item (click)="openAddItemDialog(loot)">
+                    <mat-icon>add</mat-icon>Objet
+                </button>
+                <button mat-menu-item (click)="openAddGemDialog(loot)">
+                    <mat-icon>add</mat-icon>Pierre précieuse
+                </button>
+                <button mat-menu-item (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">
+                    <mat-icon>add</mat-icon>Objet inutile
+                </button>
+                <button mat-menu-item (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">
+                    <mat-icon>add</mat-icon>Ingrédient magique
+                </button>
+
                 <button mat-menu-item
                         (click)=deleteLoot(loot)>
                     <mat-icon>delete</mat-icon> Supprimer
@@ -66,36 +68,11 @@
             </mat-menu>
 
         </mat-toolbar>
-        <mat-card-content>
-            <div class="loot-items">
-                <div *ngFor="let item of loot.items" class="loot-item">
-                    <button mat-icon-button (click)="removeItemFromLoot(loot, item)">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                    <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                    <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
-                    {{item.data.name}}
-                    <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
-                    <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
-                </div>
-            </div>
-
-            <div class="loot-monsters" *ngFor="let monster of loot.monsters">
-                <div>
-                    <span class="mat-title">{{monster.name}}</span>
-                    <button mat-raised-button (click)="createItemDialog.openDialogForMonster(monster)">
-                        <mat-icon>add</mat-icon>Objet
-                    </button>
-                    <button mat-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'USELESS_ITEM')">
-                        <mat-icon>add</mat-icon>Objet inutile
-                    </button>
-                    <button mat-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'MAGICAL_INGREDIENT')">
-                        <mat-icon>add</mat-icon>Ingrédient magique
-                    </button>
-                </div>
-                <div>
-                    <div class="monster-item loot-item" *ngFor="let item of monster.items">
-                        <button mat-icon-button (click)="removeItemFromMonster(monster, item)">
+        <mat-card>
+            <mat-card-content>
+                <div class="loot-items">
+                    <div *ngFor="let item of loot.items" class="loot-item">
+                        <button mat-icon-button (click)="removeItemFromLoot(loot, item)">
                             <mat-icon>delete</mat-icon>
                         </button>
                         <icon [icon]="item.data.icon" [size]="'32px'"></icon>
@@ -105,9 +82,34 @@
                         <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
                     </div>
                 </div>
-            </div>
-        </mat-card-content>
-    </mat-card>
-</div>
 
-<create-item #createItemDialog (onAddItem)="onAddItem($event)"></create-item>
+                <div class="loot-monsters" *ngFor="let monster of loot.monsters">
+                    <div>
+                        <span class="mat-title">{{monster.name}}</span>
+                        <button mat-raised-button (click)="createItemDialog.openDialogForMonster(monster)">
+                            <mat-icon>add</mat-icon>Objet
+                        </button>
+                        <button mat-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'USELESS_ITEM')">
+                            <mat-icon>add</mat-icon>Objet inutile
+                        </button>
+                        <button mat-raised-button (click)="addRandomItemFromCategoryToMonster(monster, 'MAGICAL_INGREDIENT')">
+                            <mat-icon>add</mat-icon>Ingrédient magique
+                        </button>
+                    </div>
+                    <div>
+                        <div class="monster-item loot-item" *ngFor="let item of monster.items">
+                            <button mat-icon-button (click)="removeItemFromMonster(monster, item)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <icon [icon]="item.data.icon" [size]="'32px'"></icon>
+                            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
+                            {{item.data.name}}
+                            <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
+                            <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -29,6 +29,7 @@ import {
     GroupService,
     TargetSelectorComponent,
 } from './';
+import { CreateItemDialogComponent } from './create-item-dialog.component';
 
 @NgModule({
     imports: [
@@ -59,9 +60,11 @@ import {
         GroupListComponent,
         GroupLootPanelComponent,
         TargetSelectorComponent,
+        CreateItemDialogComponent,
     ],
     entryComponents: [
-        FighterSelectorComponent
+        CreateItemDialogComponent,
+        FighterSelectorComponent,
     ],
     providers: [GroupService]
 })

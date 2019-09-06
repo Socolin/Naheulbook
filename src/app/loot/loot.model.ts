@@ -67,7 +67,7 @@ export class Loot extends WsRegistrable {
         if (i !== -1) {
             return false;
         }
-        this.items.push(addedItem);
+        this.items.unshift(addedItem);
         this.itemAdded.next(addedItem);
         return true;
     }

@@ -21,6 +21,7 @@ import {
     ItemTemplateEditorModuleComponent,
     ItemTemplateService,
 } from './';
+import { ItemDetailDialogComponent } from './item-detail-dialog.component';
 
 @NgModule({
     imports: [
@@ -43,11 +44,13 @@ import {
         ItemTemplateEditorModuleComponent,
         AutocompleteSearchItemTemplateComponent,
         AddItemTemplateEditorModuleDialogComponent,
+        ItemDetailDialogComponent,
     ],
     entryComponents: [
         CreateItemTemplateDialogComponent,
         EditItemTemplateDialogComponent,
         AddItemTemplateEditorModuleDialogComponent,
+        ItemDetailDialogComponent,
     ],
     exports: [
         ItemListComponent,
