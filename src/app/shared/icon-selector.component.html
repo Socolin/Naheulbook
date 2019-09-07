@@ -7,6 +7,8 @@
             <input matInput
                    placeholder="Nom de l'icône"
                    type="text"
+                   autocapitalize="off"
+                   autocomplete="off"
                    [(ngModel)]="filter"
                    (ngModelChange)="updateFiltered()">
             <mat-hint align="end">

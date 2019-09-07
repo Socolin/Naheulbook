@@ -28,4 +28,8 @@
     .text-info {
         color:  mat-color($primary, 500);
     }
+
+    .separator {
+        border-color: mat-color($foreground, divider);
+    }
 }

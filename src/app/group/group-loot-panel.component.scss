@@ -1,37 +1,91 @@
-.padding {
-    flex: 1 auto;
-}
-
-mat-card {
-    margin: 5px;
-}
-
 .buttons-header {
+    width: 100%;
     text-align: right;
     margin-top: 5px;
     margin-bottom: 7px;
 }
 
+:host {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .loot-list {
+    display: grid;
+    grid-template-columns: minmax(285px, 900px);
+
+    mat-toolbar {
+        align-items: center;
+        display: grid;
+        grid-gap: 8px;
+        grid-template-columns: 1fr auto 24px 40px;
+        grid-template-areas: "name xp visibility actions";
+        overflow: hidden;
+
+        .name {
+            grid-area: name;
+        }
+
+        .xp {
+            grid-area: xp;
+            padding-right: 8px;
+        }
+
+        .visibility-indicator {
+            grid-area: visibility;
+        }
+
+        .actions {
+            grid-area: actions;
+        }
+    }
+
+    .loot {
+        width: 100%;
+    }
+
     mat-card {
         margin: 0 0 16px;
     }
 
     .loot-item {
         position: relative;
-        display: flex;
+        display: grid;
         align-items: center;
-        > icon {
-            padding-right: 10px;
-        }
+        grid-gap: 8px;
+        grid-template-columns: 32px 1fr minmax(0, auto) 40px;
+    }
+
+    .loot-item:nth-child(4n+0) {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
     }
 
     .loot-monsters {
+        .monster-header {
+            align-items: center;
+            display: grid;
+            grid-template-columns: 1fr 40px;
+            grid-gap: 8px;
+            height: 48px;
+            .monster-name {
+                font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+            }
+        }
         .monster-item {
-            margin-left: 20px;
-            padding-left: 5px;
-            border-left-style: solid;
-            border-left-width: 1px;
+            position: relative;
+            display: grid;
+            align-items: center;
+            grid-gap: 8px;
+            margin-left: 32px;
+            grid-template-columns: 32px 1fr minmax(0, auto) 40px;
+        }
+
+        .monster-item:nth-child(4n+0) {
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
         }
     }
 }

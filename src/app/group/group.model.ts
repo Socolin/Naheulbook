@@ -480,7 +480,7 @@ export class Group extends WsRegistrable {
         if (i !== -1) {
             return false;
         }
-        this.loots.push(addedLoot);
+        this.loots.unshift(addedLoot);
         this.lootAdded.next(addedLoot);
         if (this.wsSubscribtion) {
             this.wsSubscribtion.service.registerElement(addedLoot);

@@ -63,15 +63,10 @@ export class CreateItemDialogComponent implements OnInit {
         });
     }
 
-
     setItemNotIdentified() {
         this.newItem.data.notIdentified = true;
-        if (this.mode === 'gem') {
-            this.newItem.data.name = 'Pierre précieuse';
-        } else {
-            if (this.newItem.template && this.newItem.template.data && this.newItem.template.data.notIdentifiedName) {
-                this.newItem.data.name = this.newItem.template.data.notIdentifiedName;
-            }
+        if (this.newItem.template && this.newItem.template.data && this.newItem.template.data.notIdentifiedName) {
+            this.newItem.data.name = this.newItem.template.data.notIdentifiedName;
         }
     }
 

@@ -30,6 +30,7 @@ import {
     TargetSelectorComponent,
 } from './';
 import { CreateItemDialogComponent } from './create-item-dialog.component';
+import { AddLootDialogComponent } from './add-loot-dialog.component';
 
 @NgModule({
     imports: [
@@ -61,8 +62,10 @@ import { CreateItemDialogComponent } from './create-item-dialog.component';
         GroupLootPanelComponent,
         TargetSelectorComponent,
         CreateItemDialogComponent,
+        AddLootDialogComponent,
     ],
     entryComponents: [
+        AddLootDialogComponent,
         CreateItemDialogComponent,
         FighterSelectorComponent,
     ],

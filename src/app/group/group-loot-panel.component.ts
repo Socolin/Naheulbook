@@ -11,6 +11,8 @@ import {GroupService} from './group.service';
 import {MatDialog} from '@angular/material/dialog';
 import {CreateItemDialogComponent} from './create-item-dialog.component';
 import {Subject} from 'rxjs';
+import {AddLootDialogComponent} from './add-loot-dialog.component';
+import {WebSocketService} from '../websocket';
 
 @Component({
     selector: 'group-loot-panel',
@@ -19,46 +21,45 @@ import {Subject} from 'rxjs';
 })
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() group: Group;
-    public newLootName: string | null;
 
     constructor(private notification: NotificationsService
         , private _groupService: GroupService
         , private _itemService: ItemService
         , private dialog: MatDialog
+        , private websocketService: WebSocketService
     ) {
-        super(notification);
+        super(notification, websocketService);
     }
 
-    openAddItemDialog(loot: Loot) {
+    openAddItemDialog(target: Loot|Monster) {
         const subject = new Subject<Item>();
         const dialogRef = this.dialog.open(CreateItemDialogComponent, {data: {onAdd: subject}});
         const subscription = subject.subscribe((item) => {
-            this.onAddItem({loot: loot, item: item});
+            if (target instanceof Loot) {
+                this.onAddItem({loot: target, item: item});
+            } else {
+                this.onAddItem({monster: target, item: item});
+            }
         });
 
         dialogRef.afterClosed().subscribe((result) => {
             subscription.unsubscribe();
-            if (!result) {
-                return;
-            }
-            this.onAddItem({loot: loot, item: result});
         });
-
     }
 
     openAddLootDialog() {
-    }
-
-    createLoot() {
-        if (!this.newLootName) {
-            return;
-        }
-        this._groupService.createLoot(this.group.id, this.newLootName).subscribe(
-            loot => {
-                this.lootAdded(loot, false);
+        const dialogRef = this.dialog.open(AddLootDialogComponent);
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
             }
-        );
-        this.newLootName = null;
+
+            this._groupService.createLoot(this.group.id, result).subscribe(
+                loot => {
+                    this.lootAdded(loot, false);
+                }
+            );
+        })
     }
 
     deleteLoot(loot: Loot) {
@@ -143,7 +144,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         this.loots = this.group.loots;
     }
 
-    openAddGemDialog(loot: Loot) {
+    openAddGemDialog(loot: Loot|Monster) {
         // FIXME
     }
 }

@@ -9,6 +9,7 @@ import {Monster} from '../monster';
 
 import {Character} from './character.model';
 import {Item, ItemService} from '../item';
+import {WebSocketService} from '../websocket';
 
 @Component({
     selector: 'character-loot-panel',
@@ -30,8 +31,10 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
 
     constructor(private notification: NotificationsService
         , private _itemService: ItemService
-        , private _nhbkDialogservice: NhbkDialogService) {
-        super(notification);
+        , private _nhbkDialogservice: NhbkDialogService
+        , private websocketService: WebSocketService
+    ) {
+        super(notification, websocketService);
     }
 
     openTakeItemLootDialog(loot: Loot, item: Item) {

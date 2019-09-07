@@ -6,13 +6,17 @@ import {CharacterSummary} from '../shared';
 import {Item} from '../item';
 
 import {Loot} from './loot.model';
+import {WebSocketService} from '../websocket';
 
 export class LootPanelComponent implements OnDestroy {
     public loots: Loot[] = [];
-    public lootSubscriptions: {[lootId: number]: Subscription[]} = {};
+    public lootSubscriptions: { [lootId: number]: Subscription[] } = {};
     public subscriptions: Subscription[] = [];
 
-    constructor(protected _notification: NotificationsService) {
+    constructor(
+        protected _notification: NotificationsService,
+        protected webSocketService: WebSocketService
+    ) {
     }
 
     lootAdded(loot: Loot, noNotifications: boolean): boolean {
@@ -22,6 +26,7 @@ export class LootPanelComponent implements OnDestroy {
         }
         this.loots.unshift(loot);
         this.registerLoot(loot, noNotifications);
+        this.webSocketService.registerElement(loot);
         return true;
     }
 
@@ -52,8 +57,10 @@ export class LootPanelComponent implements OnDestroy {
         let loot = this.loots[i];
         loot.dispose();
         this.loots.splice(i, 1);
-        this.lootSubscriptions[loot.id].forEach(sub => sub.unsubscribe());
-        delete this.lootSubscriptions[loot.id];
+        if (this.lootSubscriptions[loot.id]) {
+            this.lootSubscriptions[loot.id].forEach(sub => sub.unsubscribe());
+            delete this.lootSubscriptions[loot.id];
+        }
         return true;
     }
 
