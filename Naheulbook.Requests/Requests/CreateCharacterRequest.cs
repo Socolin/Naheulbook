@@ -12,6 +12,7 @@ namespace Naheulbook.Requests.Requests
         public int Money { get; set; }
         public short FatePoint { get; set; }
         public bool IsNpc { get; set; }
+        public int? GroupId { get; set; }
 
         public BasicStats Stats { get; set; }
         public IDictionary<string, ModifiedStats> ModifiedStat { get; set; }

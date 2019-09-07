@@ -80,8 +80,19 @@ namespace Naheulbook.Web.Controllers
             CreateCharacterRequest request
         )
         {
-            var group = await _characterService.CreateCharacterAsync(executionContext, request);
-            return _mapper.Map<CreateCharacterResponse>(group);
+            try
+            {
+                var character = await _characterService.CreateCharacterAsync(executionContext, request);
+                return _mapper.Map<CreateCharacterResponse>(character);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
         }
 
         [HttpPost("{CharacterId:int:min(1)}/items")]

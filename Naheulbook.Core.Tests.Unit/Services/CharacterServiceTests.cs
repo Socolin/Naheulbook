@@ -87,6 +87,49 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
+        public async Task CreateCharacterAsync_WhenGroupIdIsGiven_PutCharacterInGroup()
+        {
+            const int userId = 10;
+            const int groupId = 8;
+            var createCharacterRequest = new CreateCharacterRequest {Name = "some-name", GroupId = groupId};
+            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = userId};
+            var createdCharacter = new Character();
+            var group = new Group();
+
+            _characterFactory.CreateCharacter(createCharacterRequest)
+                .Returns(createdCharacter);
+            _itemUtil.CreateInitialPlayerInventoryAsync(createCharacterRequest.Money)
+                .Returns(new List<Item>());
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+
+            var actualCharacter = await _service.CreateCharacterAsync(naheulbookExecutionContext, createCharacterRequest);
+
+            actualCharacter.Group.Should().BeSameAs(group);
+        }
+
+        [Test]
+        public void CreateCharacterAsync_WhenGroupIdIsGiven_CheckIsGroupOwner()
+        {
+            const int groupId = 8;
+            var createCharacterRequest = new CreateCharacterRequest {Name = "some-name", GroupId = groupId};
+            var naheulbookExecutionContext = new NaheulbookExecutionContext();
+            var createdCharacter = new Character();
+            var group = new Group();
+
+            _characterFactory.CreateCharacter(createCharacterRequest)
+                .Returns(createdCharacter);
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+            _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
+                .Throw(new ForbiddenAccessException());
+
+            Func<Task> act = () => _service.CreateCharacterAsync(naheulbookExecutionContext, createCharacterRequest);
+
+            act.Should().Throw<ForbiddenAccessException>();
+        }
+
+        [Test]
         public void LoadCharacterDetailsAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;

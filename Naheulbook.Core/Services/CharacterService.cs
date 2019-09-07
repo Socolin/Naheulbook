@@ -83,6 +83,15 @@ namespace Naheulbook.Core.Services
             {
                 var character = _characterFactory.CreateCharacter(request);
 
+                if (request.GroupId.HasValue)
+                {
+                    var group = await uow.Groups.GetAsync(request.GroupId.Value);
+                    if (group == null)
+                        throw new GroupNotFoundException(request.GroupId.Value);
+                    _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+                    character.Group = group;
+                }
+
                 character.OwnerId = executionContext.UserId;
                 character.Items = await _itemUtil.CreateInitialPlayerInventoryAsync(request.Money);
 

@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Factories
                 Name = characterRequest.Name,
                 Sex = characterRequest.Sex,
                 IsActive = true,
-                IsNpc = false,
+                IsNpc = characterRequest.IsNpc,
 
                 Ad = characterRequest.Stats.Ad,
                 Cha = characterRequest.Stats.Cha,
