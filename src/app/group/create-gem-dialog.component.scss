@@ -1,0 +1,41 @@
+:host {
+    .ug {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        grid-gap: 8px;
+        align-items: center;
+    }
+    .type-dice {
+        display: grid;
+        grid-template-columns: auto 60px 1fr;
+        align-items: center;
+        grid-gap: 8px;
+        justify-content: left;
+    }
+
+    .new-item-data {
+        .name-icon {
+            display: grid;
+            grid-gap: 8px;
+            grid-template-columns: 32px 1fr;
+            align-items: center;
+
+            icon {
+                cursor: pointer;
+            }
+        }
+
+        .description {
+            mat-form-field {
+                width: 100%;
+            }
+        }
+
+        .identifiable-quantifiable {
+            display: grid;
+            grid-gap: 8px;
+            align-items: center;
+            grid-template-columns: auto 1fr;
+        }
+    }
+}

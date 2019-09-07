@@ -1,4 +1,4 @@
-import {NgModule}      from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
@@ -16,21 +16,22 @@ import {UsefullDataModule} from '../usefull-data/usefull-data.module';
 import {ItemModule} from '../item/item.module';
 
 import {
+    AddLootDialogComponent,
+    CreateGemDialogComponent,
     CreateGroupComponent,
     CreateItemComponent,
+    CreateItemDialogComponent,
     FighterComponent,
     FighterIconComponent,
-    FighterSelectorComponent,
     FighterPanelComponent,
+    FighterSelectorComponent,
     GroupComponent,
-    GroupListComponent,
     GroupHistoryComponent,
+    GroupListComponent,
     GroupLootPanelComponent,
     GroupService,
     TargetSelectorComponent,
 } from './';
-import { CreateItemDialogComponent } from './create-item-dialog.component';
-import { AddLootDialogComponent } from './add-loot-dialog.component';
 
 @NgModule({
     imports: [
@@ -63,9 +64,11 @@ import { AddLootDialogComponent } from './add-loot-dialog.component';
         TargetSelectorComponent,
         CreateItemDialogComponent,
         AddLootDialogComponent,
+        CreateGemDialogComponent,
     ],
     entryComponents: [
         AddLootDialogComponent,
+        CreateGemDialogComponent,
         CreateItemDialogComponent,
         FighterSelectorComponent,
     ],
