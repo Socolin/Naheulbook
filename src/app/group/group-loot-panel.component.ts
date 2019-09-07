@@ -50,7 +50,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
 
     openAddGemDialog(target: Loot|Monster) {
         const subject = new Subject<Item>();
-        const dialogRef = this.dialog.open(CreateGemDialogComponent, {data: {onAdd: subject}});
+        const dialogRef = this.dialog.open(CreateGemDialogComponent, {data: {onAdd: subject}, autoFocus: false});
         const subscription = subject.subscribe((item) => {
             if (target instanceof Loot) {
                 this.onAddItem({loot: target, item: item});

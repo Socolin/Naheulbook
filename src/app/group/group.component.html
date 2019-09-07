@@ -69,160 +69,136 @@
         <mat-tab label="Personnages">
             <div class="characters-tab">
                 <mat-card>
-                    <mat-card-title>Joueurs</mat-card-title>
+                    <mat-card-title>
+                        Joueurs
+                        <button mat-icon-button [matMenuTriggerFor]="charactersActions">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu xPosition="before" #charactersActions="matMenu">
+                            <button mat-menu-item
+                                    (click)="openInviteCharacterModal()">
+                                <mat-icon>group_add</mat-icon>
+                                Inviter un joueur
+                            </button>
+                            <button mat-menu-item
+                                    (click)="createNpc()">
+                                <mat-icon>add</mat-icon>
+                                Ajouter un PNJ
+                            </button>
+                            <button mat-menu-item
+                                    (click)="activeAllCharacter(false)">
+                                <mat-icon>visibility_off</mat-icon>
+                                Désactiver tous les personnages
+                            </button>
+                            <button mat-menu-item
+                                    (click)="activeAllCharacter(true)">
+                                <mat-icon>visibility_on</mat-icon>
+                                Activer tous les personnages
+                            </button>
+                        </mat-menu>
+
+                    </mat-card-title>
                     <mat-card-content class="characters-cards">
-                        <ng-template ngFor let-character [ngForOf]="group.characters">
-                            <mat-card *ngIf="!character.isNpc" class="character-summary-card">
-                                <mat-card-header>
-                                    <mat-card-title>{{character.name}} - Lvl{{character.level}}</mat-card-title>
-                                    <mat-card-subtitle>
-                                        {{character.origin.name}}
-                                        <span *ngIf="character.jobs"> -</span>
-                                        <span *ngFor="let job of character.jobs">
-                                            &nbsp;{{job.name}}
-                                        </span>
-                                    </mat-card-subtitle>
-                                    <button mat-icon-button [matMenuTriggerFor]="characterActions">
-                                        <mat-icon>more_vert</mat-icon>
+                        <mat-list>
+                            <mat-list-item *ngFor="let character of group.characters">
+                                <mat-icon *ngIf="character.active" matListIcon>visibility_on</mat-icon>
+                                <mat-icon *ngIf="!character.active" matListIcon>visibility_off</mat-icon>
+                                <h3 matLine> <span *ngIf="character.isNpc">PNJ - </span> {{character.name}} - Lvl{{character.level}}</h3>
+                                <p matLine>
+                                    <span> {{character.origin.name}} </span>
+                                    <span *ngIf="character.jobs && character.jobs.length"> -</span>
+                                    <span *ngFor="let job of character.jobs">
+                                        &nbsp;{{job.name}}
+                                    </span>
+                                </p>
+
+                                <button mat-icon-button [matMenuTriggerFor]="characterActions">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu xPosition="before" #characterActions="matMenu">
+                                    <button mat-menu-item
+                                            (click)="displayCharacterSheet(character)">
+                                        <mat-icon>pageview</mat-icon>
+                                        Voir la fiche
                                     </button>
-                                    <mat-menu xPosition="before" #characterActions="matMenu">
-                                        <button mat-menu-item
-                                                (click)="displayCharacterSheet(character)">
-                                            Voir la fiche
-                                        </button>
-                                        <button mat-menu-item
-                                                *ngIf="character.user && character.user !== _loginService.currentLoggedUser.id"
-                                                (click)="takeOwnership(character)">
-                                            Devenir propriétaire
-                                        </button>
-                                        <button mat-menu-item
-                                                *ngIf="!character.user || character.user === _loginService.currentLoggedUser.id"
-                                                (click)="openChangeOwnershipDialog(character)">
-                                            Définir le propriétaire
-                                        </button>
-                                        <button mat-menu-item
-                                                (click)="kickCharacter(character)">
-                                            Retirer du groupe
-                                        </button>
-                                    </mat-menu>
-                                </mat-card-header>
-                                <mat-card-actions align="end">
+                                    <button mat-menu-item
+                                            *ngIf="character.user && character.user !== _loginService.currentLoggedUser.id"
+                                            (click)="takeOwnership(character)">
+                                        <mat-icon>supervisor_account</mat-icon>
+                                        Devenir propriétaire
+                                    </button>
+                                    <button mat-menu-item
+                                            *ngIf="!character.user || character.user === _loginService.currentLoggedUser.id"
+                                            (click)="openChangeOwnershipDialog(character)">
+                                        <mat-icon>supervisor_account</mat-icon>
+                                        Définir le propriétaire
+                                    </button>
+                                    <button mat-menu-item
+                                            (click)="kickCharacter(character)">
+                                        <mat-icon>delete</mat-icon>
+                                        Retirer du groupe
+                                    </button>
                                     <button
-                                        mat-button
+                                        mat-menu-item
                                         color="primary"
                                         *ngIf="!character.active"
                                         (click)="toggleActiveCharacter(character)">
-                                        ACTIVER
+                                        <mat-icon>power_settings_new</mat-icon>
+                                        Activer
                                     </button>
                                     <button
-                                        mat-button
+                                        mat-menu-item
                                         *ngIf="character.active"
                                         color="accent"
                                         (click)="toggleActiveCharacter(character)">
-                                        DESACTIVER
+                                        <mat-icon>power_settings_new</mat-icon>
+                                        Désactiver
                                     </button>
-                                </mat-card-actions>
-                            </mat-card>
-                        </ng-template>
+                                </mat-menu>
+                            </mat-list-item>
+                        </mat-list>
                     </mat-card-content>
-                    <mat-card-actions align="end">
-                        <button mat-button
-                                color="primary"
-                                (click)="activeAllCharacter(false)">
-                            DESACTIVER TOUS
-                        </button>
-                        <button mat-button
-                                color="primary"
-                                (click)="activeAllCharacter(true)">
-                            ACTIVER TOUS
-                        </button>
-                    </mat-card-actions>
                 </mat-card>
 
-                <mat-card>
-                    <mat-card-title>PNJs</mat-card-title>
-                    <mat-card-content class="characters-cards">
-                        <ng-template ngFor let-character [ngForOf]="group.characters">
-                            <mat-card *ngIf="character.isNpc" class="character-summary-card">
-                                <mat-card-header>
-                                    <mat-card-title>{{character.name}}</mat-card-title>
-                                    <mat-card-subtitle>{{character.origin.name}}
-                                        <span *ngIf="character.job"> - {{character.job.name}} </span> - Lvl{{character.level}}
-                                    </mat-card-subtitle>
-                                </mat-card-header>
-                                <mat-card-actions align="end">
-                                    <button
-                                        mat-button
-                                        color="primary"
-                                        *ngIf="!character.active"
-                                        (click)="toggleActiveCharacter(character)">
-                                        ACTIVER
-                                    </button>
-                                    <button
-                                        mat-button
-                                        *ngIf="character.active"
-                                        color="accent"
-                                        (click)="toggleActiveCharacter(character)">
-                                        DESACTIVER
-                                    </button>
-                                </mat-card-actions>
-                            </mat-card>
-                        </ng-template>
-                    </mat-card-content>
-                    <mat-card-actions align="end">
-                        <button mat-button
-                                color="primary"
-                                (click)="createNpc()">
-                            AJOUTER PNJ
-                        </button>
-                    </mat-card-actions>
-                </mat-card>
-                <mat-card>
+                <mat-card *ngIf="group.invites.length || group.invited.length" >
                     <mat-card-title>Invitations</mat-card-title>
                     <mat-card-content>
                         <div *ngIf="group.invites.length">
-                            <h4>Invitation à valider</h4>
-                            <div class="list-group">
-                                <ng-template ngFor let-invite [ngForOf]="group.invites">
-                                    <mat-expansion-panel>
-                                        <mat-expansion-panel-header>
-                                            <mat-panel-description>{{invite.origin}} <span *ngIf="invite.jobs && invite.jobs.length">- {{invite.jobs.join()}}</span></mat-panel-description>
-                                            <mat-panel-title>{{invite.name}}</mat-panel-title>
-                                        </mat-expansion-panel-header>
-                                        <mat-action-row>
-                                            <button mat-button (click)="cancelInvite(invite)">REFUSER</button>
-                                            <button mat-button (click)="acceptInvite(invite)">ACCEPTER</button>
-                                        </mat-action-row>
-                                    </mat-expansion-panel>
-                                </ng-template>
-                            </div>
-                            <hr>
+                            <div>Invitations à valider:</div>
+                            <mat-list>
+                                <mat-list-item *ngFor="let invite of group.invites">
+                                    <h3 matLine>{{invite.name}}</h3>
+                                    <p matLine>
+                                        {{invite.origin}} <span *ngIf="invite.jobs && invite.jobs.length">- {{invite.jobs.join()}}</span>
+                                    </p>
+                                    <button mat-icon-button [matMenuTriggerFor]="invitesActions">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu xPosition="before" #invitesActions="matMenu">
+                                        <button mat-menu-item (click)="cancelInvite(invite)">REFUSER</button>
+                                        <button mat-menu-item (click)="acceptInvite(invite)">ACCEPTER</button>
+                                    </mat-menu>
+                                </mat-list-item>
+                            </mat-list>
                         </div>
                         <div *ngIf="group.invited.length">
-                            <h4>Invitation en attente</h4>
-                            <div class="list-group">
-                                <ng-template ngFor let-invite [ngForOf]="group.invited">
-                                    <mat-expansion-panel>
-                                        <mat-expansion-panel-header>
-                                            <mat-panel-description>{{invite.origin}} <span *ngIf="invite.jobs && invite.jobs.length">- {{invite.jobs.join()}}</span></mat-panel-description>
-                                            <mat-panel-title>{{invite.name}}</mat-panel-title>
-                                        </mat-expansion-panel-header>
-                                        <mat-action-row>
-                                            <button mat-button (click)="cancelInvite(invite)">ANNULER</button>
-                                        </mat-action-row>
-                                    </mat-expansion-panel>
-                                </ng-template>
-                            </div>
-                            <hr>
+                            <div>Invitations en attente:</div>
+                            <mat-list>
+                                <mat-list-item *ngFor="let invite of group.invited">
+                                    <h3 matLine>{{invite.name}}</h3>
+                                    <p matLine>
+                                        {{invite.origin}} <span *ngIf="invite.jobs && invite.jobs.length">- {{invite.jobs.join()}}</span>
+                                    </p>
+                                    <button mat-icon-button [matMenuTriggerFor]="invitedActions">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu xPosition="before" #invitedActions="matMenu">
+                                        <button mat-menu-item (click)="cancelInvite(invite)">Annuler</button>
+                                    </mat-menu>
+                                </mat-list-item>
+                            </mat-list>
                         </div>
                     </mat-card-content>
-                    <mat-card-actions align="end">
-                        <button mat-button
-                                (click)="openInviteCharacterModal()"
-                                color="primary">
-                            INVITER UN JOUEUR
-                        </button>
-                    </mat-card-actions>
                 </mat-card>
             </div>
         </mat-tab>
