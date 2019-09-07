@@ -36,10 +36,15 @@
                     <button mat-menu-item (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">
                         <mat-icon>add</mat-icon>Ingrédient magique
                     </button>
-
-                    <button mat-menu-item
-                            (click)=deleteLoot(loot)>
+                    <button mat-menu-item [matMenuTriggerFor]="delete">
                         <mat-icon>delete</mat-icon> Supprimer
+                    </button>
+                </mat-menu>
+
+                <mat-menu #delete="matMenu">
+                    <button mat-menu-item
+                        (click)=deleteLoot(loot)>
+                        Confirmer
                     </button>
                 </mat-menu>
             </span>
