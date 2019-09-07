@@ -44,7 +44,7 @@
                         <dd>
                             <autocomplete-input [value]="group.location.name"
                                                 (onSelect)="changeGroupLocation($event)"
-                                                [(callback)]="autocompleteLocationsCallback">
+                                                [callback]="autocompleteLocationsCallback">
                             </autocomplete-input>
                         </dd>
                     </dl>
@@ -241,25 +241,6 @@
         </mat-tab>
     </mat-tab-group>
 </div>
-
-<div *ngIf="group">
-    <ng-template ngFor let-character [ngForOf]="group.characters">
-        <ng-template *ngIf="character.active" #characters="cdkPortal" cdk-portal>
-            <div class="character-sheet">
-                <mat-card>
-                    <mat-card-title>
-                        {{character.name}}
-                        <button mat-button color="primary" (click)="closeCharacterSheet()">FERMER</button>
-                    </mat-card-title>
-                    <mat-card-content>
-                        <character [character]="character"></character>
-                    </mat-card-content>
-                </mat-card>
-            </div>
-        </ng-template>
-    </ng-template>
-</div>
-
 
 <!-- Modal -->
 <ng-template #changeOwnershipDialog="cdkPortal" cdk-portal>

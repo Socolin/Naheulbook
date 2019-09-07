@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>
+        {{data.character.name}}
+    </span>
+</mat-toolbar>
+
+<div class="content">
+    <character [character]="data.character"></character>
+</div>
+

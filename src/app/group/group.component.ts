@@ -36,6 +36,7 @@ import {ItemTemplate} from '../item-template';
 import {FighterSelectorComponent, FighterSelectorDialogData} from './fighter-selector.component';
 import {CreateItemComponent} from './create-item.component';
 import {Group, GroupInvite, Fighter} from './group.model';
+import {CharacterSheetDialogComponent} from './character-sheet-dialog.component';
 
 @Component({
     templateUrl: './group.component.html',
@@ -58,10 +59,6 @@ export class GroupComponent implements OnInit, OnDestroy {
     public autocompleteLocationsCallback: Function;
 
     public loadingGroup = false;
-
-    @ViewChildren('characters')
-    public characterSheetsDialog: QueryList<TemplatePortalDirective>;
-    private characterSheetOverlayRef: OverlayRef;
 
     @ViewChild('changeOwnershipDialog', {static: true})
     public changeOwnershipDialog: Portal<any>;
@@ -158,35 +155,12 @@ export class GroupComponent implements OnInit, OnDestroy {
     /* Characters tab */
 
     displayCharacterSheet(character: Character) {
-        let characterSheetDialog = this.characterSheetsDialog.toArray();
-        let index = 0;
-        for (let i = 0; i < this.group.characters.length; i++) {
-            if (this.group.characters[i] === character) {
-                break;
-            }
-            if (this.group.characters[i].active) {
-                index++;
-            }
-        }
-
-        if (index < characterSheetDialog.length) {
-            let config = new OverlayConfig();
-
-            config.positionStrategy = this._overlay.position()
-                .global()
-                .top('5vh')
-                .centerHorizontally();
-            config.hasBackdrop = true;
-
-            let overlayRef = this._overlay.create(config);
-            overlayRef.attach(characterSheetDialog[index]);
-            overlayRef.backdropClick().subscribe(() => overlayRef.detach());
-            this.characterSheetOverlayRef = overlayRef;
-        }
-    }
-
-    closeCharacterSheet() {
-        this.characterSheetOverlayRef.detach();
+        this.dialog.open(CharacterSheetDialogComponent, {
+            data: {character},
+            minWidth: '100vw',
+            height: '100vh',
+            autoFocus: false
+        });
     }
 
     createNpc() {

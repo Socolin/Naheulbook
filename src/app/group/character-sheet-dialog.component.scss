@@ -1,0 +1,7 @@
+.content {
+    padding: 0!important;
+
+    ::ng-deep character > mat-tab-group {
+        width: 100vw;
+    }
+}

@@ -1,7 +1,5 @@
-div {
-    & .character-component {
-        padding: -32px;
-    }
+:host {
+    padding: -32px;
 }
 
 mat-card {

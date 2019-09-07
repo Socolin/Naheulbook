@@ -32,6 +32,7 @@ import {
     GroupService,
     TargetSelectorComponent,
 } from './';
+import { CharacterSheetDialogComponent } from './character-sheet-dialog.component';
 
 @NgModule({
     imports: [
@@ -65,9 +66,11 @@ import {
         CreateItemDialogComponent,
         AddLootDialogComponent,
         CreateGemDialogComponent,
+        CharacterSheetDialogComponent,
     ],
     entryComponents: [
         AddLootDialogComponent,
+        CharacterSheetDialogComponent,
         CreateGemDialogComponent,
         CreateItemDialogComponent,
         FighterSelectorComponent,
