@@ -103,7 +103,14 @@
                             <mat-list-item *ngFor="let character of group.characters">
                                 <mat-icon *ngIf="character.active" matListIcon>visibility_on</mat-icon>
                                 <mat-icon *ngIf="!character.active" matListIcon>visibility_off</mat-icon>
-                                <h3 matLine> <span *ngIf="character.isNpc">PNJ - </span> {{character.name}} - Lvl{{character.level}}</h3>
+                                <h3 matLine class="name">
+                                    <span>
+                                        {{character.name}}
+                                    </span>
+                                    <mat-chip-list>
+                                        <mat-chip *ngIf="character.isNpc">PNJ</mat-chip>
+                                    </mat-chip-list>
+                                </h3>
                                 <p matLine>
                                     <span> {{character.origin.name}} </span>
                                     <span *ngIf="character.jobs && character.jobs.length"> -</span>

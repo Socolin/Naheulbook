@@ -37,6 +37,17 @@
     mat-list {
         width: 100%;
     }
+    .name {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+
+        span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space:nowrap;
+        }
+    }
 }
 
 .change-ownership-dialog {
