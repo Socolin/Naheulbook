@@ -1,34 +1,5 @@
 <div>
-    <div class="fighter-container fighter-header">
-        <div class="field-icon"></div>
-
-        <div class="field-datas">
-            <div class="row-first-part header">
-                <div>
-                    <div class="field-name">Nom</div>
-                    <div class="field">AT</div>
-                    <div class="field">PRD</div>
-                    <div class="field">ESQ</div>
-                    <div class="field-large">EV</div>
-                    <div class="field-large">EA</div>
-                    <div class="field-medium">PR</div>
-                    <div class="field">RESM</div>
-                </div>
-                <div>
-                </div>
-            </div>
-            <div class="row-damage-part">
-                DMG
-            </div>
-            <div class="row-end-part">
-                <div class="field">COU</div>
-                <div class="field-fixed-small">CdN</div>
-            </div>
-        </div>
-        <div class="field-button"></div>
-    </div>
-
-    <div *ngIf="group.data.inCombat && group.currentFighter" class="current-fighter">
+     <div *ngIf="group.data.inCombat && group.currentFighter" class="current-fighter">
         <fighter [selected]="false"
                  [group]="group"
                  [fighter]="group.currentFighter"
@@ -53,6 +24,7 @@
                  [expandedView]="selectedCombatRow === i"
                  (onSelect)="selectFighter($event)">
         </fighter>
+        <mat-divider></mat-divider>
     </ng-template>
 </div>
 

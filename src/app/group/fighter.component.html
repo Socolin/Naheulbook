@@ -1,3 +1,121 @@
+<div class="fighter">
+    <div class="icon">
+        <monster-color-selector *ngIf="fighter.isMonster"
+                                [monster]="fighter.monster"
+                                (onNumberChange)='changeNumber(fighter, $event)'
+                                (onColorChange)='changeColor(fighter, $event)'>
+        </monster-color-selector>
+        <character-color-selector *ngIf="!fighter.isMonster"
+                                  [character]="fighter.character"
+                                  (onColorChange)='changeColor(fighter, $event)'>
+        </character-color-selector>
+    </div>
+
+    <div class="name">
+        <span>{{fighter.name}}</span>
+        <ng-template [ngIf]="fighter.isCharacter">
+            <button mat-icon-button [matMenuTriggerFor]="menuCharacter" aria-label="Ouvrir le menu du personnage">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menuCharacter="matMenu">
+                <button mat-menu-item
+                        (click)="displayCharacterSheet(fighter.character)">
+                    Voir la fiche
+                </button>
+                <button mat-menu-item
+                        (click)=addItemTo(fighter)>
+                    Ajouter un objet
+                </button>
+            </mat-menu>
+        </ng-template>
+        <ng-template [ngIf]="fighter.isMonster">
+            <button mat-icon-button [matMenuTriggerFor]="menuMonster" aria-label="Open basic menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #menuMonster="matMenu">
+                <button mat-menu-item
+                        (click)=killMonster(fighter.monster)>
+                    Tuer le monstre
+                </button>
+                <button mat-menu-item
+                        (click)=deleteMonster(fighter.monster)>
+                    Supprimer le monstre
+                </button>
+                <button mat-menu-item
+                        (click)=openEditMonsterDialog()>
+                    Modifier
+                </button>
+            </mat-menu>
+        </ng-template>
+    </div>
+
+    <div class="field-with-label at">
+        <span class="label" matTooltip="Attaque">AT:</span>
+        <span class="text-attack">{{fighter.stats.at}}</span>
+    </div>
+    <div class="field-with-label prd">
+        <span class="label" matTooltip="Parade">PRD:</span>
+        <span class="text-prd">{{fighter.stats.prd}}</span>
+    </div>
+    <div class="field-with-label esq">
+        <span class="label" matTooltip="Esquive">ESQ:</span>
+        <span class="text-esq">{{fighter.stats.esq}}</span>
+    </div>
+    <div class="field-with-label ev" [class.text-danger]="fighter.stats.ev < 4">
+        <span class="label" matTooltip="Énergie vitale">EV:</span>
+        <value-editor [title]="'Energie vitale'"
+                      [value]="fighter.stats.ev"
+                      [maxValue]="fighter.stats.maxEv"
+                      (onChange)="changeStat('ev', $event)">
+        </value-editor>
+    </div>
+    <div class="field-with-label ea">
+        <span class="label" matTooltip="Énergie astrale">EA:</span>
+        <span *ngIf="fighter.stats.maxEa">
+            <value-editor [title]="'Energie astrale'"
+                          [value]="fighter.stats.ea"
+                          [maxValue]="fighter.stats.maxEa"
+                          (onChange)="changeStat('ea', $event)">
+            </value-editor>
+        </span>
+        <span *ngIf="!fighter.stats.maxEa">-</span>
+    </div>
+    <div class="field-with-label pr">
+        <span class="label" matTooltip="Armure (Armure magique)">PR:</span>
+        {{fighter.stats.pr}}({{fighter.stats.pr_magic}})
+    </div>
+    <div class="field-with-label resm">
+        <span class="label" matTooltip="Resistance magique">RESM:</span>
+        {{fighter.stats.resm}}
+    </div>
+    <div class="field-with-label cou">
+        <span class="label" matTooltip="Courage">COU:</span>
+        <span *ngIf="fighter.chercheNoise" matTooltip="Chercher des noise">
+            {{fighter.stats.cou}}+
+        </span>
+        <span *ngIf="!fighter.chercheNoise">
+            {{fighter.stats.cou}}
+        </span>
+    </div>
+
+    <div class="dmg" matTooltip="Dégats">
+        <div *ngFor="let dmg of fighter.stats.dmg" class="equiped-weapons-damages">
+            <mat-icon *ngIf="dmg.incompatible" color="warn">warning</mat-icon>
+            <span>
+                    <div [class.incompatible-item]="dmg.incompatible">
+                        {{dmg.damage}}
+                    </div>
+                    <div class="secondary-text damage-weapon-name"  [class.incompatible-item]="dmg.incompatible">
+                        {{dmg.name}}
+                    </div>
+                </span>
+        </div>
+    </div>
+</div>
+
+<!--
+
 <div class="fighter-container"
      [class.combat-row-selected]="selected"
      (click)="selectFighter()">
@@ -442,3 +560,4 @@
         </mat-card-content>
     </mat-card>
 </ng-template>
+-->

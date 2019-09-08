@@ -1,261 +1,94 @@
-.fighter-container {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-around;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    padding-top: 4px;
-    padding-bottom: 4px;
-}
-.fighter-row {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-}
-.field-icon {
-    flex: 0 45px;
-}
-.field-button {
-    flex: 0 36px;
-}
-.field-datas {
-    display: flex;
-    flex-direction: row;
-    flex: 1 auto;
-    align-items: center;
-    flex-wrap: nowrap;
-
-    .row-first-part {
-        flex: 11 auto;
-        width: 200px;
-        display: flex;
-        justify-content: space-between;
-        flex-direction: column;
-        min-height: 52px;
-        margin: 8px 0;
-        > div {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-        }
-        &.header {
-            min-height: 0;
-            margin: 0;
-        }
-    }
-    .row-damage-part {
-        flex: 6 auto;
-        width: 40px;
-        text-align: center;
-    }
-    .row-end-part {
-        flex: 1 auto;
-        display: flex;
-        width: 50px;
-        flex-direction: row;
-        flex-wrap: nowrap;
-    }
-}
-.field {
-    flex: 1 auto;
-    width: 20px;
-    text-align: center;
-}
-.field-fixed-small {
-    flex: 0 36px;
-    text-align: center;
-}
-
-.field-medium {
-    text-align: center;
-    flex: 1 auto;
-    width: 30px;
-}
-.field-large {
-    text-align: center;
-    flex: 1 auto;
-    width: 40px;
-}
-.field-name {
-    flex: 4 auto;
-    width: 80px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-.text-attack {
-    font-weight: bold;
-    letter-spacing: .08em;
-}
-.text-prd {
-    font-weight: bold;
-    letter-spacing: .08em;
-}
-.text-esq {
-    font-weight: bold;
-    letter-spacing: .08em;
-}
-.fighter-header {
-    font-weight: bold;
-}
-
-.row-stat-modifiers {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    >mat-card {
-        flex: 1 auto;
-        width: 400px;
-    }
-}
-.row-inventory {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    >mat-card {
-        flex: 1 auto;
-        width: 400px;
-    }
-    .item-detail {
-        flex: 1 auto;
-        width: 400px;
-    }
-}
-
-.expanded-data-card {
-    background-color: inherit;
-    margin: 1px 2px 5px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-}
-
-.expanded-data {
-    display: flex;
-    .fighter-right-data {
-        flex: 1 auto;
-        width: 100px;
-    }
-    .fighter-note {
-        width: 100%;
-    }
-    .fighter-advanced-datas {
-        flex: 1 auto;
-        width: 40px;
-        .fighter-advanced-data {
-            display: flex;
-            align-items: center;
-            .label {
-                flex: 0 90px;
-                font-weight: bold;
-            }
-            .value {
-                flex: 0 auto;
-            }
-        }
-    }
-    .fighter-inventory-item {
-        position: relative;
-        display: flex;
+:host {
+    .fighter {
+        padding: 8px 8px 8px 0;
+        margin-bottom: 4px;
+        display: grid;
         align-items: center;
-        cursor: pointer;
-        >icon {
-            padding-right: 4px;
-        }
-    }
+        grid-gap: 8px;
+        grid-template-columns: 48px minmax(50px, 1fr) minmax(64px, 85px) minmax(74px, 92px);
+        grid-template-areas: "icon name name name" "icon . at ev" ". . prd esq" "dmg dmg pr cou" "dmg dmg resm ea";
 
-}
-
-.monster-effects {
-    display: flex;
-    flex-direction: row;
-    .effect-list {
-        flex: 1 auto;
-        flex-direction: column;
-        width: 60px;
-        .effect-element {
-            height: 33px;
-            padding-left: 10px;
-            padding-right: 10px;
-            cursor: pointer;
+        .field-with-label {
             display: flex;
+            justify-content: space-between;
             flex-direction: row;
             flex-wrap: nowrap;
+
+            .label {
+            }
+        }
+
+        .target {
+            grid-area: target;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .icon {
+            grid-area: icon;
+            cursor: pointer;
+        }
+
+        .name {
+            grid-area: name;
+            display: grid;
+            grid-template-columns: 1fr 40px;
             align-items: center;
-
-            border-bottom-width: 1px;
-            border-bottom-style: solid;
-
-            .toggle-reusable {
-                padding-top: 8px;
-            }
-
-            .padding {
-                flex: 1 1 auto;
-            }
-
-            .duration-icon {
-                font-size: 20px;
+            > span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
         }
 
-        .effect-detail {
-            padding-top: 5px;
-            padding-bottom: 5px;
-            background-color: inherit;
-            min-height: 36px;
+        .at {
+            grid-area: at;
+        }
 
-            .effect-modifier {
-                padding-left: 20px;
-            }
-            .delete-modifier-button {
-                float: right;
+        .prd {
+            grid-area: prd;
+        }
+
+        .esq {
+            grid-area: esq;
+        }
+
+        .ev {
+            grid-area: ev;
+        }
+
+        .ea {
+            grid-area: ea;
+        }
+
+        .pr {
+            grid-area: pr;
+        }
+
+        .resm {
+            grid-area: resm;
+        }
+
+        .dmg {
+            text-align: center;
+            grid-area: dmg;
+            > {
+                .damage-weapon-name {
+                    font-size: 14px;
+                }
             }
         }
-    }
-}
 
-.editable-data {
-    .name {
-        width: 100%;
-    }
-}
-
-.equip-toggle {
-    padding-top: 8px;
-}
-
-.effect-list {
-    border-top-width: 1px;
-    border-top-style: solid;
-}
-
-
-.equiped-weapons-damages {
-    display: flex;
-    overflow:hidden;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    >mat-icon {
-        flex-shrink: 0;
-        margin-right: 4px;
-    }
-    >span {
-        overflow:hidden;
-        flex: 1 1 auto;
-        display: flex;
-        flex-direction: column;
-        >span {
-            flex: 1 1 auto
+        .cou {
+            grid-area: cou;
         }
-    }
-}
 
-.damage-weapon-name {
-    font-size: small;
-    overflow:hidden;
-    white-space:nowrap;
-    text-overflow: ellipsis;
+        .cdn {
+            text-align: center;
+            grid-area: cdn;
+        }
+
+    }
+
 }
