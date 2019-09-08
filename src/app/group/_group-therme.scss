@@ -9,9 +9,6 @@
     $foreground: map-get($theme, foreground);
 
     @if (map_get($theme, is-dark)) {
-        .current-fighter {
-            background: #35502c;
-        }
         .text-attack {
             color: #bf3737;
         }
@@ -22,9 +19,6 @@
             color: #2d732f;
         }
     } @else {
-        .current-fighter {
-            background: #d7f5d0;
-        }
         .text-attack {
             color: #c72b2b;
         }

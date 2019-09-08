@@ -211,32 +211,7 @@
         </mat-tab>
 
         <mat-tab label="Combat">
-            <div class="combat-tab-header">
-                <button mat-raised-button
-                        color="primary"
-                        *ngIf="!group?.data?.inCombat"
-                        (click)="startCombat()">
-                    Debut combat
-                </button>
-                <button mat-raised-button
-                        color="primary"
-                        *ngIf="group.data.inCombat"
-                        (click)="endCombat()">
-                    Fin combat
-                </button>
-                <button mat-raised-button
-                        color="primary"
-                        (click)="fighterPanel.openAddMonsterDialog()">
-                    Ajouter un monstre
-                </button>
-                <button mat-raised-button
-                        color="primary"
-                        (click)="fighterPanel.openDeadMonstersDialog()">
-                    Monstres morts
-                </button>
-            </div>
-
-            <fighter-panel #fighterPanel [group]="group"></fighter-panel>
+            <fighter-panel [group]="group"></fighter-panel>
         </mat-tab>
 
         <mat-tab label="Loot">

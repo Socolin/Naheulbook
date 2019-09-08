@@ -1,19 +1,26 @@
-import {Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges, OnInit} from '@angular/core';
-import {OverlayRef} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog, MatSlideToggleChange} from '@angular/material';
 
 import {NotificationsService} from '../notifications';
 import {Character, CharacterService, ItemActionService} from '../character';
 import {Item, ItemService} from '../item';
 import {ActiveStatsModifier, LapCountDecrement, NhbkDialogService} from '../shared';
-import {Monster, MonsterService} from '../monster';
+import {Monster, MonsterData, MonsterService} from '../monster';
 import {ItemTemplate} from '../item-template';
 
 import {Fighter, Group} from './group.model';
 import {GroupActionService} from './group-action.service';
 import {TargetJsonData} from './target.model';
 import {AddEffectDialogComponent} from '../effect';
+import {
+    EditMonsterDialogComponent,
+    EditMonsterDialogData,
+    EditMonsterDialogResult
+} from './edit-monster-dialog.component';
+import {CreateItemDialogComponent, openCreateItemDialog} from './create-item-dialog.component';
+import {Subject} from 'rxjs';
+import {Loot} from '../loot';
+import {openCreateGemDialog} from './create-gem-dialog.component';
 
 @Component({
     selector: 'fighter',
@@ -31,10 +38,6 @@ export class FighterComponent implements OnInit, OnChanges {
     @Input() selectedModifier: ActiveStatsModifier | undefined;
     public selectedItem: Item | undefined;
 
-    @ViewChild('editMonsterDialog', {static: true})
-    public editMonsterDialog: Portal<any>;
-    public editMonsterOverlayRef: OverlayRef | undefined;
-
     constructor(
         private _actionService: GroupActionService,
         private _characterService: CharacterService,
@@ -47,8 +50,27 @@ export class FighterComponent implements OnInit, OnChanges {
     ) {
     }
 
-    addItemTo(fighter: Fighter) {
-        this._actionService.emitAction('openAddItemForm', this.group, fighter);
+    openAddItemDialog() {
+        openCreateItemDialog(this.dialog, (item) => {
+            this.addItem(item);
+        });
+    }
+
+    openAddGemDialog() {
+        openCreateGemDialog(this.dialog, (item) => {
+            this.addItem(item);
+        });
+    }
+
+    addItem(item: Item) {
+        this._itemService.addItemTo(this.fighter.typeName, this.fighter.id, item.template.id, item.data).subscribe(
+            (createdItem) => {
+                if (this.fighter.isMonster) {
+                    this.fighter.monster.addItem(createdItem);
+                } else {
+                    this.fighter.character.onAddItem(createdItem);
+                }
+            });
     }
 
     displayCharacterSheet(character: Character) {
@@ -137,8 +159,7 @@ export class FighterComponent implements OnInit, OnChanges {
                         monster.changeData(monsterData);
                     });
             }
-        }
-        else {
+        } else {
             this._characterService.changeCharacterStat(this.fighter.character.id, stat, value).subscribe(
                 this.fighter.character.onChangeCharacterStat.bind(this.fighter.character)
             );
@@ -160,15 +181,26 @@ export class FighterComponent implements OnInit, OnChanges {
     }
 
     openEditMonsterDialog() {
-        this.editMonsterOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.editMonsterDialog);
-    }
+        const dialogRef = this.dialog.open<EditMonsterDialogComponent, EditMonsterDialogData, EditMonsterDialogResult>(
+            EditMonsterDialogComponent, {
+                autoFocus: false,
+                data: {monster: this.fighter.monster},
+                minWidth: '100vw', height: '100vh'
+            });
 
-    closeEditMonsterDialog() {
-        if (!this.editMonsterOverlayRef) {
-            return;
-        }
-        this.editMonsterOverlayRef.detach();
-        this.editMonsterOverlayRef = undefined;
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            const {name, ...data} = result;
+            const monsterData = new MonsterData({...this.fighter.monster.data, ...data});
+            this._monsterService.updateMonster(this.fighter.id, {name}).subscribe(() => {
+                this.fighter.monster.name = name;
+            });
+            this._monsterService.updateMonsterData(this.fighter.id, data).subscribe(() => {
+                this.fighter.monster.data = monsterData;
+            });
+        });
     }
 
     selectFighter() {
@@ -233,7 +265,7 @@ export class FighterComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this._itemActionService.registerAction('ignoreRestrictions').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('ignoreRestrictions').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             item.data = {
                 ...item.data,
@@ -243,7 +275,7 @@ export class FighterComponent implements OnInit, OnChanges {
                 this.fighter.character.onUpdateItem.bind(this.fighter.character)
             );
         });
-        this._itemActionService.registerAction('identify').subscribe((event: {item: Item, data: any}) => {
+        this._itemActionService.registerAction('identify').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             let itemData = {...item.data, name: item.template.name};
             delete itemData.notIdentified;
@@ -252,5 +284,10 @@ export class FighterComponent implements OnInit, OnChanges {
                 this.fighter.character.onUpdateItem.bind(this.fighter.character)
             );
         });
+    }
+
+    openModifierDetails(modifier: ActiveStatsModifier) {
+
+
     }
 }

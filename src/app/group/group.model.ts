@@ -108,6 +108,10 @@ export class Fighter {
     monster: Monster;
     character: Character;
 
+    get typeName(): 'monster' | 'character' {
+        return this.isMonster ? 'monster' : 'character';
+    }
+
     get onTargetChange(): Observable<TargetJsonData> {
         return this.isMonster ? this.monster.targetChanged : this.character.targetChanged;
     }

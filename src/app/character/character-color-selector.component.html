@@ -2,6 +2,10 @@
    #colorSelectorOrigin="cdkOverlayOrigin"
    [style.color]="'#' + character.color"
    class="ra ra-player ra-3x"
+   matRipple
+   matRippleCentered="true"
+   matRippleUnbounded="true"
+   matRippleRadius="24"
    (click)="toggleSelector($event)">
 </i>
 
@@ -10,7 +14,7 @@
              (backdropClick)="hideSelector()"
              [cdkConnectedOverlayOpen]="showSelector"
              [cdkConnectedOverlayOrigin]="colorSelectorOrigin">
-    <mat-card style="width:194px; display: flex; flex-direction: row; flex-wrap: wrap; padding: 0">
+    <mat-card style="width:194px; display: flex; flex-direction: row; flex-wrap: wrap; padding: 0; cursor: pointer">
         <div *ngFor="let color of colors" style="width: 48px; height: 48px">
             <i [style.color]=color
                class="ra ra-3x ra-player"

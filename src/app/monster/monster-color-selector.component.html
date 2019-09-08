@@ -2,9 +2,17 @@
      #colorSelectorOrigin="cdkOverlayOrigin"
      style="position: relative; text-align: left; width: 48px; height: 48px">
     <i style="position: absolute;"
+       matRipple
+       matRippleCentered="true"
+       matRippleUnbounded="true"
+       matRippleRadius="32"
        [style.color]="'#' + monster.data.color" class="ra ra-monster-skull ra-3x"
        (click)="openSelector($event)"></i>
     <span *ngIf="monster.data.number"
+          matRipple
+          matRippleCentered="true"
+          matRippleUnbounded="true"
+          matRippleRadius="32"
           (click)="openSelector($event)"
           style="
                 width: 40px;
@@ -27,8 +35,9 @@
     <mat-card style="padding: 0; display: flex;">
         <div style="flex: 0 auto; width: 192px">
             <ng-template ngFor let-color [ngForOf]="colors">
-                <div style="float:left; width: 48px; height: 48px">
+                <div style="float:left; width: 48px; height: 48px; cursor: pointer">
                     <i [style.color]=color
+                       mat-ripple
                        class="ra ra-monster-skull ra-3x"
                        (click)="changeColor(color)">
                     </i>
@@ -37,7 +46,8 @@
         </div>
         <div style="flex: 0 auto; width: 192px">
             <ng-template ngFor let-number [ngForOf]="numbers">
-                <div style="float:left; width: 48px; height: 48px"
+                <div style="float:left; width: 48px; height: 48px; cursor: pointer"
+                     mat-ripple
                      (click)="changeNumber(number)">
                     <span *ngIf="number"
                           style="

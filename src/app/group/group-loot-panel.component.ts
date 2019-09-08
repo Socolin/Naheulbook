@@ -9,11 +9,11 @@ import {Monster} from '../monster';
 import {Group} from './group.model';
 import {GroupService} from './group.service';
 import {MatDialog} from '@angular/material/dialog';
-import {CreateItemDialogComponent} from './create-item-dialog.component';
+import {CreateItemDialogComponent, openCreateItemDialog} from './create-item-dialog.component';
 import {Subject} from 'rxjs';
 import {AddLootDialogComponent} from './add-loot-dialog.component';
 import {WebSocketService} from '../websocket';
-import {CreateGemDialogComponent} from './create-gem-dialog.component';
+import {CreateGemDialogComponent, openCreateGemDialog} from './create-gem-dialog.component';
 
 @Component({
     selector: 'group-loot-panel',
@@ -33,34 +33,22 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     openAddItemDialog(target: Loot|Monster) {
-        const subject = new Subject<Item>();
-        const dialogRef = this.dialog.open(CreateItemDialogComponent, {data: {onAdd: subject}});
-        const subscription = subject.subscribe((item) => {
+        openCreateItemDialog(this.dialog, (item) => {
             if (target instanceof Loot) {
                 this.onAddItem({loot: target, item: item});
             } else {
                 this.onAddItem({monster: target, item: item});
             }
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-            subscription.unsubscribe();
         });
     }
 
     openAddGemDialog(target: Loot|Monster) {
-        const subject = new Subject<Item>();
-        const dialogRef = this.dialog.open(CreateGemDialogComponent, {data: {onAdd: subject}, autoFocus: false});
-        const subscription = subject.subscribe((item) => {
+        openCreateGemDialog(this.dialog, (item) => {
             if (target instanceof Loot) {
                 this.onAddItem({loot: target, item: item});
             } else {
                 this.onAddItem({monster: target, item: item});
             }
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-            subscription.unsubscribe();
         });
     }
 

@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {forkJoin, Observer} from 'rxjs';
+import {forkJoin, Observer, Subject} from 'rxjs';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Item} from '../item';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
@@ -9,6 +9,18 @@ import {IconSelectorComponent, IconSelectorComponentDialogData} from '../shared'
 
 export interface CreateItemDialogDialog {
     onAdd: Observer<any>;
+}
+
+export function openCreateItemDialog(dialog: MatDialog, onAdd: (item: Item) => void) {
+    const subject = new Subject<Item>();
+    const dialogRef = dialog.open(CreateItemDialogComponent, {data: {onAdd: subject}});
+    const subscription = subject.subscribe((item) => {
+        onAdd(item);
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+        subscription.unsubscribe();
+    });
 }
 
 @Component({
@@ -118,6 +130,13 @@ export class CreateItemDialogComponent implements OnInit {
         this.newItem.data.description = itemTemplate.data.description;
         if (itemTemplate.data.quantifiable) {
             this.newItem.data.quantity = 1;
+        } else {
+            delete this.newItem.data.quantity;
+        }
+        if (itemTemplate.data.useUG) {
+            this.newItem.data.ug = 1;
+        } else {
+            delete this.newItem.data.ug;
         }
         this.filteredItemTemplates = undefined;
     }

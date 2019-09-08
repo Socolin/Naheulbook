@@ -229,6 +229,24 @@ export class FighterPanelComponent implements OnInit {
         });
     }
 
+    startCombat() {
+        this._groupService.startCombat(this.group.id).subscribe(
+            () => {
+                this.group.data.changeValue('inCombat', true);
+            }
+        );
+    }
+
+    endCombat() {
+        this._groupService.endCombat(this.group.id).subscribe(
+            () => {
+                this.group.data.changeValue('inCombat', false);
+                let changes = this.group.updateTime('combat', 1);
+                this._groupService.saveChangedTime(this.group.id, changes);
+            }
+        );
+    }
+
     selectMonsterInAutocompleteList(monster: MonsterTemplate) {
         this.selectedMonsterTemplate = monster;
         this.monsterAutocompleteShow = false;

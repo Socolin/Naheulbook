@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {NhbkMaterialModule} from '../nhbk-material.module';
 import {NotificationsModule} from '../notifications/notifications.module';
@@ -33,6 +33,7 @@ import {
     TargetSelectorComponent,
 } from './';
 import { CharacterSheetDialogComponent } from './character-sheet-dialog.component';
+import { EditMonsterDialogComponent } from './edit-monster-dialog.component';
 
 @NgModule({
     imports: [
@@ -49,7 +50,8 @@ import { CharacterSheetDialogComponent } from './character-sheet-dialog.componen
         OriginModule,
         EventModule,
         UsefullDataModule,
-        ItemModule
+        ItemModule,
+        ReactiveFormsModule
     ],
     declarations: [
         CreateGroupComponent,
@@ -67,12 +69,14 @@ import { CharacterSheetDialogComponent } from './character-sheet-dialog.componen
         AddLootDialogComponent,
         CreateGemDialogComponent,
         CharacterSheetDialogComponent,
+        EditMonsterDialogComponent,
     ],
     entryComponents: [
         AddLootDialogComponent,
         CharacterSheetDialogComponent,
         CreateGemDialogComponent,
         CreateItemDialogComponent,
+        EditMonsterDialogComponent,
         FighterSelectorComponent,
     ],
     providers: [GroupService]

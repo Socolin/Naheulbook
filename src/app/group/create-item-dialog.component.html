@@ -62,6 +62,12 @@
                            placeholder="Quantité"
                            [(ngModel)]="newItem.data.quantity"/>
                 </mat-form-field>
+                <mat-form-field *ngIf="newItem.template?.data?.useUG">
+                    <input matInput
+                           type="number"
+                           placeholder="U.G."
+                           [(ngModel)]="newItem.data.ug"/>
+                </mat-form-field>
             </div>
         </div>
     </mat-card-content>

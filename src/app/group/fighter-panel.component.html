@@ -1,32 +1,68 @@
-<div>
-     <div *ngIf="group.data.inCombat && group.currentFighter" class="current-fighter">
-        <fighter [selected]="false"
-                 [group]="group"
-                 [fighter]="group.currentFighter"
-                 [expandedView]="true"
-                 [fighters]="group.fighters">
-        </fighter>
-    </div>
-    <div *ngIf="group.data.inCombat && group.currentFighter" class="next-fighter">
-        <button mat-raised-button
-                color="primary"
-                [disabled]="loadingNextLap || group.fighters.length < 2"
-                (click)="selectNextFighter()">
-            Suivant
-        </button>
-    </div>
-    <hr *ngIf="group.data.inCombat && group.currentFighter">
-    <ng-template ngFor let-fighter [ngForOf]="group.fighters" let-i=index>
-        <fighter [selected]="(!group.data.inCombat && selectedCombatRow === i) || (group.data.inCombat && group.data.currentFighterIndex === i)"
-                 [group]="group"
-                 [fighter]="fighter"
-                 [fighters]="group.fighters"
-                 [expandedView]="selectedCombatRow === i"
-                 (onSelect)="selectFighter($event)">
-        </fighter>
-        <mat-divider></mat-divider>
-    </ng-template>
+<mat-toolbar color=primary *ngIf="group.data.inCombat && group.currentFighter">
+    Combatant actuel
+    <button mat-icon-button
+            [disabled]="loadingNextLap || group.fighters.length < 2"
+            (click)="selectNextFighter()">
+        <mat-icon>
+            navigate_next
+        </mat-icon>
+    </button>
+</mat-toolbar>
+<div *ngIf="group.data.inCombat && group.currentFighter">
+    <fighter [selected]="false"
+             [group]="group"
+             [fighter]="group.currentFighter"
+             [expandedView]="true"
+             [fighters]="group.fighters">
+    </fighter>
 </div>
+<mat-toolbar color=primary>
+    Combatants
+    <span>
+        <button mat-icon-button [matMenuTriggerFor]="menuCharacter" aria-label="Ouvrir le menu du personnage">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menuCharacter="matMenu">
+            <button mat-menu-item
+                    color="primary"
+                    *ngIf="!group?.data?.inCombat"
+                    (click)="startCombat()">
+                <mat-icon>play_arrow</mat-icon>
+                Debut combat
+            </button>
+            <button mat-menu-item
+                    color="primary"
+                    *ngIf="group.data.inCombat"
+                    (click)="endCombat()">
+                <mat-icon>stop</mat-icon>
+                Fin combat
+            </button>
+            <button mat-menu-item
+                    color="primary"
+                    (click)="openAddMonsterDialog()">
+                <mat-icon>add</mat-icon>
+                Ajouter un monstre
+            </button>
+            <button mat-menu-item
+                    color="primary"
+                    (click)="openDeadMonstersDialog()">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-tombstone" class="ra-mat-button-icon-24"></mat-icon>
+                Monstres morts
+            </button>
+        </mat-menu>
+    </span>
+</mat-toolbar>
+<ng-template ngFor let-fighter [ngForOf]="group.fighters" let-i=index>
+    <fighter
+        [selected]="(!group.data.inCombat && selectedCombatRow === i) || (group.data.inCombat && group.data.currentFighterIndex === i)"
+        [group]="group"
+        [fighter]="fighter"
+        [fighters]="group.fighters"
+        [expandedView]="selectedCombatRow === i"
+        (onSelect)="selectFighter($event)">
+    </fighter>
+    <mat-divider></mat-divider>
+</ng-template>
 
 <ng-template #deadMonstersDialog="cdkPortal" cdk-portal>
     <mat-card class="dead-monsters-dialog">
@@ -42,13 +78,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <ng-template ngFor let-element [ngForOf]="deadMonsters">
-                        <tr>
-                            <td>{{element.name}}</td>
-                            <td>{{element.data.xp}}</td>
-                            <td>{{element.note}}</td>
-                        </tr>
-                    </ng-template>
+                <ng-template ngFor let-element [ngForOf]="deadMonsters">
+                    <tr>
+                        <td>{{element.name}}</td>
+                        <td>{{element.data.xp}}</td>
+                        <td>{{element.note}}</td>
+                    </tr>
+                </ng-template>
                 </tbody>
             </table>
         </mat-card-content>
@@ -56,10 +92,12 @@
             <button mat-button
                     color="primary"
                     [disabled]="allDeadMonstersLoaded"
-                    (click)="loadMoreDeadMonsters()">CHARGER PLUS</button>
+                    (click)="loadMoreDeadMonsters()">CHARGER PLUS
+            </button>
             <button mat-button
                     color="primary"
-                    (click)="closeDeadMonstersDialog()">FERMER</button>
+                    (click)="closeDeadMonstersDialog()">FERMER
+            </button>
         </mat-card-actions>
     </mat-card>
 </ng-template>
@@ -182,7 +220,8 @@
                     <div *ngFor="let item of newMonster.items; let i=index">
                         <span *ngIf="item.data.quantity > 1">{{item.data.quantity}}</span> {{item.data.name}}
                         <span *ngIf="item.data.notIdentified" class="label label-warning">Non identifie</span>
-                        <button (click)="item.data.notIdentified = !item.data.notIdentified" class="btn btn-primary glyphicon glyphicon-question-sign"></button>
+                        <button (click)="item.data.notIdentified = !item.data.notIdentified"
+                                class="btn btn-primary glyphicon glyphicon-question-sign"></button>
                     </div>
                 </div>
             </div>
@@ -190,15 +229,16 @@
         <mat-card-actions align="end">
             <button mat-button
                     color="primary"
-                    (click)="closeAddMonsterDialog()">FERMER</button>
+                    (click)="closeAddMonsterDialog()">FERMER
+            </button>
             <button mat-button
                     color="primary"
-                    (click)="cleanMonster()">RESET</button>
+                    (click)="cleanMonster()">RESET
+            </button>
             <button mat-button
                     color="accent"
-                    (click)="addMonster()">AJOUTER</button>
+                    (click)="addMonster()">AJOUTER
+            </button>
         </mat-card-actions>
     </mat-card>
 </ng-template>
-
-<create-item #createItemComponent (onAddItem)="onItemAdded($event)"></create-item>

@@ -20,11 +20,17 @@
             <mat-menu #menuCharacter="matMenu">
                 <button mat-menu-item
                         (click)="displayCharacterSheet(fighter.character)">
+                    <mat-icon>pageview</mat-icon>
                     Voir la fiche
                 </button>
                 <button mat-menu-item
-                        (click)=addItemTo(fighter)>
-                    Ajouter un objet
+                        (click)=openAddItemDialog(fighter)>
+                    <mat-icon>add</mat-icon>
+                    Objet
+                </button>
+                <button mat-menu-item
+                        (click)=openAddGemDialog(fighter)>
+                    <mat-icon>add</mat-icon>Pierre précieuse
                 </button>
             </mat-menu>
         </ng-template>
@@ -35,16 +41,38 @@
 
             <mat-menu #menuMonster="matMenu">
                 <button mat-menu-item
+                        (click)=openEditMonsterDialog()>
+                    <mat-icon>edit</mat-icon>
+                    Modifier
+                </button>
+                <button mat-menu-item
+                        (click)=openAddItemDialog()>
+                    <mat-icon>add</mat-icon>
+                    Objet
+                </button>
+                <button mat-menu-item
+                        (click)=openAddGemDialog()>
+                    <mat-icon>add</mat-icon>Pierre précieuse
+                </button>
+                <button mat-menu-item
+                        (click)=openAddEffectDialog()>
+                    <mat-icon>add</mat-icon>Modificateur
+                </button>
+                <button mat-menu-item
                         (click)=killMonster(fighter.monster)>
+                    <mat-icon fontSet="game-icon" fontIcon="game-icon-tombstone" class="ra-mat-button-icon-24"></mat-icon>
                     Tuer le monstre
                 </button>
-                <button mat-menu-item
-                        (click)=deleteMonster(fighter.monster)>
+                <button mat-menu-item [matMenuTriggerFor]="deleteMonsterConfirm">
+                    <mat-icon>delete</mat-icon>
                     Supprimer le monstre
                 </button>
+            </mat-menu>
+
+            <mat-menu #deleteMonsterConfirm="matMenu">
                 <button mat-menu-item
-                        (click)=openEditMonsterDialog()>
-                    Modifier
+                        (click)=deleteMonster(fighter.monster)>
+                    Confirmer
                 </button>
             </mat-menu>
         </ng-template>
@@ -111,6 +139,51 @@
                     </div>
                 </span>
         </div>
+    </div>
+    <div class="effects" *ngIf="fighter.isMonster && fighter.monster.modifiers?.length">
+        Effets:
+        <div *ngFor="let modifier of fighter.monster.modifiers" class="effect">
+            <span class="effect-name">
+                <span class="effect-reusable" *ngIf="modifier.reusable">
+                    <mat-slide-toggle color="primary"
+                                      (change)="toggleReusableModifier(modifier)"
+                                      (click)="$event.stopPropagation()"
+                                      [ngModel]="modifier.active">
+                    </mat-slide-toggle>
+                </span>
+                {{modifier.name}}
+            </span>
+            <span *ngIf="modifier.currentCombatCount" class="effect-time">
+                <span class="ra ra-sword duration-icon"></span> {{modifier.currentCombatCount}}
+            </span>
+            <span *ngIf="modifier.currentTimeDuration" class="effect-time">
+                <span class="ra ra-clockwork duration-icon"></span> {{modifier.currentTimeDuration | nhbkShortDuration}}
+            </span>
+            <span *ngIf="modifier.currentLapCount" class="effect-time">
+                <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{modifier.currentLapCount}}
+            </span>
+            <span class="effect-actions">
+               <button mat-icon-button [matMenuTriggerFor]="menuCharacter"
+                       aria-label="Ouvrir le menu de l'effet">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menuCharacter="matMenu">
+                    <button mat-menu-item
+                            (click)="openModifierDetails(modifier)">
+                        <mat-icon>info</mat-icon>
+                        Details
+                    </button>
+                    <button mat-menu-item
+                            (click)="removeModifier(modifier)">
+                        <mat-icon>delete</mat-icon>
+                        Supprimer
+                    </button>
+                </mat-menu>
+            </span>
+        </div>
+    </div>
+    <div class="note" *ngIf="fighter.isMonster && fighter.monster.data.note">
+        Note: {{fighter.monster.data.note}}
     </div>
 </div>
 
@@ -465,99 +538,4 @@
     </div>
 </div>
 
-<ng-template #editMonsterDialog="cdkPortal" cdk-portal>
-    <mat-card>
-        <mat-card-content>
-            <div class="editable-data">
-                <div class="fighter-row">
-                    <mat-form-field class="name">
-                        <input matInput
-                               placeholder="Nom"
-                               [ngModel]="fighter.monster.name"
-                               (ngModelChange)="changeStat('name', $event)"
-                        />
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="fighter-row">
-                <div class="at">
-                    AT:
-                    <span class="text-attack">
-                        <value-editor [value]="fighter.monster.data.at"
-                                      [title]="'AT'"
-                                      (onChange)="updateMonsterField(fighter.monster, 'at', $event)">
-                        </value-editor>
-                    </span>
-                </div>
-                <div class="prd">
-                    PRD:
-                    <span class="text-prd">
-                        <value-editor [value]="fighter.monster.data.prd"
-                                      [title]="'Parade'"
-                                      (onChange)="updateMonsterField(fighter.monster, 'prd', $event)">
-                        </value-editor>
-                    </span>
-                </div>
-                <div class="esq">
-                    ESQ:
-                    <span class="text-esq">
-                        <value-editor [value]="fighter.monster.data.esq"
-                                      [title]="'Esquive'"
-                                      (onChange)="updateMonsterField(fighter.monster, 'esq', $event)">
-                        </value-editor>
-                    </span>
-                </div>
-                <div class="pr">
-                    PR:
-                    <span class="">
-                        <value-editor [value]="fighter.monster.data.pr"
-                                      [title]="'Protection'"
-                                      (onChange)="updateMonsterField(fighter.monster, 'pr', $event)">
-                        </value-editor>
-                    </span>
-                </div>
-                <div class="pr_magic">
-                    PR Ma:
-                    <span class="">
-                        <value-editor [value]="fighter.monster.data.pr_magic"
-                                      [title]="'Protection magique'"
-                                      (onChange)="updateMonsterField(fighter.monster, 'pr_magic', $event)">
-                        </value-editor>
-                    </span>
-                </div>
-                <div class="resm">
-                    RESM:
-                    <span class="">
-                        <value-editor [value]="fighter.monster.data.resm"
-                                      [title]="'Resistance Magique'"
-                                      (onChange)="updateMonsterField(fighter.monster, 'resm', $event)">
-                        </value-editor>
-                    </span>
-                </div>
-            </div>
-            <div class="fighter-row">
-                <mat-form-field class="dmg">
-                    <input matInput
-                           placeholder="Dmg"
-                           [ngModel]="fighter.monster.data.dmg"
-                           (ngModelChange)="changeStat('dmg', $event)"
-                    />
-                </mat-form-field>
-                <div class="cou">
-                    COU:
-                    <value-editor [value]="fighter.monster.data.cou"
-                                  [title]="'Courage'"
-                                  (onChange)="updateMonsterField(fighter.monster, 'cou', $event)">
-                    </value-editor>
-                </div>
-                <div class="cherchenoise">
-                    Chercher des noises:
-                    <mat-checkbox [checked]="fighter.monster.data.chercheNoise"
-                                 (change)="updateMonsterField(fighter.monster, 'chercheNoise', $event.checked)">
-                    </mat-checkbox>
-                </div>
-            </div>
-        </mat-card-content>
-    </mat-card>
-</ng-template>
 -->

@@ -1,15 +1,27 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Observer} from 'rxjs';
+import {Observer, Subject} from 'rxjs';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Item} from '../item';
 import {ItemTemplateService} from '../item-template';
 import {getRandomInt, IconSelectorComponent, IconSelectorComponentDialogData} from '../shared';
 import {IconDescription} from '../shared/icon.model';
+import {CreateItemDialogComponent} from './create-item-dialog.component';
 
 export interface CreateGemDialogDialog {
     onAdd: Observer<any>;
 }
 
+export function openCreateGemDialog(dialog: MatDialog, onAdd: (item: Item) => void) {
+    const subject = new Subject<Item>();
+    const dialogRef = dialog.open(CreateGemDialogComponent, {data: {onAdd: subject}});
+    const subscription = subject.subscribe((item) => {
+        onAdd(item);
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+        subscription.unsubscribe();
+    });
+}
 @Component({
     selector: 'app-create-gem-dialog',
     templateUrl: './create-gem-dialog.component.html',

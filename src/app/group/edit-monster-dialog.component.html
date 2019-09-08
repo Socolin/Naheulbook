@@ -1,0 +1,200 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>
+        Modification du monstre: {{data.monster.name}}
+    </span>
+    <button mat-button
+            (click)="edit()">
+        SAUVEGARDER
+    </button>
+</mat-toolbar>
+
+<div class="content">
+    <form [formGroup]="form">
+        <div class="name">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       placeholder="Nom"
+                       formControlName="name"
+                />
+            </mat-form-field>
+        </div>
+
+        <div class="at">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="Attaque"
+                       formControlName="at"
+                />
+            </mat-form-field>
+        </div>
+        <div class="prd">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="Parade"
+                       formControlName="prd"
+                />
+            </mat-form-field>
+        </div>
+        <div class="esq">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="Esquive"
+                       formControlName="esq"
+                />
+            </mat-form-field>
+        </div>
+        <div class="ev">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="E.Vitale"
+                       formControlName="ev"
+                />
+            </mat-form-field>
+        </div>
+        <div class="maxEv">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="E.Vitale Max"
+                       formControlName="maxEv"
+                />
+            </mat-form-field>
+        </div>
+        <div class="ea">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="E.Astrale"
+                       formControlName="ea"
+                />
+            </mat-form-field>
+        </div>
+        <div class="maxEa">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="E.Astrale Max"
+                       formControlName="maxEa"
+                />
+            </mat-form-field>
+        </div>
+        <div class="pr">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="Protection"
+                       formControlName="pr"
+                />
+            </mat-form-field>
+        </div>
+        <div class="pr_magic">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="Protec.Magique"
+                       formControlName="pr_magic"
+                />
+            </mat-form-field>
+        </div>
+        <div class="resm">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="Resist.Magique"
+                       formControlName="resm"
+                />
+            </mat-form-field>
+        </div>
+        <div class="dmg">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       placeholder="Dégats"
+                       formControlName="dmg"
+                />
+            </mat-form-field>
+        </div>
+        <div class="cou">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="Courage"
+                       formControlName="cou"
+                />
+            </mat-form-field>
+        </div>
+        <div class="chercheNoise">
+            <mat-checkbox formControlName="chercheNoise">
+                Chercher des noises
+            </mat-checkbox>
+        </div>
+        <div class="xp">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       autocapitalize="off"
+                       type="number"
+                       placeholder="Experience"
+                       formControlName="xp"
+                />
+            </mat-form-field>
+        </div>
+        <div class="sex">
+            <mat-form-field>
+                <mat-select formControlName="sex" placeholder="Sexe">
+                    <mat-option [value]="undefined">
+                        Non défini
+                    </mat-option>
+                    <mat-option [value]="'f'">
+                        Femme
+                    </mat-option>
+                    <mat-option [value]="'h'">
+                        Homme
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="note">
+            <mat-form-field>
+            <textarea matInput placeholder="Note"
+                      formControlName="note"
+                      cdkTextareaAutosize
+                      cdkAutosizeMinRows="1"
+                      cdkAutosizeMaxRows="5">
+            </textarea>
+            </mat-form-field>
+        </div>
+    </form>
+</div>
