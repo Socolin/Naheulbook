@@ -4,6 +4,7 @@
 @import './app/shared/_value-editor-theme';
 @import './app/_app.theme';
 @import './app/character/character.theme';
+@import './app/group/fighter-panel.theme';
 @import './app/usefull-data/usefull-data-theme';
 @import './app/item-template/item-template.theme';
 @import './app/group/group-therme';
@@ -26,13 +27,17 @@ $nhbk-theme: mat-light-theme($nhbk-primary, $nhbk-accent, $nhbk-warn);
 // that you are using.
 @include angular-material-theme($nhbk-theme);
 @include global-theme($nhbk-theme);
-@include value-selector-theme($nhbk-theme);
-@include character-theme($nhbk-theme);
-@include usefull-data-theme($nhbk-theme);
-@include item-theme($nhbk-theme);
-@include group-theme($nhbk-theme);
 
-// Define an alternate dark theme.
+@mixin custom-components-theme($theme) {
+    @include value-selector-theme($theme);
+    @include character-theme($theme);
+    @include usefull-data-theme($theme);
+    @include item-theme($theme);
+    @include group-theme($theme);
+    @include fighter-panel-theme($theme);
+}
+
+@include custom-components-theme($nhbk-theme);
 
 @mixin add-theme($isDark, $primary, $accent, $warn, $name) {
     $theme-primary: mat-palette($primary);
@@ -45,11 +50,7 @@ $nhbk-theme: mat-light-theme($nhbk-primary, $nhbk-accent, $nhbk-warn);
         .#{$name} {
             @include angular-material-theme($dark-theme);
             @include global-theme($dark-theme);
-            @include value-selector-theme($dark-theme);
-            @include character-theme($dark-theme);
-            @include usefull-data-theme($dark-theme);
-            @include item-theme($dark-theme);
-            @include group-theme($dark-theme);
+            @include custom-components-theme($dark-theme);
         }
     }
     @else {
@@ -59,11 +60,7 @@ $nhbk-theme: mat-light-theme($nhbk-primary, $nhbk-accent, $nhbk-warn);
         .#{$name} {
             @include angular-material-theme($light-theme);
             @include global-theme($light-theme);
-            @include value-selector-theme($light-theme);
-            @include character-theme($light-theme);
-            @include usefull-data-theme($light-theme);
-            @include item-theme($light-theme);
-            @include group-theme($light-theme);
+            @include custom-components-theme($light-theme);
         }
     }
 }

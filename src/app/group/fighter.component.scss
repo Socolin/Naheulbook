@@ -4,7 +4,7 @@
         display: grid;
         align-items: center;
         grid-gap: 8px;
-        grid-template-columns: 48px minmax(50px, 1fr) minmax(64px, 85px) minmax(74px, 92px) 8px;
+        grid-template-columns: 48px minmax(20px, 1fr) minmax(64px, 85px) minmax(76px, 92px) 8px;
         grid-template-areas: "icon name name name name" "icon . at ev ."
             ". . prd esq ."
             "dmg dmg pr cou ."

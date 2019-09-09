@@ -1,10 +1,11 @@
 :host {
-    > h2 {
-        display: flex;
-        justify-content: space-between;
-    }
-    .padding {
-        height: 24px;
+    .fighter-card {
+        > h2 {
+            display: flex;
+            justify-content: space-between;
+        }
+        padding: 16px 8px 8px;
+        margin: 8px;
     }
 }
 fighter {
