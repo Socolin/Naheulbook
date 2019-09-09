@@ -14,6 +14,8 @@ import {Subject} from 'rxjs';
 import {AddLootDialogComponent} from './add-loot-dialog.component';
 import {WebSocketService} from '../websocket';
 import {CreateGemDialogComponent, openCreateGemDialog} from './create-gem-dialog.component';
+import {ItemTemplate} from '../item-template';
+import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 
 @Component({
     selector: 'group-loot-panel',
@@ -126,23 +128,27 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     removeItemFromLoot(loot: Loot, item: Item) {
-        if (item != null) {
-            this._itemService.deleteItem(item.id).subscribe(
-                () => {
-                    loot.removeItem(item.id);
-                }
-            );
-        }
+        this._itemService.deleteItem(item.id).subscribe(
+            () => {
+                loot.removeItem(item.id);
+            }
+        );
     }
 
     removeItemFromMonster(monster: Monster, item: Item) {
-        if (item != null) {
-            this._itemService.deleteItem(item.id).subscribe(
-                () => {
-                    monster.removeItem(item.id);
-                }
-            );
-        }
+        this._itemService.deleteItem(item.id).subscribe(
+            () => {
+                monster.removeItem(item.id);
+            }
+        );
+    }
+
+    openItemTemplateDialog(itemTemplate: ItemTemplate) {
+        this.dialog.open(ItemTemplateDialogComponent, {
+            panelClass: 'app-dialog-no-padding',
+            data: {itemTemplate},
+            autoFocus: false
+        });
     }
 
     ngOnInit() {

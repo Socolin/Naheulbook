@@ -7,7 +7,7 @@ import {GroupComponent} from '../group/group.component';
 import {SkillListComponent} from '../skill/skill-list.component';
 import {OriginListComponent} from '../origin/origin-list.component';
 import {JobListComponent} from '../job/job-list.component';
-import {ItemListComponent} from '../item-template/item-list.component';
+import {ItemTemplateListComponent} from '../item-template/item-template-list.component';
 import {EffectListComponent} from '../effect/effect-list.component';
 import {MonsterListComponent} from '../monster/monster-list.component';
 import {LocationListComponent} from '../location/location-list.component';
@@ -85,11 +85,11 @@ export const routes: Routes = [
                     },
                     {
                         path: 'items/:id',
-                        component: ItemListComponent
+                        component: ItemTemplateListComponent
                     },
                     {
                         path: 'items',
-                        component: ItemListComponent
+                        component: ItemTemplateListComponent
                     },
                     {
                         path: 'effects',

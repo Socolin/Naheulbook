@@ -15,13 +15,13 @@ import {
     CreateItemTemplateDialogComponent,
     EditItemTemplateDialogComponent,
     ItemCategoryDirective,
-    ItemListComponent,
+    ItemTemplateListComponent,
     ItemTemplateComponent,
     ItemTemplateEditorComponent,
     ItemTemplateEditorModuleComponent,
     ItemTemplateService,
 } from './';
-import { ItemDetailDialogComponent } from './item-detail-dialog.component';
+import { ItemTemplateDialogComponent } from './item-template-dialog.component';
 
 @NgModule({
     imports: [
@@ -38,22 +38,22 @@ import { ItemDetailDialogComponent } from './item-detail-dialog.component';
         CreateItemTemplateDialogComponent,
         EditItemTemplateDialogComponent,
         ItemCategoryDirective,
-        ItemListComponent,
+        ItemTemplateListComponent,
         ItemTemplateComponent,
         ItemTemplateEditorComponent,
         ItemTemplateEditorModuleComponent,
         AutocompleteSearchItemTemplateComponent,
         AddItemTemplateEditorModuleDialogComponent,
-        ItemDetailDialogComponent,
+        ItemTemplateDialogComponent,
     ],
     entryComponents: [
         CreateItemTemplateDialogComponent,
         EditItemTemplateDialogComponent,
         AddItemTemplateEditorModuleDialogComponent,
-        ItemDetailDialogComponent,
+        ItemTemplateDialogComponent,
     ],
     exports: [
-        ItemListComponent,
+        ItemTemplateListComponent,
         AutocompleteSearchItemTemplateComponent,
     ],
     providers: [

@@ -62,7 +62,7 @@ export class Monster extends WsRegistrable {
     public name: string;
     public data: MonsterData = new MonsterData();
     public dead: string;
-    public items: Item[];
+    public items: Item[] = [];
 
     public modifiers: ActiveStatsModifier[] = [];
 

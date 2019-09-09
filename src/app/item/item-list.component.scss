@@ -1,0 +1,35 @@
+:host {
+    display: block;
+
+    .item {
+        position: relative;
+        display: grid;
+        align-items: center;
+        grid-gap: 8px;
+        grid-template-columns: 1fr 40px;
+        grid-template-areas: "info delete";
+
+        .info {
+            grid-area: info;
+            grid-gap: 8px;
+            display: grid;
+            align-items: center;
+            grid-template-columns: 32px 1fr minmax(0, auto);
+
+            .name {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .delete {
+            grid-area: delete;
+        }
+    }
+
+    .item:nth-child(4n+0) {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
+}

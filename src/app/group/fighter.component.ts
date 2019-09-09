@@ -22,6 +22,7 @@ import {Subject} from 'rxjs';
 import {Loot} from '../loot';
 import {openCreateGemDialog} from './create-gem-dialog.component';
 import {ModifierDetailsDialogComponent} from './modifier-details-dialog.component';
+import {MonsterInventoryDialogComponent} from './monster-inventory-dialog.component';
 
 @Component({
     selector: 'fighter',
@@ -76,6 +77,13 @@ export class FighterComponent implements OnInit, OnChanges {
 
     displayCharacterSheet(character: Character) {
         this._actionService.emitAction('displayCharacterSheet', this.group, character);
+    }
+
+    openInventoryDialog() {
+        this.dialog.open(MonsterInventoryDialogComponent, {
+            autoFocus: false,
+            data: {monster: this.fighter.monster}
+        });
     }
 
     changeTarget(target: TargetJsonData) {

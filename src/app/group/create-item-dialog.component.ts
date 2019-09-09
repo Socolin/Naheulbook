@@ -4,7 +4,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
 import {Item} from '../item';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
-import {ItemDetailDialogComponent} from '../item-template/item-detail-dialog.component';
+import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 import {IconSelectorComponent, IconSelectorComponentDialogData} from '../shared';
 
 export interface CreateItemDialogDialog {
@@ -146,7 +146,7 @@ export class CreateItemDialogComponent implements OnInit {
         $event.stopPropagation();
         $event.preventDefault();
 
-        this.dialog.open(ItemDetailDialogComponent, {
+        this.dialog.open(ItemTemplateDialogComponent, {
             panelClass: 'app-dialog-no-padding',
             data: {itemTemplate},
             autoFocus: false

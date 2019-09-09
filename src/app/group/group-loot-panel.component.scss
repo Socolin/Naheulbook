@@ -50,19 +50,6 @@
         margin: 0 0 16px;
     }
 
-    .loot-item {
-        position: relative;
-        display: grid;
-        align-items: center;
-        grid-gap: 8px;
-        grid-template-columns: 32px 1fr minmax(0, auto) 40px;
-    }
-
-    .loot-item:nth-child(4n+0) {
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-    }
-
     .loot-monsters {
         .monster-header {
             align-items: center;
@@ -74,18 +61,9 @@
                 font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
             }
         }
-        .monster-item {
-            position: relative;
-            display: grid;
-            align-items: center;
-            grid-gap: 8px;
-            margin-left: 32px;
-            grid-template-columns: 32px 1fr minmax(0, auto) 40px;
-        }
 
-        .monster-item:nth-child(4n+0) {
-            border-bottom-width: 1px;
-            border-bottom-style: solid;
+        app-item-list {
+            margin-left: 32px;
         }
     }
 }

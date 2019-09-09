@@ -59,6 +59,11 @@
                     <mat-icon>add</mat-icon>Modificateur
                 </button>
                 <button mat-menu-item
+                        (click)=openInventoryDialog()>
+                    <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
+                    Inventaire
+                </button>
+                <button mat-menu-item
                         (click)=killMonster(fighter.monster)>
                     <mat-icon fontSet="game-icon" fontIcon="game-icon-tombstone" class="ra-mat-button-icon-24"></mat-icon>
                     Tuer le monstre

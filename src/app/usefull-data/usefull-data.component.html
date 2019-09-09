@@ -203,7 +203,7 @@
 
 <ng-template #panelItems="cdkPortal" cdk-portal>
     <mat-card class="panel-content no-padding">
-        <item-list (onAction)="onAction.next($event)" [inTab]=true></item-list>
+        <item-template-list (onAction)="onAction.next($event)" [inTab]=true></item-template-list>
     </mat-card>
 </ng-template>
 

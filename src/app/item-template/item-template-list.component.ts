@@ -23,9 +23,9 @@ import {MatDialog} from '@angular/material';
 import {CreateItemTemplateDialogComponent} from './create-item-template-dialog.component';
 
 @Component({
-    selector: 'item-list',
-    templateUrl: './item-list.component.html',
-    styleUrls: ['item-list.component.scss'],
+    selector: 'item-template-list',
+    templateUrl: './item-template-list.component.html',
+    styleUrls: ['item-template-list.component.scss'],
     animations: [
         trigger('stickyExpand', [
             state('0', style({
@@ -41,7 +41,7 @@ import {CreateItemTemplateDialogComponent} from './create-item-template-dialog.c
         ])
     ]
 })
-export class ItemListComponent implements OnInit, OnDestroy {
+export class ItemTemplateListComponent implements OnInit, OnDestroy {
     @Input() inTab: boolean;
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
     public itemSections: ItemSection[];

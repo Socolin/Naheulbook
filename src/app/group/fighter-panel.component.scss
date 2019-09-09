@@ -8,38 +8,7 @@
         margin: 8px;
     }
 }
+
 fighter {
     width: 100%;
-}
-.add-monster-dialog {
-    .inputs {
-        display: flex;
-        align-items: center;
-        mat-radio-group {
-            margin-left: 5px;
-        }
-        mat-form-field {
-            margin-left: 5px;
-        }
-        mat-form-field:first-child {
-            margin-right: 0;
-        }
-        input[type=number] {
-            width: 50px;
-        }
-    }
-
-    mat-card-content {
-        max-height: 75vh;
-        overflow-x: auto;
-    }
-}
-
-.next-fighter {
-    text-align: right;
-}
-
-.dead-monsters-list {
-    max-height: 75vh;
-    overflow-x: auto;
 }

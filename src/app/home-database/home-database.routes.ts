@@ -3,7 +3,7 @@ import {Routes} from '@angular/router';
 import {SkillListComponent} from '../skill';
 import {OriginListComponent} from '../origin';
 import {JobListComponent} from '../job';
-import {EditItemTemplateDialogComponent, ItemListComponent} from '../item-template';
+import {EditItemTemplateDialogComponent, ItemTemplateListComponent} from '../item-template';
 import {MonsterListComponent} from '../monster';
 import {CreateEffectComponent, EditEffectComponent, EffectListComponent} from '../effect';
 import {LocationListComponent} from '../location';
@@ -34,11 +34,11 @@ export const routes: Routes = [
             },
             {
                 path: 'items/:id',
-                component: ItemListComponent
+                component: ItemTemplateListComponent
             },
             {
                 path: 'items',
-                component: ItemListComponent
+                component: ItemTemplateListComponent
             },
             {
                 path: 'effects',

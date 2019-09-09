@@ -1,0 +1,16 @@
+<div *ngFor="let item of items" class="item separator">
+    <div class="info" (click)="selectItem.emit(item)" mat-ripple>
+        <icon [icon]="item.data.icon"></icon>
+        <span class="name">
+            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
+            {{item.data.name}}
+            <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
+        </span>
+        <span>
+            <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
+        </span>
+    </div>
+    <button class="delete" mat-icon-button (click)="deleteItem.emit(item)">
+        <mat-icon>delete</mat-icon>
+    </button>
+</div>

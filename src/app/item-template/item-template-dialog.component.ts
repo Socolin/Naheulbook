@@ -6,22 +6,21 @@ import {OriginService} from '../origin';
 import {God, MiscService} from '../shared';
 import {JobService} from '../job';
 
-export interface ItemDetailDialogData {
+export interface ItemTemplateDialogData {
     itemTemplate: ItemTemplate;
 }
 
 @Component({
-    selector: 'app-item-detail-dialog',
-    templateUrl: './item-detail-dialog.component.html',
-    styleUrls: ['./item-detail-dialog.component.scss']
+    templateUrl: './item-template-dialog.component.html',
+    styleUrls: ['./item-template-dialog.component.scss']
 })
-export class ItemDetailDialogComponent implements OnInit {
+export class ItemTemplateDialogComponent implements OnInit {
     public originsName: { [originId: number]: string };
     public jobsName: { [jobId: number]: string };
     public godsByTechName: {[techName: string]: God};
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: ItemDetailDialogData,
+        @Inject(MAT_DIALOG_DATA) public data: ItemTemplateDialogData,
         private _originService: OriginService,
         private _jobService: JobService,
         private _miscService: MiscService,

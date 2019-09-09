@@ -51,22 +51,11 @@
         </mat-toolbar>
         <mat-card>
             <mat-card-content>
-                <div class="loot-items">
-                    <div *ngFor="let item of loot.items" class="loot-item separator">
-                        <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                        <span>
-                            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
-                            {{item.data.name}}
-                            <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
-                        </span>
-                        <span>
-                            <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
-                        </span>
-                        <button mat-icon-button (click)="removeItemFromLoot(loot, item)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
-                </div>
+                <app-item-list
+                    [items]="loot.items"
+                    (deleteItem)="removeItemFromLoot(loot, $event)"
+                    (selectItem)="openItemTemplateDialog($event.template)">
+                </app-item-list>
 
                 <div class="loot-monsters" *ngFor="let monster of loot.monsters">
                     <div class="monster-header">
@@ -89,22 +78,11 @@
                             </button>
                         </mat-menu>
                     </div>
-                    <div>
-                        <div *ngFor="let item of monster.items" class="monster-item separator">
-                            <icon [icon]="item.data.icon" [size]="'32px'"></icon>
-                            <span>
-                            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
-                                {{item.data.name}}
-                                <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
-                        </span>
-                            <span>
-                            <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
-                        </span>
-                            <button mat-icon-button (click)="removeItemFromMonster(monster, item)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div>
-                    </div>
+                    <app-item-list
+                        [items]="monster.items"
+                        (deleteItem)="removeItemFromMonster(monster, $event)"
+                        (selectItem)="openItemTemplateDialog($event.template)">
+                    </app-item-list>
                 </div>
             </mat-card-content>
         </mat-card>
