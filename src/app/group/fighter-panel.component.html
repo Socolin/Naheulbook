@@ -1,22 +1,25 @@
-<mat-toolbar color=primary *ngIf="group.data.inCombat && group.currentFighter">
-    Combatant actuel
-    <button mat-icon-button
-            [disabled]="loadingNextLap || group.fighters.length < 2"
-            (click)="selectNextFighter()">
-        <mat-icon>
-            navigate_next
-        </mat-icon>
-    </button>
-</mat-toolbar>
-<div *ngIf="group.data.inCombat && group.currentFighter">
+<ng-template [ngIf]="group.data.inCombat && group.currentFighter">
+    <h2 class="mat-h2">
+        Combatant actuel
+        <button mat-icon-button
+                [disabled]="loadingNextLap || group.fighters.length < 2"
+                (click)="selectNextFighter()">
+            <mat-icon>
+                navigate_next
+            </mat-icon>
+        </button>
+    </h2>
     <fighter [selected]="false"
              [group]="group"
              [fighter]="group.currentFighter"
              [expandedView]="true"
              [fighters]="group.fighters">
     </fighter>
-</div>
-<mat-toolbar color=primary>
+    <mat-divider></mat-divider>
+    <div class="padding"></div>
+</ng-template>
+
+<h2 class="mat-h2">
     Combatants
     <span>
         <button mat-icon-button [matMenuTriggerFor]="menuCharacter" aria-label="Ouvrir le menu du personnage">
@@ -51,7 +54,7 @@
             </button>
         </mat-menu>
     </span>
-</mat-toolbar>
+</h2>
 <ng-template ngFor let-fighter [ngForOf]="group.fighters" let-i=index>
     <fighter
         [selected]="(!group.data.inCombat && selectedCombatRow === i) || (group.data.inCombat && group.data.currentFighterIndex === i)"
@@ -63,6 +66,7 @@
     </fighter>
     <mat-divider></mat-divider>
 </ng-template>
+
 
 <ng-template #deadMonstersDialog="cdkPortal" cdk-portal>
     <mat-card class="dead-monsters-dialog">

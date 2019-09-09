@@ -34,6 +34,7 @@ import {
 } from './';
 import { CharacterSheetDialogComponent } from './character-sheet-dialog.component';
 import { EditMonsterDialogComponent } from './edit-monster-dialog.component';
+import { ModifierDetailsDialogComponent } from './modifier-details-dialog.component';
 
 @NgModule({
     imports: [
@@ -70,6 +71,7 @@ import { EditMonsterDialogComponent } from './edit-monster-dialog.component';
         CreateGemDialogComponent,
         CharacterSheetDialogComponent,
         EditMonsterDialogComponent,
+        ModifierDetailsDialogComponent,
     ],
     entryComponents: [
         AddLootDialogComponent,
@@ -78,6 +80,7 @@ import { EditMonsterDialogComponent } from './edit-monster-dialog.component';
         CreateItemDialogComponent,
         EditMonsterDialogComponent,
         FighterSelectorComponent,
+        ModifierDetailsDialogComponent,
     ],
     providers: [GroupService]
 })

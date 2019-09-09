@@ -1,12 +1,17 @@
 :host {
     .fighter {
-        padding: 8px 8px 8px 0;
         margin-bottom: 4px;
         display: grid;
         align-items: center;
         grid-gap: 8px;
-        grid-template-columns: 48px minmax(50px, 1fr) minmax(64px, 85px) minmax(74px, 92px);
-        grid-template-areas: "icon name name name" "icon . at ev" ". . prd esq" "dmg dmg pr cou" "dmg dmg resm ea" "dmg dmg . ." "effects effects effects effects" "note note note note";
+        grid-template-columns: 48px minmax(50px, 1fr) minmax(64px, 85px) minmax(74px, 92px) 8px;
+        grid-template-areas: "icon name name name name" "icon . at ev ."
+            ". . prd esq ."
+            "dmg dmg pr cou ."
+            "dmg dmg resm ea ."
+            "dmg dmg . . ."
+            "effects effects effects effects effects"
+            "note note note note note";
 
         .field-with-label {
             display: flex;

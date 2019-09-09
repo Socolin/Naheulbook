@@ -21,6 +21,7 @@ import {CreateItemDialogComponent, openCreateItemDialog} from './create-item-dia
 import {Subject} from 'rxjs';
 import {Loot} from '../loot';
 import {openCreateGemDialog} from './create-gem-dialog.component';
+import {ModifierDetailsDialogComponent} from './modifier-details-dialog.component';
 
 @Component({
     selector: 'fighter',
@@ -287,7 +288,6 @@ export class FighterComponent implements OnInit, OnChanges {
     }
 
     openModifierDetails(modifier: ActiveStatsModifier) {
-
-
+        this.dialog.open(ModifierDetailsDialogComponent, {data: {modifier}, autoFocus: false});
     }
 }

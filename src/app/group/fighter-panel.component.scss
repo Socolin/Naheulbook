@@ -1,7 +1,10 @@
 :host {
-    mat-toolbar {
+    > h2 {
         display: flex;
         justify-content: space-between;
+    }
+    .padding {
+        height: 24px;
     }
 }
 fighter {
