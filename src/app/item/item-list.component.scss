@@ -7,7 +7,7 @@
         align-items: center;
         grid-gap: 8px;
         grid-template-columns: 1fr 40px;
-        grid-template-areas: "info delete";
+        grid-template-areas: "info action";
 
         .info {
             grid-area: info;
@@ -23,8 +23,8 @@
             }
         }
 
-        .delete {
-            grid-area: delete;
+        .action {
+            grid-area: action;
         }
     }
 

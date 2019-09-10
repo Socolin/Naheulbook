@@ -6,18 +6,45 @@ import {BidiModule} from '@angular/cdk/bidi';
 import {ObserversModule} from '@angular/cdk/observers';
 import {PortalModule} from '@angular/cdk/portal';
 import {
-    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatChipsModule, MatCommonModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatCommonModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatFormFieldModule,
     MatGridListModule,
-    MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule,
-    MatProgressSpinnerModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSidenavModule, MatSliderModule,
-    MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule,
-    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatStepperModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatBadgeModule,
 } from '@angular/material';
 import {PlatformModule} from '@angular/cdk/platform';
 
 const MATERIAL_MODULES = [
     MatAutocompleteModule,
+    MatBadgeModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
@@ -61,4 +88,5 @@ const MATERIAL_MODULES = [
     imports: MATERIAL_MODULES,
     exports: MATERIAL_MODULES,
 })
-export class NhbkMaterialModule {}
+export class NhbkMaterialModule {
+}

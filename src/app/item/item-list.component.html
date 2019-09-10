@@ -10,7 +10,7 @@
             <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
         </span>
     </div>
-    <button class="delete" mat-icon-button (click)="deleteItem.emit(item)">
-        <mat-icon>delete</mat-icon>
+    <button class="action" mat-icon-button (click)="onAction.emit(item)">
+        <mat-icon>{{actionIcon}}</mat-icon>
     </button>
 </div>

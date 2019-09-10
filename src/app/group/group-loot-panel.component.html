@@ -53,7 +53,7 @@
             <mat-card-content>
                 <app-item-list
                     [items]="loot.items"
-                    (deleteItem)="removeItemFromLoot(loot, $event)"
+                    (onAction)="removeItemFromLoot(loot, $event)"
                     (selectItem)="openItemTemplateDialog($event.template)">
                 </app-item-list>
 
@@ -80,7 +80,7 @@
                     </div>
                     <app-item-list
                         [items]="monster.items"
-                        (deleteItem)="removeItemFromMonster(monster, $event)"
+                        (onAction)="removeItemFromMonster(monster, $event)"
                         (selectItem)="openItemTemplateDialog($event.template)">
                     </app-item-list>
                 </div>

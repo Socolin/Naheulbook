@@ -1,0 +1,15 @@
+:host {
+    .content {
+        display: grid;
+        align-items: center;
+        grid-template-columns: auto;
+
+        .inventory {
+            .mat-h2 {
+                display: flex;
+                justify-content: space-between;
+                justify-items: center;
+            }
+        }
+    }
+}

@@ -1,0 +1,92 @@
+:host {
+    form {
+        display: grid;
+        grid-template-columns: minmax(70px, 120px) minmax(70px, 120px) minmax(70px, 120px);
+        align-items: center;
+        grid-gap: 8px;
+        grid-template-areas: "name name name"
+        "at prd esq"
+        "ev maxEv ."
+        "ea maxEa . "
+        "pr pr_magic resm"
+        "dmg dmg dmg"
+        "cou chercheNoise chercheNoise"
+        "xp sex sex"
+        "note note note";
+
+        mat-form-field {
+            width: 100%;
+        }
+    }
+
+    .name {
+        grid-area: name;
+    }
+
+    .at {
+        grid-area: at;
+    }
+
+    .prd {
+        grid-area: prd;
+    }
+
+    .esq {
+        grid-area: esq;
+    }
+
+    .ev {
+        grid-area: ev;
+    }
+
+    .maxEv {
+        grid-area: maxEv;
+    }
+
+    .ea {
+        grid-area: ea;
+    }
+
+    .maxEa {
+        grid-area: maxEa;
+    }
+
+    .pr {
+        grid-area: pr;
+    }
+
+    .pr_magic {
+        grid-area: pr_magic;
+    }
+
+    .dmg {
+        grid-area: dmg;
+    }
+
+    .cou {
+        grid-area: cou;
+    }
+
+    .chercheNoise {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        grid-area: chercheNoise;
+    }
+
+    .resm {
+        grid-area: resm;
+    }
+
+    .xp {
+        grid-area: xp;
+    }
+
+    .note {
+        grid-area: note;
+    }
+
+    .sex {
+        grid-area: sex;
+    }
+}

@@ -16,6 +16,8 @@ import {CreateItemComponent} from './create-item.component';
 import {Group, Fighter} from './group.model';
 import {GroupActionService} from './group-action.service';
 import {GroupService} from './group.service';
+import {MatDialog} from '@angular/material/dialog';
+import {AddMonsterDialogComponent} from './add-monster-dialog.component';
 
 @Component({
     selector: 'fighter-panel',
@@ -33,16 +35,8 @@ export class FighterPanelComponent implements OnInit {
     public newMonster: Monster = new Monster();
     public selectedCombatRow = 0;
 
-    public selectedMonsterTemplate: MonsterTemplate;
-    public monsterAutocompleteShow = false;
-    public autocompleteMonsterListCallback = this.updateMonsterListAutocomplete.bind(this);
-
     @ViewChild('createItemComponent', {static: true})
     public createItemComponent: CreateItemComponent;
-
-    @ViewChild('addMonsterDialog', {static: true})
-    public addMonsterDialog: Portal<any>;
-    public addMonsterOverlayRef: OverlayRef | undefined;
 
     @ViewChild('deadMonstersDialog', {static: true})
     public deadMonstersDialog: Portal<any>;
@@ -53,7 +47,9 @@ export class FighterPanelComponent implements OnInit {
                 private _itemService: ItemService,
                 private _monsterService: MonsterService,
                 private _monsterTemplateService: MonsterTemplateService,
-                private _nhbkDialogService: NhbkDialogService) {
+                private _nhbkDialogService: NhbkDialogService,
+                private dialog: MatDialog,
+    ) {
     }
 
     onItemAdded(data: {character: Character, monster: Monster, item: Item}) {
@@ -66,15 +62,22 @@ export class FighterPanelComponent implements OnInit {
     }
 
     openAddMonsterDialog() {
-        this.addMonsterOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addMonsterDialog);
-    }
+        const dialogRef = this.dialog.open(AddMonsterDialogComponent, {
+            minWidth: '100vw', height: '100vh'
+        });
 
-    closeAddMonsterDialog() {
-        if (!this.addMonsterOverlayRef) {
-            return;
-        }
-        this.addMonsterOverlayRef.detach();
-        this.addMonsterOverlayRef = undefined;
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            this._monsterService.createMonster(this.group.id, this.newMonster).subscribe(
+                monster => {
+                    this.group.addMonster(monster);
+                    this.group.notify('addMonster', 'Nouveau monstre ajouté: ' + monster.name, monster);
+                }
+            );
+        });
     }
 
     openDeadMonstersDialog() {
@@ -91,26 +94,6 @@ export class FighterPanelComponent implements OnInit {
 
     selectFighter(fighter: Fighter) {
         this.selectedCombatRow = this.group.fighters.indexOf(fighter);
-    }
-
-    /**
-     * Using data in monster creation form (bound with `newMonster`), post request to create a new monster
-     */
-    addMonster(): void {
-        this._monsterService.createMonster(this.group.id, this.newMonster).subscribe(
-            monster => {
-                this.group.addMonster(monster);
-                this.group.notify('addMonster', 'Nouveau monstre ajouté: ' + monster.name, monster);
-            }
-        );
-        this.randomMonsterInventory();
-    }
-
-    /**
-     * Reset the creation monster form data
-     */
-    cleanMonster() {
-        this.newMonster = new Monster();
     }
 
     /**
@@ -161,59 +144,6 @@ export class FighterPanelComponent implements OnInit {
         return false;
     }
 
-    updateMonsterListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
-        this.newMonster.name = filter;
-        if (filter === '') {
-            return observableFrom([]);
-        }
-        return this._monsterTemplateService.searchMonster(filter).pipe(map(
-            list => list.map(e => new AutocompleteValue(e, e.name))
-        ));
-    }
-
-    randomMonsterInventory() {
-        let template = this.selectedMonsterTemplate;
-        if (template && template.simpleInventory) {
-            this.newMonster.items = [];
-            for (let i = 0; i < template.simpleInventory.length; i++) {
-                let inventoryItem = template.simpleInventory[i];
-                let quantity = getRandomInt(inventoryItem.minCount, inventoryItem.maxCount);
-                if (!quantity) {
-                    continue;
-                }
-                if (Math.random() > inventoryItem.chance) {
-                    continue;
-                }
-                let item = new Item();
-                item.template = inventoryItem.itemTemplate;
-                if (inventoryItem.itemTemplate.data.notIdentifiedName) {
-                    item.data.name = inventoryItem.itemTemplate.data.notIdentifiedName;
-                } else {
-                    item.data.name = inventoryItem.itemTemplate.name;
-                }
-                item.data.notIdentified = true;
-                if (item.template.data.useUG) {
-                    item.data.ug = 1; // FIXME: minUg/maxUg
-                }
-
-                if (item.template.data.quantifiable) {
-                    item.data.quantity = quantity;
-                    this.newMonster.items.push(item);
-                } else {
-                    for (let j = 0; j < quantity; j++) {
-                        let duplicate = new Item();
-                        duplicate.template = item.template;
-                        duplicate.data = new ItemData();
-                        duplicate.data.name = item.data.name;
-                        duplicate.data.notIdentified = item.data.notIdentified;
-                        duplicate.data.ug = item.data.ug;
-                        this.newMonster.items.push(duplicate);
-                    }
-                }
-            }
-        }
-    }
-
     selectNextFighter() {
         let result = this.group.nextFighter();
         if (!result) {
@@ -245,33 +175,6 @@ export class FighterPanelComponent implements OnInit {
                 this._groupService.saveChangedTime(this.group.id, changes);
             }
         );
-    }
-
-    selectMonsterInAutocompleteList(monster: MonsterTemplate) {
-        this.selectedMonsterTemplate = monster;
-        this.monsterAutocompleteShow = false;
-        this.newMonster.name = monster.name;
-        this.newMonster.data.at = monster.data.at;
-        this.newMonster.data.prd = monster.data.prd;
-        this.newMonster.data.esq = monster.data.esq;
-        this.newMonster.data.ev = monster.data.ev;
-        this.newMonster.data.maxEv = monster.data.ev;
-        this.newMonster.data.ea = monster.data.ea;
-        this.newMonster.data.maxEa = monster.data.ea;
-        this.newMonster.data.pr = monster.data.pr;
-        this.newMonster.data.pr_magic = monster.data.pr_magic;
-        this.newMonster.data.cou = monster.data.cou;
-        this.newMonster.data.dmg = monster.data.dmg;
-        this.newMonster.data.xp = monster.data.xp;
-        this.newMonster.data.page = monster.data.page;
-        if (monster.data.resm) {
-            this.newMonster.data.resm = monster.data.resm;
-        } else {
-            this.newMonster.data.resm = 0;
-        }
-        this.newMonster.data.note = monster.data.note;
-        this.randomMonsterInventory();
-        return false;
     }
 
     ngOnInit(): void {

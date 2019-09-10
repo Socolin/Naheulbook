@@ -19,17 +19,17 @@
             </button>
             <mat-menu #menuCharacter="matMenu">
                 <button mat-menu-item
-                        (click)="displayCharacterSheet(fighter.character)">
+                        (click)="displayCharacterSheet()">
                     <mat-icon>pageview</mat-icon>
                     Voir la fiche
                 </button>
                 <button mat-menu-item
-                        (click)=openAddItemDialog(fighter)>
+                        (click)=openAddItemDialog()>
                     <mat-icon>add</mat-icon>
                     Objet
                 </button>
                 <button mat-menu-item
-                        (click)=openAddGemDialog(fighter)>
+                        (click)=openAddGemDialog()>
                     <mat-icon>add</mat-icon>Pierre précieuse
                 </button>
             </mat-menu>
@@ -61,7 +61,7 @@
                 <button mat-menu-item
                         (click)=openInventoryDialog()>
                     <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
-                    Inventaire
+                    <span [matBadge]="fighter.monster?.items?.length || undefined" matBadgeOverlap="false">Inventaire</span>
                 </button>
                 <button mat-menu-item
                         (click)=killMonster(fighter.monster)>

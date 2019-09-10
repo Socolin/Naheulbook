@@ -1,0 +1,59 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>
+        Ajouter un monstre
+    </span>
+    <button mat-button
+            (click)="addMonster()">
+        AJOUTER
+    </button>
+</mat-toolbar>
+
+<div class="content">
+
+    <mat-vertical-stepper linear="true" #stepper>
+        <mat-step>
+            <ng-template matStepLabel>Chercher un effet pré-existant</ng-template>
+            <mat-form-field>
+                <input matInput
+                       autocapitalize="off"
+                       autocomplete="off"
+                       placeholder="Monstre"
+                       #filter
+                       (keyup)="updateFilterMonster(filter.value)">
+            </mat-form-field>
+            <mat-action-list>
+                <div mat-ripple *ngFor="let monsterTemplate of filteredMonsters" (click)="selectMonsterInAutocompleteList(monsterTemplate); stepper.next()">
+                    <div class="filter-result">
+                        <div class="name">{{monsterTemplate.name}}</div>
+                        <div class="category mat-caption">{{monsterTemplate.category.type.name}} - {{monsterTemplate.category.name}}</div>
+                    </div>
+                </div>
+            </mat-action-list>
+            <div class="customize-button">
+                <button mat-button color=primary (click)="stepper.next()">
+                    MONSTRE PERSONNALISÉ
+                </button>
+            </div>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Personnalisation</ng-template>
+            <app-monster-editor [form]="form"></app-monster-editor>
+            <div class="inventory">
+                <h2 class="mat-h2">
+                    Inventaire/Loot
+                    <button mat-raised-button (click)="randomMonsterInventory()">Random</button>
+                </h2>
+                <div *ngIf="items">
+                    <app-item-list actionIcon="visibility_on"
+                                   [items]="items"
+                                   (selectItem)="openItemTemplateDialog($event.template)"
+                                   (onAction)="toggleItemNotIdentified($event)">
+                    </app-item-list>
+                </div>
+            </div>
+        </mat-step>
+    </mat-vertical-stepper>
+</div>

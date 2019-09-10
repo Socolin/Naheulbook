@@ -9,10 +9,12 @@ import {Item} from './item.model';
 export class ItemListComponent {
     @Input()
     public items: Item[];
+    @Input()
+    public actionIcon = 'delete';
     @Output()
-    public deleteItem: EventEmitter<Item> = new EventEmitter<Item>();
+    public onAction: EventEmitter<Item> = new EventEmitter<Item>();
     @Output()
-    public selectItem: EventEmitter<Item> = new EventEmitter<Item>()
+    public selectItem: EventEmitter<Item> = new EventEmitter<Item>();
 
     constructor() {
     }

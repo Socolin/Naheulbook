@@ -75,8 +75,8 @@ export class FighterComponent implements OnInit, OnChanges {
             });
     }
 
-    displayCharacterSheet(character: Character) {
-        this._actionService.emitAction('displayCharacterSheet', this.group, character);
+    displayCharacterSheet() {
+        this._actionService.emitAction('displayCharacterSheet', this.group, this.fighter.character);
     }
 
     openInventoryDialog() {

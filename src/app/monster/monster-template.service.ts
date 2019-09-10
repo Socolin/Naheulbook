@@ -114,7 +114,10 @@ export class MonsterTemplateService {
     }
 
     searchMonster(name): Observable<MonsterTemplate[]> {
-        return this.httpClient.get<MonsterTemplate[]>(`/api/v2/monsterTemplates/search?filter=${encodeURIComponent(name)}`);
+        return forkJoin([
+            this.getMonsterCategoriesById(),
+            this.httpClient.get<MonsterTemplate[]>(`/api/v2/monsterTemplates/search?filter=${encodeURIComponent(name)}`)
+        ]).pipe(map(([categories, monsters]) => MonsterTemplate.templatessFromJson(monsters, categories)));
     }
 
     addMonster(categoryId: number, monster: CreateMonsterTemplateRequest): Observable<MonsterTemplate> {
