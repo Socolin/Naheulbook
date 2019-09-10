@@ -5,7 +5,29 @@ import {Item, ItemData} from '../item';
 import {MonsterTemplate, MonsterTemplateService} from '../monster';
 import {ItemTemplate} from '../item-template';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+
+
+export interface AddMonsterDialogResult {
+    name: string;
+    at: number;
+    prd: number;
+    esq: number;
+    ev: number;
+    maxEv: number;
+    ea: number;
+    maxEa: number;
+    pr: number;
+    pr_magic: number;
+    dmg: string;
+    cou: number;
+    chercheNoise: boolean;
+    resm: number;
+    xp: number;
+    note: string;
+    sex?: 'f' | 'h';
+    items: Item[];
+}
 
 @Component({
     selector: 'app-add-monster-dialog',
@@ -38,12 +60,14 @@ export class AddMonsterDialogComponent {
     });
 
     constructor(
+        public dialogRef: MatDialogRef<AddMonsterDialogComponent>,
         private dialog: MatDialog,
         private monsterTemplateService: MonsterTemplateService
     ) {
     }
 
     addMonster() {
+        this.dialogRef.close({...this.form.value, items: this.items});
     }
 
     randomMonsterInventory() {

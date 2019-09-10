@@ -1,6 +1,7 @@
-import {DurationType, IDurable} from '../date/durable.model';
-import {Effect} from '../effect/effect.model';
-import {Fighter} from '../group/group.model';
+import {Effect} from '../effect';
+import {Fighter} from '../group';
+import {IDurable} from '../api/shared';
+import {DurationType} from '../api/shared/enums';
 
 export type StatModificationOperand =
     'ADD'

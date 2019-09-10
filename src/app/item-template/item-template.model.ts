@@ -2,7 +2,7 @@ import {ItemStatModifier} from '../shared/stat-modifier.model';
 import {Skill} from '../skill';
 import {Job} from '../job';
 import {IconDescription} from '../shared/icon.model';
-import {IDurable} from '../date/durable.model';
+import {IDurable} from '../api/shared/durable';
 
 export class ItemSection {
     id: number;

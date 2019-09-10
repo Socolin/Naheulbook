@@ -1,23 +1,19 @@
-
-import {forkJoin, from as observableFrom, Observable} from 'rxjs';
-
-import {map} from 'rxjs/operators';
+import {forkJoin} from 'rxjs';
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
-import {isNullOrUndefined} from 'util';
 
-import {getRandomInt, NhbkDialogService, AutocompleteValue} from '../shared';
-import {Character} from '../character';
-import {ItemData, Item, ItemService} from '../item';
-import {Monster, MonsterTemplate, MonsterService, MonsterTemplateService} from '../monster';
+import {NhbkDialogService} from '../shared';
+import {ItemService} from '../item';
+import {Monster, MonsterService, MonsterTemplateService} from '../monster';
 
 import {CreateItemComponent} from './create-item.component';
-import {Group, Fighter} from './group.model';
+import {Fighter, Group} from './group.model';
 import {GroupActionService} from './group-action.service';
 import {GroupService} from './group.service';
 import {MatDialog} from '@angular/material/dialog';
-import {AddMonsterDialogComponent} from './add-monster-dialog.component';
+import {AddMonsterDialogComponent, AddMonsterDialogResult} from './add-monster-dialog.component';
+import {CreateItemRequest, CreateMonsterRequest} from '../api/requests';
 
 @Component({
     selector: 'fighter-panel',
@@ -32,7 +28,6 @@ export class FighterPanelComponent implements OnInit {
     public deadMonsters: Monster[] = [];
     public allDeadMonstersLoaded = false;
 
-    public newMonster: Monster = new Monster();
     public selectedCombatRow = 0;
 
     @ViewChild('createItemComponent', {static: true})
@@ -52,17 +47,8 @@ export class FighterPanelComponent implements OnInit {
     ) {
     }
 
-    onItemAdded(data: {character: Character, monster: Monster, item: Item}) {
-        if (!isNullOrUndefined(data.character)) {
-            this._itemService.addItemTo('character', data.character.id, data.item.template.id, data.item.data).subscribe();
-        }
-        else if (!isNullOrUndefined(data.monster)) {
-            this._itemService.addItemTo('monster', data.monster.id, data.item.template.id, data.item.data).subscribe();
-        }
-    }
-
     openAddMonsterDialog() {
-        const dialogRef = this.dialog.open(AddMonsterDialogComponent, {
+        const dialogRef = this.dialog.open<AddMonsterDialogComponent, any, AddMonsterDialogResult>(AddMonsterDialogComponent, {
             minWidth: '100vw', height: '100vh'
         });
 
@@ -71,7 +57,13 @@ export class FighterPanelComponent implements OnInit {
                 return;
             }
 
-            this._monsterService.createMonster(this.group.id, this.newMonster).subscribe(
+            const {name, items, ...monsterData} = result;
+            const request = {
+                name: name,
+                items: items.map(i => ({itemTemplateId: i.template.id, itemData: i.data})),
+                data: monsterData
+            } as CreateMonsterRequest;
+            this._monsterService.createMonster(this.group.id, request).subscribe(
                 monster => {
                     this.group.addMonster(monster);
                     this.group.notify('addMonster', 'Nouveau monstre ajouté: ' + monster.name, monster);

@@ -5,10 +5,10 @@ import {map} from 'rxjs/operators';
 import {Component, Output, EventEmitter, Input, DoCheck} from '@angular/core';
 
 import {AutocompleteValue} from '../shared';
-import {IDurable} from '../date/durable.model';
 
 import {EffectService} from './effect.service';
 import {Effect} from './effect.model';
+import {IDurable} from '../api/shared';
 
 @Component({
     selector: 'active-effect-editor',

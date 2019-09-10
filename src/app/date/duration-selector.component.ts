@@ -2,9 +2,9 @@ import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from 
 
 import {dateOffset2TimeDuration, timeDuration2DateOffset2} from './util';
 import {NhbkDateOffset} from './date.model';
-import {IDurable} from './durable.model';
 import {MatButtonToggleChange, MatSelectChange} from '@angular/material';
 import {DateModifierComponent} from './date-modifier.component';
+import {IDurable} from '../api/shared';
 
 @Component({
     selector: 'duration-selector',

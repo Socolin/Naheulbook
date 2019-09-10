@@ -7,6 +7,11 @@
         padding: 16px 8px 8px;
         margin: 8px;
     }
+    .next-button {
+        display: flex;
+        flex-direction: row-reverse;
+        margin: 8px;
+    }
 }
 
 fighter {

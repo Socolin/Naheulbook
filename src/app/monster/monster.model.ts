@@ -9,6 +9,7 @@ import {WsEventServices, WsRegistrable, WebSocketService} from '../websocket';
 
 import {TargetJsonData} from '../group/target.model';
 import {Fighter} from '../group';
+import {MonsterResponse} from '../api/responses';
 
 export class MonsterData {
     at: number;
@@ -76,7 +77,7 @@ export class Monster extends WsRegistrable {
     public onChange: Subject<any> = new Subject<any>();
     public onNotification: Subject<any> = new Subject<any>();
 
-    static fromJson(jsonData: any, skillsById: {[skillId: number]: Skill}): Monster {
+    static fromJson(jsonData: MonsterResponse, skillsById: {[skillId: number]: Skill}): Monster {
         let monster = new Monster();
         Object.assign(monster, jsonData, {
             data: MonsterData.fromJson(jsonData.data),

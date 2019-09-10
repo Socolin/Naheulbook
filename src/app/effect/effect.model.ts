@@ -1,6 +1,6 @@
 import {StatModifier} from '../shared';
-import {DurationType, IDurable} from '../date/durable.model';
-import {isNullOrUndefined} from 'util';
+import {IDurable} from '../api/shared';
+import {DurationType} from '../api/shared/enums';
 
 export interface EffectJsonData {
     id: number;

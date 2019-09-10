@@ -8,6 +8,8 @@ import {ActiveStatsModifier} from '../shared';
 import {Monster} from './monster.model';
 import {Skill, SkillService} from '../skill';
 import {PartialItem} from '../item';
+import {CreateMonsterRequest} from '../api/requests';
+import {MonsterResponse} from '../api/responses';
 
 @Injectable()
 export class MonsterService {
@@ -15,11 +17,11 @@ export class MonsterService {
         , private _skillService: SkillService) {
     }
 
-    createMonster(groupId: number, monster): Observable<Monster> {
+    createMonster(groupId: number, monster: CreateMonsterRequest): Observable<Monster> {
         return forkJoin([
-            this.httpClient.post<Monster>(`/api/v2/groups/${groupId}/monsters`, monster),
+            this.httpClient.post<MonsterResponse>(`/api/v2/groups/${groupId}/monsters`, monster),
             this._skillService.getSkillsById()
-        ]).pipe(map(([monsterJsonData, skillsById]: [any, {[skillId: number]: Skill}]) => {
+        ]).pipe(map(([monsterJsonData, skillsById]: [any, { [skillId: number]: Skill }]) => {
             return Monster.fromJson(monsterJsonData, skillsById)
         }));
     }
@@ -28,11 +30,11 @@ export class MonsterService {
         return this.httpClient.put<void>(`/api/v2/monsters/${monsterId}/data`, monsterData);
     }
 
-    updateMonster(monsterId: number, request: {name?: string}): Observable<void> {
+    updateMonster(monsterId: number, request: { name?: string }): Observable<void> {
         return this.httpClient.patch<void>(`/api/v2/monsters/${monsterId}`, request);
     }
 
-    updateMonsterTarget(monsterId: number, request: {id: number, isMonster: boolean}): Observable<void> {
+    updateMonsterTarget(monsterId: number, request: { id: number, isMonster: boolean }): Observable<void> {
         return this.httpClient.put<void>(`/api/v2/monsters/${monsterId}/target`, request);
     }
 

@@ -14,7 +14,6 @@ import {
     NhbkDialogService
 } from '../shared';
 
-import {IDurable} from '../date/durable.model';
 import {ItemTemplateService, ItemCategory} from '../item-template';
 
 import {Character, CharacterGiveDestination} from './character.model';
@@ -25,6 +24,7 @@ import {MatDialog} from '@angular/material';
 import {IconDescription} from '../shared/icon.model';
 import {EditItemDialogComponent, EditItemDialogData, EditItemDialogResult} from './edit-item-dialog.component';
 import {AddItemModifierDialogComponent} from './add-item-modifier-dialog.component';
+import {IDurable} from '../api/shared';
 
 @Component({
     selector: 'item-detail',
@@ -261,7 +261,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     removeItemFromContainer() {
-        this._itemActionService.onAction('move_to_container', this.item, {container: null})
+        this._itemActionService.onAction('move_to_container', this.item, {container: null});
         this.closeStoreItemInContainerDialog();
     }
 

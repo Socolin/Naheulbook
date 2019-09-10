@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Form} from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 
 @Component({
     selector: 'app-monster-editor',
@@ -8,7 +8,7 @@ import {Form} from '@angular/forms';
 })
 export class MonsterEditorComponent implements OnInit {
     @Input()
-    form: Form;
+    form: FormGroup;
 
     constructor() {
     }

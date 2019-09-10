@@ -4,6 +4,15 @@
         align-items: center;
         grid-template-columns: auto;
 
+        .search-input {
+            width: 100%;
+        }
+
+
+        .customize-button {
+            float: right;
+        }
+
         .inventory {
             .mat-h2 {
                 display: flex;

@@ -1,4 +1,4 @@
-export type DurationType = 'custom' | 'time' | 'combat' | 'lap' | 'forever';
+import {DurationType} from './enums';
 
 export interface IDurable {
     durationType: DurationType;

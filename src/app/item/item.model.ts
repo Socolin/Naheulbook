@@ -1,15 +1,11 @@
-import {
-    IMetadata,
-    ActiveStatsModifier,
-    DurationChange
-} from '../shared';
+import {ActiveStatsModifier, DurationChange, IMetadata} from '../shared';
 import {ItemTemplate} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
-import {IDurable} from '../date/durable.model';
 import {Skill} from '../skill';
 import {Fighter} from '../group';
+import {IDurable, IItemData} from '../api/shared';
 
-export class ItemData {
+export class ItemData implements IItemData {
     name: string;
     description?: string;
     quantity?: number;

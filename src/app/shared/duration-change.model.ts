@@ -1,5 +1,5 @@
-import {IDurable} from '../date/durable.model';
 import {ActiveStatsModifier} from './stat-modifier.model';
+import {IDurable} from '../api/shared';
 
 export type FighterDurationChanges =
     | IMonsterDurationChanges
