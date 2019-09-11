@@ -326,6 +326,10 @@ namespace Naheulbook.Web.Controllers
             {
                 throw new HttpErrorException(HttpStatusCode.NotFound, ex);
             }
+            catch (ItemTemplateNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
         }
 
         [HttpPost("{GroupId:int:min(1)}/invites")]

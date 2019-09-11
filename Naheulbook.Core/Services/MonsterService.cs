@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -78,8 +79,12 @@ namespace Naheulbook.Core.Services
                     Modifiers = _jsonUtil.Serialize(request.Modifiers)
                 };
 
+                // FIXME: test this
                 uow.Monsters.Add(monster);
+                monster.Items = await _itemService.CreateItemsAsync(request.Items);
                 await uow.CompleteAsync();
+
+                monster.Items = await uow.Items.GetWithAllDataByIdsAsync(monster.Items.Select(x => x.Id));
 
                 return monster;
             }

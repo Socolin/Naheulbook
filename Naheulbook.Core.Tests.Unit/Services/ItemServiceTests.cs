@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Exceptions;
@@ -371,6 +372,68 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _notificationSessionFactory.NotificationSession.NotifyItemChangeContainer(item);
                 _notificationSessionFactory.NotificationSession.CommitAsync();
             });
+        }
+
+        [Test]
+        public async Task CreateItemsAsync_ShouldReturnsAnEmptyList_WhenRequestIsNull()
+        {
+            var result = await _service.CreateItemsAsync(null);
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        public async Task CreateItemsAsync_ShouldReturnsAnEmptyList_WhenRequestIsEmpty()
+        {
+            var result = await _service.CreateItemsAsync(new List<CreateItemRequest>());
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        public void CreateItemsAsync_ShouldThrowIfItemTemplateIsNotFound()
+        {
+            var createItemRequests = new List<CreateItemRequest>
+            {
+                new CreateItemRequest {ItemTemplateId = 42},
+            };
+
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Any<IEnumerable<int>>())
+                .Returns(new List<ItemTemplate>());
+
+            Func<Task> act = () => _service.CreateItemsAsync(createItemRequests);
+
+            act.Should().Throw<ItemTemplateNotFoundException>();
+        }
+
+        [Test]
+        public async Task CreateItemsAsync_ShouldCreateNewItems_ForEachElementOfTheRequest()
+        {
+            const int itemTemplateId1 = 1;
+            const int itemTemplateId2 = 2;
+
+            var itemData1 = new ItemData();
+            var itemData2 = new ItemData();
+            var itemTemplate1 = new ItemTemplate {Id = itemTemplateId1};
+            var itemTemplate2 = new ItemTemplate {Id = itemTemplateId2};
+            var item1 = new Item();
+            var item2 = new Item();
+
+            var createItemRequests = new List<CreateItemRequest>
+            {
+                new CreateItemRequest {ItemTemplateId = itemTemplateId1, ItemData = itemData1},
+                new CreateItemRequest {ItemTemplateId = itemTemplateId2, ItemData = itemData2},
+            };
+
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<int>>(ids => ids.SequenceEqual(new[] {itemTemplateId1, itemTemplateId2})))
+                .Returns(new List<ItemTemplate> {itemTemplate1, itemTemplate2});
+            _itemFactory.CreateItem(itemTemplate1, itemData1)
+                .Returns(item1);
+            _itemFactory.CreateItem(itemTemplate2, itemData2)
+                .Returns(item2);
+
+            var result = await _service.CreateItemsAsync(createItemRequests);
+
+            result.ElementAt(0).Should().BeSameAs(item1);
+            result.ElementAt(1).Should().BeSameAs(item2);
         }
 
         private Item GivenAnItem(ItemData itemData = null, int? characterId = null)

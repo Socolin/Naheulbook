@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Exceptions;
@@ -81,6 +82,35 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 Modifiers = "some-json-modifiers",
                 Group = group
             });
+        }
+
+        [Test]
+        public async Task CreateMonsterAsync_ShouldCreateInventoryItems_ThenReturnsMonsterWithFullyLoadedItems()
+        {
+            const int groupId = 42;
+            const int itemId = 24;
+            var request = CreateRequest();
+            request.Items = new List<CreateItemRequest> {new CreateItemRequest()};
+            var executionContext = new NaheulbookExecutionContext();
+            var group = new Group {Id = groupId};
+            var items = new List<Item> {new Item {Id = itemId}};
+            var fullyLoadedItems = new List<Item>();
+
+            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+                .Returns(group);
+            _jsonUtil.Serialize(request.Data)
+                .Returns("some-json-data");
+            _jsonUtil.Serialize(request.Modifiers)
+                .Returns("some-json-modifiers");
+            _itemService.CreateItemsAsync(request.Items)
+                .Returns(items);
+            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithAllDataByIdsAsync(Arg.Is<IEnumerable<int>>(ids => ids.SequenceEqual(new[] {itemId})))
+                .Returns(fullyLoadedItems);
+
+            var actualMonster = await _service.CreateMonsterAsync(executionContext, groupId, request);
+
+            actualMonster.Items.Should().BeSameAs(fullyLoadedItems);
+
         }
 
         [Test]
@@ -173,7 +203,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             {
                 Name = "some-monster-name",
                 Data = new MonsterData {At = 8, Prd = 10},
-                Items = new List<object>(),
+                Items = new List<CreateItemRequest>(),
                 Modifiers = new List<ActiveStatsModifier>()
             };
         }

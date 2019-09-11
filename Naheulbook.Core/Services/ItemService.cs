@@ -25,6 +25,7 @@ namespace Naheulbook.Core.Services
         Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId);
         Task<(Item takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
         Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
+        Task<IList<Item>> CreateItemsAsync(IList<CreateItemRequest> requestItems);
     }
 
     public class ItemService : IItemService
@@ -278,6 +279,32 @@ namespace Naheulbook.Core.Services
             var (_, remainingQuantity) = await _itemUtil.MoveItemToAsync(itemId, request.CharacterId, request.Quantity, MoveItemTrigger.GiveItem);
 
             return remainingQuantity;
+        }
+
+        public async Task<IList<Item>> CreateItemsAsync(IList<CreateItemRequest> requestItems)
+        {
+            if (requestItems == null)
+                return new List<Item>();
+            if (requestItems.Count == 0)
+                return new List<Item>();
+
+            Dictionary<int, ItemTemplate> itemTemplatesById;
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(requestItems.Select(x => x.ItemTemplateId));
+                itemTemplatesById = itemTemplates.ToDictionary(itemTemplate => itemTemplate.Id, itemTemplate => itemTemplate);
+            }
+
+            var items = new List<Item>();
+            foreach (var requestItem in requestItems)
+            {
+                if (!itemTemplatesById.TryGetValue(requestItem.ItemTemplateId, out var itemTemplate))
+                    throw new ItemTemplateNotFoundException(requestItem.ItemTemplateId);
+                var item = _itemFactory.CreateItem(itemTemplate, requestItem.ItemData);
+                items.Add(item);
+            }
+
+            return items;
         }
     }
 }

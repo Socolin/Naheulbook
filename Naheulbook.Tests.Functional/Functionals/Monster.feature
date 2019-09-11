@@ -3,6 +3,7 @@ Feature: Monster
   Scenario: Create a monster
     Given a JWT for a user
     Given a group
+    Given an item template
 
     When performing a POST to the url "/api/v2/groups/${Group.Id}/monsters" with the following json content and the current jwt
     """
@@ -31,11 +32,11 @@ Feature: Monster
       },
       "items": [
         {
-          "data": {
+          "itemData": {
             "name": "some-item-name",
             "notIdentified": true
           },
-          "itemTemplateId": 1
+          "itemTemplateId": ${ItemTemplate.Id}
         }
       ],
       "modifiers": [
@@ -84,7 +85,19 @@ Feature: Monster
         "resm": 0,
         "xp": 0
       },
-      items: [],
+      items: [
+        {
+          "data": {
+            "name": "some-item-name",
+            "notIdentified": true
+          },
+          "id": {"__match": {"type": "integer"}},
+          "modifiers": [],
+            "template": {"__partial": {
+              "id": ${ItemTemplate.Id}
+            }}
+          }
+      ],
       modifiers: [
         {
           "id": 1,

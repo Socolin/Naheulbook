@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
@@ -9,6 +11,7 @@ namespace Naheulbook.Data.Repositories
     public interface IItemRepository : IRepository<Item>
     {
         Task<Item> GetWithAllDataAsync(int itemId);
+        Task<List<Item>> GetWithAllDataByIdsAsync(IEnumerable<int> itemIds);
         Task<Item> GetWithOwnerAsync(int itemId);
         Task<Item> GetWithOwnerWitGroupCharactersAsync(int itemId);
         Task<Item> GetWithAllDataWithCharacterAsync(int itemId);
@@ -26,6 +29,14 @@ namespace Naheulbook.Data.Repositories
             return Context.Items
                 .IncludeItemTemplateDetails(i => i.ItemTemplate)
                 .SingleAsync(x => x.Id == itemId);
+        }
+
+        public Task<List<Item>> GetWithAllDataByIdsAsync(IEnumerable<int> itemIds)
+        {
+            return Context.Items
+                .IncludeItemTemplateDetails(i => i.ItemTemplate)
+                .Where(x => itemIds.Contains(x.Id))
+                .ToListAsync();
         }
 
         public Task<Item> GetWithOwnerAsync(int itemId)

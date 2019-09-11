@@ -367,6 +367,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             yield return new TestCaseData(new GroupNotFoundException(42), HttpStatusCode.NotFound);
         }
 
+        private static IEnumerable<TestCaseData> GetPostCreateMonsterExceptionsAndExpectedStatusCode()
+        {
+            foreach (var testCaseData in GetCommonGroupExceptionsAndExpectedStatusCode())
+                yield return testCaseData;
+
+            yield return new TestCaseData(new ItemTemplateNotFoundException(42), HttpStatusCode.BadRequest);
+        }
+
         private static IEnumerable<TestCaseData> GetPostCreateInviteExceptionsAndExpectedStatusCode()
         {
             foreach (var testCaseData in GetCommonGroupExceptionsAndExpectedStatusCode())
