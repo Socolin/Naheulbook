@@ -54,7 +54,7 @@
                 <app-item-list
                     [items]="loot.items"
                     (onAction)="removeItemFromLoot(loot, $event)"
-                    (selectItem)="openItemTemplateDialog($event.template)">
+                    (selectItem)="openItemDialog($event)">
                 </app-item-list>
 
                 <div class="loot-monsters" *ngFor="let monster of loot.monsters">
@@ -81,7 +81,7 @@
                     <app-item-list
                         [items]="monster.items"
                         (onAction)="removeItemFromMonster(monster, $event)"
-                        (selectItem)="openItemTemplateDialog($event.template)">
+                        (selectItem)="openItemDialog($event)">
                     </app-item-list>
                 </div>
             </mat-card-content>

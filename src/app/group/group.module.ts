@@ -19,7 +19,6 @@ import {
     AddLootDialogComponent,
     CreateGemDialogComponent,
     CreateGroupComponent,
-    CreateItemComponent,
     CreateItemDialogComponent,
     FighterComponent,
     FighterIconComponent,
@@ -59,7 +58,6 @@ import { MonsterEditorComponent } from './monster-editor.component';
     ],
     declarations: [
         CreateGroupComponent,
-        CreateItemComponent,
         FighterComponent,
         FighterIconComponent,
         FighterPanelComponent,

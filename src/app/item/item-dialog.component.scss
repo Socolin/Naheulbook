@@ -1,0 +1,21 @@
+:host {
+    mat-card {
+        margin: 0 !important;
+    }
+
+    mat-card-header {
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        mat-card-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        mat-card-subtitle {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}

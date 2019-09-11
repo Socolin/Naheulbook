@@ -116,6 +116,10 @@ export class AddMonsterDialogComponent {
     }
 
     updateFilterMonster(filter: string) {
+        if (!filter) {
+            return;
+        }
+
         return this.monsterTemplateService.searchMonster(filter).subscribe((monsters) => {
             this.filteredMonsters = monsters;
         });

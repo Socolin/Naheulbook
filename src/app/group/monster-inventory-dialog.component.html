@@ -2,7 +2,7 @@
 <mat-dialog-content>
     <app-item-list [items]="data.monster.items"
                    (onAction)="removeItem($event)"
-                   (selectItem)="openItemTemplateDialog($event.template)">
+                   (selectItem)="openItemDialog($event)">
     </app-item-list>
 </mat-dialog-content>
 <mat-dialog-actions>

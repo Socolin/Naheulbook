@@ -9,13 +9,11 @@ import {Monster} from '../monster';
 import {Group} from './group.model';
 import {GroupService} from './group.service';
 import {MatDialog} from '@angular/material/dialog';
-import {CreateItemDialogComponent, openCreateItemDialog} from './create-item-dialog.component';
-import {Subject} from 'rxjs';
+import {openCreateItemDialog} from './create-item-dialog.component';
 import {AddLootDialogComponent} from './add-loot-dialog.component';
 import {WebSocketService} from '../websocket';
-import {CreateGemDialogComponent, openCreateGemDialog} from './create-gem-dialog.component';
-import {ItemTemplate} from '../item-template';
-import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
+import {openCreateGemDialog} from './create-gem-dialog.component';
+import {ItemDialogComponent} from '../item/item-dialog.component';
 
 @Component({
     selector: 'group-loot-panel',
@@ -143,10 +141,10 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         );
     }
 
-    openItemTemplateDialog(itemTemplate: ItemTemplate) {
-        this.dialog.open(ItemTemplateDialogComponent, {
+    openItemDialog(item: Item) {
+        this.dialog.open(ItemDialogComponent, {
             panelClass: 'app-dialog-no-padding',
-            data: {itemTemplate},
+            data: {item},
             autoFocus: false
         });
     }

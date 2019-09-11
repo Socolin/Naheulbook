@@ -4,6 +4,7 @@ import {Monster} from '../monster';
 import {Item, ItemService} from '../item';
 import {ItemTemplate} from '../item-template';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
+import {ItemDialogComponent} from '../item/item-dialog.component';
 
 export interface MonsterInventoryDialogData {
     monster: Monster;
@@ -31,10 +32,10 @@ export class MonsterInventoryDialogComponent {
         );
     }
 
-    openItemTemplateDialog(itemTemplate: ItemTemplate) {
-        this.dialog.open(ItemTemplateDialogComponent, {
+    openItemDialog(item: Item) {
+        this.dialog.open(ItemDialogComponent, {
             panelClass: 'app-dialog-no-padding',
-            data: {itemTemplate},
+            data: {item},
             autoFocus: false
         });
     }

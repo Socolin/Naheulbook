@@ -1,0 +1,214 @@
+<mat-card>
+    <mat-card-header>
+        <icon matCardAvatar [icon]="item.data.icon" [size]="'40px'"></icon>
+        <div>
+            <mat-card-title>
+                <span *ngIf="item.template.data.quantifiable || item.data.quantity">
+                    {{item.data.quantity}}
+                </span>
+                <span style="vertical-align: top;">
+                    {{item.data.name}}
+                </span>
+            </mat-card-title>
+            <mat-card-subtitle>
+                <div *ngIf="itemCategoriesById">
+                    <span
+                        class="label label-default">{{itemCategoriesById[item.template.categoryId].section.name}}</span>
+                    -
+                    <span>{{itemCategoriesById[item.template.categoryId].name}}</span>
+                </div>
+
+                <span *ngIf="item.data.notIdentified">
+                    Non identifié
+                </span>
+            </mat-card-subtitle>
+        </div>
+    </mat-card-header>
+    <mat-card-content class="item-detail-content">
+        <div>
+            <div>
+                <span *ngIf="item.template.name !== item.data.name">Nom reel: {{item.template.name}}</span>
+            </div>
+
+            <div *ngIf="item.template.data.description">{{item.template.data.description}}</div>
+            <div>
+                <span>{{item.data.description}}</span>
+            </div>
+
+            <div>
+                <span *ngIf="item.template.data.relic" class="label label-primary">Relique</span>
+                <span *ngIf="item.template.data.sex === 'h'">Homme uniq.</span>
+                <span *ngIf="item.template.data.sex === 'f'">Femme uniq.</span>
+                <span *ngIf="item.template.data.requireLevel">
+                    Level: {{item.template.data.requireLevel}}
+                </span>
+                <span *ngIf="item.template.data.throwable" class="label label-info">Prévue pour le jet</span>
+            </div>
+            <div *ngIf="item.template.slots?.length > 0">
+                Slot:
+                <span *ngFor="let slot of item.template.slots">{{slot.name}} </span>
+            </div>
+
+            <!-- Dieu -->
+            <div *ngIf="item.template.data.god && godsByTechName">
+                <span>Dieu:</span>
+                {{godsByTechName[item.template.data.god].displayName}}
+            </div>
+
+            <div *ngIf="item.template.data.note">Note: {{item.template.data.note}}</div>
+
+            <div *ngIf="item.template.data.quantifiable">
+                <div>
+                    Quantité:
+                    <span>{{item.data.quantity}}</span>
+                </div>
+            </div>
+            <div *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
+                <span class="ra ra-broadsword ra-lg"></span>
+                <span *ngIf="item.template.data.damageDice">{{item.template.data.damageDice}}<span
+                    class="ra ra-perspective-dice-random"></span></span>
+                <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
+                <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
+                <span *ngIf="item.template.data.damageType">({{item.template.data.damageType}})</span>
+            </div>
+
+            <div *ngIf="item.template.data.protection
+                        || item.template.data.magicProtection
+                        || item.template.data.protectionAgainstMagic">
+                <span class="ra ra-shield ra-lg"></span>
+                <span *ngIf="item.template.data.protection">{{item.template.data.protection}}</span>
+                <span *ngIf="item.template.data.protection && item.template.data.magicProtection">+</span>
+                <span *ngIf="item.template.data.magicProtection">{{item.template.data.magicProtection}}
+                    (magique)</span>
+                <span
+                    *ngIf="(item.template.data.protection || item.template.data.magicProtection) && item.template.data.protectionAgainstMagic">/</span>
+                <span
+                    *ngIf="item.template.data.protectionAgainstMagic">{{item.template.data.protectionAgainstMagic}}
+                    <span
+                        *ngIf="item.template.data.protectionAgainstType">(contre {{item.template.data.protectionAgainstType}}
+                        )</span>
+                    <span *ngIf="!item.template.data.protectionAgainstType">(contre mag./myst.)</span>
+                </span>
+            </div>
+
+            <div *ngIf="item.template.data.charge">
+                <div>
+                    <span>Nombre d'utilisations:</span>
+                    {{item.data.charge}} / {{item.template.data.charge}}
+                </div>
+                <div *ngIf="item.template.data?.actions?.length">
+                    Lors de l'utilisation:
+                    <div *ngFor="let action of item.template.data.actions" style="margin-left: 20px">
+                        <nhbk-action *ngIf="!action.hidden" [action]="action"></nhbk-action>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="item.template.data.weight && !item.template.data.useUG">
+                Poids:
+                <span *ngIf="item.template.data.weight < 1">{{(item.template.data.weight * 1000) | number:'1.0-3'}}
+                    g</span>
+                <span *ngIf="item.template.data.weight >= 1">{{(item.template.data.weight)  | number:'1.3-3'}}
+                    Kg</span>
+                <span
+                    *ngIf="item.data.quantity">Total: {{item.data.quantity * item.template.data.weight | number:'1.3-3'}}
+                    Kg</span>
+            </div>
+            <div *ngIf="item.template.data.useUG">
+                <div>U.G: {{item.data.ug}}</div>
+                <div>Poids: {{item.data.ug * item.template.data.weight * 1000  | number:'1.3-3' }} g</div>
+            </div>
+            <div *ngIf="item.template.data.space">Encombrement: {{item.template.data.space}}</div>
+
+            <div *ngIf="item.template.data.rupture">
+                <span class="ra ra-broken-shield ra-lg"></span> 1 à {{item.template.data.rupture}}
+            </div>
+            <div *ngIf="item.template.data.duration">Durée: {{item.template.data.duration}}</div>
+            <div *ngIf="item.data.readCount">Lu: {{item.data.readCount}}</div>
+
+            <div *ngIf="item.price">
+                <span>Prix:</span>
+                {{item.price}} P.O.
+            </div>
+
+            <ng-template [ngIf]="item.template.modifiers && item.template.modifiers.length">
+                <ng-template ngFor let-modifier [ngForOf]="item.template.modifiers">
+                    <div>
+                        <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
+                        <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
+                        {{modifier | modifier}}
+                    </div>
+                </ng-template>
+            </ng-template>
+
+            <ul>
+                <li *ngFor="let skill of item.template.skills">Donne la compétence "{{skill.name}}"</li>
+                <li *ngFor="let skill of item.template.unskills">Annule "{{skill.name}}"</li>
+                <li *ngFor="let modifier of item.template.skillModifiers">{{modifier.skill.name}} <span
+                    *ngIf="modifier.value > 0">+</span>{{modifier.value}}
+                </li>
+            </ul>
+
+
+            <div *ngFor="let requirement of item.template.requirements">
+                <span *ngIf="requirement.min">
+                    Min {{requirement.stat}}: {{requirement.min}}
+                </span>
+                <span *ngIf="requirement.max">
+                    Max {{requirement.stat}}: {{requirement.max}}
+                </span>
+            </div>
+
+            <!-- Origine -->
+            <div *ngIf="item.template.data.origin">
+                Origine: {{item.template.data.origin}}
+            </div>
+
+            <!-- Gun -->
+            <div *ngIf="item.template.data.gun">
+                Arme à poudre:
+                <dl>
+                    <dt>Portée utile:</dt>
+                    <dd>{{item.template.data.gun.range}}</dd>
+                    <dt>Dégâts:</dt>
+                    <dd>{{item.template.data.gun.damages}}</dd>
+                    <dt>+Spécial:</dt>
+                    <dd>{{item.template.data.gun.special}}</dd>
+                    <dt>Cadence de tir:</dt>
+                    <dd>{{item.template.data.gun.rateOfFire}}</dd>
+                    <dt>Délai de rechargement:</dt>
+                    <dd>{{item.template.data.gun.reloadDelay}}</dd>
+                    <dt>Épreuve de tir:</dt>
+                    <dd>{{item.template.data.gun.shootTest}}</dd>
+                </dl>
+                <mat-divider></mat-divider>
+                Munitions
+                <dl>
+                    <dt>Combustion par coup:</dt>
+                    <dd>{{item.template.data.gun.fuelPerShot}}</dd>
+                    <dt>Munitions par coup:</dt>
+                    <dd>{{item.template.data.gun.ammunitionPerShot}}</dd>
+                </dl>
+                <mat-divider></mat-divider>
+                <dl>
+                    <dt>Chances de fonctionnement:</dt>
+                    <dd>{{item.template.data.gun.workLuck}}</dd>
+                </dl>
+            </div>
+
+            <!-- Indice de rareté -->
+            <div *ngIf="item.template.data.rarityIndicator">
+                Indice de rareté: {{item.template.data.rarityIndicator}}
+            </div>
+
+        </div>
+
+        <div *ngIf="item.data.lifetime?.durationType === 'time'">
+            <span class="game-icon game-icon-stopwatch"></span>Temps de conservation:
+            <span
+                *ngIf="item.data.lifetime.timeDuration > 0">{{item.data.lifetime.timeDuration | nhbkDuration}}</span>
+            <span *ngIf="item.data.lifetime.timeDuration === 0" class="invalid-level">expiré</span>
+        </div>
+
+    </mat-card-content>
+</mat-card>

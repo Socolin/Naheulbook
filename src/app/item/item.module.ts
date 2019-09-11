@@ -9,6 +9,9 @@ import {
     ItemService,
 } from './';
 import {ItemListComponent} from './item-list.component';
+import { ItemDialogComponent } from './item-dialog.component';
+import {DateModule} from '../date/date.module';
+import {ActionModule} from '../action/action.module';
 
 @NgModule({
     imports: [
@@ -16,14 +19,21 @@ import {ItemListComponent} from './item-list.component';
         FormsModule,
         NhbkMaterialModule,
         SharedModule,
+        DateModule,
+        ActionModule,
     ],
     declarations: [
-        ItemListComponent
+        ItemListComponent,
+        ItemDialogComponent
+    ],
+    entryComponents: [
+        ItemDialogComponent
     ],
     providers: [
         ItemService
     ],
     exports: [
+        ItemDialogComponent,
         ItemListComponent
     ]
 })

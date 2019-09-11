@@ -1,21 +1,13 @@
 import {forkJoin, Subscription} from 'rxjs';
 
 import {map} from 'rxjs/operators';
-import {
-    Component, OnInit, OnDestroy, ViewChild, QueryList,
-    ViewChildren
-} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatTabChangeEvent} from '@angular/material';
-import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
-import {Portal, TemplatePortalDirective} from '@angular/cdk/portal';
+import {Overlay, OverlayRef} from '@angular/cdk/overlay';
+import {Portal} from '@angular/cdk/portal';
 
-import {
-    AutocompleteValue,
-    NhbkDialogService,
-    ActiveStatsModifier,
-    LapCountDecrement
-} from '../shared';
+import {ActiveStatsModifier, AutocompleteValue, LapCountDecrement, NhbkDialogService} from '../shared';
 import {NotificationsService} from '../notifications';
 import {dateOffset2TimeDuration} from '../date/util';
 import {NhbkDateOffset} from '../date';
@@ -25,17 +17,16 @@ import {WebSocketService} from '../websocket';
 import {GroupActionService} from './group-action.service';
 
 import {Character, CharacterSearchResponse, CharacterService} from '../character';
-import {Effect, AddEffectDialogComponent} from '../effect';
+import {AddEffectDialogComponent, Effect} from '../effect';
 
-import {User, LoginService} from '../user';
+import {LoginService, User} from '../user';
 import {Monster, MonsterService} from '../monster';
-import {LocationService, Location} from '../location';
+import {Location, LocationService} from '../location';
 import {Item, ItemService} from '../item';
 import {ItemTemplate} from '../item-template';
 
 import {FighterSelectorComponent, FighterSelectorDialogData} from './fighter-selector.component';
-import {CreateItemComponent} from './create-item.component';
-import {Group, GroupInvite, Fighter} from './group.model';
+import {Fighter, Group, GroupInvite} from './group.model';
 import {CharacterSheetDialogComponent} from './character-sheet-dialog.component';
 
 @Component({
@@ -81,9 +72,6 @@ export class GroupComponent implements OnInit, OnDestroy {
     private routeSub: Subscription;
     private routeFragmentSub: Subscription;
     private groupNotificationSub: Subscription;
-
-    @ViewChild('createItemModal', {static: true})
-    public createItemModal: CreateItemComponent;
 
     constructor(private _route: ActivatedRoute
         , private _router: Router
@@ -483,8 +471,7 @@ export class GroupComponent implements OnInit, OnDestroy {
             }
             case 'addItem': {
                 let itemTemplate: ItemTemplate = event.data;
-                this.createItemModal.openDialog();
-                this.createItemModal.selectItemTemplate(itemTemplate);
+                throw new Error('FIXME open item dialog')
                 break;
             }
         }

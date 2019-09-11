@@ -61,7 +61,7 @@
                 <button mat-menu-item
                         (click)=openInventoryDialog()>
                     <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
-                    <span [matBadge]="fighter.monster?.items?.length || undefined" matBadgeOverlap="false">Inventaire</span>
+                    <span>Inventaire<span *ngIf="fighter.monster?.items?.length"> ({{fighter.monster?.items?.length}})</span></span>
                 </button>
                 <button mat-menu-item
                         (click)=killMonster(fighter.monster)>

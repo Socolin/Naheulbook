@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {MatDialog, MatSlideToggleChange} from '@angular/material';
 
 import {NotificationsService} from '../notifications';
-import {Character, CharacterService, ItemActionService} from '../character';
+import {CharacterService, ItemActionService} from '../character';
 import {Item, ItemService} from '../item';
 import {ActiveStatsModifier, LapCountDecrement, NhbkDialogService} from '../shared';
 import {Monster, MonsterData, MonsterService} from '../monster';
@@ -17,9 +17,7 @@ import {
     EditMonsterDialogData,
     EditMonsterDialogResult
 } from './edit-monster-dialog.component';
-import {CreateItemDialogComponent, openCreateItemDialog} from './create-item-dialog.component';
-import {Subject} from 'rxjs';
-import {Loot} from '../loot';
+import {openCreateItemDialog} from './create-item-dialog.component';
 import {openCreateGemDialog} from './create-gem-dialog.component';
 import {ModifierDetailsDialogComponent} from './modifier-details-dialog.component';
 import {MonsterInventoryDialogComponent} from './monster-inventory-dialog.component';

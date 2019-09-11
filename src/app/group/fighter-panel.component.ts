@@ -7,13 +7,12 @@ import {NhbkDialogService} from '../shared';
 import {ItemService} from '../item';
 import {Monster, MonsterService, MonsterTemplateService} from '../monster';
 
-import {CreateItemComponent} from './create-item.component';
 import {Fighter, Group} from './group.model';
 import {GroupActionService} from './group-action.service';
 import {GroupService} from './group.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddMonsterDialogComponent, AddMonsterDialogResult} from './add-monster-dialog.component';
-import {CreateItemRequest, CreateMonsterRequest} from '../api/requests';
+import {CreateMonsterRequest} from '../api/requests';
 
 @Component({
     selector: 'fighter-panel',
@@ -29,9 +28,6 @@ export class FighterPanelComponent implements OnInit {
     public allDeadMonstersLoaded = false;
 
     public selectedCombatRow = 0;
-
-    @ViewChild('createItemComponent', {static: true})
-    public createItemComponent: CreateItemComponent;
 
     @ViewChild('deadMonstersDialog', {static: true})
     public deadMonstersDialog: Portal<any>;
@@ -178,18 +174,6 @@ export class FighterPanelComponent implements OnInit {
         this._actionService.registerAction('deleteMonster').subscribe(
             data => {
                 this.deleteMonster(data.data);
-            }
-        );
-
-        this._actionService.registerAction('openAddItemForm').subscribe(
-            data => {
-                let fighter: Fighter = data.data;
-                if (fighter.isMonster)  {
-                    this.createItemComponent.openDialogForMonster(fighter.monster);
-                }
-                else {
-                    this.createItemComponent.openDialogForCharacter(fighter.character);
-                }
             }
         );
 
