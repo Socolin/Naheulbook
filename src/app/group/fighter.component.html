@@ -84,19 +84,19 @@
     </div>
 
     <div class="field-with-label at">
-        <span class="label" matTooltip="Attaque">AT:</span>
+        <span class="label" matTooltip="Attaque">AT</span>
         <span class="text-attack">{{fighter.stats.at}}</span>
     </div>
     <div class="field-with-label prd">
-        <span class="label" matTooltip="Parade">PRD:</span>
+        <span class="label" matTooltip="Parade">PRD</span>
         <span class="text-prd">{{fighter.stats.prd}}</span>
     </div>
     <div class="field-with-label esq">
-        <span class="label" matTooltip="Esquive">ESQ:</span>
+        <span class="label" matTooltip="Esquive">ESQ</span>
         <span class="text-esq">{{fighter.stats.esq}}</span>
     </div>
     <div class="field-with-label ev" [class.text-danger]="fighter.stats.ev < 4">
-        <span class="label" matTooltip="Énergie vitale">EV:</span>
+        <span class="label" matTooltip="Énergie vitale">EV</span>
         <value-editor [title]="'Energie vitale'"
                       [value]="fighter.stats.ev"
                       [maxValue]="fighter.stats.maxEv"
@@ -104,7 +104,7 @@
         </value-editor>
     </div>
     <div class="field-with-label ea">
-        <span class="label" matTooltip="Énergie astrale">EA:</span>
+        <span class="label" matTooltip="Énergie astrale">EA</span>
         <span *ngIf="fighter.stats.maxEa">
             <value-editor [title]="'Energie astrale'"
                           [value]="fighter.stats.ea"
@@ -115,15 +115,15 @@
         <span *ngIf="!fighter.stats.maxEa">-</span>
     </div>
     <div class="field-with-label pr">
-        <span class="label" matTooltip="Armure (Armure magique)">PR:</span>
+        <span class="label" matTooltip="Armure (Armure magique)">PR</span>
         {{fighter.stats.pr}}({{fighter.stats.pr_magic}})
     </div>
     <div class="field-with-label resm">
-        <span class="label" matTooltip="Resistance magique">RESM:</span>
+        <span class="label" matTooltip="Resistance magique">RESM</span>
         {{fighter.stats.resm}}
     </div>
     <div class="field-with-label cou">
-        <span class="label" matTooltip="Courage">COU:</span>
+        <span class="label" matTooltip="Courage">COU</span>
         <span *ngIf="fighter.chercheNoise" matTooltip="Chercher des noise">
             {{fighter.stats.cou}}+
         </span>

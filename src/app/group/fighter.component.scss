@@ -1,25 +1,58 @@
+@import "~app/style/responsive-utils";
 :host {
     .fighter {
         margin-bottom: 4px;
         display: grid;
         align-items: center;
         grid-gap: 8px;
-        grid-template-columns: 48px minmax(20px, 1fr) minmax(64px, 85px) minmax(76px, 92px) 8px;
-        grid-template-areas: "icon name name name name" "icon . at ev ."
+
+        grid-template-columns: 48px 1fr
+            minmax(48px, 100px) minmax(48px, 100px)
+            minmax(48px, 100px) minmax(48px, 100px)
+            minmax(48px, 100px) minmax(48px, 100px)
+            minmax(48px, 100px) minmax(48px, 100px)
+            8px;
+        grid-template-areas:
+            "icon name name name name name name name name name name"
+            "icon . at   ev   prd  esq  pr   cou  resm ea ."
+            ". dmg dmg  dmg  dmg  dmg  dmg    .    .    .    . "
+            ". effects effects effects effects effects effects effects effects effects effects"
+            ". note note note note note note note note note note";
+
+        @include for-phone-only {
+            grid-template-columns: 48px minmax(20px, 1fr) minmax(64px, 85px) minmax(76px, 92px) 8px;
+            grid-template-areas: "icon name name name name"
+            "icon . at ev ."
             ". . prd esq ."
             "dmg dmg pr cou ."
             "dmg dmg resm ea ."
             "dmg dmg . . ."
             "effects effects effects effects effects"
             "note note note note note";
+        }
+
+        @include for-tablet-landscape-up {
+            grid-template-areas:
+                "icon name name name name name    name     name   name    name    name"
+                "icon .    at   ev   prd  esq     pr       cou    resm    ea      ."
+                ".    dmg  dmg  dmg  dmg  effects effects effects effects effects ."
+                ".    note note note note note    note    note    note    note    .";
+        }
 
         .field-with-label {
             display: flex;
             justify-content: space-between;
-            flex-direction: row;
+            flex-direction: column;
             flex-wrap: nowrap;
 
-            .label {
+            @include for-phone-only {
+                flex-direction: row;
+            }
+
+            .label::after {
+                @include for-phone-only {
+                    content: ':';
+                }
             }
         }
 
