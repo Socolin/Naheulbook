@@ -4,12 +4,14 @@ import {Monster} from './monster.model';
 
 @Component({
     selector: 'monster-color-selector',
-    templateUrl: './monster-color-selector.component.html'
+    templateUrl: './monster-color-selector.component.html',
+    styleUrls: ['./monster-color-selector.component.scss']
 })
 export class MonsterColorSelectorComponent {
     @Input() monster: Monster;
     @Output() onColorChange: EventEmitter<string> = new EventEmitter<string>();
     @Output() onNumberChange: EventEmitter<number> = new EventEmitter<number>();
+    @Output() fontSize = '48px';
 
     public showSelector = false;
     public colors: string[] = [

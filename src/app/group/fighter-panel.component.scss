@@ -13,6 +13,19 @@
         flex-direction: row-reverse;
         margin: 8px;
     }
+    .fighters {
+        mat-panel-title {
+            display: grid;
+            grid-template-columns: 32px 1fr;
+            align-items: center;
+            grid-gap: 8px;
+            > span {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
 }
 
 fighter {

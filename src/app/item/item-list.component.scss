@@ -10,6 +10,8 @@
         grid-template-areas: "info action";
 
         .info {
+            padding: 0 8px;
+            cursor: pointer;
             grid-area: info;
             grid-gap: 8px;
             display: grid;

@@ -14,9 +14,14 @@
              (backdropClick)="hideSelector()"
              [cdkConnectedOverlayOpen]="showSelector"
              [cdkConnectedOverlayOrigin]="colorSelectorOrigin">
-    <mat-card style="width:194px; display: flex; flex-direction: row; flex-wrap: wrap; padding: 0; cursor: pointer">
+    <mat-card style="width:194px; display: flex; flex-direction: row; flex-wrap: wrap">
         <div *ngFor="let color of colors" style="width: 48px; height: 48px">
             <i [style.color]=color
+               matRipple
+               matRippleCentered="true"
+               matRippleUnbounded="true"
+               matRippleRadius="16"
+               style="cursor: pointer"
                class="ra ra-3x ra-player"
                (click)="changeColor(color)">
             </i>

@@ -45,7 +45,7 @@ export class FighterPanelComponent implements OnInit {
 
     openAddMonsterDialog() {
         const dialogRef = this.dialog.open<AddMonsterDialogComponent, any, AddMonsterDialogResult>(AddMonsterDialogComponent, {
-            minWidth: '100vw', height: '100vh'
+            minWidth: '100vw', height: '100vh', autoFocus: false
         });
 
         dialogRef.afterClosed().subscribe((result) => {

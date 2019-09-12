@@ -8,6 +8,7 @@ import {Fighter} from './group.model';
 })
 export class FighterIconComponent implements OnInit {
     @Input() fighter: Fighter;
+    @Input() fontSize = '2em';
 
     constructor() {
     }

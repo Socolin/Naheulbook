@@ -1,30 +1,23 @@
-<div cdk-overlay-origin
-     #colorSelectorOrigin="cdkOverlayOrigin"
-     style="position: relative; text-align: left; width: 48px; height: 48px">
-    <i style="position: absolute;"
-       matRipple
-       matRippleCentered="true"
-       matRippleUnbounded="true"
-       matRippleRadius="32"
-       [style.color]="'#' + monster.data.color" class="ra ra-monster-skull ra-3x"
-       (click)="openSelector($event)"></i>
-    <span *ngIf="monster.data.number"
-          matRipple
-          matRippleCentered="true"
-          matRippleUnbounded="true"
-          matRippleRadius="32"
-          (click)="openSelector($event)"
-          style="
-                width: 40px;
-                text-align: center;
-                position: absolute;
-                font-size: 40px;
-                opacity: 0.75;
-                color: rgba(255, 255, 255, 1);
-                text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-                ">
-        {{monster.data.number}}
-    </span>
+<div cdk-overlay-origin #colorSelectorOrigin="cdkOverlayOrigin">
+    <div class="icon">
+        <i matRipple
+           matRippleCentered="true"
+           matRippleUnbounded="true"
+           matRippleRadius="32"
+           [style.fontSize]="fontSize"
+           [style.color]="'#' + monster.data.color" class="ra ra-monster-skull"
+           (click)="openSelector($event)"></i>
+        <span *ngIf="monster.data.number"
+              class="number"
+              matRipple
+              matRippleCentered="true"
+              matRippleUnbounded="true"
+              matRippleRadius="32"
+              [style.fontSize]="fontSize"
+              (click)="openSelector($event)">
+            {{monster.data.number}}
+        </span>
+    </div>
 </div>
 
 <ng-template cdk-connected-overlay
@@ -32,32 +25,33 @@
              (backdropClick)="closeSelector()"
              [cdkConnectedOverlayOpen]="showSelector"
              [cdkConnectedOverlayOrigin]="colorSelectorOrigin">
-    <mat-card style="padding: 0; display: flex;">
-        <div style="flex: 0 auto; width: 192px">
-            <ng-template ngFor let-color [ngForOf]="colors">
-                <div style="float:left; width: 48px; height: 48px; cursor: pointer">
-                    <i [style.color]=color
-                       mat-ripple
-                       class="ra ra-monster-skull ra-3x"
-                       (click)="changeColor(color)">
-                    </i>
-                </div>
-            </ng-template>
+    <mat-card class="selector">
+        <div class="colors">
+            <div *ngFor="let color of colors" class="color">
+                <i class="ra ra-monster-skull"
+                   matRipple
+                   matRippleCentered="true"
+                   matRippleUnbounded="true"
+                   matRippleRadius="32"
+                   [style.color]=color
+                   [style.fontSize]="fontSize"
+                   (click)="changeColor(color)">
+                </i>
+            </div>
         </div>
-        <div style="flex: 0 auto; width: 192px">
-            <ng-template ngFor let-number [ngForOf]="numbers">
-                <div style="float:left; width: 48px; height: 48px; cursor: pointer"
-                     mat-ripple
+        <div class="numbers">
+            <div *ngFor="let number of numbers">
+                <div class="number"
+                     matRipple
+                     matRippleCentered="true"
+                     matRippleUnbounded="true"
+                     matRippleRadius="32"
                      (click)="changeNumber(number)">
-                    <span *ngIf="number"
-                          style="
-                                text-align: center;
-                                font-size: 40px;
-                                 color: white;
-                                 text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-                                ">{{number}}</span>
+                    <div *ngIf="number" class="number" [style.fontSize]="'40px'">
+                        {{number}}
+                    </div>
                 </div>
-            </ng-template>
+            </div>
         </div>
     </mat-card>
 </ng-template>

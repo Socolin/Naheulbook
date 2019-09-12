@@ -1,16 +1,26 @@
 :host {
     .ug {
         display: grid;
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: 60px 140px;
         grid-gap: 8px;
         align-items: center;
+        justify-content: space-between;
+
+        .max-ug-selector {
+            align-self: end;
+            > mat-form-field {
+                width: 140px;
+            }
+        }
     }
+
     .type-dice {
         display: grid;
-        grid-template-columns: auto 60px 1fr;
+        grid-template-columns: auto 30px auto;
         align-items: center;
         grid-gap: 8px;
-        justify-content: left;
+        justify-content: space-between;
+
     }
 
     .new-item-data {
@@ -30,12 +40,12 @@
                 width: 100%;
             }
         }
-
         .identifiable-quantifiable {
             display: grid;
             grid-gap: 8px;
             align-items: center;
-            grid-template-columns: auto 1fr;
+            justify-content: space-between;
+            grid-template-columns: auto auto;
         }
     }
 }

@@ -52,24 +52,36 @@
                 </button>
                 <button mat-menu-item
                         (click)="openDeadMonstersDialog()">
-                    <mat-icon fontSet="game-icon" fontIcon="game-icon-tombstone" class="ra-mat-button-icon-24"></mat-icon>
+                    <mat-icon fontSet="game-icon" fontIcon="game-icon-tombstone"
+                              class="ra-mat-button-icon-24"></mat-icon>
                     Monstres morts
                 </button>
             </mat-menu>
         </span>
     </h2>
     <mat-divider></mat-divider>
-    <ng-template ngFor let-fighter [ngForOf]="group.fighters" let-i=index>
-        <fighter
-            [selected]="(!group.data.inCombat && selectedCombatRow === i) || (group.data.inCombat && group.data.currentFighterIndex === i)"
-            [group]="group"
-            [fighter]="fighter"
-            [fighters]="group.fighters"
-            [expandedView]="selectedCombatRow === i"
-            (onSelect)="selectFighter($event)">
-        </fighter>
-        <mat-divider></mat-divider>
-    </ng-template>
+    <mat-accordion class="fighters">
+        <ng-template ngFor let-fighter [ngForOf]="group.fighters" let-i=index>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <fighter-icon [fighter]="fighter" fontSize="32px"></fighter-icon>
+                        <span>{{fighter.name}}</span>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                    <fighter
+                        [selected]="(!group.data.inCombat && selectedCombatRow === i) || (group.data.inCombat && group.data.currentFighterIndex === i)"
+                        [group]="group"
+                        [fighter]="fighter"
+                        [fighters]="group.fighters"
+                        [expandedView]="selectedCombatRow === i"
+                        (onSelect)="selectFighter($event)">
+                    </fighter>
+            </mat-expansion-panel>
+        </ng-template>
+    </mat-accordion>
 
 
     <ng-template #deadMonstersDialog="cdkPortal" cdk-portal>

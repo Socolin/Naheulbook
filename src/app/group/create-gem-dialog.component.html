@@ -10,11 +10,16 @@
                    placeholder="U.G."/>
         </mat-form-field>
 
-        <span>
-            <button mat-mini-fab [color]="maxUg == 2 ? 'accent' : 'primary'" (click)="setGemRandomUg(2)">D2</button>
-            <button mat-mini-fab [color]="maxUg == 4 ? 'accent' : 'primary'" (click)="setGemRandomUg(4)">D4</button>
-            <button mat-mini-fab [color]="maxUg == 6 ? 'accent' : 'primary'" (click)="setGemRandomUg(6)">D6</button>
-            <button mat-mini-fab [color]="maxUg == 10 ? 'accent' : 'primary'" (click)="setGemRandomUg(10)">D10</button>
+        <span class="max-ug-selector">
+            <mat-form-field>
+                <mat-select placeholder="Maximum U.G." [ngModel]="maxUg" (selectionChange)="setGemRandomUg($event.value)">
+                    <mat-option [value]="2">2</mat-option>
+                    <mat-option [value]="4">4</mat-option>
+                    <mat-option [value]="6">6</mat-option>
+                    <mat-option [value]="8">8</mat-option>
+                    <mat-option [value]="10">10</mat-option>
+                </mat-select>
+            </mat-form-field>
         </span>
     </div>
     <div class="type-dice">
