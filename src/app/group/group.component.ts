@@ -20,9 +20,9 @@ import {Character, CharacterSearchResponse, CharacterService} from '../character
 import {AddEffectDialogComponent, Effect} from '../effect';
 
 import {LoginService, User} from '../user';
-import {Monster, MonsterService} from '../monster';
+import {MonsterService} from '../monster';
 import {Location, LocationService} from '../location';
-import {Item, ItemService} from '../item';
+import {ItemService} from '../item';
 import {ItemTemplate} from '../item-template';
 
 import {FighterSelectorComponent, FighterSelectorDialogData} from './fighter-selector.component';
@@ -436,30 +436,6 @@ export class GroupComponent implements OnInit, OnDestroy {
                 }
             }
         })
-    }
-
-    onItemAdded(data: {character: Character, monster: Monster, item: Item}) {
-        const dialogRef = this.dialog.open<FighterSelectorComponent, FighterSelectorDialogData, Fighter[]>(FighterSelectorComponent, {
-            data: {
-                group: this.group,
-                title: 'Ajout de l\'objet',
-                subtitle: data.item.data.name,
-                icon: data.item.data.icon || data.item.template.data.icon
-            }
-        });
-
-        dialogRef.afterClosed().subscribe((fighters) => {
-            if (!fighters) {
-                return;
-            }
-            for (let fighter of fighters) {
-                if (fighter.isMonster) {
-                    this._itemService.addItemTo('monster', fighter.id, data.item.template.id, data.item.data).subscribe();
-                } else {
-                    this._itemService.addItemTo('character', fighter.id, data.item.template.id, data.item.data).subscribe();
-                }
-            }
-        });
     }
 
     usefullDataAction(event: {action: string, data: any}) {

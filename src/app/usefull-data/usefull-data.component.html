@@ -755,39 +755,62 @@
     </mat-card>
 </ng-template>
 
-<div class="placeholder">
 
-</div>
-<div class="tabs-category">
-    <div [class.tab-icon-critic-selected]="currentPanel==='critic'"
-         matRipple
-         class="tab-icon game-icon tab-icon-critic game-icon-spiky-eclipse"
-         (click)="openPanel('critic')"></div>
-    <div [class.tab-icon-epicfail-selected]="currentPanel==='epicfail'"
-         matRipple
-         class="tab-icon game-icon tab-icon-epicfail game-icon-dripping-blade"
-         (click)="openPanel('epicfail')"></div>
-    <div [class.tab-icon-effects-selected]="currentPanel==='effects'"
-         matRipple
-         class="tab-icon game-icon tab-icon-effects game-icon-pierced-body"
-         (click)="openPanel('effects')"></div>
-    <div [class.tab-icon-entropic-selected]="currentPanel==='entropic'"
-         matRipple
-         class="tab-icon game-icon tab-icon-entropic game-icon-bolt-spell-cast"
-         (click)="openPanel('entropic')"></div>
-    <div [class.tab-icon-skills-selected]="currentPanel==='skills'" class="tab-icon game-icon tab-icon-skills game-icon-gears"
-         matRipple
-         (click)="openPanel('skills')"></div>
-    <div [class.tab-icon-sleep-selected]="currentPanel==='sleep'" class="tab-icon game-icon tab-icon-sleep game-icon-sliced-bread"
-         matRipple
-         (click)="openPanel('sleep')"></div>
-    <div [class.tab-icon-items-selected]="currentPanel==='items'" class="tab-icon game-icon tab-icon-items game-icon-beer-stein"
-         matRipple
-         (click)="openPanel('items')"></div>
-    <div [class.tab-icon-jobs-selected]="currentPanel==='jobs'" class="tab-icon game-icon tab-icon-jobs game-icon-gear-hammer"
-         matRipple
-         (click)="openPanel('jobs')"></div>
-    <div [class.tab-icon-origins-selected]="currentPanel==='origins'" class="tab-icon game-icon tab-icon-origins game-icon-woman-elf-face"
-         matRipple
-         (click)="openPanel('origins')"></div>
-</div>
+<button mat-fab color="accent" [matMenuTriggerFor]="appMenu">
+    <mat-icon>info</mat-icon>
+</button>
+
+<mat-menu #appMenu="matMenu" [hasBackdrop]="true" [overlapTrigger]="true" [backdropClass]="'cdk-overlay-dark-backdrop'">
+    <button mat-menu-item (click)="openPanel('critic')">
+        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-spiky-eclipse"></mat-icon>
+        Succès critique
+    </button>
+    <button mat-menu-item (click)="openPanel('epicfail')">
+        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-dripping-blade"></mat-icon>
+        Échec critique
+    </button>
+    <button mat-menu-item (click)="openPanel('effects')">
+        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-pierced-body">
+        </mat-icon>
+        Effets
+    </button>
+    <button mat-menu-item (click)="openPanel('entropic')">
+        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-bolt-spell-cast"></mat-icon>
+        Sorts entropique
+    </button>
+
+    <button mat-menu-item (click)="openPanel('sleep')">
+        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-sliced-bread">
+        </mat-icon>
+        Récupération
+    </button>
+
+
+    <button mat-menu-item [matMenuTriggerFor]="databaseSubMenu">
+        <mat-icon>add</mat-icon>
+        Database
+    </button>
+
+
+</mat-menu>
+<mat-menu #databaseSubMenu="matMenu">
+    <button mat-menu-item (click)="openPanel('skills')">
+        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-gears"></mat-icon>
+        Compétences
+    </button>
+    <button mat-menu-item (click)="openPanel('items')">
+        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-beer-stein">
+        </mat-icon>
+        Objets
+    </button>
+    <button mat-menu-item (click)="openPanel('jobs')">
+        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-gear-hammer">
+        </mat-icon>
+        Métiers
+    </button>
+    <button mat-menu-item (click)="openPanel('origins')">
+        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-woman-elf-face">
+        </mat-icon>
+        Origines
+    </button>
+</mat-menu>
