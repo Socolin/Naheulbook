@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {CriticalData} from './usefull-data.model';
+import {CriticalData} from './useful-data.model';
 
 @Component({
     selector: 'data-array',

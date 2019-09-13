@@ -1,0 +1,97 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>
+        Maladresses (Echec critique)
+    </span>
+</mat-toolbar>
+
+<div class="content">
+    <ul>
+        <li>Maladresse attaque-parade : tirer 20 au jet d'ATTAQUE ou PARADE</li>
+        <li>Maladresse du sortilège : tirer 20 à l'épreuve au lancement du sort</li>
+        <li>Maladresse à l'arme de jet : tirer 20 au jet d'ADRESSE</li>
+        <li>Maladresse à mains nues : tirer 20 au jet d'ATTAQUE</li>
+    </ul>
+
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template matTabLabel>
+                <div class="tab-label-with-icon">
+                    <mat-icon fontSet="game-icon" fontIcon="game-icon-broad-dagger"></mat-icon>
+                    <span>Attaque ou parade</span>
+                </div>
+            </ng-template>
+            <data-array
+                [labels]="['D20', 'Maladresse du combattant', 'Effets']"
+                [datas]="epicFails['combat']">
+            </data-array>
+            <p>
+                * Tirer 1 D6 pour savoir si l'arme résiste au choc — voir point de rup ure dans le tableau
+                de l'armement
+            </p>
+            <p>
+                ** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
+                graves</a>
+            </p>
+        </mat-tab>
+        <mat-tab>
+            <ng-template matTabLabel>
+                <div class="tab-label-with-icon">
+                    <mat-icon fontSet="game-icon" fontIcon="game-icon-thunder-struck"></mat-icon>
+                    <span>Lancement du sort</span>
+                </div>
+            </ng-template>
+            <data-array
+                [labels]="['D20', 'Effets sur le sortilège', 'Effets']"
+                [datas]="epicFails['magic']">
+            </data-array>
+            <p>
+                *Le sortilège devient fou et frappe tout le monde dans une zone énorme
+            </p>
+            <p>
+                ** Un sort surgit de nulle part, et qui peut être n'importe quoi - le MJ décide
+            </p>
+            <p>
+                <a href='#' (click)="openPanel('entropic')">Voir sorts entropiques</a>
+            </p>
+        </mat-tab>
+        <mat-tab>
+            <ng-template matTabLabel>
+                <div class="tab-label-with-icon">
+                    <mat-icon fontSet="game-icon" fontIcon="game-icon-pierced-heart"></mat-icon>
+                    <span>Arme de jet</span>
+                </div>
+            </ng-template>
+            <data-array
+                [labels]="['D20', 'Maladresse du combattant', 'Effets']"
+                [datas]="epicFails['arrow']">
+            </data-array>
+            <p>
+                * Tirer 1 D6 pour savoir si l'arme résiste au choc — voir point de rup ure dans le tableau
+                de l'armement
+            </p>
+            <p>
+                ** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
+                graves</a>
+            </p>
+        </mat-tab>
+        <mat-tab>
+            <ng-template matTabLabel>
+                <div class="tab-label-with-icon">
+                    <mat-icon fontSet="game-icon" fontIcon="game-icon-fist"></mat-icon>
+                    <span>Mains nues</span>
+                </div>
+            </ng-template>
+            <data-array
+                [labels]="['D20', 'Maladresse du combattant', 'Effets']"
+                [datas]="epicFails['hand']">
+            </data-array>
+            <p>
+                ** voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
+                graves</a>
+            </p>
+        </mat-tab>
+    </mat-tab-group>
+</div>

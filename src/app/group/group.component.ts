@@ -438,7 +438,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         })
     }
 
-    usefullDataAction(event: {action: string, data: any}) {
+    usefulDataAction(event: {action: string, data: any}) {
         switch (event.action) {
             case 'applyEffect': {
                 let effect: Effect = event.data;

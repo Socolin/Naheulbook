@@ -5,7 +5,7 @@
 @import './app/_app.theme';
 @import './app/character/character.theme';
 @import './app/group/fighter-panel.theme';
-@import './app/usefull-data/usefull-data-theme';
+@import './app/useful-data/useful-data-theme';
 @import './app/item-template/item-template.theme';
 @import './app/group/group-therme';
 
@@ -31,7 +31,7 @@ $nhbk-theme: mat-light-theme($nhbk-primary, $nhbk-accent, $nhbk-warn);
 @mixin custom-components-theme($theme) {
     @include value-selector-theme($theme);
     @include character-theme($theme);
-    @include usefull-data-theme($theme);
+    @include useful-data-theme($theme);
     @include item-theme($theme);
     @include group-theme($theme);
     @include fighter-panel-theme($theme);

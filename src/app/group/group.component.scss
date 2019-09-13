@@ -1,61 +1,85 @@
-.group-component-container {
-}
+:host {
+    display: block;
+    padding-bottom: 72px;
 
-.group-container {
-    flex: 1 auto;
+    .loading {
+        width: 100vw;
+        height: 90vh;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+    }
 
-    .character-summary-card {
-        mat-card-header {
-            button {
-                margin-left: auto;
+    .useful-data-fab {
+        z-index: 1;
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+    }
+
+    .group-container {
+        flex: 1 auto;
+
+        .character-summary-card {
+            mat-card-header {
+                button {
+                    margin-left: auto;
+                }
+            }
+
+            margin-bottom: 5px;
+            white-space: nowrap;
+        }
+    }
+
+    .info-tab {
+        mat-card {
+            margin-bottom: 5px;
+
+            mat-card {
+                margin-right: 5px;
             }
         }
-        margin-bottom: 5px;
-        white-space: nowrap;
     }
-}
 
-.info-tab {
-    mat-card {
-        margin-bottom: 5px;
+    .characters-tab {
         mat-card {
-            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        mat-card-title {
+            display: grid;
+            grid-template-columns: 1fr 40px;
+            align-items: center;
+        }
+    }
+
+    .characters-cards {
+        mat-list {
+            width: 100%;
+        }
+
+        .name {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+
+            span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
     }
 }
 
-.characters-tab {
-    mat-card {
-        margin-bottom: 5px;
-    }
 
-    mat-card-title {
-        display: grid;
-        grid-template-columns: 1fr 40px;
-        align-items: center;
-    }
-}
-.characters-cards {
-    mat-list {
-        width: 100%;
-    }
-    .name {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-
-        span {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space:nowrap;
-        }
-    }
-}
 
 .change-ownership-dialog {
     mat-radio-button {
         display: block;
     }
+
     mat-card-content {
         display: flex;
         flex-direction: column;
@@ -66,35 +90,24 @@
 
 .invite-character-modal {
     max-width: 85vw;
+
     mat-radio-group {
         display: flex;
         flex-direction: column;
     }
+
     mat-radio-button {
         overflow: hidden;
         height: 32px;
+
         .mat-radio-label-content {
             overflow: hidden;
             text-overflow: ellipsis;
         }
     }
+
     mat-card-content {
         display: flex;
         flex-direction: column;
     }
-}
-
-.loading {
-    width: 100vw;
-    height: 90vh;
-    display: grid;
-    justify-content: center;
-    align-items: center;
-}
-
-.usefull-data-fab {
-    z-index: 1;
-    position: fixed;
-    right: 16px;
-    bottom: 16px;
 }

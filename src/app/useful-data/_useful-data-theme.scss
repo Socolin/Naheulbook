@@ -1,0 +1,10 @@
+@import '~@angular/material/theming';
+
+@mixin useful-data-theme($theme) {
+    // Extract whichever individual palettes you need from the theme.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+}

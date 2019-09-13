@@ -12,7 +12,7 @@ import {OriginModule} from '../origin/origin.module';
 import {ItemTemplateModule} from '../item-template/item-template.module';
 import {CharacterModule} from '../character/character.module';
 import {MonsterModule} from '../monster/monster.module';
-import {UsefullDataModule} from '../usefull-data/usefull-data.module';
+import {UsefulDataModule} from '../useful-data/useful-data.module';
 import {ItemModule} from '../item/item.module';
 
 import {
@@ -52,7 +52,7 @@ import { MonsterEditorComponent } from './monster-editor.component';
         JobModule,
         OriginModule,
         EventModule,
-        UsefullDataModule,
+        UsefulDataModule,
         ItemModule,
         ReactiveFormsModule
     ],

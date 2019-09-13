@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {CriticalData} from './usefull-data.model';
+import {CriticalData} from './useful-data.model';
 
 @Injectable()
-export class UsefullDataService {
+export class UsefulDataService {
 
     public criticData = {
         'sharp': [

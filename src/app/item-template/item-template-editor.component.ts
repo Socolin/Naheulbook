@@ -34,7 +34,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
 
     public modules: string[] = [];
 
-    // Datas usefull for forms
+    // Datas useful for forms
     public skills: Skill[] = [];
     public skillsById: { [skillId: number]: Skill } = {};
     public sections: ItemSection[];
