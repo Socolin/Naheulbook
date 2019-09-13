@@ -1,24 +1,68 @@
-.header {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-around;
-    font-weight: bold;
-}
+@import "~app/style/responsive-utils";
 
-.data {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-around;
-}
+:host {
+    .data,
+    .header {
+        display: grid;
+        align-items: center;
+        grid-template-columns: 70px minmax(300px, 1fr) minmax(200px, 1fr);
+        grid-template-areas: "dice effect effect2" "divider divider divider";
 
-.dice {
-    flex: 0 70px;
-}
-.effect {
-    flex: 1 300px;
-}
+        @include for-phone-only {
+            grid-template-columns: auto auto;
+            grid-template-areas: "dice" "label-effect" "effect" "label-effect2" "effect2" "divider";
+        }
 
-.effect2 {
-    flex: 1 200px;
+        .dice {
+            grid-area: dice;
+        }
+
+        .effect {
+            grid-area: effect;
+            margin-left: 16px;
+        }
+
+        .effect2 {
+            grid-area: effect2;
+            margin-left: 16px;
+        }
+
+        .label-effect {
+            grid-area: label-effect;
+            @include for-tablet-portrait-up {
+                display: none;
+            }
+        }
+
+        .label-effect::after {
+            content: ':';
+        }
+
+        .label-effect2 {
+            grid-area: label-effect2;
+            @include for-tablet-portrait-up {
+                display: none;
+            }
+        }
+
+        .label-effect2::after {
+            content: ':';
+        }
+
+        .divider {
+            grid-area: divider;
+        }
+    }
+
+
+    .header {
+        font-weight: bold;
+        @include for-phone-only {
+            display: none;
+        }
+    }
+
+    .data {
+        align-items: center;
+    }
 }

@@ -7,14 +7,7 @@
     </span>
 </mat-toolbar>
 
-<div class="content">
-    <ul>
-        <li>Maladresse attaque-parade : tirer 20 au jet d'ATTAQUE ou PARADE</li>
-        <li>Maladresse du sortilège : tirer 20 à l'épreuve au lancement du sort</li>
-        <li>Maladresse à l'arme de jet : tirer 20 au jet d'ADRESSE</li>
-        <li>Maladresse à mains nues : tirer 20 au jet d'ATTAQUE</li>
-    </ul>
-
+<div class="content mat-typography">
     <mat-tab-group>
         <mat-tab>
             <ng-template matTabLabel>
@@ -23,6 +16,10 @@
                     <span>Attaque ou parade</span>
                 </div>
             </ng-template>
+            <div class="note">
+                <span class="label">Maladresse attaque-parade</span>
+                <span class="details">20 au jet d'ATTAQUE ou PARADE</span>
+            </div>
             <data-array
                 [labels]="['D20', 'Maladresse du combattant', 'Effets']"
                 [datas]="epicFails['combat']">
@@ -43,6 +40,10 @@
                     <span>Lancement du sort</span>
                 </div>
             </ng-template>
+            <div class="note">
+                <span class="label">Maladresse du sortilège</span>
+                <span class="details">20 à l'épreuve au lancement du sort</span>
+            </div>
             <data-array
                 [labels]="['D20', 'Effets sur le sortilège', 'Effets']"
                 [datas]="epicFails['magic']">
@@ -64,6 +65,10 @@
                     <span>Arme de jet</span>
                 </div>
             </ng-template>
+            <div class="note">
+                <span class="label">Maladresse à l'arme de jet</span>
+                <span class="details">20 au jet d'ADRESSE</span>
+            </div>
             <data-array
                 [labels]="['D20', 'Maladresse du combattant', 'Effets']"
                 [datas]="epicFails['arrow']">
@@ -84,6 +89,10 @@
                     <span>Mains nues</span>
                 </div>
             </ng-template>
+            <div class="note">
+                <span class="label">Maladresse à mains nues</span>
+                <span class="details">20 au jet d'ATTAQUE</span>
+            </div>
             <data-array
                 [labels]="['D20', 'Maladresse du combattant', 'Effets']"
                 [datas]="epicFails['hand']">

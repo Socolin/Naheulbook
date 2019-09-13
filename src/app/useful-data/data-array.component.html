@@ -1,10 +1,14 @@
-<div class="header">
+<div class="header mat-typography">
     <div class="dice">{{labels[0]}}</div>
     <div class="effect">{{labels[1]}}</div>
     <div class="effect2">{{labels[2]}}</div>
+    <div class="divider"><mat-divider></mat-divider></div>
 </div>
-<div class="data" *ngFor="let data of datas">
+<div class="data mat-typography" *ngFor="let data of datas">
     <div class="dice">{{data.dice.join('-')}}</div>
+    <span class="label-effect">{{labels[1]}}</span>
     <div class="effect">{{data.effect}}</div>
+    <span class="label-effect2">{{labels[2]}}</span>
     <div class="effect2">{{data.effect2}}</div>
+    <div class="divider"><mat-divider></mat-divider></div>
 </div>
