@@ -5,30 +5,52 @@
     .header {
         display: grid;
         align-items: center;
-        grid-template-columns: 70px minmax(300px, 1fr) minmax(200px, 1fr);
-        grid-template-areas: "dice effect effect2" "divider divider divider";
+        grid-template-columns: auto auto auto;
 
         @include for-phone-only {
-            grid-template-columns: auto auto;
-            grid-template-areas: "dice" "label-effect" "effect" "label-effect2" "effect2" "divider";
+            grid-gap: 0;
+            grid-template-columns: 1fr;
         }
 
         .dice {
-            grid-area: dice;
+            @include for-phone-only {
+                padding-top: 8px;
+            }
+            @include for-tablet-portrait-up {
+                padding-top: 8px;
+                padding-bottom: 8px;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
+            }
         }
 
         .effect {
-            grid-area: effect;
-            margin-left: 16px;
+            @include for-phone-only {
+                padding-left: 16px;
+            }
+            @include for-tablet-portrait-up {
+                padding: 8px;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
+            }
         }
 
         .effect2 {
-            grid-area: effect2;
-            margin-left: 16px;
+            @include for-phone-only {
+                padding-left: 16px;
+                padding-bottom: 8px;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
+            }
+            @include for-tablet-portrait-up {
+                padding-top: 8px;
+                padding-bottom: 8px;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
+            }
         }
 
         .label-effect {
-            grid-area: label-effect;
             @include for-tablet-portrait-up {
                 display: none;
             }
@@ -39,7 +61,6 @@
         }
 
         .label-effect2 {
-            grid-area: label-effect2;
             @include for-tablet-portrait-up {
                 display: none;
             }
@@ -47,10 +68,6 @@
 
         .label-effect2::after {
             content: ':';
-        }
-
-        .divider {
-            grid-area: divider;
         }
     }
 

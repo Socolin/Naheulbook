@@ -13,7 +13,8 @@ import {JobModule} from '../job/job.module';
 import {OriginModule} from '../origin/origin.module';
 import {SkillModule} from '../skill/skill.module';
 import {EffectModule} from '../effect/effect.module';
-import {EpicFailsDialogComponent} from './dialogs/epic-fails-dialog.component';
+import {EpicFailsCriticalSuccessDialogComponent} from './dialogs/epic-fails-critical-success-dialog.component';
+import {UsefulDataDialogsService} from './useful-data-dialogs.service';
 
 @NgModule({
     imports: [
@@ -30,15 +31,15 @@ import {EpicFailsDialogComponent} from './dialogs/epic-fails-dialog.component';
     declarations: [
         UsefulDataComponent,
         DataArrayComponent,
-        EpicFailsDialogComponent,
+        EpicFailsCriticalSuccessDialogComponent,
     ],
     entryComponents: [
-        EpicFailsDialogComponent,
+        EpicFailsCriticalSuccessDialogComponent,
     ],
     exports: [
         UsefulDataComponent,
     ],
-    providers: [UsefulDataService]
+    providers: [UsefulDataService, UsefulDataDialogsService]
 })
 export class UsefulDataModule {
 }

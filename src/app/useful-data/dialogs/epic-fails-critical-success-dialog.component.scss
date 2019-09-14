@@ -1,0 +1,63 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    .content {
+        display: block;
+
+        ::ng-deep mat-tab-header {
+            @include for-phone-only {
+                display: none;
+            }
+        }
+
+        mat-form-field {
+            @include for-tablet-portrait-up {
+                display: none;
+            }
+        }
+    }
+
+    .note {
+        margin: 16px 0;
+        overflow: hidden;
+
+        .label {
+            @include for-phone-only {
+                display: block;
+            }
+        }
+
+        .details {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            @include for-phone-only {
+                padding-left: 16px;
+            }
+        }
+
+        .label::after {
+            content: ':';
+        }
+    }
+
+}
+
+
+.tab-label-with-icon {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-content: center;
+    grid-gap: 16px;
+
+    > mat-icon {
+        font-size: 24px;
+        margin: 0;
+    }
+
+    > span {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}

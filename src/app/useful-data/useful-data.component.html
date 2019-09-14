@@ -1,110 +1,3 @@
-<ng-template #panelCritic="cdkPortal" cdk-portal>
-    <mat-card class="panel-content">
-        <mat-card-title>
-            Attaque et parade critique (Réussite critique)
-        </mat-card-title>
-        <mat-card-content>
-            <ul>
-                <li><strong>Attaque critique</strong> L'attaquant tire <strong>1</strong> au jet d'ATTAQUE sur un ennemi
-                </li>
-                <li><strong>Parade critique</strong> le défenseur tire <strong>1 ou 2</strong> au jet de PARADE pour contrer
-                    une attaque réussie
-                </li>
-                <li>L'Attaque critique IGNORE L'ARMURE et ne peut être parée ou esquivée</li>
-            </ul>
-            <mat-tab-group>
-                <mat-tab>
-                    <ng-template matTabLabel>
-                        <div class="tab-label-with-icon">
-                            <mat-icon fontSet="game-icon" fontIcon="game-icon-broad-dagger"></mat-icon>
-                            <span>Arme tranchante</span>
-                        </div>
-                    </ng-template>
-
-                    <p>Epées, lances, lames diverses, haches...</p>
-                    <data-array
-                        [labels]="['D20', 'Effet sur l\'ennemi', 'Modif. dégâts']"
-                        [datas]="criticData['sharp']">
-                    </data-array>
-                    <p>
-                        * voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures graves</a>
-                    </p>
-                    <p>
-                        ** Hémorragie, dégâts sur la durée : la victime perd 1 D6 PV chaque minute jusqu'à ce
-                        qu'on la soigne
-                    </p>
-                </mat-tab>
-                <mat-tab>
-                    <ng-template matTabLabel>
-                        <div class="tab-label-with-icon">
-                            <mat-icon fontSet="game-icon" fontIcon="game-icon-thor-hammer"></mat-icon>
-                            <span>Arme contondante</span>
-                        </div>
-                    </ng-template>
-                    <p>Massues, bâtons, marteaux, masses, fléaux, nunchakus...</p>
-                    <data-array
-                        [labels]="['D20', 'Effet sur l\'ennemi', 'Modif. dégâts']"
-                        [datas]="criticData['blunt']">
-                    </data-array>
-                    <p>
-                        * voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures graves</a>
-                    </p>
-                </mat-tab>
-                <mat-tab>
-                    <ng-template matTabLabel>
-                        <div class="tab-label-with-icon">
-                            <mat-icon fontSet="game-icon" fontIcon="game-icon-shield-reflect"></mat-icon>
-                            <span>Parade</span>
-                        </div>
-                    </ng-template>
-                    <data-array
-                        [labels]="['D20', 'Effet sur l\'ennemi', 'Effet sur l\'attaquant']"
-                        [datas]="criticData['parade']">
-                    </data-array>
-                </mat-tab>
-                <mat-tab>
-                    <ng-template matTabLabel>
-                        <div class="tab-label-with-icon">
-                            <mat-icon fontSet="game-icon" fontIcon="game-icon-punch"></mat-icon>
-                            <span>Main nues</span>
-                        </div>
-                    </ng-template>
-                    <p>A utiliser si jamais le héros s'engage dans un combat à mains nues</p>
-                    <data-array
-                        [labels]="['D20', 'Effet sur l\'ennemi', 'Modif. dégâts']"
-                        [datas]="criticData['hand']">
-                    </data-array>
-                    <p>
-                        * voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures
-                        graves</a>
-                    </p>
-                </mat-tab>
-                <mat-tab>
-                    <ng-template matTabLabel>
-                        <div class="tab-label-with-icon">
-                            <mat-icon fontSet="game-icon" fontIcon="game-icon-high-shot"></mat-icon>
-                            <span>Projectiles</span>
-                        </div>
-                    </ng-template>
-                    <p>Projectiles : flèches, carreaux, javelots, poignards, dagues...</p>
-                    <data-array
-                        [labels]="['D20', 'Effet sur l\'ennemi', 'Modif. dégâts']"
-                        [datas]="criticData['projectile']">
-                    </data-array>
-
-                    <p>
-                        * voir <a href='#' (click)=showEffects(4)>table des modifications liées aux blessures graves</a>
-                    </p>
-                    <p>
-                        ** Hémorragie, dégâts sur la durée : la victime perd 1 D6 PV chaque minute jusqu'à ce qu'on la soigne
-                    </p>
-                </mat-tab>
-            </mat-tab-group>
-
-        </mat-card-content>
-    </mat-card>
-</ng-template>
-
 <ng-template #panelItems="cdkPortal" cdk-portal>
     <mat-card class="panel-content no-padding">
         <item-template-list (onAction)="onAction.next($event)" [inTab]=true></item-template-list>
@@ -665,11 +558,11 @@
 </button>
 
 <mat-menu #appMenu="matMenu" [hasBackdrop]="true" [overlapTrigger]="true" [backdropClass]="'cdk-overlay-dark-backdrop'">
-    <button mat-menu-item (click)="openPanel('critic')">
+    <button mat-menu-item (click)="openPanel('criticalSuccess')">
         <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-spiky-eclipse"></mat-icon>
         Succès critique
     </button>
-    <button mat-menu-item (click)="openEpicFailsDialog()">
+    <button mat-menu-item (click)="openPanel('epicFails')">
         <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-dripping-blade"></mat-icon>
         Échec critique
     </button>
