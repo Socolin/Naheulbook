@@ -9,11 +9,19 @@ import {IconSelectorComponent, IconSelectorComponentDialogData} from '../shared'
 
 export interface CreateItemDialogDialog {
     onAdd: Observer<any>;
+    allowMultipleAdd: boolean,
+    itemTemplate: ItemTemplate
 }
 
-export function openCreateItemDialog(dialog: MatDialog, onAdd: (item: Item) => void) {
+export function openCreateItemDialog(dialog: MatDialog, onAdd: (item: Item) => void, allowMultipleAdd = true, itemTemplate?: ItemTemplate) {
     const subject = new Subject<Item>();
-    const dialogRef = dialog.open(CreateItemDialogComponent, {data: {onAdd: subject}});
+    const dialogRef = dialog.open(CreateItemDialogComponent, {
+        data: {
+            onAdd: subject,
+            allowMultipleAdd,
+            itemTemplate
+        }
+    });
     const subscription = subject.subscribe((item) => {
         onAdd(item);
     });
@@ -45,6 +53,9 @@ export class CreateItemDialogComponent implements OnInit {
         public dialogRef: MatDialogRef<CreateItemDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: CreateItemDialogDialog
     ) {
+        if (data.itemTemplate) {
+            this.selectItemTemplate(data.itemTemplate);
+        }
     }
 
     updateFilter(filter: string): void {

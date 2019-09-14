@@ -1,0 +1,16 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>
+        Effets
+    </span>
+</mat-toolbar>
+
+<div class="content mat-typography">
+    <effect-list (onAction)="onAction($event)"
+                 [isOverlay]="true"
+                 [options]="['applyButton']"
+                 [inputCategoryId]=data.inputCategoryId>
+    </effect-list>
+</div>

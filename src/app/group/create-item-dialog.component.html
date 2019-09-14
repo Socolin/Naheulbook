@@ -2,7 +2,7 @@
 <mat-dialog-content>
     <mat-card-content style="display: flex; justify-content: space-around; flex-direction: column">
 
-        <div class="filter-field">
+        <div class="filter-field" *ngIf="!data.itemTemplate">
             <mat-form-field>
                 <input #filter matInput placeholder="Chercher un objet" (keyup)="updateFilter(filter.value)">
             </mat-form-field>
@@ -30,7 +30,7 @@
             </button>
         </mat-action-list>
         <div class="new-item-data" *ngIf="newItem.template">
-            <h2 class="mat-h3">Personnalisation</h2>
+            <h2 class="mat-h3" *ngIf="!data.itemTemplate">Personnalisation</h2>
             <div class="name-icon">
                 <icon (click)="openSelectIconDialog()" [icon]="newItem.data.icon"></icon>
                 <mat-form-field>
@@ -75,20 +75,21 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button
-            color="primary"
-            [disabled]="!newItem.template"
-            (click)=addItem(true)>
-        AJOUTER
+            mat-dialog-close
+            color="primary">
+        ANNULER
     </button>
     <button mat-button
+            *ngIf="data.allowMultipleAdd"
             color="primary"
             [disabled]="!newItem.template"
             (click)=addItem(false)>
         AJOUTER+
     </button>
     <button mat-button
-            mat-dialog-close
-            color="primary">
-        ANNULER
+            color="primary"
+            [disabled]="!newItem.template"
+            (click)=addItem(true)>
+        AJOUTER
     </button>
 </mat-dialog-actions>

@@ -13,8 +13,18 @@ import {JobModule} from '../job/job.module';
 import {OriginModule} from '../origin/origin.module';
 import {SkillModule} from '../skill/skill.module';
 import {EffectModule} from '../effect/effect.module';
-import {EpicFailsCriticalSuccessDialogComponent} from './dialogs/epic-fails-critical-success-dialog.component';
-import {UsefulDataDialogsService} from './useful-data-dialogs.service';
+
+import {
+    EffectListDialogComponent,
+    EntropicSpellsDialogComponent,
+    EpicFailsCriticalSuccessDialogComponent,
+    ItemTemplatesDialogComponent,
+    JobsDialogComponent,
+    OriginsDialogComponent,
+    RecoveryDialogComponent,
+    SkillsDialogComponent,
+    TravelDialogComponent,
+} from './dialogs';
 
 @NgModule({
     imports: [
@@ -32,14 +42,30 @@ import {UsefulDataDialogsService} from './useful-data-dialogs.service';
         UsefulDataComponent,
         DataArrayComponent,
         EpicFailsCriticalSuccessDialogComponent,
+        EffectListDialogComponent,
+        EntropicSpellsDialogComponent,
+        RecoveryDialogComponent,
+        TravelDialogComponent,
+        ItemTemplatesDialogComponent,
+        JobsDialogComponent,
+        OriginsDialogComponent,
+        SkillsDialogComponent,
     ],
     entryComponents: [
+        EffectListDialogComponent,
+        EntropicSpellsDialogComponent,
         EpicFailsCriticalSuccessDialogComponent,
+        RecoveryDialogComponent,
+        TravelDialogComponent,
+        ItemTemplatesDialogComponent,
+        JobsDialogComponent,
+        OriginsDialogComponent,
+        SkillsDialogComponent,
     ],
     exports: [
         UsefulDataComponent,
     ],
-    providers: [UsefulDataService, UsefulDataDialogsService]
+    providers: [UsefulDataService]
 })
 export class UsefulDataModule {
 }

@@ -1,9 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {UsefulDataService} from '../useful-data.service';
-import {CriticalData} from '../useful-data.model';
-import {PanelNames, UsefulDataDialogsService} from '../useful-data-dialogs.service';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+
+import {CriticalData, PanelNames} from '../useful-data.model';
+import {UsefulDataService} from '../useful-data.service';
+import {UsefulDataDialogResult} from './useful-data-dialog-result';
 
 export interface EpicFailsCriticalSuccessDialogData {
     mode: 'epicFails' | 'criticalSuccess';
@@ -163,8 +164,8 @@ export class EpicFailsCriticalSuccessDialogComponent implements OnInit {
     ];
 
     constructor(
+        private dialogRef: MatDialogRef<EpicFailsCriticalSuccessDialogComponent, UsefulDataDialogResult>,
         public usefulDataService: UsefulDataService,
-        public usefulDataDialogsService: UsefulDataDialogsService,
         @Inject(MAT_DIALOG_DATA) public data: EpicFailsCriticalSuccessDialogData,
         public breakpointObserver: BreakpointObserver
     ) {
@@ -176,7 +177,7 @@ export class EpicFailsCriticalSuccessDialogComponent implements OnInit {
     }
 
     openPanel(panelName: PanelNames, arg?: any) {
-        this.usefulDataDialogsService.openPanel(panelName, arg);
+        this.dialogRef.close({openPanel: {panelName: panelName, arg}});
     }
 
     ngOnInit() {

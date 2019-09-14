@@ -1,14 +1,21 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {Portal} from '@angular/cdk/portal';
 import {UsefulDataService} from './useful-data.service';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {
+    EffectListDialogComponent,
+    EffectListDialogData,
+    EntropicSpellsDialogComponent,
     EpicFailsCriticalSuccessDialogComponent,
-    EpicFailsCriticalSuccessDialogData
-} from './dialogs/epic-fails-critical-success-dialog.component';
-import {PanelNames, UsefulDataDialogsService} from './useful-data-dialogs.service';
+    EpicFailsCriticalSuccessDialogData,
+    ItemTemplatesDialogComponent,
+    JobsDialogComponent, OriginsDialogComponent,
+    RecoveryDialogComponent, SkillsDialogComponent,
+    TravelDialogComponent,
+    UsefulDataDialogResult,
+} from './dialogs';
 import {assertNever} from '../utils/utils';
-import {Subscription} from 'rxjs';
+import {PanelNames} from './useful-data.model';
+import {ComponentType} from '@angular/cdk/overlay';
 
 @Component({
     selector: 'useful-data',
@@ -17,61 +24,85 @@ import {Subscription} from 'rxjs';
 })
 export class UsefulDataComponent implements OnInit, OnDestroy {
     @Output() onAction = new EventEmitter<{ action: string, data: any }>();
-    public effectsCategoryId = 1;
-    public panelByNames: { [name: string]: Portal<any> } = {};
-    private subscription: Subscription = new Subscription();
 
     constructor(
         private usefulDataService: UsefulDataService,
-        private usefulDataDialogsService: UsefulDataDialogsService,
         private dialog: MatDialog
     ) {
 
     }
 
-    showEffects(categoryId) {
-        this.effectsCategoryId = categoryId;
-        return false;
-    }
-
     openPanel(panel: PanelNames, arg?: any) {
+        let dialogRef: MatDialogRef<any, UsefulDataDialogResult>;
         switch (panel) {
             case 'epicFails':
-                this.dialog.open<EpicFailsCriticalSuccessDialogComponent, EpicFailsCriticalSuccessDialogData>(
-                    EpicFailsCriticalSuccessDialogComponent, {
-                        minWidth: '100vw',
-                        height: '100vh',
-                        autoFocus: false,
-                        data: {mode: 'epicFails'}
-                    });
+                dialogRef = this.openDialog<EpicFailsCriticalSuccessDialogComponent, EpicFailsCriticalSuccessDialogData>(
+                    EpicFailsCriticalSuccessDialogComponent,
+                    {mode: 'epicFails'}
+                );
                 break;
             case 'criticalSuccess':
-                this.dialog.open<EpicFailsCriticalSuccessDialogComponent, EpicFailsCriticalSuccessDialogData>(
-                    EpicFailsCriticalSuccessDialogComponent, {
-                        minWidth: '100vw',
-                        height: '100vh',
-                        autoFocus: false,
-                        data: {mode: 'criticalSuccess'}
-                    });
+                dialogRef = this.openDialog<EpicFailsCriticalSuccessDialogComponent, EpicFailsCriticalSuccessDialogData>(
+                    EpicFailsCriticalSuccessDialogComponent,
+                    {mode: 'criticalSuccess'}
+                );
                 break;
             case 'effects':
+                dialogRef = this.openDialog<EffectListDialogComponent, EffectListDialogData>(EffectListDialogComponent,
+                    {inputCategoryId: arg}
+                );
+                break;
             case 'entropicSpells':
+                dialogRef = this.openDialog(EntropicSpellsDialogComponent);
+                break;
+            case 'recovery':
+                dialogRef = this.openDialog(RecoveryDialogComponent);
+                break;
+            case 'travel':
+                dialogRef = this.openDialog(TravelDialogComponent);
+                break;
             case 'items':
+                dialogRef = this.openDialog(ItemTemplatesDialogComponent);
+                break;
             case 'jobs':
+                dialogRef = this.openDialog(JobsDialogComponent);
+                break;
             case 'origins':
+                dialogRef = this.openDialog(OriginsDialogComponent);
+                break;
             case 'skills':
-            case 'sleep':
+                dialogRef = this.openDialog(SkillsDialogComponent);
                 break;
             default:
                 assertNever(panel);
         }
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            if (result.openPanel) {
+                this.openPanel(result.openPanel.panelName, result.openPanel.arg);
+            }
+            if (result.action) {
+                this.onAction.next(result.action);
+        }
+        })
     }
 
     ngOnInit(): void {
-        this.subscription.add(this.usefulDataDialogsService.onOpenPanel(this.openPanel.bind(this)));
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+    }
+
+    private openDialog<TDialog, TData = any>(componentType: ComponentType<TDialog>, data?: TData) {
+        return this.dialog.open<TDialog, any, UsefulDataDialogResult>(
+            componentType, {
+                minWidth: '100vw',
+                height: '100vh',
+                autoFocus: false,
+                data: data
+            });
     }
 }

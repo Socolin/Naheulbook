@@ -28,6 +28,7 @@ import {ItemTemplate} from '../item-template';
 import {FighterSelectorComponent, FighterSelectorDialogData} from './fighter-selector.component';
 import {Fighter, Group, GroupInvite} from './group.model';
 import {CharacterSheetDialogComponent} from './character-sheet-dialog.component';
+import {openCreateItemDialog} from '.';
 
 @Component({
     templateUrl: './group.component.html',
@@ -39,7 +40,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     public currentTabIndex = 0;
     public currentTab = 'infos';
-    public tabs: Array<{hash: string}> = [
+    public tabs: Array<{ hash: string }> = [
         {hash: 'infos'},
         {hash: 'characters'},
         {hash: 'combat'},
@@ -56,7 +57,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     public changeOwnershipOverlayRef: OverlayRef;
     public selectedCharacter: Character;
     public changeOwnershipNewOwner: User;
-    public filterSearchUser: string|null = null;
+    public filterSearchUser: string | null = null;
     public filteredUsers: Object[] = [];
 
     @ViewChild('inviteCharacterModal', {static: true})
@@ -66,7 +67,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     public filteredInvitePlayers: CharacterSearchResponse[] = [];
     public selectedInviteCharacter: Character;
 
-    private charactersSubscriptions: {[characterId: number]: {notification: Subscription }} = {};
+    private charactersSubscriptions: { [characterId: number]: { notification: Subscription } } = {};
     private addedCharacterSub: Subscription;
     private removedCharacterSub: Subscription;
     private routeSub: Subscription;
@@ -390,7 +391,11 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     openAddEffectDialog(effect?: Effect) {
-        const dialogRef = this.dialog.open(AddEffectDialogComponent, {minWidth: '100vw', height: '100vh', data: {effect}});
+        const dialogRef = this.dialog.open(AddEffectDialogComponent, {
+            minWidth: '100vw',
+            height: '100vh',
+            data: {effect}
+        });
         dialogRef.afterClosed().subscribe(result => {
             if (!result) {
                 return;
@@ -428,8 +433,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                     this._monsterService.addModifier(fighter.id, modifier).subscribe(
                         fighter.monster.onAddModifier.bind(fighter.monster)
                     );
-                }
-                else {
+                } else {
                     this._characterService.addModifier(fighter.id, modifier).subscribe(
                         fighter.character.onAddModifier.bind(fighter.character)
                     );
@@ -438,7 +442,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         })
     }
 
-    usefulDataAction(event: {action: string, data: any}) {
+    usefulDataAction(event: { action: string, data: any }) {
         switch (event.action) {
             case 'applyEffect': {
                 let effect: Effect = event.data;
@@ -447,8 +451,29 @@ export class GroupComponent implements OnInit, OnDestroy {
             }
             case 'addItem': {
                 let itemTemplate: ItemTemplate = event.data;
-                throw new Error('FIXME open item dialog')
-                break;
+                openCreateItemDialog(this.dialog, (item) => {
+                    const dialogRef = this.dialog.open<FighterSelectorComponent, FighterSelectorDialogData, Fighter[]>(
+                        FighterSelectorComponent, {
+                            data: {
+                                group: this.group,
+                                title: 'Ajout de l\'objet',
+                                subtitle: item.data.name || itemTemplate.name
+                            }
+                        });
+
+                    dialogRef.afterClosed().subscribe(fighters => {
+                        if (!fighters) {
+                            return;
+                        }
+                        for (let fighter of fighters) {
+                            if (fighter.isMonster) {
+                                this._itemService.addItemTo('monster', fighter.id, item.template.id, item.data).subscribe();
+                            } else {
+                                this._itemService.addItemTo('character', fighter.id, item.template.id, item.data).subscribe();
+                            }
+                        }
+                    });
+                }, false, itemTemplate);
             }
         }
     }
