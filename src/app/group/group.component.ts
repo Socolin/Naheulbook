@@ -7,7 +7,7 @@ import {MatDialog, MatTabChangeEvent} from '@angular/material';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
-import {ActiveStatsModifier, AutocompleteValue, LapCountDecrement, NhbkDialogService} from '../shared';
+import {AutocompleteValue, LapCountDecrement, NhbkDialogService} from '../shared';
 import {NotificationsService} from '../notifications';
 import {dateOffset2TimeDuration} from '../date/util';
 import {NhbkDateOffset} from '../date';
@@ -17,7 +17,7 @@ import {WebSocketService} from '../websocket';
 import {GroupActionService} from './group-action.service';
 
 import {Character, CharacterSearchResponse, CharacterService} from '../character';
-import {AddEffectDialogComponent, Effect} from '../effect';
+import {Effect} from '../effect';
 
 import {LoginService, User} from '../user';
 import {MonsterService} from '../monster';
@@ -28,7 +28,12 @@ import {ItemTemplate} from '../item-template';
 import {FighterSelectorComponent, FighterSelectorDialogData} from './fighter-selector.component';
 import {Fighter, Group, GroupInvite} from './group.model';
 import {CharacterSheetDialogComponent} from './character-sheet-dialog.component';
-import {openCreateItemDialog} from '.';
+import {openCreateItemDialog} from './create-item-dialog.component';
+import {
+    GroupAddEffectDialogComponent,
+    GroupAddEffectDialogData,
+    GroupAddEffectDialogResult
+} from './group-add-effect-dialog.component';
 
 @Component({
     templateUrl: './group.component.html',
@@ -153,7 +158,12 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     createNpc() {
-        this._router.navigate(['/gm/character/create'], {queryParams: {isNpc: true, groupId: this.group.id}});
+        this._router.navigate(['/gm/character/create'], {
+            queryParams: {
+                isNpc: true,
+                groupId: this.group.id
+            }
+        });
         return false;
     }
 
@@ -391,33 +401,18 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     openAddEffectDialog(effect?: Effect) {
-        const dialogRef = this.dialog.open(AddEffectDialogComponent, {
-            minWidth: '100vw',
-            height: '100vh',
-            data: {effect}
-        });
+        const dialogRef = this.dialog.open<GroupAddEffectDialogComponent, GroupAddEffectDialogData, GroupAddEffectDialogResult>(
+            GroupAddEffectDialogComponent, {
+                minWidth: '100vw',
+                height: '100vh',
+                data: {effect, fighters: this.group.fighters}
+            });
         dialogRef.afterClosed().subscribe(result => {
             if (!result) {
                 return;
             }
 
-            this.selectCustomModifier(result);
-        });
-    }
-
-    selectCustomModifier(modifier: ActiveStatsModifier) {
-        const dialogRef = this.dialog.open<FighterSelectorComponent, FighterSelectorDialogData, Fighter[]>(FighterSelectorComponent, {
-            data: {
-                group: this.group,
-                title: 'Ajout de l\'effet',
-                subtitle: modifier.name
-            }
-        });
-
-        dialogRef.afterClosed().subscribe(fighters => {
-            if (!fighters) {
-                return;
-            }
+            const {modifier, fighters} = result;
             for (let fighter of fighters) {
                 if (modifier.durationType === 'lap') {
                     modifier.lapCountDecrement = new LapCountDecrement();
@@ -439,7 +434,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                     );
                 }
             }
-        })
+        });
     }
 
     usefulDataAction(event: { action: string, data: any }) {

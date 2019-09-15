@@ -31,12 +31,13 @@ import {
     GroupService,
     TargetSelectorComponent,
 } from './';
-import { CharacterSheetDialogComponent } from './character-sheet-dialog.component';
-import { EditMonsterDialogComponent } from './edit-monster-dialog.component';
-import { ModifierDetailsDialogComponent } from './modifier-details-dialog.component';
-import { MonsterInventoryDialogComponent } from './monster-inventory-dialog.component';
-import { AddMonsterDialogComponent } from './add-monster-dialog.component';
-import { MonsterEditorComponent } from './monster-editor.component';
+import {CharacterSheetDialogComponent} from './character-sheet-dialog.component';
+import {EditMonsterDialogComponent} from './edit-monster-dialog.component';
+import {ModifierDetailsDialogComponent} from './modifier-details-dialog.component';
+import {MonsterInventoryDialogComponent} from './monster-inventory-dialog.component';
+import {AddMonsterDialogComponent} from './add-monster-dialog.component';
+import {MonsterEditorComponent} from './monster-editor.component';
+import {GroupAddEffectDialogComponent} from './group-add-effect-dialog.component';
 
 @NgModule({
     imports: [
@@ -76,6 +77,7 @@ import { MonsterEditorComponent } from './monster-editor.component';
         MonsterInventoryDialogComponent,
         AddMonsterDialogComponent,
         MonsterEditorComponent,
+        GroupAddEffectDialogComponent,
     ],
     entryComponents: [
         AddLootDialogComponent,
@@ -87,6 +89,7 @@ import { MonsterEditorComponent } from './monster-editor.component';
         ModifierDetailsDialogComponent,
         MonsterInventoryDialogComponent,
         AddMonsterDialogComponent,
+        GroupAddEffectDialogComponent,
     ],
     providers: [GroupService]
 })
