@@ -47,13 +47,11 @@ publish:
       - Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/
 
 deploy_staging:
-  image: ubuntu
+  image: socolin/naheulbook-deploy
   tags:
     - docker
   stage: deploy
   script:
-    - apt-get update -y && apt-get install rsync -y
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
@@ -76,13 +74,11 @@ deploy_staging:
     - master
 
 deploy_prod:
-  image: ubuntu
+  image: socolin/naheulbook-deploy
   tags:
     - docker
   stage: deploy
   script:
-    - apt-get update -y && apt-get install rsync -y
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
