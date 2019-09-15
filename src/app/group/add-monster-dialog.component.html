@@ -48,6 +48,7 @@
                 </h2>
                 <div *ngIf="items">
                     <app-item-list actionIcon="visibility_on"
+                                   actionName="Non Identifié / Identifié"
                                    [items]="items"
                                    (selectItem)="openItemTemplateDialog($event.template)"
                                    (onAction)="toggleItemNotIdentified($event)">

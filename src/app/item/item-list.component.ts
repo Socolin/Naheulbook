@@ -11,6 +11,8 @@ export class ItemListComponent {
     public items: Item[];
     @Input()
     public actionIcon = 'delete';
+    @Input()
+    public actionName = 'Supprimer';
     @Output()
     public onAction: EventEmitter<Item> = new EventEmitter<Item>();
     @Output()

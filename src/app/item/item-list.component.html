@@ -10,7 +10,16 @@
             <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
         </span>
     </div>
-    <button class="action" mat-icon-button (click)="onAction.emit(item)">
+    <button class="action"
+            mat-icon-button
+            [matMenuTriggerFor]="actionMenu"
+            aria-label="Ouvre le menu de l'action">
         <mat-icon>{{actionIcon}}</mat-icon>
     </button>
+    <mat-menu xPosition="before" #actionMenu="matMenu">
+        <button mat-menu-item (click)="onAction.emit(item)">
+            <mat-icon>{{actionIcon}}</mat-icon>
+            {{actionName}}
+        </button>
+    </mat-menu>
 </div>
