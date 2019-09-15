@@ -10,7 +10,7 @@
     </fighter>
 </div>
 
-<div class="next-button">
+<div class="next-button" *ngIf="group.data.inCombat">
     <button
         mat-raised-button
         color="primary"
