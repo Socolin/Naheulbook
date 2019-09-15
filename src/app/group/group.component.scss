@@ -1,6 +1,17 @@
+@import "~app/style/responsive-utils";
+
 :host {
     display: block;
-    padding-bottom: 72px;
+    $padding-useful-data-button: 72px;
+
+    padding-bottom: $padding-useful-data-button;
+
+    /* For safari.. useful-data button is hidden if component is too small. */
+    /* So compute viewport height - toolbar - padding */
+    min-height: calc(100vh - 64px - 32px - #{$padding-useful-data-button});
+    @include for-phone-only {
+        min-height: calc(100vh - 16px - 56px - #{$padding-useful-data-button});
+    }
 
     .loading {
         width: 100vw;
