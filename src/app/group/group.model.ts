@@ -772,6 +772,7 @@ export class Group extends WsRegistrable {
                     }
                     this.data.changeValue(key, data[key]);
                 }
+                this.updateEvents();
                 break;
             }
             case 'joinCharacter': {
