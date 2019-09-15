@@ -453,7 +453,8 @@ export class GroupComponent implements OnInit, OnDestroy {
                                 group: this.group,
                                 title: 'Ajout de l\'objet',
                                 subtitle: item.data.name || itemTemplate.name
-                            }
+                            },
+                            autoFocus: false
                         });
 
                     dialogRef.afterClosed().subscribe(fighters => {
