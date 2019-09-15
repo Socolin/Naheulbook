@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </mat-action-list>
-            <div class="customize-button">
+            <div class="step-valid-button">
                 <button mat-button color=primary (click)="customize()">
                     EFFET PERSONNALISÉ
                 </button>
@@ -40,7 +40,7 @@
             <ng-template matStepLabel>Personnalisation</ng-template>
             <stats-modifier-editor [options]="{noType: !fromEffect}" [modifier]="newStatsModifier">
             </stats-modifier-editor>
-            <div class="customize-button">
+            <div class="step-valid-button">
                 <button mat-button color=primary (click)="completeCustomization()">
                     VALIDER
                 </button>
@@ -56,6 +56,13 @@
                     </span>
                 </mat-list-option>
             </mat-selection-list>
+            <div class="step-valid-button">
+                <button mat-button
+                        *ngIf="newStatsModifier?.name"
+                        (click)="addNewModifier()">
+                    AJOUTER
+                </button>
+            </div>
         </mat-step>
     </mat-vertical-stepper>
 </div>
