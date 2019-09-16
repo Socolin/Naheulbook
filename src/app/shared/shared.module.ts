@@ -20,6 +20,7 @@ import {
     TextFormatterPipe,
     ValueEditorComponent,
 } from './';
+import { PromptDialogComponent } from './prompt-dialog.component';
 
 @NgModule({
     imports: [
@@ -39,6 +40,7 @@ import {
         TextareaAutosizeDirective,
         TextFormatterPipe,
         ValueEditorComponent,
+        PromptDialogComponent,
     ],
     exports: [
         AutocompleteInputComponent,
@@ -53,7 +55,8 @@ import {
         ValueEditorComponent,
     ],
     entryComponents: [
-        IconSelectorComponent
+        IconSelectorComponent,
+        PromptDialogComponent,
     ],
     providers: [
         IconService,

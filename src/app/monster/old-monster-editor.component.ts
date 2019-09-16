@@ -19,10 +19,10 @@ import {MonsterTemplateService} from './monster-template.service';
 
 @Component({
     selector: 'monster-editor',
-    styleUrls: ['./monster-editor.component.scss'],
-    templateUrl: './monster-editor.component.html',
+    styleUrls: ['./old-monster-editor.component.scss'],
+    templateUrl: './old-monster-editor.component.html',
 })
-export class MonsterEditorComponent implements OnInit, OnChanges {
+export class OldMonsterEditorComponent implements OnInit, OnChanges {
     @Input() monster: MonsterTemplate;
     public types: MonsterTemplateType[] = [];
     public selectedType: MonsterTemplateType;

@@ -27,3 +27,4 @@ export * from './icon.component';
 export * from './stat-requirements-editor.component';
 export * from './textarea-autosize.directive';
 export * from './value-editor.component';
+export * from './prompt-dialog.component';

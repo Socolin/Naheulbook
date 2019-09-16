@@ -1,13 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 
-import {NotificationsService} from '../notifications/notifications.service';
+import {NotificationsService} from '../notifications';
 
 import {MonsterTemplate, MonsterTemplateCategory} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
+import {MatDialog} from '@angular/material/dialog';
+import {EditMonsterTemplateDialogComponent} from './edit-monster-template-dialog.component';
 
 @Component({
     selector: 'monster-list',
     templateUrl: './monster-list.component.html',
+    styleUrls: ['./monster-list.component.scss']
 })
 export class MonsterListComponent implements OnInit {
     public monsters: MonsterTemplate[];
@@ -16,7 +19,11 @@ export class MonsterListComponent implements OnInit {
 
     public newMonsterTemplate: MonsterTemplate | undefined;
 
-    constructor(private _monsterTemplateService: MonsterTemplateService, private _notifications: NotificationsService) {
+    constructor(
+        private _monsterTemplateService: MonsterTemplateService,
+        private _notifications: NotificationsService,
+        private dialog: MatDialog
+    ) {
     }
 
     startAddMonster() {
@@ -97,6 +104,15 @@ export class MonsterListComponent implements OnInit {
                 this.sortMonsterByCategory();
             }
         );
+    }
+
+    openCreateMonsterTemplateDialog() {
+        const dialogRef = this.dialog.open(EditMonsterTemplateDialogComponent, {
+            autoFocus: false,
+            minWidth: '100vw',
+            height: '100vh',
+            data: {}
+        });
     }
 
     ngOnInit() {

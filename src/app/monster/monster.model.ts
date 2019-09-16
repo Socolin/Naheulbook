@@ -506,8 +506,9 @@ export class MonsterSimpleInventory {
     minCount: number;
     maxCount: number;
     chance: number;
-    equiped: boolean;
     hidden: boolean;
+    minUg?: number;
+    maxUg?: number;
 }
 
 export interface CreateMonsterTemplateRequest {

@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>Ajouter un objet</h2>
+<mat-dialog-content>
+    <mat-card-content style="display: flex; justify-content: space-around; flex-direction: column">
+        <div class="filter-field">
+            <mat-form-field>
+                <input #filter matInput placeholder="Chercher un objet" (keyup)="updateFilter(filter.value)">
+            </mat-form-field>
+            <button mat-icon-button (click)="updateFilter(filter.value)">
+                <mat-icon>refresh</mat-icon>
+            </button>
+        </div>
+        <mat-action-list *ngIf="filteredItemTemplates !== undefined">
+            <button mat-list-item *ngFor="let result of filteredItemTemplates"
+                    (click)="selectItemTemplate(result.itemTemplate);">
+                <div class="filter-result">
+                    <div class="item-summary">
+                        <icon [icon]="result.icon"></icon>
+                        <div class="name">{{result.name}}</div>
+                        <div class="category mat-caption">{{result.sectionName}} - {{result.categoryName}}</div>
+                    </div>
+                    <div mat-ripple matRippleUnbounded="true" matRippleCentered="true" matRippleRadius="20" class="info"
+                         (click)="showInfo($event, result.itemTemplate)" (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">
+                        <mat-icon>info</mat-icon>
+                    </div>
+                </div>
+            </button>
+            <button disabled *ngIf="filteredItemTemplates && filteredItemTemplates.length == 0">
+                Aucun objet trouvé
+            </button>
+        </mat-action-list>
+        <div class="item-inventory-data" *ngIf="inventoryElement">
+            <div class="name-icon">
+                <icon [icon]="inventoryElement.itemTemplate.data.icon"></icon>
+                <span>
+                    {{inventoryElement.itemTemplate.name}}
+                </span>
+            </div>
+            <div class="quantity">
+                <mat-form-field>
+                    <input matInput type="number" min=0 [(ngModel)]="inventoryElement.minCount" placeholder="Quantité min" />
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="number" min=0 [(ngModel)]="inventoryElement.maxCount" placeholder="Quantité max" />
+                </mat-form-field>
+            </div>
+            <div class="chance">
+                <mat-form-field>
+                    <input matInput type="number" min=0 step="0.0001" [(ngModel)]="inventoryElement.chance" placeholder="Chance" />
+                </mat-form-field>
+                <mat-checkbox [(ngModel)]="inventoryElement.hidden">Caché</mat-checkbox>
+            </div>
+            <div class="ug" *ngIf="inventoryElement.itemTemplate.data.useUG">
+                <mat-form-field>
+                    <input matInput type="number" min=0 [(ngModel)]="inventoryElement.minUg" placeholder="U.G" />
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="number" min=0 [(ngModel)]="inventoryElement.maxUg" placeholder="U.G" />
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-card-content>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            mat-dialog-close
+            color="primary">
+        ANNULER
+    </button>
+    <button mat-button
+            color="primary"
+            [disabled]="!inventoryElement"
+            (click)=addItem()>
+        AJOUTER
+    </button>
+</mat-dialog-actions>
