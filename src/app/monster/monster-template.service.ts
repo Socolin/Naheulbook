@@ -12,7 +12,7 @@ import {
     MonsterTraitDictionary
 } from './monster.model';
 
-import {CreateMonsterTemplateRequest, MonsterTemplateRequest} from '../api/requests';
+import {MonsterTemplateRequest} from '../api/requests';
 import {SkillService} from '../skill';
 import {MonsterTemplateResponse} from '../api/responses/monster-template-response';
 
@@ -129,7 +129,7 @@ export class MonsterTemplateService {
         ]).pipe(map(([categories, monsters, skillsById]) => MonsterTemplate.templatesFromResponse(monsters, categories, skillsById)));
     }
 
-    createMonsterTemplate(request: CreateMonsterTemplateRequest): Observable<MonsterTemplate> {
+    createMonsterTemplate(request: MonsterTemplateRequest): Observable<MonsterTemplate> {
         return forkJoin([
             this.getMonsterCategoriesById(),
             this.httpClient.post<MonsterTemplateResponse>(`/api/v2/monsterTemplates/`, request),

@@ -19,6 +19,7 @@ import {
     SelectMonsterTraitsDialogData,
     SelectMonsterTraitsDialogResult
 } from './select-monster-traits-dialog.component';
+import {MonsterTemplateRequest} from '../api/requests';
 
 export interface EditMonsterTemplateDialogData {
     monsterTemplate?: MonsterTemplate;
@@ -228,7 +229,8 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
 
     save() {
         this.saving = true;
-        let monterRequest = {
+        let request: MonsterTemplateRequest = {
+            categoryId: this.selectedCategory.id,
             data: {
                 ...this.form.value.data,
                 traits: this.selectedTraits
@@ -238,10 +240,9 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
             simpleInventory: this.monsterInventory
         };
         if (!this.data.monsterTemplate) {
-            this.monsterTemplateService.createMonsterTemplate({
-                categoryId: this.selectedCategory.id,
-                monster: monterRequest
-            }).subscribe((result) => {
+            this.monsterTemplateService.createMonsterTemplate(
+                request
+            ).subscribe((result) => {
                 this.dialogRef.close(result);
             }, () => {
                 this.saving = false;
@@ -249,7 +250,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
         } else {
             this.monsterTemplateService.editMonsterTemplate(
                 this.data.monsterTemplate.id,
-                monterRequest
+                request
             ).subscribe((result) => {
                 this.dialogRef.close(result);
             }, () => {

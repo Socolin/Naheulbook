@@ -521,7 +521,7 @@ export class MonsterTemplate {
             inventory.push(element);
         }
 
-        return new MonsterTemplate(response.name, category, response.data, inventory);
+        return new MonsterTemplate(response.id, response.name, category, response.data, inventory);
     }
 
     static templatesFromResponse(
@@ -536,7 +536,14 @@ export class MonsterTemplate {
         return templates;
     }
 
-    constructor(name: string, category: MonsterTemplateCategory, data: MonsterTemplateData, inventory: MonsterInventoryElement[]) {
+    constructor(
+        id: number,
+        name: string,
+        category: MonsterTemplateCategory,
+        data: MonsterTemplateData,
+        inventory: MonsterInventoryElement[]
+    ) {
+        this.id = id;
         this.name = name;
         this.category = category;
         this.categoryId = category.id; // FIXME: still needed ?

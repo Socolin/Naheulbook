@@ -15,13 +15,10 @@ export interface EditMonsterInventoryElementRequest extends MonsterInventoryElem
 }
 
 export interface MonsterTemplateRequest {
+    categoryId: number;
     name: string;
     data: MonsterTemplateData;
     simpleInventory: MonsterInventoryElementRequest[];
     locations: number[];
 }
 
-export interface CreateMonsterTemplateRequest {
-    categoryId: number;
-    monster: MonsterTemplateRequest;
-}
