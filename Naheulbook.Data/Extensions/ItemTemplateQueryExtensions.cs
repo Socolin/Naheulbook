@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,40 @@ namespace Naheulbook.Data.Extensions
                                         || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItems)
                                         || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
             );
+        }
+
+
+        public static IQueryable<TEntity> IncludeChildWithItemTemplateDetails<TEntity, TChild>(
+            this IQueryable<TEntity> queryable,
+            Expression<Func<TEntity, IEnumerable<TChild>>> parentNavigationPropertyPath,
+            Expression<Func<TChild, ItemTemplate>> navigationPropertyPath
+        )
+            where TEntity : class
+            where TChild : class
+        {
+            return queryable
+                .Include(parentNavigationPropertyPath)
+                .ThenInclude(navigationPropertyPath)
+                .ThenInclude(i => i.UnSkills)
+                .Include(parentNavigationPropertyPath)
+                .ThenInclude(navigationPropertyPath)
+                .ThenInclude(i => i.Skills)
+                .Include(parentNavigationPropertyPath)
+                .ThenInclude(navigationPropertyPath)
+                .ThenInclude(i => i.Modifiers)
+                .Include(parentNavigationPropertyPath)
+                .ThenInclude(navigationPropertyPath)
+                .ThenInclude(i => i.SkillModifiers)
+                .Include(parentNavigationPropertyPath)
+                .ThenInclude(navigationPropertyPath)
+                .ThenInclude(i => i.Requirements)
+                .Include(parentNavigationPropertyPath)
+                .ThenInclude(navigationPropertyPath)
+                .ThenInclude(i => i.Slots)
+                .ThenInclude(i => i.Slot)
+                .Include(parentNavigationPropertyPath)
+                .ThenInclude(navigationPropertyPath)
+                .ThenInclude(i => i.Modifiers);
         }
     }
 }

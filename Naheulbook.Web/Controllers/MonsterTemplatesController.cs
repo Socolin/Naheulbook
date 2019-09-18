@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers
@@ -33,13 +36,52 @@ namespace Naheulbook.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<MonsterTemplateResponse>> Post(
             [FromServices] NaheulbookExecutionContext executionContext,
-            CreateMonsterTemplateRequest request
+            MonsterTemplateRequest request
         )
         {
-            var createdMonster = await _monsterTemplateService.CreateMonsterTemplate(executionContext, request);
+            try
+            {
+                var createdMonster = await _monsterTemplateService.CreateMonsterTemplateAsync(executionContext, request);
 
-            var result = _mapper.Map<MonsterTemplateResponse>(createdMonster);
-            return new JsonResult(result) {StatusCode = (int) HttpStatusCode.Created};
+                var result = _mapper.Map<MonsterTemplateResponse>(createdMonster);
+                return new JsonResult(result) {StatusCode = (int) HttpStatusCode.Created};
+            }
+            catch (MonsterCategoryNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+        }
+
+        [HttpPut("{MonsterTemplateId}")]
+        public async Task<ActionResult<MonsterTemplateResponse>> Put(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int monsterTemplateId,
+            MonsterTemplateRequest request
+        )
+        {
+            try
+            {
+                var monster = await _monsterTemplateService.EditMonsterTemplateAsync(executionContext, monsterTemplateId, request);
+
+                var result = _mapper.Map<MonsterTemplateResponse>(monster);
+                return new JsonResult(result);
+            }
+            catch (MonsterCategoryNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+            }
+            catch (MonsterTemplateNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
         }
 
         [HttpGet("search")]

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.Extensions;
 using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
@@ -11,6 +12,8 @@ namespace Naheulbook.Data.Repositories
     {
         Task<List<MonsterTemplate>> GetAllWithItemsFullDataWithLocationsAsync();
         Task<List<MonsterTemplate>> SearchByNameAsync(string filter, int maxResult);
+        Task<MonsterTemplate> GetByIdWithItemsWithLocationsAsync(int monsterTemplateId);
+        Task<MonsterTemplate> GetByIdWithItemsFullDataWithLocationsAsync(int monsterTemplateId);
     }
 
     public class MonsterTemplateRepository : Repository<MonsterTemplate, NaheulbookDbContext>, IMonsterTemplateRepository
@@ -24,28 +27,7 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.MonsterTemplates
                 .Include(x => x.Locations)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.UnSkills)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Skills)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Modifiers)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.SkillModifiers)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Requirements)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Slots)
-                .ThenInclude(i => i.Slot)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Modifiers)
+                .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)
                 .ToListAsync();
         }
 
@@ -54,30 +36,26 @@ namespace Naheulbook.Data.Repositories
             return Context.MonsterTemplates
                 .Include(x => x.Locations)
                 .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.UnSkills)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Skills)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Modifiers)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.SkillModifiers)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Requirements)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Slots)
-                .ThenInclude(i => i.Slot)
-                .Include(m => m.Items)
-                .ThenInclude(i => i.ItemTemplate)
-                .ThenInclude(i => i.Modifiers)
+                .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)
                 .Where(e => e.Name.ToUpper().Contains(partialName.ToUpper()))
                 .Take(maxResult)
                 .ToListAsync();
+        }
+
+        public Task<MonsterTemplate> GetByIdWithItemsWithLocationsAsync(int monsterTemplateId)
+        {
+            return Context.MonsterTemplates
+                .Include(x => x.Locations)
+                .Include(x => x.Items)
+                .SingleOrDefaultAsync(x => x.Id == monsterTemplateId);
+        }
+
+        public Task<MonsterTemplate> GetByIdWithItemsFullDataWithLocationsAsync(int monsterTemplateId)
+        {
+            return Context.MonsterTemplates
+                .Include(x => x.Locations)
+                .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)
+                .SingleOrDefaultAsync(x => x.Id == monsterTemplateId);
         }
     }
 }

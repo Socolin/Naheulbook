@@ -13,26 +13,24 @@ Feature: MonsterTemplates
     """
     {
       "categoryId": ${MonsterCategory.Id},
-      "monster": {
-        "name": "some-monster-name",
-        "data": {
-          "some-key-1": 1,
-          "some-key-2": "some-data-2",
-        },
-        "locationIds": [
-          ${Location.Id}
-        ],
-        "simpleInventory": [
-          {
-            "itemTemplate": {
-              "id": ${ItemTemplate.Id}
-            },
-            "chance": 0.5,
-            "minCount": 1,
-            "maxCount": 2
-          }
-        ]
+      "name": "some-monster-name",
+      "data": {
+        "at": 1,
+        "note": "some-note",
       },
+      "locationIds": [
+        ${Location.Id}
+      ],
+      "simpleInventory": [
+        {
+          "itemTemplate": {
+            "id": ${ItemTemplate.Id}
+          },
+          "chance": 0.5,
+          "minCount": 1,
+          "maxCount": 2
+        }
+      ]
     }
     """
     Then the response status code is 201
@@ -43,8 +41,8 @@ Feature: MonsterTemplates
         "name": "some-monster-name",
         "categoryId": ${MonsterCategory.Id},
         "data": {
-          "some-key-1": 1,
-          "some-key-2": "some-data-2",
+          "at": 1,
+          "note": "some-note",
         },
         "locationIds": [
             ${Location.Id}
@@ -211,3 +209,65 @@ Feature: MonsterTemplates
     """
 
   Scenario: Edit a monster template
+    Given a JWT for an admin user
+    Given a monster template
+    Given an item template section
+    Given an item template category
+    Given an item template
+    Given a location
+    Given a monster category type
+    Given a monster category
+
+    When performing a PUT to the url "/api/v2/monsterTemplates/${MonsterTemplate.Id}" with the following json content and the current jwt
+    """
+    {
+      "categoryId": ${MonsterCategory.[1].Id},
+      "name": "some-new-monster-name",
+      "data": {
+        "at": 2,
+        "prd": 3,
+        "note": "some-new-note"
+      },
+      "locationIds": [
+        ${Location.Id}
+      ],
+      "simpleInventory": [
+        {
+          "itemTemplate": {
+            "id": ${ItemTemplate.Id}
+          },
+          "chance": 0.5,
+          "minCount": 1,
+          "maxCount": 2
+        }
+      ]
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${MonsterTemplate.Id},
+      "name": "some-new-monster-name",
+      "categoryId": ${MonsterCategory.[1].Id},
+      "data": {
+        "at": 2,
+        "prd": 3,
+        "note": "some-new-note"
+      },
+      "locationIds": [
+          ${Location.Id}
+      ],
+      "simpleInventory": [
+          {
+              "id": {"__match": {"type": "integer"}},
+              "minCount": 1,
+              "maxCount": 2,
+              "chance": 0.5,
+              "itemTemplate": {"__partial": {
+                "id": ${ItemTemplate.Id}
+              }}
+          }
+      ]
+    }
+    """

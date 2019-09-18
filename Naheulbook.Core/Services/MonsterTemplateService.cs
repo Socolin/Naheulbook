@@ -13,7 +13,8 @@ namespace Naheulbook.Core.Services
 {
     public interface IMonsterTemplateService
     {
-        Task<MonsterTemplate> CreateMonsterTemplate(NaheulbookExecutionContext executionContext, CreateMonsterTemplateRequest request);
+        Task<MonsterTemplate> CreateMonsterTemplateAsync(NaheulbookExecutionContext executionContext, MonsterTemplateRequest request);
+        Task<MonsterTemplate> EditMonsterTemplateAsync(NaheulbookExecutionContext executionContext, int monsterTemplateId, MonsterTemplateRequest request);
         Task<List<MonsterTemplate>> GetAllMonstersAsync();
         Task<List<MonsterTemplate>> SearchMonsterAsync(string filter);
     }
@@ -29,7 +30,7 @@ namespace Naheulbook.Core.Services
             _authorizationUtil = authorizationUtil;
         }
 
-        public async Task<MonsterTemplate> CreateMonsterTemplate(NaheulbookExecutionContext executionContext, CreateMonsterTemplateRequest request)
+        public async Task<MonsterTemplate> CreateMonsterTemplateAsync(NaheulbookExecutionContext executionContext, MonsterTemplateRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
@@ -38,19 +39,19 @@ namespace Naheulbook.Core.Services
                 var category = await uow.MonsterCategories.GetAsync(request.CategoryId);
                 if (category == null)
                     throw new MonsterCategoryNotFoundException(request.CategoryId);
-                var locations = await uow.Locations.GetByIdsAsync(request.Monster.LocationIds);
-                var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(request.Monster.SimpleInventory.Select(x => x.ItemTemplate.Id));
+                var locations = await uow.Locations.GetByIdsAsync(request.LocationIds);
+                var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(request.SimpleInventory.Select(x => x.ItemTemplate.Id));
 
                 var monsterTemplate = new MonsterTemplate
                 {
-                    Data = JsonConvert.SerializeObject(request.Monster.Data),
-                    Name = request.Monster.Name,
+                    Data = JsonConvert.SerializeObject(request.Data),
+                    Name = request.Name,
                     Category = category,
                     Locations = locations.Select(location => new MonsterLocation
                     {
                         Location = location
                     }).ToList(),
-                    Items = request.Monster.SimpleInventory.Select(i => new MonsterTemplateSimpleInventory
+                    Items = request.SimpleInventory.Where(i => !i.Id.HasValue).Select(i => new MonsterTemplateSimpleInventory
                     {
                         Chance = i.Chance,
                         ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplate.Id),
@@ -64,6 +65,53 @@ namespace Naheulbook.Core.Services
                 await uow.CompleteAsync();
 
                 return monsterTemplate;
+            }
+        }
+
+        public async Task<MonsterTemplate> EditMonsterTemplateAsync(NaheulbookExecutionContext executionContext, int monsterTemplateId, MonsterTemplateRequest request)
+        {
+            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var category = await uow.MonsterCategories.GetAsync(request.CategoryId);
+                if (category == null)
+                    throw new MonsterCategoryNotFoundException(request.CategoryId);
+
+                var monsterTemplate = await uow.MonsterTemplates.GetByIdWithItemsWithLocationsAsync(monsterTemplateId);
+                if (monsterTemplate == null)
+                    throw new MonsterTemplateNotFoundException(monsterTemplateId);
+
+                var locations = await uow.Locations.GetByIdsAsync(request.LocationIds);
+                var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(request.SimpleInventory.Select(x => x.ItemTemplate.Id));
+
+                monsterTemplate.Data = JsonConvert.SerializeObject(request.Data);
+                monsterTemplate.Name = request.Name;
+
+                monsterTemplate.CategoryId = category.Id;
+                monsterTemplate.Category = category;
+
+                monsterTemplate.Locations = locations.Select(location => new MonsterLocation
+                {
+                    Location = location
+                }).ToList();
+                monsterTemplate.Items = monsterTemplate.Items.Where(i => request.SimpleInventory.Any(e => e.Id == i.Id)).ToList();
+                var newItems = request.SimpleInventory.Where(i => !i.Id.HasValue).Select(i => new MonsterTemplateSimpleInventory
+                {
+                    Chance = i.Chance,
+                    ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplate.Id),
+                    MaxCount = i.MaxCount,
+                    MinCount = i.MinCount
+                });
+
+                foreach (var item in newItems)
+                {
+                    monsterTemplate.Items.Add(item);
+                }
+
+                await uow.CompleteAsync();
+
+                return await uow.MonsterTemplates.GetByIdWithItemsWithLocationsAsync(monsterTemplateId);
             }
         }
 

@@ -54,7 +54,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Locations.GetByIdsAsync(Arg.Is<IEnumerable<int>>(x => x.SequenceEqual(new[] {locationId})))
                 .Returns(new List<Location> {location});
 
-            var monsterTemplate = await _service.CreateMonsterTemplate(executionContext, request);
+            var monsterTemplate = await _service.CreateMonsterTemplateAsync(executionContext, request);
 
             Received.InOrder(() =>
             {
@@ -67,13 +67,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public void CreateMonsterTemplate_EnsureAdminAccess()
         {
-            var request = new CreateMonsterTemplateRequest();
+            var request = new MonsterTemplateRequest();
             var executionContext = new NaheulbookExecutionContext();
 
             _authorizationUtil.EnsureAdminAccessAsync(executionContext)
                 .Throws(new TestException());
 
-            Func<Task> act = () => _service.CreateMonsterTemplate(executionContext, request);
+            Func<Task> act = () => _service.CreateMonsterTemplateAsync(executionContext, request);
 
             act.Should().Throw<TestException>();
         }
@@ -81,7 +81,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public void CreateMonsterTemplate_WhenRequestedCategoryIdDoesNotExists_ThrowMonsterCategoryNotFoundException()
         {
-            var request = new CreateMonsterTemplateRequest
+            var request = new MonsterTemplateRequest
             {
                 CategoryId = 42
             };
@@ -90,7 +90,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().MonsterCategories.GetAsync(42)
                 .Returns((MonsterCategory) null);
 
-            Func<Task> act = () => _service.CreateMonsterTemplate(executionContext, request);
+            Func<Task> act = () => _service.CreateMonsterTemplateAsync(executionContext, request);
 
             act.Should().Throw<MonsterCategoryNotFoundException>();
         }
@@ -103,9 +103,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
             };
         }
 
-        private static CreateMonsterTemplateRequest CreateRequest(int categoryId, int itemTemplateId, int locationId)
+        private static MonsterTemplateRequest CreateRequest(int categoryId, int itemTemplateId, int locationId)
         {
-            return new CreateMonsterTemplateRequest
+            return new MonsterTemplateRequest
             {
                 CategoryId = categoryId,
                 Monster = new MonsterTemplateRequest
