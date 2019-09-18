@@ -108,23 +108,20 @@ namespace Naheulbook.Core.Tests.Unit.Services
             return new MonsterTemplateRequest
             {
                 CategoryId = categoryId,
-                Monster = new MonsterTemplateRequest
+                Data = JObject.FromObject(new {key = "value"}),
+                LocationIds = new List<int> {locationId},
+                Name = "some-monster-name",
+                SimpleInventory = new List<MonsterSimpleInventoryRequest>
                 {
-                    Data = JObject.FromObject(new {key = "value"}),
-                    LocationIds = new List<int> {locationId},
-                    Name = "some-monster-name",
-                    SimpleInventory = new List<MonsterSimpleInventoryRequest>
+                    new MonsterSimpleInventoryRequest
                     {
-                        new MonsterSimpleInventoryRequest
+                        Chance = 0.5f,
+                        MinCount = 1,
+                        MaxCount = 2,
+                        ItemTemplate = new IdRequest
                         {
-                            Chance = 0.5f,
-                            MinCount = 1,
-                            MaxCount = 2,
-                            ItemTemplate = new IdRequest
-                            {
-                                Id = itemTemplateId
-                            },
-                        }
+                            Id = itemTemplateId
+                        },
                     }
                 }
             };
