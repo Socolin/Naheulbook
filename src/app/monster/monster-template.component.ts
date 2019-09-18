@@ -1,10 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
-import {removeDiacritics} from '../shared';
 
-import {MonsterTemplate, MonsterTrait} from './monster.model';
+import {MonsterTemplate, MonsterTraitDictionary} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
+import {MatDialog} from '@angular/material/dialog';
+import {
+    EditMonsterTemplateDialogComponent,
+    EditMonsterTemplateDialogData
+} from './edit-monster-template-dialog.component';
 
 @Component({
     selector: 'monster-template',
@@ -12,31 +16,35 @@ import {MonsterTemplateService} from './monster-template.service';
     templateUrl: './monster-template.component.html'
 })
 export class MonsterTemplateComponent implements OnInit {
-    @Input() monster: MonsterTemplate;
-    public traisById: {[id: number]: MonsterTrait};
-    public editing: boolean;
+    @Input() monsterTemplate: MonsterTemplate;
+    public traisById?: MonsterTraitDictionary;
 
-    constructor(private _monsterTemplateService: MonsterTemplateService
-        , private _notifications: NotificationsService) {
+    constructor(
+        private dialog: MatDialog,
+        private monsterTemplateService: MonsterTemplateService,
+        private notifications: NotificationsService,
+    ) {
     }
 
-    traitImage(trait: MonsterTrait) {
-        return 'assets/img/monster-traits/' + removeDiacritics(trait.name).split(' ').join('_').toLowerCase() + '.png';
-    }
-
-    saveMonster() {
-        this.editing = false;
-        this._monsterTemplateService.editMonster(this.monster).subscribe(() => {
-            this._notifications.success('Monster', 'Monstre editer');
+    openEditMonsterDialog(): void {
+        const dialogRef = this.dialog.open<EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData>(
+            EditMonsterTemplateDialogComponent, {
+                data: {
+                    monsterTemplate: this.monsterTemplate
+                },
+                minWidth: '100vw', height: '100vh',
+                autoFocus: false
+            });
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.notifications.success('Monster', 'Monstre éditer');
         });
     }
 
-    editMonster() {
-        this.editing = true;
-    }
-
     ngOnInit(): void {
-        this._monsterTemplateService.getMonsterTraitsById().subscribe(
+        this.monsterTemplateService.getMonsterTraitsById().subscribe(
             traitsById => {
                 this.traisById = traitsById
             }

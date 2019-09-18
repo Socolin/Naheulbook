@@ -1,76 +1,80 @@
 <mat-card>
     <mat-card-header>
-        <mat-card-title>{{monster.name}}</mat-card-title>
-        <mat-card-subtitle>{{monster.category.type.name}} - {{monster.category.name}}</mat-card-subtitle>
-        <button *ngIf="!editing" mat-icon-button (click)="editMonster()">
-            <mat-icon>edit</mat-icon>
+        <mat-card-title>
+            {{monsterTemplate.name}}
+        </mat-card-title>
+        <mat-menu #menuMonster="matMenu">
+            <button mat-menu-item
+                    (click)="openEditMonsterDialog()">
+                <mat-icon>edit</mat-icon>
+                Éditer
+            </button>
+        </mat-menu>
+        <button mat-icon-button [matMenuTriggerFor]="menuMonster" aria-label="Ouvrir le menu d'édition du monstre">
+            <mat-icon>more_vert</mat-icon>
         </button>
     </mat-card-header>
-    <mat-card-actions *ngIf="editing" align="end">
-        <button mat-button color=primary (click)="editing=false">ANNULER</button>
-        <button mat-button color=primary (click)="saveMonster()">VALIDER</button>
-    </mat-card-actions>
-    <mat-card-content *ngIf="!editing">
-        <div *ngIf="monster.data.special">{{monster.data.note}}</div>
-        <div class="monster-stat-row" *ngIf="!monster.data.special">
+    <mat-card-content>
+        <div *ngIf="monsterTemplate.data.special">{{monsterTemplate.data.note}}</div>
+        <div class="monster-stat-row" *ngIf="!monsterTemplate.data.special">
             <div>
-                <strong>AT:</strong> {{monster.data.at}}
+                <strong>AT:</strong> {{monsterTemplate.data.at}}
             </div>
             <div>
-                <span *ngIf="monster.data.prd">
-                    <strong>PRD:</strong> {{monster.data.prd}}
+                <span *ngIf="monsterTemplate.data.prd">
+                    <strong>PRD:</strong> {{monsterTemplate.data.prd}}
                 </span>
-                <span *ngIf="monster.data.esq">
-                    <strong>ESQ:</strong> {{monster.data.esq}}
+                <span *ngIf="monsterTemplate.data.esq">
+                    <strong>ESQ:</strong> {{monsterTemplate.data.esq}}
                 </span>
             </div>
             <div>
-                <strong>EV:</strong> {{monster.data.ev}}
+                <strong>EV:</strong> {{monsterTemplate.data.ev}}
             </div>
             <div>
-                <span *ngIf="monster.data.ea">
-                    <strong>EA:</strong> {{monster.data.ea}}
+                <span *ngIf="monsterTemplate.data.ea">
+                    <strong>EA:</strong> {{monsterTemplate.data.ea}}
                 </span>
             </div>
 
-            <div *ngIf="!monster.data.special">
-                <strong>PR:</strong> {{monster.data.pr}}
+            <div *ngIf="!monsterTemplate.data.special">
+                <strong>PR:</strong> {{monsterTemplate.data.pr}}
             </div>
             <div>
-                <strong>COU:</strong> {{monster.data.cou}}
+                <strong>COU:</strong> {{monsterTemplate.data.cou}}
             </div>
             <div>
-                <strong>XP:</strong> {{monster.data.xp}}
+                <strong>XP:</strong> {{monsterTemplate.data.xp}}
             </div>
             <div>
             </div>
         </div>
-        <div *ngIf="!monster.data.special" class="monster-stat-row">
+        <div *ngIf="!monsterTemplate.data.special" class="monster-stat-row">
             <div>
-                <strong>Degat:</strong> {{monster.data.dmg}}
+                <strong>Degat:</strong> {{monsterTemplate.data.dmg}}
             </div>
         </div>
-        <div *ngIf="!monster.data.special" class="monster-stat-row">
-            <div *ngIf="monster.data.note">
-                <strong>Note</strong>: {{monster.data.note}}
+        <div *ngIf="!monsterTemplate.data.special" class="monster-stat-row">
+            <div *ngIf="monsterTemplate.data.note">
+                <strong>Note</strong>: {{monsterTemplate.data.note}}
             </div>
         </div>
-        <div *ngIf="traisById && monster.data.traits && monster.data.traits.length">
+        <div *ngIf="traisById && monsterTemplate.data.traits && monsterTemplate.data.traits.length">
             <div>
                 <strong>Traits</strong>
             </div>
         </div>
-        <div *ngIf="traisById && monster.data.traits && monster.data.traits.length" class="monster-traits-row">
-            <div *ngFor="let trait of monster.data.traits">
+        <div *ngIf="traisById && monsterTemplate.data.traits && monsterTemplate.data.traits.length" class="monster-traits-row">
+            <div *ngFor="let trait of monsterTemplate.data.traits">
                 <monster-trait [trait]="traisById[trait.traitId]" [traitInfo]="trait"></monster-trait>
             </div>
         </div>
-        <div *ngIf="monster.simpleInventory && monster.simpleInventory.length">
+        <div *ngIf="monsterTemplate.simpleInventory && monsterTemplate.simpleInventory.length">
             <div>
                 <strong>Inventaire</strong>
             </div>
             <div>
-                <div *ngFor="let inventory of monster.simpleInventory">
+                <div *ngFor="let inventory of monsterTemplate.simpleInventory">
                     {{inventory.itemTemplate.name}}
                 </div>
             </div>

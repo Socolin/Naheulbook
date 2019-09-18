@@ -546,6 +546,8 @@ export class MonsterTemplate {
     }
 }
 
+export type MonsterTraitDictionary = { [id: number]: MonsterTrait };
+
 export class MonsterTrait {
     id: number;
     name: string;

@@ -21,10 +21,6 @@ export interface MonsterTemplateRequest {
     locations: number[];
 }
 
-export interface EditMonsterTemplateRequest extends MonsterTemplateRequest {
-
-}
-
 export interface CreateMonsterTemplateRequest {
     categoryId: number;
     monster: MonsterTemplateRequest;

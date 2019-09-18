@@ -4,9 +4,15 @@ import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateType, MonsterTrait} from './monster.model';
+import {
+    MonsterTemplate,
+    MonsterTemplateCategory,
+    MonsterTemplateType,
+    MonsterTrait,
+    MonsterTraitDictionary
+} from './monster.model';
 
-import {CreateMonsterTemplateRequest} from '../api/requests';
+import {CreateMonsterTemplateRequest, MonsterTemplateRequest} from '../api/requests';
 import {SkillService} from '../skill';
 import {MonsterTemplateResponse} from '../api/responses/monster-template-response';
 
@@ -14,7 +20,7 @@ import {MonsterTemplateResponse} from '../api/responses/monster-template-respons
 export class MonsterTemplateService {
     private monsterTypes: ReplaySubject<MonsterTemplateType[]>;
     private monsterTraits: ReplaySubject<MonsterTrait[]>;
-    private monsterTraitsById: ReplaySubject<{ [id: number]: MonsterTrait }>;
+    private monsterTraitsById: ReplaySubject<MonsterTraitDictionary>;
 
     constructor(
         private httpClient: HttpClient,
@@ -93,7 +99,7 @@ export class MonsterTemplateService {
         return this.monsterTraits;
     }
 
-    getMonsterTraitsById(): Observable<{ [id: number]: MonsterTrait }> {
+    getMonsterTraitsById(): Observable<MonsterTraitDictionary> {
         if (!this.monsterTraitsById) {
             this.monsterTraitsById = new ReplaySubject<MonsterTrait[]>(1);
 
@@ -123,7 +129,7 @@ export class MonsterTemplateService {
         ]).pipe(map(([categories, monsters, skillsById]) => MonsterTemplate.templatesFromResponse(monsters, categories, skillsById)));
     }
 
-    addMonster(request: CreateMonsterTemplateRequest): Observable<MonsterTemplate> {
+    createMonsterTemplate(request: CreateMonsterTemplateRequest): Observable<MonsterTemplate> {
         return forkJoin([
             this.getMonsterCategoriesById(),
             this.httpClient.post<MonsterTemplateResponse>(`/api/v2/monsterTemplates/`, request),
@@ -133,12 +139,14 @@ export class MonsterTemplateService {
         }));
     }
 
-    editMonster(monster: MonsterTemplate): Observable<MonsterTemplate> {
-        let category = monster.category;
-        delete monster.category;
-        let observable = this.httpClient.put<MonsterTemplate>(`/api/v2/monsterTemplates/${monster.id}`, {...monster});
-        monster.category = category;
-        return observable;
+    editMonsterTemplate(monterTemplateId: number, request: MonsterTemplateRequest): Observable<MonsterTemplate> {
+        return forkJoin([
+            this.getMonsterCategoriesById(),
+            this.httpClient.put<MonsterTemplateResponse>(`/api/v2/monsterTemplates/${monterTemplateId}`, request),
+            this.skillService.getSkillsById()
+        ]).pipe(map(([categoriesById, monsterResponse, skillsById]) => {
+            return MonsterTemplate.fromResponse(monsterResponse, categoriesById, skillsById);
+        }));
     }
 
     createType(name: string): Observable<MonsterTemplateType> {

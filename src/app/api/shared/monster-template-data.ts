@@ -1,7 +1,7 @@
 export interface MonsterTemplateData {
     at: number;
-    prd: number | undefined;
-    esq: number | undefined;
+    prd?: number;
+    esq?: number;
     ev: number;
     ea: number;
     cou: number;

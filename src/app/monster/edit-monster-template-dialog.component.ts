@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
     MonsterInventoryElement,
     MonsterTemplate,
@@ -29,25 +29,25 @@ export interface EditMonsterTemplateDialogData {
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-template-dialog.component.scss']
 })
 export class EditMonsterTemplateDialogComponent implements OnInit {
-
+    public saving = false;
     public form = new FormGroup({
-        name: new FormControl(),
-        at: new FormControl(),
-        prd: new FormControl(),
-        esq: new FormControl(),
-        ev: new FormControl(),
-        maxEv: new FormControl(),
-        ea: new FormControl(),
-        maxEa: new FormControl(),
-        pr: new FormControl(),
-        pr_magic: new FormControl(),
-        dmg: new FormControl(),
-        cou: new FormControl(),
-        chercheNoise: new FormControl(),
-        resm: new FormControl(),
-        xp: new FormControl(),
-        note: new FormControl(),
-        sex: new FormControl(),
+        name: new FormControl(undefined, [Validators.required]),
+        data: new FormGroup({
+            at: new FormControl(),
+            prd: new FormControl(),
+            esq: new FormControl(),
+            ev: new FormControl(),
+            ea: new FormControl(),
+            pr: new FormControl(),
+            pr_magic: new FormControl(),
+            dmg: new FormControl(),
+            cou: new FormControl(),
+            chercheNoise: new FormControl(),
+            resm: new FormControl(),
+            xp: new FormControl(),
+            note: new FormControl(),
+            sex: new FormControl(),
+        })
     });
 
     public monsterTemplateTypes: MonsterTemplateType[] = [];
@@ -68,6 +68,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
         private locationService: LocationService,
         private dialog: MatDialog
     ) {
+        this.form.reset(data.monsterTemplate);
     }
 
     openCreateCategoryDialog() {
@@ -213,10 +214,11 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
                 if (this.data.monsterTemplate) {
                     this.selectedType = this.data.monsterTemplate.category.type;
                     this.selectedCategory = this.data.monsterTemplate.category;
-                    this.selectedTraits = [...this.data.monsterTemplate.data.traits];
+                    this.selectedTraits = [...this.data.monsterTemplate.data.traits || []];
                     this.selectedLocations = this.data.monsterTemplate.locations
                         .map(locationId => this.locationsById[locationId])
                         .filter(l => !!l);
+                    this.monsterInventory = this.data.monsterTemplate.simpleInventory;
                 } else {
                     this.selectType(this.monsterTemplateTypes[0]);
                 }
@@ -225,19 +227,34 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
     }
 
     save() {
-        const {name, ...monsterData} = this.form.value;
-        this.monsterTemplateService.addMonster({
-            categoryId: this.selectedCategory.id, monster: {
-                data: {
-                    ...monsterData,
-                    traits: this.selectedTraits
-                },
-                locations: [],
-                name: this.form.controls['name'].value,
-                simpleInventory: this.monsterInventory
-            }
-        }).subscribe((result) => {
-            this.dialogRef.close(result);
-        });
+        this.saving = true;
+        let monterRequest = {
+            data: {
+                ...this.form.value.data,
+                traits: this.selectedTraits
+            },
+            locations: [],
+            name: this.form.value.name,
+            simpleInventory: this.monsterInventory
+        };
+        if (!this.data.monsterTemplate) {
+            this.monsterTemplateService.createMonsterTemplate({
+                categoryId: this.selectedCategory.id,
+                monster: monterRequest
+            }).subscribe((result) => {
+                this.dialogRef.close(result);
+            }, () => {
+                this.saving = false;
+            });
+        } else {
+            this.monsterTemplateService.editMonsterTemplate(
+                this.data.monsterTemplate.id,
+                monterRequest
+            ).subscribe((result) => {
+                this.dialogRef.close(result);
+            }, () => {
+                this.saving = false;
+            });
+        }
     }
 }

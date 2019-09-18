@@ -5,6 +5,13 @@
         grid-template-columns: auto;
     }
 
+    .add-button-with-loader {
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-gap: 8px;
+        align-items: center;
+    }
+
     .category-selection {
         display: grid;
         grid-gap: 8px;
