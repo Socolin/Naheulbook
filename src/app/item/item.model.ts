@@ -54,7 +54,7 @@ export class Item {
     static fromJson(jsonData: any, skillsById: {[skillId: number]: Skill}): Item {
         let item = new Item();
         Object.assign(item, jsonData, {
-            template: ItemTemplate.fromJson(jsonData.template, skillsById),
+            template: ItemTemplate.fromResponse(jsonData.template, skillsById),
             modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers)
         });
         return item;

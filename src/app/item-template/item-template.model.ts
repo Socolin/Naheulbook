@@ -4,7 +4,7 @@ import {Job} from '../job';
 import {IconDescription} from '../shared/icon.model';
 import {IDurable} from '../api/shared/durable';
 import {ItemTemplateResponse} from '../api/responses';
-import {IItemTemplateData} from '../api/shared';
+import {IItemTemplateData, IItemTemplateGunData} from '../api/shared';
 
 export class ItemSection {
     id: number;
@@ -34,7 +34,7 @@ export class ItemSlot {
     techName: string;
 }
 
-export class ItemTemplateGunData {
+export class ItemTemplateGunData implements IItemTemplateGunData {
     range: string;
     damages: string;
     special: string;
@@ -196,17 +196,10 @@ export class ItemTemplate {
         return itemTemplate;
     }
 
-    /**
-     * @deprecated
-     */
-    static fromJson(jsonData: any, skillsById: SkillDictionary): ItemTemplate {
-        return ItemTemplate.fromResponse(jsonData, skillsById);
-    }
-
-    static itemTemplatesFromJson(jsonDatas: any[], skillsById: {[skillId: number]: Skill}): ItemTemplate[] {
+    static itemTemplatesFromResponses(responses: ItemTemplateResponse[], skillsById: {[skillId: number]: Skill}): ItemTemplate[] {
         let itemTemplates: ItemTemplate[] = [];
-        for (let jsonData of jsonDatas) {
-            itemTemplates.push(ItemTemplate.fromJson(jsonData, skillsById));
+        for (let jsonData of responses) {
+            itemTemplates.push(ItemTemplate.fromResponse(jsonData, skillsById));
         }
         return itemTemplates;
     }

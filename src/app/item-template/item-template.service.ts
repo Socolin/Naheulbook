@@ -6,7 +6,8 @@ import {HttpClient} from '@angular/common/http';
 
 import {Skill, SkillService} from '../skill';
 
-import {ItemCategory, ItemTemplateJsonData, ItemTemplate, ItemSection, ItemSlot, ItemType} from './item-template.model';
+import {ItemCategory, ItemTemplate, ItemSection, ItemSlot, ItemType} from './item-template.model';
+import {ItemTemplateResponse} from '../api/responses';
 
 @Injectable()
 export class ItemTemplateService {
@@ -61,10 +62,10 @@ export class ItemTemplateService {
                 this.httpClient.get('/api/v2/itemTemplateSections/' + section.id),
                 this._skillService.getSkillsById()
             ]).subscribe(
-                ([itemTemplateDatas, skillsById]: [ItemTemplateJsonData[], { [skillId: number]: Skill }]) => {
+                ([itemTemplateDatas, skillsById]: [ItemTemplateResponse[], { [skillId: number]: Skill }]) => {
                     let items: ItemTemplate[] = [];
                     for (let i = 0; i < itemTemplateDatas.length; i++) {
-                        let itemTemplate = ItemTemplate.fromJson(itemTemplateDatas[i], skillsById);
+                        let itemTemplate = ItemTemplate.fromResponse(itemTemplateDatas[i], skillsById);
                         items.push(itemTemplate);
                     }
                     this.itemBySection[section.id].next(items);
@@ -84,11 +85,11 @@ export class ItemTemplateService {
     getItem(id: number): Observable<ItemTemplate> {
         return new Observable((observer) => {
             forkJoin([
-                this.httpClient.get<ItemTemplateJsonData>(`/api/v2/itemTemplates/${id}`),
+                this.httpClient.get<ItemTemplateResponse>(`/api/v2/itemTemplates/${id}`),
                 this._skillService.getSkillsById()
             ]).subscribe(
-                ([itemTemplateData, skillsById]: [ItemTemplateJsonData, { [skillId: number]: Skill }]) => {
-                    let itemTemplate = ItemTemplate.fromJson(itemTemplateData, skillsById);
+                ([itemTemplateData, skillsById]: [ItemTemplateResponse, { [skillId: number]: Skill }]) => {
+                    let itemTemplate = ItemTemplate.fromResponse(itemTemplateData, skillsById);
                     observer.next(itemTemplate);
                     observer.complete();
                 },
@@ -107,8 +108,8 @@ export class ItemTemplateService {
         return forkJoin([
             this.httpClient.get('/api/v2/itemTemplates/search?filter=' + encodeURIComponent(filter)),
             this._skillService.getSkillsById()
-        ]).pipe(map(([itemTemplateDatas, skillsById]: [ItemTemplateJsonData[], { [skillId: number]: Skill }]) => {
-            return ItemTemplate.itemTemplatesFromJson(itemTemplateDatas, skillsById);
+        ]).pipe(map(([itemTemplateDatas, skillsById]: [ItemTemplateResponse[], { [skillId: number]: Skill }]) => {
+            return ItemTemplate.itemTemplatesFromResponses(itemTemplateDatas, skillsById);
         }));
     }
 
@@ -192,13 +193,13 @@ export class ItemTemplateService {
             this.itemsByCategoriesName[categoryTechName] = new ReplaySubject<ItemTemplate[]>(1);
 
             forkJoin([
-                this.httpClient.get<ItemTemplateJsonData[]>(`/api/v2/itemTemplateCategories/${categoryTechName}/itemTemplates`),
+                this.httpClient.get<ItemTemplateResponse[]>(`/api/v2/itemTemplateCategories/${categoryTechName}/itemTemplates`),
                 this._skillService.getSkillsById()
             ]).pipe(
-                map(([itemTemplatesData, skillsById]: [ItemTemplateJsonData[], { [skillId: number]: Skill }]) => {
+                map(([itemTemplatesData, skillsById]: [ItemTemplateResponse[], { [skillId: number]: Skill }]) => {
                     let items: ItemTemplate[] = [];
                     for (let i = 0; i < itemTemplatesData.length; i++) {
-                        let itemTemplate = ItemTemplate.fromJson(itemTemplatesData[i], skillsById);
+                        let itemTemplate = ItemTemplate.fromResponse(itemTemplatesData[i], skillsById);
                         items.push(itemTemplate);
                     }
                     return items;
