@@ -6,12 +6,9 @@
             <mat-icon>edit</mat-icon>
         </button>
     </mat-card-header>
-    <mat-card-content *ngIf="editing">
-        <monster-editor [monster]="monster"></monster-editor>
-    </mat-card-content>
     <mat-card-actions *ngIf="editing" align="end">
         <button mat-button color=primary (click)="editing=false">ANNULER</button>
-        <button mat-button color=primary (click)="saveMonster(monster)">VALIDER</button>
+        <button mat-button color=primary (click)="saveMonster()">VALIDER</button>
     </mat-card-actions>
     <mat-card-content *ngIf="!editing">
         <div *ngIf="monster.data.special">{{monster.data.note}}</div>

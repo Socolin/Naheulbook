@@ -1,8 +1,10 @@
 import {ItemStatModifier} from '../shared/stat-modifier.model';
-import {Skill} from '../skill';
+import {Skill, SkillDictionary} from '../skill';
 import {Job} from '../job';
 import {IconDescription} from '../shared/icon.model';
 import {IDurable} from '../api/shared/durable';
+import {ItemTemplateResponse} from '../api/responses';
+import {IItemTemplateData} from '../api/shared';
 
 export class ItemSection {
     id: number;
@@ -53,7 +55,7 @@ export class ItemTemplateGunData {
     }
 }
 
-export class ItemTemplateData {
+export class ItemTemplateData implements IItemTemplateData {
     actions?: any[];
     availableLocation?: string;
     bonusDamage?: number;
@@ -92,7 +94,7 @@ export class ItemTemplateData {
     useUG?: boolean;
     weight?: number;
 
-    static fromJson(jsonData: ItemTemplateData): ItemTemplateData {
+    static fromJson(jsonData: IItemTemplateData): ItemTemplateData {
         let itemTemplateData = new ItemTemplateData();
         Object.assign(itemTemplateData, jsonData, {gun: ItemTemplateGunData.fromJson(jsonData.gun)});
         return itemTemplateData;
@@ -127,32 +129,6 @@ export class ItemTemplateData {
             this.itemTypes.push(itemType.techName);
         }
     }
-}
-
-// FIXME: Is this used and checked ?
-export class ItemRequirement {
-    stat: string;
-    min: number;
-    max: number;
-}
-
-export class ItemSkillModifierJsonData {
-    skill: number;
-    value: number;
-}
-
-export class ItemTemplateJsonData {
-    id: number;
-    name: string;
-    categoryId: number;
-    data: ItemTemplateData;
-    modifiers: ItemStatModifier[] = [];
-    skills: {id: number}[];
-    unskills: {id: number}[];
-    slots: ItemSlot[];
-    restrictJobs: {id: number}[];
-    requirements: ItemRequirement[];
-    skillModifiers: ItemSkillModifierJsonData[];
 }
 
 export class ItemSkillModifier {
@@ -197,30 +173,37 @@ export class ItemTemplate {
         return false;
     }
 
-    static fromJson(jsonData: ItemTemplateJsonData, skillsById: {[skillId: number]: Skill}): ItemTemplate {
+    static fromResponse(response: ItemTemplateResponse, skillsById: SkillDictionary): ItemTemplate {
         let itemTemplate = new ItemTemplate();
-        Object.assign(itemTemplate, jsonData, {
+        Object.assign(itemTemplate, response, {
             skills: [],
             unskills: [],
             skillModifiers: [],
-            data: ItemTemplateData.fromJson(jsonData.data)
+            data: ItemTemplateData.fromJson(response.data)
         });
 
-        for (let s of jsonData.skills) {
+        for (let s of response.skills) {
             itemTemplate.skills.push(skillsById[s.id]);
         }
-        for (let s of jsonData.unskills) {
+        for (let s of response.unskills) {
             itemTemplate.unskills.push(skillsById[s.id]);
         }
 
-        for (let skillModifier of jsonData.skillModifiers) {
+        for (let skillModifier of response.skillModifiers) {
             itemTemplate.skillModifiers.push(new ItemSkillModifier(skillsById[+skillModifier.skill], skillModifier.value));
         }
 
         return itemTemplate;
     }
 
-    static itemTemplatesFromJson(jsonDatas: ItemTemplateJsonData[], skillsById: {[skillId: number]: Skill}): ItemTemplate[] {
+    /**
+     * @deprecated
+     */
+    static fromJson(jsonData: any, skillsById: SkillDictionary): ItemTemplate {
+        return ItemTemplate.fromResponse(jsonData, skillsById);
+    }
+
+    static itemTemplatesFromJson(jsonDatas: any[], skillsById: {[skillId: number]: Skill}): ItemTemplate[] {
         let itemTemplates: ItemTemplate[] = [];
         for (let jsonData of jsonDatas) {
             itemTemplates.push(ItemTemplate.fromJson(jsonData, skillsById));

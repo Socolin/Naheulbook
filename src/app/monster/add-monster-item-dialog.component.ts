@@ -1,10 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {forkJoin} from 'rxjs';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
-import {MonsterSimpleInventory} from './monster.model';
+import {MonsterInventoryElement} from './monster.model';
+
+export interface AddMonsterItemDialogData {
+    inventoryElement?: MonsterInventoryElement;
+}
 
 @Component({
     templateUrl: './add-monster-item-dialog.component.html',
@@ -19,13 +23,17 @@ export class AddMonsterItemDialogComponent implements OnInit {
         sourceIcon?: string,
         itemTemplate: ItemTemplate
     }[];
-    public inventoryElement?: MonsterSimpleInventory;
+    public inventoryElement?: MonsterInventoryElement;
 
     constructor(
         private dialog: MatDialog,
         private itemTemplateService: ItemTemplateService,
-        public dialogRef: MatDialogRef<AddMonsterItemDialogComponent, MonsterSimpleInventory>
+        public dialogRef: MatDialogRef<AddMonsterItemDialogComponent, MonsterInventoryElement>,
+        @Inject(MAT_DIALOG_DATA) public data: AddMonsterItemDialogData
     ) {
+        if (data.inventoryElement) {
+            this.inventoryElement = {...data.inventoryElement};
+        }
     }
 
     updateFilter(filter: string): void {
@@ -58,12 +66,12 @@ export class AddMonsterItemDialogComponent implements OnInit {
 
     selectItemTemplate(itemTemplate: ItemTemplate) {
         this.inventoryElement = {
+            id: 0,
             chance: 1,
             minCount: 1,
             maxCount: 1,
             hidden: false,
-            itemTemplate,
-            id: 0
+            itemTemplate
         };
         if (itemTemplate.data.useUG) {
             this.inventoryElement.minUg = 1;

@@ -13,7 +13,7 @@ export interface ItemTemplateResponse {
 
     modifiers: ItemTemplateModifierResponse[];
     skills: { id: number }[];
-    unSkills: { id: number }[];
+    unskills: { id: number }[];
     skillModifiers: ItemTemplateSkillModifierResponse[];
     requirements: ItemTemplateRequirementResponse[];
     slots: ItemSlotResponse[];
@@ -29,7 +29,7 @@ export interface ItemTemplateModifierResponse {
 }
 
 export interface ItemTemplateSkillModifierResponse {
-    skillId: number;
+    skill: number;
     value: number;
 }
 

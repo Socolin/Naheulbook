@@ -14,9 +14,10 @@ import {
     MonsterService,
     MonsterTemplateComponent,
     MonsterTemplateService,
-    MonsterTraitComponent,
-    OldMonsterEditorComponent
+    MonsterTraitComponent
 } from './';
+import { SelectMonsterTraitsDialogComponent } from './select-monster-traits-dialog.component';
+import { MonsterTraitDialogComponent } from './monster-trait-dialog.component';
 
 @NgModule({
     imports: [
@@ -33,12 +34,15 @@ import {
         MonsterColorSelectorComponent,
         MonsterListComponent,
         MonsterTemplateComponent,
-        OldMonsterEditorComponent,
         MonsterTraitComponent,
+        SelectMonsterTraitsDialogComponent,
+        MonsterTraitDialogComponent,
     ],
     entryComponents: [
         AddMonsterItemDialogComponent,
         EditMonsterTemplateDialogComponent,
+        SelectMonsterTraitsDialogComponent,
+        MonsterTraitDialogComponent,
     ],
     providers: [
         MonsterService,

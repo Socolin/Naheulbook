@@ -5,4 +5,5 @@ export * from './icon-description';
 export * from './item-data';
 export * from './item-template-data';
 export * from './item-template-gun-data'
+export * from './monster-template-data';
 export * from './stat-modifier';

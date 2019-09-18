@@ -1,7 +1,14 @@
+@import "~app/style/responsive-utils";
+
 :host {
     margin: -24px;
     display: grid;
-    padding-top: 64px;
+    padding-top: 72px;
+
+    @include for-phone-only {
+        padding-top: 64px;
+    }
+
     grid-template-columns: 1fr;
 
     .content {

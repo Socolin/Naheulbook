@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Ajouter un objet</h2>
 <mat-dialog-content>
     <mat-card-content style="display: flex; justify-content: space-around; flex-direction: column">
-        <div class="filter-field">
+        <div class="filter-field" *ngIf="!data.inventoryElement">
             <mat-form-field>
                 <input #filter matInput placeholder="Chercher un objet" (keyup)="updateFilter(filter.value)">
             </mat-form-field>

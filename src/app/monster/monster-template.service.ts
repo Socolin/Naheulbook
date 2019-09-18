@@ -4,13 +4,11 @@ import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {
-    CreateMonsterTemplateRequest,
-    MonsterTemplate,
-    MonsterTemplateCategory,
-    MonsterTemplateType,
-    MonsterTrait
-} from './monster.model';
+import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateType, MonsterTrait} from './monster.model';
+
+import {CreateMonsterTemplateRequest} from '../api/requests';
+import {SkillService} from '../skill';
+import {MonsterTemplateResponse} from '../api/responses/monster-template-response';
 
 @Injectable()
 export class MonsterTemplateService {
@@ -18,7 +16,10 @@ export class MonsterTemplateService {
     private monsterTraits: ReplaySubject<MonsterTrait[]>;
     private monsterTraitsById: ReplaySubject<{ [id: number]: MonsterTrait }>;
 
-    constructor(private httpClient: HttpClient) {
+    constructor(
+        private httpClient: HttpClient,
+        private skillService: SkillService
+    ) {
     }
 
     getMonsterCategoriesById(): Observable<{ [id: number]: MonsterTemplateCategory }> {
@@ -67,9 +68,10 @@ export class MonsterTemplateService {
     getMonsterList(): Observable<MonsterTemplate[]> {
         return forkJoin([
             this.getMonsterCategoriesById(),
-            this.httpClient.get<MonsterTemplate[]>('/api/v2/monsterTemplates')
-        ]).pipe(map(([categoriesById, monsterTemplatesDatas]: [{ [id: number]: MonsterTemplateCategory }, MonsterTemplate[]]) => {
-            return MonsterTemplate.templatessFromJson(monsterTemplatesDatas, categoriesById);
+            this.httpClient.get<MonsterTemplateResponse[]>('/api/v2/monsterTemplates'),
+            this.skillService.getSkillsById()
+        ]).pipe(map(([categoriesById, monsterTemplatesDatas, skillsById]) => {
+            return MonsterTemplate.templatesFromResponse(monsterTemplatesDatas, categoriesById, skillsById);
         }));
     }
 
@@ -116,16 +118,18 @@ export class MonsterTemplateService {
     searchMonster(name): Observable<MonsterTemplate[]> {
         return forkJoin([
             this.getMonsterCategoriesById(),
-            this.httpClient.get<MonsterTemplate[]>(`/api/v2/monsterTemplates/search?filter=${encodeURIComponent(name)}`)
-        ]).pipe(map(([categories, monsters]) => MonsterTemplate.templatessFromJson(monsters, categories)));
+            this.httpClient.get<MonsterTemplateResponse[]>(`/api/v2/monsterTemplates/search?filter=${encodeURIComponent(name)}`),
+            this.skillService.getSkillsById()
+        ]).pipe(map(([categories, monsters, skillsById]) => MonsterTemplate.templatesFromResponse(monsters, categories, skillsById)));
     }
 
-    addMonster(categoryId: number, monster: CreateMonsterTemplateRequest): Observable<MonsterTemplate> {
+    addMonster(request: CreateMonsterTemplateRequest): Observable<MonsterTemplate> {
         return forkJoin([
             this.getMonsterCategoriesById(),
-            this.httpClient.post<MonsterTemplate>(`/api/v2/monsterTemplates/`, {categoryId, monster})
-        ]).pipe(map(([categoriesById, monsterTemplateResponse]: [{ [id: number]: MonsterTemplateCategory }, MonsterTemplate]) => {
-            return MonsterTemplate.fromJson(monsterTemplateResponse, categoriesById);
+            this.httpClient.post<MonsterTemplateResponse>(`/api/v2/monsterTemplates/`, request),
+            this.skillService.getSkillsById()
+        ]).pipe(map(([categoriesById, monsterResponse, skillsById]) => {
+            return MonsterTemplate.fromResponse(monsterResponse, categoriesById, skillsById);
         }));
     }
 

@@ -2,7 +2,7 @@ import {Subject} from 'rxjs';
 import {isNullOrUndefined} from 'util';
 
 import {ActiveStatsModifier, DurationChange, IMetadata, StatModifier} from '../shared';
-import {Skill} from '../skill';
+import {Skill, SkillDictionary} from '../skill';
 import {ItemTemplate} from '../item-template';
 import {Item, PartialItem} from '../item';
 import {WsEventServices, WsRegistrable, WebSocketService} from '../websocket';
@@ -10,6 +10,8 @@ import {WsEventServices, WsRegistrable, WebSocketService} from '../websocket';
 import {TargetJsonData} from '../group/target.model';
 import {Fighter} from '../group';
 import {MonsterResponse} from '../api/responses';
+import {MonsterTemplateData} from '../api/shared';
+import {MonsterTemplateResponse} from '../api/responses/monster-template-response';
 
 export class MonsterData {
     at: number;
@@ -52,7 +54,7 @@ export class MonsterComputedData {
     esq: number;
     pr: number;
     pr_magic: number;
-    dmg: {name: string, damage: string, incompatible?: boolean}[] = [];
+    dmg: { name: string, damage: string, incompatible?: boolean }[] = [];
     cou: number;
     chercheNoise: boolean;
     resm: number;
@@ -77,7 +79,7 @@ export class Monster extends WsRegistrable {
     public onChange: Subject<any> = new Subject<any>();
     public onNotification: Subject<any> = new Subject<any>();
 
-    static fromJson(jsonData: MonsterResponse, skillsById: {[skillId: number]: Skill}): Monster {
+    static fromJson(jsonData: MonsterResponse, skillsById: { [skillId: number]: Skill }): Monster {
         let monster = new Monster();
         Object.assign(monster, jsonData, {
             data: MonsterData.fromJson(jsonData.data),
@@ -88,7 +90,7 @@ export class Monster extends WsRegistrable {
         return monster;
     }
 
-    static monstersFromJson(monstersData: any[] | undefined, skillsById: {[skillId: number]: Skill}): Monster[] {
+    static monstersFromJson(monstersData: any[] | undefined, skillsById: { [skillId: number]: Skill }): Monster[] {
         let monsters: Monster[] = [];
 
         if (monstersData) {
@@ -162,8 +164,7 @@ export class Monster extends WsRegistrable {
                 item.data.quantity = remainingQuantity;
                 this.onChange.next({action: 'tookItem', character: character, item: item});
             }
-        }
-        else {
+        } else {
             const item = this.getItem(itemId);
             if (item) {
                 let i = this.items.findIndex(it => it.id === itemId);
@@ -199,20 +200,20 @@ export class Monster extends WsRegistrable {
     }
 
     onAddModifier(modifier: ActiveStatsModifier) {
-        for (let i = 0 ; i < this.modifiers.length; i++) {
+        for (let i = 0; i < this.modifiers.length; i++) {
             if (this.modifiers[i].id === modifier.id) {
                 return;
             }
         }
         this.modifiers.push(modifier);
         this.update();
-        this.notify('addModifier' , 'Ajout du modificateur: ' + modifier.name);
+        this.notify('addModifier', 'Ajout du modificateur: ' + modifier.name);
     }
 
     onRemoveModifier(modifierId: number) {
         for (let i = 0; i < this.modifiers.length; i++) {
             let e = this.modifiers[i];
-            if (e. id === modifierId) {
+            if (e.id === modifierId) {
                 this.modifiers.splice(i, 1);
                 this.update();
                 this.notify('removeModifier', 'Suppression du modificateur: ' + e.name);
@@ -237,9 +238,9 @@ export class Monster extends WsRegistrable {
                 } else {
                     this.notify('updateModifier', 'Mis à jour du modificateur: ' + modifier.name);
                 }
-                this.modifiers[i] .active = modifier.active;
+                this.modifiers[i].active = modifier.active;
                 this.modifiers[i].currentCombatCount = modifier.currentCombatCount;
-                this.modifiers[i] .currentTimeDuration = modifier.currentTimeDuration;
+                this.modifiers[i].currentTimeDuration = modifier.currentTimeDuration;
                 this.modifiers[i].currentLapCount = modifier.currentLapCount;
                 break;
             }
@@ -284,18 +285,18 @@ export class Monster extends WsRegistrable {
     }
 
     update() {
-        this.computedData.at =  this.data.at;
-        this.computedData.prd =  this.data.prd ? this.data.prd : 0;
-        this.computedData.esq =  this.data.esq ? this.data.esq : 0;
-        this.computedData.pr =  this.data.pr;
-        this.computedData.pr_magic =  this.data.pr_magic;
+        this.computedData.at = this.data.at;
+        this.computedData.prd = this.data.prd ? this.data.prd : 0;
+        this.computedData.esq = this.data.esq ? this.data.esq : 0;
+        this.computedData.pr = this.data.pr;
+        this.computedData.pr_magic = this.data.pr_magic;
         if (!this.computedData.pr_magic) {
             this.computedData.pr_magic = 0;
         }
-        this.computedData.dmg =  [{name: 'base', damage: this.data.dmg}];
-        this.computedData.cou =  this.data.cou;
-        this.computedData.chercheNoise =  this.data.chercheNoise;
-        this.computedData.resm =  this.data.resm;
+        this.computedData.dmg = [{name: 'base', damage: this.data.dmg}];
+        this.computedData.cou = this.data.cou;
+        this.computedData.chercheNoise = this.data.chercheNoise;
+        this.computedData.resm = this.data.resm;
 
         for (let activeModifier of this.modifiers) {
             if (activeModifier.active) {
@@ -426,6 +427,17 @@ export class Monster extends WsRegistrable {
     }
 }
 
+export class MonsterInventoryElement {
+    id: number;
+    itemTemplate: ItemTemplate;
+    minCount: number;
+    maxCount: number;
+    chance: number;
+    hidden: boolean;
+    minUg?: number;
+    maxUg?: number;
+}
+
 export class TraitInfo {
     traitId: number;
     level: number;
@@ -435,33 +447,17 @@ export class TraitInfo {
         this.level = level;
     }
 }
-export class MonsterTemplateData {
-    at: number;
-    prd: number | undefined;
-    esq: number | undefined;
-    ev: number;
-    ea: number;
-    cou: number;
-    dmg: string;
-    note: string;
-    pr: number;
-    pr_magic: number;
-    resm: number;
-    xp: number;
-    chercheNoise: boolean;
-    special: boolean;
-    traits: TraitInfo[];
-    page: number;
-}
+
+export type MonsterTemplateCategoryDictionary = { [id: number]: MonsterTemplateCategory };
 
 export class MonsterTemplateCategory {
     id: number;
     name: string;
     type: MonsterTemplateType;
 
-    static fromJson(jsonData: any, type: {[id: number]: MonsterTemplateType}|MonsterTemplateType): MonsterTemplateCategory {
+    static fromJson(jsonData: any, type: { [id: number]: MonsterTemplateType } | MonsterTemplateType): MonsterTemplateCategory {
         let category = new MonsterTemplateCategory();
-        if (type instanceof  MonsterTemplateType) {
+        if (type instanceof MonsterTemplateType) {
             Object.assign(category, jsonData, {type: type});
         } else {
             Object.assign(category, jsonData, {type: type[jsonData.typeId]});
@@ -500,24 +496,6 @@ export class MonsterTemplateType {
     }
 }
 
-export class MonsterSimpleInventory {
-    id: number;
-    itemTemplate: ItemTemplate;
-    minCount: number;
-    maxCount: number;
-    chance: number;
-    hidden: boolean;
-    minUg?: number;
-    maxUg?: number;
-}
-
-export interface CreateMonsterTemplateRequest {
-    id: number;
-    name: string;
-    data: MonsterTemplateData;
-    simpleInventory: MonsterSimpleInventory[];
-    locations: number[];
-}
 
 export class MonsterTemplate {
     id: number;
@@ -525,26 +503,46 @@ export class MonsterTemplate {
     data: MonsterTemplateData;
     categoryId: number;
     category: MonsterTemplateCategory;
-    simpleInventory: MonsterSimpleInventory[];
+    simpleInventory: MonsterInventoryElement[];
     locations: number[];
 
-    static fromJson(jsonData: any, categoriesById: {[id: number]: MonsterTemplateCategory}): MonsterTemplate {
-        let monsterTemplate = new MonsterTemplate();
-        Object.assign(monsterTemplate, jsonData, {category: categoriesById[jsonData.categoryId]});
-        return monsterTemplate;
+    static fromResponse(
+        response: MonsterTemplateResponse,
+        categoriesById: MonsterTemplateCategoryDictionary,
+        skillsById: SkillDictionary
+    ): MonsterTemplate {
+        const category = categoriesById[response.categoryId];
+        const inventory: MonsterInventoryElement[] = [];
+        for (let inventoryElement of response.simpleInventory) {
+            let element = {
+                ...inventoryElement,
+                itemTemplate: ItemTemplate.fromResponse(inventoryElement.itemTemplate, skillsById)
+            };
+            inventory.push(element);
+        }
+
+        return new MonsterTemplate(response.name, category, response.data, inventory);
     }
 
-    static templatessFromJson(jsonDatas: any[], categoriesById: {[id: number]: MonsterTemplateCategory}): MonsterTemplate[] {
+    static templatesFromResponse(
+        responses: MonsterTemplateResponse[],
+        categoriesById: MonsterTemplateCategoryDictionary,
+        skillsById: SkillDictionary
+    ): MonsterTemplate[] {
         let templates: MonsterTemplate[] = [];
-        for (let jsonData of jsonDatas) {
-            templates.push(MonsterTemplate.fromJson(jsonData, categoriesById));
+        for (let response of responses) {
+            templates.push(MonsterTemplate.fromResponse(response, categoriesById, skillsById));
         }
         return templates;
     }
-    constructor() {
-        this.data = new MonsterTemplateData();
+
+    constructor(name: string, category: MonsterTemplateCategory, data: MonsterTemplateData, inventory: MonsterInventoryElement[]) {
+        this.name = name;
+        this.category = category;
+        this.categoryId = category.id; // FIXME: still needed ?
+        this.data = data;
         this.locations = [];
-        this.simpleInventory = [];
+        this.simpleInventory = inventory;
     }
 }
 

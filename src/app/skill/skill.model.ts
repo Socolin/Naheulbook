@@ -1,5 +1,6 @@
 import {Flag, FlagData, StatModifier} from '../shared';
 
+export type SkillDictionary =  { [skillId: number]: Skill };
 export class Skill {
     id: number;
     name: string;

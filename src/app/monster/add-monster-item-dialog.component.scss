@@ -69,6 +69,7 @@
         .ug,
         .chance,
         .quantity {
+            align-items: center;
             display: grid;
             grid-template-columns: minmax(40px, 1fr) minmax(40px, 1fr);
             grid-gap: 8px;

@@ -3,23 +3,23 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ReplaySubject, Observable} from 'rxjs';
 
-import {Skill} from './skill.model';
+import {Skill, SkillDictionary} from './skill.model';
 
 @Injectable()
 export class SkillService {
     private skills: ReplaySubject<Skill[]>;
-    private skillsById: ReplaySubject<{[skillId: number]: Skill}>;
+    private skillsById: ReplaySubject<SkillDictionary>;
 
     constructor(private httpClient: HttpClient) {
     }
 
-    getSkillsById(): Observable<{[skillId: number]: Skill}> {
+    getSkillsById(): Observable<SkillDictionary> {
         if (!this.skillsById) {
-            this.skillsById = new ReplaySubject<{[skillId: number]: Skill}>(1);
+            this.skillsById = new ReplaySubject<SkillDictionary>(1);
 
             this.getSkills().subscribe(
                 skillsJsonData => {
-                    let skillsById: {[skillId: number]: Skill} = {};
+                    let skillsById: SkillDictionary = {};
                     for (let skillJsonData of skillsJsonData) {
                         skillsById[skillJsonData.id] = Skill.fromJson(skillJsonData);
                     }

@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 
 import {MonsterTrait, TraitInfo} from './monster.model';
-import {removeDiacritics} from '../shared/remove_diacritics';
+import {removeDiacritics} from '../shared';
 
 @Component({
     selector: 'monster-trait',

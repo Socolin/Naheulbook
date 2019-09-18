@@ -5,7 +5,7 @@
     <span>
         Créer un modèle de monstre
     </span>
-    <button mat-button>
+    <button mat-button (click)="save()">
         AJOUTER
     </button>
 </mat-toolbar>
@@ -190,11 +190,16 @@
 
     <h2>Traits</h2>
     <div class="traits">
-        <button mat-raised-button>
-            <mat-icon>add</mat-icon>
-            Ajouter
+        <div *ngFor="let trait of selectedTraits">
+            {{traitsById[trait.traitId].name}}{{traitsById[trait.traitId].levels ? ' - ' + trait.level :''}}
+        </div>
+        <button mat-raised-button (click)="openSelectTraitsDialog()">
+            <mat-icon>edit</mat-icon>
+            Sélectionner
         </button>
     </div>
+<!--
+    TODO: Will do this later, when map is done. Only ways I see to do this interface are all too complex and boring
     <h2>Localisations</h2>
     <div class="locations">
         <button mat-raised-button>
@@ -202,14 +207,17 @@
             Ajouter
         </button>
     </div>
+-->
     <h2>Inventaire</h2>
     <div class="inventory">
         <div *ngFor="let inventoryElement of monsterInventory" class="inventory-element">
             <icon [icon]="inventoryElement.itemTemplate.data.icon"></icon>
             <span>
                 <span *ngIf="inventoryElement.minCount === inventoryElement.maxCount && inventoryElement.minCount !== 1">{{inventoryElement.minCount}}</span>
-                <span *ngIf="inventoryElement.minCount !== inventoryElement.maxCount">{{inventoryElement.minCount}}-{{inventoryElement.maxCount}}</span>
+                <span *ngIf="inventoryElement.minCount !== inventoryElement.maxCount">{{inventoryElement.minCount}} - {{inventoryElement.maxCount}}</span>
                 {{inventoryElement.itemTemplate.name}}
+                <span *ngIf="inventoryElement.minUg !== undefined && inventoryElement.minUg !== inventoryElement.maxUg">({{inventoryElement.minUg}} - {{inventoryElement.maxUg}} U.G.)</span>
+                <span *ngIf="inventoryElement.minUg !== undefined && inventoryElement.minUg === inventoryElement.maxUg">({{inventoryElement.minUg}} U.G.)</span>
             </span>
             <span>{{inventoryElement.chance * 100 | number:'1.0-2'}}%</span>
             <span>
@@ -231,99 +239,4 @@
             Ajouter
         </button>
     </div>
-
-    <!--
-    <div class="traits">
-
-        <div>
-            <div>Traits simple</div>
-            <div>
-                <ng-template ngFor let-trait [ngForOf]=simpleTraits>
-                    <button *ngIf="hasTrait(trait)"
-                            mat-raised-button
-                            type="button"
-                            class="btn btn-default"
-                            color="primary"
-                            (click)="toggleTrait(trait)">
-                        {{trait.name}}
-                    </button>
-                    <button *ngIf="!hasTrait(trait)"
-                            mat-button
-                            type="button"
-                            class="btn btn-default"
-                            color="primary"
-                            (click)="toggleTrait(trait)">
-                        {{trait.name}}
-                    </button>
-                </ng-template>
-            </div>
-        </div>
-        <div>
-            <div>Traits</div>
-            <div>
-                <div class="btn-group" role="group">
-                    <ng-template ngFor let-trait [ngForOf]=powerTraits>
-                        <button *ngIf="!hasTrait(trait)"
-                                mat-button
-                                type="button"
-                                class="btn btn-default"
-                                color="primary"
-                                (click)="toggleTrait(trait)">
-                            {{trait.name}}
-                        </button>
-                        <button *ngIf="hasTrait(trait)"
-                                mat-raised-button
-                                type="button"
-                                class="btn btn-default"
-                                [color]="hasTraitLevel(trait, 1) ? 'primary' : (hasTraitLevel(trait, 2) ? 'accent' : 'warn')"
-                                (click)="toggleTrait(trait)">
-                            {{trait.name}}
-                        </button>
-                    </ng-template>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div *ngIf="locationsById">
-            <span style="border-radius: 4px; background-color: #7aa09b; margin-right: 5px"
-                  *ngFor="let locationId of monster.locations">
-                {{locationsById[locationId].name}} <span (click)="removeLocation(locationId)">X</span>
-            </span>
-                <autocomplete-input [placeholder]="'Lieu'"
-                                    [value]="locationSearchName" (onSelect)="selectLocation($event)"
-                                    [(callback)]="autocompleteLocationsCallback"></autocomplete-input>
-
-            </div>
-        </div>
-        <div>
-            <autocomplete-search-item-template [clearOnSelect]="true"
-                                               [placeholder]="'Ajouter un objet dans l\'inventaire'"
-                                               (onSelect)="addItemSimpleInventory($event)">
-            </autocomplete-search-item-template>
-        </div>
-        <mat-card *ngIf="monster.simpleInventory && monster.simpleInventory.length">
-            <mat-card-subtitle>Inventaire</mat-card-subtitle>
-            <ng-template ngFor let-inventory [ngForOf]="monster.simpleInventory" let-i="index">
-                <div>
-                    <button mat-icon-button (click)="removeItemSimpleInventory(i)">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                    {{inventory.itemTemplate.name}}
-                </div>
-                <div>
-                    <mat-form-field>
-                        <input matInput type="number" min=0 [(ngModel)]="inventory.minCount" placeholder="Quantité min" />
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input matInput type="number" min=0 [(ngModel)]="inventory.maxCount" placeholder="Quantité max" />
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input matInput type="number" min=0 step="0.0001" [(ngModel)]="inventory.chance" placeholder="Chance" />
-                    </mat-form-field>
-                    <mat-checkbox [(ngModel)]="inventory.equiped">Equipé</mat-checkbox>
-                    <mat-checkbox [(ngModel)]="inventory.hidden">Caché</mat-checkbox>
-                </div>
-            </ng-template>
-        </mat-card>
-    </div>-->
 </div>

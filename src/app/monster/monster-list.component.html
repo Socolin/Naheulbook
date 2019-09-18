@@ -5,37 +5,9 @@
         </mat-icon>
     </button>
 </div>
-<div>
-    <mat-card>
-        <button mat-raised-button color="primary" *ngIf="!newMonsterTemplate" (click)="startAddMonster()">CRÉÉ UN MONSTRE</button>
-        <mat-card-content *ngIf="newMonsterTemplate">
-            <monster-editor [monster]="newMonsterTemplate"></monster-editor>
-
-        </mat-card-content>
-        <mat-card-actions *ngIf="newMonsterTemplate" align="end">
-            <button mat-button
-                    color="primary"
-                    (click)="cancelAddMonster()">
-                ANNULER
-            </button>
-            <button mat-button
-                    color="primary"
-                    [disabled]="!newMonsterTemplate.category || !newMonsterTemplate.name"
-                    (click)="addMonster()">
-                AJOUTER
-            </button>
-            <button mat-button
-                    color="primary"
-                    [disabled]="!newMonsterTemplate.category || !newMonsterTemplate.name"
-                    (click)="addMonsterContinue()">
-                AJOUTER ET CONTINUER
-            </button>
-        </mat-card-actions>
-    </mat-card>
-    <div *ngFor="let category of categories;">
-        <h3>{{category.name}}</h3>
-        <div *ngFor="let monster of monsterByCategory[category.id]; let last=last">
-            <monster-template [monster]="monster"></monster-template>
-        </div>
+<div *ngFor="let category of categories;">
+    <h3>{{category.name}}</h3>
+    <div *ngFor="let monster of monsterByCategory[category.id]; let last=last">
+        <monster-template [monster]="monster"></monster-template>
     </div>
 </div>
