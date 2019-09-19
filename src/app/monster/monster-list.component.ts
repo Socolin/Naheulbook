@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 
-import {NotificationsService} from '../notifications';
-
-import {MonsterTemplate, MonsterTemplateCategory} from './monster.model';
+import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateType} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
 import {MatDialog} from '@angular/material/dialog';
 import {EditMonsterTemplateDialogComponent} from './edit-monster-template-dialog.component';
+import {LoginService} from '../user';
+import {forkJoin} from 'rxjs';
 
 @Component({
     selector: 'monster-list',
@@ -13,15 +13,26 @@ import {EditMonsterTemplateDialogComponent} from './edit-monster-template-dialog
     styleUrls: ['./monster-list.component.scss']
 })
 export class MonsterListComponent implements OnInit {
+    public monsterTypes: MonsterTemplateType[];
+    public selectedMonsterType: MonsterTemplateType;
+    public selectedMonsterCategory?: MonsterTemplateCategory;
     public monsters: MonsterTemplate[];
     public categories: MonsterTemplateCategory[] = [];
     public monsterByCategory: {[categoryId: number]: MonsterTemplate[]} = {};
+    public isAdmin = false;
 
     constructor(
-        private _monsterTemplateService: MonsterTemplateService,
-        private _notifications: NotificationsService,
+        private loginService: LoginService,
+        private monsterTemplateService: MonsterTemplateService,
         private dialog: MatDialog
     ) {
+    }
+
+    selectMonsterType(monsterType: MonsterTemplateType) {
+        this.selectedMonsterType = monsterType;
+        if (monsterType.categories.length) {
+            this.selectedMonsterCategory = monsterType.categories[0];
+        }
     }
 
     sortMonsterByCategory() {
@@ -39,17 +50,8 @@ export class MonsterListComponent implements OnInit {
         this.categories = categories;
     }
 
-    getMonsters() {
-        this._monsterTemplateService.getMonsterList().subscribe(
-            res => {
-                this.monsters = res;
-                this.sortMonsterByCategory();
-            }
-        );
-    }
-
     openCreateMonsterTemplateDialog() {
-        const dialogRef = this.dialog.open(EditMonsterTemplateDialogComponent, {
+        this.dialog.open(EditMonsterTemplateDialogComponent, {
             autoFocus: false,
             minWidth: '100vw',
             height: '100vh',
@@ -58,6 +60,17 @@ export class MonsterListComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getMonsters();
+        forkJoin([
+            this.monsterTemplateService.getMonsterTypes(),
+            this.monsterTemplateService.getMonsterList()
+        ]).subscribe(
+            ([monsterTypes, monsters]) => {
+                this.selectMonsterType(monsterTypes[0]);
+                this.monsterTypes = monsterTypes;
+                this.monsters = monsters;
+                this.sortMonsterByCategory();
+            }
+        );
+        this.isAdmin = this.loginService.currentLoggedUser && this.loginService.currentLoggedUser.admin;
     }
 }

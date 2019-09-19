@@ -1,17 +1,82 @@
+@import "~app/style/responsive-utils";
+
 :host {
     mat-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        display: grid;
+        grid-template-columns: 1fr 40px;
+        gap: 8px;
     }
 
-    .monster-stat-row {
-        display: flex;
-        flex-wrap: wrap;
+    mat-card-content {
+        .field {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
 
-        > div {
-            flex: 1 0 60px;
+
+            .label {
+            }
+
+            .value {
+
+            }
+
+            .label::after {
+            }
         }
+
+        .monster-stats-row {
+            display: grid;
+            grid-gap: 16px;
+            grid-template-columns: minmax(15px, 150px)  minmax(15px, 150px)  minmax(15px, 150px) minmax(15px, 150px)
+            minmax(15px, 150px) minmax(26px, 150px) minmax(15px, 150px) minmax(15px, 150px);
+            grid-template-areas: "at prd esq ev ea pr cou xp";
+
+            .at {
+                grid-area: at;
+            }
+            .prd {
+                grid-area: prd;
+            }
+            .esq {
+                grid-area: esq;
+            }
+            .ev {
+                grid-area: ev;
+            }
+            .ea {
+                grid-area: ea;
+            }
+            .pr {
+                grid-area: pr;
+            }
+            .cou {
+                grid-area: cou;
+            }
+            .xp {
+                grid-area: xp;
+            }
+            .xp {
+                grid-area: xp;
+            }
+        }
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .section-content {
+        margin-left: 16px;
+    }
+
+    .inventory-element {
+        align-items: center;
+        display: grid;
+        grid-template-columns: 32px 1fr auto;
+        grid-gap: 8px;
     }
 
     .monster-traits-row {

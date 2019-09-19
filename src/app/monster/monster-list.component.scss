@@ -12,6 +12,26 @@
         min-height: calc(100vh - 16px - 56px - #{$padding-useful-data-button});
     }
 
+    .monster-category-selector {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+
+        @include for-phone-only {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .monster-templates {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        > mat-form-field {
+            width: 100%;
+        }
+    }
+
     .add-button {
         z-index: 1;
         position: fixed;

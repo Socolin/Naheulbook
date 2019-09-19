@@ -17,6 +17,7 @@ import {
 })
 export class MonsterTemplateComponent implements OnInit {
     @Input() monsterTemplate: MonsterTemplate;
+    @Input() isAdmin: boolean;
     public traisById?: MonsterTraitDictionary;
 
     constructor(
