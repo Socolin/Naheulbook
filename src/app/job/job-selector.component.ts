@@ -1,4 +1,4 @@
-import {Component, Input, EventEmitter, Output, OnInit, OnChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 
 import {generateAllStatsPair, getRandomInt} from '../shared';
 
@@ -7,17 +7,24 @@ import {Origin} from '../origin';
 import {Job} from './job.model';
 import {JobService} from './job.service';
 
+type JobAvailability = {
+    title: string,
+    state: 'ok' | 'ko' | 'swap',
+    icon: string,
+    jobs: Job[]
+};
+
 @Component({
     selector: 'job-selector',
     templateUrl: './job-selector.component.html',
     styleUrls: ['./job-selector.component.scss'],
 })
 export class JobSelectorComponent implements OnInit, OnChanges {
-    @Input('cou') cou: number;
-    @Input('cha') cha: number;
-    @Input('int') int: number;
-    @Input('ad') ad: number;
-    @Input('fo') fo: number;
+    @Input() cou: number;
+    @Input() cha: number;
+    @Input() int: number;
+    @Input() ad: number;
+    @Input() fo: number;
 
     @Output() jobChange: EventEmitter<Job> = new EventEmitter<Job>();
     @Output() swapStats: EventEmitter<string[]> = new EventEmitter<string[]>();
@@ -29,8 +36,10 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     public stats: { [statName: string]: number } = {};
     public allJobs: Job[] = [];
     public jobs: Job[] = [];
-    public jobsStates: { [jobId: number]: { state: string, changes?: any[] } };
+    public jobsStates: { [jobId: number]: { changes?: any[] } };
     public swapList: string[][];
+    public availabilityOk: JobAvailability;
+    public availabilities: JobAvailability[] = [];
 
     static isJobValid(job: Job, stats: { [statName: string]: number }): boolean {
         for (let req of job.requirements) {
@@ -84,13 +93,18 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     updateJobStates() {
         this.updateStats();
         let jobsStates = {};
+        const {availabilityOk, availabilitySwap, availabilityKo} = this.createAvailabilities();
+
         for (let job of this.jobs) {
+            if (!this.isVisible(job)) {
+                continue;
+            }
             if (JobSelectorComponent.isJobValid(job, this.stats)) {
-                jobsStates[job.id] = {state: 'ok'};
+                availabilityOk.jobs.push(job);
             }
             else {
                 if (!this.allowSwapStats) {
-                    jobsStates[job.id] = {state: 'ko'};
+                    availabilityKo.jobs.push(job);
                     continue;
                 }
                 let validSwap: string[][] = [];
@@ -104,17 +118,42 @@ export class JobSelectorComponent implements OnInit, OnChanges {
                     }
                 }
                 if (validSwap.length) {
-                    jobsStates[job.id] = {state: 'swap', changes: validSwap};
+                    availabilitySwap.jobs.push(job);
+                    jobsStates[job.id] = {changes: validSwap};
                 } else {
-                    jobsStates[job.id] = {state: 'ko'};
+                    availabilityKo.jobs.push(job);
                 }
             }
         }
         this.jobsStates = jobsStates;
+        this.availabilities = [
+            availabilityOk,
+            availabilitySwap,
+            availabilityKo
+        ];
+        this.availabilityOk = availabilityOk;
     }
 
-    isAvailable(job: Job) {
-        return this.jobsStates[job.id].state === 'ok';
+    private createAvailabilities() {
+        const availabilityOk = {
+            title: 'Métiers disponibles',
+            state: 'ok',
+            icon: 'check',
+            jobs: []
+        } as JobAvailability;
+        const availabilitySwap = {
+            title: 'Métiers disponible en inversant deux caractéristiques',
+            state: 'swap',
+            icon: 'sync',
+            jobs: []
+        } as JobAvailability;
+        const availabilityKo = {
+            title: 'Métiers non disponibles',
+            state: 'ko',
+            icon: 'close',
+            jobs: []
+        } as JobAvailability;
+        return {availabilityOk, availabilitySwap, availabilityKo};
     }
 
     selectJob(job: Job | undefined) {
@@ -150,26 +189,13 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     }
 
     randomSelect(): void {
-        let count = 1;
-        for (let i = 0; i < this.jobs.length; i++) {
-            let job = this.jobs[i];
-            if (this.isVisible(job) && this.isAvailable(job)) {
-                count++;
-            }
+        const count = this.availabilityOk.jobs.length;
+        const rnd = getRandomInt(1, count + 1);
+        if (rnd > count) {
+            this.selectJob(undefined);
+        } else {
+            this.selectJob(this.availabilityOk.jobs[rnd - 1]);
         }
-        let rnd = getRandomInt(1, count);
-        count = 0;
-        for (let i = 0; i < this.jobs.length; i++) {
-            let job = this.jobs[i];
-            if (this.isVisible(job) && this.isAvailable(job)) {
-                count++;
-                if (count === rnd) {
-                    this.selectJob(this.jobs[i]);
-                    return;
-                }
-            }
-        }
-        this.selectJob(undefined);
     }
 
     private updateStats() {

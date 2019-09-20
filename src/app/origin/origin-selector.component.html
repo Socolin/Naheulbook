@@ -1,38 +1,34 @@
-<mat-accordion [multi]="false">
-    <ng-template ngFor [ngForOf]="origins" let-origin>
-        <mat-expansion-panel>
+<div *ngFor="let availability of availabilities">
+    <h3 class="mat-h3 availability-title">{{availability.title}}</h3>
+
+    <mat-accordion [multi]="false">
+        <mat-expansion-panel *ngFor="let origin of availability.origins">
             <mat-expansion-panel-header>
                 <div class="origin-title">
-                    <span *ngIf="originsStates[origin.id].state === 'ok'" class="icon-available">
-                        <mat-icon>check</mat-icon>
-                    </span>
-                    <span *ngIf="originsStates[origin.id].state === 'ko'" class="icon-available">
-                        <mat-icon>close</mat-icon>
-                    </span>
-                    <span *ngIf="originsStates[origin.id].state === 'swap'" class="icon-available">
-                        <mat-icon>sync</mat-icon>
-                    </span>
-                    <span>
-                        {{origin.name}}
-                    </span>
+                <span class="icon-available">
+                    <mat-icon>{{availability.icon}}</mat-icon>
+                </span>
+                <span>
+                    {{origin.name}}
+                </span>
                 </div>
             </mat-expansion-panel-header>
 
             <p class="prereq">
                 Prérequis:
                 <ng-template ngFor [ngForOf]="origin.requirements" let-req let-last="last">
-                    <span class="invalid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
-                        {{req.stat|uppercase}} &ge; {{req.min}}
-                    </span>
+                <span class="invalid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
+                    {{req.stat|uppercase}} &ge; {{req.min}}
+                </span>
                     <span class="invalid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
-                        {{req.stat|uppercase}} &le; {{req.max}}
-                    </span>
+                    {{req.stat|uppercase}} &le; {{req.max}}
+                </span>
                     <span class="valid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
-                        {{req.stat|uppercase}} &ge; {{req.min}}
-                    </span>
+                    {{req.stat|uppercase}} &ge; {{req.min}}
+                </span>
                     <span class="valid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
-                        {{req.stat|uppercase}} &le; {{req.max}}
-                    </span>
+                    {{req.stat|uppercase}} &le; {{req.max}}
+                </span>
                     <span *ngIf="!last">,</span>
                 </ng-template>
                 <span *ngIf="!origin.requirements.length">aucun</span>
@@ -49,14 +45,15 @@
                 </ul>
             </div>
 
-            <mat-action-row *ngIf="originsStates[origin.id].state === 'ok'" align="end">
+            <mat-action-row *ngIf="availability.state === 'ok'" align="end">
                 <button color="primary" mat-button (click)="selectOrigin(origin)">CHOISIR</button>
             </mat-action-row>
-            <mat-action-row *ngIf="originsStates[origin.id].state === 'swap'" align="end" class="swap-buttons">
+            <mat-action-row *ngIf="availability.state === 'swap'" align="end" class="swap-buttons">
                 <ng-template ngFor [ngForOf]="originsStates[origin.id].changes" let-change>
                     <button class="swap-button" color="primary" mat-button (click)="doSwapStats(change)">INVERSER {{change[0]}} et {{change[1]}}</button>
                 </ng-template>
             </mat-action-row>
         </mat-expansion-panel>
-    </ng-template>
-</mat-accordion>
+    </mat-accordion>
+
+</div>

@@ -4,17 +4,24 @@ import {Origin} from './origin.model';
 import {OriginService} from './origin.service';
 import {generateAllStatsPair, getRandomInt} from '../shared';
 
+type OriginAvailability = {
+    title: string,
+    state: 'ok' | 'ko' | 'swap',
+    icon: string,
+    origins: Origin[]
+};
+
 @Component({
     selector: 'origin-selector',
     templateUrl: './origin-selector.component.html',
     styleUrls: ['./origin-selector.component.scss'],
 })
 export class OriginSelectorComponent implements OnInit, OnChanges {
-    @Input('cou') cou: number;
-    @Input('cha') cha: number;
-    @Input('int') int: number;
-    @Input('ad') ad: number;
-    @Input('fo') fo: number;
+    @Input() cou: number;
+    @Input() cha: number;
+    @Input() int: number;
+    @Input() ad: number;
+    @Input() fo: number;
 
     @Input() selectedOrigin?: Origin;
     @Output() originChange: EventEmitter<Origin> = new EventEmitter<Origin>();
@@ -22,8 +29,10 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
 
     public stats: { [statName: string]: number } = {};
     public origins: Origin[] = [];
-    public originsStates: { [originId: number]: { state: string, changes?: any[] } };
+    public originsStates: { [originId: number]: { changes?: any[] } };
     public swapList: string[][];
+    public availabilityOk: OriginAvailability;
+    public availabilities: OriginAvailability[] = [];
 
     static isOriginValid(origin: Origin, stats: { [statName: string]: number }): boolean {
         for (let req of origin.requirements) {
@@ -47,12 +56,13 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
 
     updateOriginStates() {
         this.updateStats();
-        let originsStates = {};
+        const {availabilityOk, availabilitySwap, availabilityKo} = this.createAvailabilities();
+
+        const originsStates = {};
         for (let origin of this.origins) {
             if (OriginSelectorComponent.isOriginValid(origin, this.stats)) {
-                originsStates[origin.id] = {state: 'ok'};
-            }
-            else {
+                availabilityOk.origins.push(origin);
+            } else {
                 let validSwap: string[][] = [];
                 for (let swap of this.swapList) {
                     let testStats = Object.assign({}, this.stats);
@@ -64,27 +74,52 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
                     }
                 }
                 if (validSwap.length) {
-                    originsStates[origin.id] = {state: 'swap', changes: validSwap};
+                    availabilitySwap.origins.push(origin);
+                    originsStates[origin.id] = {changes: validSwap};
                 } else {
-                    originsStates[origin.id] = {state: 'ko'};
+                    availabilityKo.origins.push(origin);
                 }
             }
         }
         this.originsStates = originsStates;
+        this.availabilities = [
+            availabilityOk,
+            availabilitySwap,
+            availabilityKo
+        ];
+        this.availabilityOk = availabilityOk;
+    }
+
+    private createAvailabilities() {
+        const availabilityOk = {
+            title: 'Origines disponibles',
+            state: 'ok',
+            icon: 'check',
+            origins: []
+        } as OriginAvailability;
+        const availabilitySwap = {
+            title: 'Origines disponible en inversant deux caractéristiques',
+            state: 'swap',
+            icon: 'sync',
+            origins: []
+        } as OriginAvailability;
+        const availabilityKo = {
+            title: 'Origines non disponibles',
+            state: 'ko',
+            icon: 'close',
+            origins: []
+        } as OriginAvailability;
+        return {availabilityOk, availabilitySwap, availabilityKo};
     }
 
     doSwapStats(change: string[]) {
         this.swapStats.emit(change);
     }
 
-    selectOrigin(origin: Origin) {
-        if (this.originsStates[origin.id].state === 'ok') {
-            this.selectedOrigin = origin;
-            this.originChange.emit(origin);
-        }
-        return false;
+    selectOrigin(origin: Origin): void {
+        this.selectedOrigin = origin;
+        this.originChange.emit(origin);
     }
-
 
     getOrigins() {
         this._originService.getOriginList().subscribe(
@@ -99,22 +134,9 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
     }
 
     randomSelect(): void {
-        let count = 0;
-        for (let i = 0; i < this.origins.length; i++) {
-            if (this.originsStates[this.origins[i].id].state === 'ok') {
-                count++;
-            }
-        }
-        let rnd = getRandomInt(1, count);
-        count = 0;
-        for (let i = 0; i < this.origins.length; i++) {
-            if (this.originsStates[this.origins[i].id].state === 'ok') {
-                count++;
-                if (count === rnd) {
-                    this.selectOrigin(this.origins[i]);
-                }
-            }
-        }
+        const count = this.availabilityOk.origins.length;
+        const rnd = getRandomInt(1, count);
+        this.selectOrigin(this.availabilityOk.origins[rnd - 1]);
     }
 
     private updateStats() {
