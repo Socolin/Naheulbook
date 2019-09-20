@@ -1,24 +1,18 @@
 import {forkJoin, Subscription} from 'rxjs';
-import {
-    Component, OnInit, OnDestroy, Input, ViewChildren, HostListener, QueryList, ViewChild, EventEmitter, Output
-} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import {Overlay} from '@angular/cdk/overlay';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {smoothScrollTo} from '../shared/scroll';
-import {God, removeDiacritics} from '../shared';
+import {God, MiscService, removeDiacritics} from '../shared';
 
 import {LoginService} from '../user';
 import {OriginService} from '../origin';
 import {JobService} from '../job';
 
-import {ItemCategory, ItemTemplate} from './item-template.model';
+import {ItemCategory, ItemSection, ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 import {ItemCategoryDirective} from './item-category.directive';
-import {ItemSection} from './item-template.model';
-import {MiscService} from '../shared/misc.service';
 import {MatDialog} from '@angular/material';
 import {CreateItemTemplateDialogComponent} from './create-item-template-dialog.component';
 
@@ -45,6 +39,9 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     @Input() inTab: boolean;
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
     public itemSections: ItemSection[];
+    public selectedItemCategory?: ItemCategory;
+    public previousSubCategory?: ItemCategory;
+    public nextSubCategory?: ItemCategory;
     public items: ItemTemplate[] = [];
     public selectedSection: ItemSection;
     public originsName: {[originId: number]: string};
@@ -53,44 +50,11 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
 
     public queryParamsSub: Subscription;
 
-    @ViewChild('stickyContainer', {static: true})
-    public stickyContainer: Portal<any>;
-    public stickyContainerOverlay?: OverlayRef;
-
     @ViewChildren(ItemCategoryDirective)
     public stickToTopElements: QueryList<ItemCategoryDirective>;
 
-    public filter: {name?: string, dice?: number, category?: ItemCategory};
-    public itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
-    public filteredCategories: ItemCategory[] = [];
-
-    public stickyCategory: ItemCategory;
-    public sticked?: ItemCategoryDirective;
-    public expandedSticky = false;
-
-    @HostListener('window:scroll', [])
-    onWindowScroll() {
-        if (this.inTab) {
-            return;
-        }
-        let lastOutsideScreen: ItemCategoryDirective | undefined;
-        for (let element of this.stickToTopElements.toArray()) {
-            let top = element.elementRef.nativeElement.getBoundingClientRect().top;
-            if (top > 20) {
-                break;
-            }
-            lastOutsideScreen = element;
-        }
-        if (lastOutsideScreen && lastOutsideScreen !== this.sticked) {
-            this.stickyCategory = lastOutsideScreen.category;
-            this.openStickyContainer();
-            this.sticked = lastOutsideScreen;
-        }
-        if (!lastOutsideScreen && this.sticked) {
-            this.sticked = undefined;
-            this.closeStickyContainer();
-        }
-    }
+    public filter: {name?: string, dice?: number};
+    public visibleItems: ItemTemplate[] = [];
 
     constructor(private _router: Router
         , public overlay: Overlay
@@ -104,56 +68,9 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         this.resetFilter();
     }
 
-    openStickyContainer() {
-        if (this.stickyContainerOverlay) {
-            return;
-        }
-        let config = new OverlayConfig();
-        config.width = '100%';
-        config.positionStrategy = this.overlay.position()
-            .global()
-            .left('0')
-            .top('0');
-
-        this.stickyContainerOverlay = this.overlay.create(config);
-        this.stickyContainerOverlay.attach(this.stickyContainer);
-    }
-
-    closeStickyContainer() {
-        if (this.stickyContainerOverlay) {
-            this.stickyContainerOverlay.detach();
-            this.stickyContainerOverlay = undefined;
-        }
-    }
-
-    expandStickyCategory() {
-        this.expandedSticky = true;
-    }
-
-    collapseStickyCategory() {
-        this.expandedSticky = false;
-    }
-
-    scrollToCategory(category: ItemCategory) {
-        for (let element of this.stickToTopElements.toArray()) {
-            if (element.category.id === category.id) {
-                window.scrollBy({
-                    top: element.elementRef.nativeElement.getBoundingClientRect().top,
-                    behavior: 'smooth'
-                });
-            }
-        }
-        this.expandedSticky = false;
-        return false;
-    }
-
-    backToTop() {
-        smoothScrollTo(0, 0, 300);
-    }
-
     resetFilter() {
-        this.filter = {name: undefined, dice: undefined, category: undefined};
-        this.updateFilter();
+        this.filter = {name: undefined, dice: undefined};
+        this.updateVisibleItems();
     }
 
     selectSectionById(sectionId: number) {
@@ -177,16 +94,11 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
             }
 
             this.selectedSection = section;
-            this.filter.category = undefined;
+            this.selectCategory(section.categories[0]);
             this.resetFilter();
             this.loadSection(section);
         }
         return false;
-    }
-
-    selectCategory(category: ItemCategory) {
-        this.filter.category = category;
-        this.updateFilter();
     }
 
     trackById(index, element) {
@@ -194,10 +106,8 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     }
 
     isVisible(item: ItemTemplate) {
-        if (this.filter.category) {
-            if (item.categoryId !== this.filter.category.id) {
-                return false;
-            }
+        if (item.categoryId !== this.selectedItemCategory.id) {
+            return false;
         }
         if (item.data.diceDrop && this.filter && this.filter.dice) {
             return item.data.diceDrop === this.filter.dice;
@@ -213,29 +123,12 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         this.selectedSection = section;
         this._itemTemplateService.getItems(section).subscribe(items => {
             this.items = items;
-            this.updateFilter();
+            this.updateVisibleItems();
         });
     }
 
-    updateFilter() {
-        let filteredCategories: ItemCategory[] = [];
-        let itemsByCategory: {[categoryId: number]: ItemTemplate[]} = {};
-        for (let i = 0; i < this.items.length; i++) {
-            let item = this.items[i];
-            if (!this.isVisible(item)) {
-                continue;
-            }
-            if (!itemsByCategory[item.categoryId]) {
-                itemsByCategory[item.categoryId] = [];
-                let category = this.selectedSection.categories.find(c => c.id === item.categoryId);
-                if (category) {
-                    filteredCategories.push(category);
-                }
-            }
-            itemsByCategory[item.categoryId].push(item);
-        }
-        this.itemsByCategory = itemsByCategory;
-        this.filteredCategories = filteredCategories;
+    updateVisibleItems() {
+        this.visibleItems = this.items.filter(item => this.isVisible(item));
     }
 
     hasSpecial(token: string) {
@@ -272,7 +165,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         let [itemSection, itemCategory] = result;
         this.selectSection(itemSection);
         this.filter.name = itemTemplate.name;
-        this.filter.category = itemCategory;
+        this.selectedItemCategory = itemCategory;
     }
 
     openCreateItemTemplateDialog() {
@@ -302,7 +195,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
             this._originService.getOriginsNamesById(),
             this._itemTemplateService.getSectionsList(),
             this._miscService.getGodsByTechName(),
-        ]).subscribe(([jobsName, originsName, sections, godsByTechName]: [{[jobId: number]: string}, {[jobId: number]: string}, ItemSection[], {[techName: string]: God}]) => {
+        ]).subscribe(([jobsName, originsName, sections, godsByTechName]) => {
             this.originsName = originsName;
             this.jobsName = jobsName;
             this.itemSections = sections;
@@ -320,7 +213,17 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         if (this.queryParamsSub) {
             this.queryParamsSub.unsubscribe();
         }
-        this.closeStickyContainer();
+    }
+
+    selectCategory(itemCategory: ItemCategory) {
+        this.selectedItemCategory = itemCategory;
+        const index = this.selectedSection.categories.indexOf(itemCategory);
+        let previousIndex = (index - 1 + this.selectedSection.categories.length) % this.selectedSection.categories.length;
+        this.previousSubCategory = this.selectedSection.categories[previousIndex];
+        let nextIndex = (index + 1) % this.selectedSection.categories.length;
+        this.nextSubCategory = this.selectedSection.categories[nextIndex];
+        this.updateVisibleItems();
+        document.getElementById('first-item').scrollIntoView();
     }
 }
 

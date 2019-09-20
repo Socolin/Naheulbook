@@ -2,7 +2,9 @@
     <mat-card-content>
         Les joueurs n'achètent JAMAIS le matériel en piochant eux-mêmes dans les tableaux. Vous pouvez créer vos propre
         objets grace à l'éditeur. Ce dernier pouvant être complexe il est conseillé de copié un autre objets,
-        à l'aide du bouton <mat-icon>content_copy</mat-icon>, puis de le modifier. Si vous souhaitez seulement changer
+        à l'aide du bouton
+        <mat-icon>content_copy</mat-icon>
+        , puis de le modifier. Si vous souhaitez seulement changer
         le nom, cet option est déjà disponible lors de l'ajout d'un objet sur un personnage.
     </mat-card-content>
     <mat-card-actions align="end">
@@ -10,12 +12,22 @@
     </mat-card-actions>
 </mat-card>
 <mat-card class="section-selector">
-    <mat-form-field style="width: 100%">
+    <mat-form-field class="category">
         <mat-select [ngModel]="selectedSection"
-                   (selectionChange)="selectSection($event.value)"
-                   placeholder="Section">
+                    (selectionChange)="selectSection($event.value)"
+                    placeholder="Section">
             <mat-option *ngFor="let section of itemSections" [value]="section">
                 {{section.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="selectedSection" class="sub-category">
+        <mat-select [ngModel]="selectedItemCategory"
+                    (selectionChange)="selectCategory($event.value)"
+                    placeholder="Sous-section">
+            <mat-option [value]="null"></mat-option>
+            <mat-option *ngFor="let category of selectedSection.categories" [value]="category">
+                {{category.name}}
             </mat-option>
         </mat-select>
     </mat-form-field>
@@ -36,87 +48,41 @@
     <mat-card-subtitle>Filtre</mat-card-subtitle>
     <mat-card-content class="filters">
         <mat-form-field class="name">
-            <input matInput placeholder="Filtre" [(ngModel)]="filter.name" (change)="updateFilter()"/>
+            <input matInput placeholder="Filtre" [(ngModel)]="filter.name" (change)="updateVisibleItems()"/>
         </mat-form-field>
         <mat-form-field *ngIf="hasSpecial('DICE_DROP')" class="dice-drop">
-            <input matInput placeholder="Dé" [(ngModel)]="filter.dice" type="number" (change)="updateFilter()"/>
-        </mat-form-field>
-        <mat-form-field *ngIf="selectedSection" class="category">
-            <mat-select [ngModel]="filter.category"
-                       (selectionChange)="selectCategory($event.value)"
-                       placeholder="Sous-section">
-                <mat-option [value]="null"></mat-option>
-                <mat-option *ngFor="let category of selectedSection.categories" [value]="category">
-                    {{category.name}}
-                </mat-option>
-            </mat-select>
+            <input matInput placeholder="Dé" [(ngModel)]="filter.dice" type="number" (change)="updateVisibleItems()"/>
         </mat-form-field>
     </mat-card-content>
     <mat-card-actions align="end">
         <button mat-button color="primary" (click)="resetFilter()">RESET</button>
     </mat-card-actions>
 </mat-card>
-
-<ng-template ngFor let-category [ngForOf]="filteredCategories" [ngForTrackBy]="trackById">
-    <div itemCategory [category]="category" [id]="category.id">
-        <mat-toolbar  color="primary">
-            <h3>
-                {{category.name}}
-            </h3>
-        </mat-toolbar>
-        <mat-card *ngIf="category.note">
-            <mat-card-subtitle>Note</mat-card-subtitle>
-            <mat-card-content>
-                {{category.note}}
-            </mat-card-content>
-        </mat-card>
-    </div>
-    <ng-template ngFor let-item [ngForOf]="itemsByCategory[category.id]" [ngForTrackBy]="trackById">
-        <div class="item-element">
-            <item-template class="item-element"
-                           *ngIf="isVisible(item)"
-                           [originsName]="originsName"
-                           [jobsName]="jobsName"
-                           [godsByTechName]="godsByTechName"
-                           [editable]="isEditable(item) && !inTab"
-                           [copyable]="_loginService.currentLoggedUser != undefined"
-                           [actions]="inTab ? ['addItem'] : []"
-                           (onAction)="emitAction($event.action, $event.data)"
-                           [itemTemplate]="item">
-            </item-template>
-        </div>
-    </ng-template>
-</ng-template>
-
-<ng-template #stickyContainer="cdkPortal" cdk-portal>
-    <div style="width: 100%">
-        <mat-toolbar class="sticky-category" color="primary">
-            <button mat-icon-button (click)="backToTop()">
-                <mat-icon>arrow_upward</mat-icon>
-            </button>
-
-            <h3>
-                {{stickyCategory.name}}
-            </h3>
-            <h3>
-                <button *ngIf="!expandedSticky" mat-icon-button (click)="expandStickyCategory()">
-                    <mat-icon>expand_more</mat-icon>
-                </button>
-                <button *ngIf="expandedSticky" mat-icon-button (click)="collapseStickyCategory()">
-                    <mat-icon>expand_less</mat-icon>
-                </button>
-            </h3>
-        </mat-toolbar>
-        <div class="sticky-category-list" [@stickyExpand]="expandedSticky">
-            <mat-nav-list>
-                <ng-template ngFor let-category [ngForOf]="filteredCategories">
-                    <a mat-list-item
-                       [class.selected]="stickyCategory === category"
-                       (click)="scrollToCategory(category)">
-                        {{category.name}}
-                    </a>
-                </ng-template>
-            </mat-nav-list>
-        </div>
+<span id="first-item"></span>
+<ng-template ngFor let-item [ngForOf]="visibleItems" [ngForTrackBy]="trackById">
+    <div class="item-element">
+        <item-template class="item-element"
+                       *ngIf="isVisible(item)"
+                       [originsName]="originsName"
+                       [jobsName]="jobsName"
+                       [godsByTechName]="godsByTechName"
+                       [editable]="isEditable(item) && !inTab"
+                       [copyable]="_loginService.currentLoggedUser != undefined"
+                       [actions]="inTab ? ['addItem'] : []"
+                       (onAction)="emitAction($event.action, $event.data)"
+                       [itemTemplate]="item">
+        </item-template>
     </div>
 </ng-template>
+<div *ngIf="nextSubCategory && previousSubCategory" class="prev-next-buttons">
+    <button mat-raised-button
+            (click)="selectCategory(previousSubCategory)">
+        <mat-icon>navigate_before</mat-icon>
+        {{previousSubCategory.name}}
+    </button>
+    <button mat-raised-button
+            (click)="selectCategory(nextSubCategory)">
+        {{nextSubCategory.name}}
+        <mat-icon>navigate_next</mat-icon>
+    </button>
+</div>

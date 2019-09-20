@@ -7,6 +7,7 @@ import {HttpClient} from '@angular/common/http';
 
 import {Job} from './job.model';
 import {Skill, SkillService} from '../skill';
+import {NamesByNumericId} from '../shared/shared,model';
 
 @Injectable()
 export class JobService {
@@ -72,7 +73,7 @@ export class JobService {
         }));
     }
 
-    getJobsNamesById(): Observable<{[jobId: number]: string}> {
+    getJobsNamesById(): Observable<NamesByNumericId> {
         return this.getJobList().pipe(map((jobs: Job[]) => {
             let jobNamesById = {};
             jobs.map(j => jobNamesById[j.id] = j.name);

@@ -6,7 +6,7 @@ import {HttpClient} from '@angular/common/http';
 
 import {Stat} from './stat.model';
 import {ItemTemplate} from '../item-template';
-import {God} from './god.model';
+import {God, GodByTechName} from './god.model';
 
 @Injectable()
 export class MiscService {
@@ -52,7 +52,7 @@ export class MiscService {
         return this.gods;
     }
 
-    getGodsByTechName(): Observable<{ [techName: string]: God }> {
+    getGodsByTechName(): Observable<GodByTechName> {
         return this.getGods().pipe(map((gods: God[]) => {
             let godsByTechName = {};
             gods.map(g => godsByTechName[g.techName] = g);

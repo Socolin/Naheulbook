@@ -7,6 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {SkillDictionary, SkillService} from '../skill';
 import {Origin, OriginDictionary} from './origin.model';
 import {OriginResponse} from '../api/responses';
+import {NamesByNumericId} from '../shared/shared,model';
 
 @Injectable()
 export class OriginService {
@@ -51,7 +52,7 @@ export class OriginService {
         }));
     }
 
-    getOriginsNamesById(): Observable<{[originId: number]: string}> {
+    getOriginsNamesById(): Observable<NamesByNumericId> {
         return this.getOriginList().pipe(map((origins: Origin[]) => {
             let originNamesById = {};
             origins.map(o => originNamesById[o.id] = o.name);

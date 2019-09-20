@@ -1,34 +1,73 @@
-mat-card {
-    margin: 5px 0;
+@import "~app/style/responsive-utils";
+
+:host {
+    mat-card {
+        margin: 8px 0;
+    }
+
+    .prev-next-buttons {
+        gap: 8px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        @include for-phone-only {
+            grid-template-columns: 1fr;
+        }
+
+        > button {
+            width: 100%;
+        }
+    }
 }
+
 
 .filters {
     .name {
         width: 200px;
     }
+
     .dice-drop {
         width: 50px;
     }
-    .category {
-        width: 200px;
-    }
 }
+
 .section-selector {
     padding-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "category sub-category";
+    gap: 8px;
+
+    @include for-phone-only {
+        grid-template-columns: 1fr;
+        grid-template-areas: "category" "sub-category";
+    }
+
+    .category {
+        grid-area: category;
+    }
+
+    .sub-category {
+        grid-area: sub-category;
+    }
+
 }
+
 .item-section {
     font-weight: bold;
 }
+
 .sticky-category {
     display: grid;
     grid-template-columns: 40px minmax(200px, 1fr) 40px;
     grid-gap: 16px;
+
     h3 {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
 }
+
 .sticky-category-list {
     padding-left: 48px;
     padding-right: 48px;
@@ -40,6 +79,7 @@ mat-card {
     .sticky-category {
         padding-left: 0;
         padding-right: 24px;
+
         h3 {
             padding-left: 8px;
         }
