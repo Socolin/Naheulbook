@@ -1,13 +1,16 @@
 <mat-card>
     <mat-card-content>
-        Les joueurs n'achètent JAMAIS le matériel en piochant eux-mêmes dans les tableaux. Vous pouvez créer vos propre
-        objets grace à l'éditeur. Ce dernier pouvant être complexe il est conseillé de copié un autre objets,
-        à l'aide du bouton
-        <mat-icon>content_copy</mat-icon>
-        , puis de le modifier. Si vous souhaitez seulement changer
-        le nom, cet option est déjà disponible lors de l'ajout d'un objet sur un personnage.
+        <p>
+            Les joueurs n'achètent JAMAIS le matériel en piochant eux-mêmes dans les tableaux.
+        </p>
+        <p *ngIf="showHeaderInfo">
+            Vous pouvez créer vos propre objets grace à l'éditeur. Ce dernier pouvant être complexe il est conseillé de copié un autre objets,
+            à l'aide du bouton <mat-icon>content_copy</mat-icon>, puis de le modifier. Si vous souhaitez seulement changer
+            le nom, cet option est déjà disponible lors de l'ajout d'un objet sur un personnage.
+        </p>
     </mat-card-content>
     <mat-card-actions align="end">
+        <button color="primary" mat-button (click)="showHeaderInfo =! showHeaderInfo">INFOS</button>
         <button color="primary" mat-button (click)="openCreateItemTemplateDialog()">CREER UN OBJET</button>
     </mat-card-actions>
 </mat-card>

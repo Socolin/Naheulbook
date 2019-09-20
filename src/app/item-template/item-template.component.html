@@ -19,13 +19,27 @@
             <span *ngIf="itemTemplate.data.sex == 'f'">Femme uniq. </span>
         </mat-card-subtitle>
         <span class="padding"></span>
-        <button mat-icon-button color="primary" *ngIf="copyable" (click)="openCreateItemTemplateDialog(itemTemplate)"><mat-icon>content_copy</mat-icon></button>
-        <button mat-icon-button color="primary" *ngIf="editable" (click)="openEditItemTemplateDialog(itemTemplate)"><mat-icon>edit</mat-icon></button>
-        <button mat-raised-button color="primary"
-                *ngIf="hasAction('addItem')"
-                (click)="emitAction('addItem', itemTemplate)">
-            AJOUTER
+        <button mat-icon-button
+                [matMenuTriggerFor]="itemTemplateMenu"
+                *ngIf="copyable || editable || hasAction('addItem')">
+            <mat-icon>more_vert</mat-icon>
         </button>
+        <mat-menu #itemTemplateMenu>
+            <button mat-menu-item  *ngIf="copyable" (click)="openCreateItemTemplateDialog(itemTemplate)">
+                <mat-icon>content_copy</mat-icon>
+                Créer une copie
+            </button>
+            <button mat-menu-item  *ngIf="editable" (click)="openEditItemTemplateDialog(itemTemplate)">
+                <mat-icon>edit</mat-icon>
+                Éditer
+            </button>
+            <button mat-menu-item
+                    *ngIf="hasAction('addItem')"
+                    (click)="emitAction('addItem', itemTemplate)">
+                <mat-icon>add</mat-icon>
+                Ajouter sur...
+            </button>
+        </mat-menu>
     </mat-card-header>
 
     <!-- Dice drop -->

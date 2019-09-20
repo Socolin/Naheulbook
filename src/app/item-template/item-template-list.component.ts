@@ -38,6 +38,7 @@ import {CreateItemTemplateDialogComponent} from './create-item-template-dialog.c
 export class ItemTemplateListComponent implements OnInit, OnDestroy {
     @Input() inTab: boolean;
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
+    public showHeaderInfo = false;
     public itemSections: ItemSection[];
     public selectedItemCategory?: ItemCategory;
     public previousSubCategory?: ItemCategory;
