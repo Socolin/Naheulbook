@@ -1,4 +1,5 @@
 import {Flag, FlagData, StatModifier} from '../shared';
+import {SkillResponse} from '../api/responses';
 
 export type SkillDictionary =  { [skillId: number]: Skill };
 export class Skill {
@@ -10,14 +11,14 @@ export class Skill {
     resist: string;
     using: string;
     roleplay: string;
-    stat: string;
-    test: string;
+    stat: string[];
+    test?: string;
     effects: StatModifier[];
     flags: Flag[];
 
-    static fromJson(skillJsonData: any): Skill {
+    static fromResponse(response: SkillResponse): Skill {
         let skill = new Skill();
-        Object.assign(skill, skillJsonData);
+        Object.assign(skill, response);
         return skill;
     }
 

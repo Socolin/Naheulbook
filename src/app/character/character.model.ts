@@ -2,12 +2,13 @@ import {Subject} from 'rxjs';
 
 import {isNullOrUndefined} from 'util';
 import {
-    IMetadata
-    , FlagData
-    , ItemStatModifier
-    , formatModifierValue
-    , ActiveStatsModifier
-    , StatModifier, DurationChange
+    ActiveStatsModifier,
+    DurationChange,
+    FlagData,
+    formatModifierValue,
+    IMetadata,
+    ItemStatModifier,
+    StatModifier
 } from '../shared';
 
 import {Origin} from '../origin';
@@ -17,11 +18,11 @@ import {Loot} from '../loot';
 import {ItemSlot, ItemTemplate} from '../item-template';
 import {Fighter} from '../group';
 
-import {Item, ItemData, PartialItem} from '../item';
+import {Item, PartialItem} from '../item';
 import {TargetJsonData} from '../group/target.model';
 
-import {WsRegistrable, WebSocketService} from '../websocket';
-import {WsEventServices} from '../websocket';
+import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
+import {ItemPartialResponse} from '../api/responses';
 
 export interface CharacterGiveDestination {
     id: number;
@@ -1270,7 +1271,7 @@ export class Character extends WsRegistrable {
         }
     }
 
-    onUpdateItem(newItem: PartialItem) {
+    onUpdateItem(newItem: ItemPartialResponse) {
         let currentItem = this.items.find(i => i.id === newItem.id);
         if (!currentItem) {
             throw new Error('Failed to find item ' + newItem.id);

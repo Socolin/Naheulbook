@@ -1,4 +1,3 @@
-
 import {forkJoin, Observable} from 'rxjs';
 
 import {Injectable} from '@angular/core';
@@ -7,9 +6,9 @@ import {HttpClient} from '@angular/common/http';
 import {ActiveStatsModifier} from '../shared';
 
 import {Skill, SkillService} from '../skill';
-import {LootTookItemMsg} from '../loot';
 
-import {ItemData, PartialItem, Item} from './item.model';
+import {Item, ItemData} from './item.model';
+import {ItemPartialResponse} from '../api/responses';
 
 export interface TakeItemResponse {
     takenItem: ItemData;
@@ -119,23 +118,23 @@ export class ItemService {
         });
     }
 
-    equipItem(itemId: number, level: number): Observable<PartialItem> {
-        return this.httpClient.post<PartialItem>(`/api/v2/items/${itemId}/equip`, {
+    equipItem(itemId: number, level: number): Observable<ItemPartialResponse> {
+        return this.httpClient.post<ItemPartialResponse>(`/api/v2/items/${itemId}/equip`, {
             level
         });
     }
 
-    moveToContainer(itemId: number, containerId: number): Observable<PartialItem> {
-        return this.httpClient.put<PartialItem>(`/api/v2/items/${itemId}/container`, {
+    moveToContainer(itemId: number, containerId: number): Observable<ItemPartialResponse> {
+        return this.httpClient.put<ItemPartialResponse>(`/api/v2/items/${itemId}/container`, {
             containerId: containerId
         });
     }
 
-    updateItem(itemId: number, itemData: any): Observable<PartialItem> {
-        return this.httpClient.put<PartialItem>(`/api/v2/items/${itemId}/data`, itemData);
+    updateItem(itemId: number, itemData: any): Observable<ItemPartialResponse> {
+        return this.httpClient.put<ItemPartialResponse>(`/api/v2/items/${itemId}/data`, itemData);
     }
 
-    updateItemModifiers(itemId: number, modifiers: ActiveStatsModifier[]): Observable<PartialItem> {
-        return this.httpClient.put<PartialItem>(`/api/v2/items/${itemId}/modifiers`, modifiers);
+    updateItemModifiers(itemId: number, modifiers: ActiveStatsModifier[]): Observable<ItemPartialResponse> {
+        return this.httpClient.put<ItemPartialResponse>(`/api/v2/items/${itemId}/modifiers`, modifiers);
     }
 }

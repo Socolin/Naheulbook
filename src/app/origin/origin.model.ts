@@ -1,10 +1,13 @@
 import {DescribedFlag, Flag, FlagData, StatRequirement} from '../shared';
 import {Skill} from '../skill';
+import {OriginResponse} from '../api/responses';
 
 export interface OriginInfo {
     title: string;
     description: string;
 }
+
+export type OriginDictionary = { [originId: number]: Origin };
 
 export class Origin {
     id: number;
@@ -29,20 +32,20 @@ export class Origin {
     flags: Flag[] = [];
     diceEVLevelUp: number;
 
-    static fromJson(originData: any, skillsById: {[skillId: number]: Skill}): Origin {
+    static fromResponse(response: OriginResponse, skillsById: {[skillId: number]: Skill}): Origin {
         let origin = new Origin();
 
-        Object.assign(origin, originData, {
+        Object.assign(origin, response, {
             skills: [],
             availableSkills: [],
-            bonuses: DescribedFlag.flagsFromJson(originData.bonuses),
-            restricts: DescribedFlag.flagsFromJson(originData.restricts),
+            bonuses: DescribedFlag.flagsFromJson(response.bonuses),
+            restricts: DescribedFlag.flagsFromJson(response.restricts),
         });
 
-        for (let skillId of originData.skillIds) {
+        for (let skillId of response.skillIds) {
             origin.skills.push(skillsById[skillId]);
         }
-        for (let skillId of originData.availableSkillIds) {
+        for (let skillId of response.availableSkillIds) {
             origin.availableSkills.push(skillsById[skillId]);
         }
 

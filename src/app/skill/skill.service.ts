@@ -1,9 +1,9 @@
-import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ReplaySubject, Observable} from 'rxjs';
+import {Observable, ReplaySubject} from 'rxjs';
 
 import {Skill, SkillDictionary} from './skill.model';
+import {SkillResponse} from '../api/responses';
 
 @Injectable()
 export class SkillService {
@@ -18,10 +18,10 @@ export class SkillService {
             this.skillsById = new ReplaySubject<SkillDictionary>(1);
 
             this.getSkills().subscribe(
-                skillsJsonData => {
+                skills => {
                     let skillsById: SkillDictionary = {};
-                    for (let skillJsonData of skillsJsonData) {
-                        skillsById[skillJsonData.id] = Skill.fromJson(skillJsonData);
+                    for (let skill of skills) {
+                        skillsById[skill.id] = skill;
                     }
                     this.skillsById.next(skillsById);
                     this.skillsById.complete();
@@ -38,12 +38,12 @@ export class SkillService {
         if (!this.skills) {
             this.skills = new ReplaySubject<Skill[]>(1);
 
-            this.httpClient.get<any[]>('/api/v2/skills')
+            this.httpClient.get<SkillResponse[]>('/api/v2/skills')
                 .subscribe(
-                    skillsJsonData => {
+                    skillResponses => {
                         let skills: Skill[] = [];
-                        for (let skillJsonData of skillsJsonData) {
-                            skills.push(Skill.fromJson(skillJsonData));
+                        for (let response of skillResponses) {
+                            skills.push(Skill.fromResponse(response));
                         }
                         this.skills.next(skills);
                         this.skills.complete();
