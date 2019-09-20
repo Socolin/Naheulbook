@@ -8,7 +8,10 @@ import {Effect} from './effect.model';
 import {EffectService} from './effect.service';
 
 export interface AddEffectDialogData {
-    effect?: Effect
+    effect?: Effect,
+    options?: {
+        hideReusable?: boolean
+    }
 }
 
 @Component({

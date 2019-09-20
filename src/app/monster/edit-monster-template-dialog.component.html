@@ -7,8 +7,11 @@
     </span>
     <span class="add-button-with-loader">
         <mat-spinner color="accent" diameter="32" *ngIf="saving"></mat-spinner>
-        <button mat-button (click)="save()" [disabled]="!form.valid || saving">
+        <button mat-button *ngIf="!data.monsterTemplate" (click)="save()" [disabled]="!form.valid || saving">
             AJOUTER
+        </button>
+        <button mat-button *ngIf="data.monsterTemplate" (click)="save()" [disabled]="!form.valid || saving">
+            ÉDITER
         </button>
     </span>
 </mat-toolbar>

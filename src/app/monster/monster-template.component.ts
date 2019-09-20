@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 
@@ -18,6 +18,7 @@ import {
 export class MonsterTemplateComponent implements OnInit {
     @Input() monsterTemplate: MonsterTemplate;
     @Input() isAdmin: boolean;
+    @Output() edit: EventEmitter<MonsterTemplate> = new EventEmitter<MonsterTemplate>();
     public traisById?: MonsterTraitDictionary;
 
     constructor(
@@ -28,7 +29,7 @@ export class MonsterTemplateComponent implements OnInit {
     }
 
     openEditMonsterDialog(): void {
-        const dialogRef = this.dialog.open<EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData>(
+        const dialogRef = this.dialog.open<EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData, MonsterTemplate>(
             EditMonsterTemplateDialogComponent, {
                 data: {
                     monsterTemplate: this.monsterTemplate
@@ -41,6 +42,7 @@ export class MonsterTemplateComponent implements OnInit {
                 return;
             }
             this.notifications.success('Monster', 'Monstre éditer');
+            this.edit.next(result);
         });
     }
 

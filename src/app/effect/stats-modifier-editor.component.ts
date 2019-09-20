@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {StatsModifier} from '../shared/stat-modifier.model';
+import {StatsModifier} from '../shared';
 
 @Component({
     selector: 'stats-modifier-editor',

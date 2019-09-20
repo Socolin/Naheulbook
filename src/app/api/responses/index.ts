@@ -4,6 +4,8 @@ export * from './item-partial-response';
 export * from './item-response';
 export * from './item-slot.response';
 export * from './item-template-response';
+export * from './monster-category-response';
 export * from './monster-response';
+export * from './monster-type-response';
 export * from './origin-response';
 export * from './skill-response';

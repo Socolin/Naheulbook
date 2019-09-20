@@ -23,6 +23,8 @@ import {MonsterTemplateRequest} from '../api/requests';
 
 export interface EditMonsterTemplateDialogData {
     monsterTemplate?: MonsterTemplate;
+    type?: MonsterTemplateType;
+    category?: MonsterTemplateCategory;
 }
 
 @Component({
@@ -90,11 +92,11 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
             if (!result) {
                 return;
             }
-            this.monsterTemplateService.createCategory(this.selectedType, name).subscribe(
+            this.monsterTemplateService.createCategory(this.selectedType, result.text).subscribe(
                 category => {
                     this.selectedType.categories.push(category);
                     this.selectedCategory = category;
-                    // FIXME: invalidate cache in service
+                    this.monsterTemplateService.invalidateMonsterTypes();
                 });
         })
     }
@@ -117,7 +119,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
                 type => {
                     this.monsterTemplateTypes.push(type);
                     this.selectType(type);
-                    // FIXME: invalidate cache in service
+                    this.monsterTemplateService.invalidateMonsterTypes();
                 });
         })
     }
@@ -221,7 +223,14 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
                         .filter(l => !!l);
                     this.monsterInventory = this.data.monsterTemplate.simpleInventory;
                 } else {
-                    this.selectType(this.monsterTemplateTypes[0]);
+                    if (this.data.category && this.data.type) {
+                        this.selectedCategory = this.data.category;
+                        this.selectedType = this.data.type;
+                    } else if (this.data.type) {
+                        this.selectType(this.data.type);
+                    } else {
+                        this.selectType(this.monsterTemplateTypes[0]);
+                    }
                 }
             }
         );

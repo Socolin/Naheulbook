@@ -1,6 +1,6 @@
 import {Effect} from '../effect';
 import {Fighter} from '../group';
-import {IDurable} from '../api/shared';
+import {IActiveStatsModifier, IDurable} from '../api/shared';
 import {DurationType} from '../api/shared/enums';
 
 export type StatModificationOperand =
@@ -80,7 +80,7 @@ export class ActiveStatsModifier extends StatsModifier {
 
     lapCountDecrement: LapCountDecrement;
 
-    static fromJson(jsonData: any) {
+    static fromJson(jsonData: IActiveStatsModifier) {
         let modifier = new ActiveStatsModifier();
         Object.assign(modifier, jsonData);
         return modifier;

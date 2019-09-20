@@ -24,7 +24,7 @@
 <div class="monster-templates">
     <ng-template ngIf [ngIf]="selectedMonsterCategory">
         <div *ngFor="let monster of monsterByCategory[selectedMonsterCategory.id]">
-            <monster-template [isAdmin]="isAdmin" [monsterTemplate]="monster"></monster-template>
+            <monster-template (edit)="editMonster($event)" [isAdmin]="isAdmin" [monsterTemplate]="monster"></monster-template>
         </div>
     </ng-template>
 </div>

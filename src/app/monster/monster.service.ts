@@ -7,9 +7,9 @@ import {HttpClient} from '@angular/common/http';
 import {ActiveStatsModifier} from '../shared';
 import {Monster} from './monster.model';
 import {Skill, SkillService} from '../skill';
-import {PartialItem} from '../item';
 import {CreateMonsterRequest} from '../api/requests';
 import {MonsterResponse} from '../api/responses';
+import {IActiveStatsModifier} from '../api/shared';
 
 @Injectable()
 export class MonsterService {
@@ -47,26 +47,11 @@ export class MonsterService {
     }
 
     addModifier(monsterId: number, modifier: ActiveStatsModifier): Observable<ActiveStatsModifier> {
-        return this.httpClient.post(`/api/v2/monsters/${monsterId}/modifiers`, modifier)
+        return this.httpClient.post<IActiveStatsModifier>(`/api/v2/monsters/${monsterId}/modifiers`, modifier)
             .pipe(map(res => ActiveStatsModifier.fromJson(res)));
     }
 
     removeModifier(monsterId: number, modifierId: number): Observable<void> {
         return this.httpClient.delete<void>(`/api/v2/monsters/${monsterId}/modifiers/${modifierId}`);
-    }
-
-    toggleModifier(monsterId: number, modifierId: number): Observable<ActiveStatsModifier> {
-        return this.httpClient.post('/api/monster/toggleModifier', {
-            monsterId: monsterId,
-            modifierId: modifierId,
-        }).pipe(map(res => ActiveStatsModifier.fromJson(res)));
-    }
-
-    equipItem(monsterId: number, itemId: number, equiped: boolean): Observable<PartialItem> {
-        return this.httpClient.post('/api/monster/equipItem', {
-            monsterId: monsterId,
-            itemId: itemId,
-            equiped: equiped,
-        }).pipe(map(res => PartialItem.fromJson(res)));
     }
 }

@@ -38,7 +38,9 @@
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>Personnalisation</ng-template>
-            <stats-modifier-editor [options]="{noType: !fromEffect}" [modifier]="newStatsModifier">
+            <stats-modifier-editor [options]="{noType: !fromEffect}"
+                                   [reusableToggle]="!data?.options?.hideReusable"
+                                   [modifier]="newStatsModifier">
             </stats-modifier-editor>
         </mat-step>
     </mat-vertical-stepper>

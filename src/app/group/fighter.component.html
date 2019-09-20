@@ -149,13 +149,6 @@
         Effets:
         <div *ngFor="let modifier of fighter.monster.modifiers" class="effect">
             <span class="effect-name">
-                <span class="effect-reusable" *ngIf="modifier.reusable">
-                    <mat-slide-toggle color="primary"
-                                      (change)="toggleReusableModifier(modifier)"
-                                      (click)="$event.stopPropagation()"
-                                      [ngModel]="modifier.active">
-                    </mat-slide-toggle>
-                </span>
                 {{modifier.name}}
             </span>
             <span *ngIf="modifier.currentCombatCount" class="effect-time">

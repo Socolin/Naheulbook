@@ -9,9 +9,10 @@ import {WsEventServices, WsRegistrable, WebSocketService} from '../websocket';
 
 import {TargetJsonData} from '../group/target.model';
 import {Fighter} from '../group';
-import {MonsterResponse} from '../api/responses';
+import {MonsterResponse, MonsterTypeResponse} from '../api/responses';
 import {MonsterTemplateData} from '../api/shared';
 import {MonsterTemplateResponse} from '../api/responses/monster-template-response';
+import {MonsterCategoryResponse} from '../api/responses/monster-category-response';
 
 export class MonsterData {
     at: number;
@@ -455,21 +456,24 @@ export class MonsterTemplateCategory {
     name: string;
     type: MonsterTemplateType;
 
-    static fromJson(jsonData: any, type: { [id: number]: MonsterTemplateType } | MonsterTemplateType): MonsterTemplateCategory {
+    static fromResponse(
+        response: MonsterCategoryResponse,
+        type: { [id: number]: MonsterTemplateType } | MonsterTemplateType
+    ): MonsterTemplateCategory {
         let category = new MonsterTemplateCategory();
         if (type instanceof MonsterTemplateType) {
-            Object.assign(category, jsonData, {type: type});
+            Object.assign(category, response, {type: type});
         } else {
-            Object.assign(category, jsonData, {type: type[jsonData.typeId]});
+            Object.assign(category, response, {type: type[response.typeid]});
         }
         return category;
     }
 
-    static categoriesFromJson(jsonDatas: any[], type: MonsterTemplateType): MonsterTemplateCategory[] {
+    static categoriesFromJson(jsonDatas: MonsterCategoryResponse[], type: MonsterTemplateType): MonsterTemplateCategory[] {
         let categories: MonsterTemplateCategory[] = [];
 
         for (let jsonData of jsonDatas) {
-            categories.push(MonsterTemplateCategory.fromJson(jsonData, type));
+            categories.push(MonsterTemplateCategory.fromResponse(jsonData, type));
         }
 
         return categories;
@@ -481,16 +485,16 @@ export class MonsterTemplateType {
     name: string;
     categories: MonsterTemplateCategory[] = [];
 
-    static fromJson(jsonData: any): MonsterTemplateType {
+    static fromResponse(response: MonsterTypeResponse): MonsterTemplateType {
         let type = new MonsterTemplateType();
-        Object.assign(type, jsonData, {categories: MonsterTemplateCategory.categoriesFromJson(jsonData.categories, type)});
+        Object.assign(type, response, {categories: MonsterTemplateCategory.categoriesFromJson(response.categories, type)});
         return type;
     }
 
-    static typesFromJson(jsonDatas: any[]): MonsterTemplateType[] {
+    static typesFromJson(jsonDatas: MonsterTypeResponse[]): MonsterTemplateType[] {
         let types: MonsterTemplateType[] = [];
         for (let jsonData of jsonDatas) {
-            types.push(MonsterTemplateType.fromJson(jsonData));
+            types.push(MonsterTemplateType.fromResponse(jsonData));
         }
         return types;
     }

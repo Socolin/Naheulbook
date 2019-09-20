@@ -3,7 +3,10 @@ import {Component, OnInit} from '@angular/core';
 import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateType} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
 import {MatDialog} from '@angular/material/dialog';
-import {EditMonsterTemplateDialogComponent} from './edit-monster-template-dialog.component';
+import {
+    EditMonsterTemplateDialogComponent,
+    EditMonsterTemplateDialogData
+} from './edit-monster-template-dialog.component';
 import {LoginService} from '../user';
 import {forkJoin} from 'rxjs';
 
@@ -51,12 +54,53 @@ export class MonsterListComponent implements OnInit {
     }
 
     openCreateMonsterTemplateDialog() {
-        this.dialog.open(EditMonsterTemplateDialogComponent, {
-            autoFocus: false,
-            minWidth: '100vw',
-            height: '100vh',
-            data: {}
-        });
+        const dialogRef = this.dialog.open<EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData, MonsterTemplate>(
+            EditMonsterTemplateDialogComponent, {
+                autoFocus: false,
+                minWidth: '100vw',
+                height: '100vh',
+                data: {
+                    type: this.selectedMonsterType,
+                    category: this.selectedMonsterCategory,
+                }
+            });
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
+            this.monsters.push(result);
+            this.updateSelectCategory(result);
+        })
+    }
+
+    editMonster(monsterTemplate: MonsterTemplate) {
+        const index = this.monsters.findIndex(x => x.id === monsterTemplate.id);
+        if (index !== -1) {
+            this.monsters[index] = monsterTemplate;
+        }
+        this.updateSelectCategory(monsterTemplate);
+    }
+
+    updateSelectCategory(monsterTemplate: MonsterTemplate) {
+        const monsterType = this.monsterTypes.find(x => x.id === monsterTemplate.category.type.id);
+        if (!monsterType) {
+            this.monsterTypes.push(monsterTemplate.category.type);
+            this.selectedMonsterType = monsterTemplate.category.type;
+        }
+        else if (!(monsterTemplate.category.id in monsterType.categories)) {
+            monsterType.categories.push(monsterTemplate.category);
+            this.selectedMonsterType = monsterType;
+        }
+
+        if (this.selectedMonsterType) {
+            const monsterCategory = this.selectedMonsterType.categories.find(x => x.id === monsterTemplate.category.id);
+            if (monsterCategory) {
+                this.selectedMonsterCategory = monsterCategory;
+            } else {
+                this.selectMonsterType(this.selectedMonsterType);
+            }
+        }
+        this.sortMonsterByCategory();
     }
 
     ngOnInit() {

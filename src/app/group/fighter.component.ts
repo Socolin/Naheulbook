@@ -1,12 +1,11 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {MatDialog, MatSlideToggleChange} from '@angular/material';
+import {MatDialog} from '@angular/material';
 
 import {NotificationsService} from '../notifications';
 import {CharacterService, ItemActionService} from '../character';
 import {Item, ItemService} from '../item';
 import {ActiveStatsModifier, LapCountDecrement, NhbkDialogService} from '../shared';
 import {Monster, MonsterData, MonsterService} from '../monster';
-import {ItemTemplate} from '../item-template';
 
 import {Fighter, Group} from './group.model';
 import {GroupActionService} from './group-action.service';
@@ -173,12 +172,6 @@ export class FighterComponent implements OnInit, OnChanges {
         }
     }
 
-    equipItem(item: Item, event: MatSlideToggleChange) {
-        this._monsterService.equipItem(this.fighter.id, item.id, event.checked).subscribe(res => {
-            this.fighter.monster.equipItem(res);
-        });
-    }
-
     killMonster(monster: Monster) {
         this._actionService.emitAction('killMonster', this.group, monster);
     }
@@ -210,16 +203,12 @@ export class FighterComponent implements OnInit, OnChanges {
         });
     }
 
-    selectFighter() {
-        this.onSelect.emit(this.fighter);
-    }
-
-    itemHasSlot(template: ItemTemplate, slot: string) {
-        return ItemTemplate.hasSlot(template, slot);
-    }
-
     openAddEffectDialog() {
-        const dialogRef = this.dialog.open(AddEffectDialogComponent, {minWidth: '100vw', height: '100vh'});
+        const dialogRef = this.dialog.open(AddEffectDialogComponent, {
+            minWidth: '100vw',
+            height: '100vh',
+            data: {options: {hideReusable: true}}
+        });
         dialogRef.afterClosed().subscribe(result => {
             if (!result) {
                 return;
@@ -240,20 +229,6 @@ export class FighterComponent implements OnInit, OnChanges {
                 this.fighter.monster.onAddModifier.bind(this.fighter.monster)
             );
         });
-    }
-
-    selectModifier(modifier: ActiveStatsModifier) {
-        if (modifier === this.selectedModifier) {
-            this.selectedModifier = undefined;
-        } else {
-            this.selectedModifier = modifier;
-        }
-    }
-
-    toggleReusableModifier(modifier: ActiveStatsModifier) {
-        this._monsterService.toggleModifier(this.fighter.id, modifier.id).subscribe(
-            this.fighter.monster.onUpdateModifier.bind(this.fighter.monster)
-        );
     }
 
     removeModifier(modifier: ActiveStatsModifier) {
