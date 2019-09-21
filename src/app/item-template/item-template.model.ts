@@ -144,6 +144,7 @@ export class ItemSkillModifier {
 export class ItemTemplate {
     id: number;
     name: string;
+    techName?: string;
     categoryId: number;
     data: ItemTemplateData = new ItemTemplateData();
     source: 'official'|'community'|'private';

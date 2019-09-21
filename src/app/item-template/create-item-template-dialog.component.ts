@@ -23,7 +23,7 @@ export class CreateItemTemplateDialogComponent implements OnInit {
         private _itemTemplateService: ItemTemplateService,
         private _notifications: NotificationsService,
         private _loginService: LoginService,
-        private dialogRef: MatDialogRef<CreateItemTemplateDialogComponent>,
+        private dialogRef: MatDialogRef<CreateItemTemplateDialogComponent, ItemTemplate>,
         @Inject(MAT_DIALOG_DATA) private data: CreateItemTemplateDialogData,
     ) {
         if (this._loginService.currentLoggedUser && this._loginService.currentLoggedUser.admin) {
@@ -43,11 +43,16 @@ export class CreateItemTemplateDialogComponent implements OnInit {
         }
 
         this.saving = true;
-        this._itemTemplateService.create(this.item).subscribe(
-            item => {
+        let {id: itemTemplateId, skillModifiers, ...baseRequest} = this.item;
+        const request = {
+            ...baseRequest,
+            skillModifiers: skillModifiers.map(s => ({value: s.value, skill: s.skill.id}))
+        };
+        this._itemTemplateService.createItemTemplate(request).subscribe(
+            itemTemplate => {
                 this.saving = false;
-                this._notifications.info('Objet', 'Objet créé: ' + item.name);
-                this.dialogRef.close();
+                this._notifications.info('Objet', 'Objet créé: ' + itemTemplate.name);
+                this.dialogRef.close(itemTemplate);
             }, () => {
                 this.saving = false;
             }

@@ -1,6 +1,6 @@
 import {from as observableFrom, forkJoin, ReplaySubject, Observable} from 'rxjs';
 
-import {map, take} from 'rxjs/operators';
+import {map, take, withLatestFrom} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
@@ -8,6 +8,7 @@ import {Skill, SkillDictionary, SkillService} from '../skill';
 
 import {ItemCategory, ItemTemplate, ItemSection, ItemSlot, ItemType} from './item-template.model';
 import {ItemTemplateResponse} from '../api/responses';
+import {ItemTemplateRequest} from '../api/requests/item-template-request';
 
 @Injectable()
 export class ItemTemplateService {
@@ -78,8 +79,20 @@ export class ItemTemplateService {
         return this.itemBySection[section.id];
     }
 
-    create(item): Observable<ItemTemplate> {
-        return this.httpClient.post<ItemTemplate>('/api/v2/itemTemplates/', item);
+    createItemTemplate(request: ItemTemplateRequest): Observable<ItemTemplate> {
+        return this.httpClient.post<ItemTemplateResponse>('/api/v2/itemTemplates/', request)
+            .pipe(
+                withLatestFrom(this._skillService.getSkillsById()),
+                map(([response, skillsById]) => ItemTemplate.fromResponse(response, skillsById))
+            );
+    }
+
+    editItemTemplate(itemTemplateId: number, request: ItemTemplateRequest): Observable<ItemTemplate> {
+        return this.httpClient.put<ItemTemplateResponse>(`/api/v2/itemTemplates/${itemTemplateId}`, request)
+            .pipe(
+                withLatestFrom(this._skillService.getSkillsById()),
+                map(([response, skillsById]) => ItemTemplate.fromResponse(response, skillsById))
+            );
     }
 
     getItem(id: number): Observable<ItemTemplate> {
@@ -156,10 +169,6 @@ export class ItemTemplateService {
             displayName: displayName
         };
         return this.httpClient.post<ItemType>('/api/itemtemplate/createItemType', {itemType: itemType})
-    }
-
-    editItemTemplate(itemTemplate: ItemTemplate): Observable<ItemTemplate> {
-        return this.httpClient.put<ItemTemplate>(`/api/v2/itemTemplates/${itemTemplate.id}`, itemTemplate);
     }
 
     clearItemSectionCache(sectionId: number) {

@@ -28,7 +28,7 @@ export class ItemTemplateComponent {
     }
 
     openEditItemTemplateDialog(itemTemplate: ItemTemplate) {
-        this.dialog.open<EditItemTemplateDialogComponent, EditItemTemplateDialogData>(
+        this.dialog.open<EditItemTemplateDialogComponent, EditItemTemplateDialogData, ItemTemplate>(
             EditItemTemplateDialogComponent,
             {
                 minWidth: '100vw',
@@ -40,7 +40,7 @@ export class ItemTemplateComponent {
     }
 
     openCreateItemTemplateDialog(sourceItem: ItemTemplate) {
-        this.dialog.open<CreateItemTemplateDialogComponent, CreateItemTemplateDialogData>(
+        this.dialog.open<CreateItemTemplateDialogComponent, CreateItemTemplateDialogData, ItemTemplate>(
             CreateItemTemplateDialogComponent,
             {
                 minWidth: '100vw',

@@ -21,26 +21,35 @@ export class EditItemTemplateDialogComponent implements OnInit {
     constructor(
         private _notification: NotificationsService
         , private _itemTemplateService: ItemTemplateService
-        , private dialogRef: MatDialogRef<EditItemTemplateDialogComponent>
+        , private dialogRef: MatDialogRef<EditItemTemplateDialogComponent, ItemTemplate>
         , @Inject(MAT_DIALOG_DATA) private data: EditItemTemplateDialogData
     ) {
     }
 
     saveChanges() {
         this.saving = true;
-        this._itemTemplateService.editItemTemplate(this.item).subscribe(
-            item => {
-                this._notification.success('Objet', 'Objet sauvegardé: ' + item.name);
+        let {id: itemTemplateId, skillModifiers, ...baseRequest} = this.item;
+        const request = {
+            ...baseRequest,
+            skillModifiers: skillModifiers.map(s => ({value: s.value, skill: s.skill.id}))
+        };
+        this._itemTemplateService.editItemTemplate(itemTemplateId, request).subscribe(
+            itemTemplate => {
+                this._notification.success('Objet', 'Objet sauvegardé: ' + itemTemplate.name);
                 this.saving = false;
-                this.dialogRef.close();
+                this.dialogRef.close(itemTemplate);
+            },
+            (err) => {
+                this.saving = false;
+                throw err;
             }
         );
     }
 
     ngOnInit() {
         this._itemTemplateService.getItem(this.data.itemTemplateId).subscribe(
-            item => {
-                this.item = item;
+            itemTemplate => {
+                this.item = itemTemplate;
             }
         );
     }
