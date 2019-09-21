@@ -40,12 +40,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var expectedEffectResponse = new EffectResponse();
             var effect = new Effect {Id = 42};
 
+            _effectService.EditEffectAsync(_executionContext, 42, editEffectRequest)
+                .Returns(effect);
             _mapper.Map<EffectResponse>(effect)
                 .Returns(expectedEffectResponse);
 
             var result = await _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest);
 
-            result.StatusCode.Should().Be(204);
+            result.Value.Should().Be(expectedEffectResponse);
             await _effectService.Received(1)
                 .EditEffectAsync(_executionContext, 42, editEffectRequest);
         }
@@ -56,7 +58,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
                 .Returns(Task.FromException<Effect>(new ForbiddenAccessException()));
 
-            Func<Task<StatusCodeResult>> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
+            Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
@@ -67,7 +69,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
                 .Returns(Task.FromException<Effect>(new EffectNotFoundException()));
 
-            Func<Task<StatusCodeResult>> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
+            Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }

@@ -26,7 +26,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPut("{effectId:int:min(1)}")]
-        public async Task<StatusCodeResult> PutEditEffectAsync(
+        public async Task<ActionResult<EffectResponse>> PutEditEffectAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int effectId,
             EditEffectRequest request
@@ -34,8 +34,9 @@ namespace Naheulbook.Web.Controllers
         {
             try
             {
-                await _effectService.EditEffectAsync(executionContext, effectId, request);
-                return NoContent();
+                var effect = await _effectService.EditEffectAsync(executionContext, effectId, request);
+                var effectResponse = _mapper.Map<EffectResponse>(effect);
+                return effectResponse;
             }
             catch (ForbiddenAccessException ex)
             {

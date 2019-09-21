@@ -200,9 +200,6 @@ Feature: Effect
       ]
     }
     """
-    Then the response status code is 204
-
-    When performing a GET to the url "/api/v2/effects/${Effect.Id}"
     Then the response status code is 200
     And the response should contains the following json
     """

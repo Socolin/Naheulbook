@@ -18,7 +18,7 @@ namespace Naheulbook.Core.Services
         Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
         Task<EffectCategory> CreateEffectCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectCategoryRequest request);
         Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, int categoryId, CreateEffectRequest request);
-        Task EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request);
+        Task<Effect> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request);
         Task<List<Effect>> SearchEffectsAsync(string filter);
     }
 
@@ -127,7 +127,7 @@ namespace Naheulbook.Core.Services
             return effect;
         }
 
-        public async Task EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request)
+        public async Task<Effect> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
@@ -152,6 +152,8 @@ namespace Naheulbook.Core.Services
                 }).ToList();
 
                 await uow.CompleteAsync();
+
+                return effect;
             }
         }
 
