@@ -246,7 +246,11 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
             },
             locations: [],
             name: this.form.value.name,
-            simpleInventory: this.monsterInventory
+            simpleInventory: this.monsterInventory.map(inventoryElement => ({
+                ...inventoryElement,
+                id: inventoryElement.id || undefined,
+                itemTemplateId: inventoryElement.itemTemplate.id,
+            }))
         };
         if (!this.data.monsterTemplate) {
             this.monsterTemplateService.createMonsterTemplate(
