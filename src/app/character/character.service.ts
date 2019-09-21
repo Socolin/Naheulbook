@@ -19,6 +19,7 @@ import {
 } from './character.model';
 import {DeleteGroupResponse} from '../group';
 import {LevelUpInfo} from './character.component';
+import {IActiveStatsModifier} from '../api/shared';
 
 @Injectable()
 export class CharacterService {
@@ -129,7 +130,8 @@ export class CharacterService {
     }
 
     addModifier(characterId: number, modifier: ActiveStatsModifier): Observable<ActiveStatsModifier> {
-        return this.httpClient.post<ActiveStatsModifier>(`/api/v2/characters/${characterId}/modifiers`, modifier);
+        return this.httpClient.post<IActiveStatsModifier>(`/api/v2/characters/${characterId}/modifiers`, modifier)
+            .pipe(map(ActiveStatsModifier.fromJson));
     }
 
     removeModifier(characterId: number, modifierId: number): Observable<number> {
