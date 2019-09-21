@@ -110,14 +110,14 @@ namespace Naheulbook.Core.Services
             {
                 var cleanFilter = _stringCleanupUtil.RemoveAccents(filter).ToUpperInvariant();
 
-                var exactMatchingItems = await uow.ItemTemplates.GetItemByCleanNameAsync(cleanFilter, maxResultCount, currentUserId, true);
+                var exactMatchingItems = await uow.ItemTemplates.GetItemByCleanNameWithAllDataAsync(cleanFilter, maxResultCount, currentUserId, true);
                 matchingItemTemplates.AddRange(exactMatchingItems);
 
-                var partialMatchingItems = await uow.ItemTemplates.GetItemByPartialCleanNameAsync(cleanFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true);
+                var partialMatchingItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithAllDataAsync(cleanFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true);
                 matchingItemTemplates.AddRange(partialMatchingItems);
 
                 var noSeparatorFilter = _stringCleanupUtil.RemoveSeparators(cleanFilter);
-                var partialMatchingIgnoreSpacesItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorAsync(noSeparatorFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true);
+                var partialMatchingIgnoreSpacesItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(noSeparatorFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true);
                 matchingItemTemplates.AddRange(partialMatchingIgnoreSpacesItems);
             }
 

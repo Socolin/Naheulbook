@@ -237,11 +237,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Returns(cleanFilter);
             _stringCleanupUtil.RemoveSeparators(cleanFilter)
                 .Returns(cleanFilterWithoutSeparator);
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByCleanNameAsync(cleanFilter, Arg.Any<int>(), Arg.Any<int?>(), Arg.Any<bool>())
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByCleanNameWithAllDataAsync(cleanFilter, Arg.Any<int>(), Arg.Any<int?>(), Arg.Any<bool>())
                 .Returns(new List<ItemTemplate> {item1});
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameAsync(cleanFilter, Arg.Any<int>(), Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>())
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithAllDataAsync(cleanFilter, Arg.Any<int>(), Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>())
                 .Returns(new List<ItemTemplate> {item2});
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorAsync(cleanFilterWithoutSeparator, Arg.Any<int>(), Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>())
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(cleanFilterWithoutSeparator, Arg.Any<int>(), Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>())
                 .Returns(new List<ItemTemplate> {item3});
 
             var actualItemTemplates = await _service.SearchItemTemplateAsync(filter, 10, null);
@@ -256,18 +256,18 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Returns("some-clean-filter");
             _stringCleanupUtil.RemoveSeparators(Arg.Any<string>())
                 .Returns("some-clean-name-with-no-separator");
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByCleanNameAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<int?>(), Arg.Any<bool>())
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByCleanNameWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<int?>(), Arg.Any<bool>())
                 .Returns(new List<ItemTemplate> {new ItemTemplate(), new ItemTemplate()});
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>())
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>())
                 .Returns(new List<ItemTemplate> {new ItemTemplate(), new ItemTemplate(), new ItemTemplate()});
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>())
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>())
                 .Returns(new List<ItemTemplate> {new ItemTemplate()});
 
             await _service.SearchItemTemplateAsync("some-filter", 10, null);
 
-            await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByCleanNameAsync(Arg.Any<string>(), 10, Arg.Any<int?>(), Arg.Any<bool>());
-            await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByPartialCleanNameAsync(Arg.Any<string>(), 8, Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>());
-            await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByPartialCleanNameWithoutSeparatorAsync(Arg.Any<string>(), 5, Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>());
+            await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByCleanNameWithAllDataAsync(Arg.Any<string>(), 10, Arg.Any<int?>(), Arg.Any<bool>());
+            await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByPartialCleanNameWithAllDataAsync(Arg.Any<string>(), 8, Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>());
+            await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(Arg.Any<string>(), 5, Arg.Any<IEnumerable<int>>(), Arg.Any<int?>(), Arg.Any<bool>());
         }
     }
 }
