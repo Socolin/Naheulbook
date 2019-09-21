@@ -118,10 +118,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                         Chance = 0.5f,
                         MinCount = 1,
                         MaxCount = 2,
-                        ItemTemplate = new IdRequest
-                        {
-                            Id = itemTemplateId
-                        },
+                        ItemTemplateId = itemTemplateId
                     }
                 }
             };
