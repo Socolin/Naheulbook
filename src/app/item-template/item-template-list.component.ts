@@ -69,6 +69,16 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         this.resetFilter();
     }
 
+    resetNameFilter() {
+        this.filter.name = undefined;
+        this.updateVisibleItems();
+    }
+
+    resetDiceFilter() {
+        this.filter.dice = undefined;
+        this.updateVisibleItems();
+    }
+
     resetFilter() {
         this.filter = {name: undefined, dice: undefined};
         this.updateVisibleItems();

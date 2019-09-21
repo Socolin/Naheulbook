@@ -28,15 +28,11 @@
         <mat-select [ngModel]="selectedItemCategory"
                     (selectionChange)="selectCategory($event.value)"
                     placeholder="Sous-section">
-            <mat-option [value]="null"></mat-option>
             <mat-option *ngFor="let category of selectedSection.categories" [value]="category">
                 {{category.name}}
             </mat-option>
         </mat-select>
     </mat-form-field>
-
-    <autocomplete-search-item-template [clearOnSelect]=true (onSelect)="selectItemTemplate($event)">
-    </autocomplete-search-item-template>
 </mat-card>
 
 <mat-card *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
@@ -48,18 +44,24 @@
 </mat-card>
 
 <mat-card>
-    <mat-card-subtitle>Filtre</mat-card-subtitle>
     <mat-card-content class="filters">
-        <mat-form-field class="name">
+        <autocomplete-search-item-template [clearOnSelect]=true (onSelect)="selectItemTemplate($event)" class="search">
+        </autocomplete-search-item-template>
+
+        <mat-form-field class="filter">
             <input matInput placeholder="Filtre" [(ngModel)]="filter.name" (change)="updateVisibleItems()"/>
+            <button matSuffix mat-icon-button *ngIf="filter.name !== undefined" (click)="resetNameFilter()">
+                <mat-icon>close</mat-icon>
+            </button>
         </mat-form-field>
+
         <mat-form-field *ngIf="hasSpecial('DICE_DROP')" class="dice-drop">
             <input matInput placeholder="Dé" [(ngModel)]="filter.dice" type="number" (change)="updateVisibleItems()"/>
+            <button matSuffix mat-icon-button *ngIf="filter.dice !== undefined" (click)="resetDiceFilter()">
+                <mat-icon>close</mat-icon>
+            </button>
         </mat-form-field>
     </mat-card-content>
-    <mat-card-actions align="end">
-        <button mat-button color="primary" (click)="resetFilter()">RESET</button>
-    </mat-card-actions>
 </mat-card>
 <span id="first-item"></span>
 <ng-template ngFor let-item [ngForOf]="visibleItems" [ngForTrackBy]="trackById">

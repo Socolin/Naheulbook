@@ -2,7 +2,7 @@
 
 :host {
     mat-card {
-        margin: 8px 0;
+        margin: 8px 5px;
     }
 
     .prev-next-buttons {
@@ -17,77 +17,47 @@
             width: 100%;
         }
     }
-}
 
-
-.filters {
-    .name {
-        width: 200px;
-    }
-
-    .dice-drop {
-        width: 50px;
-    }
-}
-
-.section-selector {
-    padding-top: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: "category sub-category";
-    gap: 8px;
-
-    @include for-phone-only {
-        grid-template-columns: 1fr;
-        grid-template-areas: "category" "sub-category";
-    }
-
-    .category {
-        grid-area: category;
-    }
-
-    .sub-category {
-        grid-area: sub-category;
-    }
-
-}
-
-.item-section {
-    font-weight: bold;
-}
-
-.sticky-category {
-    display: grid;
-    grid-template-columns: 40px minmax(200px, 1fr) 40px;
-    grid-gap: 16px;
-
-    h3 {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-}
-
-.sticky-category-list {
-    padding-left: 48px;
-    padding-right: 48px;
-    max-height: calc(100vh - 64px);
-    overflow: auto;
-}
-
-@media (max-width: 599px) {
-    .sticky-category {
-        padding-left: 0;
-        padding-right: 24px;
-
-        h3 {
-            padding-left: 8px;
+    .filters {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: 1fr 1fr minmax(0px, auto);
+        grid-template-areas: "search filter dice-drop";
+        @include for-phone-only {
+            grid-template-columns: 1fr minmax(0px, auto);
+            grid-template-areas: "search search" "filter dice-drop";
+        }
+        .search {
+            grid-area: search;
+        }
+        .filter {
+            grid-area: filter;
+        }
+        .dice-drop {
+            grid-area: dice-drop;
         }
     }
-    .sticky-category-list {
-        padding-left: 16px;
-        padding-right: 16px;
+
+    .section-selector {
+        padding-top: 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "category sub-category";
+        gap: 8px;
+
+        @include for-phone-only {
+            grid-template-columns: 1fr;
+            grid-template-areas: "category" "sub-category";
+        }
+
+        .category {
+            grid-area: category;
+        }
+
+        .sub-category {
+            grid-area: sub-category;
+        }
+
     }
 
 }
-
