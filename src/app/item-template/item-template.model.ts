@@ -196,12 +196,8 @@ export class ItemTemplate {
         return itemTemplate;
     }
 
-    static itemTemplatesFromResponses(responses: ItemTemplateResponse[], skillsById: {[skillId: number]: Skill}): ItemTemplate[] {
-        let itemTemplates: ItemTemplate[] = [];
-        for (let jsonData of responses) {
-            itemTemplates.push(ItemTemplate.fromResponse(jsonData, skillsById));
-        }
-        return itemTemplates;
+    static fromResponses(responses: ItemTemplateResponse[], skillsById: SkillDictionary): ItemTemplate[] {
+        return responses.map(response => ItemTemplate.fromResponse(response, skillsById));
     }
 
     isInSlot(slot: ItemSlot): boolean {

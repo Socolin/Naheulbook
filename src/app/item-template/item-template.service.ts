@@ -4,7 +4,7 @@ import {map, take} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {Skill, SkillService} from '../skill';
+import {Skill, SkillDictionary, SkillService} from '../skill';
 
 import {ItemCategory, ItemTemplate, ItemSection, ItemSlot, ItemType} from './item-template.model';
 import {ItemTemplateResponse} from '../api/responses';
@@ -106,10 +106,10 @@ export class ItemTemplateService {
         }
 
         return forkJoin([
-            this.httpClient.get('/api/v2/itemTemplates/search?filter=' + encodeURIComponent(filter)),
+            this.httpClient.get<ItemTemplateResponse[]>('/api/v2/itemTemplates/search?filter=' + encodeURIComponent(filter)),
             this._skillService.getSkillsById()
-        ]).pipe(map(([itemTemplateDatas, skillsById]: [ItemTemplateResponse[], { [skillId: number]: Skill }]) => {
-            return ItemTemplate.itemTemplatesFromResponses(itemTemplateDatas, skillsById);
+        ]).pipe(map(([itemTemplateDatas, skillsById]: [ItemTemplateResponse[], SkillDictionary]) => {
+            return ItemTemplate.fromResponses(itemTemplateDatas, skillsById);
         }));
     }
 

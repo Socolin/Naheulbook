@@ -6,4 +6,20 @@ mat-card {
             flex: 1 auto;
         }
     }
+
+
+    .icon-label {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 8px;
+        align-items: center;
+        .stats {
+            > * {
+                white-space: nowrap;
+            }
+        }
+        mat-divider {
+            position: relative;
+        }
+    }
 }

@@ -43,8 +43,11 @@
     </mat-card-header>
 
     <!-- Dice drop -->
-    <div *ngIf="itemTemplate.data.diceDrop">
-        <span class="ra ra-perspective-dice-random ra-lg">{{itemTemplate.data.diceDrop}}</span>
+    <div class="icon-label" *ngIf="itemTemplate.data.diceDrop">
+        <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            {{itemTemplate.data.diceDrop}}
+        </div>
     </div>
 
     <!-- Throwable -->
@@ -58,14 +61,8 @@
             Slot:
         </span>
         <ng-template ngFor let-slot [ngForOf]="itemTemplate.slots">
-            <span>{{slot.name}}</span>
+            <span>{{slot.name}} </span>
         </ng-template>
-    </div>
-
-    <!-- Dieu -->
-    <div *ngIf="itemTemplate.data.god && godsByTechName">
-        <span>Dieu:</span>
-        {{godsByTechName[itemTemplate.data.god].displayName}}
     </div>
 
     <!-- Description -->
@@ -73,7 +70,6 @@
         <span>Description:</span>
         {{itemTemplate.data.description}}
     </div>
-
 
     <!-- Note -->
     <div *ngIf="itemTemplate.data.note">
@@ -97,10 +93,19 @@
         {{itemTemplate.data.availableLocation}}
     </div>
 
+    <!-- Dieu -->
+    <div class="icon-label" *ngIf="itemTemplate.data.god && godsByTechName">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-prayer" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <span>Dieu:</span>
+            {{godsByTechName[itemTemplate.data.god].displayName}}
+        </div>
+    </div>
+
     <!-- Prix/Charge/Durée -->
-    <div>
-        <div *ngIf="itemTemplate.data.price">
-            <span>Prix:</span>
+    <div class="icon-label" *ngIf="itemTemplate.data.price">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
             <ng-template [ngIf]="itemTemplate.data.price >= 1">
                 {{itemTemplate.data.price | number}} P.O.
             </ng-template>
@@ -113,10 +118,11 @@
                 {{itemTemplate.data.price * 100}} P.C.
             </ng-template>
         </div>
-        <div *ngIf="itemTemplate.data.duration">
-            <span>Durée:</span>
-            {{itemTemplate.data.duration}}
-        </div>
+    </div>
+
+    <div *ngIf="itemTemplate.data.duration">
+        <span>Durée:</span>
+        {{itemTemplate.data.duration}}
     </div>
 
     <!-- Charge / Action -->
@@ -135,18 +141,21 @@
     </div>
 
 
-    <div *ngIf="itemTemplate.data.weight">
-        <span>
-            Poid:
-        </span>
-        <span *ngIf="itemTemplate.data.weight < 1">{{(itemTemplate.data.weight * 1000)}}g</span>
-        <span *ngIf="itemTemplate.data.weight >= 1">{{(itemTemplate.data.weight)}}Kg</span>
+    <div class="icon-label" *ngIf="itemTemplate.data.weight">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-weight" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <span>
+                Poids:
+            </span>
+            <span *ngIf="itemTemplate.data.weight < 1">{{(itemTemplate.data.weight * 1000)}}g</span>
+            <span *ngIf="itemTemplate.data.weight >= 1">{{(itemTemplate.data.weight)}}Kg</span>
+        </div>
     </div>
 
     <!-- Degat -->
-    <div class="row" *ngIf="itemTemplate.data.bonusDamage || itemTemplate.data.damageDice">
-        <div class="col-xs-12">
-            <span class="ra ra-broadsword ra-lg"></span>
+    <div class="icon-label" *ngIf="itemTemplate.data.bonusDamage || itemTemplate.data.damageDice">
+        <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
             <span *ngIf="itemTemplate.data.damageDice">{{itemTemplate.data.damageDice}}<span
                 class="ra ra-perspective-dice-random"></span></span>
             <span *ngIf="itemTemplate.data.damageDice && itemTemplate.data.bonusDamage>0">+</span>
@@ -156,39 +165,46 @@
     </div>
 
     <!-- Protection -->
-    <div *ngIf="itemTemplate.data.protection || itemTemplate.data.magicProtection || itemTemplate.data.protectionAgainstMagic">
-        <span class="ra ra-shield ra-lg"></span>
-        <span *ngIf="itemTemplate.data.protection">{{itemTemplate.data.protection}}</span>
-        <span *ngIf="itemTemplate.data.protection && itemTemplate.data.magicProtection">+</span>
-        <span *ngIf="itemTemplate.data.magicProtection">{{itemTemplate.data.magicProtection}} (magique)</span>
-        <span *ngIf="(itemTemplate.data.protection || itemTemplate.data.magicProtection) && itemTemplate.data.protectionAgainstMagic">/</span>
-        <span *ngIf="itemTemplate.data.protectionAgainstMagic">{{itemTemplate.data.protectionAgainstMagic}}>
-            <span *ngIf="itemTemplate.data.protectionAgainstType">(contre {{itemTemplate.data.protectionAgainstType}})</span>
-            <span *ngIf="!itemTemplate.data.protectionAgainstType">(contre mag./myst.)</span>
-        </span>
+    <div class="icon-label" *ngIf="itemTemplate.data.protection || itemTemplate.data.magicProtection || itemTemplate.data.protectionAgainstMagic">
+        <mat-icon fontSet="ra" fontIcon="ra-shield" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <span>Protection: </span>
+            <span *ngIf="itemTemplate.data.protection">{{itemTemplate.data.protection}}</span>
+            <span *ngIf="itemTemplate.data.protection && itemTemplate.data.magicProtection">+</span>
+            <span *ngIf="itemTemplate.data.magicProtection">{{itemTemplate.data.magicProtection}} (magique)</span>
+            <span *ngIf="(itemTemplate.data.protection || itemTemplate.data.magicProtection) && itemTemplate.data.protectionAgainstMagic">/</span>
+            <span *ngIf="itemTemplate.data.protectionAgainstMagic">{{itemTemplate.data.protectionAgainstMagic}}>
+                <span *ngIf="itemTemplate.data.protectionAgainstType">(contre {{itemTemplate.data.protectionAgainstType}})</span>
+                <span *ngIf="!itemTemplate.data.protectionAgainstType">(contre mag./myst.)</span>
+            </span>
+        </div>
     </div>
 
     <!-- Rupture -->
-    <div *ngIf="itemTemplate.data.rupture != undefined">
-        <div *ngIf="itemTemplate.data.rupture">
-            Rupture:
-            1 à {{itemTemplate.data.rupture}}
-        </div>
-        <div *ngIf="itemTemplate.data.rupture === 0">
-            Rupture: Incassable
+    <div class="icon-label" *ngIf="itemTemplate.data.rupture != undefined">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-cracked-shield" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <div *ngIf="itemTemplate.data.rupture">
+                Rupture:
+                1 à {{itemTemplate.data.rupture}}
+            </div>
+            <div *ngIf="itemTemplate.data.rupture === 0">
+                Rupture: Incassable
+            </div>
         </div>
     </div>
 
     <!-- Modificateurs -->
-    <ng-template [ngIf]="itemTemplate.modifiers && itemTemplate.modifiers.length">
-        <ng-template ngFor let-modifier [ngForOf]="itemTemplate.modifiers">
-            <div>
+    <div class="icon-label" *ngIf="itemTemplate.modifiers?.length">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
+        <div class="stats">
+            <div *ngFor="let modifier of itemTemplate.modifiers">
                 <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
                 <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
                 {{modifier | modifier}}
             </div>
-        </ng-template>
-    </ng-template>
+        </div>
+    </div>
 
     <!-- Compétences ajouté/annulé -->
     <ng-template ngFor let-skill [ngForOf]="itemTemplate.skills">
@@ -218,39 +234,42 @@
     </div>
 
     <!-- Gun -->
-    <div *ngIf="itemTemplate.data.gun">
-        Arme à poudre:
-        <dl>
-            <dt>Portée utile:</dt>
-            <dd>{{itemTemplate.data.gun.range}}</dd>
-            <dt>Dégâts:</dt>
-            <dd>{{itemTemplate.data.gun.damages}}</dd>
-            <dt>+Spécial:</dt>
-            <dd>{{itemTemplate.data.gun.special}}</dd>
-            <dt>Cadence de tir:</dt>
-            <dd>{{itemTemplate.data.gun.rateOfFire}}</dd>
-            <dt>Délai de rechargement:</dt>
-            <dd>{{itemTemplate.data.gun.reloadDelay}}</dd>
-            <dt>Épreuve de tir:</dt>
-            <dd>{{itemTemplate.data.gun.shootTest}}</dd>
-        </dl>
-        <mat-divider></mat-divider>
-        Munitions
-        <dl>
-            <dt *ngIf="itemTemplate.data.gun.fuelPerShot">
-                Combustion par coup:
-            </dt>
-            <dd *ngIf="itemTemplate.data.gun.fuelPerShot">
-                {{itemTemplate.data.gun.fuelPerShot}}
-            </dd>
-            <dt>Munitions par coup:</dt>
-            <dd>{{itemTemplate.data.gun.ammunitionPerShot}}</dd>
-        </dl>
-        <mat-divider></mat-divider>
-        <dl>
-            <dt>Chances de fonctionnement:</dt>
-            <dd>{{itemTemplate.data.gun.workLuck}}</dd>
-        </dl>
+    <div class="icon-label" *ngIf="itemTemplate.data.gun">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-revolver" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <h3 class="mat-h3">Arme à poudre</h3>
+            <dl>
+                <dt>Portée utile:</dt>
+                <dd>{{itemTemplate.data.gun.range}}</dd>
+                <dt>Dégâts:</dt>
+                <dd>{{itemTemplate.data.gun.damages}}</dd>
+                <dt>+Spécial:</dt>
+                <dd>{{itemTemplate.data.gun.special}}</dd>
+                <dt>Cadence de tir:</dt>
+                <dd>{{itemTemplate.data.gun.rateOfFire}}</dd>
+                <dt>Délai de rechargement:</dt>
+                <dd>{{itemTemplate.data.gun.reloadDelay}}</dd>
+                <dt>Épreuve de tir:</dt>
+                <dd>{{itemTemplate.data.gun.shootTest}}</dd>
+            </dl>
+            <mat-divider></mat-divider>
+            <h3 class="mat-h3">Munitions</h3>
+            <dl>
+                <dt *ngIf="itemTemplate.data.gun.fuelPerShot">
+                    Combustion par coup:
+                </dt>
+                <dd *ngIf="itemTemplate.data.gun.fuelPerShot">
+                    {{itemTemplate.data.gun.fuelPerShot}}
+                </dd>
+                <dt>Munitions par coup:</dt>
+                <dd>{{itemTemplate.data.gun.ammunitionPerShot}}</dd>
+            </dl>
+            <mat-divider></mat-divider>
+            <dl>
+                <dt>Chances de fonctionnement:</dt>
+                <dd>{{itemTemplate.data.gun.workLuck}}</dd>
+            </dl>
+        </div>
     </div>
 
     <!-- Indice de rareté -->
