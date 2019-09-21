@@ -1,0 +1,86 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span *ngIf="data.effect">Édition de l'effet {{data.effect.name}}</span>
+    <span *ngIf="!data.effect">Création d'un effet</span>
+    <div class="action-button">
+        <div [hidden]="!saving">
+            <mat-spinner diameter="16" color="accent"></mat-spinner>
+        </div>
+        <button *ngIf="data.effect" mat-button [disabled]="!form.valid || saving || !selectedCategory" (click)="saveEffect()">
+            ÉDITER
+        </button>
+        <button *ngIf="!data.effect" mat-button [disabled]="!form.valid || saving || !selectedCategory" (click)="saveEffect()">
+            CRÉER
+        </button>
+    </div>
+</mat-toolbar>
+
+<div class="content mat-typography">
+    <h2>Catégorie</h2>
+
+    <div *ngIf="effectTypes" class="category">
+        <mat-form-field class="category-selector">
+            <mat-select [ngModel]="selectedType"
+                        (selectionChange)="selectType($event.value)"
+                        placeholder="Catégorie">
+                <mat-option *ngFor="let type of effectTypes" [value]="type">{{type.name}}</mat-option>
+                <mat-option [value]="'new'">
+                    <span class="secondary-text">
+                        Ajouter...
+                    </span>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="selectedType" class="sub-category-selector">
+            <mat-select [ngModel]="selectedCategory"
+                        (selectionChange)="selectCategory($event.value)"
+                        placeholder="Sous-catégorie">
+                <mat-option *ngFor="let category of selectedType.categories" [value]="category">
+                    {{category.name}}
+                </mat-option>
+                <mat-option [value]="'new'">
+                    <span class="secondary-text">
+                        Ajouter...
+                    </span>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <ng-container [formGroup]="form">
+        <h2>Informations de base</h2>
+        <div class="name-dice">
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       formControlName="name"
+                       placeholder="Nom">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                       autocomplete="off"
+                       inputmode="number"
+                       type="number"
+                       formControlName="dice"
+                       placeholder="Dé">
+            </mat-form-field>
+        </div>
+        <div class="description">
+            <mat-form-field>
+                <textarea matInput
+                          cdkTextareaAutosize
+                          cdkAutosizeMinRows="1"
+                          cdkAutosizeMaxRows="5"
+                          autocomplete="off"
+                          formControlName="description"
+                          placeholder="Description">
+                </textarea>
+            </mat-form-field>
+        </div>
+    </ng-container>
+    <h2>Durée</h2>
+    <duration-selector [durable]="duration"></duration-selector>
+    <h2>Modificateurs</h2>
+    <modifiers-editor [modifiers]="statModifiers"></modifiers-editor>
+</div>

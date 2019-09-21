@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {NhbkMaterialModule} from '../nhbk-material.module';
 import {SharedModule} from '../shared/shared.module';
@@ -10,9 +10,7 @@ import {
     ActiveEffectEditorComponent,
     AddEffectDialogComponent,
     AddStatModifierDialogComponent,
-    CreateEffectComponent,
-    EditEffectComponent,
-    EffectEditorComponent,
+    EditEffectDialogComponent,
     EffectListComponent,
     EffectService,
     ModifierDetailComponent,
@@ -20,6 +18,7 @@ import {
     StatModifierAdvancedDialogComponent,
     StatModifierEditorComponent,
 } from './';
+import { CreateEffectTypeDialogComponent } from './create-effect-type-dialog.component';
 
 @NgModule({
     imports: [
@@ -28,34 +27,33 @@ import {
         NhbkMaterialModule,
         SharedModule,
         DateModule,
+        ReactiveFormsModule,
     ],
     declarations: [
         ActiveEffectEditorComponent,
         AddEffectDialogComponent,
-        CreateEffectComponent,
-        EditEffectComponent,
-        EffectEditorComponent,
+        AddStatModifierDialogComponent,
+        CreateEffectTypeDialogComponent,
+        EditEffectDialogComponent,
         EffectListComponent,
         ModifierDetailComponent,
         ModifiersEditorComponent,
-        StatModifierEditorComponent,
         StatModifierAdvancedDialogComponent,
-        AddStatModifierDialogComponent,
+        StatModifierEditorComponent,
     ],
     providers: [
         EffectService
     ],
     entryComponents: [
         AddEffectDialogComponent,
+        CreateEffectTypeDialogComponent,
+        EditEffectDialogComponent,
         StatModifierAdvancedDialogComponent,
         AddStatModifierDialogComponent,
     ],
     exports: [
         ActiveEffectEditorComponent,
         AddEffectDialogComponent,
-        CreateEffectComponent,
-        EditEffectComponent,
-        EffectEditorComponent,
         EffectListComponent,
         ModifierDetailComponent,
         ModifiersEditorComponent,

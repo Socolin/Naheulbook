@@ -1,21 +1,74 @@
-.effect-category-selector {
-    display: flex;
-    flex-direction: row;
-    .selector {
-        margin: 0 8px;
-        flex: 1 auto;
-        width: 100px;
-        > mat-form-field {
-            width: 100%;
+:host {
+    .effect-category-selector {
+        display: flex;
+        flex-direction: row;
+
+        .selector {
+            margin: 0 8px;
+            flex: 1 auto;
+            width: 100px;
+
+            > mat-form-field {
+                width: 100%;
+            }
         }
     }
-}
-mat-card {
-    margin: 5px;
-}
 
-.create-effect {
-    display: flex;
-    align-items: center;
+    mat-card {
+        margin: 5px;
+    }
+
+    .effect {
+        .actions-button {
+            margin-left: auto;
+        }
+
+        .modifiers {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px;
+            align-items: center;
+            .stats {
+                > * {
+                    white-space: nowrap;
+                }
+            }
+        }
+
+        .duration {
+            margin-bottom: 8px;
+            display: grid;
+            align-items: center;
+            grid-template-columns: auto 1fr;
+            gap: 8px;
+        }
+
+
+        .dice-number {
+            display: grid;
+            grid-template-columns: 40px;
+            font-size: 40px;
+            grid-template-areas: "stack";
+            align-items: center;
+            justify-content: center;
+
+            > span {
+                grid-area: stack;
+            }
+            .number {
+                line-height: 40px;
+            }
+            .icon {
+                opacity: 0.4;
+            }
+        }
+    }
+
+    .add-button {
+        z-index: 1;
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+    }
 }
 

@@ -8,7 +8,8 @@ import {LoginService} from '../user';
 
 import {EffectService} from './effect.service';
 import {EffectCategory, Effect, EffectType} from './effect.model';
-import {isNullOrUndefined} from 'util';
+import {EditEffectDialogComponent, EditEffectDialogData} from './edit-effect-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
     selector: 'effect-list',
@@ -19,19 +20,22 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputCategoryId: number | undefined;
     @Input() isOverlay = false;
     @Input() options: string[] = [];
-    @Output() onAction = new EventEmitter<{action: string, data: any}>();
+    @Output() onAction = new EventEmitter<{ action: string, data: any }>();
 
-    public types: EffectType[];
+    public effectTypes: EffectType[];
     public selectedType: EffectType;
-    public selectedCategory: EffectCategory;
-    public effects: {[categoryId: number]: Effect[]} = {};
+    public selectedCategory?: EffectCategory;
+    public effects: { [categoryId: number]: Effect[] } = {};
     public editable = false;
     public sub: Subscription;
 
-    constructor(private _router: Router
-        , private _route: ActivatedRoute
-        , private _loginService: LoginService
-        , private _effectService: EffectService) {
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        private loginService: LoginService,
+        private effectService: EffectService,
+        private dialog: MatDialog
+    ) {
     }
 
     selectType(type: EffectType) {
@@ -41,18 +45,18 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    selectCategory(category: EffectCategory): boolean {
+    selectCategory(category?: EffectCategory): boolean {
         this.selectedCategory = category;
         this.loadCategory(category.id);
         return false;
     }
 
     selectCategoryId(categoryId: number) {
-        let i = this.types.findIndex(t => t.categories.findIndex(c => c.id === categoryId) !== -1);
+        let i = this.effectTypes.findIndex(t => t.categories.findIndex(c => c.id === categoryId) !== -1);
         if (i === -1) {
             return;
         }
-        this.selectedType = this.types[i];
+        this.selectedType = this.effectTypes[i];
         let ci = this.selectedType.categories.findIndex(c => c.id === categoryId);
         this.selectCategory(this.selectedType.categories[ci]);
     }
@@ -66,21 +70,59 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     editEffect(effect: Effect) {
-        this._router.navigate(['/database/edit-effect', effect.id]);
+        const dialogRef = this.dialog.open<EditEffectDialogComponent, EditEffectDialogData, Effect>(
+            EditEffectDialogComponent, {
+                minWidth: '100vw', height: '100vh',
+                autoFocus: false,
+                data: {effect}
+            });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
+            const previousEffectCategory = this.effects[effect.category.id];
+            const index = previousEffectCategory.findIndex(e => e.id === result.id);
+            if (effect.category.id === result.category.id) {
+                if (index !== -1) {
+                    previousEffectCategory[index] = result;
+                }
+            } else {
+                if (index !== -1) {
+                    previousEffectCategory.splice(index, 1);
+                }
+                if (!(effect.category.id in this.effects)) {
+                    this.effects[effect.category.id] = [];
+                }
+                this.effects[effect.category.id].push(result);
+                this.effects[effect.category.id].sort((a, b) => a.dice - b.dice);
+                this.selectCategory(result.category);
+            }
+        })
     }
 
     createEffect() {
-        this._router.navigate(['/database/create-effect']);
+        const dialogRef = this.dialog.open<EditEffectDialogComponent, EditEffectDialogData, Effect>(
+            EditEffectDialogComponent, {
+                minWidth: '100vw', height: '100vh',
+                autoFocus: false,
+                data: {category: this.selectedCategory}
+            });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
+        })
     }
 
     loadCategory(categoryId: number): void {
-        if (!isNullOrUndefined(categoryId)) {
-            this._effectService.getEffects(categoryId).subscribe(
-                effects => {
-                    this.effects[categoryId] = effects;
-                }
-            );
-        }
+        this.effectService.getEffects(categoryId).subscribe(
+            effects => {
+                this.effects[categoryId] = effects;
+                this.effects[categoryId].sort((a, b) => a.dice - b.dice);
+            }
+        );
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -90,24 +132,24 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit() {
-        this._effectService.getEffectTypes().subscribe(types => {
-            this.types = types;
+        this.effectService.getEffectTypes().subscribe(types => {
+            this.effectTypes = types;
             if (types.length) {
                 this.selectType(types[0]);
             }
             if (this.isOverlay && this.inputCategoryId != null) {
                 this.selectCategoryId(this.inputCategoryId);
             } else {
-                if (!this._route.snapshot.data['id']) {
+                if (!this.route.snapshot.data['id']) {
                     this.loadCategory(this.selectedCategory.id);
                 }
-                this.sub = this._route.queryParams.subscribe(params => {
+                this.sub = this.route.queryParams.subscribe(params => {
                     this.selectCategoryId(+params['id']);
                 });
             }
         });
         if (!this.isOverlay) {
-            this._loginService.loggedUser.subscribe(
+            this.loginService.loggedUser.subscribe(
                 user => {
                     this.editable = (user != null && user.admin);
                 });

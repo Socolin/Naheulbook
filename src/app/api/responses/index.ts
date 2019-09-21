@@ -1,4 +1,7 @@
 export * from './described-flag-response';
+export * from './effect-category-response';
+export * from './effect-response';
+export * from './effect-type-response';
 export * from './flag-response';
 export * from './item-partial-response';
 export * from './item-response';

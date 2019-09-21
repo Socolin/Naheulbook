@@ -5,7 +5,7 @@ import {OriginListComponent} from '../origin';
 import {JobListComponent} from '../job';
 import {EditItemTemplateDialogComponent, ItemTemplateListComponent} from '../item-template';
 import {MonsterListComponent} from '../monster';
-import {CreateEffectComponent, EditEffectComponent, EffectListComponent} from '../effect';
+import {EffectListComponent} from '../effect';
 import {LocationListComponent} from '../location';
 import {QuestListComponent} from '../quest';
 import {HomeDatabaseComponent} from './home-database.component';
@@ -43,14 +43,6 @@ export const routes: Routes = [
             {
                 path: 'effects',
                 component: EffectListComponent,
-            },
-            {
-                path: 'create-effect',
-                component: CreateEffectComponent,
-            },
-            {
-                path: 'edit-effect/:id',
-                component: EditEffectComponent,
             },
             {
                 path: 'monsters',
