@@ -85,10 +85,12 @@ namespace Naheulbook.Web.Controllers
 
         [HttpGet("search")]
         public async Task<ActionResult<List<MonsterTemplateResponse>>> GetSearchMonsterTemplateAsync(
-            [FromQuery] string filter
+            [FromQuery] string filter,
+            [FromQuery] int? monsterTypeId,
+            [FromQuery] int? monsterSubCategoryId
         )
         {
-            var monsterTemplates = await _monsterTemplateService.SearchMonsterAsync(filter);
+            var monsterTemplates = await _monsterTemplateService.SearchMonsterAsync(filter, monsterTypeId, monsterSubCategoryId);
             return _mapper.Map<List<MonsterTemplateResponse>>(monsterTemplates);
         }
     }

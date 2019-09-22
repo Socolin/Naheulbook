@@ -16,7 +16,7 @@ namespace Naheulbook.Core.Services
         Task<MonsterTemplate> CreateMonsterTemplateAsync(NaheulbookExecutionContext executionContext, MonsterTemplateRequest request);
         Task<MonsterTemplate> EditMonsterTemplateAsync(NaheulbookExecutionContext executionContext, int monsterTemplateId, MonsterTemplateRequest request);
         Task<List<MonsterTemplate>> GetAllMonstersAsync();
-        Task<List<MonsterTemplate>> SearchMonsterAsync(string filter);
+        Task<List<MonsterTemplate>> SearchMonsterAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId);
     }
 
     public class MonsterTemplateService : IMonsterTemplateService
@@ -123,11 +123,11 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<MonsterTemplate>> SearchMonsterAsync(string filter)
+        public async Task<List<MonsterTemplate>> SearchMonsterAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                return await uow.MonsterTemplates.SearchByNameAsync(filter, 10);
+                return await uow.MonsterTemplates.SearchByNameAndCategoryAsync(filter, monsterTypeId, monsterSubCategoryId, 10);
             }
         }
     }

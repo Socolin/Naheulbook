@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Repositories
     public interface IMonsterTemplateRepository : IRepository<MonsterTemplate>
     {
         Task<List<MonsterTemplate>> GetAllWithItemsFullDataWithLocationsAsync();
-        Task<List<MonsterTemplate>> SearchByNameAsync(string filter, int maxResult);
+        Task<List<MonsterTemplate>> SearchByNameAndCategoryAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId, int maxResult);
         Task<MonsterTemplate> GetByIdWithItemsWithLocationsAsync(int monsterTemplateId);
         Task<MonsterTemplate> GetByIdWithItemsFullDataWithLocationsAsync(int monsterTemplateId);
     }
@@ -31,13 +31,24 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<List<MonsterTemplate>> SearchByNameAsync(string partialName, int maxResult)
+        public Task<List<MonsterTemplate>> SearchByNameAndCategoryAsync(string partialName, int? monsterTypeId, int? monsterSubCategoryId, int maxResult)
         {
-            return Context.MonsterTemplates
+            var query = Context.MonsterTemplates
                 .Include(x => x.Locations)
                 .Include(m => m.Items)
                 .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)
-                .Where(e => e.Name.ToUpper().Contains(partialName.ToUpper()))
+                .Where(e => e.Name.ToUpper().Contains(partialName.ToUpper()));
+
+            if (monsterSubCategoryId.HasValue)
+            {
+                query = query.Where(e => e.CategoryId == monsterSubCategoryId.Value);
+            }
+            else if (monsterTypeId.HasValue)
+            {
+                query = query.Where(e => e.Category.TypeId == monsterTypeId.Value);
+            }
+
+            return query
                 .Take(maxResult)
                 .ToListAsync();
         }
