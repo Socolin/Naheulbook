@@ -87,7 +87,7 @@ export class MonsterListComponent implements OnInit {
             this.monsterTypes.push(monsterTemplate.category.type);
             this.selectedMonsterType = monsterTemplate.category.type;
         }
-        else if (!(monsterTemplate.category.id in monsterType.categories)) {
+        else if (!(monsterType.categories.find(c => c.id === monsterTemplate.category.id))) {
             monsterType.categories.push(monsterTemplate.category);
             this.selectedMonsterType = monsterType;
         }
