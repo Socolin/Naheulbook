@@ -23,9 +23,7 @@ Feature: MonsterTemplates
       ],
       "simpleInventory": [
         {
-          "itemTemplate": {
-            "id": ${ItemTemplate.Id}
-          },
+          "itemTemplateId": ${ItemTemplate.Id},
           "chance": 0.5,
           "minCount": 1,
           "maxCount": 2
@@ -233,9 +231,7 @@ Feature: MonsterTemplates
       ],
       "simpleInventory": [
         {
-          "itemTemplate": {
-            "id": ${ItemTemplate.Id}
-          },
+          "itemTemplateId": ${ItemTemplate.Id},
           "chance": 0.5,
           "minCount": 1,
           "maxCount": 2

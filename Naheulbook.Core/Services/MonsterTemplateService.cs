@@ -51,7 +51,7 @@ namespace Naheulbook.Core.Services
                     {
                         Location = location
                     }).ToList(),
-                    Items = request.SimpleInventory.Where(i => !i.Id.HasValue).Select(i => new MonsterTemplateSimpleInventory
+                    Items = request.SimpleInventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateSimpleInventory
                     {
                         Chance = i.Chance,
                         ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplateId),
