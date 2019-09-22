@@ -7,7 +7,7 @@ import {MatDialog, MatTabChangeEvent} from '@angular/material';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
-import {AutocompleteValue, LapCountDecrement, NhbkDialogService} from '../shared';
+import {AutocompleteValue, LapCountDecrement, NhbkDialogService, PromptDialogComponent} from '../shared';
 import {NotificationsService} from '../notifications';
 import {dateOffset2TimeDuration} from '../date/util';
 import {NhbkDateOffset} from '../date';
@@ -472,5 +472,27 @@ export class GroupComponent implements OnInit, OnDestroy {
                 }, false, itemTemplate);
             }
         }
+    }
+
+    openEditGroupNameDialog() {
+        const dialogRef = this.dialog.open(PromptDialogComponent, {
+            data: {
+                confirmText: 'CHANGER',
+                cancelText: 'ANNULER',
+                placeholder: 'Nom',
+                title: 'Renommer le groupe',
+                initialValue: this.group.name
+            }
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this._groupService.editGroupValue(this.group.id, 'name', result.text)
+                .subscribe(() => {
+                    this.group.name = result.text;
+                });
+        });
     }
 }

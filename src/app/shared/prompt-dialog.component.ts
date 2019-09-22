@@ -7,6 +7,7 @@ export interface PromptDialogData {
     placeholder?: string;
     confirmText: string;
     cancelText: string;
+    initialValue?: string;
 }
 
 export interface PromptDialogResult {
