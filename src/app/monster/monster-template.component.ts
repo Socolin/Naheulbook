@@ -9,6 +9,8 @@ import {
     EditMonsterTemplateDialogComponent,
     EditMonsterTemplateDialogData
 } from './edit-monster-template-dialog.component';
+import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
+import {ItemTemplate} from '../item-template';
 
 @Component({
     selector: 'monster-template',
@@ -52,5 +54,13 @@ export class MonsterTemplateComponent implements OnInit {
                 this.traisById = traitsById
             }
         );
+    }
+
+    openItemInfo(itemTemplate: ItemTemplate) {
+        this.dialog.open(ItemTemplateDialogComponent, {
+            panelClass: 'app-dialog-no-padding',
+            data: {itemTemplate},
+            autoFocus: false
+        });
     }
 }

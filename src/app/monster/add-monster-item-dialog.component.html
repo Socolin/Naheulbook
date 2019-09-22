@@ -71,6 +71,9 @@
             color="primary"
             [disabled]="!inventoryElement"
             (click)=addItem()>
-        AJOUTER
+        <ng-template ngIf [ngIf]="!data.inventoryElement" [ngIfElse]="edit">
+            AJOUTER
+        </ng-template>
+        <ng-template #edit>MODIFIER</ng-template>
     </button>
 </mat-dialog-actions>

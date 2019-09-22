@@ -234,7 +234,11 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         let nextIndex = (index + 1) % this.selectedSection.categories.length;
         this.nextSubCategory = this.selectedSection.categories[nextIndex];
         this.updateVisibleItems();
-        document.getElementById('first-item').scrollIntoView();
+
+        const firstItem = document.getElementById('first-item');
+        if (firstItem) {
+            firstItem.scrollIntoView();
+        }
     }
 }
 

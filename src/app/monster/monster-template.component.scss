@@ -73,6 +73,7 @@
     }
 
     .inventory-element {
+        cursor: pointer;
         align-items: center;
         display: grid;
         grid-template-columns: 32px 1fr auto;
