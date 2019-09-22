@@ -207,6 +207,7 @@ Feature: Group
     When performing a PATCH to the url "/api/v2/groups/${Group.Id}/" with the following json content and the current jwt
     """
     {
+      "name": "new-name",
       "mankdebol": 4,
       "debilibeuk": 2,
       "date": {
