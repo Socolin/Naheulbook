@@ -1,15 +1,16 @@
 @import "~app/style/responsive-utils";
 
 :host {
-    $padding-useful-data-button: 72px;
+    display: block;
+    $padding-create-button: 72px;
 
-    padding-bottom: $padding-useful-data-button;
+    padding-bottom: $padding-create-button;
 
     /* For safari.. fab button is hidden if component is too small. */
     /* So compute viewport height - toolbar - padding */
-    min-height: calc(100vh - 64px - 32px - #{$padding-useful-data-button});
+    min-height: calc(100vh - 64px - 32px - #{$padding-create-button});
     @include for-phone-only {
-        min-height: calc(100vh - 16px - 56px - #{$padding-useful-data-button});
+        min-height: calc(100vh - 16px - 56px - #{$padding-create-button});
     }
 
     .monster-category-selector {
