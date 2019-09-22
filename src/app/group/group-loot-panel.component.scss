@@ -13,8 +13,7 @@
 }
 
 .loot-list {
-    display: grid;
-    grid-template-columns: minmax(285px, 900px);
+    width: 100%;
 
     mat-toolbar {
         align-items: center;

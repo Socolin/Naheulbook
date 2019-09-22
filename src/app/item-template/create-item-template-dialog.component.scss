@@ -9,9 +9,6 @@
         overflow-y: auto;
         display: grid;
         justify-content: center;
-        > * {
-            max-width: 900px;
-        }
     }
 
     mat-toolbar {
