@@ -15,15 +15,33 @@
 
     <mat-vertical-stepper linear="true" #stepper>
         <mat-step>
-            <ng-template matStepLabel>Chercher un effet pré-existant</ng-template>
+            <ng-template matStepLabel>Chercher un monstre pré-existant</ng-template>
             <mat-form-field class="search-input">
                 <input matInput
                        autocapitalize="off"
                        autocomplete="off"
                        placeholder="Monstre"
-                       #filter
-                       (keyup)="updateFilterMonster(filter.value)">
+                       [(ngModel)]="filter"
+                       (keyup)="updateFilteredMonster()">
             </mat-form-field>
+            <div class="category">
+                <mat-form-field>
+                    <mat-select (selectionChange)="selectMonsterType($event.value)" placeholder="Catégorie">
+                        <mat-option [value]="'none'"></mat-option>
+                        <mat-option *ngFor="let monsterType of monsterTypes" [value]="monsterType">
+                            {{monsterType.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-select [ngModel]="selectedMonsterCategory" (selectionChange)="selectMonsterCategory($event.value)" placeholder="Sous-catégorie">
+                        <mat-option [value]="'none'"></mat-option>
+                        <mat-option *ngFor="let monsterSubCategory of selectedMonsterType?.categories || []" [value]="monsterSubCategory">
+                            {{monsterSubCategory.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
             <mat-action-list>
                 <div mat-ripple *ngFor="let monsterTemplate of filteredMonsters" (click)="selectMonsterInAutocompleteList(monsterTemplate); stepper.next()">
                     <div class="filter-result">

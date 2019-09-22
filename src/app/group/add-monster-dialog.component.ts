@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {getRandomInt} from '../shared';
 import {Item, ItemData} from '../item';
-import {MonsterTemplate, MonsterTemplateService} from '../monster';
+import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateService, MonsterTemplateType} from '../monster';
 import {ItemTemplate} from '../item-template';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
@@ -34,10 +34,15 @@ export interface AddMonsterDialogResult {
     templateUrl: './add-monster-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './add-monster-dialog.component.scss']
 })
-export class AddMonsterDialogComponent {
+export class AddMonsterDialogComponent implements OnInit {
+    public monsterTypes: MonsterTemplateType[] = [];
+
+    public selectedMonsterType?: MonsterTemplateType;
+    public selectedMonsterCategory?: MonsterTemplateCategory;
     public selectedMonsterTemplate?: MonsterTemplate;
-    public items: Item[] = [];
     public filteredMonsters: MonsterTemplate[] = [];
+    public filter?: string;
+    public items: Item[] = [];
 
     public form = new FormGroup({
         name: new FormControl(),
@@ -115,12 +120,15 @@ export class AddMonsterDialogComponent {
         }
     }
 
-    updateFilterMonster(filter: string) {
-        if (!filter) {
+    updateFilteredMonster() {
+        if (!this.filter) {
             return;
         }
 
-        return this.monsterTemplateService.searchMonster(filter).subscribe((monsters) => {
+        const monsterTypeId = this.selectedMonsterType && this.selectedMonsterType.id;
+        const monsterSubCategoryId = this.selectedMonsterCategory && this.selectedMonsterCategory.id;
+
+        return this.monsterTemplateService.searchMonster(this.filter, monsterTypeId, monsterSubCategoryId).subscribe((monsters) => {
             this.filteredMonsters = monsters;
         });
     }
@@ -166,5 +174,30 @@ export class AddMonsterDialogComponent {
             item.data.notIdentified = true;
             item.data.name = item.template.data.notIdentifiedName || item.template.name;
         }
+    }
+
+    selectMonsterType(monsterType: MonsterTemplateType | 'none') {
+        if (monsterType === 'none') {
+            this.selectedMonsterType = undefined;
+        } else {
+            this.selectedMonsterType = monsterType;
+            this.selectedMonsterCategory = undefined;
+        }
+        this.updateFilteredMonster()
+    }
+
+    selectMonsterCategory(monsterCategory: MonsterTemplateCategory | 'none') {
+        if (monsterCategory === 'none') {
+            this.selectedMonsterCategory = undefined;
+        } else {
+            this.selectedMonsterCategory = monsterCategory;
+        }
+        this.updateFilteredMonster()
+    }
+
+    ngOnInit(): void {
+        this.monsterTemplateService.getMonsterTypes().subscribe(monsterTypes => {
+            this.monsterTypes = monsterTypes;
+        });
     }
 }

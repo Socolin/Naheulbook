@@ -112,10 +112,17 @@ export class MonsterTemplateService {
         return this.monsterTraitsById;
     }
 
-    searchMonster(name): Observable<MonsterTemplate[]> {
+    searchMonster(name: string, monsterTypeId?: number, monsterSubCategoryId?: number): Observable<MonsterTemplate[]> {
+        let url = `/api/v2/monsterTemplates/search?filter=${encodeURIComponent(name)}`;
+        if (monsterSubCategoryId) {
+            url += `&monsterSubCategoryId=${encodeURIComponent(monsterSubCategoryId.toString())}`;
+        }
+        else if (monsterTypeId) {
+            url += `&monsterTypeId=${encodeURIComponent(monsterTypeId.toString())}`;
+        }
         return forkJoin([
             this.getMonsterCategoriesById(),
-            this.httpClient.get<MonsterTemplateResponse[]>(`/api/v2/monsterTemplates/search?filter=${encodeURIComponent(name)}`),
+            this.httpClient.get<MonsterTemplateResponse[]>(url),
             this.skillService.getSkillsById()
         ]).pipe(map(([categories, monsters, skillsById]) => MonsterTemplate.templatesFromResponse(monsters, categories, skillsById)));
     }
