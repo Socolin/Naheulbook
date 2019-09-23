@@ -134,6 +134,10 @@ export class ItemService {
         return this.httpClient.put<ItemPartialResponse>(`/api/v2/items/${itemId}/data`, itemData);
     }
 
+    useItemCharge(itemId: number): Observable<ItemPartialResponse> {
+        return this.httpClient.post<ItemPartialResponse>(`/api/v2/items/${itemId}/useCharge`, {});
+    }
+
     updateItemModifiers(itemId: number, modifiers: ActiveStatsModifier[]): Observable<ItemPartialResponse> {
         return this.httpClient.put<ItemPartialResponse>(`/api/v2/items/${itemId}/modifiers`, modifiers);
     }

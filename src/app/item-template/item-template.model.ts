@@ -156,7 +156,7 @@ export class ItemTemplate {
     slots: ItemSlot[] = [];
     restrictJobs: Job[] = [];
     requirements: any[] = [];
-    skillModifiers: ItemSkillModifier[];
+    skillModifiers?: ItemSkillModifier[];
 
     static hasSlot(template: ItemTemplate, slotName: string): boolean {
         if (!template.slots) {

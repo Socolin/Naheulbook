@@ -237,7 +237,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             if (!item.data.charge) {
                 throw new Error('Cannot use charge on item with no defined charge. itemId: ' + item.id);
             }
-            this._itemService.updateItem(item.id, {...item.data, charge: item.data.charge - 1}).subscribe(
+            this._itemService.useItemCharge(item.id).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
         });
