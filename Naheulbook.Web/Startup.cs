@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Naheulbook.Core.Actions.Executor;
 using Naheulbook.Core.Clients;
 using Naheulbook.Core.Configurations;
 using Naheulbook.Core.Factories;
@@ -86,6 +87,13 @@ namespace Naheulbook.Web
 
             services.AddSingleton<IUnitOfWorkFactory>(new UnitOfWorkFactory(naheulbookDbContextOptionsBuilder.Options));
 
+            services.AddSingleton<IActionsUtil, ActionsUtil>();
+            services.AddSingleton<IAddItemExecutor, AddItemExecutor>();
+            services.AddSingleton<IRemoveItemExecutor, RemoveItemExecutor>();
+            services.AddSingleton<IAddCustomModifierExecutor, AddCustomModifierExecutor>();
+            services.AddSingleton<IAddEffectExecutor, AddEffectExecutor>();
+            services.AddSingleton<IAddEvExecutor, AddEvExecutor>();
+            services.AddSingleton<IAddEaExecutor, AddEaExecutor>();
             services.AddSingleton<ICalendarService, CalendarService>();
             services.AddSingleton<ICharacterRandomNameService, CharacterRandomNameService>();
             services.AddSingleton<ICharacterService, CharacterService>();

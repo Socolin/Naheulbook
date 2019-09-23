@@ -3,6 +3,7 @@ using Naheulbook.Data.Models;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
+using Newtonsoft.Json;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps
@@ -86,6 +87,21 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         public void GivenAnItemBasedOnThatItemTemplateInTheCharacterInventory()
         {
             _testDataUtil.AddItem(_testDataUtil.GetLast<Character>());
+            _testDataUtil.GetLast<Character>().Items = new List<Item>
+            {
+                _testDataUtil.GetLast<Item>()
+            };
+            _testDataUtil.SaveChanges();
+        }
+
+        [Given(@"an item based on that item template in the character inventory with (\d+) charges?")]
+        public void GivenAnItemBasedOnThatItemTemplateInTheCharacterInventoryWithXCharge(int chargeCount)
+        {
+            _testDataUtil.AddItem(_testDataUtil.GetLast<Character>(), item =>
+            {
+                item.Data = JsonConvert.SerializeObject(new {charge = chargeCount});
+            });
+
             _testDataUtil.GetLast<Character>().Items = new List<Item>
             {
                 _testDataUtil.GetLast<Item>()

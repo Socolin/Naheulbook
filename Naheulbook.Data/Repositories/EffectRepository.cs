@@ -13,6 +13,7 @@ namespace Naheulbook.Data.Repositories
         Task<ICollection<Effect>> GetByCategoryWithModifiersAsync(long categoryId);
         Task<Effect> GetWithModifiersAsync(int effectId);
         Task<List<Effect>> SearchByNameAsync(string partialName, int maxResult);
+        Task<Effect> GetWithEffectWithModifiersAsync(int effectId);
     }
 
     public class EffectRepository : Repository<Effect, NaheulbookDbContext>, IEffectRepository
@@ -51,6 +52,14 @@ namespace Naheulbook.Data.Repositories
                 .Where(e => e.Name.ToUpper().Contains(partialName.ToUpper()))
                 .Take(maxResult)
                 .ToListAsync();
+        }
+
+        public Task<Effect> GetWithEffectWithModifiersAsync(int effectId)
+        {
+            return Context.Effects
+                .Include(e => e.Category)
+                .Include(e => e.Modifiers)
+                .FirstAsync(e => e.Id == effectId);
         }
     }
 }

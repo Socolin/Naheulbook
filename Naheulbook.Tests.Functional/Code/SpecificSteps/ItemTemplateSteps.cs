@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Naheulbook.Data.Models;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.TestUtils;
+using Newtonsoft.Json;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps
@@ -64,6 +66,40 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             if (!_testDataUtil.Contains<ItemTemplateCategory>())
                 _testDataUtil.AddItemTemplateCategory();
             _testDataUtil.AddItemTemplate();
+        }
+
+        [Given("an item template with a charge")]
+        public void GivenAnItemTemplateWithACharge()
+        {
+            if (!_testDataUtil.Contains<ItemTemplateSection>())
+                _testDataUtil.AddItemTemplateSection();
+            if (!_testDataUtil.Contains<ItemTemplateCategory>())
+                _testDataUtil.AddItemTemplateCategory();
+            _testDataUtil.AddItemTemplate(itemTemplate =>
+            {
+                var itemTemplateData = JsonConvert.DeserializeObject<ItemTemplateData>(itemTemplate.Data) ?? new ItemTemplateData();
+                itemTemplateData.Charge = 1;
+                itemTemplateData.Actions = new List<NhbkAction>
+                {
+                    new NhbkAction{Type = "addItem",Data = new NhbkActionData
+                    {
+                        TemplateId = _testDataUtil.GetLast<ItemTemplate>().Id,
+                    }},
+                    new NhbkAction{Type = "addEv",Data = new NhbkActionData
+                    {
+                        Ev = 1
+                    }},
+                    new NhbkAction{Type = "addEa",Data = new NhbkActionData
+                    {
+                        Ea = 1
+                    }},
+                    new NhbkAction{Type = "custom",Data = new NhbkActionData
+                    {
+                        Text = "some-text"
+                    }}
+                };
+                itemTemplate.Data = JsonConvert.SerializeObject(itemTemplateData);
+            });
         }
 
         [Given("an item template with all optional fields set")]

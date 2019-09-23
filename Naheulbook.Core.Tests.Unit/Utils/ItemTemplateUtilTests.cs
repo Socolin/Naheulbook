@@ -3,6 +3,7 @@ using FluentAssertions;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.Utils;
 using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
@@ -13,12 +14,18 @@ namespace Naheulbook.Core.Tests.Unit.Utils
     {
         private ItemTemplateUtil _util;
         private IStringCleanupUtil _stringCleanupUtil;
+        private IJsonUtil _jsonUtil;
 
         [SetUp]
         public void SetUp()
         {
             _stringCleanupUtil = Substitute.For<IStringCleanupUtil>();
-            _util = new ItemTemplateUtil(_stringCleanupUtil);
+            _jsonUtil = Substitute.For<IJsonUtil>();
+
+            _util = new ItemTemplateUtil(
+                _stringCleanupUtil,
+                _jsonUtil
+            );
         }
 
         [Test]

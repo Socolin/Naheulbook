@@ -16,6 +16,7 @@ namespace Naheulbook.Core.Utils
         void EquipItem(Item item, int? level);
         Task<(Item takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger);
         Task<IList<Item>> CreateInitialPlayerInventoryAsync(int money);
+        bool DecrementQuantityOrDeleteItem(Item contextUsedItem);
     }
 
     public class ItemUtil : IItemUtil
@@ -149,6 +150,23 @@ namespace Naheulbook.Core.Utils
             moneyItem.Container = purseItem;
 
             return new List<Item> {moneyItem, purseItem};
+        }
+
+        public bool DecrementQuantityOrDeleteItem(Item item)
+        {
+            var itemData = _jsonUtil.Deserialize<ItemData>(item.Data) ?? new ItemData();
+            if (itemData.Quantity > 1)
+            {
+                var itemTemplateData = _jsonUtil.Deserialize<ItemTemplateData>(item.ItemTemplate.Data);
+                if (itemTemplateData.Charge.HasValue)
+                    itemData.Charge = itemTemplateData.Charge.Value;
+
+                itemData.Quantity--;
+                item.Data = _jsonUtil.Serialize(itemData);
+                return false;
+            }
+
+            return true;
         }
 
         private Item SplitItem(Item originalItem, ItemData originalItemData, int quantity)

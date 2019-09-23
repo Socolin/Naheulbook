@@ -27,6 +27,30 @@ Feature: Item
     }
     """
 
+  Scenario: Can use item charge
+    Given a JWT for a user
+    And a character
+    And an item template
+    And an item template with a charge
+    And an item based on that item template in the character inventory with 2 charges
+
+    When performing a POST to the url "/api/v2/items/${Item.Id}/useCharge" with the following json content and the current jwt
+    """
+    {
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${Item.Id},
+      "modifiers": ${Item.Modifiers},
+      "data": {
+        "charge": 1
+      }
+    }
+    """
+
   Scenario: Can update item modifiers
 
     Given a JWT for a user

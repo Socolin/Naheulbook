@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Naheulbook.Core.Actions;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
@@ -26,6 +27,7 @@ namespace Naheulbook.Core.Services
         Task<(Item takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
         Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
         Task<IList<Item>> CreateItemsAsync(IList<CreateItemRequest> requestItems);
+        Task<Item> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request);
     }
 
     public class ItemService : IItemService
@@ -39,6 +41,7 @@ namespace Naheulbook.Core.Services
         private readonly IJsonUtil _jsonUtil;
         private readonly IRngUtil _rngUtil;
         private readonly IItemTemplateUtil _itemTemplateUtil;
+        private readonly IActionsUtil _actionsUtil;
 
         public ItemService(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -49,7 +52,8 @@ namespace Naheulbook.Core.Services
             ICharacterHistoryUtil characterHistoryUtil,
             IJsonUtil jsonUtil,
             IRngUtil rngUtil,
-            IItemTemplateUtil itemTemplateUtil
+            IItemTemplateUtil itemTemplateUtil,
+            IActionsUtil actionsUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -61,6 +65,7 @@ namespace Naheulbook.Core.Services
             _jsonUtil = jsonUtil;
             _rngUtil = rngUtil;
             _itemTemplateUtil = itemTemplateUtil;
+            _actionsUtil = actionsUtil;
         }
 
         public async Task<Item> AddItemToAsync(
@@ -123,8 +128,6 @@ namespace Naheulbook.Core.Services
                 {
                     if (itemData.Quantity != currentItemData.Quantity)
                         item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogChangeItemQuantity(item.CharacterId.Value, item, currentItemData.Quantity, itemData.Quantity));
-                    if (itemData.Charge.HasValue && itemData.Charge == currentItemData.Charge - 1) // TODO: execute item actions when a charge is used
-                        item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogUseItemCharge(item.CharacterId.Value, item, currentItemData.Charge, itemData.Charge));
                     if (itemData.ReadCount.HasValue && itemData.ReadCount == currentItemData.ReadCount + 1)
                         item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogReadBook(item.CharacterId.Value, item));
                     if (currentItemData.NotIdentified == true && itemData.NotIdentified == null)
@@ -305,6 +308,47 @@ namespace Naheulbook.Core.Services
             }
 
             return items;
+        }
+
+        public async Task<Item> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var usedItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId);
+                if (!usedItem.CharacterId.HasValue)
+                    throw new InvalidItemOwnerTypeException(itemId);
+
+                _authorizationUtil.EnsureItemAccess(executionContext, usedItem);
+
+                var sourceCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value);
+                var targetCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value);
+
+                if (sourceCharacter.GroupId != targetCharacter.GroupId)
+                    throw new ForbiddenAccessException();
+
+                var itemData = _jsonUtil.Deserialize<ItemData>(usedItem.Data) ?? new ItemData();
+                if (itemData.Charge < 1)
+                    throw new NotChargeLeftOnItemException();
+
+                itemData.Charge--;
+                sourceCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogUseItemCharge(usedItem.CharacterId.Value, usedItem, itemData.Charge, itemData.Charge - 1));
+                usedItem.Data = _jsonUtil.Serialize(itemData);
+
+                var notificationSession = _notificationSessionFactory.CreateSession();
+                var context = new ActionContext(usedItem, sourceCharacter, targetCharacter, uow);
+                var itemTemplateData = _itemTemplateUtil.GetItemTemplateData(usedItem.ItemTemplate);
+                if (itemTemplateData.Actions == null)
+                    throw new InvalidItemTemplateActionsDataException(usedItem.ItemTemplateId);
+                foreach (var action in itemTemplateData.Actions)
+                {
+                    await _actionsUtil.ExecuteActionAsync(action, context, notificationSession);
+                }
+
+                await uow.CompleteAsync();
+                await notificationSession.CommitAsync();
+
+                return usedItem;
+            }
         }
     }
 }

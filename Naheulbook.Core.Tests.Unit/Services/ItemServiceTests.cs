@@ -33,6 +33,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private IItemTemplateUtil _itemTemplateUtil;
 
         private ItemService _service;
+        private IActionsUtil _actionsUtil;
 
         [SetUp]
         public void SetUp()
@@ -45,8 +46,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
             _jsonUtil = Substitute.For<IJsonUtil>();
             _itemTemplateUtil = Substitute.For<IItemTemplateUtil>();
-
+            _actionsUtil = Substitute.For<IActionsUtil>();
             _rngUtil = Substitute.For<IRngUtil>();
+
             _service = new ItemService(
                 _unitOfWorkFactory,
                 _itemFactory,
@@ -56,7 +58,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _characterHistoryUtil,
                 _jsonUtil,
                 _rngUtil,
-                _itemTemplateUtil
+                _itemTemplateUtil,
+                _actionsUtil
             );
         }
 
@@ -128,29 +131,6 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
             _characterHistoryUtil.CreateLogChangeItemQuantity(characterId, item, currentQuantity, newQuantity)
-                .Returns(characterHistoryEntry);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
-                .Do(info => item.Character.HistoryEntries.Should().Contain(characterHistoryEntry));
-
-            await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
-
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
-        }
-
-        [Test]
-        public async Task UpdateItemDataAsync_WhenChargeDecrementByOne_ShouldLogItInCharacterHistory()
-        {
-            const int itemId = 4;
-            const int characterId = 8;
-            var itemData = new ItemData {Charge = 3};
-            var item = GivenAnItem(new ItemData {Charge = 4}, characterId);
-            var characterHistoryEntry = new CharacterHistoryEntry();
-
-            _jsonUtil.Serialize(itemData)
-                .Returns("some-new-item-data-json");
-            _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
-                .Returns(item);
-            _characterHistoryUtil.CreateLogUseItemCharge(characterId, item, 4, 3)
                 .Returns(characterHistoryEntry);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
                 .Do(info => item.Character.HistoryEntries.Should().Contain(characterHistoryEntry));

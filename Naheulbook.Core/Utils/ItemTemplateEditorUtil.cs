@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
+using Naheulbook.Shared.Utils;
 using Newtonsoft.Json;
 
 namespace Naheulbook.Core.Utils
@@ -10,15 +12,21 @@ namespace Naheulbook.Core.Utils
     {
         void ApplyChangesFromRequest(ItemTemplate itemTemplate, ItemTemplateRequest request);
         IEnumerable<ItemTemplate> FilterItemTemplatesBySource(IEnumerable<ItemTemplate> itemTemplates, int? currentUserId, bool includeCommunityItem);
+        ItemTemplateData GetItemTemplateData(ItemTemplate itemTemplate);
     }
 
     public class ItemTemplateUtil : IItemTemplateUtil
     {
         private readonly IStringCleanupUtil _stringCleanupUtil;
+        private readonly IJsonUtil _jsonUtil;
 
-        public ItemTemplateUtil(IStringCleanupUtil stringCleanupUtil)
+        public ItemTemplateUtil(
+            IStringCleanupUtil stringCleanupUtil,
+            IJsonUtil jsonUtil
+        )
         {
             _stringCleanupUtil = stringCleanupUtil;
+            _jsonUtil = jsonUtil;
         }
 
         public void ApplyChangesFromRequest(ItemTemplate itemTemplate, ItemTemplateRequest request)
@@ -74,6 +82,11 @@ namespace Naheulbook.Core.Utils
                                             || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItem)
                                             || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
             );
+        }
+
+        public ItemTemplateData GetItemTemplateData(ItemTemplate itemTemplate)
+        {
+            return _jsonUtil.Deserialize<ItemTemplateData>(itemTemplate.Data) ?? new ItemTemplateData();
         }
     }
 }

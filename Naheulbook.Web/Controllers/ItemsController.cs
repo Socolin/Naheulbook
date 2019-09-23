@@ -10,6 +10,7 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
+using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Web.Controllers
 {
@@ -59,6 +60,28 @@ namespace Naheulbook.Web.Controllers
             {
                 await _itemService.DeleteItemAsync(executionContext, itemId);
                 return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+            }
+            catch (ItemNotFoundException ex)
+            {
+                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [HttpPost("{ItemId}/useCharge")]
+        public async Task<ActionResult<ItemPartialResponse>> PostUseChargeAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int itemId,
+            [FromBody] UseChargeItemRequest request
+        )
+        {
+            try
+            {
+                var item = await _itemService.UseChargeAsync(executionContext, itemId, request);
+                return _mapper.Map<ItemPartialResponse>(item);
             }
             catch (ForbiddenAccessException ex)
             {
