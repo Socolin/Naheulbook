@@ -46,7 +46,7 @@ export class CreateItemTemplateDialogComponent implements OnInit {
         let {id: itemTemplateId, skillModifiers, ...baseRequest} = this.item;
         const request = {
             ...baseRequest,
-            skillModifiers: skillModifiers.map(s => ({value: s.value, skill: s.skill.id}))
+            skillModifiers: skillModifiers && skillModifiers.map(s => ({value: s.value, skill: s.skill.id}))
         };
         this._itemTemplateService.createItemTemplate(request).subscribe(
             itemTemplate => {
