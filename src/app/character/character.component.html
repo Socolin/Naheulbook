@@ -168,6 +168,27 @@
                     <div>Malus point d'impact: 1</div>
                 </mat-card-content>
             </mat-card>
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        Compétences
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-list>
+                        <mat-list-item *ngFor="let skill of character.computedData.skills" class="skill-list-item">
+                            <h4 matLine [class.canceled]="skill.canceled">{{skill?.skillDef?.name}}</h4>
+                            <span *ngIf="skill.canceled">{{skill.canceled}}</span>
+                            <p matLine>
+                                <span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>
+                            </p>
+                            <button mat-icon-button (click)="openSkillInfoDialog(skill.skillDef)">
+                                <mat-icon>info</mat-icon>
+                            </button>
+                        </mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+            </mat-card>
         </div>
         <!-- End of infos tab -->
     </mat-tab>
@@ -639,27 +660,7 @@
                 </mat-card-actions>
             </mat-card>
         </div>
-        <div class="stat-tab">
-            <mat-card>
-                <div>
-                    <strong>Compétence</strong>
-                </div>
-                <div>
-                    <mat-list dense>
-                        <mat-list-item *ngFor="let skill of character.computedData.skills" class="skill-list-item">
-                            <h4 matLine [class.canceled]="skill.canceled">{{skill?.skillDef?.name}}</h4>
-                            <span *ngIf="skill.canceled">{{skill.canceled}}</span>
-                            <p matLine>
-                                <span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>
-                            </p>
-                            <button mat-icon-button (click)="openSkillInfoDialog(skill.skillDef)">
-                                <mat-icon>info</mat-icon>
-                            </button>
-                        </mat-list-item>
-                    </mat-list>
-                </div>
-            </mat-card>
-        </div>
+        <effect-panel [character]="character"></effect-panel>
         <!-- End of stats tab -->
     </mat-tab>
     <mat-tab label="Inventaire">
@@ -667,12 +668,10 @@
         <inventory-panel #inventoryPanel [inGroupTab]="inGroupTab" [character]="character"></inventory-panel>
         <!-- End of inventory tab -->
     </mat-tab>
-    <mat-tab label="Effet">
-        <!-- Start of effects tab -->
-        <effect-panel [character]="character"></effect-panel>
-        <!-- End of effects tab -->
-    </mat-tab>
-    <mat-tab label="Loot">
+    <mat-tab>
+        <ng-template matTabLabel>
+            <span [matBadgeOverlap]="false" [matBadge]="character?.loots?.length ? character.loots.length.toString() : undefined" >Loot</span>
+        </ng-template>
         <!-- Start of effects tab -->
         <character-loot-panel #lootPanel [character]="character" [inGroupTab]="inGroupTab"></character-loot-panel>
         <!-- End of effects tab -->

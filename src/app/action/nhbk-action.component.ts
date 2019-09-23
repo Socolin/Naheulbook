@@ -1,9 +1,9 @@
-import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {NhbkAction} from './nhbk-action.model';
-import {EffectService} from '../effect/effect.service';
-import {Effect} from '../effect/effect.model';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {NhbkAction, NhbkActionType} from './nhbk-action.model';
+import {EffectService} from '../effect';
+import {Effect} from '../effect';
 import {duration2text} from '../date/util';
-import {ActiveStatsModifier} from '../shared/stat-modifier.model';
+import {ActiveStatsModifier} from '../shared';
 
 @Component({
     selector: 'nhbk-action',
@@ -20,7 +20,7 @@ export class NhbkActionComponent implements OnInit, OnChanges {
     }
 
     private updateInfos() {
-        if (this.action.type === 'addEffect') {
+        if (this.action.type === NhbkActionType.addEffect) {
             if (!this.effectInfo || this.action.data.effectId !== this.effectInfo.id) {
                 if (this.action.data.effectId) {
                     this._effectService.getEffect(this.action.data.effectId).subscribe(
@@ -31,8 +31,7 @@ export class NhbkActionComponent implements OnInit, OnChanges {
                     );
                 }
             }
-        }
-        else if (this.action.type === 'addCustomModifier') {
+        } else if (this.action.type === NhbkActionType.addCustomModifier) {
             this.updateModifierInfo();
         }
     }
@@ -42,16 +41,14 @@ export class NhbkActionComponent implements OnInit, OnChanges {
             case 'combat':
                 if (effect.combatCount > 1) {
                     this.effectDuration = effect.combatCount + ' combats';
-                }
-                else {
+                } else {
                     this.effectDuration = effect.combatCount + ' combat';
                 }
                 break;
             case 'lap':
                 if (effect.lap > 1) {
                     this.effectDuration = effect.lapCount + ' tours';
-                }
-                else {
+                } else {
                     this.effectDuration = effect.lapCount + ' tour';
                 }
                 break;
@@ -66,16 +63,24 @@ export class NhbkActionComponent implements OnInit, OnChanges {
                 break;
         }
     }
+
     private updateModifierInfo() {
+        if (this.action.type !== NhbkActionType.addCustomModifier) {
+            throw `Invalid action type: ${this.action.type}`;
+        }
+
         let modifier: ActiveStatsModifier = this.action.data.modifier;
         this.updateEffectDuration(modifier);
     }
 
     private updateEffectInfo() {
+        if (this.action.type !== NhbkActionType.addEffect) {
+            throw `Invalid action type: ${this.action.type}`;
+        }
+
         if (this.action.data.effectData.durationType) {
             this.updateEffectDuration(this.action.data.effectData);
-        }
-        else {
+        } else {
             this.updateEffectDuration(this.effectInfo);
         }
     }

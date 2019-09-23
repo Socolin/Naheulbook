@@ -26,32 +26,46 @@
         </button>
         <mat-menu xPosition="before" #itemMenu="matMenu" (click)="$event.stopPropagation()">
             <button mat-menu-item (click)="editItem()">
-                Editer
+                <mat-icon>edit</mat-icon>
+                Éditer
             </button>
             <button mat-menu-item (click)="openModifierDialog()">
+                <mat-icon>add</mat-icon>
                 Ajouter un modificateur
             </button>
             <button mat-menu-item (click)="openLifetimeDialog()">
+                <mat-icon>timelapse</mat-icon>
                 Editer temps de conservation
             </button>
             <button *ngIf="character.group" mat-menu-item (click)="openGiveItemDialog(item)">
+                <mat-icon>redo</mat-icon>
                 Donner
             </button>
             <button mat-menu-item *ngIf="item.template.data.skillBook"
                     (click)="_itemActionService.onAction('read_skill_book', item)">
+                <mat-icon>menu_book</mat-icon>
                 Lire
             </button>
             <button *ngIf="item.template.data.charge"
                     mat-menu-item
                     (click)="_itemActionService.onAction('use_charge', item)">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
                 Utiliser sur soi-meme
             </button>
             <button *ngIf="item.template.data.charge"
                     mat-menu-item>
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
                 Utiliser sur...
             </button>
-            <button mat-menu-item (click)="_itemActionService.onAction('delete', item)">
+            <button mat-menu-item [matMenuTriggerFor]="deleteConfirm">
+                <mat-icon>delete</mat-icon>
                 Supprimer
+            </button>
+        </mat-menu>
+        <mat-menu #deleteConfirm>
+            <button mat-menu-item
+                    (click)="_itemActionService.onAction('delete', item)">
+                Confirmer
             </button>
         </mat-menu>
     </mat-card-header>

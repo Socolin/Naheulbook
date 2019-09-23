@@ -1,0 +1,81 @@
+<h2 mat-dialog-title>Ajouter une action</h2>
+<mat-dialog-content>
+    <mat-form-field style="min-width: 300px">
+        <mat-select [ngModel]="action.type" (selectionChange)="selectActionType($event.value)">
+            <mat-option *ngFor="let actionType of actionTypeDefinitions" [value]="actionType.type">
+                {{actionType.displayName}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox [(ngModel)]="action.hidden">Cacher</mat-checkbox>
+    <div [ngSwitch]="action.type">
+        <ng-template [ngSwitchCase]="'addItem'">
+            <autocomplete-input [clearOnSelect]="false"
+                                [placeholder]="'Objet'"
+                                (onSelect)="selectItemTemplate($event)"
+                                [callback]="autocompleteItemCallback">
+            </autocomplete-input>
+            <div *ngIf="selectedItemTemplate?.data?.quantifiable">
+                <mat-form-field align="end">
+                    <input matInput
+                           type="number"
+                           placeholder="Quantité"
+                           [(ngModel)]="action.data.quantity"/>
+                </mat-form-field>
+            </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'removeItem'">
+        </ng-template>
+        <ng-template [ngSwitchCase]="'addEv'">
+            <mat-form-field align="end">
+                <input matInput
+                       type="number"
+                       placeholder="Energie vitale"
+                       [(ngModel)]="action.data.ev"/>
+                <span matPrefix>Redonner&nbsp;</span>
+                <span matSuffix>E.V.</span>
+            </mat-form-field>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'addEa'">
+            <mat-form-field align="end">
+                <input matInput
+                       type="number"
+                       placeholder="Energie astrale"
+                       [(ngModel)]="action.data.ea"/>
+                <span matPrefix>Redonner&nbsp;</span>
+                <span matSuffix>E.A.</span>
+            </mat-form-field>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'custom'">
+            <mat-form-field align="end" style="width: 100%">
+                <input matInput
+                       placeholder="Action"
+                       [(ngModel)]="action.data.text"/>
+            </mat-form-field>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'addCustomModifier'">
+            <stats-modifier-editor [modifier]="activeModifier" [reusableToggle]="false" [options]="{noType: true}">
+            </stats-modifier-editor>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'addEffect'">
+            <active-effect-editor [reusableToggle]="false" (onChange)="updateEffect($event)">
+            </active-effect-editor>
+        </ng-template>
+        <ng-template ngSwitchDefault>
+            No data for {{action.type}}
+        </ng-template>
+    </div>
+</mat-dialog-content>
+<mat-card-actions align="end">
+    <button mat-button
+            mat-dialog-close
+            color="primary">
+        FERMER
+    </button>
+    <button mat-button
+            (click)="validate()"
+            color="primary">
+        AJOUTER
+    </button>
+</mat-card-actions>

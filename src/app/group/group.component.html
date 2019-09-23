@@ -2,7 +2,7 @@
     <mat-spinner></mat-spinner>
 </div>
 <div *ngIf="group && !loadingGroup" class="group-container">
-    <mat-tab-group (selectedTabChange)=selectTab($event) [selectedIndex]="currentTabIndex">
+    <mat-tab-group (selectedTabChange)=selectTab($event) [selectedIndex]="currentTabIndex" mat-stretch-tabs>
         <mat-tab label="Infos">
             <div class="info-tab">
                 <mat-card>

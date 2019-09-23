@@ -29,23 +29,29 @@
             <div>
                 Lors de l'utilisation:
             </div>
-            <div *ngFor="let action of itemTemplate.data.actions; let i = index" style="display: flex; align-items: center">
-                <button mat-icon-button
-                        color="accent"
-                        (click)="removeChargeAction(i)">
-                    <mat-icon>delete</mat-icon>
+            <div *ngFor="let action of itemTemplate.data.actions; let i = index" style="display: grid; grid-template-columns: 1fr auto; align-items: center">
+                <span style="display: flex; flex-direction: row">
+                    <span *ngIf="action.hidden">[Caché] </span>
+                    <nhbk-action [action]="action"></nhbk-action>
+                </span>
+                <button mat-icon-button [matMenuTriggerFor]="actionActions">
+                    <mat-icon>more_vert</mat-icon>
                 </button>
-                <span *ngIf="action.hidden">[Caché]</span>
-                <nhbk-action [action]="action"></nhbk-action>
+                <mat-menu #actionActions>
+                    <button mat-menu-item (click)="openEditChargeActionModal(action)">
+                        <mat-icon>edit</mat-icon>
+                        Editer
+                    </button>
+                    <button mat-menu-item (click)="removeChargeAction(i)">
+                        <mat-icon>delete</mat-icon>
+                        Supprimer
+                    </button>
+                </mat-menu>
             </div>
             <div>
-                <button mat-button color="primary" (click)="openAddChargeActionModal()">AJOUTER UNE ACTION</button>
+                <button mat-button color="primary" (click)="openEditChargeActionModal()">AJOUTER UNE ACTION</button>
             </div>
         </mat-card-content>
-        <ng-template #addChargeActionModal="cdkPortal" cdk-portal>
-            <nhbk-action-editor (onValidate)="addChargeAction($event)" (onClose)="closeAddChargeActionModal()">
-            </nhbk-action-editor>
-        </ng-template>
     </ng-template>
     <ng-template [ngSwitchCase]="'collect'">
         <mat-card-title>

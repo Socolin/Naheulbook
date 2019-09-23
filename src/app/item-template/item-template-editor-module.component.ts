@@ -4,12 +4,13 @@ import {Portal} from '@angular/cdk/portal';
 
 import {God, NhbkDialogService, removeDiacritics} from '../shared';
 import {Skill} from '../skill';
-import {NhbkAction} from '../action';
+import {NhbkAction, NhbkActionEditorDialogComponent, NhbkActionEditorDialogData} from '../action';
 import {LoginService} from '../user';
 
 import {ItemTemplate, ItemSlot, ItemType} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 import {itemTemplateModulesDefinitions} from './item-template-modules-definitions';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
     selector: 'item-template-editor-module',
@@ -28,10 +29,6 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
 
     @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
 
-    @ViewChild('addChargeActionModal', {static: false})
-    public addChargeActionModal: Portal<any>;
-    public addChargeActionOverlayRef: OverlayRef;
-
     @ViewChild('createItemTypeDialog', {static: false})
     public createItemTypeDialog: Portal<any>;
     public createItemTypeOverlayRef?: OverlayRef;
@@ -42,25 +39,37 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
         return result;
     }, {});
 
-    constructor(private _nhbkDialogService: NhbkDialogService,
-                public _loginService: LoginService,
-                private _itemTemplateService: ItemTemplateService) {
+    constructor(
+        private readonly dialog: MatDialog,
+        private readonly _nhbkDialogService: NhbkDialogService,
+        public readonly _loginService: LoginService,
+        private readonly _itemTemplateService: ItemTemplateService,
+    ) {
     }
 
-    openAddChargeActionModal() {
-        if (!this.itemTemplate.data.actions) {
-            this.itemTemplate.data.actions = [];
-        }
-        this.addChargeActionOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.addChargeActionModal);
-    }
-
-    closeAddChargeActionModal() {
-        this.addChargeActionOverlayRef.detach();
+    openEditChargeActionModal(action?: NhbkAction) {
+        const dialogRef = this.dialog.open<NhbkActionEditorDialogComponent, NhbkActionEditorDialogData, NhbkAction>(
+            NhbkActionEditorDialogComponent,
+            {data: {action}}
+        );
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
+            if (action) {
+                const index = this.itemTemplate.data.actions.findIndex(a => a === action);
+                this.itemTemplate.data.actions[index] = result;
+            } else {
+                this.addChargeAction(result);
+            }
+        });
     }
 
     addChargeAction(action: NhbkAction) {
-        this.itemTemplate.data.actions!.push(action);
-        this.closeAddChargeActionModal();
+        if (this.itemTemplate.data.actions === undefined) {
+            this.itemTemplate.data.actions = [];
+        }
+        this.itemTemplate.data.actions.push(action);
     }
 
     removeChargeAction(index: number) {

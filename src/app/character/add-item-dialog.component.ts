@@ -13,7 +13,7 @@ export interface AddItemDialogResult {
 @Component({
     selector: 'app-add-item-dialog',
     templateUrl: './add-item-dialog.component.html',
-    styleUrls: ['./add-item-dialog.component.scss']
+    styleUrls: ['../shared/full-screen-dialog.scss', './add-item-dialog.component.scss']
 })
 export class AddItemDialogComponent {
     @ViewChild('searchStep', {static: true})

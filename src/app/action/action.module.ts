@@ -1,11 +1,11 @@
-import {NgModule}      from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 import {NhbkMaterialModule} from '../nhbk-material.module';
 import {SharedModule} from '../shared/shared.module';
 import {NhbkActionComponent} from './nhbk-action.component';
-import {NhbkActionEditorComponent} from './nhbk-action-editor.component';
+import {NhbkActionEditorDialogComponent} from './nhbk-action-editor-dialog.component';
 import {EffectModule} from '../effect/effect.module';
 
 @NgModule({
@@ -18,13 +18,16 @@ import {EffectModule} from '../effect/effect.module';
     ],
     declarations: [
         NhbkActionComponent,
-        NhbkActionEditorComponent,
+        NhbkActionEditorDialogComponent,
     ],
     exports: [
         NhbkActionComponent,
-        NhbkActionEditorComponent,
+        NhbkActionEditorDialogComponent,
     ],
-    providers: []
+    providers: [],
+    entryComponents: [
+        NhbkActionEditorDialogComponent
+    ]
 })
 export class ActionModule {
 }
