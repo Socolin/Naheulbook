@@ -484,10 +484,13 @@ export class Character extends WsRegistrable {
 
         for (let item of this.items) {
             if (item.containerId) {
-                item.containerInfo = {
-                    name: itemsById[item.containerId].data.name,
-                    id: itemsById[item.containerId].id
-                };
+                const container = itemsById[item.containerId];
+                if (container) {
+                    item.containerInfo = {
+                        name: container.data.name,
+                        id: container.id
+                    };
+                }
             }
             if (item.id in content) {
                 item.content = content[item.id];
