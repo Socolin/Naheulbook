@@ -93,6 +93,7 @@ namespace Naheulbook.Core.Utils
                     originalItem.Character = targetCharacter;
                     originalItem.MonsterId = null;
                     originalItem.LootId = null;
+                    originalItem.ContainerId = null;
 
                     takenItem = originalItem;
 
