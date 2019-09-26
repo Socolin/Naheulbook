@@ -1,6 +1,6 @@
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -41,7 +41,7 @@ namespace Naheulbook.Web.Controllers
                 return Conflict();
             }
 
-            return StatusCode((int) HttpStatusCode.Created);
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPost("{Username}/validate")]
@@ -53,14 +53,14 @@ namespace Naheulbook.Web.Controllers
             }
             catch (UserNotFoundException)
             {
-                return StatusCode((int) HttpStatusCode.Forbidden);
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (InvalidUserActivationCodeException)
             {
-                return StatusCode((int) HttpStatusCode.Forbidden);
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
-            return StatusCode((int) HttpStatusCode.NoContent);
+            return StatusCode(StatusCodes.Status204NoContent);
         }
 
         [HttpPost("{Username}/jwt")]
@@ -75,11 +75,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (UserNotFoundException)
             {
-                return StatusCode((int) HttpStatusCode.Unauthorized);
+                return StatusCode(StatusCodes.Status401Unauthorized);
             }
             catch (InvalidPasswordException)
             {
-                return StatusCode((int) HttpStatusCode.Unauthorized);
+                return StatusCode(StatusCodes.Status401Unauthorized);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Naheulbook.Web.Controllers
             // FIXME: userSession if userId is not found, check in db if long duration session still valid
             var userId = HttpContext.Session.GetCurrentUserId();
             if (!userId.HasValue)
-                return StatusCode((int) HttpStatusCode.Unauthorized);
+                return StatusCode(StatusCodes.Status401Unauthorized);
 
             var user = await _userService.GetUserInfoAsync(userId.Value);
             return _mapper.Map<UserInfoResponse>(user);
@@ -101,7 +101,7 @@ namespace Naheulbook.Web.Controllers
             // FIXME: userSession if userId is not found, check in db if long duration session still valid
             var userId = HttpContext.Session.GetCurrentUserId();
             if (!userId.HasValue)
-                return StatusCode((int) HttpStatusCode.Unauthorized);
+                return StatusCode(StatusCodes.Status401Unauthorized);
 
             var userInfo = await _userService.GetUserInfoAsync(userId.Value);
             var token = _jwtService.GenerateJwtToken(userId.Value);
@@ -135,11 +135,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (UserNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
         }
     }

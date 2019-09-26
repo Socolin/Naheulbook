@@ -40,7 +40,7 @@ namespace Naheulbook.Shared.Clients.Facebook
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     if (!response.IsSuccessStatusCode)
-                        throw new FacebookClientException(content, response.StatusCode);
+                        throw new FacebookClientException(content, (int) response.StatusCode);
 
                     return _jsonUtil.Deserialize<FacebookAccessTokenResponse>(content).AccessToken;
                 }
@@ -57,7 +57,7 @@ namespace Naheulbook.Shared.Clients.Facebook
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     if (!response.IsSuccessStatusCode)
-                        throw new FacebookClientException(content, response.StatusCode);
+                        throw new FacebookClientException(content, (int) response.StatusCode);
 
                     return _jsonUtil.Deserialize<FacebookProfileResponse>(content);
                 }

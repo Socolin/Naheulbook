@@ -1,4 +1,3 @@
-using System.Net;
 using Microsoft.AspNetCore.Http;
 using Naheulbook.Core.Models;
 using Naheulbook.Web.Exceptions;
@@ -18,7 +17,7 @@ namespace Naheulbook.Web.Extensions
         {
             if (!context.Items.ContainsKey(NaheulbookExecutionContextKey))
             {
-                throw new HttpErrorException(HttpStatusCode.Unauthorized, "Not authenticated");
+                throw new HttpErrorException(StatusCodes.Status401Unauthorized, "Not authenticated");
             }
 
             return (NaheulbookExecutionContext) context.Items[NaheulbookExecutionContextKey];

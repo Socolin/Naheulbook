@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
@@ -53,11 +53,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (OriginNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
             catch (RandomNameGeneratorNotFound ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
     }

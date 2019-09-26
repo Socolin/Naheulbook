@@ -25,7 +25,7 @@ namespace Naheulbook.Core.Clients
             var responseContent = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
-                throw new GenericHttpClientException(url, response.StatusCode, responseContent);
+                throw new GenericHttpClientException(url, (int) response.StatusCode, responseContent);
             }
 
             return JsonConvert.DeserializeObject<List<string>>(responseContent);

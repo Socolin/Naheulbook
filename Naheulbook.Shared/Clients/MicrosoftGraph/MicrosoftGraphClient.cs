@@ -45,7 +45,7 @@ namespace Naheulbook.Shared.Clients.MicrosoftGraph
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     if (!response.IsSuccessStatusCode)
-                        throw new MicrosoftGraphClientException(content, response.StatusCode);
+                        throw new MicrosoftGraphClientException(content, (int) response.StatusCode);
 
                     return _jsonUtil.Deserialize<MicrosoftGraphAccessTokenResponse>(content);
                 }
@@ -62,7 +62,7 @@ namespace Naheulbook.Shared.Clients.MicrosoftGraph
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     if (!response.IsSuccessStatusCode)
-                        throw new MicrosoftGraphClientException(content, response.StatusCode);
+                        throw new MicrosoftGraphClientException(content, (int) response.StatusCode);
 
                     return _jsonUtil.Deserialize<MicrosoftGraphProfileResponse>(content);
                 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Shared.TransientModels
@@ -40,7 +41,8 @@ namespace Naheulbook.Shared.TransientModels
         public bool? SkillBook { get; set; }
         public string Space { get; set; }
         public bool? Throwable { get; set; }
-        public bool? UseUG { get; set; }
+        [JsonProperty("UseUG")]
+        public bool? UseUg { get; set; }
         public int? Weight { get; set; }
     }
 }

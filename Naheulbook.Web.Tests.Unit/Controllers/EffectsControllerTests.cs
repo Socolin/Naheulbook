@@ -1,8 +1,8 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -60,7 +60,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task<ActionResult<EffectResponse>>> act = () => _effectsController.GetEffectAsync(42);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
     }
 }

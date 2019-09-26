@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -50,7 +49,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             var response = await _usersController.PostAsync(new CreateUserRequest());
 
-            response.StatusCode.Should().Be((int) HttpStatusCode.Created);
+            response.StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Test]
@@ -74,7 +73,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             var response = await _usersController.PostAsync(request);
 
-            response.StatusCode.Should().Be((int) HttpStatusCode.Conflict);
+            response.StatusCode.Should().Be(StatusCodes.Status409Conflict);
         }
 
         [Test]
@@ -84,7 +83,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             var response = await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest);
 
-            response.StatusCode.Should().Be((int) HttpStatusCode.NoContent);
+            response.StatusCode.Should().Be(StatusCodes.Status204NoContent);
         }
 
         [Test]
@@ -108,7 +107,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             var response = await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest);
 
-            response.StatusCode.Should().Be((int) HttpStatusCode.Forbidden);
+            response.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         [Test]
@@ -121,7 +120,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             var response = await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest);
 
-            response.StatusCode.Should().Be((int) HttpStatusCode.Forbidden);
+            response.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         [Test]
@@ -169,7 +168,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
 
-            response.Result.Should().BeOfType<StatusCodeResult>().Subject.StatusCode.Should().Be((int) HttpStatusCode.Unauthorized);
+            response.Result.Should().BeOfType<StatusCodeResult>().Subject.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
         }
 
         [Test]
@@ -182,7 +181,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
 
-            response.Result.Should().BeOfType<StatusCodeResult>().Subject.StatusCode.Should().Be((int) HttpStatusCode.Unauthorized);
+            response.Result.Should().BeOfType<StatusCodeResult>().Subject.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
         }
 
         private static ValidateUserRequest ValidateUserRequest()

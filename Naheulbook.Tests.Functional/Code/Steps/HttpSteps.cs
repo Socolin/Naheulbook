@@ -37,7 +37,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt());
             var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
             var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode(response.StatusCode);
+            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
@@ -47,7 +47,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
             var response = await _naheulbookHttpClient.PostAsync(url, requestContent);
             var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode(response.StatusCode);
+            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
@@ -64,7 +64,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             };
             var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
             var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode(response.StatusCode);
+            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
@@ -72,7 +72,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         public void ThenTheResponseStatusCodeBe(int expectedStatusCode)
         {
             var lastStatusCode = _scenarioContext.GetLastHttpResponseStatusCode();
-            if ((int) lastStatusCode != expectedStatusCode)
+            if (lastStatusCode != expectedStatusCode)
             {
                 if (string.IsNullOrEmpty(_scenarioContext.GetLastHttpResponseContent()))
                     Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with no content");

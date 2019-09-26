@@ -1,8 +1,8 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -59,7 +59,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _itemTemplatesController.GetItemTemplateAsync(42);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
         [Test]
         public async Task PutItemTemplateAsync_CallServiceToEditItem_AndMapEditedItemIntoResponse()
@@ -87,7 +87,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, 42, new ItemTemplateRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, 42, new ItemTemplateRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task<JsonResult>> act = () => _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, new ItemTemplateRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
     }
 }

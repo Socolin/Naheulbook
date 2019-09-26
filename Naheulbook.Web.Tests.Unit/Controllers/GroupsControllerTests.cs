@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
@@ -63,7 +63,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var result = await _controller.PostCreateGroupAsync(_executionContext, createGroupRequest);
 
             result.Value.Should().BeSameAs(groupResponse);
-            result.StatusCode.Should().Be(HttpStatusCode.Created);
+            result.StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Test]
@@ -82,12 +82,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var result = await _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
 
             result.Value.Should().BeSameAs(lootResponse);
-            result.StatusCode.Should().Be(HttpStatusCode.Created);
+            result.StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void PostCreateLootAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PostCreateLootAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
             var createLootRequest = new CreateLootRequest();
@@ -116,12 +116,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var result = await _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
 
             result.Value.Should().BeSameAs(monsterResponse);
-            result.StatusCode.Should().Be(HttpStatusCode.Created);
+            result.StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void PostCreateMonsterAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PostCreateMonsterAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
             var createMonsterRequest = new CreateMonsterRequest();
@@ -150,12 +150,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var result = await _controller.PostCreateInviteAsync(_executionContext, groupId, createInviteRequest);
 
             result.Value.Should().BeSameAs(groupInviteResponse);
-            result.StatusCode.Should().Be(HttpStatusCode.Created);
+            result.StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Test]
         [TestCaseSource(nameof(GetPostCreateInviteExceptionsAndExpectedStatusCode))]
-        public void PostCreateInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PostCreateInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _groupService.CreateInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<CreateInviteRequest>())
                 .Returns(Task.FromException<GroupInvite>(exception));
@@ -185,7 +185,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetDeleteInviteExceptionsAndExpectedStatusCode))]
-        public void DeleteInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void DeleteInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _groupService.CancelOrRejectInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<int>())
                 .Returns(Task.FromException<GroupInvite>(exception));
@@ -197,7 +197,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetAcceptInviteExceptionsAndExpectedStatusCode))]
-        public void PostAcceptInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PostAcceptInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _groupService.AcceptInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<int>())
                 .Returns(Task.FromException<GroupInvite>(exception));
@@ -226,7 +226,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void GetGroupDetailsAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void GetGroupDetailsAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
 
@@ -257,7 +257,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void GetEventListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void GetEventListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
 
@@ -288,7 +288,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void GetLootListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void GetLootListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
 
@@ -302,7 +302,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void PatchGroupAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PatchGroupAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
             var request = new PatchGroupRequest();
@@ -317,7 +317,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetEditGroupLocationExceptionsAndExpectedStatusCode))]
-        public void PutChangeGroupLocationAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PutChangeGroupLocationAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
             var request = new PutChangeLocationRequest();
@@ -349,7 +349,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void GetMonsterListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void GetMonsterListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
 
@@ -363,16 +363,8 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         private static IEnumerable<TestCaseData> GetCommonGroupExceptionsAndExpectedStatusCode()
         {
-            yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
-            yield return new TestCaseData(new GroupNotFoundException(42), HttpStatusCode.NotFound);
-        }
-
-        private static IEnumerable<TestCaseData> GetPostCreateMonsterExceptionsAndExpectedStatusCode()
-        {
-            foreach (var testCaseData in GetCommonGroupExceptionsAndExpectedStatusCode())
-                yield return testCaseData;
-
-            yield return new TestCaseData(new ItemTemplateNotFoundException(42), HttpStatusCode.BadRequest);
+            yield return new TestCaseData(new ForbiddenAccessException(), StatusCodes.Status403Forbidden);
+            yield return new TestCaseData(new GroupNotFoundException(42), StatusCodes.Status404NotFound);
         }
 
         private static IEnumerable<TestCaseData> GetPostCreateInviteExceptionsAndExpectedStatusCode()
@@ -380,8 +372,8 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             foreach (var testCaseData in GetCommonGroupExceptionsAndExpectedStatusCode())
                 yield return testCaseData;
 
-            yield return new TestCaseData(new CharacterNotFoundException(42), HttpStatusCode.BadRequest);
-            yield return new TestCaseData(new CharacterAlreadyInAGroupException(42), HttpStatusCode.BadRequest);
+            yield return new TestCaseData(new CharacterNotFoundException(42), StatusCodes.Status400BadRequest);
+            yield return new TestCaseData(new CharacterAlreadyInAGroupException(42), StatusCodes.Status400BadRequest);
         }
 
         private static IEnumerable<TestCaseData> GetEditGroupLocationExceptionsAndExpectedStatusCode()
@@ -389,20 +381,20 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             foreach (var testCaseData in GetCommonGroupExceptionsAndExpectedStatusCode())
                 yield return testCaseData;
 
-            yield return new TestCaseData(new LocationNotFoundException(42), HttpStatusCode.BadRequest);
+            yield return new TestCaseData(new LocationNotFoundException(42), StatusCodes.Status400BadRequest);
         }
 
         private static IEnumerable<TestCaseData> GetDeleteInviteExceptionsAndExpectedStatusCode()
         {
-            yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
-            yield return new TestCaseData(new InviteNotFoundException(42, 8), HttpStatusCode.NotFound);
+            yield return new TestCaseData(new ForbiddenAccessException(), StatusCodes.Status403Forbidden);
+            yield return new TestCaseData(new InviteNotFoundException(42, 8), StatusCodes.Status404NotFound);
         }
 
         private static IEnumerable<TestCaseData> GetAcceptInviteExceptionsAndExpectedStatusCode()
         {
-            yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
-            yield return new TestCaseData(new InviteNotFoundException(42, 8), HttpStatusCode.NotFound);
-            yield return new TestCaseData(new CharacterAlreadyInAGroupException(42), HttpStatusCode.BadRequest);
+            yield return new TestCaseData(new ForbiddenAccessException(), StatusCodes.Status403Forbidden);
+            yield return new TestCaseData(new InviteNotFoundException(42, 8), StatusCodes.Status404NotFound);
+            yield return new TestCaseData(new CharacterAlreadyInAGroupException(42), StatusCodes.Status400BadRequest);
         }
     }
 }

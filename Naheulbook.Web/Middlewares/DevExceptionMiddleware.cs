@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -31,7 +30,7 @@ namespace Naheulbook.Web.Middlewares
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An unexpected error occured: " + ex.Message);
-                context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "text/plain";
                 await context.Response.WriteAsync(ex.ToString());
             }

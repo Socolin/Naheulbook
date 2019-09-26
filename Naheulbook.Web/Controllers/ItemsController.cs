@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -10,7 +10,6 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
-using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Web.Controllers
 {
@@ -42,11 +41,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
             catch (ItemNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
 
@@ -63,11 +62,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
             catch (ItemNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
 
@@ -85,11 +84,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
             catch (ItemNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
 
@@ -108,11 +107,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
             catch (ItemNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
 
@@ -131,11 +130,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
             catch (ItemNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
 
@@ -154,11 +153,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
             catch (ItemNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
 
@@ -181,11 +180,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
             catch (ItemNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
 
@@ -208,11 +207,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
             catch (ItemNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
     }

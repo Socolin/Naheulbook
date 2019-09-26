@@ -45,7 +45,7 @@ namespace Naheulbook.Shared.Clients.Google
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     if (!response.IsSuccessStatusCode)
-                        throw new GoogleClientException(content, response.StatusCode);
+                        throw new GoogleClientException(content, (int) response.StatusCode);
 
                     return _jsonUtil.Deserialize<GoogleAccessTokenResponse>(content).AccessToken;
                 }
@@ -61,7 +61,7 @@ namespace Naheulbook.Shared.Clients.Google
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     if (!response.IsSuccessStatusCode)
-                        throw new GoogleClientException(content, response.StatusCode);
+                        throw new GoogleClientException(content, (int) response.StatusCode);
 
                     return _jsonUtil.Deserialize<GoogleProfileResponse>(content);
                 }

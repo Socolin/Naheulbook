@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -43,15 +43,15 @@ namespace Naheulbook.Web.Controllers
                 var createdMonster = await _monsterTemplateService.CreateMonsterTemplateAsync(executionContext, request);
 
                 var result = _mapper.Map<MonsterTemplateResponse>(createdMonster);
-                return new JsonResult(result) {StatusCode = (int) HttpStatusCode.Created};
+                return new JsonResult(result) {StatusCode = StatusCodes.Status201Created};
             }
             catch (MonsterCategoryNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
         }
 
@@ -71,15 +71,15 @@ namespace Naheulbook.Web.Controllers
             }
             catch (MonsterCategoryNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.BadRequest, ex);
+                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
             }
             catch (MonsterTemplateNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
         }
 

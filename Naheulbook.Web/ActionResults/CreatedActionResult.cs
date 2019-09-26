@@ -1,4 +1,4 @@
-using System.Net;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
@@ -6,11 +6,11 @@ namespace Naheulbook.Web.ActionResults
 {
     public class CreatedActionResult<TValue> : IConvertToActionResult
     {
-        public HttpStatusCode StatusCode { get; }
+        public int StatusCode { get; }
         public TValue Value { get; }
         private readonly ActionResult _result;
 
-        private CreatedActionResult(HttpStatusCode statusCode, TValue value)
+        private CreatedActionResult(int statusCode, TValue value)
         {
             StatusCode = statusCode;
             Value = value;
@@ -23,7 +23,7 @@ namespace Naheulbook.Web.ActionResults
 
         public static implicit operator CreatedActionResult<TValue>(TValue value)
         {
-            return new CreatedActionResult<TValue>(HttpStatusCode.Created, value);
+            return new CreatedActionResult<TValue>(StatusCodes.Status201Created, value);
         }
 
         public static implicit operator CreatedActionResult<TValue>(ActionResult result)
@@ -39,7 +39,7 @@ namespace Naheulbook.Web.ActionResults
 
             return new JsonResult(Value)
             {
-                StatusCode = (int) StatusCode
+                StatusCode = StatusCode
             };
         }
     }

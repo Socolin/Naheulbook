@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -28,7 +27,7 @@ namespace Naheulbook.Web.Middlewares
             }
             catch (HttpErrorException ex)
             {
-                context.Response.StatusCode = (int) ex.StatusCode;
+                context.Response.StatusCode = ex.StatusCode;
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsync(JsonConvert.SerializeObject(new
                 {
@@ -37,7 +36,7 @@ namespace Naheulbook.Web.Middlewares
             }
             catch (Exception ex)
             {
-                context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "application/json";
                 _logger.LogError(ex, "An unexpected error occured: " + ex.Message);
                 await context.Response.WriteAsync(JsonConvert.SerializeObject(new

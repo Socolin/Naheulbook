@@ -131,7 +131,7 @@ namespace Naheulbook.Shared.Clients.Oauth1
                             .ToDictionary(s => s[0], s => s[1]);
                     }
 
-                    throw new OAuthException(RequestUrl, response.StatusCode, result);
+                    throw new OAuthException(RequestUrl, (int) response.StatusCode, result);
                 }
             }
         }

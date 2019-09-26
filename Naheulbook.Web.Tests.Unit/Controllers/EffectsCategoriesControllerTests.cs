@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -61,7 +61,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _effectCategoriesController.PostCreateEffectAsync(_executionContext, 12, new CreateEffectRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         [Test]
@@ -106,7 +106,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task<JsonResult>> act = () => _effectCategoriesController.PostCreateCategoryAsync(_executionContext, CreateEffectCategoryRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         private static CreateEffectCategoryRequest CreateEffectCategoryRequest()

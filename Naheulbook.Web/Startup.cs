@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -213,7 +212,7 @@ namespace Naheulbook.Web
             app.UseMvc();
             app.Run(async (context) =>
             {
-                context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Invalid route"}));
             });

@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TechTalk.SpecFlow;
@@ -11,14 +10,14 @@ namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions
         private const string LastHttpResponseStatusCodeKey = "LastHttpResponseStatusCode";
         private const string LastHttpResponseContentKey = "LastHttpResponseContent";
 
-        public static void SetLastHttpResponseStatusCode(this ScenarioContext scenarioContext, HttpStatusCode response)
+        public static void SetLastHttpResponseStatusCode(this ScenarioContext scenarioContext, int statusCode)
         {
-            scenarioContext.Set(response, LastHttpResponseStatusCodeKey);
+            scenarioContext.Set(statusCode, LastHttpResponseStatusCodeKey);
         }
 
-        public static HttpStatusCode GetLastHttpResponseStatusCode(this ScenarioContext scenarioContext)
+        public static int GetLastHttpResponseStatusCode(this ScenarioContext scenarioContext)
         {
-            return scenarioContext.Get<HttpStatusCode>(LastHttpResponseStatusCodeKey);
+            return scenarioContext.Get<int>(LastHttpResponseStatusCodeKey);
         }
 
         public static void SetLastHttpResponseContent(this ScenarioContext scenarioContext, string response)

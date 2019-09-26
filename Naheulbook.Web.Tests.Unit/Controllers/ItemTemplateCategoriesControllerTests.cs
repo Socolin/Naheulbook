@@ -1,8 +1,8 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -59,7 +59,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task<JsonResult>> act = () => _itemTemplateCategoriesController.PostCreateCategoryAsync(_executionContext, new CreateItemTemplateCategoryRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
     }
 }

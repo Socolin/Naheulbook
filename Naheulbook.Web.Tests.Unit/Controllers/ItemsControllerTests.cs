@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
@@ -35,7 +35,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonItemExceptionsAndExpectedStatusCode))]
-        public void PutEditItemDataAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PutEditItemDataAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _itemService.UpdateItemDataAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<ItemData>())
                 .Returns(Task.FromException<Item>(exception));
@@ -47,7 +47,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonItemExceptionsAndExpectedStatusCode))]
-        public void PutEditItemModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PutEditItemModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _itemService.UpdateItemModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<List<ActiveStatsModifier>>())
                 .Returns(Task.FromException<Item>(exception));
@@ -59,7 +59,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonItemExceptionsAndExpectedStatusCode))]
-        public void PostEquipItemAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PostEquipItemAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _itemService.EquipItemAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EquipItemRequest>())
                 .Returns(Task.FromException<Item>(exception));
@@ -71,7 +71,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonItemExceptionsAndExpectedStatusCode))]
-        public void PutChangeItemContainerAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PutChangeItemContainerAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _itemService.ChangeItemContainerAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<ChangeItemContainerRequest>())
                 .Returns(Task.FromException<Item>(exception));
@@ -83,8 +83,8 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         private static IEnumerable<TestCaseData> GetCommonItemExceptionsAndExpectedStatusCode()
         {
-            yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
-            yield return new TestCaseData(new ItemNotFoundException(42), HttpStatusCode.NotFound);
+            yield return new TestCaseData(new ForbiddenAccessException(), StatusCodes.Status403Forbidden);
+            yield return new TestCaseData(new ItemNotFoundException(42), StatusCodes.Status404NotFound);
         }
     }
 }

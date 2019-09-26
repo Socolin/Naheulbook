@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -40,11 +40,11 @@ namespace Naheulbook.Web.Controllers
             }
             catch (ForbiddenAccessException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.Forbidden, ex);
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
             }
             catch (EffectNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
 
@@ -61,7 +61,7 @@ namespace Naheulbook.Web.Controllers
             }
             catch (EffectNotFoundException ex)
             {
-                throw new HttpErrorException(HttpStatusCode.NotFound, ex);
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
 

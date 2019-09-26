@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
@@ -118,7 +118,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _controller.GetCharacterDetailsAsync(_executionContext, characterId);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _controller.GetCharacterDetailsAsync(_executionContext, characterId);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var result = await _controller.PostCreateCharacterAsync(_executionContext, createCharacterRequest);
 
             result.Value.Should().BeSameAs(characterResponse);
-            result.StatusCode.Should().Be(HttpStatusCode.Created);
+            result.StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Test]
@@ -171,7 +171,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
-        public void PostAddItemToCharacterInventory_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PostAddItemToCharacterInventory_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int characterId = 2;
             var request = new CreateItemRequest();
@@ -195,7 +195,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _controller.PostAddItemToCharacterInventory(_executionContext, characterId, request);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [Test]
@@ -217,7 +217,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
-        public void GetCharacterLoots_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void GetCharacterLoots_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.GetCharacterLootsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
                 .Returns(Task.FromException<List<Loot>>(exception));
@@ -229,7 +229,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
-        public void PostAddModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PostAddModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.AddModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<AddCharacterModifierRequest>())
                 .Returns(Task.FromException<CharacterModifier>(exception));
@@ -241,7 +241,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonCharacterModifierExceptionsAndExpectedStatusCode))]
-        public void DeleteModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void DeleteModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.DeleteModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
                 .Returns(Task.FromException<CharacterModifier>(exception));
@@ -253,7 +253,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetToggleCharacterModifierExceptionsAndExpectedStatusCode))]
-        public void PostToggleModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PostToggleModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.ToggleModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
                 .Returns(Task.FromException<CharacterModifier>(exception));
@@ -282,7 +282,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
-        public void GetCharacterHistoryEntryAsyncShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void GetCharacterHistoryEntryAsyncShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.GetCharacterHistoryEntryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
                 .Returns(Task.FromException<List<IHistoryEntry>>(exception));
@@ -295,7 +295,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
-        public void PatchCharacterAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PatchCharacterAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.UpdateCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PatchCharacterRequest>())
                 .Returns(Task.FromException<List<Loot>>(exception));
@@ -307,7 +307,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
-        public void PutStatBonusAdAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, HttpStatusCode expectedStatusCode)
+        public void PutStatBonusAdAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.SetCharacterAdBonusStatAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PutStatBonusAdRequest>())
                 .Returns(Task.FromException<List<Loot>>(exception));
@@ -319,22 +319,22 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         private static IEnumerable<TestCaseData> GetCommonCharacterExceptionsAndExpectedStatusCode()
         {
-            yield return new TestCaseData(new ForbiddenAccessException(), HttpStatusCode.Forbidden);
-            yield return new TestCaseData(new CharacterNotFoundException(42), HttpStatusCode.NotFound);
+            yield return new TestCaseData(new ForbiddenAccessException(), StatusCodes.Status403Forbidden);
+            yield return new TestCaseData(new CharacterNotFoundException(42), StatusCodes.Status404NotFound);
         }
 
         private static IEnumerable<TestCaseData> GetCommonCharacterModifierExceptionsAndExpectedStatusCode()
         {
             foreach (var testCaseData in GetCommonCharacterExceptionsAndExpectedStatusCode())
                 yield return testCaseData;
-            yield return new TestCaseData(new CharacterModifierNotFoundException(42), HttpStatusCode.NotFound);
+            yield return new TestCaseData(new CharacterModifierNotFoundException(42), StatusCodes.Status404NotFound);
         }
 
         private static IEnumerable<TestCaseData> GetToggleCharacterModifierExceptionsAndExpectedStatusCode()
         {
             foreach (var testCaseData in GetCommonCharacterModifierExceptionsAndExpectedStatusCode())
                 yield return testCaseData;
-            yield return new TestCaseData(new CharacterModifierNotReusableException(42), HttpStatusCode.BadRequest);
+            yield return new TestCaseData(new CharacterModifierNotReusableException(42), StatusCodes.Status400BadRequest);
         }
     }
 }
