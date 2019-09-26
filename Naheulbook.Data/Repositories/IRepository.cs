@@ -5,7 +5,7 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> GetAsync(int id);
+        ValueTask<TEntity> GetAsync(int id);
         Task<List<TEntity>> GetAllAsync();
 
         void Add(TEntity entity);

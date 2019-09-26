@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Naheulbook.Core.Actions.Executor;
 using Naheulbook.Core.Clients;
@@ -33,6 +33,7 @@ using Naheulbook.Web.Middlewares;
 using Naheulbook.Web.Notifications;
 using Naheulbook.Web.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Naheulbook.Web
 {
@@ -40,9 +41,9 @@ namespace Naheulbook.Web
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IHostingEnvironment environment)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IWebHostEnvironment environment)
         {
             _loggerFactory = loggerFactory;
             _environment = environment;
@@ -55,16 +56,13 @@ namespace Naheulbook.Web
 
             var naheulbookDbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
                 .UseLoggerFactory(_loggerFactory)
-                .ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning))
                 .UseMySql(_configuration.GetConnectionString("DefaultConnection"));
             if (_environment.IsDevelopment())
             {
                 naheulbookDbContextOptionsBuilder.EnableSensitiveDataLogging();
             }
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = "localhost";
-            });
+
+            services.AddStackExchangeRedisCache(options => { options.Configuration = "localhost"; });
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(4);
@@ -74,9 +72,16 @@ namespace Naheulbook.Web
 
             services.AddSignalR();
             services.AddMvc()
-                .AddJsonOptions(options => { options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore; })
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    options.SerializerSettings.ContractResolver = new DefaultContractResolver
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    };
+                })
                 .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<ValidateUserRequest>())
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(RequestToEntityProfile).Assembly, typeof(Startup).Assembly);
@@ -196,8 +201,9 @@ namespace Naheulbook.Web
             services.AddSingleton(mapImageConfiguration);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseRouting();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod());
 
             app.UseMiddleware<HttpExceptionMiddleware>();
@@ -214,9 +220,12 @@ namespace Naheulbook.Web
 
             app.UseSession();
             app.UseMiddleware<JwtAuthenticationMiddleware>();
-            app.UseSignalR(options => { options.MapHub<ChangeNotifierHub>("/ws/listen"); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ChangeNotifierHub>("/ws/listen");
+                endpoints.MapControllers();
+            });
 
-            app.UseMvc();
             app.Run(async (context) =>
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;

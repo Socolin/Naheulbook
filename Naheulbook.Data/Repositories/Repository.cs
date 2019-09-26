@@ -13,7 +13,7 @@ namespace Naheulbook.Data.Repositories
             Context = context;
         }
 
-        public Task<TEntity> GetAsync(int id)
+        public ValueTask<TEntity> GetAsync(int id)
         {
             return Context.Set<TEntity>().FindAsync(id);
         }
