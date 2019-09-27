@@ -2,9 +2,10 @@
 {
     public class SkillEffect
     {
-        public int SkillId { get; set; }
-        public string StatName { get; set; }
+        public string StatName { get; set; } = null!;
         public int Value { get; set; }
-        public Skill Skill { get; set; }
+
+        public int SkillId { get; set; }
+        public Skill Skill { get; set; } = null!;
     }
 }

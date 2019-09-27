@@ -5,24 +5,24 @@ namespace Naheulbook.Data.Models
     public class Group
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Data { get; set; }
+        public string Name { get; set; } = null!;
+        public string? Data { get; set; }
 
         public int? CombatLootId { get; set; }
-        public Loot CombatLoot { get; set; }
+        public Loot? CombatLoot { get; set; }
 
         public int MasterId { get; set; }
-        public User Master { get; set; }
+        public User Master { get; set; } = null!;
 
         public int LocationId { get; set; }
-        public Location Location { get; set; }
+        public Location Location { get; set; } = null!;
 
-        public ICollection<Loot> Loots { get; set; }
-        public ICollection<Monster> Monsters { get; set; }
-        public ICollection<Character> Characters { get; set; }
-        public ICollection<GroupInvite> Invites { get; set; }
-        public ICollection<Event> Events { get; set; }
-        public ICollection<GroupHistoryEntry> HistoryEntries { get; set; }
+        public ICollection<Loot> Loots { get; set; } = null!;
+        public ICollection<Monster> Monsters { get; set; } = null!;
+        public ICollection<Character> Characters { get; set; } = null!;
+        public ICollection<GroupInvite> Invites { get; set; } = null!;
+        public ICollection<Event> Events { get; set; } = null!;
+        public ICollection<GroupHistoryEntry> HistoryEntries { get; set; } = null!;
 
         public void AddHistoryEntry(GroupHistoryEntry entry)
         {

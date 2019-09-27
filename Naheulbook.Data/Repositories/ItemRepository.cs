@@ -42,11 +42,11 @@ namespace Naheulbook.Data.Repositories
         public Task<Item> GetWithOwnerAsync(int itemId)
         {
             return Context.Items
-                .Include(i => i.Character)
+                .Include(i => i.Character!)
                 .ThenInclude(c => c.Group)
-                .Include(i => i.Monster)
+                .Include(i => i.Monster!)
                 .ThenInclude(m => m.Group)
-                .Include(i => i.Loot)
+                .Include(i => i.Loot!)
                 .ThenInclude(l => l.Group)
                 .FirstOrDefaultAsync(i => i.Id == itemId);
         }
@@ -54,13 +54,13 @@ namespace Naheulbook.Data.Repositories
         public Task<Item> GetWithOwnerWitGroupCharactersAsync(int itemId)
         {
             return Context.Items
-                .Include(i => i.Character)
-                .ThenInclude(c => c.Group)
+                .Include(i => i.Character!)
+                .ThenInclude(c => c.Group!)
                 .ThenInclude(m => m.Characters)
-                .Include(i => i.Monster)
+                .Include(i => i.Monster!)
                 .ThenInclude(m => m.Group)
                 .ThenInclude(m => m.Characters)
-                .Include(i => i.Loot)
+                .Include(i => i.Loot!)
                 .ThenInclude(l => l.Group)
                 .ThenInclude(m => m.Characters)
                 .FirstOrDefaultAsync(i => i.Id == itemId);

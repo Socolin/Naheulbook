@@ -5,11 +5,11 @@ namespace Naheulbook.Data.Models
     public class MonsterCategory
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public int TypeId { get; set; }
-        public MonsterType Type { get; set; }
+        public MonsterType Type { get; set; } = null!;
 
-        public ICollection<MonsterTemplate> MonsterTemplates { get; set; }
+        public ICollection<MonsterTemplate> MonsterTemplates { get; set; } = null!;
     }
 }

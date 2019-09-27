@@ -63,7 +63,7 @@ namespace Naheulbook.Data.Repositories
         public Task<List<ItemTemplate>> GetItemByCleanNameWithAllDataAsync(string name, int maxResultCount, int? currentUserId, bool includeCommunityItems)
         {
             return Context.ItemTemplates
-                .Where(x => x.CleanName.ToUpper() == name)
+                .Where(x => x.CleanName!.ToUpper() == name)
                 .FilterCommunityAndPrivateItemTemplates(currentUserId, includeCommunityItems)
                 .IncludeItemTemplateDetails()
                 .OrderByDescending(x => x.Source)
@@ -74,7 +74,7 @@ namespace Naheulbook.Data.Repositories
         public Task<List<ItemTemplate>> GetItemByPartialCleanNameWithAllDataAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems)
         {
             return Context.ItemTemplates
-                .Where(x => x.CleanName.ToUpper().Contains(name))
+                .Where(x => x.CleanName!.ToUpper().Contains(name))
                 .Take(maxResultCount)
                 .Where(i => !excludedIds.Contains(i.Id))
                 .IncludeItemTemplateDetails()
@@ -86,7 +86,7 @@ namespace Naheulbook.Data.Repositories
         public Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems)
         {
             return Context.ItemTemplates
-                .Where(x => x.CleanName
+                .Where(x => x.CleanName!
                     .Replace("'", "")
                     .Replace("-", "")
                     .Replace(" ", "")

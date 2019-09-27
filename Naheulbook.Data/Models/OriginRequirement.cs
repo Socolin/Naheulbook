@@ -8,9 +8,9 @@ namespace Naheulbook.Data.Models
         public int? MaxValue { get; set; }
 
         public int OriginId { get; set; }
-        public Origin Origin { get; set; }
+        public Origin Origin { get; set; } = null!;
 
-        public string StatName { get; set; }
-        public Stat Stat { get; set; }
+        public string StatName { get; set; } = null!;
+        public Stat Stat { get; set; } = null!;
     }
 }

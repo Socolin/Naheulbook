@@ -49,15 +49,15 @@ namespace Naheulbook.Data.Configurations
                 .WithMany()
                 .HasForeignKey(e => e.ContainerId);
 
-            builder.HasOne(e => e.Character)
+            builder.HasOne(e => e.Character!)
                 .WithMany(e => e.Items)
                 .HasForeignKey(e => e.CharacterId);
 
-            builder.HasOne(e => e.Loot)
+            builder.HasOne(e => e.Loot!)
                 .WithMany(e => e.Items)
                 .HasForeignKey(e => e.LootId);
 
-            builder.HasOne(e => e.Monster)
+            builder.HasOne(e => e.Monster!)
                 .WithMany(e => e.Items)
                 .HasForeignKey(e => e.MonsterId);
         }

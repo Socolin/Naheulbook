@@ -8,9 +8,9 @@ namespace Naheulbook.Data.Models
         public int MaxCount { get; set; }
 
         public int ItemTemplateId { get; set; }
-        public ItemTemplate ItemTemplate { get; set; }
+        public ItemTemplate ItemTemplate { get; set; } = null!;
 
         public int MonsterTemplateId { get; set; }
-        public MonsterTemplate MonsterTemplate { get; set; }
+        public MonsterTemplate MonsterTemplate { get; set; } = null!;
     }
 }

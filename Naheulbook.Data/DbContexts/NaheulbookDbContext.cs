@@ -1,38 +1,38 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.Configurations;
 using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.DbContexts
 {
+    [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
     public class NaheulbookDbContext : DbContext
     {
-        public DbSet<Calendar> Calendars { get; set; }
-        public DbSet<Character> Characters { get; set; }
-        public DbSet<CharacterModifier> CharacterModifiers { get; set; }
-        public DbSet<CharacterHistoryEntry> CharacterHistory { get; set; }
-        public DbSet<Effect> Effects { get; set; }
-        public DbSet<EffectType> EffectTypes { get; set; }
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<GroupHistoryEntry> GroupHistory { get; set; }
-        public DbSet<GroupInvite> GroupInvites { get; set; }
-        public DbSet<ItemTemplateSection> ItemTemplateSections { get; set; }
-        public DbSet<Item> Items { get; set; }
-        public DbSet<ItemTemplate> ItemTemplates { get; set; }
-        public DbSet<ItemTemplateCategory> ItemTemplateCategories { get; set; }
-        public DbSet<Skill> Skills { get; set; }
-        public DbSet<Monster> Monsters { get; set; }
-        public DbSet<MonsterType> MonsterTypes { get; set; }
-        public DbSet<MonsterTemplate> MonsterTemplates { get; set; }
-        public DbSet<Origin> Origins { get; set; }
-        public DbSet<Job> Jobs { get; set; }
-        public DbSet<Slot> Slots { get; set; }
-        public DbSet<Speciality> Specialities { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<Location> Locations { get; set; }
-        public DbSet<LocationMap> LocationMaps { get; set; }
-        public DbSet<Loot> Loots { get; set; }
-        public DbSet<Event> Events { get; set; }
-        public DbSet<OriginRandomNameUrl> OriginRandomNameUrls { get; set; }
+        public DbSet<Character> Characters { get; set; } = null!;
+        public DbSet<CharacterModifier> CharacterModifiers { get; set; } = null!;
+        public DbSet<CharacterHistoryEntry> CharacterHistory { get; set; } = null!;
+        public DbSet<Effect> Effects { get; set; } = null!;
+        public DbSet<EffectType> EffectTypes { get; set; } = null!;
+        public DbSet<Group> Groups { get; set; } = null!;
+        public DbSet<GroupHistoryEntry> GroupHistory { get; set; } = null!;
+        public DbSet<GroupInvite> GroupInvites { get; set; } = null!;
+        public DbSet<ItemTemplateSection> ItemTemplateSections { get; set; } = null!;
+        public DbSet<Item> Items { get; set; } = null!;
+        public DbSet<ItemTemplate> ItemTemplates { get; set; } = null!;
+        public DbSet<ItemTemplateCategory> ItemTemplateCategories { get; set; } = null!;
+        public DbSet<Skill> Skills { get; set; } = null!;
+        public DbSet<Monster> Monsters { get; set; } = null!;
+        public DbSet<MonsterType> MonsterTypes { get; set; } = null!;
+        public DbSet<MonsterTemplate> MonsterTemplates { get; set; } = null!;
+        public DbSet<Origin> Origins { get; set; } = null!;
+        public DbSet<Job> Jobs { get; set; } = null!;
+        public DbSet<Speciality> Specialities { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Location> Locations { get; set; } = null!;
+        public DbSet<LocationMap> LocationMaps { get; set; } = null!;
+        public DbSet<Loot> Loots { get; set; } = null!;
+        public DbSet<Event> Events { get; set; } = null!;
+        public DbSet<OriginRandomNameUrl> OriginRandomNameUrls { get; set; } = null!;
 
         public NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options)
             : base(options)

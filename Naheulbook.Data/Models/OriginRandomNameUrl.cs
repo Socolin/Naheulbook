@@ -4,10 +4,10 @@ namespace Naheulbook.Data.Models
     {
         public int Id { get; set; }
 
-        public string Sex { get; set; }
-        public string Url { get; set; }
+        public string Sex { get; set; } = null!;
+        public string Url { get; set; } = null!;
 
         public int OriginId { get; set; }
-        public Origin Origin { get; set; }
+        public Origin Origin { get; set; } = null!;
     }
 }

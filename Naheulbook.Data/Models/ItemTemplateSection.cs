@@ -5,17 +5,12 @@ namespace Naheulbook.Data.Models
 {
     public class ItemTemplateSection
     {
-        public ItemTemplateSection()
-        {
-            Categories = new HashSet<ItemTemplateCategory>();
-        }
-
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Note { get; set; }
-        public string Special { get; set; }
+        public string Name { get; set; } = null!;
+        public string Note { get; set; } = null!;
+        public string Special { get; set; } = null!;
 
         [NotMapped]
-        public ICollection<ItemTemplateCategory> Categories { get; set; }
+        public ICollection<ItemTemplateCategory> Categories { get; set; } = null!;
     }
 }

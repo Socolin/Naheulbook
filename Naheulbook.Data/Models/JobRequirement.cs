@@ -7,10 +7,10 @@ namespace Naheulbook.Data.Models
         public long? MinValue { get; set; }
         public long? MaxValue { get; set; }
 
-        public string StatName { get; set; }
-        public Stat Stat { get; set; }
+        public string StatName { get; set; } = null!;
+        public Stat Stat { get; set; } = null!;
 
         public int JobId { get; set; }
-        public Job Job { get; set; }
+        public Job Job { get; set; } = null!;
     }
 }

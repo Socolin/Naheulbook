@@ -1,4 +1,4 @@
-namespace Naheulbook.Data.Repositories
+namespace Naheulbook.Requests.Requests
 {
     public class UpdateUserRequest
     {

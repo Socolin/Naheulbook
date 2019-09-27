@@ -5,9 +5,9 @@ namespace Naheulbook.Data.Models
         public bool Default { get; set; }
 
         public int JobId { get; set; }
-        public virtual Job Job { get; set; }
+        public Job Job { get; set; } = null!;
 
         public int SkillId { get; set; }
-        public virtual Skill Skill { get; set; }
+        public Skill Skill { get; set; } = null!;
     }
 }

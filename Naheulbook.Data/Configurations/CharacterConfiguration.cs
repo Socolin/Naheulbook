@@ -88,7 +88,7 @@ namespace Naheulbook.Data.Configurations
                 .HasForeignKey(e => e.OriginId)
                 .HasConstraintName("FK_character_origin_origin");
 
-            builder.HasOne(e => e.Group)
+            builder.HasOne(e => e.Group!)
                 .WithMany(e => e.Characters)
                 .HasForeignKey(e => e.GroupId)
                 .HasConstraintName("FK_character_group_group");
@@ -191,7 +191,7 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.CharacterId)
                 .HasColumnName("character");
 
-            builder.HasOne(e => e.Character)
+            builder.HasOne(e => e.Character!)
                 .WithMany(e => e.Modifiers)
                 .HasForeignKey(e => e.CharacterId)
                 .HasConstraintName("FK_character_modifier_character_character");

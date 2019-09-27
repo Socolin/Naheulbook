@@ -19,7 +19,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         }
 
         [Test]
-        public async Task GetGroupsOwnedByAsync_ItShouldLoadGroupsWithCharacterList()
+        public async Task zGetGroupsOwnedByAsync_ItShouldLoadGroupsWithCharacterList()
         {
             TestDataUtil
                 .AddUser()

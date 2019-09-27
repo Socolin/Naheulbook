@@ -55,7 +55,7 @@ namespace Naheulbook.Data.Configurations
                 .HasForeignKey(x => x.GroupId)
                 .HasConstraintName("FK_monster_group_group");
 
-            builder.HasOne(x => x.Loot)
+            builder.HasOne(x => x.Loot!)
                 .WithMany(x => x.Monsters)
                 .HasForeignKey(x => x.LootId)
                 .HasConstraintName("FK_monster_loot_lootid");

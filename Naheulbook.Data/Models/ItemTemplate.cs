@@ -8,35 +8,25 @@ namespace Naheulbook.Data.Models
         public const string PrivateSourceValue = "private";
         public const string CommunitySourceValue = "community";
 
-        public ItemTemplate()
-        {
-            Modifiers = new HashSet<ItemTemplateModifier>();
-            Requirements = new HashSet<ItemTemplateRequirement>();
-            SkillModifiers = new HashSet<ItemTemplateSkillModifier>();
-            Slots = new HashSet<ItemTemplateSlot>();
-            Skills = new HashSet<ItemTemplateSkill>();
-            UnSkills = new HashSet<ItemTemplateUnSkill>();
-        }
-
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string CleanName { get; set; }
-        public string TechName { get; set; }
-        public string Source { get; set; }
-        public string SourceUserNameCache { get; set; }
-        public string Data { get; set; }
+        public string Name { get; set; } = null!;
+        public string? CleanName { get; set; }
+        public string? TechName { get; set; }
+        public string Source { get; set; } = null!;
+        public string? SourceUserNameCache { get; set; }
+        public string? Data { get; set; }
 
         public int CategoryId { get; set; }
-        public ItemTemplateCategory Category { get; set; }
+        public ItemTemplateCategory Category { get; set; } = null!;
 
         public int? SourceUserId { get; set; }
-        public User SourceUser { get; set; }
+        public User? SourceUser { get; set; }
 
-        public ICollection<ItemTemplateModifier> Modifiers { get; set; }
-        public ICollection<ItemTemplateRequirement> Requirements { get; set; }
-        public ICollection<ItemTemplateSkillModifier> SkillModifiers { get; set; }
-        public ICollection<ItemTemplateSlot> Slots { get; set; }
-        public ICollection<ItemTemplateSkill> Skills { get; set; }
-        public ICollection<ItemTemplateUnSkill> UnSkills { get; set; }
+        public ICollection<ItemTemplateModifier> Modifiers { get; set; } = null!;
+        public ICollection<ItemTemplateRequirement> Requirements { get; set; } = null!;
+        public ICollection<ItemTemplateSkillModifier> SkillModifiers { get; set; } = null!;
+        public ICollection<ItemTemplateSlot> Slots { get; set; } = null!;
+        public ICollection<ItemTemplateSkill> Skills { get; set; } = null!;
+        public ICollection<ItemTemplateUnSkill> UnSkills { get; set; } = null!;
     }
 }

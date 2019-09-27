@@ -6,8 +6,8 @@ namespace Naheulbook.Data.Models
     {
         string Action { get; set; }
         bool Gm { get; set; }
-        string Info { get; set; }
+        string? Info { get; set; }
         DateTime Date { get; set; }
-        string Data { get; set; }
+        string? Data { get; set; }
     }
 }
