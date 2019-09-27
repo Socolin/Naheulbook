@@ -11,7 +11,7 @@ namespace Naheulbook.Core.Utils
         GroupHistoryEntry CreateLogEndCombat(Group group);
         GroupHistoryEntry CreateLogChangeMankdebol(Group group, int? oldValue, int newValue);
         GroupHistoryEntry CreateLogChangeDebilibeuk(Group group, int? oldValue, int newValue);
-        GroupHistoryEntry CreateLogChangeDate(Group group, NhbkDate oldValue, NhbkDate newValue);
+        GroupHistoryEntry CreateLogChangeDate(Group group, NhbkDate? oldValue, NhbkDate newValue);
         GroupHistoryEntry CreateLogAddTime(Group group, NhbkDate date, NhbkDateOffset timeOffset);
         GroupHistoryEntry CreateLogEventRp(Group @group, bool isGm, string info);
     }
@@ -79,7 +79,7 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public GroupHistoryEntry CreateLogChangeDate(Group group, NhbkDate oldValue, NhbkDate newValue)
+        public GroupHistoryEntry CreateLogChangeDate(Group group, NhbkDate? oldValue, NhbkDate newValue)
         {
             return new GroupHistoryEntry
             {

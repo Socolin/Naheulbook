@@ -127,11 +127,11 @@ namespace Naheulbook.Core.Services
                 if (item.CharacterId.HasValue)
                 {
                     if (itemData.Quantity != currentItemData.Quantity)
-                        item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogChangeItemQuantity(item.CharacterId.Value, item, currentItemData.Quantity, itemData.Quantity));
+                        item.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogChangeItemQuantity(item.CharacterId.Value, item, currentItemData.Quantity, itemData.Quantity));
                     if (itemData.ReadCount.HasValue && itemData.ReadCount == currentItemData.ReadCount + 1)
-                        item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogReadBook(item.CharacterId.Value, item));
+                        item.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogReadBook(item.CharacterId.Value, item));
                     if (currentItemData.NotIdentified == true && itemData.NotIdentified == null)
-                        item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogIdentifyItem(item.CharacterId.Value, item));
+                        item.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogIdentifyItem(item.CharacterId.Value, item));
                 }
 
                 item.Data = _jsonUtil.Serialize(itemData);
@@ -272,9 +272,9 @@ namespace Naheulbook.Core.Services
                 if (item.CharacterId == null)
                     throw new ForbiddenAccessException();
 
-                _authorizationUtil.EnsureCharacterAccess(executionContext, item.Character);
+                _authorizationUtil.EnsureCharacterAccess(executionContext, item.Character!);
 
-                if (item.Character.Group.Characters.All(x => x.Id != request.CharacterId && x.IsActive))
+                if (item.Character!.Group!.Characters.All(x => x.Id != request.CharacterId && x.IsActive))
                     throw new CharacterNotFoundException(request.CharacterId);
             }
 

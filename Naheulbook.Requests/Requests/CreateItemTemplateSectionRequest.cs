@@ -4,8 +4,8 @@ namespace Naheulbook.Requests.Requests
 {
     public class CreateItemTemplateSectionRequest
     {
-        public string Name { get; set; }
-        public string Note { get; set; }
-        public List<string> Specials { get; set; }
+        public string Name { get; set; } = null!;
+        public string Note { get; set; } = null!;
+        public List<string> Specials { get; set; } = null!;
     }
 }

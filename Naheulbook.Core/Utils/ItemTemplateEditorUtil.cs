@@ -39,14 +39,14 @@ namespace Naheulbook.Core.Utils
 
             itemTemplate.CleanName = _stringCleanupUtil.RemoveAccents(request.Name);
 
-            itemTemplate.Slots = request.Slots?.Select(x => new ItemTemplateSlot {SlotId = x.Id}).ToList();
+            itemTemplate.Slots = request.Slots?.Select(x => new ItemTemplateSlot {SlotId = x.Id}).ToList() ?? new List<ItemTemplateSlot>();
 
             itemTemplate.Requirements = request.Requirements?.Select(x => new ItemTemplateRequirement
             {
                 StatName = x.Stat,
                 MaxValue = x.Max,
                 MinValue = x.Min
-            }).ToList();
+            }).ToList() ?? new List<ItemTemplateRequirement>();
 
             itemTemplate.Modifiers = request.Modifiers?.Select(x => new ItemTemplateModifier
             {
@@ -56,24 +56,24 @@ namespace Naheulbook.Core.Utils
                 Value = x.Value,
                 Type = x.Type,
                 Special = x.Special == null ? "" : string.Join(',', x.Special)
-            }).ToList();
+            }).ToList() ?? new List<ItemTemplateModifier>();
 
 
             itemTemplate.Skills = request.Skills?.Select(x => new ItemTemplateSkill
             {
                 SkillId = x.Id
-            }).ToList();
+            }).ToList() ?? new List<ItemTemplateSkill>();
 
             itemTemplate.UnSkills = request.UnSkills?.Select(x => new ItemTemplateUnSkill
             {
                 SkillId = x.Id
-            }).ToList();
+            }).ToList() ?? new List<ItemTemplateUnSkill>();
 
             itemTemplate.SkillModifiers = request.SkillModifiers?.Select(x => new ItemTemplateSkillModifier()
             {
                 SkillId = x.Skill,
                 Value = x.Value
-            }).ToList();
+            }).ToList() ?? new List<ItemTemplateSkillModifier>();
         }
 
         public IEnumerable<ItemTemplate> FilterItemTemplatesBySource(IEnumerable<ItemTemplate> itemTemplates, int? currentUserId, bool includeCommunityItem)

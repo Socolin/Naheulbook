@@ -2,10 +2,10 @@ namespace Naheulbook.Requests.Requests
 {
     public class PatchGroupRequest
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int? Mankdebol { get; set; }
         public int? Debilibeuk { get; set; }
-        public NhbkDateRequest Date { get; set; }
+        public NhbkDateRequest? Date { get; set; }
         public int? FighterIndex { get; set; }
     }
 

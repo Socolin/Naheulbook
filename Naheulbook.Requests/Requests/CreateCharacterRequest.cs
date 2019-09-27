@@ -7,15 +7,15 @@ namespace Naheulbook.Requests.Requests
 {
     public class CreateCharacterRequest
     {
-        public string Name { get; set; }
-        public string Sex { get; set; }
+        public string Name { get; set; } = null!;
+        public string Sex { get; set; } = null!;
         public int Money { get; set; }
         public short FatePoint { get; set; }
         public bool IsNpc { get; set; }
         public int? GroupId { get; set; }
 
-        public BasicStats Stats { get; set; }
-        public IDictionary<string, ModifiedStats> ModifiedStat { get; set; }
+        public BasicStats Stats { get; set; } = null!;
+        public IDictionary<string, ModifiedStats> ModifiedStat { get; set; } = null!;
 
         [JsonProperty("job")]
         public int? JobId { get; set; }
@@ -24,7 +24,7 @@ namespace Naheulbook.Requests.Requests
         public int OriginId { get; set; }
 
         [JsonProperty("skills")]
-        public IList<int> SkillIds { get; set; }
+        public IList<int> SkillIds { get; set; } = null!;
 
         [JsonProperty("speciality")]
         public int? SpecialityId { get; set; }
@@ -32,8 +32,8 @@ namespace Naheulbook.Requests.Requests
 
     public class ModifiedStats
     {
-        public string Name { get; set; }
-        public IDictionary<string, int> Stats { get; set; }
+        public string Name { get; set; } = null!;
+        public IDictionary<string, int> Stats { get; set; } = null!;
     }
 
     public class BasicStats

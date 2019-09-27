@@ -8,7 +8,7 @@ namespace Naheulbook.Core.Exceptions
     public class ItemTemplateCategoryNotFoundException : Exception
     {
         public int ItemTemplateCategoryId { get; }
-        public string ItemTemplateCategoryTechName { get; }
+        public string? ItemTemplateCategoryTechName { get; }
 
         public ItemTemplateCategoryNotFoundException(int itemTemplateCategoryId)
         {

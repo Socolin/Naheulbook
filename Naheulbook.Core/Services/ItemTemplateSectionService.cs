@@ -48,7 +48,7 @@ namespace Naheulbook.Core.Services
             var itemTemplateSection = new ItemTemplateSection()
             {
                 Name = request.Name,
-                Special = request.Specials == null ? null : string.Join(",", request.Specials),
+                Special = string.Join(",", request.Specials),
                 Note = request.Note
             };
 

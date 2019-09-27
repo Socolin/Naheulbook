@@ -278,7 +278,8 @@ namespace Naheulbook.Core.Services
 
                 await uow.CompleteAsync();
 
-                notificationSession.NotifyGroupAddLoot(group.Id, group.CombatLoot);
+                if (group.CombatLoot != null)
+                    notificationSession.NotifyGroupAddLoot(group.Id, group.CombatLoot);
             }
 
             await notificationSession.CommitAsync();

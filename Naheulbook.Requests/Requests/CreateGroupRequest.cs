@@ -2,6 +2,6 @@ namespace Naheulbook.Requests.Requests
 {
     public class CreateGroupRequest
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

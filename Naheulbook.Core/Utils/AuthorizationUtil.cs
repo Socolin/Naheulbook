@@ -11,7 +11,7 @@ namespace Naheulbook.Core.Utils
     {
         Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext);
         Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplate itemTemplate);
-        void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, Group group);
+        void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, Group? group);
         bool IsGroupOwner(NaheulbookExecutionContext executionContext, Group group);
         void EnsureCharacterAccess(NaheulbookExecutionContext executionContext, Character character);
         void EnsureIsCharacterOwner(NaheulbookExecutionContext executionContext, Character character);
@@ -59,8 +59,10 @@ namespace Naheulbook.Core.Utils
             }
         }
 
-        public void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, Group group)
+        public void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, Group? group)
         {
+            if (group == null)
+                throw new ForbiddenAccessException();
             if (group.MasterId != executionContext.UserId)
                 throw new ForbiddenAccessException();
         }
@@ -74,7 +76,7 @@ namespace Naheulbook.Core.Utils
         {
             if (character.OwnerId != executionContext.UserId
                 && character.GroupId != null
-                && character.Group.MasterId != executionContext.UserId)
+                && character.Group!.MasterId != executionContext.UserId)
                 throw new ForbiddenAccessException();
         }
 
@@ -99,17 +101,17 @@ namespace Naheulbook.Core.Utils
         {
             if (item.CharacterId != null)
             {
-                if (item.Character.OwnerId == executionContext.UserId)
+                if (item.Character!.OwnerId == executionContext.UserId)
                     return;
 
-                if (item.Character.GroupId != null && item.Character.Group.MasterId == executionContext.UserId)
+                if (item.Character!.GroupId != null && item.Character!.Group!.MasterId == executionContext.UserId)
                     return;
             }
 
-            if (item.MonsterId != null && item.Monster.Group.MasterId == executionContext.UserId)
+            if (item.MonsterId != null && item.Monster!.Group.MasterId == executionContext.UserId)
                 return;
 
-            if (item.LootId != null && item.Loot.Group.MasterId == executionContext.UserId)
+            if (item.LootId != null && item.Loot!.Group.MasterId == executionContext.UserId)
                 return;
 
             throw new ForbiddenAccessException();
@@ -117,16 +119,16 @@ namespace Naheulbook.Core.Utils
 
         public void EnsureCanTakeItem(NaheulbookExecutionContext executionContext, Item item)
         {
-            if (item.MonsterId.HasValue && item.Monster.Group.MasterId == executionContext.UserId)
+            if (item.MonsterId.HasValue && item.Monster!.Group.MasterId == executionContext.UserId)
                 return;
 
-            if (item.MonsterId.HasValue && item.Monster.Group.Characters.Any(c => c.OwnerId == executionContext.UserId))
+            if (item.MonsterId.HasValue && item.Monster!.Group.Characters.Any(c => c.OwnerId == executionContext.UserId))
                 return;
 
-            if (item.LootId.HasValue && item.Loot.Group.MasterId == executionContext.UserId)
+            if (item.LootId.HasValue && item.Loot!.Group.MasterId == executionContext.UserId)
                 return;
 
-            if (item.LootId.HasValue && item.Loot.Group.Characters.Any(c => c.OwnerId == executionContext.UserId))
+            if (item.LootId.HasValue && item.Loot!.Group.Characters.Any(c => c.OwnerId == executionContext.UserId))
                 return;
 
             throw new ForbiddenAccessException();

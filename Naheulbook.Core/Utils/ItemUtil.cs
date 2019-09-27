@@ -55,12 +55,12 @@ namespace Naheulbook.Core.Utils
 
             if (previouslyEquipped != newlyEquipped && item.CharacterId != null)
             {
-                if (item.Character.HistoryEntries == null)
-                    item.Character.HistoryEntries = new List<CharacterHistoryEntry>();
+                if (item.Character!.HistoryEntries == null)
+                    item.Character!.HistoryEntries = new List<CharacterHistoryEntry>();
                 if (previouslyEquipped)
-                    item.Character.HistoryEntries.Add(_characterHistoryUtil.CreateLogUnEquipItem(item.CharacterId.Value, item.Id));
+                    item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogUnEquipItem(item.CharacterId.Value, item.Id));
                 else
-                    item.Character.HistoryEntries.Add(_characterHistoryUtil.CreateLogEquipItem(item.CharacterId.Value, item.Id));
+                    item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogEquipItem(item.CharacterId.Value, item.Id));
             }
 
             item.Data = _jsonUtil.Serialize(itemData);
@@ -87,7 +87,7 @@ namespace Naheulbook.Core.Utils
                     {
                         notificationSession.NotifyItemDeleteItem(originalItem);
                         if (originalItem.CharacterId != null)
-                            originalItem.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem));
+                            originalItem.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem));
                     }
 
                     originalItem.Character = targetCharacter;
@@ -120,7 +120,7 @@ namespace Naheulbook.Core.Utils
                     else if (trigger == MoveItemTrigger.GiveItem)
                     {
                         if (originalItem.CharacterId != null)
-                            originalItem.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem));
+                            originalItem.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem));
                         targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem));
                         notificationSession.NotifyItemDataChanged(originalItem);
                     }

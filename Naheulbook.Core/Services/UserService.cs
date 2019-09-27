@@ -92,6 +92,8 @@ namespace Naheulbook.Core.Services
                 var user = await uow.Users.GetByUsernameAsync(username);
                 if (user == null)
                     throw new UserNotFoundException();
+                if (user.HashedPassword == null)
+                    throw new InvalidPasswordException();
                 var success = _passwordHashingService.VerifyPassword(user.HashedPassword, password);
                 if (!success)
                     throw new InvalidPasswordException();

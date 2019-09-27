@@ -11,7 +11,7 @@ namespace Naheulbook.Core.Models
             ExecutionExecutionContext = executionContext;
         }
 
-        public NaheulbookExecutionContext ExecutionExecutionContext { get; set; }
+        public NaheulbookExecutionContext? ExecutionExecutionContext { get; set; }
     }
 
     public class NaheulbookExecutionContext

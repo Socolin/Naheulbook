@@ -7,14 +7,14 @@ namespace Naheulbook.Core.Utils
 {
     public interface IActiveStatsModifierUtil
     {
-        void InitializeModifierIds(ICollection<ActiveStatsModifier> modifiers);
+        void InitializeModifierIds(ICollection<ActiveStatsModifier>? modifiers);
         void AddModifier(IList<ActiveStatsModifier> modifiers, ActiveStatsModifier newModifier);
         void RemoveModifier(IList<ActiveStatsModifier> modifiers, int modifierId);
     }
 
     public class ActiveStatsModifierUtil : IActiveStatsModifierUtil
     {
-        public void InitializeModifierIds(ICollection<ActiveStatsModifier> modifiers)
+        public void InitializeModifierIds(ICollection<ActiveStatsModifier>? modifiers)
         {
             if (modifiers == null || modifiers.Count == 0)
                 return;
