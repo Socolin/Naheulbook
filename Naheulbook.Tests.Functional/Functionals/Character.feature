@@ -66,8 +66,7 @@ Feature: Character
         ],
         "level": ${Character.Level},
         "name": "${Character.Name}",
-        "origin": "${Origin.Name}",
-        "originId": ${Origin.Id}
+        "origin": "${Origin.Name}"
       }
     ]
     """

@@ -305,58 +305,57 @@ namespace Naheulbook.Web.Notifications
 
         private INotificationPacket BuildCharacterChange(int characterId, string action, object data)
         {
-            return new NotificationPacket
-            {
-                GroupName = _hubGroupUtil.GetCharacterGroupName(characterId),
-                Payload = GetPacket(ElementType.Character, characterId, action, data)
-            };
+            return new NotificationPacket(
+                _hubGroupUtil.GetCharacterGroupName(characterId),
+                GetPacket(ElementType.Character, characterId, action, data)
+            );
         }
 
         private INotificationPacket BuildCharacterGmChange(int characterId, string action, object data)
         {
             return new NotificationPacket
-            {
-                GroupName = _hubGroupUtil.GetGmCharacterGroupName(characterId),
-                Payload = GetPacket(ElementType.Character, characterId, action, data)
-            };
+            (
+                _hubGroupUtil.GetGmCharacterGroupName(characterId),
+                GetPacket(ElementType.Character, characterId, action, data)
+            );
         }
 
         private INotificationPacket BuildGroupChange(int groupId, string action, object data)
         {
             return new NotificationPacket
-            {
-                GroupName = _hubGroupUtil.GetGroupGroupName(groupId),
-                Payload = GetPacket(ElementType.Group, groupId, action, data)
-            };
+            (
+                _hubGroupUtil.GetGroupGroupName(groupId),
+                GetPacket(ElementType.Group, groupId, action, data)
+            );
         }
 
         private INotificationPacket BuildLootChange(int lootId, string action, object data)
         {
             return new NotificationPacket
-            {
-                GroupName = _hubGroupUtil.GetLootGroupName(lootId),
-                Payload = GetPacket(ElementType.Loot, lootId, action, data)
-            };
+            (
+                _hubGroupUtil.GetLootGroupName(lootId),
+                GetPacket(ElementType.Loot, lootId, action, data)
+            );
         }
 
         private INotificationPacket BuildMonsterChange(int monsterId, string action, object data)
         {
             return new NotificationPacket
-            {
-                GroupName = _hubGroupUtil.GetMonsterGroupName(monsterId),
-                Payload = GetPacket(ElementType.Monster, monsterId, action, data)
-            };
+            (
+                _hubGroupUtil.GetMonsterGroupName(monsterId),
+                GetPacket(ElementType.Monster, monsterId, action, data)
+            );
         }
 
         private static NotificationPacketPayload GetPacket(ElementType elementType, int elementId, string opcode, object data)
         {
             return new NotificationPacketPayload
-            {
-                Id = elementId,
-                Type = elementType.ToString().ToLowerInvariant(),
-                Opcode = opcode,
-                Data = data
-            };
+            (
+                elementId,
+                elementType.ToString().ToLowerInvariant(),
+                opcode,
+                data
+            );
         }
     }
 }

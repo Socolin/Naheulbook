@@ -4,6 +4,6 @@ namespace Naheulbook.Web.Responses
     {
         public int Id { get; set; }
         public bool IsNpc { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

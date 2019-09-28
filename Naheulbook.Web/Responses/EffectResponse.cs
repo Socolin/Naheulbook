@@ -9,16 +9,16 @@ namespace Naheulbook.Web.Responses
         public int Id { get; set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [JsonProperty("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonProperty("durationType")]
-        public string DurationType { get; set; }
+        public string DurationType { get; set; } = null!;
 
         [JsonProperty("duration")]
-        public string Duration { get; set; }
+        public string? Duration { get; set; }
 
         [JsonProperty("combatCount")]
         public int? CombatCount { get; set; }
@@ -30,13 +30,13 @@ namespace Naheulbook.Web.Responses
         public int? TimeDuration { get; set; }
 
         [JsonProperty("dice")]
-        public int Dice { get; set; }
+        public int? Dice { get; set; }
 
         [JsonProperty("categoryId")]
         public int CategoryId { get; set; }
 
         [JsonProperty("modifiers")]
-        public IList<StatModifierResponse> Modifiers { get; set; }
+        public IList<StatModifierResponse> Modifiers { get; set; } = null!;
     }
 
     public class EffectTypeResponse
@@ -45,10 +45,10 @@ namespace Naheulbook.Web.Responses
         public int Id { get; set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [JsonProperty("categories")]
-        public IList<EffectCategoryResponse> Categories { get; set; }
+        public IList<EffectCategoryResponse> Categories { get; set; } = null!;
     }
 
     public class EffectCategoryResponse
@@ -57,7 +57,7 @@ namespace Naheulbook.Web.Responses
         public int Id { get; set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [JsonProperty("diceCount")]
         public short DiceCount { get; set; }
@@ -66,7 +66,7 @@ namespace Naheulbook.Web.Responses
         public short DiceSize { get; set; }
 
         [JsonProperty("note")]
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
         [JsonProperty("typeId")]
         public int TypeId { get; set; }

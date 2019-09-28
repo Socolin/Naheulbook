@@ -21,7 +21,7 @@ namespace Naheulbook.Web.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            string jwt = null;
+            string? jwt = null;
             if (context.Request.Query.ContainsKey("access_token"))
                 jwt = context.Request.Query["access_token"];
             else if (context.Request.Headers.ContainsKey("Authorization"))

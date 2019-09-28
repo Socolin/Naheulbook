@@ -135,14 +135,14 @@ namespace Naheulbook.Web.Mappers
                 });
 
             CreateMap<Item, ItemPartialResponse>()
-                .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data)))
+                .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data) ?? new JObject()))
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(x => MapperHelpers.FromJson<List<ActiveStatsModifier>>(x.Modifiers)));
             CreateMap<Item, ItemResponse>()
-                .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data)))
+                .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data) ?? new JObject()))
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(x => MapperHelpers.FromJson<List<ActiveStatsModifier>>(x.Modifiers)));
 
             CreateMap<ItemTemplate, ItemTemplateResponse>()
-                .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data)))
+                .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data) ?? new JObject()))
                 .ForMember(m => m.Slots, opt => opt.MapFrom(i => i.Slots.Select(x => x.Slot)));
             CreateMap<ItemTemplateModifier, ItemTemplateModifierResponse>()
                 .ForMember(m => m.JobId, opt => opt.MapFrom(im => im.RequireJobId))
@@ -246,7 +246,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Type, opt => opt.MapFrom(x => "ADD"))
                 .ForMember(m => m.Special, opt => opt.Ignore());
 
-            CreateMap<string, LapCountDecrement>().ConvertUsing(c => c == null ? null : MapperHelpers.FromJson<LapCountDecrement>(c));
+            CreateMap<string?, LapCountDecrement?>().ConvertUsing(c => MapperHelpers.FromJson<LapCountDecrement>(c));
 
             CreateMap<Stat, StatResponse>();
 

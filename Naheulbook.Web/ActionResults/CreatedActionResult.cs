@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace Naheulbook.Web.ActionResults
 {
     public class CreatedActionResult<TValue> : IConvertToActionResult
+        where TValue : class
     {
         public int StatusCode { get; }
-        public TValue Value { get; }
-        private readonly ActionResult _result;
+        public TValue? Value { get; }
+        private readonly ActionResult? _result;
 
         private CreatedActionResult(int statusCode, TValue value)
         {

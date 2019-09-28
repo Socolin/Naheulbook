@@ -4,7 +4,7 @@ namespace Naheulbook.Web.Responses
 {
     public class FlagResponse
     {
-        public string Type { get; set; }
-        public JToken Data { get; set; }
+        public string Type { get; set; } = null!;
+        public JToken? Data { get; set; }
     }
 }

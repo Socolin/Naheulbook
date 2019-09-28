@@ -255,7 +255,10 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil
                 .AddCharacterWithRequiredDependencies();
             for (var i = 0; i < 41; i++)
-                TestDataUtil.AddCharacterHistoryEntry(h => h.Date = new DateTime(i * 100));
+            {
+                var i1 = i;
+                TestDataUtil.AddCharacterHistoryEntry(h => h.Date = new DateTime(i1 * 100));
+            }
 
             var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(TestDataUtil.Get<Character>(0).Id, null,0, false);
 
@@ -268,7 +271,10 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil
                 .AddCharacterWithRequiredDependencies();
             for (var i = 0; i < 41; i++)
-                TestDataUtil.AddCharacterHistoryEntry(h => h.Date = new DateTime(i * 100));
+            {
+                var i1 = i;
+                TestDataUtil.AddCharacterHistoryEntry(h => h.Date = new DateTime(i1 * 100));
+            }
 
             var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(TestDataUtil.Get<Character>(0).Id, null,1, false);
 

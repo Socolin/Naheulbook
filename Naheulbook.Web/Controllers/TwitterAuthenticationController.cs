@@ -36,13 +36,13 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("initOAuthAuthentication")]
-        public async Task<ActionResult<AuthenticationInitResponse>> PostInitOauthAuthenticationAsync()
+        public async Task<ActionResult<TwitterAuthenticationInitResponse>> PostInitOauthAuthenticationAsync()
         {
             var requestToken =  await _twitterClient.GetRequestTokenAsync();
 
             HttpContext.Session.SetString(TwitterOauthTokenKey, requestToken.OAuthToken);
 
-            return new AuthenticationInitResponse
+            return new TwitterAuthenticationInitResponse
             {
                 LoginToken = requestToken.OAuthToken
             };

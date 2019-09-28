@@ -1,9 +1,18 @@
+using System.ComponentModel.DataAnnotations;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Web.Requests
 {
     public class CompleteMicrosoftAuthenticationRequest
     {
-        public string Code { get; set; }
-        public string LoginToken { get; set; }
-        public string RedirectUri { get; set; }
+        [Required]
+        public string Code { get; set; } = null!;
+
+        [Required]
+        public string LoginToken { get; set; } = null!;
+
+        [Required]
+        public string RedirectUri { get; set; } = null!;
     }
 }

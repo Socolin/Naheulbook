@@ -52,7 +52,6 @@ namespace Naheulbook.Web.Controllers
             return new AuthenticationInitResponse
             {
                 LoginToken = loginToken,
-                ServiceName = "facebook",
                 AppKey = _configuration.AppId
             };
         }

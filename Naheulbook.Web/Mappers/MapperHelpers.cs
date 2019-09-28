@@ -12,12 +12,13 @@ namespace Naheulbook.Web.Mappers
             NullValueHandling = NullValueHandling.Ignore
         };
 
-        public static string[] FromCommaSeparatedStringArray(string str)
+        public static string[] FromCommaSeparatedStringArray(string? str)
         {
-            return str?.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            return str?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
         }
 
-        public static T FromJson<T>(string json)
+        public static T? FromJson<T>(string? json)
+            where T : class
         {
             if (string.IsNullOrEmpty(json))
                 return default;
@@ -25,7 +26,7 @@ namespace Naheulbook.Web.Mappers
             return JsonConvert.DeserializeObject<T>(json, JsonSerializerSettings);
         }
 
-        public static string? ToJson(object obj)
+        public static string? ToJson(object? obj)
         {
             if (obj == null)
                 return null;
@@ -33,12 +34,12 @@ namespace Naheulbook.Web.Mappers
             return JsonConvert.SerializeObject(obj);
         }
 
-        public static List<string>? FromCommaSeparatedList(string list)
+        public static List<string>? FromCommaSeparatedList(string? list)
         {
             if (string.IsNullOrEmpty(list))
                 return default;
 
-            return list.Split(",").ToList();
+            return list!.Split(",").ToList();
         }
 
         public static string? FromDateTimeToString(DateTime? date)
