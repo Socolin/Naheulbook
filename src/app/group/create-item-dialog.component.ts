@@ -13,24 +13,6 @@ export interface CreateItemDialogDialog {
     itemTemplate: ItemTemplate
 }
 
-export function openCreateItemDialog(dialog: MatDialog, onAdd: (item: Item) => void, allowMultipleAdd = true, itemTemplate?: ItemTemplate) {
-    const subject = new Subject<Item>();
-    const dialogRef = dialog.open(CreateItemDialogComponent, {
-        data: {
-            onAdd: subject,
-            allowMultipleAdd,
-            itemTemplate
-        }
-    });
-    const subscription = subject.subscribe((item) => {
-        onAdd(item);
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-        subscription.unsubscribe();
-    });
-}
-
 @Component({
     selector: 'app-create-item-dialog',
     templateUrl: './create-item-dialog.component.html',
@@ -170,4 +152,22 @@ export class CreateItemDialogComponent implements OnInit {
             this.dialogRef.close();
         }
     }
+}
+
+export function openCreateItemDialog(dialog: MatDialog, onAdd: (item: Item) => void, allowMultipleAdd = true, itemTemplate?: ItemTemplate) {
+    const subject = new Subject<Item>();
+    const dialogRef = dialog.open(CreateItemDialogComponent, {
+        data: {
+            onAdd: subject,
+            allowMultipleAdd,
+            itemTemplate
+        }
+    });
+    const subscription = subject.subscribe((item) => {
+        onAdd(item);
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+        subscription.unsubscribe();
+    });
 }

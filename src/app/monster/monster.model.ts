@@ -5,14 +5,12 @@ import {ActiveStatsModifier, DurationChange, IMetadata, StatModifier} from '../s
 import {Skill, SkillDictionary} from '../skill';
 import {ItemTemplate} from '../item-template';
 import {Item, PartialItem} from '../item';
-import {WsEventServices, WsRegistrable, WebSocketService} from '../websocket';
+import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 
 import {TargetJsonData} from '../group/target.model';
 import {Fighter} from '../group';
-import {MonsterResponse, MonsterTypeResponse} from '../api/responses';
+import {MonsterCategoryResponse, MonsterResponse, MonsterTemplateResponse, MonsterTypeResponse} from '../api/responses';
 import {MonsterTemplateData} from '../api/shared';
-import {MonsterTemplateResponse} from '../api/responses/monster-template-response';
-import {MonsterCategoryResponse} from '../api/responses/monster-category-response';
 
 export class MonsterData {
     at: number;

@@ -1,22 +1,20 @@
 import {IItemTemplateData} from '../shared';
 
-export interface ItemTemplateRequest
-{
-    source: 'official'|'community'|'private';
+export interface ItemTemplateRequest {
+    source: 'official' | 'community' | 'private';
     categoryId: number;
     name: string;
     techName?: string;
     modifiers: ItemTemplateModifierRequest[];
-    skills: {id: number}[];
-    unskills: {id: number}[];
+    skills: { id: number }[];
+    unskills: { id: number }[];
     skillModifiers: ItemTemplateSkillModifierRequest[];
     requirements: ItemTemplateRequirementRequest[];
-    slots: {id: number}[];
+    slots: { id: number }[];
     data: IItemTemplateData;
 }
 
-export interface ItemTemplateModifierRequest
-{
+export interface ItemTemplateModifierRequest {
     stat: string;
     value: number;
     type: string;
@@ -25,14 +23,12 @@ export interface ItemTemplateModifierRequest
     origin: number | null;
 }
 
-export interface ItemTemplateSkillModifierRequest
-{
+export interface ItemTemplateSkillModifierRequest {
     skill: number;
     value: number;
 }
 
-export interface ItemTemplateRequirementRequest
-{
+export interface ItemTemplateRequirementRequest {
     stat: string;
     min: number;
     max: number;

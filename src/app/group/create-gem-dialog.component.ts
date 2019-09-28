@@ -11,17 +11,6 @@ export interface CreateGemDialogDialog {
     onAdd: Observer<any>;
 }
 
-export function openCreateGemDialog(dialog: MatDialog, onAdd: (item: Item) => void) {
-    const subject = new Subject<Item>();
-    const dialogRef = dialog.open(CreateGemDialogComponent, {data: {onAdd: subject}});
-    const subscription = subject.subscribe((item) => {
-        onAdd(item);
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-        subscription.unsubscribe();
-    });
-}
 @Component({
     selector: 'app-create-gem-dialog',
     templateUrl: './create-gem-dialog.component.html',
@@ -126,4 +115,16 @@ export class CreateGemDialogComponent implements OnInit {
 
     ngOnInit() {
     }
+}
+
+export function openCreateGemDialog(dialog: MatDialog, onAdd: (item: Item) => void) {
+    const subject = new Subject<Item>();
+    const dialogRef = dialog.open(CreateGemDialogComponent, {data: {onAdd: subject}});
+    const subscription = subject.subscribe((item) => {
+        onAdd(item);
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+        subscription.unsubscribe();
+    });
 }

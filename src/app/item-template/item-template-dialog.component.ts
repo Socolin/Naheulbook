@@ -17,7 +17,7 @@ export interface ItemTemplateDialogData {
 export class ItemTemplateDialogComponent implements OnInit {
     public originsName: { [originId: number]: string };
     public jobsName: { [jobId: number]: string };
-    public godsByTechName: {[techName: string]: God};
+    public godsByTechName: { [techName: string]: God };
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: ItemTemplateDialogData,
@@ -34,8 +34,14 @@ export class ItemTemplateDialogComponent implements OnInit {
             this._miscService.getGodsByTechName(),
         ]).subscribe(([jobs, origins, godsByTechName]) => {
             this.godsByTechName = godsByTechName;
-            this.jobsName = jobs.reduce((result, job) => {result[job.id] = job.name; return result;}, {});
-            this.originsName = origins.reduce((result, origin) => {result[origin.id] = origin.name; return result;}, {});
+            this.jobsName = jobs.reduce((result, job) => {
+                result[job.id] = job.name;
+                return result;
+            }, {});
+            this.originsName = origins.reduce((result, origin) => {
+                result[origin.id] = origin.name;
+                return result;
+            }, {});
         });
     }
 }
