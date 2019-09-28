@@ -45,7 +45,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             var itemData = new JObject();
             var item = new Item {Data = itemDataJson};
 
-            _jsonUtil.Deserialize<JObject>(itemDataJson)
+            _jsonUtil.DeserializeOrCreate<JObject>(itemDataJson)
                 .Returns(itemData);
             _jsonUtil.Serialize(itemData)
                 .Returns(updatedItemDataJson);
@@ -72,7 +72,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             var item = new Item {Id = itemId, CharacterId = characterId, Character = new Character()};
             var itemData = new JObject();
 
-            _jsonUtil.DeserializeOrCreate<JObject>(Arg.Any<string>())
+            _jsonUtil.Deserialize<JObject>(Arg.Any<string>())
                 .Returns(itemData);
             _jsonUtil.Serialize(Arg.Any<JObject>())
                 .Returns("some-json");
