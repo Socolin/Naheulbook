@@ -8,7 +8,7 @@ namespace Naheulbook.Web.Configurations
 
     public class AuthenticationConfiguration : IAuthenticationConfiguration
     {
-        public string JwtSigningKey { get; set; }
+        public string JwtSigningKey { get; set; } = null!;
         public int JwtExpirationDelayInMinutes { get; set; } = 20;
     }
 }

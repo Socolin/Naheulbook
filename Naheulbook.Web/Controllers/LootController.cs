@@ -72,7 +72,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{LootId:int:min(1)}/items")]
-        public async Task<CreatedActionResult<ItemResponse>> PostAddItemToLootInventory(
+        public async Task<CreatedActionResult<ItemResponse>> PostAddItemToLootInventoryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int lootId,
             CreateItemRequest request
@@ -98,7 +98,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{LootId:int:min(1)}/addRandomItem")]
-        public async Task<CreatedActionResult<ItemResponse>> PostAddRandomItemToLootInventory(
+        public async Task<CreatedActionResult<ItemResponse>> PostAddRandomItemToLootInventoryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int lootId,
             CreateRandomItemRequest request

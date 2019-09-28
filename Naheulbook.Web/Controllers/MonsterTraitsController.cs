@@ -21,7 +21,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MonsterTraitResponse>>> GetMonsterTraits()
+        public async Task<ActionResult<List<MonsterTraitResponse>>> GetMonsterTraitsAsync()
         {
             var monsterTraits = await _monsterTraitService.GetMonsterTraitsAsync();
 

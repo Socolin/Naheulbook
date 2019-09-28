@@ -28,7 +28,7 @@ namespace Naheulbook.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ItemTemplateSectionResponse>>> GetItemTemplateSectionsAsync()
         {
-            var sections = await _itemTemplateSectionService.GetAllSections();
+            var sections = await _itemTemplateSectionService.GetAllSectionsAsync();
             return _mapper.Map<List<ItemTemplateSectionResponse>>(sections);
         }
 

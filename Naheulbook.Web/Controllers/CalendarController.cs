@@ -24,7 +24,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CalendarResponse>>> GetCalendar()
+        public async Task<ActionResult<List<CalendarResponse>>> GetCalendarAsync()
         {
             var calendar = await _calendarService.GetCalendarAsync();
             return _mapper.Map<List<CalendarResponse>>(calendar);

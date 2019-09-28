@@ -26,14 +26,14 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MonsterTemplateResponse>>> GetMonsterList()
+        public async Task<ActionResult<List<MonsterTemplateResponse>>> GetMonsterListAsync()
         {
             var monsters = await _monsterTemplateService.GetAllMonstersAsync();
             return _mapper.Map<List<MonsterTemplateResponse>>(monsters);
         }
 
         [HttpPost]
-        public async Task<ActionResult<MonsterTemplateResponse>> Post(
+        public async Task<ActionResult<MonsterTemplateResponse>> PostAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             MonsterTemplateRequest request
         )
@@ -56,7 +56,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPut("{MonsterTemplateId}")]
-        public async Task<ActionResult<MonsterTemplateResponse>> Put(
+        public async Task<ActionResult<MonsterTemplateResponse>> PutAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int monsterTemplateId,
             MonsterTemplateRequest request

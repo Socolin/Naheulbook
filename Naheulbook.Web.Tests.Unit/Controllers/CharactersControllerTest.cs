@@ -164,7 +164,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _mapper.Map<ItemResponse>(item)
                 .Returns(itemResponse);
 
-            var result = await _controller.PostAddItemToCharacterInventory(_executionContext, characterId, request);
+            var result = await _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request);
 
             result.Value.Should().BeSameAs(itemResponse);
         }
@@ -179,7 +179,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
                 .Returns(Task.FromException<Item>(exception));
 
-            Func<Task> act = () => _controller.PostAddItemToCharacterInventory(_executionContext, characterId, request);
+            Func<Task> act = () => _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request);
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }
@@ -193,7 +193,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
                 .Returns(Task.FromException<Item>(new ItemTemplateNotFoundException(3)));
 
-            Func<Task> act = () => _controller.PostAddItemToCharacterInventory(_executionContext, characterId, request);
+            Func<Task> act = () => _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request);
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
@@ -210,7 +210,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _mapper.Map<List<LootResponse>>(loots)
                 .Returns(lootsResponse);
 
-            var result = await _controller.GetCharacterLoots(_executionContext, characterId);
+            var result = await _controller.GetCharacterLootsAsync(_executionContext, characterId);
 
             result.Value.Should().BeSameAs(lootsResponse);
         }
@@ -222,7 +222,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _characterService.GetCharacterLootsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
                 .Returns(Task.FromException<List<Loot>>(exception));
 
-            Func<Task> act = () => _controller.GetCharacterLoots(_executionContext, 2);
+            Func<Task> act = () => _controller.GetCharacterLootsAsync(_executionContext, 2);
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
         }

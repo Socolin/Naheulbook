@@ -96,7 +96,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{CharacterId:int:min(1)}/items")]
-        public async Task<CreatedActionResult<ItemResponse>> PostAddItemToCharacterInventory(
+        public async Task<CreatedActionResult<ItemResponse>> PostAddItemToCharacterInventoryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId,
             CreateItemRequest request
@@ -200,7 +200,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("{CharacterId:int:min(1)}/loots")]
-        public async Task<ActionResult<List<LootResponse>>> GetCharacterLoots(
+        public async Task<ActionResult<List<LootResponse>>> GetCharacterLootsAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int characterId
         )

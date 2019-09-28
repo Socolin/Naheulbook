@@ -11,7 +11,7 @@ namespace Naheulbook.Core.Services
     public interface IMonsterTypeService
     {
         Task<List<MonsterType>> GetMonsterTypesWithCategoriesAsync();
-        Task<MonsterType> CreateMonsterType(NaheulbookExecutionContext executionContext, CreateMonsterTypeRequest request);
+        Task<MonsterType> CreateMonsterTypeAsync(NaheulbookExecutionContext executionContext, CreateMonsterTypeRequest request);
         Task<MonsterCategory> CreateMonsterCategoryAsync(NaheulbookExecutionContext executionContext, int monsterTypeId, CreateMonsterCategoryRequest request);
     }
 
@@ -37,7 +37,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<MonsterType> CreateMonsterType(
+        public async Task<MonsterType> CreateMonsterTypeAsync(
             NaheulbookExecutionContext executionContext,
             CreateMonsterTypeRequest request
         )

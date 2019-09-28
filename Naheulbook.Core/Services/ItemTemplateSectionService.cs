@@ -11,7 +11,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IItemTemplateSectionService
     {
-        Task<IList<ItemTemplateSection>> GetAllSections();
+        Task<IList<ItemTemplateSection>> GetAllSectionsAsync();
         Task<ItemTemplateSection> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request);
         Task<List<ItemTemplate>> GetItemTemplatesBySectionAsync(int sectionId, int? currentUserId);
     }
@@ -33,7 +33,7 @@ namespace Naheulbook.Core.Services
             _itemTemplateUtil = itemTemplateUtil;
         }
 
-        public async Task<IList<ItemTemplateSection>> GetAllSections()
+        public async Task<IList<ItemTemplateSection>> GetAllSectionsAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

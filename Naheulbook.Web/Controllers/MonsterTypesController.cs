@@ -27,7 +27,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MonsterTypeResponse>>> GetMonsterTypes()
+        public async Task<ActionResult<List<MonsterTypeResponse>>> GetMonsterTypesAsync()
         {
             var monsterTypes = await _monsterTypeService.GetMonsterTypesWithCategoriesAsync();
             return _mapper.Map<List<MonsterTypeResponse>>(monsterTypes);
@@ -42,7 +42,7 @@ namespace Naheulbook.Web.Controllers
         {
             try
             {
-                var monsterType = await _monsterTypeService.CreateMonsterType(executionContext, request);
+                var monsterType = await _monsterTypeService.CreateMonsterTypeAsync(executionContext, request);
                 return _mapper.Map<MonsterTypeResponse>(monsterType);
             }
             catch (ForbiddenAccessException ex)

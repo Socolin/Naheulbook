@@ -23,7 +23,7 @@ namespace Naheulbook.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ItemSlotResponse>>> GetAsync()
         {
-            var skills = await _itemTemplateService.GetItemSlots();
+            var skills = await _itemTemplateService.GetItemSlotsAsync();
 
             return _mapper.Map<List<ItemSlotResponse>>(skills);
         }

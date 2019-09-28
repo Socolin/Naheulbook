@@ -18,7 +18,7 @@ namespace Naheulbook.Core.Services
         Task<ItemTemplate> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, int itemTemplateId, ItemTemplateRequest request);
         Task<List<ItemTemplate>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId);
 
-        Task<ICollection<Slot>> GetItemSlots();
+        Task<ICollection<Slot>> GetItemSlotsAsync();
     }
 
     public class ItemTemplateService : IItemTemplateService
@@ -124,7 +124,7 @@ namespace Naheulbook.Core.Services
             return matchingItemTemplates;
         }
 
-        public async Task<ICollection<Slot>> GetItemSlots()
+        public async Task<ICollection<Slot>> GetItemSlotsAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

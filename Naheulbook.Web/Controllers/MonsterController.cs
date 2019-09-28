@@ -72,7 +72,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{MonsterId}/modifiers")]
-        public async Task<CreatedActionResult<ActiveStatsModifier>> PostAddModifier(
+        public async Task<CreatedActionResult<ActiveStatsModifier>> PostAddModifierAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int monsterId,
             ActiveStatsModifier statsModifier
@@ -94,7 +94,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpDelete("{MonsterId}/modifiers/{ModifierId}")]
-        public async Task<CreatedActionResult<ActiveStatsModifier>> DeleteModifier(
+        public async Task<CreatedActionResult<ActiveStatsModifier>> DeleteModifierAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int monsterId,
             [FromRoute] int modifierId
@@ -190,7 +190,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{MonsterId:int:min(1)}/items")]
-        public async Task<CreatedActionResult<ItemResponse>> PostAddItemToMonsterInventory(
+        public async Task<CreatedActionResult<ItemResponse>> PostAddItemToMonsterInventoryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int monsterId,
             CreateItemRequest request
@@ -216,7 +216,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{MonsterId:int:min(1)}/addRandomItem")]
-        public async Task<CreatedActionResult<ItemResponse>> PostAddRandomItemToMonsterInventory(
+        public async Task<CreatedActionResult<ItemResponse>> PostAddRandomItemToMonsterInventoryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int monsterId,
             CreateRandomItemRequest request

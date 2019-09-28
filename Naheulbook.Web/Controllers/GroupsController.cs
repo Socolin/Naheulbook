@@ -39,7 +39,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<List<GroupSummaryResponse>> GetGroupList(
+        public async Task<List<GroupSummaryResponse>> GetGroupListAsync(
             [FromServices] NaheulbookExecutionContext executionContext
         )
         {
@@ -106,7 +106,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{GroupId:int:min(1)}/startCombat")]
-        public async Task<IActionResult> PostStartCombat(
+        public async Task<IActionResult> PostStartCombatAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId
         )
@@ -131,7 +131,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{GroupId:int:min(1)}/endCombat")]
-        public async Task<IActionResult> PostEndCombat(
+        public async Task<IActionResult> PostEndCombatAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId
         )
@@ -433,7 +433,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{GroupId:int:min(1)}/history")]
-        public async Task<ActionResult<List<GroupHistoryEntryResponse>>> PostCreateGroupHistoryLog(
+        public async Task<ActionResult<List<GroupHistoryEntryResponse>>> PostCreateGroupHistoryLogAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
             PostCreateGroupHistoryEntryRequest request
@@ -519,7 +519,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpPost("{GroupId:int:min(1)}/addTime")]
-        public async Task<ActionResult<NhbkDate>> PostAddTime(
+        public async Task<ActionResult<NhbkDate>> PostAddTimeAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
             NhbkDateOffset request

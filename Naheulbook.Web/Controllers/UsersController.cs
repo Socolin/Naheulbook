@@ -84,7 +84,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("me")]
-        public async Task<ActionResult<UserInfoResponse>> GetCurrentUserInfo()
+        public async Task<ActionResult<UserInfoResponse>> GetCurrentUserInfoAsync()
         {
             // FIXME: userSession if userId is not found, check in db if long duration session still valid
             var userId = HttpContext.Session.GetCurrentUserId();
@@ -96,7 +96,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("me/jwt")]
-        public async Task<ActionResult<UserJwtResponse>> GetAJwt()
+        public async Task<ActionResult<UserJwtResponse>> GetAJwtAsync()
         {
             // FIXME: userSession if userId is not found, check in db if long duration session still valid
             var userId = HttpContext.Session.GetCurrentUserId();
@@ -122,7 +122,7 @@ namespace Naheulbook.Web.Controllers
 
 
         [HttpPatch("{UserId:int:min(1)}")]
-        public async Task<IActionResult> PatchUserId(
+        public async Task<IActionResult> PatchUserIdAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int userId,
             UpdateUserRequest request
