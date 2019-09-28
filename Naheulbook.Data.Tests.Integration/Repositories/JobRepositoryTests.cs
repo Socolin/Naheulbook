@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Data.DbContexts;
@@ -28,9 +29,15 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 TestDataUtil.GetAll<Job>(),
                 config => config
                     .Excluding(o => o.Id)
+                    .Excluding(o => o.Bonuses)
                     .Excluding(info => info.SelectedMemberPath.EndsWith(".Stat"))
                     .Excluding(info => info.SelectedMemberPath.EndsWith(".Skill"))
+                    .Excluding(o => o.OriginBlacklist)
+                    .Excluding(o => o.OriginWhitelist)
                     .IgnoringCyclicReferences());
+
+            actualJobs.First().OriginBlacklist.First().OriginId.Should().Be(TestDataUtil.GetFromEnd<Origin>(1).Id);
+            actualJobs.First().OriginWhitelist.First().OriginId.Should().Be(TestDataUtil.GetFromEnd<Origin>(0).Id);
         }
     }
 }

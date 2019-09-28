@@ -1,4 +1,3 @@
-using System;
 using FluentMigrator;
 
 namespace Naheulbook.DatabaseMigrator.Migrations
@@ -8,6 +7,7 @@ namespace Naheulbook.DatabaseMigrator.Migrations
     {
         public override void Up()
         {
+            Execute.Sql("set foreign_key_checks=0;");
             Alter.Column("character").OnTable("character_job").AsInt64().NotNullable();
             Alter.Column("job").OnTable("character_job").AsInt64().NotNullable();
             Alter.Column("order").OnTable("character_job").AsInt64().NotNullable();
@@ -21,6 +21,7 @@ namespace Naheulbook.DatabaseMigrator.Migrations
             Alter.Column("durationtype").OnTable("effect").AsString(10).NotNullable();
 
             Alter.Column("techname").OnTable("god").AsString(32).NotNullable();
+            Execute.Sql("set foreign_key_checks=1;");
         }
 
         public override void Down()

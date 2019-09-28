@@ -66,7 +66,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var character = characters.First();
             character.Should().BeEquivalentTo(expectedCharacter, config => config.Excluding(x => x.Owner).Excluding(x => x.Jobs).Excluding(x => x.Origin));
             character.Jobs.First().Job.Should().BeEquivalentTo(TestDataUtil.GetLast<Job>());
-            character.Origin.Should().BeEquivalentTo(TestDataUtil.GetLast<Origin>());
+            character.Origin.Should().BeEquivalentTo(TestDataUtil.GetLast<Origin>(), config => config.Excluding(x => x.Bonuses).Excluding(x => x.Information).Excluding(x => x.Requirements).Excluding(x => x.Skills).Excluding(x => x.Restrictions));
         }
 
         [Test]

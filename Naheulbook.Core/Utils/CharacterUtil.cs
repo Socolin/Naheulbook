@@ -161,6 +161,7 @@ namespace Naheulbook.Core.Utils
                 IsActive = true,
                 CharacterId = character.Id,
                 Permanent = true,
+                DurationType = "forever",
                 Name = "LevelUp charisme: " + character.Level,
                 Values = new List<CharacterModifierValue>
                 {
@@ -201,6 +202,7 @@ namespace Naheulbook.Core.Utils
                 Name = "LevelUp: " + request.TargetLevelUp,
                 Values = new List<CharacterModifierValue>(),
                 Permanent = true,
+                DurationType = "forever",
                 CharacterId = character.Id
             };
             levelUpCharacterModifier.Values.Add(new CharacterModifierValue

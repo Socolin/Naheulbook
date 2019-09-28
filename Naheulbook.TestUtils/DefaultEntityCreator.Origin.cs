@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Naheulbook.Data.Models;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
@@ -28,6 +29,11 @@ namespace Naheulbook.TestUtils
                 BonusPrd = 3,
                 SpeedModifier = 12,
                 DiceEvLevelUp = 2,
+                Bonuses = new List<OriginBonus>(),
+                Information = new List<OriginInfo>(),
+                Requirements = new List<OriginRequirement>(),
+                Restrictions = new List<OriginRestrict>(),
+                Skills = new List<OriginSkill>()
             };
         }
 

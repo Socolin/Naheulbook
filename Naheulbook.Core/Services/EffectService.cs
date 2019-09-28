@@ -85,7 +85,8 @@ namespace Naheulbook.Core.Services
                 TypeId = request.TypeId,
                 DiceSize = request.DiceSize,
                 DiceCount = request.DiceCount,
-                Note = request.Note
+                Note = request.Note,
+                Effects = new List<Effect>()
             };
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())

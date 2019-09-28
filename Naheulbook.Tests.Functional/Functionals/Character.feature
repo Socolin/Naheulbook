@@ -140,6 +140,7 @@ Feature: Character
                 "description": "${Character.Modifiers.[1].Description}",
                 "permanent": ${Character.Modifiers.[1].Permanent},
                 "reusable": ${Character.Modifiers.[1].Reusable},
+                "durationType": "${Character.Modifiers.[1].DurationType}",
                 "active": ${Character.Modifiers.[1].IsActive},
                 "values": [
                     {
@@ -552,6 +553,7 @@ Feature: Character
           "name": "LevelUp: 2",
           "reusable": false,
           "permanent": true,
+          "durationType": "forever",
           "values": [
             {
               "stat": "EV",

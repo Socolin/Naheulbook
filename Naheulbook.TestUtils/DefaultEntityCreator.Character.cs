@@ -50,7 +50,8 @@ namespace Naheulbook.TestUtils
             return new CharacterModifier
             {
                 Name = $"some-character-name-{suffix}",
-                Description = $"some-description",
+                Description = "some-description",
+                DurationType = "forever",
                 IsActive = true,
                 Reusable = false,
                 Permanent = false,

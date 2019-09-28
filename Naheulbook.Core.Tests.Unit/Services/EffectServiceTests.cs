@@ -235,7 +235,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 Note = "some-note",
                 DiceCount = 1,
                 DiceSize = 2,
-                TypeId = 3
+                TypeId = 3,
+                Effects = new List<Effect>()
             };
         }
 

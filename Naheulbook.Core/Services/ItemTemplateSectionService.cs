@@ -45,11 +45,12 @@ namespace Naheulbook.Core.Services
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-            var itemTemplateSection = new ItemTemplateSection()
+            var itemTemplateSection = new ItemTemplateSection
             {
                 Name = request.Name,
                 Special = string.Join(",", request.Specials),
-                Note = request.Note
+                Note = request.Note,
+                Categories = new List<ItemTemplateCategory>()
             };
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
