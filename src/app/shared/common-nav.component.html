@@ -6,7 +6,7 @@
     <a mat-list-item [routerLink]="['/credit']">
         <mat-icon matListIcon>info</mat-icon> Crédits
     </a>
-    <a mat-list-item *ngIf="_loginService.currentLoggedUser" [routerLink]="['/profile']">
+    <a mat-list-item *ngIf="loginService.currentLoggedUser" [routerLink]="['/profile']">
         <mat-icon matListIcon>account_box</mat-icon> Profile
     </a>
     <a mat-list-item [routerLink]="['/logout']">

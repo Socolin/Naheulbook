@@ -30,11 +30,11 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     public sub: Subscription;
 
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
-        private loginService: LoginService,
-        private effectService: EffectService,
-        private dialog: MatDialog
+        private readonly router: Router,
+        private readonly route: ActivatedRoute,
+        private readonly loginService: LoginService,
+        private readonly effectService: EffectService,
+        private readonly dialog: MatDialog
     ) {
     }
 

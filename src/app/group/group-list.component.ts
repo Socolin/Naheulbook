@@ -15,23 +15,25 @@ export class GroupListComponent implements OnInit {
     public groups: GroupSummaryResponse[];
     public loading = true;
 
-    constructor(private _groupService: GroupService
-        , private _notification: NotificationsService
-        , private _router: Router) {
+    constructor(
+        private readonly groupService: GroupService,
+        private readonly notification: NotificationsService,
+        private readonly router: Router,
+    ) {
     }
 
     selectGroup(group: Group) {
-        this._router.navigate(['/gm/group/', group.id]);
+        this.router.navigate(['/gm/group/', group.id]);
         return false;
     }
 
     createGroup() {
-        this._router.navigate(['/gm/group/create']);
+        this.router.navigate(['/gm/group/create']);
         return false;
     }
 
     loadGroups() {
-        this._groupService.listGroups().subscribe(
+        this.groupService.listGroups().subscribe(
             res => {
                 this.groups = res;
                 this.loading = false;

@@ -12,14 +12,16 @@ import {User} from './user.model';
 export class UserProfileComponent implements OnInit {
     public profile: User|null;
 
-    constructor(private _notification: NotificationsService
-        , private loginService: LoginService) {
+    constructor(
+        private readonly notification: NotificationsService,
+        private readonly loginService: LoginService,
+    ) {
     }
 
     updateProfile() {
         this.loginService.updateProfile(this.profile.id, this.profile).subscribe(
             () => {
-                this._notification.success('Succes', 'Profile édité');
+                this.notification.success('Succes', 'Profile édité');
             }
         );
     }

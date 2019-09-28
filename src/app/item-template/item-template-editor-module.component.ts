@@ -42,9 +42,9 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
 
     constructor(
         private readonly dialog: MatDialog,
-        private readonly _nhbkDialogService: NhbkDialogService,
-        public readonly _loginService: LoginService,
-        private readonly _itemTemplateService: ItemTemplateService,
+        private readonly nhbkDialogService: NhbkDialogService,
+        public readonly loginService: LoginService,
+        private readonly itemTemplateService: ItemTemplateService,
     ) {
     }
 
@@ -90,7 +90,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     }
 
     openCreateItemTypeDialog() {
-        this.createItemTypeOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.createItemTypeDialog, true);
+        this.createItemTypeOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.createItemTypeDialog, true);
     }
 
     closeCreateItemTypeDialog() {
@@ -101,7 +101,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     }
 
     public createItemType() {
-        this._itemTemplateService.createItemType(this.newItemTypeDisplayName, this.newItemTypeTechName)
+        this.itemTemplateService.createItemType(this.newItemTypeDisplayName, this.newItemTypeTechName)
             .subscribe(itemType => {
                 this.itemTypes.push(itemType);
             });

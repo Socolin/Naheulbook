@@ -32,11 +32,13 @@ export class EventEditorComponent implements OnInit {
     public durationOffset = 0;
     public eventDate: NhbkDate = new NhbkDate();
 
-    constructor(private _nhbkDialogService: NhbkDialogService) {
+    constructor(
+        private readonly nhbkDialogService: NhbkDialogService
+    ) {
     }
 
     openDialog() {
-        this.eventEditorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.eventEditorDialog);
+        this.eventEditorOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.eventEditorDialog);
     }
 
     closeDialog() {

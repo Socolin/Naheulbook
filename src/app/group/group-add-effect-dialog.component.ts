@@ -39,9 +39,9 @@ export class GroupAddEffectDialogComponent {
     public selectedStep = 0;
 
     constructor(
-        private effectService: EffectService,
-        public dialogRef: MatDialogRef<GroupAddEffectDialogComponent, GroupAddEffectDialogResult>,
-        @Inject(MAT_DIALOG_DATA) public data?: GroupAddEffectDialogData
+        private readonly effectService: EffectService,
+        public readonly dialogRef: MatDialogRef<GroupAddEffectDialogComponent, GroupAddEffectDialogResult>,
+        @Inject(MAT_DIALOG_DATA) public data?: GroupAddEffectDialogData,
     ) {
         if (data && data.effect) {
             this.newStatsModifier = ActiveStatsModifier.fromEffect(data.effect, {reusable: false});

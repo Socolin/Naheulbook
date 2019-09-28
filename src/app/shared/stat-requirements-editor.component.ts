@@ -15,7 +15,9 @@ export class StatRequirementsEditorComponent implements OnInit {
     public minValue: number | undefined;
     public maxValue: number | undefined;
 
-    constructor(private _miscService: MiscService) {
+    constructor(
+        private readonly miscService: MiscService
+    ) {
         this.requirements = [];
     }
 
@@ -40,7 +42,7 @@ export class StatRequirementsEditorComponent implements OnInit {
             if (this.requirements == null) {
                 this.requirements = [];
             }
-            this.requirements.push({ stat: this.selectedStat.name, min: this.minValue, max: this.maxValue });
+            this.requirements.push({stat: this.selectedStat.name, min: this.minValue, max: this.maxValue});
             this.selectedStat = undefined;
             this.minValue = undefined;
             this.maxValue = undefined;
@@ -49,7 +51,7 @@ export class StatRequirementsEditorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._miscService.getStats().subscribe(stats => {
+        this.miscService.getStats().subscribe(stats => {
             this.stats = stats;
         });
     }

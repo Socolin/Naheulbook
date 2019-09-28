@@ -29,10 +29,11 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     public takingItem: Item;
     public takingQuantity?: number;
 
-    constructor(private notification: NotificationsService
-        , private _itemService: ItemService
-        , private _nhbkDialogservice: NhbkDialogService
-        , private websocketService: WebSocketService
+    constructor(
+        private readonly notification: NotificationsService,
+        private readonly itemService: ItemService,
+        private readonly nhbkDialogService: NhbkDialogService,
+        private readonly websocketService: WebSocketService,
     ) {
         super(notification, websocketService);
     }
@@ -42,7 +43,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         this.takingQuantity = item.data.quantity;
         this.takingItemLoot = loot;
         this.takingItemMonster = undefined;
-        this.takeItemOverlayRef = this._nhbkDialogservice.openCenteredBackdropDialog(this.takeItemDialog);
+        this.takeItemOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.takeItemDialog);
     }
 
     openTakeItemMonsterDialog(monster: Monster, item: Item) {
@@ -50,7 +51,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
         this.takingQuantity = item.data.quantity;
         this.takingItemLoot = undefined;
         this.takingItemMonster = monster;
-        this.takeItemOverlayRef = this._nhbkDialogservice.openCenteredBackdropDialog(this.takeItemDialog);
+        this.takeItemOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.takeItemDialog);
     }
 
     closeTakeItemDialog() {
@@ -68,7 +69,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
 
     takeItemFromLoot(loot: Loot, item: Item, quantity?: number) {
         if (item != null) {
-            this._itemService.takeItemFromLoot(item.id, this.character.id, quantity).subscribe(
+            this.itemService.takeItemFromLoot(item.id, this.character.id, quantity).subscribe(
                 takenItemData => {
                     loot.takeItem(item.id, takenItemData.remainingQuantity, this.character);
                 }
@@ -78,7 +79,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
 
     takeItemFromMonster(monster: Monster, item: Item, quantity?: number) {
         if (item != null) {
-            this._itemService.takeItemFromLoot(item.id, this.character.id, quantity).subscribe(
+            this.itemService.takeItemFromLoot(item.id, this.character.id, quantity).subscribe(
                 takenItemData => {
                     monster.takeItem(item.id, takenItemData.remainingQuantity, this.character);
                 }

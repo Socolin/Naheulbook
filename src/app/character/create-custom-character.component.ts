@@ -1,4 +1,3 @@
-
 import {forkJoin} from 'rxjs';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
@@ -44,11 +43,13 @@ export class CreateCustomCharacterComponent implements OnInit {
 
     public creating = false;
 
-    constructor(private _router: Router
-        , private _jobService: JobService
-        , private _originService: OriginService
-        , private _skillService: SkillService
-        , private _characterService: CharacterService) {
+    constructor(
+        private readonly router: Router,
+        private readonly jobService: JobService,
+        private readonly originService: OriginService,
+        private readonly skillService: SkillService,
+        private readonly characterService: CharacterService
+    ) {
     }
 
     updateBaseStats(): void {
@@ -173,9 +174,9 @@ export class CreateCustomCharacterComponent implements OnInit {
 
     ngOnInit(): void {
         forkJoin([
-            this._jobService.getJobList(),
-            this._originService.getOriginList(),
-            this._skillService.getSkills(),
+            this.jobService.getJobList(),
+            this.originService.getOriginList(),
+            this.skillService.getSkills(),
         ]).subscribe(([jobs, origins, skills]) => {
             this.jobs = jobs;
             this.origins = origins;
@@ -245,20 +246,20 @@ export class CreateCustomCharacterComponent implements OnInit {
             skills: this.getIds(this.selectedSkills),
             specialities: specialitiesIds,
         };
-        if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('isNpc')) {
-            creationData['isNpc'] = this._router.routerState.snapshot.root.queryParams['isNpc'];
+        if (this.router.routerState.snapshot.root.queryParams.hasOwnProperty('isNpc')) {
+            creationData['isNpc'] = this.router.routerState.snapshot.root.queryParams['isNpc'];
         }
-        if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
-            creationData['groupId'] = +this._router.routerState.snapshot.root.queryParams['groupId'];
+        if (this.router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
+            creationData['groupId'] = +this.router.routerState.snapshot.root.queryParams['groupId'];
         } else {
             creationData['groupId'] = null;
         }
 
-        this._characterService.createCustomCharacter(creationData).subscribe(res => {
-                if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
-                    this._router.navigate(['/gm/group', +this._router.routerState.snapshot.root.queryParams['groupId']]);
+        this.characterService.createCustomCharacter(creationData).subscribe(res => {
+                if (this.router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
+                    this.router.navigate(['/gm/group', +this.router.routerState.snapshot.root.queryParams['groupId']]);
                 } else {
-                    this._router.navigate(['player', 'character', 'detail', res.id]);
+                    this.router.navigate(['player', 'character', 'detail', res.id]);
                 }
             },
             err => {

@@ -32,10 +32,10 @@ export class StatModifierAdvancedDialogComponent implements OnInit {
 
 
     constructor(
-        private originService: OriginService,
-        private jobService: JobService,
-        public dialogRef: MatDialogRef<StatModifierAdvancedDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: StatModifierAdvancedDialogData
+        private readonly originService: OriginService,
+        private readonly jobService: JobService,
+        private readonly dialogRef: MatDialogRef<StatModifierAdvancedDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) public readonly data: StatModifierAdvancedDialogData
     ) {
     }
 

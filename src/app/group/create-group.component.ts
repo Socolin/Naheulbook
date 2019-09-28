@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 
-import {CharacterService} from '../character/character.service';
+import {CharacterService} from '../character';
 import {GroupService} from './group.service';
 
 @Component({
@@ -11,12 +11,14 @@ import {GroupService} from './group.service';
 export class CreateGroupComponent {
     public groupName: string;
 
-    constructor(private _groupService: GroupService
-        , private router: Router) {
+    constructor(
+        private readonly groupService: GroupService,
+        private readonly router: Router,
+    ) {
     }
 
     create() {
-        this._groupService.createGroup(this.groupName).subscribe(
+        this.groupService.createGroup(this.groupName).subscribe(
             group => {
                 this.router.navigate(['/gm/group/', group.id]);
             }

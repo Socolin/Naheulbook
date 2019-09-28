@@ -9,7 +9,7 @@ import {UsefulDataDialogResult} from './useful-data-dialog-result';
 export class ItemTemplatesDialogComponent implements OnInit {
 
     constructor(
-        private dialogRef: MatDialogRef<ItemTemplatesDialogComponent, UsefulDataDialogResult>,
+        private readonly dialogRef: MatDialogRef<ItemTemplatesDialogComponent, UsefulDataDialogResult>,
     ) {
     }
 

@@ -40,10 +40,10 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     public autocompleteSearchItemTemplate: AutocompleteSearchItemTemplateComponent;
 
     constructor(
-        private _itemService: ItemService,
-        private _overlay: Overlay,
-        private dialog: MatDialog,
-        public _itemActionService: ItemActionService,
+        private readonly itemService: ItemService,
+        private readonly overlay: Overlay,
+        private readonly dialog: MatDialog,
+        public readonly itemActionService: ItemActionService,
     ) {
     }
 
@@ -74,7 +74,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             if (!result) {
                 return;
             }
-            this._itemService.addItemTo('character', this.character.id
+            this.itemService.addItemTo('character', this.character.id
                 , result.itemTemplateId
                 , result.itemData)
                 .subscribe(
@@ -159,26 +159,26 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this._itemActionService.registerAction('equip').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('equip').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             let level = 1;
             if (!isNullOrUndefined(eventData) && !isNullOrUndefined(eventData.level)) {
                 level = eventData.level;
             }
-            this._itemService.equipItem(item.id, level).subscribe(
+            this.itemService.equipItem(item.id, level).subscribe(
                 this.character.onEquipItem.bind(this.character)
             );
         });
-        this._itemActionService.registerAction('unequip').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('unequip').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
-            this._itemService.equipItem(item.id, 0).subscribe(
+            this.itemService.equipItem(item.id, 0).subscribe(
                 this.character.onEquipItem.bind(this.character)
             );
         });
-        this._itemActionService.registerAction('delete').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('delete').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
-            this._itemService.deleteItem(item.id).subscribe(
+            this.itemService.deleteItem(item.id).subscribe(
                 () => {
                     if (this.selectedItem && this.selectedItem.id === item.id) {
                         this.selectedItem = undefined;
@@ -187,7 +187,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 }
             );
         });
-        this._itemActionService.registerAction('update_quantity').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('update_quantity').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item as Item;
             let itemData = {
@@ -197,39 +197,39 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             if (item.template.data.charge && eventData.quantity === item.data.quantity - 1) {
                 itemData.charge = item.template.data.charge;
             }
-            this._itemService.updateItem(item.id, itemData).subscribe(
+            this.itemService.updateItem(item.id, itemData).subscribe(
                 res => {
                     this.character.onUpdateItem(res);
                 }
             );
         });
-        this._itemActionService.registerAction('read_skill_book').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('read_skill_book').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
-            this._itemService.updateItem(item.id, {...item.data, readCount: (item.data.readCount || 0) + 1}).subscribe(
+            this.itemService.updateItem(item.id, {...item.data, readCount: (item.data.readCount || 0) + 1}).subscribe(
                 res => {
                     this.character.onUpdateItem(res);
                 }
             );
         });
-        this._itemActionService.registerAction('identify').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('identify').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             let itemData = {...item.data, name: item.template.name};
             delete itemData.notIdentified;
-            this._itemService.updateItem(item.id, itemData).subscribe((data) =>
+            this.itemService.updateItem(item.id, itemData).subscribe((data) =>
                 this.character.onUpdateItem(data)
             );
         });
-        this._itemActionService.registerAction('ignoreRestrictions').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('ignoreRestrictions').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             item.data = {
                 ...item.data,
                 ignoreRestrictions: event.data
             };
-            this._itemService.updateItem(item.id, item.data).subscribe(
+            this.itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
         });
-        this._itemActionService.registerAction('use_charge').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('use_charge').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             if (item.data.charge == null) {
                 item.data.charge = item.template.data.charge;
@@ -237,19 +237,19 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             if (!item.data.charge) {
                 throw new Error('Cannot use charge on item with no defined charge. itemId: ' + item.id);
             }
-            this._itemService.useItemCharge(item.id).subscribe(
+            this.itemService.useItemCharge(item.id).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
         });
-        this._itemActionService.registerAction('move_to_container').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('move_to_container').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
-            this._itemService.moveToContainer(item.id, eventData.container).subscribe(
+            this.itemService.moveToContainer(item.id, eventData.container).subscribe(
                 this.character.onChangeContainer.bind(this.character)
             );
         });
 
-        this._itemActionService.registerAction('edit_item_name').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('edit_item_name').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             item.data = {
@@ -257,15 +257,15 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 name: eventData.name,
                 description: eventData.description
             };
-            this._itemService.updateItem(item.id, item.data).subscribe(
+            this.itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
         });
 
-        this._itemActionService.registerAction('give').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('give').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
-            this._itemService.giveItem(item.id, eventData.characterId, eventData.quantity).subscribe(
+            this.itemService.giveItem(item.id, eventData.characterId, eventData.quantity).subscribe(
                 result => {
                     if (result.remainingQuantity) {
                         if (this.selectedItem && this.selectedItem.id === item.id) {
@@ -279,28 +279,28 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             );
         });
 
-        this._itemActionService.registerAction('change_icon').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('change_icon').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             item.data = {
                 ...item.data,
                 icon: eventData.icon
             };
-            this._itemService.updateItem(item.id, item.data).subscribe(
+            this.itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
         });
 
-        this._itemActionService.registerAction('update_modifiers').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('update_modifiers').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
-            this._itemService.updateItemModifiers(item.id, item.modifiers).subscribe(
+            this.itemService.updateItemModifiers(item.id, item.modifiers).subscribe(
                 this.character.onUpdateModifiers.bind(this.character)
             );
         });
 
-        this._itemActionService.registerAction('update_data').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('update_data').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
-            this._itemService.updateItem(item.id, item.data).subscribe(
+            this.itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
         });

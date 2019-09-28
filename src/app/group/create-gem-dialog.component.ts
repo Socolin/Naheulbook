@@ -24,10 +24,11 @@ export class CreateGemDialogComponent implements OnInit {
     public randomDiceNumber = 1;
 
     constructor(
-        private dialog: MatDialog,
-        private itemTemplateService: ItemTemplateService,
-        public dialogRef: MatDialogRef<CreateGemDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: CreateGemDialogDialog) {
+        private readonly dialog: MatDialog,
+        private readonly itemTemplateService: ItemTemplateService,
+        private readonly dialogRef: MatDialogRef<CreateGemDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) public readonly data: CreateGemDialogDialog,
+    ) {
     }
 
     setGemType(gemType: 'raw' | 'cut') {

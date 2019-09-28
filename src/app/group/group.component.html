@@ -137,13 +137,13 @@
                                         Voir la fiche
                                     </button>
                                     <button mat-menu-item
-                                            *ngIf="character.user && character.user !== _loginService.currentLoggedUser.id"
+                                            *ngIf="character.user && character.user !== loginService.currentLoggedUser.id"
                                             (click)="takeOwnership(character)">
                                         <mat-icon>supervisor_account</mat-icon>
                                         Devenir propriétaire
                                     </button>
                                     <button mat-menu-item
-                                            *ngIf="!character.user || character.user === _loginService.currentLoggedUser.id"
+                                            *ngIf="!character.user || character.user === loginService.currentLoggedUser.id"
                                             (click)="openChangeOwnershipDialog(character)">
                                         <mat-icon>supervisor_account</mat-icon>
                                         Définir le propriétaire

@@ -10,12 +10,14 @@ import {QuestTemplate} from './quest.model';
 export class CreateQuestTemplateComponent {
     public quest: QuestTemplate = new QuestTemplate();
 
-    constructor(private _questService: QuestService
-        , private router: Router) {
+    constructor(
+        private readonly questService: QuestService,
+        private readonly router: Router,
+    ) {
     }
 
     create(quest: QuestTemplate) {
-        this._questService.createQuestTemplate(quest).subscribe(
+        this.questService.createQuestTemplate(quest).subscribe(
             () => {
                 this.router.navigate(['/database/quests/']);
             }

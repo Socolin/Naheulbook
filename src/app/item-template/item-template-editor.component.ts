@@ -1,27 +1,17 @@
-import {forkJoin, Observable, of as observableOf} from 'rxjs';
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {forkJoin} from 'rxjs';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 import {isNullOrUndefined} from 'util';
-import {
-    AutocompleteInputComponent,
-    AutocompleteValue,
-    God,
-    IconSelectorComponent,
-    IconSelectorComponentDialogData,
-    MiscService,
-    NhbkDialogService,
-    removeDiacritics,
-} from '../shared';
+import {God, IconSelectorComponent, IconSelectorComponentDialogData, MiscService, NhbkDialogService,} from '../shared';
 import {LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
 
-import {ItemTemplateSection, ItemSlot, ItemTemplate, ItemTemplateGunData} from './item-template.model';
+import {ItemSlot, ItemTemplate, ItemTemplateGunData, ItemTemplateSection} from './item-template.model';
 import {ItemTemplateService} from './item-template.service'
 import {IconDescription} from '../shared/icon.model';
 import {MatDialog} from '@angular/material';
-import {itemTemplateModulesDefinitions} from './item-template-modules-definitions';
 import {AddItemTemplateEditorModuleDialogComponent} from './add-item-template-editor-module-dialog.component';
 import {ItemTypeResponse} from '../api/responses';
 
@@ -49,19 +39,15 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     public selectedSection: ItemTemplateSection;
     public form: { levels: number[], protection: number[], damage: number[], dices: number[] };
 
-    public autocompleteModuleCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteModule.bind(this);
-
-    @ViewChild('autocompleteModuleModalTextField', {static: false})
-    autocompleteModuleModalTextField: AutocompleteInputComponent;
-
-    constructor(private _itemTemplateService: ItemTemplateService
-        , private _originService: OriginService
-        , private _nhbkDialogService: NhbkDialogService
-        , private _jobService: JobService
-        , private _miscService: MiscService
-        , public _loginService: LoginService
-        , private _skillService: SkillService
-        , private dialog: MatDialog
+    constructor(
+        public readonly loginService: LoginService,
+        private readonly itemTemplateService: ItemTemplateService,
+        private readonly originService: OriginService,
+        private readonly nhbkDialogService: NhbkDialogService,
+        private readonly jobService: JobService,
+        private readonly miscService: MiscService,
+        private readonly skillService: SkillService,
+        private readonly dialog: MatDialog,
     ) {
         this.itemTemplate = new ItemTemplate();
         this.form = {
@@ -96,18 +82,6 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         })
     }
 
-    updateAutocompleteModule(filter: string) {
-        if (!filter) {
-            return observableOf([]);
-        }
-        filter = removeDiacritics(filter).toLowerCase();
-        let filtered = itemTemplateModulesDefinitions
-            .filter(m => this.modules.indexOf(m.name) === -1)
-            .filter(m => (m.name.indexOf(filter) !== -1 || removeDiacritics(m.displayName.toLowerCase()).indexOf(filter) !== -1))
-            .map(m => new AutocompleteValue(m, m.displayName));
-        return observableOf(filtered);
-    }
-
     automaticNotIdentifiedName() {
         if (!this.itemTemplate.name) {
             return;
@@ -131,7 +105,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     }
 
     changeSource(source: 'official' | 'community' | 'private') {
-        if (!this._loginService.currentLoggedUser) {
+        if (!this.loginService.currentLoggedUser) {
             throw new Error('changeSource: No logged user');
         }
         this.itemTemplate.source = source;
@@ -139,8 +113,8 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             this.itemTemplate.sourceUser = undefined;
             this.itemTemplate.sourceUserId = undefined;
         } else {
-            this.itemTemplate.sourceUser = this._loginService.currentLoggedUser.displayName;
-            this.itemTemplate.sourceUserId = this._loginService.currentLoggedUser.id;
+            this.itemTemplate.sourceUser = this.loginService.currentLoggedUser.displayName;
+            this.itemTemplate.sourceUserId = this.loginService.currentLoggedUser.id;
         }
     }
 
@@ -463,17 +437,17 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             this.determineModulesFromItemTemplate();
         }
         forkJoin([
-            this._itemTemplateService.getItemTypes(),
-            this._miscService.getGods(),
-            this._miscService.getGodsByTechName(),
+            this.itemTemplateService.getItemTypes(),
+            this.miscService.getGods(),
+            this.miscService.getGodsByTechName(),
         ]).subscribe(([itemTypes, gods, godsByTechName]) => {
             forkJoin([
-                this._itemTemplateService.getSectionsList(),
-                this._skillService.getSkills(),
-                this._skillService.getSkillsById(),
-                this._itemTemplateService.getSlots(),
-                this._jobService.getJobList(),
-                this._originService.getOriginList()
+                this.itemTemplateService.getSectionsList(),
+                this.skillService.getSkills(),
+                this.skillService.getSkillsById(),
+                this.itemTemplateService.getSlots(),
+                this.jobService.getJobList(),
+                this.originService.getOriginList()
             ]).subscribe(([sections, skills, skillsById, slots, jobs, origins]) => {
                 this.sections = sections;
                 this.skills = skills;

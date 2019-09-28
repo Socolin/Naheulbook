@@ -24,9 +24,9 @@ export class MonsterTemplateComponent implements OnInit {
     public traisById?: MonsterTraitDictionary;
 
     constructor(
-        private dialog: MatDialog,
-        private monsterTemplateService: MonsterTemplateService,
-        private notifications: NotificationsService,
+        private readonly dialog: MatDialog,
+        private readonly monsterTemplateService: MonsterTemplateService,
+        private readonly notifications: NotificationsService,
     ) {
     }
 

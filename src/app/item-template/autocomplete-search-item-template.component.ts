@@ -1,12 +1,11 @@
-
 import {forkJoin, Observable} from 'rxjs';
 
 import {map} from 'rxjs/operators';
-import {Component, Input, EventEmitter, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 
-import {AutocompleteInputComponent, AutocompleteValue} from '../shared/autocomplete-input.component';
+import {AutocompleteInputComponent, AutocompleteValue} from '../shared';
 
-import {ItemTemplateCategory, ItemTemplate} from './item-template.model';
+import {ItemTemplate, ItemTemplateCategory} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 
 @Component({
@@ -23,22 +22,20 @@ export class AutocompleteSearchItemTemplateComponent {
 
     public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
 
-    constructor(private _itemTemplateService: ItemTemplateService) {
+    constructor(
+        private readonly itemTemplateService: ItemTemplateService,
+    ) {
     }
 
     selectItemTemplate(itemTemplate: ItemTemplate) {
         this.onSelect.emit(itemTemplate);
     }
 
-    focus() {
-        this.autocomplete.focus();
-    }
-
     updateAutocompleteItem(filter: string) {
-        return forkJoin(
-            this._itemTemplateService.getCategoriesById(),
-            this._itemTemplateService.searchItem(filter)
-        ).pipe(map(
+        return forkJoin([
+            this.itemTemplateService.getCategoriesById(),
+            this.itemTemplateService.searchItem(filter)
+        ]).pipe(map(
             ([categoriesById, list]: [{ [categoryId: number]: ItemTemplateCategory }, ItemTemplate[]]) => {
                 return list.map(e => {
                     let name = e.name;
@@ -49,8 +46,7 @@ export class AutocompleteSearchItemTemplateComponent {
                     let mdIcon;
                     if (e.source === 'community') {
                         mdIcon = 'group';
-                    }
-                    else if (e.source === 'private') {
+                    } else if (e.source === 'private') {
                         mdIcon = 'lock';
                     }
                     return new AutocompleteValue(e, name, category, e.data.icon, mdIcon);

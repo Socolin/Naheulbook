@@ -6,22 +6,24 @@ import {HttpClient} from '@angular/common/http';
 
 import {ActiveStatsModifier} from '../shared';
 import {Monster} from './monster.model';
-import {Skill, SkillService} from '../skill';
+import {SkillService} from '../skill';
 import {CreateMonsterRequest} from '../api/requests';
 import {MonsterResponse} from '../api/responses';
 import {IActiveStatsModifier} from '../api/shared';
 
 @Injectable()
 export class MonsterService {
-    constructor(private httpClient: HttpClient
-        , private _skillService: SkillService) {
+    constructor(
+        private readonly httpClient: HttpClient,
+        private readonly skillService: SkillService
+    ) {
     }
 
     createMonster(groupId: number, monster: CreateMonsterRequest): Observable<Monster> {
         return forkJoin([
             this.httpClient.post<MonsterResponse>(`/api/v2/groups/${groupId}/monsters`, monster),
-            this._skillService.getSkillsById()
-        ]).pipe(map(([monsterJsonData, skillsById]: [any, { [skillId: number]: Skill }]) => {
+            this.skillService.getSkillsById()
+        ]).pipe(map(([monsterJsonData, skillsById]) => {
             return Monster.fromJson(monsterJsonData, skillsById)
         }));
     }

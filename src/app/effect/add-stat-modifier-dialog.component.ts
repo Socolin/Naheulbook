@@ -20,8 +20,8 @@ export class AddStatModifierDialogComponent implements OnInit {
     public magicStats: string[] = ['MPHYS', 'MPSY', 'RESM'];
 
     constructor(
-        public dialogRef: MatDialogRef<AddStatModifierDialogComponent>,
-        private miscService: MiscService,
+        private readonly dialogRef: MatDialogRef<AddStatModifierDialogComponent>,
+        private readonly miscService: MiscService,
     ) {
     }
 

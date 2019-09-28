@@ -6,21 +6,24 @@ import {Observable} from 'rxjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild {
-    constructor(private _loginService: LoginService, private _router: Router) {
+    constructor(
+        private readonly loginService: LoginService,
+        private readonly router: Router,
+    ) {
     }
 
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<boolean> | Promise<boolean> | boolean {
-        if (this._loginService.currentLoggedUser) {
+        if (this.loginService.currentLoggedUser) {
             return true;
         }
 
-        return this._loginService.isLogged().pipe(map((logged: boolean) => {
+        return this.loginService.isLogged().pipe(map((logged: boolean) => {
             if (!logged) {
                 let redirect = route.data['authGuardRedirect'];
-                this._router.navigateByUrl(redirect);
+                this.router.navigateByUrl(redirect);
             }
             return logged;
         }));

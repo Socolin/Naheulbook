@@ -35,7 +35,7 @@
     <div class="source-line">
         <mat-form-field>
             <mat-select placeholder="Source" [(ngModel)]="itemTemplate.source" (selectionChange)="changeSource($event.value)" required>
-                <mat-option value="official" *ngIf="_loginService.currentLoggedUser?.admin">Officiel</mat-option>
+                <mat-option value="official" *ngIf="loginService.currentLoggedUser?.admin">Officiel</mat-option>
                 <mat-option value="community">Communautaire</mat-option>
                 <mat-option value="private">Privé</mat-option>
             </mat-select>

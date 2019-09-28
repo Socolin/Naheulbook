@@ -17,7 +17,9 @@ export class CharacterHistoryComponent implements OnInit {
     public loadMore: boolean;
     public loading: boolean;
 
-    constructor(private _characterService: CharacterService) {
+    constructor(
+        private readonly characterService: CharacterService
+    ) {
     }
 
     loadHistory(next?: boolean) {
@@ -28,7 +30,7 @@ export class CharacterHistoryComponent implements OnInit {
             this.history = [];
         }
 
-        this._characterService.loadHistory(this.character.id, this.historyPage).subscribe(
+        this.characterService.loadHistory(this.character.id, this.historyPage).subscribe(
             res => {
                 if (res.length === 0) {
                     this.loadMore = false;

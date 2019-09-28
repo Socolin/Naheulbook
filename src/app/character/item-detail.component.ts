@@ -60,12 +60,13 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     public lifetimeOverlayRef: OverlayRef | undefined;
     public previousLifetime: IDurable | null;
 
-    constructor(private _itemTemplateService: ItemTemplateService
-        , public _itemActionService: ItemActionService
-        , private _characterService: CharacterService
-        , private _miscService: MiscService
-        , private _nhbkDialogService: NhbkDialogService
-        , private dialog: MatDialog
+    constructor(
+        public readonly itemActionService: ItemActionService,
+        private readonly itemTemplateService: ItemTemplateService,
+        private readonly characterService: CharacterService,
+        private readonly miscService: MiscService,
+        private readonly nhbkDialogService: NhbkDialogService,
+        private readonly dialog: MatDialog,
     ) {
     }
 
@@ -112,7 +113,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
             if (!result) {
                 return;
             }
-            this._itemActionService.onAction('edit_item_name', this.item, {
+            this.itemActionService.onAction('edit_item_name', this.item, {
                 name: result.name,
                 description: result.description
             });
@@ -128,10 +129,10 @@ export class ItemDetailComponent implements OnChanges, OnInit {
             return;
         }
         this.giveQuantity = item.data.quantity;
-        this.giveItemOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.giveItemDialog);
+        this.giveItemOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.giveItemDialog);
         this.giveDestination = undefined;
 
-        this._characterService.listActiveCharactersInGroup(this.character.group.id).subscribe(
+        this.characterService.listActiveCharactersInGroup(this.character.group.id).subscribe(
             characters => {
                 this.giveDestination = characters.filter(c => c.id !== this.character.id);
             }
@@ -147,7 +148,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     giveItem() {
-        this._itemActionService.onAction('give', this.item, {characterId: this.giveTarget.id, quantity: this.giveQuantity});
+        this.itemActionService.onAction('give', this.item, {characterId: this.giveTarget.id, quantity: this.giveQuantity});
         this.closeGiveItemDialog();
     }
 
@@ -170,7 +171,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
             }
             this.activeModifier(result);
             this.item.modifiers.push(result);
-            this._itemActionService.onAction('update_modifiers', this.item);
+            this.itemActionService.onAction('update_modifiers', this.item);
         });
     }
 
@@ -196,7 +197,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     removeModifier(index: number) {
         if (this.item.modifiers) {
             this.item.modifiers.splice(index, 1);
-            this._itemActionService.onAction('update_modifiers', this.item);
+            this.itemActionService.onAction('update_modifiers', this.item);
         }
     }
 
@@ -205,7 +206,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
             if (this.item.modifiers[index].active) {
                 this.activeModifier(this.item.modifiers[index]);
             }
-            this._itemActionService.onAction('update_modifiers', this.item);
+            this.itemActionService.onAction('update_modifiers', this.item);
         }
     }
 
@@ -222,7 +223,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
             this.previousLifetime = Object.assign({}, this.item.data.lifetime);
         }
 
-        this.lifetimeOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.lifetimeDialog);
+        this.lifetimeOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.lifetimeDialog);
     }
 
 
@@ -243,13 +244,13 @@ export class ItemDetailComponent implements OnChanges, OnInit {
         if (this.item.data.lifetime && this.item.data.lifetime.durationType === 'forever') {
             this.item.data.lifetime = null;
         }
-        this._itemActionService.onAction('update_data', this.item);
+        this.itemActionService.onAction('update_data', this.item);
         this.closeLifetimeDialog();
     }
 
 
     openStoreItemInContainerDialog() {
-        this.storeItemInContainerOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.storeItemInContainerDialog);
+        this.storeItemInContainerOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.storeItemInContainerDialog);
     }
 
     closeStoreItemInContainerDialog() {
@@ -261,7 +262,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     }
 
     removeItemFromContainer() {
-        this._itemActionService.onAction('move_to_container', this.item, {container: null});
+        this.itemActionService.onAction('move_to_container', this.item, {container: null});
         this.closeStoreItemInContainerDialog();
     }
 
@@ -275,8 +276,8 @@ export class ItemDetailComponent implements OnChanges, OnInit {
 
     ngOnInit() {
         forkJoin([
-            this._itemTemplateService.getCategoriesById(),
-            this._miscService.getGodsByTechName(),
+            this.itemTemplateService.getCategoriesById(),
+            this.miscService.getGodsByTechName(),
         ]).subscribe(
             ([categoriesById, godsByTechName]) => {
                 this.godsByTechName = godsByTechName;
@@ -298,7 +299,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
             if (!icon) {
                 return;
             }
-            this._itemActionService.onAction('change_icon', this.item, {icon: icon});
+            this.itemActionService.onAction('change_icon', this.item, {icon: icon});
         })
     }
 }

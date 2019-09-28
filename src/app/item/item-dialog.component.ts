@@ -27,11 +27,11 @@ export class ItemDialogComponent implements OnInit {
     }
 
     constructor(
-        private jobService: JobService,
-        private originService: OriginService,
-        private itemTemplateService: ItemTemplateService,
-        private miscService: MiscService,
-        @Inject(MAT_DIALOG_DATA) public data: ItemDialogData
+        private readonly jobService: JobService,
+        private readonly originService: OriginService,
+        private readonly itemTemplateService: ItemTemplateService,
+        private readonly miscService: MiscService,
+        @Inject(MAT_DIALOG_DATA) public readonly data: ItemDialogData
     ) {
     }
 

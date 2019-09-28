@@ -8,7 +8,7 @@ import {environment} from '../environments/environment';
 Sentry.init({
     dsn: environment.sentryDsn,
     beforeSend(event, hint) {
-        const processedEvent = { ...event };
+        const processedEvent = {...event};
         if (hint.originalException && hint.originalException instanceof Error) {
             processedEvent.extra = processedEvent.extra || {};
             for (let key in hint.originalException) {
@@ -27,9 +27,11 @@ Sentry.init({
 export class NhbkErrorHandler extends ErrorHandler {
     private count = 0;
 
-    constructor(private httpClient: HttpClient,
-                private _ngZone: NgZone,
-                private _errorReportService: ErrorReportService) {
+    constructor(
+        private readonly httpClient: HttpClient,
+        private readonly ngZone: NgZone,
+        private readonly errorReportService: ErrorReportService
+    ) {
         super();
     }
 
@@ -46,8 +48,8 @@ export class NhbkErrorHandler extends ErrorHandler {
             return;
         }
 
-        this._ngZone.run(() => {
-            this._errorReportService.notify('Une erreur est survenue', error);
+        this.ngZone.run(() => {
+            this.errorReportService.notify('Une erreur est survenue', error);
         });
 
         super.handleError(error);

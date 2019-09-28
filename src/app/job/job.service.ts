@@ -14,8 +14,8 @@ export class JobService {
     private jobs: ReplaySubject<Job[]>;
 
     constructor(
-        private httpClient: HttpClient,
-        private skillService: SkillService,
+        private readonly httpClient: HttpClient,
+        private readonly skillService: SkillService,
     ) {
     }
 

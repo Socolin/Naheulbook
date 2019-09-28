@@ -17,7 +17,7 @@ export class LoginService {
     // TODO: Renewing token
 
     constructor(
-        private httpClient: HttpClient
+        private readonly httpClient: HttpClient,
     ) {
     }
 

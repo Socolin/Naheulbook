@@ -42,13 +42,13 @@
                 Donner
             </button>
             <button mat-menu-item *ngIf="item.template.data.skillBook"
-                    (click)="_itemActionService.onAction('read_skill_book', item)">
+                    (click)="itemActionService.onAction('read_skill_book', item)">
                 <mat-icon>menu_book</mat-icon>
                 Lire
             </button>
             <button *ngIf="item.template.data.charge"
                     mat-menu-item
-                    (click)="_itemActionService.onAction('use_charge', item)">
+                    (click)="itemActionService.onAction('use_charge', item)">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
                 Utiliser sur soi-meme
             </button>
@@ -64,7 +64,7 @@
         </mat-menu>
         <mat-menu #deleteConfirm>
             <button mat-menu-item
-                    (click)="_itemActionService.onAction('delete', item)">
+                    (click)="itemActionService.onAction('delete', item)">
                 Confirmer
             </button>
         </mat-menu>
@@ -133,7 +133,7 @@
                     <value-editor *ngIf="!readonly"
                                   [title]="'Quantité'"
                                   [value]="item.data.quantity"
-                                  (onChange)="_itemActionService.onAction('update_quantity', item, {quantity: $event})">
+                                  (onChange)="itemActionService.onAction('update_quantity', item, {quantity: $event})">
                     </value-editor>
                 </div>
             </div>
@@ -371,13 +371,13 @@
                 <button mat-button
                         [color]="'primary'"
                         *ngIf="gmView && !item.data.ignoreRestrictions"
-                        (click)="_itemActionService.onAction('ignoreRestrictions', item, true); $event.stopPropagation()">
+                        (click)="itemActionService.onAction('ignoreRestrictions', item, true); $event.stopPropagation()">
                     IGNORER RESTRICTIONS
                 </button>
                 <button mat-button
                         [color]="'primary'"
                         *ngIf="gmView && item.data.ignoreRestrictions"
-                        (click)="_itemActionService.onAction('ignoreRestrictions', item, undefined); $event.stopPropagation()">
+                        (click)="itemActionService.onAction('ignoreRestrictions', item, undefined); $event.stopPropagation()">
                     APPLIQUER RESTRICTIONS
                 </button>
             </div>
@@ -445,13 +445,13 @@
             <button mat-button
                     [color]="'primary'"
                     *ngIf="!readonly && !item.data.equiped && !item.content?.length"
-                    (click)="_itemActionService.onAction('equip', item); $event.stopPropagation()">
+                    (click)="itemActionService.onAction('equip', item); $event.stopPropagation()">
                 ÉQUIPER
             </button>
             <button mat-button
                     [color]="'primary'"
                     *ngIf="!readonly && item.data.equiped && !item.content?.length"
-                    (click)="_itemActionService.onAction('unequip', item); $event.stopPropagation()">
+                    (click)="itemActionService.onAction('unequip', item); $event.stopPropagation()">
                 DÉSÉQUIPER
             </button>
         </span>
@@ -459,7 +459,7 @@
         <button mat-button
                 [color]="'accent'"
                 *ngIf="gmView && item.data.notIdentified && character != undefined"
-                (click)="_itemActionService.onAction('identify', item); $event.stopPropagation()">
+                (click)="itemActionService.onAction('identify', item); $event.stopPropagation()">
             IDENTIFIER
         </button>
 
@@ -487,7 +487,7 @@
                         <icon [icon]="container.data.icon"></icon>
                         <button mat-raised-button
                                 [disabled]="item.containerId == container.id"
-                                (click)="_itemActionService.onAction('move_to_container', item, {container: container.id}); $event.stopPropagation()">
+                                (click)="itemActionService.onAction('move_to_container', item, {container: container.id}); $event.stopPropagation()">
                             {{container.data.name}}
                         </button>
                     </div>

@@ -19,10 +19,10 @@ export class EditItemTemplateDialogComponent implements OnInit {
     public saving = false;
 
     constructor(
-        private _notification: NotificationsService
-        , private _itemTemplateService: ItemTemplateService
-        , private dialogRef: MatDialogRef<EditItemTemplateDialogComponent, ItemTemplate>
-        , @Inject(MAT_DIALOG_DATA) private data: EditItemTemplateDialogData
+        private readonly dialogRef: MatDialogRef<EditItemTemplateDialogComponent, ItemTemplate>,
+        @Inject(MAT_DIALOG_DATA) private readonly data: EditItemTemplateDialogData,
+        private readonly itemTemplateService: ItemTemplateService,
+        private readonly notification: NotificationsService,
     ) {
     }
 
@@ -33,9 +33,9 @@ export class EditItemTemplateDialogComponent implements OnInit {
             ...baseRequest,
             skillModifiers: skillModifiers.map(s => ({value: s.value, skill: s.skill.id}))
         };
-        this._itemTemplateService.editItemTemplate(itemTemplateId, request).subscribe(
+        this.itemTemplateService.editItemTemplate(itemTemplateId, request).subscribe(
             itemTemplate => {
-                this._notification.success('Objet', 'Objet sauvegardé: ' + itemTemplate.name);
+                this.notification.success('Objet', 'Objet sauvegardé: ' + itemTemplate.name);
                 this.saving = false;
                 this.dialogRef.close(itemTemplate);
             },
@@ -47,7 +47,7 @@ export class EditItemTemplateDialogComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._itemTemplateService.getItem(this.data.itemTemplateId).subscribe(
+        this.itemTemplateService.getItem(this.data.itemTemplateId).subscribe(
             itemTemplate => {
                 this.item = itemTemplate;
             }

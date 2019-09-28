@@ -24,8 +24,8 @@ export class ItemTemplateService {
     private itemTypes?: ReplaySubject<ItemTypeResponse[]>;
 
     constructor(
-        private httpClient: HttpClient,
-        private skillService: SkillService,
+        private readonly httpClient: HttpClient,
+        private readonly skillService: SkillService,
     ) {
     }
 

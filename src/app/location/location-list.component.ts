@@ -15,13 +15,13 @@ export class LocationListComponent implements OnInit {
     public editable: boolean;
 
     constructor(
-        private _locationService: LocationService,
-        private _loginService: LoginService,
+        private readonly locationService: LocationService,
+        private readonly loginService: LoginService,
     ) {
     }
 
     getLocations() {
-        this._locationService.getLocationsTree().subscribe(
+        this.locationService.getLocationsTree().subscribe(
             locations => {
                 this.locations = locations;
                 this.locations.forEach(l => {
@@ -35,7 +35,7 @@ export class LocationListComponent implements OnInit {
 
     ngOnInit() {
         this.getLocations();
-        this._loginService.loggedUser.subscribe(
+        this.loginService.loggedUser.subscribe(
             user => {
                 this.editable = (user != null && user.admin);
             },

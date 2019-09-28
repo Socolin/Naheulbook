@@ -102,24 +102,26 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     private notificationSub?: Subscription;
 
-    constructor(private _route: ActivatedRoute
-        , private _router: Router
-        , private _notification: NotificationsService
-        , private _websocketService: WebSocketService
-        , private _nhbkDialogService: NhbkDialogService
-        , private _overlay: Overlay
-        , private _characterService: CharacterService) {
+    constructor(
+        private readonly characterService: CharacterService,
+        private readonly nhbkDialogService: NhbkDialogService,
+        private readonly notification: NotificationsService,
+        private readonly overlay: Overlay,
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
+        private readonly websocketService: WebSocketService,
+    ) {
     }
 
     changeStat(stat: string, value: any) {
-        this._characterService.changeCharacterStat(this.character.id, stat, value).subscribe(
+        this.characterService.changeCharacterStat(this.character.id, stat, value).subscribe(
             this.character.onChangeCharacterStat.bind(this.character)
         );
     }
 
     setStatBonusAD(id: number, stat: string) {
         if (this.character) {
-            this._characterService.setStatBonusAD(id, stat).subscribe(
+            this.characterService.setStatBonusAD(id, stat).subscribe(
                 this.character.onSetStatBonusAD.bind(this.character)
             );
         }
@@ -127,7 +129,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     levelUp() {
         this.closeLevelUpDialog();
-        this._characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(res => {
+        this.characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(res => {
             this.character.onLevelUp(res[0], res[1]);
         });
     }
@@ -152,9 +154,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     changeGmData(key: string, value: any) {
-        this._characterService.changeGmData(this.character.id, key, value).subscribe(
+        this.characterService.changeGmData(this.character.id, key, value).subscribe(
             change => {
-                this._notification.info('Modification', key + ': ' + this.character.gmData[change.key] + ' -> ' + change.value);
+                this.notification.info('Modification', key + ': ' + this.character.gmData[change.key] + ' -> ' + change.value);
                 this.character.gmData[change.key] = change.value;
             }
         );
@@ -179,13 +181,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
         let config = new OverlayConfig();
 
-        config.positionStrategy = this._overlay.position()
+        config.positionStrategy = this.overlay.position()
             .global()
             .centerHorizontally()
             .centerVertically();
         config.hasBackdrop = true;
 
-        let overlayRef = this._overlay.create(config);
+        let overlayRef = this.overlay.create(config);
         overlayRef.attach(this.levelUpDialog);
         overlayRef.backdropClick().subscribe(() => overlayRef.detach());
         this.levelUpOverlayRef = overlayRef;
@@ -279,7 +281,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     // Group
 
     cancelInvite(invite: CharacterGroupInvite) {
-        this._characterService.cancelInvite(this.character.id, invite.groupId).subscribe(
+        this.characterService.cancelInvite(this.character.id, invite.groupId).subscribe(
             res => {
                 for (let i = 0; i < this.character.invites.length; i++) {
                     let e = this.character.invites[i];
@@ -294,7 +296,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     acceptInvite(invite: CharacterGroupInvite) {
-        this._characterService.joinGroup(this.character.id, invite.groupId).subscribe(
+        this.characterService.joinGroup(this.character.id, invite.groupId).subscribe(
             () => {
                 this.character.invites = [];
                 this.character.group = {id: invite.groupId, name: invite.groupName};
@@ -314,7 +316,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this.inventoryPanel.deselectItem();
         this.lootPanel.deselectItem();
         if (!this.inGroupTab) {
-            this._router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this._route});
+            this.router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this.route});
         }
         return false;
     }
@@ -325,13 +327,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this.selectedSkillInfo = skill;
         let config = new OverlayConfig();
 
-        config.positionStrategy = this._overlay.position()
+        config.positionStrategy = this.overlay.position()
             .global()
             .centerHorizontally()
             .centerVertically();
         config.hasBackdrop = true;
 
-        let overlayRef = this._overlay.create(config);
+        let overlayRef = this.overlay.create(config);
         overlayRef.attach(this.skillInfoDialog);
         overlayRef.backdropClick().subscribe(() => overlayRef.detach());
         this.skillInfoOverlayRef = overlayRef;
@@ -348,7 +350,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     openChangeNameDialog() {
         this.newCharacterName = this.character.name;
-        this.changeNameOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeNameDialog);
+        this.changeNameOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.changeNameDialog);
     }
 
     closeChangeNameDialog() {
@@ -363,7 +365,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     openChangeSexDialog() {
         this.newCharacterSex = this.character.sex;
-        this.changeSexOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeSexDialog);
+        this.changeSexOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.changeSexDialog);
     }
 
     closeChangeSexDialog() {
@@ -378,7 +380,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     openChangeJobDialog() {
         this.addingJob = false;
-        this.changeJobOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeJobDialog);
+        this.changeJobOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.changeJobDialog);
     }
 
     closeChangeJobDialog() {
@@ -387,21 +389,21 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     addJob(job: Job) {
-        this._characterService.addJob(this.character.id, job.id).subscribe(addedJob => {
+        this.characterService.addJob(this.character.id, job.id).subscribe(addedJob => {
             this.character.onAddJob(addedJob);
         });
         this.addingJob = false;
     }
 
     removeJob(job: Job) {
-        this._characterService.removeJob(this.character.id, job.id).subscribe(removedJob => {
+        this.characterService.removeJob(this.character.id, job.id).subscribe(removedJob => {
             this.character.onRemoveJob(removedJob);
         });
     }
 
     openJobInfoDialog(job: Job) {
         this.selectedJobInfo = job;
-        this.jobInfoOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.jobInfoDialog);
+        this.jobInfoOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.jobInfoDialog);
     }
 
     closeJobInfoDialog() {
@@ -410,7 +412,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openOriginInfoDialog() {
-        this.originInfoOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.originInfoDialog);
+        this.originInfoOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.originInfoDialog);
     }
 
     closeOriginInfoDialog() {
@@ -420,7 +422,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         if (this.character && !this.inGroupTab) {
-            this._websocketService.unregisterElement(this.character);
+            this.websocketService.unregisterElement(this.character);
             this.character.dispose();
         }
         if (this.notificationSub) {
@@ -432,30 +434,30 @@ export class CharacterComponent implements OnInit, OnDestroy {
         if (this.character) {
             this.inGroupTab = true;
         } else {
-            this.character = this._route.snapshot.data['character'];
-            this._websocketService.registerElement(this.character);
+            this.character = this.route.snapshot.data['character'];
+            this.websocketService.registerElement(this.character);
             this.notificationSub = this.character.onNotification.subscribe(notificationData => {
-                this._notification.info('', notificationData.message);
+                this.notification.info('', notificationData.message);
             });
-            let tab = this._route.snapshot.fragment;
+            let tab = this.route.snapshot.fragment;
             if (tab) {
                 this.mainTabGroup.selectedIndex = this.getTabIndexFromHash(tab);
                 this.currentTab = tab;
             }
-            this._route.data.subscribe(data => {
+            this.route.data.subscribe(data => {
                 if (this.character !== data['character']) {
                     if (this.notificationSub) {
                         this.notificationSub.unsubscribe();
                     }
                     if (this.character) {
-                        this._websocketService.unregisterElement(this.character);
+                        this.websocketService.unregisterElement(this.character);
                         this.character.dispose();
                     }
                     this.character = data['character'];
-                    this._websocketService.registerElement(this.character);
+                    this.websocketService.registerElement(this.character);
                     this.mainTabGroup.selectedIndex = 0;
                     this.notificationSub = this.character.onNotification.subscribe(notificationData => {
-                        this._notification.info('', notificationData.message);
+                        this.notification.info('', notificationData.message);
                     });
                 }
             });

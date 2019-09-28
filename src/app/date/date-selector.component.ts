@@ -31,12 +31,14 @@ export class DateSelectorComponent implements OnInit, OnChanges {
         year: new FormControl('', [Validators.required, Validators.min(0), Validators.max(10000)]),
     });
 
-    constructor(private _dateService: DateService,
-                private _nhbkDialogService: NhbkDialogService) {
+    constructor(
+        private readonly dateService: DateService,
+        private readonly nhbkDialogService: NhbkDialogService,
+    ) {
     }
 
     openSelector() {
-        this.dateSelectorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.dateSelectorDialog);
+        this.dateSelectorOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.dateSelectorDialog);
     }
 
     closeSelector() {
@@ -95,7 +97,7 @@ export class DateSelectorComponent implements OnInit, OnChanges {
         if (!this.date) {
             this.date = this.defaultDate;
         }
-        this._dateService.getCalendarDates().subscribe(
+        this.dateService.getCalendarDates().subscribe(
             calendar => {
                 this.calendar = calendar;
                 this.updateCurrentCalendar();

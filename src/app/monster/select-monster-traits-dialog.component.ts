@@ -29,10 +29,10 @@ export class SelectMonsterTraitsDialogComponent implements OnInit {
     public simpleTraitsSelector: MatSelectionList;
 
     constructor(
-        public dialog: MatDialog,
-        private monsterTemplateService: MonsterTemplateService,
-        public dialogRef: MatDialogRef<SelectMonsterTraitsDialogComponent, SelectMonsterTraitsDialogResult>,
-        @Inject(MAT_DIALOG_DATA) public data: SelectMonsterTraitsDialogData,
+        private readonly dialog: MatDialog,
+        private readonly monsterTemplateService: MonsterTemplateService,
+        private readonly dialogRef: MatDialogRef<SelectMonsterTraitsDialogComponent, SelectMonsterTraitsDialogResult>,
+        @Inject(MAT_DIALOG_DATA) public readonly data: SelectMonsterTraitsDialogData,
     ) {
     }
 

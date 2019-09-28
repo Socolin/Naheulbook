@@ -17,8 +17,10 @@ export interface TakeItemResponse {
 
 @Injectable()
 export class ItemService {
-    constructor(private httpClient: HttpClient
-        , private _skillService: SkillService) {
+    constructor(
+        private readonly httpClient: HttpClient,
+        private readonly skillService: SkillService,
+    ) {
     }
 
     deleteItem(itemId: number): Observable<void> {
@@ -32,14 +34,14 @@ export class ItemService {
         });
     }
 
-    giveItem(itemId: number, characterId: number, quantity?: number): Observable<{remainingQuantity: number}> {
-        return this.httpClient.post<{remainingQuantity:  number}>(`/api/v2/items/${itemId}/give`, {
+    giveItem(itemId: number, characterId: number, quantity?: number): Observable<{ remainingQuantity: number }> {
+        return this.httpClient.post<{ remainingQuantity: number }>(`/api/v2/items/${itemId}/give`, {
             characterId: characterId,
             quantity: quantity
         });
     }
 
-    addItemTo(targetType: 'character'|'monster'|'loot'
+    addItemTo(targetType: 'character' | 'monster' | 'loot'
         , targetId: number
         , itemTemplateId: number
         , itemData: ItemData): Observable<Item> {
@@ -67,9 +69,9 @@ export class ItemService {
                     itemTemplateId: itemTemplateId,
                     itemData: itemData
                 }),
-                this._skillService.getSkillsById()
+                this.skillService.getSkillsById()
             ]).subscribe(
-                ([itemJsonData, skillsById]: [Item, {[skillId: number]: Skill}]) => {
+                ([itemJsonData, skillsById]: [Item, { [skillId: number]: Skill }]) => {
                     let item = Item.fromJson(itemJsonData, skillsById);
                     observer.next(item);
                     observer.complete();
@@ -101,11 +103,11 @@ export class ItemService {
             }
 
             forkJoin([this.httpClient.post(url, {
-                    categoryTechName
-                }),
-                this._skillService.getSkillsById()
+                categoryTechName
+            }),
+                this.skillService.getSkillsById()
             ]).subscribe(
-                ([itemJsonData, skillsById]: [Item, {[skillId: number]: Skill}]) => {
+                ([itemJsonData, skillsById]: [Item, { [skillId: number]: Skill }]) => {
                     let item = Item.fromJson(itemJsonData, skillsById);
                     observer.next(item);
                     observer.complete();

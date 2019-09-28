@@ -18,15 +18,17 @@ export class WebSocketService {
     public registeredElements: { [type: string]: { [id: number]: Subject<WsEvent> } } = {};
     public registerCount: { [type: string]: { [id: number]: number } } = {};
     public registeredObserverElements: { [type: string]: { [id: number]: Observer<WsEvent> } } = {};
-    private _hubConnection?: signalR.HubConnection;
+    private hubConnection?: signalR.HubConnection;
     private connecting = false;
 
-    constructor(private _notification: NotificationsService
-        , private _loginService: LoginService
-        , private _skillService: SkillService
-        , private _jobService: JobService
-        , private _originService: OriginService
-        , private _miscService: MiscService) {
+    constructor(
+        private readonly jobService: JobService,
+        private readonly loginService: LoginService,
+        private readonly miscService: MiscService,
+        private readonly notification: NotificationsService,
+        private readonly originService: OriginService,
+        private readonly skillService: SkillService,
+    ) {
     }
 
     public registerElement(registrable: WsRegistrable) {
@@ -40,9 +42,9 @@ export class WebSocketService {
                         console.error('Invalid packet, no opcode', res);
                     }
                     let services = {
-                        skill: this._skillService,
-                        job: this._jobService,
-                        origin: this._originService,
+                        skill: this.skillService,
+                        job: this.jobService,
+                        origin: this.originService,
                     };
                     registrable.handleWebsocketEvent(res.opcode, res.data, services);
                 } catch (err) {
@@ -67,7 +69,7 @@ export class WebSocketService {
     }
 
     private register(type: string, elementId: number): Subject<WsEvent> {
-        if (!this._hubConnection) {
+        if (!this.hubConnection) {
             this.connect();
         }
 
@@ -116,11 +118,11 @@ export class WebSocketService {
         }
 
         this.connecting = true;
-        this._hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl('/ws/listen', {accessTokenFactory: () => this._loginService.currentJwt})
+        this.hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl('/ws/listen', {accessTokenFactory: () => this.loginService.currentJwt})
             .configureLogging(signalR.LogLevel.Information)
             .build();
-        this._hubConnection.on('event', (data: string) => {
+        this.hubConnection.on('event', (data: string) => {
             let message: WsMessage = JSON.parse(data);
             if (message.type in this.registeredObserverElements) {
                 let reg = this.registeredObserverElements[message.type];
@@ -130,11 +132,11 @@ export class WebSocketService {
             }
             console.log(data);
         });
-        this._hubConnection.onclose(err => {
+        this.hubConnection.onclose(err => {
             console.error(err);
             setTimeout(() => this.connect(true), 2000);
         });
-        this._hubConnection.start()
+        this.hubConnection.start()
             .then(async () => {
                 this.connecting = false;
                 if (reconnect) {
@@ -151,7 +153,7 @@ export class WebSocketService {
                     }
                 }
                 for (const pendingMessage of this.pendingMessages) {
-                    await this._hubConnection.send.apply(this._hubConnection, [pendingMessage.methodName].concat(pendingMessage.args));
+                    await this.hubConnection.send.apply(this.hubConnection, [pendingMessage.methodName].concat(pendingMessage.args));
                 }
             })
             .catch((err) => {
@@ -188,8 +190,8 @@ export class WebSocketService {
     }
 
     private sendData(methodName: string, ...args: any[]): Promise<void> {
-        if (this._hubConnection.state === signalR.HubConnectionState.Connected) {
-            return this._hubConnection.send.apply(this._hubConnection, [methodName].concat(args));
+        if (this.hubConnection.state === signalR.HubConnectionState.Connected) {
+            return this.hubConnection.send.apply(this.hubConnection, [methodName].concat(args));
         } else {
             this.pendingMessages.push({methodName, args});
             return Promise.resolve();

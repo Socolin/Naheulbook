@@ -30,9 +30,9 @@ export class AddEffectDialogComponent {
     public selectedStep = 0;
 
     constructor(
-        private effectService: EffectService,
-        public dialogRef: MatDialogRef<AddEffectDialogComponent, ActiveStatsModifier>,
-        @Inject(MAT_DIALOG_DATA) public data?: AddEffectDialogData
+        private readonly effectService: EffectService,
+        private readonly dialogRef: MatDialogRef<AddEffectDialogComponent, ActiveStatsModifier>,
+        @Inject(MAT_DIALOG_DATA) public readonly data?: AddEffectDialogData
     ) {
         if (data && data.effect) {
             this.newStatsModifier = ActiveStatsModifier.fromEffect(data.effect, {reusable: false});

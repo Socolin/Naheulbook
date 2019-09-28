@@ -1,7 +1,4 @@
 import {Component, Input, EventEmitter, Output} from '@angular/core';
-import {Router} from '@angular/router';
-
-import {NotificationsService} from '../notifications';
 
 import {QuestService} from './quest.service';
 import {QuestTemplate} from './quest.model';
@@ -16,8 +13,8 @@ export class QuestEditorComponent {
 
     public previewDescription: boolean;
 
-    constructor(private _questService: QuestService
-        , private _notification: NotificationsService
-        , private router: Router) {
+    constructor(
+        private readonly questService: QuestService,
+    ) {
     }
 }

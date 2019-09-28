@@ -20,13 +20,13 @@ export class CreateItemTemplateDialogComponent implements OnInit {
     public saving = false;
 
     constructor(
-        private _itemTemplateService: ItemTemplateService,
-        private _notifications: NotificationsService,
-        private _loginService: LoginService,
-        private dialogRef: MatDialogRef<CreateItemTemplateDialogComponent, ItemTemplate>,
-        @Inject(MAT_DIALOG_DATA) private data: CreateItemTemplateDialogData,
+        private readonly itemTemplateService: ItemTemplateService,
+        private readonly notifications: NotificationsService,
+        private readonly loginService: LoginService,
+        private readonly dialogRef: MatDialogRef<CreateItemTemplateDialogComponent, ItemTemplate>,
+        @Inject(MAT_DIALOG_DATA) private readonly data: CreateItemTemplateDialogData,
     ) {
-        if (this._loginService.currentLoggedUser && this._loginService.currentLoggedUser.admin) {
+        if (this.loginService.currentLoggedUser && this.loginService.currentLoggedUser.admin) {
             this.item.source = 'official';
         } else {
             this.item.source = 'community';
@@ -48,10 +48,10 @@ export class CreateItemTemplateDialogComponent implements OnInit {
             ...baseRequest,
             skillModifiers: skillModifiers && skillModifiers.map(s => ({value: s.value, skill: s.skill.id}))
         };
-        this._itemTemplateService.createItemTemplate(request).subscribe(
+        this.itemTemplateService.createItemTemplate(request).subscribe(
             itemTemplate => {
                 this.saving = false;
-                this._notifications.info('Objet', 'Objet créé: ' + itemTemplate.name);
+                this.notifications.info('Objet', 'Objet créé: ' + itemTemplate.name);
                 this.dialogRef.close(itemTemplate);
             }, () => {
                 this.saving = false;
@@ -61,7 +61,7 @@ export class CreateItemTemplateDialogComponent implements OnInit {
 
     ngOnInit(): void {
         if (this.data && this.data.copyFromItemTemplateId) {
-            this._itemTemplateService.getItem(this.data.copyFromItemTemplateId).subscribe(item => {
+            this.itemTemplateService.getItem(this.data.copyFromItemTemplateId).subscribe(item => {
                 this.item = item;
                 this.item.source = 'private';
             });

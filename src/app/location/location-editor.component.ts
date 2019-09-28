@@ -20,18 +20,20 @@ export class LocationEditorComponent implements OnInit {
     public newMap: Map;
     public previewDescription: boolean;
 
-    constructor(private _notification: NotificationsService
-        , private _locationService: LocationService) {
+    constructor(
+        private readonly notification: NotificationsService,
+        private readonly locationService: LocationService,
+    ) {
         this.newMap = new Map();
     }
 
     updateAutocomplete(filter: string): Observable<AutocompleteValue[]> {
-        return this._locationService.listMapImages(filter).pipe(map(list => list.map(e => new AutocompleteValue(e, e))));
+        return this.locationService.listMapImages(filter).pipe(map(list => list.map(e => new AutocompleteValue(e, e))));
     }
 
     addMap() {
         if (!this.newMap.name || !this.newMap.file) {
-            this._notification.error('Nom ou fichier manquant');
+            this.notification.error('Nom ou fichier manquant');
             return;
         }
         this.maps.push(this.newMap);
@@ -40,7 +42,7 @@ export class LocationEditorComponent implements OnInit {
 
     ngOnInit() {
         this.autocompleteFilesCallback = this.updateAutocomplete.bind(this);
-        this._locationService.getLocations().subscribe(
+        this.locationService.getLocations().subscribe(
             locations => {
                 this.locations = locations;
             },

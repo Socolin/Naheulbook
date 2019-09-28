@@ -187,13 +187,13 @@
                                 <button mat-icon-button
                                         *ngIf="i > 0 && character.computedData.itemsBySlots[slot.id].length > 1"
                                         type="button"
-                                        (click)="_itemActionService.onAction('equip', item, {level: 1})">
+                                        (click)="itemActionService.onAction('equip', item, {level: 1})">
                                     <mat-icon>keyboard_arrow_up</mat-icon>
                                 </button>
                                 <button mat-icon-button
                                         *ngIf="!last && character.computedData.itemsBySlots[slot.id].length > 1"
                                         type="button"
-                                        (click)="_itemActionService.onAction('equip', item, {level: -1})">
+                                        (click)="itemActionService.onAction('equip', item, {level: -1})">
                                     <mat-icon>keyboard_arrow_down</mat-icon>
                                 </button>
                                 <swipeable-item-detail *ngIf="item === selectedItem"

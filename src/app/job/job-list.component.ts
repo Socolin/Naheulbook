@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {NotificationsService} from '../notifications';
 
 import {Job} from './job.model';
 import {JobService} from './job.service';
@@ -11,11 +10,13 @@ import {JobService} from './job.service';
 export class JobListComponent implements OnInit {
     public jobs: Job[];
 
-    constructor(private _jobService: JobService) {
+    constructor(
+        private readonly jobService: JobService,
+    ) {
     }
 
     getJobs() {
-        this._jobService.getJobList().subscribe(
+        this.jobService.getJobList().subscribe(
             jobs => {
                 this.jobs = jobs;
             }

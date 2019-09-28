@@ -29,10 +29,10 @@ import {
 @Injectable()
 export class CharacterService {
     constructor(
-        private httpClient: HttpClient,
-        private jobService: JobService,
-        private skillService: SkillService,
-        private originService: OriginService,
+        private readonly httpClient: HttpClient,
+        private readonly jobService: JobService,
+        private readonly skillService: SkillService,
+        private readonly originService: OriginService,
     ) {
     }
 

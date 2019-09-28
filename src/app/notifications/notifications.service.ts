@@ -9,11 +9,11 @@ export class NotificationsService {
     public notifications: Notification[] = [];
 
     constructor(
-        private _snackBar: MatSnackBar,
-        private _errorReportService: ErrorReportService,
-        private dialog: MatDialog,
+        private readonly snackBar: MatSnackBar,
+        private readonly errorReportService: ErrorReportService,
+        private readonly dialog: MatDialog,
     ) {
-        _errorReportService.notifyError.subscribe(msg => {
+        errorReportService.notifyError.subscribe(msg => {
             this.addNotification(new Notification('error', msg.message, '', msg.error));
             console.error('==== ERROR ==== ', msg.message, msg.error);
         });
@@ -25,7 +25,7 @@ export class NotificationsService {
             let config = new MatSnackBarConfig();
             config.duration = notification.type === 'error' ? 5000 : 2500;
             const action = notification.type === 'error' ? 'DETAILS' : undefined;
-            let snackBarRef = this._snackBar.open(notification.title + ' ' + notification.message, action, config);
+            let snackBarRef = this.snackBar.open(notification.title + ' ' + notification.message, action, config);
             snackBarRef.onAction().subscribe(() => {
                 this.dialog.open(ErrorDetailsDialogComponent, {data: notification.data});
             });
@@ -46,7 +46,7 @@ export class NotificationsService {
         let n = this.notifications[0];
         let config = new MatSnackBarConfig();
         config.duration = 2500;
-        this._snackBar.open(n.title + ' ' + n.message, undefined, config).afterDismissed().subscribe(
+        this.snackBar.open(n.title + ' ' + n.message, undefined, config).afterDismissed().subscribe(
             () => {
                 this.notifications.shift();
                 this.proceedNextNotification();

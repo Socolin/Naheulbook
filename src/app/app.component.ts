@@ -11,14 +11,12 @@ import {NotificationsService} from './notifications';
 })
 export class AppComponent implements OnInit {
     constructor(
-        private _themeService: ThemeService
-        , public _router: Router
-        , public notifications: NotificationsService
+        private readonly themeService: ThemeService,
     ) {
     };
 
     ngOnInit() {
-        this._themeService.updateTheme();
+        this.themeService.updateTheme();
     }
 }
 

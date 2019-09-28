@@ -38,14 +38,14 @@ export class FighterComponent implements OnInit, OnChanges {
     public selectedItem: Item | undefined;
 
     constructor(
-        private _actionService: GroupActionService,
-        private _characterService: CharacterService,
-        private _monsterService: MonsterService,
-        private _itemActionService: ItemActionService,
-        private _itemService: ItemService,
-        private _nhbkDialogService: NhbkDialogService,
-        private _notification: NotificationsService,
-        private dialog: MatDialog,
+        private readonly actionService: GroupActionService,
+        private readonly characterService: CharacterService,
+        private readonly monsterService: MonsterService,
+        private readonly itemActionService: ItemActionService,
+        private readonly itemService: ItemService,
+        private readonly nhbkDialogService: NhbkDialogService,
+        private readonly notification: NotificationsService,
+        private readonly dialog: MatDialog,
     ) {
     }
 
@@ -62,7 +62,7 @@ export class FighterComponent implements OnInit, OnChanges {
     }
 
     addItem(item: Item) {
-        this._itemService.addItemTo(this.fighter.typeName, this.fighter.id, item.template.id, item.data).subscribe(
+        this.itemService.addItemTo(this.fighter.typeName, this.fighter.id, item.template.id, item.data).subscribe(
             (createdItem) => {
                 if (this.fighter.isMonster) {
                     this.fighter.monster.addItem(createdItem);
@@ -73,7 +73,7 @@ export class FighterComponent implements OnInit, OnChanges {
     }
 
     displayCharacterSheet() {
-        this._actionService.emitAction('displayCharacterSheet', this.group, this.fighter.character);
+        this.actionService.emitAction('displayCharacterSheet', this.group, this.fighter.character);
     }
 
     openInventoryDialog() {
@@ -85,21 +85,21 @@ export class FighterComponent implements OnInit, OnChanges {
 
     changeTarget(target: TargetJsonData) {
         if (this.fighter.isMonster) {
-            this._monsterService.updateMonsterTarget(this.fighter.id, {id: target.id, isMonster: target.isMonster})
+            this.monsterService.updateMonsterTarget(this.fighter.id, {id: target.id, isMonster: target.isMonster})
                 .subscribe(
                     () => {
                         this.fighter.changeTarget(target);
-                        this._notification.info('Monstre', 'Cible changée');
+                        this.notification.info('Monstre', 'Cible changée');
                     }
                 );
         } else {
-            this._characterService.changeGmData(this.fighter.id, 'target', {
+            this.characterService.changeGmData(this.fighter.id, 'target', {
                 id: target.id,
                 isMonster: target.isMonster
             }).subscribe(
                 change => {
                     this.fighter.changeTarget(change.value);
-                    this._notification.info('Joueur', 'Cible changée');
+                    this.notification.info('Joueur', 'Cible changée');
                 }
             );
         }
@@ -110,18 +110,18 @@ export class FighterComponent implements OnInit, OnChanges {
             color = color.substring(1);
         }
         if (element.isMonster) {
-            this._monsterService.updateMonsterData(element.id, {...element.monster.data, color})
+            this.monsterService.updateMonsterData(element.id, {...element.monster.data, color})
                 .subscribe(
                     () => {
                         element.changeColor(color);
-                        this._notification.info('Monstre', 'Couleur changé');
+                        this.notification.info('Monstre', 'Couleur changé');
                     }
                 );
         } else {
-            this._characterService.changeGmData(element.id, 'color', color).subscribe(
+            this.characterService.changeGmData(element.id, 'color', color).subscribe(
                 change => {
                     element.changeColor(change.value);
-                    this._notification.info('Joueur', 'Couleur changée');
+                    this.notification.info('Joueur', 'Couleur changée');
                 }
             );
         }
@@ -132,7 +132,7 @@ export class FighterComponent implements OnInit, OnChanges {
             return;
         }
         const newData = {...monster.data, [fieldName]: newValue};
-        this._monsterService.updateMonsterData(monster.id, newData)
+        this.monsterService.updateMonsterData(monster.id, newData)
             .subscribe(() => {
                 monster.changeData(newData);
             });
@@ -140,11 +140,11 @@ export class FighterComponent implements OnInit, OnChanges {
 
     changeNumber(element: Fighter, number: number) {
         if (element.isMonster) {
-            this._monsterService.updateMonsterData(element.id, {...element.monster.data, number})
+            this.monsterService.updateMonsterData(element.id, {...element.monster.data, number})
                 .subscribe(
                     () => {
                         element.changeNumber(number);
-                        this._notification.info('Monstre', 'Couleur changé');
+                        this.notification.info('Monstre', 'Couleur changé');
                     }
                 );
         }
@@ -154,30 +154,30 @@ export class FighterComponent implements OnInit, OnChanges {
         if (this.fighter.isMonster) {
             let monster = this.fighter.monster;
             if (stat === 'name') {
-                this._monsterService.updateMonster(monster.id, {name: value})
+                this.monsterService.updateMonster(monster.id, {name: value})
                     .subscribe(() => {
                         monster.name = value;
                     });
             } else {
                 let monsterData = {...monster.data, [stat]: value};
-                this._monsterService.updateMonsterData(monster.id, monsterData)
+                this.monsterService.updateMonsterData(monster.id, monsterData)
                     .subscribe(() => {
                         monster.changeData(monsterData);
                     });
             }
         } else {
-            this._characterService.changeCharacterStat(this.fighter.character.id, stat, value).subscribe(
+            this.characterService.changeCharacterStat(this.fighter.character.id, stat, value).subscribe(
                 this.fighter.character.onChangeCharacterStat.bind(this.fighter.character)
             );
         }
     }
 
     killMonster(monster: Monster) {
-        this._actionService.emitAction('killMonster', this.group, monster);
+        this.actionService.emitAction('killMonster', this.group, monster);
     }
 
     deleteMonster(monster: Monster) {
-        this._actionService.emitAction('deleteMonster', this.group, monster);
+        this.actionService.emitAction('deleteMonster', this.group, monster);
     }
 
     openEditMonsterDialog() {
@@ -194,10 +194,10 @@ export class FighterComponent implements OnInit, OnChanges {
             }
             const {name, ...data} = result;
             const monsterData = new MonsterData({...this.fighter.monster.data, ...data});
-            this._monsterService.updateMonster(this.fighter.id, {name}).subscribe(() => {
+            this.monsterService.updateMonster(this.fighter.id, {name}).subscribe(() => {
                 this.fighter.monster.name = name;
             });
-            this._monsterService.updateMonsterData(this.fighter.id, data).subscribe(() => {
+            this.monsterService.updateMonsterData(this.fighter.id, data).subscribe(() => {
                 this.fighter.monster.data = monsterData;
             });
         });
@@ -225,14 +225,14 @@ export class FighterComponent implements OnInit, OnChanges {
                 result.lapCountDecrement.when = 'BEFORE';
             }
 
-            this._monsterService.addModifier(this.fighter.id, result).subscribe(
+            this.monsterService.addModifier(this.fighter.id, result).subscribe(
                 this.fighter.monster.onAddModifier.bind(this.fighter.monster)
             );
         });
     }
 
     removeModifier(modifier: ActiveStatsModifier) {
-        this._monsterService.removeModifier(this.fighter.id, modifier.id).subscribe(() => {
+        this.monsterService.removeModifier(this.fighter.id, modifier.id).subscribe(() => {
             if (this.selectedModifier && this.selectedModifier.id === modifier.id) {
                 this.selectedModifier = undefined;
             }
@@ -247,22 +247,22 @@ export class FighterComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this._itemActionService.registerAction('ignoreRestrictions').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('ignoreRestrictions').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             item.data = {
                 ...item.data,
                 ignoreRestrictions: event.data
             };
-            this._itemService.updateItem(item.id, item.data).subscribe(
+            this.itemService.updateItem(item.id, item.data).subscribe(
                 this.fighter.character.onUpdateItem.bind(this.fighter.character)
             );
         });
-        this._itemActionService.registerAction('identify').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('identify').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             let itemData = {...item.data, name: item.template.name};
             delete itemData.notIdentified;
 
-            this._itemService.updateItem(item.id, itemData).subscribe(
+            this.itemService.updateItem(item.id, itemData).subscribe(
                 this.fighter.character.onUpdateItem.bind(this.fighter.character)
             );
         });

@@ -18,9 +18,9 @@ export interface MonsterInventoryDialogData {
 export class MonsterInventoryDialogComponent {
 
     constructor(
-        private itemService: ItemService,
-        private dialog: MatDialog,
-        @Inject(MAT_DIALOG_DATA) public data: MonsterInventoryDialogData,
+        private readonly dialog: MatDialog,
+        @Inject(MAT_DIALOG_DATA) public readonly data: MonsterInventoryDialogData,
+        private readonly itemService: ItemService,
     ) {
     }
 

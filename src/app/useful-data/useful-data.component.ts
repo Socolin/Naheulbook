@@ -26,8 +26,8 @@ export class UsefulDataComponent implements OnInit, OnDestroy {
     @Output() onAction = new EventEmitter<{ action: string, data: any }>();
 
     constructor(
-        private usefulDataService: UsefulDataService,
-        private dialog: MatDialog
+        private readonly dialog: MatDialog,
+        private readonly usefulDataService: UsefulDataService,
     ) {
 
     }

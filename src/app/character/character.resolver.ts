@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Resolve, ActivatedRouteSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
 import {Observable} from 'rxjs';
 
 import {Character} from './character.model';
@@ -8,7 +8,9 @@ import {CharacterService} from './character.service';
 @Injectable()
 export class CharacterResolve implements Resolve<Character> {
 
-    constructor(private _characterService: CharacterService) {
+    constructor(
+        private readonly characterService: CharacterService
+    ) {
     }
 
     resolve(route: ActivatedRouteSnapshot): Observable<Character> {
@@ -19,6 +21,6 @@ export class CharacterResolve implements Resolve<Character> {
         if (!+characterId) {
             throw new Error('resolve: Invalid `id` not a number. value=`' + characterId + '');
         }
-        return this._characterService.getCharacter(+characterId);
+        return this.characterService.getCharacter(+characterId);
     }
 }

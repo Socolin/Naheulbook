@@ -164,10 +164,10 @@ export class EpicFailsCriticalSuccessDialogComponent implements OnInit {
     ];
 
     constructor(
-        private dialogRef: MatDialogRef<EpicFailsCriticalSuccessDialogComponent, UsefulDataDialogResult>,
-        public usefulDataService: UsefulDataService,
-        @Inject(MAT_DIALOG_DATA) public data: EpicFailsCriticalSuccessDialogData,
-        public breakpointObserver: BreakpointObserver
+        private readonly dialogRef: MatDialogRef<EpicFailsCriticalSuccessDialogComponent, UsefulDataDialogResult>,
+        @Inject(MAT_DIALOG_DATA) public readonly data: EpicFailsCriticalSuccessDialogData,
+        private readonly usefulDataService: UsefulDataService,
+        private readonly breakpointObserver: BreakpointObserver,
     ) {
         breakpointObserver.observe([
             Breakpoints.Handset

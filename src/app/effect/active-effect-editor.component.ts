@@ -27,7 +27,9 @@ export class ActiveEffectEditorComponent implements DoCheck {
     public newEffectCustomDuration = false;
     public customDuration: IDurable;
 
-    constructor(private _effectService: EffectService) {
+    constructor(
+        private readonly effectService: EffectService,
+    ) {
     }
 
     updateEffectListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
@@ -35,7 +37,7 @@ export class ActiveEffectEditorComponent implements DoCheck {
         if (filter === '') {
             return observableFrom([]);
         }
-        return this._effectService.searchEffect(filter).pipe(map(
+        return this.effectService.searchEffect(filter).pipe(map(
             list => list.map(e => new AutocompleteValue(e, e.category.name + ': ' + e.name))
         ));
     }

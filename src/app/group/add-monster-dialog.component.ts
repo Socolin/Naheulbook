@@ -65,9 +65,9 @@ export class AddMonsterDialogComponent implements OnInit {
     });
 
     constructor(
-        public dialogRef: MatDialogRef<AddMonsterDialogComponent>,
-        private dialog: MatDialog,
-        private monsterTemplateService: MonsterTemplateService
+        private readonly dialogRef: MatDialogRef<AddMonsterDialogComponent>,
+        private readonly dialog: MatDialog,
+        private readonly monsterTemplateService: MonsterTemplateService,
     ) {
     }
 

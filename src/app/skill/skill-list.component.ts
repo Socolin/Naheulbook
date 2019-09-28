@@ -13,7 +13,9 @@ export class SkillListComponent implements OnInit {
     public skills: Skill[];
     public filter: string;
 
-    constructor(private _skillService: SkillService) {
+    constructor(
+        private readonly skillService: SkillService,
+    ) {
     }
 
     isFiltered(skill: Skill): boolean {
@@ -25,7 +27,7 @@ export class SkillListComponent implements OnInit {
     }
 
     getSkills() {
-        this._skillService.getSkills().subscribe(
+        this.skillService.getSkills().subscribe(
             skills => {
                 this.skills = skills;
             }

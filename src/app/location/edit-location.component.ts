@@ -11,12 +11,14 @@ import {NotificationsService} from '../notifications';
 export class EditLocationComponent implements OnInit {
     public location: Location;
     public maps: Map[] = [];
-    public newLocationName: string | undefined;
+    public newLocationName?: string;
 
-    constructor(private _route: ActivatedRoute
-        , private _router: Router
-        , private _notifications: NotificationsService
-        , private _locationService: LocationService) {
+    constructor(
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
+        private readonly notifications: NotificationsService,
+        private readonly locationService: LocationService,
+    ) {
     }
 
     addLocation() {
@@ -24,10 +26,10 @@ export class EditLocationComponent implements OnInit {
             throw new Error('addLocation: `newLocationName` should be defined');
         }
 
-        this._locationService.addLocation(this.newLocationName, this.location.id).subscribe(
+        this.locationService.addLocation(this.newLocationName, this.location.id).subscribe(
             location => {
-                this._locationService.clearLocations();
-                this._notifications.success('Cartographie', 'Lieu ajotuer');
+                this.locationService.clearLocations();
+                this.notifications.success('Cartographie', 'Lieu ajotuer');
                 this.location.sons.push(location);
                 this.newLocationName = undefined;
             }
@@ -39,30 +41,30 @@ export class EditLocationComponent implements OnInit {
             throw new Error('addLocationAndEdit: `newLocationName` should be defined');
         }
 
-        this._locationService.addLocation(this.newLocationName, this.location.id).subscribe(
+        this.locationService.addLocation(this.newLocationName, this.location.id).subscribe(
             location => {
-                this._locationService.clearLocations();
-                this._notifications.success('Cartographie', 'Lieu ajotuer');
-                this._router.navigate(['/edit-location', location.id]);
+                this.locationService.clearLocations();
+                this.notifications.success('Cartographie', 'Lieu ajotuer');
+                this.router.navigate(['/edit-location', location.id]);
                 this.newLocationName = undefined;
             }
         );
     }
 
     editLocation() {
-        this._locationService.editLocation(this.location, this.maps).subscribe(
+        this.locationService.editLocation(this.location, this.maps).subscribe(
             () => {
-                this._locationService.clearLocations();
-                this._notifications.success('Cartographie', 'Lieu editer');
-                this._router.navigate(['/database/locations']);
+                this.locationService.clearLocations();
+                this.notifications.success('Cartographie', 'Lieu editer');
+                this.router.navigate(['/database/locations']);
             }
         );
     }
 
     ngOnInit() {
-        this._route.params.subscribe(
+        this.route.params.subscribe(
             params => {
-                this._locationService.getLocation(+params['id']).subscribe(
+                this.locationService.getLocation(+params['id']).subscribe(
                     location => {
                         if (!location.data) {
                             location.data = {};
@@ -73,7 +75,7 @@ export class EditLocationComponent implements OnInit {
                     err => {
                         console.log(err);
                     });
-                this._locationService.getMaps(+params['id']).subscribe(
+                this.locationService.getMaps(+params['id']).subscribe(
                     maps => {
                         this.maps = maps;
                     },

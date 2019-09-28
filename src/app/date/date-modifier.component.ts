@@ -22,11 +22,13 @@ export class DateModifierComponent {
     public dateSelectorDialog: Portal<any>;
     public dateSelectorOverlayRef: OverlayRef;
 
-    constructor(private _nhbkDialogService: NhbkDialogService) {
+    constructor(
+        private readonly nhbkDialogService: NhbkDialogService,
+    ) {
     }
 
     openSelector() {
-        this.dateSelectorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.dateSelectorDialog);
+        this.dateSelectorOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.dateSelectorDialog);
     }
 
     closeSelector() {

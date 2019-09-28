@@ -57,7 +57,9 @@ export class JobSelectorComponent implements OnInit, OnChanges {
         return true;
     }
 
-    constructor(private _jobService: JobService) {
+    constructor(
+        private readonly jobService: JobService,
+    ) {
         this.swapList = generateAllStatsPair();
     }
 
@@ -101,8 +103,7 @@ export class JobSelectorComponent implements OnInit, OnChanges {
             }
             if (JobSelectorComponent.isJobValid(job, this.stats)) {
                 availabilityOk.jobs.push(job);
-            }
-            else {
+            } else {
                 if (!this.allowSwapStats) {
                     availabilityKo.jobs.push(job);
                     continue;
@@ -176,7 +177,7 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     }
 
     getJobs() {
-        this._jobService.getJobList().subscribe(
+        this.jobService.getJobList().subscribe(
             jobs => {
                 this.allJobs = jobs;
                 this.updateJobs();

@@ -17,17 +17,19 @@ export class CommonNavComponent implements OnInit {
     public themeSelectorDialog: Portal<any>;
     public themeSelectorOverlayRef: OverlayRef | undefined;
 
-    constructor(private _themeService: ThemeService,
-                private _nhbkDialogService: NhbkDialogService,
-                public _loginService: LoginService) {
+    constructor(
+        public readonly loginService: LoginService,
+        private readonly nhbkDialogService: NhbkDialogService,
+        private readonly themeService: ThemeService,
+    ) {
     };
 
     changeTheme(theme: string) {
-        this._themeService.setTheme(theme);
+        this.themeService.setTheme(theme);
     }
 
     openThemeSelector() {
-        this.themeSelectorOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.themeSelectorDialog);
+        this.themeSelectorOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.themeSelectorDialog);
     }
 
     closeThemeSelector() {

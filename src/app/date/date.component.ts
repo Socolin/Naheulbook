@@ -15,7 +15,9 @@ export class DateComponent implements OnInit, OnChanges {
     public hour: string;
     public period: string;
 
-    constructor(private _dateService: DateService) {
+    constructor(
+        private readonly dateService: DateService
+    ) {
     }
 
     updateCurrentCalendar() {
@@ -24,21 +26,17 @@ export class DateComponent implements OnInit, OnChanges {
         }
         if (this.date.minute < 10) {
             this.minute = '0' + this.date.minute.toString();
-        }
-        else if (this.date.minute) {
+        } else if (this.date.minute) {
             this.minute = this.date.minute.toString();
-        }
-        else {
+        } else {
             this.minute = '00';
         }
 
         if (this.date.hour < 10) {
             this.hour = '0' + this.date.hour.toString();
-        }
-        else if (this.date.hour) {
+        } else if (this.date.hour) {
             this.hour = this.date.hour.toString();
-        }
-         else {
+        } else {
             this.minute = '00';
         }
 
@@ -73,7 +71,7 @@ export class DateComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
-        this._dateService.getCalendarDates().subscribe(
+        this.dateService.getCalendarDates().subscribe(
             calendar => {
                 this.calendar = calendar;
                 this.updateCurrentCalendar();

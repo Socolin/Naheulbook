@@ -13,8 +13,10 @@ import {NamesByNumericId} from '../shared/shared,model';
 export class OriginService {
     private origins: ReplaySubject<Origin[]>;
 
-    constructor(private httpClient: HttpClient
-        , private _skillService: SkillService) {
+    constructor(
+        private readonly httpClient: HttpClient,
+        private readonly skillService: SkillService,
+    ) {
     }
 
     getOriginList(): Observable<Origin[]> {
@@ -22,7 +24,7 @@ export class OriginService {
             this.origins = new ReplaySubject<Origin[]>(1);
 
             forkJoin([
-                this._skillService.getSkillsById(),
+                this.skillService.getSkillsById(),
                 this.httpClient.get<OriginResponse[]>('/api/v2/origins')
             ]).subscribe(
                 ([skillsById, originsDatas]: [SkillDictionary, OriginResponse[]]) => {

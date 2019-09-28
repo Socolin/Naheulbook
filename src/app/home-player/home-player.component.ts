@@ -15,9 +15,11 @@ export class HomePlayerComponent implements OnInit {
     @ViewChild('start', {static: true, read: MatSidenav})
     public start: MatSidenav;
 
-    constructor(private _characterService: CharacterService
-        , public _router: Router) {
-        this._router.events.subscribe(event => {
+    constructor(
+        private readonly characterService: CharacterService,
+        private readonly router: Router,
+    ) {
+        this.router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
                 this.start.close().then();
             }
@@ -25,7 +27,7 @@ export class HomePlayerComponent implements OnInit {
     };
 
     ngOnInit() {
-        this._characterService.loadList().subscribe(
+        this.characterService.loadList().subscribe(
             characters => {
                 this.characters = characters.slice(0, 5);
             }

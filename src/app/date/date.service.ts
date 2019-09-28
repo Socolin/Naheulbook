@@ -9,7 +9,9 @@ import {CalendarResponse} from '../api/responses/calendar-response';
 export class DateService {
     private calendarDates: ReplaySubject<CalendarDate[]>;
 
-    constructor(private httpClient: HttpClient) {
+    constructor(
+        private readonly httpClient: HttpClient,
+    ) {
     }
 
     getCalendarDates(): Observable<CalendarDate[]> {

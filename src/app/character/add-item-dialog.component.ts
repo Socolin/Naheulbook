@@ -31,8 +31,8 @@ export class AddItemDialogComponent {
     }[];
 
     constructor(
-        private itemTemplateService: ItemTemplateService,
-        public dialogRef: MatDialogRef<AddItemDialogComponent, AddItemDialogResult>,
+        private readonly dialogRef: MatDialogRef<AddItemDialogComponent, AddItemDialogResult>,
+        private readonly itemTemplateService: ItemTemplateService,
     ) {
     }
 

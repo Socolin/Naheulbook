@@ -20,18 +20,18 @@ export class ItemTemplateDialogComponent implements OnInit {
     public godsByTechName: { [techName: string]: God };
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: ItemTemplateDialogData,
-        private _originService: OriginService,
-        private _jobService: JobService,
-        private _miscService: MiscService,
+        @Inject(MAT_DIALOG_DATA) public readonly data: ItemTemplateDialogData,
+        private readonly originService: OriginService,
+        private readonly jobService: JobService,
+        private readonly miscService: MiscService,
     ) {
     }
 
     ngOnInit() {
         forkJoin([
-            this._jobService.getJobList(),
-            this._originService.getOriginList(),
-            this._miscService.getGodsByTechName(),
+            this.jobService.getJobList(),
+            this.originService.getOriginList(),
+            this.miscService.getGodsByTechName(),
         ]).subscribe(([jobs, origins, godsByTechName]) => {
             this.godsByTechName = godsByTechName;
             this.jobsName = jobs.reduce((result, job) => {

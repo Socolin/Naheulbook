@@ -25,9 +25,9 @@ export class MonsterListComponent implements OnInit {
     public isAdmin = false;
 
     constructor(
-        private loginService: LoginService,
-        private monsterTemplateService: MonsterTemplateService,
-        private dialog: MatDialog
+        private readonly dialog: MatDialog,
+        private readonly loginService: LoginService,
+        private readonly monsterTemplateService: MonsterTemplateService,
     ) {
     }
 

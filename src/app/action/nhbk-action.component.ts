@@ -16,14 +16,16 @@ export class NhbkActionComponent implements OnInit, OnChanges {
     public effectInfo: Effect;
     public effectDuration: string;
 
-    constructor(private _effectService: EffectService) {
+    constructor(
+        private readonly effectService: EffectService,
+    ) {
     }
 
     private updateInfos() {
         if (this.action.type === NhbkActionType.addEffect) {
             if (!this.effectInfo || this.action.data.effectId !== this.effectInfo.id) {
                 if (this.action.data.effectId) {
-                    this._effectService.getEffect(this.action.data.effectId).subscribe(
+                    this.effectService.getEffect(this.action.data.effectId).subscribe(
                         effect => {
                             this.effectInfo = effect;
                             this.updateEffectInfo();

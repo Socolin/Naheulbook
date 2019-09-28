@@ -25,8 +25,8 @@ export class MonsterTemplateService {
     private monsterTraitsById?: ReplaySubject<MonsterTraitDictionary>;
 
     constructor(
-        private httpClient: HttpClient,
-        private skillService: SkillService
+        private readonly httpClient: HttpClient,
+        private readonly skillService: SkillService
     ) {
     }
 

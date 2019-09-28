@@ -66,10 +66,10 @@ export class CreateCharacterComponent implements OnInit {
 
     // Step 5: Stats modification due to bonus
 
-    public modifiedStat: {[modifierName: string]: any};
+    public modifiedStat: { [modifierName: string]: any };
 
     /// MOVE_1_POINT_STAT
-    public move1PointStatValues: {[statName: string]: number};
+    public move1PointStatValues: { [statName: string]: number };
     /// SUPER_BOURRIN
     public superBourrinValueAt = 0;
     public superBourrinValuePrd = 0;
@@ -97,8 +97,10 @@ export class CreateCharacterComponent implements OnInit {
 
     public fatePoint: number | undefined;
 
-    constructor(private _router: Router
-        , private _characterService: CharacterService) {
+    constructor(
+        private readonly router: Router,
+        private readonly characterService: CharacterService,
+    ) {
         this.setStep(0);
     }
 
@@ -514,7 +516,7 @@ export class CreateCharacterComponent implements OnInit {
 
     randomName() {
         this.loadingRandomName = true;
-        this._characterService.getRandomName(this.selectedOrigin.id, this.sex).subscribe((name) => {
+        this.characterService.getRandomName(this.selectedOrigin.id, this.sex).subscribe((name) => {
             this.name = name
         }, (err) => {
             this.loadingRandomName = false;
@@ -565,13 +567,13 @@ export class CreateCharacterComponent implements OnInit {
         }
 
         let isNpc: boolean = undefined;
-        if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('isNpc')) {
-            isNpc = this._router.routerState.snapshot.root.queryParams['isNpc'];
+        if (this.router.routerState.snapshot.root.queryParams.hasOwnProperty('isNpc')) {
+            isNpc = this.router.routerState.snapshot.root.queryParams['isNpc'];
         }
 
         let groupId: number = undefined;
-        if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
-            groupId = +this._router.routerState.snapshot.root.queryParams['groupId'];
+        if (this.router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
+            groupId = +this.router.routerState.snapshot.root.queryParams['groupId'];
         } else {
             groupId = null;
         }
@@ -598,13 +600,13 @@ export class CreateCharacterComponent implements OnInit {
         };
 
         this.clearSavedStats();
-        this._characterService.createCharacter(creationData).subscribe(
+        this.characterService.createCharacter(creationData).subscribe(
             res => {
-                if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
-                    this._router.navigate(['/gm/group'
-                        , +this._router.routerState.snapshot.root.queryParams['groupId']]);
+                if (this.router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
+                    this.router.navigate(['/gm/group'
+                        , +this.router.routerState.snapshot.root.queryParams['groupId']]);
                 } else {
-                    this._router.navigate(['player', 'character', 'detail', res.id]);
+                    this.router.navigate(['player', 'character', 'detail', res.id]);
                 }
             },
             () => {

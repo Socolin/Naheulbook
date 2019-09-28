@@ -65,11 +65,11 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
     public monsterInventory: MonsterInventoryElement[] = [];
 
     constructor(
-        public dialogRef: MatDialogRef<EditMonsterTemplateDialogComponent, MonsterTemplate>,
-        @Inject(MAT_DIALOG_DATA) public data: EditMonsterTemplateDialogData,
-        private monsterTemplateService: MonsterTemplateService,
-        private locationService: LocationService,
-        private dialog: MatDialog
+        private readonly dialogRef: MatDialogRef<EditMonsterTemplateDialogComponent, MonsterTemplate>,
+        @Inject(MAT_DIALOG_DATA) public readonly data: EditMonsterTemplateDialogData,
+        private readonly monsterTemplateService: MonsterTemplateService,
+        private readonly locationService: LocationService,
+        private readonly dialog: MatDialog,
     ) {
         this.form.reset(data.monsterTemplate);
     }

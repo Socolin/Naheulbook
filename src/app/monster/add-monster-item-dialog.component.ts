@@ -26,10 +26,10 @@ export class AddMonsterItemDialogComponent implements OnInit {
     public inventoryElement?: MonsterInventoryElement;
 
     constructor(
-        private dialog: MatDialog,
-        private itemTemplateService: ItemTemplateService,
-        public dialogRef: MatDialogRef<AddMonsterItemDialogComponent, MonsterInventoryElement>,
-        @Inject(MAT_DIALOG_DATA) public data: AddMonsterItemDialogData
+        private readonly dialog: MatDialog,
+        private readonly itemTemplateService: ItemTemplateService,
+        private readonly dialogRef: MatDialogRef<AddMonsterItemDialogComponent, MonsterInventoryElement>,
+        @Inject(MAT_DIALOG_DATA) public readonly data: AddMonsterItemDialogData,
     ) {
         if (data.inventoryElement) {
             this.inventoryElement = {...data.inventoryElement};

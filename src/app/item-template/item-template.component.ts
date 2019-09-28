@@ -23,7 +23,7 @@ export class ItemTemplateComponent {
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
 
     constructor(
-        private dialog: MatDialog
+        private readonly dialog: MatDialog,
     ) {
     }
 

@@ -50,7 +50,9 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
         return true;
     }
 
-    constructor(private _originService: OriginService) {
+    constructor(
+        private readonly originService: OriginService
+    ) {
         this.swapList = generateAllStatsPair();
     }
 
@@ -122,7 +124,7 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
     }
 
     getOrigins() {
-        this._originService.getOriginList().subscribe(
+        this.originService.getOriginList().subscribe(
             origins => {
                 this.origins = origins;
                 this.updateOriginStates();

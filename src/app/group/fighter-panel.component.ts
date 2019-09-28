@@ -33,13 +33,14 @@ export class FighterPanelComponent implements OnInit {
     public deadMonstersDialog: Portal<any>;
     public deadMonstersOverlayRef: OverlayRef | undefined;
 
-    constructor(private _actionService: GroupActionService,
-                private _groupService: GroupService,
-                private _itemService: ItemService,
-                private _monsterService: MonsterService,
-                private _monsterTemplateService: MonsterTemplateService,
-                private _nhbkDialogService: NhbkDialogService,
-                private dialog: MatDialog,
+    constructor(
+        private readonly actionService: GroupActionService,
+        private readonly groupService: GroupService,
+        private readonly itemService: ItemService,
+        private readonly monsterService: MonsterService,
+        private readonly monsterTemplateService: MonsterTemplateService,
+        private readonly nhbkDialogService: NhbkDialogService,
+        private readonly dialog: MatDialog,
     ) {
     }
 
@@ -59,7 +60,7 @@ export class FighterPanelComponent implements OnInit {
                 items: items.map(i => ({itemTemplateId: i.template.id, itemData: i.data})),
                 data: monsterData
             } as CreateMonsterRequest;
-            this._monsterService.createMonster(this.group.id, request).subscribe(
+            this.monsterService.createMonster(this.group.id, request).subscribe(
                 monster => {
                     this.group.addMonster(monster);
                     this.group.notify('addMonster', 'Nouveau monstre ajouté: ' + monster.name, monster);
@@ -69,7 +70,7 @@ export class FighterPanelComponent implements OnInit {
     }
 
     openDeadMonstersDialog() {
-        this.deadMonstersOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.deadMonstersDialog);
+        this.deadMonstersOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.deadMonstersDialog);
     }
 
     closeDeadMonstersDialog() {
@@ -89,13 +90,13 @@ export class FighterPanelComponent implements OnInit {
      * @param monster
      */
     killMonster(monster: Monster) {
-        this._monsterService.killMonster(monster.id).subscribe(
+        this.monsterService.killMonster(monster.id).subscribe(
             () => {
                 this.group.removeMonster(monster.id);
                 this.deadMonsters.unshift(monster);
                 this.group.notify('killMonster', 'Monstre tué: ' + monster.name, monster);
                 if (this.group.pendingModifierChanges) {
-                    this._groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges);
+                    this.groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges);
                     this.group.pendingModifierChanges = null;
                 }
             }
@@ -107,12 +108,12 @@ export class FighterPanelComponent implements OnInit {
      * @param monster
      */
     deleteMonster(monster: Monster) {
-        this._monsterService.deleteMonster(monster.id).subscribe(
+        this.monsterService.deleteMonster(monster.id).subscribe(
             () => {
                 this.group.removeMonster(monster.id);
                 this.group.notify('deleteMonster', 'Monstre supprimé: ' + monster.name, monster);
                 if (this.group.pendingModifierChanges) {
-                    this._groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges);
+                    this.groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges);
                     this.group.pendingModifierChanges = null;
                 }
             }
@@ -120,7 +121,7 @@ export class FighterPanelComponent implements OnInit {
     }
 
     loadMoreDeadMonsters(): boolean {
-        this._groupService.loadDeadMonsters(this.group.id, this.deadMonsters.length, 10).subscribe(
+        this.groupService.loadDeadMonsters(this.group.id, this.deadMonsters.length, 10).subscribe(
             monsters => {
                 if (monsters.length === 0) {
                     this.allDeadMonstersLoaded = true;
@@ -140,15 +141,15 @@ export class FighterPanelComponent implements OnInit {
         this.loadingNextLap = true;
 
         forkJoin([
-            this._groupService.editGroupValue(this.group.id, 'fighterIndex', result.fighterIndex),
-            this._groupService.saveChangedTime(this.group.id, result.modifiersDurationUpdated)
+            this.groupService.editGroupValue(this.group.id, 'fighterIndex', result.fighterIndex),
+            this.groupService.saveChangedTime(this.group.id, result.modifiersDurationUpdated)
         ]).subscribe(() => {
             this.loadingNextLap = false;
         });
     }
 
     startCombat() {
-        this._groupService.startCombat(this.group.id).subscribe(
+        this.groupService.startCombat(this.group.id).subscribe(
             () => {
                 this.group.data.changeValue('inCombat', true);
             }
@@ -156,28 +157,28 @@ export class FighterPanelComponent implements OnInit {
     }
 
     endCombat() {
-        this._groupService.endCombat(this.group.id).subscribe(
+        this.groupService.endCombat(this.group.id).subscribe(
             () => {
                 this.group.data.changeValue('inCombat', false);
                 let changes = this.group.updateTime('combat', 1);
-                this._groupService.saveChangedTime(this.group.id, changes);
+                this.groupService.saveChangedTime(this.group.id, changes);
             }
         );
     }
 
     ngOnInit(): void {
-        this._actionService.registerAction('killMonster').subscribe(
+        this.actionService.registerAction('killMonster').subscribe(
             data => {
                 this.killMonster(data.data);
             }
         );
-        this._actionService.registerAction('deleteMonster').subscribe(
+        this.actionService.registerAction('deleteMonster').subscribe(
             data => {
                 this.deleteMonster(data.data);
             }
         );
 
-        this._groupService.loadDeadMonsters(this.group.id, 0, 10).subscribe(
+        this.groupService.loadDeadMonsters(this.group.id, 0, 10).subscribe(
             monsters => {
                 this.deadMonsters = monsters;
             }

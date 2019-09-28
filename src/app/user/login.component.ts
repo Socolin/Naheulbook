@@ -4,7 +4,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {LoginService} from './login.service';
 import {User} from './user.model';
 import {MatDialog} from '@angular/material';
-import {ErrorReportService} from '../error-report.service';
 
 @Component({
     selector: 'login',
@@ -17,10 +16,11 @@ export class LoginComponent implements OnInit {
     public moreInfo: boolean;
     public loading = false;
 
-    constructor(public dialog: MatDialog
-        , private _loginService: LoginService
-        , private _route: ActivatedRoute
-        , private router: Router
+    constructor(
+        private readonly dialog: MatDialog,
+        private readonly loginService: LoginService,
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
     ) {
     }
 
@@ -32,13 +32,13 @@ export class LoginComponent implements OnInit {
     login(method: string) {
         this.loading = true;
         if (method === 'facebook') {
-            this._loginService.redirectToFbLogin(this.redirectPage, this.onLoginError.bind(this));
+            this.loginService.redirectToFbLogin(this.redirectPage, this.onLoginError.bind(this));
         } else if (method === 'google') {
-            this._loginService.redirectToGoogleLogin(this.redirectPage, this.onLoginError.bind(this));
+            this.loginService.redirectToGoogleLogin(this.redirectPage, this.onLoginError.bind(this));
         } else if (method === 'twitter') {
-            this._loginService.redirectToTwitterLogin(this.redirectPage, this.onLoginError.bind(this));
+            this.loginService.redirectToTwitterLogin(this.redirectPage, this.onLoginError.bind(this));
         } else if (method === 'microsoft') {
-            this._loginService.redirectToMicrosoftLogin(this.redirectPage, this.onLoginError.bind(this));
+            this.loginService.redirectToMicrosoftLogin(this.redirectPage, this.onLoginError.bind(this));
         }
     }
 
@@ -47,15 +47,15 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._route.params.subscribe(params => {
+        this.route.params.subscribe(params => {
             this.redirectPage = params['redirect'];
             this.redirectPage = this.redirectPage.replace('@', '/');
         });
-        this._loginService.loggedUser.subscribe(
+        this.loginService.loggedUser.subscribe(
             user => {
                 this.user = user;
             }
         );
-        this._loginService.checkLogged();
+        this.loginService.checkLogged();
     }
 }

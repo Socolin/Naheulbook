@@ -7,13 +7,15 @@ import {Router} from '@angular/router';
     template: `logout`,
 })
 export class LogoutComponent implements OnInit {
-    constructor(private _loginService: LoginService
-        , private _router: Router) {
+    constructor(
+        private readonly loginService: LoginService,
+        private readonly router: Router,
+    ) {
     }
 
     ngOnInit() {
-        this._loginService.logout().subscribe(() => {
-            this._router.navigateByUrl('/');
+        this.loginService.logout().subscribe(() => {
+            this.router.navigateByUrl('/');
         });
     }
 }

@@ -61,9 +61,10 @@ export class IconSelectorComponent implements OnInit {
     public newIcon: IconDescription;
 
     constructor(
-        private _iconService: IconService,
-        public dialogRef: MatDialogRef<IconSelectorComponentDialogData>,
-        @Inject(MAT_DIALOG_DATA) public data: IconSelectorComponentDialogData) {
+        private readonly dialogRef: MatDialogRef<IconSelectorComponentDialogData>,
+        @Inject(MAT_DIALOG_DATA) public readonly data: IconSelectorComponentDialogData,
+        private readonly iconService: IconService,
+    ) {
         this.resetNewIcon();
     }
 
@@ -140,7 +141,7 @@ export class IconSelectorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._iconService.getIcons().subscribe(
+        this.iconService.getIcons().subscribe(
             icons => {
                 this.icons = icons;
                 this.updateFiltered();

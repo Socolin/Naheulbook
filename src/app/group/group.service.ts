@@ -19,10 +19,10 @@ import {CharacterSearchResponse, GroupResponse, GroupSummaryResponse, LootRespon
 @Injectable()
 export class GroupService {
     constructor(
-        private httpClient: HttpClient,
-        private characterService: CharacterService,
-        private eventService: EventService,
-        private skillService: SkillService,
+        private readonly httpClient: HttpClient,
+        private readonly characterService: CharacterService,
+        private readonly eventService: EventService,
+        private readonly skillService: SkillService,
     ) {
     }
 

@@ -12,12 +12,14 @@ import {OriginService} from './origin.service';
 export class OriginListComponent implements OnInit {
     public origins: Origin[];
 
-    constructor(private _originService: OriginService
-        , private _notification: NotificationsService) {
+    constructor(
+        private readonly originService: OriginService,
+        private readonly notification: NotificationsService
+    ) {
     }
 
     getOrigins() {
-        this._originService.getOriginList().subscribe(
+        this.originService.getOriginList().subscribe(
             origins => {
                 this.origins = origins;
             }

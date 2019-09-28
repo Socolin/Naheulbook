@@ -18,8 +18,8 @@ export class EffectPanelComponent {
     public selectedModifier: ActiveStatsModifier | undefined;
 
     constructor(
-        private _characterService: CharacterService,
-        private dialog: MatDialog,
+        private readonly characterService: CharacterService,
+        private readonly dialog: MatDialog,
     ) {
     }
 
@@ -37,7 +37,7 @@ export class EffectPanelComponent {
                 result.lapCountDecrement.when = 'BEFORE';
             }
 
-            this._characterService.addModifier(this.character.id, result).subscribe(
+            this.characterService.addModifier(this.character.id, result).subscribe(
                 this.character.onAddModifier.bind(this.character)
             );
         });
@@ -45,7 +45,7 @@ export class EffectPanelComponent {
 
     removeModifier(modifier: ActiveStatsModifier) {
         this.selectedModifier = undefined;
-        this._characterService.removeModifier(this.character.id, modifier.id).subscribe(
+        this.characterService.removeModifier(this.character.id, modifier.id).subscribe(
             this.character.onRemoveModifier.bind(this.character)
         );
     }
@@ -55,7 +55,7 @@ export class EffectPanelComponent {
     }
 
     updateReusableModifier(modifier: ActiveStatsModifier) {
-        this._characterService.toggleModifier(this.character.id, modifier.id).subscribe(
+        this.characterService.toggleModifier(this.character.id, modifier.id).subscribe(
             this.character.onUpdateModifier.bind(this.character)
         );
     }

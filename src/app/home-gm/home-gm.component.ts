@@ -17,10 +17,10 @@ export class HomeGmComponent implements OnInit {
     public start: MatSidenav;
 
     constructor(
-        private _groupService: GroupService,
-        public _router: Router,
+        private readonly groupService: GroupService,
+        private readonly router: Router,
     ) {
-        this._router.events.subscribe(event => {
+        this.router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
                 this.start.close().then();
             }
@@ -28,7 +28,7 @@ export class HomeGmComponent implements OnInit {
     };
 
     loadGroups() {
-        this._groupService.listGroups().subscribe(
+        this.groupService.listGroups().subscribe(
             res => {
                 this.groups = res.slice(0, 5);
             }

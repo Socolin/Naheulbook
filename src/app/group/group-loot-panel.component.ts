@@ -23,11 +23,12 @@ import {ItemDialogComponent} from '../item/item-dialog.component';
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() group: Group;
 
-    constructor(private notification: NotificationsService
-        , private _groupService: GroupService
-        , private _itemService: ItemService
-        , private dialog: MatDialog
-        , private websocketService: WebSocketService
+    constructor(
+        private readonly notification: NotificationsService,
+        private readonly groupService: GroupService,
+        private readonly itemService: ItemService,
+        private readonly dialog: MatDialog,
+        private readonly websocketService: WebSocketService,
     ) {
         super(notification, websocketService);
     }
@@ -59,7 +60,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
                 return;
             }
 
-            this._groupService.createLoot(this.group.id, result).subscribe(
+            this.groupService.createLoot(this.group.id, result).subscribe(
                 loot => {
                     this.lootAdded(loot, false);
                 }
@@ -68,7 +69,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     deleteLoot(loot: Loot) {
-        this._groupService.deleteLoot(loot.id).subscribe(
+        this.groupService.deleteLoot(loot.id).subscribe(
             () => {
                 this.lootDeleted(loot.id);
             }
@@ -77,13 +78,13 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
 
     onAddItem(data: { monster?: Monster, loot?: Loot, item: Item }) {
         if (data.loot) {
-            this._itemService.addItemTo('loot', data.loot.id, data.item.template.id, data.item.data).subscribe(
+            this.itemService.addItemTo('loot', data.loot.id, data.item.template.id, data.item.data).subscribe(
                 item => {
                     data.loot.addItem(item);
                 }
             );
         } else {
-            this._itemService.addItemTo('monster', data.monster.id, data.item.template.id, data.item.data).subscribe(
+            this.itemService.addItemTo('monster', data.monster.id, data.item.template.id, data.item.data).subscribe(
                 item => {
                     data.monster.addItem(item);
                 }
@@ -92,7 +93,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     openLoot(loot: Loot) {
-        this._groupService.updateLootVisibility(loot.id, true).subscribe(
+        this.groupService.updateLootVisibility(loot.id, true).subscribe(
             () => {
                 loot.visibleForPlayer = true;
             }
@@ -100,7 +101,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     closeLoot(loot: Loot) {
-        this._groupService.updateLootVisibility(loot.id, false).subscribe(
+        this.groupService.updateLootVisibility(loot.id, false).subscribe(
             () => {
                 loot.visibleForPlayer = false;
             }
@@ -108,7 +109,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     addRandomItemFromCategoryToLoot(loot: Loot, categoryName: string) {
-        this._itemService.addRandomItemTo('loot', loot.id, categoryName).subscribe(
+        this.itemService.addRandomItemTo('loot', loot.id, categoryName).subscribe(
             item => {
                 loot.addItem(item);
             }
@@ -117,7 +118,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     addRandomItemFromCategoryToMonster(monster: Monster, categoryName: string) {
-        this._itemService.addRandomItemTo('monster', monster.id, categoryName).subscribe(
+        this.itemService.addRandomItemTo('monster', monster.id, categoryName).subscribe(
             item => {
                 monster.addItem(item);
             }
@@ -126,7 +127,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     removeItemFromLoot(loot: Loot, item: Item) {
-        this._itemService.deleteItem(item.id).subscribe(
+        this.itemService.deleteItem(item.id).subscribe(
             () => {
                 loot.removeItem(item.id);
             }
@@ -134,7 +135,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     }
 
     removeItemFromMonster(monster: Monster, item: Item) {
-        this._itemService.deleteItem(item.id).subscribe(
+        this.itemService.deleteItem(item.id).subscribe(
             () => {
                 monster.removeItem(item.id);
             }

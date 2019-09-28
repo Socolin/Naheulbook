@@ -15,13 +15,15 @@ export class LocationComponent {
     public folded = true;
     public maps: Map[];
 
-    constructor(private _router: Router
-        , private _locationService: LocationService) {
+    constructor(
+        private readonly router: Router,
+        private readonly locationService: LocationService,
+    ) {
     }
 
     toggleFolded() {
         if (this.folded && !this.maps) {
-            this._locationService.getMaps(this.location.id).subscribe(
+            this.locationService.getMaps(this.location.id).subscribe(
                 maps => {
                     this.maps = maps;
                 }
@@ -31,6 +33,6 @@ export class LocationComponent {
     }
 
     editLocation() {
-        this._router.navigate(['/edit-location', this.location.id]);
+        this.router.navigate(['/edit-location', this.location.id]);
     }
 }

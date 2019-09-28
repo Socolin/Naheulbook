@@ -57,15 +57,17 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     public filter: {name?: string, dice?: number};
     public visibleItems: ItemTemplate[] = [];
 
-    constructor(private _router: Router
-        , public overlay: Overlay
-        , public dialog: MatDialog
-        , private _route: ActivatedRoute
-        , public _loginService: LoginService
-        , private _miscService: MiscService
-        , private _itemTemplateService: ItemTemplateService
-        , private _originService: OriginService
-        , private _jobService: JobService) {
+    constructor(
+        public readonly loginService: LoginService,
+        private readonly dialog: MatDialog,
+        private readonly itemTemplateService: ItemTemplateService,
+        private readonly jobService: JobService,
+        private readonly miscService: MiscService,
+        private readonly originService: OriginService,
+        private readonly overlay: Overlay,
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
+    ) {
         this.resetFilter();
     }
 
@@ -97,11 +99,11 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
 
     selectSection(section: ItemTemplateSection) {
         if (this.selectedSection && this.selectedSection.id === section.id) {
-            this._itemTemplateService.clearItemSectionCache(section.id);
+            this.itemTemplateService.clearItemSectionCache(section.id);
             this.loadSection(section);
         } else {
             if (!this.inTab) {
-                this._router.navigate(['../items'], {queryParams: {id: section.id}, relativeTo: this._route});
+                this.router.navigate(['../items'], {queryParams: {id: section.id}, relativeTo: this.route});
             }
 
             this.selectedSection = section;
@@ -132,7 +134,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
 
     loadSection(section: ItemTemplateSection) {
         this.selectedSection = section;
-        this._itemTemplateService.getItems(section).subscribe(items => {
+        this.itemTemplateService.getItems(section).subscribe(items => {
             this.items = items;
             this.updateVisibleItems();
         });
@@ -187,14 +189,14 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         if (this.inTab) {
             return false;
         }
-        if (!this._loginService.currentLoggedUser) {
+        if (!this.loginService.currentLoggedUser) {
             return false;
         }
-        if (this._loginService.currentLoggedUser.admin) {
+        if (this.loginService.currentLoggedUser.admin) {
             return true;
         }
         if (itemTemplate.source !== 'official'
-            && this._loginService.currentLoggedUser.id === itemTemplate.sourceUserId) {
+            && this.loginService.currentLoggedUser.id === itemTemplate.sourceUserId) {
             return true;
         }
         return false;
@@ -202,19 +204,19 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         forkJoin([
-            this._jobService.getJobsNamesById(),
-            this._originService.getOriginsNamesById(),
-            this._itemTemplateService.getSectionsList(),
-            this._miscService.getGodsByTechName(),
+            this.jobService.getJobsNamesById(),
+            this.originService.getOriginsNamesById(),
+            this.itemTemplateService.getSectionsList(),
+            this.miscService.getGodsByTechName(),
         ]).subscribe(([jobsName, originsName, sections, godsByTechName]) => {
             this.originsName = originsName;
             this.jobsName = jobsName;
             this.itemSections = sections;
             this.godsByTechName = godsByTechName;
-            if (!this._route.snapshot.queryParams['id']) {
+            if (!this.route.snapshot.queryParams['id']) {
                 this.selectSection(sections[0]);
             }
-            this.queryParamsSub = this._route.queryParams.subscribe(params => {
+            this.queryParamsSub = this.route.queryParams.subscribe(params => {
                 this.selectSectionById(+params['id']);
             });
         });

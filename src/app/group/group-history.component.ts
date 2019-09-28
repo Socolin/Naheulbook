@@ -14,14 +14,17 @@ export class GroupHistoryComponent implements OnInit {
     @Input() group: Group;
 
     public historyPage = 0;
-    public currentDay: string|null = null;
+    public currentDay: string | null = null;
     public history: any[];
     public loadMore = true;
 
     public historyNewEntryText = '';
     public historyNewEntryGm = false;
 
-    constructor(private _groupService: GroupService, private _notification: NotificationsService) {
+    constructor(
+        private readonly groupService: GroupService,
+        private readonly notification: NotificationsService
+    ) {
     }
 
     loadHistory(next?: boolean) {
@@ -31,7 +34,7 @@ export class GroupHistoryComponent implements OnInit {
             this.history = [];
         }
 
-        this._groupService.loadHistory(this.group.id, this.historyPage).subscribe(
+        this.groupService.loadHistory(this.group.id, this.historyPage).subscribe(
             (res: HistoryEntry[]) => {
                 if (res.length === 0) {
                     this.loadMore = false;
@@ -61,10 +64,10 @@ export class GroupHistoryComponent implements OnInit {
     }
 
     addLog() {
-        this._groupService.addLog(this.group.id, this.historyNewEntryText, this.historyNewEntryGm).subscribe(
+        this.groupService.addLog(this.group.id, this.historyNewEntryText, this.historyNewEntryGm).subscribe(
             () => {
                 this.historyNewEntryText = '';
-                this._notification.success('Historique', 'Entrée ajoutée');
+                this.notification.success('Historique', 'Entrée ajoutée');
                 this.loadHistory();
             }
         );

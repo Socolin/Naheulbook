@@ -10,11 +10,13 @@ import {QuestService} from './quest.service';
 export class QuestListComponent implements OnInit {
     public quests: QuestTemplate[];
 
-    constructor(private _questService: QuestService) {
+    constructor(
+        private readonly questService: QuestService,
+    ) {
     }
 
     getQuests() {
-        this._questService.getQuestList().subscribe(
+        this.questService.getQuestList().subscribe(
             res => {
                 this.quests = res;
             }

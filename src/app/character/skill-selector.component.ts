@@ -25,7 +25,9 @@ export class SkillSelectorComponent implements OnInit {
 
     public skills: Skill[];
 
-    constructor(private _skillService: SkillService) {
+    constructor(
+        private readonly skillService: SkillService
+    ) {
     }
 
     selectionChange(event: MatSelectionListChange) {
@@ -35,7 +37,7 @@ export class SkillSelectorComponent implements OnInit {
     }
 
     getSkills() {
-        this._skillService.getSkills().subscribe(tmpSkills => {
+        this.skillService.getSkills().subscribe(tmpSkills => {
             let availableSkills: number[] = [];
 
             if (!this.selectedJobs.length) {

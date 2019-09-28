@@ -14,8 +14,8 @@ export interface EffectListDialogData {
 export class EffectListDialogComponent implements OnInit {
 
     constructor(
-        private dialogRef: MatDialogRef<EffectListDialogComponent, UsefulDataDialogResult>,
-        @Inject(MAT_DIALOG_DATA) public data: EffectListDialogData,
+        private readonly dialogRef: MatDialogRef<EffectListDialogComponent, UsefulDataDialogResult>,
+        @Inject(MAT_DIALOG_DATA) public readonly data: EffectListDialogData,
     ) {
     }
 

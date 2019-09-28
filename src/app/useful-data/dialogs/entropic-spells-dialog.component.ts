@@ -10,7 +10,7 @@ import {PanelNames} from '../useful-data.model';
 export class EntropicSpellsDialogComponent implements OnInit {
 
     constructor(
-        private dialogRef: MatDialogRef<EntropicSpellsDialogComponent, UsefulDataDialogResult>,
+        private readonly dialogRef: MatDialogRef<EntropicSpellsDialogComponent, UsefulDataDialogResult>,
     ) {
     }
 

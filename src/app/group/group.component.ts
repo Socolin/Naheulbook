@@ -80,20 +80,22 @@ export class GroupComponent implements OnInit, OnDestroy {
     private routeFragmentSub: Subscription;
     private groupNotificationSub: Subscription;
 
-    constructor(private _route: ActivatedRoute
-        , private _router: Router
-        , public dialog: MatDialog
-        , public _loginService: LoginService
-        , private _groupService: GroupService
-        , private _monsterService: MonsterService
-        , private _locationService: LocationService
-        , private _notification: NotificationsService
-        , private _actionService: GroupActionService
-        , private _websocketService: WebSocketService
-        , private _overlay: Overlay
-        , private _nhbkDialogService: NhbkDialogService
-        , private _itemService: ItemService
-        , private _characterService: CharacterService) {
+    constructor(
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
+        private readonly dialog: MatDialog,
+        public readonly loginService: LoginService,
+        private readonly groupService: GroupService,
+        private readonly monsterService: MonsterService,
+        private readonly locationService: LocationService,
+        private readonly notification: NotificationsService,
+        private readonly actionService: GroupActionService,
+        private readonly websocketService: WebSocketService,
+        private readonly overlay: Overlay,
+        private readonly nhbkDialogService: NhbkDialogService,
+        private readonly itemService: ItemService,
+        private readonly characterService: CharacterService,
+    ) {
     }
 
 
@@ -114,7 +116,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     /* Infos tab */
 
     changeGroupValue(key: string, value: any) {
-        this._groupService.editGroupValue(this.group.id, key, value).subscribe(
+        this.groupService.editGroupValue(this.group.id, key, value).subscribe(
             () => {
                 this.group.data.changeValue(key, value);
             }
@@ -125,24 +127,24 @@ export class GroupComponent implements OnInit, OnDestroy {
         let time = dateOffset2TimeDuration(dateOffset);
         let changes = this.group.updateTime('time', time);
         forkJoin([
-            this._groupService.addTime(this.group.id, dateOffset),
-            this._groupService.saveChangedTime(this.group.id, changes)
+            this.groupService.addTime(this.group.id, dateOffset),
+            this.groupService.saveChangedTime(this.group.id, changes)
         ]).subscribe(([newDate]) => {
             this.group.data.changeValue('date', newDate);
         });
     }
 
     changeGroupLocation(location: Location) {
-        this._groupService.editGroupLocation(this.group.id, location.id).subscribe(
+        this.groupService.editGroupLocation(this.group.id, location.id).subscribe(
             () => {
-                this._notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
+                this.notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
                 this.group.location = location;
             }
         );
     }
 
     updateLocationListAutocomplete(filter: string) {
-        return this._locationService.searchLocations(filter).pipe(map(
+        return this.locationService.searchLocations(filter).pipe(map(
             list => list.map(e => new AutocompleteValue(e, e.name))
         ));
     }
@@ -159,7 +161,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     createNpc() {
-        this._router.navigate(['/gm/character/create'], {
+        this.router.navigate(['/gm/character/create'], {
             queryParams: {
                 isNpc: true,
                 groupId: this.group.id
@@ -171,7 +173,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     activeAllCharacter(active: boolean) {
         for (let i = 0; i < this.group.characters.length; i++) {
             let character = this.group.characters[i];
-            this._characterService.changeGmData(character.id, 'active', active).subscribe(
+            this.characterService.changeGmData(character.id, 'active', active).subscribe(
                 change => {
                     character.changeActive(change.value);
                 }
@@ -180,12 +182,12 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     toggleActiveCharacter(character) {
-        this._characterService.changeGmData(character.id, 'active', !character.active).subscribe(
+        this.characterService.changeGmData(character.id, 'active', !character.active).subscribe(
             change => {
                 character.changeActive(change.value);
                 if (!change.value) {
                     if (this.group.pendingModifierChanges) {
-                        this._groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges);
+                        this.groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges);
                         this.group.pendingModifierChanges = null;
                     }
                 }
@@ -194,20 +196,20 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     takeOwnership(character) {
-        this._characterService.changeGmData(character.id, 'owner', 0).subscribe(
+        this.characterService.changeGmData(character.id, 'owner', 0).subscribe(
             change => {
                 character.user = change.value;
-                this._notification.success('Modification personnage', 'Ce personnage vous appartient a présent');
+                this.notification.success('Modification personnage', 'Ce personnage vous appartient a présent');
             }
         );
     }
 
     setOwnership(user) {
         let character = this.selectedCharacter;
-        this._characterService.changeGmData(character.id, 'owner', user.id).subscribe(
+        this.characterService.changeGmData(character.id, 'owner', user.id).subscribe(
             change => {
                 character.user = change.value;
-                this._notification.success('Modification personnage', 'Ce personnage a changé de propriétaire');
+                this.notification.success('Modification personnage', 'Ce personnage a changé de propriétaire');
             }
         );
     }
@@ -215,11 +217,11 @@ export class GroupComponent implements OnInit, OnDestroy {
     openChangeOwnershipDialog(character: Character) {
         this.selectedCharacter = character;
 
-        this.changeOwnershipOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.changeOwnershipDialog);
+        this.changeOwnershipOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.changeOwnershipDialog);
     }
 
     kickCharacter(character: Character) {
-        this._groupService.kickCharacter(this.group.id, character.id).subscribe((characterId) => {
+        this.groupService.kickCharacter(this.group.id, character.id).subscribe((characterId) => {
             this.group.removeCharacter(characterId);
         });
     }
@@ -234,7 +236,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     openInviteCharacterModal() {
-        this.inviteCharacterOverlayRef = this._nhbkDialogService.openCenteredBackdropDialog(this.inviteCharacterModal);
+        this.inviteCharacterOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.inviteCharacterModal);
     }
 
     closeInviteCharacterModal() {
@@ -246,7 +248,7 @@ export class GroupComponent implements OnInit, OnDestroy {
             this.filteredInvitePlayers = [];
             return;
         }
-        this._groupService.searchPlayersForInvite(this.searchNameInvite).subscribe(
+        this.groupService.searchPlayersForInvite(this.searchNameInvite).subscribe(
             res => {
                 this.filteredInvitePlayers = res;
             }
@@ -268,7 +270,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     cancelInvite(character): boolean {
-        this._characterService.cancelInvite(character.id, this.group.id).subscribe(
+        this.characterService.cancelInvite(character.id, this.group.id).subscribe(
             res => {
                 this._removeFromInvited(res.characterId);
                 this._removeFromInvites(res.characterId);
@@ -278,7 +280,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     acceptInvite(invite: GroupInvite) {
-        this._characterService.joinGroup(invite.id, this.group.id).subscribe(
+        this.characterService.joinGroup(invite.id, this.group.id).subscribe(
             () => {
                 this._removeFromInvited(invite.id);
                 this._removeFromInvites(invite.id);
@@ -289,7 +291,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     inviteCharacter(character) {
         this.closeInviteCharacterModal();
-        this._groupService.inviteCharacter(this.group.id, character.id).subscribe(
+        this.groupService.inviteCharacter(this.group.id, character.id).subscribe(
             res => {
                 this.group.onAddInvite(res);
                 for (let i = 0; i < this.filteredInvitePlayers.length; i++) {
@@ -306,7 +308,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     updateSearchUser() {
         if (this.filterSearchUser) {
-            this._loginService.searchUser(this.filterSearchUser).subscribe(
+            this.loginService.searchUser(this.filterSearchUser).subscribe(
                 res => {
                     this.filteredUsers = res;
                 }
@@ -326,7 +328,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     registerCharacterNotification(character: Character) {
         let notifSub = character.onNotification.subscribe(notificationData => {
-            this._notification.info('', character.name + ':' + notificationData.message);
+            this.notification.info('', character.name + ':' + notificationData.message);
         });
 
         this.charactersSubscriptions[character.id] = {notification: notifSub};
@@ -341,7 +343,7 @@ export class GroupComponent implements OnInit, OnDestroy {
             this.unregisterCharacterNotification(character);
         }
 
-        this._websocketService.unregisterElement(this.group);
+        this.websocketService.unregisterElement(this.group);
         this.groupNotificationSub.unsubscribe();
         this.group.dispose();
         this.addedCharacterSub.unsubscribe();
@@ -355,21 +357,21 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this._actionService.registerAction('displayCharacterSheet').subscribe(
+        this.actionService.registerAction('displayCharacterSheet').subscribe(
             data => {
                 this.displayCharacterSheet(data.data);
             });
 
-        this.routeSub = this._route.params.subscribe(
+        this.routeSub = this.route.params.subscribe(
             params => {
                 let id = +params['id'];
                 this.loadingGroup = true;
-                this._groupService.getGroup(id).subscribe(
+                this.groupService.getGroup(id).subscribe(
                     group => {
                         this.clearGroupSub();
                         this.group = group;
                         this.groupNotificationSub = group.onNotification.subscribe(notificationData => {
-                            this._notification.info('', notificationData.message);
+                            this.notification.info('', notificationData.message);
                         });
                         for (let character of this.group.characters) {
                             this.registerCharacterNotification(character);
@@ -380,10 +382,10 @@ export class GroupComponent implements OnInit, OnDestroy {
                         this.removedCharacterSub = this.group.characterRemoved.subscribe(character => {
                             this.unregisterCharacterNotification(character);
                         });
-                        this._websocketService.registerElement(this.group);
+                        this.websocketService.registerElement(this.group);
                         this.loadingGroup = false;
                         this.group.characterJoining.subscribe((characterId) => {
-                            this._characterService.getCharacter(characterId).subscribe((character) => {
+                            this.characterService.getCharacter(characterId).subscribe((character) => {
                                 this.group.addCharacter(character);
                             });
                         })
@@ -392,7 +394,7 @@ export class GroupComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.routeFragmentSub = this._route.fragment.subscribe(value => {
+        this.routeFragmentSub = this.route.fragment.subscribe(value => {
             if (value) {
                 this.currentTabIndex = this.getTabIndexFromHash(value);
                 this.currentTab = value;
@@ -426,11 +428,11 @@ export class GroupComponent implements OnInit, OnDestroy {
                     modifier.lapCountDecrement.when = 'BEFORE';
                 }
                 if (fighter.isMonster) {
-                    this._monsterService.addModifier(fighter.id, modifier).subscribe(
+                    this.monsterService.addModifier(fighter.id, modifier).subscribe(
                         fighter.monster.onAddModifier.bind(fighter.monster)
                     );
                 } else {
-                    this._characterService.addModifier(fighter.id, modifier).subscribe(
+                    this.characterService.addModifier(fighter.id, modifier).subscribe(
                         fighter.character.onAddModifier.bind(fighter.character)
                     );
                 }
@@ -464,9 +466,9 @@ export class GroupComponent implements OnInit, OnDestroy {
                         }
                         for (let fighter of fighters) {
                             if (fighter.isMonster) {
-                                this._itemService.addItemTo('monster', fighter.id, item.template.id, item.data).subscribe();
+                                this.itemService.addItemTo('monster', fighter.id, item.template.id, item.data).subscribe();
                             } else {
-                                this._itemService.addItemTo('character', fighter.id, item.template.id, item.data).subscribe();
+                                this.itemService.addItemTo('character', fighter.id, item.template.id, item.data).subscribe();
                             }
                         }
                     });
@@ -490,7 +492,7 @@ export class GroupComponent implements OnInit, OnDestroy {
             if (!result) {
                 return;
             }
-            this._groupService.editGroupValue(this.group.id, 'name', result.text)
+            this.groupService.editGroupValue(this.group.id, 'name', result.text)
                 .subscribe(() => {
                     this.group.name = result.text;
                 });

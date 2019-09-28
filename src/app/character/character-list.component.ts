@@ -14,9 +14,11 @@ export class CharacterListComponent implements OnInit {
     public loading = true;
     public loadingCharacterId?: number;
 
-    constructor(private _router: Router
-        , private _route: ActivatedRoute
-        , private _characterService: CharacterService) {
+    constructor(
+        private readonly router: Router,
+        private readonly route: ActivatedRoute,
+        private readonly characterService: CharacterService
+    ) {
     }
 
     selectCharacter(character: CharacterSummaryResponse) {
@@ -24,7 +26,7 @@ export class CharacterListComponent implements OnInit {
             return false;
         }
         this.loadingCharacterId = character.id;
-        this._router.navigate(['../detail', character.id], {relativeTo: this._route})
+        this.router.navigate(['../detail', character.id], {relativeTo: this.route})
             .catch((e) => {
                 this.loadingCharacterId = undefined;
                 throw e;
@@ -33,18 +35,18 @@ export class CharacterListComponent implements OnInit {
     }
 
     createCharacter() {
-        this._router.navigate(['../create'], {relativeTo: this._route});
+        this.router.navigate(['../create'], {relativeTo: this.route});
         return false;
     }
 
     createCustomCharacter() {
-        this._router.navigate(['../create-custom'], {relativeTo: this._route});
+        this.router.navigate(['../create-custom'], {relativeTo: this.route});
         return false;
     }
 
 
     loadCharacterList() {
-        this._characterService.loadList().subscribe(
+        this.characterService.loadList().subscribe(
             characters => {
                 this.characters = characters;
                 this.loading = false;

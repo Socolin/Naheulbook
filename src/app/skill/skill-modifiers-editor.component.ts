@@ -14,7 +14,9 @@ export class SkillModifiersEditorComponent implements OnInit {
     public value?: number;
     public skills: Skill[];
 
-    constructor(private _skillService: SkillService) {
+    constructor(
+        private readonly skillService: SkillService
+    ) {
         this.modifiers = [];
     }
 
@@ -50,7 +52,7 @@ export class SkillModifiersEditorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._skillService.getSkills().subscribe(
+        this.skillService.getSkills().subscribe(
             skills => {
                 this.skills = skills;
             },

@@ -30,10 +30,10 @@ export class CreateItemDialogComponent implements OnInit {
     }[];
 
     constructor(
-        private dialog: MatDialog,
-        private itemTemplateService: ItemTemplateService,
-        public dialogRef: MatDialogRef<CreateItemDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: CreateItemDialogDialog
+        private readonly dialog: MatDialog,
+        private readonly itemTemplateService: ItemTemplateService,
+        private readonly dialogRef: MatDialogRef<CreateItemDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) public readonly data: CreateItemDialogDialog
     ) {
         if (data.itemTemplate) {
             this.selectItemTemplate(data.itemTemplate);
