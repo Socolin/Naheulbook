@@ -72,7 +72,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             var item = new Item {Id = itemId, CharacterId = characterId, Character = new Character()};
             var itemData = new JObject();
 
-            _jsonUtil.Deserialize<JObject>(Arg.Any<string>())
+            _jsonUtil.DeserializeOrCreate<JObject>(Arg.Any<string>())
                 .Returns(itemData);
             _jsonUtil.Serialize(Arg.Any<JObject>())
                 .Returns("some-json");

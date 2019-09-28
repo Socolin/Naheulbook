@@ -16,15 +16,15 @@ namespace Naheulbook.Shared.TransientModels
         [JsonProperty("pr_magic")]
         public int PrMagic { get; set; }
 
-        public string Dmg { get; set; }
+        public string Dmg { get; set; } = null!;
         public int Cou { get; set; }
         public bool ChercheNoise { get; set; }
         public int Resm { get; set; }
         public int Xp { get; set; }
-        public string Note { get; set; }
-        public string Color { get; set; }
+        public string? Note { get; set; }
+        public string Color { get; set; } = null!;
         public int Number { get; set; }
-        public string Sex { get; set; }
-        public int Page { get; set; }
+        public string? Sex { get; set; }
+        public int? Page { get; set; }
     }
 }

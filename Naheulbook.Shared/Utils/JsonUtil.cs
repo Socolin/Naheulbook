@@ -5,8 +5,9 @@ namespace Naheulbook.Shared.Utils
 {
     public interface IJsonUtil
     {
-        string Serialize(object obj);
-        T Deserialize<T>(string json) where T : class;
+        string? Serialize(object? obj);
+        T? Deserialize<T>(string? json) where T : class;
+        T DeserializeOrCreate<T>(string? json) where T : class, new();
     }
 
     public class JsonUtil : IJsonUtil
@@ -17,16 +18,27 @@ namespace Naheulbook.Shared.Utils
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public string Serialize(object obj)
+        public string? Serialize(object? obj)
         {
+            if (obj == null)
+                return null;
             return JsonConvert.SerializeObject(obj, _serializerSettings);
         }
 
-        public T Deserialize<T>(string json) where T : class
+        public T? Deserialize<T>(string? json)
+            where T : class
         {
             if (json == null)
                 return null;
             return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public T DeserializeOrCreate<T>(string? json)
+            where T : class, new()
+        {
+            if (string.IsNullOrEmpty(json))
+                return new T();
+            return JsonConvert.DeserializeObject<T>(json) ?? new T();
         }
     }
 }

@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using Naheulbook.Shared.TransientModels;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Naheulbook.Requests.Requests
 {
     public class PostGroupUpdateDurationsRequest

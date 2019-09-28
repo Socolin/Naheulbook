@@ -17,7 +17,7 @@ namespace Naheulbook.Requests.Requests
         public List<ItemTemplateSkillModifierRequest> SkillModifiers { get; set; } = new List<ItemTemplateSkillModifierRequest>();
         public List<ItemTemplateRequirementRequest> Requirements { get; set; } = new List<ItemTemplateRequirementRequest>();
         public List<IdRequest> Slots { get; set; } = new List<IdRequest>();
-        public JObject? Data { get; set; }
+        public JObject Data { get; set; } = null!;
     }
 
     public class ItemTemplateModifierRequest

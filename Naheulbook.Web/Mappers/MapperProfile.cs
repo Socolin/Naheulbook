@@ -122,13 +122,13 @@ namespace Naheulbook.Web.Mappers
                         case ItemModifierDurationChange.TypeValue:
                             if (!request.ItemId.HasValue)
                                 throw new NotSupportedException($"Missing itemId when converting DurationChange of type `{request.Type}`");
-                            return new ItemModifierDurationChange {ItemId = request.ItemId.Value, Modifier = request.Modifier};
+                            return new ItemModifierDurationChange {ItemId = request.ItemId.Value, Modifier = request.Modifier!};
                         case ItemLifetimeDurationChange.TypeValue:
                             if (!request.ItemId.HasValue)
                                 throw new NotSupportedException($"Missing itemId when converting DurationChange of type `{request.Type}`");
-                            return new ItemLifetimeDurationChange {ItemId = request.ItemId.Value, LifeTime = request.LifeTime};
+                            return new ItemLifetimeDurationChange {ItemId = request.ItemId.Value, LifeTime = request.LifeTime!};
                         case ModifierDurationChange.TypeValue:
-                            return new ModifierDurationChange {Modifier = request.Modifier};
+                            return new ModifierDurationChange {Modifier = request.Modifier!};
                         default:
                             throw new NotSupportedException($"Invalid ChangeDurationType `{request.Type}`");
                     }

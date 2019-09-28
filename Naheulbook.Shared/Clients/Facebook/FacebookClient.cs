@@ -42,7 +42,7 @@ namespace Naheulbook.Shared.Clients.Facebook
                     if (!response.IsSuccessStatusCode)
                         throw new FacebookClientException(content, (int) response.StatusCode);
 
-                    return _jsonUtil.Deserialize<FacebookAccessTokenResponse>(content).AccessToken;
+                    return _jsonUtil.DeserializeOrCreate<FacebookAccessTokenResponse>(content).AccessToken;
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace Naheulbook.Shared.Clients.Facebook
                     if (!response.IsSuccessStatusCode)
                         throw new FacebookClientException(content, (int) response.StatusCode);
 
-                    return _jsonUtil.Deserialize<FacebookProfileResponse>(content);
+                    return _jsonUtil.DeserializeOrCreate<FacebookProfileResponse>(content);
                 }
             }
         }

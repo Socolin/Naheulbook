@@ -47,7 +47,7 @@ namespace Naheulbook.Shared.Clients.Google
                     if (!response.IsSuccessStatusCode)
                         throw new GoogleClientException(content, (int) response.StatusCode);
 
-                    return _jsonUtil.Deserialize<GoogleAccessTokenResponse>(content).AccessToken;
+                    return _jsonUtil.DeserializeOrCreate<GoogleAccessTokenResponse>(content).AccessToken;
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace Naheulbook.Shared.Clients.Google
                     if (!response.IsSuccessStatusCode)
                         throw new GoogleClientException(content, (int) response.StatusCode);
 
-                    return _jsonUtil.Deserialize<GoogleProfileResponse>(content);
+                    return _jsonUtil.DeserializeOrCreate<GoogleProfileResponse>(content);
                 }
             }
         }

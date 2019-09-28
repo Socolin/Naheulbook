@@ -31,7 +31,7 @@ namespace Naheulbook.Core.Actions.Executor
         {
             if (action.Type != ActionType)
                 throw new InvalidActionTypeException(action.Type, ActionType);
-            if (action.Data.Modifier == null)
+            if (action.Data?.Modifier == null)
                 throw new InvalidActionDataException(action.Type);
 
             var modifier = action.Data.Modifier;

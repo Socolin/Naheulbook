@@ -64,7 +64,7 @@ namespace Naheulbook.Core.Utils
 
         private void UpdateMonsterDuration(Monster monster, IList<IDurationChange> changes, INotificationSession notificationSession)
         {
-            var modifiers = _jsonUtil.Deserialize<IList<ActiveStatsModifier>>(monster.Modifiers);
+            var modifiers = _jsonUtil.DeserializeOrCreate<List<ActiveStatsModifier>>(monster.Modifiers);
 
             foreach (var change in changes.OfType<ModifierDurationChange>())
             {
@@ -80,7 +80,7 @@ namespace Naheulbook.Core.Utils
         {
             foreach (var (item, change) in items.Join(changes.OfType<ItemModifierDurationChange>(), i => i.Id, c => c.ItemId, (item, change) => (item, change)))
             {
-                var modifiers = _jsonUtil.Deserialize<IList<ActiveStatsModifier>>(item.Modifiers);
+                var modifiers = _jsonUtil.DeserializeOrCreate<List<ActiveStatsModifier>>(item.Modifiers);
                 ApplyChangeOnItemModifier(item, modifiers, change, notificationSession);
                 item.Modifiers = _jsonUtil.Serialize(modifiers);
             }

@@ -7,13 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Naheulbook.Shared.Utils;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Shared.Clients.Oauth1
 {
     public class Oauth
     {
         public string Method { get; set; } = "POST";
-        public string RequestUrl;
-        public string AccessSecret { get; set; }
+        public string RequestUrl { get; }
+        public string? AccessSecret { get; set; }
         public string SignatureMethod { get; set; } = "HMAC-SHA1";
         public string Version { get; set; } = "1.0";
         private readonly string _consumerSecret;
@@ -21,10 +23,11 @@ namespace Naheulbook.Shared.Clients.Oauth1
         private IDictionary<string, string> Parameters { get; } = new Dictionary<string, string>();
         private IDictionary<string, string> OauthParameters { get; } = new Dictionary<string, string>();
 
-        public Oauth(string consumerKey, string consumerSecret)
+        public Oauth(string consumerKey, string consumerSecret, string requestUrl)
         {
             _consumerKey = consumerKey;
             _consumerSecret = consumerSecret;
+            RequestUrl = requestUrl;
         }
 
         private void UpdateDefaultOauthParameters()

@@ -28,6 +28,8 @@ namespace Naheulbook.Core.Actions.Executor
         {
             if (action.Type != ActionType)
                 throw new InvalidActionTypeException(action.Type, ActionType);
+            if (action.Data == null)
+                throw new InvalidActionDataException(action.Type);
             if (!action.Data.Ev.HasValue)
                 throw new InvalidActionDataException(action.Type);
 

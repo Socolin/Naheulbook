@@ -1,3 +1,6 @@
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
+
 namespace Naheulbook.Shared.TransientModels
 {
     public class ActiveStatsModifier : StatsModifier
@@ -10,6 +13,6 @@ namespace Naheulbook.Shared.TransientModels
         public int? CurrentLapCount { get; set; }
         public int? CurrentTimeDuration { get; set; }
 
-        public LapCountDecrement LapCountDecrement { get; set; }
+        public LapCountDecrement? LapCountDecrement { get; set; }
     }
 }

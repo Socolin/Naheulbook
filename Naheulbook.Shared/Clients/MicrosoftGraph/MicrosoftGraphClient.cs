@@ -47,7 +47,7 @@ namespace Naheulbook.Shared.Clients.MicrosoftGraph
                     if (!response.IsSuccessStatusCode)
                         throw new MicrosoftGraphClientException(content, (int) response.StatusCode);
 
-                    return _jsonUtil.Deserialize<MicrosoftGraphAccessTokenResponse>(content);
+                    return _jsonUtil.DeserializeOrCreate<MicrosoftGraphAccessTokenResponse>(content);
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace Naheulbook.Shared.Clients.MicrosoftGraph
                     if (!response.IsSuccessStatusCode)
                         throw new MicrosoftGraphClientException(content, (int) response.StatusCode);
 
-                    return _jsonUtil.Deserialize<MicrosoftGraphProfileResponse>(content);
+                    return _jsonUtil.DeserializeOrCreate<MicrosoftGraphProfileResponse>(content);
                 }
             }
         }

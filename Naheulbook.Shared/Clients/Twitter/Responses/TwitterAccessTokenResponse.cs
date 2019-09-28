@@ -5,9 +5,9 @@ namespace Naheulbook.Shared.Clients.Twitter.Responses
     public class TwitterAccessTokenResponse
     {
         [JsonProperty("user_id")]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = null!;
 
         [JsonProperty("screen_name")]
-        public string ScreenName { get; set; }
+        public string ScreenName { get; set; } = null!;
     }
 }

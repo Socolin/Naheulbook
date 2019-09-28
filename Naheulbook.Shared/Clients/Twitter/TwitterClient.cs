@@ -26,10 +26,7 @@ namespace Naheulbook.Shared.Clients.Twitter
 
         public async Task<TwitterRequestTokenResponse> GetRequestTokenAsync()
         {
-            var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret)
-            {
-                RequestUrl = RequestTokenUri
-            };
+            var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, RequestTokenUri);
             oauth.AddOauthParameter("callback", _configuration.Callback);
 
             try
@@ -49,9 +46,8 @@ namespace Naheulbook.Shared.Clients.Twitter
 
         public async Task<TwitterAccessTokenResponse> GetAccessTokenAsync(string loginToken, string oauthToken, string oauthVerifier)
         {
-            var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret)
+            var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, RequestTokenUri)
             {
-                RequestUrl = AccessTokenUri,
                 AccessSecret = loginToken
             };
             oauth.AddOauthParameter("token", oauthToken);

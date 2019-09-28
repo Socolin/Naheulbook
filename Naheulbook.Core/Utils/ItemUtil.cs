@@ -47,7 +47,7 @@ namespace Naheulbook.Core.Utils
 
         public void EquipItem(Item item, int? level)
         {
-            var itemData = _jsonUtil.Deserialize<JObject>(item.Data);
+            var itemData = _jsonUtil.DeserializeOrCreate<JObject>(item.Data);
 
             var previouslyEquipped = _itemDataUtil.IsItemEquipped(itemData);
             _itemDataUtil.UpdateEquipItem(itemData, level);
@@ -158,7 +158,7 @@ namespace Naheulbook.Core.Utils
             var itemData = _jsonUtil.Deserialize<ItemData>(item.Data) ?? new ItemData();
             if (itemData.Quantity > 1)
             {
-                var itemTemplateData = _jsonUtil.Deserialize<ItemTemplateData>(item.ItemTemplate.Data);
+                var itemTemplateData = _jsonUtil.DeserializeOrCreate<ItemTemplateData>(item.ItemTemplate.Data);
                 if (itemTemplateData.Charge.HasValue)
                     itemData.Charge = itemTemplateData.Charge.Value;
 
