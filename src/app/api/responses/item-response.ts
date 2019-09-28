@@ -1,4 +1,4 @@
-import {IItemData} from '../shared/item-data';
+import {IItemData} from '../shared';
 import {IActiveStatsModifier} from '../shared';
 import {ItemTemplateResponse} from './item-template-response';
 

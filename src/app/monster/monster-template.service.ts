@@ -16,7 +16,7 @@ import {MonsterTemplateRequest} from '../api/requests';
 import {SkillService} from '../skill';
 import {MonsterTemplateResponse} from '../api/responses/monster-template-response';
 import {MonsterCategoryResponse} from '../api/responses/monster-category-response';
-import {MonsterTypeResponse} from '../api/responses';
+import {MonsterTraitResponse, MonsterTypeResponse} from '../api/responses';
 
 @Injectable()
 export class MonsterTemplateService {
@@ -76,7 +76,7 @@ export class MonsterTemplateService {
         if (!this.monsterTraits) {
             this.monsterTraits = new ReplaySubject<MonsterTrait[]>(1);
 
-            this.httpClient.get<MonsterTrait[]>('/api/v2/monsterTraits')
+            this.httpClient.get<MonsterTraitResponse[]>('/api/v2/monsterTraits')
                 .subscribe(
                     monsterTraits => {
                         this.monsterTraits.next(monsterTraits);
@@ -116,8 +116,7 @@ export class MonsterTemplateService {
         let url = `/api/v2/monsterTemplates/search?filter=${encodeURIComponent(name)}`;
         if (monsterSubCategoryId) {
             url += `&monsterSubCategoryId=${encodeURIComponent(monsterSubCategoryId.toString())}`;
-        }
-        else if (monsterTypeId) {
+        } else if (monsterTypeId) {
             url += `&monsterTypeId=${encodeURIComponent(monsterTypeId.toString())}`;
         }
         return forkJoin([

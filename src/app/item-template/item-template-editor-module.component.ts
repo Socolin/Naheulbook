@@ -7,10 +7,11 @@ import {Skill} from '../skill';
 import {NhbkAction, NhbkActionEditorDialogComponent, NhbkActionEditorDialogData} from '../action';
 import {LoginService} from '../user';
 
-import {ItemTemplate, ItemSlot, ItemType} from './item-template.model';
+import {ItemTemplate, ItemSlot} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 import {itemTemplateModulesDefinitions} from './item-template-modules-definitions';
 import {MatDialog} from '@angular/material/dialog';
+import {ItemTypeResponse} from '../api/responses';
 
 @Component({
     selector: 'item-template-editor-module',
@@ -22,7 +23,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     @Input() moduleName: string;
 
     @Input() slots: ItemSlot[];
-    @Input() itemTypes: ItemType[];
+    @Input() itemTypes: ItemTypeResponse[];
     @Input() gods: God[];
     @Input() skills: Skill[] = [];
     @Input() skillsById: { [skillId: number]: Skill } = {};

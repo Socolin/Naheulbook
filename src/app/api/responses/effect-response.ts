@@ -5,8 +5,8 @@ export interface EffectResponse {
     id: number;
     categoryId: number;
     name: string;
-    description: string;
-    dice: number;
+    description?: string;
+    dice?: number;
     durationType: DurationType;
     duration?: string;
     combatCount?: number;

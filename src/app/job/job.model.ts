@@ -1,8 +1,11 @@
 import {StatRequirement} from '../shared/stat-requirement.model';
-import {Skill} from '../skill';
+import {Skill, SkillDictionary} from '../skill';
 import {Flag, FlagData, DescribedFlag} from '../shared';
 
 import {Speciality} from './speciality.model';
+import {JobResponse} from '../api/responses';
+
+export type JobDictionary = { [jobId: number]: Job };
 
 export class Job {
     availableSkills: Array<Skill>;
@@ -39,21 +42,21 @@ export class Job {
     specialities: Array<Speciality>;
     flags: Flag[] = [];
 
-    static fromJson(jobData: any, skillsById: {[skillId: number]: Skill}): Job {
+    static fromResponse(response: JobResponse, skillsById: SkillDictionary): Job {
         let job = new Job();
 
-        Object.assign(job, jobData, {
+        Object.assign(job, response, {
             skills: [],
             availableSkills: [],
-            bonuses: DescribedFlag.flagsFromJson(jobData.bonuses),
-            restricts: DescribedFlag.flagsFromJson(jobData.restricts),
-            specialities: Speciality.specialitiesFromJson(jobData.specialities),
+            bonuses: DescribedFlag.flagsFromJson(response.bonuses),
+            restricts: DescribedFlag.flagsFromJson(response.restricts),
+            specialities: Speciality.specialitiesFromJson(response.specialities),
         });
 
-        for (let skillId of jobData.skillIds) {
+        for (let skillId of response.skillIds) {
             job.skills.push(skillsById[skillId]);
         }
-        for (let skillId of jobData.availableSkillIds) {
+        for (let skillId of response.availableSkillIds) {
             job.availableSkills.push(skillsById[skillId]);
         }
 
@@ -86,7 +89,7 @@ export class Job {
         return false;
     }
 
-    getFlagsDatas(data: {[flagName: string]: FlagData[]}): void {
+    getFlagsDatas(data: { [flagName: string]: FlagData[] }): void {
         for (let restrict of this.restricts) {
             restrict.getFlagDatas(data, {type: 'job', name: this.name});
         }

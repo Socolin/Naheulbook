@@ -3,15 +3,16 @@ import {Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
 
-import {Group, PartialGroup} from './group.model';
+import {Group} from './group.model';
 import {GroupService} from './group.service';
+import {GroupSummaryResponse} from '../api/responses';
 
 @Component({
     templateUrl: './group-list.component.html',
     styleUrls: ['./group-list.component.scss']
 })
 export class GroupListComponent implements OnInit {
-    public groups: PartialGroup[];
+    public groups: GroupSummaryResponse[];
     public loading = true;
 
     constructor(private _groupService: GroupService

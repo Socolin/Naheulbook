@@ -6,17 +6,17 @@ import {Fighter} from '../group';
 import {IDurable, IItemData} from '../api/shared';
 
 export class ItemData implements IItemData {
-    name: string;
+    name?: string;
     description?: string;
     quantity?: number;
     icon?: IconDescription;
     charge?: number;
-    ug: number;
+    ug?: number;
     equiped?: number;
-    readCount: number;
-    notIdentified: boolean;
+    readCount?: number;
+    notIdentified?: boolean;
     ignoreRestrictions?: boolean;
-    lifetime: IDurable | null;
+    lifetime?: IDurable;
 }
 
 export class ItemComputedData {

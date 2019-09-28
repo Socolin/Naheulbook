@@ -1,7 +1,7 @@
 import {DurationType} from './enums';
 
 export interface IItemData {
-    name: string;
+    name?: string;
     description?: string;
     quantity?: number;
     icon?: {
@@ -10,16 +10,16 @@ export interface IItemData {
         rotation: number;
     };
     charge?: number;
-    ug: number;
+    ug?: number;
     equiped?: number;
-    readCount: number;
-    notIdentified: boolean;
+    readCount?: number;
+    notIdentified?: boolean;
     ignoreRestrictions?: boolean;
-    lifetime: {
+    lifetime?: {
         durationType: DurationType;
         combatCount?: number;
         lapCount?: number;
         duration?: string;
         timeDuration?: number;
-    } | null;
+    };
 }

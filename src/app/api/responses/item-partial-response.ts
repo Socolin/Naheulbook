@@ -4,5 +4,5 @@ export interface ItemPartialResponse {
     id: number;
     data: IItemData;
     modifiers: IActiveStatsModifier[];
-    containerId: number | null;
+    containerId?: number;
 }

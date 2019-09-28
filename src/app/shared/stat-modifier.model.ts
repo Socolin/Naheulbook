@@ -78,7 +78,7 @@ export class ActiveStatsModifier extends StatsModifier {
     currentLapCount: number;
     currentTimeDuration: number;
 
-    lapCountDecrement: LapCountDecrement;
+    lapCountDecrement?: LapCountDecrement;
 
     static fromJson(jsonData: IActiveStatsModifier) {
         let modifier = new ActiveStatsModifier();

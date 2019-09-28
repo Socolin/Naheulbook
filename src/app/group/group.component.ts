@@ -16,7 +16,7 @@ import {GroupService} from './group.service';
 import {WebSocketService} from '../websocket';
 import {GroupActionService} from './group-action.service';
 
-import {Character, CharacterSearchResponse, CharacterService} from '../character';
+import {Character, CharacterService} from '../character';
 import {Effect} from '../effect';
 
 import {LoginService, User} from '../user';
@@ -34,6 +34,7 @@ import {
     GroupAddEffectDialogData,
     GroupAddEffectDialogResult
 } from './group-add-effect-dialog.component';
+import {CharacterSearchResponse} from '../api/responses';
 
 @Component({
     templateUrl: './group.component.html',

@@ -11,6 +11,7 @@ import {CharacterService} from './character.service';
 import {SkillSelectorComponent} from './skill-selector.component';
 import {HttpErrorResponse} from '@angular/common/http';
 import {FormControl, Validators} from '@angular/forms';
+import {CreateCharacterRequest} from '../api/requests/create-character-request';
 
 @Component({
     selector: 'create-character',
@@ -553,44 +554,48 @@ export class CreateCharacterComponent implements OnInit {
         }
 
         this.creating = true;
-        let creationData = {};
-        creationData['name'] = this.name;
-        creationData['stats'] = {};
-        creationData['stats']['COU'] = this.cou;
-        creationData['stats']['INT'] = this.int;
-        creationData['stats']['CHA'] = this.cha;
-        creationData['stats']['AD'] = this.ad;
-        creationData['stats']['FO'] = this.fo;
-        creationData['origin'] = this.selectedOrigin.id;
-        if (this.selectedJobs.length) {
-            creationData['job'] = this.selectedJobs[0].id;
-        }
-
-        creationData['sex'] = this.sex;
-        creationData['skills'] = [];
-        creationData['skills'].push(this.selectedSkills[0].id);
-        creationData['skills'].push(this.selectedSkills[1].id);
-        creationData['money'] = this.money * 10;
+        let money = this.money * 10;
         if (this.money2) {
-            creationData['money'] += this.money2 * 10;
+            money += this.money2 * 10;
         }
-        if (this.modifiedStat) {
-            creationData['modifiedStat'] = this.modifiedStat;
-        }
+
+        let specialityId: number | undefined = undefined;
         if (this.selectedSpeciality) {
-            creationData['speciality'] = this.selectedSpeciality.id;
+            specialityId = this.selectedSpeciality.id;
         }
 
-        creationData['fatePoint'] = this.fatePoint;
-
+        let isNpc: boolean = undefined;
         if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('isNpc')) {
-            creationData['isNpc'] = this._router.routerState.snapshot.root.queryParams['isNpc'];
+            isNpc = this._router.routerState.snapshot.root.queryParams['isNpc'];
         }
+
+        let groupId: number = undefined;
         if (this._router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
-            creationData['groupId'] = +this._router.routerState.snapshot.root.queryParams['groupId'];
+            groupId = +this._router.routerState.snapshot.root.queryParams['groupId'];
         } else {
-            creationData['groupId'] = null;
+            groupId = null;
         }
+
+        let creationData: CreateCharacterRequest = {
+            name: this.name,
+            stats: {
+                ['COU']: this.cou,
+                ['INT']: this.int,
+                ['CHA']: this.cha,
+                ['AD']: this.ad,
+                ['FO']: this.fo
+            },
+            origin: this.selectedOrigin.id,
+            job: this.selectedJobs[0].id,
+            sex: this.sex,
+            skills: [...this.selectedSkills.map(x => x.id)],
+            money: money,
+            modifiedStat: this.modifiedStat,
+            speciality: specialityId,
+            fatePoint: this.fatePoint,
+            groupId: groupId,
+            isNpc: isNpc
+        };
 
         this.clearSavedStats();
         this._characterService.createCharacter(creationData).subscribe(

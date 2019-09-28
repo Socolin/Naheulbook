@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Item} from './item.model';
 import {forkJoin} from 'rxjs';
-import {ItemCategory, ItemTemplateService} from '../item-template';
+import {ItemTemplateCategory, ItemTemplateService} from '../item-template';
 import {God, MiscService} from '../shared';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
@@ -19,7 +19,7 @@ export interface ItemDialogData {
 export class ItemDialogComponent implements OnInit {
     public jobsName?: { [id: number]: string };
     public originsName?: { [id: number]: string };
-    public itemCategoriesById: { [categoryId: number]: ItemCategory };
+    public itemCategoriesById: { [categoryId: number]: ItemTemplateCategory };
     public godsByTechName: { [name: string]: God };
 
     public get item(): Item {

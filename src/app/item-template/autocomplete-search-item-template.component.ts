@@ -6,7 +6,7 @@ import {Component, Input, EventEmitter, Output, ViewChild} from '@angular/core';
 
 import {AutocompleteInputComponent, AutocompleteValue} from '../shared/autocomplete-input.component';
 
-import {ItemCategory, ItemTemplate} from './item-template.model';
+import {ItemTemplateCategory, ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 
 @Component({
@@ -39,7 +39,7 @@ export class AutocompleteSearchItemTemplateComponent {
             this._itemTemplateService.getCategoriesById(),
             this._itemTemplateService.searchItem(filter)
         ).pipe(map(
-            ([categoriesById, list]: [{ [categoryId: number]: ItemCategory }, ItemTemplate[]]) => {
+            ([categoriesById, list]: [{ [categoryId: number]: ItemTemplateCategory }, ItemTemplate[]]) => {
                 return list.map(e => {
                     let name = e.name;
                     if (e.data.enchantment !== undefined) {

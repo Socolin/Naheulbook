@@ -1,19 +1,21 @@
+import {EventResponse} from '../api/responses';
+
 export class NEvent {
     id: number;
     name: string;
     description: string;
     timestamp: number;
 
-    static fromJson(jsonData: any): NEvent {
+    static fromResponse(response: EventResponse): NEvent {
         let event = new NEvent();
-        Object.assign(event, jsonData);
+        Object.assign(event, response);
         return event;
     }
 
-    static eventsFromJson(jsonData: object[]): NEvent[] {
+    static fromResponses(responses: EventResponse[]): NEvent[] {
         let events: NEvent[] = [];
-        for (let eventData of jsonData) {
-            events.push(NEvent.fromJson(eventData));
+        for (let eventData of responses) {
+            events.push(NEvent.fromResponse(eventData));
         }
         return events;
     }

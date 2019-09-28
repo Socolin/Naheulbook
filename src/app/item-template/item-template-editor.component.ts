@@ -17,12 +17,13 @@ import {Skill, SkillService} from '../skill';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
 
-import {ItemSection, ItemSlot, ItemTemplate, ItemTemplateGunData, ItemType} from './item-template.model';
+import {ItemTemplateSection, ItemSlot, ItemTemplate, ItemTemplateGunData} from './item-template.model';
 import {ItemTemplateService} from './item-template.service'
 import {IconDescription} from '../shared/icon.model';
 import {MatDialog} from '@angular/material';
 import {itemTemplateModulesDefinitions} from './item-template-modules-definitions';
 import {AddItemTemplateEditorModuleDialogComponent} from './add-item-template-editor-module-dialog.component';
+import {ItemTypeResponse} from '../api/responses';
 
 @Component({
     selector: 'item-template-editor',
@@ -37,15 +38,15 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     // Datas useful for forms
     public skills: Skill[] = [];
     public skillsById: { [skillId: number]: Skill } = {};
-    public sections: ItemSection[];
+    public sections: ItemTemplateSection[];
     public slots: ItemSlot[];
-    public itemTypes: ItemType[];
+    public itemTypes: ItemTypeResponse[];
     public originsName: { [originId: number]: string };
     public jobsName: { [jobId: number]: string };
     public gods: God[];
     public godsByTechName: {[techName: string]: God};
 
-    public selectedSection: ItemSection;
+    public selectedSection: ItemTemplateSection;
     public form: { levels: number[], protection: number[], damage: number[], dices: number[] };
 
     public autocompleteModuleCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteModule.bind(this);

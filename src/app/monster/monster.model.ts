@@ -16,8 +16,8 @@ import {MonsterCategoryResponse} from '../api/responses/monster-category-respons
 
 export class MonsterData {
     at: number;
-    prd: number | undefined;
-    esq: number | undefined;
+    prd?: number;
+    esq?: number;
     ev: number;
     maxEv: number;
     ea: number;
@@ -32,8 +32,8 @@ export class MonsterData {
     note: string;
     color = '000000';
     number: number;
-    sex: string;
-    page: number;
+    sex?: string;
+    page?: number;
 
     static fromJson(jsonData: any): MonsterData {
         let monsterData = new MonsterData();

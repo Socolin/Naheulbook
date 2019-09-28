@@ -1,10 +1,11 @@
-import {share, map, retry, retryWhen, delay, take} from 'rxjs/operators';
+import {share, map, retryWhen} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {from, Observable, ReplaySubject} from 'rxjs';
 
 import {JwtResponse, User} from './user.model';
 import {genericRetryStrategy} from '../shared/rxjs-retry-strategy';
+import {AuthenticationInitResponse} from '../api/responses/authentication-init-response';
 
 @Injectable()
 export class LoginService {
@@ -20,8 +21,8 @@ export class LoginService {
     ) {
     }
 
-    getLoginToken(app: string): Observable<{ loginToken: string, appKey: string }> {
-        return this.httpClient.get<{ loginToken: string, appKey: string }>(`/api/v2/authentications/${app}/initOAuthAuthentication`);
+    getLoginToken(app: string): Observable<AuthenticationInitResponse> {
+        return this.httpClient.get<AuthenticationInitResponse>(`/api/v2/authentications/${app}/initOAuthAuthentication`);
     }
 
     doFBLogin(code: string, loginToken: string, redirectUri: string): Observable<JwtResponse> {
@@ -144,7 +145,7 @@ export class LoginService {
     }
 
 
-    updateProfile(userId: number, changeRequest: {displayName: string}): Observable<void> {
+    updateProfile(userId: number, changeRequest: { displayName: string }): Observable<void> {
         return this.httpClient.patch<void>(`/api/v2/users/${userId}`, changeRequest);
     }
 

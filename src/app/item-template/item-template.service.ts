@@ -1,36 +1,43 @@
 import {from as observableFrom, forkJoin, ReplaySubject, Observable} from 'rxjs';
 
-import {map, take, withLatestFrom} from 'rxjs/operators';
+import {map, withLatestFrom} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import {Skill, SkillDictionary, SkillService} from '../skill';
 
-import {ItemCategory, ItemTemplate, ItemSection, ItemSlot, ItemType} from './item-template.model';
-import {ItemTemplateResponse} from '../api/responses';
+import {
+    ItemTemplate,
+    ItemTemplateSection,
+    ItemSlot,
+    ItemTemplateCategoryDictionary
+} from './item-template.model';
+import {ItemTemplateResponse, ItemTemplateSectionResponse, ItemTypeResponse} from '../api/responses';
 import {ItemTemplateRequest} from '../api/requests/item-template-request';
 
 @Injectable()
 export class ItemTemplateService {
     private itemBySection: { [sectionId: number]: ReplaySubject<ItemTemplate[]> } = {};
     private itemsByCategoriesName: { [categoryName: string]: ReplaySubject<ItemTemplate[]> } = {};
-    private itemSections?: ReplaySubject<ItemSection[]>;
+    private itemSections?: ReplaySubject<ItemTemplateSection[]>;
     private slots?: ReplaySubject<ItemSlot[]>;
-    private itemTypes?: ReplaySubject<ItemType[]>;
+    private itemTypes?: ReplaySubject<ItemTypeResponse[]>;
 
-    constructor(private httpClient: HttpClient
-        , private _skillService: SkillService
+    constructor(
+        private httpClient: HttpClient,
+        private skillService: SkillService,
     ) {
     }
 
-    getSectionsList(): Observable<ItemSection[]> {
+    getSectionsList(): Observable<ItemTemplateSection[]> {
         if (!this.itemSections) {
-            this.itemSections = new ReplaySubject<ItemSection[]>(1);
+            this.itemSections = new ReplaySubject<ItemTemplateSection[]>(1);
 
-            this.httpClient.get<ItemSection[]>('/api/v2/itemTemplateSections')
+            this.httpClient.get<ItemTemplateSectionResponse[]>('/api/v2/itemTemplateSections')
                 .subscribe(
-                    categoryList => {
-                        this.itemSections.next(categoryList);
+                    itemSectionResponses => {
+                        const itemTemplateSections = ItemTemplateSection.fromResponses(itemSectionResponses);
+                        this.itemSections.next(itemTemplateSections);
                         this.itemSections.complete();
                     },
                     error => {
@@ -41,29 +48,27 @@ export class ItemTemplateService {
         return this.itemSections;
     }
 
-    getCategoriesById(): Observable<{ [categoryId: number]: ItemCategory }> {
-        return this.getSectionsList().pipe(map(sections => {
-            let categories: { [categoryId: number]: ItemCategory } = {};
-            for (let i = 0; i < sections.length; i++) {
-                let section = sections[i];
-                for (let j = 0; j < section.categories.length; j++) {
-                    let category = section.categories[j];
-                    categories[category.id] = category;
-                    category.section = section;
-                }
+    getCategoriesById(): Observable<ItemTemplateCategoryDictionary> {
+        return this.getSectionsList().pipe(map(itemTemplateSections => {
+            let categoriesByIds: ItemTemplateCategoryDictionary = {};
+            for (const sectionCategories of itemTemplateSections.map(section => section.categories)) {
+                categoriesByIds = sectionCategories.reduce((sectionCategoriesById, category) => {
+                    categoriesByIds[category.id] = category;
+                    return sectionCategoriesById
+                }, categoriesByIds);
             }
-            return categories;
+            return categoriesByIds;
         }));
     }
 
-    getItems(section: ItemSection): Observable<ItemTemplate[]> {
+    getItems(section: ItemTemplateSection): Observable<ItemTemplate[]> {
         if (!(section.id in this.itemBySection)) {
             this.itemBySection[section.id] = new ReplaySubject<ItemTemplate[]>(1);
             forkJoin([
                 this.httpClient.get('/api/v2/itemTemplateSections/' + section.id),
-                this._skillService.getSkillsById()
+                this.skillService.getSkillsById()
             ]).subscribe(
-                ([itemTemplateDatas, skillsById]: [ItemTemplateResponse[], { [skillId: number]: Skill }]) => {
+                ([itemTemplateDatas, skillsById]: [ItemTemplateResponse[], SkillDictionary]) => {
                     let items: ItemTemplate[] = [];
                     for (let i = 0; i < itemTemplateDatas.length; i++) {
                         let itemTemplate = ItemTemplate.fromResponse(itemTemplateDatas[i], skillsById);
@@ -82,7 +87,7 @@ export class ItemTemplateService {
     createItemTemplate(request: ItemTemplateRequest): Observable<ItemTemplate> {
         return this.httpClient.post<ItemTemplateResponse>('/api/v2/itemTemplates/', request)
             .pipe(
-                withLatestFrom(this._skillService.getSkillsById()),
+                withLatestFrom(this.skillService.getSkillsById()),
                 map(([response, skillsById]) => ItemTemplate.fromResponse(response, skillsById))
             );
     }
@@ -90,7 +95,7 @@ export class ItemTemplateService {
     editItemTemplate(itemTemplateId: number, request: ItemTemplateRequest): Observable<ItemTemplate> {
         return this.httpClient.put<ItemTemplateResponse>(`/api/v2/itemTemplates/${itemTemplateId}`, request)
             .pipe(
-                withLatestFrom(this._skillService.getSkillsById()),
+                withLatestFrom(this.skillService.getSkillsById()),
                 map(([response, skillsById]) => ItemTemplate.fromResponse(response, skillsById))
             );
     }
@@ -99,7 +104,7 @@ export class ItemTemplateService {
         return new Observable((observer) => {
             forkJoin([
                 this.httpClient.get<ItemTemplateResponse>(`/api/v2/itemTemplates/${id}`),
-                this._skillService.getSkillsById()
+                this.skillService.getSkillsById()
             ]).subscribe(
                 ([itemTemplateData, skillsById]: [ItemTemplateResponse, { [skillId: number]: Skill }]) => {
                     let itemTemplate = ItemTemplate.fromResponse(itemTemplateData, skillsById);
@@ -120,7 +125,7 @@ export class ItemTemplateService {
 
         return forkJoin([
             this.httpClient.get<ItemTemplateResponse[]>('/api/v2/itemTemplates/search?filter=' + encodeURIComponent(filter)),
-            this._skillService.getSkillsById()
+            this.skillService.getSkillsById()
         ]).pipe(map(([itemTemplateDatas, skillsById]: [ItemTemplateResponse[], SkillDictionary]) => {
             return ItemTemplate.fromResponses(itemTemplateDatas, skillsById);
         }));
@@ -144,11 +149,11 @@ export class ItemTemplateService {
         return this.slots;
     }
 
-    getItemTypes(): Observable<ItemType[]> {
+    getItemTypes(): Observable<ItemTypeResponse[]> {
         if (!this.itemTypes) {
-            this.itemTypes = new ReplaySubject<ItemType[]>(1);
+            this.itemTypes = new ReplaySubject<ItemTypeResponse[]>(1);
 
-            this.httpClient.get<ItemType[]>('/api/v2/itemTypes')
+            this.httpClient.get<ItemTypeResponse[]>('/api/v2/itemTypes')
                 .subscribe(
                     itemTypes => {
                         this.itemTypes.next(itemTypes);
@@ -162,20 +167,20 @@ export class ItemTemplateService {
         return this.itemTypes;
     }
 
-    createItemType(displayName: string, techName: string): Observable<ItemType> {
+    createItemType(displayName: string, techName: string): Observable<ItemTypeResponse> {
         this.itemTypes = undefined;
-        let itemType = {
+        let itemTypeRequest = {
             techName: techName,
             displayName: displayName
         };
-        return this.httpClient.post<ItemType>('/api/itemtemplate/createItemType', {itemType: itemType})
+        return this.httpClient.post<ItemTypeResponse>('/api/v2/itemTypes', itemTypeRequest);
     }
 
     clearItemSectionCache(sectionId: number) {
         delete this.itemBySection[sectionId];
     }
 
-    getSectionFromCategory(categoryId: number): Observable<ItemSection> {
+    getSectionFromCategory(categoryId: number): Observable<ItemTemplateSection> {
         return new Observable(observer => {
             this.getSectionsList().subscribe(
                 sections => {
@@ -203,7 +208,7 @@ export class ItemTemplateService {
 
             forkJoin([
                 this.httpClient.get<ItemTemplateResponse[]>(`/api/v2/itemTemplateCategories/${categoryTechName}/itemTemplates`),
-                this._skillService.getSkillsById()
+                this.skillService.getSkillsById()
             ]).pipe(
                 map(([itemTemplatesData, skillsById]: [ItemTemplateResponse[], { [skillId: number]: Skill }]) => {
                     let items: ItemTemplate[] = [];

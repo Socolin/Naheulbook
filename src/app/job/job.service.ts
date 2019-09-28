@@ -1,20 +1,22 @@
-
 import {forkJoin, ReplaySubject, Observable} from 'rxjs';
 
 import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {Job} from './job.model';
-import {Skill, SkillService} from '../skill';
+import {Job, JobDictionary} from './job.model';
+import {SkillService} from '../skill';
 import {NamesByNumericId} from '../shared/shared,model';
+import {JobResponse} from '../api/responses';
 
 @Injectable()
 export class JobService {
     private jobs: ReplaySubject<Job[]>;
 
-    constructor(private httpClient: HttpClient
-        , private _skillService: SkillService) {
+    constructor(
+        private httpClient: HttpClient,
+        private skillService: SkillService,
+    ) {
     }
 
     getJobList(): Observable<Job[]> {
@@ -22,23 +24,23 @@ export class JobService {
             this.jobs = new ReplaySubject<Job[]>(1);
 
             forkJoin([
-                this._skillService.getSkillsById(),
-                this.httpClient.get('/api/v2/jobs')
+                this.skillService.getSkillsById(),
+                this.httpClient.get<JobResponse[]>('/api/v2/jobs')
             ]).subscribe(
-                ([skillsById, jobsDatas]: [{[skillId: number]: Skill}, Job[]]) => {
-                    let jobs: Job[] = [];
-                    let jobIds: {[jobId: number]: Job} = {};
-                    for (let jobData of jobsDatas) {
-                        let job = Job.fromJson(jobData, skillsById);
-                        Object.freeze(job);
-                        jobIds[job.id] = job;
-                        jobs.push(job);
-                    }
+                ([skillsById, responses]) => {
+                    const jobs = responses.map(response => Job.fromResponse(response, skillsById));
+                    const jobsByIds = jobs.reduce((dictionary, job) => {
+                        dictionary[job.id] = job;
+                        return dictionary;
+                    }, {});
+                    jobs.forEach(job => Object.freeze(job));
 
+                    // FIXME: Find a better way to handle all the job blacklist/whitelist system.
+                    // It's really useful for only one job and it could be done using a less hacky way
                     for (let i = 0; i < jobs.length; i++) {
                         let job = jobs[i];
                         if (job.parentJobId) {
-                            let jobCopy: Job = Job.fromJson(JSON.parse(JSON.stringify(jobIds[job.parentJobId])), skillsById);
+                            let jobCopy: Job = Job.fromResponse(JSON.parse(JSON.stringify(jobsByIds[job.parentJobId])), skillsById);
                             jobCopy.originsBlacklist = [];
                             jobCopy.originsWhitelist = [];
                             for (let field in job) {
@@ -65,19 +67,21 @@ export class JobService {
         return this.jobs;
     }
 
-    getJobsById(): Observable<{[jobId: number]: Job}> {
-        return this.getJobList().pipe(map((jobs: Job[]) => {
-            let jobsById = {};
-            jobs.map(j => jobsById[j.id] = j);
-            return jobsById;
+    getJobsById(): Observable<JobDictionary> {
+        return this.getJobList().pipe(map((jobs) => {
+            return jobs.reduce((dictionary: JobDictionary, job) => {
+                dictionary[job.id] = job;
+                return dictionary;
+            }, {});
         }));
     }
 
     getJobsNamesById(): Observable<NamesByNumericId> {
         return this.getJobList().pipe(map((jobs: Job[]) => {
-            let jobNamesById = {};
-            jobs.map(j => jobNamesById[j.id] = j.name);
-            return jobNamesById;
+            return jobs.reduce((dictionary: NamesByNumericId, job) => {
+                dictionary[job.id] = job.name;
+                return dictionary;
+            }, {});
         }));
     }
 }

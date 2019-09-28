@@ -13,11 +13,11 @@ export class EventService {
 
     loadEvents(groupId: number): Observable<NEvent[]> {
         return this.httpClient.get<NEvent[]>(`/api/v2/groups/${groupId}/events`)
-            .pipe(map(res => NEvent.eventsFromJson(res)));
+            .pipe(map(res => NEvent.fromResponses(res)));
     }
 
     createEvent(groupId: number, event: NEvent): Observable<NEvent> {
-        return this.httpClient.post<NEvent>(`/api/v2/groups/${groupId}/events`, event).pipe(map(res => NEvent.fromJson(res)));
+        return this.httpClient.post<NEvent>(`/api/v2/groups/${groupId}/events`, event).pipe(map(res => NEvent.fromResponse(res)));
     }
 
     deleteEvent(groupId: number, eventId: number): Observable<void> {

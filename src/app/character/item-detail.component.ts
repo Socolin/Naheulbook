@@ -14,7 +14,7 @@ import {
     NhbkDialogService
 } from '../shared';
 
-import {ItemTemplateService, ItemCategory} from '../item-template';
+import {ItemTemplateService, ItemTemplateCategory} from '../item-template';
 
 import {Character, CharacterGiveDestination} from './character.model';
 import {CharacterService} from './character.service';
@@ -41,7 +41,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     @Input() godsByTechName: {[techName: string]: God};
     @Input() hiddenActions: string[] = [];
 
-    public itemCategoriesById: {[categoryId: number]: ItemCategory};
+    public itemCategoriesById: {[categoryId: number]: ItemTemplateCategory};
     public modifiers: any[];
 
     @ViewChild('giveItemDialog', {static: true})

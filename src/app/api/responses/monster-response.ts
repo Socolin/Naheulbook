@@ -4,7 +4,7 @@ import {ItemResponse} from './item-response';
 export interface MonsterResponse {
     id: number;
     name: string;
-    dead: string;
+    dead?: string;
     data: IMonsterData;
     modifiers: IActiveStatsModifier[];
     items: ItemResponse[];

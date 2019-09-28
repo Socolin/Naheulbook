@@ -1,31 +1,61 @@
-import {ItemStatModifier} from '../shared/stat-modifier.model';
+import {ItemStatModifier} from '../shared';
 import {Skill, SkillDictionary} from '../skill';
 import {Job} from '../job';
 import {IconDescription} from '../shared/icon.model';
-import {IDurable} from '../api/shared/durable';
-import {ItemTemplateResponse} from '../api/responses';
-import {IItemTemplateData, IItemTemplateGunData} from '../api/shared';
+import {IDurable, IItemTemplateData, IItemTemplateGunData} from '../api/shared';
+import {
+    ItemTemplateCategoryResponse,
+    ItemTemplateResponse,
+    ItemTemplateSectionResponse,
+    ItemTypeResponse
+} from '../api/responses';
 
-export class ItemSection {
+export class ItemTemplateSection {
     id: number;
     name: string;
     note: string;
     specials: string[];
-    categories: ItemCategory[];
+    categories: ItemTemplateCategory[];
+
+    private static fromResponse(response: ItemTemplateSectionResponse): ItemTemplateSection {
+        const itemSection = new ItemTemplateSection();
+        itemSection.id = response.id;
+        itemSection.name = response.name;
+        itemSection.note = response.note;
+        itemSection.specials = response.specials;
+        itemSection.categories = ItemTemplateCategory.fromResponses(response.categories, itemSection);
+        return itemSection;
+    }
+
+    static fromResponses(responses: ItemTemplateSectionResponse[]): ItemTemplateSection[] {
+        return responses.map(response => ItemTemplateSection.fromResponse(response));
+    }
 }
-export class ItemCategory {
+
+export type ItemTemplateCategoryDictionary = { [categoryId: number]: ItemTemplateCategory };
+
+export class ItemTemplateCategory {
     id: number;
     name: string;
     description: string;
     note: string;
-    section: ItemSection;
+    section: ItemTemplateSection;
     sectionId: number;
-}
 
-export class ItemType {
-    id: number;
-    displayName: string;
-    techName: string;
+    static fromResponses(responses: ItemTemplateCategoryResponse[], itemTemplateSection: ItemTemplateSection): ItemTemplateCategory[] {
+        return responses.map(response => ItemTemplateCategory.fromResponse(response, itemTemplateSection));
+    }
+
+    private static fromResponse(response: ItemTemplateCategoryResponse, itemTemplateSection: ItemTemplateSection): ItemTemplateCategory {
+        const itemTemplateCategory = new ItemTemplateCategory();
+        itemTemplateCategory.id = response.id;
+        itemTemplateCategory.name = response.name;
+        itemTemplateCategory.description = response.description;
+        itemTemplateCategory.note = response.note;
+        itemTemplateCategory.sectionId = response.sectionId;
+        itemTemplateCategory.section = itemTemplateSection;
+        return itemTemplateCategory;
+    }
 }
 
 export class ItemSlot {
@@ -108,7 +138,7 @@ export class ItemTemplateData implements IItemTemplateData {
         return i !== -1;
     }
 
-    isItemType(itemType: ItemType): boolean {
+    isItemType(itemType: ItemTypeResponse): boolean {
         if (!this.itemTypes) {
             return false;
         }
@@ -116,7 +146,7 @@ export class ItemTemplateData implements IItemTemplateData {
         return i !== -1;
     }
 
-    toggleItemType(itemType: ItemType): void {
+    toggleItemType(itemType: ItemTypeResponse): void {
         if (!this.itemTypes) {
             this.itemTypes = [];
         }
@@ -147,7 +177,7 @@ export class ItemTemplate {
     techName?: string;
     categoryId: number;
     data: ItemTemplateData = new ItemTemplateData();
-    source: 'official'|'community'|'private';
+    source: 'official' | 'community' | 'private';
     sourceUser?: string;
     sourceUserId?: number;
     modifiers: ItemStatModifier[] = [];

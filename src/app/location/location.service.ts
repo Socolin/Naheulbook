@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, ReplaySubject} from 'rxjs';
 
 import {Location, Map} from './location.model';
+import {LocationMapResponse} from '../api/responses';
 
 @Injectable()
 export class LocationService {
@@ -74,7 +75,8 @@ export class LocationService {
     }
 
     getMaps(locationId: number): Observable<Map[]> {
-        return this.httpClient.get<Map[]>(`/api/v2/locations/${locationId}/maps`);
+        return this.httpClient.get<LocationMapResponse[]>(`/api/v2/locations/${locationId}/maps`)
+            .pipe(map(responses => Map.fromResponses(responses)));
     }
 
     editLocation(location: Location, maps: Map[]): Observable<any> {

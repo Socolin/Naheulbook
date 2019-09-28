@@ -3,7 +3,7 @@ export interface CalendarDate {
     name: string;
     startDay: number;
     endDay: number;
-    note: string;
+    note?: string;
 }
 
 export class NhbkDate {

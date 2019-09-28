@@ -11,6 +11,7 @@ import {NEvent} from '../event';
 import {date2Timestamp} from '../date/util';
 import {TargetJsonData} from './target.model';
 import {FighterDurationChanges} from '../shared';
+import {DeleteInviteResponse, GroupResponse} from '../api/responses';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -223,7 +224,7 @@ export class Fighter {
         return undefined;
     }
 
-    updateLapDecrement(data: { deleted: Fighter, previous: Fighter; next: Fighter }): FighterDurationChanges | undefined{
+    updateLapDecrement(data: { deleted: Fighter, previous: Fighter; next: Fighter }): FighterDurationChanges | undefined {
         if (this.isMonster) {
             let changes = this.monster.updateLapDecrement(data);
             if (changes.length) {
@@ -292,24 +293,6 @@ export class GroupData {
         this.onChange.next({key: key, value: value});
         return true;
     }
-}
-
-export class PartialGroup {
-    id: number;
-    name: string;
-    characterCount: number;
-}
-
-
-export interface GroupResponse {
-    id: number;
-    name: string;
-    data: any;
-    location: Location;
-
-    invites: GroupInvite[];
-
-    characterIds: number[];
 }
 
 export class Group extends WsRegistrable {
@@ -696,7 +679,7 @@ export class Group extends WsRegistrable {
         }
     }
 
-    public onCancelInvite(data: DeleteGroupResponse): void {
+    public onCancelInvite(data: DeleteInviteResponse): void {
         if (data.fromGroup) {
             let i = this.invited.findIndex(d => d.id === data.characterId);
             if (i !== -1) {
@@ -745,7 +728,7 @@ export class Group extends WsRegistrable {
         switch (opcode) {
             case 'addLoot': {
                 services.skill.getSkillsById().subscribe(skillsById => {
-                    this.addLoot(Loot.fromJson(data, skillsById));
+                    this.addLoot(Loot.fromResponse(data, skillsById));
                 });
                 break;
             }
@@ -754,7 +737,7 @@ export class Group extends WsRegistrable {
                 break;
             }
             case 'addEvent': {
-                this.addEvent(NEvent.fromJson(data));
+                this.addEvent(NEvent.fromResponse(data));
                 break;
             }
             case 'deleteEvent': {
@@ -860,8 +843,3 @@ export interface GroupInvite {
     fromGroup: boolean;
 }
 
-export interface DeleteGroupResponse {
-    groupId: number;
-    characterId: number;
-    fromGroup: boolean;
-}

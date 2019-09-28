@@ -10,7 +10,7 @@ import {LoginService} from '../user';
 import {OriginService} from '../origin';
 import {JobService} from '../job';
 
-import {ItemCategory, ItemSection, ItemTemplate} from './item-template.model';
+import {ItemTemplateCategory, ItemTemplateSection, ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 import {ItemCategoryDirective} from './item-category.directive';
 import {MatDialog} from '@angular/material';
@@ -39,12 +39,12 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     @Input() inTab: boolean;
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
     public showHeaderInfo = false;
-    public itemSections: ItemSection[];
-    public selectedItemCategory?: ItemCategory;
-    public previousSubCategory?: ItemCategory;
-    public nextSubCategory?: ItemCategory;
+    public itemSections: ItemTemplateSection[];
+    public selectedItemCategory?: ItemTemplateCategory;
+    public previousSubCategory?: ItemTemplateCategory;
+    public nextSubCategory?: ItemTemplateCategory;
     public items: ItemTemplate[] = [];
-    public selectedSection: ItemSection;
+    public selectedSection: ItemTemplateSection;
     public originsName: {[originId: number]: string};
     public jobsName: {[jobId: number]: string};
     public godsByTechName: {[techName: string]: God};
@@ -95,7 +95,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         }
     }
 
-    selectSection(section: ItemSection) {
+    selectSection(section: ItemTemplateSection) {
         if (this.selectedSection && this.selectedSection.id === section.id) {
             this._itemTemplateService.clearItemSectionCache(section.id);
             this.loadSection(section);
@@ -130,7 +130,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         return true;
     }
 
-    loadSection(section: ItemSection) {
+    loadSection(section: ItemTemplateSection) {
         this.selectedSection = section;
         this._itemTemplateService.getItems(section).subscribe(items => {
             this.items = items;
@@ -155,7 +155,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         this.onAction.emit({action: actionName, data: data});
     }
 
-    getCategoryFromId(categoryId: number): [ItemSection, ItemCategory ]| undefined {
+    getCategoryFromId(categoryId: number): [ItemTemplateSection, ItemTemplateCategory ]| undefined {
         for (let ci = 0; ci < this.itemSections.length; ci++) {
             let itemSection = this.itemSections[ci];
             for (let i = 0; i < itemSection.categories.length; i++) {
@@ -226,7 +226,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         }
     }
 
-    selectCategory(itemCategory: ItemCategory) {
+    selectCategory(itemCategory: ItemTemplateCategory) {
         this.selectedItemCategory = itemCategory;
         const index = this.selectedSection.categories.indexOf(itemCategory);
         let previousIndex = (index - 1 + this.selectedSection.categories.length) % this.selectedSection.categories.length;

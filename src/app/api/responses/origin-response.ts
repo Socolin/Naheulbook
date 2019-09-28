@@ -5,17 +5,17 @@ export interface OriginResponse {
     id: number;
     name: string;
     description: string;
-    playerDescription: string;
-    playerSummary: string;
+    playerDescription?: string;
+    playerSummary?: string;
     maxLoad?: number;
     maxArmorPR?: number;
-    advantage: string;
+    advantage?: string;
     baseEV?: number;
     baseEA?: number;
     bonusAT?: number;
     bonusPRD?: number;
     diceEVLevelUp: number;
-    size: string;
+    size?: string;
     flags: FlagResponse[];
     speedModifier?: number;
     skillIds: number[];
@@ -27,8 +27,8 @@ export interface OriginResponse {
     bonuses: DescribedFlagResponse[];
     requirements: {
         stat: string;
-        min: number | null;
-        max: number | null;
+        min?: number;
+        max?: number;
     }[];
     restricts: DescribedFlagResponse[];
 }

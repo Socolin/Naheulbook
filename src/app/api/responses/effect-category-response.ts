@@ -3,6 +3,6 @@ export interface EffectCategoryResponse {
     name: string;
     diceCount: number;
     diceSize: number;
-    note: string;
-   typeId: number;
+    note?: string;
+    typeId: number;
 }

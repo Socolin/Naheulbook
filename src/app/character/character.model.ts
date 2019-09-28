@@ -13,7 +13,7 @@ import {
 
 import {Origin} from '../origin';
 import {Job, Speciality} from '../job';
-import {Skill} from '../skill';
+import {Skill, SkillDictionary} from '../skill';
 import {Loot} from '../loot';
 import {ItemSlot, ItemTemplate} from '../item-template';
 import {Fighter} from '../group';
@@ -22,7 +22,12 @@ import {Item, PartialItem} from '../item';
 import {TargetJsonData} from '../group/target.model';
 
 import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
-import {ItemPartialResponse} from '../api/responses';
+import {
+    CharacterFoGmResponse,
+    CharacterLevelUpResponse,
+    CharacterResponse,
+    ItemPartialResponse
+} from '../api/responses';
 
 export interface CharacterGiveDestination {
     id: number;
@@ -43,35 +48,10 @@ export class StaticDetailShow {
     other = false;
     magic = false;
 }
-export interface CharacterSearchResponse {
-    id: number;
-    name: string;
-    origin: string;
-    owner: string;
-}
+
 export interface CharacterGroupInvite {
     groupId: number;
     groupName: string;
-}
-
-export interface CharacterLevelUpResponse {
-    newModifiers: ActiveStatsModifier[];
-    newSkillIds: number[];
-    newSpecialities: Speciality[];
-    newLevel: number;
-}
-
-export interface LevelUpRequest {
-    evOrEa: string;
-    evOrEaValue: number;
-    targetLevelUp: number;
-    statToUp: string;
-    skillId?: number;
-    specialityIds: number[];
-}
-
-export interface RandomNameResponse {
-    name: string;
 }
 
 export class StatisticDetail {
@@ -306,32 +286,24 @@ export class Character extends WsRegistrable {
     public onNotification: Subject<any> = new Subject<any>();
     public targetChanged: Subject<TargetJsonData> = new Subject<TargetJsonData>();
 
-    static fromJson(jsonData: CharacterJsonData, origins: Origin[], jobs: Job[], skillsById: {[skillId: number]: Skill}): Character {
+    static fromResponse(
+        response: CharacterResponse | CharacterFoGmResponse,
+        origins: Origin[],
+        jobs: Job[],
+        skillsById: SkillDictionary
+    ): Character {
         let character = new Character();
-        Object.assign(character, jsonData, {
+        Object.assign(character, response, {
             skills: [],
             items: [],
-            modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers),
-            specialities: Speciality.specialitiesFromJson(jsonData.specialities)
+            modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers),
+            specialities: Speciality.specialitiesFromJson(response.specialities)
         });
-        let origin = origins.find(o => o.id === jsonData.originId);
-        if (!origin) {
-            throw new Error('Invalid originId: ' + jsonData.originId);
-        }
-        character.origin = origin;
-        character.jobs = [];
-        for (let jobId of jsonData.jobIds) {
-            let job = jobs.find(j => j.id === jobId);
-            character.jobs.push(job);
-        }
 
-        for (let skillId of jsonData.skillIds) {
-            character.skills.push(skillsById[skillId]);
-        }
-
-        for (let itemJsonData of jsonData.items) {
-            character.items.push(Item.fromJson(itemJsonData, skillsById));
-        }
+        character.origin = origins.find(o => o.id === response.originId);
+        character.jobs = response.jobIds.map(jobId => jobs.find(j => j.id === jobId)).filter(job => !!job);
+        character.skills = response.skillIds.map(skillId => skillsById[skillId]).filter(skill => !!skill);
+        character.items = response.items.map(itemResponse => Item.fromJson(itemResponse, skillsById));
 
         return character;
     }
@@ -1478,7 +1450,7 @@ export class Character extends WsRegistrable {
         switch (opcode) {
             case 'showLoot': {
                 services['skill'].getSkillsById().subscribe(skillsById => {
-                    this.addLoot(Loot.fromJson(data, skillsById));
+                    this.addLoot(Loot.fromResponse(data, skillsById));
                 });
                 break;
             }

@@ -3,9 +3,10 @@ import {Subject, Subscription} from 'rxjs';
 import {IMetadata} from '../shared';
 import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
 
-import {Skill} from '../skill';
+import {SkillDictionary} from '../skill';
 import {Item, PartialItem} from '../item';
 import {Monster} from '../monster';
+import {LootResponse} from '../api/responses';
 
 export class LootTookItemMsg {
     originalItem: PartialItem;
@@ -31,22 +32,18 @@ export class Loot extends WsRegistrable {
 
     public computedXp: number;
 
-    static fromJson(jsonData: any, skillsById: {[skillId: number]: Skill}): Loot {
+    static fromResponse(response: LootResponse, skillsById: SkillDictionary): Loot {
         let loot = new Loot();
-        Object.assign(loot, jsonData, {
-            monsters: Monster.monstersFromJson(jsonData.monsters, skillsById),
-            items: Item.itemsFromJson(jsonData.items, skillsById)
+        Object.assign(loot, response, {
+            monsters: Monster.monstersFromJson(response.monsters, skillsById),
+            items: Item.itemsFromJson(response.items, skillsById)
         });
         loot.updateXp();
         return loot;
     }
 
-    static lootsFromJson(lootsData: object[], skillsById: {[skillId: number]: Skill}): Loot[] {
-        let loots: Loot[] = [];
-        for (let i = 0; i < lootsData.length; i++) {
-            loots.push(Loot.fromJson(lootsData[i], skillsById));
-        }
-        return loots;
+    static lootsFromJson(responses: LootResponse[], skillsById: SkillDictionary): Loot[] {
+        return responses.map(response => Loot.fromResponse(response, skillsById));
     }
 
     public getItem(itemId: number): Item | undefined {

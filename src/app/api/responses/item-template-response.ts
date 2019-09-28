@@ -5,10 +5,10 @@ export interface ItemTemplateResponse {
     id: number;
     categoryId: number;
     name: string;
-    techName: string;
+    techName?: string;
     source: string;
-    sourceUserId: number | null;
-    sourceUser: string;
+    sourceUserId?: number;
+    sourceUser?: string;
     data: IItemTemplateData;
 
     modifiers: ItemTemplateModifierResponse[];
@@ -23,9 +23,9 @@ export interface ItemTemplateModifierResponse {
     stat: string;
     value: number;
     type: string;
-    special: string[];
-    jobId: number | null;
-    originId: number | null;
+    special?: string[];
+    jobId?: number;
+    originId?: number;
 }
 
 export interface ItemTemplateSkillModifierResponse {
