@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using Naheulbook.Shared.TransientModels;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
+
 namespace Naheulbook.Requests.Requests
 {
     public class CreateEffectRequest

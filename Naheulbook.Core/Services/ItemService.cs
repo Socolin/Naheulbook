@@ -25,7 +25,7 @@ namespace Naheulbook.Core.Services
         Task<Item> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request);
         Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId);
         Task<(Item takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
-        Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
+        Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, GiveItemRequest request);
         Task<IList<Item>> CreateItemsAsync(IList<CreateItemRequest> requestItems);
         Task<Item> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request);
     }
@@ -262,7 +262,7 @@ namespace Naheulbook.Core.Services
             return await _itemUtil.MoveItemToAsync(itemId, request.CharacterId, request.Quantity, MoveItemTrigger.TakeItemFromLoot);
         }
 
-        public async Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request)
+        public async Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, GiveItemRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

@@ -1,3 +1,5 @@
+// ReSharper disable UnusedMember.Global
+
 namespace Naheulbook.Requests.Requests
 {
     public class PutGroupLocationRequest

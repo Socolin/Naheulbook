@@ -1,5 +1,9 @@
 using System.Collections.Generic;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
+
 namespace Naheulbook.Requests.Requests
 {
     public class CharacterLevelUpRequest

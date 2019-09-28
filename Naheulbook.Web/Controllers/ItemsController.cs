@@ -193,7 +193,7 @@ namespace Naheulbook.Web.Controllers
         public async Task<ActionResult<GiveItemResponse>> PostGiveItemAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int itemId,
-            TakeItemRequest request
+            GiveItemRequest request
         )
         {
             try

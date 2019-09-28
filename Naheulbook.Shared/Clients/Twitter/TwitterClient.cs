@@ -46,7 +46,7 @@ namespace Naheulbook.Shared.Clients.Twitter
 
         public async Task<TwitterAccessTokenResponse> GetAccessTokenAsync(string loginToken, string oauthToken, string oauthVerifier)
         {
-            var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, RequestTokenUri)
+            var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, AccessTokenUri)
             {
                 AccessSecret = loginToken
             };
