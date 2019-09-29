@@ -1,7 +1,7 @@
 <mat-form-field style="width: 100%">
     <input matInput
            placeholder="Filtre"
-           (keydown.esc)="filter = null"
+           (keydown.esc)="filter = undefined"
            [(ngModel)]="filter">
 </mat-form-field>
 <div *ngFor="let skill of skills">

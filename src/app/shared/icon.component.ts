@@ -13,7 +13,7 @@ const defaultIcon: IconDescription = {
     styleUrls: ['./icon.component.scss']
 })
 export class IconComponent implements OnChanges {
-    @Input() icon?: IconDescription = defaultIcon;
+    @Input() icon: IconDescription = defaultIcon;
     @Input() size = '32px';
     @Input() enchanted: boolean;
 

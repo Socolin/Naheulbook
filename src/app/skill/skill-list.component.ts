@@ -11,7 +11,7 @@ import {removeDiacritics} from '../shared';
 })
 export class SkillListComponent implements OnInit {
     public skills: Skill[];
-    public filter: string;
+    public filter?: string;
 
     constructor(
         private readonly skillService: SkillService,

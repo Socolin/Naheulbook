@@ -36,7 +36,7 @@
         <div *ngIf="!job.baseEv && job.factorEv && !job.bonusEv">
             EV initiale : EV initiale -{{ (1 - job.factorEv) | percent}}
         </div>
-        <div *ngIf="!job.baseEv && !job.factorEv && job.bonusEv > 0">
+        <div *ngIf="!job.baseEv && !job.factorEv && (job.bonusEv || 0) > 0">
             EV initiale : EV initiale + {{job.bonusEv}}
         </div>
         <div *ngIf="job.baseEv && !job.factorEv && !job.bonusEv">
