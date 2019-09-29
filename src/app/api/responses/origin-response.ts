@@ -10,7 +10,7 @@ export interface OriginResponse {
     maxLoad?: number;
     maxArmorPR?: number;
     advantage?: string;
-    baseEV?: number;
+    baseEV: number;
     baseEA?: number;
     bonusAT?: number;
     bonusPRD?: number;

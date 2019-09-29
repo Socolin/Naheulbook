@@ -1,10 +1,8 @@
+import {StatModificationOperand} from './enums';
+
 export interface IStatModifier {
     stat: string;
-    type: 'ADD'
-        | 'MUL'
-        | 'DIV'
-        | 'SET'
-        | 'PERCENTAGE';
+    type: StatModificationOperand;
     value: number;
     special?: string[];
 }

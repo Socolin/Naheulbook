@@ -1,5 +1,5 @@
 import {DescribedFlag, Flag, FlagData, StatRequirement} from '../shared';
-import {Skill} from '../skill';
+import {Skill, SkillDictionary} from '../skill';
 import {OriginResponse} from '../api/responses';
 
 export interface OriginInfo {
@@ -10,50 +10,52 @@ export interface OriginInfo {
 export type OriginDictionary = { [originId: number]: Origin };
 
 export class Origin {
-    id: number;
-    name: string;
-    description: string;
-    playerDescription: string;
-    playerSummary: string;
-    advantage: string;
-    basePRD: number;
-    baseEV: number;
-    size: string;
-    bonusAT: number;
-    bonusPRD: number;
-    speedModifier: number;
-    requirements: StatRequirement[];
-    infos: OriginInfo[];
-    restrictsTokens: string[];
-    skills: Skill[];
-    availableSkills: Skill[];
-    bonuses: DescribedFlag[];
-    restricts: DescribedFlag[];
-    flags: Flag[] = [];
-    diceEVLevelUp: number;
+    readonly id: number;
+    readonly name: string;
+    readonly description: string;
+    readonly playerDescription?: string;
+    readonly playerSummary?: string;
+    readonly advantage?: string;
+    readonly baseEV: number;
+    readonly size?: string;
+    readonly bonusAT: number;
+    readonly bonusPRD: number;
+    readonly speedModifier?: number;
+    readonly requirements: StatRequirement[];
+    readonly infos: OriginInfo[];
+    readonly skills: Skill[];
+    readonly availableSkills: Skill[];
+    readonly bonuses: DescribedFlag[];
+    readonly restricts: DescribedFlag[];
+    readonly flags: Flag[] = [];
+    readonly diceEVLevelUp: number;
 
-    static fromResponse(response: OriginResponse, skillsById: {[skillId: number]: Skill}): Origin {
-        let origin = new Origin();
-
-        Object.assign(origin, response, {
-            skills: [],
-            availableSkills: [],
-            bonuses: DescribedFlag.flagsFromJson(response.bonuses),
-            restricts: DescribedFlag.flagsFromJson(response.restricts),
-        });
-
-        for (let skillId of response.skillIds) {
-            origin.skills.push(skillsById[skillId]);
-        }
-        for (let skillId of response.availableSkillIds) {
-            origin.availableSkills.push(skillsById[skillId]);
-        }
-
-        if (!origin.flags) {
-            origin.flags = [];
-        }
-
+    static fromResponse(response: OriginResponse, skillsById: SkillDictionary): Origin {
+        const origin = new Origin(response, skillsById);
+        Object.freeze(origin);
         return origin;
+    }
+
+    private constructor(response: OriginResponse, skillsById: SkillDictionary) {
+        this.id = response.id;
+        this.name = response.name;
+        this.description = response.description;
+        this.playerDescription = response.playerDescription;
+        this.playerSummary = response.playerSummary;
+        this.advantage = response.advantage;
+        this.baseEV = response.baseEV;
+        this.size = response.size;
+        this.bonusAT = response.bonusAT || 0;
+        this.bonusPRD = response.bonusPRD || 0;
+        this.speedModifier = response.speedModifier;
+        this.requirements = response.requirements;
+        this.infos = response.infos;
+        this.skills = response.skillIds.map(skillId => skillsById[skillId]);
+        this.availableSkills = response.availableSkillIds.map(skillId => skillsById[skillId]);
+        this.bonuses = DescribedFlag.flagsFromJson(response.bonuses);
+        this.restricts = DescribedFlag.flagsFromJson(response.restricts);
+        this.flags = response.flags || [];
+        this.diceEVLevelUp = response.diceEVLevelUp;
     }
 
     hasFlag(flagName: string): boolean {

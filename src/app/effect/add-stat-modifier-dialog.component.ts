@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 
-import {ItemStatModifier, MiscService, StatModificationOperand} from '../shared';
+import {ItemStatModifier, MiscService } from '../shared';
+import {StatModificationOperand} from '../api/shared/enums';
 
 @Component({
     selector: 'app-add-stat-modifier-dialog',

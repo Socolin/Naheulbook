@@ -3,23 +3,38 @@ import {SkillResponse} from '../api/responses';
 
 export type SkillDictionary =  { [skillId: number]: Skill };
 export class Skill {
-    id: number;
-    name: string;
-    description: string;
-    playerDescription: string;
-    require: string;
-    resist: string;
-    using: string;
-    roleplay: string;
-    stat: string[];
-    test?: string;
-    effects: StatModifier[];
-    flags: Flag[];
+    readonly id: number;
+    readonly name: string;
+    readonly description?: string;
+    readonly playerDescription?: string;
+    readonly require?: string;
+    readonly resist?: string;
+    readonly using?: string;
+    readonly roleplay?: string;
+    readonly stat?: string[];
+    readonly test?: number;
+    readonly effects: StatModifier[];
+    readonly flags: Flag[];
 
     static fromResponse(response: SkillResponse): Skill {
-        let skill = new Skill();
-        Object.assign(skill, response);
+        let skill = new Skill(response);
+        Object.freeze(skill);
         return skill;
+    }
+
+    private constructor(response: SkillResponse) {
+        this.id = response.id;
+        this.name = response.name;
+        this.description = response.description;
+        this.playerDescription = response.playerDescription;
+        this.require = response.require;
+        this.resist = response.resist;
+        this.using = response.using;
+        this.roleplay = response.roleplay;
+        this.stat = response.stat;
+        this.test = response.test;
+        this.effects = response.effects || [];
+        this.flags = response.flags || [];
     }
 
     hasFlag(flagName: string): boolean {

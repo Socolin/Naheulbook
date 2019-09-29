@@ -1,14 +1,7 @@
 import {Effect} from '../effect';
 import {Fighter} from '../group';
 import {IActiveStatsModifier, IDurable} from '../api/shared';
-import {DurationType} from '../api/shared/enums';
-
-export type StatModificationOperand =
-    'ADD'
-    | 'MUL'
-    | 'DIV'
-    | 'SET'
-    | 'PERCENTAGE';
+import {DurationType, StatModificationOperand} from '../api/shared/enums';
 
 export class StatModifier {
     stat: string;

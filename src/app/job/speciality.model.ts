@@ -2,34 +2,38 @@ import {Flag, FlagData, StatModifier} from '../shared';
 import {SpecialityResponse} from '../api/responses';
 
 export class Speciality {
-    id: number;
-    name: string;
-    description: string;
-    specials: {
-        id: number,
-        isBonus: boolean;
-        description: string;
-        flags: Flag[];
+    readonly id: number;
+    readonly name: string;
+    readonly description: string;
+    readonly specials: {
+        readonly id: number,
+        readonly isBonus: boolean;
+        readonly description: string;
+        readonly flags: Flag[];
     }[];
-    modifiers: StatModifier[];
-    flags: Flag[];
+    readonly modifiers: StatModifier[];
+    readonly flags: Flag[];
 
     static fromResponse(response: SpecialityResponse): Speciality {
-        const speciality = new Speciality();
-        speciality.id = response.id;
-        speciality.name = response.name;
-        speciality.description = response.description;
-        speciality.modifiers = response.modifiers;
-        speciality.specials = (response.specials || []).map(s => ({
-            ...s,
-            flags: s.flags || []
-        }));
-        speciality.flags = response.flags || [];
+        const speciality = new Speciality(response);
+        Object.freeze(speciality);
         return speciality;
     }
 
     static fromResponses(responses: SpecialityResponse[]) {
         return responses.map(response => Speciality.fromResponse(response));
+    }
+
+    private constructor(response: SpecialityResponse) {
+        this.id = response.id;
+        this.name = response.name;
+        this.description = response.description;
+        this.modifiers = response.modifiers;
+        this.specials = (response.specials || []).map(s => ({
+            ...s,
+            flags: s.flags || []
+        }));
+        this.flags = response.flags || [];
     }
 
     hasFlag(flagName: string): boolean {

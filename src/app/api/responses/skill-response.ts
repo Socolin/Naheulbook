@@ -1,4 +1,5 @@
 import {FlagResponse} from './flag-response';
+import {StatModificationOperand} from '../shared/enums';
 
 export interface SkillResponse {
     id: number;
@@ -15,6 +16,6 @@ export interface SkillResponse {
     effects: {
         stat: string;
         value: number;
-        type: string;
+        type: StatModificationOperand;
     }[];
 }

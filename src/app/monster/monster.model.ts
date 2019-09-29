@@ -531,11 +531,7 @@ export class MonsterTemplate {
         categoriesById: MonsterTemplateCategoryDictionary,
         skillsById: SkillDictionary
     ): MonsterTemplate[] {
-        let templates: MonsterTemplate[] = [];
-        for (let response of responses) {
-            templates.push(MonsterTemplate.fromResponse(response, categoriesById, skillsById));
-        }
-        return templates;
+        return responses.map(response => MonsterTemplate.fromResponse(response, categoriesById, skillsById));
     }
 
     constructor(

@@ -1,6 +1,5 @@
-import {StatRequirement} from '../shared/stat-requirement.model';
+import {DescribedFlag, Flag, FlagData, StatRequirement} from '../shared';
 import {Skill, SkillDictionary} from '../skill';
-import {Flag, FlagData, DescribedFlag} from '../shared';
 
 import {Speciality} from './speciality.model';
 import {JobResponse} from '../api/responses';
@@ -8,22 +7,20 @@ import {JobResponse} from '../api/responses';
 export type JobDictionary = { [jobId: number]: Job };
 
 export class Job {
-    availableSkills: Array<Skill>;
-    baseAT?: number;
-    baseEa?: number;
-    baseEv?: number;
-    basePRD?: number;
-    bonuses: Array<DescribedFlag>;
-    bonusEv?: number;
-    description: string;
-    diceEaLevelUp?: number;
-    factorEv?: number;
-    id: number;
-    information: string;
-    playerDescription: string;
-    playerSummary: string;
-    isMagic: boolean;
-    name: string;
+    readonly availableSkills: Array<Skill>;
+    readonly baseAT?: number;
+    readonly baseEa?: number;
+    readonly baseEv?: number;
+    readonly basePRD?: number;
+    readonly bonuses: Array<DescribedFlag>;
+    readonly bonusEv?: number;
+    readonly diceEaLevelUp?: number;
+    readonly factorEv?: number;
+    readonly id: number;
+    readonly playerDescription?: string;
+    readonly playerSummary?: string;
+    readonly isMagic: boolean;
+    readonly name: string;
     originsBlacklist: Array<{
         id: number,
         name: string
@@ -32,41 +29,47 @@ export class Job {
         id: number,
         name: string
     }>;
-    maxLoad?: number; // FIXME Not used
-    maxArmorPR?: number; // FIXME Not used
-    parentJob: Job;
-    parentJobId: number;
-    requirements: Array<StatRequirement>;
-    restricts: Array<DescribedFlag>;
-    skills: Array<Skill>;
-    specialities: Array<Speciality>;
-    flags: Flag[] = [];
+    readonly maxLoad?: number; // FIXME Not used
+    readonly maxArmorPR?: number; // FIXME Not used
+    readonly parentJobId?: number;
+    readonly requirements: Array<StatRequirement>;
+    readonly restricts: Array<DescribedFlag>;
+    readonly skills: Array<Skill>;
+    readonly specialities: Array<Speciality>;
+    readonly flags: Flag[] = [];
 
     static fromResponse(response: JobResponse, skillsById: SkillDictionary): Job {
-        let job = new Job();
-
-        Object.assign(job, response, {
-            skills: [],
-            availableSkills: [],
-            bonuses: DescribedFlag.flagsFromJson(response.bonuses),
-            restricts: DescribedFlag.flagsFromJson(response.restricts),
-            specialities: Speciality.fromResponses(response.specialities),
-        });
-
-        for (let skillId of response.skillIds) {
-            job.skills.push(skillsById[skillId]);
-        }
-        for (let skillId of response.availableSkillIds) {
-            job.availableSkills.push(skillsById[skillId]);
-        }
-
-        if (!job.flags) {
-            job.flags = [];
-        }
-
+        const job = new Job(response, skillsById);
+        // Object.freeze(job);
         return job;
     }
 
+    constructor(response: JobResponse, skillsById: SkillDictionary) {
+        this.baseAT = response.baseAT;
+        this.baseEa = response.baseEa;
+        this.baseEv = response.baseEv;
+        this.basePRD = response.basePRD;
+        this.bonuses = DescribedFlag.flagsFromJson(response.bonuses);
+        this.bonusEv = response.bonusEv;
+        this.diceEaLevelUp = response.diceEaLevelUp;
+        this.factorEv = response.factorEv;
+        this.id = response.id;
+        this.playerDescription = response.playerDescription;
+        this.playerSummary = response.playerSummary;
+        this.isMagic = response.isMagic || false;
+        this.name = response.name;
+        this.originsBlacklist = response.originsBlacklist;
+        this.originsWhitelist = response.originsWhitelist;
+        this.maxLoad = response.maxLoad;
+        this.maxArmorPR = response.maxArmorPR;
+        this.parentJobId = response.parentJobId;
+        this.requirements = response.requirements;
+        this.restricts = DescribedFlag.flagsFromJson(response.restricts);
+        this.skills = response.skillIds.map(skillId => skillsById[skillId]);
+        this.availableSkills = response.availableSkillIds.map(skillId => skillsById[skillId]);
+        this.specialities = Speciality.fromResponses(response.specialities);
+        this.flags = response.flags || [];
+    }
 
     hasFlag(flagName: string): boolean {
         for (let restrict of this.restricts) {
