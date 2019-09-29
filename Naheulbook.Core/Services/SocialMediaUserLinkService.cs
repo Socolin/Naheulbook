@@ -39,7 +39,7 @@ namespace Naheulbook.Core.Services
                         DisplayName = name
                     };
                     uow.Users.Add(user);
-                    await uow.CompleteAsync();
+                    await uow.SaveChangesAsync();
                 }
 
                 return user;
@@ -52,7 +52,7 @@ namespace Naheulbook.Core.Services
             {
                 var user = await uow.Users.GetAsync(userId);
                 user.FbId = facebookId;
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
         }
 
@@ -70,7 +70,7 @@ namespace Naheulbook.Core.Services
                         DisplayName = name
                     };
                     uow.Users.Add(user);
-                    await uow.CompleteAsync();
+                    await uow.SaveChangesAsync();
                 }
 
                 return user;
@@ -83,7 +83,7 @@ namespace Naheulbook.Core.Services
             {
                 var user = await uow.Users.GetAsync(userId);
                 user.GoogleId = googleId;
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
         }
 
@@ -101,7 +101,7 @@ namespace Naheulbook.Core.Services
                         DisplayName = name
                     };
                     uow.Users.Add(user);
-                    await uow.CompleteAsync();
+                    await uow.SaveChangesAsync();
                 }
 
                 return user;
@@ -114,7 +114,7 @@ namespace Naheulbook.Core.Services
             {
                 var user = await uow.Users.GetAsync(userId);
                 user.TwitterId = twitterId;
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
         }
 
@@ -132,7 +132,7 @@ namespace Naheulbook.Core.Services
                         DisplayName = name
                     };
                     uow.Users.Add(user);
-                    await uow.CompleteAsync();
+                    await uow.SaveChangesAsync();
                 }
 
                 return user;
@@ -145,7 +145,7 @@ namespace Naheulbook.Core.Services
             {
                 var user = await uow.Users.GetAsync(userId);
                 user.MicrosoftId = microsoftId;
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
         }
     }

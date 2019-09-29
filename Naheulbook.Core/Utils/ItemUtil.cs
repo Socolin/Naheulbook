@@ -127,7 +127,7 @@ namespace Naheulbook.Core.Utils
                     notificationSession.NotifyCharacterAddItem(targetCharacter.Id, splitItem);
                 }
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             await notificationSession.CommitAsync();

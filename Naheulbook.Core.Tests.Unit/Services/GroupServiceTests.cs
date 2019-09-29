@@ -65,7 +65,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().Groups.Add(actualGroup);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
 
             actualGroup.Location.Should().BeSameAs(location);
@@ -138,7 +138,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _groupUtil.ApplyChangesAndNotify(group, request, _notificationSessionFactory.NotificationSession);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
                 _notificationSessionFactory.NotificationSession.CommitAsync();
             });
         }
@@ -184,12 +184,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Returns(group);
             _unitOfWorkFactory.GetUnitOfWork().Locations.GetAsync(locationId)
                 .Returns(new Location());
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(info => group.LocationId.Should().Be(locationId));
 
             await _service.EditGroupLocationAsync(naheulbookExecutionContext, groupId, request);
 
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
         }
 
         [Test]
@@ -274,7 +274,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().GroupInvites.Add(Arg.Is<GroupInvite>(gi => gi.FromGroup && gi.Group == group && gi.Character == character));
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
         }
 
@@ -355,7 +355,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task> act = () => _service.CreateInviteAsync(naheulbookExecutionContext, groupId, request);
 
             act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -378,7 +378,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task> act = () => _service.CreateInviteAsync(naheulbookExecutionContext, groupId, request);
 
             act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -398,7 +398,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().GroupInvites.Remove(groupInvite);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
         }
 
@@ -471,7 +471,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Returns(groupInvite);
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetInvitesByCharacterIdAsync(characterId)
                 .Returns(groupInvites);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(info => character.GroupId.Should().Be(groupId));
 
             await _service.AcceptInviteAsync(executionContext, groupId, characterId);
@@ -479,7 +479,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().GroupInvites.RemoveRange(groupInvites);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
         }
 

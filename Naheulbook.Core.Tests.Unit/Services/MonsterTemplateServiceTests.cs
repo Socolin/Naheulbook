@@ -59,7 +59,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().MonsterTemplates.Add(monsterTemplate);
-                _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
             });
             monsterTemplate.Should().BeEquivalentTo(expectedMonsterTemplate);
         }

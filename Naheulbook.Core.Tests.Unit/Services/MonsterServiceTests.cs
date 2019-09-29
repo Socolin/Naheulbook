@@ -72,7 +72,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             {
                 _activeStatsModifierUtil.InitializeModifierIds(request.Modifiers);
                 _unitOfWorkFactory.GetUnitOfWork().Monsters.Add(actualMonster);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
 
             actualMonster.Should().BeEquivalentTo(new Monster

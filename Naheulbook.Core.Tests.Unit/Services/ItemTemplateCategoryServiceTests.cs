@@ -44,7 +44,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _itemTemplateCategoryRepository.Add(itemTemplateCategory);
-                _unitOfWork.CompleteAsync();
+                _unitOfWork.SaveChangesAsync();
             });
             itemTemplateCategory.Should().BeEquivalentTo(expectedItemTemplateCategory);
         }
@@ -59,7 +59,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                _unitOfWork.CompleteAsync();
+                _unitOfWork.SaveChangesAsync();
             });
         }
 

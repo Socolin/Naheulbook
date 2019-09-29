@@ -62,7 +62,7 @@ namespace Naheulbook.Core.Services
 
                 uow.MonsterTemplates.Add(monsterTemplate);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return monsterTemplate;
             }
@@ -109,7 +109,7 @@ namespace Naheulbook.Core.Services
                     monsterTemplate.Items.Add(item);
                 }
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return await uow.MonsterTemplates.GetByIdWithItemsWithLocationsAsync(monsterTemplateId);
             }

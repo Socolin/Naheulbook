@@ -76,7 +76,7 @@ namespace Naheulbook.Core.Services
                 };
 
                 uow.Groups.Add(group);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return group;
             }
@@ -118,7 +118,7 @@ namespace Naheulbook.Core.Services
 
                 _groupUtil.ApplyChangesAndNotify(group, request, notificationSession);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             await notificationSession.CommitAsync();
@@ -140,7 +140,7 @@ namespace Naheulbook.Core.Services
 
                 group.LocationId = request.LocationId;
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyGroupChangeLocation(groupId, location);
@@ -203,7 +203,7 @@ namespace Naheulbook.Core.Services
 
                 uow.GroupInvites.Add(groupInvite);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyCharacterGroupInvite(request.CharacterId, groupInvite);
@@ -226,7 +226,7 @@ namespace Naheulbook.Core.Services
 
                 uow.GroupInvites.Remove(groupInvite);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyCharacterCancelGroupInvite(characterId, groupInvite);
@@ -253,7 +253,7 @@ namespace Naheulbook.Core.Services
                 uow.GroupInvites.RemoveRange(allCharacterInvites);
                 groupInvite.Character.GroupId = groupInvite.GroupId;
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var notificationSession = _notificationSessionFactory.CreateSession();
                 notificationSession.NotifyCharacterAcceptGroupInvite(characterId, groupInvite);
@@ -276,7 +276,7 @@ namespace Naheulbook.Core.Services
 
                 _groupUtil.StartCombat(group, notificationSession);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 if (group.CombatLoot != null)
                     notificationSession.NotifyGroupAddLoot(group.Id, group.CombatLoot);
@@ -299,7 +299,7 @@ namespace Naheulbook.Core.Services
 
                 _groupUtil.EndCombat(group, notificationSession);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             await notificationSession.CommitAsync();
@@ -347,7 +347,7 @@ namespace Naheulbook.Core.Services
 
                 var newDate = _groupUtil.AddTimeAndNotify(group, request, notificationSession);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
                 await notificationSession.CommitAsync();
 
                 return newDate;
@@ -365,7 +365,7 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
                 group.AddHistoryEntry(_groupHistoryUtil.CreateLogEventRp(group, request.IsGm, request.Info));
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
         }
     }

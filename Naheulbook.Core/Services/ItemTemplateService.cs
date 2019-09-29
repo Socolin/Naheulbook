@@ -67,7 +67,7 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 uow.ItemTemplates.Add(itemTemplate);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
                 itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplate.Id);
             }
 
@@ -97,7 +97,7 @@ namespace Naheulbook.Core.Services
 
                 _itemTemplateUtil.ApplyChangesFromRequest(itemTemplate, request);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
             }

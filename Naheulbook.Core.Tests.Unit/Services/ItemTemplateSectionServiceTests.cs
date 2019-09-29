@@ -46,7 +46,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().ItemTemplateSections.Add(itemTemplateSection);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             itemTemplateSection.Should().BeEquivalentTo(expectedItemTemplateSection);
         }
@@ -61,7 +61,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
         }
 

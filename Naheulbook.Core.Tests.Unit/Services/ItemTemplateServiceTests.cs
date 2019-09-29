@@ -85,7 +85,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Add(newItemTemplateEntity);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actualItemTemplate.Should().Be(fullyLoadedItemTemplate);
         }
@@ -102,7 +102,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task<ItemTemplate>> act = () => _service.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
 
             act.Should().Throw<TestException>();
-            await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -114,12 +114,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _mapper.Map<ItemTemplate>(createItemTemplateRequest)
                 .Returns(newItemTemplateEntity);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(callInfo => newItemTemplateEntity.SourceUserId.Should().Be(42));
 
             await _service.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
 
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _itemTemplateUtil.ApplyChangesFromRequest(fullyLoadedItemTemplate, itemTemplateRequest);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
         }
 
@@ -152,12 +152,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
                 .Returns(fullyLoadedItemTemplate);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(info => fullyLoadedItemTemplate.SourceUserId.Should().Be(userId));
 
             await _service.EditItemTemplateAsync(naheulbookExecutionContext, itemTemplateId, itemTemplateRequest);
 
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
         }
 
         [Test]
@@ -170,12 +170,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
                 .Returns(fullyLoadedItemTemplate);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(info => fullyLoadedItemTemplate.SourceUserId.Should().BeNull());
 
             await _service.EditItemTemplateAsync(naheulbookExecutionContext, itemTemplateId, itemTemplateRequest);
 
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
         }
 
         [Test]
@@ -195,7 +195,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             using (new AssertionScope())
             {
                 act.Should().Throw<TestException>();
-                _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
             }
         }
 
@@ -218,7 +218,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             using (new AssertionScope())
             {
                 act.Should().Throw<TestException>();
-                _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
             }
         }
 

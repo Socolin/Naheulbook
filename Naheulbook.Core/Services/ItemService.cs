@@ -83,7 +83,7 @@ namespace Naheulbook.Core.Services
                 var item = _itemFactory.CreateItem(ownerType, ownerId, itemTemplate, request.ItemData);
 
                 uow.Items.Add(item);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return await uow.Items.GetWithAllDataAsync(item.Id);
             }
@@ -107,7 +107,7 @@ namespace Naheulbook.Core.Services
                 var item = _itemFactory.CreateItem(ownerType, ownerId, itemTemplate, new ItemData());
 
                 uow.Items.Add(item);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return await uow.Items.GetWithAllDataAsync(item.Id);
             }
@@ -136,7 +136,7 @@ namespace Naheulbook.Core.Services
 
                 item.Data = _jsonUtil.Serialize(itemData);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyItemDataChanged(item);
@@ -158,7 +158,7 @@ namespace Naheulbook.Core.Services
 
                 item.Modifiers = _jsonUtil.Serialize(itemModifiers);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyItemModifiersChanged(item);
@@ -180,7 +180,7 @@ namespace Naheulbook.Core.Services
 
                 _itemUtil.EquipItem(item, request.Level);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyEquipItem(item);
@@ -202,7 +202,7 @@ namespace Naheulbook.Core.Services
 
                 item.ContainerId = request.ContainerId;
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyItemChangeContainer(item);
@@ -236,7 +236,7 @@ namespace Naheulbook.Core.Services
                     uow.Items.Remove(item);
                 }
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
                 await session.CommitAsync();
             }
         }
@@ -344,7 +344,7 @@ namespace Naheulbook.Core.Services
                     await _actionsUtil.ExecuteActionAsync(action, context, notificationSession);
                 }
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
                 await notificationSession.CommitAsync();
 
                 return usedItem;

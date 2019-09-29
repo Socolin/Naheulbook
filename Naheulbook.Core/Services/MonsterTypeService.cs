@@ -53,7 +53,7 @@ namespace Naheulbook.Core.Services
                 };
 
                 uow.MonsterTypes.Add(monsterType);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return monsterType;
             }
@@ -76,7 +76,7 @@ namespace Naheulbook.Core.Services
                 };
 
                 uow.MonsterCategories.Add(monsterCategory);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return monsterCategory;
             }

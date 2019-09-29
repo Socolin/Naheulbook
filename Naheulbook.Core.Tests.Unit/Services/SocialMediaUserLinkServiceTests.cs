@@ -33,7 +33,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var actual = await _service.GetOrCreateUserFromFacebookAsync("some-name", facebookId);
 
             actual.Should().BeSameAs(expectedUser);
-            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
-                _fakeUnitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actual.Should().BeEquivalentTo(new User
             {
@@ -71,7 +71,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var actual = await _service.GetOrCreateUserFromGoogleAsync("some-name", googleId);
 
             actual.Should().BeSameAs(expectedUser);
-            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
-                _fakeUnitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actual.Should().BeEquivalentTo(new User
             {
@@ -109,7 +109,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var actual = await _service.GetOrCreateUserFromTwitterAsync("some-name", twitterId);
 
             actual.Should().BeSameAs(expectedUser);
-            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
-                _fakeUnitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actual.Should().BeEquivalentTo(new User
             {
@@ -147,7 +147,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var actual = await _service.GetOrCreateUserFromMicrosoftAsync("some-name", microsoftId);
 
             actual.Should().BeSameAs(expectedUser);
-            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -163,7 +163,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
-                _fakeUnitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actual.Should().BeEquivalentTo(new User
             {

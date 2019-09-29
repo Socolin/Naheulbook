@@ -87,7 +87,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().Items.Add(createdItem);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actualItem.Should().BeSameAs(fullyLoadedItem);
         }
@@ -104,13 +104,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Returns("some-new-item-data-json");
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(info => item.Data.Should().Be("some-new-item-data-json"));
 
             var actualItem = await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
 
             actualItem.Should().BeSameAs(item);
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
         }
 
         [Test]
@@ -132,12 +132,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Returns(item);
             _characterHistoryUtil.CreateLogChangeItemQuantity(characterId, item, currentQuantity, newQuantity)
                 .Returns(characterHistoryEntry);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(info => item.Character.HistoryEntries.Should().Contain(characterHistoryEntry));
 
             await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
 
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
         }
 
         [Test]
@@ -155,7 +155,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task> act = () => _service.UpdateItemDataAsync(executionContext, itemId, new ItemData());
 
             act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -188,13 +188,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 .Returns(itemModifiersJson);
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(info => item.Modifiers.Should().Be(itemModifiersJson));
 
             var actualItem = await _service.UpdateItemModifiersAsync(new NaheulbookExecutionContext(), itemId, itemModifiers);
 
             actualItem.Should().BeSameAs(item);
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
         }
 
         [Test]
@@ -212,7 +212,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task> act = () => _service.UpdateItemModifiersAsync(executionContext, itemId, new List<ActiveStatsModifier>());
 
             act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -242,13 +242,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(info => _itemUtil.Received(1).EquipItem(item, 24));
 
             var actualItem = await _service.EquipItemAsync(new NaheulbookExecutionContext(), itemId, equipRequest);
 
             actualItem.Should().BeSameAs(item);
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
         }
 
         [Test]
@@ -266,7 +266,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task> act = () => _service.EquipItemAsync(executionContext, itemId, new EquipItemRequest());
 
             act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -298,13 +298,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(info => item.ContainerId.Should().Be(containerId));
 
             var actualItem = await _service.ChangeItemContainerAsync(new NaheulbookExecutionContext(), itemId, equipRequest);
 
             actualItem.Should().BeSameAs(item);
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
         }
 
         [Test]
@@ -333,7 +333,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task> act = () => _service.ChangeItemContainerAsync(executionContext, itemId, new ChangeItemContainerRequest());
 
             act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().CompleteAsync();
+            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]

@@ -45,7 +45,7 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 uow.ItemTemplateCategories.Add(itemTemplateCategory);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             return itemTemplateCategory;

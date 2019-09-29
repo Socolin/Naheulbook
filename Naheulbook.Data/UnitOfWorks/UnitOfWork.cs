@@ -42,7 +42,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IStatRepository Stats { get; }
         IUserRepository Users { get; }
 
-        Task<int> CompleteAsync();
+        Task<int> SaveChangesAsync();
     }
 
     public class UnitOfWork : IUnitOfWork
@@ -89,7 +89,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IStatRepository Stats => new StatRepository(_naheulbookDbContext);
         public IUserRepository Users => new UserRepository(_naheulbookDbContext);
 
-        public Task<int> CompleteAsync()
+        public Task<int> SaveChangesAsync()
         {
             return _naheulbookDbContext.SaveChangesAsync();
         }

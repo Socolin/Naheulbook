@@ -64,7 +64,7 @@ namespace Naheulbook.Core.Services
                 };
 
                 uow.Users.Add(user);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             await _mailService.SendCreateUserMailAsync(username, activationCode);
@@ -80,7 +80,7 @@ namespace Naheulbook.Core.Services
                 if (user.ActivationCode != activationCode)
                     throw new InvalidUserActivationCodeException();
                 user.ActivationCode = null;
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
         }
 
@@ -120,7 +120,7 @@ namespace Naheulbook.Core.Services
 
                 user.DisplayName = request.DisplayName;
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
         }
     }

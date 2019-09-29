@@ -59,7 +59,7 @@ namespace Naheulbook.Core.Services
                 };
 
                 uow.Loots.Add(loot);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return loot;
             }
@@ -126,7 +126,7 @@ namespace Naheulbook.Core.Services
                         session.NotifyCharacterHideLoot(character.Id, loot.Id);
                 }
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
                 await session.CommitAsync();
             }
         }
@@ -146,7 +146,7 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
 
                 uow.Loots.Remove(loot);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyGroupDeleteLoot(group.Id, lootId);

@@ -90,7 +90,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _effectTypeRepository.Add(effectType);
-                _unitOfWork.CompleteAsync();
+                _unitOfWork.SaveChangesAsync();
             });
             effectType.Name.Should().Be("some-name");
         }
@@ -105,7 +105,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                _unitOfWork.CompleteAsync();
+                _unitOfWork.SaveChangesAsync();
             });
         }
 
@@ -121,7 +121,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _effectCategoryRepository.Add(effectCategory);
-                _unitOfWork.CompleteAsync();
+                _unitOfWork.SaveChangesAsync();
             });
             effectCategory.Should().BeEquivalentTo(expectedEffectCategory);
         }
@@ -137,7 +137,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                _unitOfWork.CompleteAsync();
+                _unitOfWork.SaveChangesAsync();
             });
         }
 
@@ -153,7 +153,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _effectRepository.Add(effect);
-                _unitOfWork.CompleteAsync();
+                _unitOfWork.SaveChangesAsync();
             });
             effect.Should().BeEquivalentTo(expectedEffect);
         }
@@ -169,7 +169,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                _unitOfWork.CompleteAsync();
+                _unitOfWork.SaveChangesAsync();
             });
         }
 
@@ -189,7 +189,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             await _effectService.EditEffectAsync(executionContext, 42, editEffectRequest);
 
             await _unitOfWork.Received(1)
-                .CompleteAsync();
+                .SaveChangesAsync();
             previousEffect.Should().BeEquivalentTo(expectedEffect);
         }
 
@@ -209,7 +209,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                _unitOfWork.CompleteAsync();
+                _unitOfWork.SaveChangesAsync();
             });
         }
 

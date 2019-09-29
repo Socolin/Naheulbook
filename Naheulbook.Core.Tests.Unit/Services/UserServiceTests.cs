@@ -56,7 +56,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                     && u.HashedPassword == SomeEncryptedPassword
                     && !string.IsNullOrEmpty(u.ActivationCode))
                 );
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
         }
         [Test]
@@ -91,7 +91,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             await _service.ValidateUserAsync(SomeUsername, SomeActivationCode);
 
             user.ActivationCode.Should().BeNull();
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
         }
 
         [Test]

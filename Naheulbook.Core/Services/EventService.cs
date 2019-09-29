@@ -64,7 +64,7 @@ namespace Naheulbook.Core.Services
 
                 uow.Events.Add(groupEvent);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return groupEvent;
             }
@@ -86,7 +86,7 @@ namespace Naheulbook.Core.Services
 
                 uow.Events.Remove(groupEvent);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
         }
     }

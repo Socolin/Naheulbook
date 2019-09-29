@@ -97,7 +97,7 @@ namespace Naheulbook.Core.Services
 
                 uow.Characters.Add(character);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return character;
             }
@@ -133,7 +133,7 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogAddItem(characterId, item));
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             var session = _notificationSessionFactory.CreateSession();
@@ -205,7 +205,7 @@ namespace Naheulbook.Core.Services
 
                 _characterUtil.ApplyCharactersChange(executionContext, request, character, notificationSession);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             await notificationSession.CommitAsync();
@@ -223,7 +223,7 @@ namespace Naheulbook.Core.Services
 
                 character.StatBonusAd = request.Stat;
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyCharacterSetStatBonusAd(characterId, request.Stat);
@@ -247,7 +247,7 @@ namespace Naheulbook.Core.Services
                 uow.CharacterModifiers.Add(characterModifier);
                 uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogAddModifier(character, characterModifier));
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyCharacterAddModifier(characterId, characterModifier);
@@ -276,7 +276,7 @@ namespace Naheulbook.Core.Services
                 // uow.CharacterModifiers.Remove(characterModifier);
                 uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId));
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyCharacterRemoveModifier(characterId, characterModifierId);
@@ -300,7 +300,7 @@ namespace Naheulbook.Core.Services
 
                 _characterModifierUtil.ToggleModifier(character, characterModifier);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var session = _notificationSessionFactory.CreateSession();
                 session.NotifyCharacterUpdateModifier(characterId, characterModifier);
@@ -350,7 +350,7 @@ namespace Naheulbook.Core.Services
                 var notificationSession = _notificationSessionFactory.CreateSession();
                 notificationSession.NotifyCharacterLevelUp(character.Id, levelUpResult);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
                 await notificationSession.CommitAsync();
 
                 return levelUpResult;

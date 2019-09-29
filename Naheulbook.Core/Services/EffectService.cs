@@ -69,7 +69,7 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 uow.EffectTypes.Add(effectType);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             return effectType;
@@ -92,7 +92,7 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 uow.EffectCategories.Add(effectCategory);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             return effectCategory;
@@ -122,7 +122,7 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 uow.Effects.Add(effect);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             return effect;
@@ -152,7 +152,7 @@ namespace Naheulbook.Core.Services
                     StatName = s.Stat, Type = s.Type, Value = s.Value
                 }).ToList();
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 return effect;
             }

@@ -78,7 +78,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().Characters.Add(createdCharacter);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
 
             actualCharacter.OwnerId.Should().Be(userId);
@@ -207,7 +207,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork(1).CharacterHistoryEntries.Add(expectedCharacterHistoryEntry);
-                _unitOfWorkFactory.GetUnitOfWork(1).CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork(1).SaveChangesAsync();
             });
         }
 
@@ -357,12 +357,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.CompleteAsync())
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(info => character.StatBonusAd.Should().BeEquivalentTo("some-stat"));
 
             await _service.SetCharacterAdBonusStatAsync(executionContext, characterId, new PutStatBonusAdRequest {Stat = "some-stat"});
 
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
 
             Received.InOrder(() =>
             {
@@ -421,7 +421,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.Add(characterModifier);
-                _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
             });
             actualCharacterModifier.Should().BeSameAs(characterModifier);
         }
@@ -469,7 +469,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().CharacterHistoryEntries.Add(characterHistoryEntry);
-                _unitOfWorkFactory.GetUnitOfWork().Received(1).CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
             });
         }
 
@@ -525,7 +525,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 // TODO: Change after rework of character history
                 characterModifier.CharacterId.Should().BeNull();
                 // _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.Remove(characterModifier);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
         }
 
@@ -548,7 +548,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _unitOfWorkFactory.GetUnitOfWork().CharacterHistoryEntries.Add(characterHistoryEntry);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
         }
 
@@ -627,7 +627,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Received.InOrder(() =>
             {
                 _characterModifierUtil.ToggleModifier(character, characterModifier);
-                _unitOfWorkFactory.GetUnitOfWork().CompleteAsync();
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
         }
 

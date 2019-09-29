@@ -82,7 +82,7 @@ namespace Naheulbook.Core.Services
                 // FIXME: test this
                 uow.Monsters.Add(monster);
                 monster.Items = await _itemService.CreateItemsAsync(request.Items);
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 monster.Items = await uow.Items.GetWithAllDataByIdsAsync(monster.Items.Select(x => x.Id));
 
@@ -153,7 +153,7 @@ namespace Naheulbook.Core.Services
                 _activeStatsModifierUtil.AddModifier(modifiers, statsModifier);
                 monster.Modifiers = _jsonUtil.Serialize(modifiers);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var notificationSession = _notificationSessionFactory.CreateSession();
                 notificationSession.NotifyMonsterAddModifier(monster.Id, statsModifier);
@@ -177,7 +177,7 @@ namespace Naheulbook.Core.Services
                 _activeStatsModifierUtil.RemoveModifier(modifiers, modifierId);
                 monster.Modifiers = _jsonUtil.Serialize(modifiers);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
 
                 var notificationSession = _notificationSessionFactory.CreateSession();
                 notificationSession.NotifyMonsterRemoveModifier(monster.Id, modifierId);
@@ -197,7 +197,7 @@ namespace Naheulbook.Core.Services
 
                 uow.Monsters.Remove(monster);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
         }
 
@@ -222,7 +222,7 @@ namespace Naheulbook.Core.Services
                     await notificationSession.CommitAsync();
                 }
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
         }
 
@@ -289,7 +289,7 @@ namespace Naheulbook.Core.Services
                 var notificationSession = _notificationSessionFactory.CreateSession();
                 notificationSession.NotifyMonsterUpdateData(monster.Id, monsterData);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
                 await notificationSession.CommitAsync();
             }
         }
@@ -330,7 +330,7 @@ namespace Naheulbook.Core.Services
                 var notificationSession = _notificationSessionFactory.CreateSession();
                 notificationSession.NotifyMonsterChangeTarget(monster.Id, request);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
                 await notificationSession.CommitAsync();
             }
         }
@@ -350,7 +350,7 @@ namespace Naheulbook.Core.Services
                 var notificationSession = _notificationSessionFactory.CreateSession();
                 notificationSession.NotifyMonsterChangeName(monster.Id, request.Name);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
                 await notificationSession.CommitAsync();
             }
         }

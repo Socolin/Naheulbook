@@ -56,7 +56,7 @@ namespace Naheulbook.Core.Utils
                 foreach (var (monster, changes) in monsters.Join(monsterUpdateDurations, c => c.Id, c => c.MonsterId, (monster, updateDuration) => (monster, updateDuration.Changes)))
                     UpdateMonsterDuration(monster, changes, notificationSession);
 
-                await uow.CompleteAsync();
+                await uow.SaveChangesAsync();
             }
 
             await notificationSession.CommitAsync();
