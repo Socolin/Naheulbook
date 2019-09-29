@@ -134,7 +134,7 @@ namespace Naheulbook.Core.Services
                         item.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogIdentifyItem(item.CharacterId.Value, item));
                 }
 
-                item.Data = _jsonUtil.Serialize(itemData);
+                item.Data = _jsonUtil.SerializeNonNull(itemData);
 
                 await uow.SaveChangesAsync();
 
@@ -332,7 +332,7 @@ namespace Naheulbook.Core.Services
 
                 itemData.Charge--;
                 sourceCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogUseItemCharge(usedItem.CharacterId.Value, usedItem, itemData.Charge, itemData.Charge - 1));
-                usedItem.Data = _jsonUtil.Serialize(itemData);
+                usedItem.Data = _jsonUtil.SerializeNonNull(itemData);
 
                 var notificationSession = _notificationSessionFactory.CreateSession();
                 var context = new ActionContext(usedItem, sourceCharacter, targetCharacter, uow);

@@ -65,7 +65,7 @@ namespace Naheulbook.Core.Factories
 
             var item = new Item
             {
-                Data = _jsonUtil.Serialize(itemData),
+                Data = _jsonUtil.SerializeNonNull(itemData),
                 ItemTemplateId = itemTemplate.Id
             };
             return item;

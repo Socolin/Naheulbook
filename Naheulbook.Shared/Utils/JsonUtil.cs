@@ -6,6 +6,7 @@ namespace Naheulbook.Shared.Utils
     public interface IJsonUtil
     {
         string? Serialize(object? obj);
+        string SerializeNonNull<T>(T obj) where T : class;
         T? Deserialize<T>(string? json) where T : class;
         T DeserializeOrCreate<T>(string? json) where T : class, new();
     }
@@ -22,6 +23,11 @@ namespace Naheulbook.Shared.Utils
         {
             if (obj == null)
                 return null;
+            return JsonConvert.SerializeObject(obj, _serializerSettings);
+        }
+
+        public string SerializeNonNull<T>(T obj) where T: class
+        {
             return JsonConvert.SerializeObject(obj, _serializerSettings);
         }
 

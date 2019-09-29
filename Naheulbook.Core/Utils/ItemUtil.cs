@@ -63,7 +63,7 @@ namespace Naheulbook.Core.Utils
                     item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogEquipItem(item.CharacterId.Value, item.Id));
             }
 
-            item.Data = _jsonUtil.Serialize(itemData);
+            item.Data = _jsonUtil.SerializeNonNull(itemData);
         }
 
         public async Task<(Item takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger)
@@ -163,7 +163,7 @@ namespace Naheulbook.Core.Utils
                     itemData.Charge = itemTemplateData.Charge.Value;
 
                 itemData.Quantity--;
-                item.Data = _jsonUtil.Serialize(itemData);
+                item.Data = _jsonUtil.SerializeNonNull(itemData);
                 return false;
             }
 
@@ -173,7 +173,7 @@ namespace Naheulbook.Core.Utils
         private Item SplitItem(Item originalItem, ItemData originalItemData, int quantity)
         {
             originalItemData.Quantity -= quantity;
-            originalItem.Data = _jsonUtil.Serialize(originalItemData);
+            originalItem.Data = _jsonUtil.SerializeNonNull(originalItemData);
 
             var originalQuantity = originalItemData.Quantity;
             originalItemData.Quantity = quantity;
@@ -181,7 +181,7 @@ namespace Naheulbook.Core.Utils
             {
                 Modifiers = originalItem.Modifiers,
                 ItemTemplateId = originalItem.ItemTemplateId,
-                Data = _jsonUtil.Serialize(originalItemData)
+                Data = _jsonUtil.SerializeNonNull(originalItemData)
             };
 
             originalItemData.Quantity = originalQuantity;

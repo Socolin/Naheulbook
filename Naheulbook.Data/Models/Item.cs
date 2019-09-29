@@ -4,7 +4,7 @@ namespace Naheulbook.Data.Models
     {
         public int Id { get; set; }
 
-        public string? Data { get; set; }
+        public string Data { get; set; } = null!;
         public string? Modifiers { get; set; }
         public int? ContainerId { get; set; }
         public Item? Container { get; set; }
