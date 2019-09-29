@@ -9,7 +9,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/skills")]
     [ApiController]
-    public class SkillsController : Controller
+    public class SkillsController : ControllerBase
     {
         private readonly ISkillService _skillService;
         private readonly IMapper _mapper;

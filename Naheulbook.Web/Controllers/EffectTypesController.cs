@@ -13,7 +13,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/effectTypes")]
     [ApiController]
-    public class EffectTypesController : Controller
+    public class EffectTypesController : ControllerBase
     {
         private readonly IEffectService _effectService;
         private readonly IMapper _mapper;

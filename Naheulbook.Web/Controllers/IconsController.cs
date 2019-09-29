@@ -8,7 +8,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/icons")]
     [ApiController]
-    public class IconsController : Controller
+    public class IconsController : ControllerBase
     {
         private readonly IIconService _iconService;
 

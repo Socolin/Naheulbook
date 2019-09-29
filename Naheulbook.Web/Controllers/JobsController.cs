@@ -9,7 +9,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/jobs")]
     [ApiController]
-    public class JobsController : Controller
+    public class JobsController : ControllerBase
     {
         private readonly IJobService _jobService;
         private readonly IMapper _mapper;

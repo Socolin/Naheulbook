@@ -15,7 +15,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/users")]
     [ApiController]
-    public class UsersController : Controller
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IJwtService _jwtService;

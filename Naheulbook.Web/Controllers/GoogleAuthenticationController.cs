@@ -14,7 +14,7 @@ namespace Naheulbook.Web.Controllers
 {
     [ApiController]
     [Route("api/v2/authentications/google")]
-    public class GoogleAuthenticationController : Controller
+    public class GoogleAuthenticationController : ControllerBase
     {
         private const string GoogleLoginTokenKey = "googleLoginToken";
 

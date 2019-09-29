@@ -14,7 +14,7 @@ namespace Naheulbook.Web.Controllers
 {
     [ApiController]
     [Route("api/v2/authentications/facebook")]
-    public class FacebookAuthenticationController : Controller
+    public class FacebookAuthenticationController : ControllerBase
     {
         private const string FacebookLoginTokenKey = "facebookLoginToken";
 

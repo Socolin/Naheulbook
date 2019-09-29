@@ -14,7 +14,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/itemTemplateSections")]
     [ApiController]
-    public class ItemTemplateSectionsController : Controller
+    public class ItemTemplateSectionsController : ControllerBase
     {
         private readonly IItemTemplateSectionService _itemTemplateSectionService;
         private readonly IMapper _mapper;

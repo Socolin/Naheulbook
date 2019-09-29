@@ -15,7 +15,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/groups")]
     [ApiController]
-    public class GroupsController : Controller
+    public class GroupsController : ControllerBase
     {
         private readonly IGroupService _groupService;
         private readonly ILootService _lootService;

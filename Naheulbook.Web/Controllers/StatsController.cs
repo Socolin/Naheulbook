@@ -9,7 +9,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/stats")]
     [ApiController]
-    public class StatsController : Controller
+    public class StatsController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IStatService _statService;

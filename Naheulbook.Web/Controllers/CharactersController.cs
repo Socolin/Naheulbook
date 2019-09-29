@@ -16,7 +16,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/characters")]
     [ApiController]
-    public class CharactersController : Controller
+    public class CharactersController : ControllerBase
     {
         private readonly ICharacterService _characterService;
         private readonly IMapper _mapper;

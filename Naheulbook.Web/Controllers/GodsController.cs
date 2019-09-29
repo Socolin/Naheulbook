@@ -9,7 +9,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/gods")]
     [ApiController]
-    public class GodsController : Controller
+    public class GodsController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IGodService _godService;

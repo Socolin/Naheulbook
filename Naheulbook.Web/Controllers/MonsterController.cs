@@ -15,7 +15,7 @@ namespace Naheulbook.Web.Controllers
 {
     [ApiController]
     [Route("api/v2/monsters")]
-    public class MonsterController : Controller
+    public class MonsterController : ControllerBase
     {
         private readonly IMonsterService _monsterService;
         private readonly IMapper _mapper;

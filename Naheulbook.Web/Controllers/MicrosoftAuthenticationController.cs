@@ -14,7 +14,7 @@ namespace Naheulbook.Web.Controllers
 {
     [ApiController]
     [Route("api/v2/authentications/microsoft")]
-    public class MicrosoftAuthenticationController : Controller
+    public class MicrosoftAuthenticationController : ControllerBase
     {
         private const string MicrosoftLoginTokenKey = "microsoftLoginToken";
 

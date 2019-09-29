@@ -13,7 +13,7 @@ namespace Naheulbook.Web.Controllers
 {
     [ApiController]
     [Route("api/v2/authentications/twitter")]
-    public class TwitterAuthenticationController : Controller
+    public class TwitterAuthenticationController : ControllerBase
     {
         private const string TwitterOauthTokenKey = "twitterOauthToken";
 

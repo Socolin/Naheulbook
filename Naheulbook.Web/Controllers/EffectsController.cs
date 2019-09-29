@@ -14,7 +14,7 @@ namespace Naheulbook.Web.Controllers
 {
     [ApiController]
     [Route("api/v2/effects")]
-    public class EffectsController : Controller
+    public class EffectsController : ControllerBase
     {
         private readonly IEffectService _effectService;
         private readonly IMapper _mapper;

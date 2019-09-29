@@ -14,7 +14,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/loots")]
     [ApiController]
-    public class LootController : Controller
+    public class LootController : ControllerBase
     {
         private readonly ILootService _lootService;
         private readonly IMapper _mapper;

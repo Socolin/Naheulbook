@@ -9,7 +9,7 @@ namespace Naheulbook.Web.Controllers
 {
     [Route("api/v2/locations")]
     [ApiController]
-    public class LocationsController : Controller
+    public class LocationsController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ILocationService _locationService;
