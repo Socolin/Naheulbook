@@ -23,7 +23,7 @@ export class AddItemDialogComponent {
     public itemData?: ItemData;
     public filteredItemTemplates: {
         name: string,
-        icon: IconDescription,
+        icon?: IconDescription,
         categoryName: string,
         sectionName: string,
         sourceIcon?: string,

@@ -76,17 +76,19 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         );
     }
 
-    onAddItem(data: { monster?: Monster, loot?: Loot, item: Item }) {
-        if (data.loot) {
+    onAddItem(data: { loot: Loot, item: Item } | { monster: Monster, item: Item }) {
+        if ('loot' in data) {
+            const loot = data.loot;
             this.itemService.addItemTo('loot', data.loot.id, data.item.template.id, data.item.data).subscribe(
                 item => {
-                    data.loot.addItem(item);
+                    loot.addItem(item);
                 }
             );
         } else {
+            const monster = data.monster;
             this.itemService.addItemTo('monster', data.monster.id, data.item.template.id, data.item.data).subscribe(
                 item => {
-                    data.monster.addItem(item);
+                    monster.addItem(item);
                 }
             );
         }

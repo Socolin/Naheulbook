@@ -6,8 +6,7 @@ import {Job, JobService} from '../job';
 import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
 import {CharacterService} from './character.service';
-import {Speciality} from '../job/speciality.model';
-import {IMetadata} from '../shared';
+import {Speciality} from '../job';
 
 @Component({
     templateUrl: './create-custom-character.component.html',
@@ -65,9 +64,12 @@ export class CreateCustomCharacterComponent implements OnInit {
         if (this.selectedOrigin) {
             this.at += this.selectedOrigin.bonusAT;
             this.prd += this.selectedOrigin.bonusPRD;
+            this.ev = this.selectedOrigin.baseEV;
+        }
+        else {
+            this.ev = 0;
         }
 
-        this.ev = this.selectedOrigin.baseEV;
         this.ea = 0;
 
         for (let i = 0; i < this.selectedJobs.length; i++) {
@@ -143,15 +145,19 @@ export class CreateCustomCharacterComponent implements OnInit {
     }
 
     updateAvailableJobs(): void {
+        if (!this.selectedOrigin) {
+            return;
+        }
         let availableJobs: Job[] = [];
+        let selectedOrigin = this.selectedOrigin;
         for (let job of this.jobs) {
             if (job.originsWhitelist && job.originsWhitelist.length) {
-                if (job.originsWhitelist.findIndex(w => w.id === this.selectedOrigin.id) !== -1) {
+                if (job.originsWhitelist.findIndex(w => w.id === selectedOrigin.id) !== -1) {
                     availableJobs.push(job);
                 }
             }
             else if (job.originsBlacklist && job.originsBlacklist.length) {
-                if (job.originsBlacklist.findIndex(w => w.id === this.selectedOrigin.id) === -1) {
+                if (job.originsBlacklist.findIndex(w => w.id === selectedOrigin.id) === -1) {
                     availableJobs.push(job);
                 }
             }
@@ -203,15 +209,11 @@ export class CreateCustomCharacterComponent implements OnInit {
         return this.specialities[job.id].indexOf(speciality) !== -1;
     }
 
-    private getIds(elements: IMetadata[]) {
-        let ids = [];
-        for (let e of elements) {
-            ids.push(e.id);
-        }
-        return ids;
-    }
-
     createCustomCharacter() {
+        // FIXME: Replace with assert typescript 3.7
+        if (!this.selectedOrigin) {
+            return;
+        }
         this.creating = true;
 
         let specialitiesIds = {};
@@ -242,8 +244,8 @@ export class CreateCustomCharacterComponent implements OnInit {
             ev: this.ev,
             ea: this.ea,
             originId: this.selectedOrigin.id,
-            jobsIds: this.getIds(this.selectedJobs),
-            skills: this.getIds(this.selectedSkills),
+            jobsIds: this.selectedJobs.map(job => job.id),
+            skills: this.selectedSkills.map(skill => skill.id),
             specialities: specialitiesIds,
         };
         if (this.router.routerState.snapshot.root.queryParams.hasOwnProperty('isNpc')) {
@@ -262,7 +264,7 @@ export class CreateCustomCharacterComponent implements OnInit {
                     this.router.navigate(['player', 'character', 'detail', res.id]);
                 }
             },
-            err => {
+            () => {
                 this.creating = false;
             });
     }

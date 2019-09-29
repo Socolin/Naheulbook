@@ -10,7 +10,7 @@ import {User} from './user.model';
     styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-    public profile: User|null;
+    public profile?: User;
 
     constructor(
         private readonly notification: NotificationsService,
@@ -19,6 +19,9 @@ export class UserProfileComponent implements OnInit {
     }
 
     updateProfile() {
+        if (!this.profile) {
+            return;
+        }
         this.loginService.updateProfile(this.profile.id, this.profile).subscribe(
             () => {
                 this.notification.success('Succes', 'Profile édité');
@@ -29,14 +32,11 @@ export class UserProfileComponent implements OnInit {
     linkTo(method: string) {
         if (method === 'facebook') {
             this.loginService.redirectToFbLogin('profile');
-        }
-        else if (method === 'google') {
+        } else if (method === 'google') {
             this.loginService.redirectToGoogleLogin('profile');
-        }
-        else if (method === 'twitter') {
+        } else if (method === 'twitter') {
             this.loginService.redirectToTwitterLogin('profile');
-        }
-        else if (method === 'microsoft') {
+        } else if (method === 'microsoft') {
             this.loginService.redirectToMicrosoftLogin('profile');
         }
     }

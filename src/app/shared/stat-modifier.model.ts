@@ -40,10 +40,10 @@ export class ItemStatModifier implements StatModifier {
     stat: string;
     type: StatModificationOperand;
     value: number;
-    special: string[];
+    special?: string[];
 
-    job: number;
-    origin: number;
+    job?: number;
+    origin?: number;
 }
 
 export class StatsModifier implements IDurable {
@@ -52,10 +52,10 @@ export class StatsModifier implements IDurable {
     reusable = false;
 
     durationType: DurationType = 'combat';
-    duration: string;
-    combatCount: number;
-    lapCount: number;
-    timeDuration: number;
+    duration?: string;
+    combatCount?: number;
+    lapCount?: number;
+    timeDuration?: number;
 
     description?: string;
     type?: string;
@@ -74,9 +74,9 @@ export class ActiveStatsModifier extends StatsModifier {
     permanent: boolean;
     active: boolean;
 
-    currentCombatCount: number;
-    currentLapCount: number;
-    currentTimeDuration: number;
+    currentCombatCount?: number;
+    currentLapCount?: number;
+    currentTimeDuration?: number;
 
     lapCountDecrement?: LapCountDecrement;
 
@@ -158,6 +158,10 @@ export class ActiveStatsModifier extends StatsModifier {
 
         switch (this.durationType) {
             case 'combat': {
+                // FIXME: Typescript 3.7 assert that
+                if (this.currentCombatCount === undefined) {
+                    throw new Error('currentCombatCount should not be undefined');
+                }
                 if (this.currentCombatCount > 0 && typeof (data) === 'number') {
                     this.currentCombatCount -= data;
                     if (this.currentCombatCount <= 0) {
@@ -169,6 +173,10 @@ export class ActiveStatsModifier extends StatsModifier {
                 break;
             }
             case 'time': {
+                // FIXME: Typescript 3.7 assert that
+                if (this.currentTimeDuration === undefined) {
+                    throw new Error('currentTimeDuration should not be undefined');
+                }
                 if (this.currentTimeDuration > 0 && typeof (data) === 'number') {
                     this.currentTimeDuration -= data;
                     if (this.currentTimeDuration <= 0) {
@@ -180,6 +188,10 @@ export class ActiveStatsModifier extends StatsModifier {
                 break;
             }
             case 'lap': {
+                // FIXME: Typescript 3.7 assert that
+                if (this.currentLapCount === undefined) {
+                    throw new Error('currentTimeDuration should not be undefined');
+                }
                 if (this.currentLapCount > 0) {
                     let testFighter: Fighter;
                     if (!this.lapCountDecrement) {

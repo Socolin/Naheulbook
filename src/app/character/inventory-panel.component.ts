@@ -194,7 +194,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 ...item.data,
                 quantity: eventData.quantity
             };
-            if (item.template.data.charge && eventData.quantity === item.data.quantity - 1) {
+            if (item.template.data.charge && eventData.quantity === (item.data.quantity || 0) - 1) {
                 itemData.charge = item.template.data.charge;
             }
             this.itemService.updateItem(item.id, itemData).subscribe(

@@ -307,7 +307,7 @@ export class Monster extends WsRegistrable {
         for (let item of this.items) {
             if (item.data.equiped) {
                 this.computedData.dmg.push({
-                    name: item.data.name,
+                    name: item.data.name || item.template.name,
                     damage: item.getDamageString()
                 });
             }

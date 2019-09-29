@@ -75,12 +75,12 @@ export class ItemTemplateGunData implements IItemTemplateGunData {
     ammunitionPerShot: string;
     workLuck: string;
 
-    static fromJson(jsonData: ItemTemplateGunData): ItemTemplateGunData | undefined {
-        if (!jsonData) {
+    static fromResponse(response?: IItemTemplateGunData): ItemTemplateGunData | undefined {
+        if (!response) {
             return undefined;
         }
         let gunData = new ItemTemplateGunData();
-        Object.assign(gunData, jsonData);
+        Object.assign(gunData, response);
         return gunData;
     }
 }
@@ -126,7 +126,7 @@ export class ItemTemplateData implements IItemTemplateData {
 
     static fromJson(jsonData: IItemTemplateData): ItemTemplateData {
         let itemTemplateData = new ItemTemplateData();
-        Object.assign(itemTemplateData, jsonData, {gun: ItemTemplateGunData.fromJson(jsonData.gun)});
+        Object.assign(itemTemplateData, jsonData, {gun: ItemTemplateGunData.fromResponse(jsonData.gun)});
         return itemTemplateData;
     }
 
@@ -185,8 +185,12 @@ export class ItemTemplate {
     unskills: Skill[] = [];
     slots: ItemSlot[] = [];
     restrictJobs: Job[] = [];
-    requirements: any[] = [];
-    skillModifiers?: ItemSkillModifier[];
+    requirements: {
+        stat: string;
+        min?: number;
+        max?: number;
+    }[] = [];
+    skillModifiers: ItemSkillModifier[];
 
     static hasSlot(template: ItemTemplate, slotName: string): boolean {
         if (!template.slots) {

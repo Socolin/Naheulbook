@@ -14,9 +14,13 @@ import {
 
 import {MonsterTemplateRequest} from '../api/requests';
 import {SkillService} from '../skill';
-import {MonsterTemplateResponse} from '../api/responses/monster-template-response';
-import {MonsterCategoryResponse} from '../api/responses/monster-category-response';
-import {MonsterTraitResponse, MonsterTypeResponse} from '../api/responses';
+import {
+    MonsterCategoryResponse,
+    MonsterTemplateResponse,
+    MonsterTraitResponse,
+    MonsterTypeResponse
+} from '../api/responses';
+import {toDictionary} from '../utils/utils';
 
 @Injectable()
 export class MonsterTemplateService {
@@ -45,17 +49,18 @@ export class MonsterTemplateService {
 
     getMonsterTypes(): Observable<MonsterTemplateType[]> {
         if (!this.monsterTypes) {
-            this.monsterTypes = new ReplaySubject<MonsterTemplateType[]>(1);
+            const loadingMonsterTypes = new ReplaySubject<MonsterTemplateType[]>(1);
+            this.monsterTypes = loadingMonsterTypes;
 
             this.httpClient.get<MonsterTypeResponse[]>('/api/v2/monsterTypes')
                 .subscribe(
                     monsterTypesJsonData => {
                         let monsterTypes = MonsterTemplateType.typesFromJson(monsterTypesJsonData);
-                        this.monsterTypes.next(monsterTypes);
-                        this.monsterTypes.complete();
+                        loadingMonsterTypes.next(monsterTypes);
+                        loadingMonsterTypes.complete();
                     },
                     error => {
-                        this.monsterTypes.error(error);
+                        loadingMonsterTypes.error(error);
                     }
                 );
         }
@@ -74,16 +79,17 @@ export class MonsterTemplateService {
 
     getMonsterTraits(): Observable<MonsterTrait[]> {
         if (!this.monsterTraits) {
-            this.monsterTraits = new ReplaySubject<MonsterTrait[]>(1);
+            const loadingMonsterTraits = new ReplaySubject<MonsterTrait[]>(1);
+            this.monsterTraits = loadingMonsterTraits;
 
             this.httpClient.get<MonsterTraitResponse[]>('/api/v2/monsterTraits')
                 .subscribe(
                     monsterTraits => {
-                        this.monsterTraits.next(monsterTraits);
-                        this.monsterTraits.complete();
+                        loadingMonsterTraits.next(monsterTraits);
+                        loadingMonsterTraits.complete();
                     },
                     error => {
-                        this.monsterTraits.error(error);
+                        loadingMonsterTraits.error(error);
                     }
                 );
         }
@@ -92,20 +98,16 @@ export class MonsterTemplateService {
 
     getMonsterTraitsById(): Observable<MonsterTraitDictionary> {
         if (!this.monsterTraitsById) {
-            this.monsterTraitsById = new ReplaySubject<MonsterTrait[]>(1);
+            const loadingMonsterTraitsById = new ReplaySubject<MonsterTraitDictionary>(1);
+            this.monsterTraitsById = loadingMonsterTraitsById;
 
             this.getMonsterTraits().subscribe(
-                traits => {
-                    let monsterTraitsById = {};
-                    for (let i = 0; i < traits.length; i++) {
-                        let trait = traits[i];
-                        monsterTraitsById[trait.id] = trait;
-                    }
-                    this.monsterTraitsById.next(monsterTraitsById);
-                    this.monsterTraitsById.complete();
+                monsterTraits => {
+                    loadingMonsterTraitsById.next(toDictionary(monsterTraits));
+                    loadingMonsterTraitsById.complete();
                 },
                 error => {
-                    this.monsterTraitsById.error(error);
+                    loadingMonsterTraitsById.error(error);
                 }
             );
         }

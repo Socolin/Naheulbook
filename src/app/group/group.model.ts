@@ -209,7 +209,7 @@ export class Fighter {
         }
     }
 
-    updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): FighterDurationChanges {
+    updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): FighterDurationChanges | undefined {
         if (this.isMonster) {
             let changes = this.monster.updateTime(type, data);
             if (changes.length) {

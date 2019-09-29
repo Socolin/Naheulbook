@@ -11,7 +11,7 @@ import {MatDialog} from '@angular/material';
     styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-    public user: User | null;
+    public user?: User;
     public redirectPage: string;
     public moreInfo: boolean;
     public loading = false;

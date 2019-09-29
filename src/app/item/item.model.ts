@@ -6,7 +6,7 @@ import {Fighter} from '../group';
 import {IDurable, IItemData} from '../api/shared';
 
 export class ItemData implements IItemData {
-    name?: string;
+    name: string;
     description?: string;
     quantity?: number;
     icon?: IconDescription;
@@ -31,20 +31,19 @@ export class Item {
     template: ItemTemplate;
     computedData: ItemComputedData = new ItemComputedData();
 
-    get price(): number|undefined {
+    get price(): number | undefined {
         if (!this.template.data.price) {
             return undefined;
         }
 
-        let quantity = 1;
+        let priceFactor = 1;
         if (this.data.quantity) {
-            quantity = this.data.quantity;
-        }
-        if (this.template.data.useUG) {
-            quantity = this.data.ug;
+            priceFactor = this.data.quantity;
+        } else if (this.template.data.useUG) {
+            priceFactor = this.data.ug || 1;
         }
 
-        return this.template.data.price * quantity;
+        return this.template.data.price * priceFactor;
     }
 
     // Generated field

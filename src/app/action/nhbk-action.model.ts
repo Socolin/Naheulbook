@@ -140,6 +140,8 @@ export class NhbkActionFactory {
                 return new NhbkCustomAction(data);
             default:
                 assertNever(type);
+                // FIXME: Remove that when `asserts` is available
+                throw new Error('Waiting for asserts');
         }
     }
 }

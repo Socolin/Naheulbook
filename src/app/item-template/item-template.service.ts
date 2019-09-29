@@ -12,7 +12,7 @@ import {
     ItemSlot,
     ItemTemplateCategoryDictionary
 } from './item-template.model';
-import {ItemTemplateResponse, ItemTemplateSectionResponse, ItemTypeResponse} from '../api/responses';
+import {ItemSlotResponse, ItemTemplateResponse, ItemTemplateSectionResponse, ItemTypeResponse} from '../api/responses';
 import {ItemTemplateRequest} from '../api/requests/item-template-request';
 
 @Injectable()
@@ -31,17 +31,17 @@ export class ItemTemplateService {
 
     getSectionsList(): Observable<ItemTemplateSection[]> {
         if (!this.itemSections) {
-            this.itemSections = new ReplaySubject<ItemTemplateSection[]>(1);
-
+            const loadingItemSections = new ReplaySubject<ItemTemplateSection[]>(1);
+            this.itemSections = loadingItemSections;
             this.httpClient.get<ItemTemplateSectionResponse[]>('/api/v2/itemTemplateSections')
                 .subscribe(
                     itemSectionResponses => {
                         const itemTemplateSections = ItemTemplateSection.fromResponses(itemSectionResponses);
-                        this.itemSections.next(itemTemplateSections);
-                        this.itemSections.complete();
+                        loadingItemSections.next(itemTemplateSections);
+                        loadingItemSections.complete();
                     },
                     error => {
-                        this.itemSections.error(error);
+                        loadingItemSections.error(error);
                     }
                 );
         }
@@ -133,16 +133,17 @@ export class ItemTemplateService {
 
     getSlots(): Observable<ItemSlot[]> {
         if (!this.slots) {
-            this.slots = new ReplaySubject<ItemSlot[]>(1);
+            const loadingSlots = new ReplaySubject<ItemSlot[]>(1);
+            this.slots = loadingSlots;
 
-            this.httpClient.get<ItemSlot[]>('/api/v2/itemSlots')
+            this.httpClient.get<ItemSlotResponse[]>('/api/v2/itemSlots')
                 .subscribe(
                     slots => {
-                        this.slots.next(slots);
-                        this.slots.complete();
+                        loadingSlots.next(slots);
+                        loadingSlots.complete();
                     },
                     error => {
-                        this.slots.error(error);
+                        loadingSlots.error(error);
                     }
                 );
         }
@@ -151,16 +152,17 @@ export class ItemTemplateService {
 
     getItemTypes(): Observable<ItemTypeResponse[]> {
         if (!this.itemTypes) {
-            this.itemTypes = new ReplaySubject<ItemTypeResponse[]>(1);
+            const loadingItemTypes = new ReplaySubject<ItemTypeResponse[]>(1);
+            this.itemTypes = loadingItemTypes;
 
             this.httpClient.get<ItemTypeResponse[]>('/api/v2/itemTypes')
                 .subscribe(
                     itemTypes => {
-                        this.itemTypes.next(itemTypes);
-                        this.itemTypes.complete();
+                        loadingItemTypes.next(itemTypes);
+                        loadingItemTypes.complete();
                     },
                     error => {
-                        this.itemTypes.error(error);
+                        loadingItemTypes.error(error);
                     }
                 );
         }
@@ -178,28 +180,6 @@ export class ItemTemplateService {
 
     clearItemSectionCache(sectionId: number) {
         delete this.itemBySection[sectionId];
-    }
-
-    getSectionFromCategory(categoryId: number): Observable<ItemTemplateSection> {
-        return new Observable(observer => {
-            this.getSectionsList().subscribe(
-                sections => {
-                    for (let i = 0; i < sections.length; i++) {
-                        let section = sections[i];
-                        for (let j = 0; j < section.categories.length; j++) {
-                            if (categoryId === section.categories[j].id) {
-                                observer.next(section);
-                                observer.complete();
-                                return;
-                            }
-                        }
-                    }
-                    observer.next(null);
-                    observer.complete();
-                    return;
-                }
-            );
-        });
     }
 
     getItemTemplatesByCategoryTechName(categoryTechName: string): Observable<ItemTemplate[]> {

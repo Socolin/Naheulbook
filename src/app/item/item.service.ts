@@ -9,6 +9,7 @@ import {Skill, SkillService} from '../skill';
 
 import {Item, ItemData} from './item.model';
 import {ItemPartialResponse} from '../api/responses';
+import {assertNever} from '../utils/utils';
 
 export interface TakeItemResponse {
     takenItem: ItemData;
@@ -41,10 +42,12 @@ export class ItemService {
         });
     }
 
-    addItemTo(targetType: 'character' | 'monster' | 'loot'
-        , targetId: number
-        , itemTemplateId: number
-        , itemData: ItemData): Observable<Item> {
+    addItemTo(
+        targetType: 'character' | 'monster' | 'loot',
+        targetId: number,
+        itemTemplateId: number,
+        itemData: ItemData,
+    ): Observable<Item> {
         if (itemData.quantity) {
             itemData.quantity = +itemData.quantity;
         } else {
@@ -63,6 +66,10 @@ export class ItemService {
                 case 'loot':
                     url = `/api/v2/loots/${targetId}/items`;
                     break;
+                default:
+                    assertNever(targetType);
+                    // FIXME: Remove next line when asserts is available (Typescript 3.7)
+                    throw new Error('Waiting for asserts');
             }
             forkJoin([
                 this.httpClient.post(url, {
@@ -84,10 +91,11 @@ export class ItemService {
         });
     }
 
-    addRandomItemTo(targetType: string
-        , targetId: number
-        , categoryTechName: string): Observable<Item> {
-
+    addRandomItemTo(
+        targetType: 'character' | 'monster' | 'loot',
+        targetId: number,
+        categoryTechName: string,
+    ): Observable<Item> {
         return new Observable(observer => {
             let url: string;
             switch (targetType) {
@@ -100,6 +108,10 @@ export class ItemService {
                 case 'loot':
                     url = `/api/v2/loots/${targetId}/addRandomItem`;
                     break;
+                default:
+                    assertNever(targetType);
+                    // FIXME: Remove next line when asserts is available (Typescript 3.7)
+                    throw new Error('Waiting for asserts');
             }
 
             forkJoin([this.httpClient.post(url, {

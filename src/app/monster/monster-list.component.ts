@@ -115,6 +115,6 @@ export class MonsterListComponent implements OnInit {
                 this.sortMonsterByCategory();
             }
         );
-        this.isAdmin = this.loginService.currentLoggedUser && this.loginService.currentLoggedUser.admin;
+        this.isAdmin = !!this.loginService.currentLoggedUser && this.loginService.currentLoggedUser.admin;
     }
 }

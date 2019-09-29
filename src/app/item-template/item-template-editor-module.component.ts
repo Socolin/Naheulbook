@@ -57,7 +57,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
             if (!result) {
                 return;
             }
-            if (action) {
+            if (action && this.itemTemplate.data.actions) {
                 const index = this.itemTemplate.data.actions.findIndex(a => a === action);
                 this.itemTemplate.data.actions[index] = result;
             } else {

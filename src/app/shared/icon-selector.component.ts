@@ -6,7 +6,7 @@ import {removeDiacritics} from './remove_diacritics';
 import {IconDescription} from './icon.model';
 
 export interface IconSelectorComponentDialogData {
-    icon: IconDescription;
+    icon?: IconDescription;
 }
 
 @Component({

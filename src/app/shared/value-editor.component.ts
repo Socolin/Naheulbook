@@ -49,7 +49,7 @@ export class ValueEditorComponent implements OnChanges {
         this.displayEditor = false;
     }
 
-    searchVeContainer(elements: HTMLCollectionOf<Element>|HTMLCollection): Element {
+    searchVeContainer(elements: HTMLCollectionOf<Element>|HTMLCollection): Element | undefined {
         for (let i = 0; i < elements.length; i++) {
             let element = elements[i];
             if (element.classList.contains('ve-container')) {
@@ -60,14 +60,16 @@ export class ValueEditorComponent implements OnChanges {
                 return result;
             }
         }
-
-        return null;
+        return undefined;
     }
 
     onDisplayed() {
         setTimeout(() => { // Workaround, to be able to compute position on first display
             let elements = document.getElementsByClassName('cdk-overlay-container');
             let container = this.searchVeContainer(elements);
+            if (!container) {
+                return;
+            }
 
             let bbox: ClientRect = {
                 bottom: 0,
@@ -114,7 +116,7 @@ export class ValueEditorComponent implements OnChanges {
         if (!this.value) {
             this.value = 0;
         }
-        if (this.minValue != null && (this.value + parseInt(this.valueDelta, 10)) < this.minValue) {
+        if (this.minValue != null && (this.value + parseInt(this.valueDelta || '0', 10)) < this.minValue) {
             this.valueDelta = (this.minValue - this.value).toString();
         }
         if (this.valueDelta) {

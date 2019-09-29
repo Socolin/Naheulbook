@@ -107,7 +107,7 @@ export class SkillSelectorComponent implements OnInit {
     }
 
     randomSelect(): void {
-        const selectedSkills = [];
+        const selectedSkills: Skill[] = [];
         while (selectedSkills.length < this.skillCount) {
             let rnd = getRandomInt(0, this.skills.length - 1);
             let skill = this.skills[rnd];

@@ -1,7 +1,7 @@
 import {DurationType} from './enums';
 
 export interface IItemData {
-    name?: string;
+    name: string;
     description?: string;
     quantity?: number;
     icon?: {

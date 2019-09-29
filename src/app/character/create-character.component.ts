@@ -515,6 +515,9 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     randomName() {
+        if (!this.selectedOrigin) {
+            return;
+        }
         this.loadingRandomName = true;
         this.characterService.getRandomName(this.selectedOrigin.id, this.sex).subscribe((name) => {
             this.name = name
@@ -548,6 +551,13 @@ export class CreateCharacterComponent implements OnInit {
     // Step 9: Confirm
 
     createCharacter() {
+        // FIXME: can be improved with `asserts` when available (Typescript 3.7)
+        if (!this.name) {
+            throw new Error('createCharacter: `name` should not be undef');
+        }
+        if (this.fatePoint === undefined) {
+            throw new Error('createCharacter: `fatePoint` should not be undef');
+        }
         if (!this.selectedOrigin) {
             throw new Error('createCharacter: `selectedOrigin` should not be undef');
         }
@@ -566,16 +576,16 @@ export class CreateCharacterComponent implements OnInit {
             specialityId = this.selectedSpeciality.id;
         }
 
-        let isNpc: boolean = undefined;
+        let isNpc: boolean | undefined = undefined;
         if (this.router.routerState.snapshot.root.queryParams.hasOwnProperty('isNpc')) {
             isNpc = this.router.routerState.snapshot.root.queryParams['isNpc'];
         }
 
-        let groupId: number = undefined;
+        let groupId: number | undefined = undefined;
         if (this.router.routerState.snapshot.root.queryParams.hasOwnProperty('groupId')) {
             groupId = +this.router.routerState.snapshot.root.queryParams['groupId'];
         } else {
-            groupId = null;
+            groupId = undefined;
         }
 
         let creationData: CreateCharacterRequest = {

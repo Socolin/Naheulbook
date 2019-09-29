@@ -22,7 +22,7 @@ import {CharacterLootPanelComponent} from './character-loot-panel.component';
 
 export class LevelUpInfo {
     evOrEa = 'EV';
-    evOrEaValue: number | undefined;
+    evOrEaValue: number;
     targetLevelUp: number;
     statToUp: string;
     skill?: Skill;
@@ -200,7 +200,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     initLevelUp() {
         this.levelUpInfo = new LevelUpInfo();
         this.levelUpInfo.evOrEa = 'EV';
-        this.levelUpInfo.evOrEaValue = undefined;
+        this.levelUpInfo.evOrEaValue = 0;
         this.levelUpInfo.targetLevelUp = this.character.level + 1;
         if (this.levelUpInfo.targetLevelUp % 2 === 0) {
             this.levelUpInfo.statToUp = 'FO';
@@ -218,9 +218,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 return;
             }
         } else {
-            let job = this.character.jobs.find(j => j.diceEaLevelUp > 0);
+            let job = this.character.jobs.find(j => !!j.diceEaLevelUp);
             if (job) {
-                diceLevelUp = job.diceEaLevelUp;
+                diceLevelUp = job.diceEaLevelUp!;
             } else {
                 diceLevelUp = 6;
             }
@@ -354,6 +354,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     closeChangeNameDialog() {
+        if (!this.changeNameOverlayRef) {
+            return;
+        }
         this.changeNameOverlayRef.detach();
         this.changeNameOverlayRef = undefined;
     }
@@ -369,6 +372,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     closeChangeSexDialog() {
+        if (!this.changeSexOverlayRef) {
+            return;
+        }
         this.changeSexOverlayRef.detach();
         this.changeSexOverlayRef = undefined;
     }

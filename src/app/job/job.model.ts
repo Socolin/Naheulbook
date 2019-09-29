@@ -50,7 +50,7 @@ export class Job {
             availableSkills: [],
             bonuses: DescribedFlag.flagsFromJson(response.bonuses),
             restricts: DescribedFlag.flagsFromJson(response.restricts),
-            specialities: Speciality.specialitiesFromJson(response.specialities),
+            specialities: Speciality.fromResponses(response.specialities),
         });
 
         for (let skillId of response.skillIds) {

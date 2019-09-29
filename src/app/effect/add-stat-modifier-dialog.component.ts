@@ -39,7 +39,7 @@ export class AddStatModifierDialogComponent implements OnInit {
     }
 
     canAddModifier(): boolean {
-        return this.selectedStat && this.selectedType && this.value !== undefined && this.value !== null;
+        return this.selectedStat !== undefined  && this.value !== undefined;
     }
 
     addModifier() {
@@ -48,8 +48,9 @@ export class AddStatModifierDialogComponent implements OnInit {
         }
 
         let modifier = new ItemStatModifier();
-        modifier.stat = this.selectedStat;
-        modifier.value = this.value;
+        // FIXME: Could assert not null with `asserts` typescript 3.7 and remove !
+        modifier.stat = this.selectedStat!;
+        modifier.value = this.value!;
         modifier.type = this.selectedType;
 
         this.dialogRef.close(modifier);

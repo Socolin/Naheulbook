@@ -45,10 +45,11 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    selectCategory(category?: EffectCategory): boolean {
+    selectCategory(category?: EffectCategory) {
         this.selectedCategory = category;
-        this.loadCategory(category.id);
-        return false;
+        if (category) {
+            this.loadCategory(category.id);
+        }
     }
 
     selectCategoryId(categoryId: number) {
@@ -95,7 +96,12 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
                     this.effects[effect.category.id] = [];
                 }
                 this.effects[effect.category.id].push(result);
-                this.effects[effect.category.id].sort((a, b) => a.dice - b.dice);
+                this.effects[effect.category.id].sort((a, b) => {
+                    if (a.dice && b.dice) {
+                        return a.dice - b.dice;
+                    }
+                    return a.id - b.id;
+                });
                 this.selectCategory(result.category);
             }
         })
@@ -120,7 +126,12 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
         this.effectService.getEffects(categoryId).subscribe(
             effects => {
                 this.effects[categoryId] = effects;
-                this.effects[categoryId].sort((a, b) => a.dice - b.dice);
+                this.effects[categoryId].sort((a, b) => {
+                    if (a.dice && b.dice) {
+                        return a.dice - b.dice;
+                    }
+                    return a.id - b.id
+                });
             }
         );
     }
@@ -140,7 +151,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
             if (this.isOverlay && this.inputCategoryId != null) {
                 this.selectCategoryId(this.inputCategoryId);
             } else {
-                if (!this.route.snapshot.data['id']) {
+                if (!this.route.snapshot.data['id'] && this.selectedCategory) {
                     this.loadCategory(this.selectedCategory.id);
                 }
                 this.sub = this.route.queryParams.subscribe(params => {

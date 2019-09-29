@@ -4,20 +4,14 @@ import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {
-    Effect,
-    EffectCategory,
-    EffectCategoryDictionary,
-    EffectType,
-    EffectTypeDictionary
-} from './effect.model';
+import {Effect, EffectCategory, EffectCategoryDictionary, EffectType, EffectTypeDictionary} from './effect.model';
 import {CreateEffectCategoryRequest, CreateEffectRequest, EditEffectRequest} from '../api/requests';
 import {EffectCategoryResponse, EffectResponse, EffectTypeResponse} from '../api/responses';
 
 @Injectable()
 export class EffectService {
     private effectsByCategory: { [categoryId: number]: ReplaySubject<Effect[]> } = {};
-    private effectTypes: ReplaySubject<EffectType[]>;
+    private effectTypes?: ReplaySubject<EffectType[]>;
     private effectsById: { [effectId: number]: ReplaySubject<Effect> } = {};
 
     constructor(private httpClient: HttpClient) {
@@ -49,17 +43,17 @@ export class EffectService {
 
     getEffectTypes(): Observable<EffectType[]> {
         if (!this.effectTypes) {
-            this.effectTypes = new ReplaySubject<EffectType[]>(1);
+            const loadingEffectTypes = new ReplaySubject<EffectType[]>(1);
+            this.effectTypes = loadingEffectTypes;
 
             this.httpClient.get<any[]>('/api/v2/effectCategories')
                 .subscribe(
                     effectTypesJsonData => {
-                        let effectTypes = EffectType.fromResponses(effectTypesJsonData);
-                        this.effectTypes.next(effectTypes);
-                        this.effectTypes.complete();
+                        loadingEffectTypes.next(EffectType.fromResponses(effectTypesJsonData));
+                        loadingEffectTypes.complete();
                     },
                     error => {
-                        this.effectTypes.error(error);
+                        loadingEffectTypes.error(error);
                     }
                 );
         }

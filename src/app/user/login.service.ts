@@ -1,18 +1,18 @@
-import {share, map, retryWhen} from 'rxjs/operators';
+import {map, retryWhen, share} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {from, Observable, ReplaySubject} from 'rxjs';
 
 import {JwtResponse, User} from './user.model';
 import {genericRetryStrategy} from '../shared/rxjs-retry-strategy';
-import {AuthenticationInitResponse} from '../api/responses/authentication-init-response';
+import {AuthenticationInitResponse} from '../api/responses';
 
 @Injectable()
 export class LoginService {
-    public loggedUser: ReplaySubject<User | null> = new ReplaySubject<User>(1);
+    public loggedUser: ReplaySubject<User | undefined> = new ReplaySubject<User>(1);
     public currentLoggedUser?: User;
     public currentJwt?: string;
-    private checkingLoggedUser?: Observable<JwtResponse | undefined>;
+    private checkingLoggedUser?: Observable<JwtResponse>;
 
     // TODO: Renewing token
 
@@ -102,13 +102,13 @@ export class LoginService {
         logout.subscribe(() => {
             this.currentLoggedUser = undefined;
             this.currentJwt = undefined;
-            this.loggedUser.next(null);
+            this.loggedUser.next(undefined);
         });
 
         return logout;
     }
 
-    checkLogged(): Observable<User> {
+    checkLogged(): Observable<User | undefined> {
         if (this.checkingLoggedUser) {
             return this.loggedUser;
         }

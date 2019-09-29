@@ -297,11 +297,15 @@ export class Character extends WsRegistrable {
             skills: [],
             items: [],
             modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers),
-            specialities: Speciality.specialitiesFromJson(response.specialities)
+            specialities: Speciality.fromResponses(response.specialities)
         });
 
-        character.origin = origins.find(o => o.id === response.originId);
-        character.jobs = response.jobIds.map(jobId => jobs.find(j => j.id === jobId)).filter(job => !!job);
+        const origin = origins.find(o => o.id === response.originId);
+        if (!origin) {
+            throw new Error('Invalid origin id. Origin was not found in database: ' + response.originId);
+        }
+        character.origin = origin;
+        character.jobs = response.jobIds.map(jobId => jobs.find(j => j.id === jobId)!).filter(job => !!job);
         character.skills = response.skillIds.map(skillId => skillsById[skillId]).filter(skill => !!skill);
         character.items = response.items.map(itemResponse => Item.fromJson(itemResponse, skillsById));
 
@@ -459,7 +463,7 @@ export class Character extends WsRegistrable {
                 const container = itemsById[item.containerId];
                 if (container) {
                     item.containerInfo = {
-                        name: container.data.name,
+                        name: container.data.name || container.template.name,
                         id: container.id
                     };
                 }
@@ -474,10 +478,17 @@ export class Character extends WsRegistrable {
                 if (a.data.equiped === b.data.equiped) {
                     return 0;
                 }
-                if (a.data.equiped < b.data.equiped) {
+
+                if (a.data.equiped && b.data.equiped) {
+                    if (a.data.equiped < b.data.equiped) {
+                        return 1;
+                    }
+                    return -1;
+                } else if (b.data.equiped) {
                     return 1;
+                } else {
+                    return -1;
                 }
-                return -1;
             });
         }
 
@@ -754,7 +765,7 @@ export class Character extends WsRegistrable {
                     for (let u = 0; u < item.template.skills.length; u++) {
                         this.computedData.skills.push({
                             skillDef: item.template.skills[u],
-                            from: [item.data.name]
+                            from: [item.data.name || item.template.name]
                         });
                     }
                 }
@@ -768,7 +779,7 @@ export class Character extends WsRegistrable {
             for (let u = 0; u < item.template.skills.length; u++) {
                 this.computedData.skills.push({
                     skillDef: item.template.skills[u],
-                    from: [item.data.name]
+                    from: [item.data.name || item.template.name]
                 });
             }
         }
@@ -879,9 +890,11 @@ export class Character extends WsRegistrable {
                     if (item2.id === item.id) {
                         continue;
                     }
-                    if (item.data.equiped < item2.data.equiped) {
-                        somethingOver = true;
-                        break;
+                    if (item.data.equiped && item2.data.equiped) {
+                        if (item.data.equiped < item2.data.equiped) {
+                            somethingOver = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -964,7 +977,7 @@ export class Character extends WsRegistrable {
                 modifications['PR_MAGIC'] = item.template.data.magicProtection;
                 this.computedData.stats['PR_MAGIC'] += item.template.data.magicProtection;
             }
-            this.computedData.details.add(item.data.name, modifications);
+            this.computedData.details.add(item.data.name || item.template.name, modifications);
         }
 
         if (this.computedData.stats['AD'] > 12 && this.statBonusAD) {
@@ -1108,7 +1121,7 @@ export class Character extends WsRegistrable {
     }
 
     updateWeaponsDamages() {
-        let weaponDamages: {name: string, damage: string, incompatible: boolean}[] = [];
+        let weaponDamages: {name: string, damage: string, incompatible?: boolean}[] = [];
         for (let item of this.items) {
             if (!item.data.equiped) {
                 continue;
@@ -1124,7 +1137,7 @@ export class Character extends WsRegistrable {
                     }
                 }
                 weaponDamages.push({
-                    name: item.data.name,
+                    name: item.data.name || item.template.name,
                     damage: damage,
                     incompatible: item.computedData.incompatible
                 });
@@ -1175,7 +1188,7 @@ export class Character extends WsRegistrable {
                 this.skills.push(skillsById[skillId]);
             }
             for (const speciality of result.newSpecialities) {
-                this.specialities.push(Speciality.fromJson(speciality));
+                this.specialities.push(Speciality.fromResponse(speciality));
             }
             this.notify('levelUp', this.name + ' gagne un niveau !');
             this.update();

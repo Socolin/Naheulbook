@@ -22,7 +22,7 @@ export class CreateItemDialogComponent implements OnInit {
     public newItem: Item = new Item();
     public filteredItemTemplates?: {
         name: string,
-        icon: IconDescription,
+        icon?: IconDescription,
         categoryName: string,
         sectionName: string,
         sourceIcon?: string,

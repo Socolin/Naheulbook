@@ -20,6 +20,7 @@ import {
     SelectMonsterTraitsDialogResult
 } from './select-monster-traits-dialog.component';
 import {MonsterTemplateRequest} from '../api/requests';
+import {toDictionary} from '../utils/utils';
 
 export interface EditMonsterTemplateDialogData {
     monsterTemplate?: MonsterTemplate;
@@ -78,6 +79,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
         if (!this.selectedType) {
             return;
         }
+        const selectedType = this.selectedType;
 
         const dialogRef = this.dialog.open<PromptDialogComponent, PromptDialogData, PromptDialogResult>(
             PromptDialogComponent, {
@@ -92,9 +94,9 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
             if (!result) {
                 return;
             }
-            this.monsterTemplateService.createCategory(this.selectedType, result.text).subscribe(
+            this.monsterTemplateService.createCategory(selectedType, result.text).subscribe(
                 category => {
-                    this.selectedType.categories.push(category);
+                    selectedType.categories.push(category);
                     this.selectedCategory = category;
                     this.monsterTemplateService.invalidateMonsterTypes();
                 });
@@ -209,17 +211,15 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
                 this.traitsById = traitsById;
 
                 this.locations = locations;
-                this.locationsById = locations.reduce((dic, loc) => {
-                    dic[loc.id] = loc;
-                    return dic
-                }, {});
+                const locationsById = toDictionary(locations);
+                this.locationsById = locationsById;
 
                 if (this.data.monsterTemplate) {
                     this.selectedType = this.data.monsterTemplate.category.type;
                     this.selectedCategory = this.data.monsterTemplate.category;
                     this.selectedTraits = [...this.data.monsterTemplate.data.traits || []];
                     this.selectedLocations = this.data.monsterTemplate.locations
-                        .map(locationId => this.locationsById[locationId])
+                        .map(locationId => locationsById[locationId])
                         .filter(l => !!l);
                     this.monsterInventory = this.data.monsterTemplate.simpleInventory;
                 } else {
@@ -237,6 +237,10 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
     }
 
     save() {
+        if (!this.selectedCategory) {
+            return;
+        }
+
         this.saving = true;
         let request: MonsterTemplateRequest = {
             categoryId: this.selectedCategory.id,

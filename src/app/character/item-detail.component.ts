@@ -58,7 +58,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     @ViewChild('lifetimeDialog', {static: true})
     public lifetimeDialog: Portal<any>;
     public lifetimeOverlayRef: OverlayRef | undefined;
-    public previousLifetime: IDurable | null;
+    public previousLifetime?: IDurable;
 
     constructor(
         public readonly itemActionService: ItemActionService,
@@ -217,7 +217,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
     openLifetimeDialog() {
         if (!this.item.data.lifetime) {
             this.item.data.lifetime = {durationType: 'forever'};
-            this.previousLifetime = null;
+            this.previousLifetime = undefined;
         }
         else {
             this.previousLifetime = Object.assign({}, this.item.data.lifetime);
@@ -242,7 +242,7 @@ export class ItemDetailComponent implements OnChanges, OnInit {
 
     updateLifetime() {
         if (this.item.data.lifetime && this.item.data.lifetime.durationType === 'forever') {
-            this.item.data.lifetime = null;
+            this.item.data.lifetime = undefined;
         }
         this.itemActionService.onAction('update_data', this.item);
         this.closeLifetimeDialog();

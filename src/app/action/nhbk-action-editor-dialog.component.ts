@@ -47,7 +47,7 @@ export class NhbkActionEditorDialogComponent {
 
         this.action.data.templateId = itemTemplate.id;
         this.action.data.itemName = itemTemplate.name;
-        this.action.data.quantity = itemTemplate.data.quantifiable ? 1 : null;
+        this.action.data.quantity = itemTemplate.data.quantifiable ? 1 : undefined;
         this.selectedItemTemplate = itemTemplate;
     }
 

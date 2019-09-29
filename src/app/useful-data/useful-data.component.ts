@@ -1,5 +1,4 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {UsefulDataService} from './useful-data.service';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {
     EffectListDialogComponent,
@@ -8,8 +7,10 @@ import {
     EpicFailsCriticalSuccessDialogComponent,
     EpicFailsCriticalSuccessDialogData,
     ItemTemplatesDialogComponent,
-    JobsDialogComponent, OriginsDialogComponent,
-    RecoveryDialogComponent, SkillsDialogComponent,
+    JobsDialogComponent,
+    OriginsDialogComponent,
+    RecoveryDialogComponent,
+    SkillsDialogComponent,
     TravelDialogComponent,
     UsefulDataDialogResult,
 } from './dialogs';
@@ -27,9 +28,7 @@ export class UsefulDataComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly dialog: MatDialog,
-        private readonly usefulDataService: UsefulDataService,
     ) {
-
     }
 
     openPanel(panel: PanelNames, arg?: any) {
@@ -75,6 +74,8 @@ export class UsefulDataComponent implements OnInit, OnDestroy {
                 break;
             default:
                 assertNever(panel);
+                // FIXME: Remove that when `asserts` is available
+                throw new Error('Waiting for asserts');
         }
 
         dialogRef.afterClosed().subscribe((result) => {

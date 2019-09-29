@@ -17,7 +17,7 @@ export interface AddMonsterItemDialogData {
 export class AddMonsterItemDialogComponent implements OnInit {
     public filteredItemTemplates?: {
         name: string,
-        icon: IconDescription,
+        icon?: IconDescription,
         categoryName: string,
         sectionName: string,
         sourceIcon?: string,

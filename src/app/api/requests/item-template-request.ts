@@ -18,9 +18,9 @@ export interface ItemTemplateModifierRequest {
     stat: string;
     value: number;
     type: string;
-    special: string[];
-    job: number | null;
-    origin: number | null;
+    special?: string[];
+    job?: number;
+    origin?: number;
 }
 
 export interface ItemTemplateSkillModifierRequest {
@@ -30,6 +30,6 @@ export interface ItemTemplateSkillModifierRequest {
 
 export interface ItemTemplateRequirementRequest {
     stat: string;
-    min: number;
-    max: number;
+    min?: number;
+    max?: number;
 }

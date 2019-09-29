@@ -119,6 +119,9 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     }
 
     isVisible(item: ItemTemplate) {
+        if (!this.selectedItemCategory) {
+            return false;
+        }
         if (item.categoryId !== this.selectedItemCategory.id) {
             return false;
         }

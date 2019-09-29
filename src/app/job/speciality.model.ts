@@ -1,4 +1,5 @@
 import {Flag, FlagData, StatModifier} from '../shared';
+import {SpecialityResponse} from '../api/responses';
 
 export class Speciality {
     id: number;
@@ -7,38 +8,28 @@ export class Speciality {
     specials: {
         id: number,
         isBonus: boolean;
-        name: string;
         description: string;
-        flags?: Flag[];
+        flags: Flag[];
     }[];
     modifiers: StatModifier[];
-    flags?: Flag[];
+    flags: Flag[];
 
-    static fromJson(specialityData: any): Speciality {
-        let speciality = new Speciality();
-
-        Object.assign(speciality, specialityData, {skills: [], availableSkills: []});
-
-        if (!speciality.specials) {
-            speciality.specials = [];
-        }
-        if (!speciality.flags) {
-            speciality.flags = [];
-        }
-
+    static fromResponse(response: SpecialityResponse): Speciality {
+        const speciality = new Speciality();
+        speciality.id = response.id;
+        speciality.name = response.name;
+        speciality.description = response.description;
+        speciality.modifiers = response.modifiers;
+        speciality.specials = (response.specials || []).map(s => ({
+            ...s,
+            flags: s.flags || []
+        }));
+        speciality.flags = response.flags || [];
         return speciality;
     }
 
-    static specialitiesFromJson(specialitiesJsonData: undefined|null|any[]) {
-        let specialities: Speciality[] = [];
-
-        if (specialitiesJsonData) {
-            for (let specialityJsonData of specialitiesJsonData) {
-                specialities.push(Speciality.fromJson(specialityJsonData));
-            }
-        }
-
-        return specialities;
+    static fromResponses(responses: SpecialityResponse[]) {
+        return responses.map(response => Speciality.fromResponse(response));
     }
 
     hasFlag(flagName: string): boolean {
@@ -48,9 +39,6 @@ export class Speciality {
         }
 
         for (let special of this.specials) {
-            if (!special.flags) {
-                continue;
-            }
             let j = special.flags.findIndex(f => f.type === flagName);
             if (j !== -1) {
                 return true;
@@ -69,9 +57,6 @@ export class Speciality {
         }
 
         for (let special of this.specials) {
-            if (!special.flags) {
-                continue;
-            }
             for (let flag of special.flags) {
                 if (!(flag.type in data)) {
                     data[flag.type] = [];

@@ -3,13 +3,14 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ErrorReportService} from './error-report.service';
 
 import * as Sentry from '@sentry/browser';
+import {Event, EventHint} from '@sentry/types';
 import {environment} from '../environments/environment';
 
 Sentry.init({
     dsn: environment.sentryDsn,
-    beforeSend(event, hint) {
+    beforeSend(event: Event, hint?: EventHint) {
         const processedEvent = {...event};
-        if (hint.originalException && hint.originalException instanceof Error) {
+        if (hint && hint.originalException && hint.originalException instanceof Error) {
             processedEvent.extra = processedEvent.extra || {};
             for (let key in hint.originalException) {
                 if (!hint.originalException.hasOwnProperty(key)) {

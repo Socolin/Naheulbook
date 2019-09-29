@@ -68,16 +68,20 @@ export class CharacterService {
     }
 
     LevelUp(characterId: number, levelUpInfo: LevelUpInfo): Observable<[CharacterLevelUpResponse, { [skillId: number]: Skill }]> {
-        let skillId = undefined;
+        let skillId: number | undefined = undefined;
         if (levelUpInfo.skill) {
             skillId = levelUpInfo.skill.id;
         }
-        let specialityIds = [];
+        let specialityIds: number[] = [];
         for (let jobId in levelUpInfo.specialities) {
             if (!levelUpInfo.specialities.hasOwnProperty(jobId)) {
                 continue;
             }
-            specialityIds.push(levelUpInfo.specialities[jobId].id);
+            const speciality = levelUpInfo.specialities[jobId];
+            if (!speciality) {
+                continue;
+            }
+            specialityIds.push(speciality.id);
         }
 
         let request: CharacterLevelUpRequest = {

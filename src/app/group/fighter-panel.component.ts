@@ -97,7 +97,7 @@ export class FighterPanelComponent implements OnInit {
                 this.group.notify('killMonster', 'Monstre tué: ' + monster.name, monster);
                 if (this.group.pendingModifierChanges) {
                     this.groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges);
-                    this.group.pendingModifierChanges = null;
+                    this.group.pendingModifierChanges = undefined;
                 }
             }
         );
@@ -114,7 +114,7 @@ export class FighterPanelComponent implements OnInit {
                 this.group.notify('deleteMonster', 'Monstre supprimé: ' + monster.name, monster);
                 if (this.group.pendingModifierChanges) {
                     this.groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges);
-                    this.group.pendingModifierChanges = null;
+                    this.group.pendingModifierChanges = undefined;
                 }
             }
         );

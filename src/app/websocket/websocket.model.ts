@@ -15,7 +15,7 @@ export interface WsMessage {
 
 export class WsEvent {
     id: number;
-    opcode?: string;
+    opcode: string;
     data: any;
 }
 

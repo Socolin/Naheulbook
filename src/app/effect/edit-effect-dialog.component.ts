@@ -94,12 +94,16 @@ export class EditEffectDialogComponent implements OnInit {
 
     selectCategory(effectCategory: EffectCategory | 'new') {
         if (effectCategory === 'new') {
+            if (!this.selectedType) {
+                return;
+            }
             const dialogRef = this.dialog.open(CreateEffectTypeDialogComponent);
+            const selectedType = this.selectedType;
             dialogRef.afterClosed().subscribe((result) => {
                 if (!result) {
                     return;
                 }
-                this.effectService.createCategory(this.selectedType, result.name, result.diceSize, result.diceCount, result.note)
+                this.effectService.createCategory(selectedType, result.name, result.diceSize, result.diceCount, result.note)
                     .subscribe(subCategory => {
                         this.selectedCategory = subCategory;
                         this.effectService.invalidateEffectTypes();
