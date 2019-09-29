@@ -100,7 +100,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var itemData = new ItemData();
             var item = GivenAnItem(new ItemData());
 
-            _jsonUtil.Serialize(itemData)
+            _jsonUtil.SerializeNonNull(itemData)
                 .Returns("some-new-item-data-json");
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);

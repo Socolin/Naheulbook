@@ -45,7 +45,7 @@ namespace Naheulbook.Core.Factories
 
         public Item CreateItem(ItemTemplate itemTemplate, ItemData itemData)
         {
-            var itemTemplateData = _jsonUtil.Deserialize<PartialItemTemplateData>(itemTemplate.Data) ?? new PartialItemTemplateData();
+            var itemTemplateData = _jsonUtil.DeserializeOrCreate<PartialItemTemplateData>(itemTemplate.Data);
 
             if (itemTemplateData.Charge.HasValue)
                 itemData.Charge = itemTemplateData.Charge.Value;

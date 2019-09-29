@@ -47,7 +47,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             _jsonUtil.DeserializeOrCreate<JObject>(itemDataJson)
                 .Returns(itemData);
-            _jsonUtil.Serialize(itemData)
+            _jsonUtil.SerializeNonNull(itemData)
                 .Returns(updatedItemDataJson);
 
             _util.EquipItem(item, 8);
@@ -55,7 +55,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             Received.InOrder(() =>
             {
                 _itemDataUtil.UpdateEquipItem(itemData, 8);
-                _jsonUtil.Serialize(itemData);
+                _jsonUtil.SerializeNonNull(itemData);
             });
             item.Data.Should().BeEquivalentTo(updatedItemDataJson);
         }
