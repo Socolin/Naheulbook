@@ -644,24 +644,24 @@ export class Character extends WsRegistrable {
         this.computedData.stats['PR_MAGIC'] = 0;
         this.computedData.stats['RESM'] = 0;
         this.computedData.stats['PI'] = 0;
-        if (this.origin.speedModifier) {
-            this.computedData.stats['MV'] += this.origin.speedModifier;
-            if (this.origin.speedModifier > 0) {
-                this.computedData.details.add('Origine', {MV: '+' + this.origin.speedModifier + '%'});
+        if (this.origin.data.speedModifier) {
+            this.computedData.stats['MV'] += this.origin.data.speedModifier;
+            if (this.origin.data.speedModifier > 0) {
+                this.computedData.details.add('Origine', {MV: '+' + this.origin.data.speedModifier + '%'});
             } else {
-                this.computedData.details.add('Origine', {MV: this.origin.speedModifier + '%'});
+                this.computedData.details.add('Origine', {MV: this.origin.data.speedModifier + '%'});
             }
         }
         this.computedData.details.add('Valeurs initial', {AT: this.computedData.stats['AT'], PRD: this.computedData.stats['PRD']});
-        this.computedData.stats['EV'] = this.origin.baseEV;
+        this.computedData.stats['EV'] = this.origin.data.baseEv;
         this.computedData.stats['EA'] = 0;
-        this.computedData.details.add('Origine', {EV: this.origin.baseEV});
+        this.computedData.details.add('Origine', {EV: this.origin.data.baseEv});
 
         if (this.origin) {
-            this.computedData.stats['AT'] += this.origin.bonusAT || 0;
-            this.computedData.stats['PRD'] += this.origin.bonusPRD || 0;
-            if (this.origin.bonusAT || this.origin.bonusPRD) {
-                this.computedData.details.add('Origine', {AT: this.origin.bonusAT, PRD: this.origin.bonusPRD});
+            this.computedData.stats['AT'] += this.origin.data.bonusAt || 0;
+            this.computedData.stats['PRD'] += this.origin.data.bonusPrd || 0;
+            if (this.origin.data.bonusAt || this.origin.data.bonusPrd) {
+                this.computedData.details.add('Origine', {AT: this.origin.data.bonusAt, PRD: this.origin.data.bonusPrd});
             }
         }
 
@@ -670,7 +670,7 @@ export class Character extends WsRegistrable {
             if (i === 0) {
                 if (job.baseEv) {
                     this.computedData.stats['EV'] = job.baseEv;
-                    this.computedData.details.add('Métiers (changement de la valeur de base)', {EV: this.origin.baseEV});
+                    this.computedData.details.add('Métiers (changement de la valeur de base)', {EV: this.origin.data.baseEv});
                 }
                 if (job.factorEv) {
                     this.computedData.stats['EV'] *= job.factorEv;

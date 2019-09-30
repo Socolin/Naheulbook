@@ -1,6 +1,7 @@
 import {DescribedFlag, Flag, FlagData, StatRequirement} from '../shared';
 import {Skill, SkillDictionary} from '../skill';
 import {OriginResponse} from '../api/responses';
+import {OriginData} from '../api/shared/origin-data';
 
 export interface OriginInfo {
     title: string;
@@ -12,23 +13,19 @@ export type OriginDictionary = { [originId: number]: Origin };
 export class Origin {
     readonly id: number;
     readonly name: string;
+    readonly data: OriginData;
     readonly description: string;
     readonly playerDescription?: string;
     readonly playerSummary?: string;
     readonly advantage?: string;
-    readonly baseEV: number;
     readonly size?: string;
-    readonly bonusAT: number;
-    readonly bonusPRD: number;
-    readonly speedModifier?: number;
     readonly requirements: StatRequirement[];
-    readonly infos: OriginInfo[];
+    readonly information: OriginInfo[];
     readonly skills: Skill[];
     readonly availableSkills: Skill[];
     readonly bonuses: DescribedFlag[];
-    readonly restricts: DescribedFlag[];
+    readonly restrictions: DescribedFlag[];
     readonly flags: Flag[] = [];
-    readonly diceEVLevelUp: number;
 
     static fromResponse(response: OriginResponse, skillsById: SkillDictionary): Origin {
         const origin = new Origin(response, skillsById);
@@ -43,19 +40,15 @@ export class Origin {
         this.playerDescription = response.playerDescription;
         this.playerSummary = response.playerSummary;
         this.advantage = response.advantage;
-        this.baseEV = response.baseEV;
+        this.data = {...response.data};
         this.size = response.size;
-        this.bonusAT = response.bonusAT || 0;
-        this.bonusPRD = response.bonusPRD || 0;
-        this.speedModifier = response.speedModifier;
         this.requirements = response.requirements;
-        this.infos = response.infos;
+        this.information = response.information;
         this.skills = response.skillIds.map(skillId => skillsById[skillId]);
         this.availableSkills = response.availableSkillIds.map(skillId => skillsById[skillId]);
         this.bonuses = DescribedFlag.flagsFromJson(response.bonuses);
-        this.restricts = DescribedFlag.flagsFromJson(response.restricts);
+        this.restrictions = DescribedFlag.flagsFromJson(response.restrictions);
         this.flags = response.flags || [];
-        this.diceEVLevelUp = response.diceEVLevelUp;
     }
 
     hasFlag(flagName: string): boolean {
@@ -64,8 +57,8 @@ export class Origin {
             return true;
         }
 
-        for (let restrict of this.restricts) {
-            if (restrict.hasFlag(flagName)) {
+        for (let restriction of this.restrictions) {
+            if (restriction.hasFlag(flagName)) {
                 return true;
             }
         }
@@ -80,8 +73,8 @@ export class Origin {
     }
 
     getFlagsDatas(data: {[flagName: string]: FlagData[]}): void {
-        for (let restrict of this.restricts) {
-            restrict.getFlagDatas(data, {type: 'origin', name: this.name});
+        for (let restriction of this.restrictions) {
+            restriction.getFlagDatas(data, {type: 'origin', name: this.name});
         }
 
         for (let bonus of this.bonuses) {

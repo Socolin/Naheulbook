@@ -47,17 +47,17 @@
             </ul>
         </div>
 
-        <div *ngIf="origin.restricts.length > 0">
+        <div *ngIf="origin.restrictions.length > 0">
             Restrictions:
             <ul>
-                <li *ngFor="let restrict of origin.restricts; let lastRes=last">
+                <li *ngFor="let restrict of origin.restrictions">
                     {{restrict.description}}
                 </li>
             </ul>
         </div>
 
-        <div *ngIf="origin.infos.length > 0">
-            <div *ngFor="let info of origin.infos; let lastInfo=last" class="origin-info">
+        <div *ngIf="origin.information.length > 0">
+            <div *ngFor="let info of origin.information" class="origin-info">
                 <b>
                     {{info.title}}:
                 </b>

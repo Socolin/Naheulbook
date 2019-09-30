@@ -1,26 +1,20 @@
 import {DescribedFlagResponse} from './described-flag-response';
 import {FlagResponse} from './flag-response';
+import {OriginData} from '../shared/origin-data';
 
 export interface OriginResponse {
     id: number;
     name: string;
+    data: OriginData;
     description: string;
     playerDescription?: string;
     playerSummary?: string;
-    maxLoad?: number;
-    maxArmorPR?: number;
     advantage?: string;
-    baseEV: number;
-    baseEA?: number;
-    bonusAT?: number;
-    bonusPRD?: number;
-    diceEVLevelUp: number;
     size?: string;
     flags: FlagResponse[];
-    speedModifier?: number;
     skillIds: number[];
     availableSkillIds: number[];
-    infos: {
+    information: {
         title: string;
         description: string;
     }[];
@@ -30,5 +24,5 @@ export interface OriginResponse {
         min?: number;
         max?: number;
     }[];
-    restricts: DescribedFlagResponse[];
+    restrictions: DescribedFlagResponse[];
 }

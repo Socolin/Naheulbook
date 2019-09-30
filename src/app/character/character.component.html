@@ -719,7 +719,7 @@
                 </mat-card-subtitle>
                 <mat-card-content>
                     <p>Pour chaque niveau gagné, on ajoute
-                        1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')"> -1 </span>
+                        1D{{character.origin.data.diceEvLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')"> -1 </span>
                         à son énergie vitale (EV)
                         <span *ngIf="character.hasMagicJob()">
                     <strong>OU</strong> 1D{{character.diceEaLevelUp}} astrale (EA)
@@ -735,7 +735,7 @@
                     </div>
                     <div>
                         <div *ngIf="levelUpInfo.evOrEa === 'EV'">
-                            Augmentation de l'energie vitale (EV) de 1D{{character.origin.diceEVLevelUp}}
+                            Augmentation de l'energie vitale (EV) de 1D{{character.origin.data.diceEvLevelUp}}
                         </div>
                         <div *ngIf="levelUpInfo.evOrEa === 'EA'">
                             Augmentation de l'energie astrale (EA) de 1D{{character.diceEaLevelUp}}
@@ -745,7 +745,7 @@
                             <mat-form-field align="end">
                                 <input matInput placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.evOrEaValue">
                                 <mat-hint align="end" *ngIf="levelUpInfo.evOrEa === 'EV'">
-                                    Lancer 1D{{character.origin.diceEVLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')">-1</span>
+                                    Lancer 1D{{character.origin.data.diceEvLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')">-1</span>
                                 </mat-hint>
                                 <mat-hint align="end" *ngIf="levelUpInfo.evOrEa === 'EA'">
                                     Lancer 1D{{character.diceEaLevelUp}}

@@ -211,7 +211,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     rollLevelUp() {
-        let diceLevelUp = this.character.origin.diceEVLevelUp;
+        let diceLevelUp = this.character.origin.data.diceEvLevelUp;
         if (this.levelUpInfo.evOrEa === 'EV') {
             if (this.characterHasToken('LEVELUP_DICE_EV_-1')) {
                 this.levelUpInfo.evOrEaValue = Math.max(1, Math.ceil(Math.random() * diceLevelUp) - 1);

@@ -65,9 +65,9 @@ export class CreateCustomCharacterComponent implements OnInit {
             }
         }
         if (this.selectedOrigin) {
-            this.at += this.selectedOrigin.bonusAT;
-            this.prd += this.selectedOrigin.bonusPRD;
-            this.ev = this.selectedOrigin.baseEV;
+            this.at += this.selectedOrigin.data.bonusAt || 0;
+            this.prd += this.selectedOrigin.data.bonusPrd || 0;
+            this.ev = this.selectedOrigin.data.baseEv;
         } else {
             this.ev = 0;
         }
