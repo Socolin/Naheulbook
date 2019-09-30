@@ -36,14 +36,6 @@ export class AutocompleteInputComponent {
     public matchingValues?: AutocompleteValue[];
     public preSelectedValueIndex: number;
 
-    focus() {
-        this.inputField.nativeElement.focus();
-    }
-
-    clear() {
-        this.value = '';
-    }
-
     selectValue(value: any) {
         this.onSelect.emit(value.value);
         if (this.clearOnSelect) {

@@ -17,7 +17,7 @@
                  [cdkConnectedOverlayOffsetY]="-20"
                  cdkConnectedOverlayHasBackdrop
                  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-                 (backdropClick)="matchingValues = null">
+                 (backdropClick)="matchingValues = undefined">
         <mat-nav-list dense class="autocomplete-overlay">
             <ng-template ngFor let-item [ngForOf]="matchingValues" let-i="index">
                 <mat-list-item (click)="selectValue(item)" [class.selected]="preSelectedValueIndex === i">
