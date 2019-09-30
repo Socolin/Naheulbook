@@ -10,7 +10,7 @@ export interface SkillResponse {
     resist?: string;
     using?: string;
     roleplay?: string;
-    stat?: string[];
+    stat: string[];
     test?: number;
     flags?: FlagResponse[];
     effects: {

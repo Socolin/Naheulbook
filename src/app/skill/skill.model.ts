@@ -11,7 +11,7 @@ export class Skill {
     readonly resist?: string;
     readonly using?: string;
     readonly roleplay?: string;
-    readonly stat?: string[];
+    readonly stat: string[];
     readonly test?: number;
     readonly effects: StatModifier[];
     readonly flags: Flag[];
