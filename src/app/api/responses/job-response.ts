@@ -1,32 +1,25 @@
 import {FlagResponse} from './flag-response';
 import {DescribedFlagResponse} from './described-flag-response';
 import {SpecialityResponse} from './speciality-response';
+import {JobStatData} from '../shared';
 
 export interface JobResponse {
     id: number;
     name: string;
-    internalname?: string;
-    informations?: string;
+    information?: string;
     playerDescription?: string;
     playerSummary?: string;
-    maxLoad?: number;
-    maxArmorPR?: number;
     isMagic?: boolean;
-    baseEv?: number;
-    factorEv?: number;
-    bonusEv?: number;
-    baseEa?: number;
-    diceEaLevelUp?: number;
-    baseAT?: number;
-    basePRD?: number;
-    parentJobId?: number;
+    data: {
+        forOrigin: {
+            [originId: string]: JobStatData
+        }
+    };
     flags?: FlagResponse[];
     skillIds: number[];
     availableSkillIds: number[];
-    originsWhitelist: { id: number, name: string }[];
-    originsBlacklist: { id: number, name: string }[];
     bonuses: DescribedFlagResponse[];
     requirements: StatRequirementResponse[];
-    restricts: DescribedFlagResponse[];
+    restrictions: DescribedFlagResponse[];
     specialities: SpecialityResponse[];
 }

@@ -186,7 +186,6 @@ export class CharacterComputedData {
     skills: SkillDetail[] = [];
     containers: Item[];
     details: StatisticDetail = new StatisticDetail();
-    selectedItem: Item;
 
     itemsBySlots: {[slotId: number]: Item[]} = {};
     itemsBySlotsAll = {};
@@ -220,33 +219,6 @@ export class CharacterComputedData {
         this.tacticalMovement = new TacticalMovementInfo();
         this.flags = {};
     }
-}
-
-export interface CharacterJsonData {
-    active: number;
-    color: string;
-    ea: number;
-    ev: number;
-    experience: number;
-    fatePoint: number;
-    gmData: any;
-    group: IMetadata;
-    id: number;
-    invites: CharacterGroupInvite[];
-    isNpc: boolean;
-    items: Item[];
-    jobIds: number[];
-    level: number;
-    modifiers: ActiveStatsModifier[];
-    name: string;
-    originId: number;
-    sex: string;
-    skillIds: number[];
-    specialities: Speciality[];
-    statBonusAD: string;
-    stats: { [statName: string]: number };
-    target: TargetJsonData;
-    userId: number;
 }
 
 export class Character extends WsRegistrable {
@@ -332,7 +304,7 @@ export class Character extends WsRegistrable {
         if (!job) {
             return undefined;
         }
-        return job.diceEaLevelUp;
+        return job.getStatData(this.origin).diceEaLevelUp;
     }
 
     hasFlag(flagName: string): boolean {
@@ -659,12 +631,12 @@ export class Character extends WsRegistrable {
         this.computedData.stats['AT'] = 8;
         this.computedData.stats['PRD'] = 10;
         if (this.jobs.length > 0) {
-            let job = this.jobs[0];
-            if (job.baseAT) {
-                this.computedData.stats['AT'] = job.baseAT;
+            let job = this.jobs[0].getStatData(this.origin);
+            if (job.baseAt) {
+                this.computedData.stats['AT'] = job.baseAt;
             }
-            if (job.basePRD) {
-                this.computedData.stats['PRD'] = job.basePRD;
+            if (job.basePrd) {
+                this.computedData.stats['PRD'] = job.basePrd;
             }
         }
         this.computedData.stats['MV'] = 100;
@@ -692,8 +664,9 @@ export class Character extends WsRegistrable {
                 this.computedData.details.add('Origine', {AT: this.origin.bonusAT, PRD: this.origin.bonusPRD});
             }
         }
+
         for (let i = 0; i < this.jobs.length; i++) {
-            let job = this.jobs[i];
+            const job = this.jobs[i].getStatData(this.origin);
             if (i === 0) {
                 if (job.baseEv) {
                     this.computedData.stats['EV'] = job.baseEv;

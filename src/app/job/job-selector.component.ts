@@ -34,7 +34,6 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     @Input() selectedOrigin: Origin;
 
     public stats: { [statName: string]: number } = {};
-    public allJobs: Job[] = [];
     public jobs: Job[] = [];
     public jobsStates: { [jobId: number]: { changes?: any[] } };
     public swapList: string[][];
@@ -63,44 +62,12 @@ export class JobSelectorComponent implements OnInit, OnChanges {
         this.swapList = generateAllStatsPair();
     }
 
-    isVisible(job: Job) {
-        if (this.selectedJobs && this.selectedJobs.find(j => j.id === job.id)) {
-            return false;
-        }
-        if (this.selectedOrigin) {
-            if (job.originsWhitelist && job.originsWhitelist.length > 0) {
-                let found = false;
-                for (let i = 0; i < job.originsWhitelist.length; i++) {
-                    if (job.originsWhitelist[i].id === this.selectedOrigin.id) {
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    return false;
-                }
-            }
-
-            if (job.originsBlacklist && job.originsBlacklist.length > 0) {
-                for (let i = 0; i < job.originsBlacklist.length; i++) {
-                    if (job.originsBlacklist[i].id === this.selectedOrigin.id) {
-                        return false;
-                    }
-                }
-            }
-
-        }
-        return true;
-    }
-
     updateJobStates() {
         this.updateStats();
         let jobsStates = {};
         const {availabilityOk, availabilitySwap, availabilityKo} = this.createAvailabilities();
 
         for (let job of this.jobs) {
-            if (!this.isVisible(job)) {
-                continue;
-            }
             if (JobSelectorComponent.isJobValid(job, this.stats)) {
                 availabilityOk.jobs.push(job);
             } else {
@@ -166,25 +133,11 @@ export class JobSelectorComponent implements OnInit, OnChanges {
         return false;
     }
 
-    updateJobs() {
-        let jobs: Job[] = [];
-        for (let job of this.allJobs) {
-            if (this.isVisible(job)) {
-                jobs.push(job);
-            }
-        }
-        this.jobs = jobs;
-    }
-
     getJobs() {
         this.jobService.getJobList().subscribe(
             jobs => {
-                this.allJobs = jobs;
-                this.updateJobs();
+                this.jobs = jobs;
                 this.updateJobStates();
-            },
-            err => {
-                console.log(err);
             }
         );
     }
@@ -214,7 +167,6 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges() {
-        this.updateJobs();
         this.updateJobStates();
     }
 

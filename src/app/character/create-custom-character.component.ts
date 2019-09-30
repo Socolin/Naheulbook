@@ -34,7 +34,7 @@ export class CreateCustomCharacterComponent implements OnInit {
     public selectedOrigin?: Origin;
     public selectedJobs: Job[] = [];
     public selectedSkills: Skill[] = [];
-    public specialities: {[jobId: number]: Speciality[]} = {};
+    public specialities: { [jobId: number]: Speciality[] } = {};
     public ea = 0;
     public ev = 0;
     public at = 8;
@@ -55,25 +55,27 @@ export class CreateCustomCharacterComponent implements OnInit {
         this.at = 8;
         this.prd = 10;
 
-        if (this.selectedJobs.length && this.selectedJobs[0].baseAT) {
-            this.at = this.selectedJobs[0].baseAT;
-        }
-        if (this.selectedJobs.length && this.selectedJobs[0].basePRD) {
-            this.prd = this.selectedJobs[0].basePRD;
+        if (this.selectedOrigin && this.selectedJobs.length && this.selectedJobs[0]) {
+            const job = this.selectedJobs[0].getStatData(this.selectedOrigin);
+            if (job && job.baseAt) {
+                this.at = job.baseAt;
+            }
+            if (this.selectedJobs.length && job.basePrd) {
+                this.prd = job.basePrd;
+            }
         }
         if (this.selectedOrigin) {
             this.at += this.selectedOrigin.bonusAT;
             this.prd += this.selectedOrigin.bonusPRD;
             this.ev = this.selectedOrigin.baseEV;
-        }
-        else {
+        } else {
             this.ev = 0;
         }
 
         this.ea = 0;
 
         for (let i = 0; i < this.selectedJobs.length; i++) {
-            let job = this.selectedJobs[i];
+            let job = this.selectedJobs[i].getStatData(this.selectedOrigin!);
             if (i === 0) {
                 if (job.baseEv) {
                     this.ev = job.baseEv;
@@ -122,8 +124,7 @@ export class CreateCustomCharacterComponent implements OnInit {
             let known = false;
             if (this.selectedOrigin.skills.findIndex(s => s.id === skill.id) !== -1) {
                 known = true;
-            }
-            else {
+            } else {
                 for (let job of this.selectedJobs) {
                     if (job.skills.findIndex(s => s.id === skill.id) !== -1) {
                         known = true;
@@ -134,8 +135,7 @@ export class CreateCustomCharacterComponent implements OnInit {
 
             if (known) {
                 knownSkills.push(skill);
-            }
-            else {
+            } else {
                 availableSkills.push(skill);
             }
         }
@@ -149,21 +149,8 @@ export class CreateCustomCharacterComponent implements OnInit {
             return;
         }
         let availableJobs: Job[] = [];
-        let selectedOrigin = this.selectedOrigin;
         for (let job of this.jobs) {
-            if (job.originsWhitelist && job.originsWhitelist.length) {
-                if (job.originsWhitelist.findIndex(w => w.id === selectedOrigin.id) !== -1) {
-                    availableJobs.push(job);
-                }
-            }
-            else if (job.originsBlacklist && job.originsBlacklist.length) {
-                if (job.originsBlacklist.findIndex(w => w.id === selectedOrigin.id) === -1) {
-                    availableJobs.push(job);
-                }
-            }
-            else {
-                availableJobs.push(job);
-            }
+            availableJobs.push(job);
         }
         this.availableJobs = availableJobs;
 

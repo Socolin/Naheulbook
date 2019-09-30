@@ -6,7 +6,7 @@ import {Portal} from '@angular/cdk/portal';
 import {Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
-import {smoothScrollBy, IMetadata, NhbkDialogService} from '../shared';
+import {smoothScrollBy, NhbkDialogService} from '../shared';
 import {Skill} from '../skill';
 import {Job, Speciality} from '../job';
 import {Item} from '../item';
@@ -218,9 +218,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 return;
             }
         } else {
-            let job = this.character.jobs.find(j => !!j.diceEaLevelUp);
+            let job = this.character.jobs.find(j => !!j.getStatData(this.character.origin).diceEaLevelUp);
             if (job) {
-                diceLevelUp = job.diceEaLevelUp!;
+                diceLevelUp = job.getStatData(this.character.origin).diceEaLevelUp!;
             } else {
                 diceLevelUp = 6;
             }

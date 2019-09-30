@@ -1,20 +1,6 @@
 <mat-expansion-panel>
     <mat-expansion-panel-header>
         {{job.name}}
-        <span class="secondary-text job-restrictions">
-            <span *ngIf="job.originsBlacklist.length"><strong>Excepté:</strong></span>
-            <ng-template ngFor let-l="last" let-bl [ngForOf]=job.originsBlacklist>
-                <span>
-                    {{bl.name}}<ng-template [ngIf]="!l">,</ng-template>
-                </span>
-            </ng-template>
-            <span *ngIf="job.originsWhitelist.length"><strong>Seulement:</strong></span>
-            <ng-template ngFor let-l="last" let-wl [ngForOf]=job.originsWhitelist>
-                <span>
-                    {{wl.name}}<ng-template [ngIf]="!l">,</ng-template>
-                </span>
-            </ng-template>
-        </span>
     </mat-expansion-panel-header>
     <div>
         <div *ngIf="job.requirements && job.requirements.length > 0">
@@ -30,25 +16,25 @@
                 </span>
         </div>
 
-        <div *ngIf="!job.baseEv && !job.factorEv && !job.bonusEv">
+        <div *ngIf="!job.data.forOrigin['all'].baseEv && !job.data.forOrigin['all'].factorEv && !job.data.forOrigin['all'].bonusEv">
             EV initiale : selon origine
         </div>
-        <div *ngIf="!job.baseEv && job.factorEv && !job.bonusEv">
-            EV initiale : EV initiale -{{ (1 - job.factorEv) | percent}}
+        <div *ngIf="!job.data.forOrigin['all'].baseEv && job.data.forOrigin['all'].factorEv && !job.data.forOrigin['all'].bonusEv">
+            EV initiale : EV initiale -{{ (1 - job.data.forOrigin['all'].factorEv) | percent}}
         </div>
-        <div *ngIf="!job.baseEv && !job.factorEv && (job.bonusEv || 0) > 0">
-            EV initiale : EV initiale + {{job.bonusEv}}
+        <div *ngIf="!job.data.forOrigin['all'].baseEv && !job.data.forOrigin['all'].factorEv && (job.data.forOrigin['all'].bonusEv || 0) > 0">
+            EV initiale : EV initiale + {{job.data.forOrigin['all'].bonusEv}}
         </div>
-        <div *ngIf="job.baseEv && !job.factorEv && !job.bonusEv">
-            EV initiale : {{job.baseEv}}
-        </div>
-
-        <div *ngIf="job.baseEa != null">
-            EA initiale (mana) : {{job.baseEa}} (+1D{{job.diceEaLevelUp}} par niveau)
+        <div *ngIf="job.data.forOrigin['all'].baseEv && !job.data.forOrigin['all'].factorEv && !job.data.forOrigin['all'].bonusEv">
+            EV initiale : {{job.data.forOrigin['all'].baseEv}}
         </div>
 
-        <div *ngIf="job.baseAT != null || job.basePRD != null">
-            Valeur ATTAQUE initiale : {{job.baseAT}} – Valeur PARADE initiale : {{job.basePRD}}
+        <div *ngIf="job.data.forOrigin['all'].baseEa != null">
+            EA initiale (mana) : {{job.data.forOrigin['all'].baseEa}} (+1D{{job.data.forOrigin['all'].diceEaLevelUp}} par niveau)
+        </div>
+
+        <div *ngIf="job.data.forOrigin['all'].baseAt != null || job.data.forOrigin['all'].basePrd != null">
+            Valeur ATTAQUE initiale : {{job.data.forOrigin['all'].baseAt}} – Valeur PARADE initiale : {{job.data.forOrigin['all'].basePrd}}
         </div>
 
         <div *ngFor="let bonus of job.bonuses">
@@ -73,10 +59,10 @@
             </ul>
         </div>
 
-        <div *ngIf="job.restricts && job.restricts.length > 0">
+        <div *ngIf="job.restrictions && job.restrictions.length > 0">
             Restrictions:
             <ul>
-                <li *ngFor="let restrict of job.restricts">
+                <li *ngFor="let restrict of job.restrictions">
                     {{restrict.description}}
                 </li>
             </ul>

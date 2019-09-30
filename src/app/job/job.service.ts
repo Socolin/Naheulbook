@@ -29,32 +29,6 @@ export class JobService {
             ]).subscribe(
                 ([skillsById, responses]) => {
                     const jobs = responses.map(response => Job.fromResponse(response, skillsById));
-                    const jobsByIds = jobs.reduce((dictionary, job) => {
-                        dictionary[job.id] = job;
-                        return dictionary;
-                    }, {});
-                    jobs.forEach(job => Object.freeze(job));
-
-                    // FIXME: Find a better way to handle all the job blacklist/whitelist system.
-                    // It's really useful for only one job and it could be done using a less hacky way
-                    for (let i = 0; i < jobs.length; i++) {
-                        let job = jobs[i];
-                        if (job.parentJobId) {
-                            let jobCopy: Job = Job.fromResponse(JSON.parse(JSON.stringify(jobsByIds[job.parentJobId])), skillsById);
-                            jobCopy.originsBlacklist = [];
-                            jobCopy.originsWhitelist = [];
-                            for (let field in job) {
-                                if (job.hasOwnProperty(field)) {
-                                    if (job[field] != null && (!Array.isArray(job[field]) || job[field].length > 0)) {
-                                        jobCopy[field] = job[field];
-                                    }
-                                }
-                            }
-                            Object.freeze(jobCopy);
-                            jobs[i] = jobCopy;
-                        }
-                    }
-
                     Object.freeze(jobs);
                     this.jobs.next(jobs);
                     this.jobs.complete();
