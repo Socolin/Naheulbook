@@ -16,18 +16,6 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.Advantage)
                 .HasColumnName("advantage");
 
-            builder.Property(e => e.BaseEa)
-                .HasColumnName("baseea");
-
-            builder.Property(e => e.BaseEv)
-                .HasColumnName("baseev");
-
-            builder.Property(e => e.BonusAt)
-                .HasColumnName("bonusat");
-
-            builder.Property(e => e.BonusPrd)
-                .HasColumnName("bonusprd");
-
             builder.Property(e => e.Description)
                 .IsRequired()
                 .HasColumnName("description");
@@ -37,15 +25,6 @@ namespace Naheulbook.Data.Configurations
 
             builder.Property(e => e.PlayerSummary)
                 .HasColumnName("playerSummary");
-
-            builder.Property(e => e.DiceEvLevelUp)
-                .HasColumnName("diceevlevelup");
-
-            builder.Property(e => e.MaxArmorPr)
-                .HasColumnName("maxarmorpr");
-
-            builder.Property(e => e.MaxLoad)
-                .HasColumnName("maxload");
 
             builder.Property(e => e.Name)
                 .IsRequired()
@@ -59,8 +38,9 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("flags")
                 .HasColumnType("json");
 
-            builder.Property(e => e.SpeedModifier)
-                .HasColumnName("speedmodifier");
+            builder.Property(e => e.Data)
+                .HasColumnName("data")
+                .HasColumnType("json");
         }
     }
 

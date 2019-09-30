@@ -190,6 +190,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Loot, LootResponse>();
 
             CreateMap<Origin, OriginResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(o => MapperHelpers.FromJsonNotNull<OriginData>(o.Data)))
                 .ForMember(m => m.Requirements, opt => opt.MapFrom(o => o.Requirements.OrderBy(r => r.Id)))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(o => MapperHelpers.FromJson<List<FlagResponse>>(o.Flags)))
                 .ForMember(m => m.AvailableSkillIds, opt => opt.MapFrom(o => o.Skills.Where(s => !s.Default).OrderBy(s => s.SkillId).Select(s => s.SkillId)))
