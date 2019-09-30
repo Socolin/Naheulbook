@@ -114,8 +114,6 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `item_type`;" +
                     "DELETE FROM `job`;" +
                     "DELETE FROM `job_bonus`;" +
-                    "DELETE FROM `job_origin_blacklist`;" +
-                    "DELETE FROM `job_origin_whitelist`;" +
                     "DELETE FROM `job_requirement`;" +
                     "DELETE FROM `job_restrict`;" +
                     "DELETE FROM `job_skill`;" +

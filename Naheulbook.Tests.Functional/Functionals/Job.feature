@@ -10,19 +10,11 @@ Feature: Job
     {
         "id": ${Job.Id},
         "name": "${Job.Name}",
-        "informations": "${Job.Information}",
+        "information": "${Job.Information}",
         "playerDescription": "${Job.PlayerDescription}",
         "playerSummary": "${Job.PlayerSummary}",
-        "maxLoad": ${Job.MaxLoad},
-        "maxArmorPR": ${Job.MaxArmorPr},
+        "data": ${Job.Data},
         "isMagic": ${Job.IsMagic},
-        "baseEv": ${Job.BaseEv},
-        "factorEv": ${Job.FactorEv},
-        "bonusEv": ${Job.BonusEv},
-        "baseEa": ${Job.BaseEa},
-        "diceEaLevelUp": ${Job.DiceEaLevelUp},
-        "baseAT": ${Job.BaseAt},
-        "basePRD": ${Job.BasePrd},
         "flags": [
             {
                 "type": "value"
@@ -33,18 +25,6 @@ Feature: Job
         ],
         "availableSkillIds": [
           ${Skill.[-1].Id}
-        ],
-        "originsWhitelist": [
-            {
-                "id": ${Origin.[-1].Id},
-                "name": "${Origin.[-1].Name}"
-            }
-          ],
-        "originsBlacklist": [
-            {
-                "id": ${Origin.[-2].Id},
-                "name": "${Origin.[-2].Name}"
-            }
         ],
         "bonuses": [
             {
@@ -59,7 +39,7 @@ Feature: Job
                 "max": ${Job.Requirements.[0].MaxValue}
             }
         ],
-        "restricts": [
+        "restrictions": [
             {
                 "description": "${Job.Restrictions.[0].Text}",
                 "flags": []

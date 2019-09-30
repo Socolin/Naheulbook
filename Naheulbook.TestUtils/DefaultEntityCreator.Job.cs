@@ -18,16 +18,8 @@ namespace Naheulbook.TestUtils
                 PlayerDescription = $"some-player-description-{suffix}",
                 Information = $"some-information-{suffix}",
                 PlayerSummary = $"some-player-summary-{suffix}",
-                DiceEaLevelUp = 20,
-                BaseAt = 2,
-                BasePrd = 8,
-                BaseEa = 10,
-                BaseEv = 12,
-                MaxLoad = 15,
+                Data = @"{""forOrigin"": {""all"": {""baseEa"": 20, ""diceEaLevelUp"": 6}}}",
                 IsMagic = true,
-                BonusEv = 7,
-                MaxArmorPr = 6,
-                FactorEv = 0.7f,
             };
         }
 

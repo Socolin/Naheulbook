@@ -167,20 +167,13 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Slot, ItemSlotResponse>();
 
             CreateMap<Job, JobResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(j => MapperHelpers.FromJsonNotNull<JobData>(j.Data)))
                 .ForMember(m => m.Requirements, opt => opt.MapFrom(j => j.Requirements.OrderBy(r => r.Id)))
-                .ForMember(m => m.OriginsWhitelist, opt => opt.MapFrom(j => j.OriginWhitelist.OrderBy(w => w.Id)))
-                .ForMember(m => m.OriginsBlacklist, opt => opt.MapFrom(j => j.OriginBlacklist.OrderBy(b => b.Id)))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)))
                 .ForMember(m => m.AvailableSkillIds, opt => opt.MapFrom(j => j.Skills.Where(s => !s.Default).OrderBy(s => s.SkillId).Select(s => s.SkillId)))
                 .ForMember(m => m.SkillIds, opt => opt.MapFrom(j => j.Skills.Where(s => s.Default).OrderBy(s => s.SkillId).Select(s => s.SkillId)));
             CreateMap<JobBonus, DescribedFlagResponse>()
                 .ForMember(m => m.Flags, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<FlagResponse>>(b.Flags)));
-            CreateMap<JobOriginBlacklist, NamedIdResponse>()
-                .ForMember(m => m.Id, opt => opt.MapFrom(b => b.Origin.Id))
-                .ForMember(m => m.Name, opt => opt.MapFrom(b => b.Origin.Name));
-            CreateMap<JobOriginWhitelist, NamedIdResponse>()
-                .ForMember(m => m.Id, opt => opt.MapFrom(w => w.Origin.Id))
-                .ForMember(m => m.Name, opt => opt.MapFrom(w => w.Origin.Name));
             CreateMap<JobRequirement, StatRequirementResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(r => r.StatName))
                 .ForMember(m => m.Min, opt => opt.MapFrom(r => r.MinValue))

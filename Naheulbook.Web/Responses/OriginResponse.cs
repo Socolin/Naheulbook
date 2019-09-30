@@ -19,7 +19,7 @@ namespace Naheulbook.Web.Responses
         public short? MaxArmorPr { get; set; }
         public string? Advantage { get; set; }
         [JsonProperty("baseEV")]
-        public short? BaseEv { get; set; }
+        public short BaseEv { get; set; }
         [JsonProperty("baseEA")]
         public short? BaseEa { get; set; }
         [JsonProperty("bonusAT")]

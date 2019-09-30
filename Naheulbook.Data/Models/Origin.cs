@@ -12,7 +12,7 @@ namespace Naheulbook.Data.Models
         public int? MaxLoad { get; set; }
         public short? MaxArmorPr { get; set; }
         public string? Advantage { get; set; }
-        public short? BaseEv { get; set; }
+        public short BaseEv { get; set; }
         public short? BaseEa { get; set; }
         public short? BonusAt { get; set; }
         public short? BonusPrd { get; set; }

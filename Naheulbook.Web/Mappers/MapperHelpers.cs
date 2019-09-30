@@ -26,6 +26,15 @@ namespace Naheulbook.Web.Mappers
             return JsonConvert.DeserializeObject<T>(json, JsonSerializerSettings);
         }
 
+        public static T FromJsonNotNull<T>(string? json)
+            where T : class, new()
+        {
+            if (string.IsNullOrEmpty(json))
+                return new T();
+
+            return JsonConvert.DeserializeObject<T>(json, JsonSerializerSettings);
+        }
+
         public static string? ToJson(object? obj)
         {
             if (obj == null)

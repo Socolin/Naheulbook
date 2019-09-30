@@ -82,8 +82,6 @@ namespace Naheulbook.Data.DbContexts
 
             modelBuilder.ApplyConfiguration(new JobConfiguration());
             modelBuilder.ApplyConfiguration(new JobBonusConfiguration());
-            modelBuilder.ApplyConfiguration(new JobOriginBlacklistConfiguration());
-            modelBuilder.ApplyConfiguration(new JobOriginWhitelistConfiguration());
             modelBuilder.ApplyConfiguration(new JobRequirementConfiguration());
             modelBuilder.ApplyConfiguration(new JobRestrictConfiguration());
             modelBuilder.ApplyConfiguration(new JobSkillConfiguration());

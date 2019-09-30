@@ -32,7 +32,8 @@ namespace Naheulbook.DatabaseMigrator.Migrations
             Execute.Sql("SET FOREIGN_KEY_CHECKS=0;");
             foreach (var tableName in tableNames)
             {
-                Delete.Table(tableName);
+                if (Schema.Table(tableName).Exists())
+                    Delete.Table(tableName);
             }
             Execute.Sql("SET FOREIGN_KEY_CHECKS=1;");
         }

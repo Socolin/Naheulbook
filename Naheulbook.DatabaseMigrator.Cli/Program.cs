@@ -21,7 +21,7 @@ namespace Naheulbook.DatabaseMigrator.Cli
 
             using (var scope = serviceProvider.CreateScope())
             {
-                UpdateDatabase(scope.ServiceProvider);
+                UpdateDatabase(scope.ServiceProvider, config["operation"]);
             }
         }
 
@@ -40,11 +40,18 @@ namespace Naheulbook.DatabaseMigrator.Cli
                 .BuildServiceProvider(false);
         }
 
-        private static void UpdateDatabase(IServiceProvider serviceProvider)
+        private static void UpdateDatabase(IServiceProvider serviceProvider, string operation)
         {
             var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
-            runner.MigrateUp();
+            if (operation == "rollback")
+            {
+                runner.Rollback(1);
+            }
+            else
+            {
+                runner.MigrateUp();
+            }
         }
     }
 }

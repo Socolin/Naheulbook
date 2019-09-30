@@ -25,8 +25,6 @@ namespace Naheulbook.Data.Repositories
                 .Include(j => j.Requirements)
                 .Include(j => j.Restrictions)
                 .Include(j => j.Skills)
-                .Include(j => j.OriginBlacklist).ThenInclude(b => b.Origin)
-                .Include(j => j.OriginWhitelist).ThenInclude(b => b.Origin)
                 .Include(j => j.Specialities).ThenInclude(s => s.Specials)
                 .Include(j => j.Specialities).ThenInclude(s => s.Modifiers)
                 .ToListAsync();

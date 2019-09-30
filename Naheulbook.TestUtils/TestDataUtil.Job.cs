@@ -22,9 +22,6 @@ namespace Naheulbook.TestUtils
             var skill1 = AddSkill().GetLast<Skill>();
             var skill2 = AddSkill().GetLast<Skill>();
 
-            var origin1 = AddOrigin().GetLast<Origin>();
-            var origin2 = AddOrigin().GetLast<Origin>();
-
             job.Bonuses = new List<JobBonus>
             {
                 new JobBonus
@@ -61,20 +58,6 @@ namespace Naheulbook.TestUtils
                     Default = false,
                     Skill = skill2
                 },
-            };
-            job.OriginBlacklist = new List<JobOriginBlacklist>
-            {
-                new JobOriginBlacklist
-                {
-                    Origin = origin1
-                }
-            };
-            job.OriginWhitelist = new List<JobOriginWhitelist>
-            {
-                new JobOriginWhitelist
-                {
-                    Origin = origin2
-                }
             };
 
             SaveEntity(job, customizer);

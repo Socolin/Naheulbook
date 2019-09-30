@@ -10,9 +10,6 @@ namespace Naheulbook.Data.Configurations
         {
             builder.ToTable("job");
 
-            builder.HasIndex(e => e.ParentJobId)
-                .HasName("IX_job_parentjob");
-
             builder.Property(e => e.Id)
                 .HasColumnName("id");
 
@@ -22,53 +19,23 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.PlayerSummary)
                 .HasColumnName("playerSummary");
 
-            builder.Property(e => e.BaseAt)
-                .HasColumnName("baseat");
-
-            builder.Property(e => e.BaseEa)
-                .HasColumnName("baseea");
-
-            builder.Property(e => e.BaseEv)
-                .HasColumnName("baseev");
-
-            builder.Property(e => e.BasePrd)
-                .HasColumnName("baseprd");
-
-            builder.Property(e => e.BonusEv)
-                .HasColumnName("bonusev");
-
-            builder.Property(e => e.DiceEaLevelUp)
-                .HasColumnName("diceealevelup");
-
-            builder.Property(e => e.FactorEv)
-                .HasColumnName("factorev");
-
             builder.Property(e => e.Information)
                 .HasColumnName("informations");
-
-            builder.Property(e => e.InternalName)
-                .HasColumnName("internalname")
-                .HasMaxLength(255);
 
             builder.Property(e => e.IsMagic)
                 .HasColumnName("ismagic")
                 .HasDefaultValueSql("false");
 
-            builder.Property(e => e.MaxArmorPr)
-                .HasColumnName("maxarmorpr");
-
-            builder.Property(e => e.MaxLoad)
-                .HasColumnName("maxload");
-
             builder.Property(e => e.Name)
                 .HasColumnName("name")
                 .HasMaxLength(255);
 
-            builder.Property(e => e.ParentJobId)
-                .HasColumnName("parentjob");
-
             builder.Property(e => e.Flags)
                 .HasColumnName("flags")
+                .HasColumnType("json");
+
+            builder.Property(e => e.Data)
+                .HasColumnName("data")
                 .HasColumnType("json");
         }
     }
@@ -95,52 +62,6 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.Flags)
                 .HasColumnName("flags")
                 .HasColumnType("json");
-        }
-    }
-
-    public class JobOriginBlacklistConfiguration : IEntityTypeConfiguration<JobOriginBlacklist>
-    {
-        public void Configure(EntityTypeBuilder<JobOriginBlacklist> builder)
-        {
-            builder.ToTable("job_origin_blacklist");
-
-            builder.HasIndex(e => e.JobId)
-                .HasName("IX_job_origin_blacklist_job");
-
-            builder.HasIndex(e => e.OriginId)
-                .HasName("IX_job_origin_blacklist_origin");
-
-            builder.Property(e => e.Id)
-                .HasColumnName("id");
-
-            builder.Property(e => e.JobId)
-                .HasColumnName("job");
-
-            builder.Property(e => e.OriginId)
-                .HasColumnName("origin");
-        }
-    }
-
-    public class JobOriginWhitelistConfiguration : IEntityTypeConfiguration<JobOriginWhitelist>
-    {
-        public void Configure(EntityTypeBuilder<JobOriginWhitelist> builder)
-        {
-            builder.ToTable("job_origin_whitelist");
-
-            builder.HasIndex(e => e.JobId)
-                .HasName("IX_job_origin_blacklist_job");
-
-            builder.HasIndex(e => e.OriginId)
-                .HasName("IX_job_origin_blacklist_origin");
-
-            builder.Property(e => e.Id)
-                .HasColumnName("id");
-
-            builder.Property(e => e.JobId)
-                .HasColumnName("job");
-
-            builder.Property(e => e.OriginId)
-                .HasColumnName("origin");
         }
     }
 
