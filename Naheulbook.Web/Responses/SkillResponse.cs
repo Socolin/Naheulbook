@@ -16,7 +16,7 @@ namespace Naheulbook.Web.Responses
         public string? Resist { get; set; }
         public string? Using { get; set; }
         public string? Roleplay { get; set; }
-        public string[]? Stat { get; set; }
+        public string[] Stat { get; set; }
         public short? Test { get; set; }
         public List<FlagResponse>? Flags { get; set; }
         public List<SkillEffectResponse> Effects { get; set; } = null!;
