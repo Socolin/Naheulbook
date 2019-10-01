@@ -27,15 +27,15 @@ import {MonsterInventoryDialogComponent} from './monster-inventory-dialog.compon
     styleUrls: ['./fighter.component.scss'],
     providers: [ItemActionService],
 })
-export class FighterComponent implements OnInit, OnChanges {
+export class FighterComponent implements OnInit {
     @Input() group: Group;
     @Input() fighter: Fighter;
     @Input() fighters: Fighter[];
     @Input() selected: boolean;
     @Input() expandedView: boolean;
     @Output() onSelect: EventEmitter<Fighter> = new EventEmitter<Fighter>();
-    @Input() selectedModifier: ActiveStatsModifier | undefined;
-    public selectedItem: Item | undefined;
+
+    public moreInfo = false;
 
     constructor(
         private readonly actionService: GroupActionService,
@@ -233,17 +233,8 @@ export class FighterComponent implements OnInit, OnChanges {
 
     removeModifier(modifier: ActiveStatsModifier) {
         this.monsterService.removeModifier(this.fighter.id, modifier.id).subscribe(() => {
-            if (this.selectedModifier && this.selectedModifier.id === modifier.id) {
-                this.selectedModifier = undefined;
-            }
             this.fighter.monster.onRemoveModifier(modifier.id);
         });
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if ('fighter' in changes) {
-            this.selectedItem = undefined;
-        }
     }
 
     ngOnInit() {
@@ -270,5 +261,9 @@ export class FighterComponent implements OnInit, OnChanges {
 
     openModifierDetails(modifier: ActiveStatsModifier) {
         this.dialog.open(ModifierDetailsDialogComponent, {data: {modifier}, autoFocus: false});
+    }
+
+    toggleMoreInfo() {
+        this.moreInfo = !this.moreInfo;
     }
 }

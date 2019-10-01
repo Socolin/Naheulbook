@@ -1,4 +1,4 @@
-<div class="fighter">
+<div class="fighter" [class.combat-row-selected]="selected && !expandedView">
     <div class="icon">
         <monster-color-selector *ngIf="fighter.isMonster"
                                 [monster]="fighter.monster"
@@ -85,15 +85,15 @@
 
     <div class="field-with-label at">
         <span class="label" matTooltip="Attaque">AT</span>
-        <span class="text-attack">{{fighter.stats.at}}</span>
+        <span>{{fighter.stats.at}}</span>
     </div>
     <div class="field-with-label prd">
         <span class="label" matTooltip="Parade">PRD</span>
-        <span class="text-prd">{{fighter.stats.prd}}</span>
+        <span>{{fighter.stats.prd}}</span>
     </div>
     <div class="field-with-label esq">
         <span class="label" matTooltip="Esquive">ESQ</span>
-        <span class="text-esq">{{fighter.stats.esq}}</span>
+        <span>{{fighter.stats.esq}}</span>
     </div>
     <div class="field-with-label ev" [class.text-danger]="fighter.stats.ev < 4">
         <span class="label" matTooltip="Énergie vitale">EV</span>
@@ -132,7 +132,7 @@
         </span>
     </div>
 
-    <div class="dmg" matTooltip="Dégats">
+    <div class="dmg" matTooltip="Dégats" *ngIf="(expandedView || moreInfo)">
         <div *ngFor="let dmg of fighter.stats.dmg" class="equiped-weapons-damages">
             <mat-icon *ngIf="dmg.incompatible" color="warn">warning</mat-icon>
             <span>
@@ -145,7 +145,7 @@
                 </span>
         </div>
     </div>
-    <div class="effects" *ngIf="fighter.isMonster && fighter.monster.modifiers?.length">
+    <div class="effects" *ngIf="(expandedView || moreInfo) && fighter.isMonster && fighter.monster.modifiers?.length">
         Effets:
         <div *ngFor="let modifier of fighter.monster.modifiers" class="effect">
             <span class="effect-name">
@@ -180,7 +180,11 @@
             </span>
         </div>
     </div>
-    <div class="note" *ngIf="fighter.isMonster && fighter.monster.data.note">
+    <div class="note" *ngIf="(expandedView || moreInfo) && fighter.isMonster && fighter.monster.data.note">
         Note: {{fighter.monster.data.note}}
+    </div>
+    <div *ngIf="!expandedView" class="expd" matRipple (click)="toggleMoreInfo()">
+        <mat-icon *ngIf="!moreInfo">keyboard_arrow_down</mat-icon>
+        <mat-icon *ngIf="moreInfo">keyboard_arrow_up</mat-icon>
     </div>
 </div>

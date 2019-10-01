@@ -13,6 +13,7 @@ import {GroupService} from './group.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddMonsterDialogComponent, AddMonsterDialogResult} from './add-monster-dialog.component';
 import {CreateMonsterRequest} from '../api/requests';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 @Component({
     selector: 'fighter-panel',
@@ -27,11 +28,10 @@ export class FighterPanelComponent implements OnInit {
     public deadMonsters: Monster[] = [];
     public allDeadMonstersLoaded = false;
 
-    public selectedCombatRow = 0;
-
     @ViewChild('deadMonstersDialog', {static: true})
     public deadMonstersDialog: Portal<any>;
     public deadMonstersOverlayRef: OverlayRef | undefined;
+    public isMobile: boolean;
 
     constructor(
         private readonly actionService: GroupActionService,
@@ -41,7 +41,13 @@ export class FighterPanelComponent implements OnInit {
         private readonly monsterTemplateService: MonsterTemplateService,
         private readonly nhbkDialogService: NhbkDialogService,
         private readonly dialog: MatDialog,
+        private readonly breakpointObserver: BreakpointObserver,
     ) {
+        breakpointObserver.observe([
+            Breakpoints.Handset
+        ]).subscribe(result => {
+            this.isMobile = result.breakpoints[Breakpoints.HandsetPortrait];
+        });
     }
 
     openAddMonsterDialog() {
@@ -79,10 +85,6 @@ export class FighterPanelComponent implements OnInit {
         }
         this.deadMonstersOverlayRef.detach();
         this.deadMonstersOverlayRef = undefined;
-    }
-
-    selectFighter(fighter: Fighter) {
-        this.selectedCombatRow = this.group.fighters.indexOf(fighter);
     }
 
     /**

@@ -60,7 +60,7 @@
         </span>
     </h2>
     <mat-divider></mat-divider>
-    <mat-accordion class="fighters">
+    <mat-accordion class="fighters" *ngIf="isMobile">
         <ng-template ngFor let-fighter [ngForOf]="group.fighters" let-i=index>
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -72,16 +72,27 @@
                     </mat-panel-description>
                 </mat-expansion-panel-header>
                     <fighter
-                        [selected]="(!group.data.inCombat && selectedCombatRow === i) || (group.data.inCombat && group.data.currentFighterIndex === i)"
+                        [selected]="group.data.inCombat && group.data.currentFighterIndex === i"
                         [group]="group"
                         [fighter]="fighter"
                         [fighters]="group.fighters"
-                        [expandedView]="selectedCombatRow === i"
-                        (onSelect)="selectFighter($event)">
+                        [expandedView]="true">
                     </fighter>
             </mat-expansion-panel>
         </ng-template>
     </mat-accordion>
+    <ng-template [ngIf]="!isMobile">
+        <div *ngFor="let fighter of group.fighters; let i=index">
+            <fighter
+                [selected]="group.data.inCombat && group.data.currentFighterIndex === i"
+                [group]="group"
+                [fighter]="fighter"
+                [fighters]="group.fighters"
+                [expandedView]="false">
+            </fighter>
+            <mat-divider></mat-divider>
+        </div>
+    </ng-template>
 
 
     <ng-template #deadMonstersDialog="cdkPortal" cdk-portal>

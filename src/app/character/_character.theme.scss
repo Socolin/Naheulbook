@@ -33,10 +33,6 @@
         }
     }
 
-    .selected {
-        background: linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
-    }
-
     .item-line {
         mat-icon {
             color: mat-color($foreground, text);

@@ -1,10 +1,16 @@
 @import "~app/style/responsive-utils";
 :host {
     .fighter {
-        margin-bottom: 4px;
+        padding-bottom: 4px;
+
+        @include for-tablet-portrait-up {
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
         display: grid;
         align-items: center;
-        grid-gap: 8px;
+        grid-column-gap: 8px;
 
         grid-template-columns: 48px 1fr
             minmax(48px, 100px) minmax(48px, 100px)
@@ -17,7 +23,8 @@
             "icon . at   ev   prd  esq  pr   cou  resm ea ."
             ". dmg dmg  dmg  dmg  dmg  dmg    .    .    .    . "
             ". effects effects effects effects effects effects effects effects effects effects"
-            ". note note note note note note note note note note";
+            ". note note note note note note note note note note"
+            ". expd expd expd expd expd expd expd expd expd expd";
 
         @include for-phone-only {
             grid-template-columns: 48px minmax(20px, 1fr) minmax(64px, 85px) minmax(76px, 92px) 8px;
@@ -36,10 +43,12 @@
                 "icon name name name name name    name     name   name    name    name"
                 "icon .    at   ev   prd  esq     pr       cou    resm    ea      ."
                 ".    dmg  dmg  dmg  dmg  effects effects effects effects effects ."
-                ".    note note note note note    note    note    note    note    .";
+                ".    note note note note note    note    note    note    note    ."
+                ".    expd expd expd expd expd    expd    expd    expd    expd    .";
         }
 
         .field-with-label {
+            padding: 8px 0;
             display: flex;
             justify-content: space-between;
             flex-direction: column;
@@ -47,6 +56,11 @@
 
             @include for-phone-only {
                 flex-direction: row;
+            }
+
+            .label {
+                opacity: 0.54;
+                font-size: 14px;
             }
 
             .label::after {
@@ -130,6 +144,12 @@
 
         .note {
             grid-area: note;
+        }
+
+        .expd {
+            text-align: center;
+            grid-area: expd;
+            align-items: center;
         }
 
         .effects {
