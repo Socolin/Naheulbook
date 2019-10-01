@@ -56,7 +56,7 @@ export class ValueEditorComponent implements OnChanges {
                 return element;
             }
             let result = this.searchVeContainer(element.children);
-            if (result !== null) {
+            if (result !== undefined) {
                 return result;
             }
         }
