@@ -65,6 +65,10 @@ export class NhbkErrorHandler extends ErrorHandler {
         Sentry.showReportDialog({
             eventId,
             lang: 'fr',
+            user: {
+                name: 'Nobody',
+                email: 'nobody@nobody.com'
+            },
             title: 'Échec Critique',
             subtitle: 'Une erreur est survenue, les informations de l\'erreur ont été enregistré pour pouvoir la corrigé.'
         });
