@@ -2,7 +2,7 @@ import {Component, ElementRef, HostListener, Input, OnChanges, OnInit, SimpleCha
 import {Overlay} from '@angular/cdk/overlay';
 import {isNullOrUndefined} from 'util';
 
-import {removeDiacritics} from '../shared';
+import {ActiveStatsModifier, removeDiacritics} from '../shared';
 import {AutocompleteSearchItemTemplateComponent} from '../item-template';
 
 import {Character} from './character.model';
@@ -11,6 +11,9 @@ import {ItemActionService} from './item-action.service';
 import {SwipeService} from './swipe.service';
 import {MatDialog} from '@angular/material';
 import {AddItemDialogComponent} from './add-item-dialog.component';
+import {EditItemDialogComponent, EditItemDialogData, EditItemDialogResult} from './edit-item-dialog.component';
+import {AddItemModifierDialogComponent} from './add-item-modifier-dialog.component';
+import {CharacterItemDialogComponent} from './character-item-dialog.component';
 
 @Component({
     selector: 'inventory-panel',
@@ -155,6 +158,58 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 );
             }
             this.character.update();
+        }
+    }
+
+    editItem(item: Item) {
+        const dialogRef = this.dialog.open<EditItemDialogComponent, EditItemDialogData, EditItemDialogResult>(
+            EditItemDialogComponent,
+            {
+                data: {item: item}
+            }
+        );
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
+            this.itemActionService.onAction('edit_item_name', item, {
+                name: result.name,
+                description: result.description
+            });
+        });
+    }
+
+    openModifierDialog(item: Item) {
+        const dialogRef = this.dialog.open<AddItemModifierDialogComponent, any, ActiveStatsModifier>(AddItemModifierDialogComponent, {
+            minWidth: '100vw',
+            height: '100vh'
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
+
+            if (item.modifiers === null) {
+                item.modifiers = [];
+            }
+            this.activeModifier(result);
+            item.modifiers.push(result);
+            this.itemActionService.onAction('update_modifiers', item);
+        });
+    }
+
+    activeModifier(modifier: ActiveStatsModifier) {
+        modifier.active = true;
+        switch (modifier.durationType) {
+            case 'time':
+                modifier.currentTimeDuration = modifier.timeDuration;
+                break;
+            case 'combat':
+                modifier.currentCombatCount = modifier.combatCount;
+                break;
+            case 'lap':
+                modifier.currentLapCount = modifier.lapCount;
+                break;
         }
     }
 
@@ -304,5 +359,15 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 this.character.onUpdateItem.bind(this.character)
             );
         });
+    }
+
+    openCharacterItemDialog(character: Character, item: Item) {
+        const dialogRef = this.dialog.open(CharacterItemDialogComponent, {
+            autoFocus: false,
+            data: {
+                character,
+                item
+            }
+        })
     }
 }

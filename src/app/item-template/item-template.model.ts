@@ -96,7 +96,6 @@ export class ItemTemplateData implements IItemTemplateData {
     damageType?: any;
     description?: string;
     diceDrop?: number;
-    duration?: string;
     enchantment?: string;
     god?: string;
     gun?: ItemTemplateGunData;

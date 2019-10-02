@@ -35,6 +35,7 @@ import {CharacterService} from './character.service';
 import {CharacterResolve} from './character.resolver';
 import {EditItemDialogComponent} from './edit-item-dialog.component';
 import { AddItemModifierDialogComponent } from './add-item-modifier-dialog.component';
+import { CharacterItemDialogComponent } from './character-item-dialog.component';
 
 @NgModule({
     imports: [
@@ -70,9 +71,11 @@ import { AddItemModifierDialogComponent } from './add-item-modifier-dialog.compo
         AddItemDialogComponent,
         EditItemDialogComponent,
         AddItemModifierDialogComponent,
+        CharacterItemDialogComponent,
     ],
     entryComponents: [
         AddItemDialogComponent,
+        CharacterItemDialogComponent,
         EditItemDialogComponent,
         AddItemModifierDialogComponent,
     ],

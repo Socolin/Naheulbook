@@ -5,6 +5,7 @@ mat-card {
         .padding {
             flex: 1 auto;
         }
+        padding-bottom: 8px;
     }
 
 
@@ -20,6 +21,16 @@ mat-card {
         }
         mat-divider {
             position: relative;
+        }
+    }
+
+    .usage-actions {
+        .usage-action {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            grid-gap: 8px;
+            padding-left: 8px;
         }
     }
 }

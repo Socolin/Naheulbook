@@ -1,3 +1,74 @@
+<div *ngFor="let item of character.items" class="item separator">
+    <div class="info" mat-ripple (click)="openCharacterItemDialog(character, item)">
+        <icon [icon]="item.data.icon"></icon>
+        <span class="name">
+            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
+            {{item.data.name}}
+        </span>
+    </div>
+    <button class="action"
+            mat-icon-button
+            [matMenuTriggerFor]="itemMenu"
+            aria-label="Ouvre le menu d'action de l'objet">
+            <button mat-icon-button [matMenuTriggerFor]="itemMenu" (click)="$event.stopPropagation()">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+    </button>
+    <mat-menu xPosition="before" #itemMenu="matMenu" (click)="$event.stopPropagation()">
+        <button mat-menu-item (click)="editItem(item)">
+            <mat-icon>edit</mat-icon>
+            Éditer
+        </button>
+        <button mat-menu-item (click)="openModifierDialog(item)">
+            <mat-icon>add</mat-icon>
+            Ajouter un modificateur
+        </button>
+        <button mat-menu-item (click)="openLifetimeDialog()">
+            <mat-icon>timelapse</mat-icon>
+            Editer temps de conservation
+        </button>
+        <button *ngIf="character.group" mat-menu-item (click)="openGiveItemDialog(item)">
+            <mat-icon>redo</mat-icon>
+            Donner
+        </button>
+        <button mat-menu-item *ngIf="item.template.data.skillBook"
+                (click)="itemActionService.onAction('read_skill_book', item)">
+            <mat-icon>menu_book</mat-icon>
+            Lire
+        </button>
+        <button *ngIf="item.template.data.charge"
+                mat-menu-item
+                (click)="itemActionService.onAction('use_charge', item)">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
+            Utiliser sur soi-meme
+        </button>
+        <button *ngIf="item.template.data.charge"
+                mat-menu-item>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
+            Utiliser sur...
+        </button>
+        <button mat-menu-item [matMenuTriggerFor]="deleteConfirm">
+            <mat-icon>delete</mat-icon>
+            Supprimer
+        </button>
+    </mat-menu>
+    <mat-menu #deleteConfirm>
+        <button mat-menu-item
+                (click)="itemActionService.onAction('delete', item)">
+            Confirmer
+        </button>
+    </mat-menu>
+</div>
+
+
+<div class="add-button">
+    <button mat-fab (click)="openAddItemModal()">
+        <mat-icon>
+            add
+        </mat-icon>
+    </button>
+</div>
+<!--
 <mat-card class="inventory-card">
     <mat-toolbar color="primary">
         <span>Inventaire</span>
@@ -220,3 +291,4 @@
     </div>
 </mat-card>
 
+-->

@@ -56,41 +56,66 @@
     </div>
 
     <!-- Slots -->
-    <div *ngIf="itemTemplate.slots?.length > 0">
-        <span>
-            Slot:
-        </span>
-        <ng-template ngFor let-slot [ngForOf]="itemTemplate.slots">
-            <span>{{slot.name}} </span>
-        </ng-template>
+    <div class="icon-label" *ngIf="itemTemplate.slots?.length > 0">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <mat-chip-list [selectable]="false">
+                <mat-chip *ngFor="let slot of itemTemplate.slots">{{slot.name}}</mat-chip>
+            </mat-chip-list>
+        </div>
     </div>
 
     <!-- Description -->
-    <div *ngIf="itemTemplate.data.description">
-        <span>Description:</span>
-        {{itemTemplate.data.description}}
+    <div class="icon-label" *ngIf="itemTemplate.data.description">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <span>Description:</span>
+            {{itemTemplate.data.description}}
+        </div>
     </div>
 
     <!-- Note -->
-    <div *ngIf="itemTemplate.data.note">
-        <span>Note:</span>
-        {{itemTemplate.data.note}}
+    <div class="icon-label" *ngIf="itemTemplate.data.note">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-scroll-unfurled" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <span>Note:</span>
+            {{itemTemplate.data.note}}
+        </div>
     </div>
 
     <!-- Encombrement -->
-    <div *ngIf="itemTemplate.data.space">
-        <span>
-            Encombrement:
-        </span>
-        {{itemTemplate.data.space}}
+    <div class="icon-label" *ngIf="itemTemplate.data.space">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <span>
+                Encombrement:
+            </span>
+            {{itemTemplate.data.space}}
+        </div>
+    </div>
+
+    <!-- Encombrement -->
+    <div class="icon-label" *ngIf="itemTemplate.data.lifetime">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-stopwatch" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <span>
+                Durée de conservation:
+            </span>
+            <span *ngIf="itemTemplate.data.lifetime.durationType === 'time'">
+                {{itemTemplate.data.lifetime.timeDuration | nhbkDuration}}
+            </span>
+        </div>
     </div>
 
     <!-- Possibilités de récolte -->
-    <div *ngIf="itemTemplate.data.availableLocation">
-        <span>
-            Possibilités de récolte:
-        </span>
-        {{itemTemplate.data.availableLocation}}
+    <div class="icon-label" *ngIf="itemTemplate.data.availableLocation">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-sickle" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <span>
+                Possibilités de récolte:
+            </span>
+            {{itemTemplate.data.availableLocation}}
+        </div>
     </div>
 
     <!-- Dieu -->
@@ -120,22 +145,21 @@
         </div>
     </div>
 
-    <div *ngIf="itemTemplate.data.duration">
-        <span>Durée:</span>
-        {{itemTemplate.data.duration}}
-    </div>
-
     <!-- Charge / Action -->
 
-    <div *ngIf="itemTemplate.data.charge">
+    <div class="icon-label" *ngIf="itemTemplate.data.charge">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-magic-swirl" class="ra-mat-button-icon-24"></mat-icon>
         <div>
-            <span>Nombre d'utilisations:</span>
-            {{itemTemplate.data.charge}}
-        </div>
-        <div *ngIf="itemTemplate.data?.actions?.length">
-            Lors de l'utilisation:
-            <div *ngFor="let action of itemTemplate.data.actions" style="margin-left: 20px">
-                <nhbk-action *ngIf="!action.hidden" [action]="action"></nhbk-action>
+            <div>
+                <span>Nombre d'utilisations:</span>
+                {{itemTemplate.data.charge}}
+            </div>
+            <div *ngIf="itemTemplate.data?.actions?.length" class="usage-actions">
+                Lors de l'utilisation:
+                <div *ngFor="let action of itemTemplate.data.actions" class="usage-action">
+                    <span class="dot"*ngIf="!action.hidden">-</span>
+                    <nhbk-action *ngIf="!action.hidden" [action]="action"></nhbk-action>
+                </div>
             </div>
         </div>
     </div>
@@ -207,30 +231,32 @@
     </div>
 
     <!-- Compétences ajouté/annulé -->
-    <ng-template ngFor let-skill [ngForOf]="itemTemplate.skills">
-        <div>Donne la compétence "{{skill.name}}"</div>
-    </ng-template>
-    <ng-template ngFor let-skill [ngForOf]="itemTemplate.unskills">
-        <div>Annule la compétence "{{skill.name}}"</div>
-    </ng-template>
-    <ng-template ngFor let-modifier [ngForOf]="itemTemplate.skillModifiers">
+    <div class="icon-label" *ngIf="itemTemplate.skills?.length || itemTemplate.unskills?.length || itemTemplate.skillModifiers?.length">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
         <div>
-            {{modifier.skill.name}} <span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
+            <div *ngFor="let skill of itemTemplate.skills">Donne la compétence "{{skill.name}}"</div>
+            <div *ngFor="let skill of itemTemplate.unskills">Annule "{{skill.name}}"</div>
+            <div *ngFor="let modifier of itemTemplate.skillModifiers">{{modifier.skill.name}}
+                <span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
+            </div>
         </div>
-    </ng-template>
-
+    </div>
 
     <!-- Prérequis -->
-    <ng-template ngFor let-requirement [ngForOf]="itemTemplate.requirements">
+    <div class="icon-label" *ngFor="let requirement of itemTemplate.requirements">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-thumb-up" class="ra-mat-button-icon-24"></mat-icon>
         <div>
             <span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
             <span *ngIf="requirement.max">Max {{requirement.stat}}: {{requirement.max}}</span>
         </div>
-    </ng-template>
+    </div>
 
     <!-- Origine -->
-    <div *ngIf="itemTemplate.data.origin">
-        Origine: {{itemTemplate.data.origin}}
+    <div class="icon-label" *ngIf="itemTemplate.data.origin">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-treasure-map" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            Origine: {{itemTemplate.data.origin}}
+        </div>
     </div>
 
     <!-- Gun -->
@@ -273,8 +299,11 @@
     </div>
 
     <!-- Indice de rareté -->
-    <div *ngIf="itemTemplate.data.rarityIndicator">
-        Indice de rareté: {{itemTemplate.data.rarityIndicator}}
+    <div class="icon-label" *ngIf="itemTemplate.data.rarityIndicator">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-chest" class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+           Indice de rareté: {{itemTemplate.data.rarityIndicator}}
+        </div>
     </div>
 
 </mat-card>

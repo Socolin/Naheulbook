@@ -27,7 +27,7 @@ export class Item {
     id: number;
     data: ItemData = new ItemData();
     modifiers: ActiveStatsModifier[];
-    containerId: number;
+    containerId?: number;
     template: ItemTemplate;
     computedData: ItemComputedData = new ItemComputedData();
 
@@ -48,7 +48,7 @@ export class Item {
 
     // Generated field
     content: Item[];
-    containerInfo: IMetadata;
+    containerInfo?: IMetadata;
 
     static fromJson(jsonData: any, skillsById: {[skillId: number]: Skill}): Item {
         let item = new Item();

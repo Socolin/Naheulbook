@@ -1,102 +1,55 @@
-mat-card {
+@import "~app/style/responsive-utils";
 
-    mat-toolbar {
-        display: flex;
-        span {
-            flex: 1 auto;
-        }
+:host {
+    display: block;
+    $padding-create-button: 72px;
+
+    padding-bottom: $padding-create-button;
+
+    /* For safari.. fab button is hidden if component is too small. */
+    /* So compute viewport height - toolbar - padding */
+    min-height: calc(100vh - 64px - 32px - #{$padding-create-button});
+    @include for-phone-only {
+        min-height: calc(100vh - 16px - 56px - #{$padding-create-button});
     }
 
-    .buttons-header {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-
-        mat-button-toggle-group {
-            margin-bottom: 12px;
-            margin-top: 12px;
-        }
-
-        button[mat-raised-button] {
-            margin-bottom: 12px;
-            margin-top: 12px;
-        }
-
-        mat-input {
-            margin-left: 10px;
-            flex: 1 auto;
-        }
-    }
-
-    .inventory-content {
-        .items-list {
-            .items-list-element {
-                cursor: pointer;
-                border-bottom-width: 1px;
-                border-bottom-style: solid;
-                display: flex;
-
-                .item-line {
-                    position: relative;
-                    flex: 1 auto;
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: nowrap;
-                    align-items: center;
-                    font-size: medium;
-
-                    icon {
-                        padding-right: 10px;
-                    }
-                }
-            }
-        }
-    }
-
-    .equiped-items {
-        margin-left: 32px;
-    }
-
-    .inventory {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-
-        .inventory-content {
-            flex: 1 1 50%;
-            width: 50%;
-        }
-
-        .item-detail {
-            flex: 1 1 50%;
-            width: 50%;
-
-            .detail-padding-height {
-                -webkit-transition: height 0.1s linear; /* Safari */
-                transition: height 0.1s linear;
-            }
-        }
-    }
-
-    .item-icon {
+    .item {
         position: relative;
-        display: inline-block;
-        width: 32px;
-        height: 32px;
-    }
-}
+        display: grid;
+        align-items: center;
+        grid-template-columns: 1fr 40px;
+        grid-template-areas: "info action";
 
-.add-item-dialog {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-@media screen and (max-width: 599px) {
-    .item-detail {
-        display: none;
-    }
-}
+        .info {
+            padding: 4px 8px;
+            cursor: pointer;
+            grid-area: info;
+            grid-column-gap: 8px;
+            display: grid;
+            align-items: center;
+            grid-template-columns: 32px 1fr;
 
-.inventory-card {
-    padding: 0;
+            .name {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .action {
+            grid-area: action;
+        }
+    }
+
+    .item:nth-child(4n+0) {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
+
+    .add-button {
+        z-index: 1;
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+    }
 }
