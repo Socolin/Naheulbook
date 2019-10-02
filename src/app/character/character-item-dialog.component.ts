@@ -1,21 +1,21 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import {Item} from '../item';
 import {Character} from './character.model';
 import {God, MiscService, NhbkDialogService} from '../shared';
 import {NamesByNumericId} from '../shared/shared,model';
-import {LoginService} from '../user';
 import {ItemTemplateCategoryDictionary, ItemTemplateService} from '../item-template';
 import {OriginService} from '../origin';
 import {JobService} from '../job';
-import {SkillService} from '../skill';
 import {forkJoin} from 'rxjs';
+import {ItemActionService} from './item-action.service';
 
 export interface CharacterItemDialogData {
     item: Item,
     character: Character,
-    gmView: boolean
+    gmView: boolean,
+    itemActionService: ItemActionService;
 }
 
 @Component({
@@ -42,7 +42,6 @@ export class CharacterItemDialogComponent implements OnInit {
     }
 
     private updateModifiers() {
-
         this.modifiers = [];
         if (this.data.item && this.data.item.template.modifiers) {
             for (let i = 0; i < this.data.item.template.modifiers.length; i++) {
@@ -70,6 +69,47 @@ export class CharacterItemDialogComponent implements OnInit {
                 }
             }
         }
+    }
+
+    removeModifier(modifierIndex: number) {
+        if (!this.data.item.modifiers) {
+            return;
+        }
+
+        this.data.item.modifiers.splice(modifierIndex, 1);
+        this.data.itemActionService.onAction('update_modifiers', this.data.item);
+    }
+
+    disableModifier(modifierIndex: number) {
+        if (!this.data.item.modifiers) {
+            return;
+        }
+        const modifier = this.data.item.modifiers[modifierIndex];
+        modifier.active = false;
+
+        this.data.itemActionService.onAction('update_modifiers', this.data.item);
+    }
+
+    activeModifier(modifierIndex: number) {
+        if (!this.data.item.modifiers) {
+            return;
+        }
+
+        const modifier = this.data.item.modifiers[modifierIndex];
+        modifier.active = true;
+        switch (modifier.durationType) {
+            case 'time':
+                modifier.currentTimeDuration = modifier.timeDuration;
+                break;
+            case 'combat':
+                modifier.currentCombatCount = modifier.combatCount;
+                break;
+            case 'lap':
+                modifier.currentLapCount = modifier.lapCount;
+                break;
+        }
+
+        this.data.itemActionService.onAction('update_modifiers', this.data.item);
     }
 
     ngOnInit() {

@@ -335,13 +335,13 @@
                 <button mat-button
                         [color]="'primary'"
                         *ngIf="data.gmView && !data.item.data.ignoreRestrictions"
-                        (click)="itemActionService.onAction('ignoreRestrictions', data.item, true); $event.stopPropagation()">
+                        (click)="data.itemActionService.onAction('ignoreRestrictions', data.item, true); $event.stopPropagation()">
                     IGNORER RESTRICTIONS
                 </button>
                 <button mat-button
                         [color]="'primary'"
                         *ngIf="data.gmView && data.item.data.ignoreRestrictions"
-                        (click)="itemActionService.onAction('ignoreRestrictions', data.item, undefined); $event.stopPropagation()">
+                        (click)="data.itemActionService.onAction('ignoreRestrictions', data.item, undefined); $event.stopPropagation()">
                     APPLIQUER RESTRICTIONS
                 </button>
             </div>
@@ -414,13 +414,13 @@
                     </div>
                     <div class="modifier-actions">
                         <mat-menu #modifierAction>
-                            <button mat-menu-item *ngIf="modifier.reusable && !modifier.active">
+                            <button mat-menu-item (click)="activeModifier(i)" *ngIf="modifier.reusable && !modifier.active">
                                 <mat-icon>power_settings_new</mat-icon>Activer
                             </button>
-                            <button mat-menu-item *ngIf="modifier.reusable && modifier.active">
+                            <button mat-menu-item (click)="disableModifier(i)" *ngIf="modifier.reusable && modifier.active">
                                 <mat-icon>power_settings_new</mat-icon>Désactiver
                             </button>
-                            <button mat-menu-item>
+                            <button mat-menu-item (click)="removeModifier(i)">
                                 <mat-icon>delete</mat-icon> Supprimer
                             </button>
                         </mat-menu>

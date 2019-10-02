@@ -13,7 +13,7 @@ import {MatDialog} from '@angular/material';
 import {AddItemDialogComponent} from './add-item-dialog.component';
 import {EditItemDialogComponent, EditItemDialogData, EditItemDialogResult} from './edit-item-dialog.component';
 import {AddItemModifierDialogComponent} from './add-item-modifier-dialog.component';
-import {CharacterItemDialogComponent} from './character-item-dialog.component';
+import {CharacterItemDialogComponent, CharacterItemDialogData} from './character-item-dialog.component';
 
 @Component({
     selector: 'inventory-panel',
@@ -362,12 +362,16 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     openCharacterItemDialog(character: Character, item: Item) {
-        const dialogRef = this.dialog.open(CharacterItemDialogComponent, {
-            autoFocus: false,
-            data: {
-                character,
-                item
-            }
-        })
+        const dialogRef = this.dialog.open<CharacterItemDialogComponent, CharacterItemDialogData>(
+            CharacterItemDialogComponent,
+            {
+                autoFocus: false,
+                data: {
+                    character,
+                    item,
+                    gmView: this.inGroupTab,
+                    itemActionService: this.itemActionService
+                }
+            });
     }
 }
