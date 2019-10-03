@@ -1,13 +1,13 @@
 <div class="inventory-header">
     <mat-button-toggle-group [(ngModel)]="sortType">
         <mat-button-toggle [value]="'asc'">
-            <mat-icon>sort_by_alpha</mat-icon>
+            A-Z
         </mat-button-toggle>
         <mat-button-toggle [value]="'desc'">
-            <mat-icon>sort_by_alpha</mat-icon>
+            Z-A
         </mat-button-toggle>
         <mat-button-toggle [value]="'not_identified_first'">
-            <mat-icon>sort</mat-icon>
+            ?
         </mat-button-toggle>
     </mat-button-toggle-group>
 
@@ -20,8 +20,13 @@
 </div>
 <div *ngFor="let item of filteredItems" class="item separator">
     <div class="info" mat-ripple (click)="openCharacterItemDialog(character, item)">
-        <icon [icon]="item.data.icon" [enchanted]="item.template.data.enchantment !== undefined" [notIdentified]="item.data.notIdentified"></icon>
+        <icon [icon]="item.data.icon"
+              [enchanted]="(!item.data.notIdentified || inGroupTab) &&  item.template.data.enchantment !== undefined"
+              [notIdentified]="item.data.notIdentified"></icon>
         <span class="name">
+            <span *ngIf="character.checkItemIncompatibilities(item) && !item.data.ignoreRestrictions" class="restrictions text-warning">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-interdiction" class="ra-mat-button-icon-32"></mat-icon>
+            </span>
             <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
             {{item.data.name}}
         </span>
@@ -56,13 +61,13 @@
             <mat-icon>menu_book</mat-icon>
             Lire
         </button>
-        <button *ngIf="item.template.data.charge"
+        <button *ngIf="item.template.data.charge" [disabled]="!item.data.charge"
                 mat-menu-item
                 (click)="itemActionService.onAction('use_charge', item)">
             <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
             Utiliser sur soi-meme
         </button>
-        <button *ngIf="item.template.data.charge"
+        <button *ngIf="item.template.data.charge" [disabled]="!item.data.charge"
                 mat-menu-item>
             <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
             Utiliser sur...

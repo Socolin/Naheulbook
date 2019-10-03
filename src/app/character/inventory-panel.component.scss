@@ -30,6 +30,13 @@
             grid-template-columns: 32px 1fr;
 
             .name {
+                .restrictions {
+                    margin-right: 8px;
+                }
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: center;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
