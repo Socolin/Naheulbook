@@ -15,7 +15,8 @@ const defaultIcon: IconDescription = {
 export class IconComponent implements OnChanges {
     @Input() icon: IconDescription = defaultIcon;
     @Input() size = '32px';
-    @Input() enchanted: boolean;
+    @Input() enchanted?: boolean;
+    @Input() notIdentified?: boolean;
 
     ngOnChanges(changes: SimpleChanges) {
         if ('icon' in changes) {

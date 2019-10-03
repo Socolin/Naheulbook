@@ -1,6 +1,26 @@
-<div *ngFor="let item of character.items" class="item separator">
+<div class="inventory-header">
+    <mat-button-toggle-group [(ngModel)]="sortType">
+        <mat-button-toggle [value]="'asc'">
+            <mat-icon>sort_by_alpha</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle [value]="'desc'">
+            <mat-icon>sort_by_alpha</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle [value]="'not_identified_first'">
+            <mat-icon>sort</mat-icon>
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <mat-form-field>
+        <input matInput [(ngModel)]="itemFilterName" placeholder="Filtre" autocomplete="off" autocapitalize="off"/>
+        <button matSuffix mat-icon-button *ngIf="itemFilterName?.length" (click)="itemFilterName = undefined">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+</div>
+<div *ngFor="let item of filteredItems" class="item separator">
     <div class="info" mat-ripple (click)="openCharacterItemDialog(character, item)">
-        <icon [icon]="item.data.icon"></icon>
+        <icon [icon]="item.data.icon" [enchanted]="item.template.data.enchantment !== undefined" [notIdentified]="item.data.notIdentified"></icon>
         <span class="name">
             <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
             {{item.data.name}}
@@ -10,9 +30,9 @@
             mat-icon-button
             [matMenuTriggerFor]="itemMenu"
             aria-label="Ouvre le menu d'action de l'objet">
-            <button mat-icon-button [matMenuTriggerFor]="itemMenu" (click)="$event.stopPropagation()">
-                <mat-icon>more_vert</mat-icon>
-            </button>
+        <button mat-icon-button [matMenuTriggerFor]="itemMenu" (click)="$event.stopPropagation()">
+            <mat-icon>more_vert</mat-icon>
+        </button>
     </button>
     <mat-menu xPosition="before" #itemMenu="matMenu" (click)="$event.stopPropagation()">
         <button mat-menu-item (click)="editItem(item)">

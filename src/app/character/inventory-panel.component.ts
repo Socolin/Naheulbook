@@ -31,7 +31,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     public sortType = 'none';
 
     public iconMode = false;
-    public itemFilterName: string;
+    public itemFilterName?: string;
 
     @ViewChild('itemDetail', {static: true})
     private itemDetailDiv: ElementRef;
@@ -41,6 +41,43 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
 
     @ViewChild('autocompleteSearchItemTemplate', {static: false})
     public autocompleteSearchItemTemplate: AutocompleteSearchItemTemplateComponent;
+
+    get filteredItems(): Item[] {
+        return this.character.items
+            .filter(item => this.isItemFilteredByName(item))
+            .sort((a, b) => {
+                switch (this.sortType) {
+                    case 'not_identified_first':
+                        if (a.data.notIdentified && b.data.notIdentified) {
+                            return 0;
+                        }
+                        if (a.data.notIdentified) {
+                            return -1;
+                        }
+                        if (b.data.notIdentified) {
+                            return 1;
+                        }
+
+                        if ((a.containerId || a.data.equiped) && (b.containerId || b.data.equiped)) {
+                            return a.data.name.localeCompare(b.data.name);
+                        }
+                        if (a.containerId || a.data.equiped) {
+                            return 1;
+                        }
+                        if (b.containerId || b.data.equiped) {
+                            return -1;
+                        }
+
+                        return a.data.name.localeCompare(b.data.name);
+                    case 'asc':
+                        return b.data.name.localeCompare(a.data.name);
+                    case 'desc':
+                        return a.data.name.localeCompare(b.data.name);
+                    default:
+                        return 0;
+                }
+            });
+    }
 
     constructor(
         private readonly itemService: ItemService,
@@ -113,52 +150,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         }
 
         return removeDiacritics(item.template.name).toLowerCase().indexOf(cleanFilter) > -1;
-    }
-
-    sortInventory(type?: string) {
-        if (type === 'not_identified_first') {
-            this.sortType = type;
-            this.character.items.sort((a, b) => {
-                    if (a.data.notIdentified && b.data.notIdentified) {
-                        return 0;
-                    }
-                    if (a.data.notIdentified) {
-                        return -1;
-                    }
-                    if (b.data.notIdentified) {
-                        return 1;
-                    }
-
-                    if ((a.containerId || a.data.equiped) && (b.containerId || b.data.equiped)) {
-                        return a.data.name.localeCompare(b.data.name);
-                    }
-                    if (a.containerId || a.data.equiped) {
-                        return 1;
-                    }
-                    if (b.containerId || b.data.equiped) {
-                        return -1;
-                    }
-
-                    return a.data.name.localeCompare(b.data.name);
-                }
-            );
-
-        } else {
-            if (this.sortType !== 'asc') {
-                this.sortType = 'asc';
-                this.character.items.sort((a, b) => {
-                        return a.data.name.localeCompare(b.data.name);
-                    }
-                );
-            } else {
-                this.sortType = 'desc';
-                this.character.items.sort((a, b) => {
-                        return 2 - a.data.name.localeCompare(b.data.name);
-                    }
-                );
-            }
-            this.character.update();
-        }
     }
 
     editItem(item: Item) {

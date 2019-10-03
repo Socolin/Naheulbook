@@ -1,1 +1,11 @@
-<span [style.font-size]="size" class="game-icon" [class.enchanted-item]="enchanted" [ngClass]="['game-icon-' + icon.name, 'rotate' + icon.rotation]" [style.color]="icon.color"></span>
+<span class="game-icon icon"
+      [class.not-identified]="notIdentified"
+      [style.font-size]="size"
+      [class.enchanted-item]="enchanted"
+      [ngClass]="['game-icon-' + icon.name, 'rotate' + icon.rotation]"
+      [style.color]="icon.color">
+</span>
+<span class="not-identified-layer mat-typography" *ngIf="notIdentified"
+      [style.font-size]="size">
+    ?
+</span>

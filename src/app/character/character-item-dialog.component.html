@@ -3,17 +3,28 @@
 </mat-dialog-content>
 <mat-dialog-content *ngIf="!loading">
     <div class="item-header">
-        <icon [icon]="data.item.data.icon" [size]="'40px'"></icon>
+        <icon [icon]="data.item.data.icon"
+              [size]="'40px'"
+              [notIdentified]="data.item.data.notIdentified"
+              [enchanted]="(!data.item.data.notIdentified || data.gmView) && data.item.template.data.enchantment !== undefined"></icon>
         <span class="item-name">
             <span *ngIf="data.item.template.data.quantifiable || data.item.data.quantity">
                     {{data.item.data.quantity}}
                 </span>
-            <span>{{data.item.data.name}}</span>
+            <span>
+                {{data.item.data.name}}
+                <span *ngIf="(!data.item.data.notIdentified || data.gmView) && data.item.template.data.enchantment !== undefined">
+                    (Ench. {{data.item.template.data.enchantment}})
+                </span>
+            </span>
         </span>
     </div>
     <mat-card-content class="item-detail-content">
-        <span *ngIf="data.item.data.notIdentified" class="secondary-text">
-            Non identifié
+        <span class="icon-label" *ngIf="data.item.data.notIdentified">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-uncertainty" class="ra-mat-button-icon-24"></mat-icon>
+            <div>
+                Non identifié
+            </div>
         </span>
 
         <div *ngIf="data.item.data.notIdentified && !data.gmView">
