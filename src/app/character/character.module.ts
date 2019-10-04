@@ -36,6 +36,7 @@ import {CharacterResolve} from './character.resolver';
 import {EditItemDialogComponent} from './edit-item-dialog.component';
 import { AddItemModifierDialogComponent } from './add-item-modifier-dialog.component';
 import { CharacterItemDialogComponent } from './character-item-dialog.component';
+import { ItemLineComponent } from './item-line.component';
 
 @NgModule({
     imports: [
@@ -72,6 +73,7 @@ import { CharacterItemDialogComponent } from './character-item-dialog.component'
         EditItemDialogComponent,
         AddItemModifierDialogComponent,
         CharacterItemDialogComponent,
+        ItemLineComponent,
     ],
     entryComponents: [
         AddItemDialogComponent,

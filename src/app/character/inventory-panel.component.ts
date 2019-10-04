@@ -2,7 +2,7 @@ import {Component, ElementRef, HostListener, Input, OnChanges, OnInit, SimpleCha
 import {Overlay} from '@angular/cdk/overlay';
 import {isNullOrUndefined} from 'util';
 
-import {ActiveStatsModifier, removeDiacritics} from '../shared';
+import {removeDiacritics} from '../shared';
 import {AutocompleteSearchItemTemplateComponent} from '../item-template';
 
 import {Character} from './character.model';
@@ -11,9 +11,6 @@ import {ItemActionService} from './item-action.service';
 import {SwipeService} from './swipe.service';
 import {MatDialog} from '@angular/material';
 import {AddItemDialogComponent} from './add-item-dialog.component';
-import {EditItemDialogComponent, EditItemDialogData, EditItemDialogResult} from './edit-item-dialog.component';
-import {AddItemModifierDialogComponent} from './add-item-modifier-dialog.component';
-import {CharacterItemDialogComponent, CharacterItemDialogData} from './character-item-dialog.component';
 
 @Component({
     selector: 'inventory-panel',
@@ -27,10 +24,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
 
     // Inventory
     public selectedItem?: Item;
-    public selectedInventoryTab = 'all';
     public sortType = 'none';
+    public viewMode: 'all' | 'bag' | 'money' | 'equipment' = 'all';
 
-    public iconMode = false;
     public itemFilterName?: string;
 
     @ViewChild('itemDetail', {static: true})
@@ -79,6 +75,10 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             });
     }
 
+    get moneyItems(): Item[] {
+        return this.character.computedData.currencyItems;
+    }
+
     constructor(
         private readonly itemService: ItemService,
         private readonly overlay: Overlay,
@@ -102,11 +102,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
     }
 
-    toggleIconMode() {
-        this.iconMode = !this.iconMode;
-    }
-
-
     openAddItemModal() {
         const dialogRef = this.dialog.open(AddItemDialogComponent, {minWidth: '100vw', height: '100vh'});
 
@@ -124,10 +119,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                     }
                 );
         })
-    }
-
-    trackById(index, element) {
-        return element.id;
     }
 
     deselectItem(): void {
@@ -152,57 +143,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         return removeDiacritics(item.template.name).toLowerCase().indexOf(cleanFilter) > -1;
     }
 
-    editItem(item: Item) {
-        const dialogRef = this.dialog.open<EditItemDialogComponent, EditItemDialogData, EditItemDialogResult>(
-            EditItemDialogComponent,
-            {
-                data: {item: item}
-            }
-        );
-        dialogRef.afterClosed().subscribe(result => {
-            if (!result) {
-                return;
-            }
-            this.itemActionService.onAction('edit_item_name', item, {
-                name: result.name,
-                description: result.description
-            });
-        });
-    }
-
-    openModifierDialog(item: Item) {
-        const dialogRef = this.dialog.open<AddItemModifierDialogComponent, any, ActiveStatsModifier>(AddItemModifierDialogComponent, {
-            minWidth: '100vw',
-            height: '100vh'
-        });
-        dialogRef.afterClosed().subscribe(result => {
-            if (!result) {
-                return;
-            }
-
-            if (item.modifiers === null) {
-                item.modifiers = [];
-            }
-            this.activeModifier(result);
-            item.modifiers.push(result);
-            this.itemActionService.onAction('update_modifiers', item);
-        });
-    }
-
-    activeModifier(modifier: ActiveStatsModifier) {
-        modifier.active = true;
-        switch (modifier.durationType) {
-            case 'time':
-                modifier.currentTimeDuration = modifier.timeDuration;
-                break;
-            case 'combat':
-                modifier.currentCombatCount = modifier.combatCount;
-                break;
-            case 'lap':
-                modifier.currentLapCount = modifier.lapCount;
-                break;
-        }
-    }
 
     ngOnInit() {
         this.itemActionService.registerAction('equip').subscribe((event: { item: Item, data: any }) => {
@@ -350,19 +290,5 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                 this.character.onUpdateItem.bind(this.character)
             );
         });
-    }
-
-    openCharacterItemDialog(character: Character, item: Item) {
-        const dialogRef = this.dialog.open<CharacterItemDialogComponent, CharacterItemDialogData>(
-            CharacterItemDialogComponent,
-            {
-                autoFocus: false,
-                data: {
-                    character,
-                    item,
-                    gmView: this.inGroupTab,
-                    itemActionService: this.itemActionService
-                }
-            });
     }
 }

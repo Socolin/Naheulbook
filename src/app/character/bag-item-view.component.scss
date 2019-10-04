@@ -1,38 +1,6 @@
-.item-bag-line {
-    display: flex;
-    height: 42px;
-    width: 100%;
-    align-items: center;
-    cursor: pointer;
-    .padding {
-        flex: 1 auto;
+:host {
+    display: block;
+    .child {
+        margin-left: 32px;
     }
-}
-
-.item-line {
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 40px;
-    width: 100%;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-
-    .padding {
-        flex: 1 auto;
-    }
-}
-.item-icon-container {
-    border-left-width: 1px;
-    border-left-style: solid;
-    margin-left: 15px;
-    padding-left: 15px;
-}
-.item-icon {
-    cursor: pointer;
-    position: relative;
-    display: inline-block;
-    width: 32px;
-    height: 32px;
 }

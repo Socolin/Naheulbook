@@ -1,90 +1,108 @@
 <div class="inventory-header">
-    <mat-button-toggle-group [(ngModel)]="sortType">
-        <mat-button-toggle [value]="'asc'">
-            A-Z
-        </mat-button-toggle>
-        <mat-button-toggle [value]="'desc'">
-            Z-A
-        </mat-button-toggle>
-        <mat-button-toggle [value]="'not_identified_first'">
-            ?
-        </mat-button-toggle>
-    </mat-button-toggle-group>
-
-    <mat-form-field>
+    <mat-form-field class="filter">
         <input matInput [(ngModel)]="itemFilterName" placeholder="Filtre" autocomplete="off" autocapitalize="off"/>
         <button matSuffix mat-icon-button *ngIf="itemFilterName?.length" (click)="itemFilterName = undefined">
             <mat-icon>close</mat-icon>
         </button>
     </mat-form-field>
-</div>
-<div *ngFor="let item of filteredItems" class="item separator">
-    <div class="info" mat-ripple (click)="openCharacterItemDialog(character, item)">
-        <icon [icon]="item.data.icon"
-              [enchanted]="(!item.data.notIdentified || inGroupTab) &&  item.template.data.enchantment !== undefined"
-              [notIdentified]="item.data.notIdentified"></icon>
-        <span class="name">
-            <span *ngIf="character.checkItemIncompatibilities(item) && !item.data.ignoreRestrictions" class="restrictions text-warning">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-interdiction" class="ra-mat-button-icon-32"></mat-icon>
-            </span>
-            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
-            {{item.data.name}}
-        </span>
-    </div>
-    <button class="action"
-            mat-icon-button
-            [matMenuTriggerFor]="itemMenu"
-            aria-label="Ouvre le menu d'action de l'objet">
-        <button mat-icon-button [matMenuTriggerFor]="itemMenu" (click)="$event.stopPropagation()">
-            <mat-icon>more_vert</mat-icon>
-        </button>
+
+    <button mat-icon-button class="actions" [matMenuTriggerFor]="inventoryMenu">
+        <mat-icon>more_vert</mat-icon>
     </button>
-    <mat-menu xPosition="before" #itemMenu="matMenu" (click)="$event.stopPropagation()">
-        <button mat-menu-item (click)="editItem(item)">
-            <mat-icon>edit</mat-icon>
-            Éditer
-        </button>
-        <button mat-menu-item (click)="openModifierDialog(item)">
-            <mat-icon>add</mat-icon>
-            Ajouter un modificateur
-        </button>
-        <button mat-menu-item (click)="openLifetimeDialog()">
-            <mat-icon>timelapse</mat-icon>
-            Editer temps de conservation
-        </button>
-        <button *ngIf="character.group" mat-menu-item (click)="openGiveItemDialog(item)">
-            <mat-icon>redo</mat-icon>
-            Donner
-        </button>
-        <button mat-menu-item *ngIf="item.template.data.skillBook"
-                (click)="itemActionService.onAction('read_skill_book', item)">
-            <mat-icon>menu_book</mat-icon>
-            Lire
-        </button>
-        <button *ngIf="item.template.data.charge" [disabled]="!item.data.charge"
-                mat-menu-item
-                (click)="itemActionService.onAction('use_charge', item)">
-            <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
-            Utiliser sur soi-meme
-        </button>
-        <button *ngIf="item.template.data.charge" [disabled]="!item.data.charge"
-                mat-menu-item>
-            <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
-            Utiliser sur...
-        </button>
-        <button mat-menu-item [matMenuTriggerFor]="deleteConfirm">
-            <mat-icon>delete</mat-icon>
-            Supprimer
-        </button>
-    </mat-menu>
-    <mat-menu #deleteConfirm>
-        <button mat-menu-item
-                (click)="itemActionService.onAction('delete', item)">
-            Confirmer
-        </button>
-    </mat-menu>
+</div>
+<mat-menu #inventoryMenu>
+    <button mat-menu-item [matMenuTriggerFor]="sortMenu">
+        Trier
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="viewModeMenu">
+        Vue
+    </button>
+</mat-menu>
+<mat-menu #sortMenu>
+    <button mat-menu-item [disabled]="sortType == 'asc'" (click)="sortType = 'asc'" role="menuitemcheckbox">
+        <mat-icon *ngIf="sortType == 'asc'">check</mat-icon>
+        <mat-icon *ngIf="sortType != 'asc'"></mat-icon>
+        Alphabétique
+    </button>
+    <button mat-menu-item [disabled]="sortType == 'desc'" (click)="sortType = 'desc'" role="menuitemcheckbox">
+        <mat-icon *ngIf="sortType == 'desc'">check</mat-icon>
+        <mat-icon *ngIf="sortType != 'desc'"></mat-icon>
+        Alphabétique inverse
+    </button>
+    <button mat-menu-item [disabled]="sortType == 'not_identified_first'" (click)="sortType = 'not_identified_first'" role="menuitemcheckbox">
+        <mat-icon *ngIf="sortType == 'not_identified_first'">check</mat-icon>
+        <mat-icon *ngIf="sortType != 'not_identified_first'"></mat-icon>
+        Non identifier en premier
+    </button>
+</mat-menu>
+<mat-menu #viewModeMenu>
+    <button mat-menu-item [disabled]="viewMode == 'all'" (click)="viewMode = 'all'" role="menuitemcheckbox">
+        <mat-icon *ngIf="viewMode == 'all'">check</mat-icon>
+        <mat-icon *ngIf="viewMode != 'all'">list</mat-icon>
+        Liste
+    </button>
+    <button mat-menu-item [disabled]="viewMode == 'bag'" (click)="viewMode = 'bag'" role="menuitemcheckbox">
+        <mat-icon *ngIf="viewMode == 'bag'">check</mat-icon>
+        <mat-icon *ngIf="viewMode != 'bag'">account_tree</mat-icon>
+        Sacs
+    </button>
+    <button mat-menu-item [disabled]="viewMode == 'money'" (click)="viewMode = 'money'" role="menuitemcheckbox">
+        <mat-icon *ngIf="viewMode == 'money'">check</mat-icon>
+        <mat-icon *ngIf="viewMode != 'money'" fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
+        Fortune
+    </button>
+    <button mat-menu-item [disabled]="viewMode == 'equipment'" (click)="viewMode = 'equipment'" role="menuitemcheckbox">
+        <mat-icon *ngIf="viewMode == 'equipment'">check</mat-icon>
+        <mat-icon *ngIf="viewMode != 'equipment'" fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-32"></mat-icon>
+        Équipement
+    </button>
+</mat-menu>
+<div class="items" *ngIf="viewMode == 'all'">
+    <div *ngFor="let item of filteredItems" class="item separator">
+        <app-item-line [character]="character"
+                       [item]="item"
+                       [gmView]="inGroupTab">
+        </app-item-line>
+    </div>
 </div>
 
+<div class="items" *ngIf="viewMode == 'bag'">
+    <div *ngIf="character.computedData.topLevelContainers">
+        <div class="list-group">
+            <bag-item-view
+                [items]="character.computedData.topLevelContainers"
+                [character]="character"
+                [gmView]="inGroupTab">
+            </bag-item-view>
+        </div>
+    </div>
+</div>
+
+<div class="items" *ngIf="viewMode == 'money'">
+    <div *ngFor="let item of moneyItems" class="item separator">
+        <app-item-line [character]="character"
+                       [item]="item"
+                       [gmView]="inGroupTab">
+        </app-item-line>
+    </div>
+</div>
+
+<div class="items" *ngIf="viewMode == 'equipment'">
+    <div *ngFor="let slot of character.computedData.itemSlots">
+        {{slot.name}}:
+        <div class="items-list equiped-items">
+            <div *ngFor="let item of character.computedData.itemsBySlots[slot.id]; let i = index">
+                <div class="items-list-element">
+                    <app-item-line [character]="character"
+                                   [item]="item"
+                                   [hideEquippedMarker]="true"
+                                   [gmView]="inGroupTab">
+                    </app-item-line>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="add-button">
     <button mat-fab (click)="openAddItemModal()">
