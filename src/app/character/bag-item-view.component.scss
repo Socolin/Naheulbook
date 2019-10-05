@@ -6,4 +6,8 @@
         border-left-style: solid;
         border-left-width: 1px;
     }
+    .top-level-items:nth-child(4n+5) {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
 }

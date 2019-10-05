@@ -48,8 +48,11 @@
                     </ng-template>
                 </div>
             </div>
-            <div>
-                <span>{{data.item.data.description}}</span>
+            <div class="icon-label" *ngIf="data.item.data.description">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    Description: {{data.item.data.description}}
+                </div>
             </div>
         </div>
         <div *ngIf="!data.item.data.notIdentified || data.gmView">
@@ -70,10 +73,10 @@
                 </div>
             </div>
 
-            <div class="icon-label" *ngIf="data.item.template.data.description">
+            <div class="icon-label" *ngIf="data.item.data.description || data.item.template.data.description">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
-                    Description: {{data.item.data.description}}
+                    Description: {{data.item.data.description || data.item.template.data.description}}
                 </div>
             </div>
 
@@ -115,9 +118,9 @@
 
             <div class="icon-label" *ngIf="data.item.template.data.bonusDamage || data.item.template.data.damageDice">
                 <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
+                <div class="damage">
                     <span *ngIf="data.item.template.data.damageDice">{{data.item.template.data.damageDice}}
-                        <span class="ra ra-perspective-dice-random"></span>
+                        <span class="ra ra-perspective-dice-random ra-mat-button-icon-24"></span>
                     </span>
                     <span *ngIf="data.item.template.data.damageDice && data.item.template.data.bonusDamage>0">+</span>
                     <span *ngIf="data.item.template.data.bonusDamage">{{data.item.template.data.bonusDamage}}</span>
@@ -258,13 +261,18 @@
                 </div>
             </div>
 
-            <div *ngFor="let requirement of data.item.template.requirements">
-                <span *ngIf="requirement.min">
-                    Min {{requirement.stat}}: {{requirement.min}}
-                </span>
-                <span *ngIf="requirement.max">
-                    Max {{requirement.stat}}: {{requirement.max}}
-                </span>
+            <div class="icon-label" *ngIf="data.item.template.requirements?.length">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-thumb-up" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <div *ngFor="let requirement of data.item.template.requirements">
+                    <span *ngIf="requirement.min">
+                        Min {{requirement.stat}}: {{requirement.min}}
+                    </span>
+                        <span *ngIf="requirement.max">
+                        Max {{requirement.stat}}: {{requirement.max}}
+                    </span>
+                    </div>
+                </div>
             </div>
 
             <div class="icon-label"

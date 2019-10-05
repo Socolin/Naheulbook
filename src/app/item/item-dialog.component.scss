@@ -18,4 +18,31 @@
             text-overflow: ellipsis;
         }
     }
+
+    .icon-label {
+        margin: 8px 0;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 8px;
+        align-items: center;
+
+        .stats {
+            > * {
+                white-space: nowrap;
+            }
+        }
+
+        mat-divider {
+            position: relative;
+        }
+    }
+
+    .damage {
+        >span {
+            display: flex;
+            align-items: center;
+        }
+        display: flex;
+        align-items: center;
+    }
 }

@@ -181,9 +181,9 @@
     <!-- Degat -->
     <div class="icon-label" *ngIf="itemTemplate.data.bonusDamage || itemTemplate.data.damageDice">
         <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
-        <div>
+        <div class="damage">
             <span *ngIf="itemTemplate.data.damageDice">{{itemTemplate.data.damageDice}}<span
-                class="ra ra-perspective-dice-random"></span></span>
+                class="ra ra-perspective-dice-random ra-mat-button-icon-24"></span></span>
             <span *ngIf="itemTemplate.data.damageDice && itemTemplate.data.bonusDamage>0">+</span>
             <span *ngIf="itemTemplate.data.bonusDamage">{{itemTemplate.data.bonusDamage}}</span>
             <span *ngIf="itemTemplate.data.damageType">({{itemTemplate.data.damageType}})</span>

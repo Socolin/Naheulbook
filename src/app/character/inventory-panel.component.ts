@@ -23,7 +23,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
 
     public selectedItem?: Item;
     public sortType: ItemSortType = 'none';
-    public viewMode: 'all' | 'bag' | 'money' | 'equipment' = 'all';
+    public viewMode: 'all' | 'bag' | 'money' | 'equipment' = 'bag';
     public itemFilterName?: string;
 
     get filteredItems(): Item[] {

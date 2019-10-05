@@ -33,4 +33,14 @@ mat-card {
             padding-left: 8px;
         }
     }
+
+
+    .damage {
+        >span {
+            display: flex;
+            align-items: center;
+        }
+        display: flex;
+        align-items: center;
+    }
 }
