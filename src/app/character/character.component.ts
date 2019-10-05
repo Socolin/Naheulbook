@@ -63,7 +63,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     public viewGmSkillInfo = false;
 
     public inGroupTab = false;
-    public selectedItem: Item;
     public currentTab = 'infos';
     public tabs: any[] = [
         {hash: 'infos'},
@@ -103,6 +102,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     private notificationSub?: Subscription;
 
     constructor(
+        private readonly itemActionService: ItemActionService,
         private readonly characterService: CharacterService,
         private readonly nhbkDialogService: NhbkDialogService,
         private readonly notification: NotificationsService,
@@ -341,11 +341,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     closeSkillInfoDialog() {
         this.skillInfoOverlayRef.detach();
-    }
-
-    selectItem(item: Item) {
-        this.selectedItem = item;
-        smoothScrollBy(0, this.combatWeaponDetailElement.nativeElement.getBoundingClientRect().bottom, 400);
     }
 
     openChangeNameDialog() {

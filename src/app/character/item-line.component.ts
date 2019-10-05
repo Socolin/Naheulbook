@@ -17,6 +17,7 @@ export class ItemLineComponent {
     @Input() item: Item;
     @Input() itemMenu: MatMenuPanel;
     @Input() hideEquippedMarker: boolean;
+    @Input() hideShouldPutIntoContainerMarker: boolean;
     @Input() gmView: boolean;
 
     constructor(

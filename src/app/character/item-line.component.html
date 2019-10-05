@@ -19,5 +19,5 @@
         [matMenuTriggerFor]="itemMenu"
         [matMenuTriggerData]="{item: item}"
         (click)="$event.stopPropagation()">
-    <mat-icon matBadgeSize="small" [matBadge]="item.shouldBePutInAContainer  && character.computedData.containers?.length ? '1' : undefined">more_vert</mat-icon>
+    <mat-icon matBadgeSize="small" [matBadge]="!hideShouldPutIntoContainerMarker && item.shouldBePutInAContainer  && character.computedData.containers?.length ? '1' : undefined">more_vert</mat-icon>
 </button>

@@ -221,27 +221,10 @@ mat-card {
         flex-wrap: wrap;
         .weapons-list {
             flex: 1 0 auto;
-            .item-line {
-                position: relative;
-                cursor: pointer;
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
-                align-items: center;
-                font-size: medium;
-
-                icon {
-                    padding-right: 10px;
-                }
-
-                mat-icon {
-                    padding-right: 6px;
-                }
-            }
         }
-        .item-line {
-            border-bottom-style: solid;
+        .weapon:nth-child(4n+0) {
             border-bottom-width: 1px;
+            border-bottom-style: solid;
         }
     }
 }

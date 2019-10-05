@@ -41,3 +41,11 @@
         }
     }
 }
+
+.menu-button-with-item-icon {
+    display: flex;
+    align-items: center;
+    icon {
+        margin-right: 16px;
+    }
+}
