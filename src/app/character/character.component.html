@@ -446,6 +446,12 @@
                             Équiper
                         </button>
                         <button mat-menu-item
+                                *ngIf="!item.data.equiped"
+                                (click)="unEquipAllAndEquip(item)">
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon" class="ra-mat-button-icon-24"></mat-icon>
+                            Équiper à la place des autres
+                        </button>
+                        <button mat-menu-item
                                 *ngIf="item.data.equiped"
                                 (click)="itemActionService.onAction('unequip', item)">
                             <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon" class="ra-mat-button-icon-24"></mat-icon>

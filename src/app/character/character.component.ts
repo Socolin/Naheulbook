@@ -465,4 +465,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
         }
     }
+
+    unEquipAllAndEquip(item: Item) {
+        for (const weaponItem of this.character.computedData.itemsBySlotsAll[1]) {
+            if (weaponItem.data.equiped) {
+                this.itemActionService.onAction('unequip', weaponItem);
+            }
+        }
+        this.itemActionService.onAction('equip', item)
+    }
 }
