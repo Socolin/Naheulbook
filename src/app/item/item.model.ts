@@ -46,8 +46,21 @@ export class Item {
         return this.template.data.price * priceFactor;
     }
 
+    get shouldBePutInAContainer(): boolean {
+        if (this.data.equiped) {
+            return false
+        }
+        if (this.containerId) {
+            return false;
+        }
+        if (this.template.data.container) {
+            return false;
+        }
+        return true;
+    }
+
     // Generated field
-    content: Item[];
+    content?: Item[];
     containerInfo?: IMetadata;
 
     static fromJson(jsonData: any, skillsById: {[skillId: number]: Skill}): Item {

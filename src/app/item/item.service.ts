@@ -138,7 +138,7 @@ export class ItemService {
         });
     }
 
-    moveToContainer(itemId: number, containerId: number): Observable<ItemPartialResponse> {
+    moveToContainer(itemId: number, containerId?: number): Observable<ItemPartialResponse> {
         return this.httpClient.put<ItemPartialResponse>(`/api/v2/items/${itemId}/container`, {
             containerId: containerId
         });

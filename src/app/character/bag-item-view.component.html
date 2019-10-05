@@ -1,8 +1,16 @@
-<div *ngFor="let item of items" class="">
-    <app-item-line [hideEquippedMarker]="true" [gmView]="gmView" [item]="item" [character]="character"></app-item-line>
-    <div *ngIf="item.content" class="child">
+<div *ngFor="let item of filteredBagItems">
+    <app-item-line [itemMenu]="itemMenu"
+                   [hideEquippedMarker]="true"
+                   [gmView]="gmView"
+                   [item]="item"
+                   [character]="character">
+    </app-item-line>
+    <div *ngIf="item.content" class="child separator">
         <bag-item-view
+            [itemFilterName]="itemFilterName"
+            [sortType]="sortType"
             [items]="item.content"
+            [itemMenu]="itemMenu"
             [character]="character"
             [gmView]="gmView">
         </bag-item-view>

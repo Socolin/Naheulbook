@@ -1,6 +1,9 @@
 :host {
     display: block;
     .child {
-        margin-left: 32px;
+        margin-left: 24px;
+        padding-left: 8px;
+        border-left-style: solid;
+        border-left-width: 1px;
     }
 }

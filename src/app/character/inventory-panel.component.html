@@ -58,29 +58,30 @@
     </button>
 </mat-menu>
 <div class="items" *ngIf="viewMode == 'all'">
-    <div *ngFor="let item of filteredItems" class="item separator">
+    <div *ngFor="let item of filteredItems; trackBy: trackByItemId" class="item separator">
         <app-item-line [character]="character"
                        [item]="item"
+                       [itemMenu]="itemMenu"
                        [gmView]="inGroupTab">
         </app-item-line>
     </div>
 </div>
 
 <div class="items" *ngIf="viewMode == 'bag'">
-    <div *ngIf="character.computedData.topLevelContainers">
-        <div class="list-group">
-            <bag-item-view
-                [items]="character.computedData.topLevelContainers"
-                [character]="character"
-                [gmView]="inGroupTab">
-            </bag-item-view>
-        </div>
-    </div>
+    <bag-item-view
+        [itemFilterName]="itemFilterName"
+        [sortType]="sortType"
+        [items]="topLevelBagItems"
+        [itemMenu]="itemMenu"
+        [character]="character"
+        [gmView]="inGroupTab">
+    </bag-item-view>
 </div>
 
 <div class="items" *ngIf="viewMode == 'money'">
     <div *ngFor="let item of moneyItems" class="item separator">
         <app-item-line [character]="character"
+                       [itemMenu]="itemMenu"
                        [item]="item"
                        [gmView]="inGroupTab">
         </app-item-line>
@@ -94,6 +95,7 @@
             <div *ngFor="let item of character.computedData.itemsBySlots[slot.id]; let i = index">
                 <div class="items-list-element">
                     <app-item-line [character]="character"
+                                   [itemMenu]="itemMenu"
                                    [item]="item"
                                    [hideEquippedMarker]="true"
                                    [gmView]="inGroupTab">
@@ -111,6 +113,88 @@
         </mat-icon>
     </button>
 </div>
+
+<mat-menu xPosition="before" #itemMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item
+                *ngIf="item.template.slots?.length > 0 && !item.data.equiped && !item.content?.length"
+                (click)="itemActionService.onAction('equip', item)">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon" class="ra-mat-button-icon-24"></mat-icon>
+            Équiper
+        </button>
+        <button mat-menu-item
+                *ngIf="item.template.slots?.length > 0 && item.data.equiped && !item.content?.length"
+                (click)="itemActionService.onAction('unequip', item)">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon" class="ra-mat-button-icon-24"></mat-icon>
+            Déséquipé
+        </button>
+        <button mat-menu-item (click)="editItem(item)">
+            <mat-icon>edit</mat-icon>
+            Éditer
+        </button>
+        <button mat-menu-item (click)="openModifierDialog(item)">
+            <mat-icon>add</mat-icon>
+            Ajouter un modificateur
+        </button>
+        <button *ngIf="!item.data.equiped && character.computedData.containers?.length" mat-menu-item [matMenuTriggerFor]="containerMenu" [matMenuTriggerData]="{item: item}">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-profit" class="ra-mat-button-icon-24"></mat-icon>
+            <span matBadgeSize="small" matBadge="1" matBadgeOverlap="false" [matBadge]="item.shouldBePutInAContainer  && character.computedData.containers?.length ? '1' : undefined">
+            Ranger
+        </span>
+        </button>
+        <button mat-menu-item (click)="openLifetimeDialog()">
+            <mat-icon>timelapse</mat-icon>
+            Éditer temps de conservation
+        </button>
+        <button *ngIf="character.group" mat-menu-item (click)="openGiveItemDialog(item)">
+            <mat-icon>redo</mat-icon>
+            Donner
+        </button>
+        <button mat-menu-item *ngIf="item.template.data.skillBook"
+                (click)="itemActionService.onAction('read_skill_book', item)">
+            <mat-icon>menu_book</mat-icon>
+            Lire
+        </button>
+        <button *ngIf="item.template.data.charge" [disabled]="!item.data.charge"
+                mat-menu-item
+                (click)="itemActionService.onAction('use_charge', item)">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
+            Utiliser sur soi-meme
+        </button>
+        <button *ngIf="item.template.data.charge" [disabled]="!item.data.charge"
+                mat-menu-item>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
+            Utiliser sur...
+        </button>
+        <button mat-menu-item [matMenuTriggerFor]="deleteConfirm" [matMenuTriggerData]="{item: item}">
+            <mat-icon>delete</mat-icon>
+            Supprimer
+        </button>
+    </ng-template>
+</mat-menu>
+<mat-menu #deleteConfirm>
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item
+                (click)="itemActionService.onAction('delete', item)">
+            Confirmer
+        </button>
+    </ng-template>
+</mat-menu>
+<mat-menu #containerMenu>
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item [disabled]="!item.containerId" (click)="putItemInContainer(item, undefined)">
+            <mat-icon *ngIf="!item.containerId">check</mat-icon>
+            <mat-icon *ngIf="item.containerId"></mat-icon>
+            Aucun
+        </button>
+        <button class="menu-button-with-item-icon" *ngFor="let container of character.computedData.containers" mat-menu-item (click)="putItemInContainer(item, container)"
+                [disabled]="item.containerId === container.id || item.id === container.id">
+            <icon size="24px" [icon]="container.data.icon" [notIdentified]="container.data.notIdentified"></icon> {{container.data.name}}
+        </button>
+    </ng-template>
+</mat-menu>
+
+
 <!--
 <mat-card class="inventory-card">
     <mat-toolbar color="primary">
