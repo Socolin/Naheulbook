@@ -13,7 +13,7 @@ import {DatabaseSectionsComponent} from './database-sections.component';
 
 export const routes: Routes = [
     {
-        path: 'database',
+        path: '',
         component: HomeDatabaseComponent,
         children: [
             {

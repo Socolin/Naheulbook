@@ -13,6 +13,18 @@ export const routes: Routes = [
         component: HomeComponent
     },
     {
+        path: 'gm',
+        loadChildren: () => import('./home-gm/home-gm.module').then(m => m.GmHomeModule)
+    },
+    {
+        path: 'database',
+        loadChildren: () => import('./home-database/home-database.module').then(m => m.DatabaseHomeModule)
+    },
+    {
+        path: 'player',
+        loadChildren: () => import('./home-player/home-player.module').then(m => m.PlayerHomeModule)
+    },
+    {
         path: 'login/:redirect',
         component: LoginComponent,
     },

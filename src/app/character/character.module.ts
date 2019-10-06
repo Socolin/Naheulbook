@@ -37,6 +37,7 @@ import {EditItemDialogComponent} from './edit-item-dialog.component';
 import { AddItemModifierDialogComponent } from './add-item-modifier-dialog.component';
 import { CharacterItemDialogComponent } from './character-item-dialog.component';
 import { ItemLineComponent } from './item-line.component';
+import {WebsocketModule} from '../websocket/websocket.module';
 
 @NgModule({
     imports: [
@@ -52,6 +53,7 @@ import { ItemLineComponent } from './item-line.component';
         ActionModule,
         ItemTemplateModule,
         ItemModule,
+        WebsocketModule,
         ReactiveFormsModule,
     ],
     declarations: [

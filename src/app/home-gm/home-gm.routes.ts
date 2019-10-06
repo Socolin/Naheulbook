@@ -19,7 +19,7 @@ import {HomeGmComponent} from './home-gm.component';
 
 export const routes: Routes = [
     {
-        path: 'gm',
+        path: '',
         component: HomeGmComponent,
         canActivate: [AuthGuard],
         data: {

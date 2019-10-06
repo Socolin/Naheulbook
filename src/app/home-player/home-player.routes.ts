@@ -12,7 +12,7 @@ import {HomePlayerComponent} from './home-player.component';
 
 export const routes: Routes = [
     {
-        path: 'player',
+        path: '',
         canActivate: [AuthGuard],
         component: HomePlayerComponent,
         data: {
