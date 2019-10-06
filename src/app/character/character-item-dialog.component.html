@@ -103,7 +103,11 @@
             <div class="icon-label" *ngIf="data.item.template.data.quantifiable">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-stack" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
-                    Quantité: {{data.item.data.quantity}}
+                    Quantité: <value-editor
+                                  [title]="'Quantité'"
+                                  [value]="data.item.data.quantity"
+                                  (onChange)="data.itemActionService.onAction('update_quantity', data.item, {quantity: $event})">
+                    </value-editor>
                 </div>
             </div>
 
