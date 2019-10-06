@@ -32,7 +32,6 @@ import {DatabaseSectionsComponent} from './database-sections.component';
         NhbkMaterialModule,
         RouterModule.forChild(routes),
         NotificationsModule,
-        UserModule,
         CharacterModule,
         GroupModule,
         EffectModule,

@@ -21,7 +21,6 @@ import {routes} from './home-player.routes';
         NhbkMaterialModule,
         RouterModule.forChild(routes),
         NotificationsModule,
-        UserModule,
         CharacterModule,
     ],
     declarations: [

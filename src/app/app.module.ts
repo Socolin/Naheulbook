@@ -17,8 +17,8 @@ import {CustomHammerConfig} from './hammer-js-config';
 import {ThemeService} from './theme.service';
 import {ErrorReportService} from './error-report.service';
 import {AuthenticationInterceptor} from './user/authentication.interceptor';
-import {LoginService} from './user';
 import {NotificationsModule} from './notifications/notifications.module';
+import {LoginService} from './user';
 
 @NgModule({
     imports: [

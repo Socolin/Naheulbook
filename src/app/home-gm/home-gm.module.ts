@@ -32,7 +32,6 @@ import {routes} from './home-gm.routes';
         NhbkMaterialModule,
         RouterModule.forChild(routes),
         NotificationsModule,
-        UserModule,
         CharacterModule,
         GroupModule,
         EffectModule,

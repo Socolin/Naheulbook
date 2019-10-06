@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    Input,
+    OnChanges, OnDestroy,
+    OnInit,
+    SimpleChanges
+} from '@angular/core';
 import {isNullOrUndefined} from 'util';
 
 import {Character} from './character.model';
@@ -12,6 +20,8 @@ import {AddItemModifierDialogComponent} from './add-item-modifier-dialog.compone
 import {ActiveStatsModifier} from '../shared';
 import {ItemLifetimeEditorDialogComponent, ItemLifetimeEditorDialogData} from './item-lifetime-editor-dialog.component';
 import {IDurable} from '../api/shared';
+import {GiveItemDialogComponent, GiveItemDialogData, GiveItemDialogResult} from './give-item-dialog.component';
+import {Subscription} from 'rxjs';
 
 @Component({
     selector: 'inventory-panel',
@@ -19,7 +29,7 @@ import {IDurable} from '../api/shared';
     styleUrls: ['./inventory-panel.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InventoryPanelComponent implements OnInit, OnChanges {
+export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
     @Input() character: Character;
     @Input() inGroupTab: boolean;
 
@@ -27,6 +37,8 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     public sortType: ItemSortType = 'none';
     public viewMode: 'all' | 'bag' | 'money' | 'equipment' = 'bag';
     public itemFilterName?: string;
+
+    private subscription: Subscription = new Subscription();
 
     get filteredItems(): Item[] {
         return this.character.items
@@ -44,6 +56,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     constructor(
+        private readonly changeDetectorRef: ChangeDetectorRef,
         private readonly itemService: ItemService,
         private readonly dialog: MatDialog,
         public readonly itemActionService: ItemActionService,
@@ -149,7 +162,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this.itemActionService.registerAction('equip').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('equip').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             let level = 1;
@@ -159,14 +172,14 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             this.itemService.equipItem(item.id, level).subscribe(
                 this.character.onEquipItem.bind(this.character)
             );
-        });
-        this.itemActionService.registerAction('unequip').subscribe((event: { item: Item, data: any }) => {
+        }));
+        this.subscription.add(this.itemActionService.registerAction('unequip').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             this.itemService.equipItem(item.id, 0).subscribe(
                 this.character.onEquipItem.bind(this.character)
             );
-        });
-        this.itemActionService.registerAction('delete').subscribe((event: { item: Item, data: any }) => {
+        }));
+        this.subscription.add(this.itemActionService.registerAction('delete').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             this.itemService.deleteItem(item.id).subscribe(
                 () => {
@@ -176,8 +189,8 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                     this.character.onDeleteItem(item.id);
                 }
             );
-        });
-        this.itemActionService.registerAction('update_quantity').subscribe((event: { item: Item, data: any }) => {
+        }));
+        this.subscription.add(this.itemActionService.registerAction('update_quantity').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item as Item;
             let itemData = {
@@ -192,24 +205,24 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                     this.character.onUpdateItem(res);
                 }
             );
-        });
-        this.itemActionService.registerAction('read_skill_book').subscribe((event: { item: Item, data: any }) => {
+        }));
+        this.subscription.add(this.itemActionService.registerAction('read_skill_book').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             this.itemService.updateItem(item.id, {...item.data, readCount: (item.data.readCount || 0) + 1}).subscribe(
                 res => {
                     this.character.onUpdateItem(res);
                 }
             );
-        });
-        this.itemActionService.registerAction('identify').subscribe((event: { item: Item, data: any }) => {
+        }));
+        this.subscription.add(this.itemActionService.registerAction('identify').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             let itemData = {...item.data, name: item.template.name};
             delete itemData.notIdentified;
             this.itemService.updateItem(item.id, itemData).subscribe((data) =>
                 this.character.onUpdateItem(data)
             );
-        });
-        this.itemActionService.registerAction('ignoreRestrictions').subscribe((event: { item: Item, data: any }) => {
+        }));
+        this.subscription.add(this.itemActionService.registerAction('ignoreRestrictions').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             item.data = {
                 ...item.data,
@@ -218,8 +231,8 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             this.itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
-        });
-        this.itemActionService.registerAction('use_charge').subscribe((event: { item: Item, data: any }) => {
+        }));
+        this.subscription.add(this.itemActionService.registerAction('use_charge').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             if (item.data.charge == null) {
                 item.data.charge = item.template.data.charge;
@@ -230,16 +243,16 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             this.itemService.useItemCharge(item.id).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
-        });
-        this.itemActionService.registerAction('move_to_container').subscribe((event: { item: Item, data: any }) => {
+        }));
+        this.subscription.add(this.itemActionService.registerAction('move_to_container').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             this.itemService.moveToContainer(item.id, eventData.container).subscribe(
                 this.character.onChangeContainer.bind(this.character)
             );
-        });
+        }));
 
-        this.itemActionService.registerAction('edit_item_name').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('edit_item_name').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             item.data = {
@@ -250,9 +263,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             this.itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
-        });
+        }));
 
-        this.itemActionService.registerAction('give').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('give').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             this.itemService.giveItem(item.id, eventData.characterId, eventData.quantity).subscribe(
@@ -267,9 +280,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
                     }
                 }
             );
-        });
+        }));
 
-        this.itemActionService.registerAction('change_icon').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('change_icon').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
             let item = event.item;
             item.data = {
@@ -279,21 +292,29 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             this.itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
-        });
+        }));
 
-        this.itemActionService.registerAction('update_modifiers').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('update_modifiers').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             this.itemService.updateItemModifiers(item.id, item.modifiers).subscribe(
                 this.character.onUpdateModifiers.bind(this.character)
             );
-        });
+        }));
 
-        this.itemActionService.registerAction('update_data').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('update_data').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             this.itemService.updateItem(item.id, item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
-        });
+        }));
+
+        this.subscription.add(this.character.onUpdate.subscribe(() => {
+            this.changeDetectorRef.detectChanges();
+        }))
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     openLifetimeDialog(item: Item) {
@@ -309,8 +330,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
 
             if (result.durationType === 'forever') {
                 item.data.lifetime = undefined;
-            }
-            else {
+            } else {
                 item.data.lifetime = result;
             }
             this.itemActionService.onAction('update_data', item);
@@ -318,6 +338,22 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     }
 
     openGiveItemDialog(item: Item) {
-
+        const dialogRef = this.dialog.open<GiveItemDialogComponent, GiveItemDialogData, GiveItemDialogResult>(
+            GiveItemDialogComponent, {
+                autoFocus: false,
+                data: {
+                    item: item,
+                    character: this.character
+                }
+            });
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.itemActionService.onAction('give', item, {
+                characterId: result.giveTarget.id,
+                quantity: result.giveQuantity
+            });
+        });
     }
 }
