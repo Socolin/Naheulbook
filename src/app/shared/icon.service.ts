@@ -15,7 +15,7 @@ export class IconService {
         if (!this.icons) {
             this.icons = new ReplaySubject<string[]>(1);
 
-            this.httpClient.get<string[]>('/api/v2/icons')
+            this.httpClient.get<string[]>('/assets/icons-list.json')
                 .subscribe(
                     icons => {
                         this.icons.next(icons);
