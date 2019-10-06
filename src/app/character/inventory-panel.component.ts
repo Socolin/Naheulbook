@@ -292,4 +292,12 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
             );
         });
     }
+
+    openLifetimeDialog() {
+        
+    }
+
+    openGiveItemDialog(item) {
+        
+    }
 }
