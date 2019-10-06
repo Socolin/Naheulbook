@@ -10,6 +10,8 @@ import {isItemNameMatchingFilter, ItemSortType, sortItemFn} from '../item/item-u
 import {EditItemDialogComponent, EditItemDialogData, EditItemDialogResult} from './edit-item-dialog.component';
 import {AddItemModifierDialogComponent} from './add-item-modifier-dialog.component';
 import {ActiveStatsModifier} from '../shared';
+import {ItemLifetimeEditorDialogComponent, ItemLifetimeEditorDialogData} from './item-lifetime-editor-dialog.component';
+import {IDurable} from '../api/shared';
 
 @Component({
     selector: 'inventory-panel',
@@ -145,6 +147,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
     trackByItemId(item: Item): number {
         return item.id;
     }
+
     ngOnInit() {
         this.itemActionService.registerAction('equip').subscribe((event: { item: Item, data: any }) => {
             let eventData = event.data;
@@ -293,11 +296,28 @@ export class InventoryPanelComponent implements OnInit, OnChanges {
         });
     }
 
-    openLifetimeDialog() {
-        
+    openLifetimeDialog(item: Item) {
+        const dialogRef = this.dialog.open<ItemLifetimeEditorDialogComponent, ItemLifetimeEditorDialogData, IDurable>(
+            ItemLifetimeEditorDialogComponent,
+            {
+                data: {lifetime: item.data.lifetime}
+            });
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            if (result.durationType === 'forever') {
+                item.data.lifetime = undefined;
+            }
+            else {
+                item.data.lifetime = result;
+            }
+            this.itemActionService.onAction('update_data', item);
+        })
     }
 
-    openGiveItemDialog(item) {
-        
+    openGiveItemDialog(item: Item) {
+
     }
 }

@@ -34,10 +34,11 @@ import {
 import {CharacterService} from './character.service';
 import {CharacterResolve} from './character.resolver';
 import {EditItemDialogComponent} from './edit-item-dialog.component';
-import { AddItemModifierDialogComponent } from './add-item-modifier-dialog.component';
-import { CharacterItemDialogComponent } from './character-item-dialog.component';
-import { ItemLineComponent } from './item-line.component';
+import {AddItemModifierDialogComponent} from './add-item-modifier-dialog.component';
+import {CharacterItemDialogComponent} from './character-item-dialog.component';
+import {ItemLineComponent} from './item-line.component';
 import {WebsocketModule} from '../websocket/websocket.module';
+import {ItemLifetimeEditorDialogComponent} from './item-lifetime-editor-dialog.component';
 
 @NgModule({
     imports: [
@@ -76,12 +77,14 @@ import {WebsocketModule} from '../websocket/websocket.module';
         AddItemModifierDialogComponent,
         CharacterItemDialogComponent,
         ItemLineComponent,
+        ItemLifetimeEditorDialogComponent,
     ],
     entryComponents: [
         AddItemDialogComponent,
         CharacterItemDialogComponent,
         EditItemDialogComponent,
         AddItemModifierDialogComponent,
+        ItemLifetimeEditorDialogComponent,
     ],
     exports: [
         CharacterColorSelectorComponent,
