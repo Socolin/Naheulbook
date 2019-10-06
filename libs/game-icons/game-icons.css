@@ -257,7 +257,16 @@
     src: url('./game-icons-28.ttf');
     src: url('./game-icons-28.woff2') format('woff2'),
         url('./game-icons-28.ttf') format('truetype');
-    unicode-range: U+FFE00-FFE29;
+    unicode-range: U+FFE00-FFE7F;
+}
+@font-face {
+    font-family: "game-icons";
+    font-weight: normal;
+    font-style: normal;
+    src: url('./game-icons-29.ttf');
+    src: url('./game-icons-29.woff2') format('woff2'),
+        url('./game-icons-29.ttf') format('truetype');
+    unicode-range: U+FFE80-FFE8B;
 }
 
 .game-icon {
@@ -11148,4 +11157,298 @@
 }
 .game-icon-nhbk_yarn:before {
     content: "\FFE29";
+}
+.game-icon-broken-arrow:before {
+    content: "\FFE2A";
+}
+.game-icon-algeria:before {
+    content: "\FFE2B";
+}
+.game-icon-apple-core:before {
+    content: "\FFE2C";
+}
+.game-icon-archive-research:before {
+    content: "\FFE2D";
+}
+.game-icon-bird-house:before {
+    content: "\FFE2E";
+}
+.game-icon-burning-forest:before {
+    content: "\FFE2F";
+}
+.game-icon-camp-cooking-pot:before {
+    content: "\FFE30";
+}
+.game-icon-car-door:before {
+    content: "\FFE31";
+}
+.game-icon-car-seat:before {
+    content: "\FFE32";
+}
+.game-icon-cargo-ship:before {
+    content: "\FFE33";
+}
+.game-icon-chanterelles:before {
+    content: "\FFE34";
+}
+.game-icon-chestnut-leaf:before {
+    content: "\FFE35";
+}
+.game-icon-coffee-pot:before {
+    content: "\FFE36";
+}
+.game-icon-cooking-glove:before {
+    content: "\FFE37";
+}
+.game-icon-coral:before {
+    content: "\FFE38";
+}
+.game-icon-credits-currency:before {
+    content: "\FFE39";
+}
+.game-icon-dam:before {
+    content: "\FFE3A";
+}
+.game-icon-dice-fire:before {
+    content: "\FFE3B";
+}
+.game-icon-dice-shield:before {
+    content: "\FFE3C";
+}
+.game-icon-dice-target:before {
+    content: "\FFE3D";
+}
+.game-icon-dice-twenty-faces-one:before {
+    content: "\FFE3E";
+}
+.game-icon-door-ring-handle:before {
+    content: "\FFE3F";
+}
+.game-icon-door:before {
+    content: "\FFE40";
+}
+.game-icon-elbow-pad:before {
+    content: "\FFE41";
+}
+.game-icon-escalator:before {
+    content: "\FFE42";
+}
+.game-icon-eyepatch:before {
+    content: "\FFE43";
+}
+.game-icon-fern:before {
+    content: "\FFE44";
+}
+.game-icon-fish-eggs:before {
+    content: "\FFE45";
+}
+.game-icon-flag-objective:before {
+    content: "\FFE46";
+}
+.game-icon-flat-platform:before {
+    content: "\FFE47";
+}
+.game-icon-flower-hat:before {
+    content: "\FFE48";
+}
+.game-icon-foundry-bucket:before {
+    content: "\FFE49";
+}
+.game-icon-furnace:before {
+    content: "\FFE4A";
+}
+.game-icon-galley:before {
+    content: "\FFE4B";
+}
+.game-icon-ginkgo-leaf:before {
+    content: "\FFE4C";
+}
+.game-icon-gun-stock:before {
+    content: "\FFE4D";
+}
+.game-icon-harbor-dock:before {
+    content: "\FFE4E";
+}
+.game-icon-heavy-bullets:before {
+    content: "\FFE4F";
+}
+.game-icon-hobbit-door:before {
+    content: "\FFE50";
+}
+.game-icon-intricate-necklace:before {
+    content: "\FFE51";
+}
+.game-icon-jerusalem-cross:before {
+    content: "\FFE52";
+}
+.game-icon-jungle:before {
+    content: "\FFE53";
+}
+.game-icon-kenya:before {
+    content: "\FFE54";
+}
+.game-icon-knight-banner:before {
+    content: "\FFE55";
+}
+.game-icon-leek:before {
+    content: "\FFE56";
+}
+.game-icon-libya:before {
+    content: "\FFE57";
+}
+.game-icon-locked-door:before {
+    content: "\FFE58";
+}
+.game-icon-logic-gate-and:before {
+    content: "\FFE59";
+}
+.game-icon-logic-gate-nand:before {
+    content: "\FFE5A";
+}
+.game-icon-logic-gate-nor:before {
+    content: "\FFE5B";
+}
+.game-icon-logic-gate-not:before {
+    content: "\FFE5C";
+}
+.game-icon-logic-gate-nxor:before {
+    content: "\FFE5D";
+}
+.game-icon-logic-gate-or:before {
+    content: "\FFE5E";
+}
+.game-icon-logic-gate-xor:before {
+    content: "\FFE5F";
+}
+.game-icon-marshmallows:before {
+    content: "\FFE60";
+}
+.game-icon-matchbox:before {
+    content: "\FFE61";
+}
+.game-icon-melting-metal:before {
+    content: "\FFE62";
+}
+.game-icon-monstera-leaf:before {
+    content: "\FFE63";
+}
+.game-icon-mushrooms-cluster:before {
+    content: "\FFE64";
+}
+.game-icon-open-gate:before {
+    content: "\FFE65";
+}
+.game-icon-orange-slice:before {
+    content: "\FFE66";
+}
+.game-icon-party-hat:before {
+    content: "\FFE67";
+}
+.game-icon-peas:before {
+    content: "\FFE68";
+}
+.game-icon-pencil-ruler:before {
+    content: "\FFE69";
+}
+.game-icon-player-time:before {
+    content: "\FFE6A";
+}
+.game-icon-portrait:before {
+    content: "\FFE6B";
+}
+.game-icon-post-stamp:before {
+    content: "\FFE6C";
+}
+.game-icon-raft:before {
+    content: "\FFE6D";
+}
+.game-icon-ranch-gate:before {
+    content: "\FFE6E";
+}
+.game-icon-raw-egg:before {
+    content: "\FFE6F";
+}
+.game-icon-rule-book:before {
+    content: "\FFE70";
+}
+.game-icon-samus-helmet:before {
+    content: "\FFE71";
+}
+.game-icon-scuba-mask:before {
+    content: "\FFE72";
+}
+.game-icon-security-gate:before {
+    content: "\FFE73";
+}
+.game-icon-shattered-heart:before {
+    content: "\FFE74";
+}
+.game-icon-south-korea:before {
+    content: "\FFE75";
+}
+.game-icon-spider-mask:before {
+    content: "\FFE76";
+}
+.game-icon-stamper:before {
+    content: "\FFE77";
+}
+.game-icon-straight-pipe:before {
+    content: "\FFE78";
+}
+.game-icon-submarine-missile:before {
+    content: "\FFE79";
+}
+.game-icon-sword-mold:before {
+    content: "\FFE7A";
+}
+.game-icon-temple-door:before {
+    content: "\FFE7B";
+}
+.game-icon-toggles:before {
+    content: "\FFE7C";
+}
+.game-icon-trunk-mushroom:before {
+    content: "\FFE7D";
+}
+.game-icon-water-flask:before {
+    content: "\FFE7E";
+}
+.game-icon-water-gun:before {
+    content: "\FFE7F";
+}
+.game-icon-winged-scepter:before {
+    content: "\FFE80";
+}
+.game-icon-battle-tank:before {
+    content: "\FFE81";
+}
+.game-icon-boot-kick:before {
+    content: "\FFE82";
+}
+.game-icon-cpu-shot:before {
+    content: "\FFE83";
+}
+.game-icon-disc:before {
+    content: "\FFE84";
+}
+.game-icon-doorway:before {
+    content: "\FFE85";
+}
+.game-icon-new-shoot:before {
+    content: "\FFE86";
+}
+.game-icon-screw-2:before {
+    content: "\FFE87";
+}
+.game-icon-snout:before {
+    content: "\FFE88";
+}
+.game-icon-waves:before {
+    content: "\FFE89";
+}
+.game-icon-elven-castle:before {
+    content: "\FFE8A";
+}
+.game-icon-potion-of-madness:before {
+    content: "\FFE8B";
 }
