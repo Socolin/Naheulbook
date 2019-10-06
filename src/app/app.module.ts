@@ -18,6 +18,7 @@ import {ThemeService} from './theme.service';
 import {ErrorReportService} from './error-report.service';
 import {AuthenticationInterceptor} from './user/authentication.interceptor';
 import {LoginService} from './user';
+import {NotificationsModule} from './notifications/notifications.module';
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import {LoginService} from './user';
         HttpClientModule,
         HomeModule,
         UserModule,
+        NotificationsModule
     ],
     declarations: [
         AppComponent
