@@ -13,6 +13,7 @@
                 <mat-menu xPosition="before" #itemLootMenu="matMenu">
                     <ng-template matMenuContent let-item="item">
                         <button mat-menu-item (click)="openTakeItemLootDialog(loot, item)">
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-mat-button-icon-24"></mat-icon>
                             Prendre
                         </button>
                     </ng-template>
@@ -35,6 +36,7 @@
             <mat-menu xPosition="before" #itemMonsterMenu="matMenu">
                 <ng-template matMenuContent let-item="item">
                     <button mat-menu-item (click)="openTakeItemMonsterDialog(monster, item)">
+                        <mat-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-mat-button-icon-24"></mat-icon>
                         Prendre
                     </button>
                 </ng-template>
