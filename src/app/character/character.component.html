@@ -23,12 +23,15 @@
 
                 <mat-menu xPosition="before" #characterBasicChange="matMenu">
                     <button mat-menu-item (click)="openChangeNameDialog()">
+                        <mat-icon>edit</mat-icon>
                         Changer le nom
                     </button>
                     <button mat-menu-item (click)="openChangeSexDialog()">
+                        <mat-icon fontSet="game-icon" [fontIcon]="character.sex === 'Homme' ? 'game-icon-male' : 'game-icon-female'" class="ra-mat-button-icon-24"></mat-icon>
                         Changer de sexe
                     </button>
                     <button mat-menu-item (click)="openChangeJobDialog()">
+                        <mat-icon fontSet="game-icon" fontIcon="game-icon-gear-hammer" class="ra-mat-button-icon-24"></mat-icon>
                         Changer de métier
                     </button>
                 </mat-menu>
