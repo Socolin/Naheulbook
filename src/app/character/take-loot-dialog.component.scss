@@ -1,0 +1,8 @@
+:host {
+    .item-name {
+        display: grid;
+        grid-template-columns: auto auto 1fr;
+        grid-column-gap: 8px;
+        align-items: center;
+    };
+}

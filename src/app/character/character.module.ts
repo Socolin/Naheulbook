@@ -39,7 +39,8 @@ import {CharacterItemDialogComponent} from './character-item-dialog.component';
 import {ItemLineComponent} from './item-line.component';
 import {WebsocketModule} from '../websocket/websocket.module';
 import {ItemLifetimeEditorDialogComponent} from './item-lifetime-editor-dialog.component';
-import { GiveItemDialogComponent } from './give-item-dialog.component';
+import {GiveItemDialogComponent} from './give-item-dialog.component';
+import {TakeLootDialogComponent} from './take-loot-dialog.component';
 
 @NgModule({
     imports: [
@@ -80,6 +81,7 @@ import { GiveItemDialogComponent } from './give-item-dialog.component';
         ItemLineComponent,
         ItemLifetimeEditorDialogComponent,
         GiveItemDialogComponent,
+        TakeLootDialogComponent,
     ],
     entryComponents: [
         AddItemDialogComponent,
@@ -88,6 +90,7 @@ import { GiveItemDialogComponent } from './give-item-dialog.component';
         AddItemModifierDialogComponent,
         ItemLifetimeEditorDialogComponent,
         GiveItemDialogComponent,
+        TakeLootDialogComponent,
     ],
     exports: [
         CharacterColorSelectorComponent,

@@ -228,6 +228,14 @@
                 <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
                 <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
                 {{modifier | modifier}}
+                <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_THROW') !== -1">(lancer)</span>
+                <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE') !== -1">(c.a.c)</span>
+                <span *ngIf="modifier.special && modifier.special.indexOf('DONT_AFFECT_MAGIEPSY') !== -1">(NoMagPsy)</span>
+                <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE_STAFF') !== -1">(c.a.c Baton)</span>
+                <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_PR_FOR_ELEMENTS') !== -1">(element)</span>
+                <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_DISCRETION') !== -1">(discretion)</span>
+                <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_DANSE') !== -1">(danse)</span>
+                <span *ngIf="modifier.special && modifier.special.indexOf('ONLY_IF_NOTHING_ON') !== -1">(si rien au dessus)</span>
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@
           [enchanted]="(!item.data.notIdentified || gmView) &&  item.template.data.enchantment !== undefined"
           [notIdentified]="item.data.notIdentified"></icon>
     <span class="name">
-        <span *ngIf="character.checkItemIncompatibilities(item) && !item.data.ignoreRestrictions" class="restrictions text-warning">
+        <span *ngIf="character?.checkItemIncompatibilities(item) && !item.data.ignoreRestrictions" class="restrictions text-warning">
             <mat-icon fontSet="game-icon" fontIcon="game-icon-interdiction" class="ra-mat-button-icon-32"></mat-icon>
         </span>
         <span *ngIf="!hideEquippedMarker && item.data.equiped" class="equiped">
@@ -19,5 +19,5 @@
         [matMenuTriggerFor]="itemMenu"
         [matMenuTriggerData]="{item: item}"
         (click)="$event.stopPropagation()">
-    <mat-icon matBadgeSize="small" [matBadge]="!hideShouldPutIntoContainerMarker && item.shouldBePutInAContainer  && character.computedData.containers?.length ? '1' : undefined">more_vert</mat-icon>
+    <mat-icon matBadgeSize="small" [matBadge]="!hideShouldPutIntoContainerMarker && item.shouldBePutInAContainer  && character?.computedData.containers?.length ? '1' : undefined">more_vert</mat-icon>
 </button>

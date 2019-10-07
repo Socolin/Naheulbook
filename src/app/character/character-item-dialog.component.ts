@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import {Item} from '../item';
 import {Character} from './character.model';
-import {God, MiscService, NhbkDialogService} from '../shared';
+import {God, ItemStatModifier, MiscService, NhbkDialogService} from '../shared';
 import {NamesByNumericId} from '../shared/shared,model';
 import {ItemTemplateCategoryDictionary, ItemTemplateService} from '../item-template';
 import {OriginService} from '../origin';
@@ -13,7 +13,7 @@ import {ItemActionService} from './item-action.service';
 
 export interface CharacterItemDialogData {
     item: Item,
-    character: Character,
+    character?: Character,
     gmView: boolean,
     itemActionService: ItemActionService;
 }
@@ -28,7 +28,7 @@ export class CharacterItemDialogComponent implements OnInit {
     public jobsName?: NamesByNumericId;
     public godsByTechName?: { [techName: string]: God };
     public itemCategoriesById?: ItemTemplateCategoryDictionary;
-    public modifiers: any[] = [];
+    public modifiers?: ItemStatModifier[];
 
     constructor(
         private readonly itemTemplateService: ItemTemplateService,
@@ -42,8 +42,8 @@ export class CharacterItemDialogComponent implements OnInit {
     }
 
     private updateModifiers() {
-        this.modifiers = [];
-        if (this.data.item && this.data.item.template.modifiers) {
+        if (this.data.character && this.data.item && this.data.item.template.modifiers) {
+            const modifiers: ItemStatModifier[] = [];
             for (let i = 0; i < this.data.item.template.modifiers.length; i++) {
                 let modifier = this.data.item.template.modifiers[i];
                 if (modifier.job && !this.data.character.hasJob(modifier.job)) {
@@ -53,8 +53,8 @@ export class CharacterItemDialogComponent implements OnInit {
                     continue;
                 }
                 let newModifier = JSON.parse(JSON.stringify(modifier));
-                for (let j = 0; j < this.modifiers.length; j++) {
-                    let newMod = this.modifiers[j];
+                for (let j = 0; j < modifiers.length; j++) {
+                    let newMod = modifiers[j];
                     if (newModifier.stat === newMod.stat
                         && newModifier.type === newMod.type
                         && (!newModifier.special || newModifier.special.length === 0)
@@ -65,9 +65,13 @@ export class CharacterItemDialogComponent implements OnInit {
                     }
                 }
                 if (newModifier) {
-                    this.modifiers.push(newModifier);
+                    modifiers.push(newModifier);
                 }
             }
+
+            this.modifiers = [];
+        } else {
+            this.modifiers = undefined;
         }
     }
 

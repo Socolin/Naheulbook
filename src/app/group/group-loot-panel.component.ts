@@ -24,11 +24,11 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
     @Input() group: Group;
 
     constructor(
-        private readonly notification: NotificationsService,
+        notification: NotificationsService,
+        websocketService: WebSocketService,
         private readonly groupService: GroupService,
         private readonly itemService: ItemService,
         private readonly dialog: MatDialog,
-        private readonly websocketService: WebSocketService,
     ) {
         super(notification, websocketService);
     }

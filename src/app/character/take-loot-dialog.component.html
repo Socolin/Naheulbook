@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Prendre un loot</h2>
+<mat-dialog-content>
+    Prendre l'objet ?
+    <div class="item-name" *ngIf="!data.item.template.data.quantifiable">
+        <icon [icon]="data.item.data.icon"></icon> {{data.item.data.name}}
+    </div>
+    <div class="item-name" *ngIf="data.item.template.data.quantifiable">
+        <icon [icon]="data.item.data.icon"></icon>
+        <value-editor [title]="'Quantité'"
+                      [hideMaxValue]="true"
+                      [value]="takingQuantity"
+                      (onChange)="takingQuantity = $event"
+                      [maxValue]="data.item.data.quantity">
+        </value-editor>
+        {{data.item.data.name}}
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            color="primary"
+            mat-dialog-close>
+        ANNULER
+    </button>
+    <button mat-button
+            color="primary"
+            (click)="takeItem()">
+        PRENDRE
+    </button>
+</mat-dialog-actions>

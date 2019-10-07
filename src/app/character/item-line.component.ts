@@ -13,7 +13,7 @@ import {ItemActionService} from './item-action.service';
     styleUrls: ['./item-line.component.scss']
 })
 export class ItemLineComponent {
-    @Input() character: Character;
+    @Input() character?: Character;
     @Input() item: Item;
     @Input() itemMenu: MatMenuPanel;
     @Input() hideEquippedMarker: boolean;

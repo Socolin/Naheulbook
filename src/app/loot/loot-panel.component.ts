@@ -14,8 +14,8 @@ export class LootPanelComponent implements OnDestroy {
     public subscriptions: Subscription[] = [];
 
     constructor(
-        protected _notification: NotificationsService,
-        protected webSocketService: WebSocketService
+        protected readonly notification: NotificationsService,
+        protected readonly webSocketService: WebSocketService
     ) {
     }
 
@@ -39,10 +39,10 @@ export class LootPanelComponent implements OnDestroy {
                 let item = change.item;
                 let character = change.character;
                 if (item.data.quantity) {
-                    this._notification.info('Loot', character.name + ' à pris '
+                    this.notification.info('Loot', character.name + ' à pris '
                         + item.data.quantity + ' ' + item.data.name);
                 } else {
-                    this._notification.info('Loot', character.name + ' à pris ' + item.data.name);
+                    this.notification.info('Loot', character.name + ' à pris ' + item.data.name);
                 }
             });
             this.lootSubscriptions[loot.id].push(sub);

@@ -1,8 +1,5 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {OverlayRef} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
-
-import {NhbkDialogService} from '../shared';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {NotificationsService} from '../notifications';
 import {Loot, LootPanelComponent} from '../loot';
 import {Monster} from '../monster';
@@ -10,6 +7,7 @@ import {Monster} from '../monster';
 import {Character} from './character.model';
 import {Item, ItemService} from '../item';
 import {WebSocketService} from '../websocket';
+import {TakeLootDialogComponent, TakeLootDialogData, TakeLootDialogResult} from './take-loot-dialog.component';
 
 @Component({
     selector: 'character-loot-panel',
@@ -19,52 +17,54 @@ import {WebSocketService} from '../websocket';
 export class CharacterLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() character: Character;
     @Input() inGroupTab: boolean;
-    public selectedItem?: Item;
-
-    @ViewChild('takeItemDialog', {static: true})
-    public takeItemDialog: Portal<any>;
-    public takeItemOverlayRef: OverlayRef;
-    public takingItemLoot: Loot | undefined;
-    public takingItemMonster: Monster | undefined;
-    public takingItem: Item;
-    public takingQuantity?: number;
 
     constructor(
-        private readonly notification: NotificationsService,
-        private readonly itemService: ItemService,
-        private readonly nhbkDialogService: NhbkDialogService,
-        private readonly websocketService: WebSocketService,
+        notification: NotificationsService,
+        websocketService: WebSocketService,
+        private readonly dialog: MatDialog,
+        private readonly itemService: ItemService
     ) {
         super(notification, websocketService);
     }
 
     openTakeItemLootDialog(loot: Loot, item: Item) {
-        this.takingItem = item;
-        this.takingQuantity = item.data.quantity;
-        this.takingItemLoot = loot;
-        this.takingItemMonster = undefined;
-        this.takeItemOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.takeItemDialog);
+        const dialogRef = this.dialog.open<TakeLootDialogComponent, TakeLootDialogData, TakeLootDialogResult>(
+            TakeLootDialogComponent,
+            {
+                autoFocus: false,
+                data: {
+                    item
+                }
+            }
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            this.takeItemFromLoot(loot, item, result.quantity);
+        });
     }
 
     openTakeItemMonsterDialog(monster: Monster, item: Item) {
-        this.takingItem = item;
-        this.takingQuantity = item.data.quantity;
-        this.takingItemLoot = undefined;
-        this.takingItemMonster = monster;
-        this.takeItemOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.takeItemDialog);
-    }
+        const dialogRef = this.dialog.open<TakeLootDialogComponent, TakeLootDialogData, TakeLootDialogResult>(
+            TakeLootDialogComponent,
+            {
+                autoFocus: false,
+                data: {
+                    item
+                }
+            }
+        );
 
-    closeTakeItemDialog() {
-        this.takeItemOverlayRef.detach();
-    }
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
 
-    validTakeItem() {
-        if (this.takingItemMonster) {
-            this.takeItemFromMonster(this.takingItemMonster, this.takingItem, this.takingQuantity);
-        } else if (this.takingItemLoot) {
-            this.takeItemFromLoot(this.takingItemLoot, this.takingItem, this.takingQuantity);
-        }
-        this.closeTakeItemDialog();
+            this.takeItemFromMonster(monster, item, result.quantity);
+        });
     }
 
     takeItemFromLoot(loot: Loot, item: Item, quantity?: number) {
@@ -85,15 +85,6 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
                 }
             );
         }
-    }
-
-    deselectItem(): void {
-        this.selectedItem = undefined;
-    }
-
-    selectItem(item: Item): boolean {
-        this.selectedItem = item;
-        return false;
     }
 
     ngOnInit(): void {

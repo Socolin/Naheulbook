@@ -6,7 +6,7 @@ import {Portal} from '@angular/cdk/portal';
 import {Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
-import {smoothScrollBy, NhbkDialogService} from '../shared';
+import {NhbkDialogService} from '../shared';
 import {Skill} from '../skill';
 import {Job, Speciality} from '../job';
 import {Item} from '../item';
@@ -18,7 +18,6 @@ import {Character, CharacterGroupInvite} from './character.model';
 import {InventoryPanelComponent} from './inventory-panel.component';
 import {ItemActionService} from './item-action.service';
 import {SwipeService} from './swipe.service';
-import {CharacterLootPanelComponent} from './character-loot-panel.component';
 
 export class LevelUpInfo {
     evOrEa = 'EV';
@@ -47,9 +46,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     @ViewChild('inventoryPanel', {static: true})
     private inventoryPanel: InventoryPanelComponent;
-
-    @ViewChild('lootPanel', {static: true})
-    private lootPanel: CharacterLootPanelComponent;
 
     @ViewChild('levelUpDialog', {static: true})
     public levelUpDialog: Portal<any>;
@@ -314,7 +310,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     selectTab(tabChangeEvent: MatTabChangeEvent): boolean {
         this.currentTab = this.tabs[tabChangeEvent.index].hash;
         this.inventoryPanel.deselectItem();
-        this.lootPanel.deselectItem();
         if (!this.inGroupTab) {
             this.router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this.route});
         }

@@ -36,7 +36,7 @@
                     </span>
                     <span *ngIf="data.item.template.data.damageDice && data.item.template.data.bonusDamage > 0">+</span>
                     <span *ngIf="data.item.template.data.bonusDamage">{{data.item.template.data.bonusDamage}}</span>
-                    <ng-template [ngIf]="data.character != undefined">
+                    <ng-template [ngIf]="data.character">
                         <div style="margin-left: 20px">
                             <span
                                 *ngIf="data.character.computedData.stats['PI'] > 0">+{{data.character.computedData.stats['PI']}}
@@ -130,14 +130,10 @@
                     <span *ngIf="data.item.template.data.bonusDamage">{{data.item.template.data.bonusDamage}}</span>
                     <span *ngIf="data.item.template.data.damageType">({{data.item.template.data.damageType}})</span>
                     <ng-template
-                        [ngIf]="data.character != undefined && data.character.computedData && data.character.computedData.stats['PI']">
+                        [ngIf]="data.character && data.character.computedData && data.character.computedData.stats['PI']">
                         <div style="margin-left: 20px">
-                        <span
-                            *ngIf="data.character.computedData.stats['PI'] > 0">+{{data.character.computedData.stats['PI']}}
-                            (Bonus personnage)</span>
-                            <span
-                                *ngIf="data.character.computedData.stats['PI'] < 0">{{data.character.computedData.stats['PI']}}
-                                (Malus personnage)</span>
+                            <span *ngIf="data.character.computedData.stats['PI'] > 0">+{{data.character.computedData.stats['PI']}} (Bonus personnage)</span>
+                            <span *ngIf="data.character.computedData.stats['PI'] < 0">{{data.character.computedData.stats['PI']}} (Malus personnage)</span>
                         </div>
                     </ng-template>
                 </div>
@@ -169,7 +165,7 @@
                     <div *ngIf="data.item.template.data?.actions?.length" class="usage-actions">
                         Lors de l'utilisation:
                         <div *ngFor="let action of data.item.template.data.actions" class="usage-action">
-                            <span class="dot"*ngIf="!action.hidden">-</span>
+                            <span class="dot" *ngIf="!action.hidden">-</span>
                             <nhbk-action *ngIf="!action.hidden" [action]="action"></nhbk-action>
                         </div>
                     </div>
@@ -237,22 +233,36 @@
                         <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
                         <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
                         {{modifier.stat}}<span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
-                        <span
-                            *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_THROW') !== -1">(lancer)</span>
-                        <span
-                            *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE') !== -1">(c.a.c)</span>
-                        <span
-                            *ngIf="modifier.special && modifier.special.indexOf('DONT_AFFECT_MAGIEPSY') !== -1">(NoMagPsy)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_THROW') !== -1">(lancer)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE') !== -1">(c.a.c)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('DONT_AFFECT_MAGIEPSY') !== -1">(NoMagPsy)</span>
                         <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE_STAFF') !== -1">(c.a.c Baton)</span>
                         <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_PR_FOR_ELEMENTS') !== -1">(element)</span>
-                        <span
-                            *ngIf="modifier.special && modifier.special.indexOf('AFFECT_DISCRETION') !== -1">(discretion)</span>
-                        <span
-                            *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_DANSE') !== -1">(danse)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_DISCRETION') !== -1">(discretion)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_DANSE') !== -1">(danse)</span>
                         <span *ngIf="modifier.special && modifier.special.indexOf('ONLY_IF_NOTHING_ON') !== -1">(si rien au dessus)</span>
                     </div>
                 </div>
             </div>
+            <div class="icon-label" *ngIf="!modifiers && data.item.template.modifiers?.length">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <div *ngFor="let modifier of data.item.template.modifiers">
+                        <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
+                        <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
+                        {{modifier | modifier}}
+                        <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_THROW') !== -1">(lancer)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE') !== -1">(c.a.c)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('DONT_AFFECT_MAGIEPSY') !== -1">(NoMagPsy)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE_STAFF') !== -1">(c.a.c Baton)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_PR_FOR_ELEMENTS') !== -1">(element)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_DISCRETION') !== -1">(discretion)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_DANSE') !== -1">(danse)</span>
+                        <span *ngIf="modifier.special && modifier.special.indexOf('ONLY_IF_NOTHING_ON') !== -1">(si rien au dessus)</span>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="icon-label" *ngIf="data.item.template.skills?.length || data.item.template.unskills?.length || data.item.template.skillModifiers?.length">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
@@ -282,7 +292,7 @@
             <div class="icon-label"
                  [class.text-warning]="!data.item.data.ignoreRestrictions"
                  [class.text-info]="data.item.data.ignoreRestrictions"
-                 *ngIf="data.character.checkItemIncompatibilities(data.item); let incompatibilities">
+                 *ngIf="data.character?.checkItemIncompatibilities(data.item); let incompatibilities">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-interdiction" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
                     <span *ngIf="incompatibilities.length === 1">
@@ -415,7 +425,7 @@
             </div>
         </div>
 
-        <div class="icon-label" *ngIf="data.character.computedData.containers && !data.item.data.equiped && data.item.containerId">
+        <div class="icon-label" *ngIf="data.character?.computedData.containers && !data.item.data.equiped && data.item.containerId">
             <mat-icon fontSet="game-icon" fontIcon="game-icon-backpack" class="ra-mat-button-icon-24"></mat-icon>
             <div>
                 Stocké dans: {{data.item.containerInfo?.name}}
