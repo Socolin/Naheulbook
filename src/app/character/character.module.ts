@@ -19,25 +19,26 @@ import {CharacterResolve} from './character.resolver';
 
 import {
     AddItemDialogComponent,
+    AddItemModifierDialogComponent,
     BagItemViewComponent,
+    ChangeSexDialogComponent,
     CharacterColorSelectorComponent,
     CharacterComponent,
     CharacterHistoryComponent,
+    CharacterItemDialogComponent,
     CharacterListComponent,
     CharacterLootPanelComponent,
     CreateCharacterComponent,
     CreateCustomCharacterComponent,
+    EditItemDialogComponent,
     EffectPanelComponent,
+    GiveItemDialogComponent,
     InventoryPanelComponent,
+    ItemLifetimeEditorDialogComponent,
+    ItemLineComponent,
     SkillSelectorComponent,
     SpecialitySelectorComponent,
     TakeLootDialogComponent,
-    GiveItemDialogComponent,
-    ItemLifetimeEditorDialogComponent,
-    ItemLineComponent,
-    CharacterItemDialogComponent,
-    AddItemModifierDialogComponent,
-    EditItemDialogComponent
 } from './';
 
 @NgModule({
@@ -61,6 +62,7 @@ import {
         AddItemDialogComponent,
         AddItemModifierDialogComponent,
         BagItemViewComponent,
+        ChangeSexDialogComponent,
         CharacterColorSelectorComponent,
         CharacterComponent,
         CharacterHistoryComponent,
@@ -82,6 +84,7 @@ import {
     entryComponents: [
         AddItemDialogComponent,
         AddItemModifierDialogComponent,
+        ChangeSexDialogComponent,
         CharacterItemDialogComponent,
         EditItemDialogComponent,
         GiveItemDialogComponent,

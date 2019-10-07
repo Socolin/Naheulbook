@@ -875,33 +875,6 @@
     </mat-card>
 </ng-template>
 
-<!-- Change sex dialog -->
-<ng-template #changeSexDialog="cdkPortal" cdk-portal>
-    <mat-card>
-        <mat-card-title>
-            Changer de sexe
-        </mat-card-title>
-        <mat-card-content>
-            <mat-radio-group [(ngModel)]="newCharacterSex">
-                <mat-radio-button name="sexe" [value]="'Homme'">
-                    Homme
-                </mat-radio-button>
-                <mat-radio-button name="sexe" [value]="'Femme'">
-                    Femme
-                </mat-radio-button>
-            </mat-radio-group>
-        </mat-card-content>
-        <mat-card-actions align="end">
-            <button mat-button color="primary" (click)="closeChangeSexDialog()">
-                ANNULER
-            </button>
-            <button mat-button [disabled]="character.sex === newCharacterSex" color="primary" (click)="changeSex()">
-                VALIDER
-            </button>
-        </mat-card-actions>
-    </mat-card>
-</ng-template>
-
 <!-- Change job dialog -->
 <ng-template #changeJobDialog="cdkPortal" cdk-portal>
     <mat-card class="modal-max-height">

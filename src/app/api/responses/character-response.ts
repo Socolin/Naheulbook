@@ -2,11 +2,12 @@ import {IActiveStatsModifier} from '../shared';
 import {ItemResponse} from './item-response';
 import {SpecialityResponse} from './speciality-response';
 import {CharacterGroupInviteResponse} from './character-group-invite-response';
+import {CharacterSex} from '../shared/enums/character-sex';
 
 export interface CharacterResponse {
     id: number;
     name: string;
-    sex: string;
+    sex: CharacterSex;
     originId: number;
     isNpc: boolean;
     ev?: number;

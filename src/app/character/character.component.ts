@@ -4,6 +4,7 @@ import {MatTabChangeEvent, MatTabGroup} from '@angular/material';
 import {Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 import {Subscription} from 'rxjs';
+import {MatDialog} from '@angular/material/dialog';
 
 import {NotificationsService} from '../notifications';
 import {NhbkDialogService} from '../shared';
@@ -17,6 +18,7 @@ import {CharacterService} from './character.service';
 import {Character, CharacterGroupInvite} from './character.model';
 import {InventoryPanelComponent} from './inventory-panel.component';
 import {ItemActionService} from './item-action.service';
+import {ChangeSexDialogComponent, ChangeSexDialogData} from './change-sex-dialog.component';
 
 export class LevelUpInfo {
     evOrEa = 'EV';
@@ -75,11 +77,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     public changeNameOverlayRef?: OverlayRef;
     public newCharacterName: string;
 
-    @ViewChild('changeSexDialog', {static: true})
-    public changeSexDialog: Portal<any>;
-    public changeSexOverlayRef?: OverlayRef;
-    public newCharacterSex: string;
-
     @ViewChild('changeJobDialog', {static: true})
     public changeJobDialog: Portal<any>;
     public changeJobOverlayRef?: OverlayRef;
@@ -97,6 +94,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     private notificationSub?: Subscription;
 
     constructor(
+        private readonly dialog: MatDialog,
         private readonly itemActionService: ItemActionService,
         private readonly characterService: CharacterService,
         private readonly nhbkDialogService: NhbkDialogService,
@@ -356,21 +354,17 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openChangeSexDialog() {
-        this.newCharacterSex = this.character.sex;
-        this.changeSexOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.changeSexDialog);
-    }
-
-    closeChangeSexDialog() {
-        if (!this.changeSexOverlayRef) {
-            return;
-        }
-        this.changeSexOverlayRef.detach();
-        this.changeSexOverlayRef = undefined;
-    }
-
-    changeSex() {
-        this.changeStat('sex', this.newCharacterSex);
-        this.closeChangeSexDialog();
+        const dialogRef = this.dialog.open<ChangeSexDialogComponent, ChangeSexDialogData>(
+            ChangeSexDialogComponent, {
+                autoFocus: false,
+                data: {sex: this.character.sex}
+            });
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
+            this.changeStat('sex',  result);
+        });
     }
 
     openChangeJobDialog() {

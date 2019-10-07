@@ -8,6 +8,7 @@ export * from './character.resolver';
 export * from './add-item-dialog.component';
 export * from './add-item-modifier-dialog.component';
 export * from './bag-item-view.component';
+export * from './change-sex-dialog.component';
 export * from './character-color-selector.component';
 export * from './character.component';
 export * from './character-history.component';

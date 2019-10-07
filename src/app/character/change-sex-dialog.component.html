@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>
+    Changer de sexe
+</h2>
+<mat-dialog-content>
+    <mat-radio-group [(ngModel)]="selectedSex" class="sex-selector">
+        <mat-radio-button name="sexe" [value]="'Homme'">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-male" class="ra-mat-button-icon-24"></mat-icon>
+            Homme
+        </mat-radio-button>
+        <mat-radio-button name="sexe" [value]="'Femme'">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-female" class="ra-mat-button-icon-24"></mat-icon>
+            Femme
+        </mat-radio-button>
+    </mat-radio-group>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button color="primary" mat-dialog-close="">
+        ANNULER
+    </button>
+    <button mat-button [disabled]="data.sex === selectedSex" color="primary" (click)="valid()">
+        VALIDER
+    </button>
+</mat-dialog-actions>

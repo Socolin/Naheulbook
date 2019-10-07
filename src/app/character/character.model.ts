@@ -28,6 +28,7 @@ import {
     CharacterResponse,
     ItemPartialResponse
 } from '../api/responses';
+import {CharacterSex} from '../api/shared/enums/character-sex';
 
 export interface CharacterGiveDestination {
     id: number;
@@ -229,7 +230,7 @@ export class Character extends WsRegistrable {
     origin: Origin;
     jobs: Job[];
     level: number;
-    sex: string;
+    sex: CharacterSex;
     experience: number;
     active: number;
     fatePoint: number;
