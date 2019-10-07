@@ -17,7 +17,6 @@ import {CharacterService} from './character.service';
 import {Character, CharacterGroupInvite} from './character.model';
 import {InventoryPanelComponent} from './inventory-panel.component';
 import {ItemActionService} from './item-action.service';
-import {SwipeService} from './swipe.service';
 
 export class LevelUpInfo {
     evOrEa = 'EV';
@@ -32,7 +31,7 @@ export class LevelUpInfo {
     selector: 'character',
     templateUrl: './character.component.html',
     styleUrls: ['./character.component.scss'],
-    providers: [SwipeService, ItemActionService],
+    providers: [ItemActionService],
 })
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;

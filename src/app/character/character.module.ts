@@ -12,6 +12,10 @@ import {EffectModule} from '../effect/effect.module';
 import {ActionModule} from '../action/action.module';
 import {ItemTemplateModule} from '../item-template/item-template.module';
 import {ItemModule} from '../item/item.module';
+import {WebsocketModule} from '../websocket/websocket.module';
+
+import {CharacterService} from './character.service';
+import {CharacterResolve} from './character.resolver';
 
 import {
     AddItemDialogComponent,
@@ -25,22 +29,16 @@ import {
     CreateCustomCharacterComponent,
     EffectPanelComponent,
     InventoryPanelComponent,
-    ItemDetailComponent,
     SkillSelectorComponent,
     SpecialitySelectorComponent,
-    SwipeableItemDetailComponent,
+    TakeLootDialogComponent,
+    GiveItemDialogComponent,
+    ItemLifetimeEditorDialogComponent,
+    ItemLineComponent,
+    CharacterItemDialogComponent,
+    AddItemModifierDialogComponent,
+    EditItemDialogComponent
 } from './';
-
-import {CharacterService} from './character.service';
-import {CharacterResolve} from './character.resolver';
-import {EditItemDialogComponent} from './edit-item-dialog.component';
-import {AddItemModifierDialogComponent} from './add-item-modifier-dialog.component';
-import {CharacterItemDialogComponent} from './character-item-dialog.component';
-import {ItemLineComponent} from './item-line.component';
-import {WebsocketModule} from '../websocket/websocket.module';
-import {ItemLifetimeEditorDialogComponent} from './item-lifetime-editor-dialog.component';
-import {GiveItemDialogComponent} from './give-item-dialog.component';
-import {TakeLootDialogComponent} from './take-loot-dialog.component';
 
 @NgModule({
     imports: [
@@ -60,36 +58,34 @@ import {TakeLootDialogComponent} from './take-loot-dialog.component';
         ReactiveFormsModule,
     ],
     declarations: [
+        AddItemDialogComponent,
+        AddItemModifierDialogComponent,
         BagItemViewComponent,
         CharacterColorSelectorComponent,
         CharacterComponent,
         CharacterHistoryComponent,
+        CharacterItemDialogComponent,
         CharacterListComponent,
         CharacterLootPanelComponent,
         CreateCharacterComponent,
         CreateCustomCharacterComponent,
+        EditItemDialogComponent,
         EffectPanelComponent,
+        GiveItemDialogComponent,
         InventoryPanelComponent,
-        ItemDetailComponent,
+        ItemLifetimeEditorDialogComponent,
+        ItemLineComponent,
         SkillSelectorComponent,
         SpecialitySelectorComponent,
-        SwipeableItemDetailComponent,
-        AddItemDialogComponent,
-        EditItemDialogComponent,
-        AddItemModifierDialogComponent,
-        CharacterItemDialogComponent,
-        ItemLineComponent,
-        ItemLifetimeEditorDialogComponent,
-        GiveItemDialogComponent,
         TakeLootDialogComponent,
     ],
     entryComponents: [
         AddItemDialogComponent,
+        AddItemModifierDialogComponent,
         CharacterItemDialogComponent,
         EditItemDialogComponent,
-        AddItemModifierDialogComponent,
-        ItemLifetimeEditorDialogComponent,
         GiveItemDialogComponent,
+        ItemLifetimeEditorDialogComponent,
         TakeLootDialogComponent,
     ],
     exports: [
@@ -99,7 +95,6 @@ import {TakeLootDialogComponent} from './take-loot-dialog.component';
         CreateCharacterComponent,
         CreateCustomCharacterComponent,
         EffectModule,
-        ItemDetailComponent,
         SkillModule,
     ],
     providers: [
