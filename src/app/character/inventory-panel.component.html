@@ -128,7 +128,7 @@
             <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon" class="ra-mat-button-icon-24"></mat-icon>
             Déséquipé
         </button>
-        <button mat-menu-item (click)="editItem(item)">
+        <button mat-menu-item [matMenuTriggerFor]="editItemMenu" [matMenuTriggerData]="{item: item}">
             <mat-icon>edit</mat-icon>
             Éditer
         </button>
@@ -190,6 +190,16 @@
         <button class="menu-button-with-item-icon" *ngFor="let container of character.computedData.containers" mat-menu-item (click)="putItemInContainer(item, container)"
                 [disabled]="item.containerId === container.id || item.id === container.id">
             <icon size="24px" [icon]="container.data.icon" [notIdentified]="container.data.notIdentified"></icon> {{container.data.name}}
+        </button>
+    </ng-template>
+</mat-menu>
+<mat-menu #editItemMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item (click)="editItem(item)">
+            Nome & Description
+        </button>
+        <button mat-menu-item (click)="openSelectItemIconDialog(item)">
+            Icone
         </button>
     </ng-template>
 </mat-menu>

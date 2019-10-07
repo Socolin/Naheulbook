@@ -17,11 +17,12 @@ import {AddItemDialogComponent} from './add-item-dialog.component';
 import {isItemNameMatchingFilter, ItemSortType, sortItemFn} from '../item/item-utils';
 import {EditItemDialogComponent, EditItemDialogData, EditItemDialogResult} from './edit-item-dialog.component';
 import {AddItemModifierDialogComponent} from './add-item-modifier-dialog.component';
-import {ActiveStatsModifier} from '../shared';
+import {ActiveStatsModifier, IconSelectorComponent, IconSelectorComponentDialogData} from '../shared';
 import {ItemLifetimeEditorDialogComponent, ItemLifetimeEditorDialogData} from './item-lifetime-editor-dialog.component';
 import {IDurable} from '../api/shared';
 import {GiveItemDialogComponent, GiveItemDialogData, GiveItemDialogResult} from './give-item-dialog.component';
 import {Subscription} from 'rxjs';
+import {IconDescription} from '../shared/icon.model';
 
 @Component({
     selector: 'inventory-panel',
@@ -355,5 +356,18 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
                 quantity: result.giveQuantity
             });
         });
+    }
+
+    openSelectItemIconDialog(item: Item): void {
+        const dialogRef = this.dialog.open<IconSelectorComponent, IconSelectorComponentDialogData, IconDescription>(IconSelectorComponent, {
+            data: {icon: item.data.icon}
+        });
+
+        dialogRef.afterClosed().subscribe((icon) => {
+            if (!icon) {
+                return;
+            }
+            this.itemActionService.onAction('change_icon', item, {icon: icon});
+        })
     }
 }

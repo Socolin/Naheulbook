@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {Item} from '../item';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {IconDescription} from '../shared/icon.model';
 
 export interface EditItemDialogData {
     item: Item;
@@ -10,6 +11,7 @@ export interface EditItemDialogData {
 export interface EditItemDialogResult {
     name: string;
     description: string;
+    icon?: IconDescription
 }
 
 @Component({
@@ -22,11 +24,13 @@ export class EditItemDialogComponent implements OnInit {
         name: new FormControl(),
         description: new FormControl(),
     });
+    public icon?: IconDescription;
 
     constructor(
         public dialogRef: MatDialogRef<EditItemDialogComponent, EditItemDialogResult>,
         @Inject(MAT_DIALOG_DATA) public data: EditItemDialogData
     ) {
+        this.icon = data.item.data.icon;
         this.form.reset({
             name: data.item.data.name,
             description: data.item.data.description,
