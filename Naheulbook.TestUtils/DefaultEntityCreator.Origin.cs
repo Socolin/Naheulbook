@@ -20,7 +20,7 @@ namespace Naheulbook.TestUtils
                 Description = $"some-description-{suffix}",
                 PlayerSummary = $"some-player-summary-{suffix}",
                 Advantage = $"some-advantage-{suffix}",
-                Data = @"{""baseEv"": 20, ""maxLoad"": 10, ""maxArmorPr"": null, ""diceEvLevelUp"": 4, ""speedModifier"": -20}",
+                Data = @"{""baseEv"": 20, ""maxLoad"": 10, ""maxArmorPr"": 2, ""diceEvLevelUp"": 4, ""speedModifier"": -20}",
                 Size = $"some-size-{suffix}",
                 Bonuses = new List<OriginBonus>(),
                 Information = new List<OriginInfo>(),

@@ -13,28 +13,21 @@ Feature: Origin
         "description": "${Origin.Description}",
         "playerDescription": "${Origin.PlayerDescription}",
         "playerSummary": "${Origin.PlayerSummary}",
-        "maxLoad": ${Origin.MaxLoad},
-        "maxArmorPR": ${Origin.MaxArmorPr},
+        "data": ${Origin.Data},
         "advantage": "${Origin.Advantage}",
-        "baseEV": ${Origin.BaseEv},
-        "baseEA": ${Origin.BaseEa},
-        "bonusAT": ${Origin.BonusAt},
-        "bonusPRD": ${Origin.BonusPrd},
-        "diceEVLevelUp": ${Origin.DiceEvLevelUp},
         "size": "${Origin.Size}",
         "flags": [
             {
                 "type": "value"
             }
         ],
-        "speedModifier": ${Origin.SpeedModifier},
         "skillIds": [
             ${Skill.[0].Id}
         ],
         "availableSkillIds": [
             ${Skill.[1].Id}
         ],
-        "infos": [
+        "information": [
             {
                 "title": "${Origin.Information.[0].Title}",
                 "description": "${Origin.Information.[0].Description}"
@@ -54,7 +47,7 @@ Feature: Origin
                 "max": ${Origin.Requirements.[0].MaxValue}
             }
         ],
-        "restricts": [
+        "restrictions": [
             {
                 "description": "${Origin.Restrictions.[0].Text}",
                 "flags": [

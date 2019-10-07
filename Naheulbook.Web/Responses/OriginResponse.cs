@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Naheulbook.Shared.TransientModels;
-using Newtonsoft.Json;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable UnusedMember.Global
@@ -15,7 +14,6 @@ namespace Naheulbook.Web.Responses
         public string Description { get; set; } = null!;
         public string? PlayerDescription { get; set; }
         public string? PlayerSummary { get; set; }
-        public long? MaxLoad { get; set; }
         public string? Advantage { get; set; }
         public OriginData Data { get; set; }
         public string? Size { get; set; }
