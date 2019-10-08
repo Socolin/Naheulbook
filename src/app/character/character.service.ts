@@ -121,24 +121,22 @@ export class CharacterService {
 
     addJob(characterId: number, jobId: number): Observable<Job> {
         return forkJoin([
-            this.httpClient.post('/api/character/addJob', {
-                characterId: characterId,
+            this.httpClient.post<{jobId: number}>(`/api/v2/characters/${characterId}/addJob`, {
                 jobId: jobId,
             }),
             this.jobService.getJobsById()
-        ]).pipe(map(([data, jobsById]: [any, { [jobId: number]: Job }]) => {
+        ]).pipe(map(([data, jobsById]) => {
             return jobsById[data.jobId];
         }));
     }
 
     removeJob(characterId: number, jobId: number): Observable<Job> {
         return forkJoin([
-            this.httpClient.post('/api/character/removeJob', {
-                characterId: characterId,
+            this.httpClient.post<{jobId: number}>(`/api/v2/characters/${characterId}/removeJob`, {
                 jobId: jobId,
             }),
             this.jobService.getJobsById()
-        ]).pipe(map(([data, jobsById]: [any, { [jobId: number]: Job }]) => {
+        ]).pipe(map(([data, jobsById]) => {
             return jobsById[data.jobId];
         }));
     }
