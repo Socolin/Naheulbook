@@ -25,6 +25,7 @@ namespace Naheulbook.Core.Notifications
         INotificationPacket BuildCharacterHideLoot(int characterId, int lootId);
         INotificationPacket BuildCharacterLevelUp(int characterId, LevelUpResult levelUpResult);
         INotificationPacket BuildCharacterAddJob(int characterId, int jobId);
+        INotificationPacket BuildCharacterRemoveJob(int characterId, int jobId);
 
         INotificationPacket BuildCharacterChangeColor(Character character);
         INotificationPacket BuildCharacterChangeTarget(Character character, TargetRequest requestTarget);

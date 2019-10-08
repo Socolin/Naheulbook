@@ -73,6 +73,10 @@ namespace Naheulbook.Web.Notifications
         {
             return BuildCharacterChange(characterId, "addJob", new CharacterAddJobResponse {JobId = jobId});
         }
+
+        public INotificationPacket BuildCharacterRemoveJob(int characterId, int jobId)
+        {
+            return BuildCharacterChange(characterId, "removeJob", new CharacterRemoveJobResponse {JobId = jobId});
         }
 
         public INotificationPacket BuildCharacterChangeColor(Character character)

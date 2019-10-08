@@ -607,3 +607,33 @@ Feature: Character
         }
     }
     """
+
+  Scenario: A character can forget a job
+    Given a JWT for a user
+    And a job
+    And a character
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/removeJob" with the following json content and the current jwt
+    """
+    {
+      "jobId": ${Job.[0].Id}
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "jobId": ${Job.[0].Id}
+    }
+    """
+
+    When performing a GET to the url "/api/v2/characters/${Character.Id}" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+        "__partial": {
+            "jobIds": []
+        }
+    }
+    """

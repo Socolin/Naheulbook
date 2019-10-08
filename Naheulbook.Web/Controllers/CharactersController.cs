@@ -345,5 +345,35 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
+
+        [HttpPost("{CharacterId:int:min(1)}/removeJob")]
+        public async Task<ActionResult<CharacterRemoveJobResponse>> PostCharacterRemoveJobAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId,
+            CharacterRemoveJobRequest request
+        )
+        {
+            try
+            {
+                await _characterService.RemoveJobAsync(executionContext, characterId, request);
+                return new CharacterRemoveJobResponse {JobId = request.JobId};
+            }
+            catch (CharacterAlreadyKnowThisJobException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status409Conflict, ex);
+            }
+            catch (JobNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+            }
+        }
     }
 }
