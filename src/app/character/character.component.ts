@@ -7,7 +7,7 @@ import {Subscription} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 
 import {NotificationsService} from '../notifications';
-import {NhbkDialogService} from '../shared';
+import {NhbkDialogService, PromptDialogComponent} from '../shared';
 import {Skill} from '../skill';
 import {Job, Speciality} from '../job';
 import {Item} from '../item';
@@ -71,11 +71,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         {hash: 'other'},
         {hash: 'history'},
     ];
-
-    @ViewChild('changeNameDialog', {static: true})
-    public changeNameDialog: Portal<any>;
-    public changeNameOverlayRef?: OverlayRef;
-    public newCharacterName: string;
 
     @ViewChild('changeJobDialog', {static: true})
     public changeJobDialog: Portal<any>;
@@ -336,21 +331,22 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openChangeNameDialog() {
-        this.newCharacterName = this.character.name;
-        this.changeNameOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.changeNameDialog);
-    }
+        const dialogRef = this.dialog.open(PromptDialogComponent, {
+            data: {
+                confirmText: 'CHANGER',
+                cancelText: 'ANNULER',
+                placeholder: 'Nom',
+                title: 'Changer de nom',
+                initialValue: this.character.name
+            }
+        });
 
-    closeChangeNameDialog() {
-        if (!this.changeNameOverlayRef) {
-            return;
-        }
-        this.changeNameOverlayRef.detach();
-        this.changeNameOverlayRef = undefined;
-    }
-
-    changeName() {
-        this.changeStat('name', this.newCharacterName);
-        this.closeChangeNameDialog();
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.changeStat('name', result.text);
+        });
     }
 
     openChangeSexDialog() {
