@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -685,6 +686,109 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task> act = () => _service.ToggleModifiersAsync(executionContext, characterId, 2);
 
             act.Should().Throw<CharacterNotFoundException>();
+        }
+
+        [Test]
+        public void AddJobAsync_AddNewJobToCharacterJobsAndNotifyIt()
+        {
+            const int jobId = 8;
+            const int characterId = 5;
+            var executionContext = new NaheulbookExecutionContext();
+            var request = new CharacterAddJobRequest {JobId = jobId};
+            var character = new Character {Jobs = new List<CharacterJob>(), Id = characterId};
+            var job = new Job {Id = jobId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+                .Returns(character);
+            _unitOfWorkFactory.GetUnitOfWork().Jobs.GetAsync(jobId)
+                .Returns(job);
+            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
+                .Do(callInfo =>
+                {
+                    character.Jobs.Should().HaveCount(1);
+                    character.Jobs.First().Job.Should().BeSameAs(job);
+                });
+
+            _service.AddJobAsync(executionContext, characterId, request);
+
+            Received.InOrder(() =>
+            {
+                _notificationSessionFactory.NotificationSession.NotifyCharacterAddJob(characterId, jobId);
+                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
+                _notificationSessionFactory.NotificationSession.Received().CommitAsync();
+            });
+        }
+
+        [Test]
+        public void AddJobAsync_WhenCharacterNotFound_Throw()
+        {
+            const int jobId = 8;
+            const int characterId = 5;
+            var executionContext = new NaheulbookExecutionContext();
+            var request = new CharacterAddJobRequest {JobId = jobId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+                .Returns((Character) null);
+
+            Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
+
+            act.Should().Throw<CharacterNotFoundException>();
+        }
+
+        [Test]
+        public void AddJobAsync_EnsureCanAccessCharacter()
+        {
+            const int jobId = 8;
+            const int characterId = 5;
+            var executionContext = new NaheulbookExecutionContext();
+            var request = new CharacterAddJobRequest {JobId = jobId};
+            var character = new Character {Jobs = new List<CharacterJob>(), Id = characterId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+                .Returns(character);
+
+            _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
+                .Throw(new TestException());
+
+            Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
+
+            act.Should().Throw<TestException>();
+        }
+
+        [Test]
+        public void AddJobAsync_WhenCharacterAlreadyKnowTheJob_Throw()
+        {
+            const int jobId = 8;
+            const int characterId = 5;
+            var executionContext = new NaheulbookExecutionContext();
+            var request = new CharacterAddJobRequest {JobId = jobId};
+            var character = new Character {Jobs = new List<CharacterJob> {new CharacterJob {JobId = jobId}}, Id = characterId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+                .Returns(character);
+
+            Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
+
+            act.Should().Throw<CharacterAlreadyKnowThisJobException>();
+        }
+
+        [Test]
+        public void AddJobAsync_WhenJobNotFoundThrow()
+        {
+            const int jobId = 8;
+            const int characterId = 5;
+            var executionContext = new NaheulbookExecutionContext();
+            var request = new CharacterAddJobRequest {JobId = jobId};
+            var character = new Character {Jobs = new List<CharacterJob>(), Id = characterId};
+
+            _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+                .Returns(character);
+            _unitOfWorkFactory.GetUnitOfWork().Jobs.GetAsync(jobId)
+                .Returns((Job) null);
+
+            Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
+
+            act.Should().Throw<JobNotFoundException>();
         }
     }
 }

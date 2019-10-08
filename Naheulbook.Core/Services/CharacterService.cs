@@ -29,6 +29,7 @@ namespace Naheulbook.Core.Services
         Task<CharacterModifier> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
         Task<List<Character>> SearchCharactersAsync(string filter);
         Task<LevelUpResult> LevelUpCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterLevelUpRequest request);
+        Task AddJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterAddJobRequest request);
     }
 
     public class CharacterService : ICharacterService
@@ -354,6 +355,36 @@ namespace Naheulbook.Core.Services
                 await notificationSession.CommitAsync();
 
                 return levelUpResult;
+            }
+        }
+
+        public async Task AddJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterAddJobRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithOriginWithJobsAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+                if (character.Jobs.Any(x => x.JobId == request.JobId))
+                    throw new CharacterAlreadyKnowThisJobException(character.Id, request.JobId);
+
+                var job = await uow.Jobs.GetAsync(request.JobId);
+                if (job == null)
+                    throw new JobNotFoundException(request.JobId);
+
+                character.Jobs.Add(new CharacterJob
+                {
+                    Job = job
+                });
+
+                var notificationSession = _notificationSessionFactory.CreateSession();
+                notificationSession.NotifyCharacterAddJob(character.Id, job.Id);
+
+                await uow.SaveChangesAsync();
+                await notificationSession.CommitAsync();
             }
         }
     }

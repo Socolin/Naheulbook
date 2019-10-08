@@ -574,3 +574,36 @@ Feature: Character
       "newSpecialities": []
     }
     """
+
+
+  Scenario: A character can learn new job
+    Given a JWT for a user
+    And a character
+    And a job
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/addJob" with the following json content and the current jwt
+    """
+    {
+      "jobId": ${Job.[-1].Id}
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "jobId": ${Job.[-1].Id}
+    }
+    """
+
+    When performing a GET to the url "/api/v2/characters/${Character.Id}" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+        "__partial": {
+            "jobIds": [
+                ${Job.[-1].Id}
+            ]
+        }
+    }
+    """
