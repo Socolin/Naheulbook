@@ -20,6 +20,7 @@ import {InventoryPanelComponent} from './inventory-panel.component';
 import {ItemActionService} from './item-action.service';
 import {ChangeSexDialogComponent, ChangeSexDialogData} from './change-sex-dialog.component';
 import {OriginPlayerDialogComponent} from './origin-player-dialog.component';
+import {JobPlayerDialogComponent} from './job-player-dialog.component';
 
 export class LevelUpInfo {
     evOrEa = 'EV';
@@ -77,11 +78,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     public changeJobDialog: Portal<any>;
     public changeJobOverlayRef?: OverlayRef;
     public addingJob = false;
-
-    @ViewChild('jobInfoDialog', {static: true})
-    public jobInfoDialog: Portal<any>;
-    public jobInfoOverlayRef?: OverlayRef;
-    public selectedJobInfo?: Job;
 
     private notificationSub?: Subscription;
 
@@ -384,13 +380,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openJobInfoDialog(job: Job) {
-        this.selectedJobInfo = job;
-        this.jobInfoOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.jobInfoDialog);
-    }
-
-    closeJobInfoDialog() {
-        this.jobInfoOverlayRef!.detach();
-        this.jobInfoOverlayRef = undefined;
+        this.dialog.open(JobPlayerDialogComponent, {
+            autoFocus: false,
+            minWidth: '100vw', height: '100vh',
+            data: {
+                job: job
+            }
+        });
     }
 
     openOriginInfoDialog() {

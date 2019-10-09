@@ -37,6 +37,7 @@ import {
     ItemLifetimeEditorDialogComponent,
     ItemLineComponent,
     OriginPlayerDialogComponent,
+    JobPlayerDialogComponent,
     SkillSelectorComponent,
     SpecialitySelectorComponent,
     TakeLootDialogComponent,
@@ -82,6 +83,7 @@ import {
         SpecialitySelectorComponent,
         TakeLootDialogComponent,
         OriginPlayerDialogComponent,
+        JobPlayerDialogComponent,
     ],
     entryComponents: [
         AddItemDialogComponent,
@@ -91,6 +93,7 @@ import {
         EditItemDialogComponent,
         GiveItemDialogComponent,
         ItemLifetimeEditorDialogComponent,
+        JobPlayerDialogComponent,
         OriginPlayerDialogComponent,
         TakeLootDialogComponent,
     ],
