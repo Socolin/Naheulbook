@@ -36,6 +36,7 @@ import {
     InventoryPanelComponent,
     ItemLifetimeEditorDialogComponent,
     ItemLineComponent,
+    OriginPlayerDialogComponent,
     SkillSelectorComponent,
     SpecialitySelectorComponent,
     TakeLootDialogComponent,
@@ -80,6 +81,7 @@ import {
         SkillSelectorComponent,
         SpecialitySelectorComponent,
         TakeLootDialogComponent,
+        OriginPlayerDialogComponent,
     ],
     entryComponents: [
         AddItemDialogComponent,
@@ -89,6 +91,7 @@ import {
         EditItemDialogComponent,
         GiveItemDialogComponent,
         ItemLifetimeEditorDialogComponent,
+        OriginPlayerDialogComponent,
         TakeLootDialogComponent,
     ],
     exports: [

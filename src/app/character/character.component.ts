@@ -19,6 +19,7 @@ import {Character, CharacterGroupInvite} from './character.model';
 import {InventoryPanelComponent} from './inventory-panel.component';
 import {ItemActionService} from './item-action.service';
 import {ChangeSexDialogComponent, ChangeSexDialogData} from './change-sex-dialog.component';
+import {OriginPlayerDialogComponent} from './origin-player-dialog.component';
 
 export class LevelUpInfo {
     evOrEa = 'EV';
@@ -81,10 +82,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     public jobInfoDialog: Portal<any>;
     public jobInfoOverlayRef?: OverlayRef;
     public selectedJobInfo?: Job;
-
-    @ViewChild('originInfoDialog', {static: true})
-    public originInfoDialog: Portal<any>;
-    public originInfoOverlayRef?: OverlayRef;
 
     private notificationSub?: Subscription;
 
@@ -397,12 +394,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openOriginInfoDialog() {
-        this.originInfoOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.originInfoDialog);
-    }
-
-    closeOriginInfoDialog() {
-        this.originInfoOverlayRef!.detach();
-        this.originInfoOverlayRef = undefined;
+        this.dialog.open(OriginPlayerDialogComponent, {
+            autoFocus: false,
+            minWidth: '100vw', height: '100vh',
+            data: {
+                origin: this.character.origin
+            }
+        });
     }
 
     ngOnDestroy() {

@@ -1,0 +1,25 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>{{data.origin.name}}</span>
+</mat-toolbar>
+
+<div class="content mat-typography">
+    <h2>Résumé</h2>
+    <p class="origin-summary" [innerHTML]="data.origin.playerSummary | textFormatter"></p>
+    <h2>Description</h2>
+    <p class="origin-description" [innerHTML]="data.origin.playerDescription | textFormatter"></p>
+    <div class="skills" *ngIf="data.origin.skills.length">
+        <h2>Compétences</h2>
+        <p>
+            Je suis né avec les compétences suivantes:
+        </p>
+        <div class="skills-list">
+            <div *ngFor="let skill of data.origin.skills">
+                <span class="skill-name">{{skill.name}}</span>
+                <span *ngIf="skill.playerDescription">: {{skill.playerDescription}}</span>
+            </div>
+        </div>
+    </div>
+</div>
