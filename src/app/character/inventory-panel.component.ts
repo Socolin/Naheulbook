@@ -360,6 +360,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
 
     openSelectItemIconDialog(item: Item): void {
         const dialogRef = this.dialog.open<IconSelectorComponent, IconSelectorComponentDialogData, IconDescription>(IconSelectorComponent, {
+            autoFocus: false,
             data: {icon: item.data.icon}
         });
 

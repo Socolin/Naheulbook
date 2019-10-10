@@ -21,6 +21,7 @@ import {ItemActionService} from './item-action.service';
 import {ChangeSexDialogComponent, ChangeSexDialogData} from './change-sex-dialog.component';
 import {OriginPlayerDialogComponent} from './origin-player-dialog.component';
 import {JobPlayerDialogComponent} from './job-player-dialog.component';
+import {ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult} from './change-job-dialog.component';
 
 export class LevelUpInfo {
     evOrEa = 'EV';
@@ -73,11 +74,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         {hash: 'other'},
         {hash: 'history'},
     ];
-
-    @ViewChild('changeJobDialog', {static: true})
-    public changeJobDialog: Portal<any>;
-    public changeJobOverlayRef?: OverlayRef;
-    public addingJob = false;
 
     private notificationSub?: Subscription;
 
@@ -357,25 +353,30 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openChangeJobDialog() {
-        this.addingJob = false;
-        this.changeJobOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.changeJobDialog);
-    }
+        const dialogRef = this.dialog.open<ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult>(
+            ChangeJobDialogComponent,
+            {
+                autoFocus: false,
+                minWidth: '100vw', height: '100vh',
+                data: {
+                    character: this.character
+                }
+            });
 
-    closeChangeJobDialog() {
-        this.changeJobOverlayRef!.detach();
-        this.changeJobOverlayRef = undefined;
-    }
-
-    addJob(job: Job) {
-        this.characterService.addJob(this.character.id, job.id).subscribe(addedJob => {
-            this.character.onAddJob(addedJob);
-        });
-        this.addingJob = false;
-    }
-
-    removeJob(job: Job) {
-        this.characterService.removeJob(this.character.id, job.id).subscribe(removedJob => {
-            this.character.onRemoveJob(removedJob);
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            for (const job of result.addedJobs) {
+                this.characterService.addJob(this.character.id, job.id).subscribe(addedJob => {
+                    this.character.onAddJob(addedJob);
+                });
+            }
+            for (const job of result.deletedJobs) {
+                this.characterService.removeJob(this.character.id, job.id).subscribe(removedJob => {
+                    this.character.onRemoveJob(removedJob);
+                });
+            }
         });
     }
 

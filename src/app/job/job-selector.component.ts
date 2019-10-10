@@ -30,7 +30,7 @@ export class JobSelectorComponent implements OnInit, OnChanges {
     @Output() swapStats: EventEmitter<string[]> = new EventEmitter<string[]>();
     @Input() allowSwapStats = true;
     @Input() displayNoJobOption = true;
-    @Input() selectedJobs?: Job[];
+    @Input() selectedJobs?: readonly Job[];
     @Input() selectedOrigin: Origin;
 
     public stats: { [statName: string]: number } = {};
@@ -68,6 +68,10 @@ export class JobSelectorComponent implements OnInit, OnChanges {
         const {availabilityOk, availabilitySwap, availabilityKo} = this.createAvailabilities();
 
         for (let job of this.jobs) {
+            if (this.selectedJobs && this.selectedJobs.findIndex(j => j.id === job.id) !== -1) {
+                continue;
+            }
+
             if (JobSelectorComponent.isJobValid(job, this.stats)) {
                 availabilityOk.jobs.push(job);
             } else {
