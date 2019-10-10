@@ -172,24 +172,24 @@
                 </mat-card-content>
             </mat-card>
             <mat-card>
-                <mat-card-header>
-                    <mat-card-title>
-                        Compétences
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <mat-list>
-                        <mat-list-item *ngFor="let skill of character.computedData.skills" class="skill-list-item">
-                            <h4 matLine [class.canceled]="skill.canceled">{{skill?.skillDef?.name}}</h4>
-                            <span *ngIf="skill.canceled">{{skill.canceled}}</span>
-                            <p matLine>
-                                <span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>
-                            </p>
-                            <button mat-icon-button (click)="openSkillInfoDialog(skill.skillDef)">
-                                <mat-icon>info</mat-icon>
-                            </button>
-                        </mat-list-item>
-                    </mat-list>
+                <mat-card-title>
+                    Compétences
+                </mat-card-title>
+                <mat-card-content class="skill-list">
+                    <div *ngFor="let skill of character.computedData.skills" class="skill">
+                        <span class="name" [class.canceled]="skill.canceled">
+                            {{skill.skillDef?.name}}
+                        </span>
+                        <span class="cancel-reason" *ngIf="skill.canceled">
+                            {{skill.canceled}}
+                        </span>
+                        <button class="info" mat-icon-button (click)="openSkillInfoDialog(skill.skillDef)">
+                            <mat-icon>info</mat-icon>
+                        </button>
+                        <div class="source secondary-text">
+                            <span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>
+                        </div>
+                    </div>
                 </mat-card-content>
             </mat-card>
         </div>

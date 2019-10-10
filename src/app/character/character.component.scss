@@ -1,5 +1,37 @@
 :host {
     padding: -32px;
+
+    .skill-list {
+        .skill {
+            display: grid;
+            align-items: center;
+            grid-template-areas: "name info" "cancel info" "source info";
+            grid-template-columns: 1fr auto;
+            grid-template-rows: 1fr auto 1fr;
+            padding-bottom: 8px;
+            padding-top: 8px;
+
+            .name {
+                grid-area: name;
+            }
+
+            .cancel-reason {
+                grid-area: cancel;
+            }
+
+            .source {
+                grid-area: source;
+            }
+
+            .info {
+                grid-area: info;
+            }
+
+            .canceled {
+                text-decoration: line-through;
+            }
+        }
+    }
 }
 
 mat-card {
@@ -198,9 +230,6 @@ mat-card {
         }
     }
 
-    .canceled {
-        text-decoration: line-through;
-    }
     .table-stats > td {
         line-height: 1;
     }
@@ -260,10 +289,6 @@ mat-card {
             flex: 0 0 auto;
         }
     }
-}
-
-.skill-list-item {
-    height: 40px;
 }
 
 .skill-info-dialog {

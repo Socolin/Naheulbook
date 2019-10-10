@@ -24,15 +24,6 @@
         color: mat-color($foreground, hint-text);
     }
 
-    .skill-list-item {
-        p[mat-line] {
-            color: mat-color($foreground, hint-text);
-        }
-        button {
-            color: mat-color($foreground, hint-text);
-        }
-    }
-
     .item-line {
         mat-icon {
             color: mat-color($foreground, text);
