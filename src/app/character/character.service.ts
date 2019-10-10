@@ -12,7 +12,6 @@ import {OriginService} from '../origin';
 import {Loot} from '../loot';
 
 import {Character, CharacterGiveDestination} from './character.model';
-import {LevelUpInfo} from './character.component';
 import {IActiveStatsModifier} from '../api/shared';
 import {CreateCharacterRequest} from '../api/requests/create-character-request';
 import {CharacterLevelUpRequest} from '../api/requests';
