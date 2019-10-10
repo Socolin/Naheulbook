@@ -265,32 +265,6 @@ mat-card {
     margin-left: 32px;
 }
 
-.level-up-dialog {
-    margin: 0 16px;
-
-    mat-card-content {
-        mat-card {
-            margin: 5px;
-        }
-    }
-    .level-up-dialog-content {
-        max-height: 65vh;
-        overflow-y: auto;
-    }
-
-    .level-up-ea-ev {
-        display: flex;
-        mat-form-field {
-            flex: 1 1 auto;
-            margin-right: 6px;
-        }
-
-        button {
-            flex: 0 0 auto;
-        }
-    }
-}
-
 .modal-max-height {
     mat-card-content {
         max-width: 90vw;

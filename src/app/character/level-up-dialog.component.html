@@ -1,0 +1,143 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>Gain d'un niveau</span>
+</mat-toolbar>
+
+<div class="content">
+    <mat-vertical-stepper [linear]="true" #stepper>
+        <mat-step [completed]="!!levelUpInfo.evOrEaValue">
+            <ng-template matStepLabel>
+                Énergie vitale / Énergie Astrale
+            </ng-template>
+
+            <p>Pour chaque niveau gagné, on ajoute 1D{{data.character.origin.data.diceEvLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')"> -1 </span>
+                à son énergie vitale (EV)
+                <span *ngIf="data.character.hasMagicJob()">
+                    <strong>OU</strong> 1D{{data.character.diceEaLevelUp}} astrale (EA)
+                </span>
+            </p>
+
+            <div *ngIf="data.character.hasMagicJob()">
+                Je choisi d'augmenter mon:
+                <mat-button-toggle-group [(ngModel)]="levelUpInfo.evOrEa">
+                    <mat-button-toggle value="EV">E.Vitale</mat-button-toggle>
+                    <mat-button-toggle value="EA">E.Astrale</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+
+
+            <div class="level-up-ea-ev">
+                <mat-form-field align="end">
+                    <input matInput placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.evOrEaValue">
+                    <mat-hint align="end" *ngIf="levelUpInfo.evOrEa === 'EV'">
+                        Lancer 1D{{data.character.origin.data.diceEvLevelUp}}<span *ngIf="characterHasToken('LEVELUP_DICE_EV_-1')">-1</span>
+                    </mat-hint>
+                    <mat-hint align="end" *ngIf="levelUpInfo.evOrEa === 'EA'">
+                        Lancer 1D{{data.character.diceEaLevelUp}}
+                    </mat-hint>
+                </mat-form-field>
+                <button mat-icon-button (click)="rollLevelUp()">
+                    <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-24"></mat-icon>
+                </button>
+            </div>
+            <div class="next-button">
+                <button mat-button color="primary" [disabled]="!levelUpInfo.evOrEaValue" matStepperNext>SUIVANT</button>
+            </div>
+        </mat-step>
+        <mat-step [completed]="!!levelUpInfo.statToUp" *ngIf="(levelUpInfo.targetLevelUp % 2) === 0">
+            <ng-template matStepLabel>
+                Augmenter une caractéristique
+            </ng-template>
+            Je choisi:
+            <mat-button-toggle-group [(ngModel)]="levelUpInfo.statToUp">
+                <mat-button-toggle value="FO">FO</mat-button-toggle>
+                <mat-button-toggle value="AD">AD</mat-button-toggle>
+                <mat-button-toggle value="COU">COU</mat-button-toggle>
+                <mat-button-toggle value="INT">INT</mat-button-toggle>
+            </mat-button-toggle-group>
+            <div class="next-button">
+                <button mat-button color="primary" [disabled]="!levelUpInfo.statToUp" matStepperNext>SUIVANT</button>
+            </div>
+        </mat-step>
+        <mat-step  [completed]="!!levelUpInfo.statToUp" *ngIf="(levelUpInfo.targetLevelUp % 2) === 1">
+            <ng-template matStepLabel>
+                Augmenter Attaque ou parade
+            </ng-template>
+            Je choisi d'augmenter de 1 point:
+            <mat-button-toggle-group [(ngModel)]="levelUpInfo.statToUp">
+                <mat-button-toggle value="AT">AT</mat-button-toggle>
+                <mat-button-toggle value="PRD">PRD</mat-button-toggle>
+            </mat-button-toggle-group>
+            <div class="next-button">
+                <button mat-button color="primary" [disabled]="!levelUpInfo.statToUp" matStepperNext>SUIVANT</button>
+            </div>
+        </mat-step>
+        <mat-step [completed]="!!levelUpInfo.skill" *ngIf="levelUpShouldSelectSkill()">
+            <ng-template matStepLabel>
+                Compétence supplémentaire
+            </ng-template>
+
+                <skill-selector *ngIf="!levelUpInfo.skill"
+                                [selectedOrigin]="data.character.origin"
+                                [selectedJobs]="data.character.jobs"
+                                [knownSkills]="data.character.skills"
+                                [skillCount]=1
+                                (skillsSelected)="onLevelUpSelectSkills($event)">
+                </skill-selector>
+
+                <p *ngIf="levelUpInfo.skill" class="lean-skill">
+                    J'apprends la compétence: {{levelUpInfo.skill.name}}
+                    <button mat-icon-button (click)="levelUpInfo.skill = undefined">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </p>
+            <div class="next-button">
+                <button mat-button color="primary" [disabled]="!levelUpInfo.statToUp" matStepperNext>SUIVANT</button>
+            </div>
+        </mat-step>
+
+        <ng-template ngFor [ngForOf]="data.character.jobs" let-job>
+            <mat-step #specialityStep [completed]="!!levelUpInfo.specialities[job.id]" *ngIf="levelUpShouldSelectSpeciality(job)">
+                <ng-template matStepLabel>
+                    {{job.name}}: Spécialisation supplémentaire
+                </ng-template>
+                <speciality-selector (specialityChange)="levelUpSelectSpeciality(job, $event); specialityStep.completed = true; stepper.next()"
+                                     [knownSpecialities]="data.character.getJobsSpecialities(job)"
+                                     [specialities]="job.specialities">
+                </speciality-selector>
+            </mat-step>
+        </ng-template>
+        <mat-step [editable]="levelUpFormReady()">
+            <ng-template matStepLabel>
+                Confirmer
+            </ng-template>
+            <ul>
+                <li *ngIf="levelUpInfo.evOrEa === 'EV'">
+                    Augmentation de l'energie vitale (EV) de {{levelUpInfo.evOrEaValue}}
+                </li>
+                <li *ngIf="levelUpInfo.evOrEa === 'EA'">
+                    Augmentation de l'energie astrale (EA) de {{levelUpInfo.evOrEaValue}}
+                </li>
+                <li>
+                    Augmentation de 1 point en {{levelUpInfo.statToUp}}
+                </li>
+                <li *ngIf="levelUpInfo.skill" >
+                    J'apprends la compétence: {{levelUpInfo.skill.name}}
+                </li>
+                <ng-template ngFor [ngForOf]="data.character.jobs" let-job>
+                    <li *ngIf="levelUpInfo.specialities[job.id]">
+                        J'apprend la spécialité: {{levelUpInfo.specialities[job.id].name}}
+                    </li>
+                </ng-template>
+            </ul>
+            <div class="next-button">
+                <button mat-button color="primary" [disabled]="!levelUpFormReady()" (click)="levelUp()">
+                    CONFIRMER
+                </button>
+            </div>
+        </mat-step>
+    </mat-vertical-stepper>
+</div>

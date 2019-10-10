@@ -67,32 +67,7 @@ export class CharacterService {
         }).pipe(map(() => stat));
     }
 
-    LevelUp(characterId: number, levelUpInfo: LevelUpInfo): Observable<[CharacterLevelUpResponse, { [skillId: number]: Skill }]> {
-        let skillId: number | undefined = undefined;
-        if (levelUpInfo.skill) {
-            skillId = levelUpInfo.skill.id;
-        }
-        let specialityIds: number[] = [];
-        for (let jobId in levelUpInfo.specialities) {
-            if (!levelUpInfo.specialities.hasOwnProperty(jobId)) {
-                continue;
-            }
-            const speciality = levelUpInfo.specialities[jobId];
-            if (!speciality) {
-                continue;
-            }
-            specialityIds.push(speciality.id);
-        }
-
-        let request: CharacterLevelUpRequest = {
-            evOrEa: levelUpInfo.evOrEa,
-            evOrEaValue: levelUpInfo.evOrEaValue,
-            targetLevelUp: levelUpInfo.targetLevelUp,
-            statToUp: levelUpInfo.statToUp,
-            skillId: skillId,
-            specialityIds: specialityIds
-        };
-
+    LevelUp(characterId: number, request: CharacterLevelUpRequest): Observable<[CharacterLevelUpResponse, { [skillId: number]: Skill }]> {
         return forkJoin([
             this.httpClient.post<CharacterLevelUpResponse>(`/api/v2/characters/${characterId}/levelUp`, request),
             this.skillService.getSkillsById()

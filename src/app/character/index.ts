@@ -25,6 +25,7 @@ export * from './inventory-panel.component';
 export * from './item-lifetime-editor-dialog.component';
 export * from './item-line.component';
 export * from './job-player-dialog.component';
+export * from './level-up-dialog.component';
 export * from './origin-player-dialog.component';
 export * from './skill-info-dialog.component';
 export * from './skill-selector.component';

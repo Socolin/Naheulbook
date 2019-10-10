@@ -1,15 +1,14 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatTabChangeEvent, MatTabGroup} from '@angular/material';
-import {Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import {Overlay} from '@angular/cdk/overlay';
 import {Subscription} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 
 import {NotificationsService} from '../notifications';
 import {NhbkDialogService, PromptDialogComponent} from '../shared';
 import {Skill} from '../skill';
-import {Job, Speciality} from '../job';
+import {Job} from '../job';
 import {Item} from '../item';
 
 import {WebSocketService} from '../websocket';
@@ -23,15 +22,9 @@ import {OriginPlayerDialogComponent} from './origin-player-dialog.component';
 import {JobPlayerDialogComponent} from './job-player-dialog.component';
 import {ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult} from './change-job-dialog.component';
 import {SkillInfoDialogComponent} from './skill-info-dialog.component';
+import {LevelUpDialogComponent, LevelUpDialogData, LevelUpDialogResult} from './level-up-dialog.component';
+import {CharacterLevelUpRequest} from '../api/requests';
 
-export class LevelUpInfo {
-    evOrEa = 'EV';
-    evOrEaValue: number;
-    targetLevelUp: number;
-    statToUp: string;
-    skill?: Skill;
-    specialities: { [jobId: number]: Speciality } = {};
-}
 
 @Component({
     selector: 'character',
@@ -51,11 +44,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     @ViewChild('inventoryPanel', {static: true})
     private inventoryPanel: InventoryPanelComponent;
-
-    @ViewChild('levelUpDialog', {static: true})
-    public levelUpDialog: Portal<any>;
-    public levelUpOverlayRef: OverlayRef;
-    public levelUpInfo: LevelUpInfo = new LevelUpInfo();
 
     public inGroupTab = false;
     public currentTab = 'infos';
@@ -99,32 +87,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         }
     }
 
-    levelUp() {
-        this.closeLevelUpDialog();
-        this.characterService.LevelUp(this.character.id, this.levelUpInfo).subscribe(res => {
-            this.character.onLevelUp(res[0], res[1]);
-        });
-    }
-
-    characterHasToken(flagName: string) {
-        if (this.character.origin.hasFlag(flagName)) {
-            return true
-        }
-        for (let job of this.character.jobs) {
-            if (job.hasFlag(flagName)) {
-                return true;
-            }
-        }
-        if (this.character.specialities) {
-            for (let speciality of this.character.specialities) {
-                if (speciality.hasFlag(flagName)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     changeGmData(key: string, value: any) {
         this.characterService.changeGmData(this.character.id, key, value).subscribe(
             change => {
@@ -146,108 +108,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
             level++;
         }
         return level;
-    }
-
-    openLevelUpDialog() {
-        this.initLevelUp();
-
-        let config = new OverlayConfig();
-
-        config.positionStrategy = this.overlay.position()
-            .global()
-            .centerHorizontally()
-            .centerVertically();
-        config.hasBackdrop = true;
-
-        let overlayRef = this.overlay.create(config);
-        overlayRef.attach(this.levelUpDialog);
-        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
-        this.levelUpOverlayRef = overlayRef;
-    }
-
-    closeLevelUpDialog() {
-        this.levelUpOverlayRef.detach();
-    }
-
-    initLevelUp() {
-        this.levelUpInfo = new LevelUpInfo();
-        this.levelUpInfo.evOrEa = 'EV';
-        this.levelUpInfo.evOrEaValue = 0;
-        this.levelUpInfo.targetLevelUp = this.character.level + 1;
-        if (this.levelUpInfo.targetLevelUp % 2 === 0) {
-            this.levelUpInfo.statToUp = 'FO';
-        }
-        else {
-            this.levelUpInfo.statToUp = 'AT';
-        }
-    }
-
-    rollLevelUp() {
-        let diceLevelUp = this.character.origin.data.diceEvLevelUp;
-        if (this.levelUpInfo.evOrEa === 'EV') {
-            if (this.characterHasToken('LEVELUP_DICE_EV_-1')) {
-                this.levelUpInfo.evOrEaValue = Math.max(1, Math.ceil(Math.random() * diceLevelUp) - 1);
-                return;
-            }
-        } else {
-            let job = this.character.jobs.find(j => !!j.getStatData(this.character.origin).diceEaLevelUp);
-            if (job) {
-                diceLevelUp = job.getStatData(this.character.origin).diceEaLevelUp!;
-            } else {
-                diceLevelUp = 6;
-            }
-        }
-        this.levelUpInfo.evOrEaValue = Math.ceil(Math.random() * diceLevelUp);
-    }
-
-    onLevelUpSelectSkills(skills: Skill[]) {
-        this.levelUpInfo.skill = skills[0];
-    }
-
-    levelUpShouldSelectSkill() {
-        return this.levelUpInfo.targetLevelUp === 3
-            || this.levelUpInfo.targetLevelUp === 6
-            || this.levelUpInfo.targetLevelUp === 10;
-    }
-
-    levelUpShouldSelectSpeciality(job: Job): boolean {
-        if (!job.specialities) {
-            return false;
-        }
-        let specialities = this.character.getJobsSpecialities(job);
-        for (let speciality of specialities) {
-            if (speciality.hasFlag('ONE_SPECIALITY')) {
-                return false;
-            }
-        }
-        return job.hasFlag('SELECT_SPECIALITY_LVL_5_10')
-            && !job.hasFlag('ONE_SPECIALITY')
-            && (this.levelUpInfo.targetLevelUp === 5 || this.levelUpInfo.targetLevelUp === 10);
-    }
-
-    levelUpSelectSpeciality(job: Job, speciality: Speciality) {
-        if (this.levelUpShouldSelectSpeciality(job)) {
-            this.levelUpInfo.specialities[job.id] = speciality;
-        }
-    }
-
-    levelUpFormReady() {
-        if (!this.levelUpInfo.evOrEaValue) {
-            return false;
-        }
-        for (let job of this.character.jobs) {
-            if (this.levelUpShouldSelectSpeciality(job)) {
-                if (this.levelUpInfo.specialities[job.id] == null) {
-                    return false;
-                }
-            }
-        }
-        if (this.levelUpShouldSelectSkill()) {
-            if (!this.levelUpInfo.skill) {
-                return false;
-            }
-        }
-        return true;
     }
 
     // Group
@@ -325,7 +185,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
             if (!result) {
                 return;
             }
-            this.changeStat('sex',  result);
+            this.changeStat('sex', result);
         });
     }
 
@@ -429,5 +289,26 @@ export class CharacterComponent implements OnInit, OnDestroy {
             }
         }
         this.itemActionService.onAction('equip', item)
+    }
+
+    openLevelUpDialog() {
+        const dialogRef = this.dialog.open<LevelUpDialogComponent, LevelUpDialogData, LevelUpDialogResult>(
+            LevelUpDialogComponent, {
+                minWidth: '100vw', height: '100vh',
+                autoFocus: false,
+                data: {
+                    character: this.character
+                }
+            });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
+
+            this.characterService.LevelUp(this.character.id, result).subscribe(res => {
+                this.character.onLevelUp(res[0], res[1]);
+            });
+        });
     }
 }
