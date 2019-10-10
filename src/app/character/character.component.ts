@@ -22,6 +22,7 @@ import {ChangeSexDialogComponent, ChangeSexDialogData} from './change-sex-dialog
 import {OriginPlayerDialogComponent} from './origin-player-dialog.component';
 import {JobPlayerDialogComponent} from './job-player-dialog.component';
 import {ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult} from './change-job-dialog.component';
+import {SkillInfoDialogComponent} from './skill-info-dialog.component';
 
 export class LevelUpInfo {
     evOrEa = 'EV';
@@ -55,12 +56,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     public levelUpDialog: Portal<any>;
     public levelUpOverlayRef: OverlayRef;
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
-
-    @ViewChild('skillInfoDialog', {static: true})
-    public skillInfoDialog: Portal<any>;
-    public skillInfoOverlayRef: OverlayRef;
-    public selectedSkillInfo: Skill;
-    public viewGmSkillInfo = false;
 
     public inGroupTab = false;
     public currentTab = 'infos';
@@ -297,26 +292,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    // Skill info modal
-
     openSkillInfoDialog(skill: Skill) {
-        this.selectedSkillInfo = skill;
-        let config = new OverlayConfig();
-
-        config.positionStrategy = this.overlay.position()
-            .global()
-            .centerHorizontally()
-            .centerVertically();
-        config.hasBackdrop = true;
-
-        let overlayRef = this.overlay.create(config);
-        overlayRef.attach(this.skillInfoDialog);
-        overlayRef.backdropClick().subscribe(() => overlayRef.detach());
-        this.skillInfoOverlayRef = overlayRef;
-    }
-
-    closeSkillInfoDialog() {
-        this.skillInfoOverlayRef.detach();
+        this.dialog.open(SkillInfoDialogComponent, {data: {skill}});
     }
 
     openChangeNameDialog() {

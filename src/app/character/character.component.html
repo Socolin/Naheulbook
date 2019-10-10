@@ -700,31 +700,6 @@
     </mat-tab>
 </mat-tab-group>
 
-<!-- Skill info dialog -->
-<ng-template #skillInfoDialog="cdkPortal" cdk-portal>
-    <mat-card class="skill-info-dialog">
-
-        <mat-card-title *ngIf="!viewGmSkillInfo && selectedSkillInfo">{{selectedSkillInfo.name}}</mat-card-title>
-        <mat-card-content *ngIf="!viewGmSkillInfo && selectedSkillInfo">
-            {{selectedSkillInfo.playerDescription}}
-        </mat-card-content>
-        <skill *ngIf="viewGmSkillInfo && selectedSkillInfo" [skill]="selectedSkillInfo"></skill>
-
-        <mat-card-actions align="end">
-            <button *ngIf="!viewGmSkillInfo" mat-button color="primary" (click)="viewGmSkillInfo = true">
-                INFO GM
-            </button>
-            <button *ngIf="viewGmSkillInfo" mat-button color="primary" (click)="viewGmSkillInfo = false">
-                INFO JOUEUR
-            </button>
-            <button mat-button color="primary" (click)="closeSkillInfoDialog()">
-                FERMER
-            </button>
-        </mat-card-actions>
-    </mat-card>
-</ng-template>
-
-
 <!-- Levelup modal -->
 <ng-template #levelUpDialog="cdkPortal" cdk-portal>
     <mat-card class="level-up-dialog">
