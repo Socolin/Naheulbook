@@ -186,7 +186,14 @@
             <div class="icon-label" *ngIf="data.item.template.data.useUG">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-scales" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
-                    <div [matTooltip]="'Unité Goltor'">{{data.item.data.ug}} U.G</div>
+                    <div [matTooltip]="'Unité Goltor'">
+                        <value-editor
+                            [title]="'Unité Goltor'"
+                            [value]="data.item.data.ug"
+                            (onChange)="updateItemUg($event)">
+                        </value-editor>
+                        {{data.item.data.ug}} U.G
+                    </div>
                     <div>Poids: {{data.item.data.ug * data.item.template.data.weight * 1000  | number:'1.3-3' }} g</div>
                 </div>
             </div>

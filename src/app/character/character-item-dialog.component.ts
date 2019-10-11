@@ -118,6 +118,16 @@ export class CharacterItemDialogComponent implements OnInit {
         this.data.itemActionService.onAction('update_modifiers', this.data.item, this.data.item.modifiers);
     }
 
+    updateItemUg(ug: number) {
+        if (!this.data.item.template.data.useUG) {
+            return;
+        }
+        this.data.itemActionService.onAction('update_data', this.data.item, {
+            ...this.data.item.data,
+            ug: ug
+        });
+    }
+
     ngOnInit() {
         forkJoin([
             this.originService.getOriginsNamesById(),
@@ -133,5 +143,4 @@ export class CharacterItemDialogComponent implements OnInit {
             this.loading = false;
         });
     }
-
 }
