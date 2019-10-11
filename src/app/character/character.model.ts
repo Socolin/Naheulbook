@@ -1233,30 +1233,30 @@ export class Character extends WsRegistrable {
         }
     }
 
-    onUpdateItem(newItem: ItemPartialResponse) {
-        let currentItem = this.items.find(i => i.id === newItem.id);
+    onUpdateItem(partialItem: ItemPartialResponse) {
+        let currentItem = this.items.find(i => i.id === partialItem.id);
         if (!currentItem) {
-            throw new Error('Failed to find item ' + newItem.id);
+            throw new Error('Failed to find item ' + partialItem.id);
         }
 
-        if (newItem.data.quantity != null && currentItem.data.quantity != null) {
-            let diff = newItem.data.quantity - currentItem.data.quantity;
+        if (partialItem.data.quantity != null && currentItem.data.quantity != null) {
+            let diff = partialItem.data.quantity - currentItem.data.quantity;
             if (diff > 0) {
-                this.notify('addItem', 'Ajout de ' + diff + ' ' + newItem.data.name);
+                this.notify('addItem', 'Ajout de ' + diff + ' ' + partialItem.data.name);
             } else if (diff < 0) {
-                this.notify('deleteItem', 'Suppression de ' + (-diff) + ' ' + newItem.data.name);
+                this.notify('deleteItem', 'Suppression de ' + (-diff) + ' ' + partialItem.data.name);
             }
         }
 
-        if (newItem.data.charge !== currentItem.data.charge) {
-            this.notify('useObject', 'Utilisation d\'une charge de ' + newItem.data.name);
+        if (partialItem.data.charge !== currentItem.data.charge) {
+            this.notify('useObject', 'Utilisation d\'une charge de ' + partialItem.data.name);
         }
 
-        if (newItem.data.notIdentified === undefined && currentItem.data.notIdentified) {
-            this.notify('identifyObject', 'Objet identifié: ' + newItem.data.name);
+        if (partialItem.data.notIdentified === undefined && currentItem.data.notIdentified) {
+            this.notify('identifyObject', 'Objet identifié: ' + partialItem.data.name);
         }
 
-        currentItem.data = newItem.data;
+        currentItem.data = partialItem.data;
         this.update();
     }
 

@@ -35,7 +35,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
     @Input() character: Character;
     @Input() inGroupTab: boolean;
 
-    public selectedItem?: Item;
     public sortType: ItemSortType = 'none';
     public viewMode: 'all' | 'bag' | 'money' | 'equipment' = 'bag';
     public itemFilterName?: string;
@@ -81,19 +80,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
                 .subscribe(
                     item => {
                         this.character.onAddItem(item);
-                        this.selectedItem = item;
                     }
                 );
         })
-    }
-
-    deselectItem(): void {
-        this.selectedItem = undefined;
-    }
-
-    selectItem(item: Item) {
-        this.selectedItem = item;
-        return false;
     }
 
     editItem(item: Item) {
@@ -180,9 +169,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
             let item = event.item;
             this.itemService.deleteItem(item.id).subscribe(
                 () => {
-                    if (this.selectedItem && this.selectedItem.id === item.id) {
-                        this.selectedItem = undefined;
-                    }
                     this.character.onDeleteItem(item.id);
                 }
             );
@@ -262,9 +248,6 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
             this.itemService.giveItem(event.item.id, event.data.characterId, event.data.quantity).subscribe(
                 result => {
                     if (result.remainingQuantity) {
-                        if (this.selectedItem && this.selectedItem.id === event.item.id) {
-                            this.selectedItem = undefined;
-                        }
                         event.item.data.quantity = result.remainingQuantity;
                     } else {
                         this.character.onDeleteItem(event.item.id);
@@ -292,9 +275,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
         }));
 
         this.subscription.add(this.itemActionService.registerAction('update_data').subscribe(event => {
-            this.itemService.updateItem(event.item.id, event.data).subscribe(
-                this.character.onUpdateItem.bind(this.character)
-            );
+            this.itemService.updateItem(event.item.id, event.data).subscribe(partialItem => this.character.onUpdateItem(partialItem));
         }));
 
         this.subscription.add(this.character.onUpdate.subscribe(() => {

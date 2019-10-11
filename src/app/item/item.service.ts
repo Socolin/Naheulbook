@@ -144,7 +144,7 @@ export class ItemService {
         });
     }
 
-    updateItem(itemId: number, itemData: any): Observable<ItemPartialResponse> {
+    updateItem(itemId: number, itemData: ItemData): Observable<ItemPartialResponse> {
         return this.httpClient.put<ItemPartialResponse>(`/api/v2/items/${itemId}/data`, itemData);
     }
 

@@ -15,7 +15,6 @@ import {WebSocketService} from '../websocket';
 
 import {CharacterService} from './character.service';
 import {Character, CharacterGroupInvite} from './character.model';
-import {InventoryPanelComponent} from './inventory-panel.component';
 import {ItemActionService} from './item-action.service';
 import {ChangeSexDialogComponent, ChangeSexDialogData} from './change-sex-dialog.component';
 import {OriginPlayerDialogComponent} from './origin-player-dialog.component';
@@ -23,7 +22,6 @@ import {JobPlayerDialogComponent} from './job-player-dialog.component';
 import {ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult} from './change-job-dialog.component';
 import {SkillInfoDialogComponent} from './skill-info-dialog.component';
 import {LevelUpDialogComponent, LevelUpDialogData, LevelUpDialogResult} from './level-up-dialog.component';
-import {CharacterLevelUpRequest} from '../api/requests';
 
 
 @Component({
@@ -41,9 +39,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     @ViewChild('mainTabGroup', {static: true})
     private mainTabGroup: MatTabGroup;
-
-    @ViewChild('inventoryPanel', {static: true})
-    private inventoryPanel: InventoryPanelComponent;
 
     public inGroupTab = false;
     public currentTab = 'infos';
@@ -145,7 +140,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     selectTab(tabChangeEvent: MatTabChangeEvent): boolean {
         this.currentTab = this.tabs[tabChangeEvent.index].hash;
-        this.inventoryPanel.deselectItem();
         if (!this.inGroupTab) {
             this.router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this.route});
         }
