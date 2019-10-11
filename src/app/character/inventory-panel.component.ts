@@ -8,7 +8,6 @@ import {
     OnInit,
     SimpleChanges
 } from '@angular/core';
-import {isNullOrUndefined} from 'util';
 
 import {Character} from './character.model';
 import {Item, ItemService} from '../item';
@@ -104,10 +103,11 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     openModifierDialog(item: Item) {
-        const dialogRef = this.dialog.open<AddItemModifierDialogComponent, any, ActiveStatsModifier>(AddItemModifierDialogComponent, {
-            minWidth: '100vw',
-            height: '100vh'
-        });
+        const dialogRef = this.dialog.open<AddItemModifierDialogComponent, any, ActiveStatsModifier>(
+            AddItemModifierDialogComponent, {
+                minWidth: '100vw',
+                height: '100vh'
+            });
         dialogRef.afterClosed().subscribe(result => {
             if (!result) {
                 return;
@@ -149,14 +149,12 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription.add(this.itemActionService.registerAction('equip').subscribe((event: { item: Item, data: any }) => {
-            let eventData = event.data;
-            let item = event.item;
+        this.subscription.add(this.itemActionService.registerAction('equip').subscribe(event => {
             let level = 1;
-            if (!isNullOrUndefined(eventData) && !isNullOrUndefined(eventData.level)) {
-                level = eventData.level;
+            if (event.data && event.data.level) {
+                level = event.data.level;
             }
-            this.itemService.equipItem(item.id, level).subscribe(
+            this.itemService.equipItem(event.item.id, level).subscribe(
                 this.character.onEquipItem.bind(this.character)
             );
         }));
@@ -201,7 +199,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
                 this.character.onUpdateItem(data)
             );
         }));
-        this.subscription.add(this.itemActionService.registerAction('ignore_restrictions').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('ignore_restrictions').subscribe(event => {
             let item = event.item;
             item.data = {
                 ...item.data,
@@ -231,15 +229,13 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
             );
         }));
 
-        this.subscription.add(this.itemActionService.registerAction('edit_item_name').subscribe((event: { item: Item, data: any }) => {
-            let eventData = event.data;
-            let item = event.item;
-            item.data = {
-                ...item.data,
-                name: eventData.name,
-                description: eventData.description
+        this.subscription.add(this.itemActionService.registerAction('edit_item_name').subscribe(event => {
+            event.item.data = {
+                ...event.item.data,
+                name: event.data.name,
+                description: event.data.description
             };
-            this.itemService.updateItem(item.id, item.data).subscribe(
+            this.itemService.updateItem(event.item.id, event.item.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
         }));
@@ -283,11 +279,11 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
         }))
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.subscription.unsubscribe();
     }
 
-    openLifetimeDialog(item: Item) {
+    openLifetimeDialog(item: Item): void {
         const dialogRef = this.dialog.open<ItemLifetimeEditorDialogComponent, ItemLifetimeEditorDialogData, IDurable>(
             ItemLifetimeEditorDialogComponent,
             {
@@ -303,7 +299,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
         })
     }
 
-    openGiveItemDialog(item: Item) {
+    openGiveItemDialog(item: Item): void {
         const dialogRef = this.dialog.open<GiveItemDialogComponent, GiveItemDialogData, GiveItemDialogResult>(
             GiveItemDialogComponent, {
                 autoFocus: false,
