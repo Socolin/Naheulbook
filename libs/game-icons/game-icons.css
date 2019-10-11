@@ -5,7 +5,7 @@
     src: url('./game-icons-0.ttf');
     src: url('./game-icons-0.woff2') format('woff2'),
         url('./game-icons-0.ttf') format('truetype');
-    unicode-range: U+FF000-FF07F;
+    unicode-range: U+FF000-FF07F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -14,7 +14,7 @@
     src: url('./game-icons-1.ttf');
     src: url('./game-icons-1.woff2') format('woff2'),
         url('./game-icons-1.ttf') format('truetype');
-    unicode-range: U+FF080-FF0FF;
+    unicode-range: U+FF080-FF0FF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -23,7 +23,7 @@
     src: url('./game-icons-2.ttf');
     src: url('./game-icons-2.woff2') format('woff2'),
         url('./game-icons-2.ttf') format('truetype');
-    unicode-range: U+FF100-FF17F;
+    unicode-range: U+FF100-FF17F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -32,7 +32,7 @@
     src: url('./game-icons-3.ttf');
     src: url('./game-icons-3.woff2') format('woff2'),
         url('./game-icons-3.ttf') format('truetype');
-    unicode-range: U+FF180-FF1FF;
+    unicode-range: U+FF180-FF1FF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -41,7 +41,7 @@
     src: url('./game-icons-4.ttf');
     src: url('./game-icons-4.woff2') format('woff2'),
         url('./game-icons-4.ttf') format('truetype');
-    unicode-range: U+FF200-FF27F;
+    unicode-range: U+FF200-FF27F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -50,7 +50,7 @@
     src: url('./game-icons-5.ttf');
     src: url('./game-icons-5.woff2') format('woff2'),
         url('./game-icons-5.ttf') format('truetype');
-    unicode-range: U+FF280-FF2FF;
+    unicode-range: U+FF280-FF2FF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -59,7 +59,7 @@
     src: url('./game-icons-6.ttf');
     src: url('./game-icons-6.woff2') format('woff2'),
         url('./game-icons-6.ttf') format('truetype');
-    unicode-range: U+FF300-FF37F;
+    unicode-range: U+FF300-FF37F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -68,7 +68,7 @@
     src: url('./game-icons-7.ttf');
     src: url('./game-icons-7.woff2') format('woff2'),
         url('./game-icons-7.ttf') format('truetype');
-    unicode-range: U+FF380-FF3FF;
+    unicode-range: U+FF380-FF3FF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -77,7 +77,7 @@
     src: url('./game-icons-8.ttf');
     src: url('./game-icons-8.woff2') format('woff2'),
         url('./game-icons-8.ttf') format('truetype');
-    unicode-range: U+FF400-FF47F;
+    unicode-range: U+FF400-FF47F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -86,7 +86,7 @@
     src: url('./game-icons-9.ttf');
     src: url('./game-icons-9.woff2') format('woff2'),
         url('./game-icons-9.ttf') format('truetype');
-    unicode-range: U+FF480-FF4FF;
+    unicode-range: U+FF480-FF4FF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -95,7 +95,7 @@
     src: url('./game-icons-10.ttf');
     src: url('./game-icons-10.woff2') format('woff2'),
         url('./game-icons-10.ttf') format('truetype');
-    unicode-range: U+FF500-FF57F;
+    unicode-range: U+FF500-FF57F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -104,7 +104,7 @@
     src: url('./game-icons-11.ttf');
     src: url('./game-icons-11.woff2') format('woff2'),
         url('./game-icons-11.ttf') format('truetype');
-    unicode-range: U+FF580-FF5FF;
+    unicode-range: U+FF580-FF5FF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -113,7 +113,7 @@
     src: url('./game-icons-12.ttf');
     src: url('./game-icons-12.woff2') format('woff2'),
         url('./game-icons-12.ttf') format('truetype');
-    unicode-range: U+FF600-FF67F;
+    unicode-range: U+FF600-FF67F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -122,7 +122,7 @@
     src: url('./game-icons-13.ttf');
     src: url('./game-icons-13.woff2') format('woff2'),
         url('./game-icons-13.ttf') format('truetype');
-    unicode-range: U+FF680-FF6FF;
+    unicode-range: U+FF680-FF6FF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -131,7 +131,7 @@
     src: url('./game-icons-14.ttf');
     src: url('./game-icons-14.woff2') format('woff2'),
         url('./game-icons-14.ttf') format('truetype');
-    unicode-range: U+FF700-FF77F;
+    unicode-range: U+FF700-FF77F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -140,7 +140,7 @@
     src: url('./game-icons-15.ttf');
     src: url('./game-icons-15.woff2') format('woff2'),
         url('./game-icons-15.ttf') format('truetype');
-    unicode-range: U+FF780-FF7FF;
+    unicode-range: U+FF780-FF7FF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -149,7 +149,7 @@
     src: url('./game-icons-16.ttf');
     src: url('./game-icons-16.woff2') format('woff2'),
         url('./game-icons-16.ttf') format('truetype');
-    unicode-range: U+FF800-FF87F;
+    unicode-range: U+FF800-FF87F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -158,7 +158,7 @@
     src: url('./game-icons-17.ttf');
     src: url('./game-icons-17.woff2') format('woff2'),
         url('./game-icons-17.ttf') format('truetype');
-    unicode-range: U+FF880-FF8FF;
+    unicode-range: U+FF880-FF8FF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -167,7 +167,7 @@
     src: url('./game-icons-18.ttf');
     src: url('./game-icons-18.woff2') format('woff2'),
         url('./game-icons-18.ttf') format('truetype');
-    unicode-range: U+FF900-FF97F;
+    unicode-range: U+FF900-FF97F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -176,7 +176,7 @@
     src: url('./game-icons-19.ttf');
     src: url('./game-icons-19.woff2') format('woff2'),
         url('./game-icons-19.ttf') format('truetype');
-    unicode-range: U+FF980-FF9FF;
+    unicode-range: U+FF980-FF9FF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -185,7 +185,7 @@
     src: url('./game-icons-20.ttf');
     src: url('./game-icons-20.woff2') format('woff2'),
         url('./game-icons-20.ttf') format('truetype');
-    unicode-range: U+FFA00-FFA7F;
+    unicode-range: U+FFA00-FFA7F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -194,7 +194,7 @@
     src: url('./game-icons-21.ttf');
     src: url('./game-icons-21.woff2') format('woff2'),
         url('./game-icons-21.ttf') format('truetype');
-    unicode-range: U+FFA80-FFAFF;
+    unicode-range: U+FFA80-FFAFF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -203,7 +203,7 @@
     src: url('./game-icons-22.ttf');
     src: url('./game-icons-22.woff2') format('woff2'),
         url('./game-icons-22.ttf') format('truetype');
-    unicode-range: U+FFB00-FFB7F;
+    unicode-range: U+FFB00-FFB7F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -212,7 +212,7 @@
     src: url('./game-icons-23.ttf');
     src: url('./game-icons-23.woff2') format('woff2'),
         url('./game-icons-23.ttf') format('truetype');
-    unicode-range: U+FFB80-FFBFF;
+    unicode-range: U+FFB80-FFBFF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -221,7 +221,7 @@
     src: url('./game-icons-24.ttf');
     src: url('./game-icons-24.woff2') format('woff2'),
         url('./game-icons-24.ttf') format('truetype');
-    unicode-range: U+FFC00-FFC7F;
+    unicode-range: U+FFC00-FFC7F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -230,7 +230,7 @@
     src: url('./game-icons-25.ttf');
     src: url('./game-icons-25.woff2') format('woff2'),
         url('./game-icons-25.ttf') format('truetype');
-    unicode-range: U+FFC80-FFCFF;
+    unicode-range: U+FFC80-FFCFF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -239,7 +239,7 @@
     src: url('./game-icons-26.ttf');
     src: url('./game-icons-26.woff2') format('woff2'),
         url('./game-icons-26.ttf') format('truetype');
-    unicode-range: U+FFD00-FFD7F;
+    unicode-range: U+FFD00-FFD7F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -248,7 +248,7 @@
     src: url('./game-icons-27.ttf');
     src: url('./game-icons-27.woff2') format('woff2'),
         url('./game-icons-27.ttf') format('truetype');
-    unicode-range: U+FFD80-FFDFF;
+    unicode-range: U+FFD80-FFDFF, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -257,7 +257,7 @@
     src: url('./game-icons-28.ttf');
     src: url('./game-icons-28.woff2') format('woff2'),
         url('./game-icons-28.ttf') format('truetype');
-    unicode-range: U+FFE00-FFE7F;
+    unicode-range: U+FFE00-FFE7F, U+20;
 }
 @font-face {
     font-family: "game-icons";
@@ -266,7 +266,7 @@
     src: url('./game-icons-29.ttf');
     src: url('./game-icons-29.woff2') format('woff2'),
         url('./game-icons-29.ttf') format('truetype');
-    unicode-range: U+FFE80-FFE8B;
+    unicode-range: U+FFE80-FFE8B, U+20;
 }
 
 .game-icon {
