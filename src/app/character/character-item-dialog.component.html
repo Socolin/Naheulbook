@@ -368,13 +368,13 @@
                 <button mat-button
                         [color]="'primary'"
                         *ngIf="data.gmView && !data.item.data.ignoreRestrictions"
-                        (click)="data.itemActionService.onAction('ignoreRestrictions', data.item, true); $event.stopPropagation()">
+                        (click)="data.itemActionService.onAction('ignore_restrictions', data.item, true); $event.stopPropagation()">
                     IGNORER RESTRICTIONS
                 </button>
                 <button mat-button
                         [color]="'primary'"
                         *ngIf="data.gmView && data.item.data.ignoreRestrictions"
-                        (click)="data.itemActionService.onAction('ignoreRestrictions', data.item, undefined); $event.stopPropagation()">
+                        (click)="data.itemActionService.onAction('ignore_restrictions', data.item, undefined); $event.stopPropagation()">
                     APPLIQUER RESTRICTIONS
                 </button>
             </div>

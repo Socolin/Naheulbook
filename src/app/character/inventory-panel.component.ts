@@ -3,7 +3,8 @@ import {
     ChangeDetectorRef,
     Component,
     Input,
-    OnChanges, OnDestroy,
+    OnChanges,
+    OnDestroy,
     OnInit,
     SimpleChanges
 } from '@angular/core';
@@ -123,12 +124,8 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
                 return;
             }
 
-            if (item.modifiers === null) {
-                item.modifiers = [];
-            }
             this.activeModifier(result);
-            item.modifiers.push(result);
-            this.itemActionService.onAction('update_modifiers', item);
+            this.itemActionService.onAction('update_modifiers', item, [...item.modifiers, result]);
         });
     }
 
@@ -152,9 +149,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
             if (item.id === container.id) {
                 return;
             }
-            this.itemActionService.onAction('move_to_container', item, {container: container.id});
+            this.itemActionService.onAction('move_to_container', item, {containerId: container.id});
         } else {
-            this.itemActionService.onAction('move_to_container', item, {container: undefined});
+            this.itemActionService.onAction('move_to_container', item, {containerId: undefined});
         }
     }
 
@@ -174,13 +171,12 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
                 this.character.onEquipItem.bind(this.character)
             );
         }));
-        this.subscription.add(this.itemActionService.registerAction('unequip').subscribe((event: { item: Item, data: any }) => {
-            let item = event.item;
-            this.itemService.equipItem(item.id, 0).subscribe(
+        this.subscription.add(this.itemActionService.registerAction('unequip').subscribe(event => {
+            this.itemService.equipItem(event.item.id, 0).subscribe(
                 this.character.onEquipItem.bind(this.character)
             );
         }));
-        this.subscription.add(this.itemActionService.registerAction('delete').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('delete').subscribe(event => {
             let item = event.item;
             this.itemService.deleteItem(item.id).subscribe(
                 () => {
@@ -191,39 +187,35 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
                 }
             );
         }));
-        this.subscription.add(this.itemActionService.registerAction('update_quantity').subscribe((event: { item: Item, data: any }) => {
-            let eventData = event.data;
-            let item = event.item as Item;
+        this.subscription.add(this.itemActionService.registerAction('update_quantity').subscribe(event => {
             let itemData = {
-                ...item.data,
-                quantity: eventData.quantity
+                ...event.item.data,
+                quantity: event.data.quantity
             };
-            if (item.template.data.charge && eventData.quantity === (item.data.quantity || 0) - 1) {
-                itemData.charge = item.template.data.charge;
+            if (event.item.template.data.charge && event.data.quantity === (event.item.data.quantity || 0) - 1) {
+                itemData.charge = event.item.template.data.charge;
             }
-            this.itemService.updateItem(item.id, itemData).subscribe(
+            this.itemService.updateItem(event.item.id, itemData).subscribe(
                 res => {
                     this.character.onUpdateItem(res);
                 }
             );
         }));
-        this.subscription.add(this.itemActionService.registerAction('read_skill_book').subscribe((event: { item: Item, data: any }) => {
-            let item = event.item;
-            this.itemService.updateItem(item.id, {...item.data, readCount: (item.data.readCount || 0) + 1}).subscribe(
+        this.subscription.add(this.itemActionService.registerAction('read_skill_book').subscribe(event => {
+            this.itemService.updateItem(event.item.id, {...event.item.data, readCount: (event.item.data.readCount || 0) + 1}).subscribe(
                 res => {
                     this.character.onUpdateItem(res);
                 }
             );
         }));
-        this.subscription.add(this.itemActionService.registerAction('identify').subscribe((event: { item: Item, data: any }) => {
-            let item = event.item;
-            let itemData = {...item.data, name: item.template.name};
+        this.subscription.add(this.itemActionService.registerAction('identify').subscribe(event => {
+            let itemData = {...event.item.data, name: event.item.template.name};
             delete itemData.notIdentified;
-            this.itemService.updateItem(item.id, itemData).subscribe((data) =>
+            this.itemService.updateItem(event.item.id, itemData).subscribe((data) =>
                 this.character.onUpdateItem(data)
             );
         }));
-        this.subscription.add(this.itemActionService.registerAction('ignoreRestrictions').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('ignore_restrictions').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             item.data = {
                 ...item.data,
@@ -233,7 +225,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
                 this.character.onUpdateItem.bind(this.character)
             );
         }));
-        this.subscription.add(this.itemActionService.registerAction('use_charge').subscribe((event: { item: Item, data: any }) => {
+            this.subscription.add(this.itemActionService.registerAction('use_charge').subscribe(event => {
             let item = event.item;
             if (item.data.charge == null) {
                 item.data.charge = item.template.data.charge;
@@ -245,10 +237,10 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
                 this.character.onUpdateItem.bind(this.character)
             );
         }));
-        this.subscription.add(this.itemActionService.registerAction('move_to_container').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('move_to_container').subscribe(event => {
             let eventData = event.data;
             let item = event.item;
-            this.itemService.moveToContainer(item.id, eventData.container).subscribe(
+            this.itemService.moveToContainer(item.id, eventData.containerId).subscribe(
                 this.character.onChangeContainer.bind(this.character)
             );
         }));
@@ -266,24 +258,22 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
             );
         }));
 
-        this.subscription.add(this.itemActionService.registerAction('give').subscribe((event: { item: Item, data: any }) => {
-            let eventData = event.data;
-            let item = event.item;
-            this.itemService.giveItem(item.id, eventData.characterId, eventData.quantity).subscribe(
+        this.subscription.add(this.itemActionService.registerAction('give').subscribe(event => {
+            this.itemService.giveItem(event.item.id, event.data.characterId, event.data.quantity).subscribe(
                 result => {
                     if (result.remainingQuantity) {
-                        if (this.selectedItem && this.selectedItem.id === item.id) {
+                        if (this.selectedItem && this.selectedItem.id === event.item.id) {
                             this.selectedItem = undefined;
                         }
-                        item.data.quantity = result.remainingQuantity;
+                        event.item.data.quantity = result.remainingQuantity;
                     } else {
-                        this.character.onDeleteItem(item.id);
+                        this.character.onDeleteItem(event.item.id);
                     }
                 }
             );
         }));
 
-        this.subscription.add(this.itemActionService.registerAction('change_icon').subscribe((event: { item: Item, data: any }) => {
+        this.subscription.add(this.itemActionService.registerAction('change_icon').subscribe(event => {
             let eventData = event.data;
             let item = event.item;
             item.data = {
@@ -295,16 +285,14 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
             );
         }));
 
-        this.subscription.add(this.itemActionService.registerAction('update_modifiers').subscribe((event: { item: Item, data: any }) => {
-            let item = event.item;
-            this.itemService.updateItemModifiers(item.id, item.modifiers).subscribe(
+        this.subscription.add(this.itemActionService.registerAction('update_modifiers').subscribe(event => {
+            this.itemService.updateItemModifiers(event.item.id, event.data).subscribe(
                 this.character.onUpdateModifiers.bind(this.character)
             );
         }));
 
-        this.subscription.add(this.itemActionService.registerAction('update_data').subscribe((event: { item: Item, data: any }) => {
-            let item = event.item;
-            this.itemService.updateItem(item.id, item.data).subscribe(
+        this.subscription.add(this.itemActionService.registerAction('update_data').subscribe(event => {
+            this.itemService.updateItem(event.item.id, event.data).subscribe(
                 this.character.onUpdateItem.bind(this.character)
             );
         }));
@@ -329,12 +317,8 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
                 return;
             }
 
-            if (result.durationType === 'forever') {
-                item.data.lifetime = undefined;
-            } else {
-                item.data.lifetime = result;
-            }
-            this.itemActionService.onAction('update_data', item);
+            const newLifeTime = result.durationType !== 'forever' ? result : undefined;
+            this.itemActionService.onAction('update_data', item, {...item.data, lifetime: newLifeTime});
         })
     }
 

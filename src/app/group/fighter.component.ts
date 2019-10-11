@@ -238,7 +238,7 @@ export class FighterComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.itemActionService.registerAction('ignoreRestrictions').subscribe((event: { item: Item, data: any }) => {
+        this.itemActionService.registerAction('ignore_restrictions').subscribe((event: { item: Item, data: any }) => {
             let item = event.item;
             item.data = {
                 ...item.data,

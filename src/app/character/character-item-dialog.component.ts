@@ -80,8 +80,11 @@ export class CharacterItemDialogComponent implements OnInit {
             return;
         }
 
-        this.data.item.modifiers.splice(modifierIndex, 1);
-        this.data.itemActionService.onAction('update_modifiers', this.data.item);
+        this.data.itemActionService.onAction(
+            'update_modifiers',
+            this.data.item,
+            this.data.item.modifiers.filter((v, i) => i !== modifierIndex)
+        );
     }
 
     disableModifier(modifierIndex: number) {
@@ -90,8 +93,7 @@ export class CharacterItemDialogComponent implements OnInit {
         }
         const modifier = this.data.item.modifiers[modifierIndex];
         modifier.active = false;
-
-        this.data.itemActionService.onAction('update_modifiers', this.data.item);
+        this.data.itemActionService.onAction('update_modifiers', this.data.item, this.data.item.modifiers);
     }
 
     activeModifier(modifierIndex: number) {
@@ -113,7 +115,7 @@ export class CharacterItemDialogComponent implements OnInit {
                 break;
         }
 
-        this.data.itemActionService.onAction('update_modifiers', this.data.item);
+        this.data.itemActionService.onAction('update_modifiers', this.data.item, this.data.item.modifiers);
     }
 
     ngOnInit() {
