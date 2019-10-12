@@ -27,8 +27,8 @@
 
     .inventory-header {
         display: grid;
-        grid-template-columns: 1fr auto;
-        grid-template-areas: "filter actions";
+        grid-template-columns: 1fr auto auto;
+        grid-template-areas: "filter sort view";
         align-items: center;
         grid-column-gap: 8px;
 
@@ -36,8 +36,12 @@
             grid-area: filter;
         }
 
-        .actions {
-            grid-area: actions;
+        .view {
+            grid-area: view;
+        }
+
+        .sort {
+            grid-area: sort;
         }
     }
 }

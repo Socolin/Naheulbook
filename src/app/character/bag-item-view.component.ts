@@ -33,10 +33,15 @@ export class BagItemViewComponent {
     @Input() itemFilterName?: string;
     @Input() sortType: ItemSortType;
     @Input() itemMenu: MatMenuPanel;
+    public expanded = true;
 
     get filteredBagItems(): Item[] {
         return this.items
             .filter(isChildItemMatchingFilter.bind(this, this.itemFilterName))
             .sort(sortItemContainerFirstFn.bind(this, this.sortType));
+    }
+
+    toggleExpand() {
+        this.expanded = !this.expanded;
     }
 }

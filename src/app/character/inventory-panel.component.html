@@ -6,8 +6,14 @@
         </button>
     </mat-form-field>
 
-    <button mat-icon-button class="actions" [matMenuTriggerFor]="inventoryMenu">
-        <mat-icon>more_vert</mat-icon>
+    <button mat-icon-button class="sort" [matMenuTriggerFor]="sortMenu">
+        <mat-icon>sort</mat-icon>
+    </button>
+    <button mat-icon-button class="view" [matMenuTriggerFor]="viewModeMenu">
+        <mat-icon *ngIf="viewMode === 'all'">list</mat-icon>
+        <mat-icon *ngIf="viewMode === 'bag'">account_tree</mat-icon>
+        <mat-icon *ngIf="viewMode === 'money'" fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
+        <mat-icon *ngIf="viewMode === 'equipment'" fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-32"></mat-icon>
     </button>
 </div>
 <mat-menu #inventoryMenu>
