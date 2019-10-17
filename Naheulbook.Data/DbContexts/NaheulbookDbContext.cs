@@ -91,6 +91,8 @@ namespace Naheulbook.Data.DbContexts
 
             modelBuilder.ApplyConfiguration(new LootConfiguration());
 
+            modelBuilder.ApplyConfiguration(new MapConfiguration());
+
             modelBuilder.ApplyConfiguration(new MonsterConfiguration());
 
             modelBuilder.ApplyConfiguration(new MonsterCategoryConfiguration());

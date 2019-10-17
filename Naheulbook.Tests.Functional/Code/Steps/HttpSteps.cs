@@ -1,9 +1,11 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using ImageMagick;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Newtonsoft.Json;
@@ -57,6 +59,40 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url)
             {
                 Content = new StringContent(contentData, Encoding.UTF8, "application/json"),
+                Headers =
+                {
+                    Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt())
+                }
+            };
+            var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
+            var content = await response.Content.ReadAsStringAsync();
+            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
+            _scenarioContext.SetLastHttpResponseContent(content);
+        }
+
+        [When(@"performing a multipart POST to the url ""(.*)"" with the following json content as ""(.+)"" and an image as ""(.+)"" and the current jwt")]
+        public async Task WhenPerformingAMultipartPostToTheUrlWithContentAndJwt(string url, string contentPartName, string imagePartName, string contentData)
+        {
+            using var image = new MagickImage(new MagickColor("#ff00ff"), 1024, 512);
+            using var memoryStream = new MemoryStream();
+            new Drawables().Line(0, 0, 1024, 512).Draw(image);
+            image.Write(memoryStream, MagickFormat.Png);
+
+            var imageContent = new ByteArrayContent(memoryStream.GetBuffer())
+            {
+                Headers =
+                {
+                    ContentType = new MediaTypeHeaderValue("image/png")
+                }
+            };
+
+            var multipartContent = new MultipartFormDataContent();
+            multipartContent.Add(new StringContent(contentData, Encoding.UTF8, "application/json"), contentPartName);
+            multipartContent.Add(imageContent, imagePartName, "some-image.png");
+
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = multipartContent,
                 Headers =
                 {
                     Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt())

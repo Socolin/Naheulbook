@@ -11,6 +11,7 @@ namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions
         private const string UserIdKey = "UserId";
         private const string ActivationCodeKey = "ActivationCode";
         private const string JwtKey = "Jwt";
+        private const string MapImageOutputDirectoryKey = "MapImageOutputDirectory";
 
         public static void SetLastReceivedMail(this ScenarioContext scenarioContext, FakeSmtpMail mail)
         {
@@ -70,6 +71,16 @@ namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions
         public static int GetUserId(this ScenarioContext scenarioContext)
         {
             return scenarioContext.Get<int>(UserIdKey);
+        }
+
+        public static void SetMapImageOutputDirectory(this ScenarioContext scenarioContext, string directory)
+        {
+            scenarioContext.Set(directory, MapImageOutputDirectoryKey);
+        }
+
+        public static string GetMapImageOutputDirectory(this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.Get<string>(MapImageOutputDirectoryKey);
         }
     }
 }

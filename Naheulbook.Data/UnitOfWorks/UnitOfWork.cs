@@ -30,6 +30,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IJobRepository Jobs { get; }
         ILocationRepository Locations { get; }
         ILootRepository Loots { get; }
+        IMapRepository Maps { get; }
         IMonsterRepository Monsters { get; }
         IMonsterTypeRepository MonsterTypes { get; }
         IMonsterCategoryRepository MonsterCategories { get; }
@@ -77,6 +78,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IJobRepository Jobs => new JobRepository(_naheulbookDbContext);
         public ILocationRepository Locations => new LocationRepository(_naheulbookDbContext);
         public ILootRepository Loots => new LootRepository(_naheulbookDbContext);
+        public IMapRepository Maps => new MapRepository(_naheulbookDbContext);
         public IMonsterRepository Monsters => new MonsterRepository(_naheulbookDbContext);
         public IMonsterTypeRepository MonsterTypes => new MonsterTypeRepository(_naheulbookDbContext);
         public IMonsterCategoryRepository MonsterCategories => new MonsterCategoryRepository(_naheulbookDbContext);

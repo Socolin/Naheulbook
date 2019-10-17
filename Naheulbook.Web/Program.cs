@@ -38,6 +38,7 @@ namespace Naheulbook.Web
                     .UseLibuv()
                     .ConfigureKestrel((context, options) =>
                     {
+                        options.Limits.MaxRequestBodySize = 60000000;
                         if (!string.IsNullOrEmpty(context.Configuration["socket"]))
                             options.ListenUnixSocket(context.Configuration["socket"]);
                     })

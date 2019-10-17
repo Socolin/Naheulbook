@@ -16,14 +16,20 @@ namespace Naheulbook.Tests.Functional.Code.Servers
     {
         private readonly FakeSmtpConfig _mailConfig;
         private readonly string _laPageAMelkorUrl;
+        private readonly string _mapImageOutputDirectory;
         public const string JwtSigningKey = "jUPS+BG/+FxexuNitsuiIHWXOLTZb3yQSxyLpOfTo2/BB8MNUZcNP+13cvAlPP5O";
         public IEnumerable<string> ListenUrls => _server.ServerFeatures.Get<IServerAddressesFeature>().Addresses;
         private IWebHost _server;
 
-        public NaheulbookApiServer(FakeSmtpConfig mailConfig, string laPageAMelkorUrl)
+        public NaheulbookApiServer(
+            FakeSmtpConfig mailConfig,
+            string laPageAMelkorUrl,
+            string mapImageOutputDirectory
+        )
         {
             _mailConfig = mailConfig;
             _laPageAMelkorUrl = laPageAMelkorUrl;
+            _mapImageOutputDirectory = mapImageOutputDirectory;
         }
 
         public void Start()
@@ -39,6 +45,7 @@ namespace Naheulbook.Tests.Functional.Code.Servers
                 ["Mail:Smtp:Ssl"] = false.ToString(),
                 ["Mail:FromAddress"] = "some-address@some-domain.aa",
                 ["LaPageAMelkor:Url"] = _laPageAMelkorUrl,
+                ["MapImage:OutputDirectory"] = _mapImageOutputDirectory,
             };
 
             var configuration = new ConfigurationBuilder()

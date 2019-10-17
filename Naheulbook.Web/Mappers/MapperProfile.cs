@@ -206,6 +206,9 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Description, opt => opt.MapFrom(r => r.Text))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(r => MapperHelpers.FromJson<List<FlagResponse>>(r.Flags)));
 
+            CreateMap<Map, MapResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(r => MapperHelpers.FromJson<MapData>(r.Data)));
+
             CreateMap<Monster, MonsterResponse>()
                 .ForMember(m => m.Dead, opt => opt.MapFrom(b => MapperHelpers.FromDateTimeToString(b.Dead)))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)))

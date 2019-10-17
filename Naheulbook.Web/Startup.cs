@@ -118,6 +118,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IJobService, JobService>();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<ILootService, LootService>();
+            services.AddSingleton<IMapService, MapService>();
             services.AddSingleton<IMailService, MailService>();
             services.AddSingleton<IMonsterService, MonsterService>();
             services.AddSingleton<IMonsterTemplateService, MonsterTemplateService>();
@@ -135,6 +136,8 @@ namespace Naheulbook.Web
             services.AddSingleton<IAuthorizationUtil, AuthorizationUtil>();
             services.AddSingleton<IStringCleanupUtil, StringCleanupUtil>();
             services.AddSingleton<IJsonUtil, JsonUtil>();
+
+            services.AddSingleton<IMapImageUtil, MapImageUtil>();
 
             services.AddSingleton<ICharacterFactory, CharacterFactory>();
             services.AddSingleton<IItemFactory, ItemFactory>();
@@ -187,6 +190,10 @@ namespace Naheulbook.Web
             var microsoftConfiguration = new MicrosoftGraphConfiguration();
             _configuration.Bind("Authentication:MicrosoftGraph", microsoftConfiguration);
             services.AddSingleton(microsoftConfiguration);
+
+            var mapImageConfiguration = new MapImageConfiguration();
+            _configuration.Bind("MapImage", mapImageConfiguration);
+            services.AddSingleton(mapImageConfiguration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
