@@ -45,7 +45,7 @@ export class MapComponent implements OnInit {
             }
             this.mapService.getMap(+mapId).subscribe(map => {
                 this.map = map;
-                this.gridSize = map.data.pixelPerUnit;
+                this.gridSize = map.data.pixelPerUnit / Math.pow(2, map.data.zoomCount);
                 this.createLeafletMap();
             })
         });

@@ -6,6 +6,8 @@ import {CreateMapRequest} from '../api/requests';
 import {map} from 'rxjs/operators';
 import {Map} from './map.model';
 
+import {toResponseBody, uploadProgress} from '../utils/operators';
+
 @Injectable()
 export class MapService {
     constructor(private httpClient: HttpClient) {
@@ -17,13 +19,15 @@ export class MapService {
         );
     }
 
-    createMap(request: CreateMapRequest, image: File): Observable<MapResponse> {
+    createMap(request: CreateMapRequest, image: File, progressCb: (progress: number) => void): Observable<Map> {
         const formData: FormData = new FormData();
         formData.append('request', JSON.stringify(request));
         formData.append('image', image);
 
-        return this.httpClient.post<MapResponse>('/api/v2/maps/', formData).pipe(
-            map(response => Map.fromResponse(response))
+        return this.httpClient.post<MapResponse>('/api/v2/maps/', formData, {reportProgress: true, observe: 'events'}).pipe(
+            uploadProgress(progressCb),
+            toResponseBody(),
+            map(response => Map.fromResponse(response!))
         );
     }
 }

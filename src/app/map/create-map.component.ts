@@ -1,6 +1,9 @@
 import {Component} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+
+import {requiredFileType} from '../utils/required-file-type.validator';
 import {MapService} from './map.service';
-import {FormControl, FormGroup} from '@angular/forms';
+import {Map} from './map.model';
 
 @Component({
     selector: 'app-create-map',
@@ -9,13 +12,19 @@ import {FormControl, FormGroup} from '@angular/forms';
 })
 export class CreateMapComponent {
     public form = new FormGroup({
-        name: new FormControl(),
-        image: new FormControl()
+        name: new FormControl(undefined, Validators.required),
+        unit: new FormControl(undefined, Validators.required),
+        pixelPerUnit: new FormControl(undefined, Validators.required),
+        image: new FormControl(undefined, [Validators.required, requiredFileType(['png', 'jpg', 'jpeg', 'svg', 'bmp'])])
     });
     public attributions: {
         name: string,
         url: string
     }[] = [];
+
+    public uploading = false;
+    public progress = 0;
+    public createdMap?: Map;
 
     constructor(
         private readonly mapService: MapService
@@ -23,7 +32,7 @@ export class CreateMapComponent {
 
     }
 
-    onMapFileSelect(event: Event) {
+    onSelectFile(event: Event) {
         const inputElement = event.target;
         if (!(inputElement instanceof HTMLInputElement)) {
             return;
@@ -33,14 +42,8 @@ export class CreateMapComponent {
         }
 
         const file = inputElement.files[0];
-        this.mapService.createMap({
-            name: this.form.value.name,
-            data: {
-                attribution: this.attributions,
-            }
-        }, file).subscribe((result) => {
-
-        });
+        this.form.controls['image'].setValue(file);
+        this.form.controls['image'].markAsTouched();
     }
 
     addAttribution() {
@@ -52,5 +55,32 @@ export class CreateMapComponent {
 
     removeAttribution(i: number) {
         this.attributions.splice(i, 1);
+    }
+
+    valid() {
+        this.uploading = true;
+        this.progress = 0;
+        this.form.disable();
+        this.mapService.createMap({
+                name: this.form.value.name,
+                data: {
+                    attribution: this.attributions,
+                    unitName: this.form.value.unitName,
+                    pixelPerUnit: +this.form.value.pixelPerUnit,
+                }
+            },
+            this.form.value.image,
+            (progress) => {
+                this.progress = progress
+            }
+        ).subscribe((map) => {
+            this.createdMap = map;
+            this.uploading = false;
+            this.form.enable();
+        }, (error) => {
+            this.uploading = false;
+            this.form.enable();
+            throw error;
+        });
     }
 }

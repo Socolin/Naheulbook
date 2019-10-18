@@ -19,6 +19,7 @@ import {
     MapService,
 } from '.';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
     declarations: [
@@ -37,6 +38,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         MatFormFieldModule,
         MatInputModule,
         MatCheckboxModule,
+        MatProgressBarModule,
     ],
     providers: [
         MapService,
