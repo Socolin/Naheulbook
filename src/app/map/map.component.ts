@@ -19,10 +19,10 @@ export class MapComponent implements OnInit {
     @ViewChild('infoSidenav', {static: true})
     private infoSidenav: MatSidenav;
 
-    private map?: Map;
-
     private leafletMap: L.Map;
     private gridLayer?: L.LayerGroup;
+
+    public map?: Map;
 
     public gridDisplayed = false;
     public gridSize = 5;
