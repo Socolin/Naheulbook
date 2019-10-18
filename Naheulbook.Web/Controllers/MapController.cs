@@ -53,7 +53,7 @@ namespace Naheulbook.Web.Controllers
             [FromForm(Name = "image")] IFormFile image
         )
         {
-            if (image.ContentType != "image/png" && image.ContentType != "image/jpg" && image.ContentType != "image/jpeg")
+            if (!image.ContentType.StartsWith("image/"))
                 return BadRequest();
 
             var imageStream = image.OpenReadStream();
