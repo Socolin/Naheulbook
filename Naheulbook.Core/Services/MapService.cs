@@ -59,6 +59,8 @@ namespace Naheulbook.Core.Services
             {
                 var mapData = new MapData
                 {
+                    PixelPerUnit = request.Data.PixelPerUnit,
+                    UnitName = request.Data.UnitName,
                     Attribution = request.Data.Attribution
                         .Select(x => new MapData.MapAttribution {Name = x.Name, Url = x.Url})
                         .ToList()
