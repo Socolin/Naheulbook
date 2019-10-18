@@ -5,6 +5,7 @@ export * from './item-data';
 export * from './item-template-data';
 export * from './item-template-gun-data'
 export * from './job-stat-data';
+export * from './map-data';
 export * from './monster-data';
 export * from './monster-template-data';
 export * from './stat-modifier';

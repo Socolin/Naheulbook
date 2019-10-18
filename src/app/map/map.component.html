@@ -1,0 +1,77 @@
+<mat-sidenav-container [hasBackdrop]="true">
+    <mat-sidenav-content>
+        <div #mapElement class="map">
+        </div>
+    </mat-sidenav-content>
+    <mat-sidenav #menuSidenav mode="over" position="start" class="menu-panel">
+        <div class="map-config">
+            <h2 class="mat-h2">Carte</h2>
+            <div class="name">
+                <mat-form-field>
+                    <input matInput [ngModel]="map?.name" placeholder="Nom" [disabled]="true" />
+                </mat-form-field>
+            </div>
+            <div class="unit">
+                <mat-form-field>
+                    <input matInput [ngModel]="map?.data.pixelPerUnit" placeholder="Nombre de pixel par unité" [disabled]="true" />
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput [ngModel]="map?.data.unitName" placeholder="Unité" [disabled]="true" />
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="grid-config">
+            <h2 class="mat-h2">Grille</h2>
+            <div class="toggle-size">
+                <mat-checkbox [ngModel]="gridDisplayed" (change)="toggleGrid($event.checked)">Activé</mat-checkbox>
+                <mat-form-field>
+                    <input matInput
+                           placeholder="Espacement"
+                           (ngModelChange)="changeGridSize($event)"
+                           [(ngModel)]="gridSize"
+                           type="number"
+                           autocomplete="off"
+                           autocapitalize="off"/>
+                </mat-form-field>
+            </div>
+            <div class="offset">
+                <mat-form-field>
+                    <input matInput
+                           placeholder="Offset X"
+                           (ngModelChange)="changeGridOffsetX($event)"
+                           [(ngModel)]="gridOffsetX"
+                           type="number"
+                           autocomplete="off"
+                           autocapitalize="off"/>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
+                           placeholder="Offset Y"
+                           (ngModelChange)="changeGridOffsetY($event)"
+                           [(ngModel)]="gridOffsetY"
+                           type="number"
+                           autocomplete="off"
+                           autocapitalize="off"/>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="markers">
+            <h2 class="mat-h2">Marqueurs</h2>
+            <button mat-button>
+                <mat-icon>add</mat-icon>
+                Ajouter
+            </button>
+        </div>
+    </mat-sidenav>
+    <mat-sidenav #infoSidenav mode="over" position="end" class="side-panel">
+        test
+        <button mat-button color="primary">test</button>
+    </mat-sidenav>
+</mat-sidenav-container>
+
+
+<div class="menu-button">
+    <button color="primary" mat-mini-fab (click)="menuSidenav.toggle()" *ngIf="!menuSidenav.opened">
+        <mat-icon>menu</mat-icon>
+    </button>
+</div>

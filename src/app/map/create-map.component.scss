@@ -1,0 +1,24 @@
+:host {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 400px;
+    max-width: 960px;
+
+
+    form {
+        mat-form-field {
+            width: 100%;
+        }
+    }
+
+    .attribution {
+        display: grid;
+        grid-template-columns: 200px 200px auto;
+        grid-column-gap: 8px;
+        align-items: center;
+    }
+    .add-attribution {
+        text-align: right;
+    }
+}

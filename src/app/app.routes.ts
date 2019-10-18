@@ -25,6 +25,10 @@ export const routes: Routes = [
         loadChildren: () => import('./home-player/home-player.module').then(m => m.PlayerHomeModule)
     },
     {
+        path: 'map',
+        loadChildren: () => import('./map/map.module').then(m => m.MapModule)
+    },
+    {
         path: 'login/:redirect',
         component: LoginComponent,
     },

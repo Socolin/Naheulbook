@@ -1,0 +1,31 @@
+<h2 class="mat-h2">Informations</h2>
+<form [formGroup]="form">
+    <mat-form-field>
+        <input matInput placeholder="Nom de la carte" autocomplete="false" formControlName="name">
+    </mat-form-field>
+</form>
+
+<h2 class="mat-h2">Image</h2>
+<input type="file" (change)="onMapFileSelect($event)">
+
+<h2 class="mat-h2">Copyright</h2>
+<div *ngFor="let attribution of attributions; let i = index" class="attribution">
+    <mat-form-field>
+        <input matInput placeholder="Nom" [ngModel]="attribution.name">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Url" [ngModel]="attribution.url">
+    </mat-form-field>
+    <button mat-icon-button (click)="removeAttribution(i)">
+        <mat-icon>delete</mat-icon>
+    </button>
+</div>
+<div class="add-attribution">
+    <button mat-button (click)="addAttribution()">
+        <mat-icon>add</mat-icon>Ajouter
+    </button>
+</div>
+
+<button mat-button color="primary" class="confirm-button">
+    AJOUTER
+</button>
