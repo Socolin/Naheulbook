@@ -35,9 +35,7 @@ namespace Naheulbook.Core.Utils
                 {
                     var copy = image.Clone();
                     copy.Resize((int) (image.Width * sizePercentage / 100), (int) (image.Height * sizePercentage / 100));
-                    Console.WriteLine(copy.Height);
                     var tiles = copy.CropToTiles(_configuration.TilesSize, _configuration.TilesSize);
-                    Console.WriteLine(sizePercentage);
 
                     var zoomDirectoryPath = Path.Combine(mapDirectoryPath, zoomNumber.ToString());
                     Directory.CreateDirectory(zoomDirectoryPath);
