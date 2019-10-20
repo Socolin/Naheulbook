@@ -28,6 +28,8 @@ export class MapComponent implements OnInit {
     public gridSize = 5;
     public gridOffsetX = 0;
     public gridOffsetY = 0;
+    public isGridDraggable: boolean;
+    private gridDraggable?: L.Draggable;
 
     constructor(
         private readonly ngZone: NgZone,
