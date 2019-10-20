@@ -41,6 +41,7 @@
                            (ngModelChange)="changeGridOffsetX($event)"
                            [(ngModel)]="gridOffsetX"
                            type="number"
+                           step="0.1"
                            autocomplete="off"
                            autocapitalize="off"/>
                 </mat-form-field>
@@ -50,6 +51,7 @@
                            (ngModelChange)="changeGridOffsetY($event)"
                            [(ngModel)]="gridOffsetY"
                            type="number"
+                           step="0.1"
                            autocomplete="off"
                            autocapitalize="off"/>
                 </mat-form-field>
@@ -73,5 +75,14 @@
 <div class="menu-button">
     <button color="primary" mat-mini-fab (click)="menuSidenav.toggle()" *ngIf="!menuSidenav.opened">
         <mat-icon>menu</mat-icon>
+    </button>
+</div>
+
+<div class="menu-grid-placement" *ngIf="gridDisplayed && !menuSidenav.opened">
+    <button color="primary" mat-mini-fab (click)="startDragGrid()" *ngIf="!isGridDraggable">
+        <mat-icon>control_camera</mat-icon>
+    </button>
+    <button color="primary" mat-mini-fab (click)="stopDragGrid()" *ngIf="isGridDraggable">
+        <mat-icon>stop</mat-icon>
     </button>
 </div>

@@ -108,22 +108,73 @@ export class MapComponent implements OnInit {
         if (gridSize <= 0) {
             return undefined;
         }
+
         const grid = L.layerGroup();
-        for (let i = 0; i * gridSize < latLngSize.lng; i++) {
-            const x = i * gridSize + this.gridOffsetX % this.gridSize;
+        const xCoords = this.getGridXs(gridSize, latLngSize.lng);
+        const yCoords = this.getGridYs(gridSize, latLngSize.lat);
+
+        for (let {index, x} of xCoords) {
             L.polyline([[0, x], [latLngSize.lat, x]], {
-                color: i % 5 === 0 ? '#a44' : '#363636',
-                weight: i % 5 === 0 ? 2 : 1,
+                color: index % 5 === 0 ? '#a44' : '#363636',
+                weight: index % 5 === 0 ? 2 : 1,
             }).addTo(grid);
         }
-        for (let i = 0; i * gridSize > latLngSize.lat; i--) {
-            const y = i * gridSize - this.gridOffsetY % this.gridSize;
+
+        for (let {index, y} of yCoords) {
             L.polyline([[y, 0], [y, latLngSize.lng]], {
-                color: i % 5 === 0 ? '#a44' : '#363636',
-                weight: i % 5 === 0 ? 2 : 1,
+                color: index % 5 === 0 ? '#a44' : '#363636',
+                weight: index % 5 === 0 ? 2 : 1,
             }).addTo(grid);
         }
+
+        if (this.isGridDraggable) {
+            for (let x of xCoords.filter(e => e.index % 5 === 0).map(e => e.x)) {
+                for (let y of yCoords.filter(e => e.index % 5 === 0).map(e => e.y)) {
+                    L.circle([y, x], 1, {
+                        color: '#000',
+                        fillColor: '#000',
+                    }).addTo(grid);
+                }
+            }
+        }
+
         return grid;
+    }
+
+    getGridXs(gridSize: number, maxLng: number): { x: number, index: number }[] {
+        const xCoords: { x: number, index: number }[] = [];
+        const cellOffsetX = Math.floor(this.gridOffsetX / gridSize);
+        let visibleIndex = 0;
+        for (let i = -5; (i - 5) * gridSize < maxLng; i++) {
+            const x = i * gridSize + this.gridOffsetX;
+            if (x < 0 || x > maxLng) {
+                continue;
+            }
+            const cellIndex = visibleIndex++ - cellOffsetX;
+            xCoords.push({
+                x,
+                index: cellIndex
+            });
+        }
+        return xCoords;
+    }
+
+    getGridYs(gridSize: number, maxLat: number): { y: number, index: number }[] {
+        const yCoords: { y: number, index: number }[] = [];
+        const cellOffsetY = Math.floor(this.gridOffsetY / gridSize);
+        let visibleIndex = 0;
+        for (let i = 5; (i + 5) * gridSize > maxLat; i--) {
+            const y = i * gridSize - this.gridOffsetY;
+            if (y > 0 || y < maxLat) {
+                continue;
+            }
+            const cellIndex = visibleIndex++ - cellOffsetY;
+            yCoords.push({
+                y,
+                index: cellIndex
+            });
+        }
+        return yCoords;
     }
 
     updateGrid() {
@@ -142,12 +193,49 @@ export class MapComponent implements OnInit {
     }
 
     changeGridOffsetX(offsetX: number) {
-        this.gridOffsetX = offsetX;
+        this.gridOffsetX = offsetX % (this.gridSize * 5);
         this.updateGrid();
     }
 
     changeGridOffsetY(offsetY: number) {
-        this.gridOffsetY = offsetY;
+        this.gridOffsetY = offsetY % (this.gridSize * 5);
+        this.updateGrid();
+    }
+
+    startDragGrid(): void {
+        if (!this.gridLayer) {
+            return;
+        }
+
+        this.isGridDraggable = true;
+
+        if (this.gridDraggable) {
+            this.gridDraggable.enable();
+            this.updateGrid();
+            return;
+        }
+
+        this.gridDraggable = new L.Draggable(this.gridLayer.getPane()!);
+        this.gridDraggable.enable();
+        this.gridDraggable.on('dragend', (event) => {
+            this.gridOffsetX += event.target._newPos.x / Math.pow(2, this.leafletMap.getZoom());
+            this.gridOffsetX %= this.gridSize * 5;
+            this.gridOffsetY += event.target._newPos.y / Math.pow(2, this.leafletMap.getZoom());
+            this.gridOffsetY %= this.gridSize * 5;
+            event.target._newPos.x = 0;
+            event.target._newPos.y = 0;
+            (event.target._element as HTMLDivElement).style.transform = 'none';
+            this.updateGrid();
+        });
+        this.updateGrid();
+    }
+
+    stopDragGrid() {
+        if (!this.gridDraggable) {
+            return;
+        }
+        this.isGridDraggable = false;
+        this.gridDraggable.disable();
         this.updateGrid();
     }
 }
