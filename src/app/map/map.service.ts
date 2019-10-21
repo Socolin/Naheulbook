@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {MapResponse} from '../api/responses';
-import {CreateMapRequest} from '../api/requests';
+import {MapLayerResponse, MapResponse} from '../api/responses';
+import {CreateMapLayerRequest, CreateMapRequest} from '../api/requests';
 import {map} from 'rxjs/operators';
-import {Map} from './map.model';
+import {Map, MapLayer} from './map.model';
 
 import {toResponseBody, uploadProgress} from '../utils/operators';
 
@@ -28,6 +28,12 @@ export class MapService {
             uploadProgress(progressCb),
             toResponseBody(),
             map(response => Map.fromResponse(response!))
+        );
+    }
+
+    createMapLayer(mapId: number, request: CreateMapLayerRequest): Observable<MapLayer> {
+        return this.httpClient.post<MapLayerResponse>(`/api/v2/maps/${mapId}/layers`, request).pipe(
+            map(response => MapLayer.fromResponse(response))
         );
     }
 }

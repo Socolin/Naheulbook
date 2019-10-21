@@ -5,6 +5,8 @@ import {MatSidenav} from '@angular/material';
 import * as L from 'leaflet';
 import {MapService} from './map.service';
 import {Map} from './map.model';
+import {MatDialog} from '@angular/material/dialog';
+import {AddMapLayerDialogComponent, AddMapLayerDialogResult} from './add-map-layer-dialog.component';
 
 @Component({
     selector: 'app-map',
@@ -34,9 +36,9 @@ export class MapComponent implements OnInit {
     constructor(
         private readonly ngZone: NgZone,
         private readonly route: ActivatedRoute,
-        private readonly mapService: MapService
+        private readonly mapService: MapService,
+        private readonly dialog: MatDialog,
     ) {
-        console.log(mapService);
     }
 
     ngOnInit() {
@@ -239,5 +241,25 @@ export class MapComponent implements OnInit {
         this.isGridDraggable = false;
         this.gridDraggable.disable();
         this.updateGrid();
+    }
+
+    openAddMapLayerDialog() {
+        const map = this.map;
+        if (!map) {
+            return;
+        }
+        const dialogRef = this.dialog.open<AddMapLayerDialogComponent, any, AddMapLayerDialogResult>(
+            AddMapLayerDialogComponent
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            this.mapService.createMapLayer(map.id, result).subscribe(mapLayer => {
+                map.layers.push(mapLayer)
+            });
+        })
     }
 }

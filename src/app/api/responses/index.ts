@@ -27,6 +27,7 @@ export * from './location-map-response';
 export * from './location-response';
 export * from './loot-response';
 export * from './map-response';
+export * from './map-layer-response';
 export * from './monster-category-response';
 export * from './monster-response';
 export * from './monster-type-response';

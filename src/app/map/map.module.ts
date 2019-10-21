@@ -20,11 +20,15 @@ import {
 } from '.';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {AddMapLayerDialogComponent} from './add-map-layer-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
     declarations: [
         MapComponent,
         CreateMapComponent,
+        AddMapLayerDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -39,9 +43,14 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
         MatInputModule,
         MatCheckboxModule,
         MatProgressBarModule,
+        MatDialogModule,
+        MatSelectModule,
     ],
     providers: [
         MapService,
+    ],
+    entryComponents: [
+        AddMapLayerDialogComponent,
     ]
 })
 export class MapModule {

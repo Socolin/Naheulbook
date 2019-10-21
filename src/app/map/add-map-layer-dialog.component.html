@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Ajout d'un groupe de marqueur</h2>
+<mat-dialog-content [formGroup]="form">
+    <div>
+        <mat-form-field>
+            <input matInput placeholder="Nom" formControlName="name">
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-select formControlName="source" placeholder="Source">
+                <mat-option value="official">Officiel</mat-option>
+                <mat-option value="private">Privé</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            mat-dialog-close
+            color="primary">
+        FERMER
+    </button>
+    <button mat-button
+            (click)="validate()"
+            color="primary">
+        AJOUTER
+    </button>
+</mat-dialog-actions>
