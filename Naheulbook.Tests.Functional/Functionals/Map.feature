@@ -23,6 +23,7 @@ Feature: Map
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-map-name",
+      "layers": [],
       "data": {"__partial": {
           "attribution": [
             {
@@ -36,7 +37,7 @@ Feature: Map
     """
 
   Scenario: Can get a map info
-    Given a map
+    Given a map with all data
 
     When performing a GET to the url "/api/v2/maps/${Map.Id}"
     Then the response status code is 200
@@ -45,7 +46,14 @@ Feature: Map
     {
       "id": ${Map.Id},
       "name": "${Map.Name}",
-      "data": {
+      "layers": [
+        {
+          "id": ${Map.Layers.[0].Id},
+          "name": "${Map.Layers.[0].Name}",
+          "source": "${Map.Layers.[0].Source}"
+        }
+      ],
+      "data": {"__partial": {
         "width": {"__match": {"type": "integer"}},
         "height":  {"__match": {"type": "integer"}},
         "attribution": [
@@ -54,6 +62,27 @@ Feature: Map
             "url": "some-attribution-url"
           }
         ]
-      }
+      }}
+    }
+    """
+
+  Scenario: Can add a layer to a map
+    Given a JWT for an admin user
+    Given a map
+
+    When performing a POST to the url "/api/v2/maps/${Map.Id}/layers" with the following json content and the current jwt
+    """
+    {
+      "name": "some-layer-name",
+      "source": "official"
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": {"__match": {"type": "integer"}},
+      "name": "some-layer-name",
+      "source": "official"
     }
     """

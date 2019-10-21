@@ -21,6 +21,8 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<ItemTemplate> ItemTemplates { get; set; } = null!;
         public DbSet<ItemTemplateCategory> ItemTemplateCategories { get; set; } = null!;
         public DbSet<Skill> Skills { get; set; } = null!;
+        public DbSet<Map> Maps { get; set; } = null!;
+        public DbSet<MapLayer> MapLayers { get; set; } = null!;
         public DbSet<Monster> Monsters { get; set; } = null!;
         public DbSet<MonsterType> MonsterTypes { get; set; } = null!;
         public DbSet<MonsterTemplate> MonsterTemplates { get; set; } = null!;
@@ -92,6 +94,7 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new LootConfiguration());
 
             modelBuilder.ApplyConfiguration(new MapConfiguration());
+            modelBuilder.ApplyConfiguration(new MapLayerConfiguration());
 
             modelBuilder.ApplyConfiguration(new MonsterConfiguration());
 

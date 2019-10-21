@@ -15,8 +15,9 @@ namespace Naheulbook.Core.Services
 {
     public interface IMapService
     {
-        Task<Map> GetMapAsync(int mapId);
+        Task<Map> GetMapAsync(int mapId, int? userId);
         Task<Map> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream);
+        Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapLayerRequest request);
     }
 
     public class MapService : IMapService
@@ -39,11 +40,11 @@ namespace Naheulbook.Core.Services
             _mapImageUtil = mapImageUtil;
         }
 
-        public async Task<Map> GetMapAsync(int mapId)
+        public async Task<Map> GetMapAsync(int mapId, int? userId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var map = await uow.Maps.GetAsync(mapId);
+                var map = await uow.Maps.GetMapDetailsForCurrentUserAsync(mapId, userId);
                 if (map == null)
                     throw new MapNotFoundException(mapId);
 
@@ -84,7 +85,7 @@ namespace Naheulbook.Core.Services
 
                     map.Data = _jsonUtil.Serialize(mapData);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     uow.Maps.Remove(map);
                 }
@@ -92,6 +93,40 @@ namespace Naheulbook.Core.Services
                 await uow.SaveChangesAsync();
 
                 return map;
+            }
+        }
+
+        public async Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapLayerRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                switch (request.Source)
+                {
+                    case "official":
+                        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                        break;
+                    case "private":
+                        break;
+                    default:
+                        throw new InvalidSourceException(request.Source);
+                }
+
+                var map = await uow.Maps.GetAsync(mapId);
+                if (map == null)
+                    throw new MapNotFoundException(mapId);
+
+                var mapLayer = new MapLayer
+                {
+                    Name = request.Name,
+                    Source = request.Source,
+                    MapId = mapId,
+                    UserId = request.Source == "official" ? (int?) null : executionContext.UserId
+                };
+
+                uow.MapLayers.Add(mapLayer);
+                await uow.SaveChangesAsync();
+
+                return mapLayer;
             }
         }
     }

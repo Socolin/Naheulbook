@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using BrunoZell.ModelBinding;
@@ -31,12 +30,13 @@ namespace Naheulbook.Web.Controllers
 
         [HttpGet("{MapId:int:min(1)}")]
         public async Task<ActionResult<MapResponse>> GetMapAsync(
+            [FromServices] OptionalNaheulbookExecutionContext executionContext,
             [FromRoute] int mapId
         )
         {
             try
             {
-                var map = await _mapService.GetMapAsync(mapId);
+                var map = await _mapService.GetMapAsync(mapId, executionContext.ExecutionExecutionContext?.UserId);
 
                 return _mapper.Map<MapResponse>(map);
             }
@@ -60,6 +60,18 @@ namespace Naheulbook.Web.Controllers
             var map = await _mapService.CreateMapAsync(executionContext, request, imageStream);
 
             return _mapper.Map<MapResponse>(map);
+        }
+
+        [HttpPost("{MapId:int:min(1)}/layers")]
+        public async Task<ActionResult<MapLayerResponse>> PostCreateMapLayerAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int mapId,
+            [FromBody] CreateMapLayerRequest request
+        )
+        {
+            var map = await _mapService.CreateMapLayerAsync(executionContext, mapId, request);
+
+            return _mapper.Map<MapLayerResponse>(map);
         }
     }
 }
