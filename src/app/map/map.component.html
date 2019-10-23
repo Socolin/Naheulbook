@@ -58,19 +58,35 @@
             </div>
         </div>
         <div class="markers" *ngIf="map">
-            <h2 class="mat-h2">Marqueurs</h2>
-            <div *ngFor="let mapLayer of map.layers">
-                {{mapLayer.name}}
+            <h2 class="mat-h2">
+                Marqueurs
+                <button mat-icon-button [matMenuTriggerFor]="markerMenu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </h2>
+            <div *ngFor="let mapLayer of map.layers" class="layer">
+                <h3 class="mat-h3">{{mapLayer.name}}</h3>
+                <button mat-stroked-button (click)="startAddMapMarker(mapLayer)">
+                    <mat-icon>add</mat-icon>Marqueur
+                </button>
             </div>
-            <button mat-button (click)="openAddMapLayerDialog()">
-                <mat-icon>add</mat-icon>
-                Ajouter
-            </button>
         </div>
+        <mat-menu #markerMenu>
+            <button mat-menu-item (click)="openAddMapLayerDialog()">
+                <mat-icon>add</mat-icon>
+                Ajouter un calque
+            </button>
+        </mat-menu>
     </mat-sidenav>
-    <mat-sidenav #infoSidenav mode="over" position="end" class="side-panel">
-        test
-        <button mat-button color="primary">test</button>
+    <mat-sidenav #infoSidenav mode="over" position="end" class="side-panel mat-typography">
+        <div *ngIf="selectedMarker && selectedMarker.editable" [formGroup]="markerForm">
+            <mat-form-field>
+                <input matInput formControlName="name" placeholder="Nom"/>
+            </mat-form-field>
+        </div>
+        <ng-template *ngIf="selectedMarker && !selectedMarker.editable">
+            <h2>{{selectedMarker.name}}</h2>
+        </ng-template>
     </mat-sidenav>
 </mat-sidenav-container>
 

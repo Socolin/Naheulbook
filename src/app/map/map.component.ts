@@ -4,9 +4,21 @@ import {MatSidenav} from '@angular/material';
 
 import * as L from 'leaflet';
 import {MapService} from './map.service';
-import {Map} from './map.model';
+import {
+    Map,
+    MapLayer,
+    MapMarker,
+    MapMarkerArea,
+    MapMarkerCircle,
+    MapMarkerPoint,
+    MapMarkerRectangle
+} from './map.model';
 import {MatDialog} from '@angular/material/dialog';
 import {AddMapLayerDialogComponent, AddMapLayerDialogResult} from './add-map-layer-dialog.component';
+import {SelectMarkerTypeDialogComponent, SelectMarkerTypeDialogResult} from './select-marker-type-dialog.component';
+import {assertNever} from '../utils/utils';
+import {FormControl, FormGroup} from '@angular/forms';
+import {LatLngBounds} from 'leaflet';
 
 @Component({
     selector: 'app-map',
@@ -32,6 +44,11 @@ export class MapComponent implements OnInit {
     public gridOffsetY = 0;
     public isGridDraggable: boolean;
     private gridDraggable?: L.Draggable;
+
+    public selectedMarker: MapMarker;
+    public markerForm = new FormGroup({
+        name: new FormControl()
+    });
 
     constructor(
         private readonly ngZone: NgZone,
@@ -80,26 +97,12 @@ export class MapComponent implements OnInit {
                 crs: L.CRS.Simple,
                 minZoom: 0,
                 maxZoom: 4,
-            }).setView(this.map.getCenter(), 1);
+                editable: true
+            } as any).setView(this.map.getCenter(), 1);
 
             L.tileLayer(`/mapdata/${this.map.id}/{z}/{x}_{y}.png`, {
                 attribution: this.map.data.attribution.map(x => `&copy;<a href=${x.url}>${x.name}</a>`).join('|')
             }).addTo(leafletMap);
-
-            const icon = new L.Icon({
-                iconUrl: '/assets/icons/position-marker.svg',
-                className: 'marker-blue',
-                iconSize: [36, 36],
-                iconAnchor: [16, 36],
-                attribution: 'https://game-icons.net'
-            });
-            const a = L.marker({lat: -135, lng: 186}, {draggable: true, icon: icon}).addTo(leafletMap);
-            a.on('click', event => {
-                console.log(event);
-                this.ngZone.run(() => {
-                    this.infoSidenav.open();
-                });
-            });
 
             leafletMap.invalidateSize({});
             this.leafletMap = leafletMap;
@@ -261,5 +264,74 @@ export class MapComponent implements OnInit {
                 map.layers.push(mapLayer)
             });
         })
+    }
+
+    startAddMapMarker(mapLayer: MapLayer) {
+        const dialogRef = this.dialog.open<SelectMarkerTypeDialogComponent, any, SelectMarkerTypeDialogResult>(
+            SelectMarkerTypeDialogComponent,
+            {
+                autoFocus: false
+            });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            this.ngZone.runOutsideAngular(() => {
+                let marker;
+                switch (result.markerType) {
+                    case 'point': {
+                        marker = new MapMarkerPoint(mapLayer, this.leafletMap.getCenter());
+                        break;
+                    }
+                    case 'area': {
+                        const bounds = this.leafletMap.getBounds();
+                        const height = bounds.getSouth() - bounds.getNorth();
+                        const width = bounds.getEast() - bounds.getWest();
+                        const points = [
+                            L.latLng([bounds.getSouth() - height * 0.3, bounds.getWest() + width * 0.3]),
+                            L.latLng([bounds.getSouth() - height * 0.3, bounds.getEast() - width * 0.3]),
+                            L.latLng([bounds.getNorth() + height * 0.3, bounds.getEast() - width * 0.3]),
+                            L.latLng([bounds.getNorth() + height * 0.3, bounds.getWest() + width * 0.3])
+                        ];
+                        marker = new MapMarkerArea(mapLayer, points);
+                        break;
+                    }
+                    case 'rectangle': {
+                        const bounds = this.leafletMap.getBounds();
+                        const height = bounds.getSouth() - bounds.getNorth();
+                        const width = bounds.getEast() - bounds.getWest();
+                        const rectangleBounds = new LatLngBounds(
+                            [bounds.getSouth() - height * 0.3, bounds.getWest() + width * 0.3],
+                            [bounds.getNorth() + height * 0.3, bounds.getEast() - width * 0.3],
+                        );
+                        marker = new MapMarkerRectangle(mapLayer, rectangleBounds);
+                        break;
+                    }
+                    case 'circle': {
+                        marker = new MapMarkerCircle(mapLayer, this.leafletMap.getCenter(), 2);
+                        break;
+                    }
+                    default:
+                        assertNever(result.markerType);
+                        throw new Error('Invalid marker type');
+                }
+
+                marker.editable = true;
+                marker.name = 'Nouveau marqueur';
+                marker.initMarker(this.leafletMap, () => {
+                    this.ngZone.run(() => {
+                        this.markerForm.reset({
+                            name: marker.name
+                        });
+                        this.selectedMarker = marker;
+                        this.infoSidenav.open();
+                    });
+                });
+            });
+
+            this.menuSidenav.close();
+        });
     }
 }
