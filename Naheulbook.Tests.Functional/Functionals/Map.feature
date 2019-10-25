@@ -50,7 +50,16 @@ Feature: Map
         {
           "id": ${Map.Layers.[0].Id},
           "name": "${Map.Layers.[0].Name}",
-          "source": "${Map.Layers.[0].Source}"
+          "source": "${Map.Layers.[0].Source}",
+          "markers": [
+            {
+              "id": ${Map.Layers.[0].Markers.[0].Id},
+              "name": "${Map.Layers.[0].Markers.[0].Name}",
+              "description": "${Map.Layers.[0].Markers.[0].Description}",
+              "type": "${Map.Layers.[0].Markers.[0].Type}",
+              "markerInfo": ${Map.Layers.[0].Markers.[0].MarkerInfo}
+            }
+          ]
         }
       ],
       "data": {"__partial": {
@@ -83,6 +92,38 @@ Feature: Map
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-layer-name",
-      "source": "official"
+      "source": "official",
+      "markers": []
+    }
+    """
+
+  Scenario: Can add a marker to a map layer
+    Given a JWT for an admin user
+    Given a map with a layer
+
+    When performing a POST to the url "/api/v2/maps/${Map.Id}/layers/${Map.Layers.[0].Id}/markers" with the following json content and the current jwt
+    """
+    {
+      "name": "some-marker-name",
+      "description": "some-marker-description",
+      "type": "point",
+      "markerInfo": {
+        "lat": 5,
+        "lng": 4
+      }
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": {"__match": {"type": "integer"}},
+      "name": "some-marker-name",
+      "description": "some-marker-description",
+      "type": "point",
+      "markerInfo": {
+        "lat": 5,
+        "lng": 4
+      }
     }
     """

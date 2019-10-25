@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using ImageMagick;
 using Naheulbook.Core.Configurations;
 using Naheulbook.Core.Models;

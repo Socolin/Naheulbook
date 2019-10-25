@@ -209,6 +209,8 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Map, MapResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(r => MapperHelpers.FromJson<MapData>(r.Data)));
             CreateMap<MapLayer, MapLayerResponse>();
+            CreateMap<MapMarker, MapMarkerResponse>()
+                .ForMember(m => m.MarkerInfo, opt => opt.MapFrom(r => MapperHelpers.FromJsonNotNull<JObject>(r.MarkerInfo)));
 
             CreateMap<Monster, MonsterResponse>()
                 .ForMember(m => m.Dead, opt => opt.MapFrom(b => MapperHelpers.FromDateTimeToString(b.Dead)))

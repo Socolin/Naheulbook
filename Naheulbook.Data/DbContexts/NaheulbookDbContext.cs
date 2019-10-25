@@ -95,6 +95,7 @@ namespace Naheulbook.Data.DbContexts
 
             modelBuilder.ApplyConfiguration(new MapConfiguration());
             modelBuilder.ApplyConfiguration(new MapLayerConfiguration());
+            modelBuilder.ApplyConfiguration(new MapMarkerConfiguration());
 
             modelBuilder.ApplyConfiguration(new MonsterConfiguration());
 

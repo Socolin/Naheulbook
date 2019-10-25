@@ -21,6 +21,7 @@ namespace Naheulbook.Core.Utils
         void EnsureCanDeleteGroupInvite(NaheulbookExecutionContext executionContext, GroupInvite groupInvite);
         void EnsureCanAcceptGroupInvite(NaheulbookExecutionContext executionContext, GroupInvite groupInvite);
         void EnsureCanEditUser(NaheulbookExecutionContext executionContext, User user);
+        Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayer mapLayer);
     }
 
     public class AuthorizationUtil : IAuthorizationUtil
@@ -160,6 +161,25 @@ namespace Naheulbook.Core.Utils
         {
             if (executionContext.UserId == user.Id)
                 return;
+
+            throw new ForbiddenAccessException();
+        }
+
+        public async Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayer mapLayer)
+        {
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            if (mapLayer.Source == "official")
+            {
+                var user = await uow.Users.GetAsync(executionContext.UserId);
+                if (user?.Admin == true)
+                    return;
+            }
+            else
+            {
+                if (mapLayer.UserId == executionContext.UserId)
+                    return;
+            }
 
             throw new ForbiddenAccessException();
         }

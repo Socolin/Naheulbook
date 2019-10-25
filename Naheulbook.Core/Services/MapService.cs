@@ -18,6 +18,7 @@ namespace Naheulbook.Core.Services
         Task<Map> GetMapAsync(int mapId, int? userId);
         Task<Map> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream);
         Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapLayerRequest request);
+        Task<MapMarker> CreateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapId, int mapLayerId, CreateMapMarkerRequest request);
     }
 
     public class MapService : IMapService
@@ -128,6 +129,37 @@ namespace Naheulbook.Core.Services
 
                 return mapLayer;
             }
+        }
+
+        public async Task<MapMarker> CreateMapMarkerAsync(
+            NaheulbookExecutionContext executionContext,
+            int mapId,
+            int mapLayerId,
+            CreateMapMarkerRequest request
+        )
+        {
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            var mapLayer = await uow.MapLayers.GetAsync(mapLayerId);
+            if (mapLayer == null)
+                throw new MapLayerNotFoundException(mapLayerId);
+
+            await _authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapLayer);
+
+            var mapMarker = new MapMarker
+            {
+                LayerId = mapLayerId,
+                Name = request.Name,
+                Description = request.Description,
+                Type = request.Type,
+                MarkerInfo = _jsonUtil.Serialize(request.MarkerInfo)
+            };
+
+            uow.MapMarkers.Add(mapMarker);
+
+            await uow.SaveChangesAsync();
+
+            return mapMarker;
         }
     }
 }

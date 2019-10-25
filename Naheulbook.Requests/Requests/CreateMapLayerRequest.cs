@@ -1,4 +1,5 @@
 // ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Naheulbook.Requests.Requests
 {

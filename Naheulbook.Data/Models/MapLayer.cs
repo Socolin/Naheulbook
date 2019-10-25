@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
 namespace Naheulbook.Data.Models
 {
@@ -14,5 +17,7 @@ namespace Naheulbook.Data.Models
 
         public int? UserId { get; set; }
         public User? User { get; set; }
+
+        public ICollection<MapMarker> Markers { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Naheulbook.Data.Models;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
@@ -28,7 +29,34 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
                 _testDataUtil.AddMap(x =>
                 {
-                    x.Layers = new []
+                    x.Layers = new[]
+                    {
+                        new MapLayer
+                        {
+                            Name = "some-layer-name",
+                            Source = "official",
+                            Markers = new List<MapMarker>
+                            {
+                                new MapMarker
+                                {
+                                    Name = "some-marker-name",
+                                    Description = "some-marker-description",
+                                    MarkerInfo = "{}",
+                                    Type = "point"
+                                }
+                            }
+                        }
+                    };
+                });
+        }
+
+        [Given(@"(a|\d+) maps? with a layer")]
+        public void GivenXMapWithALayer(string amount)
+        {
+            for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
+                _testDataUtil.AddMap(x =>
+                {
+                    x.Layers = new[]
                     {
                         new MapLayer
                         {

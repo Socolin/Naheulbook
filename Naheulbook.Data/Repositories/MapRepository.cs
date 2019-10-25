@@ -27,6 +27,7 @@ namespace Naheulbook.Data.Repositories
             map.Layers = await Context.MapLayers
                 .Where(x => x.MapId == mapId)
                 .Where(x => x.Source == "official" || (x.Source == "private" && x.UserId == userId))
+                .Include(x => x.Markers)
                 .ToListAsync();
 
             return map;
