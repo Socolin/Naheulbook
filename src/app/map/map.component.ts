@@ -18,7 +18,7 @@ import {AddMapLayerDialogComponent, AddMapLayerDialogResult} from './add-map-lay
 import {SelectMarkerTypeDialogComponent, SelectMarkerTypeDialogResult} from './select-marker-type-dialog.component';
 import {assertNever} from '../utils/utils';
 import {FormControl, FormGroup} from '@angular/forms';
-import {LatLngBounds} from 'leaflet';
+import {CreateMapMarkerRequest} from '../api/requests';
 
 @Component({
     selector: 'app-map',
@@ -45,9 +45,10 @@ export class MapComponent implements OnInit {
     public isGridDraggable: boolean;
     private gridDraggable?: L.Draggable;
 
-    public selectedMarker: MapMarker;
+    public selectedMarker?: MapMarker;
     public markerForm = new FormGroup({
-        name: new FormControl()
+        name: new FormControl(),
+        description: new FormControl(),
     });
 
     constructor(
@@ -68,8 +69,19 @@ export class MapComponent implements OnInit {
                 this.map = map;
                 this.gridSize = map.data.pixelPerUnit / Math.pow(2, map.data.zoomCount);
                 this.createLeafletMap();
+                this.map.layers.forEach(l => l.markers.forEach(m => this.addMarkerToMap(m)));
             })
         });
+    }
+
+    addMarkerToMap(mapMarker: MapMarker) {
+        this.ngZone.runOutsideAngular(() => {
+            mapMarker.initMarker(this.leafletMap, () => {
+                this.ngZone.run(() => {
+                    this.selectMarker(mapMarker);
+                });
+            })
+        })
     }
 
     toggleGrid(checked: boolean) {
@@ -279,7 +291,7 @@ export class MapComponent implements OnInit {
             }
 
             this.ngZone.runOutsideAngular(() => {
-                let marker;
+                let marker: MapMarker;
                 switch (result.markerType) {
                     case 'point': {
                         marker = new MapMarkerPoint(mapLayer, this.leafletMap.getCenter());
@@ -302,15 +314,14 @@ export class MapComponent implements OnInit {
                         const bounds = this.leafletMap.getBounds();
                         const height = bounds.getSouth() - bounds.getNorth();
                         const width = bounds.getEast() - bounds.getWest();
-                        const rectangleBounds = new LatLngBounds(
+                        marker = new MapMarkerRectangle(mapLayer, [
                             [bounds.getSouth() - height * 0.3, bounds.getWest() + width * 0.3],
                             [bounds.getNorth() + height * 0.3, bounds.getEast() - width * 0.3],
-                        );
-                        marker = new MapMarkerRectangle(mapLayer, rectangleBounds);
+                        ]);
                         break;
                     }
                     case 'circle': {
-                        marker = new MapMarkerCircle(mapLayer, this.leafletMap.getCenter(), 2);
+                        marker = new MapMarkerCircle(mapLayer, this.leafletMap.getCenter(), 50 / Math.pow(2, this.leafletMap.getZoom()));
                         break;
                     }
                     default:
@@ -320,18 +331,66 @@ export class MapComponent implements OnInit {
 
                 marker.editable = true;
                 marker.name = 'Nouveau marqueur';
-                marker.initMarker(this.leafletMap, () => {
-                    this.ngZone.run(() => {
-                        this.markerForm.reset({
-                            name: marker.name
-                        });
-                        this.selectedMarker = marker;
-                        this.infoSidenav.open();
-                    });
-                });
+                this.addMarkerToMap(marker);
             });
 
             this.menuSidenav.close();
         });
+    }
+
+    cancelEdit(mapMarker: MapMarker) {
+        mapMarker.setMarkerEditable(false);
+        if (mapMarker === this.selectedMarker) {
+            this.selectedMarker = undefined;
+            this.infoSidenav.close();
+        }
+        if (!mapMarker.id) {
+            mapMarker.leafletMarker!.remove();
+        }
+    }
+
+    saveMarker(mapMarker: MapMarker) {
+        const request: CreateMapMarkerRequest = {
+            ...this.markerForm.value,
+            type: mapMarker.type,
+        };
+        request.markerInfo = mapMarker.getMarkerInfo();
+        if (mapMarker.type === 'rectangle' || mapMarker.type === 'circle' || mapMarker.type === 'area') {
+            request.markerInfo.color = mapMarker.leafletMarker!.options.color;
+        }
+
+        if (mapMarker.id) {
+            // Save
+        } else {
+            this.mapService.createMarker(this.map!.id, mapMarker.mapLayer, request).subscribe(newMapMarker => {
+                mapMarker.remove();
+                mapMarker.mapLayer.markers.push(newMapMarker);
+                this.addMarkerToMap(newMapMarker);
+                this.infoSidenav.close();
+            });
+        }
+    }
+
+    changeSelectedMarkerColor(event: string) {
+        if (!this.selectedMarker) {
+            return;
+        }
+        if (this.selectedMarker.type !== 'area' && this.selectedMarker.type !== 'circle' && this.selectedMarker.type !== 'rectangle') {
+            return;
+        }
+        this.selectedMarker.leafletMarker!.setStyle({
+            color: event
+        });
+    }
+
+    private selectMarker(marker: MapMarker) {
+        if (this.selectedMarker !== marker) {
+            this.markerForm.reset({
+                name: marker.name,
+                description: marker.description
+            });
+            this.selectedMarker = marker;
+        }
+        this.infoSidenav.open();
     }
 }

@@ -31,7 +31,7 @@
     "hammerjs": "^2.0.8",
     "intl": "^1.2.5",
     "leaflet": "^1.5.1",
-    "leaflet-editable": "^1.2.0",
+    "leaflet-editable": "github:Socolin/Leaflet.Editable#patch-1",
     "leaflet.path.drag": "^0.0.6",
     "rxjs": "^6.5.3",
     "rxjs-compat": "^6.5.2",

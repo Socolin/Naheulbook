@@ -79,13 +79,33 @@
         </mat-menu>
     </mat-sidenav>
     <mat-sidenav #infoSidenav mode="over" position="end" class="side-panel mat-typography">
-        <div *ngIf="selectedMarker && selectedMarker.editable" [formGroup]="markerForm">
-            <mat-form-field>
-                <input matInput formControlName="name" placeholder="Nom"/>
-            </mat-form-field>
-        </div>
-        <ng-template *ngIf="selectedMarker && !selectedMarker.editable">
-            <h2>{{selectedMarker.name}}</h2>
+        <ng-template [ngIf]="selectedMarker">
+            <div *ngIf="selectedMarker.editable" class="marker-editor">
+                <div class="name" [formGroup]="markerForm">
+                    <mat-form-field>
+                        <input matInput formControlName="name" placeholder="Nom"/>
+                    </mat-form-field>
+                </div>
+                <div class="description" [formGroup]="markerForm">
+                    <mat-form-field>
+                    <textarea cdkTextareaAutosize [cdkAutosizeMinRows]="4" [cdkAutosizeMaxRows]="10"
+                              matInput formControlName="description" placeholder="Description"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="color">
+                    <input type="color" [ngModel]="selectedMarker.color" (ngModelChange)="changeSelectedMarkerColor($event)">
+                </div>
+                <div class="actions">
+                    <button mat-button (click)="cancelEdit(selectedMarker)">ANNULER</button>
+                    <button mat-button color="primary" (click)="saveMarker(selectedMarker)">CRÉER</button>
+                </div>
+            </div>
+            <div *ngIf="!selectedMarker.editable">
+                <h2>{{selectedMarker.name}}</h2>
+                <div>
+                    {{selectedMarker.description}}
+                </div>
+            </div>
         </ng-template>
     </mat-sidenav>
 </mat-sidenav-container>
