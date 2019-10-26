@@ -3,6 +3,7 @@ import {MapLayerResponse, MapMarkerResponse, MapResponse} from '../api/responses
 
 import * as L from 'leaflet';
 import {assertNever} from '../utils/utils';
+import {LatLng} from 'leaflet';
 
 export class Map {
     id: number;
@@ -203,8 +204,8 @@ export class MapMarkerArea extends MapMarkerBase {
 
     public getMarkerInfo(): {} {
         return {
-            geoJSON: this.leafletMarker
-                ? this.leafletMarker.getLatLngs()[0].map(serializeLatLng)
+            points: this.leafletMarker
+                ? (this.leafletMarker.getLatLngs()[0] as LatLng[]).map(serializeLatLng)
                 : this.points.map(serializeLatLng),
             color: this.color
         }
