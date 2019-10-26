@@ -13,7 +13,7 @@ import {Map} from './map.model';
 export class CreateMapComponent {
     public form = new FormGroup({
         name: new FormControl(undefined, Validators.required),
-        unit: new FormControl(undefined, Validators.required),
+        unitName: new FormControl(undefined, Validators.required),
         pixelPerUnit: new FormControl(undefined, Validators.required),
         image: new FormControl(undefined, [Validators.required, requiredFileType(['png', 'jpg', 'jpeg', 'svg', 'bmp'])])
     });
