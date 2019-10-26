@@ -63,7 +63,7 @@ export class MapComponent implements OnInit, OnDestroy {
     public expandedLayerList: {[mapLayerId: number]: boolean} = {};
     public hiddenLayers: {[mapLayerId: number]: boolean} = {};
     public isMobile: boolean;
-    private currentUser?: User;
+    public currentUser?: User;
 
     constructor(
         private readonly ngZone: NgZone,
