@@ -22,6 +22,7 @@ import {MapMarkerRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 import {LoginService, User} from '../user';
+import {mark} from '@angular/compiler-cli/src/ngtsc/perf/src/clock';
 
 @Component({
     selector: 'app-map',
@@ -467,5 +468,11 @@ export class MapComponent implements OnInit, OnDestroy {
             return this.currentUser.admin;
         }
         return true;
+    }
+
+    goToMarker(marker: MapMarker) {
+        if (marker.leafletMarker) {
+            this.leafletMap.setView(marker.getCenter(), this.map!.data.zoomCount);
+        }
     }
 }

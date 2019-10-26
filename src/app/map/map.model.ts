@@ -156,6 +156,8 @@ export abstract class MapMarkerBase {
 
     public abstract useColor(): boolean;
 
+    public abstract getCenter(): L.LatLng;
+
     public getColor(): string | undefined {
         const markerInfo = this.getMarkerInfo();
 
@@ -204,20 +206,26 @@ export class MapMarkerPoint extends MapMarkerBase {
         }
     }
 
-    useColor(): boolean {
+    public useColor(): boolean {
         return false;
+    }
+
+    public getCenter(): L.LatLng {
+        return this.position;
     }
 }
 
 export class MapMarkerArea extends MapMarkerBase {
     readonly type: 'area' = 'area';
     points: L.LatLng[];
+    bounds: L.LatLngBounds;
     leafletMarker?: L.Polygon;
     color?: string;
 
     constructor(mapLayer: MapLayer, points: L.LatLngLiteral[]) {
         super(mapLayer);
         this.points = points.map(L.latLng);
+        this.bounds = L.latLngBounds(this.points);
     }
 
     protected createLeafletLayer(): L.Layer {
@@ -243,6 +251,10 @@ export class MapMarkerArea extends MapMarkerBase {
 
     useColor(): boolean {
         return true;
+    }
+
+    public getCenter(): L.LatLng {
+        return this.bounds.getCenter();
     }
 }
 
@@ -281,6 +293,10 @@ export class MapMarkerCircle extends MapMarkerBase {
 
     useColor(): boolean {
         return true;
+    }
+
+    public getCenter(): L.LatLng {
+        return this.center;
     }
 }
 
@@ -324,6 +340,10 @@ export class MapMarkerRectangle extends MapMarkerBase {
 
     useColor(): boolean {
         return true;
+    }
+
+    public getCenter(): L.LatLng {
+        return this.bounds.getCenter();
     }
 }
 

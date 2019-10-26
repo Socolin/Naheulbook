@@ -83,7 +83,8 @@
                     </div>
                     <ng-template [ngIf]="expandedLayerList[mapLayer.id]">
                         <div *ngFor="let marker of mapLayer.markers" class="marker-link">
-                            {{marker.name}}
+                            <a *ngIf="!hiddenLayers[mapLayer.id]" (click)="goToMarker(marker)">{{marker.name}}</a>
+                            <span *ngIf="hiddenLayers[mapLayer.id]">{{marker.name}}</span>
                         </div>
                     </ng-template>
                     <button mat-stroked-button (click)="startAddMapMarker(mapLayer)" *ngIf="canEditLayer(mapLayer)">
