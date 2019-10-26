@@ -1,7 +1,10 @@
-import {Component} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
+import {Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MapMarkerType} from './map.model';
 
+export interface SelectMarkerTypeDialogData {
+    markerType?: MapMarkerType
+}
 export interface SelectMarkerTypeDialogResult {
     markerType: MapMarkerType
 }
@@ -29,11 +32,13 @@ export class SelectMarkerTypeDialogComponent {
             value: 'circle'
         }
     ];
-    type: MapMarkerType = 'point';
+    type: MapMarkerType;
 
     constructor(
+        @Inject(MAT_DIALOG_DATA) private readonly data: SelectMarkerTypeDialogData,
         private readonly dialogRef: MatDialogRef<SelectMarkerTypeDialogComponent, SelectMarkerTypeDialogResult>
     ) {
+        this.type = data.markerType || 'point';
     }
 
     validate() {

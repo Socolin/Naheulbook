@@ -11,11 +11,15 @@ import {
     MapMarkerArea,
     MapMarkerCircle,
     MapMarkerPoint,
-    MapMarkerRectangle
+    MapMarkerRectangle, MapMarkerType
 } from './map.model';
 import {MatDialog} from '@angular/material/dialog';
 import {AddMapLayerDialogComponent, AddMapLayerDialogResult} from './add-map-layer-dialog.component';
-import {SelectMarkerTypeDialogComponent, SelectMarkerTypeDialogResult} from './select-marker-type-dialog.component';
+import {
+    SelectMarkerTypeDialogComponent,
+    SelectMarkerTypeDialogData,
+    SelectMarkerTypeDialogResult
+} from './select-marker-type-dialog.component';
 import {assertNever} from '../utils/utils';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MapMarkerRequest} from '../api/requests';
@@ -51,6 +55,7 @@ export class MapComponent implements OnInit, OnDestroy {
     public isGridDraggable: boolean;
     private gridDraggable?: L.Draggable;
 
+    public lastCreatedMarkerType: MapMarkerType;
     public selectedMarker?: MapMarker;
     public markerForm = new FormGroup({
         name: new FormControl(),
@@ -305,16 +310,20 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     startAddMapMarker(mapLayer: MapLayer) {
-        const dialogRef = this.dialog.open<SelectMarkerTypeDialogComponent, any, SelectMarkerTypeDialogResult>(
+        const dialogRef = this.dialog.open<SelectMarkerTypeDialogComponent, SelectMarkerTypeDialogData, SelectMarkerTypeDialogResult>(
             SelectMarkerTypeDialogComponent,
             {
-                autoFocus: false
+                autoFocus: false,
+                data: {
+                    markerType: this.lastCreatedMarkerType
+                }
             });
 
         dialogRef.afterClosed().subscribe((result) => {
             if (!result) {
                 return;
             }
+            this.lastCreatedMarkerType = result.markerType;
 
             const lastColor = mapLayer.markers.reduce((color, m) => m.getColor() || color, '#00a7ff');
             this.ngZone.runOutsideAngular(() => {
@@ -362,6 +371,9 @@ export class MapComponent implements OnInit, OnDestroy {
                 marker.editable = true;
                 marker.name = 'Nouveau marqueur';
                 this.addMarkerToMap(marker);
+                if (!this.isMobile) {
+                    this.selectMarker(marker);
+                }
             });
 
             this.menuSidenav.close();
@@ -464,7 +476,7 @@ export class MapComponent implements OnInit, OnDestroy {
         if (!this.currentUser) {
             return false;
         }
-        if (mapLayer.source === 'official'){
+        if (mapLayer.source === 'official') {
             return this.currentUser.admin;
         }
         return true;
