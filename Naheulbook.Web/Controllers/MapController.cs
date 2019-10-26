@@ -72,6 +72,19 @@ namespace Naheulbook.Web.Controllers
             return _mapper.Map<MapResponse>(map);
         }
 
+        [HttpPut("{MapId:int:min(1)}")]
+        public async Task<ActionResult<MapSummaryResponse>> PutUpdateMapAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int mapId,
+            [FromBody] CreateMapRequest request
+        )
+        {
+            var map = await _mapService.UpdateMapAsync(executionContext, mapId, request);
+
+            return _mapper.Map<MapSummaryResponse>(map);
+        }
+
+
         [HttpPost("{MapId:int:min(1)}/layers")]
         public async Task<ActionResult<MapLayerResponse>> PostCreateMapLayerAsync(
             [FromServices] NaheulbookExecutionContext executionContext,

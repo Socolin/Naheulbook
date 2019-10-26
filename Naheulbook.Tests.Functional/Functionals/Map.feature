@@ -102,6 +102,46 @@ Feature: Map
     }
     """
 
+  Scenario: Can edit a map
+    Given a JWT for an admin user
+    Given a map
+
+    When performing a PUT to the url "/api/v2/maps/${Map.Id}" with the following json content and the current jwt
+    """
+    {
+      "name": "some-map-name",
+      "data": {
+        "unitName": "5m",
+        "pixelPerUnit": 42,
+        "attribution": [
+          {
+            "name": "new-name",
+            "url": "new-url"
+          }
+        ]
+      }
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${Map.Id},
+      "name": "some-map-name",
+      "data": {
+        "unitName": "5m",
+        "pixelPerUnit": 42.0,
+        "attribution": [
+          {
+            "name": "new-name",
+            "url": "new-url"
+          }
+        ]
+      }
+    }
+    """
+
+
   Scenario: Can add a layer to a map
     Given a JWT for an admin user
     Given a map

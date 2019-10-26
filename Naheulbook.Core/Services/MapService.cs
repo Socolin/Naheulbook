@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -19,6 +18,7 @@ namespace Naheulbook.Core.Services
     {
         Task<Map> GetMapAsync(int mapId, int? userId);
         Task<Map> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream);
+        Task<Map> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request);
         Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapLayerRequest request);
         Task<MapMarker> CreateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapMarkerRequest request);
         Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId);
@@ -98,6 +98,24 @@ namespace Naheulbook.Core.Services
 
                 return map;
             }
+        }
+
+        public async Task<Map> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request)
+        {
+            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            var map = await uow.Maps.GetAsync(mapId);
+            if (map == null)
+                throw new MapNotFoundException(mapId);
+
+            map.Name = request.Name;
+            map.Data = _jsonUtil.SerializeNonNull(request.Data);
+
+            await uow.SaveChangesAsync();
+
+            return map;
         }
 
         public async Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapLayerRequest request)
