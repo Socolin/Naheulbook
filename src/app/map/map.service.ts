@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {MapLayerResponse, MapMarkerResponse, MapResponse} from '../api/responses';
-import {CreateMapLayerRequest, CreateMapMarkerRequest, CreateMapRequest} from '../api/requests';
+import {CreateMapLayerRequest, MapMarkerRequest, CreateMapRequest} from '../api/requests';
 import {map} from 'rxjs/operators';
 import {Map, MapLayer, MapMarker, MapMarkerBase} from './map.model';
 
@@ -37,9 +37,23 @@ export class MapService {
         );
     }
 
-    createMarker(mapId: number, mapLayer: MapLayer, request: CreateMapMarkerRequest): Observable<MapMarker> {
-        return this.httpClient.post<MapMarkerResponse>(`/api/v2/maps/${mapId}/layers/${mapLayer.id}/markers`, request).pipe(
+    deleteMapLayer(mapLayerId: number): Observable<void> {
+        return this.httpClient.delete<void>(`/api/v2/mapLayers/${mapLayerId}`);
+    }
+
+    createMarker(mapLayer: MapLayer, request: MapMarkerRequest): Observable<MapMarker> {
+        return this.httpClient.post<MapMarkerResponse>(`/api/v2/mapLayers/${mapLayer.id}/markers`, request).pipe(
             map(response => MapMarkerBase.fromResponse(mapLayer, response))
         );
+    }
+
+    editMarker(mapLayer: MapLayer, mapMarkerId: number, request: MapMarkerRequest): Observable<MapMarker> {
+        return this.httpClient.put<MapMarkerResponse>(`/api/v2/mapMarkers/${mapMarkerId}`, request).pipe(
+            map(response => MapMarkerBase.fromResponse(mapLayer, response))
+        );
+    }
+
+    deleteMarker(mapMarkerId: number): Observable<void> {
+        return this.httpClient.delete<void>(`/api/v2/mapMarkers/${mapMarkerId}`);
     }
 }

@@ -63,9 +63,9 @@ const defaultMarkerIcon = new L.Icon({
 });
 
 export abstract class MapMarkerBase {
-    readonly id?: number;
     readonly type: MapMarkerType;
     readonly mapLayer: MapLayer;
+    id?: number;
     name: string;
     leafletMarker?: L.Layer;
     editable: boolean;
@@ -97,6 +97,7 @@ export abstract class MapMarkerBase {
                 assertNever(response.type);
                 throw new Error('Invalid mapMarkerType');
         }
+        marker.id = response.id;
         marker.name = response.name;
         marker.description = response.description;
         return marker;
@@ -131,6 +132,8 @@ export abstract class MapMarkerBase {
     public abstract setMarkerEditable(editable: boolean): void;
 
     public abstract getMarkerInfo(): {};
+
+    public abstract useColor(): boolean;
 }
 
 function serializeLatLng(latLng: L.LatLng): { lat: number, lng: number } {
@@ -165,9 +168,13 @@ export class MapMarkerPoint extends MapMarkerBase {
 
     public getMarkerInfo(): {} {
         return {
-            position: serializeLatLng(this.position),
+            position: this.leafletMarker ? serializeLatLng(this.leafletMarker.getLatLng()) : serializeLatLng(this.position),
             icon: this.icon
         }
+    }
+
+    useColor(): boolean {
+        return false;
     }
 }
 
@@ -199,6 +206,10 @@ export class MapMarkerArea extends MapMarkerBase {
             points: this.points.map(serializeLatLng),
             color: this.color
         }
+    }
+
+    useColor(): boolean {
+        return true;
     }
 }
 
@@ -234,6 +245,10 @@ export class MapMarkerCircle extends MapMarkerBase {
             color: this.color
         }
     }
+
+    useColor(): boolean {
+        return true;
+    }
 }
 
 export class MapMarkerRectangle extends MapMarkerBase {
@@ -264,6 +279,10 @@ export class MapMarkerRectangle extends MapMarkerBase {
             bounds: [serializeLatLng(this.bounds.getSouthWest()), serializeLatLng(this.bounds.getNorthEast())],
             color: this.color
         }
+    }
+
+    useColor(): boolean {
+        return true;
     }
 }
 

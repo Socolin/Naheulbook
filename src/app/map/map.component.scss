@@ -1,3 +1,5 @@
+@import "~app/style/responsive-utils";
+
 :host {
     display: block;
     width: 100vw;
@@ -38,7 +40,11 @@
     }
 
     .side-panel {
+        padding-top: 16px;
         min-width: 200px;
+        @include for-tablet-portrait-up {
+            min-width: 300px;
+        }
     }
 
     .menu-panel {
@@ -83,9 +89,43 @@
         .layer {
             display: grid;
             grid-template-columns: 1fr;
+
             > button {
                 justify-self: right;
             }
+
+            .title {
+                display: grid;
+                grid-template-columns: auto 1fr auto;
+                align-items: center;
+                overflow: hidden;
+            }
+
+            .marker-link {
+                padding: 4px 0 4px 40px;
+            }
         }
     }
+
+    .marker-detail {
+        .header {
+            display: grid;
+            align-items: center;
+            grid-template-columns: 1fr auto;
+        }
+    }
+
+    .marker-editor {
+        mat-form-field {
+            width: 100%;
+        }
+
+        .actions {
+            padding-top: 16px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+    }
+
 }

@@ -1,4 +1,4 @@
-export interface CreateMapMarkerRequest {
+export interface MapMarkerRequest {
     name: string;
     description?: string;
     type: string;

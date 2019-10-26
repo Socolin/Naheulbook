@@ -3,7 +3,7 @@
         <div #mapElement class="map">
         </div>
     </mat-sidenav-content>
-    <mat-sidenav #menuSidenav mode="over" position="start" class="menu-panel">
+    <mat-sidenav #menuSidenav mode="over" position="start" class="menu-panel" [autoFocus]="false">
         <div class="map-config">
             <h2 class="mat-h2">Carte</h2>
             <div class="name">
@@ -65,7 +65,28 @@
                 </button>
             </h2>
             <div *ngFor="let mapLayer of map.layers" class="layer">
-                <h3 class="mat-h3">{{mapLayer.name}}</h3>
+                <div class="title">
+                    <button mat-icon-button
+                            *ngIf="!expandedLayerList[mapLayer.id]"
+                            (click)="expandMarkerList(mapLayer)">
+                        <mat-icon>keyboard_arrow_right</mat-icon>
+                    </button>
+                    <button mat-icon-button
+                            *ngIf="expandedLayerList[mapLayer.id]"
+                            (click)="collapseMarkerList(mapLayer)">
+                        <mat-icon>keyboard_arrow_down</mat-icon>
+                    </button>
+                    <span>{{mapLayer.name}}</span>
+                    <button mat-icon-button (click)="toggleVisibility(mapLayer)">
+                        <mat-icon *ngIf="hiddenLayers[mapLayer.id]">visibility_off</mat-icon>
+                        <mat-icon *ngIf="!hiddenLayers[mapLayer.id]">visibility_on</mat-icon>
+                    </button>
+                </div>
+                <ng-template [ngIf]="expandedLayerList[mapLayer.id]">
+                    <div *ngFor="let marker of mapLayer.markers" class="marker-link">
+                        {{marker.name}}
+                    </div>
+                </ng-template>
                 <button mat-stroked-button (click)="startAddMapMarker(mapLayer)">
                     <mat-icon>add</mat-icon>Marqueur
                 </button>
@@ -78,7 +99,7 @@
             </button>
         </mat-menu>
     </mat-sidenav>
-    <mat-sidenav #infoSidenav mode="over" position="end" class="side-panel mat-typography">
+    <mat-sidenav #infoSidenav mode="over" position="end" class="side-panel mat-typography" [autoFocus]="false">
         <ng-template [ngIf]="selectedMarker">
             <div *ngIf="selectedMarker.editable" class="marker-editor">
                 <div class="name" [formGroup]="markerForm">
@@ -92,19 +113,44 @@
                               matInput formControlName="description" placeholder="Description"></textarea>
                     </mat-form-field>
                 </div>
-                <div class="color">
-                    <input type="color" [ngModel]="selectedMarker.color" (ngModelChange)="changeSelectedMarkerColor($event)">
+                <div class="color" *ngIf="selectedMarker.useColor()">
+                    Couleur: <input type="color" [ngModel]="selectedMarker.color" (ngModelChange)="changeSelectedMarkerColor($event)">
                 </div>
                 <div class="actions">
-                    <button mat-button (click)="cancelEdit(selectedMarker)">ANNULER</button>
-                    <button mat-button color="primary" (click)="saveMarker(selectedMarker)">CRÉER</button>
+                    <button mat-button color="primary" *ngIf="!selectedMarker.id" (click)="cancelEdit(selectedMarker)">SUPPRIMER</button>
+                    <button mat-button color="primary" *ngIf="selectedMarker.id" (click)="cancelEdit(selectedMarker)">ANNULER</button>
+                    <button mat-button color="primary" *ngIf="!selectedMarker.id" (click)="saveMarker(selectedMarker)">CRÉER</button>
+                    <button mat-button color="primary" *ngIf="selectedMarker.id" (click)="saveMarker(selectedMarker)">MODIFIER</button>
                 </div>
             </div>
-            <div *ngIf="!selectedMarker.editable">
-                <h2>{{selectedMarker.name}}</h2>
+            <div *ngIf="!selectedMarker.editable" class="marker-detail">
+                <div>
+                    <h2 class="header">
+                        {{selectedMarker.name}}
+                        <button mat-icon-button [matMenuTriggerFor]="currentMarkerMenu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                    </h2>
+                </div>
                 <div>
                     {{selectedMarker.description}}
                 </div>
+                <mat-menu #currentMarkerMenu>
+                    <button mat-menu-item (click)="startEditMarker(selectedMarker)">
+                        <mat-icon>edit</mat-icon>
+                        Éditer
+                    </button>
+                    <button mat-menu-item [matMenuTriggerFor]="confirmDeleteMarker">
+                        <mat-icon>delete</mat-icon>
+                        Supprimer
+                    </button>
+                </mat-menu>
+                <mat-menu #confirmDeleteMarker>
+                    <button mat-menu-item (click)="deleteMarker(selectedMarker)">
+                        <mat-icon>check</mat-icon>
+                        Confirmer
+                    </button>
+                </mat-menu>
             </div>
         </ng-template>
     </mat-sidenav>

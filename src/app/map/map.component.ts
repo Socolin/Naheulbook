@@ -18,7 +18,7 @@ import {AddMapLayerDialogComponent, AddMapLayerDialogResult} from './add-map-lay
 import {SelectMarkerTypeDialogComponent, SelectMarkerTypeDialogResult} from './select-marker-type-dialog.component';
 import {assertNever} from '../utils/utils';
 import {FormControl, FormGroup} from '@angular/forms';
-import {CreateMapMarkerRequest} from '../api/requests';
+import {MapMarkerRequest} from '../api/requests';
 
 @Component({
     selector: 'app-map',
@@ -50,6 +50,8 @@ export class MapComponent implements OnInit {
         name: new FormControl(),
         description: new FormControl(),
     });
+    public expandedLayerList: {[mapLayerId: number]: boolean} = {};
+    public hiddenLayers: {[mapLayerId: number]: boolean} = {};
 
     constructor(
         private readonly ngZone: NgZone,
@@ -339,7 +341,7 @@ export class MapComponent implements OnInit {
     }
 
     cancelEdit(mapMarker: MapMarker) {
-        mapMarker.setMarkerEditable(false);
+        mapMarker.setEditable(false);
         if (mapMarker === this.selectedMarker) {
             this.selectedMarker = undefined;
             this.infoSidenav.close();
@@ -350,7 +352,7 @@ export class MapComponent implements OnInit {
     }
 
     saveMarker(mapMarker: MapMarker) {
-        const request: CreateMapMarkerRequest = {
+        const request: MapMarkerRequest = {
             ...this.markerForm.value,
             type: mapMarker.type,
         };
@@ -360,9 +362,15 @@ export class MapComponent implements OnInit {
         }
 
         if (mapMarker.id) {
-            // Save
+            this.mapService.editMarker(mapMarker.mapLayer, mapMarker.id, request).subscribe(newMapMarker => {
+                mapMarker.remove();
+                const i = mapMarker.mapLayer.markers.indexOf(mapMarker);
+                mapMarker.mapLayer.markers[i] = newMapMarker;
+                this.addMarkerToMap(newMapMarker);
+                this.infoSidenav.close();
+            });
         } else {
-            this.mapService.createMarker(this.map!.id, mapMarker.mapLayer, request).subscribe(newMapMarker => {
+            this.mapService.createMarker(mapMarker.mapLayer, request).subscribe(newMapMarker => {
                 mapMarker.remove();
                 mapMarker.mapLayer.markers.push(newMapMarker);
                 this.addMarkerToMap(newMapMarker);
@@ -392,5 +400,35 @@ export class MapComponent implements OnInit {
             this.selectedMarker = marker;
         }
         this.infoSidenav.open();
+    }
+
+    deleteMarker(mapMarker: MapMarker) {
+        mapMarker.setEditable(false);
+        this.mapService.deleteMarker(mapMarker.id!).subscribe(() => {
+            mapMarker.remove();
+            this.infoSidenav.close();
+        });
+    }
+
+    startEditMarker(mapMarker: MapMarker) {
+        mapMarker.setEditable(true);
+    }
+
+    expandMarkerList(mapLayer: MapLayer) {
+        this.expandedLayerList[mapLayer.id] = true;
+    }
+
+    collapseMarkerList(mapLayer: MapLayer) {
+        delete this.expandedLayerList[mapLayer.id];
+    }
+
+    toggleVisibility(mapLayer: MapLayer) {
+        const hidden = !this.hiddenLayers[mapLayer.id];
+        this.hiddenLayers[mapLayer.id] = hidden;
+        if (hidden) {
+            mapLayer.markers.forEach(m => m.remove());
+        } else {
+            mapLayer.markers.forEach(m => this.addMarkerToMap(m));
+        }
     }
 }
