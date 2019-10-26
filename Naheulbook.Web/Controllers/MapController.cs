@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using BrunoZell.ModelBinding;
@@ -28,6 +29,14 @@ namespace Naheulbook.Web.Controllers
             _mapService = mapService;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<MapSummaryResponse>>> GetMapListAsync()
+        {
+            var maps = await _mapService.GetMapsAsync();
+
+            return _mapper.Map<List<MapSummaryResponse>>(maps);
+        }
+
         [HttpGet("{MapId:int:min(1)}")]
         public async Task<ActionResult<MapResponse>> GetMapAsync(
             [FromServices] OptionalNaheulbookExecutionContext executionContext,
@@ -49,7 +58,8 @@ namespace Naheulbook.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<MapResponse>> PostCreateMapAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
-            [ModelBinder(BinderType = typeof(JsonModelBinder), Name = "request")] CreateMapRequest request,
+            [ModelBinder(BinderType = typeof(JsonModelBinder), Name = "request")]
+            CreateMapRequest request,
             [FromForm(Name = "image")] IFormFile image
         )
         {

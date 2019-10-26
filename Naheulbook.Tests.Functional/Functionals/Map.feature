@@ -80,6 +80,28 @@ Feature: Map
     }
     """
 
+  Scenario: Can list maps
+
+    Given a map with all data
+
+    When performing a GET to the url "/api/v2/maps/"
+    Then the response status code is 200
+    And the response should contains a json array containing the following element identified by id
+    """
+    {
+      "id": ${Map.Id},
+      "name": "${Map.Name}",
+      "data": {"__partial": {
+        "attribution": [
+          {
+            "name": "some-attribution-name",
+            "url": "some-attribution-url"
+          }
+        ]
+      }}
+    }
+    """
+
   Scenario: Can add a layer to a map
     Given a JWT for an admin user
     Given a map

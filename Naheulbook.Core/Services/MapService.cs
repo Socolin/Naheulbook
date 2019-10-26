@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
@@ -22,6 +24,7 @@ namespace Naheulbook.Core.Services
         Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId);
         Task<MapMarker> UpdateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request);
         Task DeleteMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId);
+        Task<List<Map>> GetMapsAsync();
     }
 
     public class MapService : IMapService
@@ -209,6 +212,15 @@ namespace Naheulbook.Core.Services
             uow.MapLayers.Remove(mapLayer);
 
             await uow.SaveChangesAsync();
+        }
+
+        public async Task<List<Map>> GetMapsAsync()
+        {
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            var maps = await uow.Maps.GetAllAsync();
+
+            return maps;
         }
     }
 }
