@@ -240,8 +240,8 @@ export class MapMarkerCircle extends MapMarkerBase {
 
     public getMarkerInfo(): {} {
         return {
-            center: serializeLatLng(this.center),
-            radius: this.radius,
+            center: serializeLatLng(this.leafletMarker!.getLatLng()) || serializeLatLng(this.center),
+            radius: this.leafletMarker!.getRadius() || this.radius,
             color: this.color
         }
     }
