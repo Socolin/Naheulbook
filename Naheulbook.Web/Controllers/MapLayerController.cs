@@ -35,5 +35,16 @@ namespace Naheulbook.Web.Controllers
 
             return _mapper.Map<MapMarkerResponse>(map);
         }
+
+        [HttpDelete("{MapLayerId:int:min(1)}")]
+        public async Task<IActionResult> DeleteMapLayerAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int mapLayerId
+        )
+        {
+            await _mapService.DeleteMapLayerAsync(executionContext, mapLayerId);
+
+            return NoContent();
+        }
     }
 }

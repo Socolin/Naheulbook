@@ -21,6 +21,7 @@ namespace Naheulbook.Core.Services
         Task<MapMarker> CreateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapMarkerRequest request);
         Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId);
         Task<MapMarker> UpdateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request);
+        Task DeleteMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId);
     }
 
     public class MapService : IMapService
@@ -196,6 +197,21 @@ namespace Naheulbook.Core.Services
             await uow.SaveChangesAsync();
 
             return mapMarker;
+        }
+
+        public async Task DeleteMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId)
+        {
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            var mapLayer = await uow.MapLayers.GetAsync(mapLayerId);
+            if (mapLayer == null)
+                throw new MapLayerNotFoundException(mapLayerId);
+
+            await _authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapLayer);
+
+            uow.MapLayers.Remove(mapLayer);
+
+            await uow.SaveChangesAsync();
         }
     }
 }

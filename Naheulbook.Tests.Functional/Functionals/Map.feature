@@ -97,11 +97,18 @@ Feature: Map
     }
     """
 
+  Scenario: Can delete a map layer
+    Given a JWT for an admin user
+    Given a map with a layer
+
+    When performing a DELETE to the url "/api/v2/mapLayers/${Map.Layers.[0].Id}" with the current jwt
+    Then the response status code is 204
+
   Scenario: Can add a marker to a map layer
     Given a JWT for an admin user
     Given a map with a layer
 
-    When performing a POST to the url "/api/v2/maps/${Map.Id}/layers/${Map.Layers.[0].Id}/markers" with the following json content and the current jwt
+    When performing a POST to the url "/api/v2/mapLayers/${Map.Layers.[0].Id}/markers" with the following json content and the current jwt
     """
     {
       "name": "some-marker-name",
