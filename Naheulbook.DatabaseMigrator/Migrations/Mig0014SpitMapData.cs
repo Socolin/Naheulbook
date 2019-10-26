@@ -2,7 +2,7 @@ using FluentMigrator;
 
 namespace Naheulbook.DatabaseMigrator.Migrations
 {
-    [Migration(13)]
+    [Migration(14)]
     public class Mig0013SpitMapData : Migration
     {
         public override void Up()

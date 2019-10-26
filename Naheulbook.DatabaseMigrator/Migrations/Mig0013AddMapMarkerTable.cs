@@ -2,7 +2,7 @@ using FluentMigrator;
 
 namespace Naheulbook.DatabaseMigrator.Migrations
 {
-    [Migration(14)]
+    [Migration(13)]
     public class Mig0013AddMapMarkerTable : Migration
     {
         public override void Up()
