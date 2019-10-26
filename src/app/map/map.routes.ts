@@ -9,7 +9,7 @@ export const routes: Routes = [
         component: CreateMapComponent,
         canActivate: [AuthGuard],
         data: {
-            authGuardRedirect: '/login/gm'
+            authGuardRedirect: '/login/map'
         },
 
     },

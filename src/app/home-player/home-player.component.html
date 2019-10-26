@@ -1,6 +1,6 @@
 <mat-sidenav-container style="min-height: 100vh">
     <mat-sidenav #start>
-        <h4>Vos personnages</h4>
+        <h2 class="mat-h2">Vos personnages</h2>
         <mat-nav-list>
             <ng-template ngFor [ngForOf]="characters" let-character>
                 <a mat-list-item [routerLink]="['character/detail/', character.id]">
@@ -13,12 +13,11 @@
             <a mat-list-item [routerLink]="['character/create']">
                 <mat-icon matListIcon>add</mat-icon> Créer un personnage
             </a>
-            <mat-divider></mat-divider>
         </mat-nav-list>
         <common-nav></common-nav>
     </mat-sidenav>
 
-    <div>
+    <mat-sidenav-content>
         <mat-toolbar color="primary">
             <mat-toolbar-row>
                 <button mat-icon-button (click)="start.open()">
@@ -36,6 +35,6 @@
         <div class="app-content">
             <router-outlet></router-outlet>
         </div>
-    </div>
+    </mat-sidenav-content>
 </mat-sidenav-container>
 

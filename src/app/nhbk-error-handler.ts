@@ -1,5 +1,5 @@
 import {ErrorHandler, Injectable, NgZone} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpErrorResponse} from '@angular/common/http';
 import {ErrorReportService} from './error-report.service';
 
 import * as Sentry from '@sentry/browser';
@@ -29,7 +29,6 @@ export class NhbkErrorHandler extends ErrorHandler {
     private count = 0;
 
     constructor(
-        private readonly httpClient: HttpClient,
         private readonly ngZone: NgZone,
         private readonly errorReportService: ErrorReportService
     ) {

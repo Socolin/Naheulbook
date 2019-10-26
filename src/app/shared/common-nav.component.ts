@@ -6,6 +6,7 @@ import {LoginService} from '../user';
 import {ThemeService} from '../theme.service';
 
 import {NhbkDialogService} from './nhbk-dialog.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'common-nav',
@@ -21,6 +22,7 @@ export class CommonNavComponent implements OnInit {
         public readonly loginService: LoginService,
         private readonly nhbkDialogService: NhbkDialogService,
         private readonly themeService: ThemeService,
+        private readonly router: Router,
     ) {
     };
 
@@ -40,6 +42,10 @@ export class CommonNavComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    redirectToLogin() {
+        this.router.navigate(['login', document.location.pathname.replace('/', '@')])
     }
 }
 

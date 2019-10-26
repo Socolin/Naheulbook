@@ -24,6 +24,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {AddMapLayerDialogComponent} from './add-map-layer-dialog.component';
 import {SelectMarkerTypeDialogComponent} from './select-marker-type-dialog.component';
 import {MatRadioModule} from '@angular/material/radio';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -49,6 +50,7 @@ import {MatRadioModule} from '@angular/material/radio';
         MatSelectModule,
         MatMenuModule,
         MatRadioModule,
+        SharedModule,
     ],
     providers: [
         MapService,

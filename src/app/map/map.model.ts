@@ -63,6 +63,26 @@ const defaultMarkerIcon = new L.Icon({
     attribution: 'https://game-icons.net'
 });
 
+export interface MarkerInfoPoint {
+    position: L.LatLngLiteral;
+    icon?: string;
+}
+export interface MarkerInfoRectangle {
+    bounds: L.LatLngExpression[],
+    color?: string;
+}
+export interface MarkerInfoArea {
+    points: L.LatLngLiteral[]
+    color?: string;
+}
+export interface MarkerInfoCircle {
+    center: L.LatLngLiteral;
+    radius: number;
+    color?: string;
+}
+
+export type MarkerInfo = MarkerInfoPoint | MarkerInfoRectangle | MarkerInfoArea | MarkerInfoCircle;
+
 export abstract class MapMarkerBase {
     readonly type: MapMarkerType;
     readonly mapLayer: MapLayer;
@@ -132,12 +152,22 @@ export abstract class MapMarkerBase {
 
     public abstract setMarkerEditable(editable: boolean): void;
 
-    public abstract getMarkerInfo(): {};
+    public abstract getMarkerInfo(): MarkerInfo;
 
     public abstract useColor(): boolean;
+
+    public getColor(): string | undefined {
+        const markerInfo = this.getMarkerInfo();
+
+        if ('color' in markerInfo) {
+            return markerInfo.color;
+        }
+
+        return undefined;
+    }
 }
 
-function serializeLatLng(latLng: L.LatLng): { lat: number, lng: number } {
+function serializeLatLng(latLng: L.LatLng): L.LatLngLiteral {
     return {
         lat: latLng.lat,
         lng: latLng.lng
@@ -167,7 +197,7 @@ export class MapMarkerPoint extends MapMarkerBase {
         }
     }
 
-    public getMarkerInfo(): {} {
+    public getMarkerInfo(): MarkerInfoPoint {
         return {
             position: this.leafletMarker ? serializeLatLng(this.leafletMarker.getLatLng()) : serializeLatLng(this.position),
             icon: this.icon
@@ -202,7 +232,7 @@ export class MapMarkerArea extends MapMarkerBase {
         }
     }
 
-    public getMarkerInfo(): {} {
+    public getMarkerInfo(): MarkerInfoArea {
         return {
             points: this.leafletMarker
                 ? (this.leafletMarker.getLatLngs()[0] as LatLng[]).map(serializeLatLng)
@@ -241,7 +271,7 @@ export class MapMarkerCircle extends MapMarkerBase {
         }
     }
 
-    public getMarkerInfo(): {} {
+    public getMarkerInfo(): MarkerInfoCircle {
         return {
             center: this.leafletMarker ? serializeLatLng(this.leafletMarker.getLatLng()) : serializeLatLng(this.center),
             radius: this.leafletMarker!.getRadius() || this.radius,
@@ -277,7 +307,7 @@ export class MapMarkerRectangle extends MapMarkerBase {
         }
     }
 
-    public getMarkerInfo(): {} {
+    public getMarkerInfo(): MarkerInfoRectangle {
         return {
             bounds: this.leafletMarker
                 ? [

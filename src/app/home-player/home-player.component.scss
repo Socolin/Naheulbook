@@ -1,10 +1,10 @@
-mat-sidenav {
-    min-width: 15%;
-    padding-left: 16px;
-    padding-right: 16px;
+@import "~app/style/responsive-utils";
 
-    a {
-        margin-left: -16px;
+mat-sidenav {
+    width: 240px;
+
+    h2 {
+        margin-left: 16px;
     }
 
     [mat-button] {

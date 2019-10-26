@@ -1,4 +1,4 @@
-import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MatSidenav} from '@angular/material';
 
@@ -19,19 +19,24 @@ import {SelectMarkerTypeDialogComponent, SelectMarkerTypeDialogResult} from './s
 import {assertNever} from '../utils/utils';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MapMarkerRequest} from '../api/requests';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {Subscription} from 'rxjs';
+import {LoginService, User} from '../user';
 
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy {
     @ViewChild('mapElement', {static: true})
     private element: ElementRef;
     @ViewChild('menuSidenav', {static: true})
     private menuSidenav: MatSidenav;
     @ViewChild('infoSidenav', {static: true})
     private infoSidenav: MatSidenav;
+
+    protected subscription: Subscription = new Subscription();
 
     private leafletMap: L.Map;
     private gridLayer?: L.LayerGroup;
@@ -52,16 +57,26 @@ export class MapComponent implements OnInit {
     });
     public expandedLayerList: {[mapLayerId: number]: boolean} = {};
     public hiddenLayers: {[mapLayerId: number]: boolean} = {};
+    public isMobile: boolean;
+    private currentUser?: User;
 
     constructor(
         private readonly ngZone: NgZone,
         private readonly route: ActivatedRoute,
         private readonly mapService: MapService,
         private readonly dialog: MatDialog,
+        private readonly breakpointObserver: BreakpointObserver,
+        private readonly loginService: LoginService,
     ) {
     }
 
     ngOnInit() {
+        this.subscription.add(this.breakpointObserver.observe([
+            Breakpoints.Handset
+        ]).subscribe(result => {
+            this.isMobile = result.breakpoints[Breakpoints.HandsetPortrait];
+        }));
+
         this.route.paramMap.subscribe(paramMap => {
             const mapId = paramMap.get('mapId');
             if (!mapId) {
@@ -74,6 +89,14 @@ export class MapComponent implements OnInit {
                 this.map.layers.forEach(l => l.markers.forEach(m => this.addMarkerToMap(m)));
             })
         });
+
+        this.subscription.add(this.loginService.checkLogged().subscribe((user) => {
+            this.currentUser = user;
+        }));
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     addMarkerToMap(mapMarker: MapMarker) {
@@ -292,6 +315,7 @@ export class MapComponent implements OnInit {
                 return;
             }
 
+            const lastColor = mapLayer.markers.reduce((color, m) => m.getColor() || color, '#00a7ff');
             this.ngZone.runOutsideAngular(() => {
                 let marker: MapMarker;
                 switch (result.markerType) {
@@ -310,6 +334,7 @@ export class MapComponent implements OnInit {
                             L.latLng([bounds.getNorth() + height * 0.3, bounds.getWest() + width * 0.3])
                         ];
                         marker = new MapMarkerArea(mapLayer, points);
+                        marker.color = lastColor;
                         break;
                     }
                     case 'rectangle': {
@@ -320,10 +345,12 @@ export class MapComponent implements OnInit {
                             [bounds.getSouth() - height * 0.3, bounds.getWest() + width * 0.3],
                             [bounds.getNorth() + height * 0.3, bounds.getEast() - width * 0.3],
                         ]);
+                        marker.color = lastColor;
                         break;
                     }
                     case 'circle': {
                         marker = new MapMarkerCircle(mapLayer, this.leafletMap.getCenter(), 50 / Math.pow(2, this.leafletMap.getZoom()));
+                        marker.color = lastColor;
                         break;
                     }
                     default:
@@ -430,5 +457,15 @@ export class MapComponent implements OnInit {
         } else {
             mapLayer.markers.forEach(m => this.addMarkerToMap(m));
         }
+    }
+
+    canEditLayer(mapLayer: MapLayer) {
+        if (!this.currentUser) {
+            return false;
+        }
+        if (mapLayer.source === 'official'){
+            return this.currentUser.admin;
+        }
+        return true;
     }
 }
