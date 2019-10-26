@@ -203,7 +203,9 @@ export class MapMarkerArea extends MapMarkerBase {
 
     public getMarkerInfo(): {} {
         return {
-            points: this.points.map(serializeLatLng),
+            geoJSON: this.leafletMarker
+                ? this.leafletMarker.getLatLngs()[0].map(serializeLatLng)
+                : this.points.map(serializeLatLng),
             color: this.color
         }
     }
@@ -240,7 +242,7 @@ export class MapMarkerCircle extends MapMarkerBase {
 
     public getMarkerInfo(): {} {
         return {
-            center: serializeLatLng(this.leafletMarker!.getLatLng()) || serializeLatLng(this.center),
+            center: this.leafletMarker ? serializeLatLng(this.leafletMarker.getLatLng()) : serializeLatLng(this.center),
             radius: this.leafletMarker!.getRadius() || this.radius,
             color: this.color
         }
@@ -276,7 +278,15 @@ export class MapMarkerRectangle extends MapMarkerBase {
 
     public getMarkerInfo(): {} {
         return {
-            bounds: [serializeLatLng(this.bounds.getSouthWest()), serializeLatLng(this.bounds.getNorthEast())],
+            bounds: this.leafletMarker
+                ? [
+                    serializeLatLng(this.leafletMarker.getBounds().getSouthWest()),
+                    serializeLatLng(this.leafletMarker.getBounds().getNorthEast())
+                ]
+                : [
+                    serializeLatLng(this.bounds.getSouthWest()),
+                    serializeLatLng(this.bounds.getNorthEast())
+                ],
             color: this.color
         }
     }
