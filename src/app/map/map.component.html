@@ -72,7 +72,10 @@
                                 (click)="collapseMarkerList(mapLayer)">
                             <mat-icon>keyboard_arrow_down</mat-icon>
                         </button>
-                        <span>{{mapLayer.name}}</span>
+                        <span class="layer-name">
+                            <mat-icon *ngIf="mapLayer.source !== 'official'" matTooltip="Privé (seulement visible par vous)">lock</mat-icon>
+                            {{mapLayer.name}}
+                        </span>
                         <button mat-icon-button (click)="toggleVisibility(mapLayer)">
                             <mat-icon *ngIf="hiddenLayers[mapLayer.id]">visibility_off</mat-icon>
                             <mat-icon *ngIf="!hiddenLayers[mapLayer.id]">visibility_on</mat-icon>

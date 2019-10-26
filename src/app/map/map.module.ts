@@ -25,6 +25,7 @@ import {AddMapLayerDialogComponent} from './add-map-layer-dialog.component';
 import {SelectMarkerTypeDialogComponent} from './select-marker-type-dialog.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {SharedModule} from '../shared/shared.module';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -51,6 +52,7 @@ import {SharedModule} from '../shared/shared.module';
         MatMenuModule,
         MatRadioModule,
         SharedModule,
+        MatTooltipModule,
     ],
     providers: [
         MapService,

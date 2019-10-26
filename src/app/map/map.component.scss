@@ -114,8 +114,15 @@
                         grid-template-columns: auto 1fr auto;
                         align-items: center;
                         overflow: hidden;
+                        .layer-name {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            > mat-icon {
+                                margin-right: 8px;
+                            }
+                        }
                     }
-
                     .marker-link {
                         padding: 4px 0 4px 40px;
                     }
