@@ -22,10 +22,10 @@
 <h2 class="mat-h2">Copyright</h2>
 <div *ngFor="let attribution of attributions; let i = index" class="attribution">
     <mat-form-field>
-        <input matInput placeholder="Nom" [ngModel]="attribution.name">
+        <input matInput placeholder="Nom" [(ngModel)]="attribution.name">
     </mat-form-field>
     <mat-form-field>
-        <input matInput placeholder="Url" [ngModel]="attribution.url">
+        <input matInput placeholder="Url" [(ngModel)]="attribution.url">
     </mat-form-field>
     <button mat-icon-button (click)="removeAttribution(i)" [disabled]="uploading">
         <mat-icon>delete</mat-icon>
