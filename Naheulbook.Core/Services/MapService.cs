@@ -18,7 +18,9 @@ namespace Naheulbook.Core.Services
         Task<Map> GetMapAsync(int mapId, int? userId);
         Task<Map> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream);
         Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapLayerRequest request);
-        Task<MapMarker> CreateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapId, int mapLayerId, CreateMapMarkerRequest request);
+        Task<MapMarker> CreateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapMarkerRequest request);
+        Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId);
+        Task<MapMarker> UpdateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request);
     }
 
     public class MapService : IMapService
@@ -70,7 +72,7 @@ namespace Naheulbook.Core.Services
                 var map = new Map
                 {
                     Name = request.Name,
-                    Data = _jsonUtil.Serialize(mapData)
+                    Data = _jsonUtil.SerializeNonNull(mapData)
                 };
 
                 uow.Maps.Add(map);
@@ -84,7 +86,7 @@ namespace Naheulbook.Core.Services
                     mapData.ZoomCount = result.ZoomCount;
                     mapData.ExtraZoomCount = result.ExtraZoomCount;
 
-                    map.Data = _jsonUtil.Serialize(mapData);
+                    map.Data = _jsonUtil.SerializeNonNull(mapData);
                 }
                 catch (Exception)
                 {
@@ -133,9 +135,8 @@ namespace Naheulbook.Core.Services
 
         public async Task<MapMarker> CreateMapMarkerAsync(
             NaheulbookExecutionContext executionContext,
-            int mapId,
             int mapLayerId,
-            CreateMapMarkerRequest request
+            MapMarkerRequest request
         )
         {
             using var uow = _unitOfWorkFactory.CreateUnitOfWork();
@@ -152,10 +153,45 @@ namespace Naheulbook.Core.Services
                 Name = request.Name,
                 Description = request.Description,
                 Type = request.Type,
-                MarkerInfo = _jsonUtil.Serialize(request.MarkerInfo)
+                MarkerInfo = _jsonUtil.SerializeNonNull(request.MarkerInfo)
             };
 
             uow.MapMarkers.Add(mapMarker);
+
+            await uow.SaveChangesAsync();
+
+            return mapMarker;
+        }
+
+        public async Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId)
+        {
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            var mapMarker = await uow.MapMarkers.GetWithLayerAsync(mapMarkerId);
+            if (mapMarker == null)
+                throw new MapMarkerNotFoundException(mapMarkerId);
+
+            await _authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarker.Layer);
+
+            uow.MapMarkers.Remove(mapMarker);
+
+            await uow.SaveChangesAsync();
+        }
+
+        public async Task<MapMarker> UpdateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request)
+        {
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            var mapMarker = await uow.MapMarkers.GetWithLayerAsync(mapMarkerId);
+            if (mapMarker == null)
+                throw new MapMarkerNotFoundException(mapMarkerId);
+
+            await _authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarker.Layer);
+
+            mapMarker.Name = request.Name;
+            mapMarker.Description = request.Description;
+            mapMarker.Type = request.Type;
+            mapMarker.MarkerInfo = _jsonUtil.SerializeNonNull(request.MarkerInfo);
 
             await uow.SaveChangesAsync();
 

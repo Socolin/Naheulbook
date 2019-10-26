@@ -23,6 +23,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Skill> Skills { get; set; } = null!;
         public DbSet<Map> Maps { get; set; } = null!;
         public DbSet<MapLayer> MapLayers { get; set; } = null!;
+        public DbSet<MapMarker> MapMarkers { get; set; } = null!;
         public DbSet<Monster> Monsters { get; set; } = null!;
         public DbSet<MonsterType> MonsterTypes { get; set; } = null!;
         public DbSet<MonsterTemplate> MonsterTemplates { get; set; } = null!;

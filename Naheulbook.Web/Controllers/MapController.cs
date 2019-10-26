@@ -73,19 +73,5 @@ namespace Naheulbook.Web.Controllers
 
             return _mapper.Map<MapLayerResponse>(map);
         }
-
-
-        [HttpPost("{MapId:int:min(1)}/layers/{MapLayerId:int:min(1)}/markers")]
-        public async Task<ActionResult<MapMarkerResponse>> PostCreateMapMarkerAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int mapId,
-            [FromRoute] int mapLayerId,
-            [FromBody] CreateMapMarkerRequest request
-        )
-        {
-            var map = await _mapService.CreateMapMarkerAsync(executionContext, mapId, mapLayerId, request);
-
-            return _mapper.Map<MapMarkerResponse>(map);
-        }
     }
 }

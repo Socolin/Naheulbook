@@ -2,7 +2,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Requests.Requests
 {
-    public class CreateMapMarkerRequest
+    public class MapMarkerRequest
     {
         public string Name { get; set; } = null!;
         public string? Description { get; set; }

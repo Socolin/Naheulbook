@@ -127,3 +127,41 @@ Feature: Map
       }
     }
     """
+
+  Scenario: Can delete a map marker
+    Given a JWT for an admin user
+    Given a map with all data
+
+    When performing a DELETE to the url "/api/v2/mapMarkers/${Map.Layers.[0].Markers.[0].Id}" with the current jwt
+    Then the response status code is 204
+
+  Scenario: Can edit a map marker
+    Given a JWT for an admin user
+    Given a map with all data
+
+    When performing a PUT to the url "/api/v2/mapMarkers/${Map.Layers.[0].Markers.[0].Id}" with the following json content and the current jwt
+    """
+    {
+      "name": "some-new-marker-name",
+      "description": "some-new-marker-description",
+      "type": "point",
+      "markerInfo": {
+        "lat": 8,
+        "lng": 10
+      }
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${Map.Layers.[0].Markers.[0].Id},
+      "name": "some-new-marker-name",
+      "description": "some-new-marker-description",
+      "type": "point",
+      "markerInfo": {
+        "lat": 8,
+        "lng": 10
+      }
+    }
+    """
