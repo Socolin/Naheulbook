@@ -1,4 +1,4 @@
-import {MapData} from '../api/shared';
+import {MapData, MapImageData} from '../api/shared';
 import {MapLayerResponse, MapMarkerResponse, MapResponse} from '../api/responses';
 
 import * as L from 'leaflet';
@@ -9,6 +9,7 @@ export class Map {
     id: number;
     name: string;
     data: MapData;
+    imageData: MapImageData;
     layers: MapLayer[];
 
     static fromResponse(response: MapResponse): Map {
@@ -16,13 +17,14 @@ export class Map {
         map.id = response.id;
         map.name = response.name;
         map.data = response.data;
+        map.imageData = response.imageData;
         map.layers = response.layers.map(x => MapLayer.fromResponse(x));
         return map;
     }
 
     getLatLngSize(): L.LatLng {
-        const lat = -this.data.height / Math.pow(2, this.data.zoomCount);
-        const lng = this.data.width / Math.pow(2, this.data.zoomCount);
+        const lat = -this.imageData.height / Math.pow(2, this.imageData.zoomCount);
+        const lng = this.imageData.width / Math.pow(2, this.imageData.zoomCount);
         return new L.LatLng(lat, lng);
     }
 

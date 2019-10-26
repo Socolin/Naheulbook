@@ -29,6 +29,7 @@ export * from './loot-response';
 export * from './map-response';
 export * from './map-layer-response';
 export * from './map-marker-response';
+export * from './map-summary-response';
 export * from './monster-category-response';
 export * from './monster-response';
 export * from './monster-type-response';

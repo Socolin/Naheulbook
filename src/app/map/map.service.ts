@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {MapLayerResponse, MapMarkerResponse, MapResponse} from '../api/responses';
-import {CreateMapLayerRequest, MapMarkerRequest, CreateMapRequest} from '../api/requests';
+import {MapLayerResponse, MapMarkerResponse, MapResponse, MapSummaryResponse} from '../api/responses';
+import {CreateMapLayerRequest, MapMarkerRequest, MapRequest} from '../api/requests';
 import {map} from 'rxjs/operators';
 import {Map, MapLayer, MapMarker, MapMarkerBase} from './map.model';
 
@@ -19,7 +19,11 @@ export class MapService {
         );
     }
 
-    createMap(request: CreateMapRequest, image: File, progressCb: (progress: number) => void): Observable<Map> {
+    getMaps() {
+        return this.httpClient.get<MapSummaryResponse[]>(`/api/v2/maps`)
+    }
+
+    createMap(request: MapRequest, image: File, progressCb: (progress: number) => void): Observable<Map> {
         const formData: FormData = new FormData();
         formData.append('request', JSON.stringify(request));
         formData.append('image', image);
@@ -29,6 +33,10 @@ export class MapService {
             toResponseBody(),
             map(response => Map.fromResponse(response!))
         );
+    }
+
+    editMap(mapId: number, request: MapRequest): Observable<MapSummaryResponse> {
+        return this.httpClient.put<MapSummaryResponse>(`/api/v2/maps/${mapId}`, request);
     }
 
     createMapLayer(mapId: number, request: CreateMapLayerRequest): Observable<MapLayer> {

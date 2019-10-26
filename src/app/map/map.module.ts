@@ -26,6 +26,12 @@ import {SelectMarkerTypeDialogComponent} from './select-marker-type-dialog.compo
 import {MatRadioModule} from '@angular/material/radio';
 import {SharedModule} from '../shared/shared.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { MapHomeComponent } from './map-home.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatListModule} from '@angular/material/list';
+import { MapListComponent } from './map-list.component';
+import { EditMapComponent } from './edit-map.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
     declarations: [
@@ -33,6 +39,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         CreateMapComponent,
         AddMapLayerDialogComponent,
         SelectMarkerTypeDialogComponent,
+        MapHomeComponent,
+        MapListComponent,
+        EditMapComponent,
     ],
     imports: [
         CommonModule,
@@ -53,6 +62,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         MatRadioModule,
         SharedModule,
         MatTooltipModule,
+        MatToolbarModule,
+        MatListModule,
+        MatProgressSpinnerModule,
     ],
     providers: [
         MapService,

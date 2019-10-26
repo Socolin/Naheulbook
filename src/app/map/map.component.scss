@@ -5,6 +5,11 @@
     width: 100vw;
     height: 100vh;
 
+    .map {
+        width: 100%;
+        height: 100%;
+    }
+
     .menu-button {
         z-index: 1000;
         position: fixed;
@@ -33,40 +38,6 @@
         padding-right: 16px;
     }
 
-    .map {
-        width: 100%;
-        height: 100%;
-    }
-
-    .side-panel {
-        padding-top: 16px;
-        width: 240px;
-        @include for-tablet-portrait-up {
-            width: 320px;
-        }
-
-        .marker-detail {
-            .header {
-                display: grid;
-                align-items: center;
-                grid-template-columns: 1fr auto;
-            }
-        }
-
-        .marker-editor {
-            mat-form-field {
-                width: 100%;
-            }
-
-            .actions {
-                padding-top: 16px;
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-end;
-            }
-        }
-    }
-
     .menu-panel {
         width: 240px;
 
@@ -77,6 +48,11 @@
 
             .map-config {
                 padding-bottom: 8px;
+                .header {
+                    display: grid;
+                    align-items: center;
+                    grid-template-columns: 1fr auto;
+                }
             }
 
             .grid-config {
@@ -140,6 +116,36 @@
                     grid-column-gap: 8px;
                     align-items: center;
                 }
+            }
+        }
+    }
+
+
+    .info-panel {
+        padding-top: 16px;
+        width: 240px;
+        @include for-tablet-portrait-up {
+            width: 320px;
+        }
+
+        .marker-detail {
+            .header {
+                display: grid;
+                align-items: center;
+                grid-template-columns: 1fr auto;
+            }
+        }
+
+        .marker-editor {
+            mat-form-field {
+                width: 100%;
+            }
+
+            .actions {
+                padding-top: 16px;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
             }
         }
     }

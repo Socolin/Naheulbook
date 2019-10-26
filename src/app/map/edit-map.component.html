@@ -1,0 +1,42 @@
+<mat-spinner *ngIf="loading"></mat-spinner>
+<ng-template [ngIf]="!loading">
+    <h2 class="mat-h2">Informations</h2>
+    <form [formGroup]="form">
+        <mat-form-field>
+            <input matInput placeholder="Nom de la carte" autocomplete="false" formControlName="name" required>
+        </mat-form-field>
+        <div class="unit">
+            <mat-form-field>
+                <input matInput placeholder="Unité" autocomplete="false" formControlName="unit" required>
+                <mat-hint>m/km etc...</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Nombre de pixel pour une unité" autocomplete="false" formControlName="pixelPerUnit" type="number" required>
+                <mat-hint>Pour calculer des distance, peut être un nombre a virgule</mat-hint>
+            </mat-form-field>
+        </div>
+    </form>
+
+    <h2 class="mat-h2">Copyright</h2>
+    <div *ngFor="let attribution of attributions; let i = index" class="attribution">
+        <mat-form-field>
+            <input matInput placeholder="Nom" [(ngModel)]="attribution.name">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Url" [(ngModel)]="attribution.url">
+        </mat-form-field>
+        <button mat-icon-button (click)="removeAttribution(i)">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+    <div class="add-attribution">
+        <button mat-button (click)="addAttribution()"[disabled]="saving">
+            <mat-icon>add</mat-icon>Ajouter copyright
+        </button>
+    </div>
+    <div class="add-button">
+        <button mat-button color="primary" class="confirm-button" (click)="valid()" [disabled]="!form.valid || saving">
+            SAUVEGARDER
+        </button>
+    </div>
+</ng-template>

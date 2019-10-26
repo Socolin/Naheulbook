@@ -1,5 +1,5 @@
 import {Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatSidenav} from '@angular/material';
 
 import * as L from 'leaflet';
@@ -26,7 +26,6 @@ import {MapMarkerRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 import {LoginService, User} from '../user';
-import {mark} from '@angular/compiler-cli/src/ngtsc/perf/src/clock';
 
 @Component({
     selector: 'app-map',
@@ -73,6 +72,7 @@ export class MapComponent implements OnInit, OnDestroy {
         private readonly dialog: MatDialog,
         private readonly breakpointObserver: BreakpointObserver,
         private readonly loginService: LoginService,
+        private readonly router: Router,
     ) {
     }
 
@@ -90,7 +90,7 @@ export class MapComponent implements OnInit, OnDestroy {
             }
             this.mapService.getMap(+mapId).subscribe(map => {
                 this.map = map;
-                this.gridSize = map.data.pixelPerUnit / Math.pow(2, map.data.zoomCount);
+                this.gridSize = map.data.pixelPerUnit / Math.pow(2, map.imageData.zoomCount);
                 this.createLeafletMap();
                 this.map.layers.forEach(l => l.markers.forEach(m => this.addMarkerToMap(m)));
             })
@@ -484,7 +484,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
     goToMarker(marker: MapMarker) {
         if (marker.leafletMarker) {
-            this.leafletMap.setView(marker.getCenter(), this.map!.data.zoomCount);
+            this.leafletMap.setView(marker.getCenter(), this.map!.imageData.zoomCount);
         }
+    }
+
+    editMap() {
+        this.router.navigate(['/map', 'edit', this.map!.id]);
     }
 }
