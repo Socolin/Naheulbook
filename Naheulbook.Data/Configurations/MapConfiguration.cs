@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Map> builder)
         {
-            builder.ToTable("map");
+            builder.ToTable("maps");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -19,6 +19,11 @@ namespace Naheulbook.Data.Configurations
 
             builder.Property(e => e.Data)
                 .HasColumnName("data")
+                .HasColumnType("json");
+
+            builder.Property(e => e.ImageData)
+                .IsRequired()
+                .HasColumnName("imageData")
                 .HasColumnType("json");
         }
     }

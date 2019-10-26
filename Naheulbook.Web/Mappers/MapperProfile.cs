@@ -207,7 +207,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Flags, opt => opt.MapFrom(r => MapperHelpers.FromJson<List<FlagResponse>>(r.Flags)));
 
             CreateMap<Map, MapResponse>()
-                .ForMember(m => m.Data, opt => opt.MapFrom(r => MapperHelpers.FromJson<MapData>(r.Data)));
+                .ForMember(m => m.Data, opt => opt.MapFrom(r => MapperHelpers.FromJson<MapData>(r.Data)))
+                .ForMember(m => m.ImageData, opt => opt.MapFrom(r => MapperHelpers.FromJson<MapImageData>(r.ImageData)));
             CreateMap<MapLayer, MapLayerResponse>();
             CreateMap<MapMarker, MapMarkerResponse>()
                 .ForMember(m => m.MarkerInfo, opt => opt.MapFrom(r => MapperHelpers.FromJsonNotNull<JObject>(r.MarkerInfo)));

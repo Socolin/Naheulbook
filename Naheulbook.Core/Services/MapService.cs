@@ -73,21 +73,18 @@ namespace Naheulbook.Core.Services
                 var map = new Map
                 {
                     Name = request.Name,
-                    Data = _jsonUtil.SerializeNonNull(mapData)
+                    Data = _jsonUtil.SerializeNonNull(mapData),
+                    ImageData = "{}"
                 };
 
                 uow.Maps.Add(map);
                 await uow.SaveChangesAsync();
+                map.Data = _jsonUtil.SerializeNonNull(mapData);
 
                 try
                 {
-                    var result = _mapImageUtil.SplitMapImage(imageStream, map.Id);
-                    mapData.Width = result.Width;
-                    mapData.Height = result.Height;
-                    mapData.ZoomCount = result.ZoomCount;
-                    mapData.ExtraZoomCount = result.ExtraZoomCount;
-
-                    map.Data = _jsonUtil.SerializeNonNull(mapData);
+                    var mapImageData = _mapImageUtil.SplitMapImage(imageStream, map.Id);
+                    map.ImageData = _jsonUtil.SerializeNonNull(mapImageData);
                 }
                 catch (Exception)
                 {

@@ -2,13 +2,13 @@ using System;
 using System.IO;
 using ImageMagick;
 using Naheulbook.Core.Configurations;
-using Naheulbook.Core.Models;
+using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Utils
 {
     public interface IMapImageUtil
     {
-        MapSplitResult SplitMapImage(Stream imageStream, int mapId);
+        MapImageData SplitMapImage(Stream imageStream, int mapId);
     }
 
     public class MapImageUtil : IMapImageUtil
@@ -20,7 +20,7 @@ namespace Naheulbook.Core.Utils
             _configuration = configuration;
         }
 
-        public MapSplitResult SplitMapImage(Stream imageStream, int mapId)
+        public MapImageData SplitMapImage(Stream imageStream, int mapId)
         {
             using (var image = new MagickImage(imageStream))
             {
@@ -52,7 +52,7 @@ namespace Naheulbook.Core.Utils
                     zoomNumber--;
                     sizePercentage /= 2;
                 }
-                return new MapSplitResult
+                return new MapImageData
                 {
                     Width = image.Width,
                     Height = image.Height,

@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using Naheulbook.Data.Models;
+using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
 
@@ -15,16 +18,29 @@ namespace Naheulbook.TestUtils
             return new Map
             {
                 Name = $"some-map-name-{suffix}",
-                Data = JsonConvert.SerializeObject(new
+                ImageData = JsonConvert.SerializeObject(new MapImageData
                 {
-                    attribution = new[]
+                    Width = 40,
+                    Height = 20,
+                    ZoomCount = 5,
+                    ExtraZoomCount = 1
+                }, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                }),
+                Data = JsonConvert.SerializeObject(new MapData
+                {
+                    Attribution = new List<MapData.MapAttribution>()
                     {
-                        new
+                        new MapData.MapAttribution
                         {
-                            name = "some-attribution-name",
-                            url = "some-attribution-url"
+                            Name = "some-attribution-name",
+                            Url = "some-attribution-url"
                         }
                     }
+                }, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
                 })
             };
         }

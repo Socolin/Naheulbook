@@ -24,6 +24,12 @@ Feature: Map
       "id": {"__match": {"type": "integer"}},
       "name": "some-map-name",
       "layers": [],
+      "imageData": {
+        "extraZoomCount": {"__match": {"type": "integer"}},
+        "height": {"__match": {"type": "integer"}},
+        "width": {"__match": {"type": "integer"}},
+        "zoomCount": {"__match": {"type": "integer"}}
+      },
       "data": {"__partial": {
           "attribution": [
             {
@@ -63,15 +69,14 @@ Feature: Map
         }
       ],
       "data": {"__partial": {
-        "width": {"__match": {"type": "integer"}},
-        "height":  {"__match": {"type": "integer"}},
         "attribution": [
           {
             "name": "some-attribution-name",
             "url": "some-attribution-url"
           }
         ]
-      }}
+      }},
+      "imageData": ${Map.ImageData}
     }
     """
 
