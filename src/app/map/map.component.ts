@@ -168,6 +168,7 @@ export class MapComponent implements OnInit, OnDestroy {
             } as any).setView(this.map.getCenter(), 1);
 
             leafletMap.createPane('grid');
+            leafletMap.zoomControl.setPosition('topright');
 
             L.tileLayer(`/mapdata/${this.map.id}/{z}/{x}_{y}.png`, {
                 attribution: this.map.data.attribution.map(x => `&copy;<a href=${x.url}>${x.name}</a>`).join('|')
