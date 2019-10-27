@@ -19,8 +19,8 @@ export interface AddMapMarkerLinkDialogResult {
     styleUrls: ['./add-map-marker-link-dialog.component.scss']
 })
 export class AddMapMarkerLinkDialogComponent implements OnInit {
-    private maps: MapSummaryResponse[];
-    public selectedMap?: MapSummaryResponse;
+    maps?: MapSummaryResponse[];
+    selectedMap?: MapSummaryResponse;
     filteredMaps: Observable<MapSummaryResponse[]>;
     filteredMapMarkers: Observable<MapMarker[]>;
     selectedMapDetails?: Map;
@@ -45,7 +45,7 @@ export class AddMapMarkerLinkDialogComponent implements OnInit {
                         this.selectMap(undefined);
                     }
                 }),
-                map(value => this.filterAutocomplete(this.maps, value))
+                map(value => this.filterAutocomplete(this.maps!, value))
             );
 
         this.filteredMapMarkers = this.targetMarkerFormControl.valueChanges
