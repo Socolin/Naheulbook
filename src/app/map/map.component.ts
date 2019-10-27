@@ -163,7 +163,7 @@ export class MapComponent implements OnInit, OnDestroy {
             const leafletMap = L.map(this.element.nativeElement, {
                 crs: L.CRS.Simple,
                 minZoom: 0,
-                maxZoom: 4,
+                maxZoom: this.map.imageData.zoomCount + this.map.imageData.extraZoomCount,
                 editable: true
             } as any).setView(this.map.getCenter(), 1);
 
