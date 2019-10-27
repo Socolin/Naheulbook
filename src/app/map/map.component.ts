@@ -94,6 +94,15 @@ export class MapComponent implements OnInit, OnDestroy {
                 this.gridSize = map.data.pixelPerUnit / Math.pow(2, map.imageData.zoomCount);
                 this.createLeafletMap();
                 this.map.layers.forEach(l => l.markers.forEach(m => this.addMarkerToMap(m)));
+                const targetMarkerId = this.route.snapshot.queryParamMap.get('targetMarkerId');
+                if (targetMarkerId) {
+                    const marker = this.map.layers
+                        .reduce((markers: MapMarker[], l) => markers.concat(l.markers), [])
+                        .find(m => m.id === +targetMarkerId);
+                    if (marker) {
+                        this.goToMarker(marker);
+                    }
+                }
             })
         });
 
