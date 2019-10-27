@@ -83,7 +83,12 @@
                         </button>
                         <span class="layer-name">
                             <mat-icon *ngIf="mapLayer.source !== 'official'" matTooltip="Privé (seulement visible par vous)">lock</mat-icon>
-                            {{mapLayer.name}}
+                            <ng-template [ngIf]="canEditLayer(mapLayer)">
+                                <a (click)="selectLayer(mapLayer)" [class.layer-selected]="selectedLayer === mapLayer">{{mapLayer.name}}</a>
+                            </ng-template>
+                            <ng-template [ngIf]="!canEditLayer(mapLayer)">
+                                {{mapLayer.name}}
+                            </ng-template>
                         </span>
                         <button mat-icon-button (click)="toggleVisibility(mapLayer)">
                             <mat-icon *ngIf="hiddenLayers[mapLayer.id]">visibility_off</mat-icon>
@@ -118,7 +123,7 @@
             <div *ngIf="selectedMarker.editable" class="marker-editor side-panel-block">
                 <div class="name" [formGroup]="markerForm">
                     <mat-form-field>
-                        <input matInput formControlName="name" placeholder="Nom"/>
+                        <input #markerNameInput matInput formControlName="name" placeholder="Nom"/>
                     </mat-form-field>
                 </div>
                 <div class="description" [formGroup]="markerForm">

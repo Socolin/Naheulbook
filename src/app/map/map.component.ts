@@ -1,4 +1,4 @@
-import {Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatSidenav} from '@angular/material';
 
@@ -40,6 +40,8 @@ export class MapComponent implements OnInit, OnDestroy {
     private menuSidenav: MatSidenav;
     @ViewChild('infoSidenav', {static: true})
     private infoSidenav: MatSidenav;
+    @ViewChild('markerNameInput', {static: false})
+    private markerNameInput: ElementRef;
 
     protected subscription: Subscription = new Subscription();
 
@@ -57,6 +59,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     public lastCreatedMarkerType: MapMarkerType;
     public selectedMarker?: MapMarker;
+    public selectedLayer?: MapLayer;
     public markerForm = new FormGroup({
         name: new FormControl(),
         description: new FormControl(),
@@ -92,6 +95,7 @@ export class MapComponent implements OnInit, OnDestroy {
             this.mapService.getMap(+mapId).subscribe(map => {
                 this.map = map;
                 this.gridSize = map.data.pixelPerUnit / Math.pow(2, map.imageData.zoomCount);
+                this.selectedLayer = undefined;
                 this.createLeafletMap();
                 this.map.layers.forEach(l => l.markers.forEach(m => this.addMarkerToMap(m)));
                 const targetMarkerId = this.route.snapshot.queryParamMap.get('targetMarkerId');
@@ -323,6 +327,29 @@ export class MapComponent implements OnInit, OnDestroy {
         })
     }
 
+    @HostListener('window:keydown', ['$event'])
+    keyEvent(event: KeyboardEvent) {
+        if (!this.selectedLayer) {
+            return;
+        }
+
+        switch (event.key) {
+            case 'c':
+                this.addNewMapMarker(this.selectedLayer, 'circle');
+                break;
+            case 'r':
+                this.addNewMapMarker(this.selectedLayer, 'rectangle');
+                break;
+            case 'z':
+                this.addNewMapMarker(this.selectedLayer, 'area');
+                break;
+            case 'p':
+                this.addNewMapMarker(this.selectedLayer, 'point');
+                break;
+        }
+    }
+
+
     startAddMapMarker(mapLayer: MapLayer) {
         const dialogRef = this.dialog.open<SelectMarkerTypeDialogComponent, SelectMarkerTypeDialogData, SelectMarkerTypeDialogResult>(
             SelectMarkerTypeDialogComponent,
@@ -337,62 +364,71 @@ export class MapComponent implements OnInit, OnDestroy {
             if (!result) {
                 return;
             }
-            this.lastCreatedMarkerType = result.markerType;
 
-            const lastColor = mapLayer.markers.reduce((color, m) => m.getColor() || color, '#00a7ff');
-            this.ngZone.runOutsideAngular(() => {
-                let marker: MapMarker;
-                switch (result.markerType) {
-                    case 'point': {
-                        marker = new MapMarkerPoint(mapLayer, this.leafletMap.getCenter());
-                        break;
-                    }
-                    case 'area': {
-                        const bounds = this.leafletMap.getBounds();
-                        const height = bounds.getSouth() - bounds.getNorth();
-                        const width = bounds.getEast() - bounds.getWest();
-                        const points = [
-                            L.latLng([bounds.getSouth() - height * 0.3, bounds.getWest() + width * 0.3]),
-                            L.latLng([bounds.getSouth() - height * 0.3, bounds.getEast() - width * 0.3]),
-                            L.latLng([bounds.getNorth() + height * 0.3, bounds.getEast() - width * 0.3]),
-                            L.latLng([bounds.getNorth() + height * 0.3, bounds.getWest() + width * 0.3])
-                        ];
-                        marker = new MapMarkerArea(mapLayer, points);
-                        marker.color = lastColor;
-                        break;
-                    }
-                    case 'rectangle': {
-                        const bounds = this.leafletMap.getBounds();
-                        const height = bounds.getSouth() - bounds.getNorth();
-                        const width = bounds.getEast() - bounds.getWest();
-                        marker = new MapMarkerRectangle(mapLayer, [
-                            [bounds.getSouth() - height * 0.3, bounds.getWest() + width * 0.3],
-                            [bounds.getNorth() + height * 0.3, bounds.getEast() - width * 0.3],
-                        ]);
-                        marker.color = lastColor;
-                        break;
-                    }
-                    case 'circle': {
-                        marker = new MapMarkerCircle(mapLayer, this.leafletMap.getCenter(), 50 / Math.pow(2, this.leafletMap.getZoom()));
-                        marker.color = lastColor;
-                        break;
-                    }
-                    default:
-                        assertNever(result.markerType);
-                        throw new Error('Invalid marker type');
-                }
-
-                marker.editable = true;
-                marker.name = 'Nouveau marqueur';
-                this.addMarkerToMap(marker);
-                if (!this.isMobile) {
-                    this.selectMarker(marker);
-                }
-            });
-
-            this.menuSidenav.close();
+            this.addNewMapMarker(mapLayer, result.markerType);
         });
     }
+
+    private addNewMapMarker(mapLayer: MapLayer, markerType: MapMarkerType) {
+        this.lastCreatedMarkerType = markerType;
+
+        const lastColor = mapLayer.markers.reduce((color, m) => m.getColor() || color, '#00a7ff');
+        this.ngZone.runOutsideAngular(() => {
+            let marker: MapMarker;
+            switch (markerType) {
+                case 'point': {
+                    marker = new MapMarkerPoint(mapLayer, this.leafletMap.getCenter());
+                    break;
+                }
+                case 'area': {
+                    const bounds = this.leafletMap.getBounds();
+                    const height = bounds.getSouth() - bounds.getNorth();
+                    const width = bounds.getEast() - bounds.getWest();
+                    const points = [
+                        L.latLng([bounds.getSouth() - height * 0.3, bounds.getWest() + width * 0.3]),
+                        L.latLng([bounds.getSouth() - height * 0.3, bounds.getEast() - width * 0.3]),
+                        L.latLng([bounds.getNorth() + height * 0.3, bounds.getEast() - width * 0.3]),
+                        L.latLng([bounds.getNorth() + height * 0.3, bounds.getWest() + width * 0.3])
+                    ];
+                    marker = new MapMarkerArea(mapLayer, points);
+                    marker.color = lastColor;
+                    break;
+                }
+                case 'rectangle': {
+                    const bounds = this.leafletMap.getBounds();
+                    const height = bounds.getSouth() - bounds.getNorth();
+                    const width = bounds.getEast() - bounds.getWest();
+                    marker = new MapMarkerRectangle(mapLayer, [
+                        [bounds.getSouth() - height * 0.3, bounds.getWest() + width * 0.3],
+                        [bounds.getNorth() + height * 0.3, bounds.getEast() - width * 0.3],
+                    ]);
+                    marker.color = lastColor;
+                    break;
+                }
+                case 'circle': {
+                    marker = new MapMarkerCircle(mapLayer, this.leafletMap.getCenter(), 50 / Math.pow(2, this.leafletMap.getZoom()));
+                    marker.color = lastColor;
+                    break;
+                }
+                default:
+                    assertNever(markerType);
+                    throw new Error('Invalid marker type');
+            }
+
+            marker.editable = true;
+            marker.name = 'Nouveau marqueur';
+            this.addMarkerToMap(marker);
+            if (!this.isMobile) {
+                this.selectMarker(marker);
+                this.infoSidenav.open().then(() => {
+                    this.markerNameInput.nativeElement.focus();
+                });
+            }
+        });
+
+        this.menuSidenav.close();
+    }
+
 
     cancelEdit(mapMarker: MapMarker) {
         mapMarker.setEditable(false);
@@ -530,5 +566,9 @@ export class MapComponent implements OnInit, OnDestroy {
     goToMap(targetMapId: number, targetMapMarkerId?: number) {
         this.router.navigate(['/map', targetMapId], {queryParams: {targetMarkerId: targetMapMarkerId}});
         this.infoSidenav.close();
+    }
+
+    selectLayer(mapLayer: MapLayer) {
+        this.selectedLayer = mapLayer;
     }
 }
