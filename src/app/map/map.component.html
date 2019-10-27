@@ -152,6 +152,7 @@
                 <div class="links">
                     <mat-nav-list>
                         <a mat-list-item *ngFor="let link of selectedMarker.links" (click)="goToMap(link.targetMapId, link.targetMapMarkerId)">
+                            <mat-icon>arrow_forward</mat-icon>
                             {{link.name}}
                         </a>
                     </mat-nav-list>
