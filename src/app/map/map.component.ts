@@ -332,6 +332,15 @@ export class MapComponent implements OnInit, OnDestroy {
         if (!this.selectedLayer) {
             return;
         }
+        if (this.selectedMarker) {
+            return;
+        }
+        if (this.infoSidenav.opened) {
+            return;
+        }
+        if (this.menuSidenav.opened) {
+            return;
+        }
 
         switch (event.key) {
             case 'c':
