@@ -147,6 +147,10 @@ export class MapComponent implements OnInit, OnDestroy {
     private createLeafletMap() {
         if (this.leafletMap) {
             this.leafletMap.remove();
+            this.gridDisplayed = false;
+            this.gridLayer = undefined;
+            this.gridOffsetX = 0;
+            this.gridOffsetY = 0;
         }
 
         this.ngZone.runOutsideAngular(() => {
@@ -160,6 +164,8 @@ export class MapComponent implements OnInit, OnDestroy {
                 maxZoom: 4,
                 editable: true
             } as any).setView(this.map.getCenter(), 1);
+
+            leafletMap.createPane('grid');
 
             L.tileLayer(`/mapdata/${this.map.id}/{z}/{x}_{y}.png`, {
                 attribution: this.map.data.attribution.map(x => `&copy;<a href=${x.url}>${x.name}</a>`).join('|')
@@ -177,7 +183,7 @@ export class MapComponent implements OnInit, OnDestroy {
             return undefined;
         }
 
-        const grid = L.layerGroup();
+        const grid = L.layerGroup([], {pane: 'grid'});
         const xCoords = this.getGridXs(gridSize, latLngSize.lng);
         const yCoords = this.getGridYs(gridSize, latLngSize.lat);
 
@@ -185,6 +191,7 @@ export class MapComponent implements OnInit, OnDestroy {
             L.polyline([[0, x], [latLngSize.lat, x]], {
                 color: index % 5 === 0 ? '#a44' : '#363636',
                 weight: index % 5 === 0 ? 2 : 1,
+                pane: 'grid',
             }).addTo(grid);
         }
 
@@ -192,15 +199,17 @@ export class MapComponent implements OnInit, OnDestroy {
             L.polyline([[y, 0], [y, latLngSize.lng]], {
                 color: index % 5 === 0 ? '#a44' : '#363636',
                 weight: index % 5 === 0 ? 2 : 1,
+                pane: 'grid',
             }).addTo(grid);
         }
 
         if (this.isGridDraggable) {
             for (let x of xCoords.filter(e => e.index % 5 === 0).map(e => e.x)) {
                 for (let y of yCoords.filter(e => e.index % 5 === 0).map(e => e.y)) {
-                    L.circle([y, x], 1, {
+                    L.circle([y, x], 3, {
                         color: '#000',
                         fillColor: '#000',
+                        pane: 'grid',
                     }).addTo(grid);
                 }
             }
@@ -250,7 +259,7 @@ export class MapComponent implements OnInit, OnDestroy {
             this.gridLayer.remove();
         }
         this.gridLayer = this.drawGrid();
-        if (this.gridLayer && this.gridDisplayed) {
+        if (this.gridDisplayed && this.gridLayer) {
             this.gridLayer.addTo(this.leafletMap);
         }
     }
@@ -283,7 +292,7 @@ export class MapComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.gridDraggable = new L.Draggable(this.gridLayer.getPane()!);
+        this.gridDraggable = new L.Draggable(this.gridLayer!.getPane()!);
         this.gridDraggable.enable();
         this.gridDraggable.on('dragend', (event) => {
             this.gridOffsetX += event.target._newPos.x / Math.pow(2, this.leafletMap.getZoom());
