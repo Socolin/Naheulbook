@@ -141,12 +141,23 @@ export abstract class MapMarkerBase {
         }
     }
 
-    public initMarker(leafletMap: L.Map, onClick: (event: L.LeafletEvent) => void): void {
+    public initMarker(leafletMap: L.Map, onClick: () => void): void {
         if (!this.leafletMarker) {
             this.leafletMarker = this.createLeafletLayer();
         }
         this.leafletMarker.addTo(leafletMap);
         this.leafletMarker.on('click', onClick);
+        leafletMap.on('almost:click', (event) => {
+            if (event.layer === this.leafletMarker) {
+                onClick();
+            }
+        });
+        this.leafletMarker.on('remove', (event) => {
+            if (this.leafletMarker) {
+                (leafletMap as any).almostOver.removeLayer(this.leafletMarker);
+            }
+        });
+        (leafletMap as any).almostOver.addLayer(this.leafletMarker);
         this.setMarkerEditable(this.editable);
     }
 

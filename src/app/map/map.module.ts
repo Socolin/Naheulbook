@@ -17,6 +17,8 @@ import {routes} from './map.routes';
 import 'leaflet';
 import 'leaflet.path.drag';
 import 'leaflet-editable';
+import 'leaflet-geometryutil';
+import 'leaflet-almostover';
 
 import {CreateMapComponent, MapComponent, MapService} from '.';
 import {MatCheckboxModule} from '@angular/material/checkbox';
