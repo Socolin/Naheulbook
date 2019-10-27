@@ -1,5 +1,8 @@
 using Newtonsoft.Json.Linq;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Naheulbook.Requests.Requests
 {
     public class MapMarkerRequest

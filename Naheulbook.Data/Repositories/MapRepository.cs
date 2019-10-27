@@ -28,6 +28,8 @@ namespace Naheulbook.Data.Repositories
                 .Where(x => x.MapId == mapId)
                 .Where(x => x.Source == "official" || (x.Source == "private" && x.UserId == userId))
                 .Include(x => x.Markers)
+                .ThenInclude(x => x.Links)
+                .ThenInclude(x => x.TargetMap)
                 .ToListAsync();
 
             return map;

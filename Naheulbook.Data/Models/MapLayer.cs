@@ -18,6 +18,6 @@ namespace Naheulbook.Data.Models
         public int? UserId { get; set; }
         public User? User { get; set; }
 
-        public ICollection<MapMarker> Markers { get; set; }
+        public ICollection<MapMarker> Markers { get; set; } = null!;
     }
 }

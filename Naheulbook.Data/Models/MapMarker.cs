@@ -1,3 +1,8 @@
+using System.Collections.Generic;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class MapMarker
@@ -10,5 +15,7 @@ namespace Naheulbook.Data.Models
 
         public int LayerId { get; set; }
         public MapLayer Layer { get; set; } = null!;
+
+        public ICollection<MapMarkerLink> Links { get; set; } = null!;
     }
 }

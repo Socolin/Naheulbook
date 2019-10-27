@@ -239,3 +239,26 @@ Feature: Map
       }
     }
     """
+
+  Scenario: Can add a link between a marker and a map
+    Given a JWT for an admin user
+    Given 2 maps with all data
+
+
+    When performing a POST to the url "/api/v2/mapMarkers/${Map.[0].Layers.[0].Markers.[0].Id}/links" with the following json content and the current jwt
+    """
+    {
+      "name": "some-link-name",
+      "targetMapId": ${Map.[1].Id}
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${Map.Layers.[0].Markers.[0].Id},
+      "name": "some-link-name",
+      "targetMapId": ${Map.[1].Id},
+      "targetMapName": "${Map.[1].Name}"
+    }
+    """

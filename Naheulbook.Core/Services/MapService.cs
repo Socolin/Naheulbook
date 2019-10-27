@@ -25,6 +25,7 @@ namespace Naheulbook.Core.Services
         Task<MapMarker> UpdateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request);
         Task DeleteMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId);
         Task<List<Map>> GetMapsAsync();
+        Task<MapMarkerLink> CreateMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerLinkRequest request);
     }
 
     public class MapService : IMapService
@@ -239,6 +240,49 @@ namespace Naheulbook.Core.Services
             var maps = await uow.Maps.GetAllAsync();
 
             return maps;
+        }
+
+        public async Task<MapMarkerLink> CreateMapMarkerLinkAsync(
+            NaheulbookExecutionContext executionContext,
+            int mapMarkerId,
+            MapMarkerLinkRequest request
+        )
+        {
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            var mapMarker = await uow.MapMarkers.GetWithLayerAsync(mapMarkerId);
+            if (mapMarker == null)
+                throw new MapMarkerNotFoundException(mapMarkerId);
+
+            await _authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarker.Layer);
+
+            var targetMap = await uow.Maps.GetAsync(request.TargetMapId);
+            if (targetMap == null)
+                throw new MapNotFoundException(request.TargetMapId);
+
+            if (request.TargetMapMarkerId.HasValue)
+            {
+                var targetMapMarker = await uow.MapMarkers.GetWithLayerAsync(request.TargetMapMarkerId.Value);
+                if (targetMapMarker == null)
+                    throw new MapMarkerNotFoundException(request.TargetMapMarkerId.Value);
+
+                await _authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, targetMapMarker.Layer);
+            }
+
+            var mapMarkerLink = new MapMarkerLink
+            {
+                Name = request.Name,
+                MapMarkerId = mapMarkerId,
+                TargetMap = targetMap,
+                TargetMapId = request.TargetMapId,
+                TargetMapMarkerId = request.TargetMapMarkerId
+            };
+
+            uow.MapMarkerLinks.Add(mapMarkerLink);
+
+            await uow.SaveChangesAsync();
+
+            return mapMarkerLink;
         }
     }
 }

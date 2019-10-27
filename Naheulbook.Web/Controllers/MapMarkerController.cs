@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
+using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
@@ -58,8 +59,24 @@ namespace Naheulbook.Web.Controllers
             {
                 throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
+        }
 
-            return NoContent();
+        [HttpPost("{MapMarkerId}/links")]
+        public async Task<ActionResult<MapMarkerLinkResponse>> CreateMapMarkerLinkAsync(
+            [FromServices] NaheulbookExecutionContext naheulbookExecutionContext,
+            [FromRoute] int mapMarkerId,
+            [FromBody] MapMarkerLinkRequest request
+        )
+        {
+            try
+            {
+                var marker = await _mapService.CreateMapMarkerLinkAsync(naheulbookExecutionContext, mapMarkerId, request);
+                return _mapper.Map<MapMarkerLinkResponse>(marker);
+            }
+            catch (MapMarkerNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+            }
         }
     }
 }

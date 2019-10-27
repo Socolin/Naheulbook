@@ -24,6 +24,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Map> Maps { get; set; } = null!;
         public DbSet<MapLayer> MapLayers { get; set; } = null!;
         public DbSet<MapMarker> MapMarkers { get; set; } = null!;
+        public DbSet<MapMarkerLink> MapMarkerLinks { get; set; } = null!;
         public DbSet<Monster> Monsters { get; set; } = null!;
         public DbSet<MonsterType> MonsterTypes { get; set; } = null!;
         public DbSet<MonsterTemplate> MonsterTemplates { get; set; } = null!;
@@ -97,6 +98,7 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new MapConfiguration());
             modelBuilder.ApplyConfiguration(new MapLayerConfiguration());
             modelBuilder.ApplyConfiguration(new MapMarkerConfiguration());
+            modelBuilder.ApplyConfiguration(new MapMarkerLinkConfiguration());
 
             modelBuilder.ApplyConfiguration(new MonsterConfiguration());
 
