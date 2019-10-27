@@ -1,5 +1,5 @@
 import {MapData, MapImageData} from '../api/shared';
-import {MapLayerResponse, MapMarkerResponse, MapResponse} from '../api/responses';
+import {MapLayerResponse, MapMarkerLinkResponse, MapMarkerResponse, MapResponse} from '../api/responses';
 
 import * as L from 'leaflet';
 import {assertNever} from '../utils/utils';
@@ -69,14 +69,17 @@ export interface MarkerInfoPoint {
     position: L.LatLngLiteral;
     icon?: string;
 }
+
 export interface MarkerInfoRectangle {
     bounds: L.LatLngExpression[],
     color?: string;
 }
+
 export interface MarkerInfoArea {
     points: L.LatLngLiteral[]
     color?: string;
 }
+
 export interface MarkerInfoCircle {
     center: L.LatLngLiteral;
     radius: number;
@@ -93,6 +96,7 @@ export abstract class MapMarkerBase {
     leafletMarker?: L.Layer;
     editable: boolean;
     description?: string;
+    links: MapMarkerLink[];
 
     static fromResponse(mapLayer: MapLayer, response: MapMarkerResponse): MapMarker {
         let marker: MapMarker;
@@ -123,6 +127,7 @@ export abstract class MapMarkerBase {
         marker.id = response.id;
         marker.name = response.name;
         marker.description = response.description;
+        marker.links = response.links.map(MapMarkerLink.fromResponse);
         return marker;
     }
 
@@ -350,3 +355,19 @@ export class MapMarkerRectangle extends MapMarkerBase {
 }
 
 export type MapMarker = MapMarkerPoint | MapMarkerRectangle | MapMarkerArea | MapMarkerCircle;
+
+export class MapMarkerLink {
+    public id: number;
+    public name: string;
+    public targetMapId: number;
+    public targetMapMarkerId?: number;
+
+    static fromResponse(response: MapMarkerLinkResponse): MapMarkerLink {
+        const mapMarkerLink = new MapMarkerLink();
+        mapMarkerLink.id = response.id;
+        mapMarkerLink.name = response.name || response.targetMapName;
+        mapMarkerLink.targetMapId = response.targetMapId;
+        mapMarkerLink.targetMapMarkerId = response.targetMapMarkerId;
+        return mapMarkerLink;
+    }
+}

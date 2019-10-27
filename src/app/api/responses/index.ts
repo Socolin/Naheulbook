@@ -28,6 +28,7 @@ export * from './location-response';
 export * from './loot-response';
 export * from './map-response';
 export * from './map-layer-response';
+export * from './map-marker-link-response';
 export * from './map-marker-response';
 export * from './map-summary-response';
 export * from './monster-category-response';

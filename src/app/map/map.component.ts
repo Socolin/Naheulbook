@@ -26,6 +26,7 @@ import {MapMarkerRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 import {LoginService, User} from '../user';
+import {AddMapMarkerLinkDialogComponent, AddMapMarkerLinkDialogResult} from './add-map-marker-link-dialog.component';
 
 @Component({
     selector: 'app-map',
@@ -131,6 +132,10 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     private createLeafletMap() {
+        if (this.leafletMap) {
+            this.leafletMap.remove();
+        }
+
         this.ngZone.runOutsideAngular(() => {
             if (!this.map) {
                 return;
@@ -490,5 +495,31 @@ export class MapComponent implements OnInit, OnDestroy {
 
     editMap() {
         this.router.navigate(['/map', 'edit', this.map!.id]);
+    }
+
+    startAddMapMarkerLink(mapMarker: MapMarker) {
+        const dialogRef = this.dialog.open<AddMapMarkerLinkDialogComponent, any, AddMapMarkerLinkDialogResult>(
+            AddMapMarkerLinkDialogComponent, {
+                autoFocus: false
+            });
+
+        dialogRef.afterClosed().subscribe((result) => {
+           if (!result) {
+               return;
+           }
+
+           this.mapService.createMapMarkerLink(mapMarker.id!, {
+               name: result.name,
+               targetMapId: result.targetMapId,
+               targetMapMarkerId: result.targetMapMarkerId
+           }).subscribe(link => {
+               mapMarker.links.push(link);
+           })
+        });
+    }
+
+    goToMap(targetMapId: number, targetMapMarkerId?: number) {
+        this.router.navigate(['/map', targetMapId], {queryParams: {targetMarkerId: targetMapMarkerId}});
+        this.infoSidenav.close();
     }
 }

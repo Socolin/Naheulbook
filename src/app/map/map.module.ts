@@ -26,12 +26,14 @@ import {SelectMarkerTypeDialogComponent} from './select-marker-type-dialog.compo
 import {MatRadioModule} from '@angular/material/radio';
 import {SharedModule} from '../shared/shared.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { MapHomeComponent } from './map-home.component';
+import {MapHomeComponent} from './map-home.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatListModule} from '@angular/material/list';
-import { MapListComponent } from './map-list.component';
-import { EditMapComponent } from './edit-map.component';
+import {MapListComponent} from './map-list.component';
+import {EditMapComponent} from './edit-map.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {AddMapMarkerLinkDialogComponent} from './add-map-marker-link-dialog.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
     declarations: [
@@ -42,6 +44,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
         MapHomeComponent,
         MapListComponent,
         EditMapComponent,
+        AddMapMarkerLinkDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -65,12 +68,14 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
         MatToolbarModule,
         MatListModule,
         MatProgressSpinnerModule,
+        MatAutocompleteModule,
     ],
     providers: [
         MapService,
     ],
     entryComponents: [
         AddMapLayerDialogComponent,
+        AddMapMarkerLinkDialogComponent,
         SelectMarkerTypeDialogComponent,
     ]
 })

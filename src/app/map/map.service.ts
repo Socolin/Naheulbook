@@ -1,10 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {MapLayerResponse, MapMarkerResponse, MapResponse, MapSummaryResponse} from '../api/responses';
-import {CreateMapLayerRequest, MapMarkerRequest, MapRequest} from '../api/requests';
+import {
+    MapLayerResponse,
+    MapMarkerLinkResponse,
+    MapMarkerResponse,
+    MapResponse,
+    MapSummaryResponse
+} from '../api/responses';
+import {CreateMapLayerRequest, MapMarkerLinkRequest, MapMarkerRequest, MapRequest} from '../api/requests';
 import {map} from 'rxjs/operators';
-import {Map, MapLayer, MapMarker, MapMarkerBase} from './map.model';
+import {Map, MapLayer, MapMarker, MapMarkerBase, MapMarkerLink} from './map.model';
 
 import {toResponseBody, uploadProgress} from '../utils/operators';
 
@@ -63,5 +69,11 @@ export class MapService {
 
     deleteMarker(mapMarkerId: number): Observable<void> {
         return this.httpClient.delete<void>(`/api/v2/mapMarkers/${mapMarkerId}`);
+    }
+
+    createMapMarkerLink(mapMarkerId: number, request: MapMarkerLinkRequest): Observable<MapMarkerLink> {
+        return this.httpClient.post<MapMarkerLinkResponse>(`/api/v2/mapMarkers/${mapMarkerId}/links`, request).pipe(
+            map(response => MapMarkerLink.fromResponse(response))
+        );
     }
 }

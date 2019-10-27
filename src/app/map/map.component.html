@@ -149,10 +149,21 @@
                 <div>
                     {{selectedMarker.description}}
                 </div>
+                <div class="links">
+                    <mat-nav-list>
+                        <a mat-list-item *ngFor="let link of selectedMarker.links" (click)="goToMap(link.targetMapId, link.targetMapMarkerId)">
+                            {{link.name}}
+                        </a>
+                    </mat-nav-list>
+                </div>
                 <mat-menu #currentMarkerMenu>
                     <button mat-menu-item (click)="startEditMarker(selectedMarker)">
                         <mat-icon>edit</mat-icon>
                         Éditer
+                    </button>
+                    <button mat-menu-item (click)="startAddMapMarkerLink(selectedMarker)">
+                        <mat-icon>link</mat-icon>
+                        Ajouter un lien
                     </button>
                     <button mat-menu-item [matMenuTriggerFor]="confirmDeleteMarker">
                         <mat-icon>delete</mat-icon>
