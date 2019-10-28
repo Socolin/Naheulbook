@@ -33,7 +33,7 @@ export class BagItemViewComponent {
     @Input() itemFilterName?: string;
     @Input() sortType: ItemSortType;
     @Input() itemMenu: MatMenuPanel;
-    public expanded = true;
+    public collapsed: {[itemId: number]: boolean} = {};
 
     get filteredBagItems(): Item[] {
         return this.items
@@ -41,7 +41,7 @@ export class BagItemViewComponent {
             .sort(sortItemContainerFirstFn.bind(this, this.sortType));
     }
 
-    toggleExpand() {
-        this.expanded = !this.expanded;
+    toggleExpand(item: Item) {
+        this.collapsed[item.id] = !this.collapsed[item.id];
     }
 }

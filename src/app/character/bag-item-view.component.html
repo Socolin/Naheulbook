@@ -1,16 +1,16 @@
 <div *ngFor="let item of filteredBagItems" class="top-level-items separator">
     <div class="item">
         <button *ngIf="item.content"
-                (click)="toggleExpand()"
+                (click)="toggleExpand(item)"
                 mat-icon-button>
-            <mat-icon *ngIf="expanded">
+            <mat-icon *ngIf="!collapsed[item.id]">
                 keyboard_arrow_right
             </mat-icon>
-            <mat-icon *ngIf="!expanded"
+            <mat-icon *ngIf="!!collapsed[item.id]"
                       matBadgeSize="small"
                       matBadgeOverlap="true"
                       matBadgePosition="above after"
-                      [matBadgeHidden]="expanded"
+                      [matBadgeHidden]="!collapsed[item.id]"
                       [matBadge]="item.content.length">
                 keyboard_arrow_down
             </mat-icon>
@@ -22,7 +22,7 @@
                        [character]="character">
         </app-item-line>
     </div>
-    <div *ngIf="item.content && expanded" class="child separator">
+    <div *ngIf="item.content && !collapsed[item.id]" class="child separator">
         <bag-item-view
             [itemFilterName]="itemFilterName"
             [sortType]="sortType"
