@@ -172,6 +172,12 @@
             <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
             Utiliser sur...
         </button>
+        <button *ngIf="inGroupTab && item.data.notIdentified"
+                mat-menu-item
+                (click)="itemActionService.onAction('identify', item)">
+            <mat-icon>help</mat-icon>
+            Identifier
+        </button>
         <button mat-menu-item [matMenuTriggerFor]="deleteConfirm" [matMenuTriggerData]="{item: item}">
             <mat-icon>delete</mat-icon>
             Supprimer
