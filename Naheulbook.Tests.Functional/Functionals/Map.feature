@@ -63,7 +63,8 @@ Feature: Map
               "name": "${Map.Layers.[0].Markers.[0].Name}",
               "description": "${Map.Layers.[0].Markers.[0].Description}",
               "type": "${Map.Layers.[0].Markers.[0].Type}",
-              "markerInfo": ${Map.Layers.[0].Markers.[0].MarkerInfo}
+              "markerInfo": ${Map.Layers.[0].Markers.[0].MarkerInfo},
+              "links": [],
             }
           ]
         }
@@ -194,6 +195,7 @@ Feature: Map
       "id": {"__match": {"type": "integer"}},
       "name": "some-marker-name",
       "description": "some-marker-description",
+      "links": [],
       "type": "point",
       "markerInfo": {
         "lat": 5,
@@ -233,6 +235,7 @@ Feature: Map
       "name": "some-new-marker-name",
       "description": "some-new-marker-description",
       "type": "point",
+      "links": [],
       "markerInfo": {
         "lat": 8,
         "lng": 10
