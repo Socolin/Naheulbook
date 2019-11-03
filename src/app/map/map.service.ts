@@ -8,7 +8,7 @@ import {
     MapResponse,
     MapSummaryResponse
 } from '../api/responses';
-import {CreateMapLayerRequest, MapMarkerLinkRequest, MapMarkerRequest, MapRequest} from '../api/requests';
+import {MapLayerRequest, MapMarkerLinkRequest, MapMarkerRequest, MapRequest} from '../api/requests';
 import {map} from 'rxjs/operators';
 import {Map, MapLayer, MapMarker, MapMarkerBase, MapMarkerLink} from './map.model';
 
@@ -45,8 +45,14 @@ export class MapService {
         return this.httpClient.put<MapSummaryResponse>(`/api/v2/maps/${mapId}`, request);
     }
 
-    createMapLayer(mapId: number, request: CreateMapLayerRequest): Observable<MapLayer> {
+    createMapLayer(mapId: number, request: MapLayerRequest): Observable<MapLayer> {
         return this.httpClient.post<MapLayerResponse>(`/api/v2/maps/${mapId}/layers`, request).pipe(
+            map(response => MapLayer.fromResponse(response))
+        );
+    }
+
+    editMapLayer(mapLayerId: number, request: MapLayerRequest): Observable<MapLayer> {
+        return this.httpClient.put<MapLayerResponse>(`/api/v2/mapLayers/${mapLayerId}`, request).pipe(
             map(response => MapLayer.fromResponse(response))
         );
     }

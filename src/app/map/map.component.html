@@ -90,10 +90,39 @@
                                 {{mapLayer.name}}
                             </ng-template>
                         </span>
-                        <button mat-icon-button (click)="toggleVisibility(mapLayer)">
+                        <button *ngIf="!canEditLayer(mapLayer)" mat-icon-button (click)="toggleVisibility(mapLayer)">
                             <mat-icon *ngIf="hiddenLayers[mapLayer.id]">visibility_off</mat-icon>
                             <mat-icon *ngIf="!hiddenLayers[mapLayer.id]">visibility_on</mat-icon>
                         </button>
+                        <button *ngIf="canEditLayer(mapLayer)" mat-icon-button [matMenuTriggerFor]="layerMenu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #layerMenu>
+                            <button mat-menu-item>
+                                <ng-template [ngIf]="hiddenLayers[mapLayer.id]">
+                                    <mat-icon>visibility_off</mat-icon>
+                                    Cacher
+                                </ng-template>
+                                <ng-template [ngIf]="!hiddenLayers[mapLayer.id]">
+                                    <mat-icon>visibility_on</mat-icon>
+                                    Afficher
+                                </ng-template>
+                            </button>
+                            <button mat-menu-item (click)="startEditLayer(mapLayer)">
+                                <mat-icon>edit</mat-icon>
+                                Éditer
+                            </button>
+                            <button mat-menu-item [matMenuTriggerFor]="confirmDeleteLayer">
+                                <mat-icon>delete</mat-icon>
+                                Supprimer
+                            </button>
+                        </mat-menu>
+                        <mat-menu #confirmDeleteLayer>
+                            <button mat-menu-item (click)="deleteLayer(mapLayer)">
+                                <mat-icon>check</mat-icon>
+                                Confirmer
+                            </button>
+                        </mat-menu>
                     </div>
                     <ng-template [ngIf]="expandedLayerList[mapLayer.id]">
                         <div *ngFor="let marker of mapLayer.markers" class="marker-link">

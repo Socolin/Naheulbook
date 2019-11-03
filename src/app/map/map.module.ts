@@ -23,7 +23,7 @@ import 'leaflet-almostover';
 import {CreateMapComponent, MapComponent, MapService} from '.';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {AddMapLayerDialogComponent} from './add-map-layer-dialog.component';
+import {MapLayerDialogComponent} from './map-layer-dialog.component';
 import {SelectMarkerTypeDialogComponent} from './select-marker-type-dialog.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {SharedModule} from '../shared/shared.module';
@@ -42,7 +42,7 @@ import {MatRippleModule} from '@angular/material/core';
     declarations: [
         MapComponent,
         CreateMapComponent,
-        AddMapLayerDialogComponent,
+        MapLayerDialogComponent,
         SelectMarkerTypeDialogComponent,
         MapHomeComponent,
         MapListComponent,
@@ -78,7 +78,7 @@ import {MatRippleModule} from '@angular/material/core';
         MapService,
     ],
     entryComponents: [
-        AddMapLayerDialogComponent,
+        MapLayerDialogComponent,
         MapMarkerLinkDialogComponent,
         SelectMarkerTypeDialogComponent,
     ]

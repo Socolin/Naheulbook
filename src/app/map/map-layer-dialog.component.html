@@ -1,4 +1,5 @@
-<h2 mat-dialog-title>Ajout d'un groupe de marqueur</h2>
+<h2 mat-dialog-title *ngIf="!data.layer">Ajout d'un calque</h2>
+<h2 mat-dialog-title *ngIf="data.layer">Édition d'un calque</h2>
 <mat-dialog-content [formGroup]="form">
     <div>
         <mat-form-field>
@@ -23,6 +24,7 @@
     <button mat-button
             (click)="validate()"
             color="primary">
-        AJOUTER
+        <ng-template [ngIf]="!data.layer">AJOUTER</ng-template>
+        <ng-template [ngIf]="data.layer">ÉDITER</ng-template>
     </button>
 </mat-dialog-actions>

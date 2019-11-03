@@ -1,6 +1,7 @@
 import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatSidenav} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 
 import * as L from 'leaflet';
 import {MapService} from './map.service';
@@ -13,8 +14,7 @@ import {
     MapMarkerPoint,
     MapMarkerRectangle, MapMarkerType
 } from './map.model';
-import {MatDialog} from '@angular/material/dialog';
-import {AddMapLayerDialogComponent, AddMapLayerDialogResult} from './add-map-layer-dialog.component';
+import {MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult} from './map-layer-dialog.component';
 import {
     SelectMarkerTypeDialogComponent,
     SelectMarkerTypeDialogData,
@@ -329,8 +329,10 @@ export class MapComponent implements OnInit, OnDestroy {
         if (!map) {
             return;
         }
-        const dialogRef = this.dialog.open<AddMapLayerDialogComponent, any, AddMapLayerDialogResult>(
-            AddMapLayerDialogComponent
+        const dialogRef = this.dialog.open<MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult>(
+            MapLayerDialogComponent, {
+                data: {}
+            }
         );
 
         dialogRef.afterClosed().subscribe((result) => {
@@ -630,5 +632,41 @@ export class MapComponent implements OnInit, OnDestroy {
                 }
             })
         });
+    }
+
+    deleteLayer(mapLayer: MapLayer) {
+        this.mapService.deleteMapLayer(mapLayer.id).subscribe(() => {
+            const index = this.map!.layers.findIndex(l => l.id === mapLayer.id);
+            if (index !== -1) {
+                this.map!.layers.splice(index, 1);
+            }
+        });
+    }
+
+    startEditLayer(mapLayer: MapLayer) {
+        const map = this.map;
+        if (!map) {
+            return;
+        }
+        const dialogRef = this.dialog.open<MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult>(
+            MapLayerDialogComponent, {
+                data: {
+                    layer: mapLayer
+                }
+            }
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            this.mapService.editMapLayer(mapLayer.id, result).subscribe(editedMapLayer => {
+                const index = map.layers.indexOf(mapLayer);
+                if (index !== -1) {
+                    map.layers[index] = editedMapLayer;
+                }
+            });
+        })
     }
 }
