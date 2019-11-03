@@ -37,6 +37,7 @@
             [disabled]="!targetMapFormControl.value?.id"
             (click)="validate()"
             color="primary">
-        AJOUTER
+        <ng-template [ngIf]="!data.link">AJOUTER</ng-template>
+        <ng-template [ngIf]="data.link">ÉDITER</ng-template>
     </button>
 </mat-dialog-actions>

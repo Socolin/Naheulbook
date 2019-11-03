@@ -16,14 +16,6 @@
         <mat-icon *ngIf="viewMode === 'equipment'" fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-32"></mat-icon>
     </button>
 </div>
-<mat-menu #inventoryMenu>
-    <button mat-menu-item [matMenuTriggerFor]="sortMenu">
-        Trier
-    </button>
-    <button mat-menu-item [matMenuTriggerFor]="viewModeMenu">
-        Vue
-    </button>
-</mat-menu>
 <mat-menu #sortMenu>
     <button mat-menu-item [disabled]="sortType == 'asc'" (click)="sortType = 'asc'" role="menuitemcheckbox">
         <mat-icon *ngIf="sortType == 'asc'">check</mat-icon>

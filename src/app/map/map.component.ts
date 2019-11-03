@@ -9,7 +9,7 @@ import {
     MapLayer,
     MapMarker,
     MapMarkerArea,
-    MapMarkerCircle,
+    MapMarkerCircle, MapMarkerLink,
     MapMarkerPoint,
     MapMarkerRectangle, MapMarkerType
 } from './map.model';
@@ -26,7 +26,11 @@ import {MapMarkerRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 import {LoginService, User} from '../user';
-import {AddMapMarkerLinkDialogComponent, AddMapMarkerLinkDialogResult} from './add-map-marker-link-dialog.component';
+import {
+    MapMarkerLinkDialogComponent,
+    AddMapMarkerLinkDialogResult,
+    MapMarkerLinkDialogData
+} from './map-marker-link-dialog.component';
 
 @Component({
     selector: 'app-map',
@@ -64,8 +68,8 @@ export class MapComponent implements OnInit, OnDestroy {
         name: new FormControl(),
         description: new FormControl(),
     });
-    public expandedLayerList: {[mapLayerId: number]: boolean} = {};
-    public hiddenLayers: {[mapLayerId: number]: boolean} = {};
+    public expandedLayerList: { [mapLayerId: number]: boolean } = {};
+    public hiddenLayers: { [mapLayerId: number]: boolean } = {};
     public isMobile: boolean;
     public currentUser?: User;
 
@@ -562,23 +566,24 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     startAddMapMarkerLink(mapMarker: MapMarker) {
-        const dialogRef = this.dialog.open<AddMapMarkerLinkDialogComponent, any, AddMapMarkerLinkDialogResult>(
-            AddMapMarkerLinkDialogComponent, {
-                autoFocus: false
+        const dialogRef = this.dialog.open<MapMarkerLinkDialogComponent, MapMarkerLinkDialogData, AddMapMarkerLinkDialogResult>(
+            MapMarkerLinkDialogComponent, {
+                autoFocus: false,
+                data: {}
             });
 
         dialogRef.afterClosed().subscribe((result) => {
-           if (!result) {
-               return;
-           }
+            if (!result) {
+                return;
+            }
 
-           this.mapService.createMapMarkerLink(mapMarker.id!, {
-               name: result.name,
-               targetMapId: result.targetMapId,
-               targetMapMarkerId: result.targetMapMarkerId
-           }).subscribe(link => {
-               mapMarker.links.push(link);
-           })
+            this.mapService.createMapMarkerLink(mapMarker.id!, {
+                name: result.name,
+                targetMapId: result.targetMapId,
+                targetMapMarkerId: result.targetMapMarkerId
+            }).subscribe(link => {
+                mapMarker.links.push(link);
+            })
         });
     }
 
@@ -589,5 +594,41 @@ export class MapComponent implements OnInit, OnDestroy {
 
     selectLayer(mapLayer: MapLayer) {
         this.selectedLayer = mapLayer;
+    }
+
+    deleteLink(mapMarker: MapMarker, link: MapMarkerLink) {
+        this.mapService.deleteLink(link.id).subscribe(() => {
+            const index = mapMarker.links.indexOf(link);
+            if (index !== -1) {
+                mapMarker.links.splice(index, 1);
+            }
+        });
+    }
+
+    startEditLink(mapMarker: MapMarker, link: MapMarkerLink) {
+        const dialogRef = this.dialog.open<MapMarkerLinkDialogComponent, MapMarkerLinkDialogData, AddMapMarkerLinkDialogResult>(
+            MapMarkerLinkDialogComponent, {
+                autoFocus: false,
+                data: {
+                    link: link
+                }
+            });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            this.mapService.editMapMarkerLink(link.id, {
+                name: result.name,
+                targetMapId: result.targetMapId,
+                targetMapMarkerId: result.targetMapMarkerId
+            }).subscribe(editedLink => {
+                const index = mapMarker.links.indexOf(link);
+                if (index !== -1) {
+                    mapMarker.links[index] = editedLink;
+                }
+            })
+        });
     }
 }

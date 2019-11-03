@@ -34,8 +34,9 @@ import {MatListModule} from '@angular/material/list';
 import {MapListComponent} from './map-list.component';
 import {EditMapComponent} from './edit-map.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {AddMapMarkerLinkDialogComponent} from './add-map-marker-link-dialog.component';
+import {MapMarkerLinkDialogComponent} from './map-marker-link-dialog.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatRippleModule} from '@angular/material/core';
 
 @NgModule({
     declarations: [
@@ -46,7 +47,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         MapHomeComponent,
         MapListComponent,
         EditMapComponent,
-        AddMapMarkerLinkDialogComponent,
+        MapMarkerLinkDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -71,13 +72,14 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         MatListModule,
         MatProgressSpinnerModule,
         MatAutocompleteModule,
+        MatRippleModule,
     ],
     providers: [
         MapService,
     ],
     entryComponents: [
         AddMapLayerDialogComponent,
-        AddMapMarkerLinkDialogComponent,
+        MapMarkerLinkDialogComponent,
         SelectMarkerTypeDialogComponent,
     ]
 })

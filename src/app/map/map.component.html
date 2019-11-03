@@ -142,8 +142,8 @@
                     <button mat-button color="primary" *ngIf="selectedMarker.id" (click)="saveMarker(selectedMarker)">MODIFIER</button>
                 </div>
             </div>
-            <div *ngIf="!selectedMarker.editable" class="marker-detail side-panel-block">
-                <div>
+            <div *ngIf="!selectedMarker.editable" class="marker-detail">
+                <div class="side-panel-block">
                     <h2 class="header">
                         {{selectedMarker.name}}
                         <button mat-icon-button [matMenuTriggerFor]="currentMarkerMenu" *ngIf="canEditLayer(selectedMarker.mapLayer)">
@@ -151,16 +151,39 @@
                         </button>
                     </h2>
                 </div>
-                <div>
+                <div class="side-panel-block">
                     {{selectedMarker.description}}
                 </div>
                 <div class="links">
-                    <mat-nav-list>
-                        <a mat-list-item *ngFor="let link of selectedMarker.links" (click)="goToMap(link.targetMapId, link.targetMapMarkerId)">
-                            <mat-icon>arrow_forward</mat-icon>
-                            {{link.name}}
-                        </a>
-                    </mat-nav-list>
+                    <div *ngFor="let link of selectedMarker.links" class="map-link">
+                        <div class="name" mat-ripple>
+                            <mat-icon matListIcon>arrow_forward</mat-icon>
+                            <span (click)="goToMap(link.targetMapId, link.targetMapMarkerId)">
+                                {{link.name}}
+                            </span>
+                        </div>
+                        <div class="actions" *ngIf="canEditLayer(selectedMarker.mapLayer)">
+                            <button mat-icon-button  [matMenuTriggerFor]="mapLinkMenu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                        </div>
+                        <mat-menu #mapLinkMenu>
+                            <button mat-menu-item (click)="startEditLink(selectedMarker, link)">
+                                <mat-icon>edit</mat-icon>
+                                Éditer
+                            </button>
+                            <button mat-menu-item [matMenuTriggerFor]="confirmDeleteLink">
+                                <mat-icon>delete</mat-icon>
+                                Supprimer
+                            </button>
+                        </mat-menu>
+                        <mat-menu #confirmDeleteLink>
+                            <button mat-menu-item (click)="deleteLink(selectedMarker, link)">
+                                <mat-icon>check</mat-icon>
+                                Confirmer
+                            </button>
+                        </mat-menu>
+                    </div>
                 </div>
                 <mat-menu #currentMarkerMenu>
                     <button mat-menu-item (click)="startEditMarker(selectedMarker)">

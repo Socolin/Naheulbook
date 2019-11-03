@@ -76,4 +76,14 @@ export class MapService {
             map(response => MapMarkerLink.fromResponse(response))
         );
     }
+
+    editMapMarkerLink(mapMarkerLinkId: number, request: MapMarkerLinkRequest): Observable<MapMarkerLink> {
+        return this.httpClient.put<MapMarkerLinkResponse>(`/api/v2/mapMarkerLinks/${mapMarkerLinkId}`, request).pipe(
+            map(response => MapMarkerLink.fromResponse(response))
+        );
+    }
+
+    deleteLink(mapMarkerLinksId: number) {
+        return this.httpClient.delete<void>(`/api/v2/mapMarkerLinks/${mapMarkerLinksId}`);
+    }
 }

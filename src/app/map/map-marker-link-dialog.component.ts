@@ -1,12 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MapService} from './map.service';
 import {MapSummaryResponse} from '../api/responses';
 import {FormControl, Validators} from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
 import {filter, map, startWith, tap} from 'rxjs/operators';
 import {removeDiacritics} from '../shared';
-import {Map, MapMarker} from './map.model';
-import {MatDialogRef} from '@angular/material/dialog';
+import {Map, MapMarker, MapMarkerLink} from './map.model';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+
+export interface MapMarkerLinkDialogData {
+    link?: MapMarkerLink;
+}
 
 export interface AddMapMarkerLinkDialogResult {
     name?: string;
@@ -15,10 +19,10 @@ export interface AddMapMarkerLinkDialogResult {
 }
 
 @Component({
-    templateUrl: './add-map-marker-link-dialog.component.html',
-    styleUrls: ['./add-map-marker-link-dialog.component.scss']
+    templateUrl: './map-marker-link-dialog.component.html',
+    styleUrls: ['./map-marker-link-dialog.component.scss']
 })
-export class AddMapMarkerLinkDialogComponent implements OnInit {
+export class MapMarkerLinkDialogComponent implements OnInit {
     maps?: MapSummaryResponse[];
     selectedMap?: MapSummaryResponse;
     filteredMaps: Observable<MapSummaryResponse[]>;
@@ -32,25 +36,13 @@ export class AddMapMarkerLinkDialogComponent implements OnInit {
     private mapDetailSubscription?: Subscription;
 
     constructor(
-        private readonly dialogRef: MatDialogRef<AddMapMarkerLinkDialogComponent, AddMapMarkerLinkDialogResult>,
+        @Inject(MAT_DIALOG_DATA) private readonly data: MapMarkerLinkDialogData,
+        private readonly dialogRef: MatDialogRef<MapMarkerLinkDialogComponent, AddMapMarkerLinkDialogResult>,
         private readonly mapService: MapService
     ) {
-        this.filteredMaps = this.targetMapFormControl.valueChanges
-            .pipe(
-                startWith(''),
-                tap(v => {
-                    if (typeof v !== 'string') {
-                        this.selectMap(v);
-                    } else {
-                        this.selectMap(undefined);
-                    }
-                }),
-                map(value => this.filterAutocomplete(this.maps!, value))
-            );
-
         this.filteredMapMarkers = this.targetMarkerFormControl.valueChanges
             .pipe(
-                startWith(''),
+                startWith<string | MapMarker>(''),
                 filter(() => !!this.selectedMapDetails),
                 map(value => {
                     let allMarkers = this.selectedMapDetails
@@ -64,6 +56,25 @@ export class AddMapMarkerLinkDialogComponent implements OnInit {
     ngOnInit() {
         this.mapService.getMaps().subscribe(maps => {
             this.maps = maps;
+            if (this.data.link) {
+                const currentLinkMap = maps.find(m => m.id === this.data.link!.targetMapId);
+                this.targetMapFormControl.setValue(currentLinkMap);
+            } else {
+                this.targetMapFormControl.setValue('');
+            }
+            this.filteredMaps = this.targetMapFormControl.valueChanges
+                .pipe(
+                    startWith<string | MapSummaryResponse>(this.targetMapFormControl.value || ''),
+                    tap(v => {
+                        if (typeof v !== 'string') {
+                            this.selectMap(v);
+                        } else {
+                            this.selectMap(undefined);
+                        }
+                    }),
+                    map(value => this.filterAutocomplete(this.maps!, value))
+                );
+
         });
     }
 
@@ -88,6 +99,12 @@ export class AddMapMarkerLinkDialogComponent implements OnInit {
             this.mapDetailSubscription = this.mapService.getMap(mapSummary.id).subscribe(mapDetails => {
                 this.selectedMapDetails = mapDetails;
                 this.targetMarkerFormControl.enable();
+                if (this.data.link && this.data.link.targetMapId === mapDetails.id) {
+                    const marker = this.selectedMapDetails.layers
+                        .reduce((markers: MapMarker[], l) => markers.concat(l.markers), [])
+                        .find(m => m.id === this.data.link!.targetMapMarkerId);
+                    this.targetMarkerFormControl.setValue(marker);
+                }
             });
         } else {
             this.targetMarkerFormControl.disable();
