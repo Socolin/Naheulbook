@@ -36,7 +36,7 @@ export class MapMarkerLinkDialogComponent implements OnInit {
     private mapDetailSubscription?: Subscription;
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) private readonly data: MapMarkerLinkDialogData,
+        @Inject(MAT_DIALOG_DATA) public readonly data: MapMarkerLinkDialogData,
         private readonly dialogRef: MatDialogRef<MapMarkerLinkDialogComponent, AddMapMarkerLinkDialogResult>,
         private readonly mapService: MapService
     ) {
