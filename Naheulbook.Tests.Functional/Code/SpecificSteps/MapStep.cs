@@ -59,6 +59,34 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 });
         }
 
+        [Given(@"(a|\d+) maps? with a marker")]
+        public void GivenXMapWithAMarker(string amount)
+        {
+            for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
+                _testDataUtil.AddMap(x =>
+                {
+                    x.Layers = new[]
+                    {
+                        new MapLayer
+                        {
+                            Name = "some-layer-name",
+                            Source = "official",
+                            Markers = new List<MapMarker>
+                            {
+                                new MapMarker
+                                {
+                                    Name = "some-marker-name",
+                                    Description = "some-marker-description",
+                                    MarkerInfo = "{}",
+                                    Type = "point",
+                                    Links = new List<MapMarkerLink>()
+                                }
+                            }
+                        }
+                    };
+                });
+        }
+
         [Given(@"(a|\d+) maps? with a layer")]
         public void GivenXMapWithALayer(string amount)
         {

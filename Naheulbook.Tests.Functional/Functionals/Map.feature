@@ -45,26 +45,33 @@ Feature: Map
   Scenario: Can get a map info
     Given a map with all data
 
-    When performing a GET to the url "/api/v2/maps/${Map.Id}"
+    When performing a GET to the url "/api/v2/maps/${Map.[-1].Id}"
     Then the response status code is 200
     And the response should contains the following json
     """
     {
-      "id": ${Map.Id},
-      "name": "${Map.Name}",
+      "id": ${Map.[-1].Id},
+      "name": "${Map.[-1].Name}",
       "layers": [
         {
-          "id": ${Map.Layers.[0].Id},
-          "name": "${Map.Layers.[0].Name}",
-          "source": "${Map.Layers.[0].Source}",
+          "id": ${Map.[-1].Layers.[0].Id},
+          "name": "${Map.[-1].Layers.[0].Name}",
+          "source": "${Map.[-1].Layers.[0].Source}",
           "markers": [
             {
-              "id": ${Map.Layers.[0].Markers.[0].Id},
-              "name": "${Map.Layers.[0].Markers.[0].Name}",
-              "description": "${Map.Layers.[0].Markers.[0].Description}",
-              "type": "${Map.Layers.[0].Markers.[0].Type}",
-              "markerInfo": ${Map.Layers.[0].Markers.[0].MarkerInfo},
-              "links": [],
+              "id": ${Map.[-1].Layers.[0].Markers.[0].Id},
+              "name": "${Map.[-1].Layers.[0].Markers.[0].Name}",
+              "description": "${Map.[-1].Layers.[0].Markers.[0].Description}",
+              "type": "${Map.[-1].Layers.[0].Markers.[0].Type}",
+              "markerInfo": ${Map.[-1].Layers.[0].Markers.[0].MarkerInfo},
+              "links": [
+                {
+                  "id": ${Map.[-1].Layers.[0].Markers.[0].Links.[0].Id},
+                  "name": "${Map.[-1].Layers.[0].Markers.[0].Links.[0].Name}",
+                  "targetMapId": ${Map.[-1].Layers.[0].Markers.[0].Links.[0].TargetMapId},
+                  "targetMapName": "${Map.[0].Name}"
+                }
+              ],
             }
           ]
         }
@@ -77,7 +84,7 @@ Feature: Map
           }
         ]
       }},
-      "imageData": ${Map.ImageData}
+      "imageData": ${Map.[-1].ImageData}
     }
     """
 
@@ -90,8 +97,8 @@ Feature: Map
     And the response should contains a json array containing the following element identified by id
     """
     {
-      "id": ${Map.Id},
-      "name": "${Map.Name}",
+      "id": ${Map.[-1].Id},
+      "name": "${Map.[-1].Name}",
       "data": {"__partial": {
         "attribution": [
           {
@@ -107,7 +114,7 @@ Feature: Map
     Given a JWT for an admin user
     Given a map
 
-    When performing a PUT to the url "/api/v2/maps/${Map.Id}" with the following json content and the current jwt
+    When performing a PUT to the url "/api/v2/maps/${Map.[-1].Id}" with the following json content and the current jwt
     """
     {
       "name": "some-map-name",
@@ -169,14 +176,14 @@ Feature: Map
     Given a JWT for an admin user
     Given a map with a layer
 
-    When performing a DELETE to the url "/api/v2/mapLayers/${Map.Layers.[0].Id}" with the current jwt
+    When performing a DELETE to the url "/api/v2/mapLayers/${Map.[-1].Layers.[0].Id}" with the current jwt
     Then the response status code is 204
 
   Scenario: Can add a marker to a map layer
     Given a JWT for an admin user
     Given a map with a layer
 
-    When performing a POST to the url "/api/v2/mapLayers/${Map.Layers.[0].Id}/markers" with the following json content and the current jwt
+    When performing a POST to the url "/api/v2/mapLayers/${Map.[-1].Layers.[0].Id}/markers" with the following json content and the current jwt
     """
     {
       "name": "some-marker-name",
@@ -206,14 +213,14 @@ Feature: Map
 
   Scenario: Can delete a map marker
     Given a JWT for an admin user
-    Given a map with all data
+    Given a map with a marker
 
-    When performing a DELETE to the url "/api/v2/mapMarkers/${Map.Layers.[0].Markers.[0].Id}" with the current jwt
+    When performing a DELETE to the url "/api/v2/mapMarkers/${Map.[-1].Layers.[0].Markers.[0].Id}" with the current jwt
     Then the response status code is 204
 
   Scenario: Can edit a map marker
     Given a JWT for an admin user
-    Given a map with all data
+    Given a map with a marker
 
     When performing a PUT to the url "/api/v2/mapMarkers/${Map.Layers.[0].Markers.[0].Id}" with the following json content and the current jwt
     """
@@ -247,12 +254,11 @@ Feature: Map
     Given a JWT for an admin user
     Given 2 maps with all data
 
-
-    When performing a POST to the url "/api/v2/mapMarkers/${Map.[0].Layers.[0].Markers.[0].Id}/links" with the following json content and the current jwt
+    When performing a POST to the url "/api/v2/mapMarkers/${Map.[1].Layers.[0].Markers.[0].Id}/links" with the following json content and the current jwt
     """
     {
       "name": "some-link-name",
-      "targetMapId": ${Map.[1].Id}
+      "targetMapId": ${Map.[2].Id}
     }
     """
     Then the response status code is 200
@@ -261,8 +267,8 @@ Feature: Map
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-link-name",
-      "targetMapId": ${Map.[1].Id},
-      "targetMapName": "${Map.[1].Name}"
+      "targetMapId": ${Map.[2].Id},
+      "targetMapName": "${Map.[2].Name}"
     }
     """
 
