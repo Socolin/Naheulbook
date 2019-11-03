@@ -89,7 +89,7 @@ namespace Naheulbook.Web.Controllers
         public async Task<ActionResult<MapLayerResponse>> PostCreateMapLayerAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int mapId,
-            [FromBody] CreateMapLayerRequest request
+            [FromBody] MapLayerRequest request
         )
         {
             var map = await _mapService.CreateMapLayerAsync(executionContext, mapId, request);

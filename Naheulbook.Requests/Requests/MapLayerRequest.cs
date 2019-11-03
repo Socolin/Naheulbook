@@ -3,7 +3,7 @@
 
 namespace Naheulbook.Requests.Requests
 {
-    public class CreateMapLayerRequest
+    public class MapLayerRequest
     {
         public string Name { get; set; }
         public string Source { get; set; }

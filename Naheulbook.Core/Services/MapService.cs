@@ -19,7 +19,8 @@ namespace Naheulbook.Core.Services
         Task<Map> GetMapAsync(int mapId, int? userId);
         Task<Map> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream);
         Task<Map> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request);
-        Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapLayerRequest request);
+        Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request);
+        Task<MapLayer> EditMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request);
         Task<MapMarker> CreateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapMarkerRequest request);
         Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId);
         Task<MapMarker> UpdateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request);
@@ -121,7 +122,7 @@ namespace Naheulbook.Core.Services
             return map;
         }
 
-        public async Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapLayerRequest request)
+        public async Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -150,6 +151,47 @@ namespace Naheulbook.Core.Services
 
                 uow.MapLayers.Add(mapLayer);
                 await uow.SaveChangesAsync();
+
+                return mapLayer;
+            }
+        }
+
+        public async Task<MapLayer> EditMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var mapLayer = await uow.MapLayers.GetAsync(mapLayerId);
+                if (mapLayer == null)
+                    throw new MapLayerNotFoundException(mapLayerId);
+
+                switch (mapLayer.Source)
+                {
+                    case "official":
+                        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                        break;
+                    case "private":
+                        break;
+                    default:
+                        throw new InvalidSourceException(request.Source);
+                }
+
+                switch (request.Source)
+                {
+                    case "official":
+                        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                        break;
+                    case "private":
+                        break;
+                    default:
+                        throw new InvalidSourceException(request.Source);
+                }
+
+                mapLayer.Name = request.Name;
+                mapLayer.Source = request.Source;
+                mapLayer.UserId = request.Source == "official" ? (int?) null : executionContext.UserId;
+
+                await uow.SaveChangesAsync();
+                await uow.MapLayers.LoadMarkersForResponseAsync(mapLayer);
 
                 return mapLayer;
             }

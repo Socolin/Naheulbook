@@ -149,7 +149,6 @@ Feature: Map
     }
     """
 
-
   Scenario: Can add a layer to a map
     Given a JWT for an admin user
     Given a map
@@ -169,6 +168,28 @@ Feature: Map
       "name": "some-layer-name",
       "source": "official",
       "markers": []
+    }
+    """
+
+  Scenario: Can edit a map layer
+    Given a JWT for an admin user
+    Given a map with a layer
+
+    When performing a PUT to the url "/api/v2/mapLayers/${Map.Layers.[0].Id}" with the following json content and the current jwt
+    """
+    {
+      "name": "some-new-layer-name",
+      "source": "private"
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${Map.Layers.[0].Id},
+      "name": "some-new-layer-name",
+      "markers": [],
+      "source": "private"
     }
     """
 
