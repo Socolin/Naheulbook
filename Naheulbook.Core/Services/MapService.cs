@@ -26,6 +26,8 @@ namespace Naheulbook.Core.Services
         Task DeleteMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId);
         Task<List<Map>> GetMapsAsync();
         Task<MapMarkerLink> CreateMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerLinkRequest request);
+        Task<MapMarkerLink> EditMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, MapMarkerLinkRequest request);
+        Task DeleteMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId);
     }
 
     public class MapService : IMapService
@@ -283,6 +285,42 @@ namespace Naheulbook.Core.Services
             await uow.SaveChangesAsync();
 
             return mapMarkerLink;
+        }
+
+        public async Task<MapMarkerLink> EditMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, MapMarkerLinkRequest request)
+        {
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            var mapMarkerLink = await uow.MapMarkerLinks.GetWithLayerAsync(mapMarkerLinkId);
+            if (mapMarkerLink == null)
+                throw new MapMarkerNotFoundException(mapMarkerLinkId);
+
+            await _authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarkerLink.MapMarker.Layer);
+
+            mapMarkerLink.Name = request.Name;
+            mapMarkerLink.TargetMapId = request.TargetMapId;
+            mapMarkerLink.TargetMapMarkerId = request.TargetMapMarkerId;
+
+            await uow.SaveChangesAsync();
+
+            await uow.MapMarkerLinks.LoadTargetMapAsync(mapMarkerLink);
+
+            return mapMarkerLink;
+        }
+
+        public async Task DeleteMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId)
+        {
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            var mapMarkerLink = await uow.MapMarkerLinks.GetWithLayerAsync(mapMarkerLinkId);
+            if (mapMarkerLink == null)
+                throw new MapMarkerNotFoundException(mapMarkerLinkId);
+
+            await _authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarkerLink.MapMarker.Layer);
+
+            uow.MapMarkerLinks.Remove(mapMarkerLink);
+
+            await uow.SaveChangesAsync();
         }
     }
 }

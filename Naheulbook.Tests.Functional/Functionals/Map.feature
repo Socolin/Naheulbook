@@ -259,9 +259,39 @@ Feature: Map
     And the response should contains the following json
     """
     {
-      "id": ${Map.Layers.[0].Markers.[0].Id},
+      "id": {"__match": {"type": "integer"}},
       "name": "some-link-name",
       "targetMapId": ${Map.[1].Id},
       "targetMapName": "${Map.[1].Name}"
     }
     """
+
+  Scenario: Can edit a map marker link
+    Given a JWT for an admin user
+    Given a map with all data
+
+    When performing a PUT to the url "/api/v2/mapMarkerLinks/${Map.[-1].Layers.[0].Markers.[0].Links.[0].Id}" with the following json content and the current jwt
+    """
+    {
+      "name": "some-link-name",
+      "targetMapId": ${Map.[1].Id}
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${Map.[-1].Layers.[0].Markers.[0].Links.[0].Id},
+      "name": "some-link-name",
+      "targetMapId": ${Map.[1].Id},
+      "targetMapName": "${Map.[1].Name}"
+    }
+    """
+
+  Scenario: Can delete a map marker link
+    Given a JWT for an admin user
+    Given a map with all data
+
+    When performing a DELETE to the url "/api/v2/mapMarkerLinks/${Map.[-1].Layers.[0].Markers.[0].Links.[0].Id}" with the current jwt
+    Then the response status code is 204
+

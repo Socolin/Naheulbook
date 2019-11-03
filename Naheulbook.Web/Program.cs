@@ -26,11 +26,11 @@ namespace Naheulbook.Web
                 .AddCommandLine(args)
                 .Build();
 
-            using (SentrySdk.Init(configuration["Sentry:DSN"]))
-            {
+/*            using (SentrySdk.Init(configuration["Sentry:DSN"]))
+            {*/
                 var logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(configuration)
-                    .WriteTo.Sentry()
+                   // .WriteTo.Sentry()
                     .WriteTo.Console(theme: AnsiConsoleTheme.Code)
                     .CreateLogger();
 
@@ -43,7 +43,7 @@ namespace Naheulbook.Web
                             options.ListenUnixSocket(context.Configuration["socket"]);
                     })
                     .UseKestrel()
-                    .UseSentry(o => o.BeforeSend = DefaultSentryEventExceptionProcessor.BeforeSend)
+                    //.UseSentry(o => o.BeforeSend = DefaultSentryEventExceptionProcessor.BeforeSend)
                     .UseContentRoot(Directory.GetCurrentDirectory())
                     .UseEnvironment(environment)
                     .UseStartup<Startup>()
@@ -53,6 +53,6 @@ namespace Naheulbook.Web
 
                 server.Run();
             }
-        }
+//        }
     }
 }

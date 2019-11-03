@@ -26,6 +26,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given(@"(a|\d+) maps? with all data")]
         public void GivenXMapWithAllData(string amount)
         {
+            var targetMap = _testDataUtil.AddMap().GetLast<Map>();
             for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
                 _testDataUtil.AddMap(x =>
                 {
@@ -42,7 +43,15 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                                     Name = "some-marker-name",
                                     Description = "some-marker-description",
                                     MarkerInfo = "{}",
-                                    Type = "point"
+                                    Type = "point",
+                                    Links = new List<MapMarkerLink>
+                                    {
+                                        new MapMarkerLink
+                                        {
+                                            Name = "some-link-name",
+                                            TargetMapId = targetMap.Id
+                                        }
+                                    }
                                 }
                             }
                         }
