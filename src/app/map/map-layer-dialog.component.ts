@@ -24,7 +24,7 @@ export class MapLayerDialogComponent {
     });
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) private readonly data: MapLayerDialogData,
+        @Inject(MAT_DIALOG_DATA) public readonly data: MapLayerDialogData,
         private readonly dialogRef: MatDialogRef<MapLayerDialogComponent, MapLayerDialogResult>
     ) {
         if (data.layer) {
