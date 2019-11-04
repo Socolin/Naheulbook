@@ -10,9 +10,11 @@ import {
     MapLayer,
     MapMarker,
     MapMarkerArea,
-    MapMarkerCircle, MapMarkerLink,
+    MapMarkerCircle,
+    MapMarkerLink,
     MapMarkerPoint,
-    MapMarkerRectangle, MapMarkerType
+    MapMarkerRectangle,
+    MapMarkerType
 } from './map.model';
 import {MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult} from './map-layer-dialog.component';
 import {
@@ -27,8 +29,8 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 import {LoginService, User} from '../user';
 import {
-    MapMarkerLinkDialogComponent,
     AddMapMarkerLinkDialogResult,
+    MapMarkerLinkDialogComponent,
     MapMarkerLinkDialogData
 } from './map-marker-link-dialog.component';
 
@@ -72,6 +74,10 @@ export class MapComponent implements OnInit, OnDestroy {
     public hiddenLayers: { [mapLayerId: number]: boolean } = {};
     public isMobile: boolean;
     public currentUser?: User;
+
+    private positionMarker1?: L.Marker;
+    private positionMarker2?: L.Marker;
+    private measureLine?: L.Polyline;
 
     constructor(
         private readonly ngZone: NgZone,
@@ -668,5 +674,69 @@ export class MapComponent implements OnInit, OnDestroy {
                 }
             });
         })
+    }
+
+    toggleMeasure(active: boolean) {
+        if (!active) {
+            if (this.positionMarker1) {
+                this.positionMarker1.remove();
+            }
+            if (this.positionMarker2) {
+                this.positionMarker2.remove();
+            }
+            if (this.measureLine) {
+                this.measureLine.remove();
+            }
+            this.positionMarker1 = undefined;
+            this.positionMarker2 = undefined;
+            this.measureLine = undefined;
+            return;
+        }
+        this.menuSidenav.close();
+        const bounds = this.leafletMap.getBounds();
+        const height = bounds.getSouth() - bounds.getNorth();
+        const width = bounds.getEast() - bounds.getWest();
+        let position1 = L.latLng(bounds.getNorth() + height / 2, bounds.getEast() - width * 0.3);
+        let position2 = L.latLng(bounds.getNorth() + height / 2, bounds.getWest() + width * 0.3);
+        this.positionMarker1 = L.marker(position1, {draggable: true})
+            .addTo(this.leafletMap);
+        this.positionMarker2 = L.marker(position2, {draggable: true})
+            .addTo(this.leafletMap);
+        this.measureLine = L.polyline([position1, position2])
+            .addTo(this.leafletMap);
+
+        this.positionMarker1.on('drag', this.updateMeasureLine.bind(this));
+        this.positionMarker2.on('drag', this.updateMeasureLine.bind(this));
+        this.positionMarker1.on('dragend', this.updateMeasureLine.bind(this));
+        this.positionMarker2.on('dragend', this.updateMeasureLine.bind(this));
+        this.updateMeasureLine();
+    }
+
+    private updateMeasureLine() {
+        if (this.measureLine && this.positionMarker1 && this.positionMarker2) {
+            this.measureLine.setLatLngs(
+                [this.positionMarker1.getLatLng(), this.positionMarker2.getLatLng()]
+            );
+
+            let unitName = this.map!.data.unitName;
+            const result = /(\d+)(.+)/.exec(unitName);
+            let unitCount = 1;
+            if (result) {
+                unitCount = +result[1];
+                unitName = result[2];
+            }
+
+            let distance = L.CRS.Simple.distance(
+                this.positionMarker1.getLatLng(),
+                this.positionMarker2.getLatLng()
+            ) * Math.pow(2, this.map!.imageData.zoomCount) / (this.map!.data.pixelPerUnit / unitCount);
+
+            let label = distance.toFixed(2) + unitName;
+            this.measureLine.unbindTooltip();
+            this.measureLine.bindTooltip(label, {
+                permanent: true,
+                direction: 'right'
+            });
+        }
     }
 }
