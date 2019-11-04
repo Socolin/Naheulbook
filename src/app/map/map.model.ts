@@ -57,8 +57,16 @@ export class MapLayer {
 
 export type MapMarkerType = 'point' | 'area' | 'rectangle' | 'circle';
 
-const defaultMarkerIcon = new L.Icon({
+export const defaultMarkerIcon = new L.Icon({
     iconUrl: '/assets/icons/position-marker.svg',
+    className: 'marker-blue',
+    iconSize: [36, 36],
+    iconAnchor: [16, 36],
+    attribution: 'https://game-icons.net'
+});
+
+export const measureMarkerIcon = new L.Icon({
+    iconUrl: '/assets/icons/measure-marker.svg',
     className: 'marker-blue',
     iconSize: [36, 36],
     iconAnchor: [16, 36],

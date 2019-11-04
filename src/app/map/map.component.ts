@@ -14,7 +14,7 @@ import {
     MapMarkerLink,
     MapMarkerPoint,
     MapMarkerRectangle,
-    MapMarkerType
+    MapMarkerType, measureMarkerIcon
 } from './map.model';
 import {MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult} from './map-layer-dialog.component';
 import {
@@ -698,12 +698,18 @@ export class MapComponent implements OnInit, OnDestroy {
         const width = bounds.getEast() - bounds.getWest();
         let position1 = L.latLng(bounds.getNorth() + height / 2, bounds.getEast() - width * 0.3);
         let position2 = L.latLng(bounds.getNorth() + height / 2, bounds.getWest() + width * 0.3);
-        this.positionMarker1 = L.marker(position1, {draggable: true})
-            .addTo(this.leafletMap);
-        this.positionMarker2 = L.marker(position2, {draggable: true})
-            .addTo(this.leafletMap);
-        this.measureLine = L.polyline([position1, position2])
-            .addTo(this.leafletMap);
+        this.positionMarker1 = L.marker(position1, {
+            icon: measureMarkerIcon,
+            draggable: true
+        }).addTo(this.leafletMap);
+        this.positionMarker2 = L.marker(position2, {
+            icon: measureMarkerIcon,
+            draggable: true
+        }).addTo(this.leafletMap);
+        this.measureLine = L.polyline([position1, position2], {
+            color: '#50B68C',
+            weight: 6
+        }).addTo(this.leafletMap);
 
         this.positionMarker1.on('drag', this.updateMeasureLine.bind(this));
         this.positionMarker2.on('drag', this.updateMeasureLine.bind(this));
