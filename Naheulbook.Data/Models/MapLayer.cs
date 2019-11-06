@@ -11,6 +11,7 @@ namespace Naheulbook.Data.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Source { get; set; } = null!;
+        public bool IsGm { get; set; }
 
         public int MapId { get; set; }
         public Map Map { get; set; } = null!;

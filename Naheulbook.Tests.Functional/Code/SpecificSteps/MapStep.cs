@@ -36,6 +36,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                         {
                             Name = "some-layer-name",
                             Source = "official",
+                            IsGm = true,
                             Markers = new List<MapMarker>
                             {
                                 new MapMarker
@@ -71,6 +72,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                         {
                             Name = "some-layer-name",
                             Source = "official",
+                            IsGm = true,
                             Markers = new List<MapMarker>
                             {
                                 new MapMarker

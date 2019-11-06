@@ -8,6 +8,7 @@ Feature: Map
     {
       "name": "some-map-name",
       "data": {
+        "isGm": true,
         "attribution": [
           {
             "name": "Naheulbeuk",
@@ -31,6 +32,7 @@ Feature: Map
         "zoomCount": {"__match": {"type": "integer"}}
       },
       "data": {"__partial": {
+          "isGm": true,
           "attribution": [
             {
               "name": "Naheulbeuk",
@@ -57,6 +59,7 @@ Feature: Map
           "id": ${Map.[-1].Layers.[0].Id},
           "name": "${Map.[-1].Layers.[0].Name}",
           "source": "${Map.[-1].Layers.[0].Source}",
+          "isGm": true,
           "markers": [
             {
               "id": ${Map.[-1].Layers.[0].Markers.[0].Id},
@@ -100,6 +103,7 @@ Feature: Map
       "id": ${Map.[-1].Id},
       "name": "${Map.[-1].Name}",
       "data": {"__partial": {
+        "isGm": true,
         "attribution": [
           {
             "name": "some-attribution-name",
@@ -121,6 +125,7 @@ Feature: Map
       "data": {
         "unitName": "5m",
         "pixelPerUnit": 42,
+        "isGm": true,
         "attribution": [
           {
             "name": "new-name",
@@ -139,6 +144,7 @@ Feature: Map
       "data": {
         "unitName": "5m",
         "pixelPerUnit": 42.0,
+        "isGm": true,
         "attribution": [
           {
             "name": "new-name",
@@ -157,7 +163,8 @@ Feature: Map
     """
     {
       "name": "some-layer-name",
-      "source": "official"
+      "source": "official",
+      "isGm": true
     }
     """
     Then the response status code is 200
@@ -167,6 +174,7 @@ Feature: Map
       "id": {"__match": {"type": "integer"}},
       "name": "some-layer-name",
       "source": "official",
+      "isGm": true,
       "markers": []
     }
     """
@@ -179,7 +187,8 @@ Feature: Map
     """
     {
       "name": "some-new-layer-name",
-      "source": "private"
+      "source": "private",
+      "isGm": false
     }
     """
     Then the response status code is 200
@@ -188,6 +197,7 @@ Feature: Map
     {
       "id": ${Map.Layers.[0].Id},
       "name": "some-new-layer-name",
+      "isGm": false,
       "markers": [],
       "source": "private"
     }

@@ -45,6 +45,9 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("source")
                 .HasMaxLength(25);
 
+            builder.Property(e => e.IsGm)
+                .HasColumnName("isGm");
+
             builder.HasOne(e => e.Map!)
                 .WithMany(e => e.Layers)
                 .HasForeignKey(e => e.MapId)

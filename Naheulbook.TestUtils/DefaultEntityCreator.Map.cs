@@ -30,6 +30,7 @@ namespace Naheulbook.TestUtils
                 }),
                 Data = JsonConvert.SerializeObject(new MapData
                 {
+                    IsGm = true,
                     Attribution = new List<MapData.MapAttribution>()
                     {
                         new MapData.MapAttribution

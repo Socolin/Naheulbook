@@ -9,6 +9,7 @@ namespace Naheulbook.Web.Responses
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Source { get; set; } = null!;
+        public bool IsGm { get; set; }
         public List<MapMarkerResponse> Markers { get; set; } = new List<MapMarkerResponse>();
     }
 }

@@ -71,6 +71,7 @@ namespace Naheulbook.Core.Services
             {
                 var mapData = new MapData
                 {
+                    IsGm = request.Data.IsGm,
                     PixelPerUnit = request.Data.PixelPerUnit,
                     UnitName = request.Data.UnitName,
                     Attribution = request.Data.Attribution
@@ -145,6 +146,7 @@ namespace Naheulbook.Core.Services
                 {
                     Name = request.Name,
                     Source = request.Source,
+                    IsGm = request.IsGm,
                     MapId = mapId,
                     UserId = request.Source == "official" ? (int?) null : executionContext.UserId
                 };

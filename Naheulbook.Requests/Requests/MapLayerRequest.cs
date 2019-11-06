@@ -5,7 +5,8 @@ namespace Naheulbook.Requests.Requests
 {
     public class MapLayerRequest
     {
-        public string Name { get; set; }
-        public string Source { get; set; }
+        public string Name { get; set; } = null!;
+        public string Source { get; set; } = null!;
+        public bool IsGm { get; set; }
     }
 }
