@@ -2,6 +2,7 @@
 
 // Plus imports for other components in your app.
 @import './app/shared/_value-editor-theme';
+@import './app/shared/_common-nav-theme';
 @import './app/_app.theme';
 @import './app/character/character.theme';
 @import './app/group/fighter-panel.theme';
@@ -37,6 +38,7 @@ $nhbk-theme: mat-light-theme($nhbk-primary, $nhbk-accent, $nhbk-warn);
     @include group-theme($theme);
     @include fighter-panel-theme($theme);
     @include map-theme($theme);
+    @include common-nav-theme($theme);
 }
 
 @include custom-components-theme($nhbk-theme);

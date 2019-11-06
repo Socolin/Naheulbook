@@ -21,6 +21,8 @@ import {
     ValueEditorComponent,
 } from './';
 import { PromptDialogComponent } from './prompt-dialog.component';
+import {GmModeService} from './gm-mode.service';
+import { ConfirmGmModeDialogComponent } from './confirm-gm-mode-dialog.component';
 
 @NgModule({
     imports: [
@@ -31,6 +33,7 @@ import { PromptDialogComponent } from './prompt-dialog.component';
     ],
     declarations: [
         AutocompleteInputComponent,
+        ConfirmGmModeDialogComponent,
         CommonNavComponent,
         IconComponent,
         IconSelectorComponent,
@@ -55,6 +58,7 @@ import { PromptDialogComponent } from './prompt-dialog.component';
         ValueEditorComponent,
     ],
     entryComponents: [
+        ConfirmGmModeDialogComponent,
         IconSelectorComponent,
         PromptDialogComponent,
     ],
@@ -62,6 +66,7 @@ import { PromptDialogComponent } from './prompt-dialog.component';
         IconService,
         MiscService,
         NhbkDialogService,
+        GmModeService,
     ]
 })
 export class SharedModule {

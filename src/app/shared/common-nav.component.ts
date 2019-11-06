@@ -7,6 +7,9 @@ import {ThemeService} from '../theme.service';
 
 import {NhbkDialogService} from './nhbk-dialog.service';
 import {Router} from '@angular/router';
+import {GmModeService} from './gm-mode.service';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmGmModeDialogComponent} from './confirm-gm-mode-dialog.component';
 
 @Component({
     selector: 'common-nav',
@@ -23,6 +26,8 @@ export class CommonNavComponent implements OnInit {
         private readonly nhbkDialogService: NhbkDialogService,
         private readonly themeService: ThemeService,
         private readonly router: Router,
+        private readonly dialog: MatDialog,
+        public readonly gmModeService: GmModeService,
     ) {
     };
 
@@ -46,6 +51,24 @@ export class CommonNavComponent implements OnInit {
 
     redirectToLogin() {
         this.router.navigate(['login', document.location.pathname.replace('/', '@')])
+    }
+
+    toggleGmMode() {
+        if (this.gmModeService.gmModeSnapshot) {
+            this.gmModeService.setGmMode(false);
+        } else {
+            const dialogRef = this.dialog.open(ConfirmGmModeDialogComponent, {
+                autoFocus: false
+            });
+
+            dialogRef.afterClosed().subscribe((result) => {
+                if (!result) {
+                    return;
+                }
+
+                this.gmModeService.setGmMode(true);
+            });
+        }
     }
 }
 

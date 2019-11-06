@@ -1,0 +1,13 @@
+@import '~@angular/material/theming';
+
+@mixin common-nav-theme($theme) {
+    $background: map-get($theme, background);
+
+    common-nav {
+        .gm-toggle {
+            &:hover, &:focus {
+                background: mat-color($background, 'hover');
+            }
+        }
+    }
+}

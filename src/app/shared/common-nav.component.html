@@ -1,10 +1,16 @@
 <h2 class="mat-h2">Autre</h2>
+
 <mat-nav-list>
+    <div class="gm-toggle" (click)="toggleGmMode(); $event.preventDefault(); $event.stopImmediatePropagation(); $event.stopPropagation()">
+        <mat-slide-toggle [ngModel]="gmModeService.gmMode | async">
+            Maitre du jeu
+        </mat-slide-toggle>
+    </div>
     <a mat-list-item [routerLink]="['/']">
         <mat-icon matListIcon>home</mat-icon> Accueil
     </a>
     <a mat-list-item (click)="openThemeSelector()">
-        <mat-icon matListIcon>style</mat-icon>Thème
+        <mat-icon matListIcon>style</mat-icon> Thème
     </a>
     <a mat-list-item [routerLink]="['/credit']">
         <mat-icon matListIcon>info</mat-icon> Crédits
@@ -16,7 +22,7 @@
         <mat-icon matListIcon>power_settings_new</mat-icon> Déconnexion
     </a>
     <a mat-list-item *ngIf="!loginService.currentLoggedUser" (click)="redirectToLogin()">
-        <mat-icon>account_circle</mat-icon> Connexion
+        <mat-icon matListIcon>account_circle</mat-icon> Connexion
     </a>
 </mat-nav-list>
 

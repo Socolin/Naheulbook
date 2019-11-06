@@ -1,12 +1,22 @@
-h2 {
-    margin-left: 16px;
-}
+:host {
+    h2 {
+        margin-left: 16px;
+    }
 
-.themes-list {
-    display: flex;
-    flex-direction: column;
-    button {
-        flex: 1 auto;
-        margin: 4px 0;
+    .gm-toggle {
+        cursor: pointer;
+        > mat-slide-toggle {
+            padding: 16px;
+        }
+    }
+
+    .themes-list {
+        display: flex;
+        flex-direction: column;
+
+        button {
+            flex: 1 auto;
+            margin: 4px 0;
+        }
     }
 }
