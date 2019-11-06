@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
-using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;

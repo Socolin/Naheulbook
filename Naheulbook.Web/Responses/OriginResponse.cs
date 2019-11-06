@@ -15,7 +15,7 @@ namespace Naheulbook.Web.Responses
         public string? PlayerDescription { get; set; }
         public string? PlayerSummary { get; set; }
         public string? Advantage { get; set; }
-        public OriginData Data { get; set; }
+        public OriginData Data { get; set; } = null!;
         public string? Size { get; set; }
         public List<FlagResponse>? Flags { get; set; }
         public List<int> SkillIds { get; set; } = null!;

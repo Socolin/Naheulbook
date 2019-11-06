@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.Extensions.Hosting;
 using Naheulbook.Tests.Functional.Code.Stubs.Melkor;
 
 namespace Naheulbook.Tests.Functional.Code.Servers
@@ -17,7 +18,7 @@ namespace Naheulbook.Tests.Functional.Code.Servers
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseUrls("http://[::1]:0")
-                .UseEnvironment(EnvironmentName.Development)
+                .UseEnvironment(Environments.Development)
                 .UseStartup<Startup>()
                 .Build();
 

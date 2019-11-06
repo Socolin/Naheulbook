@@ -28,7 +28,6 @@ namespace Naheulbook.Data.Tests.Integration
         public static DbContextOptions<NaheulbookDbContext> GetDbContextOptions(bool logSqlQueries = false)
         {
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
-                .ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning))
                 .EnableSensitiveDataLogging()
                 .UseMySql("Server=127.0.0.1;Database=naheulbook_integration;User=naheulbook;Password=naheulbook;SslMode=None");
 

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Naheulbook.Shared.TransientModels;
 
 // ReSharper disable UnusedMember.Global

@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Naheulbook.Tests.Functional.Code.Constants;
 using Naheulbook.Web;
 using Serilog;
@@ -62,7 +63,7 @@ namespace Naheulbook.Tests.Functional.Code.Servers
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseUrls("http://[::1]:0")
-                .UseEnvironment(EnvironmentName.Development)
+                .UseEnvironment(Environments.Development)
                 .UseStartup<Startup>()
                 .UseSerilog(logger)
                 .UseConfiguration(configuration)
