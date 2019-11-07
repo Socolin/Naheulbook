@@ -161,10 +161,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
                 const targetMarkerId = this.route.snapshot.queryParamMap.get('targetMarkerId');
                 if (targetMarkerId) {
-                    const marker = this.map.layers
+                    this.focusMarker = this.map.layers
                         .reduce((markers: MapMarker[], l) => markers.concat(l.markers), [])
                         .find(m => m.id === +targetMarkerId);
-                    this.focusMarker = marker;
                 } else if (paramMap.has('x') && paramMap.has('y') && paramMap.has('z')) {
                     const x = +paramMap.get('x')!;
                     const y = +paramMap.get('y')!;
@@ -259,10 +258,10 @@ export class MapComponent implements OnInit, OnDestroy {
                 leafletMap.createPane('grid');
                 leafletMap.zoomControl.setPosition('topright');
 
-                leafletMap.on('dragend', (event) => {
+                leafletMap.on('dragend', () => {
                     this.updateCoordinateInUrl()
                 });
-                leafletMap.on('zoom', (event) => {
+                leafletMap.on('zoom', () => {
                     this.updateCoordinateInUrl()
                 });
 
@@ -653,8 +652,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     toggleVisibility(mapLayer: MapLayer) {
-        const hidden = !this.hiddenLayers[mapLayer.id];
-        this.hiddenLayers[mapLayer.id] = hidden;
+        this.hiddenLayers[mapLayer.id] = !this.hiddenLayers[mapLayer.id];
         this.hiddenLayers$.next({...this.hiddenLayers, [mapLayer.id]: !this.hiddenLayers[mapLayer.id]})
     }
 
