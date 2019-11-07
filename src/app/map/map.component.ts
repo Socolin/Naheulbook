@@ -87,6 +87,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private positionMarker1?: L.Marker;
     private positionMarker2?: L.Marker;
     private measureLine?: L.Polyline;
+    private focusMarker?: MapMarker;
 
     constructor(
         private readonly ngZone: NgZone,
@@ -155,16 +156,13 @@ export class MapComponent implements OnInit, OnDestroy {
                     const marker = this.map.layers
                         .reduce((markers: MapMarker[], l) => markers.concat(l.markers), [])
                         .find(m => m.id === +targetMarkerId);
-                    if (marker) {
-                        this.goToMarker(marker);
-                    }
+                    this.focusMarker = marker;
                 } else if (paramMap.has('x') && paramMap.has('y') && paramMap.has('z')) {
                     const x = +paramMap.get('x')!;
                     const y = +paramMap.get('y')!;
                     const z = +paramMap.get('z')!;
                     this.goToCoordinate(x, y, z);
                 }
-
 
                 this.map$.next(mapInfo);
             })
@@ -183,6 +181,10 @@ export class MapComponent implements OnInit, OnDestroy {
                     previousLayers.forEach(l => l.markers.forEach(m => m.remove()));
                     newLayers.filter(l => l.isVisible(gmMode))
                         .forEach(l => l.markers.forEach(m => this.addMarkerToMap(m)));
+                    if (this.focusMarker) {
+                        this.goToMarker(this.focusMarker);
+                        this.focusMarker = undefined;
+                    }
                 }));
     }
 
@@ -674,6 +676,7 @@ export class MapComponent implements OnInit, OnDestroy {
                 targetMapMarkerId: result.targetMapMarkerId
             }).subscribe(link => {
                 mapMarker.links.push(link);
+                this.selectedMarker$.next(mapMarker);
             })
         });
     }
@@ -695,6 +698,7 @@ export class MapComponent implements OnInit, OnDestroy {
             const index = mapMarker.links.indexOf(link);
             if (index !== -1) {
                 mapMarker.links.splice(index, 1);
+                this.selectedMarker$.next(mapMarker);
             }
         });
     }
