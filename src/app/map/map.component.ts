@@ -1,6 +1,5 @@
 import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Location} from '@angular/common';
-import {ActivatedRoute, ParamMap, Router, UrlTree} from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {MatSidenav} from '@angular/material';
 import {MatDialog} from '@angular/material/dialog';
 
@@ -29,7 +28,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {MapMarkerRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {BehaviorSubject, combineLatest, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {map, pairwise, shareReplay, startWith, tap} from 'rxjs/operators';
+import {map, pairwise, shareReplay, startWith} from 'rxjs/operators';
 import {LoginService, User} from '../user';
 import {
     AddMapMarkerLinkDialogResult,
@@ -90,6 +89,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private positionMarker2?: L.Marker;
     private measureLine?: L.Polyline;
     private focusMarker?: MapMarker;
+    private tileLayer: L.Layer;
 
     constructor(
         private readonly ngZone: NgZone,
@@ -99,7 +99,6 @@ export class MapComponent implements OnInit, OnDestroy {
         private readonly breakpointObserver: BreakpointObserver,
         private readonly loginService: LoginService,
         private readonly router: Router,
-        private readonly location: Location,
         private readonly gmModeService: GmModeService,
     ) {
         this.layersForCurrentUser$ = combineLatest([
@@ -240,49 +239,53 @@ export class MapComponent implements OnInit, OnDestroy {
             this.gridOffsetY = 0;
         }
         this.ngZone.runOutsideAngular(() => {
-            if (this.leafletMap) {
-                this.leafletMap.remove();
-            }
-
             if (!this.map) {
                 return;
             }
 
-            const leafletMap = L.map(this.element.nativeElement, {
-                crs: L.CRS.Simple,
-                minZoom: 0,
-                almostOnMouseMove: false,
-                maxZoom: this.map.imageData.zoomCount + this.map.imageData.extraZoomCount,
-                editable: true
-            } as any).setView(this.map.getCenter(), 1);
+            let leafletMap: L.Map;
+            if (this.leafletMap) {
+                leafletMap = this.leafletMap;
+                leafletMap.removeLayer(this.tileLayer);
+            } else {
+                leafletMap = L.map(this.element.nativeElement, {
+                    crs: L.CRS.Simple,
+                    minZoom: 0,
+                    almostOnMouseMove: false,
+                    maxZoom: this.map.imageData.zoomCount + this.map.imageData.extraZoomCount,
+                    editable: true
+                } as any);
 
-            leafletMap.createPane('grid');
-            leafletMap.zoomControl.setPosition('topright');
+                leafletMap.createPane('grid');
+                leafletMap.zoomControl.setPosition('topright');
 
-            L.tileLayer(`/mapdata/${this.map.id}/{z}/{x}_{y}.png`, {
+                leafletMap.on('dragend', (event) => {
+                    this.updateCoordinateInUrl()
+                });
+                leafletMap.on('zoom', (event) => {
+                    this.updateCoordinateInUrl()
+                });
+
+                this.leafletMap = leafletMap;
+            }
+
+            this.tileLayer = L.tileLayer(`/mapdata/${this.map.id}/{z}/{x}_{y}.png`, {
                 attribution: this.map.data.attribution.map(x => `&copy;<a href=${x.url}>${x.name}</a>`).join('|')
             }).addTo(leafletMap);
 
+            leafletMap.setView(this.map.getCenter(), 1);
             leafletMap.invalidateSize({});
-
-            leafletMap.on('dragend', (event) => {
-                this.updateCoordinateInUrl()
-            });
-            leafletMap.on('zoom', (event) => {
-                this.updateCoordinateInUrl()
-            });
-
-            this.leafletMap = leafletMap;
         });
     }
 
     updateCoordinateInUrl() {
         const pixelCoords = this.map!.latLngToPixelCoords(this.leafletMap.getCenter());
-        this.location.replaceState(this.router.serializeUrl(this.router.createUrlTree([
-            this.leafletMap.getZoom(),
-            pixelCoords.x,
-            pixelCoords.y
-        ], {relativeTo: this.route.parent})));
+        this.ngZone.run(() => {
+            this.router.navigate([this.leafletMap.getZoom(), pixelCoords.x, pixelCoords.y], {
+                relativeTo: this.route.parent,
+                replaceUrl: true
+            });
+        });
     }
 
     private drawGrid(): L.LayerGroup | undefined {
@@ -667,12 +670,16 @@ export class MapComponent implements OnInit, OnDestroy {
 
     goToMarker(marker: MapMarker) {
         if (marker.leafletMarker) {
-            this.leafletMap.setView(marker.getCenter(), this.map!.imageData.zoomCount);
+            this.ngZone.runOutsideAngular(() => {
+                this.leafletMap.setView(marker.getCenter(), this.map!.imageData.zoomCount);
+            });
         }
     }
 
     goToCoordinate(x: number, y: number, z: number) {
-        this.leafletMap.setView(this.map!.pixelCoordsToLatLng(x, y), z);
+        this.ngZone.runOutsideAngular(() => {
+            this.leafletMap.setView(this.map!.pixelCoordsToLatLng(x, y), z);
+        });
     }
 
     editMap() {
@@ -704,8 +711,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
     goToMap(targetMapId: number, targetMapMarkerId?: number) {
         const pixelCoords = this.map!.latLngToPixelCoords(this.leafletMap.getCenter());
-        this.router.navigate([this.leafletMap.getZoom(), pixelCoords.x, pixelCoords.y], {relativeTo: this.route.parent});
-        this.router.navigate(['/map', targetMapId], {queryParams: {targetMarkerId: targetMapMarkerId}});
+        this.router.navigate([this.leafletMap.getZoom(), pixelCoords.x, pixelCoords.y], {relativeTo: this.route.parent, }).then(() => {
+            this.router.navigate(['/map', targetMapId], {queryParams: {targetMarkerId: targetMapMarkerId}});
+        });
         this.infoSidenav.close();
     }
 
