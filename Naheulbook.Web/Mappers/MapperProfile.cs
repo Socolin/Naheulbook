@@ -216,7 +216,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.MarkerInfo, opt => opt.MapFrom(r => MapperHelpers.FromJsonNotNull<JObject>(r.MarkerInfo)))
                 .ForMember(m => m.Links, opt => opt.MapFrom(r => r.Links));
             CreateMap<MapMarkerLink, MapMarkerLinkResponse>()
-                .ForMember(m => m.TargetMapName, opt => opt.MapFrom(r => r.TargetMap.Name));
+                .ForMember(m => m.TargetMapName, opt => opt.MapFrom(r => r.TargetMap.Name))
+                .ForMember(m => m.TargetMapIsGm, opt => opt.MapFrom(r => MapperHelpers.FromJsonNotNull<MapData>(r.TargetMap.Data).IsGm));
 
             CreateMap<Monster, MonsterResponse>()
                 .ForMember(m => m.Dead, opt => opt.MapFrom(b => MapperHelpers.FromDateTimeToString(b.Dead)))

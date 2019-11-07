@@ -71,6 +71,7 @@ Feature: Map
                 {
                   "id": ${Map.[-1].Layers.[0].Markers.[0].Links.[0].Id},
                   "name": "${Map.[-1].Layers.[0].Markers.[0].Links.[0].Name}",
+                  "targetMapIsGm": true,
                   "targetMapId": ${Map.[-1].Layers.[0].Markers.[0].Links.[0].TargetMapId},
                   "targetMapName": "${Map.[0].Name}"
                 }
@@ -298,6 +299,7 @@ Feature: Map
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-link-name",
+      "targetMapIsGm": true,
       "targetMapId": ${Map.[2].Id},
       "targetMapName": "${Map.[2].Name}"
     }
@@ -320,6 +322,7 @@ Feature: Map
     {
       "id": ${Map.[-1].Layers.[0].Markers.[0].Links.[0].Id},
       "name": "some-link-name",
+      "targetMapIsGm": true,
       "targetMapId": ${Map.[1].Id},
       "targetMapName": "${Map.[1].Name}"
     }
