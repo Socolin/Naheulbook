@@ -190,6 +190,7 @@ namespace Naheulbook.Core.Services
 
                 mapLayer.Name = request.Name;
                 mapLayer.Source = request.Source;
+                mapLayer.IsGm = request.IsGm;
                 mapLayer.UserId = request.Source == "official" ? (int?) null : executionContext.UserId;
 
                 await uow.SaveChangesAsync();
