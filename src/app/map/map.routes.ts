@@ -35,6 +35,15 @@ export const routes: Routes = [
     },
     {
         path: ':mapId',
-        component: MapComponent,
+        children: [
+            {
+                path: '',
+                component: MapComponent,
+            },
+            {
+                path: ':z/:x/:y',
+                component: MapComponent,
+            }
+        ]
     }
 ];

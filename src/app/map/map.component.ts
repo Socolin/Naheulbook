@@ -1,5 +1,6 @@
 import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Location} from '@angular/common';
+import {ActivatedRoute, ParamMap, Router, UrlTree} from '@angular/router';
 import {MatSidenav} from '@angular/material';
 import {MatDialog} from '@angular/material/dialog';
 
@@ -27,8 +28,8 @@ import {assertNever} from '../utils/utils';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MapMarkerRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {combineLatest, Observable, Subject, Subscription} from 'rxjs';
-import {map, pairwise, shareReplay, startWith} from 'rxjs/operators';
+import {combineLatest, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
+import {map, pairwise, shareReplay, startWith, tap} from 'rxjs/operators';
 import {LoginService, User} from '../user';
 import {
     AddMapMarkerLinkDialogResult,
@@ -71,9 +72,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
     public lastCreatedMarkerType: MapMarkerType;
     public selectedMarker?: MapMarker;
-    public selectedMarker$: Subject<MapMarker | undefined> = new Subject<MapMarker | undefined>();
+    public selectedMarker$: ReplaySubject<MapMarker | undefined> = new ReplaySubject<MapMarker | undefined>();
     public selectedLayer?: MapLayer;
-    public selectedLayer$: Subject<MapLayer | undefined> = new Subject<MapLayer | undefined>();
+    public selectedLayer$: ReplaySubject<MapLayer | undefined> = new ReplaySubject<MapLayer | undefined>();
     public markerForm = new FormGroup({
         name: new FormControl(),
         description: new FormControl(),
@@ -95,6 +96,7 @@ export class MapComponent implements OnInit, OnDestroy {
         private readonly breakpointObserver: BreakpointObserver,
         private readonly loginService: LoginService,
         private readonly router: Router,
+        private readonly location: Location,
         private readonly gmModeService: GmModeService,
     ) {
         this.layersForCurrentUser$ = combineLatest([
@@ -107,7 +109,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
         this.availableMarkerLinks$ = combineLatest([
             gmModeService.gmMode,
-            this.selectedMarker$
+            this.selectedMarker$,
         ]).pipe(
             map(([gmMode, selectedMarker]) => {
                 if (!selectedMarker) {
@@ -126,9 +128,18 @@ export class MapComponent implements OnInit, OnDestroy {
             this.isMobile = result.breakpoints[Breakpoints.HandsetPortrait];
         }));
 
-        this.route.paramMap.subscribe(paramMap => {
+        this.route.paramMap.pipe(
+            startWith<ParamMap | undefined>(undefined),
+            pairwise()
+        ).subscribe(([lastParamMap, paramMap]) => {
+            if (!paramMap) {
+                return;
+            }
             const mapId = paramMap.get('mapId');
             if (!mapId) {
+                return;
+            }
+            if (lastParamMap && lastParamMap.get('mapId') === mapId) {
                 return;
             }
             this.mapService.getMap(+mapId).subscribe(mapInfo => {
@@ -147,7 +158,13 @@ export class MapComponent implements OnInit, OnDestroy {
                     if (marker) {
                         this.goToMarker(marker);
                     }
+                } else if (paramMap.has('x') && paramMap.has('y') && paramMap.has('z')) {
+                    const x = +paramMap.get('x')!;
+                    const y = +paramMap.get('y')!;
+                    const z = +paramMap.get('z')!;
+                    this.goToCoordinate(x, y, z);
                 }
+
 
                 this.map$.next(mapInfo);
             })
@@ -228,8 +245,25 @@ export class MapComponent implements OnInit, OnDestroy {
             }).addTo(leafletMap);
 
             leafletMap.invalidateSize({});
+
+            leafletMap.on('dragend', (event) => {
+                this.updateCoordinateInUrl()
+            });
+            leafletMap.on('zoom', (event) => {
+                this.updateCoordinateInUrl()
+            });
+
             this.leafletMap = leafletMap;
         });
+    }
+
+    updateCoordinateInUrl() {
+        const pixelCoords = this.map!.latLngToPixelCoords(this.leafletMap.getCenter());
+        this.location.replaceState(this.router.serializeUrl(this.router.createUrlTree([
+            this.leafletMap.getZoom(),
+            pixelCoords.x,
+            pixelCoords.y
+        ], {relativeTo: this.route.parent})));
     }
 
     private drawGrid(): L.LayerGroup | undefined {
@@ -508,7 +542,6 @@ export class MapComponent implements OnInit, OnDestroy {
         mapMarker.setEditable(false);
         if (mapMarker === this.selectedMarker) {
             this.selectMarker(undefined);
-            this.infoSidenav.close();
         }
         if (!mapMarker.id) {
             mapMarker.leafletMarker!.remove();
@@ -560,9 +593,13 @@ export class MapComponent implements OnInit, OnDestroy {
                 description: marker.description
             });
         }
+        if (marker) {
+            this.infoSidenav.open();
+        } else {
+            this.infoSidenav.close();
+        }
         this.selectedMarker = marker;
         this.selectedMarker$.next(marker);
-        this.infoSidenav.open();
     }
 
     deleteMarker(mapMarker: MapMarker) {
@@ -611,6 +648,10 @@ export class MapComponent implements OnInit, OnDestroy {
         }
     }
 
+    goToCoordinate(x: number, y: number, z: number) {
+        this.leafletMap.setView(this.map!.pixelCoordsToLatLng(x, y), z);
+    }
+
     editMap() {
         this.router.navigate(['/map', 'edit', this.map!.id]);
     }
@@ -638,6 +679,8 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     goToMap(targetMapId: number, targetMapMarkerId?: number) {
+        const pixelCoords = this.map!.latLngToPixelCoords(this.leafletMap.getCenter());
+        this.router.navigate([this.leafletMap.getZoom(), pixelCoords.x, pixelCoords.y], {relativeTo: this.route.parent});
         this.router.navigate(['/map', targetMapId], {queryParams: {targetMarkerId: targetMapMarkerId}});
         this.infoSidenav.close();
     }

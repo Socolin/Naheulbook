@@ -37,6 +37,17 @@ export class Map {
         const latLngSize = this.getLatLngSize();
         return new L.LatLng(latLngSize.lat / 2, latLngSize.lng / 2)
     }
+
+    pixelCoordsToLatLng(x: number, y: number): L.LatLngExpression {
+        return new LatLng(-y / Math.pow(2, this.imageData.zoomCount), x / Math.pow(2, this.imageData.zoomCount));
+    }
+
+    latLngToPixelCoords(latLng: L.LatLng): {x: number, y: number} {
+        return {
+            x: Math.round(latLng.lng * Math.pow(2, this.imageData.zoomCount)),
+            y: Math.round(-latLng.lat * Math.pow(2, this.imageData.zoomCount))
+        }
+    }
 }
 
 export class MapLayer {
