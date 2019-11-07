@@ -103,7 +103,7 @@
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #layerMenu>
-                            <button mat-menu-item>
+                            <button mat-menu-item (click)="toggleVisibility(mapLayer)">
                                 <ng-template [ngIf]="hiddenLayers[mapLayer.id]">
                                     <mat-icon>visibility_off</mat-icon>
                                     Cacher
@@ -170,10 +170,10 @@
                     Couleur: <input type="color" [ngModel]="selectedMarker.color" (ngModelChange)="changeSelectedMarkerColor($event)">
                 </div>
                 <div class="actions">
-                    <button mat-button color="primary" *ngIf="!selectedMarker.id" (click)="cancelEdit(selectedMarker)">SUPPRIMER</button>
-                    <button mat-button color="primary" *ngIf="selectedMarker.id" (click)="cancelEdit(selectedMarker)">ANNULER</button>
-                    <button mat-button color="primary" *ngIf="!selectedMarker.id" (click)="saveMarker(selectedMarker)">CRÉER</button>
-                    <button mat-button color="primary" *ngIf="selectedMarker.id" (click)="saveMarker(selectedMarker)">MODIFIER</button>
+                    <button mat-button color="primary" [disabled]="markerForm.disabled" *ngIf="!selectedMarker.id" (click)="cancelEdit(selectedMarker)">SUPPRIMER</button>
+                    <button mat-button color="primary" [disabled]="markerForm.disabled" *ngIf="selectedMarker.id" (click)="cancelEdit(selectedMarker)">ANNULER</button>
+                    <button mat-button color="primary" [disabled]="markerForm.disabled" *ngIf="!selectedMarker.id" (click)="saveMarker(selectedMarker)">CRÉER</button>
+                    <button mat-button color="primary" [disabled]="markerForm.disabled" *ngIf="selectedMarker.id" (click)="saveMarker(selectedMarker)">MODIFIER</button>
                 </div>
             </div>
             <div *ngIf="!selectedMarker.editable" class="marker-detail">

@@ -57,8 +57,6 @@ export class MapLayer {
     source: 'official' | 'private';
     markers: MapMarker[];
 
-    hidden = false;
-
     static fromResponse(response: MapLayerResponse): MapLayer {
         const mapLayer = new MapLayer();
         mapLayer.id = response.id;
@@ -71,14 +69,6 @@ export class MapLayer {
 
     isListable(gmMode: boolean): boolean {
         return this.source === 'private' || gmMode || !this.isGm;
-    }
-
-    isVisible(gmMode: boolean): boolean {
-        return !this.hidden && this.isListable(gmMode);
-    }
-
-    toggleVisibility() {
-        this.hidden = !this.hidden;
     }
 }
 
@@ -131,7 +121,7 @@ export abstract class MapMarkerBase {
     leafletMarker?: L.Layer;
     editable: boolean;
     description?: string;
-    links: MapMarkerLink[];
+    links: MapMarkerLink[] = [];
 
     static fromResponse(mapLayer: MapLayer, response: MapMarkerResponse): MapMarker {
         let marker: MapMarker;

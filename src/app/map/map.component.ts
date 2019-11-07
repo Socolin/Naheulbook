@@ -28,7 +28,7 @@ import {assertNever} from '../utils/utils';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MapMarkerRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {combineLatest, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
 import {map, pairwise, shareReplay, startWith, tap} from 'rxjs/operators';
 import {LoginService, User} from '../user';
 import {
@@ -62,6 +62,7 @@ export class MapComponent implements OnInit, OnDestroy {
     public map$: Subject<Map> = new Subject<Map>();
     public layersForCurrentUser$: Observable<MapLayer[]>;
     public availableMarkerLinks$: Observable<MapMarkerLink[]>;
+    public visibleMarkers$: Observable<MapMarker[]>;
 
     public gridDisplayed = false;
     public gridSize = 5;
@@ -81,6 +82,7 @@ export class MapComponent implements OnInit, OnDestroy {
     });
     public expandedLayerList: { [mapLayerId: number]: boolean } = {};
     public hiddenLayers: { [mapLayerId: number]: boolean } = {};
+    public hiddenLayers$ = new BehaviorSubject<{ [mapLayerId: number]: boolean }>({});
     public isMobile: boolean;
     public currentUser?: User;
 
@@ -119,6 +121,13 @@ export class MapComponent implements OnInit, OnDestroy {
                 return selectedMarker.links.filter(link => link.isListable(gmMode));
             }),
             shareReplay(1)
+        );
+
+        this.visibleMarkers$ = combineLatest([this.layersForCurrentUser$, this.hiddenLayers$]).pipe(
+            map(([layers, hiddenLayers]) => layers
+                .filter(l => !hiddenLayers[l.id])
+                .reduce((markers, layer) => markers.concat(layer.markers), [] as MapMarker[])
+            )
         );
     }
 
@@ -172,20 +181,26 @@ export class MapComponent implements OnInit, OnDestroy {
             this.currentUser = user;
         }));
 
-        this.subscription.add(
-            combineLatest([
-                this.gmModeService.gmMode,
-                this.layersForCurrentUser$.pipe(startWith<MapLayer[]>([]))
-            ]).pipe(pairwise())
-                .subscribe(([[_, previousLayers], [gmMode, newLayers]]) => {
-                    previousLayers.forEach(l => l.markers.forEach(m => m.remove()));
-                    newLayers.filter(l => l.isVisible(gmMode))
-                        .forEach(l => l.markers.forEach(m => this.addMarkerToMap(m)));
-                    if (this.focusMarker) {
-                        this.goToMarker(this.focusMarker);
-                        this.focusMarker = undefined;
-                    }
-                }));
+        this.subscription.add(this.visibleMarkers$
+            .pipe(
+                startWith([]),
+                pairwise()
+            )
+            .subscribe(([previousMarkers, displayedMarkers]: [MapMarker[], MapMarker[]]) => {
+                const addedMarkers = displayedMarkers.filter(m => previousMarkers.indexOf(m) === -1);
+                const removedMarkers = previousMarkers.filter(m => displayedMarkers.indexOf(m) === -1);
+
+                this.ngZone.runOutsideAngular(() => {
+                    removedMarkers.forEach(m => m.remove());
+                });
+                addedMarkers.forEach(m => this.addMarkerToMap(m));
+
+                if (this.focusMarker) {
+                    this.goToMarker(this.focusMarker);
+                    this.focusMarker = undefined;
+                }
+            })
+        );
     }
 
     ngOnDestroy() {
@@ -219,14 +234,16 @@ export class MapComponent implements OnInit, OnDestroy {
 
     private createLeafletMap() {
         if (this.leafletMap) {
-            this.leafletMap.remove();
             this.gridDisplayed = false;
             this.gridLayer = undefined;
             this.gridOffsetX = 0;
             this.gridOffsetY = 0;
         }
-
         this.ngZone.runOutsideAngular(() => {
+            if (this.leafletMap) {
+                this.leafletMap.remove();
+            }
+
             if (!this.map) {
                 return;
             }
@@ -347,13 +364,15 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     updateGrid() {
-        if (this.gridLayer) {
-            this.gridLayer.remove();
-        }
-        this.gridLayer = this.drawGrid();
-        if (this.gridDisplayed && this.gridLayer) {
-            this.gridLayer.addTo(this.leafletMap);
-        }
+        this.ngZone.runOutsideAngular(() => {
+            if (this.gridLayer) {
+                this.gridLayer.remove();
+            }
+            this.gridLayer = this.drawGrid();
+            if (this.gridDisplayed && this.gridLayer) {
+                this.gridLayer.addTo(this.leafletMap);
+            }
+        });
     }
 
     changeGridSize(newSize: number) {
@@ -560,20 +579,26 @@ export class MapComponent implements OnInit, OnDestroy {
             request.markerInfo.color = mapMarker.leafletMarker!.options.color;
         }
 
+        this.markerForm.disable();
         if (mapMarker.id) {
             this.mapService.editMarker(mapMarker.mapLayer, mapMarker.id, request).subscribe(newMapMarker => {
-                mapMarker.remove();
+                this.markerForm.enable();
                 const i = mapMarker.mapLayer.markers.indexOf(mapMarker);
                 mapMarker.mapLayer.markers[i] = newMapMarker;
+                this.infoSidenav.close();
+                mapMarker.remove();
+                this.map$.next(this.map);
             });
         } else {
+            mapMarker.leafletMarker!.clearAllEventListeners();
             this.mapService.createMarker(mapMarker.mapLayer, request).subscribe(newMapMarker => {
+                mapMarker.remove();
+                this.markerForm.enable();
                 mapMarker.mapLayer.markers.push(newMapMarker);
+                this.infoSidenav.close();
+                this.map$.next(this.map);
             });
         }
-
-        this.infoSidenav.close();
-        this.map$.next(this.map);
     }
 
     changeSelectedMarkerColor(event: string) {
@@ -627,11 +652,7 @@ export class MapComponent implements OnInit, OnDestroy {
     toggleVisibility(mapLayer: MapLayer) {
         const hidden = !this.hiddenLayers[mapLayer.id];
         this.hiddenLayers[mapLayer.id] = hidden;
-        if (hidden) {
-            mapLayer.markers.forEach(m => m.remove());
-        } else {
-            mapLayer.markers.forEach(m => this.addMarkerToMap(m));
-        }
+        this.hiddenLayers$.next({...this.hiddenLayers, [mapLayer.id]: !this.hiddenLayers[mapLayer.id]})
     }
 
     canEditLayer(mapLayer: MapLayer) {
@@ -770,44 +791,49 @@ export class MapComponent implements OnInit, OnDestroy {
 
     toggleMeasure(active: boolean) {
         if (!active) {
-            if (this.positionMarker1) {
-                this.positionMarker1.remove();
-            }
-            if (this.positionMarker2) {
-                this.positionMarker2.remove();
-            }
-            if (this.measureLine) {
-                this.measureLine.remove();
-            }
+            this.ngZone.runOutsideAngular(() => {
+                if (this.positionMarker1) {
+                    this.positionMarker1.remove();
+                }
+                if (this.positionMarker2) {
+                    this.positionMarker2.remove();
+                }
+                if (this.measureLine) {
+                    this.measureLine.remove();
+                }
+            });
             this.positionMarker1 = undefined;
             this.positionMarker2 = undefined;
             this.measureLine = undefined;
             return;
         }
         this.menuSidenav.close();
-        const bounds = this.leafletMap.getBounds();
-        const height = bounds.getSouth() - bounds.getNorth();
-        const width = bounds.getEast() - bounds.getWest();
-        let position1 = L.latLng(bounds.getNorth() + height / 2, bounds.getEast() - width * 0.3);
-        let position2 = L.latLng(bounds.getNorth() + height / 2, bounds.getWest() + width * 0.3);
-        this.positionMarker1 = L.marker(position1, {
-            icon: measureMarkerIcon,
-            draggable: true
-        }).addTo(this.leafletMap);
-        this.positionMarker2 = L.marker(position2, {
-            icon: measureMarkerIcon,
-            draggable: true
-        }).addTo(this.leafletMap);
-        this.measureLine = L.polyline([position1, position2], {
-            color: '#50B68C',
-            weight: 6
-        }).addTo(this.leafletMap);
 
-        this.positionMarker1.on('drag', this.updateMeasureLine.bind(this));
-        this.positionMarker2.on('drag', this.updateMeasureLine.bind(this));
-        this.positionMarker1.on('dragend', this.updateMeasureLine.bind(this));
-        this.positionMarker2.on('dragend', this.updateMeasureLine.bind(this));
-        this.updateMeasureLine();
+        this.ngZone.runOutsideAngular(() => {
+            const bounds = this.leafletMap.getBounds();
+            const height = bounds.getSouth() - bounds.getNorth();
+            const width = bounds.getEast() - bounds.getWest();
+            let position1 = L.latLng(bounds.getNorth() + height / 2, bounds.getEast() - width * 0.3);
+            let position2 = L.latLng(bounds.getNorth() + height / 2, bounds.getWest() + width * 0.3);
+            this.positionMarker1 = L.marker(position1, {
+                icon: measureMarkerIcon,
+                draggable: true
+            }).addTo(this.leafletMap);
+            this.positionMarker2 = L.marker(position2, {
+                icon: measureMarkerIcon,
+                draggable: true
+            }).addTo(this.leafletMap);
+            this.measureLine = L.polyline([position1, position2], {
+                color: '#50B68C',
+                weight: 6
+            }).addTo(this.leafletMap);
+
+            this.positionMarker1.on('drag', this.updateMeasureLine.bind(this));
+            this.positionMarker2.on('drag', this.updateMeasureLine.bind(this));
+            this.positionMarker1.on('dragend', this.updateMeasureLine.bind(this));
+            this.positionMarker2.on('dragend', this.updateMeasureLine.bind(this));
+            this.updateMeasureLine();
+        });
     }
 
     private updateMeasureLine() {
