@@ -12,6 +12,7 @@ export class EditMapComponent implements OnInit {
     public loading = true;
     public form = new FormGroup({
         name: new FormControl(undefined, Validators.required),
+        isGm: new FormControl(undefined, Validators.required),
         unitName: new FormControl(undefined, Validators.required),
         pixelPerUnit: new FormControl(undefined, Validators.required),
     });
@@ -47,6 +48,7 @@ export class EditMapComponent implements OnInit {
                 this.mapId = +params['mapId'];
                 this.form.reset({
                     name: map.name,
+                    isGm: map.data.isGm,
                     unitName: map.data.unitName,
                     pixelPerUnit: map.data.pixelPerUnit
                 });
@@ -64,6 +66,7 @@ export class EditMapComponent implements OnInit {
         this.mapService.editMap(this.mapId, {
             name: this.form.value.name,
             data: {
+                isGm: this.form.value.isGm,
                 attribution: this.attributions,
                 unitName: this.form.value.unitName,
                 pixelPerUnit: +this.form.value.pixelPerUnit,

@@ -74,7 +74,7 @@
                         <mat-icon>more_vert</mat-icon>
                     </button>
                 </h2>
-                <div *ngFor="let mapLayer of map.layers" class="layer">
+                <div *ngFor="let mapLayer of layersForCurrentUser$ | async" class="layer">
                     <div class="title">
                         <button mat-icon-button
                                 *ngIf="!expandedLayerList[mapLayer.id]"
@@ -189,7 +189,7 @@
                     {{selectedMarker.description}}
                 </div>
                 <div class="links">
-                    <div *ngFor="let link of selectedMarker.links" class="map-link">
+                    <div *ngFor="let link of availableMarkerLinks$ | async" class="map-link">
                         <div class="name" mat-ripple>
                             <mat-icon matListIcon>arrow_forward</mat-icon>
                             <span (click)="goToMap(link.targetMapId, link.targetMapMarkerId)">

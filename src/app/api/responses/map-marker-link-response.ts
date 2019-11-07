@@ -3,5 +3,6 @@ export interface MapMarkerLinkResponse {
     name?: string;
     targetMapId: number;
     targetMapName: string;
+    targetMapIsGm: boolean;
     targetMapMarkerId?: number;
 }

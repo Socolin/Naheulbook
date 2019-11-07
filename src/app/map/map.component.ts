@@ -14,7 +14,8 @@ import {
     MapMarkerLink,
     MapMarkerPoint,
     MapMarkerRectangle,
-    MapMarkerType, measureMarkerIcon
+    MapMarkerType,
+    measureMarkerIcon
 } from './map.model';
 import {MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult} from './map-layer-dialog.component';
 import {
@@ -26,13 +27,15 @@ import {assertNever} from '../utils/utils';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MapMarkerRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Subscription} from 'rxjs';
+import {combineLatest, Observable, Subject, Subscription} from 'rxjs';
+import {map, pairwise, shareReplay, startWith} from 'rxjs/operators';
 import {LoginService, User} from '../user';
 import {
     AddMapMarkerLinkDialogResult,
     MapMarkerLinkDialogComponent,
     MapMarkerLinkDialogData
 } from './map-marker-link-dialog.component';
+import {GmModeService} from '../shared';
 
 @Component({
     selector: 'app-map',
@@ -55,6 +58,9 @@ export class MapComponent implements OnInit, OnDestroy {
     private gridLayer?: L.LayerGroup;
 
     public map?: Map;
+    public map$: Subject<Map> = new Subject<Map>();
+    public layersForCurrentUser$: Observable<MapLayer[]>;
+    public availableMarkerLinks$: Observable<MapMarkerLink[]>;
 
     public gridDisplayed = false;
     public gridSize = 5;
@@ -65,7 +71,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
     public lastCreatedMarkerType: MapMarkerType;
     public selectedMarker?: MapMarker;
+    public selectedMarker$: Subject<MapMarker | undefined> = new Subject<MapMarker | undefined>();
     public selectedLayer?: MapLayer;
+    public selectedLayer$: Subject<MapLayer | undefined> = new Subject<MapLayer | undefined>();
     public markerForm = new FormGroup({
         name: new FormControl(),
         description: new FormControl(),
@@ -87,7 +95,28 @@ export class MapComponent implements OnInit, OnDestroy {
         private readonly breakpointObserver: BreakpointObserver,
         private readonly loginService: LoginService,
         private readonly router: Router,
+        private readonly gmModeService: GmModeService,
     ) {
+        this.layersForCurrentUser$ = combineLatest([
+            gmModeService.gmMode,
+            this.map$
+        ]).pipe(
+            map(([gmMode, mapInfo]) => mapInfo!.layers.filter(l => l.isListable(gmMode))),
+            shareReplay(1)
+        );
+
+        this.availableMarkerLinks$ = combineLatest([
+            gmModeService.gmMode,
+            this.selectedMarker$
+        ]).pipe(
+            map(([gmMode, selectedMarker]) => {
+                if (!selectedMarker) {
+                    return [];
+                }
+                return selectedMarker.links.filter(link => link.isListable(gmMode));
+            }),
+            shareReplay(1)
+        );
     }
 
     ngOnInit() {
@@ -102,14 +131,14 @@ export class MapComponent implements OnInit, OnDestroy {
             if (!mapId) {
                 return;
             }
-            this.mapService.getMap(+mapId).subscribe(map => {
-                this.map = map;
-                this.gridSize = map.data.pixelPerUnit / Math.pow(2, map.imageData.zoomCount);
-                this.selectedLayer = undefined;
+            this.mapService.getMap(+mapId).subscribe(mapInfo => {
+                this.map = mapInfo;
+                this.gridSize = mapInfo.data.pixelPerUnit / Math.pow(2, mapInfo.imageData.zoomCount);
+                this.selectLayer(undefined);
                 this.gridDraggable = undefined;
                 this.isGridDraggable = false;
                 this.createLeafletMap();
-                this.map.layers.forEach(l => l.markers.forEach(m => this.addMarkerToMap(m)));
+
                 const targetMarkerId = this.route.snapshot.queryParamMap.get('targetMarkerId');
                 if (targetMarkerId) {
                     const marker = this.map.layers
@@ -119,12 +148,25 @@ export class MapComponent implements OnInit, OnDestroy {
                         this.goToMarker(marker);
                     }
                 }
+
+                this.map$.next(mapInfo);
             })
         });
 
         this.subscription.add(this.loginService.checkLogged().subscribe((user) => {
             this.currentUser = user;
         }));
+
+        this.subscription.add(
+            combineLatest([
+                this.gmModeService.gmMode,
+                this.layersForCurrentUser$.pipe(startWith<MapLayer[]>([]))
+            ]).pipe(pairwise())
+                .subscribe(([[_, previousLayers], [gmMode, newLayers]]) => {
+                    previousLayers.forEach(l => l.markers.forEach(m => m.remove()));
+                    newLayers.filter(l => l.isVisible(gmMode))
+                        .forEach(l => l.markers.forEach(m => this.addMarkerToMap(m)));
+                }));
     }
 
     ngOnDestroy() {
@@ -331,8 +373,8 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     openAddMapLayerDialog() {
-        const map = this.map;
-        if (!map) {
+        const mapInfo = this.map;
+        if (!mapInfo) {
             return;
         }
         const dialogRef = this.dialog.open<MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult>(
@@ -346,8 +388,9 @@ export class MapComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            this.mapService.createMapLayer(map.id, result).subscribe(mapLayer => {
-                map.layers.push(mapLayer)
+            this.mapService.createMapLayer(mapInfo.id, result).subscribe(mapLayer => {
+                mapInfo.layers.push(mapLayer);
+                this.map$.next(mapInfo);
             });
         })
     }
@@ -464,7 +507,7 @@ export class MapComponent implements OnInit, OnDestroy {
     cancelEdit(mapMarker: MapMarker) {
         mapMarker.setEditable(false);
         if (mapMarker === this.selectedMarker) {
-            this.selectedMarker = undefined;
+            this.selectMarker(undefined);
             this.infoSidenav.close();
         }
         if (!mapMarker.id) {
@@ -487,17 +530,15 @@ export class MapComponent implements OnInit, OnDestroy {
                 mapMarker.remove();
                 const i = mapMarker.mapLayer.markers.indexOf(mapMarker);
                 mapMarker.mapLayer.markers[i] = newMapMarker;
-                this.addMarkerToMap(newMapMarker);
-                this.infoSidenav.close();
             });
         } else {
             this.mapService.createMarker(mapMarker.mapLayer, request).subscribe(newMapMarker => {
-                mapMarker.remove();
                 mapMarker.mapLayer.markers.push(newMapMarker);
-                this.addMarkerToMap(newMapMarker);
-                this.infoSidenav.close();
             });
         }
+
+        this.infoSidenav.close();
+        this.map$.next(this.map);
     }
 
     changeSelectedMarkerColor(event: string) {
@@ -512,14 +553,15 @@ export class MapComponent implements OnInit, OnDestroy {
         });
     }
 
-    private selectMarker(marker: MapMarker) {
-        if (this.selectedMarker !== marker) {
+    private selectMarker(marker: MapMarker | undefined) {
+        if (marker && this.selectedMarker !== marker) {
             this.markerForm.reset({
                 name: marker.name,
                 description: marker.description
             });
-            this.selectedMarker = marker;
         }
+        this.selectedMarker = marker;
+        this.selectedMarker$.next(marker);
         this.infoSidenav.open();
     }
 
@@ -600,8 +642,9 @@ export class MapComponent implements OnInit, OnDestroy {
         this.infoSidenav.close();
     }
 
-    selectLayer(mapLayer: MapLayer) {
+    selectLayer(mapLayer: MapLayer | undefined) {
         this.selectedLayer = mapLayer;
+        this.selectedLayer$.next(mapLayer);
     }
 
     deleteLink(mapMarker: MapMarker, link: MapMarkerLink) {
@@ -645,13 +688,14 @@ export class MapComponent implements OnInit, OnDestroy {
             const index = this.map!.layers.findIndex(l => l.id === mapLayer.id);
             if (index !== -1) {
                 this.map!.layers.splice(index, 1);
+                this.map$.next(this.map);
             }
         });
     }
 
     startEditLayer(mapLayer: MapLayer) {
-        const map = this.map;
-        if (!map) {
+        const mapInfo = this.map;
+        if (!mapInfo) {
             return;
         }
         const dialogRef = this.dialog.open<MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult>(
@@ -668,9 +712,10 @@ export class MapComponent implements OnInit, OnDestroy {
             }
 
             this.mapService.editMapLayer(mapLayer.id, result).subscribe(editedMapLayer => {
-                const index = map.layers.indexOf(mapLayer);
+                const index = mapInfo.layers.indexOf(mapLayer);
                 if (index !== -1) {
-                    map.layers[index] = editedMapLayer;
+                    mapInfo.layers[index] = editedMapLayer;
+                    this.map$.next(this.map);
                 }
             });
         })

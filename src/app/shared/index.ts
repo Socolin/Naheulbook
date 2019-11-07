@@ -21,6 +21,7 @@ export * from './text-formatter.pipe';
 
 export * from './autocomplete-input.component';
 export * from './common-nav.component';
+export * from './gm-mode.service';
 export * from './icon-selector.component';
 export * from './icon.component';
 export * from './stat-requirements-editor.component';

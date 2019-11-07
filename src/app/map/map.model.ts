@@ -42,16 +42,32 @@ export class Map {
 export class MapLayer {
     id: number;
     name: string;
+    isGm: boolean;
     source: 'official' | 'private';
     markers: MapMarker[];
+
+    hidden = false;
 
     static fromResponse(response: MapLayerResponse): MapLayer {
         const mapLayer = new MapLayer();
         mapLayer.id = response.id;
         mapLayer.name = response.name;
+        mapLayer.isGm = response.isGm;
         mapLayer.source = response.source;
         mapLayer.markers = response.markers.map(m => MapMarkerBase.fromResponse(mapLayer, m));
         return mapLayer;
+    }
+
+    isListable(gmMode: boolean): boolean {
+        return this.source === 'private' || gmMode || !this.isGm;
+    }
+
+    isVisible(gmMode: boolean): boolean {
+        return !this.hidden && this.isListable(gmMode);
+    }
+
+    toggleVisibility() {
+        this.hidden = !this.hidden;
     }
 }
 
@@ -379,6 +395,7 @@ export class MapMarkerLink {
     public id: number;
     public name: string;
     public targetMapId: number;
+    public targetMapIsGm: boolean;
     public targetMapMarkerId?: number;
 
     static fromResponse(response: MapMarkerLinkResponse): MapMarkerLink {
@@ -386,7 +403,12 @@ export class MapMarkerLink {
         mapMarkerLink.id = response.id;
         mapMarkerLink.name = response.name || response.targetMapName;
         mapMarkerLink.targetMapId = response.targetMapId;
+        mapMarkerLink.targetMapIsGm = response.targetMapIsGm;
         mapMarkerLink.targetMapMarkerId = response.targetMapMarkerId;
         return mapMarkerLink;
+    }
+
+    isListable(gmMode: boolean) {
+        return gmMode || !this.targetMapIsGm;
     }
 }

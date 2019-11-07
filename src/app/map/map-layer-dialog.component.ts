@@ -10,6 +10,7 @@ export interface MapLayerDialogData {
 export interface MapLayerDialogResult {
     name: string;
     source: 'official' | 'private';
+    isGm: boolean
 }
 
 @Component({
@@ -20,7 +21,8 @@ export class MapLayerDialogComponent {
 
     form: FormGroup = new FormGroup({
         'name': new FormControl(undefined, [Validators.required]),
-        'source': new FormControl('private', [Validators.required])
+        'source': new FormControl('private', [Validators.required]),
+        'isGm': new FormControl(false, [Validators.required]),
     });
 
     constructor(
@@ -30,7 +32,8 @@ export class MapLayerDialogComponent {
         if (data.layer) {
             this.form.reset({
                 name: data.layer.name,
-                source: data.layer.source
+                source: data.layer.source,
+                isGm: data.layer.isGm
             })
         }
     }

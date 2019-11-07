@@ -13,6 +13,7 @@ import {Map} from './map.model';
 export class CreateMapComponent {
     public form = new FormGroup({
         name: new FormControl(undefined, Validators.required),
+        isGm: new FormControl(false, Validators.required),
         unitName: new FormControl(undefined, Validators.required),
         pixelPerUnit: new FormControl(undefined, Validators.required),
         image: new FormControl(undefined, [Validators.required, requiredFileType(['png', 'jpg', 'jpeg', 'svg', 'bmp'])])
@@ -64,6 +65,7 @@ export class CreateMapComponent {
         this.mapService.createMap({
                 name: this.form.value.name,
                 data: {
+                    isGm: this.form.value.isGm,
                     attribution: this.attributions,
                     unitName: this.form.value.unitName,
                     pixelPerUnit: +this.form.value.pixelPerUnit,

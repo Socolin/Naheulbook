@@ -14,6 +14,9 @@
             </mat-select>
         </mat-form-field>
     </div>
+    <div *ngIf="form.value.source === 'official'" class="is-gm">
+        <mat-checkbox formControlName="isGm">Maitre du jeu</mat-checkbox>
+    </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button

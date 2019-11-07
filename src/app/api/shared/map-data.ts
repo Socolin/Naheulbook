@@ -3,6 +3,7 @@ export interface MapData {
         name: string,
         url: string
     }[];
+    isGm: boolean;
     pixelPerUnit: number;
     unitName: string;
 }
