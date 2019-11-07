@@ -231,12 +231,17 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     private createLeafletMap() {
-        if (this.leafletMap) {
-            this.gridDisplayed = false;
+        if (this.gridLayer) {
+            this.gridLayer.remove();
             this.gridLayer = undefined;
-            this.gridOffsetX = 0;
-            this.gridOffsetY = 0;
         }
+
+        this.gridDisplayed = false;
+        this.gridOffsetX = 0;
+        this.gridOffsetY = 0;
+
+        this.toggleMeasure(false);
+
         this.ngZone.runOutsideAngular(() => {
             if (!this.map) {
                 return;
