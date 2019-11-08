@@ -87,9 +87,10 @@ export class MapComponent implements OnInit, OnDestroy {
     public isMobile: boolean;
     public currentUser?: User;
 
-    private positionMarker1?: L.Marker;
-    private positionMarker2?: L.Marker;
-    private measureLine?: L.Polyline;
+    public  positionMarker1?: L.Marker;
+    public  positionMarker2?: L.Marker;
+    public  measureLine?: L.Polyline;
+
     private focusMarker?: MapMarker;
     private tileLayer: L.Layer;
 
