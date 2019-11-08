@@ -264,9 +264,7 @@ export class MapComponent implements OnInit, OnDestroy {
             } else {
                 leafletMap = L.map(this.element.nativeElement, {
                     crs: L.CRS.Simple,
-                    minZoom: 0,
                     almostOnMouseMove: false,
-                    maxZoom: this.map.imageData.zoomCount + this.map.imageData.extraZoomCount,
                     editable: true
                 } as any);
 
@@ -287,6 +285,8 @@ export class MapComponent implements OnInit, OnDestroy {
                 attribution: this.map.data.attribution.map(x => `&copy;<a href=${x.url}>${x.name}</a>`).join('|')
             }).addTo(leafletMap);
 
+            leafletMap.setMinZoom(0);
+            leafletMap.setMaxZoom(this.map.imageData.zoomCount + this.map.imageData.extraZoomCount);
             leafletMap.setView(this.map.getCenter(), 1);
             leafletMap.invalidateSize({});
         });
