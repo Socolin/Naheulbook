@@ -1,25 +1,41 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {MapService} from './map.service';
 import {MapSummaryResponse} from '../api/responses';
+import {GmModeService, removeDiacritics} from '../shared';
+import {combineLatest, Subscription} from 'rxjs';
+import {FormControl} from '@angular/forms';
+import {startWith} from 'rxjs/operators';
 
 @Component({
     templateUrl: './map-list.component.html',
     styleUrls: ['./map-list.component.scss']
 })
-export class MapListComponent implements OnInit {
+export class MapListComponent implements OnInit, OnDestroy {
     public maps?: MapSummaryResponse[];
+    public filterControl: FormControl = new FormControl('');
+    private subscription: Subscription = new Subscription();
 
     constructor(
         private readonly router: Router,
         private readonly mapService: MapService,
+        private readonly gmModeService: GmModeService
     ) {
     }
 
     ngOnInit() {
-        this.mapService.getMaps().subscribe(maps => {
-            this.maps = maps;
-        })
+        this.subscription.add(combineLatest([
+            this.gmModeService.gmMode,
+            this.mapService.getMaps(),
+            this.filterControl.valueChanges.pipe(startWith<string>(''))
+        ]).subscribe(([gmMode, maps, filter]) => {
+            this.maps = maps.filter(m => gmMode || !m.data.isGm).
+            filter(m => !filter || removeDiacritics(m.name.toLowerCase()).indexOf(removeDiacritics(filter.toLowerCase())) !== -1);
+        }));
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     addMap() {

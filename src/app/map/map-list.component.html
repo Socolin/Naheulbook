@@ -8,8 +8,12 @@
     </button>
 </div>
 
-<div class="map-list">
+<mat-form-field>
+    <input matInput placeholder="&#x2063;Filtre" [formControl]="filterControl" autocomplete="off"  autocapitalize="off"/>
+</mat-form-field>
+
+<mat-nav-list>
     <div *ngFor="let map of maps">
-        <a [routerLink]="['/map', map.id]">{{map.name}}</a>
+        <a  mat-list-item [routerLink]="['/map', map.id]">{{map.name}}</a>
     </div>
-</div>
+</mat-nav-list>
