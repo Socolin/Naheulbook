@@ -4,6 +4,7 @@ import {MapLayerResponse, MapMarkerLinkResponse, MapMarkerResponse, MapResponse}
 import * as L from 'leaflet';
 import {assertNever} from '../utils/utils';
 import {LatLng} from 'leaflet';
+import {defaultMarkerIcon, markerIcons} from './icons';
 
 export class Map {
     id: number;
@@ -74,22 +75,6 @@ export class MapLayer {
 
 export type MapMarkerType = 'point' | 'area' | 'rectangle' | 'circle';
 
-export const defaultMarkerIcon = new L.Icon({
-    iconUrl: '/assets/icons/position-marker.svg',
-    className: 'marker-blue',
-    iconSize: [36, 36],
-    iconAnchor: [16, 36],
-    attribution: 'https://game-icons.net'
-});
-
-export const measureMarkerIcon = new L.Icon({
-    iconUrl: '/assets/icons/measure-marker.svg',
-    className: 'marker-blue',
-    iconSize: [36, 36],
-    iconAnchor: [16, 36],
-    attribution: 'https://game-icons.net'
-});
-
 export interface MarkerInfoPoint {
     position: L.LatLngLiteral;
     icon?: string;
@@ -127,7 +112,7 @@ export abstract class MapMarkerBase {
         let marker: MapMarker;
         switch (response.type) {
             case 'point': {
-                marker = new MapMarkerPoint(mapLayer, response.markerInfo.position);
+                marker = new MapMarkerPoint(mapLayer, response.markerInfo.position, response.markerInfo.icon);
                 break;
             }
             case 'area': {
@@ -225,13 +210,17 @@ export class MapMarkerPoint extends MapMarkerBase {
     icon?: string;
     leafletMarker?: L.Marker;
 
-    constructor(mapLayer: MapLayer, position: L.LatLngLiteral) {
+    constructor(mapLayer: MapLayer, position: L.LatLngLiteral, icon?: string) {
         super(mapLayer);
         this.position = L.latLng(position);
+        this.icon = icon;
     }
 
     protected createLeafletLayer(): L.Layer {
-        return L.marker(this.position, {icon: defaultMarkerIcon, draggable: this.editable});
+        return L.marker(this.position, {
+            icon: this.icon ? markerIcons[this.icon] || defaultMarkerIcon : defaultMarkerIcon,
+            draggable: this.editable
+        });
     }
 
     public setMarkerEditable(editable: boolean): void {
@@ -245,7 +234,7 @@ export class MapMarkerPoint extends MapMarkerBase {
     public getMarkerInfo(): MarkerInfoPoint {
         return {
             position: this.leafletMarker ? serializeLatLng(this.leafletMarker.getLatLng()) : serializeLatLng(this.position),
-            icon: this.icon
+            icon: this.getIconName()
         }
     }
 
@@ -255,6 +244,18 @@ export class MapMarkerPoint extends MapMarkerBase {
 
     public getCenter(): L.LatLng {
         return this.position;
+    }
+
+    private getIconName(): string | undefined {
+        if (this.leafletMarker) {
+            for (let iconName of Object.keys(markerIcons)) {
+                if (markerIcons[iconName] === this.leafletMarker.getIcon()) {
+                    return iconName;
+                }
+            }
+            return Object.keys(markerIcons)[0];
+        }
+        return this.icon;
     }
 }
 

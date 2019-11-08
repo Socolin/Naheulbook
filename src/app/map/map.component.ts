@@ -15,7 +15,6 @@ import {
     MapMarkerPoint,
     MapMarkerRectangle,
     MapMarkerType,
-    measureMarkerIcon
 } from './map.model';
 import {MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult} from './map-layer-dialog.component';
 import {
@@ -36,6 +35,7 @@ import {
     MapMarkerLinkDialogData
 } from './map-marker-link-dialog.component';
 import {GmModeService} from '../shared';
+import {markerIcons, measureMarkerIcon} from './icons';
 
 @Component({
     selector: 'app-map',
@@ -78,7 +78,9 @@ export class MapComponent implements OnInit, OnDestroy {
     public markerForm = new FormGroup({
         name: new FormControl(),
         description: new FormControl(),
+        markerIcon: new FormControl()
     });
+    public markerIconSubscription?: Subscription;
     public expandedLayerList: { [mapLayerId: number]: boolean } = {};
     public hiddenLayers: { [mapLayerId: number]: boolean } = {};
     public hiddenLayers$ = new BehaviorSubject<{ [mapLayerId: number]: boolean }>({});
@@ -90,6 +92,9 @@ export class MapComponent implements OnInit, OnDestroy {
     private measureLine?: L.Polyline;
     private focusMarker?: MapMarker;
     private tileLayer: L.Layer;
+
+    public markerIcons: { [name: string]: L.Icon } = markerIcons;
+    public markerIconNames: string[] = Object.keys(markerIcons);
 
     constructor(
         private readonly ngZone: NgZone,
@@ -202,6 +207,9 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        if (this.markerIconSubscription) {
+            this.markerIconSubscription.unsubscribe();
+        }
         this.subscription.unsubscribe();
     }
 
@@ -578,10 +586,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
     saveMarker(mapMarker: MapMarker) {
         const request: MapMarkerRequest = {
-            ...this.markerForm.value,
+            name: this.markerForm.value.name,
+            description: this.markerForm.value.description,
             type: mapMarker.type,
+            markerInfo: mapMarker.getMarkerInfo()
         };
-        request.markerInfo = mapMarker.getMarkerInfo();
         if (mapMarker.type === 'rectangle' || mapMarker.type === 'circle' || mapMarker.type === 'area') {
             request.markerInfo.color = mapMarker.leafletMarker!.options.color;
         }
@@ -622,10 +631,22 @@ export class MapComponent implements OnInit, OnDestroy {
 
     private selectMarker(marker: MapMarker | undefined) {
         if (marker && this.selectedMarker !== marker) {
+            if (this.markerIconSubscription) {
+                this.markerIconSubscription.unsubscribe();
+                this.markerIconSubscription = undefined;
+            }
             this.markerForm.reset({
                 name: marker.name,
-                description: marker.description
+                description: marker.description,
+                markerIcon: marker.type === 'point' ? marker.icon || this.markerIconNames[0] : undefined
             });
+            if (marker.type === 'point') {
+                this.markerIconSubscription = this.markerForm.controls.markerIcon.valueChanges.subscribe((iconName) => {
+                    if (marker.leafletMarker) {
+                        marker.leafletMarker.setIcon(this.markerIcons[iconName]);
+                    }
+                });
+            }
         }
         if (marker) {
             this.infoSidenav.open();

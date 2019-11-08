@@ -169,6 +169,13 @@
                 <div class="color" *ngIf="selectedMarker.useColor()">
                     Couleur: <input type="color" [ngModel]="selectedMarker.color" (ngModelChange)="changeSelectedMarkerColor($event)">
                 </div>
+                <div [formGroup]="markerForm">
+                    <mat-radio-group formControlName="markerIcon" class="marker-icon-selector" *ngIf="selectedMarker.type === 'point'">
+                        <mat-radio-button [value]="markerIconName" *ngFor="let markerIconName of markerIconNames" class="icon">
+                            <img src="{{markerIcons[markerIconName].options.iconUrl}}" width="48">
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
                 <div class="actions">
                     <button mat-button color="primary" [disabled]="markerForm.disabled" *ngIf="!selectedMarker.id" (click)="cancelEdit(selectedMarker)">SUPPRIMER</button>
                     <button mat-button color="primary" [disabled]="markerForm.disabled" *ngIf="selectedMarker.id" (click)="cancelEdit(selectedMarker)">ANNULER</button>
