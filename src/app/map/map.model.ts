@@ -220,7 +220,7 @@ export class MapMarkerPoint extends MapMarkerBase {
         return L.marker(this.position, {
             icon: this.icon ? markerIcons[this.icon] || defaultMarkerIcon : defaultMarkerIcon,
             draggable: this.editable
-        });
+        }).bindTooltip(this.name, {direction: 'bottom', className: 'map-marker-tooltip', opacity: 1});
     }
 
     public setMarkerEditable(editable: boolean): void {
@@ -273,7 +273,8 @@ export class MapMarkerArea extends MapMarkerBase {
     }
 
     protected createLeafletLayer(): L.Layer {
-        return L.polygon(this.points, {color: this.color});
+        return L.polygon(this.points, {color: this.color})
+            .bindTooltip(this.name, {direction: 'bottom', className: 'map-marker-tooltip', opacity: 1});
     }
 
     public setMarkerEditable(editable: boolean): void {
@@ -316,7 +317,8 @@ export class MapMarkerCircle extends MapMarkerBase {
     }
 
     protected createLeafletLayer(): L.Layer {
-        return L.circle(this.center, this.radius, {color: this.color});
+        return L.circle(this.center, this.radius, {color: this.color})
+            .bindTooltip(this.name, {direction: 'bottom', className: 'map-marker-tooltip', opacity: 1});
     }
 
     public setMarkerEditable(editable: boolean): void {
@@ -356,7 +358,8 @@ export class MapMarkerRectangle extends MapMarkerBase {
     }
 
     protected createLeafletLayer(): L.Layer {
-        return L.rectangle(this.bounds, {color: this.color});
+        return L.rectangle(this.bounds, {color: this.color})
+            .bindTooltip(this.name, {direction: 'bottom', className: 'map-marker-tooltip', opacity: 1});
     }
 
     public setMarkerEditable(editable: boolean): void {

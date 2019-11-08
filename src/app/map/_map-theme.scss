@@ -1,7 +1,14 @@
 @import '~@angular/material/theming';
 
+$config: mat-typography-config();
+
 @mixin map-theme($theme) {
     $background: map-get($theme, background);
+
+    .map-marker-tooltip {
+        font-size: mat-font-size($config, body-1);
+        font-family: mat-font-family($config);
+    }
 
     .map-link {
         .name {
