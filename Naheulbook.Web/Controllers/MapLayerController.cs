@@ -43,7 +43,7 @@ namespace Naheulbook.Web.Controllers
             [FromBody] MapLayerRequest request
         )
         {
-            var map = await _mapService.EditMapMarkerAsync(executionContext, mapLayerId, request);
+            var map = await _mapService.EditMapLayerAsync(executionContext, mapLayerId, request);
 
             return _mapper.Map<MapLayerResponse>(map);
         }

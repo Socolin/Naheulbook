@@ -51,7 +51,7 @@ namespace Naheulbook.Web.Controllers
         {
             try
             {
-                var marker = await _mapService.UpdateMapMarkerAsync(naheulbookExecutionContext, mapMarkerId, request);
+                var marker = await _mapService.EditMapMarkerAsync(naheulbookExecutionContext, mapMarkerId, request);
                 return _mapper.Map<MapMarkerResponse>(marker);
             }
             catch (MapMarkerNotFoundException ex)
