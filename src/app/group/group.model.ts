@@ -4,7 +4,6 @@ import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
 
 import {Monster} from '../monster';
 import {Character} from '../character';
-import {Location} from '../location';
 import {NhbkDate} from '../date';
 import {Loot} from '../loot';
 import {NEvent} from '../event';
@@ -299,7 +298,6 @@ export class Group extends WsRegistrable {
     public id: number;
     public name: string;
     public data: GroupData = new GroupData();
-    public location: Location;
 
     public onNotification: Subject<any> = new Subject<any>();
 
@@ -742,10 +740,6 @@ export class Group extends WsRegistrable {
             }
             case 'deleteEvent': {
                 this.removeEvent(data.id);
-                break;
-            }
-            case 'changeLocation': {
-                this.location = data;
                 break;
             }
             case 'changeData': {

@@ -21,7 +21,6 @@ import {Effect} from '../effect';
 
 import {LoginService, User} from '../user';
 import {MonsterService} from '../monster';
-import {Location, LocationService} from '../location';
 import {ItemService} from '../item';
 import {ItemTemplate} from '../item-template';
 
@@ -54,8 +53,6 @@ export class GroupComponent implements OnInit, OnDestroy {
         {hash: 'history'},
     ];
 
-    public autocompleteLocationsCallback: Function;
-
     public loadingGroup = false;
 
     @ViewChild('changeOwnershipDialog', {static: true})
@@ -87,7 +84,6 @@ export class GroupComponent implements OnInit, OnDestroy {
         public readonly loginService: LoginService,
         private readonly groupService: GroupService,
         private readonly monsterService: MonsterService,
-        private readonly locationService: LocationService,
         private readonly notification: NotificationsService,
         private readonly actionService: GroupActionService,
         private readonly websocketService: WebSocketService,
@@ -132,21 +128,6 @@ export class GroupComponent implements OnInit, OnDestroy {
         ]).subscribe(([newDate]) => {
             this.group.data.changeValue('date', newDate);
         });
-    }
-
-    changeGroupLocation(location: Location) {
-        this.groupService.editGroupLocation(this.group.id, location.id).subscribe(
-            () => {
-                this.notification.info('Lieu', this.group.location.name + ' -> ' + location.name);
-                this.group.location = location;
-            }
-        );
-    }
-
-    updateLocationListAutocomplete(filter: string) {
-        return this.locationService.searchLocations(filter).pipe(map(
-            list => list.map(e => new AutocompleteValue(e, e.name))
-        ));
     }
 
     /* Characters tab */
@@ -400,7 +381,6 @@ export class GroupComponent implements OnInit, OnDestroy {
                 this.currentTab = value;
             }
         });
-        this.autocompleteLocationsCallback = this.updateLocationListAutocomplete.bind(this);
     }
 
     openAddEffectDialog(effect?: Effect) {

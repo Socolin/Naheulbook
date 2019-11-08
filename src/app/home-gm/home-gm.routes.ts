@@ -1,19 +1,18 @@
 import {Routes} from '@angular/router';
-import {CreateCharacterComponent} from '../character/create-character.component';
-import {CharacterListComponent} from '../character/character-list.component';
-import {CharacterComponent} from '../character/character.component';
-import {CharacterResolve} from '../character/character.resolver';
-import {GroupComponent} from '../group/group.component';
-import {SkillListComponent} from '../skill/skill-list.component';
-import {OriginListComponent} from '../origin/origin-list.component';
-import {JobListComponent} from '../job/job-list.component';
-import {ItemTemplateListComponent} from '../item-template/item-template-list.component';
-import {EffectListComponent} from '../effect/effect-list.component';
-import {MonsterListComponent} from '../monster/monster-list.component';
-import {LocationListComponent} from '../location/location-list.component';
-import {QuestListComponent} from '../quest/quest-list.component';
-import {CreateGroupComponent} from '../group/create-group.component';
-import {GroupListComponent} from '../group/group-list.component';
+import {CreateCharacterComponent} from '../character';
+import {CharacterListComponent} from '../character';
+import {CharacterComponent} from '../character';
+import {CharacterResolve} from '../character';
+import {GroupComponent} from '../group';
+import {SkillListComponent} from '../skill';
+import {OriginListComponent} from '../origin';
+import {JobListComponent} from '../job';
+import {ItemTemplateListComponent} from '../item-template';
+import {EffectListComponent} from '../effect';
+import {MonsterListComponent} from '../monster';
+import {QuestListComponent} from '../quest';
+import {CreateGroupComponent} from '../group';
+import {GroupListComponent} from '../group';
 import {AuthGuard} from '../user/auth-guard';
 import {HomeGmComponent} from './home-gm.component';
 
@@ -98,10 +97,6 @@ export const routes: Routes = [
                     {
                         path: 'monsters',
                         component: MonsterListComponent
-                    },
-                    {
-                        path: 'locations',
-                        component: LocationListComponent
                     },
                     {
                         path: 'quests',

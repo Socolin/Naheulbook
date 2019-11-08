@@ -5,7 +5,6 @@ export interface MonsterTemplateResponse {
     id: number;
     name: string;
     categoryId: number;
-    locationIds: number[];
     data: MonsterTemplateData;
     simpleInventory: MonsterSimpleInventoryResponse[];
 }

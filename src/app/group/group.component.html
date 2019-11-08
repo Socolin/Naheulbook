@@ -47,14 +47,6 @@
                             </date-modifier>
                             <date [date]="group.data.date"></date>
                         </dd>
-
-                        <dt>Lieu</dt>
-                        <dd>
-                            <autocomplete-input [value]="group.location.name"
-                                                (onSelect)="changeGroupLocation($event)"
-                                                [callback]="autocompleteLocationsCallback">
-                            </autocomplete-input>
-                        </dd>
                     </dl>
                 </mat-card>
                 <mat-card>

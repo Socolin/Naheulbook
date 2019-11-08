@@ -506,7 +506,6 @@ export class MonsterTemplate {
     categoryId: number;
     category: MonsterTemplateCategory;
     simpleInventory: MonsterInventoryElement[];
-    locations: number[];
 
     static fromResponse(
         response: MonsterTemplateResponse,
@@ -546,7 +545,6 @@ export class MonsterTemplate {
         this.category = category;
         this.categoryId = category.id; // FIXME: still needed ?
         this.data = data;
-        this.locations = [];
         this.simpleInventory = inventory;
     }
 }

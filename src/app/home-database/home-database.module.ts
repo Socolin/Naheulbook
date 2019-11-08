@@ -7,7 +7,6 @@ import {NhbkMaterialModule} from '../nhbk-material.module';
 import {SharedModule} from '../shared/shared.module';
 import {NotificationsModule} from '../notifications/notifications.module';
 import {CharacterModule} from '../character/character.module';
-import {UserModule} from '../user/user.module';
 import {GroupModule} from '../group/group.module';
 
 import {EffectModule} from '../effect/effect.module';
@@ -18,7 +17,6 @@ import {QuestModule} from '../quest/quest.module';
 import {SkillModule} from '../skill/skill.module';
 import {DateModule} from '../date/date.module';
 import {JobModule} from '../job/job.module';
-import {LocationModule} from '../location/location.module';
 
 import {routes} from './home-database.routes';
 import {HomeDatabaseComponent} from './home-database.component';
@@ -37,7 +35,6 @@ import {DatabaseSectionsComponent} from './database-sections.component';
         EffectModule,
         ItemTemplateModule,
         JobModule,
-        LocationModule,
         MonsterModule,
         OriginModule,
         QuestModule,

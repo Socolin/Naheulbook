@@ -11,7 +11,6 @@ import {
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {PromptDialogComponent, PromptDialogData, PromptDialogResult} from '../shared';
 import {MonsterTemplateService} from './monster-template.service';
-import {Location, LocationService} from '../location';
 import {forkJoin} from 'rxjs';
 import {AddMonsterItemDialogComponent, AddMonsterItemDialogData} from './add-monster-item-dialog.component';
 import {
@@ -20,7 +19,6 @@ import {
     SelectMonsterTraitsDialogResult
 } from './select-monster-traits-dialog.component';
 import {MonsterTemplateRequest} from '../api/requests';
-import {toDictionary} from '../utils/utils';
 
 export interface EditMonsterTemplateDialogData {
     monsterTemplate?: MonsterTemplate;
@@ -55,13 +53,10 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
     });
 
     public monsterTemplateTypes: MonsterTemplateType[] = [];
-    public locations: Location[] = [];
-    public locationsById?: { [id: number]: Location };
     public traitsById: { [id: number]: MonsterTrait } = {};
 
     public selectedType?: MonsterTemplateType;
     public selectedCategory?: MonsterTemplateCategory;
-    public selectedLocations: Location[] = [];
     public selectedTraits: TraitInfo[] = [];
     public monsterInventory: MonsterInventoryElement[] = [];
 
@@ -69,7 +64,6 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
         private readonly dialogRef: MatDialogRef<EditMonsterTemplateDialogComponent, MonsterTemplate>,
         @Inject(MAT_DIALOG_DATA) public readonly data: EditMonsterTemplateDialogData,
         private readonly monsterTemplateService: MonsterTemplateService,
-        private readonly locationService: LocationService,
         private readonly dialog: MatDialog,
     ) {
         this.form.reset(data.monsterTemplate);
@@ -203,24 +197,16 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
         forkJoin([
             this.monsterTemplateService.getMonsterTypes(),
             this.monsterTemplateService.getMonsterTraitsById(),
-            this.locationService.getLocations(),
         ]).subscribe(
-            ([monsterTemplateTypes, traitsById, locations]: [MonsterTemplateType[], { [id: number]: MonsterTrait }, Location[]]) => {
+            ([monsterTemplateTypes, traitsById]: [MonsterTemplateType[], { [id: number]: MonsterTrait }]) => {
                 this.monsterTemplateTypes = monsterTemplateTypes;
 
                 this.traitsById = traitsById;
-
-                this.locations = locations;
-                const locationsById = toDictionary(locations);
-                this.locationsById = locationsById;
 
                 if (this.data.monsterTemplate) {
                     this.selectedType = this.data.monsterTemplate.category.type;
                     this.selectedCategory = this.data.monsterTemplate.category;
                     this.selectedTraits = [...this.data.monsterTemplate.data.traits || []];
-                    this.selectedLocations = this.data.monsterTemplate.locations
-                        .map(locationId => locationsById[locationId])
-                        .filter(l => !!l);
                     this.monsterInventory = this.data.monsterTemplate.simpleInventory;
                 } else {
                     if (this.data.category && this.data.type) {
@@ -248,7 +234,6 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
                 ...this.form.value.data,
                 traits: this.selectedTraits
             },
-            locations: [],
             name: this.form.value.name,
             simpleInventory: this.monsterInventory.map(inventoryElement => ({
                 ...inventoryElement,

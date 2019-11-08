@@ -23,8 +23,6 @@ export * from './item-template-section-response';
 export * from './item-type-response';
 export * from './job-response';
 export * from './list-active-character-response';
-export * from './location-map-response';
-export * from './location-response';
 export * from './loot-response';
 export * from './map-response';
 export * from './map-layer-response';

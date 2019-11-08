@@ -6,7 +6,6 @@ import {JobListComponent} from '../job';
 import {EditItemTemplateDialogComponent, ItemTemplateListComponent} from '../item-template';
 import {MonsterListComponent} from '../monster';
 import {EffectListComponent} from '../effect';
-import {LocationListComponent} from '../location';
 import {QuestListComponent} from '../quest';
 import {HomeDatabaseComponent} from './home-database.component';
 import {DatabaseSectionsComponent} from './database-sections.component';
@@ -47,10 +46,6 @@ export const routes: Routes = [
             {
                 path: 'monsters',
                 component: MonsterListComponent
-            },
-            {
-                path: 'locations',
-                component: LocationListComponent
             },
             {
                 path: 'quests',

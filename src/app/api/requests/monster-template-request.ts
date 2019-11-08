@@ -19,6 +19,5 @@ export interface MonsterTemplateRequest {
     name: string;
     data: MonsterTemplateData;
     simpleInventory: MonsterInventoryElementRequest[];
-    locations: number[];
 }
 
