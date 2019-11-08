@@ -274,7 +274,7 @@ export class MapComponent implements OnInit, OnDestroy {
                 leafletMap.on('dragend', () => {
                     this.updateCoordinateInUrl()
                 });
-                leafletMap.on('zoom', () => {
+                leafletMap.on('zoomend', () => {
                     this.updateCoordinateInUrl()
                 });
 
