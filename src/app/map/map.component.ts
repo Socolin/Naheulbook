@@ -90,6 +90,7 @@ export class MapComponent implements OnInit, OnDestroy {
     public  positionMarker1?: L.Marker;
     public  positionMarker2?: L.Marker;
     public  measureLine?: L.Polyline;
+    public  measureLineStroke?: L.Polyline;
 
     private focusMarker?: MapMarker;
     private tileLayer: L.Layer;
@@ -834,10 +835,14 @@ export class MapComponent implements OnInit, OnDestroy {
             if (this.measureLine) {
                 this.measureLine.remove();
             }
+            if (this.measureLineStroke) {
+                this.measureLineStroke.remove();
+            }
         });
         this.positionMarker1 = undefined;
         this.positionMarker2 = undefined;
         this.measureLine = undefined;
+        this.measureLineStroke = undefined;
     }
 
     toggleMeasure() {
@@ -861,9 +866,13 @@ export class MapComponent implements OnInit, OnDestroy {
                 icon: measureMarkerIcon,
                 draggable: true
             }).addTo(this.leafletMap);
+            this.measureLineStroke = L.polyline([position1, position2], {
+                color: '#000',
+                weight: 8
+            }).addTo(this.leafletMap);
             this.measureLine = L.polyline([position1, position2], {
                 color: '#50B68C',
-                weight: 6
+                weight: 4
             }).addTo(this.leafletMap);
 
             this.positionMarker1.on('drag', this.updateMeasureLine.bind(this));
@@ -875,8 +884,11 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     private updateMeasureLine() {
-        if (this.measureLine && this.positionMarker1 && this.positionMarker2) {
+        if (this.measureLineStroke && this.measureLine && this.positionMarker1 && this.positionMarker2) {
             this.measureLine.setLatLngs(
+                [this.positionMarker1.getLatLng(), this.positionMarker2.getLatLng()]
+            );
+            this.measureLineStroke.setLatLngs(
                 [this.positionMarker1.getLatLng(), this.positionMarker2.getLatLng()]
             );
 
@@ -897,7 +909,9 @@ export class MapComponent implements OnInit, OnDestroy {
             this.measureLine.unbindTooltip();
             this.measureLine.bindTooltip(label, {
                 permanent: true,
-                direction: 'right'
+                direction: 'right',
+                className: 'map-marker-tooltip',
+                opacity: 1
             });
         }
     }
