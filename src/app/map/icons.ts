@@ -32,8 +32,26 @@ export const towerIcon = new L.Icon({
     attribution: 'https://game-icons.net'
 });
 
+export const directionSignsIcon = new L.Icon({
+    iconUrl: '/assets/icons/direction-signs.svg',
+    className: 'marker-blue',
+    iconSize: [48, 48],
+    iconAnchor: [24, 48],
+    attribution: 'https://game-icons.net'
+});
+
+export const campingTentIcon = new L.Icon({
+    iconUrl: '/assets/icons/camping-tent.svg',
+    className: 'marker-blue',
+    iconSize: [48, 48],
+    iconAnchor: [24, 48],
+    attribution: 'https://game-icons.net'
+});
+
 export const markerIcons = {
     default: defaultMarkerIcon,
     woodenSign: woodenSignIcon,
     tower: towerIcon,
+    directionSigns: directionSignsIcon,
+    campingTent: campingTentIcon,
 };
