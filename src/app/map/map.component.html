@@ -197,9 +197,9 @@
                 </div>
                 <div class="links">
                     <div *ngFor="let link of availableMarkerLinks$ | async" class="map-link">
-                        <div class="name" mat-ripple>
+                        <div class="name" mat-ripple (click)="goToMap(link.targetMapId, link.targetMapMarkerId)">
                             <mat-icon matListIcon>arrow_forward</mat-icon>
-                            <span (click)="goToMap(link.targetMapId, link.targetMapMarkerId)">
+                            <span>
                                 {{link.name}}
                             </span>
                         </div>
