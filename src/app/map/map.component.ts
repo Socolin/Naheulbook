@@ -1,9 +1,20 @@
 import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {FormControl, FormGroup} from '@angular/forms';
 import {MatSidenav} from '@angular/material';
 import {MatDialog} from '@angular/material/dialog';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+
+import {BehaviorSubject, combineLatest, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
+import {map, pairwise, shareReplay, startWith} from 'rxjs/operators';
+
+import {assertNever} from '../utils/utils';
+import {MapMarkerRequest} from '../api/requests';
+import {GmModeService} from '../shared';
+import {LoginService, User} from '../user';
 
 import * as L from 'leaflet';
+
 import {MapService} from './map.service';
 import {
     Map,
@@ -16,25 +27,19 @@ import {
     MapMarkerRectangle,
     MapMarkerType,
 } from './map.model';
-import {MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult} from './map-layer-dialog.component';
-import {
-    SelectMarkerTypeDialogComponent,
-    SelectMarkerTypeDialogData,
-    SelectMarkerTypeDialogResult
-} from './select-marker-type-dialog.component';
-import {assertNever} from '../utils/utils';
-import {FormControl, FormGroup} from '@angular/forms';
-import {MapMarkerRequest} from '../api/requests';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {BehaviorSubject, combineLatest, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {map, pairwise, shareReplay, startWith} from 'rxjs/operators';
-import {LoginService, User} from '../user';
+
 import {
     AddMapMarkerLinkDialogResult,
+    MapLayerDialogComponent,
+    MapLayerDialogData,
+    MapLayerDialogResult,
     MapMarkerLinkDialogComponent,
-    MapMarkerLinkDialogData
-} from './map-marker-link-dialog.component';
-import {GmModeService} from '../shared';
+    MapMarkerLinkDialogData,
+    SelectMarkerTypeDialogComponent,
+    SelectMarkerTypeDialogData,
+    SelectMarkerTypeDialogResult,
+} from './';
+
 import {markerIcons, measureMarkerIcon} from './icons';
 
 @Component({

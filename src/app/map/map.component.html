@@ -196,8 +196,7 @@
                         </button>
                     </h2>
                 </div>
-                <div class="side-panel-block">
-                    {{selectedMarker.description}}
+                <div class="side-panel-block mat-typography" [innerHTML]="selectedMarker.description | markdown">
                 </div>
                 <div class="links">
                     <div *ngFor="let link of availableMarkerLinks$ | async" class="map-link">

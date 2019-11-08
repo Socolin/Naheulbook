@@ -3,14 +3,26 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 
-import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
-import {MatIconModule} from '@angular/material/icon';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDialogModule} from '@angular/material/dialog';
-import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatRippleModule} from '@angular/material/core';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatTooltipModule} from '@angular/material/tooltip';
+
+import {SharedModule} from '../shared/shared.module';
+import {MarkdownModule} from '../markdown/markdown.module';
 
 import {routes} from './map.routes';
 
@@ -20,23 +32,17 @@ import 'leaflet-editable';
 import 'leaflet-geometryutil';
 import 'leaflet-almostover';
 
-import {CreateMapComponent, MapComponent, MapService} from '.';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MapLayerDialogComponent} from './map-layer-dialog.component';
-import {SelectMarkerTypeDialogComponent} from './select-marker-type-dialog.component';
-import {MatRadioModule} from '@angular/material/radio';
-import {SharedModule} from '../shared/shared.module';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MapHomeComponent} from './map-home.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatListModule} from '@angular/material/list';
-import {MapListComponent} from './map-list.component';
-import {EditMapComponent} from './edit-map.component';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MapMarkerLinkDialogComponent} from './map-marker-link-dialog.component';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatRippleModule} from '@angular/material/core';
+import {
+    CreateMapComponent,
+    EditMapComponent,
+    MapComponent,
+    MapHomeComponent,
+    MapLayerDialogComponent,
+    MapListComponent,
+    MapMarkerLinkDialogComponent,
+    MapService,
+    SelectMarkerTypeDialogComponent,
+} from '.';
 
 @NgModule({
     declarations: [
@@ -73,6 +79,8 @@ import {MatRippleModule} from '@angular/material/core';
         MatProgressSpinnerModule,
         MatAutocompleteModule,
         MatRippleModule,
+
+        MarkdownModule
     ],
     providers: [
         MapService,
