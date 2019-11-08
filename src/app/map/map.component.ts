@@ -248,7 +248,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.gridOffsetX = 0;
         this.gridOffsetY = 0;
 
-        this.toggleMeasure(false);
+        this.disableMeasure();
 
         this.ngZone.runOutsideAngular(() => {
             if (!this.map) {
@@ -678,8 +678,9 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     toggleVisibility(mapLayer: MapLayer) {
-        this.hiddenLayers[mapLayer.id] = !this.hiddenLayers[mapLayer.id];
-        this.hiddenLayers$.next({...this.hiddenLayers, [mapLayer.id]: !this.hiddenLayers[mapLayer.id]})
+        let hidden = !this.hiddenLayers[mapLayer.id];
+        this.hiddenLayers[mapLayer.id] = hidden;
+        this.hiddenLayers$.next({...this.hiddenLayers, [mapLayer.id]: hidden})
     }
 
     canEditLayer(mapLayer: MapLayer) {
@@ -821,22 +822,26 @@ export class MapComponent implements OnInit, OnDestroy {
         })
     }
 
-    toggleMeasure(active: boolean) {
-        if (!active) {
-            this.ngZone.runOutsideAngular(() => {
-                if (this.positionMarker1) {
-                    this.positionMarker1.remove();
-                }
-                if (this.positionMarker2) {
-                    this.positionMarker2.remove();
-                }
-                if (this.measureLine) {
-                    this.measureLine.remove();
-                }
-            });
-            this.positionMarker1 = undefined;
-            this.positionMarker2 = undefined;
-            this.measureLine = undefined;
+    disableMeasure() {
+        this.ngZone.runOutsideAngular(() => {
+            if (this.positionMarker1) {
+                this.positionMarker1.remove();
+            }
+            if (this.positionMarker2) {
+                this.positionMarker2.remove();
+            }
+            if (this.measureLine) {
+                this.measureLine.remove();
+            }
+        });
+        this.positionMarker1 = undefined;
+        this.positionMarker2 = undefined;
+        this.measureLine = undefined;
+    }
+
+    toggleMeasure() {
+        if (this.measureLine) {
+            this.disableMeasure();
             return;
         }
         this.menuSidenav.close();

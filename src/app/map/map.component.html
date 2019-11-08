@@ -29,11 +29,9 @@
                 </div>
                 <div class="unit">
                     <span>Échelle: {{map?.data.pixelPerUnit}} pixels / {{map?.data.unitName}}</span>
-                </div>
-                <div>
-                    <mat-checkbox mat-raised-button (change)="toggleMeasure($event.checked)">
-                        Mesurer
-                    </mat-checkbox>
+                    <button mat-mini-fab [color]="this.measureLine ? 'primary' : undefined" (click)="toggleMeasure()">
+                        <mat-icon fontSet="game-icon" fontIcon="game-icon-pencil-ruler" class="ra-mat-button-icon-24"></mat-icon>
+                    </button>
                 </div>
             </div>
             <div class="grid-config side-panel-block">
