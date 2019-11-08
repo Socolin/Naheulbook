@@ -20,7 +20,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             _lootRepository = new LootRepository(RepositoryDbContext);
 
             _character = TestDataUtil.AddOrigin().AddUser().AddCharacter().GetLast<Character>();
-            _group = TestDataUtil.AddUser().AddLocation().AddGroup(g => g.Characters = new[] {_character}).GetLast<Group>();
+            _group = TestDataUtil.AddUser().AddGroup(g => g.Characters = new[] {_character}).GetLast<Group>();
         }
 
         [Test]

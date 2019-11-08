@@ -26,31 +26,6 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class MonsterLocationConfiguration : IEntityTypeConfiguration<MonsterLocation>
-    {
-        public void Configure(EntityTypeBuilder<MonsterLocation> builder)
-        {
-            builder.ToTable("monster_location");
-
-            builder.HasKey(e => new {e.LocationId, e.MonsterTemplateId});
-
-            builder.Property(e => e.MonsterTemplateId)
-                .HasColumnName("monsterid");
-            builder.Property(e => e.LocationId)
-                .HasColumnName("locationid");
-
-            builder.HasOne(x => x.MonsterTemplate)
-                .WithMany(x => x.Locations)
-                .HasForeignKey(x => x.MonsterTemplateId)
-                .HasConstraintName("FK_monster_location_monster_template_monsterid");
-
-            builder.HasOne(x => x.Location)
-                .WithMany()
-                .HasForeignKey(x => x.LocationId)
-                .HasConstraintName("FK_monster_location_location_locationid");
-        }
-    }
-
     public class MonsterTemplateConfiguration : IEntityTypeConfiguration<MonsterTemplate>
     {
         public void Configure(EntityTypeBuilder<MonsterTemplate> builder)

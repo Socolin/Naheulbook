@@ -19,10 +19,6 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("data")
                 .HasColumnType("json");
 
-            builder.Property(e => e.LocationId)
-                .IsRequired()
-                .HasColumnName("location");
-
             builder.Property(e => e.MasterId)
                 .IsRequired()
                 .HasColumnName("master");
@@ -40,11 +36,6 @@ namespace Naheulbook.Data.Configurations
                 .WithMany(e => e.Groups)
                 .HasForeignKey(e => e.MasterId)
                 .HasConstraintName("FK_group_user_master");
-
-            builder.HasOne(e => e.Location)
-                .WithMany()
-                .HasForeignKey(e => e.LocationId)
-                .HasConstraintName("FK_group_location_location");
         }
     }
 

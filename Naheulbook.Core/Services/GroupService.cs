@@ -19,7 +19,6 @@ namespace Naheulbook.Core.Services
         Task<List<Group>> GetGroupListAsync(NaheulbookExecutionContext executionContext);
         Task<Group> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task EditGroupPropertiesAsync(NaheulbookExecutionContext executionContext, int groupId, PatchGroupRequest request);
-        Task EditGroupLocationAsync(NaheulbookExecutionContext executionContext, int groupId, PutChangeLocationRequest request);
         Task<List<GroupHistoryEntry>> GetGroupHistoryEntriesAsync(NaheulbookExecutionContext executionContext, int groupId, int page);
         Task EnsureUserCanAccessGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task<GroupInvite> CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request);
@@ -66,13 +65,10 @@ namespace Naheulbook.Core.Services
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var location = await uow.Locations.GetNewGroupDefaultLocationAsync();
-
                 var group = new Group
                 {
                     Name = request.Name,
-                    MasterId = executionContext.UserId,
-                    Location = location
+                    MasterId = executionContext.UserId
                 };
 
                 uow.Groups.Add(group);
@@ -122,30 +118,6 @@ namespace Naheulbook.Core.Services
             }
 
             await notificationSession.CommitAsync();
-        }
-
-        public async Task EditGroupLocationAsync(NaheulbookExecutionContext executionContext, int groupId, PutChangeLocationRequest request)
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var group = await uow.Groups.GetAsync(groupId);
-                if (group == null)
-                    throw new GroupNotFoundException(groupId);
-
-                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
-
-                var location = await uow.Locations.GetAsync(request.LocationId);
-                if (location == null)
-                    throw new LocationNotFoundException(request.LocationId);
-
-                group.LocationId = request.LocationId;
-
-                await uow.SaveChangesAsync();
-
-                var session = _notificationSessionFactory.CreateSession();
-                session.NotifyGroupChangeLocation(groupId, location);
-                await session.CommitAsync();
-            }
         }
 
         public async Task<List<GroupHistoryEntry>> GetGroupHistoryEntriesAsync(NaheulbookExecutionContext executionContext, int groupId, int page)

@@ -2,7 +2,6 @@ Feature: Group
 
   Scenario: Create a group
     Given a JWT for a user
-    Given a location
 
     When performing a POST to the url "/api/v2/groups/" with the following json content and the current jwt
     """
@@ -19,9 +18,6 @@ Feature: Group
       "data": {},
       "invites": [],
       "characterIds": [],
-      "location": { "__partial": {
-        "id": 1
-      }}
     }
     """
 
@@ -60,11 +56,6 @@ Feature: Group
       "id": ${Group.Id},
       "name": "${Group.Name}",
       "data": {},
-      "location": {
-        "data": ${Location.Data},
-        "id": ${Location.Id},
-        "name": "${Location.Name}"
-      },
       "characterIds": [
         ${Character.[2].Id}
       ],
@@ -187,19 +178,6 @@ Feature: Group
     """
     Then the response status code is 204
 
-  Scenario: Can edit group location
-    Given a JWT for a user
-    Given a group
-    Given a location
-
-    When performing a PUT to the url "/api/v2/groups/${Group.Id}/location" with the following json content and the current jwt
-    """
-    {
-      "locationId": ${Location.[-1].Id}
-    }
-    """
-    Then the response status code is 204
-
   Scenario: Can edit group properties
     Given a JWT for a user
     Given a group
@@ -223,7 +201,6 @@ Feature: Group
   Scenario: Can start/stop combat
     Given a JWT for a user
     Given a group
-    Given a location
 
     When performing a POST to the url "/api/v2/groups/${Group.Id}/startCombat" with the following json content and the current jwt
     """

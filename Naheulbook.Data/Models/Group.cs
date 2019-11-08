@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class Group
@@ -13,9 +15,6 @@ namespace Naheulbook.Data.Models
 
         public int MasterId { get; set; }
         public User Master { get; set; } = null!;
-
-        public int LocationId { get; set; }
-        public Location Location { get; set; } = null!;
 
         public ICollection<Loot> Loots { get; set; } = null!;
         public ICollection<Monster> Monsters { get; set; } = null!;

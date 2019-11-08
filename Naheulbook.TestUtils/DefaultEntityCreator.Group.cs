@@ -5,7 +5,7 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public Group CreateGroup(int masterId, Location location, string suffix = null)
+        public Group CreateGroup(int masterId, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
@@ -14,8 +14,7 @@ namespace Naheulbook.TestUtils
             {
                 Name = $"some-name-{suffix}",
                 Data = "{}",
-                MasterId = masterId,
-                Location = location
+                MasterId = masterId
             };
         }
 

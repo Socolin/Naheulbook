@@ -55,10 +55,6 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var createGroupRequest = new CreateGroupRequest {Name = "some-name"};
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
-            var location = new Location();
-
-            _unitOfWorkFactory.GetUnitOfWork().Locations.GetNewGroupDefaultLocationAsync()
-                .Returns(location);
 
             var actualGroup = await _service.CreateGroupAsync(naheulbookExecutionContext, createGroupRequest);
 
@@ -68,7 +64,6 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
 
-            actualGroup.Location.Should().BeSameAs(location);
             actualGroup.Name.Should().Be("some-name");
             actualGroup.MasterId.Should().Be(10);
         }
@@ -169,90 +164,6 @@ namespace Naheulbook.Core.Tests.Unit.Services
             Func<Task> act = () => _service.EditGroupPropertiesAsync(naheulbookExecutionContext, 4, new PatchGroupRequest());
 
             act.Should().Throw<TestException>();
-        }
-
-        [Test]
-        public async Task EditGroupLocationAsync_ShouldApplyChangeOnGroupThenSave()
-        {
-            const int groupId = 4;
-            const int locationId = 1;
-            var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var request = new PutChangeLocationRequest {LocationId = locationId};
-            var group = new Group();
-
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns(group);
-            _unitOfWorkFactory.GetUnitOfWork().Locations.GetAsync(locationId)
-                .Returns(new Location());
-            _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => group.LocationId.Should().Be(locationId));
-
-            await _service.EditGroupLocationAsync(naheulbookExecutionContext, groupId, request);
-
-            await _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
-        }
-
-        [Test]
-        public void EditGroupLocationAsync_ShouldThrowWhenGroupDoesNotExists()
-        {
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(Arg.Any<int>())
-                .Returns((Group) null);
-
-            Func<Task> act = () => _service.EditGroupLocationAsync(new NaheulbookExecutionContext(), 4, new PutChangeLocationRequest());
-
-            act.Should().Throw<GroupNotFoundException>();
-        }
-
-        [Test]
-        public void EditGroupLocationAsync_ShouldEnsureIsGroupOwner()
-        {
-            var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new Group();
-
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(Arg.Any<int>())
-                .Returns(group);
-
-            _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
-                .Throw(new TestException());
-
-            Func<Task> act = () => _service.EditGroupLocationAsync(naheulbookExecutionContext, 4, new PutChangeLocationRequest());
-
-            act.Should().Throw<TestException>();
-        }
-
-        [Test]
-        public void EditGroupLocationAsync_ShouldThrowIfLocationDoesNotExists()
-        {
-            var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new Group();
-
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(Arg.Any<int>())
-                .Returns(group);
-            _unitOfWorkFactory.GetUnitOfWork().Locations.GetAsync(Arg.Any<int>())
-                .Returns((Location) null);
-
-            Func<Task> act = () => _service.EditGroupLocationAsync(naheulbookExecutionContext, 4, new PutChangeLocationRequest());
-
-            act.Should().Throw<LocationNotFoundException>();
-        }
-
-        [Test]
-        public async Task EditGroupLocationAsync_ShouldNotifyChange()
-        {
-            const int groupId = 4;
-            var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var request = new PutChangeLocationRequest {LocationId = 1};
-            var location = new Location();
-
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns(new Group());
-            _unitOfWorkFactory.GetUnitOfWork().Locations.GetAsync(Arg.Any<int>())
-                .Returns(location);
-
-            await _service.EditGroupLocationAsync(naheulbookExecutionContext, groupId, request);
-
-            _notificationSessionFactory.NotificationSession.Received(1).NotifyGroupChangeLocation(groupId, location);
-            await _notificationSessionFactory.NotificationSession.Received(1).CommitAsync();
         }
 
         [Test]

@@ -40,7 +40,6 @@ namespace Naheulbook.Data.Repositories
                 .ThenInclude(g => g.Character)
                 .ThenInclude(g => g.Jobs)
                 .ThenInclude(g => g.Job)
-                .Include(g => g.Location)
                 .Where(g => g.Id == groupId)
                 .SingleOrDefaultAsync();
         }

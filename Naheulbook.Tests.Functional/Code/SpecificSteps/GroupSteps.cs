@@ -24,8 +24,6 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("a group")]
         public void GivenAGroup()
         {
-            _testDataUtil.AddLocation();
-
             _testDataUtil.AddGroup(_scenarioContext.GetUserId());
         }
 

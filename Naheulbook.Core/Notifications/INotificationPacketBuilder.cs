@@ -44,7 +44,6 @@ namespace Naheulbook.Core.Notifications
         INotificationPacket BuildGroupCancelGroupInvite(int groupId, GroupInvite groupInvite);
         INotificationPacket BuildGroupAcceptGroupInvite(int groupId, GroupInvite groupInvite);
         INotificationPacket BuildGroupChangeGroupData(int groupId, GroupData groupData);
-        INotificationPacket BuildGroupChangeLocation(int groupId, Location location);
         INotificationPacket BuildGroupAddLoot(int groupId, Loot loot);
         INotificationPacket BuildGroupDeleteLoot(int groupId, int lootId);
 

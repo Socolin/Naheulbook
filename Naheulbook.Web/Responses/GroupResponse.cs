@@ -12,7 +12,6 @@ namespace Naheulbook.Web.Responses
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public JObject? Data { get; set; }
-        public LocationResponse Location { get; set; } = null!;
 
         public IList<int> CharacterIds { get; set; } = null!;
         public IList<GroupGroupInviteResponse> Invites { get; set; } = null!;

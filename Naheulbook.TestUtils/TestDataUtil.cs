@@ -117,12 +117,9 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `job_requirement`;" +
                     "DELETE FROM `job_restrict`;" +
                     "DELETE FROM `job_skill`;" +
-                    "DELETE FROM `location`;" +
-                    "DELETE FROM `location_map`;" +
                     "DELETE FROM `loot`;" +
                     "DELETE FROM `monster`;" +
                     "DELETE FROM `monster_category`;" +
-                    "DELETE FROM `monster_location`;" +
                     "DELETE FROM `monster_template`;" +
                     "DELETE FROM `monster_template_simple_inventory`;" +
                     "DELETE FROM `monster_trait`;" +

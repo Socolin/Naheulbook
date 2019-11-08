@@ -79,32 +79,6 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPut("{GroupId:int:min(1)}/location")]
-        public async Task<IActionResult> PutChangeGroupLocationAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int groupId,
-            PutChangeLocationRequest request
-        )
-        {
-            try
-            {
-                await _groupService.EditGroupLocationAsync(executionContext, groupId, request);
-                return NoContent();
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (GroupNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-            catch (LocationNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
-            }
-        }
-
         [HttpPost("{GroupId:int:min(1)}/startCombat")]
         public async Task<IActionResult> PostStartCombatAsync(
             [FromServices] NaheulbookExecutionContext executionContext,

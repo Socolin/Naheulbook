@@ -43,16 +43,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
             var monsterCategory = CreateMonsterCategory(categoryId);
             var request = CreateRequest(categoryId, itemTemplateId, locationId);
-            var location = new Location();
             var itemTemplate = new ItemTemplate {Id = itemTemplateId};
-            var expectedMonsterTemplate = CreateMonsterTemplate(monsterCategory, itemTemplate, location);
+            var expectedMonsterTemplate = CreateMonsterTemplate(monsterCategory, itemTemplate);
 
             _unitOfWorkFactory.GetUnitOfWork().MonsterCategories.GetAsync(categoryId)
                 .Returns(monsterCategory);
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<int>>(x => x.SequenceEqual(new[] {itemTemplateId})))
                 .Returns(new List<ItemTemplate> {itemTemplate});
-            _unitOfWorkFactory.GetUnitOfWork().Locations.GetByIdsAsync(Arg.Is<IEnumerable<int>>(x => x.SequenceEqual(new[] {locationId})))
-                .Returns(new List<Location> {location});
 
             var monsterTemplate = await _service.CreateMonsterTemplateAsync(executionContext, request);
 
@@ -124,7 +121,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             };
         }
 
-        private static MonsterTemplate CreateMonsterTemplate(MonsterCategory monsterCategory, ItemTemplate itemTemplate, Location location)
+        private static MonsterTemplate CreateMonsterTemplate(MonsterCategory monsterCategory, ItemTemplate itemTemplate)
         {
             return new MonsterTemplate()
             {
@@ -138,13 +135,6 @@ namespace Naheulbook.Core.Tests.Unit.Services
                         MinCount = 1,
                         MaxCount = 2,
                         ItemTemplate = itemTemplate,
-                    }
-                },
-                Locations = new List<MonsterLocation>
-                {
-                    new MonsterLocation
-                    {
-                        Location = location
                     }
                 },
                 Name = "some-monster-name"

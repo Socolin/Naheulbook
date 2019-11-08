@@ -23,14 +23,13 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddUser()
-                .AddLocation()
                 .AddGroup()
                 .AddOrigin()
                 .AddCharacter(c => c.GroupId = TestDataUtil.GetLast<Group>().Id);
 
             var groups = await _groupRepository.GetGroupsOwnedByAsync(TestDataUtil.GetLast<User>().Id);
 
-            groups.Should().BeEquivalentTo(TestDataUtil.GetAll<Group>(), config => config.Excluding(g => g.Characters).Excluding(g => g.Master).Excluding(g => g.Location));
+            groups.Should().BeEquivalentTo(TestDataUtil.GetAll<Group>(), config => config.Excluding(g => g.Characters).Excluding(g => g.Master));
             groups.First().Characters.Should().BeEquivalentTo(TestDataUtil.GetAll<Character>(), config => config.Excluding(c => c.Group).Excluding(c => c.Owner).Excluding(c => c.Origin));
         }
 
@@ -38,7 +37,6 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         public async Task GetGroupsOwnedByAsync_ItShouldNotReturnGroupNotOwnedByUser()
         {
             TestDataUtil
-                .AddLocation()
                 .AddUser()
                 .AddGroup()
                 .AddUser();
@@ -53,7 +51,6 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [Test]
         public async Task GetGroupsWithDetailsAsync_ShouldLoadGroupWithAllRequiredData()
         {
-            var expectedLocation = TestDataUtil.AddLocation().GetLast<Location>();
             var expectedGroup = TestDataUtil.AddUser().AddGroup().GetLast<Group>();
             var expectedCharacter = TestDataUtil.AddOrigin().AddCharacter(c => c.GroupId = TestDataUtil.GetLast<Group>().Id).GetLast<Character>();
             var expectedInvite1 = TestDataUtil.AddCharacter().AddGroupInvite(TestDataUtil.GetLast<Character>(), TestDataUtil.GetLast<Group>(), true).GetLast<GroupInvite>();
@@ -61,9 +58,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             var group = await _groupRepository.GetGroupsWithDetailsAsync(expectedGroup.Id);
 
-            group.Should().BeEquivalentTo(expectedGroup, config => config.Excluding(g => g.Characters).Excluding(g => g.Master).Excluding(g => g.Location).Excluding(g => g.Invites));
+            group.Should().BeEquivalentTo(expectedGroup, config => config.Excluding(g => g.Characters).Excluding(g => g.Master).Excluding(g => g.Invites));
             group.Characters.Should().BeEquivalentTo(new [] {expectedCharacter}, config => config.Excluding(c => c.Group).Excluding(c => c.Owner).Excluding(c => c.Origin));
-            group.Location.Should().BeEquivalentTo(expectedLocation);
             group.Invites.Should().BeEquivalentTo(new [] {expectedInvite1, expectedInvite2}, config => config.Excluding(i => i.Character).Excluding(i => i.Group));
         }
 

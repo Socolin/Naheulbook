@@ -248,11 +248,6 @@ namespace Naheulbook.Web.Notifications
             return BuildGroupChange(groupId, "changeData", groupData);
         }
 
-        public INotificationPacket BuildGroupChangeLocation(int groupId, Location location)
-        {
-            return BuildGroupChange(groupId, "changeLocation", _mapper.Map<LocationResponse>(location));
-        }
-
         public INotificationPacket BuildGroupAddLoot(int groupId, Loot loot)
         {
             return BuildGroupChange(groupId, "addLoot", _mapper.Map<LootResponse>(loot));

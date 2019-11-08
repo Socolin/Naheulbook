@@ -108,7 +108,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddUser()
-                .AddLocation().AddGroup()
+                .AddGroup()
                 .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(100))
                 .AddGroupHistoryEntry(h => h.Date = new DateTime(200))
@@ -142,7 +142,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddUser()
-                .AddLocation().AddGroup()
+                .AddGroup()
                 .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
                 .AddCharacterHistoryEntry(h =>
                 {
@@ -166,7 +166,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddUser()
-                .AddLocation().AddGroup()
+                .AddGroup()
                 .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
                 .AddCharacterHistoryEntry(h =>
                 {
@@ -192,7 +192,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddUser()
-                .AddLocation().AddGroup()
+                .AddGroup()
                 .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(100))
                 .AddGroupHistoryEntry(h => h.Date = new DateTime(200));
@@ -211,7 +211,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddUser()
-                .AddLocation().AddGroup()
+                .AddGroup()
                 .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(100))
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(400))
@@ -235,7 +235,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddUser()
-                .AddLocation().AddGroup()
+                .AddGroup()
                 .AddGroupHistoryEntry(h => h.Date = new DateTime(200))
                 .AddGroup()
                 .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())

@@ -32,8 +32,6 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Job> Jobs { get; set; } = null!;
         public DbSet<Speciality> Specialities { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
-        public DbSet<Location> Locations { get; set; } = null!;
-        public DbSet<LocationMap> LocationMaps { get; set; } = null!;
         public DbSet<Loot> Loots { get; set; } = null!;
         public DbSet<Event> Events { get; set; } = null!;
         public DbSet<OriginRandomNameUrl> OriginRandomNameUrls { get; set; } = null!;
@@ -90,9 +88,6 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new JobRestrictConfiguration());
             modelBuilder.ApplyConfiguration(new JobSkillConfiguration());
 
-            modelBuilder.ApplyConfiguration(new LocationConfiguration());
-            modelBuilder.ApplyConfiguration(new LocationMapConfiguration());
-
             modelBuilder.ApplyConfiguration(new LootConfiguration());
 
             modelBuilder.ApplyConfiguration(new MapConfiguration());
@@ -103,7 +98,6 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new MonsterConfiguration());
 
             modelBuilder.ApplyConfiguration(new MonsterCategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new MonsterLocationConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTemplateSimpleInventoryConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTypeConfiguration());

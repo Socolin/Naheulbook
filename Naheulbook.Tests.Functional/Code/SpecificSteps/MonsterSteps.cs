@@ -46,7 +46,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddMonsterTemplate();
         }
 
-        [Given("a monster template with locations and inventory")]
+        [Given("a monster template with inventory")]
         public void GivenAMonsterTemplateWithLocationAndInventory()
         {
             if (!_testDataUtil.Contains<MonsterType>())
@@ -55,13 +55,8 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 _testDataUtil.AddMonsterCategory();
 
             _testDataUtil.AddItemTemplateSection().AddItemTemplateCategory().AddItemTemplate();
-            _testDataUtil.AddLocation();
             _testDataUtil.AddMonsterTemplate(m =>
             {
-                m.Locations = new List<MonsterLocation>
-                {
-                    new MonsterLocation {Location = _testDataUtil.GetLast<Location>()}
-                };
                 m.Items = new List<MonsterTemplateSimpleInventory>
                 {
                     new MonsterTemplateSimpleInventory

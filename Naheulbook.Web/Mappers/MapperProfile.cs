@@ -182,11 +182,6 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Description, opt => opt.MapFrom(r => r.Text))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)));
 
-            CreateMap<Location, LocationResponse>()
-                .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)));
-            CreateMap<LocationMap, LocationMapResponse>()
-                .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)));
-
             CreateMap<Loot, LootResponse>();
 
             CreateMap<Origin, OriginResponse>()
@@ -226,7 +221,6 @@ namespace Naheulbook.Web.Mappers
 
             CreateMap<MonsterTemplate, MonsterTemplateResponse>()
                 .ForMember(x => x.SimpleInventory, opt => opt.MapFrom(m => m.Items))
-                .ForMember(x => x.LocationIds, opt => opt.MapFrom(m => m.Locations.Select(x => x.LocationId)))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)));
             CreateMap<MonsterTemplateSimpleInventory, MonsterTemplateResponse.MonsterSimpleInventoryResponse>();
             CreateMap<MonsterType, MonsterTypeResponse>()

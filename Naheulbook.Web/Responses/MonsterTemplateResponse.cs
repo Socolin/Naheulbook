@@ -20,7 +20,6 @@ namespace Naheulbook.Web.Responses
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public int CategoryId { get; set; }
-        public List<int> LocationIds { get; set; } = null!;
         public JObject Data { get; set; } = null!;
         public List<MonsterSimpleInventoryResponse> SimpleInventory { get; set; } = null!;
     }

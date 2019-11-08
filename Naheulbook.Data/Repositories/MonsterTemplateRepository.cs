@@ -10,10 +10,10 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IMonsterTemplateRepository : IRepository<MonsterTemplate>
     {
-        Task<List<MonsterTemplate>> GetAllWithItemsFullDataWithLocationsAsync();
+        Task<List<MonsterTemplate>> GetAllWithItemsFullDataAsync();
         Task<List<MonsterTemplate>> SearchByNameAndCategoryAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId, int maxResult);
-        Task<MonsterTemplate> GetByIdWithItemsWithLocationsAsync(int monsterTemplateId);
-        Task<MonsterTemplate> GetByIdWithItemsFullDataWithLocationsAsync(int monsterTemplateId);
+        Task<MonsterTemplate> GetByIdWithItemsAsync(int monsterTemplateId);
+        Task<MonsterTemplate> GetByIdWithItemsFullDataAsync(int monsterTemplateId);
     }
 
     public class MonsterTemplateRepository : Repository<MonsterTemplate, NaheulbookDbContext>, IMonsterTemplateRepository
@@ -23,10 +23,9 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public Task<List<MonsterTemplate>> GetAllWithItemsFullDataWithLocationsAsync()
+        public Task<List<MonsterTemplate>> GetAllWithItemsFullDataAsync()
         {
             return Context.MonsterTemplates
-                .Include(x => x.Locations)
                 .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)
                 .ToListAsync();
         }
@@ -34,7 +33,6 @@ namespace Naheulbook.Data.Repositories
         public Task<List<MonsterTemplate>> SearchByNameAndCategoryAsync(string partialName, int? monsterTypeId, int? monsterSubCategoryId, int maxResult)
         {
             var query = Context.MonsterTemplates
-                .Include(x => x.Locations)
                 .Include(m => m.Items)
                 .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)
                 .Where(e => e.Name.ToUpper().Contains(partialName.ToUpper()));
@@ -53,18 +51,16 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<MonsterTemplate> GetByIdWithItemsWithLocationsAsync(int monsterTemplateId)
+        public Task<MonsterTemplate> GetByIdWithItemsAsync(int monsterTemplateId)
         {
             return Context.MonsterTemplates
-                .Include(x => x.Locations)
                 .Include(x => x.Items)
                 .SingleOrDefaultAsync(x => x.Id == monsterTemplateId);
         }
 
-        public Task<MonsterTemplate> GetByIdWithItemsFullDataWithLocationsAsync(int monsterTemplateId)
+        public Task<MonsterTemplate> GetByIdWithItemsFullDataAsync(int monsterTemplateId)
         {
             return Context.MonsterTemplates
-                .Include(x => x.Locations)
                 .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)
                 .SingleOrDefaultAsync(x => x.Id == monsterTemplateId);
         }

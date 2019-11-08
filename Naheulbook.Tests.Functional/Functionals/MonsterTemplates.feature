@@ -5,7 +5,6 @@ Feature: MonsterTemplates
     Given an item template section
     Given an item template category
     Given an item template
-    Given a location
     Given a monster category type
     Given a monster category
 
@@ -18,9 +17,6 @@ Feature: MonsterTemplates
         "at": 1,
         "note": "some-note",
       },
-      "locationIds": [
-        ${Location.Id}
-      ],
       "simpleInventory": [
         {
           "itemTemplateId": ${ItemTemplate.Id},
@@ -42,9 +38,6 @@ Feature: MonsterTemplates
           "at": 1,
           "note": "some-note",
         },
-        "locationIds": [
-            ${Location.Id}
-        ],
         "simpleInventory": [
             {
                 "id": {"__match": {"type": "integer"}},
@@ -106,7 +99,7 @@ Feature: MonsterTemplates
 
 
   Scenario: Listing monster templates
-    Given a monster template with locations and inventory
+    Given a monster template with inventory
 
     When performing a GET to the url "/api/v2/monsterTemplates/"
 
@@ -129,9 +122,6 @@ Feature: MonsterTemplates
             "name": "${ItemTemplate.Name}"
           }}
         },
-      ],
-      "locationIds": [
-        ${Location.Id}
       ]
     }
     """
@@ -177,7 +167,7 @@ Feature: MonsterTemplates
 
 
   Scenario: Search monster template
-    Given a monster template with locations and inventory
+    Given a monster template with inventory
 
     When performing a GET to the url "/api/v2/monsterTemplates/search?filter=${MonsterTemplate.Name}"
     Then the response status code is 200
@@ -198,10 +188,7 @@ Feature: MonsterTemplates
             "id": ${ItemTemplate.Id},
             "name": "${ItemTemplate.Name}"
           }}
-        },
-      ],
-      "locationIds": [
-        ${Location.Id}
+        }
       ]
     }
     """
@@ -212,7 +199,6 @@ Feature: MonsterTemplates
     Given an item template section
     Given an item template category
     Given an item template
-    Given a location
     Given a monster category type
     Given a monster category
 
@@ -226,9 +212,6 @@ Feature: MonsterTemplates
         "prd": 3,
         "note": "some-new-note"
       },
-      "locationIds": [
-        ${Location.Id}
-      ],
       "simpleInventory": [
         {
           "itemTemplateId": ${ItemTemplate.Id},
@@ -251,9 +234,6 @@ Feature: MonsterTemplates
         "prd": 3,
         "note": "some-new-note"
       },
-      "locationIds": [
-          ${Location.Id}
-      ],
       "simpleInventory": [
           {
               "id": {"__match": {"type": "integer"}},

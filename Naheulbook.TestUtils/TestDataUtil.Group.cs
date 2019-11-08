@@ -7,19 +7,18 @@ namespace Naheulbook.TestUtils
     {
         public TestDataUtil AddGroup(int masterId, Action<Group> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateGroup(masterId, GetLast<Location>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateGroup(masterId), customizer);
         }
 
         public TestDataUtil AddGroup(Action<Group> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<User>().Id, GetLast<Location>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<User>().Id), customizer);
         }
 
         public TestDataUtil AddGroupWithRequiredData(Action<Group> customizer = null)
         {
             AddUser();
-            AddLocation();
-            return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<User>().Id, GetLast<Location>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<User>().Id), customizer);
         }
 
         public TestDataUtil AddLoot(Action<Loot> customizer = null)

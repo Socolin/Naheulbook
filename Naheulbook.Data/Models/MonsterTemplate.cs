@@ -13,6 +13,5 @@ namespace Naheulbook.Data.Models
         public MonsterCategory Category { get; set; } = null!;
 
         public ICollection<MonsterTemplateSimpleInventory> Items { get; set; } = null!;
-        public ICollection<MonsterLocation> Locations { get; set; } = null!;
     }
 }
