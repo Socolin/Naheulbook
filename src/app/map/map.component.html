@@ -109,12 +109,12 @@
                         <mat-menu #layerMenu>
                             <button mat-menu-item (click)="toggleVisibility(mapLayer)">
                                 <ng-template [ngIf]="hiddenLayers[mapLayer.id]">
-                                    <mat-icon>visibility_off</mat-icon>
-                                    Cacher
-                                </ng-template>
-                                <ng-template [ngIf]="!hiddenLayers[mapLayer.id]">
                                     <mat-icon>visibility_on</mat-icon>
                                     Afficher
+                                </ng-template>
+                                <ng-template [ngIf]="!hiddenLayers[mapLayer.id]">
+                                    <mat-icon>visibility_off</mat-icon>
+                                    Cacher
                                 </ng-template>
                             </button>
                             <button mat-menu-item (click)="startEditLayer(mapLayer)">
