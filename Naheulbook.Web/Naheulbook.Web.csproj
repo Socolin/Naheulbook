@@ -13,6 +13,7 @@
         <PackageReference Include="jose-jwt" Version="2.4.0" />
         <PackageReference Include="JsonModelBinder" Version="2.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.App" Version="3.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Transport.Libuv" Version="3.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.0.0" />
