@@ -1,54 +1,53 @@
-mat-sidenav {
-    width: 240px;
+@import "~app/style/responsive-utils";
 
-    h2 {
-        margin-left: 16px;
+:host {
+    > mat-sidenav-container {
+        min-height: 100vh;
     }
 
-    [mat-button] {
-        width: 100%;
-        position: relative;
-        bottom: 0;
-        margin: 24px 0;
-    }
-}
+    mat-sidenav {
+        width: 240px;
 
-@media (min-width: 600px) {
-    .app-content {
-        padding: 0 32px 32px;
-        max-width: 960px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
+        h2 {
+            margin-left: 16px;
+        }
 
-@media (max-width: 599px) {
-    .app-content {
-        padding: 0 10px 10px;
-    }
-}
-
-
-mat-toolbar {
-    mat-icon {
-        cursor: pointer;
-    }
-
-    .app-toolbar {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        justify-content: space-between;
-        > a {
-            padding-right: 10px;
+        [mat-button] {
+            width: 100%;
+            position: relative;
+            bottom: 0;
+            margin: 24px 0;
         }
     }
 
-    .home-link {
-        color: inherit;
+    .app-content {
+        padding: 8px 8px 8px;
+        @include for-tablet-portrait-up {
+            padding: 8px 32px 32px;
+            max-width: 960px;
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
-}
 
-h1 {
-    font-size: 20px;
+    mat-toolbar {
+        mat-icon {
+            cursor: pointer;
+        }
+
+        .app-toolbar {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+
+            > a {
+                padding-right: 10px;
+            }
+        }
+
+        .home-link {
+            color: inherit;
+        }
+    }
 }

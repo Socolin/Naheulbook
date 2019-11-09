@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Origin} from './origin.model';
+import {GmModeService} from '../shared';
 
 @Component({
     selector: 'origin',
@@ -8,4 +9,7 @@ import {Origin} from './origin.model';
 })
 export class OriginComponent {
     @Input() origin: Origin;
+
+    constructor(public readonly gmModeService: GmModeService) {
+    }
 }

@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 
 import {Job} from './job.model';
+import {GmModeService} from '../shared';
 
 @Component({
     selector: 'job',
@@ -9,4 +10,7 @@ import {Job} from './job.model';
 })
 export class JobComponent {
     @Input() job: Job;
+
+    constructor(public readonly gmModeService: GmModeService) {
+    }
 }

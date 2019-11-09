@@ -7,7 +7,9 @@ import {SharedModule} from '../shared/shared.module';
 
 import {
     OriginComponent,
+    OriginGmInfoComponent,
     OriginListComponent,
+    OriginPlayerInfoComponent,
     OriginSelectorComponent,
     OriginService
 } from './';
@@ -23,6 +25,8 @@ import {
         OriginComponent,
         OriginListComponent,
         OriginSelectorComponent,
+        OriginPlayerInfoComponent,
+        OriginGmInfoComponent,
     ],
     providers: [
         OriginService,
@@ -31,6 +35,7 @@ import {
         OriginComponent,
         OriginListComponent,
         OriginSelectorComponent,
+        OriginPlayerInfoComponent,
     ],
 })
 export class OriginModule {

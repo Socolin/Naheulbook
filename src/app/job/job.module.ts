@@ -1,11 +1,18 @@
-import {NgModule}      from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 import {NhbkMaterialModule} from '../nhbk-material.module';
 import {SharedModule} from '../shared/shared.module';
 
-import {JobComponent, JobListComponent, JobSelectorComponent, JobService} from './';
+import {
+    JobComponent,
+    JobGmInfoComponent,
+    JobListComponent,
+    JobPlayerInfoComponent,
+    JobSelectorComponent,
+    JobService
+} from './';
 
 @NgModule({
     imports: [
@@ -18,11 +25,14 @@ import {JobComponent, JobListComponent, JobSelectorComponent, JobService} from '
         JobComponent,
         JobListComponent,
         JobSelectorComponent,
+        JobPlayerInfoComponent,
+        JobGmInfoComponent,
     ],
     exports: [
         JobComponent,
         JobListComponent,
         JobSelectorComponent,
+        JobPlayerInfoComponent,
     ],
     providers: [
         JobService

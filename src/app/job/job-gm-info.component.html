@@ -1,0 +1,72 @@
+<div class="mat-typography">
+    <div *ngIf="job.requirements && job.requirements.length > 0">
+        <b>Critères: </b>
+        <span *ngFor="let requirement of job.requirements; let lastReq=last">
+            <span *ngIf="requirement.min">
+                {{requirement.stat}} minimum: {{requirement.min}}
+            </span>
+            <span *ngIf="requirement.max">
+                {{requirement.stat}} maximum: {{requirement.max}}
+            </span>
+            <span *ngIf="!lastReq"> et </span>
+        </span>
+    </div>
+
+    <div
+        *ngIf="!job.data.forOrigin['all'].baseEv && !job.data.forOrigin['all'].factorEv && !job.data.forOrigin['all'].bonusEv">
+        EV initiale : selon origine
+    </div>
+    <div
+        *ngIf="!job.data.forOrigin['all'].baseEv && job.data.forOrigin['all'].factorEv && !job.data.forOrigin['all'].bonusEv">
+        EV initiale : EV initiale -{{ (1 - job.data.forOrigin['all'].factorEv) | percent}}
+    </div>
+    <div
+        *ngIf="!job.data.forOrigin['all'].baseEv && !job.data.forOrigin['all'].factorEv && (job.data.forOrigin['all'].bonusEv || 0) > 0">
+        EV initiale : EV initiale + {{job.data.forOrigin['all'].bonusEv}}
+    </div>
+    <div
+        *ngIf="job.data.forOrigin['all'].baseEv && !job.data.forOrigin['all'].factorEv && !job.data.forOrigin['all'].bonusEv">
+        EV initiale : {{job.data.forOrigin['all'].baseEv}}
+    </div>
+
+    <div *ngIf="job.data.forOrigin['all'].baseEa != null">
+        EA initiale (mana) : {{job.data.forOrigin['all'].baseEa}} (+1D{{job.data.forOrigin['all'].diceEaLevelUp}} par
+        niveau)
+    </div>
+
+    <div *ngIf="job.data.forOrigin['all'].baseAt != null || job.data.forOrigin['all'].basePrd != null">
+        Valeur ATTAQUE initiale : {{job.data.forOrigin['all'].baseAt}} – Valeur PARADE initiale
+        : {{job.data.forOrigin['all'].basePrd}}
+    </div>
+
+    <div *ngFor="let bonus of job.bonuses">
+        {{bonus.description}}
+    </div>
+
+    <div *ngIf="job.skills && job.skills.length > 0">
+        Compétences de naissance:
+        <ul>
+            <li *ngFor="let skill of job.skills">
+                <strong>{{skill.name}}</strong>: {{skill.playerDescription}}
+            </li>
+        </ul>
+    </div>
+
+    <div *ngIf="job.availableSkills && job.availableSkills.length > 0">
+        Compétences au choix:
+        <ul>
+            <li *ngFor="let skill of job.availableSkills">
+                <strong>{{skill.name}}</strong>: {{skill.playerDescription}}
+            </li>
+        </ul>
+    </div>
+
+    <div *ngIf="job.restrictions && job.restrictions.length > 0">
+        Restrictions:
+        <ul>
+            <li *ngFor="let restrict of job.restrictions">
+                {{restrict.description}}
+            </li>
+        </ul>
+    </div>
+</div>

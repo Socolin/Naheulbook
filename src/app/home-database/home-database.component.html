@@ -1,8 +1,8 @@
-<mat-sidenav-container style="min-height: 100vh">
+<mat-sidenav-container>
     <mat-sidenav #start>
         <h2 class="mat-h2">Database</h2>
         <mat-nav-list>
-            <a mat-list-item [routerLink]="['/database/skills']">
+            <a mat-list-item [routerLink]="['/database/skills']" *ngIf="gmModeService.gmMode | async">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
                 Compétences
             </a>
@@ -14,15 +14,15 @@
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-diploma" class="ra-mat-button-icon-24"></mat-icon>
                 Metiers
             </a>
-            <a mat-list-item [routerLink]="['/database/items']">
+            <a mat-list-item [routerLink]="['/database/items']" *ngIf="gmModeService.gmMode | async">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-24"></mat-icon>
                 Objets
             </a>
-            <a mat-list-item [routerLink]="['/database/effects']">
+            <a mat-list-item [routerLink]="['/database/effects']" *ngIf="gmModeService.gmMode | async">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-broken-bone" class="ra-mat-button-icon-24"></mat-icon>
                 Effets
             </a>
-            <a mat-list-item [routerLink]="['/database/monsters']">
+            <a mat-list-item [routerLink]="['/database/monsters']" *ngIf="gmModeService.gmMode | async">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-dragon-head" class="ra-mat-button-icon-24"></mat-icon>
                 Bestiaire
             </a>
