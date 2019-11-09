@@ -141,7 +141,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     selectTab(tabChangeEvent: MatTabChangeEvent): boolean {
         this.currentTab = this.tabs[tabChangeEvent.index].hash;
         if (!this.inGroupTab) {
-            this.router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this.route});
+            this.router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this.route, replaceUrl: true});
         }
         return false;
     }
