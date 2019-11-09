@@ -1,62 +1,75 @@
-<mat-card style="text-justify: auto; text-align: justify;">
-    Ce formulaire permet de crée des personnages, étant de niveau supérieur à 1 ou ne respectant pas forcément toutes
-    les restrictions des règles actuelle (personnage crée avec les règles de la 2.0 etc..). Pour les statistiques,
-    il ne faut pas compter les bonus d'équipements, ou les bonus d'agilité exceptionnel / pourri.
-    Ces bonus seront calculé automatiquement ensuite sur la fiche du personnage.
+<mat-card>
+    <p class="mat-body">
+        Ce formulaire permet de créer des personnages, étant de niveau supérieur à 1 ou ne respectant pas forcément
+        toutes les restrictions des règles actuelle (personnage crée avec les règles de la 2.0, etc.).
+    </p>
+    <p class="mat-body">
+        Pour les caractéristiques, il ne faut pas compter les bonus d'équipements, ou autres bonus tel que le bonus
+        d'agilité exceptionnel / pourri, Ces bonus seront calculé automatiquement ensuite sur la fiche du personnage.
+        Les effets des blessures graves, n'ont pas besoin d'être pris en compte non plus, vous pourrez les ajouter plus
+        tard.
+    </p>
+    <p class="mat-body">
+        Une fois le personnage créer vous pourrez ajouter des modificateurs au besoin pour ajuster les caractéristiques
+        de votre personnage en détails.
+    </p>
 </mat-card>
+
 <mat-card>
     <mat-card-title>
         Caractéristiques
     </mat-card-title>
-    <mat-card-content class="stats">
-        <mat-form-field>
-            <input matInput
-                   type="number"
-                   [(ngModel)]="cou"
-                   placeholder="Courage"
-                   step="1"
-                   min=0 />
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput
-                   type="number"
-                   [(ngModel)]="int"
-                   placeholder="Intelligence"
-                   step="1"
-                   min=0 />
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput
-                   type="number"
-                   [(ngModel)]="cha"
-                   placeholder="Charisme"
-                   step="1"
-                   min=0 />
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput
-                   type="number"
-                   [(ngModel)]="ad"
-                   placeholder="Adresse"
-                   step="1"
-                   min=0 />
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput
-                   type="number"
-                   [(ngModel)]="fo"
-                   placeholder="Force"
-                   step="1"
-                   min=0 />
-        </mat-form-field>
-    </mat-card-content>
+    <div [formGroup]="form">
+        <mat-card-content class="basic-stats" formGroupName="stats">
+            <mat-form-field class="cou">
+                <input matInput
+                       type="number"
+                       formControlName="cou"
+                       placeholder="Courage"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+            <mat-form-field class="int">
+                <input matInput
+                       type="number"
+                       formControlName="int"
+                       placeholder="Intelligence"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+            <mat-form-field class="cha">
+                <input matInput
+                       type="number"
+                       formControlName="cha"
+                       placeholder="Charisme"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+            <mat-form-field class="ad">
+                <input matInput
+                       type="number"
+                       formControlName="ad"
+                       placeholder="Adresse"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+            <mat-form-field class="fo">
+                <input matInput
+                       type="number"
+                       formControlName="fo"
+                       placeholder="Force"
+                       step="1"
+                       min=0 />
+            </mat-form-field>
+        </mat-card-content>
+    </div>
 </mat-card>
 <mat-card class="origin-card">
     <mat-card-title>
         Origine
     </mat-card-title>
     <mat-card-content>
-        <mat-form-field class="selector">
+        <mat-form-field>
             <mat-select placeholder="Origine" [(ngModel)]="selectedOrigin" (selectionChange)="updateAvailableJobs()">
                 <mat-option *ngFor="let origin of origins" [value]="origin">
                     {{origin.name}}
@@ -127,33 +140,34 @@
         </ng-template>
     </mat-card-content>
 </mat-card>
-<mat-card>
+<mat-card [formGroup]="form">
     <mat-card-title>
         Divers
     </mat-card-title>
     <mat-card-content>
-        <div class="stats">
-            <mat-form-field>
+        <div class="name-sex">
+            <mat-form-field class="name">
                 <input matInput
-                       [(ngModel)]="name"
+                       formControlName="name"
                        placeholder="Nom" />
             </mat-form-field>
+
+            <div class="sex">
+                <mat-radio-group name="sexe" formControlName="sex">
+                    <mat-radio-button name="sexe" [value]="'Homme'">
+                        Homme
+                    </mat-radio-button>
+                    <mat-radio-button name="sexe" [value]="'Femme'">
+                        Femme
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
         </div>
-        <div class="stats">
-            <mat-radio-group name="sexe" [(ngModel)]="sex">
-                <mat-radio-button name="sexe" [value]="'Homme'">
-                    Homme
-                </mat-radio-button>
-                <mat-radio-button name="sexe" [value]="'Femme'">
-                    Femme
-                </mat-radio-button>
-            </mat-radio-group>
-        </div>
-        <div class="stats">
+        <div class="level-exp-fate">
             <mat-form-field>
                 <input matInput
                        type="number"
-                       [(ngModel)]="level"
+                       formControlName="level"
                        placeholder="Niveau"
                        step="1"
                        min=0 />
@@ -161,7 +175,7 @@
             <mat-form-field>
                 <input matInput
                        type="number"
-                       [(ngModel)]="xp"
+                       formControlName="experience"
                        placeholder="Experience"
                        step="1"
                        min=0 />
@@ -169,33 +183,33 @@
             <mat-form-field>
                 <input matInput
                        type="number"
-                       [(ngModel)]="fatePoint"
+                       formControlName="fatePoint"
                        placeholder="Point de destin"
                        step="1"
                        min=0 />
             </mat-form-field>
         </div>
-        <div class="stats">
+        <div class="ev-ea-at-prd" formGroupName="basicStatsOverrides">
             <mat-form-field>
                 <input matInput
                        type="number"
-                       [(ngModel)]="ev"
-                       placeholder="Energie Vitale"
+                       formControlName="ev"
+                       placeholder="Énergie Vitale"
                        step="1"
                        min=0 />
             </mat-form-field>
             <mat-form-field>
                 <input matInput
                        type="number"
-                       [(ngModel)]="ea"
-                       placeholder="Energie Astrale"
+                       formControlName="ea"
+                       placeholder="Énergie Astrale"
                        step="1"
                        min=0 />
             </mat-form-field>
             <mat-form-field>
                 <input matInput
                        type="number"
-                       [(ngModel)]="at"
+                       formControlName="at"
                        placeholder="AT"
                        step="1"
                        min=0 />
@@ -203,7 +217,7 @@
             <mat-form-field>
                 <input matInput
                        type="number"
-                       [(ngModel)]="prd"
+                       formControlName="prd"
                        placeholder="PRD"
                        step="1"
                        min=0 />
@@ -214,8 +228,8 @@
 
 <div class="create-button">
     <button mat-raised-button
-            [disabled]="creating"
+            [disabled]="!form.valid || !selectedOrigin || creating"
             (click)="createCustomCharacter()">
-        Creer
+        Créer
     </button>
 </div>

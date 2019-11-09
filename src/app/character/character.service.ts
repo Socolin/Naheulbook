@@ -24,6 +24,8 @@ import {
     ListActiveCharacterResponse,
     RandomCharacterNameResponse
 } from '../api/responses';
+import {CharacterSex} from '../api/shared/enums';
+import {CreateCustomCharacterRequest} from '../api/requests/create-custom-character-request';
 
 @Injectable()
 export class CharacterService {
@@ -165,11 +167,11 @@ export class CharacterService {
         return this.httpClient.get<ListActiveCharacterResponse[]>(`/api/v2/groups/${groupId}/activeCharacters`);
     }
 
-    createCustomCharacter(customCharacterData: any): Observable<IMetadata> {
-        return this.httpClient.post<IMetadata>('/api/character/createCustom', customCharacterData);
+    createCustomCharacter(request: CreateCustomCharacterRequest): Observable<IMetadata> {
+        return this.httpClient.post<IMetadata>('/api/v2/characters/custom', request);
     }
 
-    getRandomName(originId: number, sex: string) {
+    getRandomName(originId: number, sex: CharacterSex) {
         return this.httpClient.get<RandomCharacterNameResponse>(`/api/v2/origins/${originId}/randomCharacterName`, {
             params: {
                 sex: sex

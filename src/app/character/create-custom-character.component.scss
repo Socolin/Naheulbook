@@ -1,48 +1,115 @@
-mat-card {
-    margin-bottom: 8px;
-    .stats {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+@import "~app/style/responsive-utils";
+
+:host {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-row-gap: 8px;
+
+    p {
+        text-align: justify;
+    }
+
+    mat-card {
+        .basic-stats {
+            display: grid;
+            grid-template-columns: minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr);
+            grid-column-gap: 8px;
+
+            @include for-phone-only {
+                grid-template-columns: minmax(30px, 1fr) minmax(30px, 1fr) minmax(30px, 1fr) minmax(30px, 1fr) minmax(30px, 1fr)  minmax(30px, 1fr);
+                grid-template-areas: "cou cou int int cha cha" "ad ad ad fo fo fo";
+                .cou {
+                    grid-area: cou;
+                }
+                .int {
+                    grid-area: int;
+                }
+                .cha {
+                    grid-area: cha;
+                }
+                .ad {
+                    grid-area: ad;
+                }
+                .fo {
+                    grid-area: fo;
+                }
+            }
+        }
+
+        .name-sex {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-column-gap: 8px;
+            align-items: center;
+
+            @include for-phone-only {
+                grid-template-columns: 1fr;
+            }
+
+            .name {
+
+            }
+
+            .sex > mat-radio-group {
+                display: grid;
+                grid-template-columns: auto auto;
+                grid-column-gap: 8px;
+            }
+        }
+
+        .level-exp-fate {
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: minmax(40px, 1fr) minmax(40px, 2fr) minmax(40px, 2fr);
+            grid-column-gap: 8px;
+        }
+
+        .ev-ea-at-prd {
+            display: grid;
+            grid-template-columns: minmax(40px, 1.5fr) minmax(40px, 1.5fr) minmax(40px, 1fr) minmax(40px, 1fr);
+            grid-column-gap: 8px;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-direction: column;
+
+            .skill-description {
+                padding-left: 32px;
+            }
+        }
+    }
+
+    .origin-card {
         mat-form-field {
-            margin: 0 8px;
-            width: 80px;
-            flex: 1 1 auto;
-        }
-    }
-
-    .skill-list {
-        display: flex;
-        flex-direction: column;
-        .skill-description {
-            padding-left: 32px;
-        }
-    }
-}
-
-.origin-card {
-    .selector {
-        width: 100%;
-    }
-}
-.job-card {
-    .job {
-        padding-bottom: 16px;
-        .speciality {
-            padding-left: 24px;
-        }
-        .speciality-selector {
             width: 100%;
         }
     }
-    .job-selector {
-        width: 100%;
+
+    .job-card {
+        .job {
+            padding-bottom: 16px;
+
+            .speciality {
+                padding-left: 24px;
+            }
+
+            .speciality-selector {
+                width: 100%;
+            }
+        }
+
+        .job-selector {
+            width: 100%;
+        }
+    }
+
+    .create-button {
+        display: flex;
+
+        button {
+            flex: 1 auto;
+        }
     }
 }
 
-.create-button {
-    display: flex;
-    button {
-        flex: 1 auto;
-    }
-}
