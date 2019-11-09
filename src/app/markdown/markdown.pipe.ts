@@ -12,8 +12,10 @@ export class MarkdownPipe implements PipeTransform {
         };
     }
 
-    transform(text: string) {
-
+    transform(text?: string) {
+        if (!text) {
+            return '';
+        }
         try {
             return marked(text, {renderer: this.renderer});
         } catch (e) {

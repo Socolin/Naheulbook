@@ -64,7 +64,8 @@ export class MapLayer {
         mapLayer.name = response.name;
         mapLayer.isGm = response.isGm;
         mapLayer.source = response.source;
-        mapLayer.markers = response.markers.map(m => MapMarkerBase.fromResponse(mapLayer, m));
+        mapLayer.markers = response.markers.map(m => MapMarkerBase.fromResponse(mapLayer, m))
+            .sort((a, b) => a.name.localeCompare(b.name));
         return mapLayer;
     }
 

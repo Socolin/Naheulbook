@@ -29,8 +29,9 @@ export class MapListComponent implements OnInit, OnDestroy {
             this.mapService.getMaps(),
             this.filterControl.valueChanges.pipe(startWith<string>(''))
         ]).subscribe(([gmMode, maps, filter]) => {
-            this.maps = maps.filter(m => gmMode || !m.data.isGm).
-            filter(m => !filter || removeDiacritics(m.name.toLowerCase()).indexOf(removeDiacritics(filter.toLowerCase())) !== -1);
+            this.maps = maps.filter(m => gmMode || ! m.data.isGm)
+                .filter(m => !filter || removeDiacritics(m.name.toLowerCase()).indexOf(removeDiacritics(filter.toLowerCase())) !== -1)
+                .sort((a, b) => a.name.localeCompare(b.name));
         }));
     }
 
