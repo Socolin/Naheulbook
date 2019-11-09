@@ -12,6 +12,7 @@ import {SkillSelectorComponent} from './skill-selector.component';
 import {HttpErrorResponse} from '@angular/common/http';
 import {FormControl, Validators} from '@angular/forms';
 import {CreateCharacterRequest} from '../api/requests/create-character-request';
+import {CharacterSex} from '../api/shared/enums';
 
 @Component({
     selector: 'create-character',
@@ -91,7 +92,7 @@ export class CreateCharacterComponent implements OnInit {
     public name: string | undefined;
     public randomNameAvailable = true;
     public loadingRandomName = false;
-    public sex = 'Homme';
+    public sex: CharacterSex = 'Homme';
 
     // Step 8: FatePoint
 
