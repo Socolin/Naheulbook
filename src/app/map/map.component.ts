@@ -28,19 +28,19 @@ import {
     MapMarkerType,
 } from './map.model';
 
-import {
-    AddMapMarkerLinkDialogResult,
-    MapLayerDialogComponent,
-    MapLayerDialogData,
-    MapLayerDialogResult,
-    MapMarkerLinkDialogComponent,
-    MapMarkerLinkDialogData,
-    SelectMarkerTypeDialogComponent,
-    SelectMarkerTypeDialogData,
-    SelectMarkerTypeDialogResult,
-} from './';
 
 import {markerIcons, measureMarkerIcon} from './icons';
+import {MapLayerDialogComponent, MapLayerDialogData, MapLayerDialogResult} from './map-layer-dialog.component';
+import {
+    SelectMarkerTypeDialogComponent,
+    SelectMarkerTypeDialogData,
+    SelectMarkerTypeDialogResult
+} from './select-marker-type-dialog.component';
+import {
+    AddMapMarkerLinkDialogResult,
+    MapMarkerLinkDialogComponent,
+    MapMarkerLinkDialogData
+} from './map-marker-link-dialog.component';
 
 @Component({
     selector: 'app-map',
