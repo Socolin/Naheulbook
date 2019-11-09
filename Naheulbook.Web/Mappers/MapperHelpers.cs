@@ -32,7 +32,7 @@ namespace Naheulbook.Web.Mappers
             if (string.IsNullOrEmpty(json))
                 return new T();
 
-            return JsonConvert.DeserializeObject<T>(json, JsonSerializerSettings);
+            return JsonConvert.DeserializeObject<T>(json, JsonSerializerSettings)!;
         }
 
         public static string? ToJson(object? obj)
