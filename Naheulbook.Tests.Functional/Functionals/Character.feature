@@ -47,6 +47,58 @@ Feature: Character
     }
     """
 
+  Scenario: Create a character using the custom method
+    Given a JWT for a user
+    And an origin
+    And a skill
+    And 2 jobs
+    And 2 specialities
+
+    When performing a POST to the url "/api/v2/characters/custom" with the following json content and the current jwt
+    """
+    {
+      "name": "some-name",
+      "sex": "Homme",
+      "fatePoint": 3,
+      "level": 5,
+      "experience": 1100,
+      "stats": {
+        "cou": 8,
+        "int": 9,
+        "cha": 10,
+        "ad": 11,
+        "fo": 12
+      },
+      "basicStatsOverrides": {
+        "at": 9,
+        "prd": 6,
+        "ev": 25,
+        "ea": 30
+      },
+      "originId": ${Origin.Id},
+      "jobIds": [
+        ${Job.[0].Id},
+        ${Job.[1].Id}
+      ],
+      "skillIds": [
+        ${Skill.Id}
+      ],
+      "specialityIds": {
+        "${Job.[0].Id}": [
+          ${Speciality.[0].Id}
+        ]
+      }
+    }
+    """
+    Then the response status code is 201
+    And the response should contains the following json
+    """
+    {
+      "id": {"__match": {"type": "integer"}}
+    }
+    """
+
+
   Scenario: Load characters list
     Given a JWT for a user
     And a job

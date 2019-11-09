@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
 
-
 namespace Naheulbook.Requests.Requests
 {
     public class CreateCharacterRequest

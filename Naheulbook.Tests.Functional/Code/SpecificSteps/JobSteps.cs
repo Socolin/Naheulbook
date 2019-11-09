@@ -1,3 +1,4 @@
+using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
 using TechTalk.SpecFlow;
 
@@ -13,16 +14,20 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil = testDataUtil;
         }
 
-        [Given("a job")]
-        public void GivenAJob()
+        [Given(@"(a) job")]
+        [Given(@"(.*) jobs")]
+        public void GivenAJob(string amount)
         {
-            _testDataUtil.AddJob();
+            for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
+                _testDataUtil.AddJob();
         }
 
-        [Given("a speciality")]
-        public void GivenASpeciality()
+        [Given(@"(a) speciality")]
+        [Given(@"(.*) specialities")]
+        public void GivenSpecialities(string amount)
         {
-            _testDataUtil.AddSpeciality();
+            for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
+                _testDataUtil.AddSpeciality();
         }
 
         [Given("a job with all possible data")]

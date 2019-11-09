@@ -95,6 +95,27 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpPost("custom")]
+        public async Task<CreatedActionResult<CreateCharacterResponse>> PostCreateCustomCharacterAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            CreateCustomCharacterRequest request
+        )
+        {
+            try
+            {
+                var character = await _characterService.CreateCustomCharacterAsync(executionContext, request);
+                return _mapper.Map<CreateCharacterResponse>(character);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+            }
+        }
+
         [HttpPost("{CharacterId:int:min(1)}/items")]
         public async Task<CreatedActionResult<ItemResponse>> PostAddItemToCharacterInventoryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,

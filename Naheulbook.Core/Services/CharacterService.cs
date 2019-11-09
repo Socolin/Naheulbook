@@ -17,6 +17,7 @@ namespace Naheulbook.Core.Services
     {
         Task<List<Character>> GetCharacterListAsync(NaheulbookExecutionContext executionContext);
         Task<Character> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request);
+        Task<Character> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request);
         Task<Character> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId);
         Task<Item> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request);
         Task<List<Loot>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId);
@@ -103,6 +104,29 @@ namespace Naheulbook.Core.Services
 
                 return character;
             }
+        }
+
+        public async Task<Character> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request)
+        {
+            using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+
+            var character = _characterFactory.CreateCustomCharacter(request);
+
+            if (request.GroupId.HasValue)
+            {
+                var group = await uow.Groups.GetAsync(request.GroupId.Value);
+                if (group == null)
+                    throw new GroupNotFoundException(request.GroupId.Value);
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, @group);
+                character.Group = @group;
+            }
+
+            character.OwnerId = executionContext.UserId;
+            uow.Characters.Add(character);
+
+            await uow.SaveChangesAsync();
+
+            return character;
         }
 
         public async Task<Character> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId)

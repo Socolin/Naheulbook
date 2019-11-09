@@ -8,6 +8,7 @@ namespace Naheulbook.Core.Factories
     public interface ICharacterFactory
     {
         Character CreateCharacter(CreateCharacterRequest characterRequest);
+        Character CreateCustomCharacter(CreateCustomCharacterRequest request);
     }
 
     public class CharacterFactory : ICharacterFactory
@@ -59,6 +60,51 @@ namespace Naheulbook.Core.Factories
                         SpecialityId = characterRequest.SpecialityId.Value
                     }
                 };
+
+            return character;
+        }
+
+        public Character CreateCustomCharacter(CreateCustomCharacterRequest characterRequest)
+        {
+            var character = new Character
+            {
+                Name = characterRequest.Name,
+                Sex = characterRequest.Sex,
+                IsActive = true,
+                IsNpc = characterRequest.IsNpc,
+
+                Ad = characterRequest.Stats.Ad,
+                Cha = characterRequest.Stats.Cha,
+                Cou = characterRequest.Stats.Cou,
+                Fo = characterRequest.Stats.Fo,
+                Int = characterRequest.Stats.Int,
+
+                Ev = characterRequest.BasicStatsOverrides.Ev,
+                Ea = characterRequest.BasicStatsOverrides.Ea,
+                // FIXME: maxEv, maxEa
+                // FIXME: At/Prd
+
+                Level = characterRequest.Level,
+                Experience = characterRequest.Experience,
+
+                FatePoint = characterRequest.FatePoint,
+
+                OriginId = characterRequest.OriginId,
+            };
+
+            character.Jobs = characterRequest.JobIds.Select(jobId => new CharacterJob
+            {
+                JobId = jobId
+            }).ToList();
+
+            character.Skills = characterRequest.SkillIds.Select(x => new CharacterSkill
+            {
+                SkillId = x
+            }).ToList();
+            character.Specialities = characterRequest.SpecialityIds.SelectMany(x => x.Value).Select(specialityId => new CharacterSpeciality
+            {
+                SpecialityId = specialityId
+            }).ToList();
 
             return character;
         }
