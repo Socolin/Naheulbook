@@ -8,8 +8,8 @@ import {ThemeService} from '../theme.service';
 import {NhbkDialogService} from './nhbk-dialog.service';
 import {Router} from '@angular/router';
 import {GmModeService} from './gm-mode.service';
-import {MatDialog} from '@angular/material/dialog';
 import {ConfirmGmModeDialogComponent} from './confirm-gm-mode-dialog.component';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'common-nav',
@@ -26,7 +26,7 @@ export class CommonNavComponent implements OnInit {
         private readonly nhbkDialogService: NhbkDialogService,
         private readonly themeService: ThemeService,
         private readonly router: Router,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         public readonly gmModeService: GmModeService,
     ) {
     };

@@ -1,11 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {forkJoin, Observer, Subject} from 'rxjs';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Item} from '../item';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 import {IconSelectorComponent, IconSelectorComponentDialogData} from '../shared';
+import {NhbkMatDialog} from '../material-workaround';
 
 export interface CreateItemDialogDialog {
     onAdd: Observer<any>;
@@ -30,7 +31,7 @@ export class CreateItemDialogComponent implements OnInit {
     }[];
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly itemTemplateService: ItemTemplateService,
         private readonly dialogRef: MatDialogRef<CreateItemDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public readonly data: CreateItemDialogDialog
@@ -154,7 +155,12 @@ export class CreateItemDialogComponent implements OnInit {
     }
 }
 
-export function openCreateItemDialog(dialog: MatDialog, onAdd: (item: Item) => void, allowMultipleAdd = true, itemTemplate?: ItemTemplate) {
+export function openCreateItemDialog(
+    dialog: NhbkMatDialog,
+    onAdd: (item: Item) => void,
+    allowMultipleAdd = true,
+    itemTemplate?: ItemTemplate
+) {
     const subject = new Subject<Item>();
     const dialogRef = dialog.open(CreateItemDialogComponent, {
         data: {
@@ -167,7 +173,7 @@ export function openCreateItemDialog(dialog: MatDialog, onAdd: (item: Item) => v
         onAdd(item);
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
         subscription.unsubscribe();
     });
 }

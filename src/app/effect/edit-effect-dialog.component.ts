@@ -6,6 +6,7 @@ import {PromptDialogComponent, StatModifier} from '../shared';
 import {IDurable} from '../api/shared';
 import {EffectService} from './effect.service';
 import {CreateEffectTypeDialogComponent} from './create-effect-type-dialog.component';
+import {NhbkMatDialog} from '../material-workaround';
 
 export interface EditEffectDialogData {
     effect?: Effect;
@@ -29,7 +30,7 @@ export class EditEffectDialogComponent implements OnInit {
     };
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly effectService: EffectService,
         public dialogRef: MatDialogRef<EditEffectDialogComponent, Effect>,
         @Inject(MAT_DIALOG_DATA) public readonly data: EditEffectDialogData

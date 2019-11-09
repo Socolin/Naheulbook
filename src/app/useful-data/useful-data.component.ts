@@ -1,5 +1,9 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
+import {ComponentType} from '@angular/cdk/overlay';
+
+import {NhbkMatDialog} from '../material-workaround';
+
 import {
     EffectListDialogComponent,
     EffectListDialogData,
@@ -16,7 +20,6 @@ import {
 } from './dialogs';
 import {assertNever} from '../utils/utils';
 import {PanelNames} from './useful-data.model';
-import {ComponentType} from '@angular/cdk/overlay';
 
 @Component({
     selector: 'useful-data',
@@ -27,7 +30,7 @@ export class UsefulDataComponent implements OnInit, OnDestroy {
     @Output() onAction = new EventEmitter<{ action: string, data: any }>();
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
     ) {
     }
 
@@ -98,11 +101,8 @@ export class UsefulDataComponent implements OnInit, OnDestroy {
     }
 
     private openDialog<TDialog, TData = any>(componentType: ComponentType<TDialog>, data?: TData) {
-        return this.dialog.open<TDialog, any, UsefulDataDialogResult>(
+        return this.dialog.openFullScreen<TDialog, any, UsefulDataDialogResult>(
             componentType, {
-                minWidth: '100vw',
-                height: '100vh',
-                autoFocus: false,
                 data: data
             });
     }

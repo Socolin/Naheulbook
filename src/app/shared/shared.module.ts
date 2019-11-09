@@ -1,13 +1,17 @@
-import {NgModule}      from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 
-import {NhbkMaterialModule} from '../nhbk-material.module';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+
+import {NhbkMaterialModule} from '../nhbk-material.module';
+import {MaterialWorkaroundModule} from '../material-workaround/material-workaround.module';
 
 import {
     AutocompleteInputComponent,
     CommonNavComponent,
+    ConfirmGmModeDialogComponent,
+    GmModeService,
     IconComponent,
     IconSelectorComponent,
     IconService,
@@ -15,14 +19,13 @@ import {
     ModifierPipe,
     NhbkDialogService,
     PlusMinusPipe,
+    PromptDialogComponent,
     StatRequirementsEditorComponent,
     TextareaAutosizeDirective,
     TextFormatterPipe,
     ValueEditorComponent,
 } from './';
-import { PromptDialogComponent } from './prompt-dialog.component';
-import {GmModeService} from './gm-mode.service';
-import { ConfirmGmModeDialogComponent } from './confirm-gm-mode-dialog.component';
+
 
 @NgModule({
     imports: [
@@ -30,6 +33,7 @@ import { ConfirmGmModeDialogComponent } from './confirm-gm-mode-dialog.component
         FormsModule,
         NhbkMaterialModule,
         RouterModule,
+        MaterialWorkaroundModule,
     ],
     declarations: [
         AutocompleteInputComponent,
@@ -46,6 +50,7 @@ import { ConfirmGmModeDialogComponent } from './confirm-gm-mode-dialog.component
         PromptDialogComponent,
     ],
     exports: [
+        MaterialWorkaroundModule,
         AutocompleteInputComponent,
         CommonNavComponent,
         IconComponent,

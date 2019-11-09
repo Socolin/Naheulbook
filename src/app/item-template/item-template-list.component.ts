@@ -10,11 +10,11 @@ import {LoginService} from '../user';
 import {OriginService} from '../origin';
 import {JobService} from '../job';
 
-import {ItemTemplateCategory, ItemTemplateSection, ItemTemplate} from './item-template.model';
+import {ItemTemplate, ItemTemplateCategory, ItemTemplateSection} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 import {ItemCategoryDirective} from './item-category.directive';
-import {MatDialog} from '@angular/material';
 import {CreateItemTemplateDialogComponent} from './create-item-template-dialog.component';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'item-template-list',
@@ -59,7 +59,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
 
     constructor(
         public readonly loginService: LoginService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly itemTemplateService: ItemTemplateService,
         private readonly jobService: JobService,
         private readonly miscService: MiscService,
@@ -185,7 +185,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     }
 
     openCreateItemTemplateDialog() {
-        this.dialog.open(CreateItemTemplateDialogComponent, {minWidth: '100vw', height: '100vh'});
+        this.dialog.open(CreateItemTemplateDialogComponent);
     }
 
     isEditable(itemTemplate: ItemTemplate): boolean {

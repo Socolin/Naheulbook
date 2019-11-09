@@ -2,7 +2,6 @@ import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChil
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatSidenav} from '@angular/material';
-import {MatDialog} from '@angular/material/dialog';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 import {BehaviorSubject, combineLatest, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
@@ -41,6 +40,7 @@ import {
     MapMarkerLinkDialogComponent,
     MapMarkerLinkDialogData
 } from './map-marker-link-dialog.component';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'app-map',
@@ -107,7 +107,7 @@ export class MapComponent implements OnInit, OnDestroy {
         private readonly ngZone: NgZone,
         private readonly route: ActivatedRoute,
         private readonly mapService: MapService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly breakpointObserver: BreakpointObserver,
         private readonly loginService: LoginService,
         private readonly router: Router,

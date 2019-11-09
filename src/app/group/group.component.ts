@@ -1,13 +1,11 @@
 import {forkJoin, Subscription} from 'rxjs';
-
-import {map} from 'rxjs/operators';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog, MatTabChangeEvent} from '@angular/material';
+import {MatTabChangeEvent} from '@angular/material';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
-import {AutocompleteValue, LapCountDecrement, NhbkDialogService, PromptDialogComponent} from '../shared';
+import {LapCountDecrement, NhbkDialogService, PromptDialogComponent} from '../shared';
 import {NotificationsService} from '../notifications';
 import {dateOffset2TimeDuration} from '../date/util';
 import {NhbkDateOffset} from '../date';
@@ -15,6 +13,7 @@ import {NhbkDateOffset} from '../date';
 import {GroupService} from './group.service';
 import {WebSocketService} from '../websocket';
 import {GroupActionService} from './group-action.service';
+import {NhbkMatDialog} from '../material-workaround';
 
 import {Character, CharacterService} from '../character';
 import {Effect} from '../effect';
@@ -80,7 +79,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     constructor(
         private readonly route: ActivatedRoute,
         private readonly router: Router,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         public readonly loginService: LoginService,
         private readonly groupService: GroupService,
         private readonly monsterService: MonsterService,
@@ -133,11 +132,8 @@ export class GroupComponent implements OnInit, OnDestroy {
     /* Characters tab */
 
     displayCharacterSheet(character: Character) {
-        this.dialog.open(CharacterSheetDialogComponent, {
+        this.dialog.openFullScreen(CharacterSheetDialogComponent, {
             data: {character},
-            minWidth: '100vw',
-            height: '100vh',
-            autoFocus: false
         });
     }
 
@@ -384,10 +380,8 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     openAddEffectDialog(effect?: Effect) {
-        const dialogRef = this.dialog.open<GroupAddEffectDialogComponent, GroupAddEffectDialogData, GroupAddEffectDialogResult>(
+        const dialogRef = this.dialog.openFullScreen<GroupAddEffectDialogComponent, GroupAddEffectDialogData, GroupAddEffectDialogResult>(
             GroupAddEffectDialogComponent, {
-                minWidth: '100vw',
-                height: '100vh',
                 data: {effect, fighters: this.group.fighters}
             });
         dialogRef.afterClosed().subscribe(result => {

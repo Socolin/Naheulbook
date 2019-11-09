@@ -1,5 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 import {CharacterService, ItemActionService} from '../character';
@@ -20,6 +19,7 @@ import {openCreateItemDialog} from './create-item-dialog.component';
 import {openCreateGemDialog} from './create-gem-dialog.component';
 import {ModifierDetailsDialogComponent} from './modifier-details-dialog.component';
 import {MonsterInventoryDialogComponent} from './monster-inventory-dialog.component';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'fighter',
@@ -45,7 +45,7 @@ export class FighterComponent implements OnInit {
         private readonly itemService: ItemService,
         private readonly nhbkDialogService: NhbkDialogService,
         private readonly notification: NotificationsService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
     ) {
     }
 
@@ -181,11 +181,9 @@ export class FighterComponent implements OnInit {
     }
 
     openEditMonsterDialog() {
-        const dialogRef = this.dialog.open<EditMonsterDialogComponent, EditMonsterDialogData, EditMonsterDialogResult>(
+        const dialogRef = this.dialog.openFullScreen<EditMonsterDialogComponent, EditMonsterDialogData, EditMonsterDialogResult>(
             EditMonsterDialogComponent, {
-                autoFocus: false,
                 data: {monster: this.fighter.monster},
-                minWidth: '100vw', height: '100vh'
             });
 
         dialogRef.afterClosed().subscribe((result) => {
@@ -204,9 +202,7 @@ export class FighterComponent implements OnInit {
     }
 
     openAddEffectDialog() {
-        const dialogRef = this.dialog.open(AddEffectDialogComponent, {
-            minWidth: '100vw',
-            height: '100vh',
+        const dialogRef = this.dialog.openFullScreen(AddEffectDialogComponent, {
             data: {options: {hideReusable: true}}
         });
         dialogRef.afterClosed().subscribe(result => {

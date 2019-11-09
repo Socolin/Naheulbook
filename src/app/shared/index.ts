@@ -13,6 +13,7 @@ export * from './scroll';
 
 export * from './icon.service';
 export * from './misc.service';
+export * from './gm-mode.service';
 export * from './nhbk-dialog.service';
 
 export * from './modifier.pipe';
@@ -21,6 +22,7 @@ export * from './text-formatter.pipe';
 
 export * from './autocomplete-input.component';
 export * from './common-nav.component';
+export * from './confirm-gm-mode-dialog.component';
 export * from './gm-mode.service';
 export * from './icon-selector.component';
 export * from './icon.component';

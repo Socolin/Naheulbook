@@ -1,11 +1,11 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
+import {NhbkMatDialog} from '../material-workaround';
 import {ActiveStatsModifier, LapCountDecrement} from '../shared';
 import {AddEffectDialogComponent} from '../effect';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
-import {MatDialog} from '@angular/material';
 
 @Component({
     selector: 'effect-panel',
@@ -19,12 +19,12 @@ export class EffectPanelComponent {
 
     constructor(
         private readonly characterService: CharacterService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
     ) {
     }
 
     openAddEffectDialog() {
-        const dialogRef = this.dialog.open(AddEffectDialogComponent, {minWidth: '100vw', height: '100vh'});
+        const dialogRef = this.dialog.openFullScreen(AddEffectDialogComponent);
         dialogRef.afterClosed().subscribe(result => {
             if (!result) {
                 return;

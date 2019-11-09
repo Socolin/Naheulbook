@@ -5,7 +5,7 @@ import {Item} from '../item';
 import {ItemTemplateService} from '../item-template';
 import {getRandomInt, IconSelectorComponent, IconSelectorComponentDialogData} from '../shared';
 import {IconDescription} from '../shared/icon.model';
-import {CreateItemDialogComponent} from './create-item-dialog.component';
+import {NhbkMatDialog} from '../material-workaround';
 
 export interface CreateGemDialogDialog {
     onAdd: Observer<any>;
@@ -24,7 +24,7 @@ export class CreateGemDialogComponent implements OnInit {
     public randomDiceNumber = 1;
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly itemTemplateService: ItemTemplateService,
         private readonly dialogRef: MatDialogRef<CreateGemDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public readonly data: CreateGemDialogDialog,
@@ -118,14 +118,14 @@ export class CreateGemDialogComponent implements OnInit {
     }
 }
 
-export function openCreateGemDialog(dialog: MatDialog, onAdd: (item: Item) => void) {
+export function openCreateGemDialog(dialog: NhbkMatDialog, onAdd: (item: Item) => void) {
     const subject = new Subject<Item>();
     const dialogRef = dialog.open(CreateGemDialogComponent, {data: {onAdd: subject}});
     const subscription = subject.subscribe((item) => {
         onAdd(item);
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
         subscription.unsubscribe();
     });
 }

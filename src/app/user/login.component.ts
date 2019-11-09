@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {LoginService} from './login.service';
 import {User} from './user.model';
-import {MatDialog} from '@angular/material';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'login',
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
     public loading = false;
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly loginService: LoginService,
         private readonly route: ActivatedRoute,
         private readonly router: Router,

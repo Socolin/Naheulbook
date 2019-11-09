@@ -1,9 +1,10 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MonsterTrait, TraitInfo} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MonsterTraitDialogComponent} from './monster-trait-dialog.component';
 import {MatSelectionList} from '@angular/material/list';
+import {NhbkMatDialog} from '../material-workaround';
 
 export interface SelectMonsterTraitsDialogData {
     selectedTraits: TraitInfo[];
@@ -29,7 +30,7 @@ export class SelectMonsterTraitsDialogComponent implements OnInit {
     public simpleTraitsSelector: MatSelectionList;
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly monsterTemplateService: MonsterTemplateService,
         private readonly dialogRef: MatDialogRef<SelectMonsterTraitsDialogComponent, SelectMonsterTraitsDialogResult>,
         @Inject(MAT_DIALOG_DATA) public readonly data: SelectMonsterTraitsDialogData,

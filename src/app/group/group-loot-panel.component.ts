@@ -8,12 +8,12 @@ import {Monster} from '../monster';
 
 import {Group} from './group.model';
 import {GroupService} from './group.service';
-import {MatDialog} from '@angular/material/dialog';
 import {openCreateItemDialog} from './create-item-dialog.component';
 import {AddLootDialogComponent} from './add-loot-dialog.component';
 import {WebSocketService} from '../websocket';
 import {openCreateGemDialog} from './create-gem-dialog.component';
 import {ItemDialogComponent} from '../item/item-dialog.component';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'group-loot-panel',
@@ -28,7 +28,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         websocketService: WebSocketService,
         private readonly groupService: GroupService,
         private readonly itemService: ItemService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
     ) {
         super(notification, websocketService);
     }

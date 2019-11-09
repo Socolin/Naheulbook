@@ -1,15 +1,13 @@
-import {
-    Component, SimpleChanges, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter,
-} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges,} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 
 import {LoginService} from '../user';
+import {NhbkMatDialog} from '../material-workaround';
 
 import {EffectService} from './effect.service';
-import {EffectCategory, Effect, EffectType} from './effect.model';
+import {Effect, EffectCategory, EffectType} from './effect.model';
 import {EditEffectDialogComponent, EditEffectDialogData} from './edit-effect-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
 
 @Component({
     selector: 'effect-list',
@@ -34,7 +32,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
         private readonly route: ActivatedRoute,
         private readonly loginService: LoginService,
         private readonly effectService: EffectService,
-        private readonly dialog: MatDialog
+        private readonly dialog: NhbkMatDialog
     ) {
     }
 
@@ -71,10 +69,8 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     editEffect(effect: Effect) {
-        const dialogRef = this.dialog.open<EditEffectDialogComponent, EditEffectDialogData, Effect>(
+        const dialogRef = this.dialog.openFullScreen<EditEffectDialogComponent, EditEffectDialogData, Effect>(
             EditEffectDialogComponent, {
-                minWidth: '100vw', height: '100vh',
-                autoFocus: false,
                 data: {effect}
             });
 
@@ -108,10 +104,8 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     createEffect() {
-        const dialogRef = this.dialog.open<EditEffectDialogComponent, EditEffectDialogData, Effect>(
+        const dialogRef = this.dialog.openFullScreen<EditEffectDialogComponent, EditEffectDialogData, Effect>(
             EditEffectDialogComponent, {
-                minWidth: '100vw', height: '100vh',
-                autoFocus: false,
                 data: {category: this.selectedCategory}
             });
 

@@ -12,7 +12,6 @@ import {
 import {Character} from './character.model';
 import {Item, ItemService} from '../item';
 import {ItemActionService} from './item-action.service';
-import {MatDialog} from '@angular/material';
 import {AddItemDialogComponent} from './add-item-dialog.component';
 import {isItemNameMatchingFilter, ItemSortType, sortItemFn} from '../item/item-utils';
 import {EditItemDialogComponent, EditItemDialogData, EditItemDialogResult} from './edit-item-dialog.component';
@@ -23,6 +22,7 @@ import {IDurable} from '../api/shared';
 import {GiveItemDialogComponent, GiveItemDialogData, GiveItemDialogResult} from './give-item-dialog.component';
 import {Subscription} from 'rxjs';
 import {IconDescription} from '../shared/icon.model';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'inventory-panel',
@@ -58,7 +58,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
     constructor(
         private readonly changeDetectorRef: ChangeDetectorRef,
         private readonly itemService: ItemService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         public readonly itemActionService: ItemActionService,
     ) {
     }
@@ -67,7 +67,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     openAddItemModal() {
-        const dialogRef = this.dialog.open(AddItemDialogComponent, {minWidth: '100vw', height: '100vh'});
+        const dialogRef = this.dialog.openFullScreen(AddItemDialogComponent);
 
         dialogRef.afterClosed().subscribe((result) => {
             if (!result) {
@@ -103,11 +103,9 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     openModifierDialog(item: Item) {
-        const dialogRef = this.dialog.open<AddItemModifierDialogComponent, any, ActiveStatsModifier>(
-            AddItemModifierDialogComponent, {
-                minWidth: '100vw',
-                height: '100vh'
-            });
+        const dialogRef = this.dialog.openFullScreen<AddItemModifierDialogComponent, any, ActiveStatsModifier>(
+            AddItemModifierDialogComponent
+        );
         dialogRef.afterClosed().subscribe(result => {
             if (!result) {
                 return;

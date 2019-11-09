@@ -3,7 +3,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatTabChangeEvent, MatTabGroup} from '@angular/material';
 import {Overlay} from '@angular/cdk/overlay';
 import {Subscription} from 'rxjs';
-import {MatDialog} from '@angular/material/dialog';
 
 import {NotificationsService} from '../notifications';
 import {NhbkDialogService, PromptDialogComponent} from '../shared';
@@ -22,6 +21,7 @@ import {JobPlayerDialogComponent} from './job-player-dialog.component';
 import {ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult} from './change-job-dialog.component';
 import {SkillInfoDialogComponent} from './skill-info-dialog.component';
 import {LevelUpDialogComponent, LevelUpDialogData, LevelUpDialogResult} from './level-up-dialog.component';
+import { NhbkMatDialog } from 'app/material-workaround';
 
 
 @Component({
@@ -56,7 +56,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     private notificationSub?: Subscription;
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly itemActionService: ItemActionService,
         private readonly characterService: CharacterService,
         private readonly nhbkDialogService: NhbkDialogService,
@@ -184,11 +184,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openChangeJobDialog() {
-        const dialogRef = this.dialog.open<ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult>(
+        const dialogRef = this.dialog.openFullScreen<ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult>(
             ChangeJobDialogComponent,
             {
-                autoFocus: false,
-                minWidth: '100vw', height: '100vh',
                 data: {
                     character: this.character
                 }
@@ -212,9 +210,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openJobInfoDialog(job: Job) {
-        this.dialog.open(JobPlayerDialogComponent, {
-            autoFocus: false,
-            minWidth: '100vw', height: '100vh',
+        this.dialog.openFullScreen(JobPlayerDialogComponent, {
             data: {
                 job: job
             }
@@ -222,9 +218,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openOriginInfoDialog() {
-        this.dialog.open(OriginPlayerDialogComponent, {
-            autoFocus: false,
-            minWidth: '100vw', height: '100vh',
+        this.dialog.openFullScreen(OriginPlayerDialogComponent, {
             data: {
                 origin: this.character.origin
             }
@@ -286,10 +280,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openLevelUpDialog() {
-        const dialogRef = this.dialog.open<LevelUpDialogComponent, LevelUpDialogData, LevelUpDialogResult>(
+        const dialogRef = this.dialog.openFullScreen<LevelUpDialogComponent, LevelUpDialogData, LevelUpDialogResult>(
             LevelUpDialogComponent, {
-                minWidth: '100vw', height: '100vh',
-                autoFocus: false,
                 data: {
                     character: this.character
                 }

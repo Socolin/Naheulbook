@@ -11,9 +11,9 @@ import {OriginService} from '../origin';
 import {ItemSlot, ItemTemplate, ItemTemplateGunData, ItemTemplateSection} from './item-template.model';
 import {ItemTemplateService} from './item-template.service'
 import {IconDescription} from '../shared/icon.model';
-import {MatDialog} from '@angular/material';
 import {AddItemTemplateEditorModuleDialogComponent} from './add-item-template-editor-module-dialog.component';
 import {ItemTypeResponse} from '../api/responses';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'item-template-editor',
@@ -47,7 +47,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         private readonly jobService: JobService,
         private readonly miscService: MiscService,
         private readonly skillService: SkillService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
     ) {
         this.itemTemplate = new ItemTemplate();
         this.form = {

@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {MatDialog} from '@angular/material';
 
 import {God} from '../shared';
 import {CreateItemTemplateDialogComponent, CreateItemTemplateDialogData} from './create-item-template-dialog.component';
 import {EditItemTemplateDialogComponent, EditItemTemplateDialogData} from './edit-item-template-dialog.component';
 
 import {ItemTemplate} from './item-template.model';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'item-template',
@@ -23,28 +23,23 @@ export class ItemTemplateComponent {
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
     ) {
     }
 
     openEditItemTemplateDialog(itemTemplate: ItemTemplate) {
-        this.dialog.open<EditItemTemplateDialogComponent, EditItemTemplateDialogData, ItemTemplate>(
+        this.dialog.openFullScreen<EditItemTemplateDialogComponent, EditItemTemplateDialogData, ItemTemplate>(
             EditItemTemplateDialogComponent,
             {
-                minWidth: '100vw',
-                height: '100vh',
-                autoFocus: false,
                 data: {itemTemplateId: itemTemplate.id}
             }
         );
     }
 
     openCreateItemTemplateDialog(sourceItem: ItemTemplate) {
-        this.dialog.open<CreateItemTemplateDialogComponent, CreateItemTemplateDialogData, ItemTemplate>(
+        this.dialog.openFullScreen<CreateItemTemplateDialogComponent, CreateItemTemplateDialogData, ItemTemplate>(
             CreateItemTemplateDialogComponent,
             {
-                minWidth: '100vw',
-                height: '100vh',
                 data: {copyFromItemTemplateId: sourceItem.id}
             }
         );

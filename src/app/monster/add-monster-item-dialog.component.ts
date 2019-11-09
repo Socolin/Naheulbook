@@ -1,10 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {forkJoin} from 'rxjs';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 import {MonsterInventoryElement} from './monster.model';
+import {NhbkMatDialog} from '../material-workaround';
 
 export interface AddMonsterItemDialogData {
     inventoryElement?: MonsterInventoryElement;
@@ -26,7 +27,7 @@ export class AddMonsterItemDialogComponent implements OnInit {
     public inventoryElement?: MonsterInventoryElement;
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly itemTemplateService: ItemTemplateService,
         private readonly dialogRef: MatDialogRef<AddMonsterItemDialogComponent, MonsterInventoryElement>,
         @Inject(MAT_DIALOG_DATA) public readonly data: AddMonsterItemDialogData,

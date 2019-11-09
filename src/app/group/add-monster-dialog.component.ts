@@ -5,7 +5,8 @@ import {Item, ItemData} from '../item';
 import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateService, MonsterTemplateType} from '../monster';
 import {ItemTemplate} from '../item-template';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
+import {NhbkMatDialog} from '../material-workaround';
 
 
 export interface AddMonsterDialogResult {
@@ -66,7 +67,7 @@ export class AddMonsterDialogComponent implements OnInit {
 
     constructor(
         private readonly dialogRef: MatDialogRef<AddMonsterDialogComponent>,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly monsterTemplateService: MonsterTemplateService,
     ) {
     }

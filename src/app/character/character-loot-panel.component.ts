@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
 import {NotificationsService} from '../notifications';
 import {Loot, LootPanelComponent} from '../loot';
 import {Monster} from '../monster';
@@ -8,6 +7,7 @@ import {Character} from './character.model';
 import {Item, ItemService} from '../item';
 import {WebSocketService} from '../websocket';
 import {TakeLootDialogComponent, TakeLootDialogData, TakeLootDialogResult} from './take-loot-dialog.component';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'character-loot-panel',
@@ -21,7 +21,7 @@ export class CharacterLootPanelComponent extends LootPanelComponent implements O
     constructor(
         notification: NotificationsService,
         websocketService: WebSocketService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly itemService: ItemService
     ) {
         super(notification, websocketService);

@@ -8,7 +8,7 @@ import {
     MonsterTrait,
     TraitInfo
 } from './monster.model';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {PromptDialogComponent, PromptDialogData, PromptDialogResult} from '../shared';
 import {MonsterTemplateService} from './monster-template.service';
 import {forkJoin} from 'rxjs';
@@ -19,6 +19,7 @@ import {
     SelectMonsterTraitsDialogResult
 } from './select-monster-traits-dialog.component';
 import {MonsterTemplateRequest} from '../api/requests';
+import {NhbkMatDialog} from '../material-workaround';
 
 export interface EditMonsterTemplateDialogData {
     monsterTemplate?: MonsterTemplate;
@@ -64,7 +65,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
         private readonly dialogRef: MatDialogRef<EditMonsterTemplateDialogComponent, MonsterTemplate>,
         @Inject(MAT_DIALOG_DATA) public readonly data: EditMonsterTemplateDialogData,
         private readonly monsterTemplateService: MonsterTemplateService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
     ) {
         this.form.reset(data.monsterTemplate);
     }

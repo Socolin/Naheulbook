@@ -4,13 +4,13 @@ import {NotificationsService} from '../notifications';
 
 import {MonsterTemplate, MonsterTraitDictionary} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
-import {MatDialog} from '@angular/material/dialog';
 import {
     EditMonsterTemplateDialogComponent,
     EditMonsterTemplateDialogData
 } from './edit-monster-template-dialog.component';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 import {ItemTemplate} from '../item-template';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'monster-template',
@@ -24,20 +24,18 @@ export class MonsterTemplateComponent implements OnInit {
     public traisById?: MonsterTraitDictionary;
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly monsterTemplateService: MonsterTemplateService,
         private readonly notifications: NotificationsService,
     ) {
     }
 
     openEditMonsterDialog(): void {
-        const dialogRef = this.dialog.open<EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData, MonsterTemplate>(
+        const dialogRef = this.dialog.openFullScreen<EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData, MonsterTemplate>(
             EditMonsterTemplateDialogComponent, {
                 data: {
                     monsterTemplate: this.monsterTemplate
-                },
-                minWidth: '100vw', height: '100vh',
-                autoFocus: false
+                }
             });
         dialogRef.afterClosed().subscribe((result) => {
             if (!result) {

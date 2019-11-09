@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Notification} from './notification.model';
-import {MatDialog, MatSnackBar, MatSnackBarConfig} from '@angular/material';
+import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ErrorReportService} from '../error-report.service';
 import {ErrorDetailsDialogComponent} from './error-details-dialog.component';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Injectable()
 export class NotificationsService {
@@ -11,7 +12,7 @@ export class NotificationsService {
     constructor(
         private readonly snackBar: MatSnackBar,
         private readonly errorReportService: ErrorReportService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
     ) {
         errorReportService.notifyError.subscribe(msg => {
             this.addNotification(new Notification('error', msg.message, '', msg.error));

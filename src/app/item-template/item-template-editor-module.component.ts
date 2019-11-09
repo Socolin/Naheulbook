@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
@@ -7,11 +7,11 @@ import {Skill} from '../skill';
 import {NhbkAction, NhbkActionEditorDialogComponent, NhbkActionEditorDialogData} from '../action';
 import {LoginService} from '../user';
 
-import {ItemTemplate, ItemSlot} from './item-template.model';
+import {ItemSlot, ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 import {itemTemplateModulesDefinitions} from './item-template-modules-definitions';
-import {MatDialog} from '@angular/material/dialog';
 import {ItemTypeResponse} from '../api/responses';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'item-template-editor-module',
@@ -41,7 +41,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     }, {});
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly nhbkDialogService: NhbkDialogService,
         public readonly loginService: LoginService,
         private readonly itemTemplateService: ItemTemplateService,

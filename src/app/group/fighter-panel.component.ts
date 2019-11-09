@@ -7,13 +7,13 @@ import {NhbkDialogService} from '../shared';
 import {ItemService} from '../item';
 import {Monster, MonsterService, MonsterTemplateService} from '../monster';
 
-import {Fighter, Group} from './group.model';
+import {Group} from './group.model';
 import {GroupActionService} from './group-action.service';
 import {GroupService} from './group.service';
-import {MatDialog} from '@angular/material/dialog';
 import {AddMonsterDialogComponent, AddMonsterDialogResult} from './add-monster-dialog.component';
 import {CreateMonsterRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'fighter-panel',
@@ -40,7 +40,7 @@ export class FighterPanelComponent implements OnInit {
         private readonly monsterService: MonsterService,
         private readonly monsterTemplateService: MonsterTemplateService,
         private readonly nhbkDialogService: NhbkDialogService,
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly breakpointObserver: BreakpointObserver,
     ) {
         breakpointObserver.observe([
@@ -51,9 +51,7 @@ export class FighterPanelComponent implements OnInit {
     }
 
     openAddMonsterDialog() {
-        const dialogRef = this.dialog.open<AddMonsterDialogComponent, any, AddMonsterDialogResult>(AddMonsterDialogComponent, {
-            minWidth: '100vw', height: '100vh', autoFocus: false
-        });
+        const dialogRef = this.dialog.openFullScreen<AddMonsterDialogComponent, any, AddMonsterDialogResult>(AddMonsterDialogComponent);
 
         dialogRef.afterClosed().subscribe((result) => {
             if (!result) {

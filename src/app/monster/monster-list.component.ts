@@ -2,13 +2,13 @@ import {Component, OnInit} from '@angular/core';
 
 import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateType} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
-import {MatDialog} from '@angular/material/dialog';
 import {
     EditMonsterTemplateDialogComponent,
     EditMonsterTemplateDialogData
 } from './edit-monster-template-dialog.component';
 import {LoginService} from '../user';
 import {forkJoin} from 'rxjs';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'monster-list',
@@ -25,7 +25,7 @@ export class MonsterListComponent implements OnInit {
     public isAdmin = false;
 
     constructor(
-        private readonly dialog: MatDialog,
+        private readonly dialog: NhbkMatDialog,
         private readonly loginService: LoginService,
         private readonly monsterTemplateService: MonsterTemplateService,
     ) {
@@ -54,11 +54,8 @@ export class MonsterListComponent implements OnInit {
     }
 
     openCreateMonsterTemplateDialog() {
-        const dialogRef = this.dialog.open<EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData, MonsterTemplate>(
+        const dialogRef = this.dialog.openFullScreen<EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData, MonsterTemplate>(
             EditMonsterTemplateDialogComponent, {
-                autoFocus: false,
-                minWidth: '100vw',
-                height: '100vh',
                 data: {
                     type: this.selectedMonsterType,
                     category: this.selectedMonsterCategory,
