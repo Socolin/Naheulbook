@@ -111,7 +111,6 @@ namespace Naheulbook.Web
             services.AddSingleton<IGroupService, GroupService>();
             services.AddSingleton<IGroupUtil, GroupUtil>();
             services.AddSingleton<IGroupHistoryUtil, GroupHistoryUtil>();
-            services.AddSingleton<IIconService, IconService>();
             services.AddSingleton<IItemService, ItemService>();
             services.AddSingleton<IItemUtil, ItemUtil>();
             services.AddSingleton<IItemDataUtil, ItemDataUtil>();

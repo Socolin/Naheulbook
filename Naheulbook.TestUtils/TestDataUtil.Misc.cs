@@ -14,10 +14,5 @@ namespace Naheulbook.TestUtils
         {
             return SaveEntity(_defaultEntityCreator.CreateCalendar(), customizer);
         }
-
-        public TestDataUtil AddIcon(Action<Icon> customizer = null)
-        {
-            return SaveEntity(_defaultEntityCreator.CreateIcon(), customizer);
-        }
     }
 }

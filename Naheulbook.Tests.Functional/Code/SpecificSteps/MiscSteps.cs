@@ -18,11 +18,5 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         {
             _testDataUtil.AddCalendarEntry();
         }
-
-        [Given("an icon")]
-        public void GivenAnIcon()
-        {
-            _testDataUtil.AddIcon();
-        }
     }
 }
