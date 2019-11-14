@@ -23,8 +23,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddEffectType()
-                .AddEffectCategory()
-                .AddEffectCategory();
+                .AddEffectSubCategory()
+                .AddEffectSubCategory();
 
             var actualEffectCategories = await _effectRepository.GetCategoriesAsync();
 
@@ -36,11 +36,11 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         }
 
         [Test]
-        public async Task CanGetEffectByCategoryWithModifiers()
+        public async Task CanGetEffectBySubCategoryWithModifiers()
         {
             TestDataUtil
                 .AddEffectType()
-                .AddEffectCategory()
+                .AddEffectSubCategory()
                 .AddStat()
                 .AddEffect((effect) => effect.Modifiers = new List<EffectModifier>
                 {
@@ -52,13 +52,13 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                     }
                 });
 
-            var actualEffects = await _effectRepository.GetByCategoryWithModifiersAsync(TestDataUtil.Get<EffectCategory>().Id);
+            var actualEffects = await _effectRepository.GetBySubCategoryWithModifiersAsync(TestDataUtil.Get<EffectSubCategory>().Id);
 
             actualEffects.Should().BeEquivalentTo(
                 TestDataUtil.GetAll<Effect>(),
                 config => config
                     .Excluding(o => o.Id)
-                    .Excluding(o => o.Category)
+                    .Excluding(o => o.SubCategory)
                     .Excluding(info => info.SelectedMemberPath.EndsWith(".Effect"))
                     .Excluding(info => info.SelectedMemberPath.EndsWith(".Stat"))
                     .IgnoringCyclicReferences());
@@ -69,7 +69,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddEffectType()
-                .AddEffectCategory()
+                .AddEffectSubCategory()
                 .AddStat()
                 .AddEffect((effect) => effect.Modifiers = new List<EffectModifier>
                 {
@@ -87,7 +87,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 TestDataUtil.Get<Effect>(),
                 config => config
                     .Excluding(o => o.Id)
-                    .Excluding(o => o.Category)
+                    .Excluding(o => o.SubCategory)
                     .Excluding(info => info.SelectedMemberPath.EndsWith(".Effect"))
                     .Excluding(info => info.SelectedMemberPath.EndsWith(".Stat"))
                     .IgnoringCyclicReferences());

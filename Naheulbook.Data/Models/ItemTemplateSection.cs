@@ -11,6 +11,6 @@ namespace Naheulbook.Data.Models
         public string Special { get; set; } = null!;
 
         [NotMapped]
-        public ICollection<ItemTemplateCategory> Categories { get; set; } = null!;
+        public ICollection<ItemTemplateSubCategory> SubCategories { get; set; } = null!;
     }
 }

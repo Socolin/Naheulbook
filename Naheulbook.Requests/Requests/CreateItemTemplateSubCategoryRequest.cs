@@ -3,7 +3,7 @@
 
 namespace Naheulbook.Requests.Requests
 {
-    public class CreateItemTemplateCategoryRequest
+    public class CreateItemTemplateSubCategoryRequest
     {
         public int SectionId { get; set; }
         public string Name { get; set; } = null!;

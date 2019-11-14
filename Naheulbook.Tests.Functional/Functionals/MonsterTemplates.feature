@@ -3,15 +3,15 @@ Feature: MonsterTemplates
   Scenario: Create a monster template
     Given a JWT for an admin user
     Given an item template section
-    Given an item template category
+    Given an item template sub-category
     Given an item template
     Given a monster category type
-    Given a monster category
+    Given a monster sub-category
 
     When performing a POST to the url "/api/v2/monsterTemplates/" with the following json content and the current jwt
     """
     {
-      "categoryId": ${MonsterCategory.Id},
+      "subCategoryId": ${MonsterSubCategory.Id},
       "name": "some-monster-name",
       "data": {
         "at": 1,
@@ -33,7 +33,7 @@ Feature: MonsterTemplates
     {
         "id": {"__match": {"type": "integer"}},
         "name": "some-monster-name",
-        "categoryId": ${MonsterCategory.Id},
+        "subCategoryId": ${MonsterSubCategory.Id},
         "data": {
           "at": 1,
           "note": "some-note",
@@ -55,8 +55,8 @@ Feature: MonsterTemplates
 
   Scenario: Listing types
     Given a monster category type
-    Given a monster category
-    Given a monster category
+    Given a monster sub-category
+    Given a monster sub-category
 
     When performing a GET to the url "/api/v2/monsterTypes/"
 
@@ -66,15 +66,15 @@ Feature: MonsterTemplates
     {
         "id": ${MonsterType.Id},
         "name": "${MonsterType.Name}",
-        "categories": [
+        "subCategories": [
             {
-                "id": ${MonsterCategory.[0].Id},
-                "name": "${MonsterCategory.[0].Name}",
+                "id": ${MonsterSubCategory.[0].Id},
+                "name": "${MonsterSubCategory.[0].Name}",
                 "typeid": ${MonsterType.Id}
             },
             {
-                "id": ${MonsterCategory.[1].Id},
-                "name": "${MonsterCategory.[1].Name}",
+                "id": ${MonsterSubCategory.[1].Id},
+                "name": "${MonsterSubCategory.[1].Name}",
                 "typeid": ${MonsterType.Id}
             }
         ]
@@ -110,7 +110,7 @@ Feature: MonsterTemplates
       "id": ${MonsterTemplate.Id},
       "name": "${MonsterTemplate.Name}",
       "data": ${MonsterTemplate.Data},
-      "categoryId": ${MonsterTemplate.CategoryId},
+      "subCategoryId": ${MonsterTemplate.SubCategoryId},
       "simpleInventory": [
         {
           "id": ${MonsterTemplate.Items.[0].Id},
@@ -141,15 +141,15 @@ Feature: MonsterTemplates
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-name",
-      "categories": []
+      "subCategories": []
     }
     """
 
-  Scenario: Create monster category
+  Scenario: Create monster sub-category
     Given a JWT for an admin user
     Given a monster category type
 
-    When performing a POST to the url "/api/v2/monsterTypes/${MonsterType.Id}/categories" with the following json content and the current jwt
+    When performing a POST to the url "/api/v2/monsterTypes/${MonsterType.Id}/subcategories" with the following json content and the current jwt
     """
     {
       "name": "some-category-name"
@@ -177,7 +177,7 @@ Feature: MonsterTemplates
       "id": ${MonsterTemplate.Id},
       "name": "${MonsterTemplate.Name}",
       "data": ${MonsterTemplate.Data},
-      "categoryId": ${MonsterTemplate.CategoryId},
+      "subCategoryId": ${MonsterTemplate.SubCategoryId},
       "simpleInventory": [
         {
           "id": ${MonsterTemplate.Items.[0].Id},
@@ -197,15 +197,15 @@ Feature: MonsterTemplates
     Given a JWT for an admin user
     Given a monster template
     Given an item template section
-    Given an item template category
+    Given an item template sub-category
     Given an item template
     Given a monster category type
-    Given a monster category
+    Given a monster sub-category
 
     When performing a PUT to the url "/api/v2/monsterTemplates/${MonsterTemplate.Id}" with the following json content and the current jwt
     """
     {
-      "categoryId": ${MonsterCategory.[1].Id},
+      "subCategoryId": ${MonsterSubCategory.[1].Id},
       "name": "some-new-monster-name",
       "data": {
         "at": 2,
@@ -228,7 +228,7 @@ Feature: MonsterTemplates
     {
       "id": ${MonsterTemplate.Id},
       "name": "some-new-monster-name",
-      "categoryId": ${MonsterCategory.[1].Id},
+      "subCategoryId": ${MonsterSubCategory.[1].Id},
       "data": {
         "at": 2,
         "prd": 3,

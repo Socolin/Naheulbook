@@ -39,11 +39,11 @@ namespace Naheulbook.Data.Repositories
 
             if (monsterSubCategoryId.HasValue)
             {
-                query = query.Where(e => e.CategoryId == monsterSubCategoryId.Value);
+                query = query.Where(e => e.SubCategoryId == monsterSubCategoryId.Value);
             }
             else if (monsterTypeId.HasValue)
             {
-                query = query.Where(e => e.Category.TypeId == monsterTypeId.Value);
+                query = query.Where(e => e.SubCategory.TypeId == monsterTypeId.Value);
             }
 
             return query

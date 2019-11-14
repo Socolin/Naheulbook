@@ -4,11 +4,11 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class MonsterCategoryConfiguration : IEntityTypeConfiguration<MonsterCategory>
+    public class MonsterSubCategoryConfiguration : IEntityTypeConfiguration<MonsterSubCategory>
     {
-        public void Configure(EntityTypeBuilder<MonsterCategory> builder)
+        public void Configure(EntityTypeBuilder<MonsterSubCategory> builder)
         {
-            builder.ToTable("monster_category");
+            builder.ToTable("monster_subcategories");
 
             builder.HasKey(e => e.Id);
 
@@ -20,7 +20,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("typeid");
 
             builder.HasOne(x => x.Type)
-                .WithMany(x => x.Categories)
+                .WithMany(x => x.SubCategories)
                 .HasForeignKey(x => x.TypeId)
                 .HasConstraintName("monster_category_monster_type_id_fk");
         }
@@ -41,12 +41,12 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnType("json");
             builder.Property(e => e.Name)
                 .HasColumnName("name");
-            builder.Property(e => e.CategoryId)
-                .HasColumnName("categoryid");
+            builder.Property(e => e.SubCategoryId)
+                .HasColumnName("subCategoryId");
 
-            builder.HasOne(x => x.Category)
+            builder.HasOne(x => x.SubCategory)
                 .WithMany(x => x.MonsterTemplates)
-                .HasForeignKey(x => x.CategoryId)
+                .HasForeignKey(x => x.SubCategoryId)
                 .HasConstraintName("FK_monster_template_monster_category_categoryid");
         }
     }

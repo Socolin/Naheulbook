@@ -89,7 +89,7 @@ namespace Naheulbook.Core.Actions.Executor
                 Permanent = false,
                 DurationType = durationType,
                 Duration = duration,
-                Type = effect.Category.Name,
+                Type = effect.SubCategory.Name,
                 Description = effect.Description,
                 Reusable = false,
                 IsActive = true,

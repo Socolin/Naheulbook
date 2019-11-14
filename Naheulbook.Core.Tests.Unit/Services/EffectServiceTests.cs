@@ -20,7 +20,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
     public class EffectServiceTests
     {
         private IEffectRepository _effectRepository;
-        private IEffectCategoryRepository _effectCategoryRepository;
+        private IEffectSubCategoryRepository _effectSubCategoryRepository;
         private IEffectTypeRepository _effectTypeRepository;
         private IAuthorizationUtil _authorizationUtil;
         private EffectService _effectService;
@@ -34,8 +34,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
             unitOfWorkFactory.CreateUnitOfWork().Returns(_unitOfWork);
             _effectRepository = Substitute.For<IEffectRepository>();
             _unitOfWork.Effects.Returns(_effectRepository);
-            _effectCategoryRepository = Substitute.For<IEffectCategoryRepository>();
-            _unitOfWork.EffectCategories.Returns(_effectCategoryRepository);
+            _effectSubCategoryRepository = Substitute.For<IEffectSubCategoryRepository>();
+            _unitOfWork.EffectSubCategories.Returns(_effectSubCategoryRepository);
             _effectTypeRepository = Substitute.For<IEffectTypeRepository>();
             _unitOfWork.EffectTypes.Returns(_effectTypeRepository);
             _authorizationUtil = Substitute.For<IAuthorizationUtil>();
@@ -56,16 +56,16 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public async Task GetEffectCategories()
+        public async Task GetEffectSubCategories()
         {
-            var expectedEffectCategories = new List<EffectType>();
+            var expectedEffectSubCategories = new List<EffectType>();
 
             _effectRepository.GetCategoriesAsync()
-                .Returns(expectedEffectCategories);
+                .Returns(expectedEffectSubCategories);
 
-            var effectCategories = await _effectService.GetEffectCategoriesAsync();
+            var effectSubCategories = await _effectService.GetEffectSubCategoriesAsync();
 
-            effectCategories.Should().BeSameAs(expectedEffectCategories);
+            effectSubCategories.Should().BeSameAs(expectedEffectSubCategories);
         }
 
         [Test]
@@ -73,10 +73,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var expectedEffects = new List<Effect>();
 
-            _effectRepository.GetByCategoryWithModifiersAsync(42)
+            _effectRepository.GetBySubCategoryWithModifiersAsync(42)
                 .Returns(expectedEffects);
 
-            var effects = await _effectService.GetEffectsByCategoryAsync(42);
+            var effects = await _effectService.GetEffectsBySubCategoryAsync(42);
 
             effects.Should().BeSameAs(expectedEffects);
         }
@@ -110,29 +110,29 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public async Task CreateEffectCategory_AddANewEffectCategoryInDatabase()
+        public async Task CreateEffectSubCategory_AddANewEffectSubCategoryInDatabase()
         {
-            var expectedEffectCategory = CreateEffectCategory();
-            expectedEffectCategory.Effects = new List<Effect>();
-            var createEffectCategoryRequest = AutoFill<CreateEffectCategoryRequest>.One();
+            var expectedEffectSubCategory = CreateEffectSubCategory();
+            expectedEffectSubCategory.Effects = new List<Effect>();
+            var createEffectSubCategoryRequest = AutoFill<CreateEffectSubCategoryRequest>.One();
 
-            var effectCategory = await _effectService.CreateEffectCategoryAsync(new NaheulbookExecutionContext(), createEffectCategoryRequest);
+            var effectSubCategory = await _effectService.CreateEffectSubCategoryAsync(new NaheulbookExecutionContext(), createEffectSubCategoryRequest);
 
             Received.InOrder(() =>
             {
-                _effectCategoryRepository.Add(effectCategory);
+                _effectSubCategoryRepository.Add(effectSubCategory);
                 _unitOfWork.SaveChangesAsync();
             });
-            effectCategory.Should().BeEquivalentTo(expectedEffectCategory);
+            effectSubCategory.Should().BeEquivalentTo(expectedEffectSubCategory);
         }
 
         [Test]
-        public async Task CreateEffectCategory_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
+        public async Task CreateEffectSubCategory_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
         {
             var executionContext = new NaheulbookExecutionContext();
-            var createEffectCategoryRequest = AutoFill<CreateEffectCategoryRequest>.One();
+            var createEffectSubCategoryRequest = AutoFill<CreateEffectSubCategoryRequest>.One();
 
-            await _effectService.CreateEffectCategoryAsync(executionContext, createEffectCategoryRequest);
+            await _effectService.CreateEffectSubCategoryAsync(executionContext, createEffectSubCategoryRequest);
 
             Received.InOrder(() =>
             {
@@ -144,7 +144,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task CreateEffect_AddANewEffectInDatabase()
         {
-            var expectedEffect = CreateEffect(categoryId: 2);
+            var expectedEffect = CreateEffect(subCategoryId: 2);
             var createEffectRequest = AutoFill<CreateEffectRequest>.One();
             var executionContext = new NaheulbookExecutionContext();
 
@@ -176,9 +176,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task EditEffect_UpdateEffectInDatabase()
         {
-            var expectedEffect = CreateEffect(42, categoryId: 1, offset: 1);
+            var expectedEffect = CreateEffect(42, subCategoryId: 1, offset: 1);
             var executionContext = new NaheulbookExecutionContext();
-            var previousEffect = AutoFill<Effect>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt, new AutoFillSettings {MaxDepth = 1}, (i) => new {i.Category});
+            var previousEffect = AutoFill<Effect>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt, new AutoFillSettings {MaxDepth = 1}, (i) => new {Category = i.SubCategory});
             var editEffectRequest = AutoFill<EditEffectRequest>.One();
 
             previousEffect.Id = 42;
@@ -227,9 +227,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
             act.Should().Throw<EffectNotFoundException>();
         }
 
-        private static EffectCategory CreateEffectCategory()
+        private static EffectSubCategory CreateEffectSubCategory()
         {
-            return new EffectCategory
+            return new EffectSubCategory
             {
                 Name = "some-name",
                 Note = "some-note",
@@ -240,7 +240,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             };
         }
 
-        private static Effect CreateEffect(int id = 0, int offset = 0, int categoryId = 0)
+        private static Effect CreateEffect(int id = 0, int offset = 0, int subCategoryId = 0)
         {
             return new Effect
             {
@@ -274,7 +274,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                         Value = (short) (7 + offset)
                     }
                 },
-                CategoryId = categoryId
+                SubCategoryId = subCategoryId
             };
         }
     }

@@ -3,9 +3,9 @@ using Naheulbook.Requests.Requests;
 
 namespace Naheulbook.Requests.Validators
 {
-    public class CreateEffectCategoryRequestValidator : AbstractValidator<CreateEffectCategoryRequest>
+    public class CreateEffectSubCategoryRequestValidator : AbstractValidator<CreateEffectSubCategoryRequest>
     {
-        public CreateEffectCategoryRequestValidator()
+        public CreateEffectSubCategoryRequestValidator()
         {
             RuleFor(e => e.Name).NotNull().Length(1, 255);
             RuleFor(e => e.DiceSize).GreaterThanOrEqualTo((short) 0);

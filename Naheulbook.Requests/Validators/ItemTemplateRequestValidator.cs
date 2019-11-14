@@ -12,7 +12,7 @@ namespace Naheulbook.Requests.Validators
         {
             RuleFor(r => r.Name).NotEmpty().Length(1, 255);
             RuleFor(r => r.Source).Must(s => ValidSources.Contains(s));
-            RuleFor(r => r.CategoryId).GreaterThan(0);
+            RuleFor(r => r.SubCategoryId).GreaterThan(0);
             RuleFor(r => r.Data).NotNull();
         }
     }

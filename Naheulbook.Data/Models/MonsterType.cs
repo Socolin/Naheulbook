@@ -7,6 +7,6 @@ namespace Naheulbook.Data.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
 
-        public ICollection<MonsterCategory> Categories { get; set; } = null!;
+        public ICollection<MonsterSubCategory> SubCategories { get; set; } = null!;
     }
 }

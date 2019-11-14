@@ -116,7 +116,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IItemUtil, ItemUtil>();
             services.AddSingleton<IItemDataUtil, ItemDataUtil>();
             services.AddSingleton<IItemTemplateService, ItemTemplateService>();
-            services.AddSingleton<IItemTemplateCategoryService, ItemTemplateCategoryService>();
+            services.AddSingleton<IItemTemplateSubCategoryService, ItemTemplateSubCategoryService>();
             services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();
             services.AddSingleton<IItemTemplateUtil, ItemTemplateUtil>();
             services.AddSingleton<IItemTypeService, ItemTypeService>();

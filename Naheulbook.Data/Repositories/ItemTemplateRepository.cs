@@ -12,7 +12,7 @@ namespace Naheulbook.Data.Repositories
     {
         Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(int id);
         Task<List<ItemTemplate>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId);
-        Task<List<ItemTemplate>> GetWithAllDataByCategoryIdAsync(int categoryId, int? currentUserId, bool includeCommunityItems);
+        Task<List<ItemTemplate>> GetWithAllDataByCategoryIdAsync(int subCategoryId, int? currentUserId, bool includeCommunityItems);
         Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<int> ids);
         Task<List<ItemTemplate>> GetItemByCleanNameWithAllDataAsync(string name, int maxResultCount, int? currentUserId, bool includeCommunityItems);
         Task<List<ItemTemplate>> GetItemByPartialCleanNameWithAllDataAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems);
@@ -40,16 +40,16 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.ItemTemplates
                 .IncludeItemTemplateDetails()
-                .Where(x => x.Category.SectionId == sectionId)
+                .Where(x => x.SubCategory.SectionId == sectionId)
                 .ToListAsync();
         }
 
-        public Task<List<ItemTemplate>> GetWithAllDataByCategoryIdAsync(int categoryId, int? currentUserId, bool includeCommunityItems)
+        public Task<List<ItemTemplate>> GetWithAllDataByCategoryIdAsync(int subCategoryId, int? currentUserId, bool includeCommunityItems)
         {
             return Context.ItemTemplates
                 .IncludeItemTemplateDetails()
                 .FilterCommunityAndPrivateItemTemplates(currentUserId, includeCommunityItems)
-                .Where(x => x.CategoryId == categoryId)
+                .Where(x => x.SubCategoryId == subCategoryId)
                 .ToListAsync();
         }
 

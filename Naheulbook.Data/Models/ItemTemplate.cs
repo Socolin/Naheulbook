@@ -16,8 +16,8 @@ namespace Naheulbook.Data.Models
         public string? SourceUserNameCache { get; set; }
         public string? Data { get; set; }
 
-        public int CategoryId { get; set; }
-        public ItemTemplateCategory Category { get; set; } = null!;
+        public int SubCategoryId { get; set; }
+        public ItemTemplateSubCategory SubCategory { get; set; } = null!;
 
         public int? SourceUserId { get; set; }
         public User? SourceUser { get; set; }

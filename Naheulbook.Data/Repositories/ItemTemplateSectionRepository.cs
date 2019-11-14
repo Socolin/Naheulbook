@@ -21,7 +21,7 @@ namespace Naheulbook.Data.Repositories
         public Task<List<ItemTemplateSection>> GetAllWithCategoriesAsync()
         {
             return Context.ItemTemplateSections
-                .Include(s => s.Categories)
+                .Include(s => s.SubCategories)
                 .ToListAsync();
         }
     }

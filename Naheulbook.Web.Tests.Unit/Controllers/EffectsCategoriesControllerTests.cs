@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
@@ -22,7 +21,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
     {
         private IEffectService _effectService;
         private IMapper _mapper;
-        private EffectCategoriesController _effectCategoriesController;
+        private EffectSubCategoriesController _effectSubCategoriesController;
         private NaheulbookExecutionContext _executionContext;
 
         [SetUp]
@@ -30,24 +29,24 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             _effectService = Substitute.For<IEffectService>();
             _mapper = Substitute.For<IMapper>();
-            _effectCategoriesController = new EffectCategoriesController(_effectService, _mapper);
+            _effectSubCategoriesController = new EffectSubCategoriesController(_effectService, _mapper);
             _executionContext = new NaheulbookExecutionContext();
         }
 
         [Test]
         public async Task PostCreateEffect_CallEffectService()
         {
-            const int categoryId = 12;
+            const int subCategoryId = 12;
             var createEffectRequest = new CreateEffectRequest();
             var expectedEffectResponse = new EffectResponse();
             var effect = new Effect {Id = 42};
 
-            _effectService.CreateEffectAsync(_executionContext, categoryId, createEffectRequest)
+            _effectService.CreateEffectAsync(_executionContext, subCategoryId, createEffectRequest)
                 .Returns(effect);
             _mapper.Map<EffectResponse>(effect)
                 .Returns(expectedEffectResponse);
 
-            var result = await _effectCategoriesController.PostCreateEffectAsync(_executionContext, categoryId, createEffectRequest);
+            var result = await _effectSubCategoriesController.PostCreateEffectAsync(_executionContext, subCategoryId, createEffectRequest);
 
             result.StatusCode.Should().Be(201);
             result.Value.Should().Be(expectedEffectResponse);
@@ -59,7 +58,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _effectService.CreateEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateEffectRequest>())
                 .Returns(Task.FromException<Effect>(new ForbiddenAccessException()));
 
-            Func<Task> act = () => _effectCategoriesController.PostCreateEffectAsync(_executionContext, 12, new CreateEffectRequest());
+            Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectAsync(_executionContext, 12, new CreateEffectRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
@@ -70,12 +69,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var effects = new List<Effect>();
             var expectedResponse = new List<EffectResponse>();
 
-            _effectService.GetEffectsByCategoryAsync(42)
+            _effectService.GetEffectsBySubCategoryAsync(42)
                 .Returns(effects);
             _mapper.Map<List<EffectResponse>>(effects)
                 .Returns(expectedResponse);
 
-            var result = await _effectCategoriesController.GetEffectsAsync(42);
+            var result = await _effectSubCategoriesController.GetEffectsAsync(42);
 
             result.Value.Should().BeSameAs(expectedResponse);
         }
@@ -83,35 +82,35 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public async Task PostCreateCategory_CallEffectService()
         {
-            var request = CreateEffectCategoryRequest();
-            var effectCategory = new EffectCategory();
-            var expectedEffectCategoryResponse = new EffectCategoryResponse();
+            var request = CreateEffectSubCategoryRequest();
+            var effectSubCategory = new EffectSubCategory();
+            var expectedEffectSubCategoryResponse = new EffectSubCategoryResponse();
 
-            _effectService.CreateEffectCategoryAsync(_executionContext, request)
-                .Returns(effectCategory);
-            _mapper.Map<EffectCategoryResponse>(effectCategory)
-                .Returns(expectedEffectCategoryResponse);
+            _effectService.CreateEffectSubCategoryAsync(_executionContext, request)
+                .Returns(effectSubCategory);
+            _mapper.Map<EffectSubCategoryResponse>(effectSubCategory)
+                .Returns(expectedEffectSubCategoryResponse);
 
-            var result = await _effectCategoriesController.PostCreateCategoryAsync(_executionContext, request);
+            var result = await _effectSubCategoriesController.PostCreateEffectSubCategoryAsync(_executionContext, request);
 
             result.StatusCode.Should().Be(201);
-            result.Value.Should().Be(expectedEffectCategoryResponse);
+            result.Value.Should().Be(expectedEffectSubCategoryResponse);
         }
 
         [Test]
         public void PostCreateCategory_WhenCatchForbiddenAccessException_Return403()
         {
-            _effectService.CreateEffectCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectCategoryRequest>())
-                .Returns(Task.FromException<EffectCategory>(new ForbiddenAccessException()));
+            _effectService.CreateEffectSubCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectSubCategoryRequest>())
+                .Returns(Task.FromException<EffectSubCategory>(new ForbiddenAccessException()));
 
-            Func<Task<JsonResult>> act = () => _effectCategoriesController.PostCreateCategoryAsync(_executionContext, CreateEffectCategoryRequest());
+            Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectSubCategoryAsync(_executionContext, CreateEffectSubCategoryRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
-        private static CreateEffectCategoryRequest CreateEffectCategoryRequest()
+        private static CreateEffectSubCategoryRequest CreateEffectSubCategoryRequest()
         {
-            return new CreateEffectCategoryRequest
+            return new CreateEffectSubCategoryRequest
             {
                 Name = "some-name",
                 TypeId = 24,

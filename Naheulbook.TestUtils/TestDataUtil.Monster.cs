@@ -10,9 +10,9 @@ namespace Naheulbook.TestUtils
             return SaveEntity(_defaultEntityCreator.CreateMonsterType(), customizer);
         }
 
-        public TestDataUtil AddMonsterCategory(Action<MonsterCategory> customizer = null)
+        public TestDataUtil AddMonsterSubCategory(Action<MonsterSubCategory> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateMonsterCategory(GetLast<MonsterType>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateMonsterSubCategory(GetLast<MonsterType>()), customizer);
         }
 
         public TestDataUtil AddMonsterTrait(Action<MonsterTrait> customizer = null)
@@ -22,7 +22,7 @@ namespace Naheulbook.TestUtils
 
         public TestDataUtil AddMonsterTemplate(Action<MonsterTemplate> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateMonsterTemplate(GetLast<MonsterCategory>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateMonsterTemplate(GetLast<MonsterSubCategory>()), customizer);
         }
 
         public TestDataUtil AddMonster(Action<Monster> customizer = null)

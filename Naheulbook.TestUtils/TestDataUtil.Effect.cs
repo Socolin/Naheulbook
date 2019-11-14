@@ -10,14 +10,14 @@ namespace Naheulbook.TestUtils
             return SaveEntity(_defaultEntityCreator.CreateEffectType(), customizer);
         }
 
-        public TestDataUtil AddEffectCategory(Action<EffectCategory> customizer = null)
+        public TestDataUtil AddEffectSubCategory(Action<EffectSubCategory> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateEffectCategory(GetLast<EffectType>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateEffectSubCategory(GetLast<EffectType>()), customizer);
         }
 
         public TestDataUtil AddEffect(Action<Effect> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateEffect(GetLast<EffectCategory>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateEffect(GetLast<EffectSubCategory>()), customizer);
         }
     }
 }

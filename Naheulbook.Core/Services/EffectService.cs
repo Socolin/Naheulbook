@@ -13,11 +13,11 @@ namespace Naheulbook.Core.Services
     public interface IEffectService
     {
         Task<Effect> GetEffectAsync(int effectId);
-        Task<ICollection<EffectType>> GetEffectCategoriesAsync();
-        Task<ICollection<Effect>> GetEffectsByCategoryAsync(long categoryId);
+        Task<ICollection<EffectType>> GetEffectSubCategoriesAsync();
+        Task<ICollection<Effect>> GetEffectsBySubCategoryAsync(long subCategoryId);
         Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
-        Task<EffectCategory> CreateEffectCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectCategoryRequest request);
-        Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, int categoryId, CreateEffectRequest request);
+        Task<EffectSubCategory> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request);
+        Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request);
         Task<Effect> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request);
         Task<List<Effect>> SearchEffectsAsync(string filter);
     }
@@ -41,7 +41,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<ICollection<EffectType>> GetEffectCategoriesAsync()
+        public async Task<ICollection<EffectType>> GetEffectSubCategoriesAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -49,11 +49,11 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<ICollection<Effect>> GetEffectsByCategoryAsync(long categoryId)
+        public async Task<ICollection<Effect>> GetEffectsBySubCategoryAsync(long subCategoryId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                return await uow.Effects.GetByCategoryWithModifiersAsync(categoryId);
+                return await uow.Effects.GetBySubCategoryWithModifiersAsync(subCategoryId);
             }
         }
 
@@ -75,11 +75,11 @@ namespace Naheulbook.Core.Services
             return effectType;
         }
 
-        public async Task<EffectCategory> CreateEffectCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectCategoryRequest request)
+        public async Task<EffectSubCategory> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-            var effectCategory = new EffectCategory
+            var effectSubCategory = new EffectSubCategory
             {
                 Name = request.Name,
                 TypeId = request.TypeId,
@@ -91,21 +91,21 @@ namespace Naheulbook.Core.Services
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                uow.EffectCategories.Add(effectCategory);
+                uow.EffectSubCategories.Add(effectSubCategory);
                 await uow.SaveChangesAsync();
             }
 
-            return effectCategory;
+            return effectSubCategory;
         }
 
-        public async Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, int categoryId, CreateEffectRequest request)
+        public async Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
             var effect = new Effect
             {
                 Name = request.Name,
-                CategoryId = categoryId,
+                SubCategoryId = subCategoryId,
                 Description = request.Description,
                 Dice = request.Dice,
                 TimeDuration = request.TimeDuration,
@@ -139,7 +139,7 @@ namespace Naheulbook.Core.Services
                     throw new EffectNotFoundException();
 
                 effect.Name = request.Name;
-                effect.CategoryId = request.CategoryId;
+                effect.SubCategoryId = request.SubCategoryId;
                 effect.Description = request.Description;
                 effect.Dice = request.Dice;
                 effect.TimeDuration = request.TimeDuration;

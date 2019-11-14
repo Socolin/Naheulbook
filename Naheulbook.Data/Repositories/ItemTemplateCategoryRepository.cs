@@ -5,29 +5,29 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IItemTemplateCategoryRepository : IRepository<ItemTemplateCategory>
+    public interface IItemTemplateSubCategoryRepository : IRepository<ItemTemplateSubCategory>
     {
-        Task<ItemTemplateCategory> GetWithItemTemplatesByTechNameAsync(string techName);
-        Task<ItemTemplateCategory> GetByTechNameAsync(string techName);
+        Task<ItemTemplateSubCategory> GetWithItemTemplatesByTechNameAsync(string techName);
+        Task<ItemTemplateSubCategory> GetByTechNameAsync(string techName);
     }
 
-    public class ItemTemplateCategoryRepository : Repository<ItemTemplateCategory, NaheulbookDbContext>, IItemTemplateCategoryRepository
+    public class ItemTemplateSubCategoryRepository : Repository<ItemTemplateSubCategory, NaheulbookDbContext>, IItemTemplateSubCategoryRepository
     {
-        public ItemTemplateCategoryRepository(NaheulbookDbContext context)
+        public ItemTemplateSubCategoryRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public Task<ItemTemplateCategory> GetWithItemTemplatesByTechNameAsync(string techName)
+        public Task<ItemTemplateSubCategory> GetWithItemTemplatesByTechNameAsync(string techName)
         {
-            return Context.ItemTemplateCategories
+            return Context.ItemTemplateSubCategories
                 .Include(c => c.ItemTemplates)
                 .SingleOrDefaultAsync(c => c.TechName == techName);
         }
 
-        public Task<ItemTemplateCategory> GetByTechNameAsync(string techName)
+        public Task<ItemTemplateSubCategory> GetByTechNameAsync(string techName)
         {
-            return Context.ItemTemplateCategories
+            return Context.ItemTemplateSubCategories
                 .SingleOrDefaultAsync(c => c.TechName == techName);
         }
     }

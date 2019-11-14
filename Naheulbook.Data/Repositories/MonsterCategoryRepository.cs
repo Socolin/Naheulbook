@@ -3,13 +3,13 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IMonsterCategoryRepository : IRepository<MonsterCategory>
+    public interface IMonsterSubCategoryRepository : IRepository<MonsterSubCategory>
     {
     }
 
-    public class MonsterCategoryRepository : Repository<MonsterCategory, NaheulbookDbContext>, IMonsterCategoryRepository
+    public class MonsterSubCategoryRepository : Repository<MonsterSubCategory, NaheulbookDbContext>, IMonsterSubCategoryRepository
     {
-        public MonsterCategoryRepository(NaheulbookDbContext context)
+        public MonsterSubCategoryRepository(NaheulbookDbContext context)
             : base(context)
         {
         }

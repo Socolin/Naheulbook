@@ -40,14 +40,14 @@ namespace Naheulbook.Core.Tests.Unit.TestUtils
         {
             var uow = Substitute.For<IUnitOfWork>();
             uow.Effects.Returns(Substitute.For<IEffectRepository>());
-            uow.EffectCategories.Returns(Substitute.For<IEffectCategoryRepository>());
+            uow.EffectSubCategories.Returns(Substitute.For<IEffectSubCategoryRepository>());
             uow.EffectTypes.Returns(Substitute.For<IEffectTypeRepository>());
             uow.ItemTemplates.Returns(Substitute.For<IItemTemplateRepository>());
-            uow.ItemTemplateCategories.Returns(Substitute.For<IItemTemplateCategoryRepository>());
+            uow.ItemTemplateSubCategories.Returns(Substitute.For<IItemTemplateSubCategoryRepository>());
             uow.ItemTemplateSections.Returns(Substitute.For<IItemTemplateSectionRepository>());
             uow.Jobs.Returns(Substitute.For<IJobRepository>());
             uow.MonsterTypes.Returns(Substitute.For<IMonsterTypeRepository>());
-            uow.MonsterCategories.Returns(Substitute.For<IMonsterCategoryRepository>());
+            uow.MonsterSubCategories.Returns(Substitute.For<IMonsterSubCategoryRepository>());
             uow.MonsterTemplates.Returns(Substitute.For<IMonsterTemplateRepository>());
             uow.Origins.Returns(Substitute.For<IOriginRepository>());
             uow.Skills.Returns(Substitute.For<ISkillRepository>());

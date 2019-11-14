@@ -36,18 +36,18 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task CreateMonsterTemplate_InsertNewEntityInDatabase()
         {
-            const int categoryId = 10;
+            const int subCategoryId = 10;
             const int itemTemplateId = 11;
             const int locationId = 12;
 
             var executionContext = new NaheulbookExecutionContext();
-            var monsterCategory = CreateMonsterCategory(categoryId);
-            var request = CreateRequest(categoryId, itemTemplateId, locationId);
+            var monsterSubCategory = CreateMonsterSubCategory(subCategoryId);
+            var request = CreateRequest(subCategoryId, itemTemplateId, locationId);
             var itemTemplate = new ItemTemplate {Id = itemTemplateId};
-            var expectedMonsterTemplate = CreateMonsterTemplate(monsterCategory, itemTemplate);
+            var expectedMonsterTemplate = CreateMonsterTemplate(monsterSubCategory, itemTemplate);
 
-            _unitOfWorkFactory.GetUnitOfWork().MonsterCategories.GetAsync(categoryId)
-                .Returns(monsterCategory);
+            _unitOfWorkFactory.GetUnitOfWork().MonsterSubCategories.GetAsync(subCategoryId)
+                .Returns(monsterSubCategory);
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<int>>(x => x.SequenceEqual(new[] {itemTemplateId})))
                 .Returns(new List<ItemTemplate> {itemTemplate});
 
@@ -76,35 +76,35 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void CreateMonsterTemplate_WhenRequestedCategoryIdDoesNotExists_ThrowMonsterCategoryNotFoundException()
+        public void CreateMonsterTemplate_WhenRequestedSubCategoryIdDoesNotExists_ThrowMonsterSubCategoryNotFoundException()
         {
             var request = new MonsterTemplateRequest
             {
-                CategoryId = 42
+                SubCategoryId = 42
             };
             var executionContext = new NaheulbookExecutionContext();
 
-            _unitOfWorkFactory.GetUnitOfWork().MonsterCategories.GetAsync(42)
-                .Returns((MonsterCategory) null);
+            _unitOfWorkFactory.GetUnitOfWork().MonsterSubCategories.GetAsync(42)
+                .Returns((MonsterSubCategory) null);
 
             Func<Task> act = () => _service.CreateMonsterTemplateAsync(executionContext, request);
 
-            act.Should().Throw<MonsterCategoryNotFoundException>();
+            act.Should().Throw<MonsterSubCategoryNotFoundException>();
         }
 
-        private static MonsterCategory CreateMonsterCategory(int categoryId)
+        private static MonsterSubCategory CreateMonsterSubCategory(int subCategoryId)
         {
-            return new MonsterCategory
+            return new MonsterSubCategory
             {
-                Id = categoryId
+                Id = subCategoryId
             };
         }
 
-        private static MonsterTemplateRequest CreateRequest(int categoryId, int itemTemplateId, int locationId)
+        private static MonsterTemplateRequest CreateRequest(int subCategoryId, int itemTemplateId, int locationId)
         {
             return new MonsterTemplateRequest
             {
-                CategoryId = categoryId,
+                SubCategoryId = subCategoryId,
                 Data = JObject.FromObject(new {key = "value"}),
                 LocationIds = new List<int> {locationId},
                 Name = "some-monster-name",
@@ -121,11 +121,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
             };
         }
 
-        private static MonsterTemplate CreateMonsterTemplate(MonsterCategory monsterCategory, ItemTemplate itemTemplate)
+        private static MonsterTemplate CreateMonsterTemplate(MonsterSubCategory monsterSubCategory, ItemTemplate itemTemplate)
         {
             return new MonsterTemplate()
             {
-                Category = monsterCategory,
+                SubCategory = monsterSubCategory,
                 Data = @"{""key"":""value""}",
                 Items = new List<MonsterTemplateSimpleInventory>()
                 {

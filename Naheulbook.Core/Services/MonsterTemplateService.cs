@@ -36,16 +36,16 @@ namespace Naheulbook.Core.Services
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var category = await uow.MonsterCategories.GetAsync(request.CategoryId);
+                var category = await uow.MonsterSubCategories.GetAsync(request.SubCategoryId);
                 if (category == null)
-                    throw new MonsterCategoryNotFoundException(request.CategoryId);
+                    throw new MonsterSubCategoryNotFoundException(request.SubCategoryId);
                 var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(request.SimpleInventory.Select(x => x.ItemTemplateId));
 
                 var monsterTemplate = new MonsterTemplate
                 {
                     Data = JsonConvert.SerializeObject(request.Data),
                     Name = request.Name,
-                    Category = category,
+                    SubCategory = category,
                     Items = request.SimpleInventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateSimpleInventory
                     {
                         Chance = i.Chance,
@@ -69,9 +69,9 @@ namespace Naheulbook.Core.Services
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var category = await uow.MonsterCategories.GetAsync(request.CategoryId);
+                var category = await uow.MonsterSubCategories.GetAsync(request.SubCategoryId);
                 if (category == null)
-                    throw new MonsterCategoryNotFoundException(request.CategoryId);
+                    throw new MonsterSubCategoryNotFoundException(request.SubCategoryId);
 
                 var monsterTemplate = await uow.MonsterTemplates.GetByIdWithItemsAsync(monsterTemplateId);
                 if (monsterTemplate == null)
@@ -82,8 +82,8 @@ namespace Naheulbook.Core.Services
                 monsterTemplate.Data = JsonConvert.SerializeObject(request.Data);
                 monsterTemplate.Name = request.Name;
 
-                monsterTemplate.CategoryId = category.Id;
-                monsterTemplate.Category = category;
+                monsterTemplate.SubCategoryId = category.Id;
+                monsterTemplate.SubCategory = category;
 
                 monsterTemplate.Items = monsterTemplate.Items.Where(i => request.SimpleInventory.Any(e => e.Id == i.Id)).ToList();
                 var newItems = request.SimpleInventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateSimpleInventory

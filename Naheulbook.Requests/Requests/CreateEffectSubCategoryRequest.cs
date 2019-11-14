@@ -1,6 +1,6 @@
 namespace Naheulbook.Requests.Requests
 {
-    public class CreateEffectCategoryRequest
+    public class CreateEffectSubCategoryRequest
     {
         public string Name { get; set; } = null!;
         public short DiceCount { get; set; }

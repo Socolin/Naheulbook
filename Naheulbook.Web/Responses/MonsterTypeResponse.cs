@@ -9,6 +9,6 @@ namespace Naheulbook.Web.Responses
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public IList<MonsterCategoryResponse> Categories { get; set; } = null!;
+        public IList<MonsterSubCategoryResponse> SubCategories { get; set; } = null!;
     }
 }

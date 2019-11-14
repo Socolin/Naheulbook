@@ -113,7 +113,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         public void GivenAnItemInTheLoot()
         {
             if (!_testDataUtil.Contains<ItemTemplate>())
-                _testDataUtil.AddItemTemplateSection().AddItemTemplateCategory().AddItemTemplate();
+                _testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
             _testDataUtil.AddItem(_testDataUtil.GetLast<Loot>());
             _testDataUtil.SaveChanges();
         }
@@ -122,7 +122,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         public void GivenAnItemInTheCharacterInventory()
         {
             if (!_testDataUtil.Contains<ItemTemplate>())
-                _testDataUtil.AddItemTemplateSection().AddItemTemplateCategory().AddItemTemplate();
+                _testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
             _testDataUtil.AddItem(_testDataUtil.GetLast<Character>());
             _testDataUtil.SaveChanges();
         }

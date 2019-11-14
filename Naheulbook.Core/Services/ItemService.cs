@@ -93,13 +93,13 @@ namespace Naheulbook.Core.Services
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var itemTemplateCategory = await uow.ItemTemplateCategories.GetWithItemTemplatesByTechNameAsync(request.CategoryTechName);
-                if (itemTemplateCategory == null)
-                    throw new ItemTemplateCategoryNotFoundException(request.CategoryTechName);
+                var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetWithItemTemplatesByTechNameAsync(request.SubCategoryTechName);
+                if (itemTemplateSubCategory == null)
+                    throw new ItemTemplateSubCategoryNotFoundException(request.SubCategoryTechName);
 
-                var itemTemplates = _itemTemplateUtil.FilterItemTemplatesBySource(itemTemplateCategory.ItemTemplates, currentUserId, false).ToList();
+                var itemTemplates = _itemTemplateUtil.FilterItemTemplatesBySource(itemTemplateSubCategory.ItemTemplates, currentUserId, false).ToList();
                 if (itemTemplates.Count == 0)
-                    throw new EmptyItemTemplateCategoryException(itemTemplateCategory.Id);
+                    throw new EmptyItemTemplateSubCategoryException(itemTemplateSubCategory.Id);
 
                 var itemTemplateIndex = _rngUtil.GetRandomInt(0, itemTemplates.Count);
                 var itemTemplate = itemTemplates.ElementAt(itemTemplateIndex);

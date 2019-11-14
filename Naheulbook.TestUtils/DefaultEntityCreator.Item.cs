@@ -10,14 +10,14 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public ItemTemplate CreateItemTemplate(ItemTemplateCategory category, string suffix = null)
+        public ItemTemplate CreateItemTemplate(ItemTemplateSubCategory subCategory, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
             return new ItemTemplate
             {
-                Category = category,
+                SubCategory = subCategory,
                 Data = @"{""key"": ""value""}",
                 CleanName = $"some-item-name-{suffix}",
                 Name = $"some-item-name-{suffix}",
@@ -39,12 +39,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public ItemTemplateCategory CreateItemTemplateCategory(ItemTemplateSection section, string suffix = null)
+        public ItemTemplateSubCategory CreateItemTemplateSubCategory(ItemTemplateSection section, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new ItemTemplateCategory
+            return new ItemTemplateSubCategory
             {
                 Section = section,
                 Note = $"some-note-{suffix}",

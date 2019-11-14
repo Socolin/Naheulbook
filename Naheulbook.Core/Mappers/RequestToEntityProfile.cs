@@ -13,7 +13,7 @@ namespace Naheulbook.Core.Mappers
             CreateMap<ItemTemplateRequest, ItemTemplate>()
                 .ForMember(m => m.Id, opt => opt.Ignore())
                 .ForMember(m => m.CleanName, opt => opt.MapFrom(i => StringCleanupHelper.RemoveAccents(i.Name)))
-                .ForMember(m => m.Category, opt => opt.Ignore())
+                .ForMember(m => m.SubCategory, opt => opt.Ignore())
                 .ForMember(m => m.SourceUserId, opt => opt.Ignore())
                 .ForMember(m => m.SourceUser, opt => opt.Ignore())
                 .ForMember(m => m.Data, opt => opt.MapFrom(i => i.Data.ToString(Formatting.None)));
@@ -59,7 +59,7 @@ namespace Naheulbook.Core.Mappers
             CreateMap<CreateItemTemplateSectionRequest, ItemTemplateSection>()
                 .ForMember(m => m.Id, opt => opt.Ignore())
                 .ForMember(m => m.Special, opt => opt.MapFrom(i => string.Join(",", i.Specials)));
-            CreateMap<CreateItemTemplateCategoryRequest, ItemTemplateCategory>()
+            CreateMap<CreateItemTemplateSubCategoryRequest, ItemTemplateSubCategory>()
                 .ForMember(m => m.Id, opt => opt.Ignore())
                 .ForMember(m => m.Section, opt => opt.Ignore());
         }

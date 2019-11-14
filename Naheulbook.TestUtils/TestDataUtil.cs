@@ -90,7 +90,7 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `character_skills`;" +
                     "DELETE FROM `character_speciality`;" +
                     "DELETE FROM `effect`;" +
-                    "DELETE FROM `effect_category`;" +
+                    "DELETE FROM `effect_subcategories`;" +
                     "DELETE FROM `effect_modifier`;" +
                     "DELETE FROM `effect_type`;" +
                     // "DELETE FROM `error_report`;" +
@@ -103,7 +103,7 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `item`;" +
                     "DELETE FROM `item_slot`;" +
                     "DELETE FROM `item_template`;" +
-                    "DELETE FROM `item_template_category`;" +
+                    "DELETE FROM `item_template_subcategories`;" +
                     "DELETE FROM `item_template_modifier`;" +
                     "DELETE FROM `item_template_requirement`;" +
                     "DELETE FROM `item_template_section`;" +
@@ -119,7 +119,7 @@ namespace Naheulbook.TestUtils
                     "DELETE FROM `job_skill`;" +
                     "DELETE FROM `loot`;" +
                     "DELETE FROM `monster`;" +
-                    "DELETE FROM `monster_category`;" +
+                    "DELETE FROM `monster_subcategories`;" +
                     "DELETE FROM `monster_template`;" +
                     "DELETE FROM `monster_template_simple_inventory`;" +
                     "DELETE FROM `monster_trait`;" +

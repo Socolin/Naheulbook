@@ -283,7 +283,7 @@ Feature: Monster
             "name": "${ItemTemplate.Name}",
             "techName": "${ItemTemplate.TechName}",
             "source": "official",
-            "categoryId": ${ItemTemplateCategory.Id},
+            "subCategoryId": ${ItemTemplateSubCategory.Id},
             "data": {
                 "key": "value"
             },
@@ -342,7 +342,7 @@ Feature: Monster
     When performing a POST to the url "/api/v2/monsters/${Monster.Id}/addRandomItem" with the following json content and the current jwt
     """
     {
-      "categoryTechName": "${ItemTemplateCategory.TechName}"
+      "subCategoryTechName": "${ItemTemplateSubCategory.TechName}"
     }
     """
     Then the response status code is 201
@@ -359,7 +359,7 @@ Feature: Monster
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",
-        "categoryId": ${ItemTemplateCategory.Id},
+        "subCategoryId": ${ItemTemplateSubCategory.Id},
         "data": {
           "key": "value"
         },

@@ -18,12 +18,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public EffectCategory CreateEffectCategory(EffectType effectType, string suffix = null)
+        public EffectSubCategory CreateEffectSubCategory(EffectType effectType, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new EffectCategory
+            return new EffectSubCategory
             {
                 Name = $"some-effect-category-name-{suffix}",
                 Note = $"some-effect-name-{suffix}",
@@ -33,14 +33,14 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Effect CreateEffect(EffectCategory category, string suffix = null)
+        public Effect CreateEffect(EffectSubCategory subCategory, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
             return new Effect
             {
-                Category = category,
+                SubCategory = subCategory,
                 Description = $"some-description-{suffix}",
                 Dice = 4,
                 Name = $"some-effect-name-{suffix}",

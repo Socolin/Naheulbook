@@ -28,7 +28,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var actual = await _itemTemplateRepository.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
 
             actual.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>(), config =>
-                config.Excluding(x => x.Category)
+                config.Excluding(x => x.SubCategory)
                     .Excluding(x => x.Requirements)
                     .Excluding(x => x.Modifiers)
                     .Excluding(x => x.Skills)
@@ -50,7 +50,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddItemTemplateSection()
-                .AddItemTemplateCategory()
+                .AddItemTemplateSubCategory()
                 .AddItemTemplate()
                 .AddItemTemplate()
                 .AddItemTemplate();
@@ -59,7 +59,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             var actual = await _itemTemplateRepository.GetByIdsAsync(itemTemplateIds);
 
-            actual.Should().BeEquivalentTo(TestDataUtil.GetAll<ItemTemplate>(), config => config.Excluding(x => x.Category));
+            actual.Should().BeEquivalentTo(TestDataUtil.GetAll<ItemTemplate>(), config => config.Excluding(x => x.SubCategory));
         }
     }
 }

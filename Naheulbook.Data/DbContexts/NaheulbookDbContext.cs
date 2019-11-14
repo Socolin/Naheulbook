@@ -19,7 +19,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<ItemTemplateSection> ItemTemplateSections { get; set; } = null!;
         public DbSet<Item> Items { get; set; } = null!;
         public DbSet<ItemTemplate> ItemTemplates { get; set; } = null!;
-        public DbSet<ItemTemplateCategory> ItemTemplateCategories { get; set; } = null!;
+        public DbSet<ItemTemplateSubCategory> ItemTemplateSubCategories { get; set; } = null!;
         public DbSet<Skill> Skills { get; set; } = null!;
         public DbSet<Map> Maps { get; set; } = null!;
         public DbSet<MapLayer> MapLayers { get; set; } = null!;
@@ -54,7 +54,7 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new CharacterHistoryEntryConfiguration());
 
             modelBuilder.ApplyConfiguration(new EffectConfiguration());
-            modelBuilder.ApplyConfiguration(new EffectCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new EffectSubCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new EffectModifierConfiguration());
             modelBuilder.ApplyConfiguration(new EffectTypeConfiguration());
 
@@ -71,7 +71,7 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new ItemConfiguration());
 
             modelBuilder.ApplyConfiguration(new ItemTemplateConfiguration());
-            modelBuilder.ApplyConfiguration(new ItemTemplateCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemTemplateSubCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ItemTemplateModifierConfiguration());
             modelBuilder.ApplyConfiguration(new ItemTemplateRequirementConfiguration());
             modelBuilder.ApplyConfiguration(new ItemTemplateSectionConfiguration());
@@ -97,7 +97,7 @@ namespace Naheulbook.Data.DbContexts
 
             modelBuilder.ApplyConfiguration(new MonsterConfiguration());
 
-            modelBuilder.ApplyConfiguration(new MonsterCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new MonsterSubCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTemplateSimpleInventoryConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTypeConfiguration());

@@ -12,7 +12,7 @@ namespace Naheulbook.Core.Services
     {
         Task<List<MonsterType>> GetMonsterTypesWithCategoriesAsync();
         Task<MonsterType> CreateMonsterTypeAsync(NaheulbookExecutionContext executionContext, CreateMonsterTypeRequest request);
-        Task<MonsterCategory> CreateMonsterCategoryAsync(NaheulbookExecutionContext executionContext, int monsterTypeId, CreateMonsterCategoryRequest request);
+        Task<MonsterSubCategory> CreateMonsterSubCategoryAsync(NaheulbookExecutionContext executionContext, int monsterTypeId, CreateMonsterSubCategoryRequest request);
     }
 
     public class MonsterTypeService : IMonsterTypeService
@@ -49,7 +49,7 @@ namespace Naheulbook.Core.Services
                 var monsterType = new MonsterType
                 {
                     Name = request.Name,
-                    Categories = new List<MonsterCategory>()
+                    SubCategories = new List<MonsterSubCategory>()
                 };
 
                 uow.MonsterTypes.Add(monsterType);
@@ -59,26 +59,26 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<MonsterCategory> CreateMonsterCategoryAsync(
+        public async Task<MonsterSubCategory> CreateMonsterSubCategoryAsync(
             NaheulbookExecutionContext executionContext,
             int monsterTypeId,
-            CreateMonsterCategoryRequest request
+            CreateMonsterSubCategoryRequest request
         )
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var monsterCategory = new MonsterCategory
+                var monsterSubCategory = new MonsterSubCategory
                 {
                     Name = request.Name,
                     TypeId = monsterTypeId
                 };
 
-                uow.MonsterCategories.Add(monsterCategory);
+                uow.MonsterSubCategories.Add(monsterSubCategory);
                 await uow.SaveChangesAsync();
 
-                return monsterCategory;
+                return monsterSubCategory;
             }
         }
     }

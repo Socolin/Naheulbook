@@ -34,7 +34,7 @@ namespace Naheulbook.Core.Utils
             itemTemplate.Name = request.Name;
             itemTemplate.TechName = request.TechName;
             itemTemplate.Source = request.Source;
-            itemTemplate.CategoryId = request.CategoryId;
+            itemTemplate.SubCategoryId = request.SubCategoryId;
             itemTemplate.Data = JsonConvert.SerializeObject(request.Data, Formatting.None);
 
             itemTemplate.CleanName = _stringCleanupUtil.RemoveAccents(request.Name);

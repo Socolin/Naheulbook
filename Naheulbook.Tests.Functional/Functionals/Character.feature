@@ -251,7 +251,7 @@ Feature: Character
               "name": "${ItemTemplate.Name}",
               "techName": "${ItemTemplate.TechName}",
               "source": "official",
-              "categoryId": ${ItemTemplateCategory.Id},
+              "subCategoryId": ${ItemTemplateSubCategory.Id},
               "data": {
                 "key": "value"
               },
@@ -333,7 +333,7 @@ Feature: Character
             "name": "${ItemTemplate.Name}",
             "techName": "${ItemTemplate.TechName}",
             "source": "official",
-            "categoryId": ${ItemTemplateCategory.Id},
+            "subCategoryId": ${ItemTemplateSubCategory.Id},
             "data": {
                 "key": "value"
             },

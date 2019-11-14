@@ -1,6 +1,6 @@
 namespace Naheulbook.Web.Responses
 {
-    public class ItemTemplateCategoryResponse
+    public class ItemTemplateSubCategoryResponse
     {
         public int Id { get; set; }
         public int SectionId { get; set; }

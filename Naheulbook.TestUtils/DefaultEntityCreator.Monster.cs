@@ -7,12 +7,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public MonsterCategory CreateMonsterCategory(MonsterType monsterType, string suffix = null)
+        public MonsterSubCategory CreateMonsterSubCategory(MonsterType monsterType, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new MonsterCategory
+            return new MonsterSubCategory
             {
                 MonsterTemplates = new List<MonsterTemplate>(),
                 Name = $"some-name-{suffix}",
@@ -29,7 +29,7 @@ namespace Naheulbook.TestUtils
             return new MonsterType()
             {
                 Name = $"some-monster-type-name-{suffix}",
-                Categories = new List<MonsterCategory>()
+                SubCategories = new List<MonsterSubCategory>()
             };
         }
 
@@ -46,7 +46,7 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public MonsterTemplate CreateMonsterTemplate(MonsterCategory category, string suffix = null)
+        public MonsterTemplate CreateMonsterTemplate(MonsterSubCategory subCategory, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
@@ -54,7 +54,7 @@ namespace Naheulbook.TestUtils
             return new MonsterTemplate
             {
                 Name = $"some-monster-template-name-{suffix}",
-                Category = category,
+                SubCategory = subCategory,
                 Data = @"{""key"":""value""}"
             };
         }

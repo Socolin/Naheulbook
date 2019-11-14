@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Naheulbook.Web.Responses
 {
-    public class MonsterCategoryResponse
+    public class MonsterSubCategoryResponse
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;

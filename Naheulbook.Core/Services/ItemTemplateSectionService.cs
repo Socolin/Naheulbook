@@ -50,7 +50,7 @@ namespace Naheulbook.Core.Services
                 Name = request.Name,
                 Special = string.Join(",", request.Specials),
                 Note = request.Note,
-                Categories = new List<ItemTemplateCategory>()
+                SubCategories = new List<ItemTemplateSubCategory>()
             };
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())

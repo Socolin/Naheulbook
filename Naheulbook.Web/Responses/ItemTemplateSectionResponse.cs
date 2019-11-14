@@ -12,6 +12,6 @@ namespace Naheulbook.Web.Responses
         public string Name { get; set; } = null!;
         public string Note { get; set; } = null!;
         public List<string> Specials { get; set; } = null!;
-        public List<ItemTemplateCategoryResponse> Categories { get; set; } = null!;
+        public List<ItemTemplateSubCategoryResponse> SubCategories { get; set; } = null!;
     }
 }

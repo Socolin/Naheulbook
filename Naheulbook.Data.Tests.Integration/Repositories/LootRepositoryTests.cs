@@ -27,7 +27,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         public async Task GetLootsVisibleByCharactersOfGroupAsync_FullyLoadLootAndItems()
         {
             var expectedLoot = TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = true).GetLast<Loot>();
-            var expectedLootItemTemplate = TestDataUtil.AddItemTemplateSection().AddItemTemplateCategory().AddItemTemplate().GetLast<ItemTemplate>();
+            var expectedLootItemTemplate = TestDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate().GetLast<ItemTemplate>();
             var expectedLootItem = TestDataUtil.AddItem(expectedLoot).GetLast<Item>();
             var expectedMonster = TestDataUtil.AddMonster(c => c.Loot = expectedLoot).GetLast<Monster>();
             var expectedMonsterItemTemplate = TestDataUtil.AddItemTemplate().GetLast<ItemTemplate>();
@@ -38,10 +38,10 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var loot = loots.First();
             loot.Should().BeEquivalentTo(expectedLoot, config => config.Excluding(l => l.Items).Excluding(l => l.Monsters).Excluding(l => l.Group));
             loot.Items.First().Should().BeEquivalentTo(expectedLootItem, config => config.Excluding(i => i.ItemTemplate).Excluding(i => i.Character).Excluding(i => i.Loot));
-            loot.Items.First().ItemTemplate.Should().BeEquivalentTo(expectedLootItemTemplate, config => config.Excluding(i => i.Category).Excluding(i => i.Modifiers).Excluding(i => i.Requirements).Excluding(i => i.Slots).Excluding(i => i.Skills).Excluding(i => i.UnSkills).Excluding(i => i.SkillModifiers));
+            loot.Items.First().ItemTemplate.Should().BeEquivalentTo(expectedLootItemTemplate, config => config.Excluding(i => i.SubCategory).Excluding(i => i.Modifiers).Excluding(i => i.Requirements).Excluding(i => i.Slots).Excluding(i => i.Skills).Excluding(i => i.UnSkills).Excluding(i => i.SkillModifiers));
             loot.Monsters.First().Should().BeEquivalentTo(expectedMonster, config => config.Excluding(m => m.Items).Excluding(m => m.Group).Excluding(m => m.Loot));
             loot.Monsters.First().Items.First().Should().BeEquivalentTo(expectedMonsterItem, config => config.Excluding(i => i.ItemTemplate).Excluding(i => i.Monster));
-            loot.Monsters.First().Items.First().ItemTemplate.Should().BeEquivalentTo(expectedMonsterItemTemplate, config => config.Excluding(i => i.Category).Excluding(i => i.Modifiers).Excluding(i => i.Requirements).Excluding(i => i.Slots).Excluding(i => i.Skills).Excluding(i => i.UnSkills).Excluding(i => i.SkillModifiers));
+            loot.Monsters.First().Items.First().ItemTemplate.Should().BeEquivalentTo(expectedMonsterItemTemplate, config => config.Excluding(i => i.SubCategory).Excluding(i => i.Modifiers).Excluding(i => i.Requirements).Excluding(i => i.Slots).Excluding(i => i.Skills).Excluding(i => i.UnSkills).Excluding(i => i.SkillModifiers));
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         public async Task GetByGroupIdAsync_FullyLoadLootAndItems()
         {
             var expectedLoot = TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = true).GetLast<Loot>();
-            var expectedLootItemTemplate = TestDataUtil.AddItemTemplateSection().AddItemTemplateCategory().AddItemTemplate().GetLast<ItemTemplate>();
+            var expectedLootItemTemplate = TestDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate().GetLast<ItemTemplate>();
             var expectedLootItem = TestDataUtil.AddItem(expectedLoot).GetLast<Item>();
             var expectedMonster = TestDataUtil.AddMonster(c => c.Loot = expectedLoot).GetLast<Monster>();
             var expectedMonsterItemTemplate = TestDataUtil.AddItemTemplate().GetLast<ItemTemplate>();
@@ -79,10 +79,10 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var loot = loots.First();
             loot.Should().BeEquivalentTo(expectedLoot, config => config.Excluding(l => l.Items).Excluding(l => l.Monsters).Excluding(l => l.Group));
             loot.Items.First().Should().BeEquivalentTo(expectedLootItem, config => config.Excluding(i => i.ItemTemplate).Excluding(i => i.Character).Excluding(i => i.Loot));
-            loot.Items.First().ItemTemplate.Should().BeEquivalentTo(expectedLootItemTemplate, config => config.Excluding(i => i.Category).Excluding(i => i.Requirements).Excluding(i => i.Modifiers).Excluding(i => i.SkillModifiers).Excluding(i => i.UnSkills).Excluding(i => i.Slots).Excluding(i => i.Skills));
+            loot.Items.First().ItemTemplate.Should().BeEquivalentTo(expectedLootItemTemplate, config => config.Excluding(i => i.SubCategory).Excluding(i => i.Requirements).Excluding(i => i.Modifiers).Excluding(i => i.SkillModifiers).Excluding(i => i.UnSkills).Excluding(i => i.Slots).Excluding(i => i.Skills));
             loot.Monsters.First().Should().BeEquivalentTo(expectedMonster, config => config.Excluding(m => m.Items).Excluding(m => m.Group).Excluding(m => m.Loot));
             loot.Monsters.First().Items.First().Should().BeEquivalentTo(expectedMonsterItem, config => config.Excluding(i => i.ItemTemplate).Excluding(i => i.Monster));
-            loot.Monsters.First().Items.First().ItemTemplate.Should().BeEquivalentTo(expectedMonsterItemTemplate, config => config.Excluding(i => i.Category).Excluding(i => i.Requirements).Excluding(i => i.Modifiers).Excluding(i => i.SkillModifiers).Excluding(i => i.UnSkills).Excluding(i => i.Slots).Excluding(i => i.Skills));
+            loot.Monsters.First().Items.First().ItemTemplate.Should().BeEquivalentTo(expectedMonsterItemTemplate, config => config.Excluding(i => i.SubCategory).Excluding(i => i.Requirements).Excluding(i => i.Modifiers).Excluding(i => i.SkillModifiers).Excluding(i => i.UnSkills).Excluding(i => i.Slots).Excluding(i => i.Skills));
         }
 
         [Test]

@@ -45,7 +45,7 @@ namespace Naheulbook.Web.Controllers
                 var result = _mapper.Map<MonsterTemplateResponse>(createdMonster);
                 return new JsonResult(result) {StatusCode = StatusCodes.Status201Created};
             }
-            catch (MonsterCategoryNotFoundException ex)
+            catch (MonsterSubCategoryNotFoundException ex)
             {
                 throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
             }
@@ -69,7 +69,7 @@ namespace Naheulbook.Web.Controllers
                 var result = _mapper.Map<MonsterTemplateResponse>(monster);
                 return new JsonResult(result);
             }
-            catch (MonsterCategoryNotFoundException ex)
+            catch (MonsterSubCategoryNotFoundException ex)
             {
                 throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
             }

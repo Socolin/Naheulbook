@@ -7,7 +7,7 @@ namespace Naheulbook.Requests.Requests
     public class ItemTemplateRequest
     {
         public string Source { get; set; } = null!;
-        public int CategoryId { get; set; }
+        public int SubCategoryId { get; set; }
         public string Name { get; set; } = null!;
         public string? TechName { get; set; }
         public List<ItemTemplateModifierRequest> Modifiers { get; set; } = new List<ItemTemplateModifierRequest>();

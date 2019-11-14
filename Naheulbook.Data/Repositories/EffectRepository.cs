@@ -10,7 +10,7 @@ namespace Naheulbook.Data.Repositories
     public interface IEffectRepository : IRepository<Effect>
     {
         Task<ICollection<EffectType>> GetCategoriesAsync();
-        Task<ICollection<Effect>> GetByCategoryWithModifiersAsync(long categoryId);
+        Task<ICollection<Effect>> GetBySubCategoryWithModifiersAsync(long subCategoryId);
         Task<Effect> GetWithModifiersAsync(int effectId);
         Task<List<Effect>> SearchByNameAsync(string partialName, int maxResult);
         Task<Effect> GetWithEffectWithModifiersAsync(int effectId);
@@ -26,14 +26,14 @@ namespace Naheulbook.Data.Repositories
         public async Task<ICollection<EffectType>> GetCategoriesAsync()
         {
             return await Context.EffectTypes
-                .Include(e => e.Categories)
+                .Include(e => e.SubCategories)
                 .ToListAsync();
         }
 
-        public async Task<ICollection<Effect>> GetByCategoryWithModifiersAsync(long categoryId)
+        public async Task<ICollection<Effect>> GetBySubCategoryWithModifiersAsync(long subCategoryId)
         {
             return await Context.Effects
-                .Where(e => e.CategoryId == categoryId)
+                .Where(e => e.SubCategoryId == subCategoryId)
                 .Include(e => e.Modifiers)
                 .ToListAsync();
         }
@@ -57,7 +57,7 @@ namespace Naheulbook.Data.Repositories
         public Task<Effect> GetWithEffectWithModifiersAsync(int effectId)
         {
             return Context.Effects
-                .Include(e => e.Category)
+                .Include(e => e.SubCategory)
                 .Include(e => e.Modifiers)
                 .FirstAsync(e => e.Id == effectId);
         }

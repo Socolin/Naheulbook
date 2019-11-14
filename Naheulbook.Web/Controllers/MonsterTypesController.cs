@@ -51,17 +51,17 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPost("{MonsterTypeId}/categories")]
-        public async Task<CreatedActionResult<MonsterCategoryResponse>> PostCreateMonsterCategoryAsync(
+        [HttpPost("{MonsterTypeId}/subcategories")]
+        public async Task<CreatedActionResult<MonsterSubCategoryResponse>> PostCreateMonsterSubCategoryAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int monsterTypeId,
-            CreateMonsterCategoryRequest request
+            CreateMonsterSubCategoryRequest request
         )
         {
             try
             {
-                var monsterCategory = await _monsterTypeService.CreateMonsterCategoryAsync(executionContext, monsterTypeId, request);
-                return _mapper.Map<MonsterCategoryResponse>(monsterCategory);
+                var monsterSubCategory = await _monsterTypeService.CreateMonsterSubCategoryAsync(executionContext, monsterTypeId, request);
+                return _mapper.Map<MonsterSubCategoryResponse>(monsterSubCategory);
             }
             catch (ForbiddenAccessException ex)
             {

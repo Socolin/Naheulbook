@@ -3,13 +3,13 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IEffectCategoryRepository : IRepository<EffectCategory>
+    public interface IEffectSubCategoryRepository : IRepository<EffectSubCategory>
     {
     }
 
-    public class EffectCategoryRepository : Repository<EffectCategory, NaheulbookDbContext>, IEffectCategoryRepository
+    public class EffectSubCategoryRepository : Repository<EffectSubCategory, NaheulbookDbContext>, IEffectSubCategoryRepository
     {
-        public EffectCategoryRepository(NaheulbookDbContext context)
+        public EffectSubCategoryRepository(NaheulbookDbContext context)
             : base(context)
         {
         }

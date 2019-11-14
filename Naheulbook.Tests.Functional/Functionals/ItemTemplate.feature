@@ -20,18 +20,18 @@ Feature: ItemTemplate
       "id": {"__capture": {"name": "ItemTemplateSectionId", "type": "integer"}},
       "name": "some-name",
       "note": "some-note",
-      "categories": [],
+      "subCategories": [],
       "specials": [
         "some-special"
       ]
     }
     """
 
-  Scenario: Can create an item category
+  Scenario: Can create an item sub-category
     Given a JWT for an admin user
     And an item template section
 
-    When performing a POST to the url "/api/v2/itemTemplateCategories/" with the following json content and the current jwt
+    When performing a POST to the url "/api/v2/itemTemplateSubCategories/" with the following json content and the current jwt
     """
     {
       "sectionId": ${ItemTemplateSection.Id},
@@ -54,10 +54,10 @@ Feature: ItemTemplate
     }
     """
 
-  Scenario: List item template categories
+  Scenario: List item template sub categories
     Given an item template section
-    And an item template category
-    And an item template category
+    And an item template sub-category
+    And an item template sub-category
 
     When performing a GET to the url "/api/v2/itemTemplateSections/"
 
@@ -71,22 +71,22 @@ Feature: ItemTemplate
         "specials": [
             "${ItemTemplateSection.Special}"
         ],
-        "categories": [
+        "subCategories": [
             {
-                "id": ${ItemTemplateCategory.[0].Id},
-                "name": "${ItemTemplateCategory.[0].Name}",
-                "techName": "${ItemTemplateCategory.[0].TechName}",
-                "description": "${ItemTemplateCategory.[0].Description}",
-                "note": "${ItemTemplateCategory.[0].Note}",
-                "sectionId": ${ItemTemplateCategory.[0].SectionId}
+                "id": ${ItemTemplateSubCategory.[0].Id},
+                "name": "${ItemTemplateSubCategory.[0].Name}",
+                "techName": "${ItemTemplateSubCategory.[0].TechName}",
+                "description": "${ItemTemplateSubCategory.[0].Description}",
+                "note": "${ItemTemplateSubCategory.[0].Note}",
+                "sectionId": ${ItemTemplateSubCategory.[0].SectionId}
             },
             {
-                "id": ${ItemTemplateCategory.[1].Id},
-                "name": "${ItemTemplateCategory.[1].Name}",
-                "techName": "${ItemTemplateCategory.[1].TechName}",
-                "description": "${ItemTemplateCategory.[1].Description}",
-                "note": "${ItemTemplateCategory.[1].Note}",
-                "sectionId": ${ItemTemplateCategory.[1].SectionId}
+                "id": ${ItemTemplateSubCategory.[1].Id},
+                "name": "${ItemTemplateSubCategory.[1].Name}",
+                "techName": "${ItemTemplateSubCategory.[1].TechName}",
+                "description": "${ItemTemplateSubCategory.[1].Description}",
+                "note": "${ItemTemplateSubCategory.[1].Note}",
+                "sectionId": ${ItemTemplateSubCategory.[1].SectionId}
             }
 
         ]
@@ -96,7 +96,7 @@ Feature: ItemTemplate
   Scenario: Can create an item template
     Given a JWT for an admin user
     And an item template section
-    And an item template category
+    And an item template sub-category
     And an item slot
     And 3 skills
 
@@ -104,7 +104,7 @@ Feature: ItemTemplate
     """
     {
       "source": "official",
-      "categoryId": ${ItemTemplateCategory.Id},
+      "subCategoryId": ${ItemTemplateSubCategory.Id},
       "name": "some-name",
       "techName": "some-tech-name",
       "source": "official",
@@ -157,7 +157,7 @@ Feature: ItemTemplate
     {
       "id": {"__match": {"type": "integer"}},
       "source": "official",
-      "categoryId": ${ItemTemplateCategory.Id},
+      "subCategoryId": ${ItemTemplateSubCategory.Id},
       "name": "some-name",
       "techName": "some-tech-name",
       "source": "official",
@@ -231,7 +231,7 @@ Feature: ItemTemplate
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",
-        "categoryId": ${ItemTemplateCategory.Id},
+        "subCategoryId": ${ItemTemplateSubCategory.Id},
         "data": {
             "key": "value"
         },
@@ -290,7 +290,7 @@ Feature: ItemTemplate
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",
-        "categoryId": ${ItemTemplateCategory.Id},
+        "subCategoryId": ${ItemTemplateSubCategory.Id},
         "data": {
             "key": "value"
         },
@@ -340,7 +340,7 @@ Feature: ItemTemplate
   Scenario: Can edit item template
     Given a JWT for an admin user
     And an item template with all optional fields set
-    And an item template category
+    And an item template sub-category
     And an item slot
     And a stat
     And 3 skills
@@ -352,7 +352,7 @@ Feature: ItemTemplate
         "name": "some-new-name",
         "techName": "some-new-tech-name",
         "source": "official",
-        "categoryId": ${ItemTemplateCategory.[-1].Id},
+        "subCategoryId": ${ItemTemplateSubCategory.[-1].Id},
         "data": {
             "new-key": "new-value"
         },
@@ -409,7 +409,7 @@ Feature: ItemTemplate
          "name": "some-new-name",
          "techName": "some-new-tech-name",
          "source": "official",
-         "categoryId": ${ItemTemplateCategory.[-1].Id},
+         "subCategoryId": ${ItemTemplateSubCategory.[-1].Id},
          "data": {
              "new-key": "new-value"
          },
@@ -469,7 +469,7 @@ Feature: ItemTemplate
            "name": "${ItemTemplate.Name}",
            "techName": "${ItemTemplate.TechName}",
            "source": "official",
-           "categoryId": ${ItemTemplateCategory.Id},
+           "subCategoryId": ${ItemTemplateSubCategory.Id},
            "data": ${ItemTemplate.Data},
            "slots": [],
            "modifiers": [],
@@ -481,10 +481,10 @@ Feature: ItemTemplate
       ]
       """
 
-  Scenario: Can get items by category techName
+  Scenario: Can get items by sub-category techName
     Given an item template
 
-    When performing a GET to the url "/api/v2/itemTemplateCategories/${ItemTemplateCategory.TechName}/itemTemplates"
+    When performing a GET to the url "/api/v2/itemTemplateSubCategories/${ItemTemplateSubCategory.TechName}/itemTemplates"
     Then the response status code is 200
     And the response should contains the following json
       """
@@ -494,7 +494,7 @@ Feature: ItemTemplate
            "name": "${ItemTemplate.Name}",
            "techName": "${ItemTemplate.TechName}",
            "source": "official",
-           "categoryId": ${ItemTemplateCategory.Id},
+           "subCategoryId": ${ItemTemplateSubCategory.Id},
            "data": ${ItemTemplate.Data},
            "slots": [],
            "modifiers": [],

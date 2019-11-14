@@ -32,6 +32,12 @@ namespace Naheulbook.DatabaseMigrator.Cli
                 Debug.WriteLine(n);
             return new ServiceCollection()
                 .AddFluentMigratorCore()
+                .Configure<FluentMigratorLoggerOptions>(
+                    opt =>
+                    {
+                        opt.ShowElapsedTime = true;
+                        opt.ShowSql = true;
+                    })
                 .ConfigureRunner(rb => rb
                     .AddMySql5()
                     .WithGlobalConnectionString(connectionString)

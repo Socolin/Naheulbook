@@ -9,18 +9,18 @@ using Naheulbook.Requests.Requests;
 
 namespace Naheulbook.Core.Services
 {
-    public interface IItemTemplateCategoryService
+    public interface IItemTemplateSubCategoryService
     {
-        Task<ItemTemplateCategory> CreateItemTemplateCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateCategoryRequest request);
-        Task<List<ItemTemplate>> GetItemTemplatesByCategoryTechNameAsync(string categoryTechName, int? currentUserId, bool includeCommunityItems);
+        Task<ItemTemplateSubCategory> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request);
+        Task<List<ItemTemplate>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems);
     }
 
-    public class ItemTemplateCategoryService : IItemTemplateCategoryService
+    public class ItemTemplateSubCategoryService : IItemTemplateSubCategoryService
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IAuthorizationUtil _authorizationUtil;
 
-        public ItemTemplateCategoryService(
+        public ItemTemplateSubCategoryService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IAuthorizationUtil authorizationUtil
         )
@@ -29,11 +29,11 @@ namespace Naheulbook.Core.Services
             _authorizationUtil = authorizationUtil;
         }
 
-        public async Task<ItemTemplateCategory> CreateItemTemplateCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateCategoryRequest request)
+        public async Task<ItemTemplateSubCategory> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-            var itemTemplateCategory = new ItemTemplateCategory()
+            var itemTemplateSubCategory = new ItemTemplateSubCategory()
             {
                 SectionId = request.SectionId,
                 Name = request.Name,
@@ -44,22 +44,22 @@ namespace Naheulbook.Core.Services
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                uow.ItemTemplateCategories.Add(itemTemplateCategory);
+                uow.ItemTemplateSubCategories.Add(itemTemplateSubCategory);
                 await uow.SaveChangesAsync();
             }
 
-            return itemTemplateCategory;
+            return itemTemplateSubCategory;
         }
 
-        public async Task<List<ItemTemplate>> GetItemTemplatesByCategoryTechNameAsync(string categoryTechName, int? currentUserId, bool includeCommunityItems)
+        public async Task<List<ItemTemplate>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var itemTemplateCategory = await uow.ItemTemplateCategories.GetByTechNameAsync(categoryTechName);
-                if (itemTemplateCategory == null)
-                    throw new ItemTemplateCategoryNotFoundException(categoryTechName);
+                var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetByTechNameAsync(subCategoryTechName);
+                if (itemTemplateSubCategory == null)
+                    throw new ItemTemplateSubCategoryNotFoundException(subCategoryTechName);
 
-                return await uow.ItemTemplates.GetWithAllDataByCategoryIdAsync(itemTemplateCategory.Id, currentUserId, includeCommunityItems);
+                return await uow.ItemTemplates.GetWithAllDataByCategoryIdAsync(itemTemplateSubCategory.Id, currentUserId, includeCommunityItems);
             }
         }
     }

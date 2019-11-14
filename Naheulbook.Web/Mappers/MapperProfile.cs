@@ -67,7 +67,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Effect, EffectResponse>()
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(e => e.Modifiers.OrderBy(m => m.StatName)));
             CreateMap<EffectType, EffectTypeResponse>();
-            CreateMap<EffectCategory, EffectCategoryResponse>();
+            CreateMap<EffectSubCategory, EffectSubCategoryResponse>();
             CreateMap<EffectModifier, StatModifierResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(se => se.StatName))
                 .ForMember(m => m.Special, opt => opt.Ignore());
@@ -162,7 +162,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Id, opt => opt.MapFrom(i => i.SkillId));
             CreateMap<ItemTemplateSection, ItemTemplateSectionResponse>()
                 .ForMember(m => m.Specials, opt => opt.MapFrom(i => MapperHelpers.FromCommaSeparatedList(i.Special)));
-            CreateMap<ItemTemplateCategory, ItemTemplateCategoryResponse>();
+            CreateMap<ItemTemplateSubCategory, ItemTemplateSubCategoryResponse>();
             CreateMap<ItemType, ItemTypeResponse>();
             CreateMap<Slot, ItemSlotResponse>();
 
@@ -224,8 +224,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)));
             CreateMap<MonsterTemplateSimpleInventory, MonsterTemplateResponse.MonsterSimpleInventoryResponse>();
             CreateMap<MonsterType, MonsterTypeResponse>()
-                .ForMember(m => m.Categories, opt => opt.MapFrom(c => c.Categories.OrderBy(ca => ca.Id)));
-            CreateMap<MonsterCategory, MonsterCategoryResponse>();
+                .ForMember(m => m.SubCategories, opt => opt.MapFrom(c => c.SubCategories.OrderBy(ca => ca.Id)));
+            CreateMap<MonsterSubCategory, MonsterSubCategoryResponse>();
             CreateMap<MonsterTrait, MonsterTraitResponse>()
                 .ForMember(m => m.Levels, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<string>>(b.Levels)));
 

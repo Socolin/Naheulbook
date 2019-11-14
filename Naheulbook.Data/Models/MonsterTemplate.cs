@@ -9,8 +9,8 @@ namespace Naheulbook.Data.Models
         public string Data { get; set; } = null!;
         public string Name { get; set; } = null!;
 
-        public int CategoryId { get; set; }
-        public MonsterCategory Category { get; set; } = null!;
+        public int SubCategoryId { get; set; }
+        public MonsterSubCategory SubCategory { get; set; } = null!;
 
         public ICollection<MonsterTemplateSimpleInventory> Items { get; set; } = null!;
     }

@@ -3,9 +3,9 @@ using Naheulbook.Requests.Requests;
 
 namespace Naheulbook.Requests.Validators
 {
-    public class CreateItemTemplateCategoryRequestValidator : AbstractValidator<CreateItemTemplateCategoryRequest>
+    public class CreateItemTemplateSubCategoryRequestValidator : AbstractValidator<CreateItemTemplateSubCategoryRequest>
     {
-        public CreateItemTemplateCategoryRequestValidator()
+        public CreateItemTemplateSubCategoryRequestValidator()
         {
             RuleFor(i => i.Name).NotNull().Length(1, 255);
             RuleFor(i => i.Description).NotNull().Length(0, 255);

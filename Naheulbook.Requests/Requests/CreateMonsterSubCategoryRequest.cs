@@ -2,7 +2,7 @@
 
 namespace Naheulbook.Requests.Requests
 {
-    public class CreateMonsterCategoryRequest
+    public class CreateMonsterSubCategoryRequest
     {
         public string Name { get; set; } = null!;
     }

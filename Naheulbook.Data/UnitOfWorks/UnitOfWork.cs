@@ -14,7 +14,7 @@ namespace Naheulbook.Data.UnitOfWorks
         ICharacterModifierRepository CharacterModifiers { get; }
         ICharacterHistoryEntryRepository CharacterHistoryEntries { get; }
         IEffectRepository Effects { get; }
-        IEffectCategoryRepository EffectCategories { get; }
+        IEffectSubCategoryRepository EffectSubCategories { get; }
         IEffectTypeRepository EffectTypes { get; }
         IEventRepository Events { get; }
         IGodRepository Gods { get; }
@@ -24,7 +24,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IIconRepository Icons { get; }
         IItemRepository Items { get; }
         IItemTemplateRepository ItemTemplates { get; }
-        IItemTemplateCategoryRepository ItemTemplateCategories { get; }
+        IItemTemplateSubCategoryRepository ItemTemplateSubCategories { get; }
         IItemTemplateSectionRepository ItemTemplateSections { get; }
         IItemTypeRepository ItemTypes { get; }
         IJobRepository Jobs { get; }
@@ -35,7 +35,7 @@ namespace Naheulbook.Data.UnitOfWorks
         IMapMarkerLinkRepository MapMarkerLinks { get; }
         IMonsterRepository Monsters { get; }
         IMonsterTypeRepository MonsterTypes { get; }
-        IMonsterCategoryRepository MonsterCategories { get; }
+        IMonsterSubCategoryRepository MonsterSubCategories { get; }
         IMonsterTemplateRepository MonsterTemplates { get; }
         IMonsterTraitRepository MonsterTraits { get; }
         IOriginRepository Origins { get; }
@@ -65,7 +65,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public ICharacterHistoryEntryRepository CharacterHistoryEntries => new CharacterHistoryEntryRepository(_naheulbookDbContext);
         public IEffectRepository Effects => new EffectRepository(_naheulbookDbContext);
         public IEffectTypeRepository EffectTypes => new EffectTypeRepository(_naheulbookDbContext);
-        public IEffectCategoryRepository EffectCategories => new EffectCategoryRepository(_naheulbookDbContext);
+        public IEffectSubCategoryRepository EffectSubCategories => new EffectSubCategoryRepository(_naheulbookDbContext);
         public IEventRepository Events => new EventRepository(_naheulbookDbContext);
         public IGodRepository Gods => new GodRepository(_naheulbookDbContext);
         public IGroupRepository Groups => new GroupRepository(_naheulbookDbContext);
@@ -75,7 +75,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IItemRepository Items => new ItemRepository(_naheulbookDbContext);
         public IItemTemplateRepository ItemTemplates => new ItemTemplateRepository(_naheulbookDbContext);
         public IItemTemplateSectionRepository ItemTemplateSections => new ItemTemplateSectionRepository(_naheulbookDbContext);
-        public IItemTemplateCategoryRepository ItemTemplateCategories => new ItemTemplateCategoryRepository(_naheulbookDbContext);
+        public IItemTemplateSubCategoryRepository ItemTemplateSubCategories => new ItemTemplateSubCategoryRepository(_naheulbookDbContext);
         public IItemTypeRepository ItemTypes => new ItemTypeRepository(_naheulbookDbContext);
         public IJobRepository Jobs => new JobRepository(_naheulbookDbContext);
         public ILootRepository Loots => new LootRepository(_naheulbookDbContext);
@@ -85,7 +85,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public IMapMarkerLinkRepository MapMarkerLinks => new MapMarkerLinkRepository(_naheulbookDbContext);
         public IMonsterRepository Monsters => new MonsterRepository(_naheulbookDbContext);
         public IMonsterTypeRepository MonsterTypes => new MonsterTypeRepository(_naheulbookDbContext);
-        public IMonsterCategoryRepository MonsterCategories => new MonsterCategoryRepository(_naheulbookDbContext);
+        public IMonsterSubCategoryRepository MonsterSubCategories => new MonsterSubCategoryRepository(_naheulbookDbContext);
         public IMonsterTemplateRepository MonsterTemplates => new MonsterTemplateRepository(_naheulbookDbContext);
         public IMonsterTraitRepository MonsterTraits => new MonsterTraitRepository(_naheulbookDbContext);
         public IOriginRepository Origins => new OriginRepository(_naheulbookDbContext);

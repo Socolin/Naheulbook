@@ -37,12 +37,12 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddItemTemplateSection();
         }
 
-        [Given("an item template category")]
-        public void GivenAnItemTemplateCategory()
+        [Given("an item template sub-category")]
+        public void GivenAnItemTemplateSubCategory()
         {
             if (!_testDataUtil.Contains<ItemTemplateSection>())
                 _testDataUtil.AddItemTemplateSection();
-            _testDataUtil.AddItemTemplateCategory();
+            _testDataUtil.AddItemTemplateSubCategory();
         }
 
         [Given("item templates required for initial inventory")]
@@ -50,8 +50,8 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         {
             if (!_testDataUtil.Contains<ItemTemplateSection>())
                 _testDataUtil.AddItemTemplateSection();
-            if (!_testDataUtil.Contains<ItemTemplateCategory>())
-                _testDataUtil.AddItemTemplateCategory();
+            if (!_testDataUtil.Contains<ItemTemplateSubCategory>())
+                _testDataUtil.AddItemTemplateSubCategory();
             _testDataUtil.AddItemTemplate(i => i.TechName = "MONEY");
             _testDataUtil.AddItemTemplate(i => i.TechName = "BIG_PURSE");
             _testDataUtil.AddItemTemplate(i => i.TechName = "MEDIUM_PURSE");
@@ -63,8 +63,8 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         {
             if (!_testDataUtil.Contains<ItemTemplateSection>())
                 _testDataUtil.AddItemTemplateSection();
-            if (!_testDataUtil.Contains<ItemTemplateCategory>())
-                _testDataUtil.AddItemTemplateCategory();
+            if (!_testDataUtil.Contains<ItemTemplateSubCategory>())
+                _testDataUtil.AddItemTemplateSubCategory();
             _testDataUtil.AddItemTemplate();
         }
 
@@ -73,8 +73,8 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         {
             if (!_testDataUtil.Contains<ItemTemplateSection>())
                 _testDataUtil.AddItemTemplateSection();
-            if (!_testDataUtil.Contains<ItemTemplateCategory>())
-                _testDataUtil.AddItemTemplateCategory();
+            if (!_testDataUtil.Contains<ItemTemplateSubCategory>())
+                _testDataUtil.AddItemTemplateSubCategory();
             _testDataUtil.AddItemTemplate(itemTemplate =>
             {
                 var itemTemplateData = JsonConvert.DeserializeObject<ItemTemplateData>(itemTemplate.Data) ?? new ItemTemplateData();
@@ -114,7 +114,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 .AddSkill()
                 .AddSkill()
                 .AddItemTemplateSection()
-                .AddItemTemplateCategory();
+                .AddItemTemplateSubCategory();
 
             _testDataUtil.AddItemTemplate(itemTemplate =>
             {

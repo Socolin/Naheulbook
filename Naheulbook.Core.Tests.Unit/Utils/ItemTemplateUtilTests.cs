@@ -37,7 +37,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                 Data = @"{""key"": ""value""}",
                 Source = "some-source",
                 TechName = "some-tech-name",
-                CategoryId = 1
+                SubCategoryId = 1
             };
 
             var request = new ItemTemplateRequest
@@ -46,7 +46,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                 Data = JObject.FromObject(new {newKey = "newValue"}),
                 Source = "some-new-source",
                 TechName = "some-new-tech-name",
-                CategoryId = 2
+                SubCategoryId = 2
             };
 
             _util.ApplyChangesFromRequest(itemTemplate, request);
@@ -55,7 +55,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             itemTemplate.Data.Should().Be(@"{""newKey"":""newValue""}");
             itemTemplate.Source.Should().Be("some-new-source");
             itemTemplate.TechName.Should().Be("some-new-tech-name");
-            itemTemplate.CategoryId.Should().Be(2);
+            itemTemplate.SubCategoryId.Should().Be(2);
         }
 
         [Test]

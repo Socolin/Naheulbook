@@ -16,27 +16,27 @@ namespace Naheulbook.TestUtils
             return SaveEntity(_defaultEntityCreator.CreateItemTemplateSection(), customizer);
         }
 
-        public TestDataUtil AddItemTemplateCategory(Action<ItemTemplateCategory> customizer = null)
+        public TestDataUtil AddItemTemplateSubCategory(Action<ItemTemplateSubCategory> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateItemTemplateCategory(GetLast<ItemTemplateSection>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateItemTemplateSubCategory(GetLast<ItemTemplateSection>()), customizer);
         }
 
         public TestDataUtil AddItemTemplate(Action<ItemTemplate> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateCategory>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateSubCategory>()), customizer);
         }
 
         public TestDataUtil AddItemTemplateAndRequiredData(Action<ItemTemplate> customizer = null)
         {
             AddItemTemplateSection();
-            AddItemTemplateCategory();
-            return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateCategory>()), customizer);
+            AddItemTemplateSubCategory();
+            return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateSubCategory>()), customizer);
         }
 
         public TestDataUtil AddItemTemplateWithAllData()
         {
             AddItemTemplateSection()
-                .AddItemTemplateCategory()
+                .AddItemTemplateSubCategory()
                 .AddStat()
                 .AddJob()
                 .AddOrigin()

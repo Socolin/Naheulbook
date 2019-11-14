@@ -21,7 +21,7 @@ namespace Naheulbook.Data.Repositories
         public Task<List<MonsterType>> GetAllWithCategoriesAsync()
         {
             return Context.MonsterTypes
-                .Include(x => x.Categories)
+                .Include(x => x.SubCategories)
                 .ToListAsync();
         }
     }

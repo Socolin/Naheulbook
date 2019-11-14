@@ -10,13 +10,13 @@ namespace Naheulbook.Data.Configurations
         {
             builder.ToTable("item_template");
 
-            builder.HasIndex(e => e.CategoryId);
+            builder.HasIndex(e => e.SubCategoryId);
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
 
-            builder.Property(e => e.CategoryId)
-                .HasColumnName("category");
+            builder.Property(e => e.SubCategoryId)
+                .HasColumnName("subCategoryId");
 
             builder.Property(e => e.CleanName)
                 .HasColumnName("cleanname")
@@ -46,9 +46,9 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.SourceUserId)
                 .HasColumnName("sourceuserid");
 
-            builder.HasOne(e => e.Category)
+            builder.HasOne(e => e.SubCategory)
                 .WithMany(c => c.ItemTemplates)
-                .HasForeignKey(e => e.CategoryId)
+                .HasForeignKey(e => e.SubCategoryId)
                 .HasConstraintName("FK_item_template_item_category_category");
 
             builder.HasOne(e => e.SourceUser)
@@ -59,11 +59,11 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class ItemTemplateCategoryConfiguration : IEntityTypeConfiguration<ItemTemplateCategory>
+    public class ItemTemplateSubCategoryConfiguration : IEntityTypeConfiguration<ItemTemplateSubCategory>
     {
-        public void Configure(EntityTypeBuilder<ItemTemplateCategory> builder)
+        public void Configure(EntityTypeBuilder<ItemTemplateSubCategory> builder)
         {
-            builder.ToTable("item_template_category");
+            builder.ToTable("item_template_subcategories");
 
             builder.HasIndex(e => e.SectionId)
                 .HasName("IX_item_category_type");
@@ -96,7 +96,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("section");
 
             builder.HasOne(e => e.Section)
-                .WithMany(s => s.Categories)
+                .WithMany(s => s.SubCategories)
                 .HasForeignKey(e => e.SectionId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_item_category_item_type_type");

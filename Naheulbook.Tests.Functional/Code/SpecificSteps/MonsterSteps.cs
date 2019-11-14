@@ -24,10 +24,10 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddMonsterType();
         }
 
-        [Given("a monster category")]
-        public void GivenAMonsterCategory()
+        [Given("a monster sub-category")]
+        public void GivenAMonsterSubCategory()
         {
-            _testDataUtil.AddMonsterCategory();
+            _testDataUtil.AddMonsterSubCategory();
         }
 
         [Given("a monster trait")]
@@ -41,8 +41,8 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         {
             if (!_testDataUtil.Contains<MonsterType>())
                 _testDataUtil.AddMonsterType();
-            if (!_testDataUtil.Contains<MonsterCategory>())
-                _testDataUtil.AddMonsterCategory();
+            if (!_testDataUtil.Contains<MonsterSubCategory>())
+                _testDataUtil.AddMonsterSubCategory();
             _testDataUtil.AddMonsterTemplate();
         }
 
@@ -51,10 +51,10 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         {
             if (!_testDataUtil.Contains<MonsterType>())
                 _testDataUtil.AddMonsterType();
-            if (!_testDataUtil.Contains<MonsterCategory>())
-                _testDataUtil.AddMonsterCategory();
+            if (!_testDataUtil.Contains<MonsterSubCategory>())
+                _testDataUtil.AddMonsterSubCategory();
 
-            _testDataUtil.AddItemTemplateSection().AddItemTemplateCategory().AddItemTemplate();
+            _testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
             _testDataUtil.AddMonsterTemplate(m =>
             {
                 m.Items = new List<MonsterTemplateSimpleInventory>

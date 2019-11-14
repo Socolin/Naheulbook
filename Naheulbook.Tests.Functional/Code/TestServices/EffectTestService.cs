@@ -19,9 +19,9 @@ namespace Naheulbook.Tests.Functional.Code.TestServices
             return _naheulbookHttpClient.PostAndParseJsonResultAsync<EffectTypeResponse>("/api/v2/effectTypes", request, jwt);
         }
 
-        public Task<EffectCategoryResponse> CreateEffectCategoryAsync(CreateEffectCategoryRequest request, string jwt)
+        public Task<EffectSubCategoryResponse> CreateEffectSubCategoryAsync(CreateEffectSubCategoryRequest request, string jwt)
         {
-            return _naheulbookHttpClient.PostAndParseJsonResultAsync<EffectCategoryResponse>("/api/v2/effectCategories", request, jwt);
+            return _naheulbookHttpClient.PostAndParseJsonResultAsync<EffectSubCategoryResponse>("/api/v2/effectSubCategories", request, jwt);
         }
 
         public Task<EffectResponse> CreateEffectAsync(CreateEffectRequest request, string jwt)

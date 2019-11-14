@@ -117,7 +117,7 @@ namespace Naheulbook.Web.Controllers
             {
                 throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
-            catch (ItemTemplateCategoryNotFoundException ex)
+            catch (ItemTemplateSubCategoryNotFoundException ex)
             {
                 throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
             }

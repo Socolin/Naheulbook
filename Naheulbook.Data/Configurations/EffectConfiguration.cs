@@ -10,14 +10,14 @@ namespace Naheulbook.Data.Configurations
         {
             builder.ToTable("effect");
 
-            builder.HasIndex(e => e.CategoryId)
-                .HasName("IX_effect_category");
+            builder.HasIndex(e => e.SubCategoryId)
+                .HasName("IX_effect_subCategoryId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
 
-            builder.Property(e => e.CategoryId)
-                .HasColumnName("category");
+            builder.Property(e => e.SubCategoryId)
+                .HasColumnName("subCategoryId");
 
             builder.Property(e => e.DurationType)
                 .HasColumnName("durationtype");
@@ -45,19 +45,19 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.TimeDuration)
                 .HasColumnName("timeduration");
 
-            builder.HasOne(e => e.Category)
+            builder.HasOne(e => e.SubCategory)
                 .WithMany(e => e.Effects)
                 .OnDelete(DeleteBehavior.Restrict)
-                .HasForeignKey(e => e.CategoryId)
+                .HasForeignKey(e => e.SubCategoryId)
                 .HasConstraintName("FK_effect_effect_category_category");
         }
     }
 
-    public class EffectCategoryConfiguration : IEntityTypeConfiguration<EffectCategory>
+    public class EffectSubCategoryConfiguration : IEntityTypeConfiguration<EffectSubCategory>
     {
-        public void Configure(EntityTypeBuilder<EffectCategory> builder)
+        public void Configure(EntityTypeBuilder<EffectSubCategory> builder)
         {
-            builder.ToTable("effect_category");
+            builder.ToTable("effect_subcategories");
 
             builder.HasKey(e => e.Id);
 
@@ -83,7 +83,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("note");
 
             builder.HasOne(d => d.Type)
-                .WithMany(p => p.Categories)
+                .WithMany(p => p.SubCategories)
                 .HasForeignKey(d => d.TypeId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("effect_category_effect_type_id_fk");
