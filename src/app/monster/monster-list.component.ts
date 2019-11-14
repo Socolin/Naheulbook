@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 
-import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateType} from './monster.model';
+import {MonsterTemplate, MonsterTemplateSubCategory, MonsterTemplateType} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
 import {
     EditMonsterTemplateDialogComponent,
@@ -18,10 +18,10 @@ import {NhbkMatDialog} from '../material-workaround';
 export class MonsterListComponent implements OnInit {
     public monsterTypes: MonsterTemplateType[];
     public selectedMonsterType: MonsterTemplateType;
-    public selectedMonsterCategory?: MonsterTemplateCategory;
+    public selectedMonsterSubCategory?: MonsterTemplateSubCategory;
     public monsters: MonsterTemplate[];
-    public categories: MonsterTemplateCategory[] = [];
-    public monsterByCategory: {[categoryId: number]: MonsterTemplate[]} = {};
+    public subCategories: MonsterTemplateSubCategory[] = [];
+    public monsterBySubCategory: {[subCategoryId: number]: MonsterTemplate[]} = {};
     public isAdmin = false;
 
     constructor(
@@ -33,24 +33,24 @@ export class MonsterListComponent implements OnInit {
 
     selectMonsterType(monsterType: MonsterTemplateType) {
         this.selectedMonsterType = monsterType;
-        if (monsterType.categories.length) {
-            this.selectedMonsterCategory = monsterType.categories[0];
+        if (monsterType.subCategories.length) {
+            this.selectedMonsterSubCategory = monsterType.subCategories[0];
         }
     }
 
-    sortMonsterByCategory() {
-        let monsterByCategory: {[categoryId: number]: MonsterTemplate[]} = [];
-        let categories: MonsterTemplateCategory[] = [];
+    sortMonsterBySubCategory() {
+        let monsterBySubCategory: {[subCategoryId: number]: MonsterTemplate[]} = [];
+        let subCategories: MonsterTemplateSubCategory[] = [];
         for (let i = 0; i < this.monsters.length; i++) {
             let monster = this.monsters[i];
-            if (!(monster.category.id in monsterByCategory)) {
-                categories.push(monster.category);
-                monsterByCategory[monster.category.id] = [];
+            if (!(monster.subCategory.id in monsterBySubCategory)) {
+                subCategories.push(monster.subCategory);
+                monsterBySubCategory[monster.subCategory.id] = [];
             }
-            monsterByCategory[monster.category.id].push(monster);
+            monsterBySubCategory[monster.subCategory.id].push(monster);
         }
-        this.monsterByCategory = monsterByCategory;
-        this.categories = categories;
+        this.monsterBySubCategory = monsterBySubCategory;
+        this.subCategories = subCategories;
     }
 
     openCreateMonsterTemplateDialog() {
@@ -58,7 +58,7 @@ export class MonsterListComponent implements OnInit {
             EditMonsterTemplateDialogComponent, {
                 data: {
                     type: this.selectedMonsterType,
-                    category: this.selectedMonsterCategory,
+                    subCategory: this.selectedMonsterSubCategory,
                 }
             });
         dialogRef.afterClosed().subscribe(result => {
@@ -66,7 +66,7 @@ export class MonsterListComponent implements OnInit {
                 return;
             }
             this.monsters.push(result);
-            this.updateSelectCategory(result);
+            this.updateSelectSubCategory(result);
         })
     }
 
@@ -75,29 +75,29 @@ export class MonsterListComponent implements OnInit {
         if (index !== -1) {
             this.monsters[index] = monsterTemplate;
         }
-        this.updateSelectCategory(monsterTemplate);
+        this.updateSelectSubCategory(monsterTemplate);
     }
 
-    updateSelectCategory(monsterTemplate: MonsterTemplate) {
-        const monsterType = this.monsterTypes.find(x => x.id === monsterTemplate.category.type.id);
+    updateSelectSubCategory(monsterTemplate: MonsterTemplate) {
+        const monsterType = this.monsterTypes.find(x => x.id === monsterTemplate.subCategory.type.id);
         if (!monsterType) {
-            this.monsterTypes.push(monsterTemplate.category.type);
-            this.selectedMonsterType = monsterTemplate.category.type;
+            this.monsterTypes.push(monsterTemplate.subCategory.type);
+            this.selectedMonsterType = monsterTemplate.subCategory.type;
         }
-        else if (!(monsterType.categories.find(c => c.id === monsterTemplate.category.id))) {
-            monsterType.categories.push(monsterTemplate.category);
+        else if (!(monsterType.subCategories.find(c => c.id === monsterTemplate.subCategory.id))) {
+            monsterType.subCategories.push(monsterTemplate.subCategory);
             this.selectedMonsterType = monsterType;
         }
 
         if (this.selectedMonsterType) {
-            const monsterCategory = this.selectedMonsterType.categories.find(x => x.id === monsterTemplate.category.id);
-            if (monsterCategory) {
-                this.selectedMonsterCategory = monsterCategory;
+            const monsterSubCategory = this.selectedMonsterType.subCategories.find(x => x.id === monsterTemplate.subCategory.id);
+            if (monsterSubCategory) {
+                this.selectedMonsterSubCategory = monsterSubCategory;
             } else {
                 this.selectMonsterType(this.selectedMonsterType);
             }
         }
-        this.sortMonsterByCategory();
+        this.sortMonsterBySubCategory();
     }
 
     ngOnInit() {
@@ -109,7 +109,7 @@ export class MonsterListComponent implements OnInit {
                 this.selectMonsterType(monsterTypes[0]);
                 this.monsterTypes = monsterTypes;
                 this.monsters = monsters;
-                this.sortMonsterByCategory();
+                this.sortMonsterBySubCategory();
             }
         );
         this.isAdmin = !!this.loginService.currentLoggedUser && this.loginService.currentLoggedUser.admin;

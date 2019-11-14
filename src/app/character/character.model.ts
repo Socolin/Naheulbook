@@ -101,7 +101,7 @@ export class StatisticDetail {
     }
 
     add(name: string, data: {[statName: string]: any}) {
-        let categories: {[categoryName: string]: any} = {};
+        let subCategories: {[subCategoryName: string]: any} = {};
         for (let i in data) {
             if (!data.hasOwnProperty(i)) {
                 continue;
@@ -110,10 +110,10 @@ export class StatisticDetail {
             if (!this[category]) {
                 this[category] = [];
             }
-            categories[category] = 1;
+            subCategories[category] = 1;
         }
-        for (let i in categories) {
-            if (!categories.hasOwnProperty(i)) {
+        for (let i in subCategories) {
+            if (!subCategories.hasOwnProperty(i)) {
                 continue;
             }
             if (i === 'evea') {

@@ -1,5 +1,5 @@
 <mat-card>
-    <mat-card-content class="effect-category-selector">
+    <mat-card-content class="effect-sub-category-selector">
         <div class="selector">
             <mat-form-field>
                 <mat-select
@@ -13,10 +13,10 @@
         </div>
         <div class="selector">
             <mat-form-field *ngIf="selectedType">
-                <mat-select [(ngModel)]="selectedCategory"
-                            (selectionChange)="selectCategory($event.value)">
-                    <mat-option *ngFor="let category of selectedType.categories" [value]="category">
-                        {{category.name}}
+                <mat-select [(ngModel)]="selectedSubCategory"
+                            (selectionChange)="selectSubCategory($event.value)">
+                    <mat-option *ngFor="let subCategory of selectedType.subCategories" [value]="subCategory">
+                        {{subCategory.name}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -24,17 +24,17 @@
     </mat-card-content>
 </mat-card>
 
-<mat-card *ngIf="selectedCategory && (editable || selectedCategory.note)">
+<mat-card *ngIf="selectedSubCategory && (editable || selectedSubCategory.note)">
     <mat-card-subtitle>Note</mat-card-subtitle>
     <mat-card-content>
-        {{selectedCategory.note}}
+        {{selectedSubCategory.note}}
     </mat-card-content>
 </mat-card>
 
-<ng-template [ngIf]="effects && selectedCategory">
-    <mat-card class="effect" *ngFor="let effect of effects[selectedCategory.id]">
+<ng-template [ngIf]="effects && selectedSubCategory">
+    <mat-card class="effect" *ngFor="let effect of effects[selectedSubCategory.id]">
         <mat-card-header>
-            <div matCardAvatar *ngIf="selectedCategory.diceCount" class="dice-number">
+            <div matCardAvatar *ngIf="selectedSubCategory.diceCount" class="dice-number">
                 <span class="icon game-icon game-icon-perspective-dice-six-faces-random"></span>
                 <span class="number number-shadow-24">{{effect.dice}}</span>
             </div>

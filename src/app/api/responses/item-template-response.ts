@@ -3,7 +3,7 @@ import {ItemSlotResponse} from './item-slot.response';
 
 export interface ItemTemplateResponse {
     id: number;
-    categoryId: number;
+    subCategoryId: number;
     name: string;
     techName?: string;
     source: string;

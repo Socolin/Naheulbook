@@ -1,11 +1,11 @@
 import {StatModifier} from '../shared';
 import {IDurable} from '../api/shared';
 import {DurationType} from '../api/shared/enums';
-import {EffectCategoryResponse, EffectResponse, EffectTypeResponse} from '../api/responses';
+import {EffectSubCategoryResponse, EffectResponse, EffectTypeResponse} from '../api/responses';
 
-export type EffectCategoryDictionary = { [id: number]: EffectCategory };
+export type EffectSubCategoryDictionary = { [id: number]: EffectSubCategory };
 
-export class EffectCategory {
+export class EffectSubCategory {
     id: number;
     name: string;
     type: EffectType;
@@ -13,18 +13,18 @@ export class EffectCategory {
     diceCount: number;
     note: string;
 
-    static fromResponse(response: EffectCategoryResponse, type: EffectTypeDictionary | EffectType): EffectCategory {
-        let category = new EffectCategory();
+    static fromResponse(response: EffectSubCategoryResponse, type: EffectTypeDictionary | EffectType): EffectSubCategory {
+        let subCategory = new EffectSubCategory();
         if (type instanceof EffectType) {
-            Object.assign(category, response, {type: type});
+            Object.assign(subCategory, response, {type: type});
         } else {
-            Object.assign(category, response, {type: type[response.typeId]});
+            Object.assign(subCategory, response, {type: type[response.typeId]});
         }
-        return category;
+        return subCategory;
     }
 
-    static fromResponses(responses: EffectCategoryResponse[], type: EffectType): EffectCategory[] {
-        return responses.map(response => EffectCategory.fromResponse(response, type));
+    static fromResponses(responses: EffectSubCategoryResponse[], type: EffectType): EffectSubCategory[] {
+        return responses.map(response => EffectSubCategory.fromResponse(response, type));
     }
 }
 
@@ -33,11 +33,11 @@ export type EffectTypeDictionary = { [id: number]: EffectType };
 export class EffectType {
     id: number;
     name: string;
-    categories: EffectCategory[] = [];
+    subCategories: EffectSubCategory[] = [];
 
     static fromResponse(response: EffectTypeResponse): EffectType {
         let type = new EffectType();
-        Object.assign(type, response, {categories: EffectCategory.fromResponses(response.categories, type)});
+        Object.assign(type, response, {subCategories: EffectSubCategory.fromResponses(response.subCategories, type)});
         return type;
     }
 
@@ -49,7 +49,7 @@ export class EffectType {
 export class Effect implements IDurable {
     id: number;
     name: string;
-    category: EffectCategory;
+    subCategory: EffectSubCategory;
     description: string;
     modifiers: StatModifier[] = [];
     dice?: number;
@@ -59,13 +59,13 @@ export class Effect implements IDurable {
     duration?: string;
     timeDuration?: number;
 
-    static fromResponse(response: EffectResponse, categoriesById: EffectCategoryDictionary): Effect {
+    static fromResponse(response: EffectResponse, categoriesById: EffectSubCategoryDictionary): Effect {
         let effect = new Effect();
-        Object.assign(effect, response, {category: categoriesById[response.categoryId]});
+        Object.assign(effect, response, {subCategory: categoriesById[response.subCategoryId]});
         return effect;
     }
 
-    static fromResponses(categoriesById: EffectCategoryDictionary, responses: EffectResponse[]): Effect[] {
+    static fromResponses(categoriesById: EffectSubCategoryDictionary, responses: EffectResponse[]): Effect[] {
         return responses.map(response => Effect.fromResponse(response, categoriesById));
     }
 }

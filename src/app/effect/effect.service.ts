@@ -4,26 +4,26 @@ import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {Effect, EffectCategory, EffectCategoryDictionary, EffectType, EffectTypeDictionary} from './effect.model';
-import {CreateEffectCategoryRequest, CreateEffectRequest, EditEffectRequest} from '../api/requests';
-import {EffectCategoryResponse, EffectResponse, EffectTypeResponse} from '../api/responses';
+import {Effect, EffectSubCategory, EffectSubCategoryDictionary, EffectType, EffectTypeDictionary} from './effect.model';
+import {CreateEffectSubCategoryRequest, CreateEffectRequest, EditEffectRequest} from '../api/requests';
+import {EffectSubCategoryResponse, EffectResponse, EffectTypeResponse} from '../api/responses';
 
 @Injectable()
 export class EffectService {
-    private effectsByCategory: { [categoryId: number]: ReplaySubject<Effect[]> } = {};
+    private effectsBySubCategory: { [subCategoryId: number]: ReplaySubject<Effect[]> } = {};
     private effectTypes?: ReplaySubject<EffectType[]>;
     private effectsById: { [effectId: number]: ReplaySubject<Effect> } = {};
 
     constructor(private httpClient: HttpClient) {
     }
 
-    getEffectCategoriesById(): Observable<EffectCategoryDictionary> {
+    getEffectSubCategoriesById(): Observable<EffectSubCategoryDictionary> {
         return this.getEffectTypes().pipe(
             map((types: EffectType[]) => {
                 let categoriesById = {};
                 for (let type of types) {
-                    for (let category of type.categories) {
-                        categoriesById[category.id] = category;
+                    for (let subCategory of type.subCategories) {
+                        categoriesById[subCategory.id] = subCategory;
                     }
                 }
                 return categoriesById;
@@ -66,40 +66,40 @@ export class EffectService {
             this.effectsById[effectId].unsubscribe();
             delete this.effectsById[effectId];
         }
-        this.clearCacheCategory(effect.category.id);
+        this.clearCacheSubCategory(effect.subCategory.id);
     }
 
-    clearCacheCategory(categoryId: number) {
-        if (categoryId in this.effectsByCategory) {
-            this.effectsByCategory[categoryId].unsubscribe();
-            delete this.effectsByCategory[categoryId];
+    clearCacheSubCategory(subCategoryId: number) {
+        if (subCategoryId in this.effectsBySubCategory) {
+            this.effectsBySubCategory[subCategoryId].unsubscribe();
+            delete this.effectsBySubCategory[subCategoryId];
         }
     }
 
-    getEffects(categoryId: number): Observable<Effect[]> {
-        if (!(categoryId in this.effectsByCategory)) {
-            this.effectsByCategory[categoryId] = new ReplaySubject<Effect[]>(1);
+    getEffects(subCategoryId: number): Observable<Effect[]> {
+        if (!(subCategoryId in this.effectsBySubCategory)) {
+            this.effectsBySubCategory[subCategoryId] = new ReplaySubject<Effect[]>(1);
             forkJoin([
-                this.getEffectCategoriesById(),
-                this.httpClient.get<EffectResponse[]>(`/api/v2/effectCategories/${categoryId}/effects`)
+                this.getEffectSubCategoriesById(),
+                this.httpClient.get<EffectResponse[]>(`/api/v2/effectCategories/${subCategoryId}/effects`)
             ]).pipe(
                 map(([categoriesById, responses]) => Effect.fromResponses(categoriesById, responses))
             ).subscribe(
                 effects => {
-                    this.effectsByCategory[categoryId].next(effects);
-                    this.effectsByCategory[categoryId].complete();
+                    this.effectsBySubCategory[subCategoryId].next(effects);
+                    this.effectsBySubCategory[subCategoryId].complete();
                 },
                 error => {
-                    this.effectsByCategory[categoryId].error(error);
+                    this.effectsBySubCategory[subCategoryId].error(error);
                 }
             );
         }
-        return this.effectsByCategory[categoryId];
+        return this.effectsBySubCategory[subCategoryId];
     }
 
     searchEffect(filter: string): Observable<Effect[]> {
         return forkJoin([
-            this.getEffectCategoriesById(),
+            this.getEffectSubCategoriesById(),
             this.httpClient.get<EffectResponse[]>('/api/v2/effects/search?filter=' + encodeURIComponent(filter))
         ]).pipe(map(([categoriesById, effectsJsonData]) => {
             return Effect.fromResponses(categoriesById, effectsJsonData);
@@ -110,9 +110,9 @@ export class EffectService {
         if (!(effectId in this.effectsById)) {
             this.effectsById[effectId] = new ReplaySubject<Effect>(1);
             forkJoin([
-                this.getEffectCategoriesById(),
+                this.getEffectSubCategoriesById(),
                 this.httpClient.get<EffectResponse>(`/api/v2/effects/${effectId}`)
-            ]).pipe(map(([categoriesById, effectJsonData]: [EffectCategoryDictionary, EffectResponse]) => {
+            ]).pipe(map(([categoriesById, effectJsonData]: [EffectSubCategoryDictionary, EffectResponse]) => {
                 return Effect.fromResponse(effectJsonData, categoriesById);
             })).subscribe(
                 (effect: Effect) => {
@@ -131,10 +131,10 @@ export class EffectService {
         this.effectTypes = undefined;
     }
 
-    createEffect(effectCategoryId: number, request: CreateEffectRequest): Observable<Effect> {
+    createEffect(effectSubCategoryId: number, request: CreateEffectRequest): Observable<Effect> {
         return forkJoin([
-            this.getEffectCategoriesById(),
-            this.httpClient.post<EffectResponse>(`/api/v2/effectCategories/${effectCategoryId}/effects`, request)
+            this.getEffectSubCategoriesById(),
+            this.httpClient.post<EffectResponse>(`/api/v2/effectSubCategories/${effectSubCategoryId}/effects`, request)
         ]).pipe(map(([categoriesById, response]) =>
             Effect.fromResponse(response, categoriesById)
         ));
@@ -142,7 +142,7 @@ export class EffectService {
 
     editEffect(effectId: number, request: EditEffectRequest): Observable<Effect> {
         return forkJoin([
-            this.getEffectCategoriesById(),
+            this.getEffectSubCategoriesById(),
             this.httpClient.put<EffectResponse>(`/api/v2/effects/${effectId}`, request)
         ]).pipe(map(([categoriesById, response]) =>
             Effect.fromResponse(response, categoriesById)
@@ -155,17 +155,17 @@ export class EffectService {
         }).pipe(map(res => EffectType.fromResponse(res)));
     }
 
-    createCategory(type: EffectType, name: string, diceSize: number, diceCount: number, note?: string): Observable<EffectCategory> {
-        return this.httpClient.post<EffectCategoryResponse>('/api/v2/effectCategories', {
+    createSubCategory(type: EffectType, name: string, diceSize: number, diceCount: number, note?: string): Observable<EffectSubCategory> {
+        return this.httpClient.post<EffectSubCategoryResponse>('/api/v2/effectSubCategories', {
             typeId: type.id,
             name: name,
             note: note,
             diceCount: diceSize,
             diceSize: diceSize
-        } as CreateEffectCategoryRequest).pipe(map(res => {
-            const category = EffectCategory.fromResponse(res, type);
-            type.categories.push(category);
-            return category;
+        } as CreateEffectSubCategoryRequest).pipe(map(res => {
+            const subCategory = EffectSubCategory.fromResponse(res, type);
+            type.subCategories.push(subCategory);
+            return subCategory;
         }));
     }
 }

@@ -10,7 +10,7 @@ import {
     ItemTemplate,
     ItemTemplateSection,
     ItemSlot,
-    ItemTemplateCategoryDictionary
+    ItemTemplateSubCategoryDictionary
 } from './item-template.model';
 import {ItemSlotResponse, ItemTemplateResponse, ItemTemplateSectionResponse, ItemTypeResponse} from '../api/responses';
 import {ItemTemplateRequest} from '../api/requests/item-template-request';
@@ -18,7 +18,7 @@ import {ItemTemplateRequest} from '../api/requests/item-template-request';
 @Injectable()
 export class ItemTemplateService {
     private itemBySection: { [sectionId: number]: ReplaySubject<ItemTemplate[]> } = {};
-    private itemsByCategoriesName: { [categoryName: string]: ReplaySubject<ItemTemplate[]> } = {};
+    private itemsBySubCategoriesName: { [subCategoryName: string]: ReplaySubject<ItemTemplate[]> } = {};
     private itemSections?: ReplaySubject<ItemTemplateSection[]>;
     private slots?: ReplaySubject<ItemSlot[]>;
     private itemTypes?: ReplaySubject<ItemTypeResponse[]>;
@@ -48,12 +48,12 @@ export class ItemTemplateService {
         return this.itemSections;
     }
 
-    getCategoriesById(): Observable<ItemTemplateCategoryDictionary> {
+    getSubCategoriesById(): Observable<ItemTemplateSubCategoryDictionary> {
         return this.getSectionsList().pipe(map(itemTemplateSections => {
-            let categoriesByIds: ItemTemplateCategoryDictionary = {};
-            for (const sectionCategories of itemTemplateSections.map(section => section.categories)) {
-                categoriesByIds = sectionCategories.reduce((sectionCategoriesById, category) => {
-                    categoriesByIds[category.id] = category;
+            let categoriesByIds: ItemTemplateSubCategoryDictionary = {};
+            for (const subCategories of itemTemplateSections.map(section => section.subCategories)) {
+                categoriesByIds = subCategories.reduce((sectionCategoriesById, subCategory) => {
+                    categoriesByIds[subCategory.id] = subCategory;
                     return sectionCategoriesById
                 }, categoriesByIds);
             }
@@ -182,12 +182,12 @@ export class ItemTemplateService {
         delete this.itemBySection[sectionId];
     }
 
-    getItemTemplatesByCategoryTechName(categoryTechName: string): Observable<ItemTemplate[]> {
-        if (!(categoryTechName in this.itemsByCategoriesName)) {
-            this.itemsByCategoriesName[categoryTechName] = new ReplaySubject<ItemTemplate[]>(1);
+    getItemTemplatesBySubCategoryTechName(subCategoryTechName: string): Observable<ItemTemplate[]> {
+        if (!(subCategoryTechName in this.itemsBySubCategoriesName)) {
+            this.itemsBySubCategoriesName[subCategoryTechName] = new ReplaySubject<ItemTemplate[]>(1);
 
             forkJoin([
-                this.httpClient.get<ItemTemplateResponse[]>(`/api/v2/itemTemplateCategories/${categoryTechName}/itemTemplates`),
+                this.httpClient.get<ItemTemplateResponse[]>(`/api/v2/itemTemplateSubCategories/${subCategoryTechName}/itemTemplates`),
                 this.skillService.getSkillsById()
             ]).pipe(
                 map(([itemTemplatesData, skillsById]: [ItemTemplateResponse[], { [skillId: number]: Skill }]) => {
@@ -199,12 +199,12 @@ export class ItemTemplateService {
                     return items;
                 })
             ).subscribe(itemTemplates => {
-                this.itemsByCategoriesName[categoryTechName].next(itemTemplates);
+                this.itemsBySubCategoriesName[subCategoryTechName].next(itemTemplates);
             }, error => {
-                this.itemsByCategoriesName[categoryTechName].error(error);
+                this.itemsBySubCategoriesName[subCategoryTechName].error(error);
             });
         }
 
-        return this.itemsByCategoriesName[categoryTechName];
+        return this.itemsBySubCategoriesName[subCategoryTechName];
     }
 }

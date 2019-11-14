@@ -2,7 +2,7 @@ import {forkJoin} from 'rxjs';
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 import {isNullOrUndefined} from 'util';
-import {God, IconSelectorComponent, IconSelectorComponentDialogData, MiscService, NhbkDialogService,} from '../shared';
+import {God, IconSelectorComponent, IconSelectorComponentDialogData, MiscService, NhbkDialogService} from '../shared';
 import {LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
 import {JobService} from '../job';
@@ -93,9 +93,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (this.itemTemplate && this.sections) {
             for (let i = 0; i < this.sections.length; i++) {
                 let section = this.sections[i];
-                for (let j = 0; j < section.categories.length; j++) {
-                    let category = section.categories[j];
-                    if (category.id === this.itemTemplate.categoryId) {
+                for (let j = 0; j < section.subCategories.length; j++) {
+                    const subCategory = section.subCategories[j];
+                    if (subCategory.id === this.itemTemplate.subCategoryId) {
                         this.selectedSection = section;
                         break;
                     }

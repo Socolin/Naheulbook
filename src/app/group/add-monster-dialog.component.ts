@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {getRandomInt} from '../shared';
 import {Item, ItemData} from '../item';
-import {MonsterTemplate, MonsterTemplateCategory, MonsterTemplateService, MonsterTemplateType} from '../monster';
+import {MonsterTemplate, MonsterTemplateSubCategory, MonsterTemplateService, MonsterTemplateType} from '../monster';
 import {ItemTemplate} from '../item-template';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -39,7 +39,7 @@ export class AddMonsterDialogComponent implements OnInit {
     public monsterTypes: MonsterTemplateType[] = [];
 
     public selectedMonsterType?: MonsterTemplateType;
-    public selectedMonsterCategory?: MonsterTemplateCategory;
+    public selectedMonsterSubCategory?: MonsterTemplateSubCategory;
     public selectedMonsterTemplate?: MonsterTemplate;
     public filteredMonsters: MonsterTemplate[] = [];
     public filter?: string;
@@ -127,7 +127,7 @@ export class AddMonsterDialogComponent implements OnInit {
         }
 
         const monsterTypeId = this.selectedMonsterType && this.selectedMonsterType.id;
-        const monsterSubCategoryId = this.selectedMonsterCategory && this.selectedMonsterCategory.id;
+        const monsterSubCategoryId = this.selectedMonsterSubCategory && this.selectedMonsterSubCategory.id;
 
         return this.monsterTemplateService.searchMonster(this.filter, monsterTypeId, monsterSubCategoryId).subscribe((monsters) => {
             this.filteredMonsters = monsters;
@@ -182,16 +182,16 @@ export class AddMonsterDialogComponent implements OnInit {
             this.selectedMonsterType = undefined;
         } else {
             this.selectedMonsterType = monsterType;
-            this.selectedMonsterCategory = undefined;
+            this.selectedMonsterSubCategory = undefined;
         }
         this.updateFilteredMonster()
     }
 
-    selectMonsterCategory(monsterCategory: MonsterTemplateCategory | 'none') {
-        if (monsterCategory === 'none') {
-            this.selectedMonsterCategory = undefined;
+    selectMonsterSubCategory(monsterSubCategory: MonsterTemplateSubCategory | 'none') {
+        if (monsterSubCategory === 'none') {
+            this.selectedMonsterSubCategory = undefined;
         } else {
-            this.selectedMonsterCategory = monsterCategory;
+            this.selectedMonsterSubCategory = monsterSubCategory;
         }
         this.updateFilteredMonster()
     }

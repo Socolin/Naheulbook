@@ -29,10 +29,10 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field *ngIf="selectedType" class="category-selector">
-            <mat-select [ngModel]="selectedCategory" (selectionChange)="selectCategory($event.value)"
+            <mat-select [ngModel]="selectedSubCategory" (selectionChange)="selectSubCategory($event.value)"
                         placeholder="Sous-catégorie">
-                <mat-option *ngFor="let category of selectedType.categories" [value]="category">
-                    {{category.name}}
+                <mat-option *ngFor="let subCategory of selectedType.subCategories" [value]="subCategory">
+                    {{subCategory.name}}
                 </mat-option>
                 <mat-option [value]="'new'">
                 <span class="secondary-text">

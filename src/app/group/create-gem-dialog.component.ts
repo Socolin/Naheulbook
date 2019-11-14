@@ -56,8 +56,8 @@ export class CreateGemDialogComponent implements OnInit {
     }
 
     updateGem() {
-        const categoryTechName = this.gemType === 'cut' ? 'CUT_GEM' : 'RAW_GEM';
-        this.itemTemplateService.getItemTemplatesByCategoryTechName(categoryTechName).subscribe(itemTemplates => {
+        const subCategoryTechName = this.gemType === 'cut' ? 'CUT_GEM' : 'RAW_GEM';
+        this.itemTemplateService.getItemTemplatesBySubCategoryTechName(subCategoryTechName).subscribe(itemTemplates => {
             const itemTemplate = itemTemplates.find(i => i.data.diceDrop === this.randomDiceNumber);
             if (!itemTemplate) {
                 console.log('Could not find ' + this.gemType + ' gem number ' + this.randomDiceNumber);

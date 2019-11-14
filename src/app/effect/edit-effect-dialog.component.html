@@ -8,10 +8,10 @@
         <div [hidden]="!saving">
             <mat-spinner diameter="16" color="accent"></mat-spinner>
         </div>
-        <button *ngIf="data.effect" mat-button [disabled]="!form.valid || saving || !selectedCategory" (click)="saveEffect()">
+        <button *ngIf="data.effect" mat-button [disabled]="!form.valid || saving || !selectedSubCategory" (click)="saveEffect()">
             ÉDITER
         </button>
-        <button *ngIf="!data.effect" mat-button [disabled]="!form.valid || saving || !selectedCategory" (click)="saveEffect()">
+        <button *ngIf="!data.effect" mat-button [disabled]="!form.valid || saving || !selectedSubCategory" (click)="saveEffect()">
             CRÉER
         </button>
     </div>
@@ -34,11 +34,11 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field *ngIf="selectedType" class="sub-category-selector">
-            <mat-select [ngModel]="selectedCategory"
-                        (selectionChange)="selectCategory($event.value)"
+            <mat-select [ngModel]="selectedSubCategory"
+                        (selectionChange)="selectSubCategory($event.value)"
                         placeholder="Sous-catégorie">
-                <mat-option *ngFor="let category of selectedType.categories" [value]="category">
-                    {{category.name}}
+                <mat-option *ngFor="let subCategory of selectedType.subCategories" [value]="subCategory">
+                    {{subCategory.name}}
                 </mat-option>
                 <mat-option [value]="'new'">
                     <span class="secondary-text">

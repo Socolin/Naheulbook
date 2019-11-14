@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Item} from './item.model';
 import {forkJoin} from 'rxjs';
-import {ItemTemplateCategory, ItemTemplateService} from '../item-template';
+import {ItemTemplateSubCategory, ItemTemplateService} from '../item-template';
 import {God, MiscService} from '../shared';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
@@ -19,7 +19,7 @@ export interface ItemDialogData {
 export class ItemDialogComponent implements OnInit {
     public jobsName?: { [id: number]: string };
     public originsName?: { [id: number]: string };
-    public itemCategoriesById: { [categoryId: number]: ItemTemplateCategory };
+    public itemCategoriesById: { [subCategoryId: number]: ItemTemplateSubCategory };
     public godsByTechName: { [name: string]: God };
 
     public get item(): Item {
@@ -39,7 +39,7 @@ export class ItemDialogComponent implements OnInit {
         forkJoin([
             this.jobService.getJobList(),
             this.originService.getOriginList(),
-            this.itemTemplateService.getCategoriesById(),
+            this.itemTemplateService.getSubCategoriesById(),
             this.miscService.getGodsByTechName(),
         ]).subscribe(
             ([jobs, origins, categoriesById, godsByTechName]) => {

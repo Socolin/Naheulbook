@@ -15,7 +15,7 @@ export interface EditMonsterInventoryElementRequest extends MonsterInventoryElem
 }
 
 export interface MonsterTemplateRequest {
-    categoryId: number;
+    subCategoryId: number;
     name: string;
     data: MonsterTemplateData;
     simpleInventory: MonsterInventoryElementRequest[];

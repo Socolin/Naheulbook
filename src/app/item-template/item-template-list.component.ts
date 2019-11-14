@@ -10,9 +10,8 @@ import {LoginService} from '../user';
 import {OriginService} from '../origin';
 import {JobService} from '../job';
 
-import {ItemTemplate, ItemTemplateCategory, ItemTemplateSection} from './item-template.model';
+import {ItemTemplate, ItemTemplateSubCategory, ItemTemplateSection} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
-import {ItemCategoryDirective} from './item-category.directive';
 import {CreateItemTemplateDialogComponent} from './create-item-template-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
 
@@ -40,9 +39,9 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
     public showHeaderInfo = false;
     public itemSections: ItemTemplateSection[];
-    public selectedItemCategory?: ItemTemplateCategory;
-    public previousSubCategory?: ItemTemplateCategory;
-    public nextSubCategory?: ItemTemplateCategory;
+    public selectedItemSubCategory?: ItemTemplateSubCategory;
+    public previousSubCategory?: ItemTemplateSubCategory;
+    public nextSubCategory?: ItemTemplateSubCategory;
     public items: ItemTemplate[] = [];
     public selectedSection: ItemTemplateSection;
     public originsName: {[originId: number]: string};
@@ -50,9 +49,6 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     public godsByTechName: {[techName: string]: God};
 
     public queryParamsSub: Subscription;
-
-    @ViewChildren(ItemCategoryDirective)
-    public stickToTopElements: QueryList<ItemCategoryDirective>;
 
     public filter: {name?: string, dice?: number};
     public visibleItems: ItemTemplate[] = [];
@@ -107,7 +103,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
             }
 
             this.selectedSection = section;
-            this.selectCategory(section.categories[0]);
+            this.selectSubCategory(section.subCategories[0]);
             this.resetFilter();
             this.loadSection(section);
         }
@@ -119,10 +115,10 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     }
 
     isVisible(item: ItemTemplate) {
-        if (!this.selectedItemCategory) {
+        if (!this.selectedItemSubCategory) {
             return false;
         }
-        if (item.categoryId !== this.selectedItemCategory.id) {
+        if (item.subCategoryId !== this.selectedItemSubCategory.id) {
             return false;
         }
         if (item.data.diceDrop && this.filter && this.filter.dice) {
@@ -160,13 +156,13 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         this.onAction.emit({action: actionName, data: data});
     }
 
-    getCategoryFromId(categoryId: number): [ItemTemplateSection, ItemTemplateCategory ]| undefined {
+    getSubCategoryFromId(subCategoryId: number): [ItemTemplateSection, ItemTemplateSubCategory ]| undefined {
         for (let ci = 0; ci < this.itemSections.length; ci++) {
             let itemSection = this.itemSections[ci];
-            for (let i = 0; i < itemSection.categories.length; i++) {
-                let itemCategory = itemSection.categories[i];
-                if (itemCategory.id === categoryId) {
-                    return [itemSection, itemCategory];
+            for (let i = 0; i < itemSection.subCategories.length; i++) {
+                let itemSubCategory = itemSection.subCategories[i];
+                if (itemSubCategory.id === subCategoryId) {
+                    return [itemSection, itemSubCategory];
                 }
             }
         }
@@ -174,14 +170,14 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     }
 
     selectItemTemplate(itemTemplate: ItemTemplate) {
-        let result = this.getCategoryFromId(itemTemplate.categoryId);
+        let result = this.getSubCategoryFromId(itemTemplate.subCategoryId);
         if (!result) {
             return;
         }
-        let [itemSection, itemCategory] = result;
+        let [itemSection, itemSubCategory] = result;
         this.selectSection(itemSection);
         this.filter.name = itemTemplate.name;
-        this.selectedItemCategory = itemCategory;
+        this.selectedItemSubCategory = itemSubCategory;
     }
 
     openCreateItemTemplateDialog() {
@@ -231,13 +227,13 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         }
     }
 
-    selectCategory(itemCategory: ItemTemplateCategory) {
-        this.selectedItemCategory = itemCategory;
-        const index = this.selectedSection.categories.indexOf(itemCategory);
-        let previousIndex = (index - 1 + this.selectedSection.categories.length) % this.selectedSection.categories.length;
-        this.previousSubCategory = this.selectedSection.categories[previousIndex];
-        let nextIndex = (index + 1) % this.selectedSection.categories.length;
-        this.nextSubCategory = this.selectedSection.categories[nextIndex];
+    selectSubCategory(itemSubCategory: ItemTemplateSubCategory) {
+        this.selectedItemSubCategory = itemSubCategory;
+        const index = this.selectedSection.subCategories.indexOf(itemSubCategory);
+        let previousIndex = (index - 1 + this.selectedSection.subCategories.length) % this.selectedSection.subCategories.length;
+        this.previousSubCategory = this.selectedSection.subCategories[previousIndex];
+        let nextIndex = (index + 1) % this.selectedSection.subCategories.length;
+        this.nextSubCategory = this.selectedSection.subCategories[nextIndex];
         this.updateVisibleItems();
 
         const firstItem = document.getElementById('first-item');

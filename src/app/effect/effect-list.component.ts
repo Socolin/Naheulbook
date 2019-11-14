@@ -6,7 +6,7 @@ import {LoginService} from '../user';
 import {NhbkMatDialog} from '../material-workaround';
 
 import {EffectService} from './effect.service';
-import {Effect, EffectCategory, EffectType} from './effect.model';
+import {Effect, EffectSubCategory, EffectType} from './effect.model';
 import {EditEffectDialogComponent, EditEffectDialogData} from './edit-effect-dialog.component';
 
 @Component({
@@ -15,15 +15,15 @@ import {EditEffectDialogComponent, EditEffectDialogData} from './edit-effect-dia
     styleUrls: ['../shared/number-shadow.scss', './effect-list.component.scss'],
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
-    @Input() inputCategoryId: number | undefined;
+    @Input() inputSubCategoryId: number | undefined;
     @Input() isOverlay = false;
     @Input() options: string[] = [];
     @Output() onAction = new EventEmitter<{ action: string, data: any }>();
 
     public effectTypes: EffectType[];
     public selectedType: EffectType;
-    public selectedCategory?: EffectCategory;
-    public effects: { [categoryId: number]: Effect[] } = {};
+    public selectedSubCategory?: EffectSubCategory;
+    public effects: { [subcategoryId: number]: Effect[] } = {};
     public editable = false;
     public sub: Subscription;
 
@@ -38,26 +38,26 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
 
     selectType(type: EffectType) {
         this.selectedType = type;
-        if (this.selectedType.categories.length) {
-            this.selectCategory(this.selectedType.categories[0]);
+        if (this.selectedType.subCategories.length) {
+            this.selectSubCategory(this.selectedType.subCategories[0]);
         }
     }
 
-    selectCategory(category?: EffectCategory) {
-        this.selectedCategory = category;
-        if (category) {
-            this.loadCategory(category.id);
+    selectSubCategory(subCategory?: EffectSubCategory) {
+        this.selectedSubCategory = subCategory;
+        if (subCategory) {
+            this.loadSubCategory(subCategory.id);
         }
     }
 
-    selectCategoryId(categoryId: number) {
-        let i = this.effectTypes.findIndex(t => t.categories.findIndex(c => c.id === categoryId) !== -1);
+    selectSubCategoryId(subCategoryId: number) {
+        let i = this.effectTypes.findIndex(t => t.subCategories.findIndex(c => c.id === subCategoryId) !== -1);
         if (i === -1) {
             return;
         }
         this.selectedType = this.effectTypes[i];
-        let ci = this.selectedType.categories.findIndex(c => c.id === categoryId);
-        this.selectCategory(this.selectedType.categories[ci]);
+        let ci = this.selectedType.subCategories.findIndex(c => c.id === subCategoryId);
+        this.selectSubCategory(this.selectedType.subCategories[ci]);
     }
 
     hasOption(option: string): boolean {
@@ -78,27 +78,27 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
             if (!result) {
                 return;
             }
-            const previousEffectCategory = this.effects[effect.category.id];
-            const index = previousEffectCategory.findIndex(e => e.id === result.id);
-            if (effect.category.id === result.category.id) {
+            const previousEffectSubCategory = this.effects[effect.subCategory.id];
+            const index = previousEffectSubCategory.findIndex(e => e.id === result.id);
+            if (effect.subCategory.id === result.subCategory.id) {
                 if (index !== -1) {
-                    previousEffectCategory[index] = result;
+                    previousEffectSubCategory[index] = result;
                 }
             } else {
                 if (index !== -1) {
-                    previousEffectCategory.splice(index, 1);
+                    previousEffectSubCategory.splice(index, 1);
                 }
-                if (!(effect.category.id in this.effects)) {
-                    this.effects[effect.category.id] = [];
+                if (!(effect.subCategory.id in this.effects)) {
+                    this.effects[effect.subCategory.id] = [];
                 }
-                this.effects[effect.category.id].push(result);
-                this.effects[effect.category.id].sort((a, b) => {
+                this.effects[effect.subCategory.id].push(result);
+                this.effects[effect.subCategory.id].sort((a, b) => {
                     if (a.dice && b.dice) {
                         return a.dice - b.dice;
                     }
                     return a.id - b.id;
                 });
-                this.selectCategory(result.category);
+                this.selectSubCategory(result.subCategory);
             }
         })
     }
@@ -106,7 +106,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     createEffect() {
         const dialogRef = this.dialog.openFullScreen<EditEffectDialogComponent, EditEffectDialogData, Effect>(
             EditEffectDialogComponent, {
-                data: {category: this.selectedCategory}
+                data: {subCategory: this.selectedSubCategory}
             });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -116,11 +116,11 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
         })
     }
 
-    loadCategory(categoryId: number): void {
-        this.effectService.getEffects(categoryId).subscribe(
+    loadSubCategory(subCategoryId: number): void {
+        this.effectService.getEffects(subCategoryId).subscribe(
             effects => {
-                this.effects[categoryId] = effects;
-                this.effects[categoryId].sort((a, b) => {
+                this.effects[subCategoryId] = effects;
+                this.effects[subCategoryId].sort((a, b) => {
                     if (a.dice && b.dice) {
                         return a.dice - b.dice;
                     }
@@ -131,8 +131,8 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if ('inputCategoryId' in changes && !changes['inputCategoryId'].isFirstChange()) {
-            this.selectCategoryId(+changes['inputCategoryId'].currentValue);
+        if ('inputSubCategoryId' in changes && !changes['inputSubCategoryId'].isFirstChange()) {
+            this.selectSubCategoryId(+changes['inputSubCategoryId'].currentValue);
         }
     }
 
@@ -142,14 +142,14 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
             if (types.length) {
                 this.selectType(types[0]);
             }
-            if (this.isOverlay && this.inputCategoryId != null) {
-                this.selectCategoryId(this.inputCategoryId);
+            if (this.isOverlay && this.inputSubCategoryId != null) {
+                this.selectSubCategoryId(this.inputSubCategoryId);
             } else {
-                if (!this.route.snapshot.data['id'] && this.selectedCategory) {
-                    this.loadCategory(this.selectedCategory.id);
+                if (!this.route.snapshot.data['id'] && this.selectedSubCategory) {
+                    this.loadSubCategory(this.selectedSubCategory.id);
                 }
                 this.sub = this.route.queryParams.subscribe(params => {
-                    this.selectCategoryId(+params['id']);
+                    this.selectSubCategoryId(+params['id']);
                 });
             }
         });

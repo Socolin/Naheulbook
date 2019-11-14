@@ -14,7 +14,6 @@ import {
     AutocompleteSearchItemTemplateComponent,
     CreateItemTemplateDialogComponent,
     EditItemTemplateDialogComponent,
-    ItemCategoryDirective,
     ItemTemplateListComponent,
     ItemTemplateComponent,
     ItemTemplateEditorComponent,
@@ -37,7 +36,6 @@ import { ItemTemplateDialogComponent } from './item-template-dialog.component';
     declarations: [
         CreateItemTemplateDialogComponent,
         EditItemTemplateDialogComponent,
-        ItemCategoryDirective,
         ItemTemplateListComponent,
         ItemTemplateComponent,
         ItemTemplateEditorComponent,

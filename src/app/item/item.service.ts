@@ -94,7 +94,7 @@ export class ItemService {
     addRandomItemTo(
         targetType: 'character' | 'monster' | 'loot',
         targetId: number,
-        categoryTechName: string,
+        subCategoryTechName: string,
     ): Observable<Item> {
         return new Observable(observer => {
             let url: string;
@@ -114,9 +114,10 @@ export class ItemService {
                     throw new Error('Waiting for asserts');
             }
 
-            forkJoin([this.httpClient.post(url, {
-                categoryTechName
-            }),
+            forkJoin([
+                this.httpClient.post(url, {
+                    subCategoryTechName
+                }),
                 this.skillService.getSkillsById()
             ]).subscribe(
                 ([itemJsonData, skillsById]: [Item, { [skillId: number]: Skill }]) => {

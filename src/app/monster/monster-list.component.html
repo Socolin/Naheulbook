@@ -14,16 +14,16 @@
         </mat-select>
     </mat-form-field>
     <mat-form-field *ngIf="selectedMonsterType">
-        <mat-select [(ngModel)]="selectedMonsterCategory">
-            <mat-option *ngFor="let monsterCategory of selectedMonsterType.categories" [value]="monsterCategory">
-                {{monsterCategory.name}}
+        <mat-select [(ngModel)]="selectedMonsterSubCategory">
+            <mat-option *ngFor="let monsterSubCategory of selectedMonsterType.subCategories" [value]="monsterSubCategory">
+                {{monsterSubCategory.name}}
             </mat-option>
         </mat-select>
     </mat-form-field>
 </div>
 <div class="monster-templates">
-    <ng-template ngIf [ngIf]="selectedMonsterCategory">
-        <div *ngFor="let monster of monsterByCategory[selectedMonsterCategory.id]">
+    <ng-template ngIf [ngIf]="selectedMonsterSubCategory">
+        <div *ngFor="let monster of monsterBySubCategory[selectedMonsterSubCategory.id]">
             <monster-template (edit)="editMonster($event)" [isAdmin]="isAdmin" [monsterTemplate]="monster"></monster-template>
         </div>
     </ng-template>

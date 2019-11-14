@@ -110,8 +110,8 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         );
     }
 
-    addRandomItemFromCategoryToLoot(loot: Loot, categoryName: string) {
-        this.itemService.addRandomItemTo('loot', loot.id, categoryName).subscribe(
+    addRandomItemFromSubCategoryToLoot(loot: Loot, subCategoryName: string) {
+        this.itemService.addRandomItemTo('loot', loot.id, subCategoryName).subscribe(
             item => {
                 loot.addItem(item);
             }
@@ -119,8 +119,8 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         return false;
     }
 
-    addRandomItemFromCategoryToMonster(monster: Monster, categoryName: string) {
-        this.itemService.addRandomItemTo('monster', monster.id, categoryName).subscribe(
+    addRandomItemFromSubCategoryToMonster(monster: Monster, subCategoryName: string) {
+        this.itemService.addRandomItemTo('monster', monster.id, subCategoryName).subscribe(
             item => {
                 monster.addItem(item);
             }

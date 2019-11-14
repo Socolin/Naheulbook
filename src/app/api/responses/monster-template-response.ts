@@ -4,7 +4,7 @@ import {MonsterTemplateData} from '../shared';
 export interface MonsterTemplateResponse {
     id: number;
     name: string;
-    categoryId: number;
+    subCategoryId: number;
     data: MonsterTemplateData;
     simpleInventory: MonsterSimpleInventoryResponse[];
 }

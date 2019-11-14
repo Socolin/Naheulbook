@@ -51,7 +51,7 @@ export class UsefulDataComponent implements OnInit, OnDestroy {
                 break;
             case 'effects':
                 dialogRef = this.openDialog<EffectListDialogComponent, EffectListDialogData>(EffectListDialogComponent,
-                    {inputCategoryId: arg}
+                    {inputSubCategoryId: arg}
                 );
                 break;
             case 'entropicSpells':

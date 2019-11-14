@@ -16,7 +16,7 @@
                     <div class="item-summary">
                         <icon [icon]="result.icon"></icon>
                         <div class="name">{{result.name}}</div>
-                        <div class="category mat-caption">{{result.sectionName}} - {{result.categoryName}}</div>
+                        <div class="category mat-caption">{{result.sectionName}} - {{result.subCategoryName}}</div>
                     </div>
                     <div mat-ripple matRippleUnbounded="true" matRippleCentered="true" matRippleRadius="20" class="info"
                          (click)="showInfo($event, result.itemTemplate)" (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">

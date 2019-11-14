@@ -1,4 +1,4 @@
-export interface EffectCategoryResponse {
+export interface EffectSubCategoryResponse {
     id: number;
     name: string;
     diceCount: number;

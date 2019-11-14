@@ -4,7 +4,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UsefulDataDialogResult} from './useful-data-dialog-result';
 
 export interface EffectListDialogData {
-    inputCategoryId: number
+    inputSubCategoryId: number
 }
 
 @Component({

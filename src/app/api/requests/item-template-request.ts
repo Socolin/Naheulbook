@@ -2,7 +2,7 @@ import {IItemTemplateData} from '../shared';
 
 export interface ItemTemplateRequest {
     source: 'official' | 'community' | 'private';
-    categoryId: number;
+    subCategoryId: number;
     name: string;
     techName?: string;
     modifiers: ItemTemplateModifierRequest[];

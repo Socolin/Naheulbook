@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {Effect, EffectCategory, EffectType} from './effect.model';
+import {Effect, EffectSubCategory, EffectType} from './effect.model';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {PromptDialogComponent, StatModifier} from '../shared';
 import {IDurable} from '../api/shared';
@@ -10,7 +10,7 @@ import {NhbkMatDialog} from '../material-workaround';
 
 export interface EditEffectDialogData {
     effect?: Effect;
-    category?: EffectCategory
+    subCategory?: EffectSubCategory
 }
 
 @Component({
@@ -22,7 +22,7 @@ export class EditEffectDialogComponent implements OnInit {
     public effectTypes: EffectType[];
 
     public selectedType?: EffectType;
-    public selectedCategory?: EffectCategory;
+    public selectedSubCategory?: EffectSubCategory;
     public form: FormGroup;
     public statModifiers: StatModifier[] = [];
     public duration: IDurable = {
@@ -57,10 +57,10 @@ export class EditEffectDialogComponent implements OnInit {
     ngOnInit() {
         this.effectService.getEffectTypes().subscribe(effectTypes => {
             this.effectTypes = effectTypes;
-            if (this.data.effect && this.data.effect.category) {
-                this.selectCategory(this.data.effect.category);
-            } else if (this.data.category) {
-                this.selectCategory(this.data.category);
+            if (this.data.effect && this.data.effect.subCategory) {
+                this.selectSubCategory(this.data.effect.subCategory);
+            } else if (this.data.subCategory) {
+                this.selectSubCategory(this.data.subCategory);
             } else {
                 this.selectType(effectTypes[0]);
             }
@@ -89,12 +89,12 @@ export class EditEffectDialogComponent implements OnInit {
             })
         } else {
             this.selectedType = effectType;
-            this.selectedCategory = effectType.categories[0];
+            this.selectedSubCategory = effectType.subCategories[0];
         }
     }
 
-    selectCategory(effectCategory: EffectCategory | 'new') {
-        if (effectCategory === 'new') {
+    selectSubCategory(effectSubCategory: EffectSubCategory | 'new') {
+        if (effectSubCategory === 'new') {
             if (!this.selectedType) {
                 return;
             }
@@ -104,20 +104,20 @@ export class EditEffectDialogComponent implements OnInit {
                 if (!result) {
                     return;
                 }
-                this.effectService.createCategory(selectedType, result.name, result.diceSize, result.diceCount, result.note)
+                this.effectService.createSubCategory(selectedType, result.name, result.diceSize, result.diceCount, result.note)
                     .subscribe(subCategory => {
-                        this.selectedCategory = subCategory;
+                        this.selectedSubCategory = subCategory;
                         this.effectService.invalidateEffectTypes();
                     });
             })
         } else {
-            this.selectedCategory = effectCategory;
-            this.selectedType = effectCategory.type;
+            this.selectedSubCategory = effectSubCategory;
+            this.selectedType = effectSubCategory.type;
         }
     }
 
     saveEffect() {
-        if (!this.selectedCategory) {
+        if (!this.selectedSubCategory) {
             return;
         }
         this.saving = true;
@@ -127,14 +127,14 @@ export class EditEffectDialogComponent implements OnInit {
                 ...this.form.value,
                 ...this.duration,
                 modifiers: [...this.statModifiers],
-                categoryId: this.selectedCategory.id
+                subCategoryId: this.selectedSubCategory.id
             }).subscribe(effect => {
                 this.dialogRef.close(effect);
             }, () => {
                 this.saving = false;
             });
         } else {
-            this.effectService.createEffect(this.selectedCategory.id, {
+            this.effectService.createEffect(this.selectedSubCategory.id, {
                 ...this.form.value,
                 ...this.duration,
                 modifiers: [...this.statModifiers]

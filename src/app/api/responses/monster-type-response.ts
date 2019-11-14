@@ -1,7 +1,7 @@
-import {MonsterCategoryResponse} from './monster-category-response';
+import {MonsterSubCategoryResponse} from './monster-sub-category-response';
 
 export interface MonsterTypeResponse {
     id: number;
     name: string;
-    categories: MonsterCategoryResponse[];
+    subCategories: MonsterSubCategoryResponse[];
 }

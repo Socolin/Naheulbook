@@ -5,7 +5,7 @@ import {Item} from '../item';
 import {Character} from './character.model';
 import {God, ItemStatModifier, MiscService, NhbkDialogService} from '../shared';
 import {NamesByNumericId} from '../shared/shared,model';
-import {ItemTemplateCategoryDictionary, ItemTemplateService} from '../item-template';
+import {ItemTemplateSubCategoryDictionary, ItemTemplateService} from '../item-template';
 import {OriginService} from '../origin';
 import {JobService} from '../job';
 import {forkJoin} from 'rxjs';
@@ -27,7 +27,7 @@ export class CharacterItemDialogComponent implements OnInit {
     public originsName?: NamesByNumericId;
     public jobsName?: NamesByNumericId;
     public godsByTechName?: { [techName: string]: God };
-    public itemCategoriesById?: ItemTemplateCategoryDictionary;
+    public itemCategoriesById?: ItemTemplateSubCategoryDictionary;
     public modifiers?: ItemStatModifier[];
 
     constructor(
@@ -133,7 +133,7 @@ export class CharacterItemDialogComponent implements OnInit {
             this.originService.getOriginsNamesById(),
             this.jobService.getJobsNamesById(),
             this.miscService.getGodsByTechName(),
-            this.itemTemplateService.getCategoriesById(),
+            this.itemTemplateService.getSubCategoriesById(),
         ]).subscribe(([originsName, jobsName, godsByTechName, itemCategoriesById]) => {
             this.originsName = originsName;
             this.jobsName = jobsName;

@@ -26,7 +26,7 @@
                 <div mat-ripple *ngFor="let effect of filteredEffects" (click)="selectEffect(effect)">
                     <div class="filter-result">
                         <div class="name">{{effect.name}}</div>
-                        <div class="category mat-caption">{{effect.category.type.name}} - {{effect.category.name}}</div>
+                        <div class="mat-caption">{{effect.subCategory.type.name}} - {{effect.subCategory.name}}</div>
                     </div>
                 </div>
             </mat-action-list>

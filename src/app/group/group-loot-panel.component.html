@@ -30,10 +30,10 @@
                     <button mat-menu-item (click)="openAddGemDialog(loot)">
                         <mat-icon>add</mat-icon>Pierre précieuse
                     </button>
-                    <button mat-menu-item (click)="addRandomItemFromCategoryToLoot(loot, 'USELESS_ITEM')">
+                    <button mat-menu-item (click)="addRandomItemFromSubCategoryToLoot(loot, 'USELESS_ITEM')">
                         <mat-icon>add</mat-icon>Objet inutile
                     </button>
-                    <button mat-menu-item (click)="addRandomItemFromCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">
+                    <button mat-menu-item (click)="addRandomItemFromSubCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">
                         <mat-icon>add</mat-icon>Ingrédient magique
                     </button>
                     <button mat-menu-item [matMenuTriggerFor]="delete">
@@ -70,10 +70,10 @@
                             <button mat-menu-item (click)="openAddGemDialog(monster)">
                                 <mat-icon>add</mat-icon>Pierre précieuse
                             </button>
-                            <button mat-menu-item (click)="addRandomItemFromCategoryToMonster(monster, 'USELESS_ITEM')">
+                            <button mat-menu-item (click)="addRandomItemFromSubCategoryToMonster(monster, 'USELESS_ITEM')">
                                 <mat-icon>add</mat-icon>Objet inutile
                             </button>
-                            <button mat-menu-item (click)="addRandomItemFromCategoryToMonster(monster, 'MAGICAL_INGREDIENT')">
+                            <button mat-menu-item (click)="addRandomItemFromSubCategoryToMonster(monster, 'MAGICAL_INGREDIENT')">
                                 <mat-icon>add</mat-icon>Ingrédient magique
                             </button>
                         </mat-menu>

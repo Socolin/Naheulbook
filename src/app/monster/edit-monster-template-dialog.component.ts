@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
     MonsterInventoryElement,
     MonsterTemplate,
-    MonsterTemplateCategory,
+    MonsterTemplateSubCategory,
     MonsterTemplateType,
     MonsterTrait,
     TraitInfo
@@ -24,7 +24,7 @@ import {NhbkMatDialog} from '../material-workaround';
 export interface EditMonsterTemplateDialogData {
     monsterTemplate?: MonsterTemplate;
     type?: MonsterTemplateType;
-    category?: MonsterTemplateCategory;
+    subCategory?: MonsterTemplateSubCategory;
 }
 
 @Component({
@@ -57,7 +57,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
     public traitsById: { [id: number]: MonsterTrait } = {};
 
     public selectedType?: MonsterTemplateType;
-    public selectedCategory?: MonsterTemplateCategory;
+    public selectedSubCategory?: MonsterTemplateSubCategory;
     public selectedTraits: TraitInfo[] = [];
     public monsterInventory: MonsterInventoryElement[] = [];
 
@@ -70,7 +70,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
         this.form.reset(data.monsterTemplate);
     }
 
-    openCreateCategoryDialog() {
+    openCreateSubCategoryDialog() {
         if (!this.selectedType) {
             return;
         }
@@ -89,10 +89,10 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
             if (!result) {
                 return;
             }
-            this.monsterTemplateService.createCategory(selectedType, result.text).subscribe(
-                category => {
-                    selectedType.categories.push(category);
-                    this.selectedCategory = category;
+            this.monsterTemplateService.createSubCategory(selectedType, result.text).subscribe(
+                subCategory => {
+                    selectedType.subCategories.push(subCategory);
+                    this.selectedSubCategory = subCategory;
                     this.monsterTemplateService.invalidateMonsterTypes();
                 });
         })
@@ -121,11 +121,11 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
         })
     }
 
-    selectCategory(category: MonsterTemplateCategory | 'new') {
-        if (category === 'new') {
-            this.openCreateCategoryDialog();
+    selectSubCategory(subCategory: MonsterTemplateSubCategory | 'new') {
+        if (subCategory === 'new') {
+            this.openCreateSubCategoryDialog();
         } else {
-            this.selectedCategory = category;
+            this.selectedSubCategory = subCategory;
         }
     }
 
@@ -134,8 +134,8 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
             this.openCreateTypeDialog();
         } else {
             this.selectedType = type;
-            if (this.selectedType.categories.length) {
-                this.selectedCategory = this.selectedType.categories[0];
+            if (this.selectedType.subCategories.length) {
+                this.selectedSubCategory = this.selectedType.subCategories[0];
             }
         }
     }
@@ -205,13 +205,13 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
                 this.traitsById = traitsById;
 
                 if (this.data.monsterTemplate) {
-                    this.selectedType = this.data.monsterTemplate.category.type;
-                    this.selectedCategory = this.data.monsterTemplate.category;
+                    this.selectedType = this.data.monsterTemplate.subCategory.type;
+                    this.selectedSubCategory = this.data.monsterTemplate.subCategory;
                     this.selectedTraits = [...this.data.monsterTemplate.data.traits || []];
                     this.monsterInventory = this.data.monsterTemplate.simpleInventory;
                 } else {
-                    if (this.data.category && this.data.type) {
-                        this.selectedCategory = this.data.category;
+                    if (this.data.subCategory && this.data.type) {
+                        this.selectedSubCategory = this.data.subCategory;
                         this.selectedType = this.data.type;
                     } else if (this.data.type) {
                         this.selectType(this.data.type);
@@ -224,13 +224,13 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
     }
 
     save() {
-        if (!this.selectedCategory) {
+        if (!this.selectedSubCategory) {
             return;
         }
 
         this.saving = true;
         let request: MonsterTemplateRequest = {
-            categoryId: this.selectedCategory.id,
+            subCategoryId: this.selectedSubCategory.id,
             data: {
                 ...this.form.value.data,
                 traits: this.selectedTraits

@@ -1,7 +1,7 @@
-import {EffectCategoryResponse} from './effect-category-response';
+import {EffectSubCategoryResponse} from './effect-sub-category-response';
 
 export interface EffectTypeResponse {
     id: number;
     name: string;
-    categories: EffectCategoryResponse[];
+    subCategories: EffectSubCategoryResponse[];
 }

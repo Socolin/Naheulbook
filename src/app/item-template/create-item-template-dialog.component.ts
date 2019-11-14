@@ -34,7 +34,7 @@ export class CreateItemTemplateDialogComponent implements OnInit {
     }
 
     canCreateItemTemplate() {
-        return this.item.name && this.item.categoryId && this.item.source
+        return this.item.name && this.item.subCategoryId && this.item.source
     }
 
     createItemTemplate() {

@@ -3,7 +3,7 @@ import {DurationType} from '../shared/enums';
 
 export interface EffectResponse {
     id: number;
-    categoryId: number;
+    subCategoryId: number;
     name: string;
     description?: string;
     dice?: number;

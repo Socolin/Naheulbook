@@ -34,9 +34,9 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field>
-                    <mat-select [ngModel]="selectedMonsterCategory" (selectionChange)="selectMonsterCategory($event.value)" placeholder="Sous-catégorie">
+                    <mat-select [ngModel]="selectedMonsterSubCategory" (selectionChange)="selectMonsterSubCategory($event.value)" placeholder="Sous-catégorie">
                         <mat-option [value]="'none'"></mat-option>
-                        <mat-option *ngFor="let monsterSubCategory of selectedMonsterType?.categories || []" [value]="monsterSubCategory">
+                        <mat-option *ngFor="let monsterSubCategory of selectedMonsterType?.subCategories || []" [value]="monsterSubCategory">
                             {{monsterSubCategory.name}}
                         </mat-option>
                     </mat-select>
@@ -46,7 +46,7 @@
                 <div mat-ripple *ngFor="let monsterTemplate of filteredMonsters" (click)="selectMonsterInAutocompleteList(monsterTemplate); stepper.next()">
                     <div class="filter-result">
                         <div class="name">{{monsterTemplate.name}}</div>
-                        <div class="category mat-caption">{{monsterTemplate.category.type.name}} - {{monsterTemplate.category.name}}</div>
+                        <div class="category mat-caption">{{monsterTemplate.subCategory.type.name}} - {{monsterTemplate.subCategory.name}}</div>
                     </div>
                 </div>
             </mat-action-list>

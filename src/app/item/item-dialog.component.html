@@ -13,9 +13,9 @@
             <mat-card-subtitle>
                 <div *ngIf="itemCategoriesById">
                     <span
-                        class="label label-default">{{itemCategoriesById[item.template.categoryId].section.name}}</span>
+                        class="label label-default">{{itemCategoriesById[item.template.subCategoryId].section.name}}</span>
                     -
-                    <span>{{itemCategoriesById[item.template.categoryId].name}}</span>
+                    <span>{{itemCategoriesById[item.template.subCategoryId].name}}</span>
                 </div>
 
                 <span *ngIf="item.data.notIdentified">

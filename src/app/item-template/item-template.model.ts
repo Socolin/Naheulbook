@@ -4,7 +4,7 @@ import {Job} from '../job';
 import {IconDescription} from '../shared/icon.model';
 import {IDurable, IItemTemplateData, IItemTemplateGunData} from '../api/shared';
 import {
-    ItemTemplateCategoryResponse,
+    ItemTemplateSubCategoryResponse,
     ItemTemplateResponse,
     ItemTemplateSectionResponse,
     ItemTypeResponse
@@ -15,7 +15,7 @@ export class ItemTemplateSection {
     name: string;
     note: string;
     specials: string[];
-    categories: ItemTemplateCategory[];
+    subCategories: ItemTemplateSubCategory[];
 
     private static fromResponse(response: ItemTemplateSectionResponse): ItemTemplateSection {
         const itemSection = new ItemTemplateSection();
@@ -23,7 +23,7 @@ export class ItemTemplateSection {
         itemSection.name = response.name;
         itemSection.note = response.note;
         itemSection.specials = response.specials;
-        itemSection.categories = ItemTemplateCategory.fromResponses(response.categories, itemSection);
+        itemSection.subCategories = ItemTemplateSubCategory.fromResponses(response.subCategories, itemSection);
         return itemSection;
     }
 
@@ -32,9 +32,9 @@ export class ItemTemplateSection {
     }
 }
 
-export type ItemTemplateCategoryDictionary = { [categoryId: number]: ItemTemplateCategory };
+export type ItemTemplateSubCategoryDictionary = { [subCategoryId: number]: ItemTemplateSubCategory };
 
-export class ItemTemplateCategory {
+export class ItemTemplateSubCategory {
     id: number;
     name: string;
     description: string;
@@ -42,19 +42,25 @@ export class ItemTemplateCategory {
     section: ItemTemplateSection;
     sectionId: number;
 
-    static fromResponses(responses: ItemTemplateCategoryResponse[], itemTemplateSection: ItemTemplateSection): ItemTemplateCategory[] {
-        return responses.map(response => ItemTemplateCategory.fromResponse(response, itemTemplateSection));
+    static fromResponses(
+        responses: ItemTemplateSubCategoryResponse[],
+        itemTemplateSection: ItemTemplateSection
+    ): ItemTemplateSubCategory[] {
+        return responses.map(response => ItemTemplateSubCategory.fromResponse(response, itemTemplateSection));
     }
 
-    private static fromResponse(response: ItemTemplateCategoryResponse, itemTemplateSection: ItemTemplateSection): ItemTemplateCategory {
-        const itemTemplateCategory = new ItemTemplateCategory();
-        itemTemplateCategory.id = response.id;
-        itemTemplateCategory.name = response.name;
-        itemTemplateCategory.description = response.description;
-        itemTemplateCategory.note = response.note;
-        itemTemplateCategory.sectionId = response.sectionId;
-        itemTemplateCategory.section = itemTemplateSection;
-        return itemTemplateCategory;
+    private static fromResponse(
+        response: ItemTemplateSubCategoryResponse,
+        itemTemplateSection: ItemTemplateSection
+    ): ItemTemplateSubCategory {
+        const itemTemplateSubCategory = new ItemTemplateSubCategory();
+        itemTemplateSubCategory.id = response.id;
+        itemTemplateSubCategory.name = response.name;
+        itemTemplateSubCategory.description = response.description;
+        itemTemplateSubCategory.note = response.note;
+        itemTemplateSubCategory.sectionId = response.sectionId;
+        itemTemplateSubCategory.section = itemTemplateSection;
+        return itemTemplateSubCategory;
     }
 }
 
@@ -174,7 +180,7 @@ export class ItemTemplate {
     id: number;
     name: string;
     techName?: string;
-    categoryId: number;
+    subCategoryId: number;
     data: ItemTemplateData = new ItemTemplateData();
     source: 'official' | 'community' | 'private';
     sourceUser?: string;

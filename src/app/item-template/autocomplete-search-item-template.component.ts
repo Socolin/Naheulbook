@@ -5,7 +5,7 @@ import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 
 import {AutocompleteInputComponent, AutocompleteValue} from '../shared';
 
-import {ItemTemplate, ItemTemplateCategory} from './item-template.model';
+import {ItemTemplate, ItemTemplateSubCategory} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 
 @Component({
@@ -33,23 +33,23 @@ export class AutocompleteSearchItemTemplateComponent {
 
     updateAutocompleteItem(filter: string) {
         return forkJoin([
-            this.itemTemplateService.getCategoriesById(),
+            this.itemTemplateService.getSubCategoriesById(),
             this.itemTemplateService.searchItem(filter)
         ]).pipe(map(
-            ([categoriesById, list]: [{ [categoryId: number]: ItemTemplateCategory }, ItemTemplate[]]) => {
+            ([subCategoriesById, list]: [{ [subCategoryId: number]: ItemTemplateSubCategory }, ItemTemplate[]]) => {
                 return list.map(e => {
                     let name = e.name;
                     if (e.data.enchantment !== undefined) {
                         name += ' (Ench. ' + e.data.enchantment + ')';
                     }
-                    let category = categoriesById[e.categoryId].section.name + ' - ' + categoriesById[e.categoryId].name;
+                    let categoryString = subCategoriesById[e.subCategoryId].section.name + ' - ' + subCategoriesById[e.subCategoryId].name;
                     let mdIcon;
                     if (e.source === 'community') {
                         mdIcon = 'group';
                     } else if (e.source === 'private') {
                         mdIcon = 'lock';
                     }
-                    return new AutocompleteValue(e, name, category, e.data.icon, mdIcon);
+                    return new AutocompleteValue(e, name, categoryString, e.data.icon, mdIcon);
                 });
             }
         ));

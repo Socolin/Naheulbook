@@ -1,4 +1,4 @@
-export interface CreateEffectCategoryRequest {
+export interface CreateEffectSubCategoryRequest {
     name: string;
     diceCount: number;
     diceSize: number;

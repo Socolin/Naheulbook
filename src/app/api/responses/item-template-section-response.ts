@@ -1,9 +1,9 @@
-import {ItemTemplateCategoryResponse} from './item-template-category-response';
+import {ItemTemplateSubCategoryResponse} from './item-template-sub-category-response';
 
 export interface ItemTemplateSectionResponse {
     id: number;
     name: string;
     note: string;
     specials: string[];
-    categories: ItemTemplateCategoryResponse[];
+    subCategories: ItemTemplateSubCategoryResponse[];
 }

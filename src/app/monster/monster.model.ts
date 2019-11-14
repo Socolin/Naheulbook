@@ -9,7 +9,7 @@ import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 
 import {TargetJsonData} from '../group/target.model';
 import {Fighter} from '../group';
-import {MonsterCategoryResponse, MonsterResponse, MonsterTemplateResponse, MonsterTypeResponse} from '../api/responses';
+import {MonsterSubCategoryResponse, MonsterResponse, MonsterTemplateResponse, MonsterTypeResponse} from '../api/responses';
 import {MonsterTemplateData} from '../api/shared';
 
 export class MonsterData {
@@ -447,45 +447,45 @@ export class TraitInfo {
     }
 }
 
-export type MonsterTemplateCategoryDictionary = { [id: number]: MonsterTemplateCategory };
+export type MonsterTemplateSubCategoryDictionary = { [id: number]: MonsterTemplateSubCategory };
 
-export class MonsterTemplateCategory {
+export class MonsterTemplateSubCategory {
     id: number;
     name: string;
     type: MonsterTemplateType;
 
     static fromResponse(
-        response: MonsterCategoryResponse,
+        response: MonsterSubCategoryResponse,
         type: { [id: number]: MonsterTemplateType } | MonsterTemplateType
-    ): MonsterTemplateCategory {
-        let category = new MonsterTemplateCategory();
+    ): MonsterTemplateSubCategory {
+        let subCategory = new MonsterTemplateSubCategory();
         if (type instanceof MonsterTemplateType) {
-            Object.assign(category, response, {type: type});
+            Object.assign(subCategory, response, {type: type});
         } else {
-            Object.assign(category, response, {type: type[response.typeid]});
+            Object.assign(subCategory, response, {type: type[response.typeid]});
         }
-        return category;
+        return subCategory;
     }
 
-    static categoriesFromJson(jsonDatas: MonsterCategoryResponse[], type: MonsterTemplateType): MonsterTemplateCategory[] {
-        let categories: MonsterTemplateCategory[] = [];
+    static categoriesFromJson(responses: MonsterSubCategoryResponse[], type: MonsterTemplateType): MonsterTemplateSubCategory[] {
+        let subCategories: MonsterTemplateSubCategory[] = [];
 
-        for (let jsonData of jsonDatas) {
-            categories.push(MonsterTemplateCategory.fromResponse(jsonData, type));
+        for (let jsonData of responses) {
+            subCategories.push(MonsterTemplateSubCategory.fromResponse(jsonData, type));
         }
 
-        return categories;
+        return subCategories;
     }
 }
 
 export class MonsterTemplateType {
     id: number;
     name: string;
-    categories: MonsterTemplateCategory[] = [];
+    subCategories: MonsterTemplateSubCategory[] = [];
 
     static fromResponse(response: MonsterTypeResponse): MonsterTemplateType {
         let type = new MonsterTemplateType();
-        Object.assign(type, response, {categories: MonsterTemplateCategory.categoriesFromJson(response.categories, type)});
+        Object.assign(type, response, {subCategories: MonsterTemplateSubCategory.categoriesFromJson(response.subCategories, type)});
         return type;
     }
 
@@ -503,16 +503,16 @@ export class MonsterTemplate {
     id: number;
     name: string;
     data: MonsterTemplateData;
-    categoryId: number;
-    category: MonsterTemplateCategory;
+    subCategoryId: number;
+    subCategory: MonsterTemplateSubCategory;
     simpleInventory: MonsterInventoryElement[];
 
     static fromResponse(
         response: MonsterTemplateResponse,
-        categoriesById: MonsterTemplateCategoryDictionary,
+        subCategoriesById: MonsterTemplateSubCategoryDictionary,
         skillsById: SkillDictionary
     ): MonsterTemplate {
-        const category = categoriesById[response.categoryId];
+        const subCategory = subCategoriesById[response.subCategoryId];
         const inventory: MonsterInventoryElement[] = [];
         for (let inventoryElement of response.simpleInventory) {
             let element = {
@@ -522,12 +522,12 @@ export class MonsterTemplate {
             inventory.push(element);
         }
 
-        return new MonsterTemplate(response.id, response.name, category, response.data, inventory);
+        return new MonsterTemplate(response.id, response.name, subCategory, response.data, inventory);
     }
 
     static templatesFromResponse(
         responses: MonsterTemplateResponse[],
-        categoriesById: MonsterTemplateCategoryDictionary,
+        categoriesById: MonsterTemplateSubCategoryDictionary,
         skillsById: SkillDictionary
     ): MonsterTemplate[] {
         return responses.map(response => MonsterTemplate.fromResponse(response, categoriesById, skillsById));
@@ -536,14 +536,14 @@ export class MonsterTemplate {
     constructor(
         id: number,
         name: string,
-        category: MonsterTemplateCategory,
+        subCategory: MonsterTemplateSubCategory,
         data: MonsterTemplateData,
         inventory: MonsterInventoryElement[]
     ) {
         this.id = id;
         this.name = name;
-        this.category = category;
-        this.categoryId = category.id; // FIXME: still needed ?
+        this.subCategory = subCategory;
+        this.subCategoryId = subCategory.id; // FIXME: still needed ?
         this.data = data;
         this.simpleInventory = inventory;
     }

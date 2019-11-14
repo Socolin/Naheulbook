@@ -24,7 +24,7 @@ export class AddItemDialogComponent {
     public filteredItemTemplates: {
         name: string,
         icon?: IconDescription,
-        categoryName: string,
+        subCategoryName: string,
         sectionName: string,
         sourceIcon?: string,
         itemTemplate: ItemTemplate
@@ -38,7 +38,7 @@ export class AddItemDialogComponent {
 
     updateFilter(filter: string): void {
         forkJoin([
-            this.itemTemplateService.getCategoriesById(),
+            this.itemTemplateService.getSubCategoriesById(),
             this.itemTemplateService.searchItem(filter)
         ]).subscribe(([categoriesById, itemTemplates]) => {
             this.filteredItemTemplates = itemTemplates.map(itemTemplate => {
@@ -55,8 +55,8 @@ export class AddItemDialogComponent {
                 return {
                     name,
                     icon: itemTemplate.data.icon,
-                    sectionName: categoriesById[itemTemplate.categoryId].section.name,
-                    categoryName: categoriesById[itemTemplate.categoryId].name,
+                    sectionName: categoriesById[itemTemplate.subCategoryId].section.name,
+                    subCategoryName: categoriesById[itemTemplate.subCategoryId].name,
                     sourceIcon,
                     itemTemplate,
                 };

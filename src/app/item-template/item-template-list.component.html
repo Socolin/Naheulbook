@@ -25,11 +25,11 @@
         </mat-select>
     </mat-form-field>
     <mat-form-field *ngIf="selectedSection" class="sub-category">
-        <mat-select [ngModel]="selectedItemCategory"
-                    (selectionChange)="selectCategory($event.value)"
+        <mat-select [ngModel]="selectedItemSubCategory"
+                    (selectionChange)="selectSubCategory($event.value)"
                     placeholder="Sous-section">
-            <mat-option *ngFor="let category of selectedSection.categories" [value]="category">
-                {{category.name}}
+            <mat-option *ngFor="let subCategory of selectedSection.subCategories" [value]="subCategory">
+                {{subCategory.name}}
             </mat-option>
         </mat-select>
     </mat-form-field>
@@ -81,12 +81,12 @@
 </ng-template>
 <div *ngIf="nextSubCategory && previousSubCategory" class="prev-next-buttons">
     <button mat-raised-button
-            (click)="selectCategory(previousSubCategory)">
+            (click)="selectSubCategory(previousSubCategory)">
         <mat-icon>navigate_before</mat-icon>
         {{previousSubCategory.name}}
     </button>
     <button mat-raised-button
-            (click)="selectCategory(nextSubCategory)">
+            (click)="selectSubCategory(nextSubCategory)">
         {{nextSubCategory.name}}
         <mat-icon>navigate_next</mat-icon>
     </button>

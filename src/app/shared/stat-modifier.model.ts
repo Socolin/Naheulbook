@@ -97,7 +97,7 @@ export class ActiveStatsModifier extends StatsModifier {
         modifier.description = effect.description;
         modifier.permanent = false;
         modifier.reusable = data.reusable;
-        modifier.type = effect.category.name;
+        modifier.type = effect.subCategory.name;
         if ('durationType' in data) {
             modifier.durationType = data.durationType;
             switch (data.durationType) {

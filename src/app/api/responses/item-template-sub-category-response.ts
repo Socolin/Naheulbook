@@ -1,4 +1,4 @@
-export interface ItemTemplateCategoryResponse {
+export interface ItemTemplateSubCategoryResponse {
     id: number;
     sectionId: number;
     name: string;

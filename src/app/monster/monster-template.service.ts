@@ -6,7 +6,7 @@ import {HttpClient} from '@angular/common/http';
 
 import {
     MonsterTemplate,
-    MonsterTemplateCategory,
+    MonsterTemplateSubCategory,
     MonsterTemplateType,
     MonsterTrait,
     MonsterTraitDictionary
@@ -15,7 +15,7 @@ import {
 import {MonsterTemplateRequest} from '../api/requests';
 import {SkillService} from '../skill';
 import {
-    MonsterCategoryResponse,
+    MonsterSubCategoryResponse,
     MonsterTemplateResponse,
     MonsterTraitResponse,
     MonsterTypeResponse
@@ -34,16 +34,16 @@ export class MonsterTemplateService {
     ) {
     }
 
-    getMonsterCategoriesById(): Observable<{ [id: number]: MonsterTemplateCategory }> {
+    getMonsterCategoriesById(): Observable<{ [id: number]: MonsterTemplateSubCategory }> {
         return this.getMonsterTypes().pipe(
             map((types: MonsterTemplateType[]) => {
-                let categoriesById = {};
+                let subCategoriesById = {};
                 for (let type of types) {
-                    for (let category of type.categories) {
-                        categoriesById[category.id] = category;
+                    for (let subCategory of type.subCategories) {
+                        subCategoriesById[subCategory.id] = subCategory;
                     }
                 }
-                return categoriesById;
+                return subCategoriesById;
             }));
     }
 
@@ -125,7 +125,7 @@ export class MonsterTemplateService {
             this.getMonsterCategoriesById(),
             this.httpClient.get<MonsterTemplateResponse[]>(url),
             this.skillService.getSkillsById()
-        ]).pipe(map(([categories, monsters, skillsById]) => MonsterTemplate.templatesFromResponse(monsters, categories, skillsById)));
+        ]).pipe(map(([subCategories, monsters, skillsById]) => MonsterTemplate.templatesFromResponse(monsters, subCategories, skillsById)));
     }
 
     createMonsterTemplate(request: MonsterTemplateRequest): Observable<MonsterTemplate> {
@@ -154,10 +154,10 @@ export class MonsterTemplateService {
         }).pipe(map(response => MonsterTemplateType.fromResponse(response)));
     }
 
-    createCategory(type: MonsterTemplateType, name: string): Observable<MonsterTemplateCategory> {
-        return this.httpClient.post<MonsterCategoryResponse>(`/api/v2/monsterTypes/${type.id}/categories`, {
+    createSubCategory(type: MonsterTemplateType, name: string): Observable<MonsterTemplateSubCategory> {
+        return this.httpClient.post<MonsterSubCategoryResponse>(`/api/v2/monsterTypes/${type.id}/subCategories`, {
             name: name
-        }).pipe(map(response => MonsterTemplateCategory.fromResponse(response, type)));
+        }).pipe(map(response => MonsterTemplateSubCategory.fromResponse(response, type)));
     }
 
     invalidateMonsterTypes() {
