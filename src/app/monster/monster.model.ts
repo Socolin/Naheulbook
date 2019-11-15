@@ -505,7 +505,7 @@ export class MonsterTemplate {
     data: MonsterTemplateData;
     subCategoryId: number;
     subCategory: MonsterTemplateSubCategory;
-    simpleInventory: MonsterInventoryElement[];
+    inventory: MonsterInventoryElement[];
 
     static fromResponse(
         response: MonsterTemplateResponse,
@@ -514,7 +514,7 @@ export class MonsterTemplate {
     ): MonsterTemplate {
         const subCategory = subCategoriesById[response.subCategoryId];
         const inventory: MonsterInventoryElement[] = [];
-        for (let inventoryElement of response.simpleInventory) {
+        for (let inventoryElement of response.inventory) {
             let element = {
                 ...inventoryElement,
                 itemTemplate: ItemTemplate.fromResponse(inventoryElement.itemTemplate, skillsById)
@@ -545,7 +545,7 @@ export class MonsterTemplate {
         this.subCategory = subCategory;
         this.subCategoryId = subCategory.id; // FIXME: still needed ?
         this.data = data;
-        this.simpleInventory = inventory;
+        this.inventory = inventory;
     }
 }
 

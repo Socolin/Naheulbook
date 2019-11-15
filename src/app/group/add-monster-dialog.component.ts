@@ -78,10 +78,10 @@ export class AddMonsterDialogComponent implements OnInit {
 
     randomMonsterInventory() {
         let template = this.selectedMonsterTemplate;
-        if (template && template.simpleInventory) {
+        if (template && template.inventory) {
             this.items = [];
-            for (let i = 0; i < template.simpleInventory.length; i++) {
-                let inventoryItem = template.simpleInventory[i];
+            for (let i = 0; i < template.inventory.length; i++) {
+                let inventoryItem = template.inventory[i];
                 let quantity = getRandomInt(inventoryItem.minCount, inventoryItem.maxCount);
                 if (!quantity) {
                     continue;

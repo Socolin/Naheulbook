@@ -81,12 +81,12 @@
             </div>
         </ng-template>
 
-        <div *ngIf="monsterTemplate.simpleInventory && monsterTemplate.simpleInventory.length">
+        <div *ngIf="monsterTemplate.inventory && monsterTemplate.inventory.length">
             <div class="section-title">
                 Inventaire
             </div>
             <div class="section-content">
-                <div *ngFor="let inventoryElement of monsterTemplate.simpleInventory" class="inventory-element" mat-ripple (click)="openItemInfo(inventoryElement.itemTemplate)">
+                <div *ngFor="let inventoryElement of monsterTemplate.inventory" class="inventory-element" mat-ripple (click)="openItemInfo(inventoryElement.itemTemplate)">
                     <icon [icon]="inventoryElement.itemTemplate.data.icon"></icon>
                     <span>
                         <span *ngIf="inventoryElement.minCount === inventoryElement.maxCount && inventoryElement.minCount !== 1">{{inventoryElement.minCount}}</span>

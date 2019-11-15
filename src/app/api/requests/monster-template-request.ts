@@ -18,6 +18,6 @@ export interface MonsterTemplateRequest {
     subCategoryId: number;
     name: string;
     data: MonsterTemplateData;
-    simpleInventory: MonsterInventoryElementRequest[];
+    inventory: MonsterInventoryElementRequest[];
 }
 

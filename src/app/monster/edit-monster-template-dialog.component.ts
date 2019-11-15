@@ -208,7 +208,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
                     this.selectedType = this.data.monsterTemplate.subCategory.type;
                     this.selectedSubCategory = this.data.monsterTemplate.subCategory;
                     this.selectedTraits = [...this.data.monsterTemplate.data.traits || []];
-                    this.monsterInventory = this.data.monsterTemplate.simpleInventory;
+                    this.monsterInventory = this.data.monsterTemplate.inventory;
                 } else {
                     if (this.data.subCategory && this.data.type) {
                         this.selectedSubCategory = this.data.subCategory;
@@ -236,7 +236,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
                 traits: this.selectedTraits
             },
             name: this.form.value.name,
-            simpleInventory: this.monsterInventory.map(inventoryElement => ({
+            inventory: this.monsterInventory.map(inventoryElement => ({
                 ...inventoryElement,
                 id: inventoryElement.id || undefined,
                 itemTemplateId: inventoryElement.itemTemplate.id,

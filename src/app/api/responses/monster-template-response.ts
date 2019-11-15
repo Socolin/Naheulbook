@@ -6,10 +6,10 @@ export interface MonsterTemplateResponse {
     name: string;
     subCategoryId: number;
     data: MonsterTemplateData;
-    simpleInventory: MonsterSimpleInventoryResponse[];
+    inventory: MonsterTemplateInventoryElementResponse[];
 }
 
-export interface MonsterSimpleInventoryResponse {
+export interface MonsterTemplateInventoryElementResponse {
     id: number;
     itemTemplate: ItemTemplateResponse;
     minCount: number;
