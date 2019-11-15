@@ -220,7 +220,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<ActiveStatsModifier>>(b.Modifiers)));
 
             CreateMap<MonsterTemplate, MonsterTemplateResponse>()
-                .ForMember(x => x.SimpleInventory, opt => opt.MapFrom(m => m.Items))
+                .ForMember(x => x.Inventory, opt => opt.MapFrom(m => m.Items))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)));
             CreateMap<MonsterTemplateInventoryElement, MonsterTemplateResponse.MonsterTemplateInventoryElementResponse>();
             CreateMap<MonsterType, MonsterTypeResponse>()

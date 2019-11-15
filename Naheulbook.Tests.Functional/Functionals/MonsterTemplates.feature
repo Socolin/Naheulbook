@@ -17,7 +17,7 @@ Feature: MonsterTemplates
         "at": 1,
         "note": "some-note",
       },
-      "simpleInventory": [
+      "inventory": [
         {
           "itemTemplateId": ${ItemTemplate.Id},
           "chance": 0.5,
@@ -38,7 +38,7 @@ Feature: MonsterTemplates
           "at": 1,
           "note": "some-note",
         },
-        "simpleInventory": [
+        "inventory": [
             {
                 "id": {"__match": {"type": "integer"}},
                 "minCount": 1,
@@ -111,7 +111,7 @@ Feature: MonsterTemplates
       "name": "${MonsterTemplate.Name}",
       "data": ${MonsterTemplate.Data},
       "subCategoryId": ${MonsterTemplate.SubCategoryId},
-      "simpleInventory": [
+      "inventory": [
         {
           "id": ${MonsterTemplate.Items.[0].Id},
           "chance": ${MonsterTemplate.Items.[0].Chance},
@@ -178,7 +178,7 @@ Feature: MonsterTemplates
       "name": "${MonsterTemplate.Name}",
       "data": ${MonsterTemplate.Data},
       "subCategoryId": ${MonsterTemplate.SubCategoryId},
-      "simpleInventory": [
+      "inventory": [
         {
           "id": ${MonsterTemplate.Items.[0].Id},
           "chance": ${MonsterTemplate.Items.[0].Chance},
@@ -212,7 +212,7 @@ Feature: MonsterTemplates
         "prd": 3,
         "note": "some-new-note"
       },
-      "simpleInventory": [
+      "inventory": [
         {
           "itemTemplateId": ${ItemTemplate.Id},
           "chance": 0.5,
@@ -234,7 +234,7 @@ Feature: MonsterTemplates
         "prd": 3,
         "note": "some-new-note"
       },
-      "simpleInventory": [
+      "inventory": [
           {
               "id": {"__match": {"type": "integer"}},
               "minCount": 1,

@@ -21,6 +21,6 @@ namespace Naheulbook.Web.Responses
         public string Name { get; set; } = null!;
         public int SubCategoryId { get; set; }
         public JObject Data { get; set; } = null!;
-        public List<MonsterTemplateInventoryElementResponse> SimpleInventory { get; set; } = null!;
+        public List<MonsterTemplateInventoryElementResponse> Inventory { get; set; } = null!;
     }
 }
