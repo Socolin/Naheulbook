@@ -83,7 +83,7 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new JobConfiguration());
             modelBuilder.ApplyConfiguration(new JobBonusConfiguration());
             modelBuilder.ApplyConfiguration(new JobRequirementConfiguration());
-            modelBuilder.ApplyConfiguration(new JobRestrictConfiguration());
+            modelBuilder.ApplyConfiguration(new JobRestrictionConfiguration());
             modelBuilder.ApplyConfiguration(new JobSkillConfiguration());
 
             modelBuilder.ApplyConfiguration(new LootConfiguration());
@@ -97,7 +97,7 @@ namespace Naheulbook.Data.DbContexts
 
             modelBuilder.ApplyConfiguration(new MonsterSubCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTemplateConfiguration());
-            modelBuilder.ApplyConfiguration(new MonsterTemplateSimpleInventoryConfiguration());
+            modelBuilder.ApplyConfiguration(new MonsterTemplateInventoryElementConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTypeConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTraitConfiguration());
 

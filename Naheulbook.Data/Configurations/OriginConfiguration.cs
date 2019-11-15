@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Origin> builder)
         {
-            builder.ToTable("origin");
+            builder.ToTable("origins");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -48,7 +48,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<OriginBonus> builder)
         {
-            builder.ToTable("origin_bonus");
+            builder.ToTable("origin_bonuses");
 
             builder.HasIndex(e => e.OriginId);
 
@@ -72,7 +72,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<OriginInfo> builder)
         {
-            builder.ToTable("origin_info");
+            builder.ToTable("origin_information");
 
             builder.HasKey(e => e.Id);
 
@@ -105,7 +105,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<OriginRequirement> builder)
         {
-            builder.ToTable("origin_requirement");
+            builder.ToTable("origin_requirements");
 
             builder.HasKey(e => e.Id);
 
@@ -144,7 +144,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<OriginRestrict> builder)
         {
-            builder.ToTable("origin_restrict");
+            builder.ToTable("origin_restrictions");
 
             builder.HasIndex(e => e.OriginId)
                 .HasName("IX_origin_restrict_originid");
@@ -171,7 +171,7 @@ namespace Naheulbook.Data.Configurations
         {
             builder.HasKey(e => new {e.OriginId, e.SkillId});
 
-            builder.ToTable("origin_skill");
+            builder.ToTable("origin_skills");
 
             builder.HasIndex(e => e.SkillId)
                 .HasName("IX_origin_skill_skillid");

@@ -57,9 +57,9 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             _testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
             _testDataUtil.AddMonsterTemplate(m =>
             {
-                m.Items = new List<MonsterTemplateSimpleInventory>
+                m.Items = new List<MonsterTemplateInventoryElement>
                 {
-                    new MonsterTemplateSimpleInventory
+                    new MonsterTemplateInventoryElement
                     {
                         Chance = 0.5f,
                         ItemTemplate = _testDataUtil.GetLast<ItemTemplate>(),

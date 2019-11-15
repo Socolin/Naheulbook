@@ -108,9 +108,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 Data = JObject.FromObject(new {key = "value"}),
                 LocationIds = new List<int> {locationId},
                 Name = "some-monster-name",
-                SimpleInventory = new List<MonsterSimpleInventoryRequest>
+                SimpleInventory = new List<MonsterTemplateInventoryElementRequest>
                 {
-                    new MonsterSimpleInventoryRequest
+                    new MonsterTemplateInventoryElementRequest
                     {
                         Chance = 0.5f,
                         MinCount = 1,
@@ -127,9 +127,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
             {
                 SubCategory = monsterSubCategory,
                 Data = @"{""key"":""value""}",
-                Items = new List<MonsterTemplateSimpleInventory>()
+                Items = new List<MonsterTemplateInventoryElement>()
                 {
-                    new MonsterTemplateSimpleInventory
+                    new MonsterTemplateInventoryElement
                     {
                         Chance = 0.5f,
                         MinCount = 1,

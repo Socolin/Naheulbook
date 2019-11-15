@@ -1,6 +1,6 @@
 namespace Naheulbook.Data.Models
 {
-    public class MonsterTemplateSimpleInventory
+    public class MonsterTemplateInventoryElement
     {
         public int Id { get; set; }
         public float Chance { get; set; }

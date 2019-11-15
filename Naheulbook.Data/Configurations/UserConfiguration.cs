@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("user");
+            builder.ToTable("users");
 
             builder.HasIndex(e => e.Username)
                 .IsUnique();

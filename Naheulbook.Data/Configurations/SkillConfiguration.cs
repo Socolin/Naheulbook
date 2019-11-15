@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Skill> builder)
         {
-            builder.ToTable("skill");
+            builder.ToTable("skills");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -58,7 +58,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<SkillEffect> builder)
         {
-            builder.ToTable("skill_effect");
+            builder.ToTable("skill_effects");
 
             builder.HasKey(e => new {e.SkillId, e.StatName});
 

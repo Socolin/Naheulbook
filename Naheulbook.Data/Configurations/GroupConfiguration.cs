@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Group> builder)
         {
-            builder.ToTable("group");
+            builder.ToTable("groups");
 
             builder.Property(e => e.Name)
                 .IsRequired()
@@ -72,7 +72,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<GroupHistoryEntry> builder)
         {
-            builder.ToTable("group_history");
+            builder.ToTable("group_history_entries");
 
             builder.HasKey(e => e.Id);
 

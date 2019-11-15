@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ItemTemplate> builder)
         {
-            builder.ToTable("item_template");
+            builder.ToTable("item_templates");
 
             builder.HasIndex(e => e.SubCategoryId);
 
@@ -107,7 +107,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ItemTemplateSection> builder)
         {
-            builder.ToTable("item_template_section");
+            builder.ToTable("item_template_sections");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -132,7 +132,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ItemTemplateModifier> builder)
         {
-            builder.ToTable("item_template_modifier");
+            builder.ToTable("item_template_modifiers");
 
             builder.HasIndex(e => e.ItemTemplateId)
                 .HasName("IX_item_effect_item");
@@ -190,7 +190,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ItemTemplateRequirement> builder)
         {
-            builder.ToTable("item_template_requirement");
+            builder.ToTable("item_template_requirements");
 
             builder.HasIndex(e => e.ItemTemplateId);
 
@@ -231,7 +231,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ItemTemplateSkill> builder)
         {
-            builder.ToTable("item_template_skill");
+            builder.ToTable("item_template_skills");
 
             builder.HasKey(e => new {e.SkillId, e.ItemTemplateId});
 
@@ -305,7 +305,7 @@ namespace Naheulbook.Data.Configurations
         {
             builder.HasKey(e => new {Slot = e.SlotId, Item = e.ItemTemplateId});
 
-            builder.ToTable("item_template_slot");
+            builder.ToTable("item_template_slots");
 
             builder.HasIndex(e => e.ItemTemplateId)
                 .HasName("IX_item_template_slot_item");
@@ -332,7 +332,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ItemTemplateUnSkill> builder)
         {
-            builder.ToTable("item_template_unskill");
+            builder.ToTable("item_template_unskills");
 
             builder.HasKey(e => new {e.SkillId, e.ItemTemplateId});
 
@@ -366,7 +366,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ItemType> builder)
         {
-            builder.ToTable("item_type");
+            builder.ToTable("item_types");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -387,7 +387,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Slot> builder)
         {
-            builder.ToTable("item_slot");
+            builder.ToTable("slots");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");

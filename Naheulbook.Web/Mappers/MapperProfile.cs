@@ -178,7 +178,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Stat, opt => opt.MapFrom(r => r.StatName))
                 .ForMember(m => m.Min, opt => opt.MapFrom(r => r.MinValue))
                 .ForMember(m => m.Max, opt => opt.MapFrom(r => r.MaxValue));
-            CreateMap<JobRestrict, DescribedFlagResponse>()
+            CreateMap<JobRestriction, DescribedFlagResponse>()
                 .ForMember(m => m.Description, opt => opt.MapFrom(r => r.Text))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)));
 
@@ -222,7 +222,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<MonsterTemplate, MonsterTemplateResponse>()
                 .ForMember(x => x.SimpleInventory, opt => opt.MapFrom(m => m.Items))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)));
-            CreateMap<MonsterTemplateSimpleInventory, MonsterTemplateResponse.MonsterSimpleInventoryResponse>();
+            CreateMap<MonsterTemplateInventoryElement, MonsterTemplateResponse.MonsterTemplateInventoryElementResponse>();
             CreateMap<MonsterType, MonsterTypeResponse>()
                 .ForMember(m => m.SubCategories, opt => opt.MapFrom(c => c.SubCategories.OrderBy(ca => ca.Id)));
             CreateMap<MonsterSubCategory, MonsterSubCategoryResponse>();

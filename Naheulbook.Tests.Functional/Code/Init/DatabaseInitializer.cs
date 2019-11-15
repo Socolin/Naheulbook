@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using BoDi;
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
@@ -33,11 +36,48 @@ namespace Naheulbook.Tests.Functional.Code.Init
                         .WithMigrationsIn(typeof(Mig0001Init).Assembly))
                 .BuildServiceProvider();
 
+
+            var dbContextOptions = new DbContextOptionsBuilder<DbContext>()
+                .UseMySql(DefaultTestConfigurations.NaheulbookTestConnectionString)
+                .Options;
+
+            DropAllTables(dbContextOptions);
+
             using (var scope = serviceProvider.CreateScope())
             {
                 var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-                runner.MigrateDown(0);
                 runner.MigrateUp();
+            }
+        }
+
+        private static void DropAllTables(DbContextOptions<DbContext> dbContextOptions)
+        {
+            var tablesNames = new List<string>();
+
+            using (var dbContext = new DbContext(dbContextOptions))
+            using (var command = dbContext.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT `table_name` FROM information_schema.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = @DbName";
+                var dbNameParameter = command.CreateParameter();
+                dbNameParameter.ParameterName = "@DbName";
+                dbNameParameter.Value = DefaultTestConfigurations.NaheulbookDbName;
+                command.Parameters.Add(dbNameParameter);
+
+                dbContext.Database.GetDbConnection().Open();
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    tablesNames.Add(reader.GetString(0));
+                }
+            }
+
+            using (var dbContext = new DbContext(dbContextOptions))
+            {
+                dbContext.Database.ExecuteSqlRaw(
+                    "SET foreign_key_checks = 0;\n" +
+                    string.Join('\n', tablesNames.Select(tableName => $"DROP TABLE `{tableName}`;")) +
+                    "SET foreign_key_checks = 1\n"
+                );
             }
         }
 

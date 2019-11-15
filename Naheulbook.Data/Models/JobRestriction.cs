@@ -1,6 +1,9 @@
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
-    public class JobRestrict
+    public class JobRestriction
     {
         public int Id { get; set; }
         public string Text { get; set; } = null!;

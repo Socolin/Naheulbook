@@ -3,7 +3,7 @@
 
 namespace Naheulbook.Requests.Requests
 {
-    public class MonsterSimpleInventoryRequest
+    public class MonsterTemplateInventoryElementRequest
     {
         public int? Id { get; set; }
         public int ItemTemplateId { get; set; }

@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Effect> builder)
         {
-            builder.ToTable("effect");
+            builder.ToTable("effects");
 
             builder.HasIndex(e => e.SubCategoryId)
                 .HasName("IX_effect_subCategoryId");
@@ -96,7 +96,7 @@ namespace Naheulbook.Data.Configurations
         {
             builder.HasKey(e => new {e.EffectId, e.StatName});
 
-            builder.ToTable("effect_modifier");
+            builder.ToTable("effect_modifiers");
 
             builder.HasIndex(e => e.StatName)
                 .HasName("IX_effect_modifier_stat");
@@ -135,7 +135,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<EffectType> builder)
         {
-            builder.ToTable("effect_type");
+            builder.ToTable("effect_types");
 
             builder.HasKey(e => e.Id);
 

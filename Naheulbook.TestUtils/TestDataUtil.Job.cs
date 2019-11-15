@@ -38,9 +38,9 @@ namespace Naheulbook.TestUtils
                     MaxValue = 4,
                 }
             };
-            job.Restrictions = new List<JobRestrict>
+            job.Restrictions = new List<JobRestriction>
             {
-                new JobRestrict
+                new JobRestriction
                 {
                     Text = $"some-job-restriction-{suffix}",
                     Flags = "[]"

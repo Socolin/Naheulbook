@@ -30,7 +30,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<MonsterTemplate> builder)
         {
-            builder.ToTable("monster_template");
+            builder.ToTable("monster_templates");
 
             builder.HasKey(e => e.Id);
 
@@ -51,11 +51,11 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class MonsterTemplateSimpleInventoryConfiguration : IEntityTypeConfiguration<MonsterTemplateSimpleInventory>
+    public class MonsterTemplateInventoryElementConfiguration : IEntityTypeConfiguration<MonsterTemplateInventoryElement>
     {
-        public void Configure(EntityTypeBuilder<MonsterTemplateSimpleInventory> builder)
+        public void Configure(EntityTypeBuilder<MonsterTemplateInventoryElement> builder)
         {
-            builder.ToTable("monster_template_simple_inventory");
+            builder.ToTable("monster_template_inventory_elements");
 
             builder.HasKey(e => e.Id);
 
@@ -88,7 +88,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<MonsterType> builder)
         {
-            builder.ToTable("monster_type");
+            builder.ToTable("monster_types");
 
             builder.HasKey(e => e.Id);
 
@@ -103,7 +103,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<MonsterTrait> builder)
         {
-            builder.ToTable("monster_trait");
+            builder.ToTable("monster_traits");
 
             builder.HasKey(e => e.Id);
 

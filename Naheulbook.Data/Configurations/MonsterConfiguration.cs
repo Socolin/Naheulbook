@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Monster> builder)
         {
-            builder.ToTable("monster");
+            builder.ToTable("monsters");
 
             builder.HasKey(x => x.Id);
 

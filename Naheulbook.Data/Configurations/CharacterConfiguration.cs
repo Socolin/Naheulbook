@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Character> builder)
         {
-            builder.ToTable("character");
+            builder.ToTable("characters");
 
             builder.HasKey(x => x.Id);
 
@@ -109,7 +109,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CharacterJob> builder)
         {
-            builder.ToTable("character_job");
+            builder.ToTable("character_jobs");
 
             builder.HasKey(e => new {e.CharacterId, e.JobId});
 
@@ -138,7 +138,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CharacterModifier> builder)
         {
-            builder.ToTable("character_modifier");
+            builder.ToTable("character_modifiers");
 
             builder.HasKey(e => e.Id);
 
@@ -207,7 +207,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CharacterModifierValue> builder)
         {
-            builder.ToTable("character_modifier_value");
+            builder.ToTable("character_modifier_values");
 
             builder.HasKey(e => e.Id);
 
@@ -251,7 +251,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CharacterSpeciality> builder)
         {
-            builder.ToTable("character_speciality");
+            builder.ToTable("character_specialities");
 
             builder.HasKey(e => new {e.SpecialityId, e.CharacterId});
 
@@ -276,7 +276,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CharacterHistoryEntry> builder)
         {
-            builder.ToTable("character_history");
+            builder.ToTable("character_history_entries");
 
             builder.HasKey(e => e.Id);
 

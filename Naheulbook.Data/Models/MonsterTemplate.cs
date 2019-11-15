@@ -12,6 +12,6 @@ namespace Naheulbook.Data.Models
         public int SubCategoryId { get; set; }
         public MonsterSubCategory SubCategory { get; set; } = null!;
 
-        public ICollection<MonsterTemplateSimpleInventory> Items { get; set; } = null!;
+        public ICollection<MonsterTemplateInventoryElement> Items { get; set; } = null!;
     }
 }

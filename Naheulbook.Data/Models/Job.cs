@@ -18,7 +18,7 @@ namespace Naheulbook.Data.Models
 
         public ICollection<JobBonus> Bonuses { get; set; } = null!;
         public ICollection<JobRequirement> Requirements { get; set; } = null!;
-        public ICollection<JobRestrict> Restrictions { get; set; } = null!;
+        public ICollection<JobRestriction> Restrictions { get; set; } = null!;
         public ICollection<JobSkill> Skills { get; set; } = null!;
         public ICollection<Speciality> Specialities { get; set; } = null!;
     }

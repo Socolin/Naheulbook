@@ -46,7 +46,7 @@ namespace Naheulbook.Core.Services
                     Data = JsonConvert.SerializeObject(request.Data),
                     Name = request.Name,
                     SubCategory = category,
-                    Items = request.SimpleInventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateSimpleInventory
+                    Items = request.SimpleInventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateInventoryElement
                     {
                         Chance = i.Chance,
                         ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplateId),
@@ -86,7 +86,7 @@ namespace Naheulbook.Core.Services
                 monsterTemplate.SubCategory = category;
 
                 monsterTemplate.Items = monsterTemplate.Items.Where(i => request.SimpleInventory.Any(e => e.Id == i.Id)).ToList();
-                var newItems = request.SimpleInventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateSimpleInventory
+                var newItems = request.SimpleInventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateInventoryElement
                 {
                     Chance = i.Chance,
                     ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplateId),

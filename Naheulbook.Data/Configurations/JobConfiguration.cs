@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Job> builder)
         {
-            builder.ToTable("job");
+            builder.ToTable("jobs");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -44,7 +44,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<JobBonus> builder)
         {
-            builder.ToTable("job_bonus");
+            builder.ToTable("job_bonuses");
 
             builder.HasIndex(e => e.JobId)
                 .HasName("IX_job_bonus_jobid");
@@ -69,7 +69,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<JobRequirement> builder)
         {
-            builder.ToTable("job_requirement");
+            builder.ToTable("job_requirements");
 
             builder.HasIndex(e => e.JobId)
                 .HasName("IX_job_requirement_jobid");
@@ -108,11 +108,11 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class JobRestrictConfiguration : IEntityTypeConfiguration<JobRestrict>
+    public class JobRestrictionConfiguration : IEntityTypeConfiguration<JobRestriction>
     {
-        public void Configure(EntityTypeBuilder<JobRestrict> builder)
+        public void Configure(EntityTypeBuilder<JobRestriction> builder)
         {
-            builder.ToTable("job_restrict");
+            builder.ToTable("job_restrictions");
 
             builder.HasIndex(e => e.JobId)
                 .HasName("IX_job_restrict_jobid");
@@ -145,7 +145,7 @@ namespace Naheulbook.Data.Configurations
         {
             builder.HasKey(e => new {e.JobId, e.SkillId});
 
-            builder.ToTable("job_skill");
+            builder.ToTable("job_skills");
 
             builder.HasIndex(e => e.SkillId)
                 .HasName("IX_job_skill_skillid");

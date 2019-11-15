@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Speciality> builder)
         {
-            builder.ToTable("speciality");
+            builder.ToTable("specialities");
 
             builder.HasIndex(e => e.JobId)
                 .HasName("IX_speciality_job");
@@ -44,7 +44,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<SpecialityModifier> builder)
         {
-            builder.ToTable("speciality_modifier");
+            builder.ToTable("speciality_modifiers");
 
             builder.HasIndex(e => e.SpecialityId)
                 .HasName("IX_speciality_modifier_speciality");
@@ -78,7 +78,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<SpecialitySpecial> builder)
         {
-            builder.ToTable("speciality_special");
+            builder.ToTable("speciality_specials");
 
             builder.HasIndex(e => e.SpecialityId)
                 .HasName("IX_speciality_special_speciality");

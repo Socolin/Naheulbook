@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Calendar> builder)
         {
-            builder.ToTable("calendar");
+            builder.ToTable("calendars");
 
             builder.HasKey(e => e.Id);
 

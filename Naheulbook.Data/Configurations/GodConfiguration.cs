@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<God> builder)
         {
-            builder.ToTable("god");
+            builder.ToTable("gods");
 
             builder.HasKey(e => e.Id);
 

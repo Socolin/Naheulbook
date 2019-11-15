@@ -10,7 +10,7 @@ namespace Naheulbook.Data.Configurations
         {
             builder.HasKey(e => e.Name);
 
-            builder.ToTable("stat");
+            builder.ToTable("stats");
 
             builder.Property(e => e.Name)
                 .HasColumnName("name")

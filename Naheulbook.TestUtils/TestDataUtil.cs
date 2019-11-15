@@ -81,67 +81,69 @@ namespace Naheulbook.TestUtils
             {
                 cleanupSqlCommand.CommandText =
                     "SET FOREIGN_KEY_CHECKS=0;" +
-                    "DELETE FROM `calendar`;" +
-                    "DELETE FROM `character`;" +
-                    "DELETE FROM `character_history`;" +
-                    "DELETE FROM `character_job`;" +
-                    "DELETE FROM `character_modifier`;" +
-                    "DELETE FROM `character_modifier_value`;" +
+                    "DELETE FROM `calendars`;" +
+                    "DELETE FROM `characters`;" +
+                    "DELETE FROM `character_history_entries`;" +
+                    "DELETE FROM `character_jobs`;" +
+                    "DELETE FROM `character_modifiers`;" +
+                    "DELETE FROM `character_modifier_values`;" +
                     "DELETE FROM `character_skills`;" +
-                    "DELETE FROM `character_speciality`;" +
-                    "DELETE FROM `effect`;" +
+                    "DELETE FROM `character_specialities`;" +
+                    "DELETE FROM `effects`;" +
                     "DELETE FROM `effect_subcategories`;" +
-                    "DELETE FROM `effect_modifier`;" +
-                    "DELETE FROM `effect_type`;" +
-                    // "DELETE FROM `error_report`;" +
-                    "DELETE FROM `event`;" +
-                    "DELETE FROM `god`;" +
-                    "DELETE FROM `group`;" +
-                    "DELETE FROM `group_history`;" +
+                    "DELETE FROM `effect_modifiers`;" +
+                    "DELETE FROM `effect_types`;" +
+                    "DELETE FROM `events`;" +
+                    "DELETE FROM `gods`;" +
+                    "DELETE FROM `groups`;" +
+                    "DELETE FROM `group_history_entries`;" +
                     "DELETE FROM `group_invitations`;" +
-                    "DELETE FROM `icon`;" +
-                    "DELETE FROM `item`;" +
-                    "DELETE FROM `item_slot`;" +
-                    "DELETE FROM `item_template`;" +
+                    "DELETE FROM `items`;" +
+                    "DELETE FROM `item_templates`;" +
                     "DELETE FROM `item_template_subcategories`;" +
-                    "DELETE FROM `item_template_modifier`;" +
-                    "DELETE FROM `item_template_requirement`;" +
-                    "DELETE FROM `item_template_section`;" +
-                    "DELETE FROM `item_template_skill`;" +
+                    "DELETE FROM `item_template_modifiers`;" +
+                    "DELETE FROM `item_template_requirements`;" +
+                    "DELETE FROM `item_template_sections`;" +
+                    "DELETE FROM `item_template_skills`;" +
                     "DELETE FROM `item_template_skill_modifiers`;" +
-                    "DELETE FROM `item_template_slot`;" +
-                    "DELETE FROM `item_template_unskill`;" +
-                    "DELETE FROM `item_type`;" +
-                    "DELETE FROM `job`;" +
-                    "DELETE FROM `job_bonus`;" +
-                    "DELETE FROM `job_requirement`;" +
-                    "DELETE FROM `job_restrict`;" +
-                    "DELETE FROM `job_skill`;" +
-                    "DELETE FROM `loot`;" +
-                    "DELETE FROM `monster`;" +
+                    "DELETE FROM `item_template_slots`;" +
+                    "DELETE FROM `item_template_unskills`;" +
+                    "DELETE FROM `item_types`;" +
+                    "DELETE FROM `jobs`;" +
+                    "DELETE FROM `job_bonuses`;" +
+                    "DELETE FROM `job_requirements`;" +
+                    "DELETE FROM `job_restrictions`;" +
+                    "DELETE FROM `job_skills`;" +
+                    "DELETE FROM `loots`;" +
+                    "DELETE FROM `maps`;" +
+                    "DELETE FROM `map_marker_links`;" +
+                    "DELETE FROM `map_markers`;" +
+                    "DELETE FROM `map_layers`;" +
+                    "DELETE FROM `monsters`;" +
                     "DELETE FROM `monster_subcategories`;" +
-                    "DELETE FROM `monster_template`;" +
-                    "DELETE FROM `monster_template_simple_inventory`;" +
-                    "DELETE FROM `monster_trait`;" +
-                    "DELETE FROM `monster_type`;" +
-                    "DELETE FROM `origin`;" +
-                    "DELETE FROM `origin_bonus`;" +
-                    "DELETE FROM `origin_info`;" +
-                    "DELETE FROM `origin_requirement`;" +
-                    "DELETE FROM `origin_restrict`;" +
-                    "DELETE FROM `origin_skill`;" +
-                    // "DELETE FROM `quest`;" +
-                    // "DELETE FROM `quest_template`;" +
-                    "DELETE FROM `skill`;" +
-                    "DELETE FROM `skill_effect`;" +
-                    "DELETE FROM `speciality`;" +
-                    "DELETE FROM `speciality_modifier`;" +
-                    "DELETE FROM `speciality_special`;" +
-                    // "DELETE FROM `spell`;" +
-                    // "DELETE FROM `spell_category`;" +
-                    "DELETE FROM `stat`;" +
-                    "DELETE FROM `user`;" +
-                    // "DELETE FROM `user_session`;" +
+                    "DELETE FROM `monster_templates`;" +
+                    "DELETE FROM `monster_template_inventory_elements`;" +
+                    "DELETE FROM `monster_traits`;" +
+                    "DELETE FROM `monster_types`;" +
+                    "DELETE FROM `origins`;" +
+                    "DELETE FROM `origin_bonuses`;" +
+                    "DELETE FROM `origin_information`;" +
+                    "DELETE FROM `origin_requirements`;" +
+                    "DELETE FROM `origin_restrictions`;" +
+                    "DELETE FROM `origin_skills`;" +
+                    // "DELETE FROM `quests`;" +
+                    // "DELETE FROM `quest_templates`;" +
+                    "DELETE FROM `skill_effects`;" +
+                    "DELETE FROM `skills`;" +
+                    "DELETE FROM `slots`;" +
+                    "DELETE FROM `specialities`;" +
+                    "DELETE FROM `speciality_modifiers`;" +
+                    "DELETE FROM `speciality_specials`;" +
+                    // "DELETE FROM `spells`;" +
+                    // "DELETE FROM `spell_categories`;" +
+                    "DELETE FROM `stats`;" +
+                    "DELETE FROM `users`;" +
+                    // "DELETE FROM `user_sessions`;" +
                     "SET FOREIGN_KEY_CHECKS=1;";
                 cleanupSqlCommand.ExecuteNonQuery();
             }

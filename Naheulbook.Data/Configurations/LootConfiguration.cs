@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Loot> builder)
         {
-            builder.ToTable("loot");
+            builder.ToTable("loots");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");

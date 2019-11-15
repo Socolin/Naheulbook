@@ -8,7 +8,7 @@ namespace Naheulbook.Web.Responses
 {
     public class MonsterTemplateResponse
     {
-        public class MonsterSimpleInventoryResponse
+        public class MonsterTemplateInventoryElementResponse
         {
             public int Id;
             public ItemTemplateResponse ItemTemplate = null!;
@@ -21,6 +21,6 @@ namespace Naheulbook.Web.Responses
         public string Name { get; set; } = null!;
         public int SubCategoryId { get; set; }
         public JObject Data { get; set; } = null!;
-        public List<MonsterSimpleInventoryResponse> SimpleInventory { get; set; } = null!;
+        public List<MonsterTemplateInventoryElementResponse> SimpleInventory { get; set; } = null!;
     }
 }
