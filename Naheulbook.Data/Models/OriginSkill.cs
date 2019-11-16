@@ -1,3 +1,8 @@
+using System;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class OriginSkill
@@ -7,7 +12,7 @@ namespace Naheulbook.Data.Models
         public int OriginId { get; set; }
         public Origin Origin { get; set; } = null!;
 
-        public int SkillId { get; set; }
+        public Guid SkillId { get; set; }
         public Skill Skill { get; set; } = null!;
     }
 }

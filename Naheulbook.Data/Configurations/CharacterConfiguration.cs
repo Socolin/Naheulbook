@@ -230,10 +230,17 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasKey(e => new {e.SkillId, e.CharacterId});
 
+            builder.HasIndex(e => e.CharacterId)
+                .HasName("IX_character_skills_character");
+
+            builder.HasIndex(e => e.SkillId)
+                .HasName("IX_character_skills_skillId");
+
             builder.Property(e => e.CharacterId)
                 .HasColumnName("character");
+
             builder.Property(e => e.SkillId)
-                .HasColumnName("skill");
+                .HasColumnName("skillId");
 
             builder.HasOne(e => e.Character)
                 .WithMany(e => e.Skills)
@@ -243,7 +250,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Skill)
                 .WithMany()
                 .HasForeignKey(e => e.SkillId)
-                .HasConstraintName("FK_character_skills_skill_skill");
+                .HasConstraintName("FK_character_skills_skillId_skills_id");
         }
     }
 

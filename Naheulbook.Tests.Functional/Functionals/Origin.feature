@@ -22,10 +22,10 @@ Feature: Origin
             }
         ],
         "skillIds": [
-            ${Skill.[0].Id}
+            "${Skill.[0].Id}"
         ],
         "availableSkillIds": [
-            ${Skill.[1].Id}
+            "${Skill.[1].Id}"
         ],
         "information": [
             {

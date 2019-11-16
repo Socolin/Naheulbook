@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Naheulbook.Data.Models
 {
     public class ItemTemplate

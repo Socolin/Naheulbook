@@ -1,4 +1,4 @@
-using Socolin.TestsUtils.FakeSmtp;
+using Socolin.TestUtils.FakeSmtp;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions

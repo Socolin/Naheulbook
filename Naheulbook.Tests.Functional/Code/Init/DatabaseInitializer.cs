@@ -1,13 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BoDi;
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.DatabaseMigrator.Migrations;
 using Naheulbook.Tests.Functional.Code.Constants;
+using Naheulbook.Tests.Functional.Code.Tools;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Init
@@ -26,7 +28,16 @@ namespace Naheulbook.Tests.Functional.Code.Init
         public static void BeforeTestRun()
         {
             var serviceProvider = new ServiceCollection()
-                .AddLogging(lb => lb.AddFluentMigratorConsole())
+                .Configure<FluentMigratorLoggerOptions>(
+                    opt =>
+                    {
+                        opt.ShowElapsedTime = true;
+                        opt.ShowSql = true;
+                    })
+                .AddLogging(lb => lb
+                    .AddFluentMigratorConsole()
+                    .Services.AddSingleton<ILoggerProvider>((services) => new FluentMigratorFileLoggerProvider("/tmp/fluentmigrator.log", services.GetService<IOptions<FluentMigratorLoggerOptions>>()))
+                )
                 .AddFluentMigratorCore()
                 .ConfigureRunner(
                     builder => builder

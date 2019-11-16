@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -12,7 +13,7 @@ namespace Naheulbook.Requests.Requests
         public short EvOrEaValue { get; set; }
         public int TargetLevelUp { get; set; }
         public string StatToUp { get; set; } = null!;
-        public int? SkillId { get; set; }
+        public Guid? SkillId { get; set; }
         public List<int> SpecialityIds { get; set; } = null!;
     }
 }

@@ -40,7 +40,7 @@ namespace Naheulbook.DatabaseMigrator.Cli
                     })
                 .ConfigureRunner(rb => rb
                     .AddMySql5()
-                    .WithGlobalConnectionString(connectionString)
+                    .WithGlobalConnectionString(connectionString + ";Allow User Variables=True")
                     .ScanIn(typeof(Mig0001Init).Assembly).For.Migrations().For.EmbeddedResources())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
                 .BuildServiceProvider(false);

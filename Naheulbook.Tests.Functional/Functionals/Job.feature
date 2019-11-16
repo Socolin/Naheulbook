@@ -21,10 +21,10 @@ Feature: Job
             }
         ],
         "skillIds": [
-          ${Skill.[-2].Id}
+          "${Skill.[-2].Id}"
         ],
         "availableSkillIds": [
-          ${Skill.[-1].Id}
+          "${Skill.[-1].Id}"
         ],
         "bonuses": [
             {

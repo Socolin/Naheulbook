@@ -9,7 +9,7 @@ using Naheulbook.Web;
 using Serilog;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
-using Socolin.TestsUtils.FakeSmtp;
+using Socolin.TestUtils.FakeSmtp;
 
 namespace Naheulbook.Tests.Functional.Code.Servers
 {
@@ -76,6 +76,7 @@ namespace Naheulbook.Tests.Functional.Code.Servers
         {
             _server?.StopAsync().GetAwaiter().GetResult();
             _server?.Dispose();
+            _server = null;
         }
     }
 }

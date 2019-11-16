@@ -8,7 +8,7 @@ Feature: Skill
     And the response should contains a json array containing the following element identified by id
     """
     {
-        "id": ${Skill.Id},
+        "id": "${Skill.Id}",
         "name": "${Skill.Name}",
         "description": "${Skill.Description}",
         "playerDescription": "${Skill.PlayerDescription}",

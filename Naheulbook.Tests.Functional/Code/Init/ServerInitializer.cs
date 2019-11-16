@@ -5,7 +5,7 @@ using BoDi;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Servers;
-using Socolin.TestsUtils.FakeSmtp;
+using Socolin.TestUtils.FakeSmtp;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Init

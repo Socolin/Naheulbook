@@ -58,20 +58,19 @@ namespace Naheulbook.Core.Utils
                 Special = x.Special == null ? "" : string.Join(',', x.Special)
             }).ToList() ?? new List<ItemTemplateModifier>();
 
-
-            itemTemplate.Skills = request.Skills?.Select(x => new ItemTemplateSkill
+            itemTemplate.Skills = request.SkillIds?.Select(skillId => new ItemTemplateSkill
             {
-                SkillId = x.Id
+                SkillId = skillId
             }).ToList() ?? new List<ItemTemplateSkill>();
 
-            itemTemplate.UnSkills = request.UnSkills?.Select(x => new ItemTemplateUnSkill
+            itemTemplate.UnSkills = request.UnSkillIds?.Select(skillId => new ItemTemplateUnSkill
             {
-                SkillId = x.Id
+                SkillId = skillId
             }).ToList() ?? new List<ItemTemplateUnSkill>();
 
-            itemTemplate.SkillModifiers = request.SkillModifiers?.Select(x => new ItemTemplateSkillModifier()
+            itemTemplate.SkillModifiers = request.SkillModifiers?.Select(x => new ItemTemplateSkillModifier
             {
-                SkillId = x.Skill,
+                SkillId = x.SkillId,
                 Value = x.Value
             }).ToList() ?? new List<ItemTemplateSkillModifier>();
         }

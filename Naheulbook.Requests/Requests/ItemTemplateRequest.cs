@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Requests.Requests
@@ -11,9 +11,8 @@ namespace Naheulbook.Requests.Requests
         public string Name { get; set; } = null!;
         public string? TechName { get; set; }
         public List<ItemTemplateModifierRequest> Modifiers { get; set; } = new List<ItemTemplateModifierRequest>();
-        public List<IdRequest> Skills { get; set; } = new List<IdRequest>();
-        [JsonProperty("unskills")]
-        public List<IdRequest> UnSkills { get; set; } = new List<IdRequest>();
+        public List<Guid> SkillIds { get; set; } = new List<Guid>();
+        public List<Guid> UnSkillIds { get; set; } = new List<Guid>();
         public List<ItemTemplateSkillModifierRequest> SkillModifiers { get; set; } = new List<ItemTemplateSkillModifierRequest>();
         public List<ItemTemplateRequirementRequest> Requirements { get; set; } = new List<ItemTemplateRequirementRequest>();
         public List<IdRequest> Slots { get; set; } = new List<IdRequest>();
@@ -32,7 +31,7 @@ namespace Naheulbook.Requests.Requests
 
     public class ItemTemplateSkillModifierRequest
     {
-        public int Skill { get; set; }
+        public Guid SkillId { get; set; }
         public short Value { get; set; }
     }
 

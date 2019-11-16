@@ -1,3 +1,8 @@
+using System;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class ItemTemplateSkill
@@ -5,7 +10,7 @@ namespace Naheulbook.Data.Models
         public int ItemTemplateId { get; set; }
         public ItemTemplate ItemTemplate { get; set; } = null!;
 
-        public int SkillId { get; set; }
+        public Guid SkillId { get; set; }
         public Skill Skill { get; set; } = null!;
     }
 }

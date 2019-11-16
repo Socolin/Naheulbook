@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Naheulbook.Core.Utils;
@@ -255,39 +256,39 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             {
                 Skills = new List<ItemTemplateSkill>
                 {
-                    new ItemTemplateSkill {SkillId = 1},
-                    new ItemTemplateSkill {SkillId = 2}
+                    new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000001")},
+                    new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000002")}
                 },
                 UnSkills = new List<ItemTemplateUnSkill>
                 {
-                    new ItemTemplateUnSkill {SkillId = 3},
-                    new ItemTemplateUnSkill {SkillId = 4}
+                    new ItemTemplateUnSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000003")},
+                    new ItemTemplateUnSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000004")}
                 }
             };
 
             var request = new ItemTemplateRequest
             {
-                Skills = new List<IdRequest>
+                SkillIds = new List<Guid>
                 {
-                    new IdRequest {Id = 4},
-                    new IdRequest {Id = 5},
+                    new Guid("00000000-0000-0000-0000-000000000004"),
+                    new Guid("00000000-0000-0000-0000-000000000005")
                 },
-                UnSkills = new List<IdRequest>
+                UnSkillIds = new List<Guid>
                 {
-                    new IdRequest {Id = 6},
-                    new IdRequest {Id = 7},
+                    new Guid("00000000-0000-0000-0000-000000000006"),
+                    new Guid("00000000-0000-0000-0000-000000000007")
                 }
             };
 
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
             itemTemplate.Skills.Should().BeEquivalentTo(
-                new ItemTemplateSkill {SkillId = 4},
-                new ItemTemplateSkill {SkillId = 5}
+                new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000004")},
+                new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000005")}
             );
             itemTemplate.UnSkills.Should().BeEquivalentTo(
-                new ItemTemplateSkill {SkillId = 6},
-                new ItemTemplateSkill {SkillId = 7}
+                new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000006")},
+                new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000007")}
             );
         }
 
@@ -299,8 +300,8 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             {
                 SkillModifiers = new List<ItemTemplateSkillModifier>
                 {
-                    new ItemTemplateSkillModifier {SkillId = 1, Value = 1},
-                    new ItemTemplateSkillModifier {SkillId = 2, Value = 2}
+                    new ItemTemplateSkillModifier {SkillId = new Guid("00000000-0000-0000-0000-000000000001"), Value = 1},
+                    new ItemTemplateSkillModifier {SkillId = new Guid("00000000-0000-0000-0000-000000000002"), Value = 2}
                 }
             };
 
@@ -308,16 +309,16 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             {
                 SkillModifiers = new List<ItemTemplateSkillModifierRequest>
                 {
-                    new ItemTemplateSkillModifierRequest {Skill = 4, Value = 3},
-                    new ItemTemplateSkillModifierRequest {Skill = 5, Value = 4},
+                    new ItemTemplateSkillModifierRequest {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
+                    new ItemTemplateSkillModifierRequest {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4},
                 }
             };
 
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
             itemTemplate.SkillModifiers.Should().BeEquivalentTo(
-                new ItemTemplateSkillModifier {SkillId = 4, Value = 3},
-                new ItemTemplateSkillModifier {SkillId = 5, Value = 4}
+                new ItemTemplateSkillModifier {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
+                new ItemTemplateSkillModifier {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4}
             );
         }
 

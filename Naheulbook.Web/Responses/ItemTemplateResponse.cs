@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -20,10 +21,8 @@ namespace Naheulbook.Web.Responses
         public JObject Data { get; set; } = null!;
 
         public List<ItemTemplateModifierResponse> Modifiers { get; set; } = null!;
-        public List<IdResponse> Skills { get; set; } = null!;
-
-        [JsonProperty("unskills")]
-        public List<IdResponse> UnSkills { get; set; } = null!;
+        public List<Guid> SkillIds { get; set; } = null!;
+        public List<Guid> UnSkillIds { get; set; } = null!;
 
         public List<ItemTemplateSkillModifierResponse> SkillModifiers { get; set; } = null!;
         public List<ItemTemplateRequirementResponse> Requirements { get; set; } = null!;
@@ -46,8 +45,7 @@ namespace Naheulbook.Web.Responses
 
     public class ItemTemplateSkillModifierResponse
     {
-        [JsonProperty("skill")]
-        public int SkillId { get; set; }
+        public Guid SkillId { get; set; }
 
         public short Value { get; set; }
     }

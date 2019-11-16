@@ -13,7 +13,6 @@ namespace Naheulbook.Requests.Validators
         {
             RuleFor(r => r.EvOrEa).Must(s => ValidEvEa.Contains(s));
             RuleFor(r => r.StatToUp).Must(s => ValidStats.Contains(s));
-            RuleFor(r => r.SkillId).GreaterThan(0);
             RuleFor(r => r.SpecialityIds).NotNull();
         }
     }

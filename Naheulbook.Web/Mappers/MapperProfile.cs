@@ -142,6 +142,8 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(x => MapperHelpers.FromJson<List<ActiveStatsModifier>>(x.Modifiers)));
 
             CreateMap<ItemTemplate, ItemTemplateResponse>()
+                .ForMember(m => m.SkillIds, opt => opt.MapFrom(i => i.Skills.Select(s => s.SkillId)))
+                .ForMember(m => m.UnSkillIds, opt => opt.MapFrom(i => i.UnSkills.Select(s => s.SkillId)))
                 .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data) ?? new JObject()))
                 .ForMember(m => m.Slots, opt => opt.MapFrom(i => i.Slots.Select(x => x.Slot)));
             CreateMap<ItemTemplateModifier, ItemTemplateModifierResponse>()
@@ -156,10 +158,6 @@ namespace Naheulbook.Web.Mappers
             CreateMap<ItemTemplateSkillModifier, ItemTemplateSkillModifierResponse>();
             CreateMap<ItemTemplateSlot, IdResponse>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(i => i.SlotId));
-            CreateMap<ItemTemplateSkill, IdResponse>()
-                .ForMember(m => m.Id, opt => opt.MapFrom(i => i.SkillId));
-            CreateMap<ItemTemplateUnSkill, IdResponse>()
-                .ForMember(m => m.Id, opt => opt.MapFrom(i => i.SkillId));
             CreateMap<ItemTemplateSection, ItemTemplateSectionResponse>()
                 .ForMember(m => m.Specials, opt => opt.MapFrom(i => MapperHelpers.FromCommaSeparatedList(i.Special)));
             CreateMap<ItemTemplateSubCategory, ItemTemplateSubCategoryResponse>();

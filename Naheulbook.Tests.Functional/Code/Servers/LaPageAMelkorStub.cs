@@ -29,6 +29,7 @@ namespace Naheulbook.Tests.Functional.Code.Servers
         {
             _server?.StopAsync().GetAwaiter().GetResult();
             _server?.Dispose();
+            _server = null;
         }
     }
 }

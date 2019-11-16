@@ -118,19 +118,15 @@ Feature: ItemTemplate
           "origin": null
         }
       ],
-      "skills": [
-        {
-          "id": ${Skill.[0].Id}
-        }
+      "skillIds": [
+        "${Skill.[0].Id}"
       ],
-      "unskills": [
-        {
-          "id": ${Skill.[1].Id}
-        }
+      "unSkillIds": [
+        "${Skill.[1].Id}"
       ],
       "skillModifiers": [
         {
-          "skill": ${Skill.[2].Id},
+          "skillId": "${Skill.[2].Id}",
           "value": 1
         }
       ],
@@ -169,19 +165,15 @@ Feature: ItemTemplate
           "special": ["SOME-SPECIAL"]
         }
       ],
-      "skills": [
-        {
-          "id": ${Skill.[0].Id}
-        }
+      "skillIds": [
+        "${Skill.[0].Id}"
       ],
-      "unskills": [
-        {
-          "id": ${Skill.[1].Id}
-        }
+      "unSkillIds": [
+        "${Skill.[1].Id}"
       ],
       "skillModifiers": [
         {
-          "skill": ${Skill.[2].Id},
+          "skillId": "${Skill.[2].Id}",
           "value": 1
         }
       ],
@@ -261,19 +253,15 @@ Feature: ItemTemplate
         ],
         "skillModifiers": [
             {
-                "skill": ${Skill.[-3].Id},
+                "skillId": "${Skill.[-3].Id}",
                 "value": 2
             }
         ],
-        "skills": [
-            {
-                "id":  ${Skill.[-1].Id}
-            }
+        "skillIds": [
+          "${Skill.[-1].Id}"
         ],
-        "unskills": [
-            {
-                "id":  ${Skill.[-2].Id}
-            }
+        "unSkillIds": [
+          "${Skill.[-2].Id}"
         ]
     }
     """
@@ -320,19 +308,15 @@ Feature: ItemTemplate
         ],
         "skillModifiers": [
             {
-                "skill": ${Skill.[-3].Id},
+                "skillId": "${Skill.[-3].Id}",
                 "value": 2
             }
         ],
-        "skills": [
-            {
-                "id":  ${Skill.[-1].Id}
-            }
+        "skillIds": [
+          "${Skill.[-1].Id}"
         ],
-        "unskills": [
-            {
-                "id":  ${Skill.[-2].Id}
-            }
+        "unSkillIds": [
+           "${Skill.[-2].Id}"
         ]
     }
     """
@@ -384,19 +368,15 @@ Feature: ItemTemplate
         ],
         "skillModifiers": [
             {
-                "skill": ${Skill.[-3].Id},
+                "skillId": "${Skill.[-3].Id}",
                 "value": 2
             }
         ],
-        "skills": [
-            {
-                "id":  ${Skill.[-1].Id},
-            }
+        "skillIds": [
+            "${Skill.[-1].Id}"
         ],
-        "unskills": [
-            {
-                "id":  ${Skill.[-2].Id},
-            }
+        "unSkillIds": [
+            "${Skill.[-2].Id}"
         ]
     }
     """
@@ -439,19 +419,15 @@ Feature: ItemTemplate
          ],
          "skillModifiers": [
              {
-                 "skill": ${Skill.[-3].Id},
+                 "skillId": "${Skill.[-3].Id}",
                  "value": 2
              }
          ],
-         "skills": [
-             {
-                 "id":  ${Skill.[-1].Id},
-             }
+         "skillIds": [
+             "${Skill.[-1].Id}"
          ],
-         "unskills": [
-             {
-                 "id":  ${Skill.[-2].Id},
-             }
+         "unSkillIds": [
+             "${Skill.[-2].Id}"
          ]
      }
      """
@@ -475,8 +451,8 @@ Feature: ItemTemplate
            "modifiers": [],
            "requirements": [],
            "skillModifiers": [],
-           "skills": [],
-           "unskills": []
+           "skillIds": [],
+           "unSkillIds": []
          }
       ]
       """
@@ -500,8 +476,8 @@ Feature: ItemTemplate
            "modifiers": [],
            "requirements": [],
            "skillModifiers": [],
-           "skills": [],
-           "unskills": []
+           "skillIds": [],
+           "unSkillIds": []
          }
       ]
       """

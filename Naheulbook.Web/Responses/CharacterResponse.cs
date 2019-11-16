@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json;
@@ -45,7 +46,7 @@ namespace Naheulbook.Web.Responses
         public string? StatBonusAd { get; set; }
 
         public IList<int> JobIds { get; set; } = null!;
-        public IList<int> SkillIds { get; set; } = null!;
+        public IList<Guid> SkillIds { get; set; } = null!;
 
         public NamedIdResponse? Group { get; set; }
 

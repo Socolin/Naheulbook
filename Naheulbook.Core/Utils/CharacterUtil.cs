@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Notifications;
@@ -185,7 +186,7 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        private CharacterSkill CreateCharacterSkill(Character character, int skillId)
+        private CharacterSkill CreateCharacterSkill(Character character, Guid skillId)
         {
             return new CharacterSkill
             {

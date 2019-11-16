@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -25,8 +26,7 @@ namespace Naheulbook.Requests.Requests
         [JsonProperty("origin")]
         public int OriginId { get; set; }
 
-        [JsonProperty("skills")]
-        public IList<int> SkillIds { get; set; } = null!;
+        public IList<Guid> SkillIds { get; set; } = null!;
 
         [JsonProperty("speciality")]
         public int? SpecialityId { get; set; }

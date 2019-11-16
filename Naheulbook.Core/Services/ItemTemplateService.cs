@@ -33,7 +33,8 @@ namespace Naheulbook.Core.Services
             IUnitOfWorkFactory unitOfWorkFactory,
             IAuthorizationUtil authorizationUtil,
             IMapper mapper,
-            IItemTemplateUtil itemTemplateUtil, IStringCleanupUtil stringCleanupUtil
+            IItemTemplateUtil itemTemplateUtil,
+            IStringCleanupUtil stringCleanupUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -94,7 +95,6 @@ namespace Naheulbook.Core.Services
                     else
                         itemTemplate.SourceUserId = executionContext.UserId;
                 }
-
                 _itemTemplateUtil.ApplyChangesFromRequest(itemTemplate, request);
 
                 await uow.SaveChangesAsync();

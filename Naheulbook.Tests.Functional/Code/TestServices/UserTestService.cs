@@ -7,7 +7,7 @@ using Naheulbook.Tests.Functional.Code.Steps;
 using Naheulbook.TestUtils;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using Socolin.TestsUtils.FakeSmtp;
+using Socolin.TestUtils.FakeSmtp;
 
 namespace Naheulbook.Tests.Functional.Code.TestServices
 {

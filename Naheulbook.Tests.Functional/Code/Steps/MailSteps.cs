@@ -2,7 +2,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using NUnit.Framework;
-using Socolin.TestsUtils.FakeSmtp;
+using Socolin.TestUtils.FakeSmtp;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Steps

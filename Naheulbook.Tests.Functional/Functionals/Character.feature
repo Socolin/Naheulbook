@@ -21,8 +21,8 @@ Feature: Character
       },
       "job": ${Job.Id},
       "origin": ${Origin.Id},
-      "skills": [
-        ${Skill.Id}
+      "skillIds": [
+        "${Skill.Id}"
       ],
       "sex": "Homme",
       "money": 150,
@@ -81,7 +81,7 @@ Feature: Character
         ${Job.[1].Id}
       ],
       "skillIds": [
-        ${Skill.Id}
+        "${Skill.Id}"
       ],
       "specialityIds": {
         "${Job.[0].Id}": [
@@ -221,8 +221,8 @@ Feature: Character
             }
         ],
         "skillIds": [
-            ${Skill.[0].Id},
-            ${Skill.[1].Id}
+            "${Skill.[0].Id}",
+            "${Skill.[1].Id}"
         ],
         "specialities": [
             {
@@ -281,19 +281,15 @@ Feature: Character
               ],
               "skillModifiers": [
                 {
-                  "skill": ${Skill.[-3].Id},
+                  "skillId": "${Skill.[-3].Id}",
                   "value": 2
                 }
               ],
-              "skills": [
-                {
-                  "id":  ${Skill.[-1].Id}
-                }
+              "skillIds": [
+                "${Skill.[-1].Id}"
               ],
-              "unskills": [
-                {
-                  "id":  ${Skill.[-2].Id}
-                }
+              "unSkillIds": [
+                "${Skill.[-2].Id}"
               ]
             }
           }
@@ -363,19 +359,15 @@ Feature: Character
             ],
             "skillModifiers": [
                 {
-                    "skill": ${Skill.[-3].Id},
+                    "skillId": "${Skill.[-3].Id}",
                     "value": 2
                 }
             ],
-            "skills": [
-                {
-                    "id":  ${Skill.[-1].Id}
-                }
+            "skillIds": [
+                "${Skill.[-1].Id}"
             ],
-            "unskills": [
-                {
-                    "id":  ${Skill.[-2].Id}
-                }
+            "unSkillIds": [
+                "${Skill.[-2].Id}"
             ]
         }
     }
@@ -589,7 +581,7 @@ Feature: Character
       "evOrEaValue": 4,
       "targetLevelUp": 2,
       "statToUp": "AD",
-      "skillId": ${Skill.Id},
+      "skillId": "${Skill.Id}",
       "specialityIds": []
     }
     """
@@ -620,7 +612,7 @@ Feature: Character
         }
       ],
       "newSkillIds": [
-        ${Skill.Id}
+        "${Skill.Id}"
       ],
       "newLevel": 2,
       "newSpecialities": []

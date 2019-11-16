@@ -148,7 +148,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("job_skills");
 
             builder.HasIndex(e => e.SkillId)
-                .HasName("IX_job_skill_skillid");
+                .HasName("IX_job_skills_skillId");
 
             builder.Property(e => e.JobId)
                 .HasColumnName("jobid");
@@ -168,7 +168,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Skill)
                 .WithMany(s => s.JobSkills)
                 .HasForeignKey(e => e.SkillId)
-                .HasConstraintName("FK_job_skill_skill_skillid")
+                .HasConstraintName("FK_job_skills_skillId_skills_id")
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

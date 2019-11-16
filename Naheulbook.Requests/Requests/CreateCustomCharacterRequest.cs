@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -19,7 +20,7 @@ namespace Naheulbook.Requests.Requests
 
         public int OriginId { get; set; }
         public IList<int> JobIds { get; set; } = null!;
-        public IList<int> SkillIds { get; set; } = null!;
+        public IList<Guid> SkillIds { get; set; } = null!;
         public IDictionary<int, IList<int>> SpecialityIds { get; set; } = null!;
 
         public bool IsNpc { get; set; }

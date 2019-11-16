@@ -50,7 +50,8 @@ namespace Naheulbook.Data.Configurations
             builder.HasMany(e => e.SkillEffects)
                 .WithOne(s => s.Skill)
                 .HasForeignKey(e => e.SkillId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_skill_effects_skillId_skills_id");
         }
     }
 
@@ -62,13 +63,14 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasKey(e => new {e.SkillId, e.StatName});
 
-            builder.HasIndex(e => e.SkillId);
+            builder.HasIndex(e => e.SkillId)
+                .HasName("IX_skill_effects_skillId");
 
             builder.HasIndex(e => e.StatName);
 
             builder.Property(e => e.SkillId)
                 .IsRequired()
-                .HasColumnName("skill");
+                .HasColumnName("skillId");
 
             builder.Property(e => e.Value)
                 .IsRequired()
