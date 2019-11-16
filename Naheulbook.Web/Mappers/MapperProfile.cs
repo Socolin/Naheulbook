@@ -148,7 +148,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Slots, opt => opt.MapFrom(i => i.Slots.Select(x => x.Slot)));
             CreateMap<ItemTemplateModifier, ItemTemplateModifierResponse>()
                 .ForMember(m => m.JobId, opt => opt.MapFrom(im => im.RequireJobId))
-                .ForMember(m => m.OriginId, opt => opt.MapFrom(im => im.RequireOriginId))
+                .ForMember(m => m.OriginId, opt => opt.MapFrom(im => im.RequiredOriginId))
                 .ForMember(m => m.Special, opt => opt.MapFrom(im => MapperHelpers.FromCommaSeparatedList(im.Special)))
                 .ForMember(m => m.Stat, opt => opt.MapFrom(im => im.StatName));
             CreateMap<ItemTemplateRequirement, ItemTemplateRequirementResponse>()

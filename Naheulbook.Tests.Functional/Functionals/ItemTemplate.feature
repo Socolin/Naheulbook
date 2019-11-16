@@ -238,8 +238,8 @@ Feature: ItemTemplate
             {
                 "stat": "${Stat.Name}",
                 "value": -2,
-                "job": ${Job.Id},
-                "origin": ${Origin.Id},
+                "jobId": ${Job.Id},
+                "originId": "${Origin.Id}",
                 "special": [],
                 "type": "ADD"
             }
@@ -293,8 +293,8 @@ Feature: ItemTemplate
             {
                 "stat": "${Stat.Name}",
                 "value": -2,
-                "job": ${Job.Id},
-                "origin": ${Origin.Id},
+                "jobId": ${Job.Id},
+                "originId": "${Origin.Id}",
                 "special": [],
                 "type": "ADD"
             }

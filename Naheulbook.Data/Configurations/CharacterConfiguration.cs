@@ -67,7 +67,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("user");
             builder.Property(e => e.OriginId)
                 .IsRequired()
-                .HasColumnName("origin");
+                .HasColumnName("originId");
             builder.Property(e => e.GroupId)
                 .IsRequired(false)
                 .HasColumnName("group");
@@ -86,7 +86,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Origin)
                 .WithMany()
                 .HasForeignKey(e => e.OriginId)
-                .HasConstraintName("FK_character_origin_origin");
+                .HasConstraintName("FK_characters_originId_origins_id");
 
             builder.HasOne(e => e.Group!)
                 .WithMany(e => e.Characters)

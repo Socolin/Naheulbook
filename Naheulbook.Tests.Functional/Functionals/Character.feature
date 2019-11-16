@@ -20,7 +20,7 @@ Feature: Character
         "FO": 12
       },
       "job": ${Job.Id},
-      "origin": ${Origin.Id},
+      "originId": "${Origin.Id}",
       "skillIds": [
         "${Skill.Id}"
       ],
@@ -75,7 +75,7 @@ Feature: Character
         "ev": 25,
         "ea": 30
       },
-      "originId": ${Origin.Id},
+      "originId": "${Origin.Id}",
       "jobIds": [
         ${Job.[0].Id},
         ${Job.[1].Id}
@@ -141,7 +141,7 @@ Feature: Character
     {
         "id": ${Character.Id},
         "name": "${Character.Name}",
-        "originId": ${Origin.Id},
+        "originId": "${Origin.Id}",
         "level": ${Character.Level},
         "jobIds": [
             ${Job.[0].Id},
@@ -266,8 +266,8 @@ Feature: Character
                 {
                   "stat": "${ItemTemplate.Modifiers.[0].StatName}",
                   "value": ${ItemTemplate.Modifiers.[0].Value},
-                  "job": ${ItemTemplate.Modifiers.[0].RequireJobId},
-                  "origin": ${ItemTemplate.Modifiers.[0].RequireOriginId},
+                  "jobId": ${ItemTemplate.Modifiers.[0].RequireJobId},
+                  "originId": "${ItemTemplate.Modifiers.[0].RequiredOriginId}",
                   "special": [],
                   "type": "ADD"
                 }
@@ -344,8 +344,8 @@ Feature: Character
                 {
                     "stat": "${Stat.Name}",
                     "value": -2,
-                    "job": ${Job.Id},
-                    "origin": ${Origin.Id},
+                    "jobId": ${Job.Id},
+                    "originId": "${Origin.Id}",
                     "special": [],
                     "type": "ADD"
                 }

@@ -8,7 +8,7 @@ Feature: Origin
     And the response should contains a json array containing the following element identified by id
     """
     {
-        "id": ${Origin.Id},
+        "id": "${Origin.Id}",
         "name": "${Origin.Name}",
         "description": "${Origin.Description}",
         "playerDescription": "${Origin.PlayerDescription}",

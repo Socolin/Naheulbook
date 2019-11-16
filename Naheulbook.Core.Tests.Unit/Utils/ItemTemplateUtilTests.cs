@@ -212,14 +212,14 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                     new ItemTemplateModifierRequest
                     {
                         Stat = "some-stat-name-2",
-                        Job = 1,
+                        JobId = 1,
                         Type = "ADD",
                         Value = 3
                     },
                     new ItemTemplateModifierRequest
                     {
                         Stat = "some-stat-name-3",
-                        Origin = 2,
+                        OriginId = new Guid("00000000-0000-0000-0000-000000000001"),
                         Type = "ADD",
                         Value = 3,
                         Special = new List<string> {"some-special-3"}
@@ -241,7 +241,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                 new ItemTemplateModifier
                 {
                     StatName = "some-stat-name-3",
-                    RequireOriginId = 2,
+                    RequiredOriginId = new Guid("00000000-0000-0000-0000-000000000001"),
                     Type = "ADD",
                     Value = 3,
                     Special = "some-special-3"

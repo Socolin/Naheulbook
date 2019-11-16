@@ -23,13 +23,13 @@ namespace Naheulbook.Core.Mappers
                 .ForMember(m => m.Data, opt => opt.MapFrom(i => i.Data.ToString(Formatting.None)));
             CreateMap<ItemTemplateModifierRequest, ItemTemplateModifier>()
                 .ForMember(m => m.Id, opt => opt.Ignore())
-                .ForMember(m => m.RequireJobId, opt => opt.MapFrom(im => im.Job))
-                .ForMember(m => m.RequireOriginId, opt => opt.MapFrom(im => im.Origin))
+                .ForMember(m => m.RequireJobId, opt => opt.MapFrom(im => im.JobId))
+                .ForMember(m => m.RequiredOriginId, opt => opt.MapFrom(im => im.OriginId))
                 .ForMember(m => m.Special, opt => opt.MapFrom(im => im.Special == null ? null : string.Join(',', im.Special)))
                 .ForMember(m => m.StatName, opt => opt.MapFrom(im => im.Stat))
                 .ForMember(m => m.Stat, opt => opt.Ignore())
                 .ForMember(m => m.RequireJob, opt => opt.Ignore())
-                .ForMember(m => m.RequireOrigin, opt => opt.Ignore())
+                .ForMember(m => m.RequiredOrigin, opt => opt.Ignore())
                 .ForMember(m => m.ItemTemplate, opt => opt.Ignore());
             CreateMap<ItemTemplateRequirementRequest, ItemTemplateRequirement>()
                 .ForMember(m => m.Id, opt => opt.Ignore())

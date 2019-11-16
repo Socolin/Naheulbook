@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Naheulbook.Data.Models
@@ -31,7 +32,7 @@ namespace Naheulbook.Data.Models
         public int OwnerId { get; set; }
         public User Owner { get; set; } = null!;
 
-        public int OriginId { get; set; }
+        public Guid OriginId { get; set; }
         public Origin Origin { get; set; } = null!;
 
         public int? GroupId { get; set; }

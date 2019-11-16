@@ -25,8 +25,8 @@ namespace Naheulbook.Requests.Requests
         public int Value { get; set; }
         public string Type { get; set; } = null!;
         public List<string>? Special { get; set; }
-        public int? Job { get; set; }
-        public int? Origin { get; set; }
+        public int? JobId { get; set; }
+        public Guid? OriginId { get; set; }
     }
 
     public class ItemTemplateSkillModifierRequest

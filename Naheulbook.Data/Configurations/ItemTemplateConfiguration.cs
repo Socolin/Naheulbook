@@ -140,7 +140,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasIndex(e => e.RequireJobId)
                 .HasName("IX_item_effect_requirejob");
 
-            builder.HasIndex(e => e.RequireOriginId)
+            builder.HasIndex(e => e.RequiredOriginId)
                 .HasName("IX_item_effect_requireorigin");
 
             builder.HasIndex(e => e.StatName)
@@ -156,8 +156,8 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.RequireJobId)
                 .HasColumnName("requirejob");
 
-            builder.Property(e => e.RequireOriginId)
-                .HasColumnName("requireorigin");
+            builder.Property(e => e.RequiredOriginId)
+                .HasColumnName("requiredOriginId");
 
             builder.Property(e => e.Special)
                 .IsRequired(false)
@@ -183,6 +183,12 @@ namespace Naheulbook.Data.Configurations
                 .HasForeignKey(s => s.ItemTemplateId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_item_effect_item_template_item");
+
+            builder.HasOne(s => s.RequiredOrigin)
+                .WithMany()
+                .HasForeignKey(s => s.RequiredOriginId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_item_template_modifiers_requiredOriginId_origins_id");
         }
     }
 

@@ -1,3 +1,5 @@
+using System;
+
 namespace Naheulbook.Data.Models
 {
     public class OriginRandomNameUrl
@@ -7,7 +9,7 @@ namespace Naheulbook.Data.Models
         public string Sex { get; set; } = null!;
         public string Url { get; set; } = null!;
 
-        public int OriginId { get; set; }
+        public Guid OriginId { get; set; }
         public Origin Origin { get; set; } = null!;
     }
 }

@@ -31,7 +31,7 @@ namespace Naheulbook.Web.Responses
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Sex { get; set; } = null!;
-        public int OriginId { get; set; }
+        public Guid OriginId { get; set; }
         public bool IsNpc { get; set; }
 
         public int? Ev { get; set; }

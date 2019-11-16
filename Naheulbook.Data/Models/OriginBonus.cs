@@ -1,3 +1,8 @@
+using System;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class OriginBonus
@@ -6,7 +11,7 @@ namespace Naheulbook.Data.Models
         public string Description { get; set; } = null!;
         public string? Flags { get; set; }
 
-        public int OriginId { get; set; }
+        public Guid OriginId { get; set; }
         public Origin Origin { get; set; } = null!;
     }
 }

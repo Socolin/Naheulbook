@@ -62,7 +62,7 @@ namespace Naheulbook.TestUtils
                     {
                         Special = null,
                         RequireJob = Get<Job>(),
-                        RequireOrigin = Get<Origin>(),
+                        RequiredOrigin = Get<Origin>(),
                         Stat = Get<Stat>(),
                         Value = 2,
                         Type = "ADD"

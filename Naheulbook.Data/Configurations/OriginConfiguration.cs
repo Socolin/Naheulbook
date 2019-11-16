@@ -55,16 +55,25 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.Id)
                 .HasColumnName("id");
 
+            builder.HasIndex(e => e.OriginId)
+                .HasName("IX_origin_bonuses_originId");
+
             builder.Property(e => e.Description)
                 .IsRequired()
                 .HasColumnName("description");
 
             builder.Property(e => e.OriginId)
-                .HasColumnName("originid");
+                .HasColumnName("originId");
 
             builder.Property(e => e.Flags)
                 .HasColumnName("flags")
                 .HasColumnType("json");
+
+            builder.HasOne(e => e.Origin)
+                .WithMany(o => o.Bonuses)
+                .HasForeignKey(o => o.OriginId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_origin_bonuses_originId_origins_id");
         }
     }
 
@@ -84,7 +93,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("description");
 
             builder.Property(e => e.OriginId)
-                .HasColumnName("originid");
+                .HasColumnName("originId");
 
             builder.Property(e => e.Title)
                 .IsRequired()
@@ -92,12 +101,13 @@ namespace Naheulbook.Data.Configurations
                 .HasMaxLength(255);
 
             builder.HasIndex(e => e.OriginId)
-                .HasName("IX_origin_info_originid");
+                .HasName("IX_origin_information_originId");
 
             builder.HasOne(e => e.Origin)
                 .WithMany(o => o.Information)
                 .HasForeignKey(e => e.OriginId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_origin_information_originId_origins_id");
         }
     }
 
@@ -128,7 +138,7 @@ namespace Naheulbook.Data.Configurations
                 .HasMaxLength(64);
 
             builder.HasIndex(e => e.OriginId)
-                .HasName("IX_origin_requirement_originid");
+                .HasName("IX_origin_requirements_originId");
 
             builder.HasIndex(e => e.StatName)
                 .HasName("IX_origin_requirement_stat");
@@ -136,7 +146,8 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Origin)
                 .WithMany(o => o.Requirements)
                 .HasForeignKey(e => e.OriginId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_origin_requirements_originId_origins_id");
         }
     }
 
@@ -147,7 +158,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("origin_restrictions");
 
             builder.HasIndex(e => e.OriginId)
-                .HasName("IX_origin_restrict_originid");
+                .HasName("IX_origin_restrictions_originId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -162,6 +173,12 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.Flags)
                 .HasColumnName("flags")
                 .HasColumnType("json");
+
+            builder.HasOne(e => e.Origin)
+                .WithMany(o => o.Restrictions)
+                .HasForeignKey(o => o.OriginId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_origin_restrictions_originId_origins_id");
         }
     }
 
@@ -207,6 +224,9 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasKey(x => x.Id);
 
+            builder.HasIndex(x => x.OriginId)
+                .HasName("IX_origin_random_name_urls_originId");
+
             builder.Property(x => x.Sex)
                 .IsRequired()
                 .HasMaxLength(255)
@@ -223,6 +243,13 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(x => x.Origin)
                 .WithMany()
                 .HasForeignKey(x => x.OriginId);
+
+            builder.HasOne(e => e.Origin)
+                .WithMany()
+                .HasForeignKey(e => e.OriginId)
+                .HasConstraintName("FK_origin_random_name_urls_originId_origins_id")
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

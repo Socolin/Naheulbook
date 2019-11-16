@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -37,9 +38,9 @@ namespace Naheulbook.Web.Controllers
             return _mapper.Map<List<OriginResponse>>(skills);
         }
 
-        [HttpGet("{OriginId:int:min(1)}/randomCharacterName")]
+        [HttpGet("{OriginId:guid}/randomCharacterName")]
         public async Task<RandomCharacterNameResponse> GetRandomCharacterNameAsync(
-            [FromRoute] int originId,
+            [FromRoute] Guid originId,
             [FromQuery] string sex
         )
         {

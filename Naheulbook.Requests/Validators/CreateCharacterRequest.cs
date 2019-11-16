@@ -10,7 +10,6 @@ namespace Naheulbook.Requests.Validators
             RuleFor(e => e.Name).NotNull().Length(1, 255);
             RuleFor(e => e.Money).GreaterThanOrEqualTo(0);
             RuleFor(e => e.FatePoint).GreaterThanOrEqualTo((short)0);
-            RuleFor(e => e.OriginId).GreaterThanOrEqualTo(0);
         }
     }
 }

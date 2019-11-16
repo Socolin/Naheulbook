@@ -9,7 +9,7 @@ namespace Naheulbook.Data.Models
     {
         public bool Default { get; set; }
 
-        public int OriginId { get; set; }
+        public Guid OriginId { get; set; }
         public Origin Origin { get; set; } = null!;
 
         public Guid SkillId { get; set; }

@@ -18,7 +18,7 @@ namespace Naheulbook.Requests.Requests
         public BasicStats Stats { get; set; } = null!;
         public StatsOverrides BasicStatsOverrides { get; set; } = null!;
 
-        public int OriginId { get; set; }
+        public Guid OriginId { get; set; }
         public IList<int> JobIds { get; set; } = null!;
         public IList<Guid> SkillIds { get; set; } = null!;
         public IDictionary<int, IList<int>> SpecialityIds { get; set; } = null!;

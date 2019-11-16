@@ -7,9 +7,9 @@ namespace Naheulbook.Core.Exceptions
 {
     public class OriginNotFoundException : Exception
     {
-        public int OriginId { get; }
+        public Guid OriginId { get; }
 
-        public OriginNotFoundException(int originId)
+        public OriginNotFoundException(Guid originId)
         {
             OriginId = originId;
         }

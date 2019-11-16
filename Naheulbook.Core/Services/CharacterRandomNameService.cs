@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Naheulbook.Core.Clients;
@@ -8,7 +9,7 @@ namespace Naheulbook.Core.Services
 {
     public interface ICharacterRandomNameService
     {
-        Task<string> GenerateRandomCharacterNameAsync(int originId, string sex);
+        Task<string> GenerateRandomCharacterNameAsync(Guid originId, string sex);
     }
 
     public class CharacterRandomNameService : ICharacterRandomNameService
@@ -25,7 +26,7 @@ namespace Naheulbook.Core.Services
             _httpClient = httpClient;
         }
 
-        public async Task<string> GenerateRandomCharacterNameAsync(int originId, string sex)
+        public async Task<string> GenerateRandomCharacterNameAsync(Guid originId, string sex)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

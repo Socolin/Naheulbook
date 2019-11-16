@@ -8,9 +8,9 @@ namespace Naheulbook.Core.Exceptions
     public class RandomNameGeneratorNotFound : Exception
     {
         public string Sex { get; }
-        public int OriginId { get; }
+        public Guid OriginId { get; }
 
-        public RandomNameGeneratorNotFound(string sex, int originId)
+        public RandomNameGeneratorNotFound(string sex, Guid originId)
         {
             Sex = sex;
             OriginId = originId;

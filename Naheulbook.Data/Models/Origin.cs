@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -7,7 +8,7 @@ namespace Naheulbook.Data.Models
 {
     public class Origin
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string Data { get; set; } = null!;

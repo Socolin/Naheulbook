@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -8,14 +9,20 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IOriginRepository : IRepository<Origin>
     {
+        ValueTask<Origin> GetAsync(Guid id);
         Task<ICollection<Origin>> GetAllWithAllDataAsync();
-        Task<Origin> GetWithAllDataAsync(int originId);
+        Task<Origin> GetWithAllDataAsync(Guid originId);
     }
 
     public class OriginRepository : Repository<Origin, NaheulbookDbContext>, IOriginRepository
     {
         public OriginRepository(NaheulbookDbContext context) : base(context)
         {
+        }
+
+        public ValueTask<Origin> GetAsync(Guid id)
+        {
+            return Context.Origins.FindAsync(id);
         }
 
         public async Task<ICollection<Origin>> GetAllWithAllDataAsync()
@@ -29,7 +36,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Origin> GetWithAllDataAsync(int originId)
+        public Task<Origin> GetWithAllDataAsync(Guid originId)
         {
             return Context.Origins
                 .Include(o => o.Requirements)

@@ -35,12 +35,8 @@ namespace Naheulbook.Web.Responses
         public int Value { get; set; }
         public string Type { get; set; } = null!;
         public List<string>? Special { get; set; }
-
-        [JsonProperty("job")]
         public int? JobId { get; set; }
-
-        [JsonProperty("origin")]
-        public int? OriginId { get; set; }
+        public Guid? OriginId { get; set; }
     }
 
     public class ItemTemplateSkillModifierResponse

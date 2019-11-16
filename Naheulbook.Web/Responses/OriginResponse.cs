@@ -10,7 +10,7 @@ namespace Naheulbook.Web.Responses
 {
     public class OriginResponse
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string? PlayerDescription { get; set; }

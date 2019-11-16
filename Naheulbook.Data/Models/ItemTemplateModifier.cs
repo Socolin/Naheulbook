@@ -1,3 +1,5 @@
+using System;
+
 namespace Naheulbook.Data.Models
 {
     public class ItemTemplateModifier
@@ -13,8 +15,8 @@ namespace Naheulbook.Data.Models
         public int? RequireJobId { get; set; }
         public Job? RequireJob { get; set; }
 
-        public int? RequireOriginId { get; set; }
-        public Origin? RequireOrigin { get; set; }
+        public Guid? RequiredOriginId { get; set; }
+        public Origin? RequiredOrigin { get; set; }
 
         public string StatName { get; set; } = null!;
         public Stat Stat { get; set; } = null!;

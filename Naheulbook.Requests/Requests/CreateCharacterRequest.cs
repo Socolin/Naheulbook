@@ -23,8 +23,7 @@ namespace Naheulbook.Requests.Requests
         [JsonProperty("job")]
         public int? JobId { get; set; }
 
-        [JsonProperty("origin")]
-        public int OriginId { get; set; }
+        public Guid OriginId { get; set; }
 
         public IList<Guid> SkillIds { get; set; } = null!;
 

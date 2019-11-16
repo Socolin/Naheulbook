@@ -133,7 +133,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                     {
                         Special = null,
                         RequireJob = _testDataUtil.GetLast<Job>(),
-                        RequireOrigin = _testDataUtil.GetLast<Origin>(),
+                        RequiredOrigin = _testDataUtil.GetLast<Origin>(),
                         Stat = _testDataUtil.GetLast<Stat>(),
                         Value = -2,
                         Type = "ADD",
