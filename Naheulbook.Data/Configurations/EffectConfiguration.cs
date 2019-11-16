@@ -98,11 +98,13 @@ namespace Naheulbook.Data.Configurations
 
             builder.ToTable("effect_modifiers");
 
+            builder.HasIndex(e => e.EffectId)
+                .HasName("IX_effect_modifiers_effectId");
             builder.HasIndex(e => e.StatName)
                 .HasName("IX_effect_modifier_stat");
 
             builder.Property(e => e.EffectId)
-                .HasColumnName("effect");
+                .HasColumnName("effectId");
 
             builder.Property(e => e.StatName)
                 .HasColumnName("stat")
@@ -121,7 +123,7 @@ namespace Naheulbook.Data.Configurations
                 .WithMany(e => e.Modifiers)
                 .HasForeignKey(e => e.EffectId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_effect_modifier_effect_effect");
+                .HasConstraintName("FK_effect_modifiers_effectId_effects_id");
 
             builder.HasOne(e => e.Stat)
                 .WithMany(e => e.Effects)

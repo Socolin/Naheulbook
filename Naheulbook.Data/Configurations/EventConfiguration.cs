@@ -10,6 +10,9 @@ namespace Naheulbook.Data.Configurations
         {
             builder.ToTable("events");
 
+            builder.HasIndex(e => e.GroupId)
+                .HasName("IX_events_groupId");
+
             builder.Property(e => e.Id)
                 .HasColumnName("id");
             builder.Property(e => e.Description)
@@ -17,12 +20,12 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.Timestamp)
                 .HasColumnName("timestamp");
             builder.Property(e => e.GroupId)
-                .HasColumnName("groupid");
+                .HasColumnName("groupId");
 
             builder.HasOne(e => e.Group)
                 .WithMany(e => e.Events)
                 .HasForeignKey(e => e.GroupId)
-                .HasConstraintName("event_group_id_fk");
+                .HasConstraintName("FK_events_groupId_groups_id");
         }
     }
 }

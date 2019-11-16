@@ -10,6 +10,9 @@ namespace Naheulbook.Data.Configurations
         {
             builder.ToTable("groups");
 
+            builder.HasIndex(e => e.MasterId)
+                .HasName("IX_groups_masterId");
+
             builder.Property(e => e.Name)
                 .IsRequired()
                 .HasColumnName("name")
@@ -21,7 +24,7 @@ namespace Naheulbook.Data.Configurations
 
             builder.Property(e => e.MasterId)
                 .IsRequired()
-                .HasColumnName("master");
+                .HasColumnName("masterId");
 
             builder.Property(e => e.CombatLootId)
                 .IsRequired(false)
@@ -35,7 +38,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Master)
                 .WithMany(e => e.Groups)
                 .HasForeignKey(e => e.MasterId)
-                .HasConstraintName("FK_group_user_master");
+                .HasConstraintName("FK_groups_masterId_users_id");
         }
     }
 
@@ -47,11 +50,16 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasKey(e => new {e.GroupId, e.CharacterId});
 
+            builder.HasIndex(e => e.CharacterId)
+                .HasName("IX_group_invitations_characterId");
+            builder.HasIndex(e => e.GroupId)
+                .HasName("IX_group_invitations_groupId");
+
             builder.Property(e => e.CharacterId)
-                .HasColumnName("character");
+                .HasColumnName("characterId");
 
             builder.Property(e => e.GroupId)
-                .HasColumnName("group");
+                .HasColumnName("groupId");
 
             builder.Property(e => e.FromGroup)
                 .HasColumnName("fromgroup");
@@ -59,12 +67,12 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Group)
                 .WithMany(g => g.Invites)
                 .HasForeignKey(e => e.GroupId)
-                .HasConstraintName("FK_group_invitations_group_group");
+                .HasConstraintName("FK_group_invitations_groupId_groups_id");
 
             builder.HasOne(e => e.Character)
                 .WithMany(g => g.Invites)
                 .HasForeignKey(e => e.CharacterId)
-                .HasConstraintName("FK_group_invitations_character_character");
+                .HasConstraintName("FK_group_invitations_characterId_characters_id");
         }
     }
 

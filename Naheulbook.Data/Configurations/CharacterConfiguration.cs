@@ -12,6 +12,13 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasKey(x => x.Id);
 
+            builder.HasIndex(e => e.GroupId)
+                .HasName("IX_characters_groupId");
+            builder.HasIndex(e => e.OriginId)
+                .HasName("IX_characters_originId");
+            builder.HasIndex(e => e.OwnerId)
+                .HasName("IX_characters_userId");
+
             builder.Property(e => e.Id)
                 .HasColumnName("id");
 
@@ -64,13 +71,13 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("experience");
 
             builder.Property(e => e.OwnerId)
-                .HasColumnName("user");
+                .HasColumnName("userId");
             builder.Property(e => e.OriginId)
                 .IsRequired()
                 .HasColumnName("originId");
             builder.Property(e => e.GroupId)
                 .IsRequired(false)
-                .HasColumnName("group");
+                .HasColumnName("groupId");
             builder.Property(e => e.TargetedCharacterId)
                 .IsRequired(false)
                 .HasColumnName("targetcharacterid");
@@ -81,7 +88,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Owner)
                 .WithMany(e => e.Characters)
                 .HasForeignKey(e => e.OwnerId)
-                .HasConstraintName("FK_character_user_user");
+                .HasConstraintName("FK_characters_userId_users_id");
 
             builder.HasOne(e => e.Origin)
                 .WithMany()
@@ -91,7 +98,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Group!)
                 .WithMany(e => e.Characters)
                 .HasForeignKey(e => e.GroupId)
-                .HasConstraintName("FK_character_group_group");
+                .HasConstraintName("FK_characters_groupId_groups_id");
 
             builder.HasOne(e => e.TargetedCharacter)
                 .WithMany()
@@ -195,17 +202,17 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("duration");
 
             builder.Property(e => e.CharacterId)
-                .HasColumnName("character");
+                .HasColumnName("characterId");
 
             builder.HasOne(e => e.Character!)
                 .WithMany(e => e.Modifiers)
                 .HasForeignKey(e => e.CharacterId)
-                .HasConstraintName("FK_character_modifier_character_character");
+                .HasConstraintName("FK_character_modifiers_characterId_characters_id");
 
             builder.HasMany(e => e.Values)
                 .WithOne()
                 .HasForeignKey(e => e.CharacterModifierId)
-                .HasConstraintName("FK_character_modifier_value_character_modifier_charactermodifier");
+                .HasConstraintName("FK_character_modifier_values_characterModifierId");
         }
     }
 
@@ -217,6 +224,11 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasKey(e => e.Id);
 
+            builder.HasIndex(e => e.StatName)
+                .HasName("IX_character_modifier_value_stat");
+            builder.HasIndex(e => e.CharacterModifierId)
+                .HasName("IX_character_modifier_values_characterModifierId");
+
             builder.Property(e => e.StatName)
                 .HasColumnName("stat");
             builder.Property(e => e.Type)
@@ -224,7 +236,7 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.Value)
                 .HasColumnName("value");
             builder.Property(e => e.CharacterModifierId)
-                .HasColumnName("charactermodifier");
+                .HasColumnName("characterModifierId");
         }
     }
 
@@ -237,13 +249,13 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => new {e.SkillId, e.CharacterId});
 
             builder.HasIndex(e => e.CharacterId)
-                .HasName("IX_character_skills_character");
+                .HasName("IX_character_skills_characterId");
 
             builder.HasIndex(e => e.SkillId)
                 .HasName("IX_character_skills_skillId");
 
             builder.Property(e => e.CharacterId)
-                .HasColumnName("character");
+                .HasColumnName("characterId");
 
             builder.Property(e => e.SkillId)
                 .HasColumnName("skillId");
@@ -251,7 +263,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Character)
                 .WithMany(e => e.Skills)
                 .HasForeignKey(e => e.CharacterId)
-                .HasConstraintName("FK_character_skills_character_character");
+                .HasConstraintName("FK_character_skills_characterId_characters_id");
 
             builder.HasOne(e => e.Skill)
                 .WithMany()
@@ -270,17 +282,18 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasIndex(e => e.SpecialityId)
                 .HasName("IX_character_specialities_specialityId");
+            builder.HasIndex(e => e.CharacterId)
+                .HasName("IX_character_specialities_characterId");
 
             builder.Property(e => e.CharacterId)
-                .HasColumnName("character");
-
+                .HasColumnName("characterId");
             builder.Property(e => e.SpecialityId)
                 .HasColumnName("specialityId");
 
             builder.HasOne(e => e.Character)
                 .WithMany(e => e.Specialities)
                 .HasForeignKey(e => e.CharacterId)
-                .HasConstraintName("FK_character_speciality_character_character");
+                .HasConstraintName("FK_character_specialities_characterId_characters_id");
 
             builder.HasOne(e => e.Speciality)
                 .WithMany()
