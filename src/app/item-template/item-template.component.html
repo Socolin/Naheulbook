@@ -225,8 +225,8 @@
         <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
         <div class="stats">
             <div *ngFor="let modifier of itemTemplate.modifiers">
-                <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
-                <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
+                <span *ngIf="jobsName && modifier.jobId">{{jobsName[modifier.jobId]}}:</span>
+                <span *ngIf="originsName && modifier.originId">{{originsName[modifier.originId]}}:</span>
                 {{modifier | modifier}}
                 <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_THROW') !== -1">(lancer)</span>
                 <span *ngIf="modifier.special && modifier.special.indexOf('AFFECT_ONLY_MELEE') !== -1">(c.a.c)</span>

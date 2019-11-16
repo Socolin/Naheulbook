@@ -23,7 +23,7 @@ export class ModifiersEditorComponent implements OnInit {
     @Input() advancedModifiers = false;
     public specialValueDescriptionByValues: {[name: string]: string} = {};
 
-    public originsByIds: { [originId: number]: Origin };
+    public originsByIds: { [originId: string]: Origin };
     public jobsByIds: { [jobId: number]: Job };
 
     constructor(private originService: OriginService
@@ -45,8 +45,8 @@ export class ModifiersEditorComponent implements OnInit {
             StatModifierAdvancedDialogComponent,
             {
                 data: {
-                    selectedJobId: modifier.job,
-                    selectedOriginId: modifier.origin,
+                    selectedJobId: modifier.jobId,
+                    selectedOriginId: modifier.originId,
                     specials: modifier.special
                 }
             }
@@ -56,8 +56,8 @@ export class ModifiersEditorComponent implements OnInit {
             if (!result) {
                 return;
             }
-            modifier.origin = result.selectedOriginId;
-            modifier.job = result.selectedJobId;
+            modifier.originId = result.selectedOriginId;
+            modifier.jobId = result.selectedJobId;
             modifier.special = result.specials;
         });
     }

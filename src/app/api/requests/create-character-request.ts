@@ -15,7 +15,7 @@ export interface CreateCharacterRequest {
         }
     };
     job?: number;
-    origin: number;
+    originId: Guid;
     skillIds: Guid[];
     speciality?: number;
 }

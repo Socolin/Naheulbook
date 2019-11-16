@@ -29,7 +29,7 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
 
     public stats: { [statName: string]: number } = {};
     public origins: Origin[] = [];
-    public originsStates: { [originId: number]: { changes?: any[] } };
+    public originsStates: { [originId: string]: { changes?: any[] } };
     public swapList: string[][];
     public availabilityOk: OriginAvailability;
     public availabilities: OriginAvailability[] = [];

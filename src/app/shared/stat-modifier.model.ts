@@ -2,6 +2,7 @@ import {Effect} from '../effect';
 import {Fighter} from '../group';
 import {IActiveStatsModifier, IDurable} from '../api/shared';
 import {DurationType, StatModificationOperand} from '../api/shared/enums';
+import {Guid} from '../api/shared/util';
 
 export class StatModifier {
     stat: string;
@@ -35,8 +36,8 @@ export class ItemStatModifier implements StatModifier {
     value: number;
     special?: string[];
 
-    job?: number;
-    origin?: number;
+    jobId?: number;
+    originId?: Guid;
 }
 
 export class StatsModifier implements IDurable {

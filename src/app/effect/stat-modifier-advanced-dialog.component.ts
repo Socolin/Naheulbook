@@ -4,10 +4,11 @@ import {Origin, OriginService} from '../origin';
 import {Job, JobService} from '../job';
 
 import {statModifierSpecialsValues} from './stat-modifier-specials.constants';
+import {Guid} from '../api/shared/util';
 
 export interface StatModifierAdvancedDialogData {
     selectedJobId?: number;
-    selectedOriginId?: number;
+    selectedOriginId?: Guid;
     specials?: string[];
 }
 

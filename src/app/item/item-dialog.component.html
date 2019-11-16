@@ -175,8 +175,8 @@
                 <div>
                     <div *ngFor="let modifier of item.template.modifiers">
                         <div>
-                            <span *ngIf="jobsName && modifier.job">{{jobsName[modifier.job]}}:</span>
-                            <span *ngIf="originsName && modifier.origin">{{originsName[modifier.origin]}}:</span>
+                            <span *ngIf="jobsName && modifier.jobId">{{jobsName[modifier.jobId]}}:</span>
+                            <span *ngIf="originsName && modifier.originId">{{originsName[modifier.originId]}}:</span>
                             {{modifier | modifier}}
                         </div>
                     </div>

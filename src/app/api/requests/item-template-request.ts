@@ -20,8 +20,8 @@ export interface ItemTemplateModifierRequest {
     value: number;
     type: string;
     special?: string[];
-    job?: number;
-    origin?: number;
+    jobId?: number;
+    originId?: Guid;
 }
 
 export interface ItemTemplateSkillModifierRequest {

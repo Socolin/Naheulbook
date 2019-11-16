@@ -15,7 +15,7 @@ export interface ItemTemplateDialogData {
     styleUrls: ['./item-template-dialog.component.scss']
 })
 export class ItemTemplateDialogComponent implements OnInit {
-    public originsName: { [originId: number]: string };
+    public originsName: { [originId: string]: string };
     public jobsName: { [jobId: number]: string };
     public godsByTechName: { [techName: string]: God };
 

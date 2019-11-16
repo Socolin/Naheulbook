@@ -598,7 +598,7 @@ export class CreateCharacterComponent implements OnInit {
                 ['AD']: this.ad,
                 ['FO']: this.fo
             },
-            origin: this.selectedOrigin.id,
+            originId: this.selectedOrigin.id,
             job: this.selectedJobs[0] && this.selectedJobs[0].id,
             sex: this.sex,
             skillIds: [...this.selectedSkills.map(x => x.id)],

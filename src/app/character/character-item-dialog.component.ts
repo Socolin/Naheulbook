@@ -46,10 +46,10 @@ export class CharacterItemDialogComponent implements OnInit {
             const modifiers: ItemStatModifier[] = [];
             for (let i = 0; i < this.data.item.template.modifiers.length; i++) {
                 let modifier = this.data.item.template.modifiers[i];
-                if (modifier.job && !this.data.character.hasJob(modifier.job)) {
+                if (modifier.jobId && !this.data.character.hasJob(modifier.jobId)) {
                     continue;
                 }
-                if (modifier.origin && modifier.origin !== this.data.character.origin.id) {
+                if (modifier.originId && modifier.originId !== this.data.character.origin.id) {
                     continue;
                 }
                 let newModifier = JSON.parse(JSON.stringify(modifier));

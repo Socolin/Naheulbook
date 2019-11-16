@@ -1,9 +1,10 @@
 import {DescribedFlagResponse} from './described-flag-response';
 import {FlagResponse} from './flag-response';
 import {OriginData} from '../shared/origin-data';
+import {Guid} from '../shared/util';
 
 export interface OriginResponse {
-    id: number;
+    id: Guid;
     name: string;
     data: OriginData;
     description: string;

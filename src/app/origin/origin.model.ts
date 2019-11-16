@@ -2,16 +2,17 @@ import {DescribedFlag, Flag, FlagData, StatRequirement} from '../shared';
 import {Skill, SkillDictionary} from '../skill';
 import {OriginResponse} from '../api/responses';
 import {OriginData} from '../api/shared/origin-data';
+import {Guid} from '../api/shared/util';
 
 export interface OriginInfo {
     title: string;
     description: string;
 }
 
-export type OriginDictionary = { [originId: number]: Origin };
+export type OriginDictionary = { [originId: string]: Origin };
 
 export class Origin {
-    readonly id: number;
+    readonly id: Guid;
     readonly name: string;
     readonly data: OriginData;
     readonly description: string;

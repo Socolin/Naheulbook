@@ -44,7 +44,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     public nextSubCategory?: ItemTemplateSubCategory;
     public items: ItemTemplate[] = [];
     public selectedSection: ItemTemplateSection;
-    public originsName: {[originId: number]: string};
+    public originsName: {[originId: string]: string};
     public jobsName: {[jobId: number]: string};
     public godsByTechName: {[techName: string]: God};
 

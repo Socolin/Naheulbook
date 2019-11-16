@@ -325,10 +325,10 @@ export class Character extends WsRegistrable {
         if (item.template.modifiers) {
             for (let i = 0; i < item.template.modifiers.length; i++) {
                 let modifier = item.template.modifiers[i];
-                if (modifier.job && !this.hasJob(modifier.job )) {
+                if (modifier.jobId && !this.hasJob(modifier.jobId )) {
                     continue;
                 }
-                if (modifier.origin && modifier.origin !== this.origin.id) {
+                if (modifier.originId && modifier.originId !== this.origin.id) {
                     continue;
                 }
                 let newModifier = JSON.parse(JSON.stringify(modifier));
@@ -892,10 +892,10 @@ export class Character extends WsRegistrable {
             let cleanModifiers = this.cleanItemModifiers(item);
             for (let m = 0; m < cleanModifiers.length; m++) {
                 let modifier = cleanModifiers[m];
-                if (modifier.job && !this.hasJob(modifier.job)) {
+                if (modifier.jobId && !this.hasJob(modifier.jobId)) {
                     continue;
                 }
-                if (modifier.origin && modifier.origin !== this.origin.id) {
+                if (modifier.originId && modifier.originId !== this.origin.id) {
                     continue;
                 }
                 let affectStats = true;

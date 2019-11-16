@@ -16,7 +16,7 @@ export class ItemTemplateComponent {
     @Input() itemTemplate: ItemTemplate;
     @Input() editable: boolean;
     @Input() copyable: boolean;
-    @Input() originsName: {[originId: number]: string};
+    @Input() originsName: {[originId: string]: string};
     @Input() jobsName: {[jobId: number]: string};
     @Input() godsByTechName: {[techName: string]: God};
     @Input() actions: string[];

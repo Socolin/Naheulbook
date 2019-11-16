@@ -1,4 +1,5 @@
 import {CharacterSex} from '../shared/enums';
+import {Guid} from '../shared/util';
 
 export interface CreateCustomCharacterRequest {
     name: string;
@@ -19,7 +20,7 @@ export interface CreateCustomCharacterRequest {
         ev: number,
         ea: number
     },
-    originId: number;
+    originId: Guid;
     jobIds: number[];
     skillIds: number[];
     specialityIds: { [jobId: number]: number[] };

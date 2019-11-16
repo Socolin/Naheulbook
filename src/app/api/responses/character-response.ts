@@ -3,12 +3,13 @@ import {ItemResponse} from './item-response';
 import {SpecialityResponse} from './speciality-response';
 import {CharacterGroupInviteResponse} from './character-group-invite-response';
 import {CharacterSex} from '../shared/enums/character-sex';
+import {Guid} from '../shared/util';
 
 export interface CharacterResponse {
     id: number;
     name: string;
     sex: CharacterSex;
-    originId: number;
+    originId: Guid;
     isNpc: boolean;
     ev?: number;
     ea?: number;
