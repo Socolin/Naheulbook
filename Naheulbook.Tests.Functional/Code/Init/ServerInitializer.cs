@@ -51,11 +51,12 @@ namespace Naheulbook.Tests.Functional.Code.Init
         [AfterTestRun]
         public static void AfterTestRun()
         {
-            _laPageAMelkorStub.Stop();
-            _naheulbookApiServer.Stop();
-            _fakeSmtpServer.Stop();
-            _fakeSmtpServer.Dispose();
-            Directory.Delete(_mapImageOutputDirectory, true);
+            _laPageAMelkorStub?.Stop();
+            _naheulbookApiServer?.Stop();
+            _fakeSmtpServer?.Stop();
+            _fakeSmtpServer?.Dispose();
+            if (_mapImageOutputDirectory != null)
+                Directory.Delete(_mapImageOutputDirectory, true);
         }
 
         [BeforeScenario(Order = 0)]
