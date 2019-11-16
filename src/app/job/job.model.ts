@@ -5,8 +5,9 @@ import {Speciality} from './speciality.model';
 import {JobResponse} from '../api/responses';
 import {JobStatData} from '../api/shared';
 import {Origin} from '../origin';
+import {Guid} from '../api/shared/util';
 
-export type JobDictionary = { [jobId: number]: Job };
+export type JobDictionary = { [jobId: string]: Job };
 
 export class Job {
     readonly availableSkills: Array<Skill>;
@@ -16,7 +17,7 @@ export class Job {
         }
     };
     readonly bonuses: Array<DescribedFlag>;
-    readonly id: number;
+    readonly id: Guid;
     readonly playerDescription?: string;
     readonly playerSummary?: string;
     readonly isMagic: boolean;

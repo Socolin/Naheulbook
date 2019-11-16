@@ -2,9 +2,10 @@ import {FlagResponse} from './flag-response';
 import {DescribedFlagResponse} from './described-flag-response';
 import {SpecialityResponse} from './speciality-response';
 import {JobStatData} from '../shared';
+import {Guid} from '../shared/util';
 
 export interface JobResponse {
-    id: number;
+    id: Guid;
     name: string;
     information?: string;
     playerDescription?: string;

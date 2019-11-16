@@ -45,7 +45,7 @@ export class CreateCustomCharacterComponent implements OnInit {
     public selectedOrigin?: Origin;
     public selectedJobs: Job[] = [];
     public selectedSkills: Skill[] = [];
-    public specialities: { [jobId: number]: Speciality[] } = {};
+    public specialities: { [jobId: string]: Speciality[] } = {};
 
     public creating = false;
 

@@ -21,9 +21,9 @@ export interface CreateCustomCharacterRequest {
         ea: number
     },
     originId: Guid;
-    jobIds: number[];
+    jobIds: Guid[];
     skillIds: number[];
-    specialityIds: { [jobId: number]: number[] };
+    specialityIds: { [jobId: string]: number[] };
 
     isNpc?: boolean;
     groupId?: number;

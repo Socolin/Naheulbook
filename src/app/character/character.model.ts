@@ -29,6 +29,7 @@ import {
     ItemPartialResponse
 } from '../api/responses';
 import {CharacterSex} from '../api/shared/enums/character-sex';
+import {Guid} from '../api/shared/util';
 
 export interface CharacterGiveDestination {
     id: number;
@@ -285,7 +286,7 @@ export class Character extends WsRegistrable {
         return character;
     }
 
-    hasJob(job: number|Job): boolean {
+    hasJob(job: Guid | Job): boolean {
         if (job instanceof Job) {
             return this.jobs.findIndex(j => j.id === job.id) !== -1;
         }
@@ -1365,8 +1366,8 @@ export class Character extends WsRegistrable {
         }
     }
 
-    public onRemoveJob(job: Job | number): void {
-        let jobId: number = job instanceof Job ? job.id : job;
+    public onRemoveJob(job: Job | Guid): void {
+        let jobId: Guid = job instanceof Job ? job.id : job;
         let jobIndex = this.jobs.findIndex(j => j.id === jobId);
         if (jobIndex !== -1) {
             this.jobs.splice(jobIndex, 1);

@@ -2,7 +2,7 @@ import {IActiveStatsModifier} from '../shared';
 import {ItemResponse} from './item-response';
 import {SpecialityResponse} from './speciality-response';
 import {CharacterGroupInviteResponse} from './character-group-invite-response';
-import {CharacterSex} from '../shared/enums/character-sex';
+import {CharacterSex} from '../shared/enums';
 import {Guid} from '../shared/util';
 
 export interface CharacterResponse {
@@ -24,8 +24,8 @@ export interface CharacterResponse {
         INT: number;
     };
     statBonusAd?: string;
-    jobIds: number[];
-    skillIds: number[];
+    jobIds: Guid[];
+    skillIds: Guid[];
     group?: {
         name: string;
         id: number;

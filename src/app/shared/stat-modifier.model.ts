@@ -36,7 +36,7 @@ export class ItemStatModifier implements StatModifier {
     value: number;
     special?: string[];
 
-    jobId?: number;
+    jobId?: Guid;
     originId?: Guid;
 }
 

@@ -5,7 +5,6 @@ import {NotificationsService} from '../notifications';
 
 import {ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
-import {ItemTemplateRequest} from '../api/requests/item-template-request';
 
 export interface EditItemTemplateDialogData {
     itemTemplateId: number;

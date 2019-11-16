@@ -96,9 +96,9 @@ export class CharacterService {
         }));
     }
 
-    addJob(characterId: number, jobId: number): Observable<Job> {
+    addJob(characterId: number, jobId: Guid): Observable<Job> {
         return forkJoin([
-            this.httpClient.post<{jobId: number}>(`/api/v2/characters/${characterId}/addJob`, {
+            this.httpClient.post<{jobId: Guid}>(`/api/v2/characters/${characterId}/addJob`, {
                 jobId: jobId,
             }),
             this.jobService.getJobsById()
@@ -107,9 +107,9 @@ export class CharacterService {
         }));
     }
 
-    removeJob(characterId: number, jobId: number): Observable<Job> {
+    removeJob(characterId: number, jobId: Guid): Observable<Job> {
         return forkJoin([
-            this.httpClient.post<{jobId: number}>(`/api/v2/characters/${characterId}/removeJob`, {
+            this.httpClient.post<{jobId: Guid}>(`/api/v2/characters/${characterId}/removeJob`, {
                 jobId: jobId,
             }),
             this.jobService.getJobsById()

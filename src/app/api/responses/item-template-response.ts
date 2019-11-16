@@ -25,8 +25,8 @@ export interface ItemTemplateModifierResponse {
     value: number;
     type: string;
     special?: string[];
-    jobId?: number;
-    originId?: number;
+    jobId?: Guid;
+    originId?: Guid;
 }
 
 export interface ItemTemplateSkillModifierResponse {

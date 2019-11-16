@@ -35,7 +35,7 @@ export class JobSelectorComponent implements OnInit, OnChanges {
 
     public stats: { [statName: string]: number } = {};
     public jobs: Job[] = [];
-    public jobsStates: { [jobId: number]: { changes?: any[] } };
+    public jobsStates: { [jobId: string]: { changes?: any[] } };
     public swapList: string[][];
     public availabilityOk: JobAvailability;
     public availabilities: JobAvailability[] = [];

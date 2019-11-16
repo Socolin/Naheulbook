@@ -7,7 +7,7 @@ import {statModifierSpecialsValues} from './stat-modifier-specials.constants';
 import {Guid} from '../api/shared/util';
 
 export interface StatModifierAdvancedDialogData {
-    selectedJobId?: number;
+    selectedJobId?: Guid;
     selectedOriginId?: Guid;
     specials?: string[];
 }

@@ -24,7 +24,7 @@ export class LevelUpInfo {
     targetLevelUp: number;
     statToUp?: string;
     skill?: Skill;
-    specialities: { [jobId: number]: Speciality } = {};
+    specialities: { [jobId: string]: Speciality } = {};
 }
 
 @Component({

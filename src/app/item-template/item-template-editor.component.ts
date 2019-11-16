@@ -32,7 +32,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     public slots: ItemSlot[];
     public itemTypes: ItemTypeResponse[];
     public originsName: { [originId: string]: string };
-    public jobsName: { [jobId: number]: string };
+    public jobsName: { [jobId: string]: string };
     public gods: God[];
     public godsByTechName: {[techName: string]: God};
 
@@ -457,7 +457,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 this.gods = gods;
                 this.godsByTechName = godsByTechName;
 
-                let jobsName: { [jobId: number]: string } = {};
+                let jobsName: { [jobId: string]: string } = {};
                 for (let i = 0; i < jobs.length; i++) {
                     let job = jobs[i];
                     jobsName[job.id] = job.name;

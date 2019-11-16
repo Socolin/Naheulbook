@@ -20,7 +20,7 @@ export interface ItemTemplateModifierRequest {
     value: number;
     type: string;
     special?: string[];
-    jobId?: number;
+    jobId?: Guid;
     originId?: Guid;
 }
 

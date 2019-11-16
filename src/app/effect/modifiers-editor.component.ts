@@ -24,7 +24,7 @@ export class ModifiersEditorComponent implements OnInit {
     public specialValueDescriptionByValues: {[name: string]: string} = {};
 
     public originsByIds: { [originId: string]: Origin };
-    public jobsByIds: { [jobId: number]: Job };
+    public jobsByIds: { [jobId: string]: Job };
 
     constructor(private originService: OriginService
         , private jobService: JobService

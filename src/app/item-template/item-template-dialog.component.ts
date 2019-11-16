@@ -16,7 +16,7 @@ export interface ItemTemplateDialogData {
 })
 export class ItemTemplateDialogComponent implements OnInit {
     public originsName: { [originId: string]: string };
-    public jobsName: { [jobId: number]: string };
+    public jobsName: { [jobId: string]: string };
     public godsByTechName: { [techName: string]: God };
 
     constructor(

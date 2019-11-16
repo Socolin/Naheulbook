@@ -17,7 +17,7 @@ export class ItemTemplateComponent {
     @Input() editable: boolean;
     @Input() copyable: boolean;
     @Input() originsName: {[originId: string]: string};
-    @Input() jobsName: {[jobId: number]: string};
+    @Input() jobsName: {[jobId: string]: string};
     @Input() godsByTechName: {[techName: string]: God};
     @Input() actions: string[];
     @Output() onAction = new EventEmitter<{action: string, data: any}>();

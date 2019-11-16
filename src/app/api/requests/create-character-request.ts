@@ -14,7 +14,7 @@ export interface CreateCharacterRequest {
             stats: { [key: string]: number };
         }
     };
-    job?: number;
+    jobId?: Guid;
     originId: Guid;
     skillIds: Guid[];
     speciality?: number;
