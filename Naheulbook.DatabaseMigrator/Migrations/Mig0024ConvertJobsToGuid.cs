@@ -75,7 +75,7 @@ namespace Naheulbook.DatabaseMigrator.Migrations
             string tableName,
             string columnName,
             string foreignKey,
-            string previousIndexName = null
+            string? previousIndexName = null
         )
         {
             ConvertLinkedTableToUuid(tableName, foreignKey, columnName, "jobId", "jobs", "id", previousIndexName);
@@ -88,7 +88,7 @@ namespace Naheulbook.DatabaseMigrator.Migrations
             string newColumnName,
             string targetTableName,
             string targetColumnName,
-            string previousIndexName,
+            string? previousIndexName,
             bool nullable = false
         )
         {
