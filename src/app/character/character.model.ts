@@ -732,8 +732,8 @@ export class Character extends WsRegistrable {
         for (let item of this.items) {
             if (!item.data.equiped && item.data.readCount) {
                 if (item.data.readCount >= 7) {
-                    for (let u = 0; u < item.template.unskills.length; u++) {
-                        let skill = item.template.unskills[u];
+                    for (let u = 0; u < item.template.unSkills.length; u++) {
+                        let skill = item.template.unSkills[u];
                         canceledSkills[skill.id] = item;
                     }
                     for (let u = 0; u < item.template.skills.length; u++) {
@@ -746,8 +746,8 @@ export class Character extends WsRegistrable {
             }
         }
         for (let item of this.computedData.itemsEquiped) {
-            for (let u = 0; u < item.template.unskills.length; u++) {
-                let skill = item.template.unskills[u];
+            for (let u = 0; u < item.template.unSkills.length; u++) {
+                let skill = item.template.unSkills[u];
                 canceledSkills[skill.id] = item;
             }
             for (let u = 0; u < item.template.skills.length; u++) {

@@ -1,3 +1,5 @@
+import {Guid} from '../shared/util';
+
 export interface CreateCharacterRequest {
     name: string;
     sex: string;
@@ -14,6 +16,6 @@ export interface CreateCharacterRequest {
     };
     job?: number;
     origin: number;
-    skills: number[];
+    skillIds: Guid[];
     speciality?: number;
 }

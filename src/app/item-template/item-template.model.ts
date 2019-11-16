@@ -187,7 +187,7 @@ export class ItemTemplate {
     sourceUserId?: number;
     modifiers: ItemStatModifier[] = [];
     skills: Skill[] = [];
-    unskills: Skill[] = [];
+    unSkills: Skill[] = [];
     slots: ItemSlot[] = [];
     restrictJobs: Job[] = [];
     requirements: {
@@ -217,20 +217,20 @@ export class ItemTemplate {
         let itemTemplate = new ItemTemplate();
         Object.assign(itemTemplate, response, {
             skills: [],
-            unskills: [],
+            unSkills: [],
             skillModifiers: [],
             data: ItemTemplateData.fromJson(response.data)
         });
 
-        for (let s of response.skills) {
-            itemTemplate.skills.push(skillsById[s.id]);
+        for (let skillId of response.skillIds) {
+            itemTemplate.skills.push(skillsById[skillId]);
         }
-        for (let s of response.unskills) {
-            itemTemplate.unskills.push(skillsById[s.id]);
+        for (let skillId of response.unSkillIds) {
+            itemTemplate.unSkills.push(skillsById[skillId]);
         }
 
         for (let skillModifier of response.skillModifiers) {
-            itemTemplate.skillModifiers.push(new ItemSkillModifier(skillsById[+skillModifier.skill], skillModifier.value));
+            itemTemplate.skillModifiers.push(new ItemSkillModifier(skillsById[+skillModifier.skillId], skillModifier.value));
         }
 
         return itemTemplate;
@@ -279,17 +279,17 @@ export class ItemTemplate {
     }
 
     addUnskill(skill: Skill) {
-        if (!this.unskills) {
-            this.unskills = [];
+        if (!this.unSkills) {
+            this.unSkills = [];
         }
-        this.unskills.push(skill);
+        this.unSkills.push(skill);
     }
 
     removeUnskill(skill: Skill) {
-        if (this.unskills) {
-            let i = this.unskills.findIndex(s => s.id === skill.id);
+        if (this.unSkills) {
+            let i = this.unSkills.findIndex(s => s.id === skill.id);
             if (i !== -1) {
-                this.unskills.splice(i, 1);
+                this.unSkills.splice(i, 1);
             }
         }
     }

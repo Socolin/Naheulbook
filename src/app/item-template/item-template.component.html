@@ -241,11 +241,11 @@
     </div>
 
     <!-- Compétences ajouté/annulé -->
-    <div class="icon-label" *ngIf="itemTemplate.skills?.length || itemTemplate.unskills?.length || itemTemplate.skillModifiers?.length">
+    <div class="icon-label" *ngIf="itemTemplate.skills?.length || itemTemplate.unSkills?.length || itemTemplate.skillModifiers?.length">
         <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
         <div>
             <div *ngFor="let skill of itemTemplate.skills">Donne la compétence "{{skill.name}}"</div>
-            <div *ngFor="let skill of itemTemplate.unskills">Annule "{{skill.name}}"</div>
+            <div *ngFor="let skill of itemTemplate.unSkills">Annule "{{skill.name}}"</div>
             <div *ngFor="let modifier of itemTemplate.skillModifiers">{{modifier.skill.name}}
                 <span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
             </div>

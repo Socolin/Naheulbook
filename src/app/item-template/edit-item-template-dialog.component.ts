@@ -5,6 +5,7 @@ import {NotificationsService} from '../notifications';
 
 import {ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
+import {ItemTemplateRequest} from '../api/requests/item-template-request';
 
 export interface EditItemTemplateDialogData {
     itemTemplateId: number;
@@ -28,10 +29,12 @@ export class EditItemTemplateDialogComponent implements OnInit {
 
     saveChanges() {
         this.saving = true;
-        let {id: itemTemplateId, skillModifiers, ...baseRequest} = this.item;
+        let {id: itemTemplateId, skillModifiers, skills, unSkills, ...baseRequest} = this.item;
         const request = {
             ...baseRequest,
-            skillModifiers: skillModifiers.map(s => ({value: s.value, skill: s.skill.id}))
+            skillIds: skills.map(s => s.id),
+            unSkillIds: unSkills.map(s => s.id),
+            skillModifiers: skillModifiers.map(s => ({value: s.value, skillId: s.skill.id}))
         };
         this.itemTemplateService.editItemTemplate(itemTemplateId, request).subscribe(
             itemTemplate => {

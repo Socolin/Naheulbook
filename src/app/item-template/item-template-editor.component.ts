@@ -202,7 +202,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 break;
             case 'skill':
                 this.itemTemplate.skills = [];
-                this.itemTemplate.unskills = [];
+                this.itemTemplate.unSkills = [];
                 this.itemTemplate.skillModifiers = [];
                 break;
             case 'skillBook':
@@ -308,7 +308,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 break;
             case 'skill':
                 this.itemTemplate.skills = [];
-                this.itemTemplate.unskills = [];
+                this.itemTemplate.unSkills = [];
                 this.itemTemplate.skillModifiers = [];
                 break;
             case 'skillBook':
@@ -407,7 +407,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             modules.push('sex');
         }
         if ((!isNullOrUndefined(this.itemTemplate.skills) && this.itemTemplate.skills.length)
-            || (!isNullOrUndefined(this.itemTemplate.unskills) && this.itemTemplate.unskills.length)
+            || (!isNullOrUndefined(this.itemTemplate.unSkills) && this.itemTemplate.unSkills.length)
             || (!isNullOrUndefined(this.itemTemplate.skillModifiers) && this.itemTemplate.skillModifiers.length)) {
             modules.push('skill');
         }

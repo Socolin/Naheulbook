@@ -3,6 +3,7 @@ import {Character} from './character.model';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Skill} from '../skill';
 import {Job, Speciality} from '../job';
+import {Guid} from '../api/shared/util';
 
 export interface LevelUpDialogData {
     readonly character: Character;
@@ -13,7 +14,7 @@ export interface LevelUpDialogResult {
     evOrEaValue: number;
     targetLevelUp: number;
     statToUp: string;
-    skillId?: number;
+    skillId?: Guid;
     specialityIds: number[];
 }
 
@@ -143,7 +144,7 @@ export class LevelUpDialogComponent {
             return;
         }
 
-        let skillId: number | undefined = undefined;
+        let skillId: Guid | undefined = undefined;
         if (this.levelUpInfo.skill) {
             skillId = this.levelUpInfo.skill.id;
         }

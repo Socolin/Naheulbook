@@ -1,4 +1,5 @@
 import {IItemTemplateData} from '../shared';
+import {Guid} from '../shared/util';
 
 export interface ItemTemplateRequest {
     source: 'official' | 'community' | 'private';
@@ -6,8 +7,8 @@ export interface ItemTemplateRequest {
     name: string;
     techName?: string;
     modifiers: ItemTemplateModifierRequest[];
-    skills: { id: number }[];
-    unskills: { id: number }[];
+    skillIds: Guid[];
+    unSkillIds: Guid[];
     skillModifiers: ItemTemplateSkillModifierRequest[];
     requirements: ItemTemplateRequirementRequest[];
     slots: { id: number }[];
@@ -24,7 +25,7 @@ export interface ItemTemplateModifierRequest {
 }
 
 export interface ItemTemplateSkillModifierRequest {
-    skill: number;
+    skillId: Guid;
     value: number;
 }
 

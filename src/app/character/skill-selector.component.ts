@@ -7,6 +7,7 @@ import {Origin} from '../origin';
 
 import {Skill, SkillService} from '../skill';
 import {MatSelectionListChange} from '@angular/material';
+import {Guid} from '../api/shared/util';
 
 @Component({
     selector: 'skill-selector',
@@ -38,7 +39,7 @@ export class SkillSelectorComponent implements OnInit {
 
     getSkills() {
         this.skillService.getSkills().subscribe(tmpSkills => {
-            let availableSkills: number[] = [];
+            let availableSkills: Guid[] = [];
 
             if (!this.selectedJobs.length) {
                 if (this.selectedOrigin && this.selectedOrigin.availableSkills) {

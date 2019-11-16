@@ -183,11 +183,11 @@
                 </div>
             </div>
 
-            <div class="icon-label" *ngIf="data.item.template.skills?.length || data.item.template.unskills?.length || data.item.template.skillModifiers?.length">
+            <div class="icon-label" *ngIf="data.item.template.skills?.length || data.item.template.unSkills?.length || data.item.template.skillModifiers?.length">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
                     <div *ngFor="let skill of data.item.template.skills">Donne la compétence "{{skill.name}}"</div>
-                    <div *ngFor="let skill of data.item.template.unskills">Annule "{{skill.name}}"</div>
+                    <div *ngFor="let skill of data.item.template.unSkills">Annule "{{skill.name}}"</div>
                     <div *ngFor="let modifier of data.item.template.skillModifiers">{{modifier.skill.name}}
                         <span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
                     </div>

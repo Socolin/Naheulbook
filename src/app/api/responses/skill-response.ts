@@ -1,8 +1,9 @@
 import {FlagResponse} from './flag-response';
 import {StatModificationOperand} from '../shared/enums';
+import {Guid} from '../shared/util';
 
 export interface SkillResponse {
-    id: number;
+    id: Guid;
     name: string;
     description?: string;
     playerDescription?: string;

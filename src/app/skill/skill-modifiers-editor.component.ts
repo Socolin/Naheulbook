@@ -2,6 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 
 import {Skill} from './skill.model';
 import {SkillService} from './skill.service';
+import {Guid} from '../api/shared/util';
 
 @Component({
     selector: 'skill-modifiers-editor',
@@ -10,7 +11,7 @@ import {SkillService} from './skill.service';
 })
 export class SkillModifiersEditorComponent implements OnInit {
     @Input() modifiers: any[];
-    public selectedSkill?: number;
+    public selectedSkillId?: Guid;
     public value?: number;
     public skills: Skill[];
 
@@ -29,12 +30,11 @@ export class SkillModifiersEditorComponent implements OnInit {
     }
 
     addModifier() {
-        if (this.value && this.selectedSkill) {
-            this.selectedSkill = +this.selectedSkill;
+        if (this.value && this.selectedSkillId) {
             let skill: Skill | undefined;
             for (let i = 0; i < this.skills.length; i++) {
                 let s = this.skills[i];
-                if (s.id === this.selectedSkill) {
+                if (s.id === this.selectedSkillId) {
                     skill = s;
                     break;
                 }
@@ -45,7 +45,7 @@ export class SkillModifiersEditorComponent implements OnInit {
                 }
                 this.modifiers.push({skill: skill, value: this.value});
                 this.value = undefined;
-                this.selectedSkill = undefined;
+                this.selectedSkillId = undefined;
             }
         }
         return true;

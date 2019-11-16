@@ -1,5 +1,6 @@
 import {IItemTemplateData} from '../shared';
 import {ItemSlotResponse} from './item-slot.response';
+import {Guid} from '../shared/util';
 
 export interface ItemTemplateResponse {
     id: number;
@@ -12,8 +13,8 @@ export interface ItemTemplateResponse {
     data: IItemTemplateData;
 
     modifiers: ItemTemplateModifierResponse[];
-    skills: { id: number }[];
-    unskills: { id: number }[];
+    skillIds: Guid[];
+    unSkillIds: Guid[];
     skillModifiers: ItemTemplateSkillModifierResponse[];
     requirements: ItemTemplateRequirementResponse[];
     slots: ItemSlotResponse[];
@@ -29,7 +30,7 @@ export interface ItemTemplateModifierResponse {
 }
 
 export interface ItemTemplateSkillModifierResponse {
-    skill: number;
+    skillId: Guid;
     value: number;
 }
 

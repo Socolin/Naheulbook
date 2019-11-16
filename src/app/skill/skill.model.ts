@@ -1,9 +1,11 @@
 import {Flag, FlagData, StatModifier} from '../shared';
 import {SkillResponse} from '../api/responses';
+import {Guid} from '../api/shared/util';
 
-export type SkillDictionary =  { [skillId: number]: Skill };
+export type SkillDictionary = { [skillId: string]: Skill };
+
 export class Skill {
-    readonly id: number;
+    readonly id: Guid;
     readonly name: string;
     readonly description?: string;
     readonly playerDescription?: string;

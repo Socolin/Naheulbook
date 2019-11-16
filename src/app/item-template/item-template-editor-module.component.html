@@ -459,7 +459,7 @@
             </div>
 
             <div>
-                <div *ngFor="let skill of itemTemplate.unskills">
+                <div *ngFor="let skill of itemTemplate.unSkills">
                     <button mat-icon-button color="accent" (click)="itemTemplate.removeUnskill(skill)"><mat-icon>delete</mat-icon></button>
                     Permet d'annuler la compétence <em>{{skill.name}}</em>
                 </div>
