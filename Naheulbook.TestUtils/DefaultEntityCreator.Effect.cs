@@ -25,7 +25,7 @@ namespace Naheulbook.TestUtils
 
             return new EffectSubCategory
             {
-                Name = $"some-effect-category-name-{suffix}",
+                Name = $"some-effect-sub-category-name-{suffix}",
                 Note = $"some-effect-name-{suffix}",
                 DiceCount = 1,
                 DiceSize = 20,

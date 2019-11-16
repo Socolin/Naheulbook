@@ -69,7 +69,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public async Task CanGetEffectsByCategory()
+        public async Task CanGetEffectsBySubCategory()
         {
             var expectedEffects = new List<Effect>();
 

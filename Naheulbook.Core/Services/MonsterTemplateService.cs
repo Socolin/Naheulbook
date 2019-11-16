@@ -36,8 +36,8 @@ namespace Naheulbook.Core.Services
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var category = await uow.MonsterSubCategories.GetAsync(request.SubCategoryId);
-                if (category == null)
+                var subCategory = await uow.MonsterSubCategories.GetAsync(request.SubCategoryId);
+                if (subCategory == null)
                     throw new MonsterSubCategoryNotFoundException(request.SubCategoryId);
                 var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(request.Inventory.Select(x => x.ItemTemplateId));
 
@@ -45,7 +45,7 @@ namespace Naheulbook.Core.Services
                 {
                     Data = JsonConvert.SerializeObject(request.Data),
                     Name = request.Name,
-                    SubCategory = category,
+                    SubCategory = subCategory,
                     Items = request.Inventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateInventoryElement
                     {
                         Chance = i.Chance,
@@ -69,8 +69,8 @@ namespace Naheulbook.Core.Services
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var category = await uow.MonsterSubCategories.GetAsync(request.SubCategoryId);
-                if (category == null)
+                var subCategory = await uow.MonsterSubCategories.GetAsync(request.SubCategoryId);
+                if (subCategory == null)
                     throw new MonsterSubCategoryNotFoundException(request.SubCategoryId);
 
                 var monsterTemplate = await uow.MonsterTemplates.GetByIdWithItemsAsync(monsterTemplateId);
@@ -82,8 +82,8 @@ namespace Naheulbook.Core.Services
                 monsterTemplate.Data = JsonConvert.SerializeObject(request.Data);
                 monsterTemplate.Name = request.Name;
 
-                monsterTemplate.SubCategoryId = category.Id;
-                monsterTemplate.SubCategory = category;
+                monsterTemplate.SubCategoryId = subCategory.Id;
+                monsterTemplate.SubCategory = subCategory;
 
                 monsterTemplate.Items = monsterTemplate.Items.Where(i => request.Inventory.Any(e => e.Id == i.Id)).ToList();
                 var newItems = request.Inventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateInventoryElement
@@ -117,7 +117,7 @@ namespace Naheulbook.Core.Services
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                return await uow.MonsterTemplates.SearchByNameAndCategoryAsync(filter, monsterTypeId, monsterSubCategoryId, 10);
+                return await uow.MonsterTemplates.SearchByNameAndSubCategoryAsync(filter, monsterTypeId, monsterSubCategoryId, 10);
             }
         }
     }

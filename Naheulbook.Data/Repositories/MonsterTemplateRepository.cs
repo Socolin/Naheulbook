@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Repositories
     public interface IMonsterTemplateRepository : IRepository<MonsterTemplate>
     {
         Task<List<MonsterTemplate>> GetAllWithItemsFullDataAsync();
-        Task<List<MonsterTemplate>> SearchByNameAndCategoryAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId, int maxResult);
+        Task<List<MonsterTemplate>> SearchByNameAndSubCategoryAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId, int maxResult);
         Task<MonsterTemplate> GetByIdWithItemsAsync(int monsterTemplateId);
         Task<MonsterTemplate> GetByIdWithItemsFullDataAsync(int monsterTemplateId);
     }
@@ -30,7 +30,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<List<MonsterTemplate>> SearchByNameAndCategoryAsync(string partialName, int? monsterTypeId, int? monsterSubCategoryId, int maxResult)
+        public Task<List<MonsterTemplate>> SearchByNameAndSubCategoryAsync(string partialName, int? monsterTypeId, int? monsterSubCategoryId, int maxResult)
         {
             var query = Context.MonsterTemplates
                 .Include(m => m.Items)
