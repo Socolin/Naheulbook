@@ -1,3 +1,8 @@
+using System;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class SpecialitySpecial
@@ -7,7 +12,7 @@ namespace Naheulbook.Data.Models
         public string Description { get; set; } = null!;
         public string? Flags { get; set; }
 
-        public int SpecialityId { get; set; }
+        public Guid SpecialityId { get; set; }
         public Speciality Speciality { get; set; } = null!;
     }
 }

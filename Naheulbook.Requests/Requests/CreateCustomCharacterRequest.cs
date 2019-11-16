@@ -21,7 +21,7 @@ namespace Naheulbook.Requests.Requests
         public Guid OriginId { get; set; }
         public IList<Guid> JobIds { get; set; } = null!;
         public IList<Guid> SkillIds { get; set; } = null!;
-        public IDictionary<Guid, IList<int>> SpecialityIds { get; set; } = null!;
+        public IDictionary<Guid, IList<Guid>> SpecialityIds { get; set; } = null!;
 
         public bool IsNpc { get; set; }
         public int? GroupId { get; set; }

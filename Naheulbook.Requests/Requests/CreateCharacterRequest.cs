@@ -24,9 +24,7 @@ namespace Naheulbook.Requests.Requests
         public Guid OriginId { get; set; }
 
         public IList<Guid> SkillIds { get; set; } = null!;
-
-        [JsonProperty("speciality")]
-        public int? SpecialityId { get; set; }
+        public Guid? SpecialityId { get; set; }
     }
 
     public class ModifiedStats

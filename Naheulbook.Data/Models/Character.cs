@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Naheulbook.Data.Models
 {
     public class Character

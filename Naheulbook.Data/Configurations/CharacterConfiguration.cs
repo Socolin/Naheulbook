@@ -265,10 +265,14 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasKey(e => new {e.SpecialityId, e.CharacterId});
 
+            builder.HasIndex(e => e.SpecialityId)
+                .HasName("IX_character_specialities_specialityId");
+
             builder.Property(e => e.CharacterId)
                 .HasColumnName("character");
+
             builder.Property(e => e.SpecialityId)
-                .HasColumnName("speciality");
+                .HasColumnName("specialityId");
 
             builder.HasOne(e => e.Character)
                 .WithMany(e => e.Specialities)
@@ -278,7 +282,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Speciality)
                 .WithMany()
                 .HasForeignKey(e => e.SpecialityId)
-                .HasConstraintName("FK_character_speciality_speciality_speciality");
+                .HasConstraintName("FK_character_specialities_specialityId_specialities_id");
         }
     }
 

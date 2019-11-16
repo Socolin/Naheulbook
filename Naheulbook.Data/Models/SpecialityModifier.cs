@@ -1,3 +1,8 @@
+using System;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class SpecialityModifier
@@ -6,7 +11,7 @@ namespace Naheulbook.Data.Models
         public string Stat { get; set; } = null!;
         public int Value { get; set; }
 
-        public int SpecialityId { get; set; }
-        public virtual Speciality Speciality { get; set; } = null!;
+        public Guid SpecialityId { get; set; }
+        public Speciality Speciality { get; set; } = null!;
     }
 }

@@ -47,7 +47,7 @@ Feature: Job
         ],
         "specialities": [
             {
-                "id": ${Speciality.Id},
+                "id": "${Speciality.Id}",
                 "name": "${Speciality.Name}",
                 "description": "${Speciality.Description}",
                 "modifiers": [

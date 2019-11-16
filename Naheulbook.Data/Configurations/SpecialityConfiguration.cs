@@ -47,7 +47,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("speciality_modifiers");
 
             builder.HasIndex(e => e.SpecialityId)
-                .HasName("IX_speciality_modifier_speciality");
+                .HasName("IX_speciality_modifiers_specialityId");
 
             builder.HasIndex(e => e.Stat)
                 .HasName("IX_speciality_modifier_stat");
@@ -56,7 +56,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("id");
 
             builder.Property(e => e.SpecialityId)
-                .HasColumnName("speciality");
+                .HasColumnName("specialityId");
 
             builder.Property(e => e.Stat)
                 .IsRequired()
@@ -69,7 +69,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Speciality)
                 .WithMany(s => s.Modifiers)
                 .HasForeignKey(e => e.SpecialityId)
-                .HasConstraintName("FK_speciality_modifier_speciality_speciality")
+                .HasConstraintName("FK_speciality_modifiers_specialityId_specialities_id")
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
@@ -81,7 +81,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("speciality_specials");
 
             builder.HasIndex(e => e.SpecialityId)
-                .HasName("IX_speciality_special_speciality");
+                .HasName("IX_speciality_specials_specialityId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -94,7 +94,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("isbonus");
 
             builder.Property(e => e.SpecialityId)
-                .HasColumnName("speciality");
+                .HasColumnName("specialityId");
 
             builder.Property(e => e.Flags)
                 .HasColumnName("flags")
@@ -103,7 +103,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Speciality)
                 .WithMany(s => s.Specials)
                 .HasForeignKey(e => e.SpecialityId)
-                .HasConstraintName("FK_speciality_special_speciality_speciality")
+                .HasConstraintName("FK_speciality_specials_specialityId_specialities_id")
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

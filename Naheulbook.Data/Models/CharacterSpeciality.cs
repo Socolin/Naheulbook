@@ -1,3 +1,7 @@
+using System;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class CharacterSpeciality
@@ -5,7 +9,7 @@ namespace Naheulbook.Data.Models
         public int CharacterId { get; set; }
         public Character Character { get; set; } = null!;
 
-        public int SpecialityId { get; set; }
+        public Guid SpecialityId { get; set; }
         public Speciality Speciality { get; set; } = null!;
     }
 }

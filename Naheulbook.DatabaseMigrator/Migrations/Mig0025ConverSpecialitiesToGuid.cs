@@ -4,12 +4,12 @@ using FluentMigrator;
 
 namespace Naheulbook.DatabaseMigrator.Migrations
 {
-    [Migration(24)]
-    public class Mig0024ConvertJobsToGuid : Migration
+    [Migration(25)]
+    public class Mig0025ConvertSpecialitiesToGuid : Migration
     {
         public override void Up()
         {
-            var convertedTableName = "jobs";
+            var convertedTableName = "specialities";
             Alter.Table(convertedTableName).AddColumn("tmpBaseUuid").AsCustom("CHAR(36) CHARACTER SET ascii NOT NULL").SetExistingRowsTo(SystemMethods.NewGuid);
             Execute.WithConnection((connection, transaction) =>
             {
@@ -20,50 +20,23 @@ namespace Naheulbook.DatabaseMigrator.Migrations
 
             Create.Index("IX_" + convertedTableName + "_id").OnTable(convertedTableName).OnColumn("tmpBaseUuid");
 
-            ConvertJobsLinkedTableToUuid(
-                "job_bonuses",
-                "jobid",
-                "FK_job_bonus_job_jobid",
-                "IX_job_bonus_jobid"
+            ConvertSpecialitiesLinkedTableToUuid(
+                "speciality_modifiers",
+                "speciality",
+                "FK_speciality_modifier_speciality_speciality",
+                "IX_speciality_modifier_speciality"
             );
-            ConvertJobsLinkedTableToUuid(
-                "job_requirements",
-                "jobid",
-                "FK_job_requirement_job_jobid",
-                "IX_job_requirement_jobid"
+            ConvertSpecialitiesLinkedTableToUuid(
+                "speciality_specials",
+                "speciality",
+                "FK_speciality_special_speciality_speciality",
+                "IX_speciality_special_speciality"
             );
-            ConvertJobsLinkedTableToUuid(
-                "job_restrictions",
-                "jobid",
-                "FK_job_restrict_job_jobid",
-                "IX_job_restrict_jobid"
-            );
-            ConvertJobsLinkedTableToUuid(
-                "job_skills",
-                "jobid",
-                "FK_job_skill_job_jobid"
-            );
-            ConvertJobsLinkedTableToUuid(
-                "character_jobs",
-                "job",
-                "character_job_job_id_fk",
-                "character_job_job_id_fk"
-            );
-            ConvertJobsLinkedTableToUuid(
-                "specialities",
-                "job",
-                "FK_speciality_job_job",
-                "IX_speciality_job"
-            );
-            ConvertLinkedTableToUuid(
-                "item_template_modifiers",
-                "FK_item_effect_job_requirejob",
-                "requirejob",
-                "requiredJobId",
-                "jobs",
-                "id",
-                "IX_item_effect_requirejob",
-                true
+            ConvertSpecialitiesLinkedTableToUuid(
+                "character_specialities",
+                "speciality",
+                "FK_character_speciality_speciality_speciality",
+                "IX_character_speciality_speciality"
             );
 
             Delete.Column("id").FromTable(convertedTableName);
@@ -71,14 +44,14 @@ namespace Naheulbook.DatabaseMigrator.Migrations
             Create.PrimaryKey().OnTable(convertedTableName).Column("id");
         }
 
-        private void ConvertJobsLinkedTableToUuid(
+        private void ConvertSpecialitiesLinkedTableToUuid(
             string tableName,
             string columnName,
             string foreignKey,
             string previousIndexName = null
         )
         {
-            ConvertLinkedTableToUuid(tableName, foreignKey, columnName, "jobId", "jobs", "id", previousIndexName);
+            ConvertLinkedTableToUuid(tableName, foreignKey, columnName, "specialityId", "specialities", "id", previousIndexName);
         }
 
         private void ConvertLinkedTableToUuid(

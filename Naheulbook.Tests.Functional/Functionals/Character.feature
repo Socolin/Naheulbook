@@ -35,7 +35,7 @@ Feature: Character
             }
          }
       },
-      "speciality": ${Speciality.Id},
+      "specialityId": "${Speciality.Id}",
       "fatePoint": 3
     }
     """
@@ -85,7 +85,7 @@ Feature: Character
       ],
       "specialityIds": {
         "${Job.[0].Id}": [
-          ${Speciality.[0].Id}
+          "${Speciality.[0].Id}"
         ]
       }
     }
@@ -226,7 +226,7 @@ Feature: Character
         ],
         "specialities": [
             {
-                "id": ${Speciality.Id},
+                "id": "${Speciality.Id}",
                 "name": "${Speciality.Name}",
                 "description": "${Speciality.Description}",
                 "modifiers": [],

@@ -14,6 +14,6 @@ namespace Naheulbook.Requests.Requests
         public int TargetLevelUp { get; set; }
         public string StatToUp { get; set; } = null!;
         public Guid? SkillId { get; set; }
-        public List<int> SpecialityIds { get; set; } = null!;
+        public List<Guid> SpecialityIds { get; set; } = null!;
     }
 }

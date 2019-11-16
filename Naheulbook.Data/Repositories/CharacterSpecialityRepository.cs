@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Naheulbook.Data.Repositories
 {
     public interface ICharacterSpecialityRepository : IRepository<CharacterSpeciality>
     {
-        Task<List<Speciality>> GetWithModiferWithSpecialByIdsAsync(List<int> specialityIds);
+        Task<List<Speciality>> GetWithModiferWithSpecialByIdsAsync(List<Guid> specialityIds);
     }
 
     public class CharacterSpecialityRepository : Repository<CharacterSpeciality, NaheulbookDbContext>, ICharacterSpecialityRepository
@@ -19,7 +20,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public Task<List<Speciality>> GetWithModiferWithSpecialByIdsAsync(List<int> specialityIds)
+        public Task<List<Speciality>> GetWithModiferWithSpecialByIdsAsync(List<Guid> specialityIds)
         {
             return Context.Specialities
                 .Include(s => s.Modifiers)
