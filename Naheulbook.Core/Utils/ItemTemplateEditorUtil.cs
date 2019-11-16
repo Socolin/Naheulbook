@@ -51,7 +51,7 @@ namespace Naheulbook.Core.Utils
             itemTemplate.Modifiers = request.Modifiers?.Select(x => new ItemTemplateModifier
             {
                 StatName = x.Stat,
-                RequireJobId = x.JobId,
+                RequiredJobId = x.JobId,
                 RequiredOriginId = x.OriginId,
                 Value = x.Value,
                 Type = x.Type,

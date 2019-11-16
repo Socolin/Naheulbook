@@ -1,5 +1,8 @@
 using System;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class ItemTemplateModifier
@@ -12,8 +15,8 @@ namespace Naheulbook.Data.Models
         public int ItemTemplateId { get; set; }
         public ItemTemplate ItemTemplate { get; set; } = null!;
 
-        public int? RequireJobId { get; set; }
-        public Job? RequireJob { get; set; }
+        public Guid? RequiredJobId { get; set; }
+        public Job? RequiredJob { get; set; }
 
         public Guid? RequiredOriginId { get; set; }
         public Origin? RequiredOrigin { get; set; }

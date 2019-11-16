@@ -1,3 +1,4 @@
+using System;
 using Naheulbook.Core.Models;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
@@ -24,8 +25,8 @@ namespace Naheulbook.Core.Notifications
         INotificationPacket BuildCharacterShowLoot(int characterId, Loot loot);
         INotificationPacket BuildCharacterHideLoot(int characterId, int lootId);
         INotificationPacket BuildCharacterLevelUp(int characterId, LevelUpResult levelUpResult);
-        INotificationPacket BuildCharacterAddJob(int characterId, int jobId);
-        INotificationPacket BuildCharacterRemoveJob(int characterId, int jobId);
+        INotificationPacket BuildCharacterAddJob(int characterId, Guid jobId);
+        INotificationPacket BuildCharacterRemoveJob(int characterId, Guid jobId);
 
         INotificationPacket BuildCharacterChangeColor(Character character);
         INotificationPacket BuildCharacterChangeTarget(Character character, TargetRequest requestTarget);

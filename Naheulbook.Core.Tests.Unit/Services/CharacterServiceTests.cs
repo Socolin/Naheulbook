@@ -691,8 +691,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public void AddJobAsync_AddNewJobToCharacterJobsAndNotifyIt()
         {
-            const int jobId = 8;
             const int characterId = 5;
+            var jobId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext();
             var request = new CharacterAddJobRequest {JobId = jobId};
             var character = new Character {Jobs = new List<CharacterJob>(), Id = characterId};
@@ -722,7 +722,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public void AddJobAsync_WhenCharacterNotFound_Throw()
         {
-            const int jobId = 8;
+            var jobId = Guid.NewGuid();
             const int characterId = 5;
             var executionContext = new NaheulbookExecutionContext();
             var request = new CharacterAddJobRequest {JobId = jobId};
@@ -738,7 +738,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public void AddJobAsync_EnsureCanAccessCharacter()
         {
-            const int jobId = 8;
+            var jobId = Guid.NewGuid();
             const int characterId = 5;
             var executionContext = new NaheulbookExecutionContext();
             var request = new CharacterAddJobRequest {JobId = jobId};
@@ -758,8 +758,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public void AddJobAsync_WhenCharacterAlreadyKnowTheJob_Throw()
         {
-            const int jobId = 8;
             const int characterId = 5;
+            var jobId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext();
             var request = new CharacterAddJobRequest {JobId = jobId};
             var character = new Character {Jobs = new List<CharacterJob> {new CharacterJob {JobId = jobId}}, Id = characterId};
@@ -775,8 +775,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public void AddJobAsync_WhenJobNotFoundThrow()
         {
-            const int jobId = 8;
             const int characterId = 5;
+            var jobId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext();
             var request = new CharacterAddJobRequest {JobId = jobId};
             var character = new Character {Jobs = new List<CharacterJob>(), Id = characterId};

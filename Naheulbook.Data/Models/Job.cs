@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -7,7 +8,7 @@ namespace Naheulbook.Data.Models
 {
     public class Job
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Information { get; set; }
         public string? PlayerDescription { get; set; }

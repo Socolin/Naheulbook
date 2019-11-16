@@ -113,11 +113,14 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasKey(e => new {e.CharacterId, e.JobId});
 
+            builder.HasIndex(e => e.JobId)
+                .HasName("IX_character_jobs_jobId");
+
             builder.Property(e => e.CharacterId)
                 .HasColumnName("character");
 
             builder.Property(e => e.JobId)
-                .HasColumnName("job");
+                .HasColumnName("jobId");
 
             builder.Property(e => e.Order)
                 .HasColumnName("order");
@@ -130,7 +133,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Job)
                 .WithMany()
                 .HasForeignKey(e => e.JobId)
-                .HasConstraintName("character_job_job_id_fk");
+                .HasConstraintName("FK_character_jobs_jobId_jobs_id");
         }
     }
 

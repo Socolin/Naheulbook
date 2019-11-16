@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("specialities");
 
             builder.HasIndex(e => e.JobId)
-                .HasName("IX_speciality_job");
+                .HasName("IX_specialities_jobId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -21,7 +21,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("description");
 
             builder.Property(e => e.JobId)
-                .HasColumnName("job");
+                .HasColumnName("jobId");
 
             builder.Property(e => e.Name)
                 .IsRequired()
@@ -35,7 +35,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasOne(e => e.Job)
                 .WithMany(j => j.Specialities)
                 .HasForeignKey(e => e.JobId)
-                .HasConstraintName("FK_speciality_job_job")
+                .HasConstraintName("FK_specialities_jobId_jobs_id")
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

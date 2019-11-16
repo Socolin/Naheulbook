@@ -137,11 +137,11 @@ namespace Naheulbook.Data.Configurations
             builder.HasIndex(e => e.ItemTemplateId)
                 .HasName("IX_item_effect_item");
 
-            builder.HasIndex(e => e.RequireJobId)
-                .HasName("IX_item_effect_requirejob");
+            builder.HasIndex(e => e.RequiredJobId)
+                .HasName("IX_item_template_modifiers_requiredJobId");
 
             builder.HasIndex(e => e.RequiredOriginId)
-                .HasName("IX_item_effect_requireorigin");
+                .HasName("IX_item_template_modifiers_requiredOriginId");
 
             builder.HasIndex(e => e.StatName)
                 .HasName("IX_item_effect_stat");
@@ -153,8 +153,8 @@ namespace Naheulbook.Data.Configurations
                 .IsRequired()
                 .HasColumnName("itemTemplate");
 
-            builder.Property(e => e.RequireJobId)
-                .HasColumnName("requirejob");
+            builder.Property(e => e.RequiredJobId)
+                .HasColumnName("requiredJobId");
 
             builder.Property(e => e.RequiredOriginId)
                 .HasColumnName("requiredOriginId");
@@ -189,6 +189,12 @@ namespace Naheulbook.Data.Configurations
                 .HasForeignKey(s => s.RequiredOriginId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_item_template_modifiers_requiredOriginId_origins_id");
+
+            builder.HasOne(s => s.RequiredJob)
+                .WithMany()
+                .HasForeignKey(s => s.RequiredJobId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_item_template_modifiers_requiredJobId_jobs_id");
         }
     }
 

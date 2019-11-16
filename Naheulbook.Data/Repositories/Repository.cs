@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,11 @@ namespace Naheulbook.Data.Repositories
         }
 
         public ValueTask<TEntity> GetAsync(int id)
+        {
+            return Context.Set<TEntity>().FindAsync(id);
+        }
+
+        public ValueTask<TEntity> GetAsync(Guid id)
         {
             return Context.Set<TEntity>().FindAsync(id);
         }

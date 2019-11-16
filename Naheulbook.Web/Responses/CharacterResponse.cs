@@ -45,7 +45,7 @@ namespace Naheulbook.Web.Responses
         [JsonProperty("statBonusAD")]
         public string? StatBonusAd { get; set; }
 
-        public IList<int> JobIds { get; set; } = null!;
+        public IList<Guid> JobIds { get; set; } = null!;
         public IList<Guid> SkillIds { get; set; } = null!;
 
         public NamedIdResponse? Group { get; set; }

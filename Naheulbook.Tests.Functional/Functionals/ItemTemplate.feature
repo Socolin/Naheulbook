@@ -114,8 +114,8 @@ Feature: ItemTemplate
           "value": 1,
           "type": "ADD",
           "special": ["SOME-SPECIAL"],
-          "job": null,
-          "origin": null
+          "jobId": null,
+          "originId": null
         }
       ],
       "skillIds": [
@@ -238,7 +238,7 @@ Feature: ItemTemplate
             {
                 "stat": "${Stat.Name}",
                 "value": -2,
-                "jobId": ${Job.Id},
+                "jobId": "${Job.Id}",
                 "originId": "${Origin.Id}",
                 "special": [],
                 "type": "ADD"
@@ -293,7 +293,7 @@ Feature: ItemTemplate
             {
                 "stat": "${Stat.Name}",
                 "value": -2,
-                "jobId": ${Job.Id},
+                "jobId": "${Job.Id}",
                 "originId": "${Origin.Id}",
                 "special": [],
                 "type": "ADD"
@@ -351,8 +351,8 @@ Feature: ItemTemplate
             {
                 "stat": "${Stat.[-1].Name}",
                 "value": 4,
-                "job": null,
-                "origin": null,
+                "jobId": null,
+                "originId": null,
                 "special": [
                     "SOME_SPECIAL"
                 ],

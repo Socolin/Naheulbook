@@ -30,6 +30,7 @@ namespace Naheulbook.Requests.Validators
     {
         public ItemTemplateSkillModifierRequestValidator()
         {
+            RuleFor(r => r.SkillId).NotEmpty();
         }
     }
 

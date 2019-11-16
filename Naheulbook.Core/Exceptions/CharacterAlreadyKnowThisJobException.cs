@@ -8,9 +8,9 @@ namespace Naheulbook.Core.Exceptions
     public class CharacterAlreadyKnowThisJobException : Exception
     {
         public int CharacterId { get; }
-        public int JobId { get; }
+        public Guid JobId { get; }
 
-        public CharacterAlreadyKnowThisJobException(int characterId, int jobId)
+        public CharacterAlreadyKnowThisJobException(int characterId, Guid jobId)
         {
             CharacterId = characterId;
             JobId = jobId;

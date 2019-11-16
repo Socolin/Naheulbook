@@ -298,7 +298,7 @@ Feature: Monster
                 {
                     "stat": "${Stat.Name}",
                     "value": -2,
-                    "jobId": ${Job.Id},
+                    "jobId": "${Job.Id}",
                     "originId": "${Origin.Id}",
                     "special": [],
                     "type": "ADD"

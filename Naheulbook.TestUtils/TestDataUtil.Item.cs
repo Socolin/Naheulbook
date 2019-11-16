@@ -61,7 +61,7 @@ namespace Naheulbook.TestUtils
                     new ItemTemplateModifier
                     {
                         Special = null,
-                        RequireJob = Get<Job>(),
+                        RequiredJob = Get<Job>(),
                         RequiredOrigin = Get<Origin>(),
                         Stat = Get<Stat>(),
                         Value = 2,

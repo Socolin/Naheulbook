@@ -8,7 +8,7 @@ Feature: Job
     And the response should contains a json array containing the following element identified by id
     """
     {
-        "id": ${Job.Id},
+        "id": "${Job.Id}",
         "name": "${Job.Name}",
         "information": "${Job.Information}",
         "playerDescription": "${Job.PlayerDescription}",

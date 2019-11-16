@@ -132,7 +132,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                     new ItemTemplateModifier
                     {
                         Special = null,
-                        RequireJob = _testDataUtil.GetLast<Job>(),
+                        RequiredJob = _testDataUtil.GetLast<Job>(),
                         RequiredOrigin = _testDataUtil.GetLast<Origin>(),
                         Stat = _testDataUtil.GetLast<Stat>(),
                         Value = -2,

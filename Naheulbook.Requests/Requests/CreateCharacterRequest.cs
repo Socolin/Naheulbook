@@ -20,9 +20,7 @@ namespace Naheulbook.Requests.Requests
         public BasicStats Stats { get; set; } = null!;
         public IDictionary<string, ModifiedStats> ModifiedStat { get; set; } = null!;
 
-        [JsonProperty("job")]
-        public int? JobId { get; set; }
-
+        public Guid? JobId { get; set; }
         public Guid OriginId { get; set; }
 
         public IList<Guid> SkillIds { get; set; } = null!;

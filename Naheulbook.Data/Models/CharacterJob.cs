@@ -1,3 +1,8 @@
+using System;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class CharacterJob
@@ -5,7 +10,7 @@ namespace Naheulbook.Data.Models
         public int CharacterId { get; set; }
         public Character Character { get; set; } = null!;
 
-        public int JobId { get; set; }
+        public Guid JobId { get; set; }
         public Job Job { get; set; } = null!;
 
         public int Order { get; set; }

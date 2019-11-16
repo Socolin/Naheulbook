@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 // ReSharper disable UnusedMember.Global
@@ -35,7 +34,7 @@ namespace Naheulbook.Web.Responses
         public int Value { get; set; }
         public string Type { get; set; } = null!;
         public List<string>? Special { get; set; }
-        public int? JobId { get; set; }
+        public Guid? JobId { get; set; }
         public Guid? OriginId { get; set; }
     }
 

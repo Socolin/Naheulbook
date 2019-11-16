@@ -8,9 +8,9 @@ namespace Naheulbook.Core.Exceptions
     public class CharacterDoNotKnowJobException : Exception
     {
         public int CharacterId { get; }
-        public int JobId { get; }
+        public Guid JobId { get; }
 
-        public CharacterDoNotKnowJobException(int characterId, int jobId)
+        public CharacterDoNotKnowJobException(int characterId, Guid jobId)
         {
             CharacterId = characterId;
             JobId = jobId;

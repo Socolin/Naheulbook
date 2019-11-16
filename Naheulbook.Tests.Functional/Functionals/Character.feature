@@ -19,7 +19,7 @@ Feature: Character
         "AD": 11,
         "FO": 12
       },
-      "job": ${Job.Id},
+      "jobId": "${Job.Id}",
       "originId": "${Origin.Id}",
       "skillIds": [
         "${Skill.Id}"
@@ -77,8 +77,8 @@ Feature: Character
       },
       "originId": "${Origin.Id}",
       "jobIds": [
-        ${Job.[0].Id},
-        ${Job.[1].Id}
+        "${Job.[0].Id}",
+        "${Job.[1].Id}"
       ],
       "skillIds": [
         "${Skill.Id}"
@@ -144,8 +144,8 @@ Feature: Character
         "originId": "${Origin.Id}",
         "level": ${Character.Level},
         "jobIds": [
-            ${Job.[0].Id},
-            ${Job.[1].Id}
+            "${Job.[0].Id}",
+            "${Job.[1].Id}"
         ],
         "stats": {
             "COU": ${Character.Cou},
@@ -266,7 +266,7 @@ Feature: Character
                 {
                   "stat": "${ItemTemplate.Modifiers.[0].StatName}",
                   "value": ${ItemTemplate.Modifiers.[0].Value},
-                  "jobId": ${ItemTemplate.Modifiers.[0].RequireJobId},
+                  "jobId": "${ItemTemplate.Modifiers.[0].RequiredJobId}",
                   "originId": "${ItemTemplate.Modifiers.[0].RequiredOriginId}",
                   "special": [],
                   "type": "ADD"
@@ -344,7 +344,7 @@ Feature: Character
                 {
                     "stat": "${Stat.Name}",
                     "value": -2,
-                    "jobId": ${Job.Id},
+                    "jobId": "${Job.Id}",
                     "originId": "${Origin.Id}",
                     "special": [],
                     "type": "ADD"
@@ -628,14 +628,14 @@ Feature: Character
     When performing a POST to the url "/api/v2/characters/${Character.Id}/addJob" with the following json content and the current jwt
     """
     {
-      "jobId": ${Job.[-1].Id}
+      "jobId": "${Job.[-1].Id}"
     }
     """
     Then the response status code is 200
     And the response should contains the following json
     """
     {
-      "jobId": ${Job.[-1].Id}
+      "jobId": "${Job.[-1].Id}"
     }
     """
 
@@ -646,7 +646,7 @@ Feature: Character
     {
         "__partial": {
             "jobIds": [
-                ${Job.[-1].Id}
+                "${Job.[-1].Id}"
             ]
         }
     }
@@ -660,14 +660,14 @@ Feature: Character
     When performing a POST to the url "/api/v2/characters/${Character.Id}/removeJob" with the following json content and the current jwt
     """
     {
-      "jobId": ${Job.[0].Id}
+      "jobId": "${Job.[0].Id}"
     }
     """
     Then the response status code is 200
     And the response should contains the following json
     """
     {
-      "jobId": ${Job.[0].Id}
+      "jobId": "${Job.[0].Id}"
     }
     """
 

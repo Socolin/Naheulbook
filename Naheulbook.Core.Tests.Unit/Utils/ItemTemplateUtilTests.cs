@@ -212,7 +212,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                     new ItemTemplateModifierRequest
                     {
                         Stat = "some-stat-name-2",
-                        JobId = 1,
+                        JobId = new Guid("00000000-0000-0000-0000-000000000011"),
                         Type = "ADD",
                         Value = 3
                     },
@@ -233,7 +233,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                 new ItemTemplateModifier
                 {
                     StatName = "some-stat-name-2",
-                    RequireJobId = 1,
+                    RequiredJobId = new Guid("00000000-0000-0000-0000-000000000011"),
                     Type = "ADD",
                     Value = 3,
                     Special = ""

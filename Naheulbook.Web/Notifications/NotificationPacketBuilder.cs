@@ -69,12 +69,12 @@ namespace Naheulbook.Web.Notifications
             return BuildCharacterChange(characterId, "levelUp", _mapper.Map<CharacterLevelUpResponse>(levelUpResult));
         }
 
-        public INotificationPacket BuildCharacterAddJob(int characterId, int jobId)
+        public INotificationPacket BuildCharacterAddJob(int characterId, Guid jobId)
         {
             return BuildCharacterChange(characterId, "addJob", new CharacterAddJobResponse {JobId = jobId});
         }
 
-        public INotificationPacket BuildCharacterRemoveJob(int characterId, int jobId)
+        public INotificationPacket BuildCharacterRemoveJob(int characterId, Guid jobId)
         {
             return BuildCharacterChange(characterId, "removeJob", new CharacterRemoveJobResponse {JobId = jobId});
         }

@@ -9,7 +9,6 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IOriginRepository : IRepository<Origin>
     {
-        ValueTask<Origin> GetAsync(Guid id);
         Task<ICollection<Origin>> GetAllWithAllDataAsync();
         Task<Origin> GetWithAllDataAsync(Guid originId);
     }
@@ -18,11 +17,6 @@ namespace Naheulbook.Data.Repositories
     {
         public OriginRepository(NaheulbookDbContext context) : base(context)
         {
-        }
-
-        public ValueTask<Origin> GetAsync(Guid id)
-        {
-            return Context.Origins.FindAsync(id);
         }
 
         public async Task<ICollection<Origin>> GetAllWithAllDataAsync()
