@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using FluentMigrator.Runner;
 using Microsoft.Extensions.Configuration;
@@ -27,9 +26,6 @@ namespace Naheulbook.DatabaseMigrator.Cli
 
         private static IServiceProvider CreateServices(string connectionString)
         {
-            var asm = typeof(Mig0001Init).Assembly;
-            foreach (var n in asm.GetManifestResourceNames())
-                Debug.WriteLine(n);
             return new ServiceCollection()
                 .AddFluentMigratorCore()
                 .Configure<FluentMigratorLoggerOptions>(
