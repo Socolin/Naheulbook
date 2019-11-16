@@ -6,5 +6,5 @@ export interface CharacterLevelUpRequest {
     targetLevelUp: number;
     statToUp: string;
     skillId?: Guid;
-    specialityIds: number[];
+    specialityIds: Guid[];
 }

@@ -1,8 +1,9 @@
 import {Flag, FlagData, StatModifier} from '../shared';
 import {SpecialityResponse} from '../api/responses';
+import {Guid} from '../api/shared/util';
 
 export class Speciality {
-    readonly id: number;
+    readonly id: Guid;
     readonly name: string;
     readonly description: string;
     readonly specials: {

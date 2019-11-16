@@ -28,7 +28,7 @@ import {
     CharacterResponse,
     ItemPartialResponse
 } from '../api/responses';
-import {CharacterSex} from '../api/shared/enums/character-sex';
+import {CharacterSex} from '../api/shared/enums';
 import {Guid} from '../api/shared/util';
 
 export interface CharacterGiveDestination {

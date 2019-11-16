@@ -23,7 +23,7 @@ export interface CreateCustomCharacterRequest {
     originId: Guid;
     jobIds: Guid[];
     skillIds: number[];
-    specialityIds: { [jobId: string]: number[] };
+    specialityIds: { [jobId: string]: Guid[] };
 
     isNpc?: boolean;
     groupId?: number;

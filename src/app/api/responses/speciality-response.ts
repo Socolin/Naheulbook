@@ -1,8 +1,9 @@
 import {FlagResponse} from './flag-response';
 import {IStatModifier} from '../shared';
+import {Guid} from '../shared/util';
 
 export interface SpecialityResponse {
-    id: number;
+    id: Guid;
     name: string;
     description: string;
     modifiers: IStatModifier[];

@@ -9,6 +9,7 @@ import {Skill, SkillService} from '../skill';
 import {CharacterService} from './character.service';
 import {Speciality} from '../job';
 import {CreateCustomCharacterRequest} from '../api/requests/create-custom-character-request';
+import {Guid} from '../api/shared/util';
 
 @Component({
     templateUrl: './create-custom-character.component.html',
@@ -217,14 +218,14 @@ export class CreateCustomCharacterComponent implements OnInit {
         }
         this.creating = true;
 
-        let specialitiesIds = {};
+        let specialitiesIds: {[jobId: string]: Guid[]} = {};
         for (let jobId in this.specialities) {
             if (!this.specialities.hasOwnProperty(jobId)) {
                 continue;
             }
             specialitiesIds[jobId] = [];
-            for (let spe of this.specialities[jobId]) {
-                specialitiesIds[jobId].push(spe.id);
+            for (const speciality of this.specialities[jobId]) {
+                specialitiesIds[jobId].push(speciality.id);
             }
         }
 

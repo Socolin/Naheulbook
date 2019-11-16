@@ -15,7 +15,7 @@ export interface LevelUpDialogResult {
     targetLevelUp: number;
     statToUp: string;
     skillId?: Guid;
-    specialityIds: number[];
+    specialityIds: Guid[];
 }
 
 export class LevelUpInfo {
@@ -149,7 +149,7 @@ export class LevelUpDialogComponent {
             skillId = this.levelUpInfo.skill.id;
         }
 
-        let specialityIds: number[] = [];
+        let specialityIds: Guid[] = [];
         for (let jobId in this.levelUpInfo.specialities) {
             if (!this.levelUpInfo.specialities.hasOwnProperty(jobId)) {
                 continue;

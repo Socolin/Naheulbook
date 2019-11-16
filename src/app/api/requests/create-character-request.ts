@@ -17,5 +17,5 @@ export interface CreateCharacterRequest {
     jobId?: Guid;
     originId: Guid;
     skillIds: Guid[];
-    speciality?: number;
+    speciality?: Guid;
 }

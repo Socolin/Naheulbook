@@ -13,6 +13,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {FormControl, Validators} from '@angular/forms';
 import {CreateCharacterRequest} from '../api/requests/create-character-request';
 import {CharacterSex} from '../api/shared/enums';
+import {Guid} from '../api/shared/util';
 
 @Component({
     selector: 'create-character',
@@ -572,7 +573,7 @@ export class CreateCharacterComponent implements OnInit {
             money += this.money2 * 10;
         }
 
-        let specialityId: number | undefined = undefined;
+        let specialityId: Guid | undefined = undefined;
         if (this.selectedSpeciality) {
             specialityId = this.selectedSpeciality.id;
         }
