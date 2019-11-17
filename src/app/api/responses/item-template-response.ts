@@ -3,7 +3,7 @@ import {ItemSlotResponse} from './item-slot.response';
 import {Guid} from '../shared/util';
 
 export interface ItemTemplateResponse {
-    id: number;
+    id: Guid;
     subCategoryId: number;
     name: string;
     techName?: string;

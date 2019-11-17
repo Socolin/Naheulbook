@@ -14,6 +14,7 @@ import {
 } from './item-template.model';
 import {ItemSlotResponse, ItemTemplateResponse, ItemTemplateSectionResponse, ItemTypeResponse} from '../api/responses';
 import {ItemTemplateRequest} from '../api/requests/item-template-request';
+import {Guid} from '../api/shared/util';
 
 @Injectable()
 export class ItemTemplateService {
@@ -92,7 +93,7 @@ export class ItemTemplateService {
             );
     }
 
-    editItemTemplate(itemTemplateId: number, request: ItemTemplateRequest): Observable<ItemTemplate> {
+    editItemTemplate(itemTemplateId: Guid, request: ItemTemplateRequest): Observable<ItemTemplate> {
         return this.httpClient.put<ItemTemplateResponse>(`/api/v2/itemTemplates/${itemTemplateId}`, request)
             .pipe(
                 withLatestFrom(this.skillService.getSkillsById()),
@@ -100,10 +101,10 @@ export class ItemTemplateService {
             );
     }
 
-    getItem(id: number): Observable<ItemTemplate> {
+    getItem(itemTemplateId: Guid): Observable<ItemTemplate> {
         return new Observable((observer) => {
             forkJoin([
-                this.httpClient.get<ItemTemplateResponse>(`/api/v2/itemTemplates/${id}`),
+                this.httpClient.get<ItemTemplateResponse>(`/api/v2/itemTemplates/${itemTemplateId}`),
                 this.skillService.getSkillsById()
             ]).subscribe(
                 ([itemTemplateData, skillsById]: [ItemTemplateResponse, { [skillId: number]: Skill }]) => {

@@ -6,9 +6,10 @@ import {LoginService} from '../user';
 import {ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {Guid} from '../api/shared/util';
 
 export interface CreateItemTemplateDialogData {
-    copyFromItemTemplateId?: number;
+    copyFromItemTemplateId?: Guid;
 }
 
 @Component({

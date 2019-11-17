@@ -1,5 +1,6 @@
 import {ActiveStatsModifier} from '../shared';
 import {assertNever} from '../utils/utils';
+import {Guid} from '../api/shared/util';
 
 export enum NhbkActionType {
     addItem = 'addItem',
@@ -26,7 +27,7 @@ export interface INhbkAction {
 }
 
 export type NhbkAddItemActionData = {
-    templateId: number;
+    templateId: Guid;
     itemName?: string;
     quantity?: number;
 };

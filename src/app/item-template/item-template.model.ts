@@ -9,6 +9,7 @@ import {
     ItemTemplateSectionResponse,
     ItemTypeResponse
 } from '../api/responses';
+import {Guid} from '../api/shared/util';
 
 export class ItemTemplateSection {
     id: number;
@@ -177,7 +178,7 @@ export class ItemSkillModifier {
 }
 
 export class ItemTemplate {
-    id: number;
+    id: Guid;
     name: string;
     techName?: string;
     subCategoryId: number;

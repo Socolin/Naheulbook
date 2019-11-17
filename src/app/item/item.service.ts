@@ -10,6 +10,7 @@ import {Skill, SkillService} from '../skill';
 import {Item, ItemData} from './item.model';
 import {ItemPartialResponse} from '../api/responses';
 import {assertNever} from '../utils/utils';
+import {Guid} from '../api/shared/util';
 
 export interface TakeItemResponse {
     takenItem: ItemData;
@@ -45,7 +46,7 @@ export class ItemService {
     addItemTo(
         targetType: 'character' | 'monster' | 'loot',
         targetId: number,
-        itemTemplateId: number,
+        itemTemplateId: Guid,
         itemData: ItemData,
     ): Observable<Item> {
         if (itemData.quantity) {

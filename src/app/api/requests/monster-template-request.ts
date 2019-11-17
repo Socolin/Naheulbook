@@ -1,7 +1,8 @@
 import {MonsterTemplateData} from '../shared';
+import {Guid} from '../shared/util';
 
 export interface MonsterInventoryElementRequest {
-    itemTemplateId: number;
+    itemTemplateId: Guid;
     minCount: number;
     maxCount: number;
     chance: number;

@@ -4,9 +4,10 @@ import {ItemData} from '../item';
 import {MatDialogRef, MatStep} from '@angular/material';
 import {forkJoin} from 'rxjs';
 import {IconDescription} from '../shared/icon.model';
+import {Guid} from '../api/shared/util';
 
 export interface AddItemDialogResult {
-    itemTemplateId: number;
+    itemTemplateId: Guid;
     itemData: ItemData;
 }
 

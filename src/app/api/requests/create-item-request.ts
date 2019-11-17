@@ -1,6 +1,7 @@
 import {IItemData} from '../shared';
+import {Guid} from '../shared/util';
 
 export interface CreateItemRequest {
-    itemTemplateId: number;
+    itemTemplateId: Guid;
     itemData: IItemData;
 }

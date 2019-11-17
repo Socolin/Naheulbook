@@ -85,9 +85,9 @@ export class NhbkActionEditorDialogComponent {
         this.dialogRef.close(this.action);
     }
 
-    isReady() {
+    isReady(): boolean {
         if (this.action.type === NhbkActionType.addItem) {
-            return this.action.data.templateId > 0;
+            return !!this.action.data.templateId;
         } else if (this.action.type === NhbkActionType.addEffect) {
             return this.action.data.effectId > 0;
         }
@@ -98,7 +98,7 @@ export class NhbkActionEditorDialogComponent {
     selectActionType(actionType: NhbkActionType) {
         switch (actionType) {
             case NhbkActionType.addItem:
-                this.action = NhbkActionFactory.createFromType(NhbkActionType.addItem, {templateId: 0});
+                this.action = NhbkActionFactory.createFromType(NhbkActionType.addItem, {templateId: ''});
                 break;
             case NhbkActionType.removeItem:
                 this.action = NhbkActionFactory.createFromType(NhbkActionType.removeItem);

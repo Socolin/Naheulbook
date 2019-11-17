@@ -5,9 +5,10 @@ import {NotificationsService} from '../notifications';
 
 import {ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
+import {Guid} from '../api/shared/util';
 
 export interface EditItemTemplateDialogData {
-    itemTemplateId: number;
+    itemTemplateId: Guid;
 }
 
 @Component({
