@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -291,7 +292,7 @@ namespace Naheulbook.Core.Services
             if (requestItems.Count == 0)
                 return new List<Item>();
 
-            Dictionary<int, ItemTemplate> itemTemplatesById;
+            Dictionary<Guid, ItemTemplate> itemTemplatesById;
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(requestItems.Select(x => x.ItemTemplateId));

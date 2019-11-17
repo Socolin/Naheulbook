@@ -30,7 +30,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             TestDataUtil.AddItem(character);
 
-            var item = await _itemRepository.GetWithAllDataAsync(TestDataUtil.Get<ItemTemplate>().Id);
+            var item = await _itemRepository.GetWithAllDataAsync(TestDataUtil.Get<Item>().Id);
 
             item.Should().BeEquivalentTo(TestDataUtil.GetLast<Item>(), config => config.ExcludingChildren());
             var itemTemplate = item.ItemTemplate;
@@ -53,7 +53,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var character = TestDataUtil.AddOrigin().AddCharacter(user.Id, u => u.Group = TestDataUtil.GetLast<Group>()).GetLast<Character>();
             TestDataUtil.AddItem(character);
 
-            var item = await _itemRepository.GetWithOwnerAsync(TestDataUtil.Get<ItemTemplate>().Id);
+            var item = await _itemRepository.GetWithOwnerAsync(TestDataUtil.Get<Item>().Id);
 
             var expectation = TestDataUtil.GetLast<Item>();
             item.Should().BeEquivalentTo(expectation, config => config.ExcludingChildren());
@@ -69,7 +69,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil.AddLoot();
             TestDataUtil.AddItem(TestDataUtil.GetLast<Loot>());
 
-            var item = await _itemRepository.GetWithOwnerAsync(TestDataUtil.Get<ItemTemplate>().Id);
+            var item = await _itemRepository.GetWithOwnerAsync(TestDataUtil.Get<Item>().Id);
 
             var expectation = TestDataUtil.GetLast<Item>();
             item.Should().BeEquivalentTo(expectation, config => config.ExcludingChildren());
@@ -85,7 +85,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil.AddMonster();
             TestDataUtil.AddItem(TestDataUtil.GetLast<Monster>());
 
-            var item = await _itemRepository.GetWithOwnerAsync(TestDataUtil.Get<ItemTemplate>().Id);
+            var item = await _itemRepository.GetWithOwnerAsync(TestDataUtil.Get<Item>().Id);
 
             var expectation = TestDataUtil.GetLast<Item>();
             item.Should().BeEquivalentTo(expectation, config => config.ExcludingChildren());

@@ -10,7 +10,7 @@ namespace Naheulbook.Web.Responses
 {
     public class ItemTemplateResponse
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int SubCategoryId { get; set; }
         public string Name { get; set; } = null!;
         public string? TechName { get; set; }

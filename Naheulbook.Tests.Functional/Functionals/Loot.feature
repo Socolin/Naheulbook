@@ -73,7 +73,7 @@ Feature: Loot
     When performing a POST to the url "/api/v2/loots/${Loot.Id}/items" with the following json content and the current jwt
     """
     {
-      "itemTemplateId": ${ItemTemplate.Id},
+      "itemTemplateId": "${ItemTemplate.Id}",
       "itemData": {
           "name": "some-name"
       }
@@ -89,7 +89,7 @@ Feature: Loot
         },
         "modifiers": [],
         "template": {
-            "id": ${ItemTemplate.Id},
+            "id": "${ItemTemplate.Id}",
             "name": "${ItemTemplate.Name}",
             "techName": "${ItemTemplate.TechName}",
             "source": "official",
@@ -160,7 +160,7 @@ Feature: Loot
       },
       "modifiers": [],
       "template": {
-        "id": ${ItemTemplate.Id},
+        "id": "${ItemTemplate.Id}",
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",

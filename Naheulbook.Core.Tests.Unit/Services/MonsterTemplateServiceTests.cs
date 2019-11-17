@@ -37,8 +37,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task CreateMonsterTemplate_InsertNewEntityInDatabase()
         {
             const int subCategoryId = 10;
-            const int itemTemplateId = 11;
             const int locationId = 12;
+            var itemTemplateId = Guid.NewGuid();
 
             var executionContext = new NaheulbookExecutionContext();
             var monsterSubCategory = CreateMonsterSubCategory(subCategoryId);
@@ -48,7 +48,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             _unitOfWorkFactory.GetUnitOfWork().MonsterSubCategories.GetAsync(subCategoryId)
                 .Returns(monsterSubCategory);
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<int>>(x => x.SequenceEqual(new[] {itemTemplateId})))
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<Guid>>(x => x.SequenceEqual(new[] {itemTemplateId})))
                 .Returns(new List<ItemTemplate> {itemTemplate});
 
             var monsterTemplate = await _service.CreateMonsterTemplateAsync(executionContext, request);
@@ -100,7 +100,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             };
         }
 
-        private static MonsterTemplateRequest CreateRequest(int subCategoryId, int itemTemplateId, int locationId)
+        private static MonsterTemplateRequest CreateRequest(int subCategoryId, Guid itemTemplateId, int locationId)
         {
             return new MonsterTemplateRequest
             {

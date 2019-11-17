@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,9 +14,9 @@ namespace Naheulbook.Core.Services
 {
     public interface IItemTemplateService
     {
-        Task<ItemTemplate> GetItemTemplateAsync(int itemTemplateId);
+        Task<ItemTemplate> GetItemTemplateAsync(Guid itemTemplateId);
         Task<ItemTemplate> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request);
-        Task<ItemTemplate> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, int itemTemplateId, ItemTemplateRequest request);
+        Task<ItemTemplate> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request);
         Task<List<ItemTemplate>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId);
 
         Task<ICollection<Slot>> GetItemSlotsAsync();
@@ -44,7 +45,7 @@ namespace Naheulbook.Core.Services
             _stringCleanupUtil = stringCleanupUtil;
         }
 
-        public async Task<ItemTemplate> GetItemTemplateAsync(int itemTemplateId)
+        public async Task<ItemTemplate> GetItemTemplateAsync(Guid itemTemplateId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -75,7 +76,7 @@ namespace Naheulbook.Core.Services
             return itemTemplate;
         }
 
-        public async Task<ItemTemplate> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, int itemTemplateId, ItemTemplateRequest request)
+        public async Task<ItemTemplate> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

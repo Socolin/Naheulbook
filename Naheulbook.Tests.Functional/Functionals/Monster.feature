@@ -36,7 +36,7 @@ Feature: Monster
             "name": "some-item-name",
             "notIdentified": true
           },
-          "itemTemplateId": ${ItemTemplate.Id}
+          "itemTemplateId": "${ItemTemplate.Id}"
         }
       ],
       "modifiers": [
@@ -94,7 +94,7 @@ Feature: Monster
           "id": {"__match": {"type": "integer"}},
           "modifiers": [],
             "template": {"__partial": {
-              "id": ${ItemTemplate.Id}
+              "id": "${ItemTemplate.Id}"
             }}
           }
       ],
@@ -144,7 +144,7 @@ Feature: Monster
           { "__partial": {
             "id": ${Item.Id},
             "template": { "__partial": {
-                "id": ${ItemTemplate.Id}
+                "id": "${ItemTemplate.Id}"
             }}
           }}
         ]
@@ -263,7 +263,7 @@ Feature: Monster
     When performing a POST to the url "/api/v2/monsters/${Monster.Id}/items" with the following json content and the current jwt
     """
     {
-      "itemTemplateId": ${ItemTemplate.Id},
+      "itemTemplateId": "${ItemTemplate.Id}",
       "itemData": {
           "name": "some-name"
       }
@@ -279,7 +279,7 @@ Feature: Monster
         },
         "modifiers": [],
         "template": {
-            "id": ${ItemTemplate.Id},
+            "id": "${ItemTemplate.Id}",
             "name": "${ItemTemplate.Name}",
             "techName": "${ItemTemplate.TechName}",
             "source": "official",
@@ -351,7 +351,7 @@ Feature: Monster
       },
       "modifiers": [],
       "template": {
-        "id": ${ItemTemplate.Id},
+        "id": "${ItemTemplate.Id}",
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",

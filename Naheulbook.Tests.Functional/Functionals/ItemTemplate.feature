@@ -151,7 +151,7 @@ Feature: ItemTemplate
     And the response should contains the following json
     """
     {
-      "id": {"__match": {"type": "integer"}},
+      "id": {"__match": {"type": "string"}},
       "source": "official",
       "subCategoryId": ${ItemTemplateSubCategory.Id},
       "name": "some-name",
@@ -219,7 +219,7 @@ Feature: ItemTemplate
     And the response should contains the following json
     """
     {
-        "id": ${ItemTemplate.Id},
+        "id": "${ItemTemplate.Id}",
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",
@@ -274,7 +274,7 @@ Feature: ItemTemplate
     And the response should contains a json array containing the following element identified by id
     """
     {
-        "id": ${ItemTemplate.Id},
+        "id": "${ItemTemplate.Id}",
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",
@@ -332,7 +332,7 @@ Feature: ItemTemplate
     When performing a PUT to the url "/api/v2/itemTemplates/${ItemTemplate.Id}" with the following json content and the current jwt
     """
     {
-        "id": ${ItemTemplate.Id},
+        "id": "${ItemTemplate.Id}",
         "name": "some-new-name",
         "techName": "some-new-tech-name",
         "source": "official",
@@ -385,7 +385,7 @@ Feature: ItemTemplate
     And the response should contains the following json
     """
     {
-         "id": ${ItemTemplate.Id},
+         "id": "${ItemTemplate.Id}",
          "name": "some-new-name",
          "techName": "some-new-tech-name",
          "source": "official",
@@ -441,7 +441,7 @@ Feature: ItemTemplate
       """
       [
         {
-           "id": ${ItemTemplate.Id},
+           "id": "${ItemTemplate.Id}",
            "name": "${ItemTemplate.Name}",
            "techName": "${ItemTemplate.TechName}",
            "source": "official",
@@ -466,7 +466,7 @@ Feature: ItemTemplate
       """
       [
         {
-           "id": ${ItemTemplate.Id},
+           "id": "${ItemTemplate.Id}",
            "name": "${ItemTemplate.Name}",
            "techName": "${ItemTemplate.TechName}",
            "source": "official",

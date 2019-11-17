@@ -135,7 +135,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("item_template_modifiers");
 
             builder.HasIndex(e => e.ItemTemplateId)
-                .HasName("IX_item_effect_item");
+                .HasName("IX_item_template_modifiers_itemTemplateId");
 
             builder.HasIndex(e => e.RequiredJobId)
                 .HasName("IX_item_template_modifiers_requiredJobId");
@@ -151,7 +151,7 @@ namespace Naheulbook.Data.Configurations
 
             builder.Property(e => e.ItemTemplateId)
                 .IsRequired()
-                .HasColumnName("itemTemplate");
+                .HasColumnName("itemTemplateId");
 
             builder.Property(e => e.RequiredJobId)
                 .HasColumnName("requiredJobId");
@@ -182,7 +182,7 @@ namespace Naheulbook.Data.Configurations
                 .WithMany(e => e.Modifiers)
                 .HasForeignKey(s => s.ItemTemplateId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_item_effect_item_template_item");
+                .HasConstraintName("FK_item_template_modifiers_itemTemplateId_item_templates_id");
 
             builder.HasOne(s => s.RequiredOrigin)
                 .WithMany()
@@ -212,7 +212,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("id");
 
             builder.Property(e => e.ItemTemplateId)
-                .HasColumnName("itemTemplate");
+                .HasColumnName("itemTemplateId");
 
             builder.Property(e => e.MaxValue)
                 .HasColumnName("maxvalue");
@@ -229,7 +229,7 @@ namespace Naheulbook.Data.Configurations
                 .WithMany(i => i.Requirements)
                 .HasForeignKey(r => r.ItemTemplateId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_item_requirement_item_template_item");
+                .HasConstraintName("FK_item_template_requirements_itemTemplateId_item_templates_id");
 
             builder.HasOne(e => e.Stat)
                 .WithMany()
@@ -248,13 +248,13 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => new {e.SkillId, e.ItemTemplateId});
 
             builder.HasIndex(e => e.ItemTemplateId)
-                .HasName("IX_item_skill_item");
+                .HasName("IX_item_template_skills_itemTemplateId");
 
             builder.HasIndex(e => e.SkillId)
                 .HasName("IX_item_template_skills_skillId");
 
             builder.Property(e => e.ItemTemplateId)
-                .HasColumnName("itemTemplate");
+                .HasColumnName("itemTemplateId");
 
             builder.Property(e => e.SkillId)
                 .HasColumnName("skillId");
@@ -269,7 +269,7 @@ namespace Naheulbook.Data.Configurations
                 .WithMany(i => i.Skills)
                 .HasForeignKey(s => s.ItemTemplateId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_item_skill_item_template_item");
+                .HasConstraintName("FK_item_template_skills_itemTemplateId_item_templates_id");
         }
     }
 
@@ -280,7 +280,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("item_template_skill_modifiers");
 
             builder.HasIndex(e => e.ItemTemplateId)
-                .HasName("IX_item_skill_modifiers_item");
+                .HasName("IX_item_template_skill_modifiers_itemTemplateId");
 
             builder.HasIndex(e => e.SkillId)
                 .HasName("IX_item_template_skill_modifiers_skillId");
@@ -289,7 +289,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("id");
 
             builder.Property(e => e.ItemTemplateId)
-                .HasColumnName("itemTemplate");
+                .HasColumnName("itemTemplateId");
 
             builder.Property(e => e.SkillId)
                 .HasColumnName("skillId");
@@ -301,7 +301,7 @@ namespace Naheulbook.Data.Configurations
                 .WithMany()
                 .HasForeignKey(e => e.SkillId)
                 .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_item_skill_modifiers_skill_skillId");
+                .HasConstraintName("FK_item_template_skill_modifiers_itemTemplateId");
 
             builder.HasOne(e => e.ItemTemplate)
                 .WithMany(i => i.SkillModifiers)
@@ -320,18 +320,18 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("item_template_slots");
 
             builder.HasIndex(e => e.ItemTemplateId)
-                .HasName("IX_item_template_slot_item");
+                .HasName("IX_item_template_slots_itemTemplateId");
 
             builder.Property(e => e.SlotId)
                 .HasColumnName("slot");
 
             builder.Property(e => e.ItemTemplateId)
-                .HasColumnName("itemTemplate");
+                .HasColumnName("itemTemplateId");
 
             builder.HasOne(s => s.ItemTemplate)
                 .WithMany(s => s.Slots)
                 .HasForeignKey(s => s.ItemTemplateId)
-                .HasConstraintName("FK_item_template_slot_item_template_item");
+                .HasConstraintName("FK_item_template_slots_itemTemplateId_item_templates_id");
 
             builder.HasOne(s => s.Slot)
                 .WithMany()
@@ -349,13 +349,13 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => new {e.SkillId, e.ItemTemplateId});
 
             builder.HasIndex(e => e.ItemTemplateId)
-                .HasName("IX_item_unskill_item");
+                .HasName("IX_item_template_unskills_itemTemplateId");
 
             builder.HasIndex(e => e.SkillId)
                 .HasName("IX_item_template_unskills_skillId");
 
             builder.Property(e => e.ItemTemplateId)
-                .HasColumnName("itemTemplate");
+                .HasColumnName("itemTemplateId");
 
             builder.Property(e => e.SkillId)
                 .HasColumnName("skillId");
@@ -370,7 +370,7 @@ namespace Naheulbook.Data.Configurations
                 .WithMany(i => i.UnSkills)
                 .HasForeignKey(s => s.ItemTemplateId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_item_unskill_item_template_item");
+                .HasConstraintName("FK_item_template_unskills_itemTemplateId_item_templates_id");
         }
     }
 

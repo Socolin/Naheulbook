@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -25,8 +26,8 @@ namespace Naheulbook.Web.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{itemTemplateId:int:min(1)}")]
-        public async Task<ActionResult<ItemTemplateResponse>> GetItemTemplateAsync(int itemTemplateId)
+        [HttpGet("{itemTemplateId:guid}")]
+        public async Task<ActionResult<ItemTemplateResponse>> GetItemTemplateAsync(Guid itemTemplateId)
         {
             try
             {
@@ -40,10 +41,10 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
-        [HttpPut("{itemTemplateId:int:min(1)}")]
+        [HttpPut("{itemTemplateId:guid}")]
         public async Task<ActionResult<ItemTemplateResponse>> PutItemTemplateAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int itemTemplateId,
+            [FromRoute] Guid itemTemplateId,
             ItemTemplateRequest request
         )
         {

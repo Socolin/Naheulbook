@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,13 +11,13 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IItemTemplateRepository : IRepository<ItemTemplate>
     {
-        Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(int id);
+        Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id);
         Task<List<ItemTemplate>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId);
         Task<List<ItemTemplate>> GetWithAllDataByCategoryIdAsync(int subCategoryId, int? currentUserId, bool includeCommunityItems);
-        Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<int> ids);
+        Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<Guid> ids);
         Task<List<ItemTemplate>> GetItemByCleanNameWithAllDataAsync(string name, int maxResultCount, int? currentUserId, bool includeCommunityItems);
-        Task<List<ItemTemplate>> GetItemByPartialCleanNameWithAllDataAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems);
-        Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems);
+        Task<List<ItemTemplate>> GetItemByPartialCleanNameWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems);
+        Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems);
         Task<ItemTemplate> GetPurseItemTemplateBasedOnMoneyAsync(int money);
         Task<ItemTemplate> GetGoldCoinItemTemplate();
     }
@@ -28,7 +29,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(int id)
+        public Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id)
         {
             return Context.ItemTemplates
                 .IncludeItemTemplateDetails()
@@ -53,7 +54,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<int> ids)
+        public Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<Guid> ids)
         {
             return Context.ItemTemplates
                 .Where(x => ids.Contains(x.Id))
@@ -71,7 +72,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<List<ItemTemplate>> GetItemByPartialCleanNameWithAllDataAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems)
+        public Task<List<ItemTemplate>> GetItemByPartialCleanNameWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems)
         {
             return Context.ItemTemplates
                 .Where(x => x.CleanName!.ToUpper().Contains(name))
@@ -83,7 +84,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(string name, int maxResultCount, IEnumerable<int> excludedIds, int? currentUserId, bool includeCommunityItems)
+        public Task<List<ItemTemplate>> GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems)
         {
             return Context.ItemTemplates
                 .Where(x => x.CleanName!

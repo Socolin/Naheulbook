@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json.Linq;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -14,7 +15,7 @@ namespace Naheulbook.Shared.TransientModels
 
     public class NhbkActionData
     {
-        public int? TemplateId { get; set; }
+        public Guid? TemplateId { get; set; }
         public string? ItemName { get; set; }
         public int? Quantity { get; set; }
         public int? Ev { get; set; }

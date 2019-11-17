@@ -37,7 +37,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public async Task GetItemTemplateAsync_RetrieveItemInfroFromItemService_AndMapItIntoResponse()
         {
-            const int itemTemplateId = 42;
+            var itemTemplateId = Guid.NewGuid();
             var itemTemplate = new ItemTemplate();
             var itemTemplateResponse = new ItemTemplateResponse();
 
@@ -54,22 +54,23 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public void GetItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
         {
-            _itemTemplateService.GetItemTemplateAsync(Arg.Any<int>())
-                .Throws(new ItemTemplateNotFoundException(42));
+            var itemTemplateId = Guid.NewGuid();
+            _itemTemplateService.GetItemTemplateAsync(Arg.Any<Guid>())
+                .Throws(new ItemTemplateNotFoundException(itemTemplateId));
 
-            Func<Task> act = () => _itemTemplatesController.GetItemTemplateAsync(42);
+            Func<Task> act = () => _itemTemplatesController.GetItemTemplateAsync(itemTemplateId);
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
         [Test]
         public async Task PutItemTemplateAsync_CallServiceToEditItem_AndMapEditedItemIntoResponse()
         {
-            const int itemTemplateId = 42;
+            var itemTemplateId = Guid.NewGuid();
             var itemTemplate = new ItemTemplate();
             var itemTemplateRequest = new ItemTemplateRequest();
             var itemTemplateResponse = new ItemTemplateResponse();
 
-            _itemTemplateService.EditItemTemplateAsync(_executionContext, 42, itemTemplateRequest)
+            _itemTemplateService.EditItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest)
                 .Returns(itemTemplate);
             _mapper.Map<ItemTemplateResponse>(itemTemplate)
                 .Returns(itemTemplateResponse);
@@ -82,10 +83,11 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public void PutItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
         {
-            _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<ItemTemplateRequest>())
-                .Throws(new ItemTemplateNotFoundException(42));
+            var itemTemplateId = Guid.NewGuid();
+            _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<Guid>(), Arg.Any<ItemTemplateRequest>())
+                .Throws(new ItemTemplateNotFoundException(itemTemplateId));
 
-            Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, 42, new ItemTemplateRequest());
+            Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, new ItemTemplateRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
@@ -93,10 +95,10 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public void PutItemTemplateAsync_Return403_WhenNotAllowed()
         {
-            _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<ItemTemplateRequest>())
+            _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<Guid>(), Arg.Any<ItemTemplateRequest>())
                 .Throws(new ForbiddenAccessException());
 
-            Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, 42, new ItemTemplateRequest());
+            Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, Guid.NewGuid(), new ItemTemplateRequest());
 
             act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }

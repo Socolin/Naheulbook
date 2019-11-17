@@ -68,7 +68,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int itemId = 25;
             const int characterId = 10;
-            const int itemTemplateId = 12;
+            var itemTemplateId = Guid.NewGuid();
             var itemData = new ItemData();
             var itemTemplate = new ItemTemplate();
             var request = new CreateItemRequest {ItemData = itemData, ItemTemplateId = itemTemplateId};
@@ -373,10 +373,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var createItemRequests = new List<CreateItemRequest>
             {
-                new CreateItemRequest {ItemTemplateId = 42},
+                new CreateItemRequest {ItemTemplateId = Guid.NewGuid()},
             };
 
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Any<IEnumerable<int>>())
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Any<IEnumerable<Guid>>())
                 .Returns(new List<ItemTemplate>());
 
             Func<Task> act = () => _service.CreateItemsAsync(createItemRequests);
@@ -387,8 +387,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task CreateItemsAsync_ShouldCreateNewItems_ForEachElementOfTheRequest()
         {
-            const int itemTemplateId1 = 1;
-            const int itemTemplateId2 = 2;
+            var itemTemplateId1 = Guid.NewGuid();
+            var itemTemplateId2 = Guid.NewGuid();
 
             var itemData1 = new ItemData();
             var itemData2 = new ItemData();
@@ -403,7 +403,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 new CreateItemRequest {ItemTemplateId = itemTemplateId2, ItemData = itemData2},
             };
 
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<int>>(ids => ids.SequenceEqual(new[] {itemTemplateId1, itemTemplateId2})))
+            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<Guid>>(ids => ids.SequenceEqual(new[] {itemTemplateId1, itemTemplateId2})))
                 .Returns(new List<ItemTemplate> {itemTemplate1, itemTemplate2});
             _itemFactory.CreateItem(itemTemplate1, itemData1)
                 .Returns(item1);

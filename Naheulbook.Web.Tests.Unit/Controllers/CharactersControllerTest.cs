@@ -188,10 +188,11 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public void PostAddItemToCharacterInventory_WhenCatchItemTemplateNotFound_Return400()
         {
             const int characterId = 2;
+            var itemTemplateId = Guid.NewGuid();
             var request = new CreateItemRequest();
 
             _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
-                .Returns(Task.FromException<Item>(new ItemTemplateNotFoundException(3)));
+                .Returns(Task.FromException<Item>(new ItemTemplateNotFoundException(itemTemplateId)));
 
             Func<Task> act = () => _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request);
 

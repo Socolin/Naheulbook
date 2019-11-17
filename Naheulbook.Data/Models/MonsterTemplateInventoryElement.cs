@@ -1,3 +1,8 @@
+using System;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class MonsterTemplateInventoryElement
@@ -7,7 +12,7 @@ namespace Naheulbook.Data.Models
         public int MinCount { get; set; }
         public int MaxCount { get; set; }
 
-        public int ItemTemplateId { get; set; }
+        public Guid ItemTemplateId { get; set; }
         public ItemTemplate ItemTemplate { get; set; } = null!;
 
         public int MonsterTemplateId { get; set; }

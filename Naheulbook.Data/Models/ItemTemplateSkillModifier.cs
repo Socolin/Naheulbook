@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Models
 
         public short Value { get; set; }
 
-        public int ItemTemplateId { get; set; }
+        public Guid ItemTemplateId { get; set; }
         public ItemTemplate ItemTemplate { get; set; } = null!;
 
         public Guid SkillId { get; set; }

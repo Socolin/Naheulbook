@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
@@ -142,7 +143,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
         {
             return new ItemTemplate
             {
-                Id = RngHelper.GetRandomInt(),
+                Id = Guid.NewGuid(),
                 Data = "some-item-template-data"
             };
         }

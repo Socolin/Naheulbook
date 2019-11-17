@@ -24,7 +24,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("container");
 
             builder.Property(e => e.ItemTemplateId)
-                .HasColumnName("itemtemplateid");
+                .HasColumnName("itemTemplateId");
 
             builder.Property(e => e.CharacterId)
                 .IsRequired(false)
@@ -43,7 +43,8 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasOne(e => e.ItemTemplate)
                 .WithMany()
-                .HasForeignKey(e => e.ItemTemplateId);
+                .HasForeignKey(e => e.ItemTemplateId)
+                .HasConstraintName("FK_items_itemTemplateId_item_templates_id");
 
             builder.HasOne(e => e.Container)
                 .WithMany()
@@ -51,15 +52,18 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasOne(e => e.Character!)
                 .WithMany(e => e.Items)
-                .HasForeignKey(e => e.CharacterId);
+                .HasForeignKey(e => e.CharacterId)
+                .HasConstraintName("FK_item_character_characterid");
 
             builder.HasOne(e => e.Loot!)
                 .WithMany(e => e.Items)
-                .HasForeignKey(e => e.LootId);
+                .HasForeignKey(e => e.LootId)
+                .HasConstraintName("FK_item_loot_lootid");
 
             builder.HasOne(e => e.Monster!)
                 .WithMany(e => e.Items)
-                .HasForeignKey(e => e.MonsterId);
+                .HasForeignKey(e => e.MonsterId)
+                .HasConstraintName("FK_item_monster_monsterid");
         }
     }
 }

@@ -1,3 +1,8 @@
+using System;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Data.Models
 {
     public class ItemTemplateRequirement
@@ -6,7 +11,7 @@ namespace Naheulbook.Data.Models
         public int? MinValue { get; set; }
         public int? MaxValue { get; set; }
 
-        public int ItemTemplateId { get; set; }
+        public Guid ItemTemplateId { get; set; }
         public ItemTemplate ItemTemplate { get; set; } = null!;
 
         public string StatName { get; set; } = null!;

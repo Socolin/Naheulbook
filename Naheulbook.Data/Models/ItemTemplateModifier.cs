@@ -12,7 +12,7 @@ namespace Naheulbook.Data.Models
         public string? Special { get; set; }
         public string Type { get; set; } = null!;
 
-        public int ItemTemplateId { get; set; }
+        public Guid ItemTemplateId { get; set; }
         public ItemTemplate ItemTemplate { get; set; } = null!;
 
         public Guid? RequiredJobId { get; set; }

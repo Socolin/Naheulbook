@@ -68,14 +68,14 @@ namespace Naheulbook.Data.Configurations
             builder.Property(e => e.MinCount)
                 .HasColumnName("minCount");
             builder.Property(e => e.ItemTemplateId)
-                .HasColumnName("itemtemplateid");
+                .HasColumnName("itemTemplateId");
             builder.Property(e => e.MonsterTemplateId)
                 .HasColumnName("monstertemplateid");
 
             builder.HasOne(x => x.ItemTemplate)
                 .WithMany()
                 .HasForeignKey(x => x.ItemTemplateId)
-                .HasConstraintName("FK_monster_template_simple_inventory_item_template_itemtemplatei");
+                .HasConstraintName("FK_monster_template_inventory_elements_itemTemplateId");
 
             builder.HasOne(x => x.MonsterTemplate)
                 .WithMany(x => x.Items)

@@ -7,9 +7,9 @@ namespace Naheulbook.Core.Exceptions
 {
     public class ItemTemplateNotFoundException : Exception
     {
-        public int ItemTemplateId { get; }
+        public Guid ItemTemplateId { get; }
 
-        public ItemTemplateNotFoundException(int itemTemplateId)
+        public ItemTemplateNotFoundException(Guid itemTemplateId)
         {
             ItemTemplateId = itemTemplateId;
         }

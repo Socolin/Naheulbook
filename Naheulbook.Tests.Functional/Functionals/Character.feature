@@ -247,7 +247,7 @@ Feature: Character
             "data": ${Item.Data},
             "modifiers": ${Item.Modifiers},
             "template": {
-              "id": ${ItemTemplate.Id},
+              "id": "${ItemTemplate.Id}",
               "name": "${ItemTemplate.Name}",
               "techName": "${ItemTemplate.TechName}",
               "source": "official",
@@ -309,7 +309,7 @@ Feature: Character
     When performing a POST to the url "/api/v2/characters/${Character.Id}/items" with the following json content and the current jwt
     """
     {
-      "itemTemplateId": ${ItemTemplate.Id},
+      "itemTemplateId": "${ItemTemplate.Id}",
       "itemData": {
         "name": "some-name"
       }
@@ -325,7 +325,7 @@ Feature: Character
         },
         "modifiers": [],
         "template": {
-            "id": ${ItemTemplate.Id},
+            "id": "${ItemTemplate.Id}",
             "name": "${ItemTemplate.Name}",
             "techName": "${ItemTemplate.TechName}",
             "source": "official",

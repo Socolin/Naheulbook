@@ -19,7 +19,7 @@ Feature: MonsterTemplates
       },
       "inventory": [
         {
-          "itemTemplateId": ${ItemTemplate.Id},
+          "itemTemplateId": "${ItemTemplate.Id}",
           "chance": 0.5,
           "minCount": 1,
           "maxCount": 2
@@ -45,7 +45,7 @@ Feature: MonsterTemplates
                 "maxCount": 2,
                 "chance": 0.5,
                 "itemTemplate": {"__partial": {
-                  "id": ${ItemTemplate.Id}
+                  "id": "${ItemTemplate.Id}"
                 }}
             }
         ]
@@ -118,7 +118,7 @@ Feature: MonsterTemplates
           "maxCount": ${MonsterTemplate.Items.[0].MaxCount},
           "minCount": ${MonsterTemplate.Items.[0].MinCount},
           "itemTemplate": { "__partial": {
-            "id": ${ItemTemplate.Id},
+            "id": "${ItemTemplate.Id}",
             "name": "${ItemTemplate.Name}"
           }}
         },
@@ -185,7 +185,7 @@ Feature: MonsterTemplates
           "maxCount": ${MonsterTemplate.Items.[0].MaxCount},
           "minCount": ${MonsterTemplate.Items.[0].MinCount},
           "itemTemplate": { "__partial": {
-            "id": ${ItemTemplate.Id},
+            "id": "${ItemTemplate.Id}",
             "name": "${ItemTemplate.Name}"
           }}
         }
@@ -214,7 +214,7 @@ Feature: MonsterTemplates
       },
       "inventory": [
         {
-          "itemTemplateId": ${ItemTemplate.Id},
+          "itemTemplateId": "${ItemTemplate.Id}",
           "chance": 0.5,
           "minCount": 1,
           "maxCount": 2
@@ -241,7 +241,7 @@ Feature: MonsterTemplates
               "maxCount": 2,
               "chance": 0.5,
               "itemTemplate": {"__partial": {
-                "id": ${ItemTemplate.Id}
+                "id": "${ItemTemplate.Id}"
               }}
           }
       ]

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -10,7 +11,7 @@ namespace Naheulbook.Data.Models
         public const string PrivateSourceValue = "private";
         public const string CommunitySourceValue = "community";
 
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public string? CleanName { get; set; }
         public string? TechName { get; set; }
