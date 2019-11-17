@@ -33,9 +33,9 @@
                     <date [date]="eventDate"></date>
                 </span>
                 <span class="input-group-addon">
-                    <date-selector [date]="eventDate"
-                                   (onChange)="setDate($event)">
-                    </date-selector>
+                    <button mat-icon-button (click)="openDateSelectorDialog()">
+                        <mat-icon>date_range</mat-icon>
+                    </button>
                 </span>
             </div>
             <div *ngIf="durationType === 'offset'">

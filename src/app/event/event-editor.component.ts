@@ -7,6 +7,12 @@ import {NhbkDateOffset, NhbkDate} from '../date';
 import {dateOffset2TimeDuration, date2Timestamp, timestamp2Date} from '../date/util';
 
 import {NEvent} from './event.model';
+import {NhbkMatDialog} from '../material-workaround';
+import {
+    DateSelectorDialogComponent,
+    DateSelectorDialogData,
+    DateSelectorDialogResult
+} from '../date/date-selector-dialog.component';
 
 @Component({
     selector: 'event-editor',
@@ -33,7 +39,8 @@ export class EventEditorComponent implements OnInit {
     public eventDate: NhbkDate = new NhbkDate();
 
     constructor(
-        private readonly nhbkDialogService: NhbkDialogService
+        private readonly nhbkDialogService: NhbkDialogService,
+        private readonly dialog: NhbkMatDialog,
     ) {
     }
 
@@ -75,5 +82,25 @@ export class EventEditorComponent implements OnInit {
 
     ngOnInit(): void {
         this.eventDate = this.group.data.date;
+    }
+
+    openDateSelectorDialog() {
+        const dialogRef = this.dialog.open<DateSelectorDialogComponent, DateSelectorDialogData, DateSelectorDialogResult>(
+            DateSelectorDialogComponent, {
+                data: {
+                    date: this.eventDate,
+                    title: 'Choisir la date de l\'évènement'
+                }
+            }
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            this.setDate(result.date);
+        })
+
     }
 }

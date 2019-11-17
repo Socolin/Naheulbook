@@ -33,6 +33,11 @@ import {
     GroupAddEffectDialogResult
 } from './group-add-effect-dialog.component';
 import {CharacterSearchResponse} from '../api/responses';
+import {
+    DateSelectorDialogComponent,
+    DateSelectorDialogData,
+    DateSelectorDialogResult
+} from '../date/date-selector-dialog.component';
 
 @Component({
     templateUrl: './group.component.html',
@@ -470,6 +475,23 @@ export class GroupComponent implements OnInit, OnDestroy {
                 .subscribe(() => {
                     this.group.name = result.text;
                 });
+        });
+    }
+
+    openDateSelectorDialog(): void {
+        const dialogRef = this.dialog.open<DateSelectorDialogComponent, DateSelectorDialogData, DateSelectorDialogResult>(
+            DateSelectorDialogComponent, {
+                data: {
+                    date: this.group.data.date,
+                    title: 'Définir la date du groupe'
+                }
+            });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.changeGroupValue('date', result.date);
         });
     }
 }

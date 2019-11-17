@@ -38,9 +38,9 @@
 
                         <dt>Date</dt>
                         <dd>
-                            <date-selector [date]="group.data.date"
-                                           (onChange)="changeGroupValue('date', $event)">
-                            </date-selector>
+                            <button mat-icon-button (click)="openDateSelectorDialog()">
+                                <mat-icon>date_range</mat-icon>
+                            </button>
                             <date-modifier *ngIf="group.data.date"
                                            [title]="'Modification de la date'"
                                            (onChange)="addTime($event)">

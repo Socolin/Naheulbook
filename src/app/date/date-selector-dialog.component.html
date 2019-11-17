@@ -1,1 +1,66 @@
-<p>date-selector-dialog works!</p>
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+    <form [formGroup]="form">
+        <div class="date-selector">
+            <mat-form-field class="hour">
+                <input matInput
+                       formControlName="hour"
+                       type="number"
+                       min="0"
+                       max="23"
+                       step="1"
+                       placeholder="Heure">
+            </mat-form-field>
+            <mat-form-field class="minute">
+                <input matInput
+                       formControlName="minute"
+                       type="number"
+                       min="0"
+                       max="59"
+                       step="1"
+                       placeholder="Minutes">
+            </mat-form-field>
+            <mat-form-field class="year">
+                <input matInput
+                       formControlName="year"
+                       type="number"
+                       min="0"
+                       step="1"
+                       placeholder="Année">
+            </mat-form-field>
+            <mat-form-field class="day">
+                <input matInput
+                       formControlName="relativeDay"
+                       type="number"
+                       min="1"
+                       step="1"
+                       placeholder="Jour">
+            </mat-form-field>
+
+            <mat-form-field class="decade">
+                <mat-select placeholder="Période" formControlName="currentCalendarDate">
+                    <ng-template ngFor [ngForOf]="calendarPerRealMonth" let-month>
+                        <mat-optgroup [label]="month.monthName">
+                            <mat-option *ngFor="let cDate of month.calendarEntries" [value]="cDate">
+                                {{cDate.name}}
+                            </mat-option>
+                        </mat-optgroup>
+                    </ng-template>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            color="primary"
+            mat-dialog-close>
+        FERMER
+    </button>
+    <button mat-button
+            color="primary"
+            [disabled]="!form.valid"
+            (click)="valid()">
+        VALIDER
+    </button>
+</mat-dialog-actions>
