@@ -12,7 +12,7 @@ namespace Naheulbook.DatabaseMigrator.Migrations
             Delete.ForeignKey("character_job_character_id_fk").OnTable("character_jobs");
             Delete.Index("character_job_character_job_uindex").OnTable("character_jobs");
 
-            Create.PrimaryKey("PRIMARY").OnTable("character_jobs")
+            Create.PrimaryKey("PRIMARY2").OnTable("character_jobs")
                 .Columns("jobId", "characterId");
 
             Create.Index("IX_character_jobs_characterId")
