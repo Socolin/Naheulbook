@@ -46,7 +46,7 @@ export class EffectService {
             const loadingEffectTypes = new ReplaySubject<EffectType[]>(1);
             this.effectTypes = loadingEffectTypes;
 
-            this.httpClient.get<any[]>('/api/v2/effectCategories')
+            this.httpClient.get<any[]>('/api/v2/effectSubCategories')
                 .subscribe(
                     effectTypesJsonData => {
                         loadingEffectTypes.next(EffectType.fromResponses(effectTypesJsonData));
