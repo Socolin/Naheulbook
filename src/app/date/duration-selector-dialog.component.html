@@ -3,16 +3,16 @@
     <div class="time-selector">
         <div class="element-selector" *ngFor="let unitDef of allUnits">
             <span class="title">{{unitDef.title}}</span>
+            <div>
+                <button mat-icon-button (click)="updateTime(unitDef.unit, -1)">
+                    <mat-icon>keyboard_arrow_up</mat-icon>
+                </button>
+            </div>
             <div (wheel)="onWheelEvent(unitDef.unit, $event)"
                  class="roller"
                  (touchstart)="onTouchStart(unitDef.unit, $event)"
                  (touchmove)="onTouchMoveEvent($event)"
                  (touchend)="onTouchEnd()">
-                <div>
-                    <button mat-icon-button (click)="updateTime(unitDef.unit, -1)">
-                        <mat-icon>keyboard_arrow_up</mat-icon>
-                    </button>
-                </div>
 
                 <div class="numbers">
                     <div [ngStyle]="{'margin-top': touchOffsetY[unitDef.unit] + 'px'}">
@@ -22,11 +22,11 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <button mat-icon-button (click)="updateTime(unitDef.unit, 1)">
-                        <mat-icon>keyboard_arrow_down</mat-icon>
-                    </button>
-                </div>
+            </div>
+            <div>
+                <button mat-icon-button (click)="updateTime(unitDef.unit, 1)">
+                    <mat-icon>keyboard_arrow_down</mat-icon>
+                </button>
             </div>
         </div>
     </div>
