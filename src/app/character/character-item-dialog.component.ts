@@ -3,9 +3,9 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import {Item} from '../item';
 import {Character} from './character.model';
-import {God, ItemStatModifier, MiscService, NhbkDialogService} from '../shared';
+import {God, ItemStatModifier, MiscService} from '../shared';
 import {NamesByNumericId} from '../shared/shared,model';
-import {ItemTemplateSubCategoryDictionary, ItemTemplateService} from '../item-template';
+import {ItemTemplateService, ItemTemplateSubCategoryDictionary} from '../item-template';
 import {OriginService} from '../origin';
 import {JobService} from '../job';
 import {forkJoin} from 'rxjs';
@@ -33,7 +33,6 @@ export class CharacterItemDialogComponent implements OnInit {
     constructor(
         private readonly itemTemplateService: ItemTemplateService,
         private readonly originService: OriginService,
-        private readonly nhbkDialogService: NhbkDialogService,
         private readonly jobService: JobService,
         private readonly miscService: MiscService,
         @Inject(MAT_DIALOG_DATA) public data: CharacterItemDialogData,

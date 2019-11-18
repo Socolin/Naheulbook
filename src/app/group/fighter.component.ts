@@ -3,7 +3,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NotificationsService} from '../notifications';
 import {CharacterService, ItemActionService} from '../character';
 import {Item, ItemService} from '../item';
-import {ActiveStatsModifier, LapCountDecrement, NhbkDialogService} from '../shared';
+import {ActiveStatsModifier, LapCountDecrement} from '../shared';
 import {Monster, MonsterData, MonsterService} from '../monster';
 
 import {Fighter, Group} from './group.model';
@@ -43,7 +43,6 @@ export class FighterComponent implements OnInit {
         private readonly monsterService: MonsterService,
         private readonly itemActionService: ItemActionService,
         private readonly itemService: ItemService,
-        private readonly nhbkDialogService: NhbkDialogService,
         private readonly notification: NotificationsService,
         private readonly dialog: NhbkMatDialog,
     ) {
