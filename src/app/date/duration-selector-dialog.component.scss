@@ -21,8 +21,9 @@
                 width: 24px;
                 text-align: center;
                 overflow: hidden;
-                height: 48px;
+                height: 57px;
                 z-index: 1;
+                pointer-events:none;
                 .number-0 {
                     opacity: 0.25;
                 }

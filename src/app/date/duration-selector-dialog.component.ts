@@ -37,16 +37,17 @@ const allUnits: { unit: UnitTypes, title: string }[] = [
     templateUrl: './duration-selector-dialog.component.html',
 })
 export class DurationSelectorDialogComponent implements OnInit {
+    static numberHeight = 19;
     public dateOffset: NhbkDateOffset;
     public allUnits: { unit: UnitTypes, title: string }[] = allUnits;
     public scrollingUnit?: UnitTypes;
     public displayedNumbersPerUnit: { [unit: string]: string[] } = {};
     public startY = 0;
     public touchOffsetY: { [unit: string]: number } = {
-        minute: -16,
-        hour: -16,
-        day: -16,
-        week: -16,
+        minute: -DurationSelectorDialogComponent.numberHeight,
+        hour: -DurationSelectorDialogComponent.numberHeight,
+        day: -DurationSelectorDialogComponent.numberHeight,
+        week: -DurationSelectorDialogComponent.numberHeight,
     };
     public forceUpdateDuration = 0;
 
@@ -89,7 +90,10 @@ export class DurationSelectorDialogComponent implements OnInit {
         this.updateTime(unit, $event.deltaY < 0 ? -1 : 1);
     }
 
-    onTouchStart(unit: UnitTypes, event): void {
+    onTouchStart(unit: UnitTypes, event: TouchEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
         this.startY = event.changedTouches[0].clientY;
         this.scrollingUnit = unit;
     }
@@ -98,28 +102,27 @@ export class DurationSelectorDialogComponent implements OnInit {
         if (!this.scrollingUnit) {
             return;
         }
-
         let touchOffsetY = event.changedTouches[0].clientY - this.startY;
 
-        while (touchOffsetY > 16) {
+        while (touchOffsetY > DurationSelectorDialogComponent.numberHeight) {
             const oldValue = this.dateOffset[this.scrollingUnit];
             this.updateTime(this.scrollingUnit, -1);
             const newValue = this.dateOffset[this.scrollingUnit];
             if (oldValue === newValue) {
-                touchOffsetY = 16;
+                touchOffsetY = DurationSelectorDialogComponent.numberHeight;
                 break;
             } else {
-                touchOffsetY -= 16;
-                this.startY += 16;
+                touchOffsetY -= DurationSelectorDialogComponent.numberHeight;
+                this.startY += DurationSelectorDialogComponent.numberHeight;
             }
         }
 
-        while (touchOffsetY < -16) {
+        while (touchOffsetY < -DurationSelectorDialogComponent.numberHeight) {
             this.updateTime(this.scrollingUnit, 1);
-            touchOffsetY += 16;
-            this.startY -= 16;
+            touchOffsetY += DurationSelectorDialogComponent.numberHeight;
+            this.startY -= DurationSelectorDialogComponent.numberHeight;
         }
-        this.touchOffsetY[this.scrollingUnit] = -16 + touchOffsetY;
+        this.touchOffsetY[this.scrollingUnit] = -DurationSelectorDialogComponent.numberHeight + touchOffsetY;
     }
 
     onTouchEnd(): void {
@@ -127,7 +130,7 @@ export class DurationSelectorDialogComponent implements OnInit {
             return;
         }
 
-        this.touchOffsetY[this.scrollingUnit] = -16;
+        this.touchOffsetY[this.scrollingUnit] = -DurationSelectorDialogComponent.numberHeight;
         this.scrollingUnit = undefined;
     }
 

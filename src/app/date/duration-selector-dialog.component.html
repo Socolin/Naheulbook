@@ -7,7 +7,7 @@
                  class="roller"
                  (touchstart)="onTouchStart(unitDef.unit, $event)"
                  (touchmove)="onTouchMoveEvent($event)"
-                 (touchend)="onTouchEnd($event)">
+                 (touchend)="onTouchEnd()">
                 <div>
                     <button mat-icon-button (click)="updateTime(unitDef.unit, -1)">
                         <mat-icon>keyboard_arrow_up</mat-icon>
