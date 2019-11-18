@@ -6,23 +6,25 @@ import * as Sentry from '@sentry/browser';
 import {Event, EventHint} from '@sentry/types';
 import {environment} from '../environments/environment';
 
-Sentry.init({
-    dsn: environment.sentryDsn,
-    beforeSend(event: Event, hint?: EventHint) {
-        const processedEvent = {...event};
-        if (hint && hint.originalException && hint.originalException instanceof Error) {
-            processedEvent.extra = processedEvent.extra || {};
-            for (let key in hint.originalException) {
-                if (!hint.originalException.hasOwnProperty(key)) {
-                    continue;
+if (environment.production) {
+    Sentry.init({
+        dsn: environment.sentryDsn,
+        beforeSend(event: Event, hint?: EventHint) {
+            const processedEvent = {...event};
+            if (hint && hint.originalException && hint.originalException instanceof Error) {
+                processedEvent.extra = processedEvent.extra || {};
+                for (let key in hint.originalException) {
+                    if (!hint.originalException.hasOwnProperty(key)) {
+                        continue;
+                    }
+                    processedEvent.extra['___error.' + key] = hint.originalException[key];
                 }
-                processedEvent.extra['___error.' + key] = hint.originalException[key];
             }
-        }
 
-        return processedEvent;
-    },
-});
+            return processedEvent;
+        },
+    });
+}
 
 @Injectable()
 export class NhbkErrorHandler extends ErrorHandler {
@@ -60,16 +62,18 @@ export class NhbkErrorHandler extends ErrorHandler {
             }
         }
 
-        const eventId = Sentry.captureException(error.originalError || error);
-        Sentry.showReportDialog({
-            eventId,
-            lang: 'fr',
-            user: {
-                name: 'Nobody',
-                email: 'nobody@nobody.com'
-            },
-            title: 'Échec Critique',
-            subtitle: 'Une erreur est survenue, les informations de l\'erreur ont été enregistré pour pouvoir la corrigé.'
-        });
+        if (environment.production) {
+            const eventId = Sentry.captureException(error.originalError || error);
+            Sentry.showReportDialog({
+                eventId,
+                lang: 'fr',
+                user: {
+                    name: 'Nobody',
+                    email: 'nobody@nobody.com'
+                },
+                title: 'Échec Critique',
+                subtitle: 'Une erreur est survenue, les informations de l\'erreur ont été enregistré pour pouvoir la corriger.'
+            });
+        }
     }
 }
