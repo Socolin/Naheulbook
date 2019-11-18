@@ -81,7 +81,7 @@ export class EffectService {
             this.effectsBySubCategory[subCategoryId] = new ReplaySubject<Effect[]>(1);
             forkJoin([
                 this.getEffectSubCategoriesById(),
-                this.httpClient.get<EffectResponse[]>(`/api/v2/effectCategories/${subCategoryId}/effects`)
+                this.httpClient.get<EffectResponse[]>(`/api/v2/effectSubCategories/${subCategoryId}/effects`)
             ]).pipe(
                 map(([categoriesById, responses]) => Effect.fromResponses(categoriesById, responses))
             ).subscribe(
