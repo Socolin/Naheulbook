@@ -1,27 +1,28 @@
 <div class="fighter-card mat-elevation-z4" *ngIf="group.data.inCombat && group.currentFighter">
-    <h2 class="mat-h2">
-        Combattant actuel
-    </h2>
+    <div class="header">
+        <h2 class="mat-h2">
+            Combattant actuel
+        </h2>
+        <div class="next-button" *ngIf="group.data.inCombat">
+            <button
+                mat-raised-button
+                color="primary"
+                [disabled]="loadingNextLap || group.fighters.length < 2"
+                (click)="selectNextFighter()"
+                aria-label="Combattant suivant">
+                Suivant
+                <mat-icon>
+                    navigate_next
+                </mat-icon>
+            </button>
+        </div>
+    </div>
     <fighter [selected]="false"
              [group]="group"
              [fighter]="group.currentFighter"
              [expandedView]="true"
              [fighters]="group.fighters">
     </fighter>
-</div>
-
-<div class="next-button" *ngIf="group.data.inCombat">
-    <button
-        mat-raised-button
-        color="primary"
-        [disabled]="loadingNextLap || group.fighters.length < 2"
-        (click)="selectNextFighter()"
-        aria-label="Combattant suivant">
-        Suivant
-        <mat-icon>
-            navigate_next
-        </mat-icon>
-    </button>
 </div>
 
 <div class="fighter-card  mat-elevation-z2">
