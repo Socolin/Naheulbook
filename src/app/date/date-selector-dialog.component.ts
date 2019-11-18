@@ -32,7 +32,7 @@ export class DateSelectorDialogComponent implements OnInit {
     });
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) private readonly data: DateSelectorDialogData,
+        @Inject(MAT_DIALOG_DATA) public readonly data: DateSelectorDialogData,
         private readonly dateService: DateService,
         private readonly dialogRef: MatDialogRef<DateSelectorDialogComponent, DateSelectorDialogResult>
     ) {

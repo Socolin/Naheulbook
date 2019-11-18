@@ -21,10 +21,9 @@
                 {{durable.timeDuration | nhbkDuration}}
             </span>
             <span>
-            <date-modifier #dateSelector [resetOnChange]=false
-                           [dateOffset]="dateOffset"
-                           (onChange)="setTimeDuration($event)">
-            </date-modifier>
+            <button mat-icon-button (click)="openDurationSelector()">
+                <mat-icon>update</mat-icon>
+            </button>
         </span>
         </div>
     </div>

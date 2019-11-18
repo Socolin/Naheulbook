@@ -8,7 +8,12 @@ import {Portal} from '@angular/cdk/portal';
 import {LapCountDecrement, NhbkDialogService, PromptDialogComponent} from '../shared';
 import {NotificationsService} from '../notifications';
 import {dateOffset2TimeDuration} from '../date/util';
-import {NhbkDateOffset} from '../date';
+import {
+    DurationSelectorDialogComponent,
+    DurationSelectorDialogData,
+    DurationSelectorDialogResult,
+    NhbkDateOffset
+} from '../date';
 
 import {GroupService} from './group.service';
 import {WebSocketService} from '../websocket';
@@ -492,6 +497,25 @@ export class GroupComponent implements OnInit, OnDestroy {
                 return;
             }
             this.changeGroupValue('date', result.date);
+        });
+    }
+
+    openDurationSelector() {
+        const dialogRef = this.dialog.open<DurationSelectorDialogComponent, DurationSelectorDialogData, DurationSelectorDialogResult>(
+            DurationSelectorDialogComponent,
+            {
+                autoFocus: false,
+                data: {
+                    title: 'Modification de la date'
+                }
+            }
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.addTime(result.duration);
         });
     }
 }

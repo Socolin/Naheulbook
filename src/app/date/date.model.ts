@@ -35,5 +35,16 @@ export class NhbkDateOffset {
     public week = 0;
     public year = 0;
     public second = 0;
+
+    constructor(dateOffset?: NhbkDateOffset) {
+        if (dateOffset) {
+            this.minute = dateOffset.minute;
+            this.hour = dateOffset.hour;
+            this.day = dateOffset.day;
+            this.week = dateOffset.week;
+            this.year = dateOffset.year;
+            this.second = dateOffset.second;
+        }
+    }
 }
 

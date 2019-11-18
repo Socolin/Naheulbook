@@ -3,8 +3,13 @@ import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from 
 import {dateOffset2TimeDuration, timeDuration2DateOffset2} from './util';
 import {NhbkDateOffset} from './date.model';
 import {MatButtonToggleChange, MatSelectChange} from '@angular/material';
-import {DateModifierComponent} from './date-modifier.component';
+import {
+    DurationSelectorDialogComponent,
+    DurationSelectorDialogData,
+    DurationSelectorDialogResult
+} from './duration-selector-dialog.component';
 import {IDurable} from '../api/shared';
+import {NhbkMatDialog} from '../material-workaround';
 
 @Component({
     selector: 'duration-selector',
@@ -23,8 +28,11 @@ export class DurationSelectorComponent implements OnChanges {
     combatCountInput: ElementRef;
     @ViewChild('customDurationInput', {static: true})
     customDurationInput: ElementRef;
-    @ViewChild('dateSelector', {static: true})
-    dateSelector: DateModifierComponent;
+
+    constructor(
+        private readonly dialog: NhbkMatDialog
+    ) {
+    }
 
     updateDuration(event?: MatButtonToggleChange | MatSelectChange) {
         if (event) {
@@ -91,9 +99,6 @@ export class DurationSelectorComponent implements OnChanges {
             case 'custom':
                 this.customDurationInput.nativeElement.focus();
                 break;
-            case 'time':
-                this.dateSelector.focus();
-                break;
             case 'combat':
                 this.combatCountInput.nativeElement.focus();
                 break;
@@ -101,5 +106,24 @@ export class DurationSelectorComponent implements OnChanges {
                 this.lapCountInput.nativeElement.focus();
                 break;
         }
+    }
+
+    openDurationSelector() {
+        const dialogRef = this.dialog.open<DurationSelectorDialogComponent, DurationSelectorDialogData, DurationSelectorDialogResult>(
+            DurationSelectorDialogComponent,
+            {
+                autoFocus: false,
+                data: {
+                    duration: this.dateOffset
+                }
+            }
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.setTimeDuration(result.duration);
+        });
     }
 }

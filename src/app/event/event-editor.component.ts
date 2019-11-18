@@ -3,7 +3,13 @@ import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
 import {NhbkDialogService} from '../shared';
-import {NhbkDateOffset, NhbkDate} from '../date';
+import {
+    NhbkDateOffset,
+    NhbkDate,
+    DurationSelectorDialogComponent,
+    DurationSelectorDialogData,
+    DurationSelectorDialogResult
+} from '../date';
 import {dateOffset2TimeDuration, date2Timestamp, timestamp2Date} from '../date/util';
 
 import {NEvent} from './event.model';
@@ -101,6 +107,24 @@ export class EventEditorComponent implements OnInit {
 
             this.setDate(result.date);
         })
+   }
 
+    openDurationSelector() {
+        const dialogRef = this.dialog.open<DurationSelectorDialogComponent, DurationSelectorDialogData, DurationSelectorDialogResult>(
+            DurationSelectorDialogComponent,
+            {
+                autoFocus: false,
+                data: {
+                    duration: this.durationDateOffset
+                }
+            }
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.setTimeDuration(result.duration);
+        });
     }
 }

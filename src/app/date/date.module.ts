@@ -11,7 +11,7 @@ import {DateService} from './date.service';
 
 import {DateComponent} from './date.component';
 
-import {DateModifierComponent} from './date-modifier.component';
+import {DurationSelectorDialogComponent} from './duration-selector-dialog.component';
 import {NhbkDateDurationPipe, NhbkDateShortDurationPipe} from './nhbk-duration.pipe';
 import {DurationSelectorComponent} from './duration-selector.component';
 import { DateSelectorDialogComponent } from './date-selector-dialog.component';
@@ -27,7 +27,7 @@ import { DateSelectorDialogComponent } from './date-selector-dialog.component';
     ],
     declarations: [
         DateComponent,
-        DateModifierComponent,
+        DurationSelectorDialogComponent,
         NhbkDateDurationPipe,
         NhbkDateShortDurationPipe,
         DurationSelectorComponent,
@@ -35,13 +35,13 @@ import { DateSelectorDialogComponent } from './date-selector-dialog.component';
     ],
     exports: [
         DateComponent,
-        DateModifierComponent,
         NhbkDateDurationPipe,
         NhbkDateShortDurationPipe,
         DurationSelectorComponent,
     ],
     entryComponents: [
         DateSelectorDialogComponent,
+        DurationSelectorDialogComponent,
     ],
     providers: [DateService]
 })

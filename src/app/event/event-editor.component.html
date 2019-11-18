@@ -42,10 +42,9 @@
                 <span class="input-group-addon">Dans</span>
                 <span class="input-group-addon">{{durationOffset | nhbkDuration}}</span>
                 <span class="input-group-addon">
-                    <date-modifier [resetOnChange]=false
-                                   [dateOffset]="durationDateOffset"
-                                   (onChange)="setTimeDuration($event)">
-                    </date-modifier>
+                    <button mat-icon-button (click)="openDurationSelector()">
+                        <mat-icon>update</mat-icon>
+                    </button>
                 </span>
             </div>
         </mat-card-content>
