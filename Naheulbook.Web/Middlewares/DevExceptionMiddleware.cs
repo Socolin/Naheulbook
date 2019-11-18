@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Naheulbook.Core.Exceptions;
 using Naheulbook.Web.Exceptions;
 
 namespace Naheulbook.Web.Middlewares
 {
     public class DevExceptionMiddleware
     {
+        private static readonly string[] ExcludedExceptionFields = {"TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"};
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
         private readonly bool _displayExceptionFields;
@@ -42,8 +42,7 @@ namespace Naheulbook.Web.Middlewares
 
                 if (_displayExceptionFields)
                 {
-                    var excludedNames = new[] {"TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"};
-                    foreach (var propertyInfo in ex.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(f => !excludedNames.Contains(f.Name)))
+                    foreach (var propertyInfo in ex.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(f => !ExcludedExceptionFields.Contains(f.Name)))
                     {
                         await context.Response.WriteAsync("\n" + propertyInfo.Name + "=" + propertyInfo.GetValue(ex));
                     }
