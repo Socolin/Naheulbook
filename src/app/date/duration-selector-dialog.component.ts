@@ -149,7 +149,7 @@ export class DurationSelectorDialogComponent implements OnInit {
 
     private generateDisplayedNumberForUnit(unit: string, maxValue?: number, nextUnits?: string[]): string[] {
         const displayedNumbers: string[] = [];
-        for (let i = -2; i <= 2; i++) {
+        for (let i = -3; i <= 3; i++) {
             const value = i + this.dateOffset[unit];
             if (value < 0) {
                 if (nextUnits && nextUnits.find(u => this.dateOffset[u] > 0)) {
