@@ -3,11 +3,9 @@
     <div class="time-selector">
         <div class="element-selector" *ngFor="let unitDef of allUnits">
             <span class="title">{{unitDef.title}}</span>
-            <div>
-                <button mat-icon-button (click)="updateTime(unitDef.unit, -1)">
-                    <mat-icon>keyboard_arrow_up</mat-icon>
-                </button>
-            </div>
+            <button mat-icon-button (click)="updateTime(unitDef.unit, -1)">
+                <mat-icon>keyboard_arrow_up</mat-icon>
+            </button>
             <div (wheel)="onWheelEvent(unitDef.unit, $event)"
                  class="roller"
                  (touchstart)="onTouchStart(unitDef.unit, $event)"
@@ -23,11 +21,9 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <button mat-icon-button (click)="updateTime(unitDef.unit, 1)">
-                    <mat-icon>keyboard_arrow_down</mat-icon>
-                </button>
-            </div>
+            <button mat-icon-button (click)="updateTime(unitDef.unit, 1)">
+                <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
         </div>
     </div>
     <div class="form-group">
