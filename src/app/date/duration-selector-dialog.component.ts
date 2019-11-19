@@ -141,7 +141,7 @@ export class DurationSelectorDialogComponent implements OnInit {
     private updateDisplayedNumbers(): void {
         this.displayedNumbersPerUnit = {
             minute: this.generateDisplayedNumberForUnit('minute', 60, ['hour', 'day', 'week']),
-            hour: this.generateDisplayedNumberForUnit('hour', 24, ['day', 'hour']),
+            hour: this.generateDisplayedNumberForUnit('hour', 24, ['day', 'week']),
             day: this.generateDisplayedNumberForUnit('day', 7, ['week']),
             week: this.generateDisplayedNumberForUnit('week')
         }
