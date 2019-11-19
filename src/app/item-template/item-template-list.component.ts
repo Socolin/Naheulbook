@@ -181,7 +181,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     }
 
     openCreateItemTemplateDialog() {
-        this.dialog.open(CreateItemTemplateDialogComponent);
+        this.dialog.openFullScreen(CreateItemTemplateDialogComponent);
     }
 
     isEditable(itemTemplate: ItemTemplate): boolean {
