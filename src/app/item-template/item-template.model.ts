@@ -1,12 +1,11 @@
 import {ItemStatModifier} from '../shared';
 import {Skill, SkillDictionary} from '../skill';
-import {Job} from '../job';
 import {IconDescription} from '../shared/icon.model';
-import {IDurable, IItemTemplateData, IItemTemplateGunData} from '../api/shared';
+import {IDurable, IItemTemplateData, IItemTemplateGunData, IItemTemplateInstrumentData} from '../api/shared';
 import {
-    ItemTemplateSubCategoryResponse,
     ItemTemplateResponse,
     ItemTemplateSectionResponse,
+    ItemTemplateSubCategoryResponse,
     ItemTypeResponse
 } from '../api/responses';
 import {Guid} from '../api/shared/util';
@@ -92,6 +91,22 @@ export class ItemTemplateGunData implements IItemTemplateGunData {
     }
 }
 
+export class ItemTemplateInstrumentData implements IItemTemplateInstrumentData {
+    specialMove?: number;
+    speechTheater?: number;
+    jugglingDance?: number;
+    musicSinging?: number;
+
+    static fromResponse(response?: IItemTemplateInstrumentData): ItemTemplateInstrumentData | undefined {
+        if (!response) {
+            return undefined;
+        }
+        let instrumentData = new ItemTemplateInstrumentData();
+        Object.assign(instrumentData, response);
+        return instrumentData;
+    }
+}
+
 export class ItemTemplateData implements IItemTemplateData {
     actions?: any[];
     availableLocation?: string;
@@ -109,6 +124,7 @@ export class ItemTemplateData implements IItemTemplateData {
     icon?: IconDescription;
     isCurrency?: boolean;
     itemTypes?: string[];
+    instrument?: ItemTemplateInstrumentData;
     lifetime?: IDurable;
     magicProtection?: number;
     note?: string;
@@ -130,9 +146,12 @@ export class ItemTemplateData implements IItemTemplateData {
     useUG?: boolean;
     weight?: number;
 
-    static fromJson(jsonData: IItemTemplateData): ItemTemplateData {
+    static fromJson(response: IItemTemplateData): ItemTemplateData {
         let itemTemplateData = new ItemTemplateData();
-        Object.assign(itemTemplateData, jsonData, {gun: ItemTemplateGunData.fromResponse(jsonData.gun)});
+        Object.assign(itemTemplateData, response, {
+            gun: ItemTemplateGunData.fromResponse(response.gun),
+            instrument: ItemTemplateInstrumentData.fromResponse(response.instrument)
+        });
         return itemTemplateData;
     }
 
@@ -190,7 +209,6 @@ export class ItemTemplate {
     skills: Skill[] = [];
     unSkills: Skill[] = [];
     slots: ItemSlot[] = [];
-    restrictJobs: Job[] = [];
     requirements: {
         stat: string;
         min?: number;

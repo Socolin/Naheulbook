@@ -36,3 +36,9 @@ mat-card {
         width: 100%;
     }
 }
+
+.instrument-stats {
+    display: grid;
+    grid-template-columns: minmax(60px, 1fr) minmax(60px, 1fr) minmax(60px, 1fr) minmax(60px, 1fr);
+    grid-gap: 8px;
+}

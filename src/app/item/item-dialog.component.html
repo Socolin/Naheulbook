@@ -248,6 +248,25 @@
                 </div>
             </div>
 
+            <!-- Instrument -->
+            <div class="icon-label" *ngIf="item.template.data.instrument">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-musical-notes" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <div>
+                        Coup spécial: {{item.template.data.instrument.specialMove | plusminus}}
+                    </div>
+                    <div>
+                        Discours - Théâtre: {{item.template.data.instrument.speechTheater | plusminus}}
+                    </div>
+                    <div>
+                        Jonglage - Danse: {{item.template.data.instrument.jugglingDance | plusminus}}
+                    </div>
+                    <div>
+                        Musique - Chant: {{item.template.data.instrument.musicSinging | plusminus}}
+                    </div>
+                </div>
+            </div>
+
             <!-- Indice de rareté -->
             <div *ngIf="item.template.data.rarityIndicator">
                 Indice de rareté: {{item.template.data.rarityIndicator}}

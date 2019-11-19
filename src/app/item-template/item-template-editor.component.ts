@@ -8,7 +8,13 @@ import {Skill, SkillService} from '../skill';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
 
-import {ItemSlot, ItemTemplate, ItemTemplateGunData, ItemTemplateSection} from './item-template.model';
+import {
+    ItemSlot,
+    ItemTemplate,
+    ItemTemplateGunData,
+    ItemTemplateInstrumentData,
+    ItemTemplateSection
+} from './item-template.model';
 import {ItemTemplateService} from './item-template.service'
 import {IconDescription} from '../shared/icon.model';
 import {AddItemTemplateEditorModuleDialogComponent} from './add-item-template-editor-module-dialog.component';
@@ -173,6 +179,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'modifiers':
                 this.itemTemplate.modifiers = [];
                 break;
+            case 'instrument':
+                this.itemTemplate.data.instrument = new ItemTemplateInstrumentData();
+                break;
             case 'itemTypes':
                 this.itemTemplate.data.itemTypes = [];
                 break;
@@ -276,6 +285,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'modifiers':
                 this.itemTemplate.modifiers = [];
                 break;
+            case 'instrument':
+                this.itemTemplate.data.instrument = undefined;
+                break;
             case 'itemTypes':
                 this.itemTemplate.data.itemTypes = undefined;
                 break;
@@ -366,6 +378,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
         if (this.itemTemplate.data.gun) {
             modules.push('gun');
+        }
+        if (this.itemTemplate.data.instrument) {
+            modules.push('instrument');
         }
         if (this.itemTemplate.data.requireLevel) {
             modules.push('level');

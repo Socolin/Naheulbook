@@ -422,6 +422,27 @@
             </div>
         </div>
 
+
+        <!-- Instrument -->
+        <div class="icon-label" *ngIf="data.item.template.data.instrument">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-musical-notes" class="ra-mat-button-icon-24"></mat-icon>
+            <div>
+                <div>
+                    Coup spécial: {{data.item.template.data.instrument.specialMove | plusminus}}
+                </div>
+                <div>
+                    Discours - Théâtre: {{data.item.template.data.instrument.speechTheater | plusminus}}
+                </div>
+                <div>
+                    Jonglage - Danse: {{data.item.template.data.instrument.jugglingDance | plusminus}}
+                </div>
+                <div>
+                    Musique - Chant: {{data.item.template.data.instrument.musicSinging | plusminus}}
+                </div>
+            </div>
+        </div>
+
+
         <div class="icon-label" *ngIf="data.item.data.lifetime?.durationType === 'time'" [class.text-warning]="data.item.data.lifetime.timeDuration === 0">
             <mat-icon fontSet="game-icon" fontIcon="game-icon-stopwatch" class="ra-mat-button-icon-24"></mat-icon>
             <div>

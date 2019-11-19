@@ -242,6 +242,36 @@
             </mat-form-field>
         </mat-card-content>
     </ng-template>
+    <ng-template [ngSwitchCase]="'instrument'">
+        <mat-card-title>
+            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+            Instrument de musique
+        </mat-card-title>
+        <mat-card-content>
+            <div class="instrument-stats">
+                <mat-form-field>
+                    <input matInput
+                           placeholder="Coup Spécial"
+                           [(ngModel)]="itemTemplate.data.instrument.specialMove"/>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
+                           placeholder="Discours Théâtre"
+                           [(ngModel)]="itemTemplate.data.instrument.speechTheater"/>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
+                           placeholder="Jonglage Danse"
+                           [(ngModel)]="itemTemplate.data.instrument.jugglingDance"/>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
+                           placeholder="Musique Chant"
+                           [(ngModel)]="itemTemplate.data.instrument.musicSinging"/>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+    </ng-template>
     <ng-template [ngSwitchCase]="'itemTypes'">
         <mat-card-title>
             <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>

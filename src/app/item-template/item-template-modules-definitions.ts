@@ -14,6 +14,7 @@ export const itemTemplateModulesDefinitions: ItemTemplateModuleDefinition[] = [
     {name: 'god',          displayName: 'Dieu',                     icon: 'kneeling', description: 'Lié à un dieu (restriction pour l\'utilisation)'},
     {name: 'gun',          displayName: 'Arme à poudre',            icon: 'winchester-rifle', description: 'Kaboom'},
     {name: 'itemTypes',    displayName: 'Type d\'objet',            icon: 'sword-spade', description: ''},
+    {name: 'instrument',   displayName: 'Instrument de musique',    icon: 'musical-notes', description: ''},
     {name: 'level',        displayName: 'Niveau requis',            icon: 'level-two', description: 'Niveau minimum pour utiliser'},
     {name: 'lifetime',     displayName: 'Temps de conservation',    icon: 'sands-of-time', description: ''},
     {name: 'modifiers',    displayName: 'Modificateurs',            icon: 'skills', description: ''},

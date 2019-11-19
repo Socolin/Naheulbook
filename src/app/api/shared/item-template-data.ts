@@ -1,6 +1,7 @@
 import {IIconDescription} from './icon-description';
 import {IDurable} from './durable';
 import {IItemTemplateGunData} from './item-template-gun-data';
+import {IItemTemplateInstrumentData} from './item-template-instrument-data';
 
 export interface IItemTemplateData {
     actions?: any[];
@@ -19,6 +20,7 @@ export interface IItemTemplateData {
     gun?: IItemTemplateGunData;
     icon?: IIconDescription;
     isCurrency?: boolean;
+    instrument?: IItemTemplateInstrumentData;
     itemTypes?: string[];
     lifetime?: IDurable;
     magicProtection?: number;
