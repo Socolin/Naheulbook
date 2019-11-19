@@ -3,27 +3,25 @@
     <div class="time-selector">
         <div class="element-selector" *ngFor="let unitDef of allUnits">
             <span class="title">{{unitDef.title}}</span>
-            <button mat-icon-button (click)="updateTime(unitDef.unit, -1)">
-                <mat-icon>keyboard_arrow_up</mat-icon>
-            </button>
             <div (wheel)="onWheelEvent(unitDef.unit, $event)"
                  class="roller"
                  (touchstart)="onTouchStart(unitDef.unit, $event)"
                  (touchmove)="onTouchMoveEvent($event)"
                  (touchend)="onTouchEnd()">
-
+                <button mat-icon-button (click)="updateTime(unitDef.unit, -1)">
+                    <mat-icon>keyboard_arrow_up</mat-icon>
+                </button>
                 <div class="numbers">
                     <div [ngStyle]="{'margin-top': touchOffsetY[unitDef.unit] + 'px'}">
                         <div *ngFor="let number of displayedNumbersPerUnit[unitDef.unit]; let index = index"
-                             [innerHTML]="number" [ngClass]="'number-' + index">
-                            {{number}}
+                             [innerHTML]="number" [ngClass]="'number-' + index" [style.opacity]="isSpace(number) ? 0 : undefined">
                         </div>
                     </div>
                 </div>
+                <button mat-icon-button (click)="updateTime(unitDef.unit, 1)">
+                    <mat-icon>keyboard_arrow_down</mat-icon>
+                </button>
             </div>
-            <button mat-icon-button (click)="updateTime(unitDef.unit, 1)">
-                <mat-icon>keyboard_arrow_down</mat-icon>
-            </button>
         </div>
     </div>
     <div class="form-group">

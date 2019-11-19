@@ -91,9 +91,6 @@ export class DurationSelectorDialogComponent implements OnInit {
     }
 
     onTouchStart(unit: UnitTypes, event: TouchEvent): void {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
         this.startY = event.changedTouches[0].clientY;
         this.scrollingUnit = unit;
     }
@@ -102,6 +99,7 @@ export class DurationSelectorDialogComponent implements OnInit {
         if (!this.scrollingUnit) {
             return;
         }
+        event.preventDefault();
         let touchOffsetY = event.changedTouches[0].clientY - this.startY;
 
         while (touchOffsetY > DurationSelectorDialogComponent.numberHeight) {
@@ -132,6 +130,10 @@ export class DurationSelectorDialogComponent implements OnInit {
 
         this.touchOffsetY[this.scrollingUnit] = -DurationSelectorDialogComponent.numberHeight;
         this.scrollingUnit = undefined;
+    }
+
+    isSpace(number: string) {
+        return number === '&nbsp;';
     }
 
     ngOnInit(): void {
