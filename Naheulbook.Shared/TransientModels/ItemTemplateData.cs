@@ -25,6 +25,7 @@ namespace Naheulbook.Shared.TransientModels
         public IconDescription? Icon { get; set; }
         public bool? IsCurrency { get; set; }
         public string[]? ItemTypes { get; set; }
+        public ItemTemplateInstrumentData? Instrument { get; set; }
         public Durable? Lifetime { get; set; }
         public int? MagicProtection { get; set; }
         public string? Note { get; set; }
