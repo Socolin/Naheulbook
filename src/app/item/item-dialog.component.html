@@ -252,16 +252,16 @@
             <div class="icon-label" *ngIf="item.template.data.instrument">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-musical-notes" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
-                    <div>
+                    <div *ngIf="item.template.data.instrument.specialMove">
                         Coup spécial: {{item.template.data.instrument.specialMove | plusminus}}
                     </div>
-                    <div>
+                    <div *ngIf="item.template.data.instrument.speechTheater">
                         Discours - Théâtre: {{item.template.data.instrument.speechTheater | plusminus}}
                     </div>
-                    <div>
+                    <div *ngIf="item.template.data.instrument.jugglingDance">
                         Jonglage - Danse: {{item.template.data.instrument.jugglingDance | plusminus}}
                     </div>
-                    <div>
+                    <div *ngIf="item.template.data.instrument.musicSinging">
                         Musique - Chant: {{item.template.data.instrument.musicSinging | plusminus}}
                     </div>
                 </div>
