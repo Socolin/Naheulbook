@@ -392,7 +392,8 @@ export class GroupComponent implements OnInit, OnDestroy {
     openAddEffectDialog(effect?: Effect) {
         const dialogRef = this.dialog.openFullScreen<GroupAddEffectDialogComponent, GroupAddEffectDialogData, GroupAddEffectDialogResult>(
             GroupAddEffectDialogComponent, {
-                data: {effect, fighters: this.group.fighters}
+                data: {effect, fighters: this.group.fighters},
+                closeOnNavigation: false
             });
         dialogRef.afterClosed().subscribe(result => {
             if (!result) {
@@ -456,7 +457,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                             }
                         }
                     });
-                }, false, itemTemplate);
+                }, false, itemTemplate, false);
             }
         }
     }

@@ -27,16 +27,21 @@ export class NhbkMatDialog {
         componentOrTemplateRef: ComponentType<T> | TemplateRef<T>,
         config?: MatDialogConfig<D>
     ): MatDialogRef<T, R> {
-        this.router.navigate([], {
-            fragment: location.hash.substring(1) || undefined,
-            queryParams: {dialogOpen: this.dialogCount},
-            relativeTo: this.route,
-            state: {isDialog: true}
-        }).then(() => {
-            this.location.replaceState(location.pathname + location.hash, location.search, {isDialog: true});
-        });
+        const dialogCount = this.dialogCount++;
 
-        this.dialogCount++;
+        if (!(this.location.getState() && 'isDialog' in (this.location.getState() as any))) {
+            this.router.navigate([], {
+                fragment: location.hash.substring(1) || undefined,
+                queryParams: {dialogOpen: this.dialogCount},
+                relativeTo: this.route,
+                state: {isDialog: true, dialogCount: dialogCount}
+            }).then(() => {
+                this.location.replaceState(location.pathname + location.hash, location.search, {
+                    isDialog: true,
+                    dialogCount: dialogCount
+                });
+            });
+        }
 
         const dialogRef = this.dialog.open(componentOrTemplateRef, {
             ...config,
@@ -46,7 +51,9 @@ export class NhbkMatDialog {
         });
         dialogRef.afterClosed().subscribe(() => {
             if (this.location.getState() && 'isDialog' in (this.location.getState() as any)) {
-                this.location.back();
+                if ((this.location.getState() as any)['dialogCount'] === dialogCount) {
+                    this.location.back();
+                }
             }
         });
         return dialogRef;

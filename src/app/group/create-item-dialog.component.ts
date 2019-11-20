@@ -159,10 +159,12 @@ export function openCreateItemDialog(
     dialog: NhbkMatDialog,
     onAdd: (item: Item) => void,
     allowMultipleAdd = true,
-    itemTemplate?: ItemTemplate
+    itemTemplate?: ItemTemplate,
+    closeOnNavigation?: boolean
 ) {
     const subject = new Subject<Item>();
     const dialogRef = dialog.open(CreateItemDialogComponent, {
+        closeOnNavigation: closeOnNavigation,
         data: {
             onAdd: subject,
             allowMultipleAdd,
