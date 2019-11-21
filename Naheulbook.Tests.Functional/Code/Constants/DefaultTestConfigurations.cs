@@ -11,6 +11,7 @@ namespace Naheulbook.Tests.Functional.Code.Constants
                                                                "Pwd=naheulbook;" +
                                                                "SslMode=None;" +
                                                                "CharSet=utf8;" +
+                                                               "AllowPublicKeyRetrieval=True;" +
                                                                "Allow User Variables=True";
     }
 }
