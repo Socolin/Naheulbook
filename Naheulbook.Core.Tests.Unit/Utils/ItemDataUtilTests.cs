@@ -1,91 +1,129 @@
 using FluentAssertions;
-using Naheulbook.Core.Constants;
 using Naheulbook.Core.Utils;
-using Newtonsoft.Json.Linq;
+using Naheulbook.Data.Models;
+using Naheulbook.Shared.TransientModels;
+using Naheulbook.Shared.Utils;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Naheulbook.Core.Tests.Unit.Utils
 {
     public class ItemDataUtilTests
     {
+        private const string SomeItemDataJson = "some-item-data-json";
+        private const string SomeUpdatedJsonData = "some-updated-json-data";
         private IItemDataUtil _util;
+        private IJsonUtil _jsonUtil;
 
         [SetUp]
         public void SetUp()
         {
-            _util = new ItemDataUtil();
+            _jsonUtil = Substitute.For<IJsonUtil>();
+
+            _util = new ItemDataUtil(_jsonUtil);
         }
 
         [Test]
         public void IsItemEquipped_ShouldReturnTrueWhenPropertyEquippedIsSet()
         {
-            _util.IsItemEquipped(new JObject{[ItemDataConstants.EquippedKey] = 1}).Should().BeTrue();
+            var itemData = new ItemData {Equipped = 1};
+            var item = GivenAnItem(itemData);
+
+            _util.IsItemEquipped(item).Should().BeTrue();
         }
 
         [Test]
         public void IsItemEquipped_ShouldReturnFalseWhenPropertyEquippedIsAbsent()
         {
-            _util.IsItemEquipped(new JObject()).Should().BeFalse();
+            var itemData = new ItemData {Equipped = null};
+            var item = GivenAnItem(itemData);
+
+            _util.IsItemEquipped(item).Should().BeFalse();
         }
 
         [Test]
         public void UpdateEquipItem_WhenItemIsNotEquipped_AndNoLevelIsGiven_ShouldSetEquippedTo_1()
         {
-            var itemData = new JObject();
+            var itemData = new ItemData {Equipped = null};
+            var item = GivenAnItem(itemData);
 
-            _util.UpdateEquipItem(itemData, null);
+            _util.UpdateEquipItem(item, null);
 
-            itemData.Value<int>(ItemDataConstants.EquippedKey).Should().Be(1);
+            itemData.Equipped.Should().Be(1);
+            item.Data.Should().Be(SomeUpdatedJsonData);
         }
 
         [Test]
         public void UpdateEquipItem_WhenItemIsEquipped_AndLevelIs_0_ShouldUnsetEquipped()
         {
-            var itemData = new JObject {[ItemDataConstants.EquippedKey] = 1};
+            var itemData = new ItemData {Equipped = 1};
+            var item = GivenAnItem(itemData);
 
-            _util.UpdateEquipItem(itemData, 0);
+            _util.UpdateEquipItem(item, 0);
 
-            itemData.ContainsKey(ItemDataConstants.EquippedKey).Should().BeFalse();
+            itemData.Equipped.Should().BeNull();
+            item.Data.Should().Be(SomeUpdatedJsonData);
         }
 
         [Test]
         public void UpdateEquipItem_WhenItemIsEquipped_AndLevelIs_1_ShouldIncrementLevel()
         {
-            var itemData = new JObject {[ItemDataConstants.EquippedKey] = 3};
+            var itemData = new ItemData {Equipped = 3};
+            var item = GivenAnItem(itemData);
 
-            _util.UpdateEquipItem(itemData, 1);
+            _util.UpdateEquipItem(item, 1);
 
-            itemData.Value<int>(ItemDataConstants.EquippedKey).Should().Be(4);
+            itemData.Equipped.Should().Be(4);
+            item.Data.Should().Be(SomeUpdatedJsonData);
         }
 
         [Test]
         public void UpdateEquipItem_WhenItemIsEquipped_AndLevelIs_1_ShouldIncrementBySkipping_0()
         {
-            var itemData = new JObject {[ItemDataConstants.EquippedKey] = -1};
+            var itemData = new ItemData {Equipped = -1};
+            var item = GivenAnItem(itemData);
 
-            _util.UpdateEquipItem(itemData, 1);
+            _util.UpdateEquipItem(item, 1);
 
-            itemData.Value<int>(ItemDataConstants.EquippedKey).Should().Be(1);
+            itemData.Equipped.Should().Be(1);
+            item.Data.Should().Be(SomeUpdatedJsonData);
         }
 
         [Test]
         public void UpdateEquipItem_WhenItemIsEquipped_AndLevelIs_minus_1_ShouldDecrementLevel()
         {
-            var itemData = new JObject {[ItemDataConstants.EquippedKey] = -3};
+            var itemData = new ItemData {Equipped = -3};
+            var item = GivenAnItem(itemData);
 
-            _util.UpdateEquipItem(itemData, -1);
+            _util.UpdateEquipItem(item, -1);
 
-            itemData.Value<int>(ItemDataConstants.EquippedKey).Should().Be(-4);
+            itemData.Equipped.Should().Be(-4);
+            item.Data.Should().Be(SomeUpdatedJsonData);
         }
 
         [Test]
         public void UpdateEquipItem_WhenItemIsEquipped_AndLevelIs_minus_1_ShouldDecrementBySkipping_0()
         {
-            var itemData = new JObject {[ItemDataConstants.EquippedKey] = 1};
+            var itemData = new ItemData {Equipped = 1};
+            var item = GivenAnItem(itemData);
 
-            _util.UpdateEquipItem(itemData, -1);
+            _util.UpdateEquipItem(item, -1);
 
-            itemData.Value<int>(ItemDataConstants.EquippedKey).Should().Be(-1);
+            itemData.Equipped.Should().Be(-1);
+            item.Data.Should().Be(SomeUpdatedJsonData);
+        }
+
+        private Item GivenAnItem(ItemData itemData)
+        {
+            _jsonUtil.DeserializeOrCreate<ItemData>(SomeItemDataJson)
+                .Returns(itemData);
+            _jsonUtil.SerializeNonNull(itemData)
+                .Returns(SomeUpdatedJsonData);
+
+            return new Item
+            {
+                Data = SomeItemDataJson
+            };
         }
     }
 }

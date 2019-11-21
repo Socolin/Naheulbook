@@ -5,7 +5,22 @@ using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Shared.TransientModels
 {
-    public class ItemData
+    public interface IReadOnlyItemData
+    {
+        string? Name { get; }
+        string? Description { get; }
+        int? Quantity { get; }
+        JToken? Icon { get; }
+        int? Charge { get; }
+        int? Ug { get; }
+        int? Equipped { get; }
+        int? ReadCount { get; }
+        bool? NotIdentified { get; }
+        bool? IgnoreRestrictions { get; }
+        JToken? Lifetime { get; }
+    }
+
+    public class ItemData : IReadOnlyItemData
     {
         public string? Name { get; set; }
         public string? Description { get; set; }

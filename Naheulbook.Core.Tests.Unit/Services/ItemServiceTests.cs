@@ -21,7 +21,6 @@ namespace Naheulbook.Core.Tests.Unit.Services
 {
     public class ItemServiceTests
     {
-        private const string ItemDataJson = "some-item-data-json";
         private FakeUnitOfWorkFactory _unitOfWorkFactory;
         private IItemFactory _itemFactory;
         private FakeNotificationSessionFactory _notificationSessionFactory;
@@ -31,6 +30,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private ICharacterHistoryUtil _characterHistoryUtil;
         private IRngUtil _rngUtil;
         private IItemTemplateUtil _itemTemplateUtil;
+        private IItemDataUtil _itemDataUtil;
 
         private ItemService _service;
         private IActionsUtil _actionsUtil;
@@ -48,6 +48,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _itemTemplateUtil = Substitute.For<IItemTemplateUtil>();
             _actionsUtil = Substitute.For<IActionsUtil>();
             _rngUtil = Substitute.For<IRngUtil>();
+            _itemDataUtil = Substitute.For<IItemDataUtil>();
 
             _service = new ItemService(
                 _unitOfWorkFactory,
@@ -59,7 +60,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _jsonUtil,
                 _rngUtil,
                 _itemTemplateUtil,
-                _actionsUtil
+                _actionsUtil,
+                _itemDataUtil
             );
         }
 
@@ -105,7 +107,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => item.Data.Should().Be("some-new-item-data-json"));
+                .Do(info => _itemDataUtil.Received(1).SetItemData(item, itemData));
 
             var actualItem = await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
 
@@ -418,10 +420,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
         private Item GivenAnItem(ItemData itemData = null, int? characterId = null)
         {
-            _jsonUtil.Deserialize<ItemData>(ItemDataJson)
-                .Returns(itemData ?? new ItemData());
-
-            return new Item
+            var item = new Item
             {
                 CharacterId = characterId,
                 Character = !characterId.HasValue
@@ -429,9 +428,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
                     : new Character
                     {
                         Id = characterId.Value
-                    },
-                Data = ItemDataJson
+                    }
             };
+
+            _itemDataUtil.GetItemData(item)
+                .Returns(itemData ?? new ItemData());
+
+            return item;
         }
     }
 }

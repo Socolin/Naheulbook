@@ -5,7 +5,6 @@ using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.Utils;
-using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -40,24 +39,11 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void EquipItem_ShouldUpdateItemData()
         {
-            const string itemDataJson = "some-item-data-json";
-            const string updatedItemDataJson = "some-updated-item-data-json";
-            var itemData = new JObject();
-            var item = new Item {Data = itemDataJson};
-
-            _jsonUtil.DeserializeOrCreate<JObject>(itemDataJson)
-                .Returns(itemData);
-            _jsonUtil.SerializeNonNull(itemData)
-                .Returns(updatedItemDataJson);
+            var item = new Item();
 
             _util.EquipItem(item, 8);
 
-            Received.InOrder(() =>
-            {
-                _itemDataUtil.UpdateEquipItem(itemData, 8);
-                _jsonUtil.SerializeNonNull(itemData);
-            });
-            item.Data.Should().BeEquivalentTo(updatedItemDataJson);
+            _itemDataUtil.UpdateEquipItem(item, 8);
         }
 
         [Test]
@@ -70,17 +56,12 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             const int characterId = 8;
             const int itemId = 12;
             var item = new Item {Id = itemId, CharacterId = characterId, Character = new Character()};
-            var itemData = new JObject();
 
-            _jsonUtil.Deserialize<JObject>(Arg.Any<string>())
-                .Returns(itemData);
-            _jsonUtil.Serialize(Arg.Any<JObject>())
-                .Returns("some-json");
             _characterHistoryUtil.CreateLogEquipItem(characterId, itemId)
                 .Returns(new CharacterHistoryEntry {Action = "equip"});
             _characterHistoryUtil.CreateLogUnEquipItem(characterId, itemId)
                 .Returns(new CharacterHistoryEntry {Action = "unEquip"});
-            _itemDataUtil.IsItemEquipped(itemData)
+            _itemDataUtil.IsItemEquipped(item)
                 .Returns(wasEquipped, isNowEquipped);
 
             _util.EquipItem(item, 8);

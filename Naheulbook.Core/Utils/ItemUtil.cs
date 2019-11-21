@@ -7,7 +7,6 @@ using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
-using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Core.Utils
 {
@@ -47,11 +46,9 @@ namespace Naheulbook.Core.Utils
 
         public void EquipItem(Item item, int? level)
         {
-            var itemData = _jsonUtil.DeserializeOrCreate<JObject>(item.Data);
-
-            var previouslyEquipped = _itemDataUtil.IsItemEquipped(itemData);
-            _itemDataUtil.UpdateEquipItem(itemData, level);
-            var newlyEquipped = _itemDataUtil.IsItemEquipped(itemData);
+            var previouslyEquipped = _itemDataUtil.IsItemEquipped(item);
+            _itemDataUtil.UpdateEquipItem(item, level);
+            var newlyEquipped = _itemDataUtil.IsItemEquipped(item);
 
             if (previouslyEquipped != newlyEquipped && item.CharacterId != null)
             {
@@ -62,8 +59,6 @@ namespace Naheulbook.Core.Utils
                 else
                     item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogEquipItem(item.CharacterId.Value, item.Id));
             }
-
-            item.Data = _jsonUtil.SerializeNonNull(itemData);
         }
 
         public async Task<(Item takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger)
@@ -77,7 +72,7 @@ namespace Naheulbook.Core.Utils
             {
                 var targetCharacter = await uow.Characters.GetAsync(characterId);
                 var originalItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId);
-                var originalItemData = _jsonUtil.Deserialize<ItemData>(originalItem.Data) ?? new ItemData();
+                var originalItemData = _itemDataUtil.GetItemData(originalItem);
 
                 if (quantity == null || originalItemData.Quantity == null || quantity >= originalItemData.Quantity)
                 {
@@ -94,6 +89,8 @@ namespace Naheulbook.Core.Utils
                     originalItem.MonsterId = null;
                     originalItem.LootId = null;
                     originalItem.ContainerId = null;
+                    _itemDataUtil.ResetReadCount(originalItem);
+                    _itemDataUtil.UpdateEquipItem(originalItem, null);
 
                     takenItem = originalItem;
 
@@ -105,7 +102,7 @@ namespace Naheulbook.Core.Utils
                 }
                 else
                 {
-                    var splitItem = SplitItem(originalItem, originalItemData, quantity.Value);
+                    var splitItem = SplitItem(originalItem, quantity.Value);
                     splitItem.Character = targetCharacter;
                     uow.Items.Add(splitItem);
 
@@ -155,36 +152,26 @@ namespace Naheulbook.Core.Utils
 
         public bool DecrementQuantityOrDeleteItem(Item item)
         {
-            var itemData = _jsonUtil.Deserialize<ItemData>(item.Data) ?? new ItemData();
-            if (itemData.Quantity > 1)
-            {
-                var itemTemplateData = _jsonUtil.DeserializeOrCreate<ItemTemplateData>(item.ItemTemplate.Data);
-                if (itemTemplateData.Charge.HasValue)
-                    itemData.Charge = itemTemplateData.Charge.Value;
+            var itemData = _itemDataUtil.GetItemData(item);
+            if (itemData.Quantity <= 1)
+                return true;
 
-                itemData.Quantity--;
-                item.Data = _jsonUtil.SerializeNonNull(itemData);
-                return false;
-            }
+            var itemTemplateData = _jsonUtil.DeserializeOrCreate<ItemTemplateData>(item.ItemTemplate.Data);
+            if (itemTemplateData.Charge.HasValue)
+                _itemDataUtil.UpdateChargeCount(item, itemTemplateData.Charge.Value);
 
-            return true;
+            _itemDataUtil.UpdateRelativeQuantity(item, -1);
+            _itemDataUtil.SetItemData(item, itemData);
+
+            return false;
         }
 
-        private Item SplitItem(Item originalItem, ItemData originalItemData, int quantity)
+        private Item SplitItem(Item originalItem, int quantity)
         {
-            originalItemData.Quantity -= quantity;
-            originalItem.Data = _jsonUtil.SerializeNonNull(originalItemData);
+            var splitItem = _itemFactory.CloneItem(originalItem);
 
-            var originalQuantity = originalItemData.Quantity;
-            originalItemData.Quantity = quantity;
-            var splitItem = new Item
-            {
-                Modifiers = originalItem.Modifiers,
-                ItemTemplateId = originalItem.ItemTemplateId,
-                Data = _jsonUtil.SerializeNonNull(originalItemData)
-            };
-
-            originalItemData.Quantity = originalQuantity;
+            _itemDataUtil.UpdateQuantity(splitItem, quantity);
+            _itemDataUtil.UpdateRelativeQuantity(splitItem, -quantity);
 
             return splitItem;
         }

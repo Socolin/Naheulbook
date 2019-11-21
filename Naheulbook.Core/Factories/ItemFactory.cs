@@ -1,5 +1,6 @@
 using System;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
@@ -10,15 +11,18 @@ namespace Naheulbook.Core.Factories
     {
         Item CreateItem(ItemOwnerType ownerType, int ownerId, ItemTemplate itemTemplate, ItemData itemData);
         Item CreateItem(ItemTemplate itemTemplate, ItemData itemData);
+        Item CloneItem(Item originalItem);
     }
 
     public class ItemFactory : IItemFactory
     {
         private readonly IJsonUtil _jsonUtil;
+        private readonly IItemDataUtil _itemDataUtil;
 
-        public ItemFactory(IJsonUtil jsonUtil)
+        public ItemFactory(IJsonUtil jsonUtil, IItemDataUtil itemDataUtil)
         {
             _jsonUtil = jsonUtil;
+            _itemDataUtil = itemDataUtil;
         }
 
         public Item CreateItem(ItemOwnerType ownerType, int ownerId, ItemTemplate itemTemplate, ItemData itemData)
@@ -69,6 +73,19 @@ namespace Naheulbook.Core.Factories
                 ItemTemplateId = itemTemplate.Id
             };
             return item;
+        }
+
+        public Item CloneItem(Item originalItem)
+        {
+            var originItemData = _itemDataUtil.GetItemData(originalItem);
+            var clonedItem = new Item
+            {
+                Modifiers = originalItem.Modifiers,
+                ItemTemplateId = originalItem.ItemTemplateId,
+                Data = _jsonUtil.SerializeNonNull(originItemData)
+            };
+
+            return clonedItem;
         }
     }
 }

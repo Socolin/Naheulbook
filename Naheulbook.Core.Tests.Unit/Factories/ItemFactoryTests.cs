@@ -2,6 +2,7 @@ using System;
 using FluentAssertions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
@@ -15,12 +16,14 @@ namespace Naheulbook.Core.Tests.Unit.Factories
     {
         private ItemFactory _factory;
         private IJsonUtil _jsonUtil;
+        private IItemDataUtil _itemDataUtil;
 
         [SetUp]
         public void SetUp()
         {
             _jsonUtil = Substitute.For<IJsonUtil>();
-            _factory = new ItemFactory(_jsonUtil);
+            _itemDataUtil = Substitute.For<IItemDataUtil>();
+            _factory = new ItemFactory(_jsonUtil, _itemDataUtil);
         }
 
         [Test]

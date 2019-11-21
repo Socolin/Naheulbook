@@ -13,4 +13,8 @@
       <PackageReference Include="Serilog" Version="2.8.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Naheulbook.Shared\Naheulbook.Shared.csproj" />
+    </ItemGroup>
+
 </Project>

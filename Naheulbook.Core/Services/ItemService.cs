@@ -43,6 +43,7 @@ namespace Naheulbook.Core.Services
         private readonly IRngUtil _rngUtil;
         private readonly IItemTemplateUtil _itemTemplateUtil;
         private readonly IActionsUtil _actionsUtil;
+        private readonly IItemDataUtil _itemDataUtil;
 
         public ItemService(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -54,7 +55,8 @@ namespace Naheulbook.Core.Services
             IJsonUtil jsonUtil,
             IRngUtil rngUtil,
             IItemTemplateUtil itemTemplateUtil,
-            IActionsUtil actionsUtil
+            IActionsUtil actionsUtil,
+            IItemDataUtil itemDataUtil
         )
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -67,6 +69,7 @@ namespace Naheulbook.Core.Services
             _rngUtil = rngUtil;
             _itemTemplateUtil = itemTemplateUtil;
             _actionsUtil = actionsUtil;
+            _itemDataUtil = itemDataUtil;
         }
 
         public async Task<Item> AddItemToAsync(
@@ -124,7 +127,7 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureItemAccess(executionContext, item);
 
-                var currentItemData = _jsonUtil.Deserialize<ItemData>(item.Data) ?? new ItemData();
+                var currentItemData = _itemDataUtil.GetItemData(item);
                 if (item.CharacterId.HasValue)
                 {
                     if (itemData.Quantity != currentItemData.Quantity)
@@ -135,7 +138,7 @@ namespace Naheulbook.Core.Services
                         item.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogIdentifyItem(item.CharacterId.Value, item));
                 }
 
-                item.Data = _jsonUtil.SerializeNonNull(itemData);
+                _itemDataUtil.SetItemData(item, itemData);
 
                 await uow.SaveChangesAsync();
 
@@ -327,13 +330,12 @@ namespace Naheulbook.Core.Services
                 if (sourceCharacter.GroupId != targetCharacter.GroupId)
                     throw new ForbiddenAccessException();
 
-                var itemData = _jsonUtil.Deserialize<ItemData>(usedItem.Data) ?? new ItemData();
+                var itemData = _itemDataUtil.GetItemData(usedItem);
                 if (itemData.Charge < 1)
                     throw new NotChargeLeftOnItemException();
 
-                itemData.Charge--;
+                _itemDataUtil.UpdateRelativeChargeCount(usedItem, -1);
                 sourceCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogUseItemCharge(usedItem.CharacterId.Value, usedItem, itemData.Charge, itemData.Charge - 1));
-                usedItem.Data = _jsonUtil.SerializeNonNull(itemData);
 
                 var notificationSession = _notificationSessionFactory.CreateSession();
                 var context = new ActionContext(usedItem, sourceCharacter, targetCharacter, uow);
