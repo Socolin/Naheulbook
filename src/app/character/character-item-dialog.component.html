@@ -103,11 +103,14 @@
             <div class="icon-label" *ngIf="data.item.template.data.quantifiable">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-stack" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
-                    Quantité: <value-editor
-                                  [title]="'Quantité'"
-                                  [value]="data.item.data.quantity"
-                                  (onChange)="data.itemActionService.onAction('update_quantity', data.item, {quantity: $event})">
+                    Quantité:
+                    <value-editor
+                        *ngIf="!data.itemInLoot || data.gmView"
+                        [title]="'Quantité'"
+                        [value]="data.item.data.quantity"
+                        (onChange)="data.itemActionService.onAction('update_quantity', data.item, {quantity: $event})">
                     </value-editor>
+                    <span *ngIf="data.itemInLoot && !data.gmView">{{data.item.data.quantity}}</span>
                 </div>
             </div>
 
@@ -188,10 +191,12 @@
                 <div>
                     <div [matTooltip]="'Unité Goltor'">
                         <value-editor
+                            *ngIf="data.gmView"
                             [title]="'Unité Goltor'"
                             [value]="data.item.data.ug"
                             (onChange)="updateItemUg($event)">
                         </value-editor>
+                        <span *ngIf="!data.gmView">{{data.item.data.ug}}</span>
                         U.G
                     </div>
                     <div>Poids: {{data.item.data.ug * data.item.template.data.weight * 1000  | number:'1.3-3' }} g</div>

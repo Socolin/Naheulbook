@@ -16,6 +16,7 @@ export interface CharacterItemDialogData {
     character?: Character,
     gmView: boolean,
     itemActionService: ItemActionService;
+    itemInLoot?: boolean;
 }
 
 @Component({

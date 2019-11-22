@@ -5,6 +5,7 @@
             <div *ngFor="let item of loot.items" class="item separator">
                 <app-item-line [item]="item"
                                [itemMenu]="itemLootMenu"
+                               [itemInLoot]="true"
                                [hideEquippedMarker]="true"
                                [hideShouldPutIntoContainerMarker]="true"
                                [gmView]="inGroupTab">
@@ -28,6 +29,7 @@
                 <app-item-line [item]="item"
                                [itemMenu]="itemMonsterMenu"
                                [hideEquippedMarker]="true"
+                               [itemInLoot]="true"
                                [hideShouldPutIntoContainerMarker]="true"
                                [gmView]="inGroupTab">
                 </app-item-line>

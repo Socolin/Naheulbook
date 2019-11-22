@@ -19,6 +19,7 @@ export class ItemLineComponent {
     @Input() hideEquippedMarker: boolean;
     @Input() hideShouldPutIntoContainerMarker: boolean;
     @Input() gmView: boolean;
+    @Input() itemInLoot: boolean;
 
     constructor(
         private readonly dialog: NhbkMatDialog,
@@ -35,7 +36,8 @@ export class ItemLineComponent {
                     item,
                     character: this.character,
                     gmView: this.gmView,
-                    itemActionService: this.itemActionService
+                    itemActionService: this.itemActionService,
+                    itemInLoot: this.itemInLoot
                 }
             });
     }
