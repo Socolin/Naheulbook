@@ -1,4 +1,7 @@
 :host {
+    >mat-card {
+        margin: 5px;
+    }
     mat-card-title {
         display: flex;
         justify-content: space-between;
