@@ -17,7 +17,7 @@ import {
 } from './edit-monster-dialog.component';
 import {openCreateItemDialog} from './create-item-dialog.component';
 import {openCreateGemDialog} from './create-gem-dialog.component';
-import {ModifierDetailsDialogComponent} from './modifier-details-dialog.component';
+import {ModifierDetailsDialogComponent} from '../effect/modifier-details-dialog.component';
 import {MonsterInventoryDialogComponent} from './monster-inventory-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
 

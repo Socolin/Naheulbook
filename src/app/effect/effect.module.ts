@@ -10,15 +10,15 @@ import {
     ActiveEffectEditorComponent,
     AddEffectDialogComponent,
     AddStatModifierDialogComponent,
+    CreateEffectTypeDialogComponent,
     EditEffectDialogComponent,
     EffectListComponent,
     EffectService,
-    ModifierDetailComponent,
+    ModifierDetailsDialogComponent,
     ModifiersEditorComponent,
     StatModifierAdvancedDialogComponent,
     StatModifierEditorComponent,
 } from './';
-import { CreateEffectTypeDialogComponent } from './create-effect-type-dialog.component';
 
 @NgModule({
     imports: [
@@ -36,10 +36,10 @@ import { CreateEffectTypeDialogComponent } from './create-effect-type-dialog.com
         CreateEffectTypeDialogComponent,
         EditEffectDialogComponent,
         EffectListComponent,
-        ModifierDetailComponent,
         ModifiersEditorComponent,
         StatModifierAdvancedDialogComponent,
         StatModifierEditorComponent,
+        ModifierDetailsDialogComponent,
     ],
     providers: [
         EffectService
@@ -49,14 +49,15 @@ import { CreateEffectTypeDialogComponent } from './create-effect-type-dialog.com
         CreateEffectTypeDialogComponent,
         EditEffectDialogComponent,
         StatModifierAdvancedDialogComponent,
+        ModifierDetailsDialogComponent,
         AddStatModifierDialogComponent,
     ],
     exports: [
         ActiveEffectEditorComponent,
         AddEffectDialogComponent,
         EffectListComponent,
-        ModifierDetailComponent,
         ModifiersEditorComponent,
+        ModifierDetailsDialogComponent,
         StatModifierEditorComponent,
     ],
 })

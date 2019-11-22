@@ -33,7 +33,6 @@ import {
 } from './';
 import {CharacterSheetDialogComponent} from './character-sheet-dialog.component';
 import {EditMonsterDialogComponent} from './edit-monster-dialog.component';
-import {ModifierDetailsDialogComponent} from './modifier-details-dialog.component';
 import {MonsterInventoryDialogComponent} from './monster-inventory-dialog.component';
 import {AddMonsterDialogComponent} from './add-monster-dialog.component';
 import {MonsterEditorComponent} from './monster-editor.component';
@@ -73,7 +72,6 @@ import {GroupAddEffectDialogComponent} from './group-add-effect-dialog.component
         CreateGemDialogComponent,
         CharacterSheetDialogComponent,
         EditMonsterDialogComponent,
-        ModifierDetailsDialogComponent,
         MonsterInventoryDialogComponent,
         AddMonsterDialogComponent,
         MonsterEditorComponent,
@@ -86,7 +84,6 @@ import {GroupAddEffectDialogComponent} from './group-add-effect-dialog.component
         CreateItemDialogComponent,
         EditMonsterDialogComponent,
         FighterSelectorComponent,
-        ModifierDetailsDialogComponent,
         MonsterInventoryDialogComponent,
         AddMonsterDialogComponent,
         GroupAddEffectDialogComponent,

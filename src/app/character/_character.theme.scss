@@ -79,12 +79,8 @@
         border-top-color: mat-color($foreground, hint-text);;
     }
 
-    .effect-element:hover {
+    .effect-element .info:hover {
         background-color: mat-color($background, hover);
-    }
-
-    .effect-element {
-        border-bottom-color: mat-color($foreground, hint-text);;
     }
 
     .loot-tab {

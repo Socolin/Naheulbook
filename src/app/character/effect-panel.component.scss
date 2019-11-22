@@ -1,67 +1,46 @@
-mat-card {
-    margin: 5px;
-}
-
-@media (min-width: 700px) {
-    .effect-panel {
-        flex-direction: row;
-    }
-}
-
-@media (max-width: 699px) {
-    .effect-panel{
-        flex-direction: column;
-    }
-}
-
-.effect-panel {
-    display: flex;
-    .effect-list-panel {
-        flex: 1 50px;
-        min-width: 0;
-    }
-    .effect-detail-panel {
-        flex: 1 50px;
-        min-width: 0;
-    }
-}
-
-.effect-list {
-    .effect-element {
-        cursor: pointer;
+:host {
+    mat-card-title {
         display: flex;
-        flex-direction: row;
-        padding: 8px;
-        height: 32px;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .modifier-type {
-            overflow:hidden;
-            white-space:nowrap;
-            text-overflow: ellipsis;
-        }
-
-        .modifier-toggle {
-            flex: 0 auto;
-            width: 32px;
-            min-width: 32px;
-            display: flex;
+    .effect-list {
+        .effect-element {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             align-items: center;
-        }
+            grid-template-areas: "toggle info actions";
+            cursor: pointer;
 
-        .modifier-info {
-            padding-right: 8px;
-            flex: 1 auto;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-        }
+            .toggle {
+                grid-area: toggle;
+                padding-right: 16px;
+                padding-left: 8px;
+            }
 
-        .modifier-duration {
-            flex: 0 auto;
-            width: 32px;
-            min-width: 32px;
-            display: flex;
-            flex-direction: column;
+            .info {
+                padding: 4px 8px;
+                grid-area: info;
+                display: grid;
+                min-height: 48px;
+                grid-template-columns: 1fr auto;
+                align-items: center;
+                grid-template-areas: "name duration";
+
+                .name {
+                    grid-area: name;
+                }
+
+                .duration {
+                    grid-area: duration;
+                }
+            }
+
+            .actions {
+                grid-area: actions;
+            }
+
         }
     }
 }

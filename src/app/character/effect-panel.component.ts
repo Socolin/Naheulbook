@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 
 import {NhbkMatDialog} from '../material-workaround';
 import {ActiveStatsModifier, LapCountDecrement} from '../shared';
-import {AddEffectDialogComponent} from '../effect';
+import {AddEffectDialogComponent, ModifierDetailsDialogComponent, ModifierDetailsDialogData} from '../effect';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
@@ -50,8 +50,13 @@ export class EffectPanelComponent {
         );
     }
 
-    selectModifier(modifier: ActiveStatsModifier) {
-        this.selectedModifier = modifier;
+    openModifierDialog(modifier: ActiveStatsModifier) {
+        this.dialog.open<ModifierDetailsDialogComponent, ModifierDetailsDialogData>(
+            ModifierDetailsDialogComponent, {
+                data: {modifier},
+                autoFocus: false
+            }
+        );
     }
 
     updateReusableModifier(modifier: ActiveStatsModifier) {

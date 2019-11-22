@@ -1,0 +1,27 @@
+:host {
+    > h2 {
+        margin-bottom: 0;
+    }
+    > .secondary-text {
+        margin-bottom: 8px;
+    }
+
+
+    .icon-label {
+        margin: 8px 0;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 8px;
+        align-items: center;
+
+        .stats {
+            > * {
+                white-space: nowrap;
+            }
+        }
+
+        mat-divider {
+            position: relative;
+        }
+    }
+}

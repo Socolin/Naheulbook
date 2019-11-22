@@ -1,0 +1,79 @@
+<h2 mat-dialog-title>{{data.modifier.name}}</h2>
+<div class="secondary-text" *ngIf="data.modifier.type">{{data.modifier.type!}}</div>
+<mat-dialog-content class="mat-typography">
+    <p *ngIf="data.modifier.description">{{data.modifier.description!}}</p>
+
+    <div class="icon-label" *ngIf="data.modifier.durationType === 'lap' || data.modifier.durationType == 'combat' || data.modifier.durationType == 'time'">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-duration " class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <div>
+                Durée totale
+            </div>
+            <span [ngSwitch]="data.modifier.durationType">
+                <ng-template [ngSwitchCase]="'lap'">
+                    {{data.modifier.lapCount | i18nPlural: ({
+                    '=1': '# tour',
+                    'other': '# tours'
+                })}}
+                </ng-template>
+                <ng-template [ngSwitchCase]="'combat'">
+                    {{data.modifier.combatCount | i18nPlural: ({
+                    '=1': '# combat',
+                    'other': '# combats'
+                })}}
+                </ng-template>
+                <ng-template [ngSwitchCase]="'time'">
+                    {{data.modifier.timeDuration! | nhbkDuration}}
+                </ng-template>
+            </span>
+        </div>
+    </div>
+
+    <div class="icon-label" *ngIf="data.modifier.durationType">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-sands-of-time " class="ra-mat-button-icon-24"></mat-icon>
+        <div>
+            <div>Durée restante</div>
+            <span [ngSwitch]="data.modifier.durationType">
+            <ng-template [ngSwitchCase]="'lap'">
+                {{data.modifier.currentLapCount! | i18nPlural: ({
+                '=1': '# tour',
+                'other': '# tours'
+            })}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'combat'">
+                {{data.modifier.currentCombatCount! | i18nPlural: ({
+                '=1': '# combat',
+                'other': '# combats'
+            })}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'custom'">
+                {{data.modifier.duration!}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'time'">
+                {{data.modifier.currentTimeDuration! | nhbkDuration}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'forever'">
+                permanent
+            </ng-template>
+        </span>
+        </div>
+    </div>
+
+    <div class="icon-label" *ngIf="data.modifier.values?.length">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
+        <div class="stats">
+            <div>Caractéristiques affectées</div>
+            <div *ngFor="let modifier of data.modifier.values">
+                {{modifier | modifier}}
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            type="button"
+            color="primary"
+            mat-dialog-close>
+        FERMER
+    </button>
+</mat-dialog-actions>
