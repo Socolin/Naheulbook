@@ -127,6 +127,7 @@ namespace Naheulbook.Web
             services.AddSingleton<IMonsterTemplateService, MonsterTemplateService>();
             services.AddSingleton<IMonsterTraitService, MonsterTraitService>();
             services.AddSingleton<IMonsterTypeService, MonsterTypeService>();
+            services.AddSingleton<INpcService, NpcService>();
             services.AddSingleton<IOriginService, OriginService>();
             services.AddSingleton<IOriginUtil, OriginUtil>();
             services.AddSingleton<IPasswordHashingService, PasswordHashingService>();

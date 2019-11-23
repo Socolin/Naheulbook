@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
 namespace Naheulbook.Data.Models
@@ -22,6 +24,7 @@ namespace Naheulbook.Data.Models
         public ICollection<GroupInvite> Invites { get; set; } = null!;
         public ICollection<Event> Events { get; set; } = null!;
         public ICollection<GroupHistoryEntry> HistoryEntries { get; set; } = null!;
+        public ICollection<Npc> Npcs { get; set; } = null!;
 
         public void AddHistoryEntry(GroupHistoryEntry entry)
         {

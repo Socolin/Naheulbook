@@ -28,6 +28,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Monster> Monsters { get; set; } = null!;
         public DbSet<MonsterType> MonsterTypes { get; set; } = null!;
         public DbSet<MonsterTemplate> MonsterTemplates { get; set; } = null!;
+        public DbSet<Npc> Npcs { get; set; } = null!;
         public DbSet<Origin> Origins { get; set; } = null!;
         public DbSet<Job> Jobs { get; set; } = null!;
         public DbSet<Speciality> Specialities { get; set; } = null!;
@@ -100,6 +101,8 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new MonsterTemplateInventoryElementConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTypeConfiguration());
             modelBuilder.ApplyConfiguration(new MonsterTraitConfiguration());
+
+            modelBuilder.ApplyConfiguration(new NpcConfiguration());
 
             modelBuilder.ApplyConfiguration(new OriginConfiguration());
             modelBuilder.ApplyConfiguration(new OriginBonusConfiguration());

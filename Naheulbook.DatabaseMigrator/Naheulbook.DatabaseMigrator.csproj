@@ -8,17 +8,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentMigrator" Version="3.2.1"/>
-        <PackageReference Include="FluentMigrator.Runner" Version="3.2.1"/>
-        <PackageReference Include="FluentMigrator.Runner.MySql" Version="3.2.1"/>
+        <PackageReference Include="FluentMigrator" Version="3.2.1" />
+        <PackageReference Include="FluentMigrator.Runner" Version="3.2.1" />
+        <PackageReference Include="FluentMigrator.Runner.MySql" Version="3.2.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="init.sql"/>
-        <EmbeddedResource Include="Migrations\Mig0028UpdateItemTemplateActionsItemTemplateIdReferences.sql"/>
+        <EmbeddedResource Include="init.sql" />
+        <EmbeddedResource Include="Migrations\Mig0028UpdateItemTemplateActionsItemTemplateIdReferences.sql" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="LICENSES.md"/>
+        <Content Include="LICENSES.md" />
     </ItemGroup>
 </Project>

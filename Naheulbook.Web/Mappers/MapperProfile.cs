@@ -227,6 +227,9 @@ namespace Naheulbook.Web.Mappers
             CreateMap<MonsterTrait, MonsterTraitResponse>()
                 .ForMember(m => m.Levels, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<string>>(b.Levels)));
 
+            CreateMap<Npc, NpcResponse>()
+                .ForMember(m => m.Data, opt => opt.MapFrom(r => MapperHelpers.FromJson<NpcData>(r.Data)));
+
             CreateMap<SkillEffect, SkillEffectResponse>()
                 .ForMember(m => m.Type, opt => opt.MapFrom(x => "ADD"))
                 .ForMember(m => m.Stat, opt => opt.MapFrom(s => s.StatName));

@@ -97,5 +97,11 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
             });
             _testDataUtil.SaveChanges();
         }
+
+        [Given("a npc")]
+        public void GivenANpc()
+        {
+            _testDataUtil.AddNpc();
+        }
     }
 }

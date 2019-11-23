@@ -22,13 +22,15 @@ namespace Naheulbook.Web.Controllers
         private readonly IMonsterService _monsterService;
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
+        private readonly INpcService _npcService;
 
         public GroupsController(
             IGroupService groupService,
             ILootService lootService,
             IMonsterService monsterService,
             IEventService eventService,
-            IMapper mapper
+            IMapper mapper,
+            INpcService npcService
         )
         {
             _groupService = groupService;
@@ -36,6 +38,7 @@ namespace Naheulbook.Web.Controllers
             _monsterService = monsterService;
             _eventService = eventService;
             _mapper = mapper;
+            _npcService = npcService;
         }
 
         [HttpGet]
@@ -236,6 +239,7 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
+
         [HttpGet("{GroupId:int:min(1)}/monsters")]
         public async Task<ActionResult<List<MonsterResponse>>> GetMonsterListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
@@ -506,6 +510,50 @@ namespace Naheulbook.Web.Controllers
             catch (GroupDateNotSetException ex)
             {
                 throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+            }
+        }
+
+        [HttpGet("{GroupId:int:min(1)}/npcs")]
+        public async Task<ActionResult<List<NpcResponse>>> GetNpcsAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId
+        )
+        {
+            try
+            {
+                var npcs = await _npcService.LoadNpcsAsync(executionContext, groupId);
+                return _mapper.Map<List<NpcResponse>>(npcs);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+            }
+        }
+
+
+        [HttpPost("{GroupId:int:min(1)}/npcs")]
+        public async Task<CreatedActionResult<NpcResponse>> PostCreateNpcAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            CreateNpcRequest request
+        )
+        {
+            try
+            {
+                var npc = await _npcService.CreateNpcAsync(executionContext, groupId, request);
+                return _mapper.Map<NpcResponse>(npc);
             }
             catch (ForbiddenAccessException ex)
             {

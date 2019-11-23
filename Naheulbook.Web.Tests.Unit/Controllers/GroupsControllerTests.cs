@@ -24,6 +24,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         private IMonsterService _monsterService;
         private IEventService _eventService;
         private IMapper _mapper;
+        private INpcService _npcService;
         private NaheulbookExecutionContext _executionContext;
 
         private GroupsController _controller;
@@ -36,13 +37,15 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _monsterService = Substitute.For<IMonsterService>();
             _eventService = Substitute.For<IEventService>();
             _mapper = Substitute.For<IMapper>();
+            _npcService = Substitute.For<INpcService>();
 
             _controller = new GroupsController(
                 _groupService,
                 _lootService,
                 _monsterService,
                 _eventService,
-                _mapper
+                _mapper,
+                _npcService
             );
 
             _executionContext = new NaheulbookExecutionContext();
