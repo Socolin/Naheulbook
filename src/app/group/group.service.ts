@@ -13,8 +13,16 @@ import {Character, CharacterService} from '../character';
 import {NhbkDate, NhbkDateOffset} from '../date';
 import {Skill, SkillService} from '../skill';
 
-import {Group, GroupInviteResponse} from './group.model';
-import {CharacterSearchResponse, GroupResponse, GroupSummaryResponse, LootResponse} from '../api/responses';
+import {Group, GroupInviteResponse, Npc} from './group.model';
+import {
+    CharacterSearchResponse,
+    GroupResponse,
+    GroupSummaryResponse,
+    LootResponse,
+    NpcResponse
+} from '../api/responses';
+import {CreateNpcRequest} from '../api/requests';
+import {EditNpcRequest} from '../api/requests/edit-npc-request';
 
 @Injectable()
 export class GroupService {
@@ -197,5 +205,20 @@ export class GroupService {
 
     endCombat(groupId: number): Observable<void> {
         return this.httpClient.post<void>(`/api/v2/groups/${groupId}/endCombat`, {});
+    }
+
+    createNpc(groupId: number, request: CreateNpcRequest): Observable<Npc> {
+        return this.httpClient.post<NpcResponse>(`/api/v2/groups/${groupId}/npcs`, request)
+            .pipe(map((response) => Npc.fromResponse(response)));
+    }
+
+    getNpcs(groupId: number): Observable<Npc[]> {
+        return this.httpClient.get<NpcResponse[]>(`/api/v2/groups/${groupId}/npcs`)
+            .pipe(map(responses => Npc.fromResponses(responses)));
+    }
+
+    editNpc(npcId: number, request: EditNpcRequest): Observable<Npc> {
+        return this.httpClient.put<NpcResponse>(`/api/v2/npcs/${npcId}`, request)
+            .pipe(map(response => Npc.fromResponse(response)));
     }
 }

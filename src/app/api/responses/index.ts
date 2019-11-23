@@ -34,6 +34,7 @@ export * from './monster-response';
 export * from './monster-type-response';
 export * from './monster-template-response';
 export * from './monster-trait-response';
+export * from './npc-response';
 export * from './origin-response';
 export * from './random-character-name-response';
 export * from './skill-response';

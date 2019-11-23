@@ -89,6 +89,55 @@
             }
         }
     }
+
+    .npcs {
+        .npc {
+            display: grid;
+            grid-template-areas: "name name" "location origin" "note note";
+            grid-template-columns: 1fr 1fr;
+            padding: 4px 0 4px;
+            cursor: pointer;
+
+            @include for-phone-only {
+                grid-template-areas: "name" "location" "origin" "note";
+                grid-template-columns: 1fr;
+            }
+
+            .name {
+                grid-area: name;
+
+                display: grid;
+                grid-template-columns: 1fr auto;
+                align-items: center;
+                grid-column-gap: 8px;
+
+                font-weight: 500;
+            }
+
+            .location {
+                grid-area: location;
+
+                display: grid;
+                grid-template-columns: auto 1fr;
+                align-items: center;
+                grid-column-gap: 8px;
+            }
+
+            .origin {
+                grid-area: origin;
+
+                display: grid;
+                grid-template-columns: auto 1fr;
+                align-items: center;
+                grid-column-gap: 8px;
+            }
+
+            .note {
+                grid-area: note;
+                overflow: hidden;
+            }
+        }
+    }
 }
 
 

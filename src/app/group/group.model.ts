@@ -1,6 +1,6 @@
-import {Observable, Subscription, Subject} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 
-import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
+import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 
 import {Monster} from '../monster';
 import {Character} from '../character';
@@ -10,7 +10,8 @@ import {NEvent} from '../event';
 import {date2Timestamp} from '../date/util';
 import {TargetJsonData} from './target.model';
 import {FighterDurationChanges} from '../shared';
-import {DeleteInviteResponse, GroupResponse} from '../api/responses';
+import {DeleteInviteResponse, GroupResponse, NpcResponse} from '../api/responses';
+import {INpcData} from '../api/shared';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -816,6 +817,42 @@ export class Group extends WsRegistrable {
 
         this.eventAdded.unsubscribe();
         this.eventRemoved.unsubscribe();
+    }
+}
+
+export class NpcData implements INpcData {
+    public location?: string;
+    public note?: string;
+    public sex?: string;
+    public originName?: string;
+
+    static fromResponse(response: INpcData): NpcData {
+        const npcData = new NpcData();
+
+        npcData.location = response.location;
+        npcData.note = response.note;
+        npcData.sex = response.sex;
+        npcData.originName = response.originName;
+
+        return npcData;
+    }
+}
+
+export class Npc {
+    public id: number;
+    public name: string;
+    public data: NpcData;
+
+    static fromResponse(response: NpcResponse): Npc {
+        const npc = new Npc();
+        npc.data = NpcData.fromResponse(response.data);
+        npc.name = response.name;
+        npc.id = response.id;
+        return npc;
+    }
+
+    static fromResponses(responses: NpcResponse[]): Npc[] {
+        return responses.map(response => Npc.fromResponse(response));
     }
 }
 

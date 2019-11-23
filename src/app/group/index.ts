@@ -7,6 +7,7 @@ export * from './add-loot-dialog.component';
 export * from './create-gem-dialog.component';
 export * from './create-group.component';
 export * from './create-item-dialog.component';
+export * from './edit-npc-dialog.component';
 export * from './fighter-icon.component'
 export * from './fighter-panel.component'
 export * from './fighter-selector.component'

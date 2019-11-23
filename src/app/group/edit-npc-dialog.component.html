@@ -1,0 +1,46 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span *ngIf="data.npc">Edition d'un PNJ</span>
+    <span *ngIf="!data.npc">Création d'un PNJ</span>
+    <button mat-button (click)="valid()" [disabled]="!form.valid">
+        <ng-container *ngIf="data.npc">EDITER</ng-container>
+        <ng-container *ngIf="!data.npc">AJOUTER</ng-container>
+    </button>
+</mat-toolbar>
+<div class="content mat-typography" [formGroup]="form">
+    <div class="name">
+        <mat-form-field>
+            <input matInput placeholder="Nom" formControlName="name" required/>
+        </mat-form-field>
+        <button matSuffix mat-stroked-button (click)="openRandomNameGeneratorDialog()">
+            Générer
+        </button>
+    </div>
+    <ng-container formGroupName="data">
+        <mat-form-field>
+            <input matInput placeholder="Lieu" formControlName="location"/>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Origine" formControlName="originName"/>
+        </mat-form-field>
+        <mat-radio-group formControlName="sex" class="sex-selector">
+            <mat-radio-button name="sexe" [value]="undefined">
+                Non-défini
+            </mat-radio-button>
+            <mat-radio-button name="sexe" [value]="'Homme'">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-male" class="ra-mat-button-icon-24"></mat-icon>
+                Homme
+            </mat-radio-button>
+            <mat-radio-button name="sexe" [value]="'Femme'">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-female" class="ra-mat-button-icon-24"></mat-icon>
+                Femme
+            </mat-radio-button>
+        </mat-radio-group>
+        <mat-form-field>
+            <textarea matInput placeholder="Note" formControlName="note" cdkTextareaAutosize cdkAutosizeMinRows="1">
+            </textarea>
+        </mat-form-field>
+    </ng-container>
+</div>

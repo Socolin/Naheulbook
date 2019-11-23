@@ -29,7 +29,7 @@ import {ItemService} from '../item';
 import {ItemTemplate} from '../item-template';
 
 import {FighterSelectorComponent, FighterSelectorDialogData} from './fighter-selector.component';
-import {Fighter, Group, GroupInvite} from './group.model';
+import {Fighter, Group, GroupInvite, Npc} from './group.model';
 import {CharacterSheetDialogComponent} from './character-sheet-dialog.component';
 import {openCreateItemDialog} from './create-item-dialog.component';
 import {
@@ -43,6 +43,8 @@ import {
     DateSelectorDialogData,
     DateSelectorDialogResult
 } from '../date/date-selector-dialog.component';
+import {EditNpcDialogComponent, EditNpcDialogData, EditNpcDialogResult} from './edit-npc-dialog.component';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
     templateUrl: './group.component.html',
@@ -85,6 +87,8 @@ export class GroupComponent implements OnInit, OnDestroy {
     private routeSub: Subscription;
     private routeFragmentSub: Subscription;
     private groupNotificationSub: Subscription;
+
+    public npcs: Npc[] = [];
 
     constructor(
         private readonly route: ActivatedRoute,
@@ -375,18 +379,23 @@ export class GroupComponent implements OnInit, OnDestroy {
                             this.characterService.getCharacter(characterId).subscribe((character) => {
                                 this.group.addCharacter(character);
                             });
-                        })
+                        });
+                        this.groupService.getNpcs(id).subscribe((npcs) => {
+                            this.npcs = npcs;
+                        });
                     }
                 );
             }
         );
 
-        this.routeFragmentSub = this.route.fragment.subscribe(value => {
-            if (value) {
+        this.routeFragmentSub = this.route.fragment
+            .pipe(
+                filter(fragment => !!fragment),
+                map(fragment => fragment.indexOf('?') === -1 ? fragment : fragment.substring(0, fragment.indexOf('?')))
+            ).subscribe(value => {
                 this.currentTabIndex = this.getTabIndexFromHash(value);
                 this.currentTab = value;
-            }
-        });
+            });
     }
 
     openAddEffectDialog(effect?: Effect) {
@@ -518,5 +527,46 @@ export class GroupComponent implements OnInit, OnDestroy {
             }
             this.addTime(result.duration);
         });
+    }
+
+    openCreateNpcDialog() {
+        const dialogRef = this.dialog.openFullScreen<EditNpcDialogComponent, never, EditNpcDialogResult>(EditNpcDialogComponent);
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            this.groupService.createNpc(this.group.id, {
+                name: result.name,
+                data: result.data
+            }).subscribe((npc) => {
+                this.npcs.push(npc);
+            });
+        })
+    }
+
+    openEditNpcDialog(npc: Npc) {
+        const dialogRef = this.dialog.openFullScreen<EditNpcDialogComponent, EditNpcDialogData, EditNpcDialogResult>(
+            EditNpcDialogComponent,
+            {
+                data: {npc}
+            }
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            this.groupService.editNpc(npc.id, {
+                name: result.name,
+                data: result.data
+            }).subscribe((editedNpc) => {
+                let index = this.npcs.indexOf(editedNpc);
+                if (index !== -1) {
+                    this.npcs[index] = editedNpc;
+                }
+            });
+        })
     }
 }

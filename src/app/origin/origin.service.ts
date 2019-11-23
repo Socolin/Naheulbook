@@ -1,13 +1,15 @@
-import {forkJoin, Observable, ReplaySubject} from 'rxjs';
+import {forkJoin, Observable, of, ReplaySubject} from 'rxjs';
 
-import {map} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import {SkillDictionary, SkillService} from '../skill';
 import {Origin, OriginDictionary} from './origin.model';
-import {OriginResponse} from '../api/responses';
+import {OriginResponse, RandomCharacterNameResponse} from '../api/responses';
 import {NamesByNumericId} from '../shared/shared,model';
+import {Guid} from '../api/shared/util';
+import {CharacterSex} from '../api/shared/enums';
 
 @Injectable()
 export class OriginService {
@@ -60,5 +62,15 @@ export class OriginService {
             origins.map(o => originNamesById[o.id] = o.name);
             return originNamesById;
         }));
+    }
+
+    getRandomName(originId: Guid, sex: CharacterSex): Observable<string> {
+        return this.httpClient.get<RandomCharacterNameResponse>(`/api/v2/origins/${originId}/randomCharacterName`, {
+            params: {
+                sex: sex
+            }
+        }).pipe(
+            map((s) => s.name)
+        );
     }
 }

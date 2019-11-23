@@ -20,6 +20,7 @@ import {
     CreateGemDialogComponent,
     CreateGroupComponent,
     CreateItemDialogComponent,
+    EditNpcDialogComponent,
     FighterComponent,
     FighterIconComponent,
     FighterPanelComponent,
@@ -37,6 +38,7 @@ import {MonsterInventoryDialogComponent} from './monster-inventory-dialog.compon
 import {AddMonsterDialogComponent} from './add-monster-dialog.component';
 import {MonsterEditorComponent} from './monster-editor.component';
 import {GroupAddEffectDialogComponent} from './group-add-effect-dialog.component';
+import {MarkdownModule} from '../markdown/markdown.module';
 
 @NgModule({
     imports: [
@@ -54,7 +56,8 @@ import {GroupAddEffectDialogComponent} from './group-add-effect-dialog.component
         EventModule,
         UsefulDataModule,
         ItemModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MarkdownModule
     ],
     declarations: [
         CreateGroupComponent,
@@ -76,12 +79,14 @@ import {GroupAddEffectDialogComponent} from './group-add-effect-dialog.component
         AddMonsterDialogComponent,
         MonsterEditorComponent,
         GroupAddEffectDialogComponent,
+        EditNpcDialogComponent,
     ],
     entryComponents: [
         AddLootDialogComponent,
         CharacterSheetDialogComponent,
         CreateGemDialogComponent,
         CreateItemDialogComponent,
+        EditNpcDialogComponent,
         EditMonsterDialogComponent,
         FighterSelectorComponent,
         MonsterInventoryDialogComponent,

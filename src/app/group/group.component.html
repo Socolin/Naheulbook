@@ -208,6 +208,52 @@
                         </div>
                     </mat-card-content>
                 </mat-card>
+
+                <mat-card>
+                    <mat-card-title>
+                        PNJs
+                        <button mat-icon-button [matMenuTriggerFor]="npcActions">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+
+                        <mat-menu xPosition="before" #npcActions="matMenu">
+                            <button mat-menu-item (click)="openCreateNpcDialog()">
+                                <mat-icon>add</mat-icon>
+                                Ajouter un PNJ
+                            </button>
+                        </mat-menu>
+
+                    </mat-card-title>
+                    <mat-card-content class="mat-typography">
+                        <div class="npcs">
+                            <ng-container *ngFor="let npc of npcs">
+                                <div class="npc" mat-ripple (click)="openEditNpcDialog(npc)">
+                                    <div class="name">
+                                        {{npc.name}}
+                                        <ng-container [ngSwitch]="npc.data.sex">
+                                            <ng-template [ngSwitchCase]="'Homme'">
+                                                <mat-icon fontSet="game-icon" fontIcon="game-icon-male" class="ra-mat-button-icon-24"></mat-icon>
+                                            </ng-template>
+                                            <ng-template [ngSwitchCase]="'Femme'">
+                                                <mat-icon fontSet="game-icon" fontIcon="game-icon-female" class="ra-mat-button-icon-24"></mat-icon>
+                                            </ng-template>
+                                        </ng-container>
+                                    </div>
+                                    <div class="origin" *ngIf="npc.data.originName">
+                                        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-woman-elf-face"></mat-icon>
+                                        {{npc.data.originName}}
+                                    </div>
+                                    <div class="location" *ngIf="npc.data.location">
+                                        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-position-marker"></mat-icon>
+                                        {{npc.data.location}}
+                                    </div>
+                                    <div class="note" [innerHTML]="npc.data.note | markdown"></div>
+                                </div>
+                                <mat-divider></mat-divider>
+                            </ng-container>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
             </div>
         </mat-tab>
 

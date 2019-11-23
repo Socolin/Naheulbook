@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 
 import {getRandomInt} from '../shared/random';
 
-import {Origin, OriginSelectorComponent} from '../origin';
+import {Origin, OriginSelectorComponent, OriginService} from '../origin';
 import {Job, JobSelectorComponent, Speciality} from '../job';
 import {Skill} from '../skill';
 
@@ -101,6 +101,7 @@ export class CreateCharacterComponent implements OnInit {
 
     constructor(
         private readonly router: Router,
+        private readonly originService: OriginService,
         private readonly characterService: CharacterService,
     ) {
         this.setStep(0);
@@ -521,7 +522,7 @@ export class CreateCharacterComponent implements OnInit {
             return;
         }
         this.loadingRandomName = true;
-        this.characterService.getRandomName(this.selectedOrigin.id, this.sex).subscribe((name) => {
+        this.originService.getRandomName(this.selectedOrigin.id, this.sex).subscribe((name) => {
             this.name = name
         }, (err) => {
             this.loadingRandomName = false;

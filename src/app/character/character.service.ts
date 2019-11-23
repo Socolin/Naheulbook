@@ -21,10 +21,8 @@ import {
     CharacterResponse,
     CharacterSummaryResponse,
     DeleteInviteResponse,
-    ListActiveCharacterResponse,
-    RandomCharacterNameResponse
+    ListActiveCharacterResponse
 } from '../api/responses';
-import {CharacterSex} from '../api/shared/enums';
 import {CreateCustomCharacterRequest} from '../api/requests/create-custom-character-request';
 import {Guid} from '../api/shared/util';
 
@@ -170,13 +168,5 @@ export class CharacterService {
 
     createCustomCharacter(request: CreateCustomCharacterRequest): Observable<IMetadata> {
         return this.httpClient.post<IMetadata>('/api/v2/characters/custom', request);
-    }
-
-    getRandomName(originId: Guid, sex: CharacterSex) {
-        return this.httpClient.get<RandomCharacterNameResponse>(`/api/v2/origins/${originId}/randomCharacterName`, {
-            params: {
-                sex: sex
-            }
-        }).pipe(map((s) => s.name));
     }
 }
