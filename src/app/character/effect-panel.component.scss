@@ -16,6 +16,9 @@
             grid-template-areas: "toggle info actions";
             cursor: pointer;
 
+            -webkit-user-drag: none;
+            -webkit-tap-highlight-color: transparent;
+
             .toggle {
                 grid-area: toggle;
                 padding-right: 16px;
@@ -30,6 +33,9 @@
                 grid-template-columns: 1fr auto;
                 align-items: center;
                 grid-template-areas: "name duration";
+
+                -webkit-user-drag: none;
+                -webkit-tap-highlight-color: transparent;
 
                 .name {
                     grid-area: name;

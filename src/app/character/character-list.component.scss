@@ -1,21 +1,30 @@
-mat-card {
-    margin: 5px;
-}
+:host {
+    mat-card {
+        margin: 5px;
 
-mat-card.clickable {
-    cursor: pointer;
-}
-
-.create-character {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    > mat-icon {
-        margin-right: 8px;
+        -webkit-user-drag: none;
+        -webkit-tap-highlight-color: transparent;
     }
-}
 
-.loading-characters {
-    display: flex;
-    justify-content: space-around;
+    mat-progress-bar {
+        margin: 8px 0;
+    }
+
+    mat-card.clickable {
+        cursor: pointer;
+    }
+
+    .create-character {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        > mat-icon {
+            margin-right: 8px;
+        }
+    }
+
+    .loading-characters {
+        display: flex;
+        justify-content: space-around;
+    }
 }

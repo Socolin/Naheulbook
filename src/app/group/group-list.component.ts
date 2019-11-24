@@ -22,7 +22,7 @@ export class GroupListComponent implements OnInit {
     ) {
     }
 
-    selectGroup(group: Group) {
+    selectGroup(group: GroupSummaryResponse) {
         this.router.navigate(['/gm/group/', group.id]);
         return false;
     }

@@ -147,7 +147,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openSkillInfoDialog(skill: Skill) {
-        this.dialog.open(SkillInfoDialogComponent, {data: {skill}});
+        this.dialog.open(SkillInfoDialogComponent, {data: {skill}, autoFocus: false});
     }
 
     openChangeNameDialog() {

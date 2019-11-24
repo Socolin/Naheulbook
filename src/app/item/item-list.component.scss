@@ -19,6 +19,9 @@
             align-items: center;
             grid-template-columns: 32px 1fr minmax(0, auto);
 
+            -webkit-user-drag: none;
+            -webkit-tap-highlight-color: transparent;
+
             .name {
                 overflow: hidden;
                 white-space: nowrap;

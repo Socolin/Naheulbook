@@ -95,6 +95,9 @@
             margin-left: -16px;
             margin-right: -16px;
 
+            -webkit-user-drag: none;
+            -webkit-tap-highlight-color: transparent;
+
             @include for-phone-only {
                 grid-template-areas: "name" "location" "origin" "note";
                 grid-template-columns: 1fr;
