@@ -226,7 +226,7 @@
                     </mat-card-title>
                     <mat-card-content class="mat-typography">
                         <div class="npcs">
-                            <ng-container *ngFor="let npc of npcs">
+                            <ng-container *ngFor="let npc of npcs; let last=last">
                                 <div class="npc" mat-ripple (click)="openEditNpcDialog(npc)">
                                     <div class="name">
                                         {{npc.name}}
@@ -249,7 +249,7 @@
                                     </div>
                                     <div class="note" [innerHTML]="npc.data.note | markdown"></div>
                                 </div>
-                                <mat-divider></mat-divider>
+                                <mat-divider *ngIf="!last"></mat-divider>
                             </ng-container>
                         </div>
                     </mat-card-content>

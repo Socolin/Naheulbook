@@ -530,7 +530,10 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     openCreateNpcDialog() {
-        const dialogRef = this.dialog.openFullScreen<EditNpcDialogComponent, EditNpcDialogData, EditNpcDialogResult>(EditNpcDialogComponent, {data: {}});
+        const dialogRef = this.dialog.openFullScreen<EditNpcDialogComponent, EditNpcDialogData, EditNpcDialogResult>(
+            EditNpcDialogComponent,
+            {data: {}}
+        );
         dialogRef.afterClosed().subscribe((result) => {
             if (!result) {
                 return;

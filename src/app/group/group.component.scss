@@ -13,6 +13,10 @@
         min-height: calc(100vh - 16px - 56px - #{$padding-useful-data-button});
     }
 
+    mat-card {
+        margin: 2px;
+    }
+
     .loading {
         width: 100vw;
         height: 90vh;
@@ -53,18 +57,10 @@
                 align-items: center;
                 gap: 8px;
             }
-
-            mat-card {
-                margin-right: 5px;
-            }
         }
     }
 
     .characters-tab {
-        mat-card {
-            margin-bottom: 5px;
-        }
-
         mat-card-title {
             display: grid;
             grid-template-columns: 1fr 40px;
@@ -95,8 +91,10 @@
             display: grid;
             grid-template-areas: "name name" "location origin" "note note";
             grid-template-columns: 1fr 1fr;
-            padding: 4px 0 4px;
+            padding: 8px 24px;
             cursor: pointer;
+            margin-left: -16px;
+            margin-right: -16px;
 
             @include for-phone-only {
                 grid-template-areas: "name" "location" "origin" "note";
