@@ -69,7 +69,7 @@ export class CharacterItemDialogComponent implements OnInit {
                 }
             }
 
-            this.modifiers = [];
+            this.modifiers = modifiers;
         } else {
             this.modifiers = undefined;
         }
