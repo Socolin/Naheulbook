@@ -1,4 +1,4 @@
-import {from as observableFrom, forkJoin, ReplaySubject, Observable} from 'rxjs';
+import {forkJoin, from as observableFrom, Observable, ReplaySubject} from 'rxjs';
 
 import {map, withLatestFrom} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
@@ -6,14 +6,9 @@ import {HttpClient} from '@angular/common/http';
 
 import {Skill, SkillDictionary, SkillService} from '../skill';
 
-import {
-    ItemTemplate,
-    ItemTemplateSection,
-    ItemSlot,
-    ItemTemplateSubCategoryDictionary
-} from './item-template.model';
+import {ItemSlot, ItemTemplate, ItemTemplateSection, ItemTemplateSubCategoryDictionary} from './item-template.model';
 import {ItemSlotResponse, ItemTemplateResponse, ItemTemplateSectionResponse, ItemTypeResponse} from '../api/responses';
-import {ItemTemplateRequest} from '../api/requests/item-template-request';
+import {ItemTemplateRequest} from '../api/requests';
 import {Guid} from '../api/shared/util';
 
 @Injectable()

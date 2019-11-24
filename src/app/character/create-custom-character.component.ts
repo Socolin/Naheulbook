@@ -3,12 +3,11 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
-import {Job, JobService} from '../job';
+import {Job, JobService, Speciality} from '../job';
 import {Origin, OriginService} from '../origin';
 import {Skill, SkillService} from '../skill';
 import {CharacterService} from './character.service';
-import {Speciality} from '../job';
-import {CreateCustomCharacterRequest} from '../api/requests/create-custom-character-request';
+import {CreateCustomCharacterRequest} from '../api/requests';
 import {Guid} from '../api/shared/util';
 
 @Component({

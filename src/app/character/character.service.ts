@@ -13,8 +13,7 @@ import {Loot} from '../loot';
 
 import {Character, CharacterGiveDestination} from './character.model';
 import {IActiveStatsModifier} from '../api/shared';
-import {CreateCharacterRequest} from '../api/requests/create-character-request';
-import {CharacterLevelUpRequest} from '../api/requests';
+import {CharacterLevelUpRequest, CreateCharacterRequest, CreateCustomCharacterRequest} from '../api/requests';
 import {
     CharacterFoGmResponse,
     CharacterLevelUpResponse,
@@ -23,7 +22,6 @@ import {
     DeleteInviteResponse,
     ListActiveCharacterResponse
 } from '../api/responses';
-import {CreateCustomCharacterRequest} from '../api/requests/create-custom-character-request';
 import {Guid} from '../api/shared/util';
 
 @Injectable()

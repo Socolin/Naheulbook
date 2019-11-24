@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 
-import {getRandomInt} from '../shared/random';
+import {getRandomInt} from '../shared';
 
 import {Origin, OriginSelectorComponent, OriginService} from '../origin';
 import {Job, JobSelectorComponent, Speciality} from '../job';
@@ -11,7 +11,7 @@ import {CharacterService} from './character.service';
 import {SkillSelectorComponent} from './skill-selector.component';
 import {HttpErrorResponse} from '@angular/common/http';
 import {FormControl, Validators} from '@angular/forms';
-import {CreateCharacterRequest} from '../api/requests/create-character-request';
+import {CreateCharacterRequest} from '../api/requests';
 import {CharacterSex} from '../api/shared/enums';
 import {Guid} from '../api/shared/util';
 

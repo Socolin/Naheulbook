@@ -1,5 +1,4 @@
-
-import {forkJoin, of as observableOf, Observable, Subject, of} from 'rxjs';
+import {forkJoin, Observable, of as observableOf, of, Subject} from 'rxjs';
 
 import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
@@ -8,7 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {FighterDurationChanges, HistoryEntry} from '../shared';
 import {Monster} from '../monster';
 import {Loot} from '../loot';
-import {NEvent, EventService} from '../event';
+import {EventService, NEvent} from '../event';
 import {Character, CharacterService} from '../character';
 import {NhbkDate, NhbkDateOffset} from '../date';
 import {Skill, SkillService} from '../skill';
