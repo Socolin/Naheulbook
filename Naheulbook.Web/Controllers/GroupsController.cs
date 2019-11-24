@@ -547,7 +547,7 @@ namespace Naheulbook.Web.Controllers
         public async Task<CreatedActionResult<NpcResponse>> PostCreateNpcAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
-            CreateNpcRequest request
+            NpcRequest request
         )
         {
             try

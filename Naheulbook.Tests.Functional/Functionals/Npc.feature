@@ -46,3 +46,34 @@ Feature: Npc
     ]
     """
 
+  Scenario: Can edit npc
+    Given a JWT for a user
+    Given a group
+    And a npc
+
+    When performing a PUT to the url "/api/v2/npcs/${Npc.Id}" with the following json content and the current jwt
+    """
+    {
+      "name": "new-name",
+      "data": {
+        "note": "new-note",
+        "sex": "new-sex",
+        "location": "new-location",
+        "originName": "new-originName"
+      }
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${Npc.Id},
+      "name": "new-name",
+      "data": {
+        "note": "new-note",
+        "sex": "new-sex",
+        "location": "new-location",
+        "originName": "new-originName"
+      }
+    }
+    """
