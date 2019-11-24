@@ -28,9 +28,9 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public Task<Character> GetWithAllDataAsync(int id)
+        public async Task<Character> GetWithAllDataAsync(int id)
         {
-            return Context.Characters
+            var character = await Context.Characters
                 .Include(c => c.Modifiers)
                 .ThenInclude(c => c.Values)
                 .Include(c => c.Skills)
@@ -42,10 +42,17 @@ namespace Naheulbook.Data.Repositories
                 .ThenInclude(s => s.Speciality)
                 .ThenInclude(s => s.Modifiers)
                 .Include(c => c.Jobs)
-                .IncludeItemDetails(c => c.Items)
                 .Include(c => c.Invites)
                 .ThenInclude(i => i.Group)
                 .FirstOrDefaultAsync(x => x.Id == id);
+
+            await Context.Entry(character)
+                .Collection(c => c.Items)
+                .Query()
+                .IncludeItemTemplateDetails(c => c.ItemTemplate)
+                .LoadAsync();
+
+            return character;
         }
 
         public Task<Character> GetWithGroupAsync(int id)
