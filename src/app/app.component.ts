@@ -8,8 +8,9 @@ import {ThemeService} from './theme.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+    public initialized = false;
     constructor(
-        private readonly themeService: ThemeService,
+        private readonly themeService: ThemeService
     ) {
     };
 
