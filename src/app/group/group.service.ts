@@ -21,8 +21,7 @@ import {
     LootResponse,
     NpcResponse
 } from '../api/responses';
-import {CreateNpcRequest} from '../api/requests';
-import {EditNpcRequest} from '../api/requests/edit-npc-request';
+import {NpcRequest} from '../api/requests';
 
 @Injectable()
 export class GroupService {
@@ -207,7 +206,7 @@ export class GroupService {
         return this.httpClient.post<void>(`/api/v2/groups/${groupId}/endCombat`, {});
     }
 
-    createNpc(groupId: number, request: CreateNpcRequest): Observable<Npc> {
+    createNpc(groupId: number, request: NpcRequest): Observable<Npc> {
         return this.httpClient.post<NpcResponse>(`/api/v2/groups/${groupId}/npcs`, request)
             .pipe(map((response) => Npc.fromResponse(response)));
     }
@@ -217,7 +216,7 @@ export class GroupService {
             .pipe(map(responses => Npc.fromResponses(responses)));
     }
 
-    editNpc(npcId: number, request: EditNpcRequest): Observable<Npc> {
+    editNpc(npcId: number, request: NpcRequest): Observable<Npc> {
         return this.httpClient.put<NpcResponse>(`/api/v2/npcs/${npcId}`, request)
             .pipe(map(response => Npc.fromResponse(response)));
     }

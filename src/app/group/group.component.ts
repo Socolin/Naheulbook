@@ -530,7 +530,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     openCreateNpcDialog() {
-        const dialogRef = this.dialog.openFullScreen<EditNpcDialogComponent, never, EditNpcDialogResult>(EditNpcDialogComponent);
+        const dialogRef = this.dialog.openFullScreen<EditNpcDialogComponent, EditNpcDialogData, EditNpcDialogResult>(EditNpcDialogComponent, {data: {}});
         dialogRef.afterClosed().subscribe((result) => {
             if (!result) {
                 return;
@@ -562,7 +562,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                 name: result.name,
                 data: result.data
             }).subscribe((editedNpc) => {
-                let index = this.npcs.indexOf(editedNpc);
+                let index = this.npcs.indexOf(npc);
                 if (index !== -1) {
                     this.npcs[index] = editedNpc;
                 }
