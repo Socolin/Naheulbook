@@ -86,7 +86,6 @@ export class UsefulDataComponent implements OnInit, OnDestroy {
                 return;
             }
             if (result.openPanel) {
-                dialogRef.afterClosed()
                 setTimeout(() => this.openPanel(result.openPanel!.panelName, result.openPanel!.arg), 100)
             }
             if (result.action) {
