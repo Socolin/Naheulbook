@@ -225,10 +225,16 @@ export class MapMarkerPoint extends MapMarkerBase {
     }
 
     public setMarkerEditable(editable: boolean): void {
+        if (!this.leafletMarker) {
+            return;
+        }
+        if (!this.leafletMarker!.dragging) {
+            return;
+        }
         if (editable) {
-            this.leafletMarker!.dragging!.enable();
+            this.leafletMarker.dragging.enable();
         } else {
-            this.leafletMarker!.dragging!.disable();
+            this.leafletMarker.dragging.disable();
         }
     }
 

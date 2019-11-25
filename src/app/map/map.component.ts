@@ -20,6 +20,7 @@ import {
     MapLayer,
     MapMarker,
     MapMarkerArea,
+    MapMarkerBase,
     MapMarkerCircle,
     MapMarkerLink,
     MapMarkerPoint,
@@ -97,7 +98,6 @@ export class MapComponent implements OnInit, OnDestroy {
     public  measureLine?: L.Polyline;
     public  measureLineStroke?: L.Polyline;
 
-    private focusMarker?: MapMarker;
     private tileLayer: L.Layer;
 
     public markerIcons: { [name: string]: L.Icon } = markerIcons;
@@ -169,19 +169,21 @@ export class MapComponent implements OnInit, OnDestroy {
                 this.selectLayer(undefined);
                 this.gridDraggable = undefined;
                 this.isGridDraggable = false;
-                this.createLeafletMap();
 
+                let target: MapMarker | {x: number, y: number, z: number} | undefined = undefined;
                 const targetMarkerId = this.route.snapshot.queryParamMap.get('targetMarkerId');
                 if (targetMarkerId) {
-                    this.focusMarker = this.map.layers
+                    target = this.map.layers
                         .reduce((markers: MapMarker[], l) => markers.concat(l.markers), [])
                         .find(m => m.id === +targetMarkerId);
                 } else if (paramMap.has('x') && paramMap.has('y') && paramMap.has('z')) {
                     const x = +paramMap.get('x')!;
                     const y = +paramMap.get('y')!;
                     const z = +paramMap.get('z')!;
-                    this.goToCoordinate(x, y, z);
+                    target = {x, y, z};
                 }
+
+                this.createLeafletMap(target);
 
                 this.map$.next(mapInfo);
             })
@@ -204,11 +206,6 @@ export class MapComponent implements OnInit, OnDestroy {
                     removedMarkers.forEach(m => m.remove());
                 });
                 addedMarkers.forEach(m => this.addMarkerToMap(m));
-
-                if (this.focusMarker) {
-                    this.goToMarker(this.focusMarker);
-                    this.focusMarker = undefined;
-                }
             })
         );
     }
@@ -245,7 +242,7 @@ export class MapComponent implements OnInit, OnDestroy {
         }
     }
 
-    private createLeafletMap() {
+    private createLeafletMap(target: MapMarker | {x: number, y: number, z: number} | undefined) {
         if (this.gridLayer) {
             this.gridLayer.remove();
             this.gridLayer = undefined;
@@ -292,8 +289,17 @@ export class MapComponent implements OnInit, OnDestroy {
 
             leafletMap.setMinZoom(0);
             leafletMap.setMaxZoom(this.map.imageData.zoomCount + this.map.imageData.extraZoomCount);
-            leafletMap.setView(this.map.getCenter(), 1);
             leafletMap.invalidateSize({});
+            if (!target) {
+                leafletMap.setView(this.map.getCenter(), 1);
+            } else if (target instanceof MapMarkerBase) {
+                target.initMarker(leafletMap, () => {});
+                this.goToMarker(target);
+                target.remove();
+            } else {
+                this.goToCoordinate(target.x, target.y, target.z);
+            }
+            this.updateCoordinateInUrl();
         });
     }
 
@@ -744,7 +750,7 @@ export class MapComponent implements OnInit, OnDestroy {
     goToMap(targetMapId: number, targetMapMarkerId?: number) {
         const pixelCoords = this.map!.latLngToPixelCoords(this.leafletMap.getCenter());
         this.router.navigate([this.leafletMap.getZoom(), pixelCoords.x, pixelCoords.y], {relativeTo: this.route.parent, }).then(() => {
-            this.router.navigate(['/map', targetMapId], {queryParams: {targetMarkerId: targetMapMarkerId}});
+            this.router.navigate(['/map/', targetMapId, 0, 0, 0], {queryParams: {targetMarkerId: targetMapMarkerId}});
         });
         this.infoSidenav.close();
     }
