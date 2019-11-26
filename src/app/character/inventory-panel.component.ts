@@ -207,17 +207,19 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
                 this.character.onUpdateItem.bind(this.character)
             );
         }));
-            this.subscription.add(this.itemActionService.registerAction('use_charge').subscribe(event => {
+        this.subscription.add(this.itemActionService.registerAction('use_charge').subscribe(event => {
             let item = event.item;
-            if (item.data.charge == null) {
+            if (item.data.charge === undefined) {
                 item.data.charge = item.template.data.charge;
             }
             if (!item.data.charge) {
                 throw new Error('Cannot use charge on item with no defined charge. itemId: ' + item.id);
             }
-            this.itemService.useItemCharge(item.id).subscribe(
-                this.character.onUpdateItem.bind(this.character)
-            );
+            this.itemService.useItemCharge(item.id).subscribe((partialItem) => {
+                if (this.character.items.findIndex(i => i.id === partialItem.id) !== -1) {
+                    this.character.onUpdateItem(partialItem);
+                }
+            });
         }));
         this.subscription.add(this.itemActionService.registerAction('move_to_container').subscribe(event => {
             let eventData = event.data;
