@@ -90,7 +90,7 @@ namespace Naheulbook.Core.Utils
                     originalItem.LootId = null;
                     originalItem.ContainerId = null;
                     _itemDataUtil.ResetReadCount(originalItem);
-                    _itemDataUtil.UpdateEquipItem(originalItem, null);
+                    _itemDataUtil.UnEquipItem(originalItem);
 
                     takenItem = originalItem;
 

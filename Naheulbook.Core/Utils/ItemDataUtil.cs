@@ -17,6 +17,7 @@ namespace Naheulbook.Core.Utils
         void UpdateChargeCount(Item item, int newChargeCount);
         void UpdateRelativeChargeCount(Item item, int change);
         void ResetReadCount(Item item);
+        void UnEquipItem(Item item);
     }
 
     /// <summary>
@@ -104,6 +105,11 @@ namespace Naheulbook.Core.Utils
         public void ResetReadCount(Item item)
         {
             UpdateData(item, (itemData) => itemData.ReadCount = 0);
+        }
+
+        public void UnEquipItem(Item item)
+        {
+            UpdateData(item, (itemData => itemData.Equipped = null));
         }
 
         private void UpdateData(Item item, Action<ItemData> action)
