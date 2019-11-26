@@ -100,10 +100,10 @@
 							Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
 						</ng-template>
 						<ng-template [ngSwitchCase]="'IDENTIFY'">
-							Identification de l'objet: {{log.item.data.name}}
+							Identification de l'objet: {{log.item?.data?.name}}
 						</ng-template>
 						<ng-template [ngSwitchCase]="'LOOT_ITEM'">
-							Loot de l'objet: {{log.item.data.name}}
+							Loot de l'objet: {{log.item?.data?.name}}
 						</ng-template>
 						<ng-template ngSwitchDefault>{{log.action}}</ng-template>
 					</span>
