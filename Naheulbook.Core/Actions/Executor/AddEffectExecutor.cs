@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
@@ -46,48 +47,42 @@ namespace Naheulbook.Core.Actions.Executor
             var timeDuration = effect.TimeDuration;
             var duration = effect.Duration;
             var lapCount = effect.LapCount;
-            var durationType = action.Data.EffectData.Value<string>("durationType");
 
-            switch (durationType)
+            var customDurationType = action.Data.EffectData.Value<string>("durationType");
+            if (customDurationType != null)
             {
-                case "combat":
-                    timeDuration = null;
-                    duration = null;
-                    combatCount = action.Data.EffectData.Value<int?>("combatCount");
-                    lapCount = null;
-                    break;
-                case "time":
-                    combatCount = null;
-                    duration = null;
-                    timeDuration = action.Data.EffectData.Value<int?>("timeDuration");
-                    lapCount = null;
-                    break;
-                case "custom":
-                    combatCount = null;
-                    duration = action.Data.EffectData.Value<string>("duration");
-                    timeDuration = null;
-                    lapCount = null;
-                    break;
-                case "lap":
-                    combatCount = null;
-                    duration = null;
-                    timeDuration = null;
-                    lapCount = action.Data.EffectData.Value<int?>("lapCount");
-                    break;
-                case "forever":
-                    combatCount = null;
-                    duration = null;
-                    timeDuration = null;
-                    lapCount = null;
-                    break;
+                timeDuration = null;
+                duration = null;
+                combatCount = null;
+                lapCount = null;
+                switch (customDurationType)
+                {
+                    case "combat":
+                        combatCount = action.Data.EffectData.Value<int?>("combatCount");
+                        break;
+                    case "time":
+                        timeDuration = action.Data.EffectData.Value<int?>("timeDuration");
+                        break;
+                    case "custom":
+                        duration = action.Data.EffectData.Value<string>("duration");
+                        break;
+                    case "lap":
+                        lapCount = action.Data.EffectData.Value<int?>("lapCount");
+                        break;
+                    case "forever":
+                        break;
+                    default:
+                        throw new InvalidCustomDurationActionException(customDurationType);
+                }
             }
+
 
 
             var characterModifier = new CharacterModifier
             {
                 Name = effect.Name,
                 Permanent = false,
-                DurationType = durationType,
+                DurationType = customDurationType ?? effect.DurationType,
                 Duration = duration,
                 Type = effect.SubCategory.Name,
                 Description = effect.Description,
