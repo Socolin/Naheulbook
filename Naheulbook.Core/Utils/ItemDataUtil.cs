@@ -104,7 +104,7 @@ namespace Naheulbook.Core.Utils
 
         public void ResetReadCount(Item item)
         {
-            UpdateData(item, (itemData) => itemData.ReadCount = 0);
+            UpdateData(item, (itemData) => itemData.ReadCount = null);
         }
 
         public void UnEquipItem(Item item)
