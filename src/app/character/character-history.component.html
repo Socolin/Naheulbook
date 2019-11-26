@@ -46,7 +46,7 @@
 							Lecture du livre: {{log.item?.data?.name}}
 						</ng-template>
 						<ng-template [ngSwitchCase]="'DELETE_ITEM'">
-							Suppression de l'objet: {{log.item.data.name}}
+							Suppression de l'objet: {{log.item?.data?.name}}
 						</ng-template>
 						<ng-template [ngSwitchCase]="'APPLY_EFFECT'">
 							Ajout de l'effet: {{log.effect.name}}
@@ -76,7 +76,7 @@
 							Utilisation de charge: {{log.item?.data?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
 						</ng-template>
 						<ng-template [ngSwitchCase]="'REMOVE_EFFECT'">
-							Suppression de l'effet: {{log.effect.name}}
+							Suppression de l'effet: {{log.effect?.name}}
 						</ng-template>
 						<ng-template [ngSwitchCase]="'ADD_XP'">
 							Ajout d'experience: {{log.info}}
