@@ -63,17 +63,24 @@ export class NhbkErrorHandler extends ErrorHandler {
         }
 
         if (environment.production) {
-            const eventId = Sentry.captureException(error.originalError || error);
-            Sentry.showReportDialog({
-                eventId,
-                lang: 'fr',
-                user: {
-                    name: 'Nobody',
-                    email: 'nobody@nobody.com'
-                },
-                title: 'Échec Critique',
-                subtitle: 'Une erreur est survenue, les informations de l\'erreur ont été enregistré pour pouvoir la corriger.'
-            });
+            try {
+                const eventId = Sentry.captureException(error.originalError || error);
+                Sentry.showReportDialog({
+                    eventId,
+                    lang: 'fr',
+                    user: {
+                        name: 'Nobody',
+                        email: 'nobody@nobody.com'
+                    },
+                    title: 'Échec Critique',
+                    subtitle: 'Une erreur est survenue, les informations de l\'erreur ont été enregistré pour pouvoir la corriger.'
+                });
+            } catch (e) {
+                console.error(error);
+                console.error(e);
+                Sentry.captureException(new Error(`An error occured while logging another error.\n`
+                    + ` OriginalError message: ${(error.originalError || error).message}, sentry error: ${e.message}`));
+            }
         }
     }
 }
