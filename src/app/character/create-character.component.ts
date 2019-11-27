@@ -333,7 +333,7 @@ export class CreateCharacterComponent implements OnInit {
 
     initMove1PointStatValues() {
         this.move1PointStatValues = {'cou': 0, 'int': 0, 'cha': 0, 'ad': 0, 'fo': 0};
-        this.modifiedStat['MOVE_1_POINT_STAT'] = {};
+        delete this.modifiedStat['MOVE_1_POINT_STAT'];
     }
 
     hasMove1PointStat() {
