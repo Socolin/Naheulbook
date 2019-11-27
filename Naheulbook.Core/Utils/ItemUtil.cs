@@ -86,6 +86,7 @@ namespace Naheulbook.Core.Utils
                     }
 
                     originalItem.Character = targetCharacter;
+                    originalItem.CharacterId = targetCharacter.Id;
                     originalItem.MonsterId = null;
                     originalItem.LootId = null;
                     originalItem.ContainerId = null;
@@ -103,8 +104,10 @@ namespace Naheulbook.Core.Utils
                 else
                 {
                     var splitItem = SplitItem(originalItem, quantity.Value);
-                    splitItem.Character = targetCharacter;
                     uow.Items.Add(splitItem);
+                    await uow.SaveChangesAsync();
+
+                    splitItem.Character = targetCharacter;
 
                     takenItem = splitItem;
                     remainingQuantity = originalItemData.Quantity.Value;
