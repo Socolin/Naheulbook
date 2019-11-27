@@ -182,8 +182,8 @@
                         Poids:
                     </span>
                     <span *ngIf="data.item.template.data.weight < 1">{{(data.item.template.data.weight * 1000) | number:'1.0-3'}} g</span>
-                    <span *ngIf="data.item.template.data.weight >= 1">{{(data.item.template.data.weight)  | number:'1.3-3'}} Kg</span>
-                    <span *ngIf="data.item.data.quantity">Total: {{data.item.data.quantity * data.item.template.data.weight | number:'1.3-3'}} Kg</span>
+                    <span *ngIf="data.item.template.data.weight >= 1">{{(data.item.template.data.weight)  | number:'1.0-3'}} Kg</span>
+                    <span *ngIf="data.item.data.quantity">Total: {{data.item.data.quantity * data.item.template.data.weight | number:'1.0-3'}} Kg</span>
                 </div>
             </div>
             <div class="icon-label" *ngIf="data.item.template.data.useUG">

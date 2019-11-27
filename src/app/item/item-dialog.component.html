@@ -130,15 +130,15 @@
                 <div>
                     Poids:
                     <span *ngIf="item.template.data.weight < 1">{{(item.template.data.weight * 1000) | number:'1.0-3'}} g</span>
-                    <span *ngIf="item.template.data.weight >= 1">{{(item.template.data.weight)  | number:'1.3-3'}} Kg</span>
-                    <span *ngIf="item.data.quantity">Total: {{item.data.quantity * item.template.data.weight | number:'1.3-3'}} Kg</span>
+                    <span *ngIf="item.template.data.weight >= 1">{{(item.template.data.weight)  | number:'1.0-3'}} Kg</span>
+                    <span *ngIf="item.data.quantity">Total: {{item.data.quantity * item.template.data.weight | number:'1.0-3'}} Kg</span>
                 </div>
             </div>
             <div class="icon-label" *ngIf="item.template.data.useUG">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-scales" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
                     <div>U.G: {{item.data.ug}}</div>
-                    <div>Poids: {{item.data.ug * item.template.data.weight * 1000  | number:'1.3-3' }} g</div>
+                    <div>Poids: {{item.data.ug * item.template.data.weight * 1000  | number:'1.0-3' }} g</div>
                 </div>
             </div>
 
