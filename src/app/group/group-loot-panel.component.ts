@@ -35,6 +35,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
 
     openAddItemDialog(target: Loot|Monster) {
         openCreateItemDialog(this.dialog, (item) => {
+            console.log(item);
             if (target instanceof Loot) {
                 this.onAddItem({loot: target, item: item});
             } else {

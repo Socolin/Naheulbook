@@ -8,9 +8,10 @@ import {ActiveStatsModifier} from '../shared';
 import {Skill, SkillService} from '../skill';
 
 import {Item, ItemData} from './item.model';
-import {ItemPartialResponse} from '../api/responses';
+import {ItemPartialResponse, ItemResponse} from '../api/responses';
 import {assertNever} from '../utils/utils';
 import {Guid} from '../api/shared/util';
+import {IItemData} from '../api/shared';
 
 export interface TakeItemResponse {
     takenItem: ItemData;
@@ -80,7 +81,7 @@ export class ItemService {
                 this.skillService.getSkillsById()
             ]).subscribe(
                 ([itemJsonData, skillsById]: [Item, { [skillId: number]: Skill }]) => {
-                    let item = Item.fromJson(itemJsonData, skillsById);
+                    let item = Item.fromResponse(itemJsonData, skillsById);
                     observer.next(item);
                     observer.complete();
                 },
@@ -116,13 +117,13 @@ export class ItemService {
             }
 
             forkJoin([
-                this.httpClient.post(url, {
+                this.httpClient.post<ItemResponse>(url, {
                     subCategoryTechName
                 }),
                 this.skillService.getSkillsById()
             ]).subscribe(
-                ([itemJsonData, skillsById]: [Item, { [skillId: number]: Skill }]) => {
-                    let item = Item.fromJson(itemJsonData, skillsById);
+                ([itemJsonData, skillsById]) => {
+                    let item = Item.fromResponse(itemJsonData, skillsById);
                     observer.next(item);
                     observer.complete();
                 },
@@ -146,7 +147,7 @@ export class ItemService {
         });
     }
 
-    updateItem(itemId: number, itemData: ItemData): Observable<ItemPartialResponse> {
+    updateItem(itemId: number, itemData: IItemData): Observable<ItemPartialResponse> {
         return this.httpClient.put<ItemPartialResponse>(`/api/v2/items/${itemId}/data`, itemData);
     }
 

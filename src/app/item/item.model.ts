@@ -1,9 +1,10 @@
 import {ActiveStatsModifier, DurationChange, IMetadata} from '../shared';
 import {ItemTemplate} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
-import {Skill} from '../skill';
+import {Skill, SkillDictionary} from '../skill';
 import {Fighter} from '../group';
 import {IDurable, IItemData} from '../api/shared';
+import {ItemResponse} from '../api/responses';
 
 export class ItemData implements IItemData {
     name: string;
@@ -63,21 +64,17 @@ export class Item {
     content?: Item[];
     containerInfo?: IMetadata;
 
-    static fromJson(jsonData: any, skillsById: {[skillId: number]: Skill}): Item {
+    static fromResponse(response: ItemResponse, skillsById: SkillDictionary): Item {
         let item = new Item();
-        Object.assign(item, jsonData, {
-            template: ItemTemplate.fromResponse(jsonData.template, skillsById),
-            modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers)
+        Object.assign(item, response, {
+            template: ItemTemplate.fromResponse(response.template, skillsById),
+            modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers)
         });
         return item;
     }
 
-    static itemsFromJson(itemsData: object[], skillsById: {[skillId: number]: Skill}): Item[] {
-        let items: Item[] = [];
-        for (let i = 0; i < itemsData.length; i++) {
-            items.push(Item.fromJson(itemsData[i], skillsById));
-        }
-        return items;
+    static itemsFromJson(responses: ItemResponse[], skillsById: SkillDictionary): Item[] {
+        return responses.map(response => Item.fromResponse(response, skillsById));
     }
 
     updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): DurationChange[] {

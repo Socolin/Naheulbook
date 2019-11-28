@@ -1,14 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {Item} from './item.model';
+import {Item, ItemData} from './item.model';
 import {forkJoin} from 'rxjs';
 import {ItemTemplateSubCategory, ItemTemplateService} from '../item-template';
 import {God, MiscService} from '../shared';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
+import {ItemService} from './item.service';
 
 export interface ItemDialogData {
-    item: Item;
+    readonly item: Item;
 }
 
 @Component({
@@ -31,8 +32,18 @@ export class ItemDialogComponent implements OnInit {
         private readonly originService: OriginService,
         private readonly itemTemplateService: ItemTemplateService,
         private readonly miscService: MiscService,
+        private readonly itemService: ItemService,
         @Inject(MAT_DIALOG_DATA) public readonly data: ItemDialogData
     ) {
+    }
+
+    updateItemQuantity(newQuantity: number) {
+        this.itemService.updateItem(this.data.item.id, {
+            ...this.data.item.data,
+            quantity: newQuantity
+        }).subscribe((item) => {
+            this.data.item.data = {...item.data}
+        });
     }
 
     ngOnInit() {

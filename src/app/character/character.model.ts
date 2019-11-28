@@ -281,7 +281,7 @@ export class Character extends WsRegistrable {
         character.origin = origin;
         character.jobs = response.jobIds.map(jobId => jobs.find(j => j.id === jobId)!).filter(job => !!job);
         character.skills = response.skillIds.map(skillId => skillsById[skillId]).filter(skill => !!skill);
-        character.items = response.items.map(itemResponse => Item.fromJson(itemResponse, skillsById));
+        character.items = response.items.map(itemResponse => Item.fromResponse(itemResponse, skillsById));
 
         return character;
     }
@@ -1476,7 +1476,7 @@ export class Character extends WsRegistrable {
             }
             case 'addItem': {
                 services.skill.getSkillsById().subscribe(skillsById => {
-                    this.onAddItem(Item.fromJson(data, skillsById));
+                    this.onAddItem(Item.fromResponse(data, skillsById));
                 });
                 break;
             }

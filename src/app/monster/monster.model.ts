@@ -378,7 +378,7 @@ export class Monster extends WsRegistrable {
         switch (opcode) {
             case 'addItem': {
                 services.skill.getSkillsById().subscribe(skillsById => {
-                    this.addItem(Item.fromJson(data, skillsById));
+                    this.addItem(Item.fromResponse(data, skillsById));
                 });
                 break;
             }

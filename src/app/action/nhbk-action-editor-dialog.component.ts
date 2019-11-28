@@ -1,5 +1,5 @@
 import {map} from 'rxjs/operators';
-import {Component, EventEmitter, Inject, Input, Output} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {NhbkAction, NhbkActionFactory, NhbkActionType} from './nhbk-action.model';
 import {Observable} from 'rxjs';
 
