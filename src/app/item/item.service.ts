@@ -74,13 +74,13 @@ export class ItemService {
                     throw new Error('Waiting for asserts');
             }
             forkJoin([
-                this.httpClient.post(url, {
+                this.httpClient.post<ItemResponse>(url, {
                     itemTemplateId: itemTemplateId,
                     itemData: itemData
                 }),
                 this.skillService.getSkillsById()
             ]).subscribe(
-                ([itemJsonData, skillsById]: [Item, { [skillId: number]: Skill }]) => {
+                ([itemJsonData, skillsById]) => {
                     let item = Item.fromResponse(itemJsonData, skillsById);
                     observer.next(item);
                     observer.complete();
