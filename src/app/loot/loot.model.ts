@@ -4,9 +4,9 @@ import {IMetadata} from '../shared';
 import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
 
 import {SkillDictionary} from '../skill';
-import {Item, PartialItem} from '../item';
+import {Item, ItemData, PartialItem} from '../item';
 import {Monster} from '../monster';
-import {LootResponse} from '../api/responses';
+import {ItemPartialResponse, LootResponse} from '../api/responses';
 
 export class LootTookItemMsg {
     originalItem: PartialItem;
@@ -208,11 +208,24 @@ export class Loot extends WsRegistrable {
                 this.visibleForPlayer = data;
                 break;
             }
+            case 'updateItem': {
+                this.onUpdateItem(data);
+                break;
+            }
             case 'tookItem': {
                 this.takeItem(data.originalItem.id, data.remainingQuantity, data.character);
                 break;
             }
         }
+    }
+
+    onUpdateItem(partialItem: ItemPartialResponse): void {
+        let currentItem = this.items.find(i => i.id === partialItem.id);
+        if (!currentItem) {
+            return;
+        }
+
+        currentItem.data = new ItemData(partialItem.data);
     }
 
     public dispose() {

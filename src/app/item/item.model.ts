@@ -18,6 +18,12 @@ export class ItemData implements IItemData {
     notIdentified?: boolean;
     ignoreRestrictions?: boolean;
     lifetime?: IDurable;
+
+    constructor(data?: IItemData) {
+        if (data) {
+            Object.assign(this, data);
+        }
+    }
 }
 
 export class ItemComputedData {
