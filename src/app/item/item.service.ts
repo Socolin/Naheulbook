@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http';
 
 import {ActiveStatsModifier} from '../shared';
 
-import {Skill, SkillService} from '../skill';
+import {SkillService} from '../skill';
 
 import {Item, ItemData} from './item.model';
 import {ItemPartialResponse, ItemResponse} from '../api/responses';

@@ -3,10 +3,12 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Item, ItemData} from './item.model';
 import {forkJoin} from 'rxjs';
 import {ItemTemplateSubCategory, ItemTemplateService} from '../item-template';
-import {God, MiscService} from '../shared';
+import {God, IconSelectorComponent, IconSelectorComponentDialogData, MiscService} from '../shared';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
 import {ItemService} from './item.service';
+import {IconDescription} from '../shared/icon.model';
+import {NhbkMatDialog} from '../material-workaround';
 
 export interface ItemDialogData {
     readonly item: Item;
@@ -33,6 +35,7 @@ export class ItemDialogComponent implements OnInit {
         private readonly itemTemplateService: ItemTemplateService,
         private readonly miscService: MiscService,
         private readonly itemService: ItemService,
+        private readonly dialog: NhbkMatDialog,
         @Inject(MAT_DIALOG_DATA) public readonly data: ItemDialogData
     ) {
     }
@@ -44,6 +47,26 @@ export class ItemDialogComponent implements OnInit {
         }).subscribe((item) => {
             this.data.item.data = {...item.data}
         });
+    }
+
+    openSelectIconDialog() {
+        const dialogRef = this.dialog.open<IconSelectorComponent, IconSelectorComponentDialogData, IconDescription>(
+            IconSelectorComponent, {
+                data: {icon: this.data.item.data.icon}
+            }
+        );
+
+        dialogRef.afterClosed().subscribe((icon) => {
+            if (!icon) {
+                return;
+            }
+            this.itemService.updateItem(this.data.item.id, {
+                ...this.data.item.data,
+                icon: icon
+            }).subscribe((item) => {
+                this.data.item.data = {...item.data}
+            });
+        })
     }
 
     ngOnInit() {

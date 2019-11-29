@@ -1,6 +1,6 @@
 <mat-card>
     <mat-card-header>
-        <icon matCardAvatar [icon]="item.data.icon" [size]="'40px'"></icon>
+        <icon matRipple matCardAvatar [icon]="item.data.icon" [size]="'40px'" (click)="openSelectIconDialog()"></icon>
         <div>
             <mat-card-title>
                 <span *ngIf="item.template.data.quantifiable || item.data.quantity">
