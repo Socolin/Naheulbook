@@ -65,11 +65,10 @@
                     <button mat-raised-button (click)="randomMonsterInventory()">Random</button>
                 </h2>
                 <div *ngIf="items">
-                    <app-item-list actionIcon="visibility_on"
-                                   actionName="Non Identifié / Identifié"
-                                   [items]="items"
+                    <app-item-list [items]="items"
+                                   [itemsExistsOnServer]="false"
                                    (selectItem)="openItemTemplateDialog($event.template)"
-                                   (onAction)="toggleItemNotIdentified($event)">
+                                   (deleteItems)="removeItemsFromMonsterInventory($event)">
                     </app-item-list>
                 </div>
             </div>

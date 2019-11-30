@@ -53,10 +53,8 @@
             <mat-card-content>
                 <app-item-list
                     [items]="loot.items"
-                    [multiSelectActions]="['changeIcon', 'delete', 'rename']"
-                    (onAction)="removeItemFromLoot(loot, $event)"
-                    (selectItem)="openItemDialog($event)"
-                    (multiSelectAction)="onLootItemsAction(loot, $event)">
+                    (deleteItems)="removeItemsFromLoot(loot, $event)"
+                    (selectItem)="openItemDialog($event)">
                 </app-item-list>
 
                 <div class="loot-monsters" *ngFor="let monster of loot.monsters">
@@ -82,10 +80,8 @@
                     </div>
                     <app-item-list
                         [items]="monster.items"
-                        [multiSelectActions]="['changeIcon', 'delete', 'rename']"
-                        (onAction)="removeItemFromMonster(monster, $event)"
-                        (selectItem)="openItemDialog($event)"
-                        (multiSelectAction)="onMonsterItemsAction(monster, $event)">
+                        (deleteItems)="removeItemsFromMonster(monster, $event)"
+                        (selectItem)="openItemDialog($event)">
                     </app-item-list>
                 </div>
             </mat-card-content>

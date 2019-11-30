@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 
-import {Item, ItemData, ItemService} from '../item';
+import {Item, ItemService} from '../item';
 import {Loot, LootPanelComponent} from '../loot';
 import {Monster} from '../monster';
 
@@ -14,9 +14,6 @@ import {WebSocketService} from '../websocket';
 import {openCreateGemDialog} from './create-gem-dialog.component';
 import {ItemDialogComponent} from '../item/item-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
-import {MultiSelectItemActionsNames} from '../item/item-list.component';
-import {IconSelectorComponent, IconSelectorComponentDialogData} from '../shared';
-import {IconDescription} from '../shared/icon.model';
 
 @Component({
     selector: 'group-loot-panel',
@@ -132,20 +129,24 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         return false;
     }
 
-    removeItemFromLoot(loot: Loot, item: Item) {
-        this.itemService.deleteItem(item.id).subscribe(
-            () => {
-                loot.removeItem(item.id);
-            }
-        );
+    removeItemsFromLoot(loot: Loot, items: Item[]) {
+        for (const item of items) {
+            this.itemService.deleteItem(item.id).subscribe(
+                () => {
+                    loot.removeItem(item.id);
+                }
+            );
+        }
     }
 
-    removeItemFromMonster(monster: Monster, item: Item) {
-        this.itemService.deleteItem(item.id).subscribe(
-            () => {
-                monster.removeItem(item.id);
-            }
-        );
+    removeItemsFromMonster(monster: Monster, items: Item[]) {
+        for (const item of items) {
+            this.itemService.deleteItem(item.id).subscribe(
+                () => {
+                    monster.removeItem(item.id);
+                }
+            );
+        }
     }
 
     openItemDialog(item: Item) {
@@ -154,31 +155,6 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
             data: {item},
             autoFocus: false
         });
-    }
-
-
-    onLootItemsAction(loot: Loot, event: { action: MultiSelectItemActionsNames; items: Item[] }) {
-        switch (event.action) {
-            case 'delete':
-                for (let item of event.items) {
-                    this.removeItemFromLoot(loot, item);
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    onMonsterItemsAction(monster: Monster, event: { action: MultiSelectItemActionsNames; items: Item[] }) {
-        switch (event.action) {
-            case 'delete':
-                for (let item of event.items) {
-                    this.removeItemFromMonster(monster, item);
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     ngOnInit() {

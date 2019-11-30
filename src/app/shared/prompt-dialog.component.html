@@ -4,10 +4,10 @@
         {{data.text}}
     </p>
     <mat-form-field>
-        <input [placeholder]="data.placeholder" [ngModel]="data.initialValue" matInput #input/>
+        <input [placeholder]="data.placeholder" [ngModel]="data.initialValue" matInput #input (keydown.enter)="confirm(input.value)"/>
     </mat-form-field>
 </mat-dialog-content>
-<mat-dialog-actions align="=end">
+<mat-dialog-actions align="end">
     <button mat-button color="primary" mat-dialog-close>{{data.cancelText}}</button>
     <button mat-button color="primary" (click)="confirm(input.value)">{{data.confirmText}}</button>
 </mat-dialog-actions>

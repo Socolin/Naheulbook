@@ -167,16 +167,6 @@ export class AddMonsterDialogComponent implements OnInit {
         });
     }
 
-    toggleItemNotIdentified(item: Item) {
-        if (item.data.notIdentified) {
-            delete item.data.notIdentified;
-            item.data.name = item.template.name;
-        } else {
-            item.data.notIdentified = true;
-            item.data.name = item.template.data.notIdentifiedName || item.template.name;
-        }
-    }
-
     selectMonsterType(monsterType: MonsterTemplateType | 'none') {
         if (monsterType === 'none') {
             this.selectedMonsterType = undefined;
@@ -200,5 +190,14 @@ export class AddMonsterDialogComponent implements OnInit {
         this.monsterTemplateService.getMonsterTypes().subscribe(monsterTypes => {
             this.monsterTypes = monsterTypes;
         });
+    }
+
+    removeItemsFromMonsterInventory(items: Item[]) {
+        for (let item of items) {
+            let index = this.items.findIndex(x => x.id === item.id);
+            if (index !== -1) {
+                this.items.splice(index, 1);
+            }
+        }
     }
 }

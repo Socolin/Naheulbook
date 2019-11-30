@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Inventaire</h2>
 <mat-dialog-content>
     <app-item-list [items]="data.monster.items"
-                   (onAction)="removeItem($event)"
+                   (deleteItems)="removeItem($event)"
                    (selectItem)="openItemDialog($event)">
     </app-item-list>
 </mat-dialog-content>

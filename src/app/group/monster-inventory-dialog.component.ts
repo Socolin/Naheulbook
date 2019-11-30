@@ -23,12 +23,14 @@ export class MonsterInventoryDialogComponent {
     ) {
     }
 
-    removeItem(item: Item) {
-        this.itemService.deleteItem(item.id).subscribe(
-            () => {
-                this.data.monster.removeItem(item.id);
-            }
-        );
+    removeItem(items: Item[]) {
+        for (const item of items) {
+            this.itemService.deleteItem(item.id).subscribe(
+                () => {
+                    this.data.monster.removeItem(item.id);
+                }
+            );
+        }
     }
 
     openItemDialog(item: Item) {
