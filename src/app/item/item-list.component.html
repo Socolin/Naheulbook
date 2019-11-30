@@ -36,11 +36,11 @@
 <div *ngFor="let item of items" class="item separator with-selector">
     <mat-checkbox [checked]="!!selectedItemsByIds[item.id]" (change)="toggleSelectItem(item, $event.checked)"></mat-checkbox>
     <div class="info" (click)="selectItem.emit(item)" mat-ripple>
-        <icon [icon]="item.data.icon"></icon>
+        <icon [notIdentified]="item.data.notIdentified" [enchanted]="item.template.data.enchantment" [icon]="item.data.icon"></icon>
         <span class="name">
             <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
             {{item.data.name}}
-            <span *ngIf="item.data.notIdentified">({{item.template.name}})</span>
+            <span *ngIf="item.data.notIdentified && item.data.name !== item.template.name">({{item.template.name}})</span>
         </span>
         <span>
             <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
