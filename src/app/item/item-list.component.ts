@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {Item, ItemData} from './item.model';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {IconDescription} from '../shared/icon.model';
@@ -56,17 +56,7 @@ export class ItemListComponent {
             delete this.selectedItemsByIds[item.id];
         }
 
-        const selectedItemsIds = Object.keys(this.selectedItemsByIds);
-        if (selectedItemsIds.length === 0) {
-            this.selectAllCheckbox.checked = false;
-            this.selectAllCheckbox.indeterminate = false;
-        } else if (selectedItemsIds.length === this.items.length) {
-            this.selectAllCheckbox.checked = true;
-            this.selectAllCheckbox.indeterminate = false;
-        } else {
-            this.selectAllCheckbox.checked = true;
-            this.selectAllCheckbox.indeterminate = true;
-        }
+        this.updateSelectAllCheckboxState();
     }
 
     markItemsAsNotIdentified(items?: Item[]) {
@@ -132,6 +122,7 @@ export class ItemListComponent {
         for (let item of selectedItems) {
             delete this.selectedItemsByIds[item.id];
         }
+        this.updateSelectAllCheckboxState();
     }
 
     private updateItemsData(selectedItems, transformItemData: (item: Item) => IItemData) {
@@ -144,6 +135,20 @@ export class ItemListComponent {
             } else {
                 item.data = new ItemData(newItemData);
             }
+        }
+    }
+
+    private updateSelectAllCheckboxState() {
+        const selectedItemsIds = Object.keys(this.selectedItemsByIds);
+        if (selectedItemsIds.length === 0) {
+            this.selectAllCheckbox.checked = false;
+            this.selectAllCheckbox.indeterminate = false;
+        } else if (selectedItemsIds.length === this.items.length) {
+            this.selectAllCheckbox.checked = true;
+            this.selectAllCheckbox.indeterminate = false;
+        } else {
+            this.selectAllCheckbox.checked = true;
+            this.selectAllCheckbox.indeterminate = true;
         }
     }
 }
