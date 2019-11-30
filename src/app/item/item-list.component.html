@@ -1,4 +1,41 @@
-<div *ngFor="let item of items" class="item separator">
+<div *ngIf="multiSelectActions?.length && items?.length" class="multi-select-header separator">
+    <mat-checkbox #selectAllCheckbox (change)="toggleSelectAll($event.checked)"></mat-checkbox>
+    <ng-container *ngIf="selectAllCheckbox.checked">
+        <ng-container *ngFor="let multiSelectAction of multiSelectActions">
+            <button mat-icon-button
+                    [matTooltip]="multiSelectActionDefinitions[multiSelectAction].tooltip"
+                    *ngIf="!multiSelectActionDefinitions[multiSelectAction].label"
+                    (click)="executeMultiSelectAction(multiSelectAction)">
+                <mat-icon [fontSet]="multiSelectActionDefinitions[multiSelectAction].iconSet"
+                          [fontIcon]="multiSelectActionDefinitions[multiSelectAction].icon"
+                          class="ra-mat-button-icon-24">
+                    {{multiSelectActionDefinitions[multiSelectAction].materialIcon}}
+                </mat-icon>
+            </button>
+        </ng-container>
+        <button mat-icon-button [matMenuTriggerFor]="headerMenu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #headerMenu>
+            <ng-container *ngFor="let multiSelectAction of multiSelectActions">
+                <button mat-menu-item
+                        *ngIf="multiSelectActionDefinitions[multiSelectAction].label"
+                        (click)="executeMultiSelectAction(multiSelectAction)">
+                    <mat-icon [fontSet]="multiSelectActionDefinitions[multiSelectAction].iconSet"
+                              [fontIcon]="multiSelectActionDefinitions[multiSelectAction].icon"
+                              class="ra-mat-button-icon-24">
+                        {{multiSelectActionDefinitions[multiSelectAction].materialIcon}}
+                    </mat-icon>
+                    {{multiSelectActionDefinitions[multiSelectAction].label}}
+                </button>
+            </ng-container>
+        </mat-menu>
+    </ng-container>
+</div>
+<div *ngFor="let item of items" class="item separator" [class.with-selector]="multiSelectActions?.length">
+    <div *ngIf="multiSelectActions?.length" class="selector">
+        <mat-checkbox [checked]="!!selectedItemsByIds[item.id]" (change)="toggleSelectItem(item, $event.checked)"></mat-checkbox>
+    </div>
     <div class="info" (click)="selectItem.emit(item)" mat-ripple>
         <icon [icon]="item.data.icon"></icon>
         <span class="name">

@@ -1,6 +1,20 @@
 :host {
     display: block;
 
+    .multi-select-header {
+        height: 40px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+
+        > mat-checkbox {
+            padding-right: 12px;
+        }
+    }
+
     .item {
         position: relative;
         display: grid;
@@ -9,9 +23,17 @@
         grid-template-columns: 1fr 40px;
         grid-template-areas: "info action";
 
+        &.with-selector {
+            grid-template-columns: auto 1fr 40px;
+            grid-template-areas: "selector info action";
+        }
+
+        .selector {
+            grid-area: selector;
+        }
+
         .info {
-            margin: 0 8px;
-            padding: 4px 0;
+            padding: 4px 8px;
             cursor: pointer;
             grid-area: info;
             grid-column-gap: 8px;
