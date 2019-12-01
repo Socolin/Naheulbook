@@ -34,7 +34,7 @@
     </ng-container>
 </div>
 <div *ngFor="let item of items" class="item separator with-selector">
-    <mat-checkbox [checked]="!!selectedItemsByIds[item.id]" (change)="toggleSelectItem(item, $event.checked)"></mat-checkbox>
+    <mat-checkbox [checked]="selectedItems.indexOf(item) !== -1" (change)="toggleSelectItem(item, $event.checked)"></mat-checkbox>
     <div class="info" (click)="selectItem.emit(item)" mat-ripple>
         <icon [notIdentified]="item.data.notIdentified" [enchanted]="item.template.data.enchantment" [icon]="item.data.icon"></icon>
         <span class="name">
@@ -72,7 +72,7 @@
                 <mat-icon>visibility_off</mat-icon>
                 Non identifié
             </button>
-            <button mat-menu-item (click)="deleteItems.emit([item])">
+            <button mat-menu-item (click)="deleteSelectedItems([item])">
                 <mat-icon>delete</mat-icon>
                 Supprimer
             </button>

@@ -194,7 +194,7 @@ export class AddMonsterDialogComponent implements OnInit {
 
     removeItemsFromMonsterInventory(items: Item[]) {
         for (let item of items) {
-            let index = this.items.findIndex(x => x.id === item.id);
+            let index = this.items.findIndex(x => x === item);
             if (index !== -1) {
                 this.items.splice(index, 1);
             }

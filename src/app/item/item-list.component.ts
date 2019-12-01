@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {Item, ItemData} from './item.model';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {IconDescription} from '../shared/icon.model';
@@ -18,7 +18,7 @@ import {IItemData} from '../api/shared';
     templateUrl: './item-list.component.html',
     styleUrls: ['./item-list.component.scss']
 })
-export class ItemListComponent {
+export class ItemListComponent implements OnChanges {
     @Input()
     public items: Item[];
     @Input()
@@ -29,8 +29,8 @@ export class ItemListComponent {
     public deleteItems: EventEmitter<Item[]> = new EventEmitter<Item[]>();
 
     @ViewChild('selectAllCheckbox', {static: false})
-    private selectAllCheckbox: MatCheckbox;
-    public selectedItemsByIds: { [itemId: number]: Item } = {};
+    private selectAllCheckbox?: MatCheckbox;
+    public selectedItems: Item[] = [];
 
     constructor(
         private readonly itemService: ItemService,
@@ -38,29 +38,38 @@ export class ItemListComponent {
     ) {
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('items' in changes) {
+            this.toggleSelectAll(false);
+        }
+    }
+
     toggleSelectAll(checked: boolean) {
         if (checked) {
-            this.selectedItemsByIds = this.items.reduce((result, item) => {
-                result[item.id] = item;
-                return result
-            }, {});
+            this.selectedItems = [...this.items];
         } else {
-            this.selectedItemsByIds = {};
+            this.selectedItems = [];
         }
+        this.updateSelectAllCheckboxState();
     }
 
     toggleSelectItem(item: Item, checked: boolean) {
         if (checked) {
-            this.selectedItemsByIds[item.id] = item;
+            if (this.selectedItems.indexOf(item) === -1) {
+                this.selectedItems.push(item);
+            }
         } else {
-            delete this.selectedItemsByIds[item.id];
+            const index = this.selectedItems.indexOf(item);
+            if (index !== -1) {
+                this.selectedItems.splice(index, 1);
+            }
         }
 
         this.updateSelectAllCheckboxState();
     }
 
     markItemsAsNotIdentified(items?: Item[]) {
-        const selectedItems = items || Object.values(this.selectedItemsByIds);
+        const selectedItems = items || this.selectedItems;
         this.updateItemsData(selectedItems, (item => ({
             ...item.data,
             notIdentified: true,
@@ -69,7 +78,7 @@ export class ItemListComponent {
     }
 
     identifyItems(items?: Item[]) {
-        const selectedItems = items || Object.values(this.selectedItemsByIds);
+        const selectedItems = items || this.selectedItems;
         this.updateItemsData(selectedItems, item => {
             const newItemData = {
                 ...item.data,
@@ -81,7 +90,7 @@ export class ItemListComponent {
     }
 
     openSelectIconDialog(items?: Item[]): void {
-        const selectedItems = items || Object.values(this.selectedItemsByIds);
+        const selectedItems = items || this.selectedItems;
         const dialogRef = this.dialog.open<IconSelectorComponent, IconSelectorComponentDialogData, IconDescription>(
             IconSelectorComponent, {
                 data: {icon: selectedItems[0].data.icon}
@@ -97,7 +106,7 @@ export class ItemListComponent {
     }
 
     openRenameItemsDialog(items?: Item[]): void {
-        const selectedItems = items || Object.values(this.selectedItemsByIds);
+        const selectedItems = items || this.selectedItems;
         const dialogRef = this.dialog.open<PromptDialogComponent, PromptDialogData, PromptDialogResult>(
             PromptDialogComponent, {
                 data: {
@@ -117,10 +126,10 @@ export class ItemListComponent {
     }
 
     deleteSelectedItems(items?: Item[]) {
-        const selectedItems = items || Object.values(this.selectedItemsByIds);
+        const selectedItems = items || [...this.selectedItems];
         this.deleteItems.emit(selectedItems);
-        for (let item of selectedItems) {
-            delete this.selectedItemsByIds[item.id];
+        for (const item of selectedItems) {
+            this.toggleSelectItem(item, false);
         }
         this.updateSelectAllCheckboxState();
     }
@@ -139,11 +148,13 @@ export class ItemListComponent {
     }
 
     private updateSelectAllCheckboxState() {
-        const selectedItemsIds = Object.keys(this.selectedItemsByIds);
-        if (selectedItemsIds.length === 0) {
+        if (!this.selectAllCheckbox) {
+            return;
+        }
+        if (this.selectedItems.length === 0) {
             this.selectAllCheckbox.checked = false;
             this.selectAllCheckbox.indeterminate = false;
-        } else if (selectedItemsIds.length === this.items.length) {
+        } else if (this.selectedItems.length === this.items.length) {
             this.selectAllCheckbox.checked = true;
             this.selectAllCheckbox.indeterminate = false;
         } else {
