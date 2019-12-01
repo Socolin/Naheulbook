@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Naheulbook.Core.Models;
+using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Services;
 using Newtonsoft.Json;
@@ -12,11 +13,13 @@ namespace Naheulbook.Web.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly IJwtService _jwtService;
+        private readonly ITimeService _timeService;
 
-        public JwtAuthenticationMiddleware(RequestDelegate next, IJwtService jwtService)
+        public JwtAuthenticationMiddleware(RequestDelegate next, IJwtService jwtService, ITimeService timeService)
         {
             _next = next;
             _jwtService = jwtService;
+            _timeService = timeService;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -39,17 +42,23 @@ namespace Naheulbook.Web.Middlewares
 
             if (jwt != null)
             {
-                var userId = _jwtService.DecodeJwt(jwt);
-                if (userId == null)
+                var token = _jwtService.DecodeJwt(jwt);
+                if (token == null)
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Invalid JWT"}));
                     return;
                 }
+                if (token.Exp < _timeService.UtcNow.ToUnixTimeSeconds())
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Expired JWT"}));
+                    return;
+                }
 
                 context.SetExecutionContext(new NaheulbookExecutionContext
                 {
-                    UserId = userId.Value
+                    UserId = token.Sub
                 });
             }
 

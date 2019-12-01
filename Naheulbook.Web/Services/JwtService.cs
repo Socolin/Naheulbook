@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Jose;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
+using Naheulbook.Web.Models;
 using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Web.Services
@@ -11,7 +12,7 @@ namespace Naheulbook.Web.Services
     {
         string GenerateJwtToken(int userId);
 
-        int? DecodeJwt(string jwt);
+        JwtTokenPayload? DecodeJwt(string jwt);
     }
 
     public class JwtService : IJwtService
@@ -38,12 +39,11 @@ namespace Naheulbook.Web.Services
             return JWT.Encode(payload, Convert.FromBase64String(_configuration.JwtSigningKey), JwsAlgorithm.HS256);
         }
 
-        public int? DecodeJwt(string jwt)
+        public JwtTokenPayload? DecodeJwt(string jwt)
         {
             try
             {
-                var result = JWT.Decode<JObject>(jwt, Convert.FromBase64String(_configuration.JwtSigningKey));
-                return result.Value<int>("sub");
+                return JWT.Decode<JwtTokenPayload>(jwt, Convert.FromBase64String(_configuration.JwtSigningKey));
             }
             catch (Exception)
             {
