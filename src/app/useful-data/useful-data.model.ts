@@ -8,7 +8,8 @@ export type PanelNames =
     | 'skills'
     | 'items'
     | 'jobs'
-    | 'origins';
+    | 'origins'
+    | 'monsters';
 
 export class CriticalData {
     dice: number[];

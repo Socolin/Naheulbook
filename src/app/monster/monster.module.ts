@@ -18,6 +18,7 @@ import {
 } from './';
 import { SelectMonsterTraitsDialogComponent } from './select-monster-traits-dialog.component';
 import { MonsterTraitDialogComponent } from './monster-trait-dialog.component';
+import { MonstersDialogComponent } from './monsters-dialog.component';
 
 @NgModule({
     imports: [
@@ -37,12 +38,14 @@ import { MonsterTraitDialogComponent } from './monster-trait-dialog.component';
         MonsterTraitComponent,
         SelectMonsterTraitsDialogComponent,
         MonsterTraitDialogComponent,
+        MonstersDialogComponent,
     ],
     entryComponents: [
         AddMonsterItemDialogComponent,
         EditMonsterTemplateDialogComponent,
         SelectMonsterTraitsDialogComponent,
         MonsterTraitDialogComponent,
+        MonstersDialogComponent,
     ],
     providers: [
         MonsterService,

@@ -20,6 +20,7 @@ import {
 } from './dialogs';
 import {assertNever} from '../utils/utils';
 import {PanelNames} from './useful-data.model';
+import {MonstersDialogComponent} from '../monster/monsters-dialog.component';
 
 @Component({
     selector: 'useful-data',
@@ -74,6 +75,9 @@ export class UsefulDataComponent implements OnInit, OnDestroy {
                 break;
             case 'skills':
                 dialogRef = this.openDialog(SkillsDialogComponent);
+                break;
+            case 'monsters':
+                dialogRef = this.openDialog(MonstersDialogComponent);
                 break;
             default:
                 assertNever(panel);
