@@ -44,7 +44,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
                             , token
                             , window.location.origin + window.location.pathname).subscribe(
                             () => {
-                                this.router.navigateByUrl(redirectUrl);
+                                this.router.navigateByUrl(redirectUrl, {replaceUrl: true, });
                             }, () => {
                                 this.isInErrorState = true;
                             }
@@ -60,7 +60,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
                             , token
                             , window.location.origin + window.location.pathname).subscribe(
                             () => {
-                                this.router.navigateByUrl(redirectUrl);
+                                this.router.navigateByUrl(redirectUrl, {replaceUrl: true, });
                             }, () => {
                                 this.isInErrorState = true;
                             }
@@ -76,7 +76,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
                             , token
                             , window.location.origin + window.location.pathname).subscribe(
                             () => {
-                                this.router.navigateByUrl(redirectUrl);
+                                this.router.navigateByUrl(redirectUrl, {replaceUrl: true, });
                             }, () => {
                                 this.isInErrorState = true;
                             }
@@ -89,7 +89,7 @@ export class LoggedComponent implements OnInit, OnDestroy {
                     if (params.hasOwnProperty('oauth_token') && params.hasOwnProperty('oauth_verifier')) {
                         this.loginService.doTwitterLogin(params['oauth_token'], params['oauth_verifier']).subscribe(
                             () => {
-                                this.router.navigateByUrl(redirectUrl);
+                                this.router.navigateByUrl(redirectUrl, {replaceUrl: true, });
                             }, () => {
                                 this.isInErrorState = true;
                             }

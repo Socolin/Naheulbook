@@ -1,6 +1,6 @@
 import {map, retryWhen, share} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {from, Observable, ReplaySubject} from 'rxjs';
 
 import {JwtResponse, User} from './user.model';
@@ -131,7 +131,9 @@ export class LoginService {
             this.currentLoggedUser = undefined;
             this.currentJwt = undefined;
             this.checkingLoggedUser = undefined;
-            this.loggedUser.error(error);
+            if (!(error instanceof HttpErrorResponse) || error.status !== 401) {
+                this.loggedUser.error(error);
+            }
         });
 
         return this.loggedUser;

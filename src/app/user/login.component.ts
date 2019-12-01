@@ -1,20 +1,21 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {LoginService} from './login.service';
-import {User} from './user.model';
 import {NhbkMatDialog} from '../material-workaround';
+import {combineLatest, forkJoin, Subscription} from 'rxjs';
+import {share} from 'rxjs/operators';
 
 @Component({
     selector: 'login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
-    public user?: User;
+export class LoginComponent implements OnInit, OnDestroy {
     public redirectPage: string;
     public moreInfo: boolean;
     public loading = false;
+    public subscription: Subscription = new Subscription();
 
     constructor(
         private readonly dialog: NhbkMatDialog,
@@ -47,15 +48,28 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.route.params.subscribe(params => {
+        this.loading = true;
+        this.subscription.add(this.route.params.subscribe(params => {
             this.redirectPage = params['redirect'];
             this.redirectPage = this.redirectPage.replace('@', '/');
-        });
-        this.loginService.loggedUser.subscribe(
-            user => {
-                this.user = user;
+        }));
+
+        this.subscription.add(combineLatest([
+            this.route.params,
+            this.loginService.checkLogged(),
+        ]).subscribe(([params, user]) => {
+            if (user) {
+                this.loading = true;
+                this.router.navigateByUrl(params['redirect'], {replaceUrl: true});
+            } else {
+                this.loading = false;
             }
-        );
-        this.loginService.checkLogged();
+        }, () => {
+            this.loading = false;
+        }));
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 }

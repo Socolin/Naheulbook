@@ -1,7 +1,7 @@
 <div class="login-form">
     <mat-card>
         <mat-card-title>
-            Connexion
+            Connexion <mat-spinner *ngIf="loading" [diameter]="24"></mat-spinner>
         </mat-card-title>
         <mat-card-subtitle>
             Choisissez quelle méthode utiliser pour vous authentifier.

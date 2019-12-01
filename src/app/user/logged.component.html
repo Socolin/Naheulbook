@@ -5,4 +5,10 @@
             Retourner sur la page d'accueil
         </a>
     </div>
+    <div *ngIf="!isInErrorState">
+        <div style="display: flex; flex-direction: column; align-items: center">
+            <div class="lds-ripple"><div></div><div></div></div>
+            <div>Connexion en cours...</div>
+        </div>
+    </div>
 </div>
