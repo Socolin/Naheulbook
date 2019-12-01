@@ -55,9 +55,6 @@ export class SkillModifiersEditorComponent implements OnInit {
         this.skillService.getSkills().subscribe(
             skills => {
                 this.skills = skills;
-            },
-            err => {
-                console.log(err);
             }
         );
     }
