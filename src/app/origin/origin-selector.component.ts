@@ -128,9 +128,6 @@ export class OriginSelectorComponent implements OnInit, OnChanges {
             origins => {
                 this.origins = origins;
                 this.updateOriginStates();
-            },
-            err => {
-                console.log(err);
             }
         );
     }

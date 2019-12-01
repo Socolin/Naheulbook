@@ -91,9 +91,6 @@ export class AutocompleteInputComponent {
             matchingValues => {
                 this.matchingValues = matchingValues;
                 this.preSelectedValueIndex = 0;
-            },
-            err => {
-                console.log(err);
             }
         );
     }

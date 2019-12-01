@@ -54,6 +54,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     ];
 
     private notificationSub?: Subscription;
+    private subscription = new Subscription();
 
     constructor(
         private readonly dialog: NhbkMatDialog,
@@ -69,26 +70,26 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     changeStat(stat: string, value: any) {
-        this.characterService.changeCharacterStat(this.character.id, stat, value).subscribe(
+        this.subscription.add(this.characterService.changeCharacterStat(this.character.id, stat, value).subscribe(
             this.character.onChangeCharacterStat.bind(this.character)
-        );
+        ));
     }
 
     setStatBonusAD(id: number, stat: string) {
         if (this.character) {
-            this.characterService.setStatBonusAD(id, stat).subscribe(
+            this.subscription.add(this.characterService.setStatBonusAD(id, stat).subscribe(
                 this.character.onSetStatBonusAD.bind(this.character)
-            );
+            ));
         }
     }
 
     changeGmData(key: string, value: any) {
-        this.characterService.changeGmData(this.character.id, key, value).subscribe(
+        this.subscription.add(this.characterService.changeGmData(this.character.id, key, value).subscribe(
             change => {
                 this.notification.info('Modification', key + ': ' + this.character.gmData[change.key] + ' -> ' + change.value);
                 this.character.gmData[change.key] = change.value;
             }
-        );
+        ));
     }
 
     canLevelUp(): boolean {
@@ -108,7 +109,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
     // Group
 
     cancelInvite(invite: CharacterGroupInvite) {
-        this.characterService.cancelInvite(this.character.id, invite.groupId).subscribe(
+        this.subscription.add(this.characterService.cancelInvite(this.character.id, invite.groupId).subscribe(
             res => {
                 for (let i = 0; i < this.character.invites.length; i++) {
                     let e = this.character.invites[i];
@@ -118,17 +119,17 @@ export class CharacterComponent implements OnInit, OnDestroy {
                     }
                 }
             }
-        );
+        ));
         return false;
     }
 
     acceptInvite(invite: CharacterGroupInvite) {
-        this.characterService.joinGroup(this.character.id, invite.groupId).subscribe(
+        this.subscription.add(this.characterService.joinGroup(this.character.id, invite.groupId).subscribe(
             () => {
                 this.character.invites = [];
                 this.character.group = {id: invite.groupId, name: invite.groupName};
             }
-        );
+        ));
         return false;
     }
 
@@ -197,14 +198,14 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 return;
             }
             for (const job of result.addedJobs) {
-                this.characterService.addJob(this.character.id, job.id).subscribe(addedJob => {
+                this.subscription.add(this.characterService.addJob(this.character.id, job.id).subscribe(addedJob => {
                     this.character.onAddJob(addedJob);
-                });
+                }));
             }
             for (const job of result.deletedJobs) {
-                this.characterService.removeJob(this.character.id, job.id).subscribe(removedJob => {
+                this.subscription.add(this.characterService.removeJob(this.character.id, job.id).subscribe(removedJob => {
                     this.character.onRemoveJob(removedJob);
-                });
+                }));
             }
         });
     }
@@ -233,6 +234,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         if (this.notificationSub) {
             this.notificationSub.unsubscribe();
         }
+        this.subscription.unsubscribe();
     }
 
     ngOnInit() {
@@ -249,7 +251,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 this.mainTabGroup.selectedIndex = this.getTabIndexFromHash(tab);
                 this.currentTab = tab;
             }
-            this.route.data.subscribe(data => {
+            this.subscription.add(this.route.data.subscribe(data => {
                 if (this.character !== data['character']) {
                     if (this.notificationSub) {
                         this.notificationSub.unsubscribe();
@@ -265,7 +267,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
                         this.notification.info('', notificationData.message);
                     });
                 }
-            });
+            }));
 
         }
     }

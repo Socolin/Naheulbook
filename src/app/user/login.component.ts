@@ -50,8 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.loading = true;
         this.subscription.add(this.route.params.subscribe(params => {
-            this.redirectPage = params['redirect'];
-            this.redirectPage = this.redirectPage.replace('@', '/');
+            this.redirectPage = decodeURIComponent(params['redirect']);
         }));
 
         this.subscription.add(combineLatest([
@@ -60,7 +59,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         ]).subscribe(([params, user]) => {
             if (user) {
                 this.loading = true;
-                this.router.navigateByUrl(params['redirect'], {replaceUrl: true});
+                this.router.navigateByUrl(decodeURIComponent(params['redirect']), {replaceUrl: true});
             } else {
                 this.loading = false;
             }

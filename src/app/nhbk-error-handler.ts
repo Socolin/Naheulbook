@@ -1,10 +1,11 @@
-import {ErrorHandler, Injectable, NgZone} from '@angular/core';
+import {ErrorHandler, Injectable, Injector, NgZone} from '@angular/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ErrorReportService} from './error-report.service';
 
 import * as Sentry from '@sentry/browser';
 import {Event, EventHint} from '@sentry/types';
 import {environment} from '../environments/environment';
+import {Router} from '@angular/router';
 
 if (environment.production) {
     Sentry.init({
@@ -32,7 +33,8 @@ export class NhbkErrorHandler extends ErrorHandler {
 
     constructor(
         private readonly ngZone: NgZone,
-        private readonly errorReportService: ErrorReportService
+        private readonly errorReportService: ErrorReportService,
+        private readonly injector: Injector
     ) {
         super();
     }
@@ -41,6 +43,10 @@ export class NhbkErrorHandler extends ErrorHandler {
         if (error instanceof HttpErrorResponse) {
             if (error.status === 401) {
                 super.handleError(error);
+                this.ngZone.run(() => {
+                    this.errorReportService.notify('Vous êtes déconnecté', error);
+                    this.injector.get(Router).navigate(['login', encodeURIComponent(document.location.pathname)]);
+                });
                 return;
             }
         }

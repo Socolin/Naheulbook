@@ -50,7 +50,7 @@ export class CommonNavComponent implements OnInit {
     }
 
     redirectToLogin() {
-        this.router.navigate(['login', document.location.pathname.replace('/', '@')])
+        this.router.navigate(['login', encodeURIComponent(document.location.pathname)]);
     }
 
     toggleGmMode() {
