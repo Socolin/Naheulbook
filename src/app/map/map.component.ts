@@ -189,7 +189,7 @@ export class MapComponent implements OnInit, OnDestroy {
             })
         });
 
-        this.subscription.add(this.loginService.checkLogged().subscribe((user) => {
+        this.subscription.add(this.loginService.loggedUser.subscribe((user) => {
             this.currentUser = user;
         }));
 

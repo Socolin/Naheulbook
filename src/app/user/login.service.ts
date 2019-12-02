@@ -13,6 +13,7 @@ export class LoginService {
     public currentLoggedUser?: User;
     public currentJwt?: string;
     private checkingLoggedUser?: Observable<JwtResponse>;
+    private renewTokenTimeout?: any;
 
     // TODO: Renewing token
 
@@ -113,6 +114,10 @@ export class LoginService {
             return this.loggedUser;
         }
 
+        if (this.renewTokenTimeout) {
+            clearTimeout(this.renewTokenTimeout);
+        }
+
         this.checkingLoggedUser = this.httpClient.get<JwtResponse>('/api/v2/users/me/jwt').pipe(
             retryWhen(genericRetryStrategy({
                 excludedStatusCodes: [401, 400],
@@ -126,6 +131,7 @@ export class LoginService {
             this.currentLoggedUser = response.userInfo;
             this.currentJwt = response.token;
             this.checkingLoggedUser = undefined;
+            this.startRenewToken(response.token);
         }, (error) => {
             this.loggedUser.next(undefined);
             this.currentLoggedUser = undefined;
@@ -143,7 +149,7 @@ export class LoginService {
         if (this.currentJwt) {
             return from([true]);
         }
-        return this.checkLogged().pipe(map(user => user !== undefined));
+        return this.loggedUser.pipe(map(user => user !== undefined));
     }
 
 
@@ -195,5 +201,12 @@ export class LoginService {
         this.getLoginToken('twitter').subscribe(authInfos => {
             window.location.href = 'https://api.twitter.com/oauth/authenticate?oauth_token=' + authInfos.loginToken;
         }, errorCb);
+    }
+
+    private startRenewToken(token: string) {
+        const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+        this.renewTokenTimeout = setTimeout(() => {
+            this.checkLogged();
+        }, ((tokenPayload.exp * 1000) - (new Date().getTime())) / 2);
     }
 }

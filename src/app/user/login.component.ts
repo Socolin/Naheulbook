@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {LoginService} from './login.service';
 import {NhbkMatDialog} from '../material-workaround';
 import {combineLatest, forkJoin, Subscription} from 'rxjs';
-import {share} from 'rxjs/operators';
+import {share, skip} from 'rxjs/operators';
 
 @Component({
     selector: 'login',
@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.subscription.add(combineLatest([
             this.route.params,
-            this.loginService.checkLogged(),
+            this.loginService.checkLogged().pipe(skip(1)),
         ]).subscribe(([params, user]) => {
             if (user) {
                 this.loading = true;

@@ -14,7 +14,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler):
         Observable<HttpEvent<any>> {
-        if (this.loginService.currentJwt) {
+        if (this.loginService.currentJwt && req.url !== '/api/v2/users/me/jwt' && req.url !== '/api/v2/users/me') {
             req = req.clone({
                 setHeaders: {
                     'Authorization': `JWT ${this.loginService.currentJwt}`
