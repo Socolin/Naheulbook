@@ -32,7 +32,11 @@ export const routes: Routes = [
                 component: JobListComponent
             },
             {
-                path: 'items/:id',
+                path: 'items/:categoryId/:subCategoryId',
+                component: ItemTemplateListComponent
+            },
+            {
+                path: 'items/:categoryId',
                 component: ItemTemplateListComponent
             },
             {

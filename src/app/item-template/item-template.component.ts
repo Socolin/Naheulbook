@@ -21,6 +21,8 @@ export class ItemTemplateComponent {
     @Input() godsByTechName: {[techName: string]: God};
     @Input() actions: string[];
     @Output() onAction = new EventEmitter<{action: string, data: any}>();
+    @Output() onEdit = new EventEmitter<ItemTemplate>();
+    @Output() onCreateCopy = new EventEmitter<ItemTemplate>();
 
     constructor(
         private readonly dialog: NhbkMatDialog,
@@ -28,21 +30,33 @@ export class ItemTemplateComponent {
     }
 
     openEditItemTemplateDialog(itemTemplate: ItemTemplate) {
-        this.dialog.openFullScreen<EditItemTemplateDialogComponent, EditItemTemplateDialogData, ItemTemplate>(
+        const dialogRef = this.dialog.openFullScreen<EditItemTemplateDialogComponent, EditItemTemplateDialogData, ItemTemplate>(
             EditItemTemplateDialogComponent,
             {
                 data: {itemTemplateId: itemTemplate.id}
             }
         );
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.onEdit.next(result);
+        });
     }
 
     openCreateItemTemplateDialog(sourceItem: ItemTemplate) {
-        this.dialog.openFullScreen<CreateItemTemplateDialogComponent, CreateItemTemplateDialogData, ItemTemplate>(
+        const dialogRef= this.dialog.openFullScreen<CreateItemTemplateDialogComponent, CreateItemTemplateDialogData, ItemTemplate>(
             CreateItemTemplateDialogComponent,
             {
                 data: {copyFromItemTemplateId: sourceItem.id}
             }
         );
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.onEdit.next(result);
+        });
     }
 
     hasAction(actionName: string) {

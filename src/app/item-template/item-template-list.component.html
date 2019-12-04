@@ -4,9 +4,9 @@
             Les joueurs n'achètent JAMAIS le matériel en piochant eux-mêmes dans les tableaux.
         </p>
         <p *ngIf="showHeaderInfo">
-            Vous pouvez créer vos propre objets grace à l'éditeur. Ce dernier pouvant être complexe il est conseillé de copié un autre objets,
+            Vous pouvez créer vos propres objets grace à l'éditeur. Ce dernier pouvant être complexe il est conseillé de copier un autre objet,
             à l'aide du bouton <mat-icon>content_copy</mat-icon>, puis de le modifier. Si vous souhaitez seulement changer
-            le nom, cet option est déjà disponible lors de l'ajout d'un objet sur un personnage.
+            le nom, cette option est déjà disponible lors de l'ajout d'un objet sur un personnage.
         </p>
     </mat-card-content>
     <mat-card-actions align="end">
@@ -64,8 +64,8 @@
     </mat-card-content>
 </mat-card>
 <span id="first-item"></span>
-<ng-template ngFor let-item [ngForOf]="visibleItems" [ngForTrackBy]="trackById">
-    <div class="item-element">
+<ng-container *ngFor="let item of  visibleItems; trackBy: trackById">
+    <div class="item-element" [id]="'item-'+item.id" (click)="navigateToItem(item.id)">
         <item-template class="item-element"
                        *ngIf="isVisible(item)"
                        [originsName]="originsName"
@@ -75,10 +75,12 @@
                        [copyable]="loginService.currentLoggedUser != undefined"
                        [actions]="inTab ? ['addItem'] : []"
                        (onAction)="emitAction($event.action, $event.data)"
+                       (onEdit)="reloadSectionForItem($event); reloadSectionForItem(item)"
+                       (onCreateCopy)="reloadSectionForItem($event)"
                        [itemTemplate]="item">
         </item-template>
     </div>
-</ng-template>
+</ng-container>
 <div *ngIf="nextSubCategory && previousSubCategory" class="prev-next-buttons">
     <button mat-raised-button
             (click)="selectSubCategory(previousSubCategory)">
