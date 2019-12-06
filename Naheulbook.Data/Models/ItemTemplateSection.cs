@@ -8,6 +8,7 @@ namespace Naheulbook.Data.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Note { get; set; } = null!;
+        public string Icon { get; set; } = null!;
         public string Special { get; set; } = null!;
 
         [NotMapped]

@@ -121,6 +121,11 @@ namespace Naheulbook.Data.Configurations
                 .IsRequired()
                 .HasColumnName("note");
 
+            builder.Property(e => e.Icon)
+                .IsRequired()
+                .HasMaxLength(64)
+                .HasColumnName("icon");
+
             builder.Property(e => e.Special)
                 .IsRequired()
                 .HasColumnName("special")

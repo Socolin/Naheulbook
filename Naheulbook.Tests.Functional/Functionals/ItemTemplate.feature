@@ -8,6 +8,7 @@ Feature: ItemTemplate
     {
       "name": "some-name",
       "note": "some-note",
+      "icon": "some-icon",
       "specials": [
         "some-special"
       ]
@@ -20,6 +21,7 @@ Feature: ItemTemplate
       "id": {"__capture": {"name": "ItemTemplateSectionId", "type": "integer"}},
       "name": "some-name",
       "note": "some-note",
+      "icon": "some-icon",
       "subCategories": [],
       "specials": [
         "some-special"
@@ -68,6 +70,7 @@ Feature: ItemTemplate
         "id": ${ItemTemplateSection.Id},
         "name": "${ItemTemplateSection.Name}",
         "note": "${ItemTemplateSection.Note}",
+        "icon": "${ItemTemplateSection.Icon}",
         "specials": [
             "${ItemTemplateSection.Special}"
         ],

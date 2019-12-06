@@ -35,7 +35,8 @@ namespace Naheulbook.TestUtils
             {
                 Name = $"some-item-name-{suffix}",
                 Note = $"some-note-{suffix}",
-                Special = $"some-special-{suffix}"
+                Special = $"some-special-{suffix}",
+                Icon = $"some-icon-{suffix}"
             };
         }
 

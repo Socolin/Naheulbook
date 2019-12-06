@@ -1,3 +1,7 @@
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Naheulbook.Web.Responses
 {
     public class ItemTemplateSubCategoryResponse
