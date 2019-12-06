@@ -90,6 +90,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 Name = "some-name",
                 Special = "some-specials0,some-specials1,some-specials2",
                 Note = "some-note",
+                Icon = "some-icon",
                 SubCategories = new List<ItemTemplateSubCategory>()
             };
         }
