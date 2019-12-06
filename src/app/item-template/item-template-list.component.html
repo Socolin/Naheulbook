@@ -19,8 +19,9 @@
         <mat-select [ngModel]="selectedSection"
                     (selectionChange)="selectSection($event.value)"
                     placeholder="Section">
-            <mat-option *ngFor="let section of itemSections" [value]="section">
-                {{section.name}}
+            <mat-option *ngFor="let category of itemSections" [value]="category">
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + category.icon" class="ra-mat-button-icon-24"></mat-icon>
+                {{category.name}}
             </mat-option>
         </mat-select>
     </mat-form-field>

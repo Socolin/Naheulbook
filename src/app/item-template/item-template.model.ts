@@ -15,6 +15,7 @@ export class ItemTemplateSection {
     name: string;
     note: string;
     specials: string[];
+    icon: string;
     subCategories: ItemTemplateSubCategory[];
 
     private static fromResponse(response: ItemTemplateSectionResponse): ItemTemplateSection {
@@ -23,6 +24,7 @@ export class ItemTemplateSection {
         itemSection.name = response.name;
         itemSection.note = response.note;
         itemSection.specials = response.specials;
+        itemSection.icon = response.icon;
         itemSection.subCategories = ItemTemplateSubCategory.fromResponses(response.subCategories, itemSection);
         return itemSection;
     }

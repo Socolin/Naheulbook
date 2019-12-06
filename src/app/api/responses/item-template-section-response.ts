@@ -4,6 +4,7 @@ export interface ItemTemplateSectionResponse {
     id: number;
     name: string;
     note: string;
+    icon: string;
     specials: string[];
     subCategories: ItemTemplateSubCategoryResponse[];
 }
