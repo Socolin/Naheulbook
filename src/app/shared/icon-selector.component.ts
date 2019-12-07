@@ -56,6 +56,7 @@ export class IconSelectorComponent implements OnInit {
         '#11963b',
         '#51e113',
         '#08fdcc',
+        '#d6d6d6',
     ];
 
     public newIcon: IconDescription;
@@ -86,7 +87,7 @@ export class IconSelectorComponent implements OnInit {
             let iconName = this.icons[i];
             if (iconName.indexOf(cleanFilter) !== -1) {
                 filtered.push(iconName);
-                if (filtered.length === 30) {
+                if (filtered.length === 48) {
                     break;
                 }
             }
@@ -143,7 +144,7 @@ export class IconSelectorComponent implements OnInit {
     ngOnInit() {
         this.iconService.getIcons().subscribe(
             icons => {
-                this.icons = icons;
+                this.icons = icons.sort((a, b) => a.length - b.length);
                 this.updateFiltered();
             }
         );

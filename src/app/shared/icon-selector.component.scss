@@ -1,4 +1,7 @@
 :host {
+    mat-dialog-content {
+        max-width: 640px;
+    }
     .icon-filter {
         display: grid;
         grid-template-columns: 1fr 32px;
