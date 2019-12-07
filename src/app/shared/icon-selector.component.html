@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Choisir une icône</h2>
 
 <mat-dialog-content>
-    <h3 class="mat-h3">Image</h3>
+    <p>Nom principalement en anglais, vous pouvez chercher plus facilement sur <a target=_blank href="https://game-icons.net/">https://game-icons.net/</a></p>
     <div class="icon-filter">
         <mat-form-field align="end">
             <input matInput
@@ -12,7 +12,7 @@
                    [(ngModel)]="filter"
                    (ngModelChange)="updateFiltered()">
             <mat-hint align="end">
-                Actuelle: {{data.icon?.name || 'Non défini'}}
+                Icône actuelle: {{data.icon?.name || 'Non défini'}}
             </mat-hint>
         </mat-form-field>
         <button mat-icon-button (click)="selectRandom()"><span class="ra ra-perspective-dice-random ra-2x"></span></button>
