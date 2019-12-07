@@ -14,7 +14,7 @@ export interface CreateItemTemplateDialogData {
 
 @Component({
     templateUrl: './create-item-template-dialog.component.html',
-    styleUrls: ['./create-item-template-dialog.component.scss']
+    styleUrls: ['./create-item-template-dialog.component.scss', '../shared/full-screen-dialog.scss']
 })
 export class CreateItemTemplateDialogComponent implements OnInit {
     public item: ItemTemplate = new ItemTemplate();

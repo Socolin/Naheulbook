@@ -8,6 +8,11 @@
             à l'aide du bouton <mat-icon>content_copy</mat-icon>, puis de le modifier. Si vous souhaitez seulement changer
             le nom, cette option est déjà disponible lors de l'ajout d'un objet sur un personnage.
         </p>
+        <p *ngIf="showHeaderInfo">
+            Les icônes sur les objets sont là a titre indicatif pour identifier plus facilement les objets lors des recherches
+            et dans l'inventaire. Elles ne sont pas à utiliser pour savoir à quoi ressemble vraiment l'objet, n'ayant pas forcément
+            une icône parfait pour chaque objet. Les icônes utilisées proviennent principalement du site <a href="https://game-icons.net/">https://game-icons.net/</a>
+        </p>
     </mat-card-content>
     <mat-card-actions align="end">
         <button color="primary" mat-button (click)="showHeaderInfo =! showHeaderInfo">INFOS</button>
