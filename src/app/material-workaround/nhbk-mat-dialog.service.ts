@@ -20,7 +20,7 @@ export class NhbkMatDialog {
         componentOrTemplateRef: ComponentType<T> | TemplateRef<T>,
         config?: MatDialogConfig<D>
     ): MatDialogRef<T, R> {
-        return this.dialog.open(componentOrTemplateRef, config);
+        return this.dialog.open(componentOrTemplateRef, {...config, maxWidth: (config && config.maxWidth) || '960px'});
     }
 
     openFullScreen<T, D = any, R = any>(
