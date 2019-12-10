@@ -69,6 +69,17 @@
         </mat-form-field>
     </mat-card-content>
 </mat-card>
+
+<mat-card *ngIf="selectedItemSubCategory" class="panel panel-default">
+    <mat-card-title>
+        {{selectedItemSubCategory.name}}
+    </mat-card-title>
+    <mat-card-content *ngIf="selectedItemSubCategory.note">
+        <div class="panel-body" [innerHTML]="selectedItemSubCategory.note|textFormatter">
+        </div>
+    </mat-card-content>
+</mat-card>
+
 <span id="first-item"></span>
 <ng-container *ngFor="let item of  visibleItems; trackBy: trackById">
     <div class="item-element" [id]="'item-'+item.id" (click)="navigateToItem(item.id)">
