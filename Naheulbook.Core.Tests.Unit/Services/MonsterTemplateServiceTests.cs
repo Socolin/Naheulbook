@@ -53,9 +53,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             var monsterTemplate = await _service.CreateMonsterTemplateAsync(executionContext, request);
 
+            var monsterTemplateRepository = _unitOfWorkFactory.GetUnitOfWork().MonsterTemplates;
             Received.InOrder(() =>
             {
-                _unitOfWorkFactory.GetUnitOfWork().MonsterTemplates.Add(monsterTemplate);
+                monsterTemplateRepository.Add(monsterTemplate);
                 _unitOfWorkFactory.GetUnitOfWork().Received(1).SaveChangesAsync();
             });
             monsterTemplate.Should().BeEquivalentTo(expectedMonsterTemplate);

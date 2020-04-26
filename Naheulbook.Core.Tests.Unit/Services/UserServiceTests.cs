@@ -6,6 +6,7 @@ using Naheulbook.Core.Services;
 using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
+using Naheulbook.Data.Repositories;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -49,9 +50,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             await _service.CreateUserAsync(SomeUsername, SomePassword);
 
+
+            var userRepository = _unitOfWorkFactory.GetUnitOfWork().Users;
             Received.InOrder(() =>
             {
-                _unitOfWorkFactory.GetUnitOfWork().Users.Add(Arg.Is<User>(u =>
+                userRepository.Add(Arg.Is<User>(u =>
                     u.Username == SomeUsername
                     && u.HashedPassword == SomeEncryptedPassword
                     && !string.IsNullOrEmpty(u.ActivationCode))

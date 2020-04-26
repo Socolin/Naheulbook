@@ -85,9 +85,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             var actualItemTemplate = await _service.CreateItemTemplateAsync(new NaheulbookExecutionContext(), createItemTemplateRequest);
 
+            var itemTemplateRepository = _unitOfWorkFactory.GetUnitOfWork().ItemTemplates;
             Received.InOrder(() =>
             {
-                _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Add(newItemTemplateEntity);
+                itemTemplateRepository.Add(newItemTemplateEntity);
                 _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actualItemTemplate.Should().Be(fullyLoadedItemTemplate);

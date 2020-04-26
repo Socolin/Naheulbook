@@ -46,9 +46,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             var actual = await _service.GetOrCreateUserFromFacebookAsync("some-name", facebookId);
 
+            var userRepository = _fakeUnitOfWorkFactory.GetUnitOfWork().Users;
             Received.InOrder(() =>
             {
-                _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
+                userRepository.Add(actual);
                 _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actual.Should().BeEquivalentTo(new User
@@ -84,9 +85,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             var actual = await _service.GetOrCreateUserFromGoogleAsync("some-name", googleId);
 
+            var userRepository = _fakeUnitOfWorkFactory.GetUnitOfWork().Users;
             Received.InOrder(() =>
             {
-                _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
+                userRepository.Add(actual);
                 _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actual.Should().BeEquivalentTo(new User
@@ -122,9 +124,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             var actual = await _service.GetOrCreateUserFromTwitterAsync("some-name", twitterId);
 
+            var userRepository = _fakeUnitOfWorkFactory.GetUnitOfWork().Users;
             Received.InOrder(() =>
             {
-                _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
+                userRepository.Add(actual);
                 _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actual.Should().BeEquivalentTo(new User
@@ -160,9 +163,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             var actual = await _service.GetOrCreateUserFromMicrosoftAsync("some-name", microsoftId);
 
+            var userRepository = _fakeUnitOfWorkFactory.GetUnitOfWork().Users;
             Received.InOrder(() =>
             {
-                _fakeUnitOfWorkFactory.GetUnitOfWork().Users.Add(actual);
+                userRepository.Add(actual);
                 _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             actual.Should().BeEquivalentTo(new User

@@ -43,9 +43,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             var itemTemplateSection = await _service.CreateItemTemplateSectionAsync(new NaheulbookExecutionContext(), createItemTemplateSectionRequest);
 
+            var itemTemplateSectionRepository = _unitOfWorkFactory.GetUnitOfWork().ItemTemplateSections;
             Received.InOrder(() =>
             {
-                _unitOfWorkFactory.GetUnitOfWork().ItemTemplateSections.Add(itemTemplateSection);
+                itemTemplateSectionRepository.Add(itemTemplateSection);
                 _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
             itemTemplateSection.Should().BeEquivalentTo(expectedItemTemplateSection);
