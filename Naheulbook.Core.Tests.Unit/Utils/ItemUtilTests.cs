@@ -57,9 +57,9 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             const int itemId = 12;
             var item = new Item {Id = itemId, CharacterId = characterId, Character = new Character()};
 
-            _characterHistoryUtil.CreateLogEquipItem(characterId, itemId)
+            _characterHistoryUtil.CreateLogEquipItem(characterId, item)
                 .Returns(new CharacterHistoryEntry {Action = "equip"});
-            _characterHistoryUtil.CreateLogUnEquipItem(characterId, itemId)
+            _characterHistoryUtil.CreateLogUnEquipItem(characterId, item)
                 .Returns(new CharacterHistoryEntry {Action = "unEquip"});
             _itemDataUtil.IsItemEquipped(item)
                 .Returns(wasEquipped, isNowEquipped);

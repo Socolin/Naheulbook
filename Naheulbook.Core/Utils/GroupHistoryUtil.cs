@@ -13,7 +13,7 @@ namespace Naheulbook.Core.Utils
         GroupHistoryEntry CreateLogChangeDebilibeuk(Group group, int? oldValue, int newValue);
         GroupHistoryEntry CreateLogChangeDate(Group group, NhbkDate? oldValue, NhbkDate newValue);
         GroupHistoryEntry CreateLogAddTime(Group group, NhbkDate date, NhbkDateOffset timeOffset);
-        GroupHistoryEntry CreateLogEventRp(Group @group, bool isGm, string info);
+        GroupHistoryEntry CreateLogEventRp(Group group, bool isGm, string info);
     }
 
     public class GroupHistoryUtil : IGroupHistoryUtil
@@ -103,7 +103,7 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public GroupHistoryEntry CreateLogEventRp(Group @group, bool isGm, string info)
+        public GroupHistoryEntry CreateLogEventRp(Group group, bool isGm, string info)
         {
             return new GroupHistoryEntry
             {
@@ -111,7 +111,7 @@ namespace Naheulbook.Core.Utils
                 Action = EventRpActionName,
                 Date = DateTime.Now,
                 Gm = isGm,
-                Info = info
+                Data = _jsonUtil.Serialize(new {text = info})
             };
         }
     }

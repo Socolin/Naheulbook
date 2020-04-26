@@ -55,9 +55,9 @@ namespace Naheulbook.Core.Utils
                 if (item.Character!.HistoryEntries == null)
                     item.Character!.HistoryEntries = new List<CharacterHistoryEntry>();
                 if (previouslyEquipped)
-                    item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogUnEquipItem(item.CharacterId.Value, item.Id));
+                    item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogUnEquipItem(item.CharacterId.Value, item));
                 else
-                    item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogEquipItem(item.CharacterId.Value, item.Id));
+                    item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogEquipItem(item.CharacterId.Value, item));
             }
         }
 
@@ -82,7 +82,7 @@ namespace Naheulbook.Core.Utils
                     {
                         notificationSession.NotifyItemDeleteItem(originalItem);
                         if (originalItem.CharacterId != null)
-                            originalItem.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem));
+                            originalItem.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem, targetCharacter.Name));
                     }
 
                     originalItem.Character = targetCharacter;
@@ -99,7 +99,7 @@ namespace Naheulbook.Core.Utils
                     if (trigger == MoveItemTrigger.TakeItemFromLoot)
                         targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogLootItem(targetCharacter.Id, takenItem));
                     else if (trigger == MoveItemTrigger.GiveItem)
-                        targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem));
+                        targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem, originalItem.Character.Name));
                 }
                 else
                 {
@@ -120,8 +120,8 @@ namespace Naheulbook.Core.Utils
                     else if (trigger == MoveItemTrigger.GiveItem)
                     {
                         if (originalItem.CharacterId != null)
-                            originalItem.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem));
-                        targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem));
+                            originalItem.Character!.AddHistoryEntry(_characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem, targetCharacter.Name));
+                        targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem, originalItem.Character?.Name));
                         notificationSession.NotifyItemDataChanged(originalItem);
                     }
                     notificationSession.NotifyCharacterAddItem(targetCharacter.Id, splitItem);

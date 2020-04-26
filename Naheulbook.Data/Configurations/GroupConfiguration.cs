@@ -93,8 +93,6 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnType("json");
             builder.Property(e => e.Date)
                 .HasColumnName("date");
-            builder.Property(e => e.Info)
-                .HasColumnName("info");
             builder.Property(e => e.Action)
                 .HasColumnName("action");
             builder.Property(e => e.Gm)

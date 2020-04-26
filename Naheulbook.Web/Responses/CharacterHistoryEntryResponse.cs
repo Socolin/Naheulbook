@@ -1,4 +1,3 @@
-using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json.Linq;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -14,9 +13,6 @@ namespace Naheulbook.Web.Responses
         public JObject? Data { get; set; }
         public string Date { get; set; } = null!;
         public bool Gm { get; set; }
-        public string? Info { get; set; }
         public bool IsGroup => false;
-        public ItemResponse? Item { get; set; }
-        public ActiveStatsModifier? Modifier { get; set; }
     }
 }

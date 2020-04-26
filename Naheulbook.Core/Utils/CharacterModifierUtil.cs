@@ -29,11 +29,11 @@ namespace Naheulbook.Core.Utils
                 modifier.CurrentLapCount = modifier.LapCount;
                 modifier.CurrentTimeDuration = modifier.TimeDuration;
 
-                character.AddHistoryEntry(_characterHistoryUtil.CreateLogActiveModifier(character.Id, modifier.Id));
+                character.AddHistoryEntry(_characterHistoryUtil.CreateLogActiveModifier(character.Id, modifier));
             }
             else
             {
-                character.AddHistoryEntry(_characterHistoryUtil.CreateLogDisableModifier(character.Id, modifier.Id));
+                character.AddHistoryEntry(_characterHistoryUtil.CreateLogDisableModifier(character.Id, modifier));
             }
         }
     }

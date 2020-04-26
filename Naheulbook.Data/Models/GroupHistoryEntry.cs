@@ -9,7 +9,6 @@ namespace Naheulbook.Data.Models
         public string? Data { get; set; }
         public DateTime Date { get; set; }
         public bool Gm { get; set; }
-        public string? Info { get; set; }
 
         public int GroupId { get; set; }
         public Group Group { get; set; } = null!;

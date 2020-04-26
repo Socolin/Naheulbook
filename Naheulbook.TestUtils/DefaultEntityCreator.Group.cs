@@ -57,8 +57,7 @@ namespace Naheulbook.TestUtils
                 Gm = true,
                 Date = new DateTime(2020, 10, 5, 5, 7, 8, DateTimeKind.Utc),
                 GroupId = group.Id,
-                Action = $"some-group-history-action-{suffix}",
-                Info = $"some-info-{suffix}"
+                Action = $"some-group-history-action-{suffix}"
             };
         }
     }

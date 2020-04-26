@@ -1,5 +1,6 @@
 using System;
 using Naheulbook.Data.Models;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Utils
@@ -13,14 +14,14 @@ namespace Naheulbook.Core.Utils
         CharacterHistoryEntry CreateLogChangeSex(Character character, string oldValue, string newValue);
         CharacterHistoryEntry CreateLogChangeName(Character character, string oldValue, string newValue);
         CharacterHistoryEntry CreateLogAddItem(int characterId, Item item);
-        CharacterHistoryEntry CreateLogEquipItem(int characterId, int itemId);
-        CharacterHistoryEntry CreateLogUnEquipItem(int characterId, int itemId);
+        CharacterHistoryEntry CreateLogEquipItem(int characterId, Item item);
+        CharacterHistoryEntry CreateLogUnEquipItem(int characterId, Item item);
         CharacterHistoryEntry CreateLogAddModifier(Character character, CharacterModifier characterModifier);
-        CharacterHistoryEntry CreateLogRemoveModifier(int characterId, int characterModifierId);
-        CharacterHistoryEntry CreateLogActiveModifier(int characterId, int characterModifierId);
-        CharacterHistoryEntry CreateLogDisableModifier(int characterId, int characterModifierId);
-        CharacterHistoryEntry CreateLogGiveItem(int characterId, Item item);
-        CharacterHistoryEntry CreateLogGivenItem(int characterId, Item item);
+        CharacterHistoryEntry CreateLogRemoveModifier(int characterId, CharacterModifier characterModifier);
+        CharacterHistoryEntry CreateLogActiveModifier(int characterId, CharacterModifier characterModifier);
+        CharacterHistoryEntry CreateLogDisableModifier(int characterId, CharacterModifier characterModifier);
+        CharacterHistoryEntry CreateLogGiveItem(int characterId, Item item, string destCharacterName);
+        CharacterHistoryEntry CreateLogGivenItem(int characterId, Item item, string? sourceCharacterName);
         CharacterHistoryEntry CreateLogLootItem(int characterId, Item item);
         CharacterHistoryEntry CreateLogChangeItemQuantity(int characterId, Item item, int? oldValue, int? newValue);
         CharacterHistoryEntry CreateLogUseItemCharge(int characterId, Item item, int? oldValue, int? newValue);
@@ -54,10 +55,15 @@ namespace Naheulbook.Core.Utils
         private const string LevelUpActionName = "LEVEL_UP";
 
         private readonly IJsonUtil _jsonUtil;
+        private readonly IItemDataUtil _itemDataUtil;
 
-        public CharacterHistoryUtil(IJsonUtil jsonUtil)
+        public CharacterHistoryUtil(
+            IJsonUtil jsonUtil,
+            IItemDataUtil itemDataUtil
+        )
         {
             _jsonUtil = jsonUtil;
+            _itemDataUtil = itemDataUtil;
         }
 
         public CharacterHistoryEntry CreateLogChangeEv(Character character, int? oldValue, int? newValue)
@@ -133,29 +139,29 @@ namespace Naheulbook.Core.Utils
                 CharacterId = characterId,
                 Action = AddItemActionName,
                 Date = DateTime.Now,
-                ItemId = item.Id
+                Data = GetItemLogData(item)
             };
         }
 
-        public CharacterHistoryEntry CreateLogEquipItem(int characterId, int itemId)
+        public CharacterHistoryEntry CreateLogEquipItem(int characterId, Item item)
         {
             return new CharacterHistoryEntry
             {
                 CharacterId = characterId,
                 Action = EquipActionName,
                 Date = DateTime.Now,
-                ItemId = itemId
+                Data = GetItemLogData(item)
             };
         }
 
-        public CharacterHistoryEntry CreateLogUnEquipItem(int characterId, int itemId)
+        public CharacterHistoryEntry CreateLogUnEquipItem(int characterId, Item item)
         {
             return new CharacterHistoryEntry
             {
                 CharacterId = characterId,
                 Action = UnEquipActionName,
                 Date = DateTime.Now,
-                ItemId = itemId
+                Data = GetItemLogData(item)
             };
         }
 
@@ -166,62 +172,62 @@ namespace Naheulbook.Core.Utils
                 CharacterId = character.Id,
                 Action = ApplyModifierActionName,
                 Date = DateTime.Now,
-                CharacterModifier = characterModifier
+                Data = GetCharacterModifierLogData(characterModifier)
             };
         }
 
-        public CharacterHistoryEntry CreateLogRemoveModifier(int characterId, int characterModifierId)
+        public CharacterHistoryEntry CreateLogRemoveModifier(int characterId, CharacterModifier characterModifier)
         {
             return new CharacterHistoryEntry
             {
                 CharacterId = characterId,
                 Action = RemoveModifierActionName,
                 Date = DateTime.Now,
-                CharacterModifierId = characterModifierId
+                Data = GetCharacterModifierLogData(characterModifier)
             };
         }
 
-        public CharacterHistoryEntry CreateLogActiveModifier(int characterId, int characterModifierId)
+        public CharacterHistoryEntry CreateLogActiveModifier(int characterId, CharacterModifier characterModifier)
         {
             return new CharacterHistoryEntry
             {
                 CharacterId = characterId,
                 Action = ActiveModifierActionName,
                 Date = DateTime.Now,
-                CharacterModifierId = characterModifierId
+                Data = GetCharacterModifierLogData(characterModifier)
             };
         }
 
-        public CharacterHistoryEntry CreateLogDisableModifier(int characterId, int characterModifierId)
+        public CharacterHistoryEntry CreateLogDisableModifier(int characterId, CharacterModifier characterModifier)
         {
             return new CharacterHistoryEntry
             {
                 CharacterId = characterId,
                 Action = DisableModifierActionName,
                 Date = DateTime.Now,
-                CharacterModifierId = characterModifierId
+                Data = GetCharacterModifierLogData(characterModifier)
             };
         }
 
-        public CharacterHistoryEntry CreateLogGiveItem(int characterId, Item item)
+        public CharacterHistoryEntry CreateLogGiveItem(int characterId, Item item, string destCharacterName)
         {
             return new CharacterHistoryEntry
             {
                 CharacterId = characterId,
                 Action = GiveItemActionName,
                 Date = DateTime.Now,
-                ItemId = item.Id
+                Data = GetItemGiveLogData(item, destCharacterName)
             };
         }
 
-        public CharacterHistoryEntry CreateLogGivenItem(int characterId, Item item)
+        public CharacterHistoryEntry CreateLogGivenItem(int characterId, Item item, string? sourceCharacterName)
         {
             return new CharacterHistoryEntry
             {
                 CharacterId = characterId,
                 Action = GivenItemActionName,
                 Date = DateTime.Now,
-                ItemId = item.Id
+                Data = GetItemGiveLogData(item, sourceCharacterName)
             };
         }
 
@@ -232,7 +238,7 @@ namespace Naheulbook.Core.Utils
                 CharacterId = characterId,
                 Action = LootItemActionName,
                 Date = DateTime.Now,
-                ItemId = item.Id
+                Data = GetItemLogData(item)
             };
         }
 
@@ -243,8 +249,7 @@ namespace Naheulbook.Core.Utils
                 CharacterId = characterId,
                 Action = ChangeQuantityActionName,
                 Date = DateTime.Now,
-                ItemId = item.Id,
-                Data = _jsonUtil.Serialize(new {oldValue, newValue})
+                Data = GetItemQuantityChangeDataLog(item, oldValue, newValue)
             };
         }
 
@@ -255,8 +260,7 @@ namespace Naheulbook.Core.Utils
                 CharacterId = characterId,
                 Action = UseChargeActionName,
                 Date = DateTime.Now,
-                ItemId = item.Id,
-                Data = _jsonUtil.Serialize(new {oldValue, newValue})
+                Data = GetItemQuantityChangeDataLog(item, oldValue, newValue)
             };
         }
 
@@ -267,7 +271,7 @@ namespace Naheulbook.Core.Utils
                 CharacterId = characterId,
                 Action = ReadBookActionName,
                 Date = DateTime.Now,
-                ItemId = item.Id
+                Data = GetItemLogData(item)
             };
         }
 
@@ -278,7 +282,7 @@ namespace Naheulbook.Core.Utils
                 CharacterId = characterId,
                 Action = IdentifyActionName,
                 Date = DateTime.Now,
-                ItemId = item.Id
+                Data = GetItemLogData(item)
             };
         }
 
@@ -289,8 +293,60 @@ namespace Naheulbook.Core.Utils
                 CharacterId = characterId,
                 Action = LevelUpActionName,
                 Date = DateTime.Now,
-                Info = level.ToString()
+                Data = _jsonUtil.SerializeNonNull(new {level})
             };
+        }
+
+        private string? GetItemLogData(Item item)
+        {
+            var itemData = _itemDataUtil.GetItemData(item);
+            var itemLogData = _jsonUtil.Serialize(new ItemLogData
+            {
+                Name = itemData.Name ?? item.ItemTemplate?.Name,
+                Quantity = itemData.Quantity,
+                Ug = itemData.Ug,
+                Icon = itemData.Icon
+            });
+            return itemLogData;
+        }
+
+        private string? GetItemQuantityChangeDataLog(Item item, int? oldValue, int? newValue)
+        {
+            var itemData = _itemDataUtil.GetItemData(item);
+            var itemLogData = _jsonUtil.Serialize(new ItemQuantityChangeLogData
+            {
+                Name = itemData.Name ?? item.ItemTemplate?.Name,
+                Quantity = itemData.Quantity,
+                Ug = itemData.Ug,
+                Icon = itemData.Icon,
+                NewValue = newValue,
+                OldValue = oldValue
+            });
+            return itemLogData;
+        }
+
+
+        private string? GetItemGiveLogData(Item item, string? characterName)
+        {
+            var itemData = _itemDataUtil.GetItemData(item);
+            var itemLogData = _jsonUtil.Serialize(new ItemGiveLogData
+            {
+                Name = itemData.Name ?? item.ItemTemplate?.Name,
+                Quantity = itemData.Quantity,
+                Ug = itemData.Ug,
+                Icon = itemData.Icon,
+                CharacterName = characterName
+            });
+            return itemLogData;
+        }
+
+        private string? GetCharacterModifierLogData(CharacterModifier modifier)
+        {
+            var itemLogData = _jsonUtil.Serialize(new CharacterModifierLogData
+            {
+                Name = modifier.Name
+            });
+            return itemLogData;
         }
     }
 }

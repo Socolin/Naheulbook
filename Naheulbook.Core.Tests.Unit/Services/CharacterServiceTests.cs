@@ -535,14 +535,15 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             const int characterModifierId = 2;
+            var characterModifier = new CharacterModifier();
             var characterHistoryEntry = new CharacterHistoryEntry();
 
-            _characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId)
+            _characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifier)
                 .Returns(characterHistoryEntry);
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
                 .Returns(new Character());
             _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(Arg.Any<int>(), Arg.Any<int>())
-                .Returns(new CharacterModifier());
+                .Returns(characterModifier);
 
             await _service.DeleteModifiersAsync(new NaheulbookExecutionContext(), characterId, characterModifierId);
 

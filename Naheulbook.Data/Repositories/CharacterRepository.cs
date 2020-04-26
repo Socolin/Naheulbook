@@ -76,9 +76,6 @@ namespace Naheulbook.Data.Repositories
         {
             var history = new List<IHistoryEntry>();
             var characterHistory = await Context.CharacterHistory
-                .Include(x => x.Item)
-                .Include(x => x.Effect)
-                .Include(x => x.CharacterModifier)
                 .Where(x => x.CharacterId == characterId)
                 .Where(x => x.Gm && isGm || !x.Gm)
                 .OrderByDescending(x => x.Date)
