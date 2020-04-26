@@ -28,7 +28,7 @@ namespace Naheulbook.Shared.Clients.Facebook
         public async Task<string> GetAccessTokenAsync(string redirectUri, string code)
         {
             var requestUri = new StringBuilder();
-            requestUri.AppendFormat("https://graph.facebook.com/v2.12/oauth/access_token");
+            requestUri.AppendFormat("https://graph.facebook.com/v6.0/oauth/access_token");
             requestUri.AppendFormat("?redirect_uri={0}", Uri.EscapeUriString(redirectUri));
             requestUri.AppendFormat("&code={0}", Uri.EscapeUriString(code));
             requestUri.AppendFormat("&client_id={0}", _configuration.AppId);
