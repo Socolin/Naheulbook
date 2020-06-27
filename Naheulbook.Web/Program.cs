@@ -35,7 +35,6 @@ namespace Naheulbook.Web
                     .CreateLogger();
 
                 var server = new WebHostBuilder()
-                    .UseLibuv()
                     .ConfigureKestrel((context, options) =>
                     {
                         options.Limits.MaxRequestBodySize = 60000000;
