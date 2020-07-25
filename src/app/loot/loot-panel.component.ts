@@ -1,4 +1,4 @@
-import {OnDestroy} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
@@ -8,6 +8,9 @@ import {Loot} from './loot.model';
 import {WebSocketService} from '../websocket';
 import {CharacterSummaryResponse} from '../api/responses';
 
+@Component({
+    template: ``
+})
 export class LootPanelComponent implements OnDestroy {
     public loots: Loot[] = [];
     public lootSubscriptions: { [lootId: number]: Subscription[] } = {};
