@@ -39,3 +39,4 @@ export * from './origin-response';
 export * from './random-character-name-response';
 export * from './skill-response';
 export * from './speciality-response';
+export * from './stat-requirement-response';

@@ -3,6 +3,7 @@ import {DescribedFlagResponse} from './described-flag-response';
 import {SpecialityResponse} from './speciality-response';
 import {JobStatData} from '../shared';
 import {Guid} from '../shared/util';
+import {StatRequirementResponse} from './stat-requirement-response';
 
 export interface JobResponse {
     id: Guid;
