@@ -1,0 +1,4 @@
+user-agent: *
+allow: /
+disallow: /player
+disallow: /gm

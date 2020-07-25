@@ -24,6 +24,7 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/privacy.html",
+              "src/robots.txt",
               "src/assets",
               {
                 "glob": "favicon.ico",
