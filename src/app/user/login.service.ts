@@ -158,7 +158,7 @@ export class LoginService {
     }
 
     searchUser(filter: string): Observable<Object[]> {
-        return this.httpClient.post<Object[]>('/api/user/searchUser', {filter: filter});
+        return this.httpClient.post<Object[]>('/api/v2/users/search', {filter: filter});
     }
 
     redirectToFbLogin(redirectPage: string, errorCb?: (error) => void) {
