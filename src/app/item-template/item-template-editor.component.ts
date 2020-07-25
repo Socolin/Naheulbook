@@ -1,7 +1,6 @@
 import {forkJoin} from 'rxjs';
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
-import {isNullOrUndefined} from 'util';
 import {God, IconSelectorComponent, IconSelectorComponentDialogData, MiscService, NhbkDialogService} from '../shared';
 import {LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
@@ -367,7 +366,7 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (this.itemTemplate.data.diceDrop) {
             modules.push('diceDrop');
         }
-        if (!isNullOrUndefined(this.itemTemplate.data.enchantment)) {
+        if (this.itemTemplate.data.enchantment !== undefined) {
             modules.push('enchantment');
         }
         if (this.itemTemplate.data.useUG) {
@@ -388,17 +387,16 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (this.itemTemplate.data.lifetime) {
             modules.push('lifetime');
         }
-        if (!isNullOrUndefined(this.itemTemplate.modifiers) && this.itemTemplate.modifiers.length) {
+        if (this.itemTemplate.modifiers?.length) {
             modules.push('modifiers');
         }
-        if (!isNullOrUndefined(this.itemTemplate.data.itemTypes) && this.itemTemplate.data.itemTypes.length) {
+        if (this.itemTemplate.data.itemTypes?.length) {
             modules.push('itemTypes');
         }
-        if (!isNullOrUndefined(this.itemTemplate.data.origin)) {
+        if (this.itemTemplate.data.origin) {
             modules.push('origin');
         }
-        if (!isNullOrUndefined(this.itemTemplate.requirements)
-            && this.itemTemplate.requirements.length) {
+        if (this.itemTemplate.requirements?.length) {
             modules.push('prereq');
         }
         if (this.itemTemplate.data.protection
@@ -409,27 +407,25 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         if (this.itemTemplate.data.quantifiable) {
             modules.push('quantifiable');
         }
-        if (!isNullOrUndefined(this.itemTemplate.data.rarityIndicator)) {
+        if (this.itemTemplate.data.rarityIndicator !== undefined) {
             modules.push('rarity');
         }
         if (this.itemTemplate.data.relic) {
             modules.push('relic');
         }
-        if (!isNullOrUndefined(this.itemTemplate.data.rupture)) {
+        if (this.itemTemplate.data.rupture !== undefined) {
             modules.push('rupture');
         }
         if (this.itemTemplate.data.sex) {
             modules.push('sex');
         }
-        if ((!isNullOrUndefined(this.itemTemplate.skills) && this.itemTemplate.skills.length)
-            || (!isNullOrUndefined(this.itemTemplate.unSkills) && this.itemTemplate.unSkills.length)
-            || (!isNullOrUndefined(this.itemTemplate.skillModifiers) && this.itemTemplate.skillModifiers.length)) {
+        if (this.itemTemplate.skills?.length || this.itemTemplate.unSkills?.length || this.itemTemplate.skillModifiers?.length) {
             modules.push('skill');
         }
         if (this.itemTemplate.data.skillBook) {
             modules.push('skillBook');
         }
-        if (!isNullOrUndefined(this.itemTemplate.slots) && this.itemTemplate.slots.length) {
+        if (this.itemTemplate.slots?.length) {
             modules.push('slots');
         }
         if (this.itemTemplate.data.space) {

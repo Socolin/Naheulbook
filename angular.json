@@ -12,6 +12,11 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
+            "allowedCommonJsDependencies": [
+              "hammerjs",
+              "leaflet-geometryutil",
+              "leaflet-editable"
+            ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",

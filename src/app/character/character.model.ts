@@ -1,6 +1,5 @@
 import {Subject} from 'rxjs';
 
-import {isNullOrUndefined} from 'util';
 import {
     ActiveStatsModifier,
     DurationChange,
@@ -1008,10 +1007,10 @@ export class Character extends WsRegistrable {
             this.computedData.details.add('Malus FO < 9', {'PI': -1});
         }
 
-        if (isNullOrUndefined(this.ev)) {
+        if (this.ev === undefined) {
             this.ev = this.computedData.stats['EV'];
         }
-        if (isNullOrUndefined(this.ea) && !isNullOrUndefined(this.computedData.stats['EA'])) {
+        if (this.ea  === undefined && this.computedData.stats['EA']) {
             this.ea = this.computedData.stats['EA'];
         }
 

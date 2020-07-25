@@ -1,5 +1,4 @@
 import {Subject} from 'rxjs';
-import {isNullOrUndefined} from 'util';
 
 import {ActiveStatsModifier, DurationChange, IMetadata, StatModifier} from '../shared';
 import {Skill, SkillDictionary} from '../skill';
@@ -251,7 +250,7 @@ export class Monster extends WsRegistrable {
         if (mod.stat === 'AT') {
             this.computedData.at = StatModifier.apply(this.computedData.at, mod);
         }
-        if (mod.stat === 'PRD' && !isNullOrUndefined(this.computedData.prd)) {
+        if (mod.stat === 'PRD' && this.computedData.prd !== undefined) {
             this.computedData.prd = StatModifier.apply(this.computedData.prd, mod);
         }
         if (mod.stat === 'AD') {

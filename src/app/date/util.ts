@@ -1,5 +1,4 @@
 import {NhbkDateOffset, NhbkDate} from './date.model';
-import {isNullOrUndefined} from 'util';
 
 export class NhbkDateUtil {
     public static yearDuration = 365 * 24 * 3600;
@@ -23,8 +22,8 @@ export function dateOffset2TimeDuration (dateOffset: NhbkDateOffset): number {
 }
 
 
-export function date2Timestamp (date: NhbkDate): number {
-    if (isNullOrUndefined(date)) {
+export function date2Timestamp (date?: NhbkDate): number {
+    if (date === undefined) {
         return 0;
     }
 
