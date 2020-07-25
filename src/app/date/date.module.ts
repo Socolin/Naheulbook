@@ -39,10 +39,6 @@ import { DateSelectorDialogComponent } from './date-selector-dialog.component';
         NhbkDateShortDurationPipe,
         DurationSelectorComponent,
     ],
-    entryComponents: [
-        DateSelectorDialogComponent,
-        DurationSelectorDialogComponent,
-    ],
     providers: [DateService]
 })
 export class DateModule {

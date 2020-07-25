@@ -44,12 +44,6 @@ import { ItemTemplateDialogComponent } from './item-template-dialog.component';
         AddItemTemplateEditorModuleDialogComponent,
         ItemTemplateDialogComponent,
     ],
-    entryComponents: [
-        CreateItemTemplateDialogComponent,
-        EditItemTemplateDialogComponent,
-        AddItemTemplateEditorModuleDialogComponent,
-        ItemTemplateDialogComponent,
-    ],
     exports: [
         ItemTemplateListComponent,
         AutocompleteSearchItemTemplateComponent,

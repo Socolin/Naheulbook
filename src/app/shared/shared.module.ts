@@ -62,11 +62,6 @@ import {
         TextFormatterPipe,
         ValueEditorComponent,
     ],
-    entryComponents: [
-        ConfirmGmModeDialogComponent,
-        IconSelectorComponent,
-        PromptDialogComponent,
-    ],
     providers: [
         IconService,
         MiscService,

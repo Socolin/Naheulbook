@@ -34,9 +34,6 @@ import { NameGeneratorDialogComponent } from './name-generator-dialog.component'
     providers: [
         OriginService,
     ],
-    entryComponents: [
-        NameGeneratorDialogComponent,
-    ],
     exports: [
         OriginComponent,
         OriginListComponent,

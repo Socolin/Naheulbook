@@ -81,18 +81,6 @@ import {MarkdownModule} from '../markdown/markdown.module';
         GroupAddEffectDialogComponent,
         EditNpcDialogComponent,
     ],
-    entryComponents: [
-        AddLootDialogComponent,
-        CharacterSheetDialogComponent,
-        CreateGemDialogComponent,
-        CreateItemDialogComponent,
-        EditNpcDialogComponent,
-        EditMonsterDialogComponent,
-        FighterSelectorComponent,
-        MonsterInventoryDialogComponent,
-        AddMonsterDialogComponent,
-        GroupAddEffectDialogComponent,
-    ],
     providers: [GroupService]
 })
 export class GroupModule {

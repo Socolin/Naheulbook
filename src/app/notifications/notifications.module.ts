@@ -19,9 +19,6 @@ import { ErrorDetailsDialogComponent } from './error-details-dialog.component';
         SimpleNotificationsComponent,
         ErrorDetailsDialogComponent,
     ],
-    entryComponents: [
-        ErrorDetailsDialogComponent,
-    ],
     exports: [
         SimpleNotificationsComponent,
     ],

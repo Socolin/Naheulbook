@@ -40,13 +40,6 @@ import { MonstersDialogComponent } from './monsters-dialog.component';
         MonsterTraitDialogComponent,
         MonstersDialogComponent,
     ],
-    entryComponents: [
-        AddMonsterItemDialogComponent,
-        EditMonsterTemplateDialogComponent,
-        SelectMonsterTraitsDialogComponent,
-        MonsterTraitDialogComponent,
-        MonstersDialogComponent,
-    ],
     providers: [
         MonsterService,
         MonsterTemplateService,

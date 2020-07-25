@@ -44,14 +44,6 @@ import {
     providers: [
         EffectService
     ],
-    entryComponents: [
-        AddEffectDialogComponent,
-        CreateEffectTypeDialogComponent,
-        EditEffectDialogComponent,
-        StatModifierAdvancedDialogComponent,
-        ModifierDetailsDialogComponent,
-        AddStatModifierDialogComponent,
-    ],
     exports: [
         ActiveEffectEditorComponent,
         AddEffectDialogComponent,

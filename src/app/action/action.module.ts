@@ -24,10 +24,7 @@ import {EffectModule} from '../effect/effect.module';
         NhbkActionComponent,
         NhbkActionEditorDialogComponent,
     ],
-    providers: [],
-    entryComponents: [
-        NhbkActionEditorDialogComponent
-    ]
+    providers: []
 })
 export class ActionModule {
 }

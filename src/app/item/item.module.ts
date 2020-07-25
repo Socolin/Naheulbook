@@ -26,9 +26,6 @@ import {ActionModule} from '../action/action.module';
         ItemListComponent,
         ItemDialogComponent
     ],
-    entryComponents: [
-        ItemDialogComponent
-    ],
     providers: [
         ItemService
     ],

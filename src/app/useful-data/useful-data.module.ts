@@ -51,17 +51,6 @@ import {
         OriginsDialogComponent,
         SkillsDialogComponent,
     ],
-    entryComponents: [
-        EffectListDialogComponent,
-        EntropicSpellsDialogComponent,
-        EpicFailsCriticalSuccessDialogComponent,
-        RecoveryDialogComponent,
-        TravelDialogComponent,
-        ItemTemplatesDialogComponent,
-        JobsDialogComponent,
-        OriginsDialogComponent,
-        SkillsDialogComponent,
-    ],
     exports: [
         UsefulDataComponent,
     ],

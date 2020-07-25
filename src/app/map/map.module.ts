@@ -85,11 +85,6 @@ import {
     providers: [
         MapService,
     ],
-    entryComponents: [
-        MapLayerDialogComponent,
-        MapMarkerLinkDialogComponent,
-        SelectMarkerTypeDialogComponent,
-    ]
 })
 export class MapModule {
 }
