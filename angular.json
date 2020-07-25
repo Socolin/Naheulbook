@@ -17,6 +17,7 @@
             "tsConfig": "src/tsconfig.json",
             "polyfills": "src/polyfills.ts",
             "assets": [
+              "src/privacy.html",
               "src/assets",
               {
                 "glob": "favicon.ico",
