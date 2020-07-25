@@ -187,7 +187,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     takeOwnership(character) {
-        this.characterService.changeGmData(character.id, 'owner', 0).subscribe(
+        this.characterService.changeGmData(character.id, 'ownerId', 0).subscribe(
             change => {
                 character.user = change.value;
                 this.notification.success('Modification personnage', 'Ce personnage vous appartient a présent');
@@ -197,7 +197,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     setOwnership(user) {
         let character = this.selectedCharacter;
-        this.characterService.changeGmData(character.id, 'owner', user.id).subscribe(
+        this.characterService.changeGmData(character.id, 'ownerId', user.id).subscribe(
             change => {
                 character.user = change.value;
                 this.notification.success('Modification personnage', 'Ce personnage a changé de propriétaire');
