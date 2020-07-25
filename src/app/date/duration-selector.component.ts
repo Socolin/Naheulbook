@@ -2,7 +2,8 @@ import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from 
 
 import {dateOffset2TimeDuration, timeDuration2DateOffset2} from './util';
 import {NhbkDateOffset} from './date.model';
-import {MatButtonToggleChange, MatSelectChange} from '@angular/material';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { MatSelectChange } from '@angular/material/select';
 import {
     DurationSelectorDialogComponent,
     DurationSelectorDialogData,

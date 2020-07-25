@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Item} from '../item';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {IconDescription} from '../shared/icon.model';
 

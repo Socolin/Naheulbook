@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
 
-import {MatSidenav} from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import {GmModeService} from '../shared';
 import {Subscription} from 'rxjs';
 

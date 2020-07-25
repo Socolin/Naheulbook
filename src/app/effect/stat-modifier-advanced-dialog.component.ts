@@ -1,5 +1,8 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef, MatOption, MatSelect, MatSelectionList} from '@angular/material';
+import { MatOption } from '@angular/material/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSelectionList } from '@angular/material/list';
+import { MatSelect } from '@angular/material/select';
 import {Origin, OriginService} from '../origin';
 import {Job, JobService} from '../job';
 

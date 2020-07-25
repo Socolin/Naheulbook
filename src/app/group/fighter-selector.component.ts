@@ -1,5 +1,6 @@
 import {Component, Inject, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSelectionList} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSelectionList } from '@angular/material/list';
 
 import {Group} from './group.model';
 import {IconDescription} from '../shared/icon.model';

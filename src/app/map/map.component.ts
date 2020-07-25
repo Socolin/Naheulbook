@@ -1,7 +1,7 @@
 import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {FormControl, FormGroup} from '@angular/forms';
-import {MatSidenav} from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 import {BehaviorSubject, combineLatest, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';

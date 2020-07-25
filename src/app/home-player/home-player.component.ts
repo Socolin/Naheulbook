@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
 
-import {MatSidenav} from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import {CharacterService} from '../character';
 import {CharacterSummaryResponse} from '../api/responses';
 

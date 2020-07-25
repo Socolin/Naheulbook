@@ -6,7 +6,7 @@ import {Job} from '../job';
 import {Origin} from '../origin';
 
 import {Skill, SkillService} from '../skill';
-import {MatSelectionListChange} from '@angular/material';
+import { MatSelectionListChange } from '@angular/material/list';
 import {Guid} from '../api/shared/util';
 
 @Component({

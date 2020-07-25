@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatTabChangeEvent, MatTabGroup} from '@angular/material';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import {Overlay} from '@angular/cdk/overlay';
 import {Subscription} from 'rxjs';
 
