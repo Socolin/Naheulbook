@@ -1,6 +1,7 @@
 <div *ngFor="let item of filteredBagItems" class="top-level-items separator">
     <div class="item">
         <button *ngIf="item.content"
+                [attr.aria-label]="collapsed[item.id] ? 'Afficher contenu de l\'objet' : 'Cacher le contenu de l\'objet'"
                 (click)="toggleExpand(item)"
                 mat-icon-button>
             <mat-icon *ngIf="!collapsed[item.id]">

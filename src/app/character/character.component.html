@@ -16,7 +16,7 @@
             <mat-card>
                 <mat-card-title style="display: flex; justify-content: space-between; align-items: center">
                     {{character.name}}
-                    <button mat-icon-button [matMenuTriggerFor]="characterBasicChange">
+                    <button mat-icon-button [matMenuTriggerFor]="characterBasicChange" aria-label="Menu edition du joueur">
                         <mat-icon>more_vert</mat-icon>
                     </button>
                 </mat-card-title>
@@ -40,7 +40,7 @@
                         <dt>Origine</dt>
                         <dd style="display: flex; align-items: center">
                             {{character.origin.name}}
-                            <button mat-icon-button (click)="openOriginInfoDialog()">
+                            <button mat-icon-button (click)="openOriginInfoDialog()" aria-label="Afficher les informations de l'origine">
                                 <mat-icon>info</mat-icon>
                             </button>
                         </dd>
@@ -48,7 +48,7 @@
                         <dt>Metier</dt>
                         <dd *ngFor="let job of character.jobs" style="display: flex; align-items: center">
                             {{job.name}}
-                            <button mat-icon-button (click)="openJobInfoDialog(job)">
+                            <button mat-icon-button (click)="openJobInfoDialog(job)" aria-label="Afficher les informations du métier">
                                 <mat-icon>info</mat-icon>
                             </button>
                         </dd>
@@ -183,7 +183,7 @@
                         <span class="cancel-reason" *ngIf="skill.canceled">
                             {{skill.canceled}}
                         </span>
-                        <button class="info" mat-icon-button (click)="openSkillInfoDialog(skill.skillDef)">
+                        <button class="info" mat-icon-button (click)="openSkillInfoDialog(skill.skillDef)" aria-label="Afficher les informations de la compétence">
                             <mat-icon>info</mat-icon>
                         </button>
                         <div class="source secondary-text">
@@ -702,7 +702,7 @@
 </mat-tab-group>
 
 <div class="add-button" *ngIf="currentTab === 'inventory'">
-    <button class="extended-fab-button" mat-fab color="primary" (click)="inventoryPanel.openAddItemModal()">
+    <button class="extended-fab-button" mat-fab color="primary" (click)="inventoryPanel.openAddItemModal()" aria-label="Ajouter un objet">
         <mat-icon>add</mat-icon>
         <span class="extended-fab-button__text">Ajouter un objet</span>
     </button>

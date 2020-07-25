@@ -1,7 +1,7 @@
 <mat-card>
     <mat-card-title>
         Effets
-        <button mat-icon-button (click)="openAddEffectDialog()">
+        <button mat-icon-button (click)="openAddEffectDialog()" aria-label="Ajouter un effet">
             <mat-icon>add</mat-icon>
         </button>
     </mat-card-title>
@@ -11,9 +11,10 @@
                 <div *ngIf="!modifier.permanent" class="effect-element">
                     <div class="toggle">
                         <mat-checkbox color="primary"
-                                     [disabled]="!modifier.reusable"
-                                     [checked]="modifier.active"
-                                     (change)="updateReusableModifier(modifier)">
+                                      [aria-label]="modifier.active ? 'Effet activé' : 'Effet inactif'"
+                                      [disabled]="!modifier.reusable"
+                                      [checked]="modifier.active"
+                                      (change)="updateReusableModifier(modifier)">
                         </mat-checkbox>
                     </div>
                     <div class="info" mat-ripple (click)="openModifierDialog(modifier)">
@@ -41,7 +42,7 @@
                         </div>
                     </div>
                     <div class="actions">
-                        <button mat-icon-button [matMenuTriggerFor]="modifierActions" [matMenuTriggerData]="{modifier: modifier}">
+                        <button mat-icon-button [matMenuTriggerFor]="modifierActions" [matMenuTriggerData]="{modifier: modifier}" aria-label="Afficher le menu de l'effet">
                             <mat-icon>more_vert</mat-icon>
                         </button>
                     </div>

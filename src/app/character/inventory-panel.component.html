@@ -1,15 +1,15 @@
 <div class="inventory-header">
     <mat-form-field class="filter">
         <input matInput [(ngModel)]="itemFilterName" placeholder="Filtre" autocomplete="off" autocapitalize="off"/>
-        <button matSuffix mat-icon-button *ngIf="itemFilterName?.length" (click)="itemFilterName = undefined">
+        <button matSuffix mat-icon-button *ngIf="itemFilterName?.length" (click)="itemFilterName = undefined" aria-label="Réinitialiser le filtre">
             <mat-icon>close</mat-icon>
         </button>
     </mat-form-field>
 
-    <button mat-icon-button class="sort" [matMenuTriggerFor]="sortMenu">
+    <button mat-icon-button class="sort" [matMenuTriggerFor]="sortMenu" aria-label="Trier">
         <mat-icon>sort</mat-icon>
     </button>
-    <button mat-icon-button class="view" [matMenuTriggerFor]="viewModeMenu">
+    <button mat-icon-button class="view" [matMenuTriggerFor]="viewModeMenu" aria-label="Filtrer les objets afficher">
         <mat-icon *ngIf="viewMode === 'all'">list</mat-icon>
         <mat-icon *ngIf="viewMode === 'bag'">account_tree</mat-icon>
         <mat-icon *ngIf="viewMode === 'money'" fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>

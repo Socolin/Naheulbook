@@ -10,7 +10,7 @@
                         <mat-card-title>
                             {{group.name}}
                         </mat-card-title>
-                        <button mat-icon-button [matMenuTriggerFor]="groupMenu">
+                        <button mat-icon-button [matMenuTriggerFor]="groupMenu" aria-label="Afficher le menu du groupe">
                             <mat-icon>more_vert</mat-icon>
                         </button>
                     </mat-card-header>
@@ -70,7 +70,7 @@
                 <mat-card>
                     <mat-card-title>
                         Joueurs
-                        <button mat-icon-button [matMenuTriggerFor]="charactersActions">
+                        <button mat-icon-button [matMenuTriggerFor]="charactersActions" aria-label="Afficher le menu des joueurs">
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu xPosition="before" #charactersActions="matMenu">
@@ -118,7 +118,7 @@
                                     </span>
                                 </p>
 
-                                <button mat-icon-button [matMenuTriggerFor]="characterActions">
+                                <button mat-icon-button [matMenuTriggerFor]="characterActions" [attr.aria-label]="'Afficher le menu pour le joueur ' + character.name">
                                     <mat-icon>more_vert</mat-icon>
                                 </button>
                                 <mat-menu xPosition="before" #characterActions="matMenu">
@@ -178,7 +178,7 @@
                                         {{invite.origin}} <span
                                         *ngIf="invite.jobs && invite.jobs.length">- {{invite.jobs.join()}}</span>
                                     </p>
-                                    <button mat-icon-button [matMenuTriggerFor]="invitesActions">
+                                    <button mat-icon-button [matMenuTriggerFor]="invitesActions" aria-label="Afficher le menu de l'invitation">
                                         <mat-icon>more_vert</mat-icon>
                                     </button>
                                     <mat-menu xPosition="before" #invitesActions="matMenu">
@@ -197,7 +197,7 @@
                                         {{invite.origin}} <span
                                         *ngIf="invite.jobs && invite.jobs.length">- {{invite.jobs.join()}}</span>
                                     </p>
-                                    <button mat-icon-button [matMenuTriggerFor]="invitedActions">
+                                    <button mat-icon-button [matMenuTriggerFor]="invitedActions" aria-label="Afficher le menu de l'invitation">
                                         <mat-icon>more_vert</mat-icon>
                                     </button>
                                     <mat-menu xPosition="before" #invitedActions="matMenu">
@@ -212,7 +212,7 @@
                 <mat-card>
                     <mat-card-title>
                         PNJs
-                        <button mat-icon-button [matMenuTriggerFor]="npcActions">
+                        <button mat-icon-button [matMenuTriggerFor]="npcActions" aria-label="Afficher le menu des PNJ">
                             <mat-icon>more_vert</mat-icon>
                         </button>
 

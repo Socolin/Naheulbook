@@ -13,14 +13,14 @@
     <div>
         <mat-toolbar color="primary">
             <mat-toolbar-row>
-                <button mat-icon-button (click)="start.open()">
+                <button mat-icon-button (click)="start.open()" aria-label="Afficher le menu">
                     <mat-icon>menu</mat-icon>
                 </button>
                 <div class="app-toolbar">
                     <h1 class="mat-h1">
                         Naheulbook
                     </h1>
-                    <a class="home-link" [routerLink]="['/']"><mat-icon>home</mat-icon></a>
+                    <a class="home-link" aria-label="Page d'accueil" [routerLink]="['/']"><mat-icon>home</mat-icon></a>
                 </div>
             </mat-toolbar-row>
         </mat-toolbar>
