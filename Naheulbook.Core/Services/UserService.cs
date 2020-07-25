@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Naheulbook.Core.Services
         Task<User> CheckPasswordAsync(string username, string password);
         Task<User> GetUserInfoAsync(int userId);
         Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request);
+        Task<List<User>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter);
     }
 
     public class UserService : IUserService
@@ -121,6 +123,14 @@ namespace Naheulbook.Core.Services
                 user.DisplayName = request.DisplayName;
 
                 await uow.SaveChangesAsync();
+            }
+        }
+
+        public async Task<List<User>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await uow.Users.SearchUsersAsync(filter);
             }
         }
     }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,7 @@ namespace Naheulbook.Data.Repositories
         Task<User> GetByGoogleIdAsync(string googleId);
         Task<User> GetByTwitterIdAsync(string twitterId);
         Task<User> GetByMicrosoftIdAsync(string microsoftId);
+        Task<List<User>> SearchUsersAsync(string filter);
     }
 
     public class UserRepository : Repository<User, NaheulbookDbContext>, IUserRepository
@@ -55,6 +58,14 @@ namespace Naheulbook.Data.Repositories
             return Context.Users
                 .Where(u => u.MicrosoftId == microsoftId)
                 .SingleOrDefaultAsync();
+        }
+
+        public Task<List<User>> SearchUsersAsync(string filter)
+        {
+            return Context.Users
+                .Where(u => u.DisplayName != null && u.DisplayName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                .Take(10)
+                .ToListAsync();
         }
     }
 }

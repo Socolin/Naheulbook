@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -119,6 +120,22 @@ namespace Naheulbook.Web.Controllers
             return NoContent();
         }
 
+        [HttpPost("search")]
+        public async Task<ActionResult<List<UserSearchResponse>>> PostSearchAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            SearchUserRequest request
+        )
+        {
+            try
+            {
+                var users = await _userService.SearchUserAsync(executionContext, request.Filter);
+                return _mapper.Map<List<UserSearchResponse>>(users);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+            }
+        }
 
         [HttpPatch("{UserId:int:min(1)}")]
         public async Task<IActionResult> PatchUserIdAsync(

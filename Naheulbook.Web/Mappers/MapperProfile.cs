@@ -258,6 +258,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.LinkedWithGoogle, opt => opt.MapFrom(u => u.TwitterId != null))
                 .ForMember(m => m.LinkedWithMicrosoft, opt => opt.MapFrom(u => u.MicrosoftId != null))
                 ;
+            CreateMap<User, UserSearchResponse>();
         }
     }
 }

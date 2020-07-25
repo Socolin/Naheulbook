@@ -20,7 +20,7 @@ namespace Naheulbook.Data.Models
 
         public string? TwitterId { get; set; }
 
-        public string? DisplayName { get; set; }
+        public string?DisplayName { get; set; }
 
         public ICollection<Group> Groups { get; set; } = null!;
         public ICollection<Character> Characters { get; set; } = null!;
