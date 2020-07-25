@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Subject, Observable, Observer} from 'rxjs';
-import * as signalR from '@aspnet/signalr';
+import * as signalR from '@microsoft/signalr';
 
 import {MiscService} from '../shared';
 import {NotificationsService} from '../notifications';
