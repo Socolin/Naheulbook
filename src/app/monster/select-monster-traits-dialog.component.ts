@@ -26,7 +26,7 @@ export class SelectMonsterTraitsDialogComponent implements OnInit {
     public selectedSimpleTraits: { [id: number]: boolean } = {};
     public selectedPowerTraits: { [id: number]: number } = {};
 
-    @ViewChild('simpleTraitsSelector', {static: false})
+    @ViewChild('simpleTraitsSelector')
     public simpleTraitsSelector: MatSelectionList;
 
     constructor(

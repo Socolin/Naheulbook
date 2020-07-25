@@ -28,7 +28,7 @@ export class ItemListComponent implements OnChanges {
     @Output()
     public deleteItems: EventEmitter<Item[]> = new EventEmitter<Item[]>();
 
-    @ViewChild('selectAllCheckbox', {static: false})
+    @ViewChild('selectAllCheckbox')
     private selectAllCheckbox?: MatCheckbox;
     public selectedItems: Item[] = [];
 

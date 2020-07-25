@@ -55,7 +55,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private menuSidenav: MatSidenav;
     @ViewChild('infoSidenav', {static: true})
     private infoSidenav: MatSidenav;
-    @ViewChild('markerNameInput', {static: false})
+    @ViewChild('markerNameInput')
     private markerNameInput: ElementRef;
 
     protected subscription: Subscription = new Subscription();
