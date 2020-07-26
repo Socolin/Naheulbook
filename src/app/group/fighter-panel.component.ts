@@ -14,6 +14,7 @@ import {AddMonsterDialogComponent, AddMonsterDialogResult} from './add-monster-d
 import {CreateMonsterRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {NhbkMatDialog} from '../material-workaround';
+import {EndCombatDialogComponent, EndCombatDialogResult} from './end-combat-dialog.component';
 
 @Component({
     selector: 'fighter-panel',
@@ -156,12 +157,14 @@ export class FighterPanelComponent implements OnInit {
         );
     }
 
-    endCombat() {
+    endCombat(decreaseCombatTimer: boolean) {
         this.groupService.endCombat(this.group.id).subscribe(
             () => {
                 this.group.data.changeValue('inCombat', false);
-                let changes = this.group.updateTime('combat', 1);
-                this.groupService.saveChangedTime(this.group.id, changes);
+                if (decreaseCombatTimer) {
+                    let changes = this.group.updateTime('combat', 1);
+                    this.groupService.saveChangedTime(this.group.id, changes);
+                }
             }
         );
     }
@@ -183,5 +186,15 @@ export class FighterPanelComponent implements OnInit {
                 this.deadMonsters = monsters;
             }
         );
+    }
+
+    openEndCombatDialog() {
+        const dialogRef = this.dialog.open<EndCombatDialogComponent, any, EndCombatDialogResult>(EndCombatDialogComponent)
+        dialogRef.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
+            this.endCombat(result.decreaseCombatTimer);
+        })
     }
 }

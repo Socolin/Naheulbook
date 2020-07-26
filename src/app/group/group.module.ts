@@ -39,6 +39,7 @@ import {AddMonsterDialogComponent} from './add-monster-dialog.component';
 import {MonsterEditorComponent} from './monster-editor.component';
 import {GroupAddEffectDialogComponent} from './group-add-effect-dialog.component';
 import {MarkdownModule} from '../markdown/markdown.module';
+import {EndCombatDialogComponent} from './end-combat-dialog.component';
 
 @NgModule({
     imports: [
@@ -80,6 +81,7 @@ import {MarkdownModule} from '../markdown/markdown.module';
         MonsterEditorComponent,
         GroupAddEffectDialogComponent,
         EditNpcDialogComponent,
+        EndCombatDialogComponent,
     ],
     providers: [GroupService]
 })
