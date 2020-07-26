@@ -178,7 +178,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                 character.changeActive(change.value);
                 if (!change.value) {
                     if (this.group.pendingModifierChanges) {
-                        this.groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges);
+                        this.groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges).subscribe();
                         this.group.pendingModifierChanges = undefined;
                     }
                 }
