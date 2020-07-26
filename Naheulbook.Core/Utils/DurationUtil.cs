@@ -81,8 +81,9 @@ namespace Naheulbook.Core.Utils
             foreach (var (item, change) in items.Join(changes.OfType<ItemModifierDurationChange>(), i => i.Id, c => c.ItemId, (item, change) => (item, change)))
             {
                 var modifiers = _jsonUtil.DeserializeOrCreate<List<ActiveStatsModifier>>(item.Modifiers);
-                ApplyChangeOnItemModifier(item, modifiers, change, notificationSession);
+                ApplyChangeOnItemModifier(modifiers, change, notificationSession);
                 item.Modifiers = _jsonUtil.Serialize(modifiers);
+                notificationSession.NotifyItemUpdateModifier(item);
             }
         }
 
@@ -136,7 +137,7 @@ namespace Naheulbook.Core.Utils
             }
         }
 
-        private void ApplyChangeOnItemModifier(Item item, IList<ActiveStatsModifier> modifiers, IModifierChange change, INotificationSession notificationSession)
+        private void ApplyChangeOnItemModifier(IList<ActiveStatsModifier> modifiers, IModifierChange change, INotificationSession notificationSession)
         {
             var newModifier = change.Modifier;
             var modifier = modifiers.First(m => m.Id == newModifier.Id);
@@ -144,7 +145,6 @@ namespace Naheulbook.Core.Utils
             if (!newModifier.Active && !modifier.Reusable)
             {
                 modifiers.Remove(modifier);
-                notificationSession.NotifyItemUpdateModifier(item);
             }
             else
             {
@@ -152,7 +152,6 @@ namespace Naheulbook.Core.Utils
                 modifier.CurrentCombatCount = newModifier.CurrentCombatCount;
                 modifier.CurrentLapCount = newModifier.CurrentLapCount;
                 modifier.CurrentTimeDuration = newModifier.CurrentTimeDuration;
-                notificationSession.NotifyItemUpdateModifier(item);
             }
         }
     }
