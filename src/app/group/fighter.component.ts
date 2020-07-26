@@ -20,6 +20,7 @@ import {openCreateGemDialog} from './create-gem-dialog.component';
 import {ModifierDetailsDialogComponent} from '../effect/modifier-details-dialog.component';
 import {MonsterInventoryDialogComponent} from './monster-inventory-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
+import {CreateMonsterRequest} from '../api/requests';
 
 @Component({
     selector: 'fighter',
@@ -177,6 +178,21 @@ export class FighterComponent implements OnInit {
 
     deleteMonster(monster: Monster) {
         this.actionService.emitAction('deleteMonster', this.group, monster);
+    }
+
+    duplicateMonster(sourceMonster: Monster) {
+        const request: CreateMonsterRequest = {
+            data: {...sourceMonster.data},
+            items: [],
+            modifiers: [],
+            name: sourceMonster.name
+        }
+        this.monsterService.createMonster(this.group.id, request).subscribe(
+            monster => {
+                this.group.addMonster(monster);
+                this.group.notify('addMonster', 'Nouveau monstre ajouté: ' + monster.name, monster);
+            }
+        );
     }
 
     openEditMonsterDialog() {

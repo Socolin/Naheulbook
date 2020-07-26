@@ -16,6 +16,6 @@ export interface IMonsterData {
     note: string;
     color: string;
     number: number;
-    sex: string;
-    page: number;
+    sex?: string;
+    page?: number;
 }

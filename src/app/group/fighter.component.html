@@ -68,6 +68,11 @@
                     <mat-icon fontSet="game-icon" fontIcon="game-icon-tombstone" class="ra-mat-button-icon-24"></mat-icon>
                     Tuer le monstre
                 </button>
+                <button mat-menu-item
+                        (click)=duplicateMonster(fighter.monster)>
+                    <mat-icon>content_copy</mat-icon>
+                    Dupliquer le monstre
+                </button>
                 <button mat-menu-item [matMenuTriggerFor]="deleteMonsterConfirm">
                     <mat-icon>delete</mat-icon>
                     Supprimer le monstre

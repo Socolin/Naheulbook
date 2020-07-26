@@ -9,9 +9,9 @@ import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 import {TargetJsonData} from '../group/target.model';
 import {Fighter} from '../group';
 import {MonsterSubCategoryResponse, MonsterResponse, MonsterTemplateResponse, MonsterTypeResponse} from '../api/responses';
-import {MonsterTemplateData} from '../api/shared';
+import {IMonsterData, MonsterTemplateData} from '../api/shared';
 
-export class MonsterData {
+export class MonsterData implements IMonsterData {
     at: number;
     prd?: number;
     esq?: number;
