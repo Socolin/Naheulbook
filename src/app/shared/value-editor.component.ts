@@ -1,4 +1,11 @@
-import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild} from '@angular/core';
+import {NhbkMatDialog} from '../material-workaround';
+import {
+    ValueEditorModes,
+    ValueEditorSettingsDialogComponent,
+    ValueEditorSettingsDialogData,
+    ValueEditorSettingsDialogResult
+} from './value-editor-settings-dialog.component';
 
 @Component({
     selector: 'value-editor',
@@ -18,8 +25,15 @@ export class ValueEditorComponent implements OnChanges {
     public displayEditor = false;
     public xOffset = 0;
     public yOffset = 0;
+    public mode?: ValueEditorModes;
 
-    constructor() {
+    @ViewChild('valueInput', {static: false})
+    private valueInput?: ElementRef;
+
+    constructor(
+        private readonly dialog: NhbkMatDialog
+    ) {
+        this.loadConfig();
     }
 
     computeEditorBoundingBox(element: Element, bbox: ClientRect): void {
@@ -49,7 +63,7 @@ export class ValueEditorComponent implements OnChanges {
         this.displayEditor = false;
     }
 
-    searchVeContainer(elements: HTMLCollectionOf<Element>|HTMLCollection): Element | undefined {
+    searchVeContainer(elements: HTMLCollectionOf<Element> | HTMLCollection): Element | undefined {
         for (let i = 0; i < elements.length; i++) {
             let element = elements[i];
             if (element.classList.contains('ve-container')) {
@@ -65,6 +79,8 @@ export class ValueEditorComponent implements OnChanges {
 
     onDisplayed() {
         setTimeout(() => { // Workaround, to be able to compute position on first display
+            this.valueInput?.nativeElement.focus();
+
             let elements = document.getElementsByClassName('cdk-overlay-container');
             let container = this.searchVeContainer(elements);
             if (!container) {
@@ -82,21 +98,19 @@ export class ValueEditorComponent implements OnChanges {
 
             this.computeEditorBoundingBox(container, bbox);
 
-            bbox.right += 50;
+            bbox.right += 30;
             bbox.left += 30;
             bbox.top -= 25;
             bbox.bottom -= 5;
-            if (bbox.right > window.innerWidth) {
-                this.xOffset = window.innerWidth - bbox.right;
-            }
-            else if (bbox.left < 0) {
+            if (bbox.left < 0) {
                 this.xOffset = -bbox.left;
+            } else if (bbox.right > window.innerWidth) {
+                this.xOffset = window.innerWidth - bbox.right;
             }
 
             if (bbox.bottom > window.innerHeight) {
                 this.yOffset = window.innerHeight - bbox.bottom;
-            }
-            else if (bbox.top < 0) {
+            } else if (bbox.top < 0) {
                 this.yOffset = -bbox.top;
             }
         }, 0);
@@ -129,8 +143,7 @@ export class ValueEditorComponent implements OnChanges {
     changeValue(val: string) {
         if (!val) {
             this.valueDelta = val;
-        }
-        else if (val === 'max') {
+        } else if (val === 'max') {
             if (this.maxValue) {
                 let t = this.maxValue - this.value;
                 if (t < 0) {
@@ -139,22 +152,25 @@ export class ValueEditorComponent implements OnChanges {
                     this.valueDelta = '+' + t;
                 }
             }
-        }
-        else if (val === 'zero') {
+        } else if (val === 'zero') {
             let t = -this.value;
             if (t < 0) {
                 this.valueDelta = t.toString();
             } else {
                 this.valueDelta = '+' + t;
             }
-        }
-        else if (val === 'reset') {
+        } else if (!this.isRelative(val) && !isNaN(parseInt(val, 10))) {
+            let t = Math.floor(parseInt(val, 10)) - this.value;
+            if (t < 0) {
+                this.valueDelta = t.toString();
+            } else {
+                this.valueDelta = '+' + t;
+            }
+        } else if (val === 'reset') {
             this.valueDelta = undefined;
-        }
-        else if (!this.valueDelta) {
+        } else if (!this.valueDelta) {
             this.valueDelta = val;
-        }
-        else if (this.isRelative(val) && this.isRelative(this.valueDelta)) {
+        } else if (this.isRelative(val) && this.isRelative(this.valueDelta)) {
             let t = parseInt(this.valueDelta, 10);
             t += parseInt(val, 10);
             if (t < 0) {
@@ -171,4 +187,40 @@ export class ValueEditorComponent implements OnChanges {
         this.updateNewValue();
     }
 
+    openSettings() {
+        this.displayEditor = false;
+        this.valueDelta = undefined;
+        const dialogRef = this.dialog.open<ValueEditorSettingsDialogComponent,
+            ValueEditorSettingsDialogData,
+            ValueEditorSettingsDialogResult>(ValueEditorSettingsDialogComponent, {
+            data: {mode: this.mode}
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            this.updateMode(result.mode);
+        })
+    }
+
+    private loadConfig() {
+        const valueEditorMode = localStorage.getItem('valueEditorMode');
+        if (valueEditorMode != null) {
+            switch (valueEditorMode) {
+                case 'keyboard':
+                case 'mobile':
+                    this.mode = ValueEditorModes[valueEditorMode];
+            }
+        }
+    }
+
+    private updateMode(mode?: ValueEditorModes) {
+        this.mode = mode;
+        if (mode) {
+            localStorage.setItem('valueEditorMode', mode);
+        } else {
+            localStorage.removeItem('valueEditorMode');
+        }
+    }
 }

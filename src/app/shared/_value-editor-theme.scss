@@ -8,56 +8,69 @@
     $foreground: map-get($theme, foreground);
 
     .ve-value {
-        background: linear-gradient(mat-color($primary, default, 0.12),mat-color($primary, default, 0.20));
+        background: linear-gradient(mat-color($primary, default, 0.12), mat-color($primary, default, 0.20));
     }
     .ve-value:hover {
-        background: linear-gradient(mat-color($primary, default, 0.30),mat-color($primary, default, 0.30));
+        background: linear-gradient(mat-color($primary, default, 0.30), mat-color($primary, default, 0.30));
     }
 
-    .ve-container {
-        background: mat-color($background, card);
-        color: mat-color($foreground, base);
-
-        .ve-delta-value {
-            background: mat-color($background, disabled-button);
+    .ve-keyboard-container {;
+        .ve-title {
+            background: mat-color($background, card);
+            color: mat-color($foreground, base);
+            border-color: mat-color($foreground, divider);
+        }
+    }
+    .ve-mobile-container {
+        .ve-summary,
+        .ve-title {
+            background: mat-color($background, card);
             color: mat-color($foreground, base);
         }
 
-        .ve-actions {
-            .valid-button {
-                button {
-                    background: mat-color($accent);
-                    color: mat-color($accent, default-contrast);
-                }
-            }
-            .minus-buttons {
-                button {
-                    background: mat-color($primary, 400);
-                    color: mat-color($primary, default-contrast);
-                }
-            }
-            .disabled {
-                button {
-                    background: mat-color($background, disabled-button);
-                    color: mat-color($foreground, disabled-button);
-                }
-            }
-            .max-zero-buttons {
-                button {
-                    background: mat-color($primary);
-                    color: mat-color($primary, default-contrast);
-                }
+        .ve-delta-value {
+            background: mat-color($background, background);
+            color: mat-color($foreground, base);
+        }
 
-                button[disabled] {
+        .ve-button {
+            &.ve-button-valid {
+                background: mat-color($accent);
+                color: mat-color($accent, default-contrast);
+            }
+
+            &.ve-button-s500,
+            &.ve-button-s50,
+            &.ve-button-s5,
+            &.ve-button-s1 {
+                background: mat-color($primary, 400);
+                color: mat-color($primary, default-contrast);
+            }
+
+            &.ve-button-reset,
+            &.ve-button-max,
+            &.ve-button-zero,
+            {
+                background: mat-color($primary);
+                color: mat-color($primary, default-contrast);
+
+                [disabled] {
                     background: mat-color($background, disabled-button);
                     color: mat-color($foreground, disabled-button);
                 }
             }
-            .plus-buttons {
-                button {
-                    background: mat-color($primary, 600);
-                    color: mat-color($primary, default-contrast);
-                }
+
+            &.ve-button-a500,
+            &.ve-button-a50,
+            &.ve-button-a5,
+            &.ve-button-a1 {
+                background: mat-color($primary, 600);
+                color: mat-color($primary, default-contrast);
+            }
+
+            &.disabled {
+                background: mat-color($background, disabled-button);
+                color: mat-color($foreground, disabled-button);
             }
         }
 

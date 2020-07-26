@@ -25,6 +25,7 @@ import {
     TextFormatterPipe,
     ValueEditorComponent,
 } from './';
+import { ValueEditorSettingsDialogComponent } from './value-editor-settings-dialog.component';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import {
         TextFormatterPipe,
         ValueEditorComponent,
         PromptDialogComponent,
+        ValueEditorSettingsDialogComponent,
     ],
     exports: [
         MaterialWorkaroundModule,
