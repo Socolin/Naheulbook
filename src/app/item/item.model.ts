@@ -28,6 +28,7 @@ export class ItemData implements IItemData {
 
 export class ItemComputedData {
     incompatible?: boolean;
+    modifierBonusDamage?: number;
 }
 
 export class Item {

@@ -873,7 +873,8 @@ export class Character extends WsRegistrable {
                 }
             }
 
-            if (item.modifiers) {
+            if (item.modifiers?.length) {
+                item.computedData.modifierBonusDamage = undefined;
                 for (let modifier of item.modifiers) {
                     if (!modifier.active) {
                         continue;
@@ -882,6 +883,12 @@ export class Character extends WsRegistrable {
                     let detailData = {};
                     for (let k = 0; k < modifier.values.length; k++) {
                         let mod = modifier.values[k];
+                        // Special case, PI modifiers on weapons should not be applied for the character.
+                        // this is computed on weapons weapon damage
+                        if (mod.stat === 'PI' && ItemTemplate.hasSlot(item.template, 'WEAPON')) {
+                            item.computedData.modifierBonusDamage = (item.computedData.modifierBonusDamage || 0) + mod.value;
+                            continue;
+                        }
                         StatModifier.applyInPlace(this.computedData.stats, mod);
                         detailData[mod.stat] = formatModifierValue(mod);
                     }
@@ -1102,12 +1109,15 @@ export class Character extends WsRegistrable {
             }
             if (ItemTemplate.hasSlot(item.template, 'WEAPON')) {
                 let damage = item.getDamageString();
-                if (damage && this.computedData.stats['PI']) {
-                    if (this.computedData.stats['PI'] > 0) {
-                        damage += ' (+' + this.computedData.stats['PI'] + ')';
+                let impactDamageItemBonus = item.computedData.modifierBonusDamage || 0;
+                let impactDamageCharacterBonus = this.computedData.stats['PI'] || 0;
+                let weaponBonusDamage = impactDamageItemBonus + impactDamageCharacterBonus;
+                if (damage && weaponBonusDamage) {
+                    if (weaponBonusDamage > 0) {
+                        damage += ' (+' + weaponBonusDamage + ')';
                     }
                     else {
-                        damage += ' (' + this.computedData.stats['PI'] + ')';
+                        damage += ' (' + weaponBonusDamage + ')';
                     }
                 }
                 weaponDamages.push({
