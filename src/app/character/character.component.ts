@@ -21,8 +21,10 @@ import {JobPlayerDialogComponent} from './job-player-dialog.component';
 import {ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult} from './change-job-dialog.component';
 import {SkillInfoDialogComponent} from './skill-info-dialog.component';
 import {LevelUpDialogComponent, LevelUpDialogData, LevelUpDialogResult} from './level-up-dialog.component';
-import { NhbkMatDialog } from 'app/material-workaround';
-
+import {NhbkMatDialog} from 'app/material-workaround';
+import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
+import {EffectPanelComponent} from './effect-panel.component';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
     selector: 'character',
@@ -39,6 +41,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     @ViewChild('mainTabGroup', {static: true})
     private mainTabGroup: MatTabGroup;
+
+    @ViewChild('effectPanel', {static: true})
+    private effectPanel: EffectPanelComponent;
 
     public inGroupTab = false;
     public currentTab = 'infos';
@@ -57,8 +62,8 @@ export class CharacterComponent implements OnInit, OnDestroy {
     private subscription = new Subscription();
 
     constructor(
+        public readonly itemActionService: ItemActionService,
         private readonly dialog: NhbkMatDialog,
-        private readonly itemActionService: ItemActionService,
         private readonly characterService: CharacterService,
         private readonly nhbkDialogService: NhbkDialogService,
         private readonly notification: NotificationsService,
@@ -66,6 +71,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         private readonly route: ActivatedRoute,
         private readonly router: Router,
         private readonly websocketService: WebSocketService,
+        private readonly quickCommandService: QuickCommandService,
     ) {
     }
 
@@ -235,6 +241,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
             this.notificationSub.unsubscribe();
         }
         this.subscription.unsubscribe();
+        this.unregisterQuickActions();
     }
 
     ngOnInit() {
@@ -246,11 +253,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
             this.notificationSub = this.character.onNotification.subscribe(notificationData => {
                 this.notification.info('', notificationData.message);
             });
-            let tab = this.route.snapshot.fragment;
-            if (tab) {
+            this.route.fragment.pipe(
+                filter(fragment => !!fragment),
+                map(fragment => fragment.indexOf('?') === -1 ? fragment : fragment.substring(0, fragment.indexOf('?')))
+            ).subscribe(tab => {
                 this.mainTabGroup.selectedIndex = this.getTabIndexFromHash(tab);
                 this.currentTab = tab;
-            }
+            })
             this.subscription.add(this.route.data.subscribe(data => {
                 if (this.character !== data['character']) {
                     if (this.notificationSub) {
@@ -270,6 +279,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
             }));
 
         }
+        this.registerQuickActions();
     }
 
     unEquipAllAndEquip(item: Item) {
@@ -298,5 +308,26 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 this.character.onLevelUp(res[0], res[1]);
             });
         });
+    }
+
+    private unregisterQuickActions(): void {
+        this.quickCommandService.unregisterActions('character');
+    }
+
+    private registerQuickActions(): void {
+        const actions: QuickAction[] = [];
+
+        actions.push({
+            type: CommandSuggestionType.Action,
+            icon: 'add',
+            priority: 50,
+            displayText: 'Ajouter un effet',
+            canBeUsedInRecent: true,
+            action: () => {
+                this.effectPanel.openAddEffectDialog();
+            },
+        })
+
+        this.quickCommandService.registerActions('character', actions);
     }
 }

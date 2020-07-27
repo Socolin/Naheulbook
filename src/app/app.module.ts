@@ -19,6 +19,7 @@ import {ErrorReportService} from './error-report.service';
 import {AuthenticationInterceptor} from './user/authentication.interceptor';
 import {NotificationsModule} from './notifications/notifications.module';
 import {LoginService} from './user';
+import {QuickCommandModule} from './quick-command/quick-command.module';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import {LoginService} from './user';
         HttpClientModule,
         HomeModule,
         UserModule,
-        NotificationsModule
+        NotificationsModule,
+        QuickCommandModule
     ],
     declarations: [
         AppComponent

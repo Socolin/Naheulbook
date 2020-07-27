@@ -1,7 +1,7 @@
 import {forkJoin, Subscription} from 'rxjs';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
@@ -45,6 +45,7 @@ import {
 } from '../date/date-selector-dialog.component';
 import {EditNpcDialogComponent, EditNpcDialogData, EditNpcDialogResult} from './edit-npc-dialog.component';
 import {filter, map} from 'rxjs/operators';
+import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 
 @Component({
     templateUrl: './group.component.html',
@@ -104,6 +105,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         private readonly nhbkDialogService: NhbkDialogService,
         private readonly itemService: ItemService,
         private readonly characterService: CharacterService,
+        private readonly quickCommandService: QuickCommandService,
     ) {
     }
 
@@ -345,6 +347,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         this.clearGroupSub();
         this.routeSub.unsubscribe();
         this.routeFragmentSub.unsubscribe();
+        this.quickCommandService.unregisterActions('group');
     }
 
     ngOnInit() {
@@ -383,6 +386,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                         this.groupService.getNpcs(id).subscribe((npcs) => {
                             this.npcs = npcs;
                         });
+                        this.registerQuickActions();
                     }
                 );
             }
@@ -571,5 +575,38 @@ export class GroupComponent implements OnInit, OnDestroy {
                 }
             });
         })
+    }
+
+    private registerQuickActions() {
+        let commands: QuickAction[] = [];
+
+        commands.push(...this.group.characters.map(c => ({
+            icon: 'ra-player',
+            iconFontSet: 'ra',
+            iconColor: '#' + c.color,
+            displayText: c.name,
+            canBeUsedInRecent: false,
+            priority: 50,
+            type: CommandSuggestionType.Personnage,
+            action: () => this.displayCharacterSheet(c)
+        } as QuickAction)));
+
+        commands.push({
+            type: CommandSuggestionType.Action,
+            icon: 'update',
+            priority: 40,
+            displayText: 'Avancer le temps',
+            canBeUsedInRecent: true,
+            action: () => this.openDurationSelector(),
+        })
+        commands.push({
+            type: CommandSuggestionType.Action,
+            icon: 'add',
+            priority: 40,
+            displayText: 'Crée un PNJ',
+            canBeUsedInRecent: true,
+            action: () => this.openCreateNpcDialog(),
+        })
+        this.quickCommandService.registerActions('group', commands);
     }
 }

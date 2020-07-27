@@ -1,0 +1,19 @@
+.command-input {
+    font-size: 32px;
+}
+.suggestion {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    height: 32px;
+    &.selected {
+        background: #d5d5d5;
+    }
+    background: white;
+    cursor: pointer;
+    mat-icon {
+        font-size: 24px;
+    }
+}

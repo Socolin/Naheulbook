@@ -11,7 +11,6 @@ import {
     AutocompleteInputComponent,
     CommonNavComponent,
     ConfirmGmModeDialogComponent,
-    GmModeService,
     IconComponent,
     IconSelectorComponent,
     IconService,
@@ -25,7 +24,7 @@ import {
     TextFormatterPipe,
     ValueEditorComponent,
 } from './';
-import { ValueEditorSettingsDialogComponent } from './value-editor-settings-dialog.component';
+import {ValueEditorSettingsDialogComponent} from './value-editor-settings-dialog.component';
 
 
 @NgModule({
@@ -68,7 +67,6 @@ import { ValueEditorSettingsDialogComponent } from './value-editor-settings-dial
         IconService,
         MiscService,
         NhbkDialogService,
-        GmModeService,
     ]
 })
 export class SharedModule {

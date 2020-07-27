@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 
@@ -14,13 +14,15 @@ import {WebSocketService} from '../websocket';
 import {openCreateGemDialog} from './create-gem-dialog.component';
 import {ItemDialogComponent} from '../item/item-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
+import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'group-loot-panel',
     styleUrls: ['./group-loot-panel.component.scss'],
     templateUrl: './group-loot-panel.component.html',
 })
-export class GroupLootPanelComponent extends LootPanelComponent implements OnInit {
+export class GroupLootPanelComponent extends LootPanelComponent implements OnInit, OnDestroy {
     @Input() group: Group;
 
     constructor(
@@ -28,12 +30,14 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         websocketService: WebSocketService,
         private readonly groupService: GroupService,
         private readonly itemService: ItemService,
+        private readonly router: Router,
+        private readonly quickCommandService: QuickCommandService,
         private readonly dialog: NhbkMatDialog,
     ) {
         super(notification, websocketService);
     }
 
-    openAddItemDialog(target: Loot|Monster) {
+    openAddItemDialog(target: Loot | Monster) {
         openCreateItemDialog(this.dialog, (item) => {
             if (target instanceof Loot) {
                 this.onAddItem({loot: target, item: item});
@@ -43,7 +47,7 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
         });
     }
 
-    openAddGemDialog(target: Loot|Monster) {
+    openAddGemDialog(target: Loot | Monster) {
         openCreateGemDialog(this.dialog, (item) => {
             if (target instanceof Loot) {
                 this.onAddItem({loot: target, item: item});
@@ -158,5 +162,29 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
 
     ngOnInit() {
         this.loots = this.group.loots;
+        this.registerQuickActions();
+    }
+
+    ngOnDestroy() {
+        super.ngOnDestroy();
+        this.quickCommandService.unregisterActions('group-loot');
+    }
+
+    private registerQuickActions() {
+        const actions: QuickAction[] = [];
+
+        actions.push({
+            type: CommandSuggestionType.Action,
+            icon: 'add',
+            priority: 40,
+            displayText: 'Crée un loot',
+            canBeUsedInRecent: true,
+            action: () => {
+                this.openAddLootDialog();
+                this.router.navigate([], {fragment: 'loot'})
+            },
+        })
+
+        this.quickCommandService.registerActions('group-loot', actions);
     }
 }

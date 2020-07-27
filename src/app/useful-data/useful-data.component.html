@@ -3,27 +3,9 @@
 </button>
 
 <mat-menu #appMenu="matMenu" [hasBackdrop]="true" [overlapTrigger]="true" [backdropClass]="'cdk-overlay-dark-backdrop'">
-    <button mat-menu-item (click)="openPanel('criticalSuccess')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-spiky-eclipse"></mat-icon>
-        Succès critique
-    </button>
-    <button mat-menu-item (click)="openPanel('epicFails')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-dripping-blade"></mat-icon>
-        Échec critique
-    </button>
-    <button mat-menu-item (click)="openPanel('entropicSpells')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-bolt-spell-cast"></mat-icon>
-        Sorts entropique
-    </button>
-    <button mat-menu-item (click)="openPanel('recovery')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-sliced-bread">
-        </mat-icon>
-        Récupération
-    </button>
-    <button mat-menu-item (click)="openPanel('travel')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-walk">
-        </mat-icon>
-        Déplacements
+    <button *ngFor="let info of basesInfoDefinitions" mat-menu-item (click)="openPanel(info.panel)">
+        <mat-icon [fontSet]="info.fontSet" class="ra-mat-button-icon-24" [fontIcon]="info.icon"></mat-icon>
+        {{info.displayName}}
     </button>
 
     <button mat-menu-item [matMenuTriggerFor]="databaseSubMenu">
@@ -34,33 +16,8 @@
 </mat-menu>
 
 <mat-menu #databaseSubMenu="matMenu">
-    <button mat-menu-item (click)="openPanel('effects')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-pierced-body">
-        </mat-icon>
-        Effets
-    </button>
-    <button mat-menu-item (click)="openPanel('items')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-beer-stein">
-        </mat-icon>
-        Objets
-    </button>
-    <button mat-menu-item (click)="openPanel('skills')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-gears"></mat-icon>
-        Compétences
-    </button>
-    <button mat-menu-item (click)="openPanel('jobs')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-gear-hammer">
-        </mat-icon>
-        Métiers
-    </button>
-    <button mat-menu-item (click)="openPanel('origins')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-woman-elf-face">
-        </mat-icon>
-        Origines
-    </button>
-    <button mat-menu-item (click)="openPanel('monsters')">
-        <mat-icon fontSet="game-icon" class="ra-mat-button-icon-24" fontIcon="game-icon-dragon-head">
-        </mat-icon>
-        Monstres
+    <button *ngFor="let info of databaseInfoDefinitions" mat-menu-item (click)="openPanel(info.panel)">
+        <mat-icon [fontSet]="info.fontSet" class="ra-mat-button-icon-24" [fontIcon]="info.icon"></mat-icon>
+        {{info.displayName}}
     </button>
 </mat-menu>

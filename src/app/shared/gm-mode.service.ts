@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class GmModeService {
     get gmMode(): Observable<boolean> {
         return this._gmModeSubject;
@@ -19,8 +21,8 @@ export class GmModeService {
     }
 
     public setGmMode(active: boolean) {
-        this._gmModeSubject.next(active);
         this._gmModeSnapshot = active;
+        this._gmModeSubject.next(active);
         localStorage.setItem('gmMode', active ? '1' : '0');
     }
 }

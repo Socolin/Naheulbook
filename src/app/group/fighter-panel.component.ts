@@ -1,5 +1,5 @@
 import {forkJoin} from 'rxjs';
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
@@ -15,13 +15,15 @@ import {CreateMonsterRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {NhbkMatDialog} from '../material-workaround';
 import {EndCombatDialogComponent, EndCombatDialogResult} from './end-combat-dialog.component';
+import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'fighter-panel',
     templateUrl: './fighter-panel.component.html',
     styleUrls: ['./fighter.component.scss', './fighter-panel.component.scss']
 })
-export class FighterPanelComponent implements OnInit {
+export class FighterPanelComponent implements OnInit, OnDestroy {
     @Input() group: Group;
 
     public loadingNextLap = false;
@@ -42,7 +44,9 @@ export class FighterPanelComponent implements OnInit {
         private readonly monsterTemplateService: MonsterTemplateService,
         private readonly nhbkDialogService: NhbkDialogService,
         private readonly dialog: NhbkMatDialog,
+        private readonly router: Router,
         private readonly breakpointObserver: BreakpointObserver,
+        private readonly quickCommandService: QuickCommandService,
     ) {
         breakpointObserver.observe([
             Breakpoints.Handset
@@ -153,6 +157,7 @@ export class FighterPanelComponent implements OnInit {
         this.groupService.startCombat(this.group.id).subscribe(
             () => {
                 this.group.data.changeValue('inCombat', true);
+                this.registerCombatQuickActions();
             }
         );
     }
@@ -165,8 +170,14 @@ export class FighterPanelComponent implements OnInit {
                     let changes = this.group.updateTime('combat', 1);
                     this.groupService.saveChangedTime(this.group.id, changes).subscribe();
                 }
+                this.registerCombatQuickActions();
             }
         );
+    }
+
+    ngOnDestroy(): void {
+        this.quickCommandService.unregisterActions('fighters');
+        this.quickCommandService.unregisterActions('combat');
     }
 
     ngOnInit(): void {
@@ -186,6 +197,8 @@ export class FighterPanelComponent implements OnInit {
                 this.deadMonsters = monsters;
             }
         );
+        this.registerQuickActions();
+        this.registerCombatQuickActions();
     }
 
     openEndCombatDialog() {
@@ -196,5 +209,45 @@ export class FighterPanelComponent implements OnInit {
             }
             this.endCombat(result.decreaseCombatTimer);
         })
+    }
+
+    private registerCombatQuickActions() {
+        if (!this.group.data.inCombat) {
+            this.quickCommandService.registerActions('combat',  [{
+                displayText: 'Début combat',
+                type: CommandSuggestionType.Action,
+                icon: 'play_arrow',
+                priority: 40,
+                action: () => {
+                    this.startCombat(),
+                    this.router.navigate([], {fragment: 'combat'})
+                },
+                canBeUsedInRecent: true
+            }]);
+        } else {
+            this.quickCommandService.registerActions('combat', [{
+                displayText: 'Fin combat',
+                type: CommandSuggestionType.Action,
+                icon: 'stop',
+                priority: 40,
+                action: () => this.openEndCombatDialog(),
+                canBeUsedInRecent: true
+            }]);
+        }
+    }
+
+    private registerQuickActions() {
+        const actions: QuickAction[] = [];
+
+        actions.push({
+            type: CommandSuggestionType.Action,
+            icon: 'add',
+            priority: 20,
+            displayText: 'Ajouter un monstre',
+            canBeUsedInRecent: true,
+            action: () => this.openAddMonsterDialog(),
+        })
+
+        this.quickCommandService.registerActions('fighter', actions);
     }
 }
