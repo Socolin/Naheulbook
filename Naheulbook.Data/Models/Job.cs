@@ -11,8 +11,8 @@ namespace Naheulbook.Data.Models
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Information { get; set; }
-        public string? PlayerDescription { get; set; }
-        public string? PlayerSummary { get; set; }
+        public string PlayerDescription { get; set; } = null!;
+        public string PlayerSummary { get; set; } = null!;
         public string? Flags { get; set; }
         public string Data { get; set; } = null!;
         public bool? IsMagic { get; set; }

@@ -14,9 +14,11 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("id");
 
             builder.Property(e => e.PlayerDescription)
+                .IsRequired()
                 .HasColumnName("playerDescription");
 
             builder.Property(e => e.PlayerSummary)
+                .IsRequired()
                 .HasColumnName("playerSummary");
 
             builder.Property(e => e.Information)
