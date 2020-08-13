@@ -18,8 +18,8 @@ export class Job {
     };
     readonly bonuses: Array<DescribedFlag>;
     readonly id: Guid;
-    readonly playerDescription?: string;
-    readonly playerSummary?: string;
+    readonly playerDescription: string;
+    readonly playerSummary: string;
     readonly isMagic: boolean;
     readonly name: string;
     readonly requirements: StatRequirement[];

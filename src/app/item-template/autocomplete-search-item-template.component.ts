@@ -20,7 +20,7 @@ export class AutocompleteSearchItemTemplateComponent {
     @ViewChild('autocomplete', {static: true})
     autocomplete: AutocompleteInputComponent;
 
-    public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
+    public autocompleteItemCallback:  (filter: string) => Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
 
     constructor(
         private readonly itemTemplateService: ItemTemplateService,

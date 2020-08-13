@@ -1,18 +1,18 @@
 <div cdk-overlay-origin #colorSelectorOrigin="cdkOverlayOrigin">
     <div class="icon">
         <i matRipple
-           matRippleCentered="true"
-           matRippleUnbounded="true"
-           matRippleRadius="32"
+           [matRippleCentered]="true"
+           [matRippleUnbounded]="true"
+           [matRippleRadius]="32"
            [style.fontSize]="fontSize"
            [style.color]="'#' + monster.data.color" class="ra ra-monster-skull"
            (click)="openSelector($event)"></i>
         <span *ngIf="monster.data.number"
               class="number"
               matRipple
-              matRippleCentered="true"
-              matRippleUnbounded="true"
-              matRippleRadius="32"
+              [matRippleCentered]="true"
+              [matRippleUnbounded]="true"
+              [matRippleRadius]="32"
               [style.fontSize]="fontSize"
               (click)="openSelector($event)">
             {{monster.data.number}}
@@ -30,9 +30,9 @@
             <div *ngFor="let color of colors" class="color">
                 <i class="ra ra-monster-skull"
                    matRipple
-                   matRippleCentered="true"
-                   matRippleUnbounded="true"
-                   matRippleRadius="32"
+                   [matRippleCentered]="true"
+                   [matRippleUnbounded]="true"
+                   [matRippleRadius]="32"
                    [style.color]=color
                    [style.fontSize]="fontSize"
                    (click)="changeColor(color)">
@@ -43,9 +43,9 @@
             <div *ngFor="let number of numbers">
                 <div class="number"
                      matRipple
-                     matRippleCentered="true"
-                     matRippleUnbounded="true"
-                     matRippleRadius="32"
+                     [matRippleCentered]="true"
+                     [matRippleUnbounded]="true"
+                     [matRippleRadius]="32"
                      (click)="changeNumber(number)">
                     <div *ngIf="number" class="number" [style.fontSize]="'40px'">
                         {{number}}

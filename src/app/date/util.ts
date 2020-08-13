@@ -72,7 +72,7 @@ export function timestamp2Date (duration: number): NhbkDate {
     return date;
 }
 
-export function duration2text(duration: number|NhbkDateOffset) {
+export function duration2text(duration?: number | NhbkDateOffset) {
     let dateOffset;
 
     if (!duration) {

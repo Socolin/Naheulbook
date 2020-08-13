@@ -123,7 +123,7 @@
             </origin-selector>
         </div>
         <div *ngIf="(step > 1)">
-            {{selectedOrigin.name}}
+            {{selectedOrigin!.name}}
         </div>
     </mat-card-content>
 </mat-card>
@@ -189,7 +189,7 @@
             Vous pouvez choisir deux compétences
         </div>
         <div *ngIf="(step == 3)">
-            <skill-selector [selectedOrigin]="selectedOrigin"
+            <skill-selector [selectedOrigin]="selectedOrigin!"
                             [selectedJobs]="selectedJobs"
                             (skillsSelected)="onSelectSkills($event)">
             </skill-selector>
@@ -364,19 +364,19 @@
             </div>
             <div class="move-stat-point-selector">
                 <button mat-icon-button (click)="move1PointStat('cou', -1)">
-                    <mat-icon [color]="move1PointStatValues['cou'] == -1 ? 'accent' : null">keyboard_arrow_down</mat-icon>
+                    <mat-icon [color]="move1PointStatValues['cou'] == -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
                 </button>
                 <button mat-icon-button (click)="move1PointStat('int', -1)">
-                    <mat-icon [color]="move1PointStatValues['int'] == -1 ? 'accent' : null">keyboard_arrow_down</mat-icon>
+                    <mat-icon [color]="move1PointStatValues['int'] == -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
                 </button>
                 <button mat-icon-button (click)="move1PointStat('cha', -1)">
-                    <mat-icon [color]="move1PointStatValues['cha'] == -1 ? 'accent' : null">keyboard_arrow_down</mat-icon>
+                    <mat-icon [color]="move1PointStatValues['cha'] == -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
                 </button>
                 <button mat-icon-button (click)="move1PointStat('ad', -1)">
-                    <mat-icon [color]="move1PointStatValues['ad'] == -1 ? 'accent' : null">keyboard_arrow_down</mat-icon>
+                    <mat-icon [color]="move1PointStatValues['ad'] == -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
                 </button>
                 <button mat-icon-button (click)="move1PointStat('fo', -1)">
-                    <mat-icon [color]="move1PointStatValues['fo'] == -1 ? 'accent' : null">keyboard_arrow_down</mat-icon>
+                    <mat-icon [color]="move1PointStatValues['fo'] == -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
                 </button>
             </div>
         </div>

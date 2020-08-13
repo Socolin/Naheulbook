@@ -289,11 +289,11 @@
                     Aucun utilisateur trouvé
                 </div>
                 <mat-radio-group [(ngModel)]="changeOwnershipNewOwner">
-                    <ng-template ngFor let-user [ngForOf]="filteredUsers">
+                    <ng-container *ngFor="let user of filteredUsers">
                         <mat-radio-button [value]="user">
-                            {{user.displayName}}
+                            {{$any(user).displayName}}
                         </mat-radio-button>
-                    </ng-template>
+                    </ng-container>
                 </mat-radio-group>
             </div>
         </mat-card-content>

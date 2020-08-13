@@ -12,17 +12,13 @@ const defaultIcon: IconDescription = {
     templateUrl: './icon.component.html',
     styleUrls: ['./icon.component.scss']
 })
-export class IconComponent implements OnChanges {
-    @Input() icon: IconDescription = defaultIcon;
+export class IconComponent {
+    get displayedIcon() {
+        return this.icon || defaultIcon;
+    }
+
+    @Input() icon?: IconDescription;
     @Input() size = '32px';
     @Input() enchanted?: boolean;
     @Input() notIdentified?: boolean;
-
-    ngOnChanges(changes: SimpleChanges) {
-        if ('icon' in changes) {
-            if (!changes['icon'].currentValue) {
-                this.icon = defaultIcon;
-            }
-        }
-    }
 }

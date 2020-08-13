@@ -9,8 +9,8 @@ export interface JobResponse {
     id: Guid;
     name: string;
     information?: string;
-    playerDescription?: string;
-    playerSummary?: string;
+    playerDescription: string;
+    playerSummary: string;
     isMagic?: boolean;
     data: {
         forOrigin: {

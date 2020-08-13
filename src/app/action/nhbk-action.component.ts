@@ -1,5 +1,11 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {NhbkAction, NhbkActionType} from './nhbk-action.model';
+import {
+    NhbkAction,
+    NhbkActionType, NhbkAddCustomModifierAction, NhbkAddEaAction,
+    NhbkAddEffectAction, NhbkAddEvAction,
+    NhbkAddItemAction, NhbkCustomAction,
+    NhbkRemoveItemAction
+} from './nhbk-action.model';
 import {EffectService} from '../effect';
 import {Effect} from '../effect';
 import {duration2text} from '../date/util';
@@ -20,6 +26,14 @@ export class NhbkActionComponent implements OnInit, OnChanges {
         private readonly effectService: EffectService,
     ) {
     }
+
+    public asNhbkAddItemAction(action: NhbkAction): NhbkAddItemAction { return action as NhbkAddItemAction; }
+    public asNhbkRemoveItemAction(action: NhbkAction): NhbkRemoveItemAction { return action as NhbkRemoveItemAction; }
+    public asNhbkAddEffectAction(action: NhbkAction): NhbkAddEffectAction { return action as NhbkAddEffectAction; }
+    public asNhbkAddCustomModifierAction(action: NhbkAction): NhbkAddCustomModifierAction { return action as NhbkAddCustomModifierAction; }
+    public asNhbkAddEvAction(action: NhbkAction): NhbkAddEvAction { return action as NhbkAddEvAction; }
+    public asNhbkAddEaAction(action: NhbkAction): NhbkAddEaAction { return action as NhbkAddEaAction; }
+    public asNhbkCustomAction(action: NhbkAction): NhbkCustomAction { return action as NhbkCustomAction; }
 
     private updateInfos() {
         if (this.action.type === NhbkActionType.addEffect) {

@@ -18,7 +18,7 @@
                         <div class="name">{{result.name}}</div>
                         <div class="category mat-caption">{{result.sectionName}} - {{result.subCategoryName}}</div>
                     </div>
-                    <div mat-ripple matRippleUnbounded="true" matRippleCentered="true" matRippleRadius="20" class="info"
+                    <div mat-ripple [matRippleUnbounded]="true" [matRippleCentered]="true" [matRippleRadius]="20" class="info"
                          (click)="showInfo($event, result.itemTemplate)" (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">
                         <mat-icon>info</mat-icon>
                     </div>
@@ -71,9 +71,9 @@
             color="primary"
             [disabled]="!inventoryElement"
             (click)=addItem()>
-        <ng-template ngIf [ngIf]="!data.inventoryElement" [ngIfElse]="edit">
+        <ng-container *ngIf="!data.inventoryElement else edit">
             AJOUTER
-        </ng-template>
+        </ng-container>
         <ng-template #edit>MODIFIER</ng-template>
     </button>
 </mat-dialog-actions>

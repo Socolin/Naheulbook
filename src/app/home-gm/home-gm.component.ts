@@ -5,13 +5,14 @@ import { MatSidenav } from '@angular/material/sidenav';
 import {NotificationsService} from '../notifications';
 
 import {GroupService} from '../group';
+import {GroupSummaryResponse} from '../api/responses';
 
 @Component({
     templateUrl: './home-gm.component.html',
     styleUrls: ['./home-gm.component.scss'],
 })
 export class HomeGmComponent implements OnInit {
-    public groups: Object[];
+    public groups: GroupSummaryResponse[];
 
     @ViewChild('start', {static: true, read: MatSidenav})
     public start: MatSidenav;

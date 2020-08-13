@@ -8,7 +8,7 @@
 
 <div class="content">
     <mat-vertical-stepper linear="true" #stepper>
-        <mat-step [completed]="selectedItemTemplate" #searchStep>
+        <mat-step [completed]="selectedItemTemplate !== undefined" #searchStep>
             <ng-template matStepLabel>Chercher un objet</ng-template>
             <mat-form-field class="filter-field">
                 <input #filter matInput placeholder="Nom de l'objet" (keyup)="updateFilter(filter.value)">

@@ -1,6 +1,12 @@
 import {map} from 'rxjs/operators';
 import {Component, Inject} from '@angular/core';
-import {NhbkAction, NhbkActionFactory, NhbkActionType} from './nhbk-action.model';
+import {
+    NhbkAction,
+    NhbkActionFactory,
+    NhbkActionType, NhbkAddCustomModifierAction, NhbkAddEaAction, NhbkAddEffectAction, NhbkAddEvAction,
+    NhbkAddItemAction, NhbkCustomAction,
+    NhbkRemoveItemAction
+} from './nhbk-action.model';
 import {Observable} from 'rxjs';
 
 import {ActiveStatsModifier, AutocompleteValue, MiscService} from '../shared';
@@ -30,7 +36,7 @@ export class NhbkActionEditorDialogComponent {
         {type: NhbkActionType.custom, displayName: 'Custom'},
     ];
 
-    public autocompleteItemCallback: Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
+    public autocompleteItemCallback: (filter: string) => Observable<AutocompleteValue[]> = this.updateAutocompleteItem.bind(this);
     public selectedItemTemplate: ItemTemplate;
 
     constructor(
@@ -39,6 +45,11 @@ export class NhbkActionEditorDialogComponent {
         @Inject(MAT_DIALOG_DATA) public data: NhbkActionEditorDialogData
     ) {
     }
+
+    public asNhbkAddItemAction(action: NhbkAction): NhbkAddItemAction { return action as NhbkAddItemAction; }
+    public asNhbkAddEvAction(action: NhbkAction): NhbkAddEvAction { return action as NhbkAddEvAction; }
+    public asNhbkAddEaAction(action: NhbkAction): NhbkAddEaAction { return action as NhbkAddEaAction; }
+    public asNhbkCustomAction(action: NhbkAction): NhbkCustomAction { return action as NhbkCustomAction; }
 
     selectItemTemplate(itemTemplate: ItemTemplate) {
         if (this.action.type !== NhbkActionType.addItem) {
@@ -67,7 +78,7 @@ export class NhbkActionEditorDialogComponent {
         this.action.data.effectData = data;
     }
 
-    updateAutocompleteItem(filter: string) {
+    updateAutocompleteItem(filter: string): Observable<AutocompleteValue[]> {
         return this.miscService.searchItem(filter).pipe(map(
             list => list.map(e => new AutocompleteValue(e, e.name))
         ));

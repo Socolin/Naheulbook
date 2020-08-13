@@ -1,10 +1,10 @@
-<ng-template ngFor [ngForOf]="modifiers" let-modifier let-last="last" let-i="index">
+<ng-container *ngFor="let modifier of modifiers; let last = last; let i = index">
     <div class="stat-modifier mat-typography">
         <span>{{modifier | modifier}}</span>
 
         <span [hidden]="!advancedModifiers" class="advanced-modifier">
-            <span *ngIf="jobsByIds && modifier.job">{{jobsByIds[modifier.job]?.name}}</span>
-            <span *ngIf="originsByIds && modifier.origin">{{originsByIds[modifier.origin]?.name}}</span>
+            <span *ngIf="jobsByIds && modifier.jobId">{{jobsByIds[modifier.jobId]?.name}}</span>
+            <span *ngIf="originsByIds && modifier.originId">{{originsByIds[modifier.originId]?.name}}</span>
             <span *ngFor="let special of modifier.special">
                 {{specialValueDescriptionByValues[special]}}
             </span>
@@ -22,7 +22,7 @@
     </div>
 
     <mat-divider *ngIf="!last"></mat-divider>
-</ng-template>
+</ng-container>
 
 
 <div class="actions">

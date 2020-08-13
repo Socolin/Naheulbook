@@ -8,7 +8,7 @@ import {duration2shortText, duration2text} from './util';
 @Injectable()
 export class NhbkDateDurationPipe implements PipeTransform {
 
-    transform(duration: number | NhbkDateOffset): any {
+    transform(duration?: number | NhbkDateOffset, ...args: any[]): any {
         return duration2text(duration);
     }
 }

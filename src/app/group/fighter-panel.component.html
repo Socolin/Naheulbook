@@ -110,13 +110,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <ng-template ngFor let-element [ngForOf]="deadMonsters">
+                    <ng-container *ngFor="let element of deadMonsters">
                         <tr>
                             <td>{{element.name}}</td>
                             <td>{{element.data.xp}}</td>
-                            <td>{{element.note}}</td>
+                            <td>{{element.data.note}}</td>
                         </tr>
-                    </ng-template>
+                    </ng-container>
                     </tbody>
                 </table>
             </mat-card-content>

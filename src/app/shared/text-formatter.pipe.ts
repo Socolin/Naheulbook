@@ -26,7 +26,7 @@ export class TextFormatterPipe implements PipeTransform {
         }
     };
 
-    transform(text: string) {
+    transform(text?: string) {
         let result = '';
         if (!text) {
             return result;

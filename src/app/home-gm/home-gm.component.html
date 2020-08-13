@@ -2,11 +2,11 @@
     <mat-sidenav #start>
         <h2 class="mat-h2" >Maître du Jeu</h2>
         <mat-nav-list>
-            <ng-template ngFor [ngForOf]="groups" let-group>
+            <ng-container *ngFor="let group of groups">
                 <a mat-list-item [routerLink]="['/gm/group/', group.id]">
                     <mat-icon matListIcon>group</mat-icon> {{group.name}}
                 </a>
-            </ng-template>
+            </ng-container>
             <a mat-list-item [routerLink]="['/gm/group/list']">
                 <mat-icon matListIcon>list</mat-icon> Tous vos groupes
             </a>

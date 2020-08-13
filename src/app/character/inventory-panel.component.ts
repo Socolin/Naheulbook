@@ -6,7 +6,7 @@ import {
     OnChanges,
     OnDestroy,
     OnInit,
-    SimpleChanges
+    SimpleChanges, TrackByFunction
 } from '@angular/core';
 
 import {Character} from './character.model';
@@ -142,7 +142,8 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    trackByItemId(item: Item): number {
+
+    trackByItemId(index: number, item: Item): number {
         return item.id;
     }
 

@@ -14,7 +14,7 @@
                     </div>
                 </mat-expansion-panel-header>
                 <mat-action-row align="end">
-                    <button color="primary" mat-button (click)="selectJob(null)">CHOISIR</button>
+                    <button color="primary" mat-button (click)="selectJob(undefined)">CHOISIR</button>
                 </mat-action-row>
             </mat-expansion-panel>
             <mat-expansion-panel *ngFor="let job of availability.jobs">

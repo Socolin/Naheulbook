@@ -22,12 +22,12 @@
     <span *ngIf="giveDestination?.length === 0">Aucun personnage disponible</span>
 
     <mat-radio-group [(ngModel)]="giveTarget">
-        <ng-template ngFor let-destination [ngForOf]="giveDestination">
+        <ng-container *ngFor="let destination of giveDestination">
             <mat-radio-button [value]="destination">
-                <span *ngIf="destination.isnpc">[NPC]</span>
+                <span *ngIf="destination.isNpc">[NPC]</span>
                 {{destination.name}}
             </mat-radio-button>
-        </ng-template>
+        </ng-container>
     </mat-radio-group>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

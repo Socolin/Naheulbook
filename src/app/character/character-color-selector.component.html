@@ -3,9 +3,9 @@
    [style.color]="'#' + character.color"
    class="ra ra-player ra-3x"
    matRipple
-   matRippleCentered="true"
-   matRippleUnbounded="true"
-   matRippleRadius="24"
+   [matRippleCentered]="true"
+   [matRippleUnbounded]="true"
+   [matRippleRadius]="24"
    (click)="toggleSelector($event)">
 </i>
 
@@ -18,9 +18,9 @@
         <div *ngFor="let color of colors" style="width: 48px; height: 48px">
             <i [style.color]=color
                matRipple
-               matRippleCentered="true"
-               matRippleUnbounded="true"
-               matRippleRadius="16"
+               [matRippleCentered]="true"
+               [matRippleUnbounded]="true"
+               [matRippleRadius]="16"
                style="cursor: pointer"
                class="ra ra-3x ra-player"
                (click)="changeColor(color)">
