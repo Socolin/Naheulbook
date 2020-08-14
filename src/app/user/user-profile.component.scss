@@ -1,14 +1,16 @@
 mat-card {
-    margin: 5px;
+    margin: 5px auto;
+    max-width: 960px;
+
     .linked-account-list {
         display: flex;
         flex-wrap: wrap;
+
         button {
             flex: 1 120px;
             margin: 4px 8px;
         }
     }
-
 }
 
 mat-toolbar {
@@ -21,6 +23,7 @@ mat-toolbar {
         align-items: center;
         width: 100%;
         justify-content: space-between;
+
         > a {
             padding-right: 10px;
         }

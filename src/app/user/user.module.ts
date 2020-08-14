@@ -9,6 +9,7 @@ import {NhbkMaterialModule} from '../nhbk-material.module';
 import {LoggedComponent, LoginComponent, UserProfileComponent, LoginService} from './';
 import {AuthGuard} from './auth-guard';
 import {LogoutComponent} from './logout.component';
+import { EnableShowInSearchComponent } from './enable-show-in-search.component';
 
 @NgModule({
     imports: [
@@ -23,6 +24,7 @@ import {LogoutComponent} from './logout.component';
         LoginComponent,
         LogoutComponent,
         UserProfileComponent,
+        EnableShowInSearchComponent,
     ],
     providers: [
         LoginService,

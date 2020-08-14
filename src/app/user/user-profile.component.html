@@ -4,7 +4,9 @@
             <h1>
                 Naheulbook
             </h1>
-            <a class="home-link" aria-label="Page d'accueil" [routerLink]="['/']"><mat-icon>home</mat-icon></a>
+            <a class="home-link" aria-label="Page d'accueil" [routerLink]="['/']">
+                <mat-icon>home</mat-icon>
+            </a>
         </div>
     </mat-toolbar>
 
@@ -16,15 +18,36 @@
                     <input matInput
                            placeholder="Nom / Pseudonyme"
                            [(ngModel)]="profile.displayName">
+                    <mat-hint>Permet a votre GM d'identifier votre personnage pour vous inviter dans le groupe
+                    </mat-hint>
                 </mat-form-field>
 
+                <mat-checkbox [(ngModel)]="profile.showInSearch"
+                              (change)="toggleVisibilityInSearch($event)">Visible dans les recherches utilisateurs / de personnage
+                    <mat-hint>Si la case n'est pas coché vous n'apparaitrez pas dans les recherches</mat-hint>
+                </mat-checkbox>
+
                 <div>
-                    Lié avec
+                    <h2 class="mat-h2">Service de connexion</h2>
+                    <p>
+                        Il est recommandé de vous lié au minimum avec 2 services pour vous garantir un accès a votre
+                        compte.
+                        Certains service change leur règles parfois et il est possible qu'il ne soit pas possible
+                        temporairement de se connecté avec un service, le temps que le problème soit corrigé.
+                    </p>
                     <div class="linked-account-list">
-                        <button mat-raised-button color="primary" (click)="linkTo('facebook')" [disabled]="profile.linkedWithFb">Facebook</button>
-                        <button mat-raised-button color="primary" (click)="linkTo('google')" [disabled]="profile.linkedWithGoogle">Google</button>
-                        <button mat-raised-button color="primary" (click)="linkTo('twitter')" [disabled]="profile.linkedWithTwitter">Twitter</button>
-                        <button mat-raised-button color="primary" (click)="linkTo('microsoft')" [disabled]="profile.linkedWithMicrosoft">Microsoft</button>
+                        <button mat-raised-button color="primary" (click)="linkTo('facebook')"
+                                [disabled]="profile.linkedWithFb">Facebook
+                        </button>
+                        <button mat-raised-button color="primary" (click)="linkTo('google')"
+                                [disabled]="profile.linkedWithGoogle">Google
+                        </button>
+                        <button mat-raised-button color="primary" (click)="linkTo('twitter')"
+                                [disabled]="profile.linkedWithTwitter">Twitter
+                        </button>
+                        <button mat-raised-button color="primary" (click)="linkTo('microsoft')"
+                                [disabled]="profile.linkedWithMicrosoft">Microsoft
+                        </button>
                     </div>
                 </div>
             </div>

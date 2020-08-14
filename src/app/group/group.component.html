@@ -316,6 +316,11 @@
     <mat-card class="invite-character-modal">
         <mat-card-title>Inviter un personnage</mat-card-title>
         <mat-card-content>
+            <p>
+                Cette recherche affiche seulement les personnage des joueurs ayant accepté d'être listé dans les recherche.
+                Si vous ne trouvez pas un personnage, assurez vous que le joueur a activé temporairement cette fonctionnalité dans son
+                <mat-icon matListIcon>account_box</mat-icon> profile.
+            </p>
             <mat-form-field>
                 <input matInput
                        [(ngModel)]="searchNameInvite"

@@ -6,4 +6,5 @@ export class UserInfoResponse {
     linkedWithGoogle: boolean;
     linkedWithTwitter: boolean;
     linkedWithMicrosoft: boolean;
+    showInSearch: boolean;
 }
