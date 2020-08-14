@@ -4,6 +4,6 @@ namespace Naheulbook.Requests.Requests
 {
     public class UpdateUserRequest
     {
-        public string DisplayName { get; set; } = null!;
+        public string? DisplayName { get; set; }
     }
 }

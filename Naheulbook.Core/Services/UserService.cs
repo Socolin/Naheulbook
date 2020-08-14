@@ -120,7 +120,8 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureCanEditUser(executionContext, user);
 
-                user.DisplayName = request.DisplayName;
+                if (!string.IsNullOrEmpty(request.DisplayName))
+                    user.DisplayName = request.DisplayName;
 
                 await uow.SaveChangesAsync();
             }
