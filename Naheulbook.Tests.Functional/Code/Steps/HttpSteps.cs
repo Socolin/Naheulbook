@@ -122,7 +122,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         {
             var jsonContent = _scenarioContext.GetLastJsonHttpResponseContent();
 
-            Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(_jsonComparer));
+            Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(_jsonComparer).WithColoredOutput());
         }
 
         [Then(@"the response should contains a json array containing the following element identified by (.+)")]
@@ -151,7 +151,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 if (!identityValue.Equals((JValue) actualObject.Property(identityField).Value))
                     continue;
 
-                Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(_jsonComparer));
+                Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(_jsonComparer).WithColoredOutput());
                 return;
             }
 
