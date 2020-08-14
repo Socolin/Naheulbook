@@ -105,6 +105,7 @@ Feature: Group
     Given a JWT for a user
     Given a group
     Given a character
+    Given that the owner of the character allow to appear in searches
 
     When performing a GET to the url "/api/v2/characters/search?filter=${Character.Name}" with the current jwt
     Then the response status code is 200

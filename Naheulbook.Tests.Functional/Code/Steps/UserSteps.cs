@@ -52,7 +52,6 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         [Given("a JWT for a user")]
         public void GivenAJwtForAUser()
         {
-
             var hasUtil = new PasswordHashingService();
             _testDataUtil.AddUser(u => u.HashedPassword = hasUtil.HashPassword("some-password"));
 
@@ -100,6 +99,13 @@ namespace Naheulbook.Tests.Functional.Code.Steps
 
             payload.Should().ContainKey("sub");
             payload.Should().ContainKey("exp");
+        }
+
+        [Given("that the owner of the character allow to appear in searches")]
+        public void GivenThatTheOwnerOfTheCharacterAllowToAppearInSearches()
+        {
+            _testDataUtil.Get<Character>().Owner.ShowInSearchUntil = DateTime.UtcNow.AddDays(1);
+            _testDataUtil.SaveChanges();
         }
     }
 }
