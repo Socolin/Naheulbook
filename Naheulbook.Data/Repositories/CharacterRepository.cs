@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -109,6 +110,7 @@ namespace Naheulbook.Data.Repositories
             return Context.Characters
                 .Include(x => x.Owner)
                 .Include(x => x.Origin)
+                .Where(x => x.Owner.ShowInSearchUntil > DateTime.UtcNow)
                 .Where(x => x.GroupId == null && x.Name.ToUpper().Contains(filter.ToUpper()) && x.IsNpc == false)
                 .Take(maxCount)
                 .ToListAsync();

@@ -64,7 +64,7 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.Users
                 .Where(u => u.DisplayName != null && u.DisplayName.Contains(filter, StringComparison.OrdinalIgnoreCase))
-                .Where(u => u.ShowInSearchUntil > DateTimeOffset.UtcNow)
+                .Where(u => u.ShowInSearchUntil > DateTime.UtcNow)
                 .Take(10)
                 .ToListAsync();
         }
