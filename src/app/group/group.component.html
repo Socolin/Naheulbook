@@ -291,7 +291,7 @@
                 <mat-radio-group [(ngModel)]="changeOwnershipNewOwner">
                     <ng-container *ngFor="let user of filteredUsers">
                         <mat-radio-button [value]="user">
-                            {{$any(user).displayName}}
+                            {{user.displayName}}
                         </mat-radio-button>
                     </ng-container>
                 </mat-radio-group>

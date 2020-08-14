@@ -13,3 +13,4 @@ export * from './map-marker-request';
 export * from './map-request';
 export * from './npc-request';
 export * from './monster-template-request';
+export * from './update-user-request';

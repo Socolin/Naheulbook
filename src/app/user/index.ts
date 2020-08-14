@@ -1,5 +1,3 @@
-export * from './user.model';
-
 export * from './login.service';
 
 export * from './login.component';

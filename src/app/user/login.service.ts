@@ -3,14 +3,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {from, Observable, ReplaySubject} from 'rxjs';
 
-import {JwtResponse, User} from './user.model';
 import {genericRetryStrategy} from '../shared/rxjs-retry-strategy';
-import {AuthenticationInitResponse} from '../api/responses';
+import {AuthenticationInitResponse, JwtResponse, UserInfoResponse, UserSearchResponse} from '../api/responses';
+import {UpdateUserRequest} from '../api/requests';
 
 @Injectable()
 export class LoginService {
-    public loggedUser: ReplaySubject<User | undefined> = new ReplaySubject<User>(1);
-    public currentLoggedUser?: User;
+    public loggedUser: ReplaySubject<UserInfoResponse | undefined> = new ReplaySubject<UserInfoResponse>(1);
+    public currentLoggedUser?: UserInfoResponse;
     public currentJwt?: string;
     private checkingLoggedUser?: Observable<JwtResponse>;
     private renewTokenTimeout?: any;
@@ -97,8 +97,8 @@ export class LoginService {
         return twitterLogin;
     }
 
-    logout(): Observable<User> {
-        let logout = this.httpClient.get<User>('/api/v2/users/me/logout').pipe(share());
+    logout(): Observable<UserInfoResponse> {
+        let logout = this.httpClient.get<UserInfoResponse>('/api/v2/users/me/logout').pipe(share());
 
         logout.subscribe(() => {
             this.currentLoggedUser = undefined;
@@ -109,7 +109,7 @@ export class LoginService {
         return logout;
     }
 
-    checkLogged(): Observable<User | undefined> {
+    checkLogged(): Observable<UserInfoResponse | undefined> {
         if (this.checkingLoggedUser) {
             return this.loggedUser;
         }
@@ -152,13 +152,12 @@ export class LoginService {
         return this.loggedUser.pipe(map(user => user !== undefined));
     }
 
-
-    updateProfile(userId: number, changeRequest: { displayName: string }): Observable<void> {
+    updateProfile(userId: number, changeRequest: UpdateUserRequest): Observable<void> {
         return this.httpClient.patch<void>(`/api/v2/users/${userId}`, changeRequest);
     }
 
-    searchUser(filter: string): Observable<Object[]> {
-        return this.httpClient.post<Object[]>('/api/v2/users/search', {filter: filter});
+    searchUser(filter: string): Observable<UserSearchResponse[]> {
+        return this.httpClient.post<UserSearchResponse[]>('/api/v2/users/search', {filter: filter});
     }
 
     redirectToFbLogin(redirectPage: string, errorCb?: (error) => void) {

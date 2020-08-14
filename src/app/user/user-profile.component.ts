@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 import {LoginService} from './login.service';
-import {User} from './user.model';
+import {UserInfoResponse} from '../api/responses';
 
 @Component({
     selector: 'user-profile',
@@ -10,7 +10,7 @@ import {User} from './user.model';
     styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-    public profile?: User;
+    public profile?: UserInfoResponse;
 
     constructor(
         private readonly notification: NotificationsService,
@@ -22,7 +22,7 @@ export class UserProfileComponent implements OnInit {
         if (!this.profile) {
             return;
         }
-        this.loginService.updateProfile(this.profile.id, this.profile).subscribe(
+        this.loginService.updateProfile(this.profile.id, {displayName: this.profile.displayName}).subscribe(
             () => {
                 this.notification.success('Succes', 'Profile édité');
             }

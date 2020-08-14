@@ -23,7 +23,7 @@ import {NhbkMatDialog} from '../material-workaround';
 import {Character, CharacterService} from '../character';
 import {Effect} from '../effect';
 
-import {LoginService, User} from '../user';
+import {LoginService} from '../user';
 import {MonsterService} from '../monster';
 import {ItemService} from '../item';
 import {ItemTemplate} from '../item-template';
@@ -37,7 +37,7 @@ import {
     GroupAddEffectDialogData,
     GroupAddEffectDialogResult
 } from './group-add-effect-dialog.component';
-import {CharacterSearchResponse} from '../api/responses';
+import {CharacterSearchResponse, UserInfoResponse, UserSearchResponse} from '../api/responses';
 import {
     DateSelectorDialogComponent,
     DateSelectorDialogData,
@@ -71,9 +71,9 @@ export class GroupComponent implements OnInit, OnDestroy {
     public changeOwnershipDialog: Portal<any>;
     public changeOwnershipOverlayRef: OverlayRef;
     public selectedCharacter: Character;
-    public changeOwnershipNewOwner: User;
+    public changeOwnershipNewOwner: UserSearchResponse;
     public filterSearchUser: string | null = null;
-    public filteredUsers: Object[] = [];
+    public filteredUsers: UserSearchResponse[] = [];
 
     @ViewChild('inviteCharacterModal', {static: true})
     public inviteCharacterModal: Portal<any>;
@@ -197,7 +197,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         );
     }
 
-    setOwnership(user) {
+    setOwnership(user: UserSearchResponse) {
         let character = this.selectedCharacter;
         this.characterService.changeGmData(character.id, 'ownerId', user.id).subscribe(
             change => {

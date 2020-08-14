@@ -10,7 +10,7 @@ import {map, pairwise, shareReplay, startWith} from 'rxjs/operators';
 import {assertNever} from '../utils/utils';
 import {MapMarkerRequest} from '../api/requests';
 import {GmModeService} from '../shared';
-import {LoginService, User} from '../user';
+import {LoginService} from '../user';
 
 import * as L from 'leaflet';
 
@@ -42,6 +42,7 @@ import {
     MapMarkerLinkDialogData
 } from './map-marker-link-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
+import {UserInfoResponse} from '../api/responses';
 
 @Component({
     selector: 'app-map',
@@ -91,7 +92,7 @@ export class MapComponent implements OnInit, OnDestroy {
     public hiddenLayers: { [mapLayerId: number]: boolean } = {};
     public hiddenLayers$ = new BehaviorSubject<{ [mapLayerId: number]: boolean }>({});
     public isMobile: boolean;
-    public currentUser?: User;
+    public currentUser?: UserInfoResponse;
 
     public  positionMarker1?: L.Marker;
     public  positionMarker2?: L.Marker;
