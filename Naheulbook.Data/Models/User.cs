@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Naheulbook.Data.Models
@@ -20,7 +21,9 @@ namespace Naheulbook.Data.Models
 
         public string? TwitterId { get; set; }
 
-        public string?DisplayName { get; set; }
+        public string? DisplayName { get; set; }
+
+        public DateTime? ShowInSearchUntil { get; set; }
 
         public ICollection<Group> Groups { get; set; } = null!;
         public ICollection<Character> Characters { get; set; } = null!;

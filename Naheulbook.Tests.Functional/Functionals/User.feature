@@ -7,6 +7,7 @@ Feature: User
     """
     {
       "displayName": "some-new-display-name",
+      "showInSearchFor": 600
     }
     """
     Then the response status code is 204

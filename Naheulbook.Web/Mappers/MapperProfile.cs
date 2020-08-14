@@ -253,6 +253,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<Stat, StatResponse>();
 
             CreateMap<User, UserInfoResponse>()
+                .ForMember(m => m.ShowInSearch, opt => opt.MapFrom(u => u.ShowInSearchUntil > DateTime.UtcNow))
                 .ForMember(m => m.LinkedWithFb, opt => opt.MapFrom(u => u.FbId != null))
                 .ForMember(m => m.LinkedWithTwitter, opt => opt.MapFrom(u => u.TwitterId != null))
                 .ForMember(m => m.LinkedWithGoogle, opt => opt.MapFrom(u => u.TwitterId != null))

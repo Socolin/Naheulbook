@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -122,6 +123,14 @@ namespace Naheulbook.Core.Services
 
                 if (!string.IsNullOrEmpty(request.DisplayName))
                     user.DisplayName = request.DisplayName;
+                if (request.ShowInSearchFor.HasValue)
+                {
+                    if (request.ShowInSearchFor.Value == 0)
+                        user.ShowInSearchUntil = null;
+                    else
+                        user.ShowInSearchUntil = DateTime.UtcNow.AddSeconds(request.ShowInSearchFor.Value);
+                }
+
 
                 await uow.SaveChangesAsync();
             }

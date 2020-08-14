@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FluentAssertions.Extensions;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
@@ -23,7 +25,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil.AddUser(u => u.Admin = true);
             var expectedUser = TestDataUtil.GetLast<User>();
 
-            var actualUser = await _userRepository.GetByUsernameAsync(expectedUser.Username);
+            var actualUser = await _userRepository.GetByUsernameAsync(expectedUser.Username!);
 
             actualUser.Should().BeEquivalentTo(expectedUser);
         }
@@ -34,10 +36,37 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil.AddUser();
             var expectedUser = TestDataUtil.GetLast<User>();
 
-            var actualUser = await _userRepository.GetByFacebookIdAsync(expectedUser.FbId);
+            var actualUser = await _userRepository.GetByFacebookIdAsync(expectedUser.FbId!);
 
             actualUser.Should().BeEquivalentTo(TestDataUtil.GetLast<User>());
+        }
 
+        [Test]
+        public async Task SearchUser_ShouldReturnsMatchingUsers()
+        {
+            TestDataUtil.AddUser(u => u.ShowInSearchUntil = RoundDate(DateTime.Now.AddDays(1)));
+            var testUser = TestDataUtil.GetLast<User>();
+
+            var users = await _userRepository.SearchUsersAsync(testUser.DisplayName!);
+
+            users.Should().BeEquivalentTo(testUser);
+        }
+
+        [Test]
+        public async Task SearchUser_ShouldNotDisplayUser_WhenShowInSearchUntilIsOlderThanNow()
+        {
+            TestDataUtil.AddUser(u => u.ShowInSearchUntil = DateTime.Now.AddDays(-1));
+
+            var testUser = TestDataUtil.GetLast<User>();
+
+            var users = await _userRepository.SearchUsersAsync(testUser.DisplayName!);
+
+            users.Should().BeEmpty();
+        }
+
+        private static DateTime? RoundDate(DateTime date)
+        {
+            return date.AddNanoseconds(-date.Nanosecond());
         }
     }
 }
