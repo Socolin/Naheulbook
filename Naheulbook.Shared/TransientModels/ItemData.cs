@@ -18,6 +18,7 @@ namespace Naheulbook.Shared.TransientModels
         bool? NotIdentified { get; }
         bool? IgnoreRestrictions { get; }
         JToken? Lifetime { get; }
+        bool? ShownToGm { get; }
     }
 
     public class ItemData : IReadOnlyItemData
@@ -36,5 +37,6 @@ namespace Naheulbook.Shared.TransientModels
         public bool? NotIdentified { get; set; }
         public bool? IgnoreRestrictions { get; set; }
         public JToken? Lifetime { get; set; }
+        public bool? ShownToGm { get; set; }
     }
 }
