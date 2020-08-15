@@ -461,6 +461,10 @@
                             <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon" class="ra-mat-button-icon-24"></mat-icon>
                             Déséquipé
                         </button>
+                        <button mat-menu-item (click)="sharpenWeapon(item)">
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-sword-smithing" class="ra-mat-button-icon-24"></mat-icon>
+                            Aiguiser (+1 PI / 3 combats)
+                        </button>
                     </ng-template>
                 </mat-menu>
             </mat-card>

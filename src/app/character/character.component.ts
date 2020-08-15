@@ -5,7 +5,7 @@ import {Overlay} from '@angular/cdk/overlay';
 import {Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
-import {NhbkDialogService, PromptDialogComponent} from '../shared';
+import {ActiveStatsModifier, NhbkDialogService, PromptDialogComponent} from '../shared';
 import {Skill} from '../skill';
 import {Job} from '../job';
 import {Item} from '../item';
@@ -25,6 +25,7 @@ import {NhbkMatDialog} from 'app/material-workaround';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 import {EffectPanelComponent} from './effect-panel.component';
 import {filter, map} from 'rxjs/operators';
+import {monitorEventLoopDelay} from 'perf_hooks';
 
 @Component({
     selector: 'character',
@@ -308,6 +309,21 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 this.character.onLevelUp(res[0], res[1]);
             });
         });
+    }
+
+    sharpenWeapon(item: Item): void {
+        let modifier = new ActiveStatsModifier();
+        modifier.durationType = 'combat';
+        modifier.combatCount = 3;
+        modifier.currentCombatCount = 3;
+        modifier.active = true;
+        modifier.name = 'Aiguisé';
+        modifier.values = [{
+            type: 'ADD',
+            stat: 'PI',
+            value: 1
+        }];
+        this.itemActionService.onAction('update_modifiers', item, [...item.modifiers, modifier]);
     }
 
     private unregisterQuickActions(): void {
