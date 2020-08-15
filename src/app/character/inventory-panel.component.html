@@ -122,7 +122,7 @@
             <mat-icon>edit</mat-icon>
             Éditer
         </button>
-        <button mat-menu-item (click)="openModifierDialog(item)">
+        <button mat-menu-item [matMenuTriggerFor]="addModifierMenu" [matMenuTriggerData]="{item: item}">
             <mat-icon>add</mat-icon>
             Ajouter un modificateur
         </button>
@@ -196,6 +196,16 @@
         </button>
         <button mat-menu-item (click)="openSelectItemIconDialog(item)">
             Icone
+        </button>
+    </ng-template>
+</mat-menu>
+<mat-menu #addModifierMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button *ngIf="isWeapon(item)" mat-menu-item (click)="sharpenWeapon(item)">
+            Aiguiser (+1 PI / 3 combats)
+        </button>
+        <button mat-menu-item (click)="openModifierDialog(item)">
+            Personnalisé...
         </button>
     </ng-template>
 </mat-menu>

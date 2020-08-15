@@ -280,7 +280,7 @@
             </mat-card>
 
             <mat-card *ngIf="character.computedData.weaponsDamages.length" class="equiped-weapons-stats stats-card">
-                <mat-card-subtitle>Dégat des armes (bonus compris)</mat-card-subtitle>
+                <mat-card-subtitle>Dégât des armes (bonus compris)</mat-card-subtitle>
                 <mat-card-content>
                     <div *ngFor="let dmg of character.computedData.weaponsDamages" class="equiped-weapons-damages">
                         <mat-icon *ngIf="dmg.incompatible" color="warn">warning</mat-icon>

@@ -1271,13 +1271,10 @@ export class Character extends WsRegistrable {
     }
 
     onUpdateModifiers(item: PartialItem) {
-        for (let i = 0; i < this.items.length; i++) {
-            let it = this.items[i];
-            if (it.id === item.id) {
-                it.modifiers = ActiveStatsModifier.modifiersFromJson(item.modifiers);
-                this.update();
-                break;
-            }
+        let it = this.items.find(i => i.id === item.id);
+        if (it) {
+            it.modifiers = ActiveStatsModifier.modifiersFromJson(item.modifiers);
+            this.update();
         }
     }
 

@@ -23,6 +23,7 @@ import {GiveItemDialogComponent, GiveItemDialogData, GiveItemDialogResult} from 
 import {Subscription} from 'rxjs';
 import {IconDescription} from '../shared/icon.model';
 import {NhbkMatDialog} from '../material-workaround';
+import {ItemTemplate} from '../item-template';
 
 @Component({
     selector: 'inventory-panel',
@@ -332,5 +333,23 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.itemActionService.onAction('change_icon', item, {icon: icon});
         })
+    }
+
+    isWeapon(item: Item): boolean {
+        return ItemTemplate.hasSlot(item.template, 'WEAPON');
+    }
+
+    sharpenWeapon(item: Item) {
+        let modifier = new ActiveStatsModifier();
+        modifier.durationType = 'combat';
+        modifier.combatCount = 3;
+        modifier.name = 'Aiguisé';
+        modifier.values = [{
+            type: 'ADD',
+            stat: 'PI',
+            value: 1
+        }];
+        this.activeModifier(modifier);
+        this.itemActionService.onAction('update_modifiers', item, [...item.modifiers, modifier]);
     }
 }
