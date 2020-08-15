@@ -205,6 +205,7 @@ export class CharacterComputedData {
     countActiveEffect = 0;
     weaponsDamages: {name: string, damage: string, incompatible?: boolean}[] = [];
     flags: {[flagName: string]: FlagData[]} = {};
+    shownItemsToGm: Item[] = [];
 
     init() {
         this.details.init();
@@ -375,11 +376,15 @@ export class Character extends WsRegistrable {
         let containers: Item[] = [];
         let topLevelContainers: Item[] = [];
         let currencyItems: Item[] = [];
+        let shownItemsToGm: Item[] = [];
         let totalMoney = 0;
         let content: {[itemId: number]: Item[]} = {};
         let itemsById: {[itemId: number]: Item} = {};
 
         for (let item of this.items) {
+            if (item.data.shownToGm) {
+                shownItemsToGm.push(item);
+            }
             if (item.template.data.isCurrency && item.template.data.price != null) {
                 totalMoney += item.template.data.price * (item.data.quantity || 1);
                 currencyItems.push(item);
@@ -492,6 +497,7 @@ export class Character extends WsRegistrable {
         this.computedData.topLevelContainers = topLevelContainers;
         this.computedData.currencyItems = currencyItems;
         this.computedData.totalMoney = totalMoney;
+        this.computedData.shownItemsToGm = shownItemsToGm;
     }
 
     private updateFlags() {

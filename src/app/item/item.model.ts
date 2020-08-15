@@ -1,7 +1,7 @@
 import {ActiveStatsModifier, DurationChange, IMetadata} from '../shared';
 import {ItemTemplate} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
-import {Skill, SkillDictionary} from '../skill';
+import {SkillDictionary} from '../skill';
 import {Fighter} from '../group';
 import {IDurable, IItemData} from '../api/shared';
 import {ItemResponse} from '../api/responses';
@@ -18,6 +18,7 @@ export class ItemData implements IItemData {
     notIdentified?: boolean;
     ignoreRestrictions?: boolean;
     lifetime?: IDurable;
+    shownToGm?: boolean;
 
     constructor(data?: IItemData) {
         if (data) {

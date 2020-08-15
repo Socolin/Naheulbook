@@ -13,6 +13,13 @@ import {ItemService} from './item.service';
 import {NhbkMatDialog} from '../material-workaround';
 import {IItemData} from '../api/shared';
 
+type Actions =
+    'delete'
+    | 'rename'
+    | 'identify'
+    | 'changeIcon'
+    | 'hide'
+
 @Component({
     selector: 'app-item-list',
     templateUrl: './item-list.component.html',
@@ -27,7 +34,11 @@ export class ItemListComponent implements OnChanges {
     public selectItem: EventEmitter<Item> = new EventEmitter<Item>();
     @Output()
     public deleteItems: EventEmitter<Item[]> = new EventEmitter<Item[]>();
+    @Output()
+    public hideItems: EventEmitter<Item[]> = new EventEmitter<Item[]>();
 
+    @Input()
+    public actions: Actions[] = ['changeIcon', 'rename', 'identify', 'delete'];
     @ViewChild('selectAllCheckbox')
     private selectAllCheckbox?: MatCheckbox;
     public selectedItems: Item[] = [];
@@ -36,6 +47,10 @@ export class ItemListComponent implements OnChanges {
         private readonly itemService: ItemService,
         private readonly dialog: NhbkMatDialog,
     ) {
+    }
+
+    actionEnabled(action: Actions): boolean {
+        return this.actions.indexOf(action) !== -1;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -128,6 +143,15 @@ export class ItemListComponent implements OnChanges {
     deleteSelectedItems(items?: Item[]) {
         const selectedItems = items || [...this.selectedItems];
         this.deleteItems.emit(selectedItems);
+        for (const item of selectedItems) {
+            this.toggleSelectItem(item, false);
+        }
+        this.updateSelectAllCheckboxState();
+    }
+
+    hideSelectedItems(items?: Item[]) {
+        const selectedItems = items || [...this.selectedItems];
+        this.hideItems.emit(selectedItems);
         for (const item of selectedItems) {
             this.toggleSelectItem(item, false);
         }

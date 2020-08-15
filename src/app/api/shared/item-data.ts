@@ -22,4 +22,5 @@ export interface IItemData {
         duration?: string;
         timeDuration?: number;
     };
+    shownToGm?: boolean;
 }

@@ -67,6 +67,22 @@
 
         <mat-tab label="Personnages">
             <div class="characters-tab">
+                <mat-card *ngIf="group.characterIdWithShownItem?.size">
+                    <mat-card-title>
+                        Objets montrés par les joueurs
+                    </mat-card-title>
+                    <mat-card-content>
+                        <div *ngFor="let characterId of group.characterIdWithShownItem">
+                            <h3 class="mat-h3">{{group.charactersById[characterId].name}}</h3>
+                            <app-item-list [items]="group.charactersById[characterId].computedData.shownItemsToGm"
+                                           [actions]="['identify','hide']"
+                                           (hideItems)="removeItemsFromShownList($event)"
+                                           (selectItem)="openItemDialog($event)">
+                            </app-item-list>
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
                 <mat-card>
                     <mat-card-title>
                         Joueurs
@@ -95,7 +111,6 @@
                                 Activer tous les personnages
                             </button>
                         </mat-menu>
-
                     </mat-card-title>
                     <mat-card-content class="characters-cards">
                         <mat-list>
@@ -117,7 +132,6 @@
                                         &nbsp;{{job.name}}
                                     </span>
                                 </p>
-
                                 <button mat-icon-button [matMenuTriggerFor]="characterActions" [attr.aria-label]="'Afficher le menu pour le joueur ' + character.name">
                                     <mat-icon>more_vert</mat-icon>
                                 </button>

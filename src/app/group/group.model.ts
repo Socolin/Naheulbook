@@ -12,6 +12,7 @@ import {TargetJsonData} from './target.model';
 import {FighterDurationChanges} from '../shared';
 import {DeleteInviteResponse, GroupResponse, NpcResponse} from '../api/responses';
 import {INpcData} from '../api/shared';
+import {Item} from '../item';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -306,6 +307,7 @@ export class Group extends WsRegistrable {
     public invites: GroupInvite[] = [];
 
     public characters: Character[] = [];
+    public charactersById: {[characterId: number]: Character} = {}
     public characterJoining: Subject<number> = new Subject<number>();
     public characterAdded: Subject<Character> = new Subject<Character>();
     public characterRemoved: Subject<Character> = new Subject<Character>();
@@ -328,6 +330,7 @@ export class Group extends WsRegistrable {
     public fightersSubscriptions: { [fighterUid: string]: Subscription } = {};
 
     public pendingModifierChanges?: FighterDurationChanges[];
+    public characterIdWithShownItem: Set<number> = new Set<number>();
 
     get currentFighter(): Fighter | undefined {
         if (this.fighters.length <= this.data.currentFighterIndex) {
@@ -364,16 +367,21 @@ export class Group extends WsRegistrable {
         if (i !== -1) {
             return false;
         }
+        this.charactersById[addedCharacter.id] = addedCharacter;
         this.characters.push(addedCharacter);
         this.characterAdded.next(addedCharacter);
         let changeSub = addedCharacter.onUpdate
-            .subscribe(() => this.updateFightersOrder());
+            .subscribe((character) => {
+                this.updateFightersOrder();
+                this.updateCharacterShownItems(character);
+            });
         let activeSub = addedCharacter.onActiveChange.subscribe((active: number) => {
             if (active) {
                 this.addFighter(addedCharacter);
             } else {
                 this.removeFighter(addedCharacter);
             }
+            this.updateCharacterShownItems(addedCharacter);
             this.updateFightersOrder();
         });
         if (addedCharacter.active) {
@@ -386,6 +394,7 @@ export class Group extends WsRegistrable {
         if (this.wsSubscribtion) {
             this.wsSubscribtion.service.registerElement(addedCharacter);
         }
+        this.updateShownItems();
         return true;
     }
 
@@ -398,6 +407,7 @@ export class Group extends WsRegistrable {
         let i = this.characters.findIndex(character => character.id === removedCharacterId);
         if (i !== -1) {
             let removedCharacter = this.characters[i];
+            delete this.charactersById[removedCharacter.id];
             this.characters.splice(i, 1);
             this.characterRemoved.next(removedCharacter);
             this.characterSubscriptions[removedCharacter.id].active.unsubscribe();
@@ -817,6 +827,20 @@ export class Group extends WsRegistrable {
 
         this.eventAdded.unsubscribe();
         this.eventRemoved.unsubscribe();
+    }
+
+    private updateShownItems() {
+        for (let character of this.characters) {
+            this.updateCharacterShownItems(character);
+        }
+    }
+
+    private updateCharacterShownItems(character: Character) {
+        if (character.active && character.computedData.shownItemsToGm.length) {
+            this.characterIdWithShownItem.add(character.id);
+        } else {
+            this.characterIdWithShownItem.delete(character.id);
+        }
     }
 }
 

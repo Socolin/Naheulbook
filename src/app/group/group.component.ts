@@ -25,7 +25,7 @@ import {Effect} from '../effect';
 
 import {LoginService} from '../user';
 import {MonsterService} from '../monster';
-import {ItemService} from '../item';
+import {Item, ItemService} from '../item';
 import {ItemTemplate} from '../item-template';
 
 import {FighterSelectorComponent, FighterSelectorDialogData} from './fighter-selector.component';
@@ -46,6 +46,7 @@ import {
 import {EditNpcDialogComponent, EditNpcDialogData, EditNpcDialogResult} from './edit-npc-dialog.component';
 import {filter, map} from 'rxjs/operators';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
+import {ItemDialogComponent} from '../item/item-dialog.component';
 
 @Component({
     templateUrl: './group.component.html',
@@ -608,5 +609,21 @@ export class GroupComponent implements OnInit, OnDestroy {
             action: () => this.openCreateNpcDialog(),
         })
         this.quickCommandService.registerActions('group', commands);
+    }
+
+    openItemDialog(item: Item) {
+        this.dialog.open(ItemDialogComponent, {
+            panelClass: 'app-dialog-no-padding',
+            data: {item},
+            autoFocus: false
+        });
+    }
+
+    removeItemsFromShownList(items: Item[]) {
+        for (let item of items) {
+            this.itemService.updateItem(item.id, {...item.data, shownToGm: undefined}).subscribe((partialItem => {
+                item.data.shownToGm = partialItem.data.shownToGm;
+            }));
+        }
     }
 }

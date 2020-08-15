@@ -18,7 +18,8 @@ type ActionName = 'change_icon'
     | 'update_data'
     | 'update_modifiers'
     | 'update_quantity'
-    | 'use_charge';
+    | 'use_charge'
+    | 'show_to_gm';
 
 @Injectable()
 export class ItemActionService {
@@ -38,6 +39,7 @@ export class ItemActionService {
     public registerAction(actionName: 'update_modifiers'): Observable<{ item: Item, data: ActiveStatsModifier[] }>;
     public registerAction(actionName: 'update_quantity'): Observable<{ item: Item, data: { quantity: number } }>;
     public registerAction(actionName: 'use_charge'): Observable<{ item: Item }>;
+    public registerAction(actionName: 'show_to_gm'): Observable<{ item: Item }>;
     public registerAction(actionName: ActionName): Observable<{ item: Item, data?: any }> {
         return new Observable(((observer) => {
             this.actionObservers[actionName] = observer;
@@ -58,6 +60,7 @@ export class ItemActionService {
     public onAction(actionName: 'update_modifiers', item: Item, data: ActiveStatsModifier[]);
     public onAction(actionName: 'update_quantity', item: Item, data: { quantity: number });
     public onAction(actionName: 'use_charge', item: Item);
+    public onAction(actionName: 'show_to_gm', item: Item);
     public onAction(actionName: ActionName, item: Item, data?: any) {
         if (!(actionName in this.actionObservers)) {
             throw new Error('action: `' + actionName + '\' was not registered');

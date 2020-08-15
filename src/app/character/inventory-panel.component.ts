@@ -278,7 +278,14 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
 
         this.subscription.add(this.character.onUpdate.subscribe(() => {
             this.changeDetectorRef.detectChanges();
-        }))
+        }));
+
+        this.subscription.add(this.itemActionService.registerAction('show_to_gm').subscribe(event => {
+            let item = event.item;
+            this.itemService.updateItem(item.id, {...item.data, shownToGm: true}).subscribe((partialResult) => {
+                item.data.shownToGm = partialResult.data.shownToGm;
+            });
+        }));
     }
 
     ngOnDestroy(): void {

@@ -106,6 +106,10 @@
 
 <mat-menu xPosition="before" #itemMenu="matMenu">
     <ng-template matMenuContent let-item="item">
+        <button mat-menu-item (click)="itemActionService.onAction   ('show_to_gm', item)">
+            <mat-icon>visibility</mat-icon>
+            Montrer l'objet au MJ
+        </button>
         <button mat-menu-item
                 *ngIf="item.template.slots?.length > 0 && !item.data.equiped && !item.content?.length"
                 (click)="itemActionService.onAction('equip', item)">
