@@ -167,4 +167,8 @@ export class CharacterService {
     createCustomCharacter(request: CreateCustomCharacterRequest): Observable<IMetadata> {
         return this.httpClient.post<IMetadata>('/api/v2/characters/custom', request);
     }
+
+    quitGroup(characterId: number): Observable<number> {
+        return this.httpClient.post<number>(`/api/v2/characters/${characterId}/quitGroup`, {});
+    }
 }

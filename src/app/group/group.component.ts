@@ -214,7 +214,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     kickCharacter(character: Character) {
-        this.groupService.kickCharacter(this.group.id, character.id).subscribe((characterId) => {
+        this.characterService.quitGroup(character.id).subscribe((characterId) => {
             this.group.removeCharacter(characterId);
         });
     }

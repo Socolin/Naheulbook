@@ -190,13 +190,6 @@ export class GroupService {
         return this.httpClient.get<GroupSummaryResponse[]>('/api/v2/groups');
     }
 
-    kickCharacter(groupId: number, characterId: number): Observable<number> {
-        return this.httpClient.post<number>('/api/group/kickCharacter', {
-            groupId: groupId,
-            characterId: characterId,
-        });
-    }
-
     startCombat(groupId: number): Observable<void> {
         return this.httpClient.post<void>(`/api/v2/groups/${groupId}/startCombat`, {});
     }
