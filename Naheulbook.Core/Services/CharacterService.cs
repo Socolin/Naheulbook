@@ -32,6 +32,7 @@ namespace Naheulbook.Core.Services
         Task<LevelUpResult> LevelUpCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterLevelUpRequest request);
         Task AddJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterAddJobRequest request);
         Task RemoveJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterRemoveJobRequest request);
+        Task QuitGroupAsync(NaheulbookExecutionContext executionContext, int characterId);
     }
 
     public class CharacterService : ICharacterService
@@ -436,6 +437,22 @@ namespace Naheulbook.Core.Services
                 await notificationSession.CommitAsync();
             }
 
+        }
+
+        public async Task QuitGroupAsync(NaheulbookExecutionContext executionContext, int characterId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var character = await uow.Characters.GetWithOriginWithJobsAsync(characterId);
+                if (character == null)
+                    throw new CharacterNotFoundException(characterId);
+
+                _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+                character.GroupId = null;
+
+                await uow.SaveChangesAsync();
+            }
         }
     }
 }

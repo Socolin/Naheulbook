@@ -396,5 +396,31 @@ namespace Naheulbook.Web.Controllers
                 throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
             }
         }
+
+
+        [HttpPost("{CharacterId:int:min(1)}/quitGroup")]
+        public async Task<ActionResult<CharacterLevelUpResponse>> PostCharacterQuitGroupAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId
+        )
+        {
+            try
+            {
+                await _characterService.QuitGroupAsync(executionContext, characterId);
+                return NoContent();
+            }
+            catch (CharacterNotInAGroupException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+            }
+        }
     }
 }

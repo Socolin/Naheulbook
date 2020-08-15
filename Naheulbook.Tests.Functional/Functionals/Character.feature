@@ -681,3 +681,13 @@ Feature: Character
         }
     }
     """
+
+  Scenario: A character can quit group
+    Given a JWT for a user
+    And a character
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/quitGroup" with the following json content and the current jwt
+    """
+    {}
+    """
+    Then the response status code is 204
