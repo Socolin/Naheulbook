@@ -11,4 +11,7 @@
     .sticky-category-list {
         background-color: mat-color($background, background);
     }
+    .main-row:hover {
+        background-color: mat-color($background, hover);
+    }
 }

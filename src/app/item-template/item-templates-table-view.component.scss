@@ -1,0 +1,51 @@
+:host {
+    width: 100%;
+
+    table {
+        width: 100%;
+
+        .items-table {
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    .icon-name {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 8px;
+        .item-name {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+    }
+
+    .item-template-detail {
+        overflow: hidden;
+        display: flex;
+
+        app-item-template-details {
+            margin: 8px 0;
+        }
+    }
+
+    tr.detail-row {
+        height: 0;
+    }
+
+    .main-row {
+        cursor: pointer;
+    }
+
+    tr.main-row td {
+        border-bottom-width: 0;
+    }
+
+    .actions {
+        width: 48px;
+    }
+
+}
+

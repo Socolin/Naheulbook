@@ -12,9 +12,11 @@ import {JobService} from '../job';
 
 import {ItemTemplate, ItemTemplateSection, ItemTemplateSubCategory} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
-import {CreateItemTemplateDialogComponent} from './create-item-template-dialog.component';
+import {CreateItemTemplateDialogComponent, CreateItemTemplateDialogData} from './create-item-template-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
 import {Guid} from '../api/shared/util';
+import {EditItemTemplateDialogComponent, EditItemTemplateDialogData} from './edit-item-template-dialog.component';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 @Component({
     selector: 'item-template-list',
@@ -53,6 +55,8 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
 
     public filter: { name?: string, dice?: number };
     public visibleItems: ItemTemplate[] = [];
+    public tableView: boolean;
+    public showCommunityItems: boolean;
 
     constructor(
         public readonly loginService: LoginService,
@@ -64,12 +68,18 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         private readonly overlay: Overlay,
         private readonly route: ActivatedRoute,
         private readonly router: Router,
+        private readonly breakpointObserver: BreakpointObserver,
     ) {
         this.resetFilter();
     }
 
     resetNameFilter() {
         this.filter.name = undefined;
+        this.updateVisibleItems();
+    }
+
+    updateViewCommunityItems(checked: boolean) {
+        this.showCommunityItems = checked;
         this.updateVisibleItems();
     }
 
@@ -92,6 +102,9 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
             return false;
         }
         if (item.subCategoryId !== this.selectedItemSubCategory.id) {
+            return false;
+        }
+        if (item.source === 'community' && !this.showCommunityItems) {
             return false;
         }
         if (item.data.diceDrop && this.filter && this.filter.dice) {
@@ -293,12 +306,29 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         }
     }
 
+    openEditItemTemplateDialog(itemTemplate: ItemTemplate) {
+        const dialogRef = this.dialog.openFullScreen<EditItemTemplateDialogComponent, EditItemTemplateDialogData, ItemTemplate>(
+            EditItemTemplateDialogComponent,
+            {
+                data: {itemTemplateId: itemTemplate.id}
+            }
+        );
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.reloadSectionForItem(itemTemplate);
+            this.reloadSectionForItem(result);
+        });
+    }
+
     private reloadCategory(category: ItemTemplateSection) {
         this.itemTemplateService.clearItemSectionCache(category.id);
         this.loadSection(category);
     }
 
     ngOnInit() {
+        this.tableView = this.breakpointObserver.isMatched([Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
         forkJoin([
             this.jobService.getJobsNamesById(),
             this.originService.getOriginsNamesById(),
@@ -326,6 +356,21 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         if (this.queryParamsSub) {
             this.queryParamsSub.unsubscribe();
         }
+    }
+
+    openCreateCopyItemTemplateDialog(sourceItem: ItemTemplate) {
+        const dialogRef = this.dialog.openFullScreen<CreateItemTemplateDialogComponent, CreateItemTemplateDialogData, ItemTemplate>(
+            CreateItemTemplateDialogComponent,
+            {
+                data: {copyFromItemTemplateId: sourceItem.id}
+            }
+        );
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.reloadSectionForItem(result);
+        });
     }
 }
 

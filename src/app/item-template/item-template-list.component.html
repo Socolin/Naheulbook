@@ -1,17 +1,23 @@
-<mat-card>
+<mat-card *ngIf="!inTab">
     <mat-card-content>
         <p>
-            Les joueurs n'achètent JAMAIS le matériel en piochant eux-mêmes dans les tableaux.
+            Les joueurs n'achètent JAMAIS le matériel en piochant eux-mêmes dans les tableaux (<a href="https://www.naheulbeuk.com/jdr-docs/guide-equipement-naheulbeuk-jdr.pdf" target="_blank">Voir guide</a>).
         </p>
         <p *ngIf="showHeaderInfo">
-            Vous pouvez créer vos propres objets grace à l'éditeur. Ce dernier pouvant être complexe il est conseillé de copier un autre objet,
-            à l'aide du bouton <mat-icon>content_copy</mat-icon>, puis de le modifier. Si vous souhaitez seulement changer
+            Vous pouvez créer vos propres objets grace à l'éditeur. Ce dernier pouvant être complexe il est conseillé de
+            copier un autre objet,
+            à l'aide du bouton
+            <mat-icon>content_copy</mat-icon>
+            , puis de le modifier. Si vous souhaitez seulement changer
             le nom, cette option est déjà disponible lors de l'ajout d'un objet sur un personnage.
         </p>
         <p *ngIf="showHeaderInfo">
-            Les icônes sur les objets sont là a titre indicatif pour identifier plus facilement les objets lors des recherches
-            et dans l'inventaire. Elles ne sont pas à utiliser pour savoir à quoi ressemble vraiment l'objet, n'ayant pas forcément
-            une icône parfait pour chaque objet. Les icônes utilisées proviennent principalement du site <a href="https://game-icons.net/">https://game-icons.net/</a>
+            Les icônes sur les objets sont là a titre indicatif pour identifier plus facilement les objets lors des
+            recherches
+            et dans l'inventaire. Elles ne sont pas à utiliser pour savoir à quoi ressemble vraiment l'objet, n'ayant
+            pas forcément
+            une icône parfait pour chaque objet. Les icônes utilisées proviennent principalement du site <a
+            href="https://game-icons.net/">https://game-icons.net/</a>
         </p>
     </mat-card-content>
     <mat-card-actions align="end">
@@ -25,7 +31,8 @@
                     (selectionChange)="selectSection($event.value)"
                     placeholder="Section">
             <mat-option *ngFor="let category of itemSections" [value]="category">
-                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + category.icon" class="ra-mat-button-icon-24"></mat-icon>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + category.icon"
+                          class="ra-mat-button-icon-24"></mat-icon>
                 {{category.name}}
             </mat-option>
         </mat-select>
@@ -61,12 +68,8 @@
             </button>
         </mat-form-field>
 
-        <mat-form-field *ngIf="hasSpecial('DICE_DROP')" class="dice-drop">
-            <input matInput placeholder="Dé" [(ngModel)]="filter.dice" type="number" (change)="updateVisibleItems()"/>
-            <button matSuffix mat-icon-button *ngIf="filter.dice !== undefined" (click)="resetDiceFilter()">
-                <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
+        <mat-checkbox class="table-view" [(ngModel)]="tableView">Vue tableau</mat-checkbox>
+        <mat-checkbox class="display-community" (change)="updateViewCommunityItems($event.checked)">Objets communautaires</mat-checkbox>
     </mat-card-content>
 </mat-card>
 
@@ -81,22 +84,40 @@
 </mat-card>
 
 <span id="first-item"></span>
-<ng-container *ngFor="let item of  visibleItems; trackBy: trackById">
-    <div class="item-element" [id]="'item-'+item.id" (click)="navigateToItem(item.id)">
-        <item-template class="item-element"
-                       *ngIf="isVisible(item)"
-                       [originsName]="originsName"
-                       [jobsName]="jobsName"
-                       [godsByTechName]="godsByTechName"
-                       [editable]="isEditable(item) && !inTab"
-                       [copyable]="loginService.currentLoggedUser != undefined"
-                       [actions]="inTab ? ['addItem'] : []"
-                       (onAction)="emitAction($event.action, $event.data)"
-                       (onEdit)="reloadSectionForItem($event); reloadSectionForItem(item)"
-                       (onCreateCopy)="reloadSectionForItem($event)"
-                       [itemTemplate]="item">
-        </item-template>
-    </div>
+<div class="items-table mat-elevation-z2">
+    <app-item-templates-table-view
+        *ngIf="tableView"
+        [itemTemplates]="visibleItems"
+        [godsByTechName]="godsByTechName"
+        [jobsName]="jobsName"
+        [originsName]="originsName"
+        [itemTemplateSection]="selectedSection"
+        (onStartEdit)="openEditItemTemplateDialog($event);"
+        (onStartCreateCopy)="openCreateCopyItemTemplateDialog($event);"
+        [actions]="inTab ? ['addItem'] : []"
+        (onAction)="emitAction($event.action, $event.data)"
+    >
+    </app-item-templates-table-view>
+</div>
+
+<ng-container *ngIf="!tableView">
+    <ng-container *ngFor="let item of  visibleItems; trackBy: trackById">
+        <div class="item-element" [id]="'item-'+item.id" (click)="navigateToItem(item.id)">
+            <item-template class="item-element"
+                           *ngIf="isVisible(item)"
+                           [originsName]="originsName"
+                           [jobsName]="jobsName"
+                           [godsByTechName]="godsByTechName"
+                           [editable]="isEditable(item) && !inTab"
+                           [copyable]="loginService.currentLoggedUser != undefined"
+                           [actions]="inTab ? ['addItem'] : []"
+                           (onAction)="emitAction($event.action, $event.data)"
+                           (onEdit)="reloadSectionForItem($event); reloadSectionForItem(item)"
+                           (onCreateCopy)="reloadSectionForItem($event)"
+                           [itemTemplate]="item">
+            </item-template>
+        </div>
+    </ng-container>
 </ng-container>
 <div *ngIf="nextSubCategory && previousSubCategory" class="prev-next-buttons">
     <button mat-raised-button

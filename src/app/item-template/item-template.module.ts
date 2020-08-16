@@ -1,4 +1,4 @@
-import {NgModule}      from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
@@ -14,13 +14,16 @@ import {
     AutocompleteSearchItemTemplateComponent,
     CreateItemTemplateDialogComponent,
     EditItemTemplateDialogComponent,
-    ItemTemplateListComponent,
     ItemTemplateComponent,
     ItemTemplateEditorComponent,
     ItemTemplateEditorModuleComponent,
+    ItemTemplateListComponent,
     ItemTemplateService,
 } from './';
-import { ItemTemplateDialogComponent } from './item-template-dialog.component';
+import {ItemTemplateDialogComponent} from './item-template-dialog.component';
+import {ItemTemplatesTableViewComponent} from './item-templates-table-view.component';
+import { ItemTemplateDetailsComponent } from './item-template-details.component';
+import { ItemTemplateDataProtectionPipe } from './item-template-data-protection.pipe';
 
 @NgModule({
     imports: [
@@ -43,6 +46,9 @@ import { ItemTemplateDialogComponent } from './item-template-dialog.component';
         AutocompleteSearchItemTemplateComponent,
         AddItemTemplateEditorModuleDialogComponent,
         ItemTemplateDialogComponent,
+        ItemTemplatesTableViewComponent,
+        ItemTemplateDetailsComponent,
+        ItemTemplateDataProtectionPipe,
     ],
     exports: [
         ItemTemplateListComponent,

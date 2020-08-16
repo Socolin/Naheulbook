@@ -21,11 +21,12 @@
     .filters {
         display: grid;
         gap: 8px;
-        grid-template-columns: 1fr 1fr minmax(0px, auto);
-        grid-template-areas: "search filter dice-drop";
+        align-items: center;
+        grid-template-columns: 1fr 1fr auto auto;
+        grid-template-areas: "search filter" "table-view display-community";
         @include for-phone-only {
-            grid-template-columns: 1fr minmax(0px, auto);
-            grid-template-areas: "search search" "filter dice-drop";
+            grid-template-columns: 1fr auto auto;
+            grid-template-areas: "search filter" "table-view display-community";
         }
         .search {
             grid-area: search;
@@ -33,8 +34,11 @@
         .filter {
             grid-area: filter;
         }
-        .dice-drop {
-            grid-area: dice-drop;
+        .table-view {
+            grid-area: table-view;
+        }
+        .display-community {
+            grid-area: display-community;
         }
     }
 
@@ -58,6 +62,10 @@
             grid-area: sub-category;
         }
 
+    }
+
+    .items-table {
+        margin: 5px;
     }
 
 }

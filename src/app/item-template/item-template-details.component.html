@@ -1,0 +1,293 @@
+<!-- Sex -->
+<div class="icon-label" *ngIf="itemTemplate.data.sex">
+    <mat-icon *ngIf="itemTemplate.data.sex == 'h'" fontSet="game-icon" fontIcon="game-icon-male" class="ra-mat-button-icon-24"></mat-icon>
+    <mat-icon *ngIf="itemTemplate.data.sex == 'f'" fontSet="game-icon" fontIcon="game-icon-female" class="ra-mat-button-icon-24"></mat-icon>
+    <span *ngIf="itemTemplate.data.sex == 'h'">Homme uniq. </span>
+    <span *ngIf="itemTemplate.data.sex == 'f'">Femme uniq. </span>
+</div>
+
+<!-- Relic -->
+<div class="icon-label" *ngIf="itemTemplate.data.relic">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-relic-blade" class="ra-mat-button-icon-24"></mat-icon>
+    <span>Relique </span>
+</div>
+
+
+<!-- Dice drop -->
+<div class="icon-label" *ngIf="itemTemplate.data.diceDrop">
+    <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        {{itemTemplate.data.diceDrop}}
+    </div>
+</div>
+
+<!-- Throwable -->
+<div *ngIf="itemTemplate.data.throwable">
+    <span>Arme prévue pour le jet</span>
+</div>
+
+<!-- Slots -->
+<div class="icon-label" *ngIf="itemTemplate.slots?.length > 0">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <mat-chip-list [selectable]="false">
+            <mat-chip *ngFor="let slot of itemTemplate.slots">{{slot.name}}</mat-chip>
+        </mat-chip-list>
+    </div>
+</div>
+
+<!-- Description -->
+<div class="icon-label" *ngIf="itemTemplate.data.description">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <span>Description:</span>
+        {{itemTemplate.data.description}}
+    </div>
+</div>
+
+<!-- Note -->
+<div class="icon-label" *ngIf="itemTemplate.data.note">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-scroll-unfurled" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <span>Note:</span>
+        {{itemTemplate.data.note}}
+    </div>
+</div>
+
+<!-- Encombrement -->
+<div class="icon-label" *ngIf="itemTemplate.data.space">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+            <span>
+                Encombrement:
+            </span>
+        {{itemTemplate.data.space}}
+    </div>
+</div>
+
+<!-- Encombrement -->
+<div class="icon-label" *ngIf="itemTemplate.data.lifetime">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-stopwatch" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+            <span>
+                Durée de conservation:
+            </span>
+        <span *ngIf="itemTemplate.data.lifetime.durationType === 'time'">
+                {{itemTemplate.data.lifetime.timeDuration | nhbkDuration}}
+            </span>
+    </div>
+</div>
+
+<!-- Possibilités de récolte -->
+<div class="icon-label" *ngIf="itemTemplate.data.availableLocation">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-sickle" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+            <span>
+                Possibilités de récolte:
+            </span>
+        {{itemTemplate.data.availableLocation}}
+    </div>
+</div>
+
+<!-- Dieu -->
+<div class="icon-label" *ngIf="itemTemplate.data.god && godsByTechName">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-prayer" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <span>Dieu:</span>
+        {{godsByTechName[itemTemplate.data.god].displayName}}
+    </div>
+</div>
+
+<!-- Prix/Charge/Durée -->
+<div class="icon-label" *ngIf="itemTemplate.data.price">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <ng-template [ngIf]="itemTemplate.data.price >= 1">
+            {{itemTemplate.data.price | number}} P.O.
+        </ng-template>
+
+        <ng-template [ngIf]="itemTemplate.data.price < 1 && itemTemplate.data.price >= 0.1">
+            {{itemTemplate.data.price * 10}} P.A.
+        </ng-template>
+
+        <ng-template [ngIf]="itemTemplate.data.price < 0.1">
+            {{itemTemplate.data.price * 100}} P.C.
+        </ng-template>
+    </div>
+</div>
+
+<!-- Charge / Action -->
+
+<div class="icon-label" *ngIf="itemTemplate.data.charge">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-magic-swirl" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <div>
+            <span>Nombre d'utilisations:</span>
+            {{itemTemplate.data.charge}}
+        </div>
+        <div *ngIf="itemTemplate.data?.actions?.length" class="usage-actions">
+            Lors de l'utilisation:
+            <div *ngFor="let action of itemTemplate.data.actions" class="usage-action">
+                <span class="dot" *ngIf="!action.hidden">-</span>
+                <nhbk-action *ngIf="!action.hidden" [action]="action"></nhbk-action>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="icon-label" *ngIf="itemTemplate.data.weight">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-weight" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+            <span>
+                Poids:
+            </span>
+        <span *ngIf="itemTemplate.data.weight < 1">{{(itemTemplate.data.weight * 1000)}}g</span>
+        <span *ngIf="itemTemplate.data.weight >= 1">{{(itemTemplate.data.weight)}}Kg</span>
+    </div>
+</div>
+
+<!-- Degat -->
+<div class="icon-label" *ngIf="itemTemplate.data.bonusDamage || itemTemplate.data.damageDice">
+    <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
+    <div class="damage">
+            <span *ngIf="itemTemplate.data.damageDice">{{itemTemplate.data.damageDice}}<span
+                class="ra ra-perspective-dice-random ra-mat-button-icon-24"></span></span>
+        <span *ngIf="itemTemplate.data.damageDice && itemTemplate.data.bonusDamage>0">+</span>
+        <span *ngIf="itemTemplate.data.bonusDamage">{{itemTemplate.data.bonusDamage}}</span>
+        <span *ngIf="itemTemplate.data.damageType">({{itemTemplate.data.damageType}})</span>
+    </div>
+</div>
+
+<!-- Protection -->
+<div class="icon-label"
+     *ngIf="itemTemplate.data.protection || itemTemplate.data.magicProtection || itemTemplate.data.protectionAgainstMagic">
+    <mat-icon fontSet="ra" fontIcon="ra-shield" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <span>Protection: </span>
+        {{itemTemplate | itemTemplateDataProtection}}
+    </div>
+</div>
+
+<!-- Rupture -->
+<div class="icon-label" *ngIf="itemTemplate.data.rupture != undefined">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-cracked-shield" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <div *ngIf="itemTemplate.data.rupture">
+            Rupture:
+            1 à {{itemTemplate.data.rupture}}
+        </div>
+        <div *ngIf="itemTemplate.data.rupture === 0">
+            Rupture: Incassable
+        </div>
+    </div>
+</div>
+
+<!-- Modificateurs -->
+<div class="icon-label" *ngIf="itemTemplate.modifiers?.length">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
+    <div class="stats">
+        <div *ngFor="let modifier of itemTemplate.modifiers">
+            <span *ngIf="jobsName && modifier.jobId">{{jobsName[modifier.jobId]}}:</span>
+            <span *ngIf="originsName && modifier.originId">{{originsName[modifier.originId]}}:</span>
+            {{modifier | modifier}}
+        </div>
+    </div>
+</div>
+
+<!-- Compétences ajouté/annulé -->
+<div class="icon-label"
+     *ngIf="itemTemplate.skills?.length || itemTemplate.unSkills?.length || itemTemplate.skillModifiers?.length">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <div *ngFor="let skill of itemTemplate.skills">Donne la compétence "{{skill.name}}"</div>
+        <div *ngFor="let skill of itemTemplate.unSkills">Annule "{{skill.name}}"</div>
+        <div *ngFor="let modifier of itemTemplate.skillModifiers">{{modifier.skill.name}}
+            <span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
+        </div>
+    </div>
+</div>
+
+<!-- Prérequis -->
+<div class="icon-label" *ngFor="let requirement of itemTemplate.requirements">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-thumb-up" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <span *ngIf="requirement.min">Min {{requirement.stat}}: {{requirement.min}}</span>
+        <span *ngIf="requirement.max">Max {{requirement.stat}}: {{requirement.max}}</span>
+    </div>
+</div>
+
+<!-- Origine -->
+<div class="icon-label" *ngIf="itemTemplate.data.origin">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-treasure-map" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        Origine: {{itemTemplate.data.origin}}
+    </div>
+</div>
+
+<!-- Gun -->
+<div class="icon-label" *ngIf="itemTemplate.data.gun">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-revolver" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <h3 class="mat-h3">Arme à poudre</h3>
+        <dl>
+            <dt>Portée utile:</dt>
+            <dd>{{itemTemplate.data.gun.range}}</dd>
+            <dt>Dégâts:</dt>
+            <dd>{{itemTemplate.data.gun.damages}}</dd>
+            <dt>+Spécial:</dt>
+            <dd>{{itemTemplate.data.gun.special}}</dd>
+            <dt>Cadence de tir:</dt>
+            <dd>{{itemTemplate.data.gun.rateOfFire}}</dd>
+            <dt>Délai de rechargement:</dt>
+            <dd>{{itemTemplate.data.gun.reloadDelay}}</dd>
+            <dt>Épreuve de tir:</dt>
+            <dd>{{itemTemplate.data.gun.shootTest}}</dd>
+        </dl>
+        <mat-divider></mat-divider>
+        <h3 class="mat-h3">Munitions</h3>
+        <dl>
+            <dt *ngIf="itemTemplate.data.gun.fuelPerShot">
+                Combustion par coup:
+            </dt>
+            <dd *ngIf="itemTemplate.data.gun.fuelPerShot">
+                {{itemTemplate.data.gun.fuelPerShot}}
+            </dd>
+            <dt>Munitions par coup:</dt>
+            <dd>{{itemTemplate.data.gun.ammunitionPerShot}}</dd>
+        </dl>
+        <mat-divider></mat-divider>
+        <dl>
+            <dt>Chances de fonctionnement:</dt>
+            <dd>{{itemTemplate.data.gun.workLuck}}</dd>
+        </dl>
+    </div>
+</div>
+
+<!-- Instrument -->
+<div class="icon-label" *ngIf="itemTemplate.data.instrument">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-musical-notes" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        <div *ngIf="itemTemplate.data.instrument.specialMove">
+            Coup spécial: {{itemTemplate.data.instrument.specialMove | plusminus}}
+        </div>
+        <div *ngIf="itemTemplate.data.instrument.speechTheater">
+            Discours - Théâtre: {{itemTemplate.data.instrument.speechTheater | plusminus}}
+        </div>
+        <div *ngIf="itemTemplate.data.instrument.jugglingDance">
+            Jonglage - Danse: {{itemTemplate.data.instrument.jugglingDance | plusminus}}
+        </div>
+        <div *ngIf="itemTemplate.data.instrument.musicSinging">
+            Musique - Chant: {{itemTemplate.data.instrument.musicSinging | plusminus}}
+        </div>
+    </div>
+</div>
+
+<!-- Indice de rareté -->
+<div class="icon-label" *ngIf="itemTemplate.data.rarityIndicator">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-chest" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+        Indice de rareté: {{itemTemplate.data.rarityIndicator}}
+    </div>
+</div>
+

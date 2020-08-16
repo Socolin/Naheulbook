@@ -1,0 +1,125 @@
+<table mat-table [dataSource]="itemTemplates" class="items-table" multiTemplateDataRows>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+
+    <tr mat-row *matRowDef="let itemTemplate; columns: columnsToDisplay"
+        class="main-row"
+        (click)="expandedElement = expandedElement === itemTemplate ? undefined : itemTemplate">
+    </tr>
+    <tr mat-row *matRowDef="let itemTemplate; columns: ['expandedDetail']" class="detail-row"></tr>
+
+    <ng-container matColumnDef="name">1
+        <th mat-header-cell *matHeaderCellDef>Nom</th>
+        <td mat-cell *matCellDef="let itemTemplate">
+            <div class="icon-name">
+                <icon [icon]="asItemTemplate(itemTemplate).data.icon"
+                      [enchanted]="asItemTemplate(itemTemplate).data.enchantment !== undefined"
+                      [size]="'32px'">
+                </icon>
+                <span class="item-name">
+                    <span *ngIf="asItemTemplate(itemTemplate).source === 'community'">
+                        <mat-icon [matTooltip]="'Objet communautaire'">group</mat-icon>
+                    </span>
+                    <span *ngIf="asItemTemplate(itemTemplate).source === 'private'">
+                        <mat-icon [matTooltip]="'Objet privé'">lock</mat-icon>
+                    </span>
+                    <span>{{asItemTemplate(itemTemplate).name}}</span>
+                    <span *ngIf="asItemTemplate(itemTemplate).data.enchantment !== undefined">
+                        (Ench. {{asItemTemplate(itemTemplate).data.enchantment}})
+                    </span>
+                </span>
+            </div>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="level">
+        <th mat-header-cell *matHeaderCellDef>Niveau</th>
+        <td mat-cell *matCellDef="let itemTemplate">{{asItemTemplate(itemTemplate).data.requireLevel}}</td>
+    </ng-container>
+    <ng-container matColumnDef="dice">
+        <th mat-header-cell *matHeaderCellDef>Dé</th>
+        <td mat-cell *matCellDef="let itemTemplate">{{asItemTemplate(itemTemplate).data.diceDrop}}</td>
+    </ng-container>
+    <ng-container matColumnDef="damage">
+        <th mat-header-cell *matHeaderCellDef>Dégâts</th>
+        <td mat-cell *matCellDef="let itemTemplate">{{formatDamage(asItemTemplate(itemTemplate))}}</td>
+    </ng-container>
+    <ng-container matColumnDef="protection">
+        <th mat-header-cell *matHeaderCellDef>Protection</th>
+        <td mat-cell *matCellDef="let itemTemplate">{{asItemTemplate(itemTemplate) | itemTemplateDataProtection}}</td>
+    </ng-container>
+    <ng-container matColumnDef="modifiers">
+        <th mat-header-cell *matHeaderCellDef>Modificateurs</th>
+        <td mat-cell *matCellDef="let itemTemplate">
+            <span *ngFor="let modifier of asItemTemplate(itemTemplate).modifiers">
+                <span *ngIf="jobsName && modifier.jobId">{{jobsName[modifier.jobId]}}:</span>
+                <span *ngIf="originsName && modifier.originId">{{originsName[modifier.originId]}}:</span>
+                {{modifier | modifier}}
+            </span>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="rupture">
+        <th mat-header-cell *matHeaderCellDef>Rupture</th>
+        <td mat-cell *matCellDef="let itemTemplate">{{formatRupture(asItemTemplate(itemTemplate))}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Prix</th>
+        <td mat-cell *matCellDef="let itemTemplate" style="white-space: nowrap">
+            <ng-template [ngIf]="asItemTemplate(itemTemplate).data.price >= 1">
+                {{asItemTemplate(itemTemplate).data.price | number}} P.O.
+            </ng-template>
+
+            <ng-template
+                [ngIf]="asItemTemplate(itemTemplate).data.price < 1 && asItemTemplate(itemTemplate).data.price >= 0.1">
+                {{asItemTemplate(itemTemplate).data.price * 10}} P.A.
+            </ng-template>
+
+            <ng-template [ngIf]="asItemTemplate(itemTemplate).data.price < 0.1">
+                {{asItemTemplate(itemTemplate).data.price * 100}} P.C.
+            </ng-template>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let itemTemplate" class="actions">
+            <button mat-icon-button [matMenuTriggerFor]="itemTemplateActionsMenu"
+                    [matMenuTriggerData]="{itemTemplate: itemTemplate}" (click)="$event.stopPropagation()">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let itemTemplate" [attr.colspan]="columnsToDisplay.length">
+            <div class="item-template-detail"
+                 [@detailExpand]="itemTemplate === expandedElement ? 'expanded' : 'collapsed'">
+                <app-item-template-details [itemTemplate]="itemTemplate"
+                                           [godsByTechName]="godsByTechName"
+                                           [originsName]="originsName"
+                                           [jobsName]="jobsName">
+                </app-item-template-details>
+            </div>
+        </td>
+    </ng-container>
+</table>
+
+<mat-menu #itemTemplateActionsMenu>
+    <ng-template matMenuContent let-itemTemplate="itemTemplate">
+        <button mat-menu-item (click)="onStartEdit.next(itemTemplate)" *ngIf="isEditable(itemTemplate)">
+            <mat-icon>edit</mat-icon>
+            Éditer
+        </button>
+        <button mat-menu-item (click)="onStartCreateCopy.next(itemTemplate)">
+            <mat-icon>content_copy</mat-icon>
+            Créer une copie
+        </button>
+        <button mat-menu-item
+                *ngIf="hasAction('addItem')"
+                (click)="emitAction('addItem', itemTemplate)">
+            <mat-icon>add</mat-icon>
+            Ajouter sur...
+        </button>
+    </ng-template>
+</mat-menu>
