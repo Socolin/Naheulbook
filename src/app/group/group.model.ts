@@ -11,8 +11,7 @@ import {date2Timestamp} from '../date/util';
 import {TargetJsonData} from './target.model';
 import {FighterDurationChanges} from '../shared';
 import {DeleteInviteResponse, GroupResponse, NpcResponse} from '../api/responses';
-import {INpcData} from '../api/shared';
-import {Item} from '../item';
+import {IGroupConfig, INpcData} from '../api/shared';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -241,6 +240,20 @@ export class Fighter {
     }
 }
 
+export class GroupConfig implements IGroupConfig {
+    public allowPlayersToSeeSkillGmDetails: boolean;
+    public allowPlayersToAddObject: boolean;
+    public allowPlayersToSeeGemPriceWhenIdentified: boolean;
+
+    static fromResponse(response: IGroupConfig): GroupConfig {
+        const groupConfig = new GroupConfig();
+        groupConfig.allowPlayersToAddObject = response.allowPlayersToAddObject;
+        groupConfig.allowPlayersToSeeSkillGmDetails = response.allowPlayersToSeeSkillGmDetails;
+        groupConfig.allowPlayersToSeeGemPriceWhenIdentified = response.allowPlayersToSeeGemPriceWhenIdentified;
+        return groupConfig;
+    }
+}
+
 export class GroupData {
     public debilibeuk: number;
     public mankdebol: number;
@@ -300,6 +313,7 @@ export class Group extends WsRegistrable {
     public id: number;
     public name: string;
     public data: GroupData = new GroupData();
+    public config: GroupConfig = new GroupConfig();
 
     public onNotification: Subject<any> = new Subject<any>();
 
@@ -332,6 +346,18 @@ export class Group extends WsRegistrable {
     public pendingModifierChanges?: FighterDurationChanges[];
     public characterIdWithShownItem: Set<number> = new Set<number>();
 
+    public pastEventCount = 0;
+    public futureEventCount = 0;
+
+    static fromResponse(jsonData: GroupResponse): Group {
+        let group = new Group();
+        Object.assign(group, jsonData, {data: GroupData.fromJson(jsonData.data), characters: []});
+        group.config = GroupConfig.fromResponse(jsonData.config);
+        group.invited = jsonData.invites.filter(i => i.fromGroup);
+        group.invites = jsonData.invites.filter(i => !i.fromGroup);
+        return group;
+    }
+
     get currentFighter(): Fighter | undefined {
         if (this.fighters.length <= this.data.currentFighterIndex) {
             return undefined;
@@ -340,17 +366,6 @@ export class Group extends WsRegistrable {
             return undefined;
         }
         return this.fighters[this.data.currentFighterIndex];
-    }
-
-    public pastEventCount = 0;
-    public futureEventCount = 0;
-
-    static fromJson(jsonData: GroupResponse): Group {
-        let group = new Group();
-        Object.assign(group, jsonData, {data: GroupData.fromJson(jsonData.data), characters: []});
-        group.invited = jsonData.invites.filter(i => i.fromGroup);
-        group.invites = jsonData.invites.filter(i => !i.fromGroup);
-        return group;
     }
 
     public notify(type: string, message: string, data?: any) {
@@ -745,6 +760,10 @@ export class Group extends WsRegistrable {
                 this.removeLoot(data);
                 break;
             }
+            case 'changeConfig': {
+                this.updateConfig(GroupConfig.fromResponse(data));
+                break;
+            }
             case 'addEvent': {
                 this.addEvent(NEvent.fromResponse(data));
                 break;
@@ -841,6 +860,10 @@ export class Group extends WsRegistrable {
         } else {
             this.characterIdWithShownItem.delete(character.id);
         }
+    }
+
+    private updateConfig(config: GroupConfig) {
+        this.config = config;
     }
 }
 

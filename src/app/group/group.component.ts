@@ -29,7 +29,7 @@ import {Item, ItemService} from '../item';
 import {ItemTemplate} from '../item-template';
 
 import {FighterSelectorComponent, FighterSelectorDialogData} from './fighter-selector.component';
-import {Fighter, Group, GroupInvite, Npc} from './group.model';
+import {Fighter, Group, GroupConfig, GroupInvite, Npc} from './group.model';
 import {CharacterSheetDialogComponent} from './character-sheet-dialog.component';
 import {openCreateItemDialog} from './create-item-dialog.component';
 import {
@@ -47,6 +47,11 @@ import {EditNpcDialogComponent, EditNpcDialogData, EditNpcDialogResult} from './
 import {filter, map} from 'rxjs/operators';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 import {ItemDialogComponent} from '../item/item-dialog.component';
+import {
+    GroupConfigDialogComponent,
+    GroupConfigDialogData,
+    GroupConfigDialogResult
+} from './group-config-dialog.component';
 
 @Component({
     templateUrl: './group.component.html',
@@ -625,5 +630,24 @@ export class GroupComponent implements OnInit, OnDestroy {
                 item.data.shownToGm = partialItem.data.shownToGm;
             }));
         }
+    }
+
+    openGroupConfigDialog(): void {
+        const dialogRef = this.dialog.open<GroupConfigDialogComponent,
+            GroupConfigDialogData,
+            GroupConfigDialogResult>(GroupConfigDialogComponent, {
+            data: {
+                groupConfig: this.group.config
+            }
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            this.groupService.updateGroupConfig(this.group.id, result.groupConfig).subscribe(() => {
+                this.group.config = GroupConfig.fromResponse(result.groupConfig);
+            });
+        })
     }
 }

@@ -1,5 +1,6 @@
 export * from './authentication-init-response';
 export * from './calendar-response';
+export * from './character-group-response';
 export * from './character-group-invite-response';
 export * from './character-level-up-response';
 export * from './character-response';

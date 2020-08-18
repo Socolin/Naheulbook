@@ -5,7 +5,7 @@ import {Item} from '../item';
 import {Character} from './character.model';
 import {God, ItemStatModifier, MiscService} from '../shared';
 import {NamesByNumericId} from '../shared/shared,model';
-import {ItemTemplateService, ItemTemplateSubCategoryDictionary} from '../item-template';
+import {ItemTemplate, ItemTemplateService, ItemTemplateSubCategoryDictionary} from '../item-template';
 import {OriginService} from '../origin';
 import {JobService} from '../job';
 import {forkJoin} from 'rxjs';
@@ -126,6 +126,17 @@ export class CharacterItemDialogComponent implements OnInit {
             ...this.data.item.data,
             ug: ug
         });
+    }
+
+    allowViewPrice(): boolean {
+        if (this.data.gmView) {
+            return true;
+        }
+        if (this.data.item.template.data.useUG
+            && this.data.character?.group?.config.allowPlayersToSeeGemPriceWhenIdentified) {
+            return true;
+        }
+        return false;
     }
 
     ngOnInit() {

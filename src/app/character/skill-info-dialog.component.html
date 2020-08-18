@@ -29,12 +29,14 @@
     </ng-template>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button *ngIf="!viewGmSkillInfo" mat-button color="primary" (click)="viewGmSkillInfo = true">
-        INFO GM
-    </button>
-    <button *ngIf="viewGmSkillInfo" mat-button color="primary" (click)="viewGmSkillInfo = false">
-        INFO JOUEUR
-    </button>
+    <ng-container *ngIf="canViewGmSkillInfo">
+        <button *ngIf="!viewGmSkillInfo" mat-button color="primary" (click)="viewGmSkillInfo = true">
+            INFO GM
+        </button>
+        <button *ngIf="viewGmSkillInfo" mat-button color="primary" (click)="viewGmSkillInfo = false">
+            INFO JOUEUR
+        </button>
+    </ng-container>
     <button mat-button mat-dialog-close color="primary">
         FERMER
     </button>

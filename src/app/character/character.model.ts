@@ -22,7 +22,7 @@ import {TargetJsonData} from '../group/target.model';
 
 import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 import {
-    CharacterFoGmResponse,
+    CharacterFoGmResponse, CharacterGroupInviteResponse, CharacterGroupResponse,
     CharacterLevelUpResponse,
     CharacterResponse,
     ItemPartialResponse
@@ -48,11 +48,6 @@ export class StaticDetailShow {
     stat = false;
     other = false;
     magic = false;
-}
-
-export interface CharacterGroupInvite {
-    groupId: number;
-    groupName: string;
 }
 
 export class StatisticDetail {
@@ -245,8 +240,8 @@ export class Character extends WsRegistrable {
     target: TargetJsonData;
     color: string;
     gmData: any;
-    group?: IMetadata;
-    invites: CharacterGroupInvite[];
+    group?: CharacterGroupResponse;
+    invites: CharacterGroupInviteResponse[];
     isNpc: boolean;
 
     computedData: CharacterComputedData = new CharacterComputedData();

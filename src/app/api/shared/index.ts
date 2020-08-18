@@ -1,5 +1,6 @@
 export * from './active-stats-modifier';
 export * from './durable';
+export * from './group-config';
 export * from './icon-description';
 export * from './item-data';
 export * from './item-template-data';

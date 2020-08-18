@@ -1,9 +1,10 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {Skill} from '../skill';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface SkillInfoDialogData {
     skill: Skill;
+    canViewGmSkillInfo: boolean;
 }
 
 @Component({
@@ -12,10 +13,12 @@ export interface SkillInfoDialogData {
 })
 export class SkillInfoDialogComponent implements OnInit {
     public viewGmSkillInfo = false;
+    public canViewGmSkillInfo: boolean;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public readonly data: SkillInfoDialogData
     ) {
+        this.canViewGmSkillInfo = data.canViewGmSkillInfo;
     }
 
     ngOnInit() {

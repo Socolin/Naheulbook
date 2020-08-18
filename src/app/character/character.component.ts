@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
+import {MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
 import {Overlay} from '@angular/cdk/overlay';
 import {Subscription} from 'rxjs';
 
@@ -13,19 +13,19 @@ import {Item} from '../item';
 import {WebSocketService} from '../websocket';
 
 import {CharacterService} from './character.service';
-import {Character, CharacterGroupInvite} from './character.model';
+import {Character} from './character.model';
 import {ItemActionService} from './item-action.service';
 import {ChangeSexDialogComponent, ChangeSexDialogData} from './change-sex-dialog.component';
 import {OriginPlayerDialogComponent} from './origin-player-dialog.component';
 import {JobPlayerDialogComponent} from './job-player-dialog.component';
 import {ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult} from './change-job-dialog.component';
-import {SkillInfoDialogComponent} from './skill-info-dialog.component';
+import {SkillInfoDialogComponent, SkillInfoDialogData} from './skill-info-dialog.component';
 import {LevelUpDialogComponent, LevelUpDialogData, LevelUpDialogResult} from './level-up-dialog.component';
 import {NhbkMatDialog} from 'app/material-workaround';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 import {EffectPanelComponent} from './effect-panel.component';
 import {filter, map} from 'rxjs/operators';
-import {monitorEventLoopDelay} from 'perf_hooks';
+import {CharacterGroupInviteResponse} from '../api/responses';
 
 @Component({
     selector: 'character',
@@ -115,7 +115,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     // Group
 
-    cancelInvite(invite: CharacterGroupInvite) {
+    cancelInvite(invite: CharacterGroupInviteResponse) {
         this.subscription.add(this.characterService.cancelInvite(this.character.id, invite.groupId).subscribe(
             res => {
                 for (let i = 0; i < this.character.invites.length; i++) {
@@ -130,11 +130,11 @@ export class CharacterComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    acceptInvite(invite: CharacterGroupInvite) {
+    acceptInvite(invite: CharacterGroupInviteResponse) {
         this.subscription.add(this.characterService.joinGroup(this.character.id, invite.groupId).subscribe(
             () => {
                 this.character.invites = [];
-                this.character.group = {id: invite.groupId, name: invite.groupName};
+                this.character.group = {id: invite.groupId, name: invite.groupName, config: invite.config};
             }
         ));
         return false;
@@ -155,7 +155,13 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     openSkillInfoDialog(skill: Skill) {
-        this.dialog.open(SkillInfoDialogComponent, {data: {skill}, autoFocus: false});
+        this.dialog.open<SkillInfoDialogComponent, SkillInfoDialogData>(SkillInfoDialogComponent, {
+            data: {
+                skill: skill,
+                canViewGmSkillInfo: this.inGroupTab || !!this.character.group?.config.allowPlayersToSeeSkillGmDetails
+            },
+            autoFocus: false
+        });
     }
 
     openChangeNameDialog() {

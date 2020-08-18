@@ -230,7 +230,7 @@
                 </div>
             </div>
 
-            <div class="icon-label" *ngIf="data.gmView && data.item.price">
+            <div class="icon-label" *ngIf="allowViewPrice() && data.item.price">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
                     <span>Prix:</span>

@@ -21,6 +21,8 @@ import {
     NpcResponse
 } from '../api/responses';
 import {NpcRequest} from '../api/requests';
+import {IGroupConfig} from '../api/shared';
+import {PatchGroupConfigRequest} from '../api/requests/patch-group-config-request';
 
 @Injectable()
 export class GroupService {
@@ -42,7 +44,7 @@ export class GroupService {
                 charactersLoading.push(this.characterService.getCharacter(characterId));
             }
 
-            let group = Group.fromJson(groupData);
+            let group = Group.fromResponse(groupData);
 
             if (charactersLoading.length === 0) {
                 charactersLoading.push(observableOf(null));
@@ -211,5 +213,9 @@ export class GroupService {
     editNpc(npcId: number, request: NpcRequest): Observable<Npc> {
         return this.httpClient.put<NpcResponse>(`/api/v2/npcs/${npcId}`, request)
             .pipe(map(response => Npc.fromResponse(response)));
+    }
+
+    updateGroupConfig(groupId: number, groupConfig: PatchGroupConfigRequest): Observable<void> {
+        return this.httpClient.patch<void>(`/api/v2/groups/${groupId}/config`, groupConfig);
     }
 }
