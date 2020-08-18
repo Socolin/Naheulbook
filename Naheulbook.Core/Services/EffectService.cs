@@ -37,7 +37,11 @@ namespace Naheulbook.Core.Services
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                return await uow.Effects.GetWithModifiersAsync(effectId);
+                var effect = await uow.Effects.GetWithModifiersAsync(effectId);
+                if (effect == null)
+                    throw new EffectNotFoundException();
+
+                return effect;
             }
         }
 

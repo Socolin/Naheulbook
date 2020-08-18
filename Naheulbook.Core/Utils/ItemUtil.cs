@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Factories;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Notifications;
@@ -71,7 +72,11 @@ namespace Naheulbook.Core.Utils
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var targetCharacter = await uow.Characters.GetAsync(characterId);
+                if (targetCharacter == null)
+                    throw new CharacterNotFoundException(characterId);
                 var originalItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId);
+                if (originalItem == null)
+                    throw new ItemNotFoundException(itemId);
                 var originalItemData = _itemDataUtil.GetItemData(originalItem);
 
                 if (quantity == null || originalItemData.Quantity == null || quantity >= originalItemData.Quantity)

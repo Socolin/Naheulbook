@@ -10,11 +10,11 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IItemRepository : IRepository<Item>
     {
-        Task<Item> GetWithAllDataAsync(int itemId);
+        Task<Item?> GetWithAllDataAsync(int itemId);
         Task<List<Item>> GetWithAllDataByIdsAsync(IEnumerable<int> itemIds);
-        Task<Item> GetWithOwnerAsync(int itemId);
-        Task<Item> GetWithOwnerWitGroupCharactersAsync(int itemId);
-        Task<Item> GetWithAllDataWithCharacterAsync(int itemId);
+        Task<Item?> GetWithOwnerAsync(int itemId);
+        Task<Item?> GetWithOwnerWitGroupCharactersAsync(int itemId);
+        Task<Item?> GetWithAllDataWithCharacterAsync(int itemId);
     }
 
     public class ItemRepository : Repository<Item, NaheulbookDbContext>, IItemRepository
@@ -24,7 +24,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public Task<Item> GetWithAllDataAsync(int itemId)
+        public Task<Item?> GetWithAllDataAsync(int itemId)
         {
             return Context.Items
                 .IncludeItemTemplateDetails(i => i.ItemTemplate)
@@ -39,7 +39,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Item> GetWithOwnerAsync(int itemId)
+        public Task<Item?> GetWithOwnerAsync(int itemId)
         {
             return Context.Items
                 .Include(i => i.Character!)
@@ -51,7 +51,7 @@ namespace Naheulbook.Data.Repositories
                 .FirstOrDefaultAsync(i => i.Id == itemId);
         }
 
-        public Task<Item> GetWithOwnerWitGroupCharactersAsync(int itemId)
+        public Task<Item?> GetWithOwnerWitGroupCharactersAsync(int itemId)
         {
             return Context.Items
                 .Include(i => i.Character!)
@@ -66,7 +66,7 @@ namespace Naheulbook.Data.Repositories
                 .FirstOrDefaultAsync(i => i.Id == itemId);
         }
 
-        public Task<Item> GetWithAllDataWithCharacterAsync(int itemId)
+        public Task<Item?> GetWithAllDataWithCharacterAsync(int itemId)
         {
             return Context.Items
                 .IncludeItemTemplateDetails(i => i.ItemTemplate)

@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IOriginRandomNameUrlRepository : IRepository<OriginRandomNameUrl>
     {
-        Task<OriginRandomNameUrl> GetByOriginIdAndSexAsync(string sex, Guid originId);
+        Task<OriginRandomNameUrl?> GetByOriginIdAndSexAsync(string sex, Guid originId);
     }
 
     public class OriginRandomNameUrlRepository : Repository<OriginRandomNameUrl, NaheulbookDbContext>, IOriginRandomNameUrlRepository
@@ -17,7 +17,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public Task<OriginRandomNameUrl> GetByOriginIdAndSexAsync(string sex, Guid originId)
+        public Task<OriginRandomNameUrl?> GetByOriginIdAndSexAsync(string sex, Guid originId)
         {
             return Context.OriginRandomNameUrls
                 .SingleOrDefaultAsync(x => x.Sex == sex && x.OriginId == originId);

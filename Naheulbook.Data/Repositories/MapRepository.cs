@@ -8,7 +8,7 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IMapRepository : IRepository<Map>
     {
-        Task<Map> GetMapDetailsForCurrentUserAsync(int mapId, int? userId);
+        Task<Map?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId);
     }
 
     public class MapRepository : Repository<Map, NaheulbookDbContext>, IMapRepository
@@ -18,7 +18,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public async Task<Map> GetMapDetailsForCurrentUserAsync(int mapId, int? userId)
+        public async Task<Map?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId)
         {
             var map = await Context.Maps
                 .Where(m => m.Id == mapId)

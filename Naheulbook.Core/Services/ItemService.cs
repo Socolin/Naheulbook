@@ -27,7 +27,7 @@ namespace Naheulbook.Core.Services
         Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId);
         Task<(Item takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
         Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, GiveItemRequest request);
-        Task<IList<Item>> CreateItemsAsync(IList<CreateItemRequest> requestItems);
+        Task<IList<Item>> CreateItemsAsync(IList<CreateItemRequest>? requestItems);
         Task<Item> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request);
     }
 
@@ -89,7 +89,7 @@ namespace Naheulbook.Core.Services
                 uow.Items.Add(item);
                 await uow.SaveChangesAsync();
 
-                return await uow.Items.GetWithAllDataAsync(item.Id);
+                return (await uow.Items.GetWithAllDataAsync(item.Id))!;
             }
         }
 
@@ -113,7 +113,7 @@ namespace Naheulbook.Core.Services
                 uow.Items.Add(item);
                 await uow.SaveChangesAsync();
 
-                return await uow.Items.GetWithAllDataAsync(item.Id);
+                return (await uow.Items.GetWithAllDataAsync(item.Id))!;
             }
         }
 
@@ -288,7 +288,7 @@ namespace Naheulbook.Core.Services
             return remainingQuantity;
         }
 
-        public async Task<IList<Item>> CreateItemsAsync(IList<CreateItemRequest> requestItems)
+        public async Task<IList<Item>> CreateItemsAsync(IList<CreateItemRequest>? requestItems)
         {
             if (requestItems == null)
                 return new List<Item>();
@@ -319,6 +319,8 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var usedItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId);
+                if (usedItem == null)
+                    throw new ItemNotFoundException(itemId);
                 if (!usedItem.CharacterId.HasValue)
                     throw new InvalidItemOwnerTypeException(itemId);
 
@@ -326,6 +328,11 @@ namespace Naheulbook.Core.Services
 
                 var sourceCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value);
                 var targetCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value);
+
+                if (sourceCharacter == null)
+                    throw new CharacterNotFoundException(usedItem.CharacterId.Value);
+                if (targetCharacter == null)
+                    throw new CharacterNotFoundException(usedItem.CharacterId.Value);
 
                 if (sourceCharacter.GroupId != targetCharacter.GroupId)
                     throw new ForbiddenAccessException();

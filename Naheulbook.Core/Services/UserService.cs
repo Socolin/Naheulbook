@@ -107,7 +107,10 @@ namespace Naheulbook.Core.Services
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                return await uow.Users.GetAsync(userId);
+                var user = await uow.Users.GetAsync(userId);
+                if (user == null)
+                    throw new UserNotFoundException(userId);
+                return user;
             }
         }
 

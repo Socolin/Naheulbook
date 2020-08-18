@@ -11,12 +11,12 @@ namespace Naheulbook.Data.Repositories
 {
     public interface ICharacterRepository : IRepository<Character>
     {
-        Task<Character> GetWithAllDataAsync(int id);
-        Task<Character> GetWithGroupAsync(int id);
+        Task<Character?> GetWithAllDataAsync(int id);
+        Task<Character?> GetWithGroupAsync(int id);
         Task<List<Character>> GetForSummaryByOwnerIdAsync(int ownerId);
         Task<List<IHistoryEntry>> GetHistoryByCharacterIdAsync(int characterId, int? groupId, int page, bool isGm);
         Task<List<Character>> SearchCharacterWithNoGroupByNameWithOriginWithOwner(string filter, int maxCount);
-        Task<Character> GetWithOriginWithJobsAsync(int requestCharacterId);
+        Task<Character?> GetWithOriginWithJobsAsync(int requestCharacterId);
         Task<List<Character>> GetWithItemsWithModifiersByGroupAndByIdAsync(int groupId, IEnumerable<int> characterIds);
     }
 
@@ -29,7 +29,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public async Task<Character> GetWithAllDataAsync(int id)
+        public async Task<Character?> GetWithAllDataAsync(int id)
         {
             var character = await Context.Characters
                 .Include(c => c.Modifiers)
@@ -56,7 +56,7 @@ namespace Naheulbook.Data.Repositories
             return character;
         }
 
-        public Task<Character> GetWithGroupAsync(int id)
+        public Task<Character?> GetWithGroupAsync(int id)
         {
             return Context.Characters
                 .Include(c => c.Group)
@@ -116,7 +116,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Character> GetWithOriginWithJobsAsync(int characterId)
+        public Task<Character?> GetWithOriginWithJobsAsync(int characterId)
         {
             return Context.Characters
                 .Include(x => x.Jobs)

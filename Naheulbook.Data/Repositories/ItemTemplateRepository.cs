@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IItemTemplateRepository : IRepository<ItemTemplate>
     {
-        Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id);
+        Task<ItemTemplate?> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id);
         Task<List<ItemTemplate>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId);
         Task<List<ItemTemplate>> GetWithAllDataByCategoryIdAsync(int subCategoryId, int? currentUserId, bool includeCommunityItems);
         Task<List<ItemTemplate>> GetByIdsAsync(IEnumerable<Guid> ids);
@@ -29,7 +29,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public Task<ItemTemplate> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id)
+        public Task<ItemTemplate?> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id)
         {
             return Context.ItemTemplates
                 .IncludeItemTemplateDetails()

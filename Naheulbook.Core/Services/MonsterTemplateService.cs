@@ -101,7 +101,7 @@ namespace Naheulbook.Core.Services
 
                 await uow.SaveChangesAsync();
 
-                return await uow.MonsterTemplates.GetByIdWithItemsAsync(monsterTemplateId);
+                return (await uow.MonsterTemplates.GetByIdWithItemsAsync(monsterTemplateId))!;
             }
         }
 

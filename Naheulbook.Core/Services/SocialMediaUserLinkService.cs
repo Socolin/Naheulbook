@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 
@@ -51,6 +52,8 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var user = await uow.Users.GetAsync(userId);
+                if (user == null)
+                    throw new UserNotFoundException(userId);
                 user.FbId = facebookId;
                 await uow.SaveChangesAsync();
             }
@@ -82,6 +85,8 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var user = await uow.Users.GetAsync(userId);
+                if (user == null)
+                    throw new UserNotFoundException(userId);
                 user.GoogleId = googleId;
                 await uow.SaveChangesAsync();
             }
@@ -113,6 +118,8 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var user = await uow.Users.GetAsync(userId);
+                if (user == null)
+                    throw new UserNotFoundException(userId);
                 user.TwitterId = twitterId;
                 await uow.SaveChangesAsync();
             }
@@ -144,6 +151,8 @@ namespace Naheulbook.Core.Services
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var user = await uow.Users.GetAsync(userId);
+                if (user == null)
+                    throw new UserNotFoundException(userId);
                 user.MicrosoftId = microsoftId;
                 await uow.SaveChangesAsync();
             }

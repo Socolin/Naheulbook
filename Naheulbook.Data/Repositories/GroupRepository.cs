@@ -10,8 +10,8 @@ namespace Naheulbook.Data.Repositories
     public interface IGroupRepository : IRepository<Group>
     {
         Task<List<Group>> GetGroupsOwnedByAsync(int userId);
-        Task<Group> GetGroupsWithDetailsAsync(int groupId);
-        Task<Group> GetGroupsWithCharactersAsync(int groupId);
+        Task<Group?> GetGroupsWithDetailsAsync(int groupId);
+        Task<Group?> GetGroupsWithCharactersAsync(int groupId);
     }
 
     public class GroupRepository : Repository<Group, NaheulbookDbContext>, IGroupRepository
@@ -29,7 +29,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Group> GetGroupsWithDetailsAsync(int groupId)
+        public Task<Group?> GetGroupsWithDetailsAsync(int groupId)
         {
             return Context.Groups
                 .Include(g => g.Characters)
@@ -44,7 +44,7 @@ namespace Naheulbook.Data.Repositories
                 .SingleOrDefaultAsync();
         }
 
-        public Task<Group> GetGroupsWithCharactersAsync(int groupId)
+        public Task<Group?> GetGroupsWithCharactersAsync(int groupId)
         {
             return Context.Groups
                 .Include(g => g.Characters)

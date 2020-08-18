@@ -9,7 +9,7 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IGroupInviteRepository : IRepository<GroupInvite>
     {
-        Task<GroupInvite> GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(int groupId, int characterId);
+        Task<GroupInvite?> GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(int groupId, int characterId);
         Task<List<GroupInvite>> GetInvitesByCharacterIdAsync(int characterId);
     }
 
@@ -20,7 +20,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public Task<GroupInvite> GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(int groupId, int characterId)
+        public Task<GroupInvite?> GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(int groupId, int characterId)
         {
             return Context.GroupInvites
                 .Include(x => x.Group)

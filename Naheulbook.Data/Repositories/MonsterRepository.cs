@@ -12,8 +12,8 @@ namespace Naheulbook.Data.Repositories
         Task<List<Monster>> GetByGroupIdWithInventoryAsync(int groupId);
         Task<List<Monster>> GetDeadMonstersByGroupIdAsync(int groupId, int startIndex, int count);
         Task<List<Monster>> GetWithItemsByGroupAndByIdAsync(int groupId, IEnumerable<int> monsterIds);
-        Task<Monster> GetWithGroupAsync(int monsterId);
-        Task<Monster> GetWithGroupWithItemsAsync(int monsterId);
+        Task<Monster?> GetWithGroupAsync(int monsterId);
+        Task<Monster?> GetWithGroupWithItemsAsync(int monsterId);
     }
 
     public class MonsterRepository : Repository<Monster, NaheulbookDbContext>, IMonsterRepository
@@ -69,14 +69,14 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Monster> GetWithGroupAsync(int monsterId)
+        public Task<Monster?> GetWithGroupAsync(int monsterId)
         {
             return Context.Monsters
                 .Include(m => m.Group)
                 .SingleOrDefaultAsync(m => m.Id == monsterId);
         }
 
-        public Task<Monster> GetWithGroupWithItemsAsync(int monsterId)
+        public Task<Monster?> GetWithGroupWithItemsAsync(int monsterId)
         {
             return Context.Monsters
                 .Include(m => m.Group)

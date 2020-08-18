@@ -70,7 +70,7 @@ namespace Naheulbook.Core.Services
             {
                 uow.ItemTemplates.Add(itemTemplate);
                 await uow.SaveChangesAsync();
-                itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplate.Id);
+                itemTemplate = (await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplate.Id))!;
             }
 
             return itemTemplate;
@@ -100,7 +100,7 @@ namespace Naheulbook.Core.Services
 
                 await uow.SaveChangesAsync();
 
-                return await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
+                return (await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId))!;
             }
         }
 
