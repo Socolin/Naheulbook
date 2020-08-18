@@ -45,7 +45,7 @@ export class ItemTemplateComponent {
     }
 
     openCreateItemTemplateDialog(sourceItem: ItemTemplate) {
-        const dialogRef= this.dialog.openFullScreen<CreateItemTemplateDialogComponent, CreateItemTemplateDialogData, ItemTemplate>(
+        const dialogRef = this.dialog.openFullScreen<CreateItemTemplateDialogComponent, CreateItemTemplateDialogData, ItemTemplate>(
             CreateItemTemplateDialogComponent,
             {
                 data: {copyFromItemTemplateId: sourceItem.id}

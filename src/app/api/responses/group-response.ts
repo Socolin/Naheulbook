@@ -1,10 +1,10 @@
 import {GroupGroupInviteResponse} from './group-group-invite-response';
-import {IGroupConfig} from '../shared';
+import {IGroupConfig, IGroupData} from '../shared';
 
 export interface GroupResponse {
     id: number;
     name: string;
-    data?: any;
+    data?: IGroupData;
     config: IGroupConfig;
     characterIds: number[];
     invites: GroupGroupInviteResponse[];

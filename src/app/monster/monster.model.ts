@@ -32,7 +32,7 @@ export class MonsterData implements IMonsterData {
     sex?: string;
     page?: number;
 
-    static fromJson(jsonData: any): MonsterData {
+    static fromJson(jsonData: IMonsterData): MonsterData {
         let monsterData = new MonsterData();
         Object.assign(monsterData, jsonData);
         return monsterData;
@@ -77,23 +77,23 @@ export class Monster extends WsRegistrable {
     public onChange: Subject<any> = new Subject<any>();
     public onNotification: Subject<any> = new Subject<any>();
 
-    static fromJson(jsonData: MonsterResponse, skillsById: { [skillId: number]: Skill }): Monster {
+    static fromResponse(response: MonsterResponse, skillsById: SkillDictionary): Monster {
         let monster = new Monster();
-        Object.assign(monster, jsonData, {
-            data: MonsterData.fromJson(jsonData.data),
-            items: Item.itemsFromJson(jsonData.items, skillsById),
-            modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers)
+        Object.assign(monster, response, {
+            data: MonsterData.fromJson(response.data),
+            items: Item.itemsFromJson(response.items, skillsById),
+            modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers)
         });
         monster.update();
         return monster;
     }
 
-    static monstersFromJson(monstersData: any[] | undefined, skillsById: { [skillId: number]: Skill }): Monster[] {
+    static fromResponses(responses: MonsterResponse[] | undefined, skillsById: SkillDictionary): Monster[] {
         let monsters: Monster[] = [];
 
-        if (monstersData) {
-            for (let monsterData of monstersData) {
-                monsters.push(Monster.fromJson(monsterData, skillsById));
+        if (responses) {
+            for (let monsterData of responses) {
+                monsters.push(Monster.fromResponse(monsterData, skillsById));
             }
         }
 
@@ -414,7 +414,7 @@ export class Monster extends WsRegistrable {
                 break;
             }
             case 'equipItem': {
-                this.equipItem(PartialItem.fromJson(data));
+                this.equipItem(PartialItem.fromResponse(data));
                 break;
             }
             default: {

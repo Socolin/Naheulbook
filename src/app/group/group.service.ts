@@ -10,7 +10,7 @@ import {Loot} from '../loot';
 import {EventService, NEvent} from '../event';
 import {Character, CharacterService} from '../character';
 import {NhbkDate, NhbkDateOffset} from '../date';
-import {Skill, SkillService} from '../skill';
+import {SkillService} from '../skill';
 
 import {Group, GroupInviteResponse, Npc} from './group.model';
 import {
@@ -18,10 +18,10 @@ import {
     GroupResponse,
     GroupSummaryResponse,
     LootResponse,
+    MonsterResponse,
     NpcResponse
 } from '../api/responses';
 import {NpcRequest} from '../api/requests';
-import {IGroupConfig} from '../api/shared';
 import {PatchGroupConfigRequest} from '../api/requests/patch-group-config-request';
 
 @Injectable()
@@ -91,19 +91,19 @@ export class GroupService {
 
     loadMonsters(groupId: number): Observable<Monster[]> {
         return forkJoin([
-            this.httpClient.get<Monster[]>(`/api/v2/groups/${groupId}/monsters`),
+            this.httpClient.get<MonsterResponse[]>(`/api/v2/groups/${groupId}/monsters`),
             this.skillService.getSkillsById()
-        ]).pipe(map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
-            return Monster.monstersFromJson(monstersJsonData, skillsById)
+        ]).pipe(map(([monsterResponses, skillsById]) => {
+            return Monster.fromResponses(monsterResponses, skillsById)
         }));
     }
 
     loadDeadMonsters(groupId: number, startIndex: number, count: number): Observable<Monster[]> {
         return forkJoin([
-            this.httpClient.get<Monster[]>(`/api/v2/groups/${groupId}/deadMonsters?startIndex=${startIndex}&count=${count}`),
+            this.httpClient.get<MonsterResponse[]>(`/api/v2/groups/${groupId}/deadMonsters?startIndex=${startIndex}&count=${count}`),
             this.skillService.getSkillsById()
-        ]).pipe(map(([monstersJsonData, skillsById]: [any[], {[skillId: number]: Skill}]) => {
-            return Monster.monstersFromJson(monstersJsonData, skillsById)
+        ]).pipe(map(([monsterResponses, skillsById]) => {
+            return Monster.fromResponses(monsterResponses, skillsById)
         }));
     }
 

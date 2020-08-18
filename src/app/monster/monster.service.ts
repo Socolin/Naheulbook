@@ -24,7 +24,7 @@ export class MonsterService {
             this.httpClient.post<MonsterResponse>(`/api/v2/groups/${groupId}/monsters`, monster),
             this.skillService.getSkillsById()
         ]).pipe(map(([monsterJsonData, skillsById]) => {
-            return Monster.fromJson(monsterJsonData, skillsById)
+            return Monster.fromResponse(monsterJsonData, skillsById)
         }));
     }
 

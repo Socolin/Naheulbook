@@ -11,7 +11,7 @@ import {date2Timestamp} from '../date/util';
 import {TargetJsonData} from './target.model';
 import {FighterDurationChanges} from '../shared';
 import {DeleteInviteResponse, GroupResponse, NpcResponse} from '../api/responses';
-import {IGroupConfig, INpcData} from '../api/shared';
+import {IGroupConfig, IGroupData, INpcData} from '../api/shared';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -254,7 +254,7 @@ export class GroupConfig implements IGroupConfig {
     }
 }
 
-export class GroupData {
+export class GroupData implements IGroupData {
     public debilibeuk: number;
     public mankdebol: number;
     public inCombat: boolean;
@@ -264,10 +264,10 @@ export class GroupData {
     public onChange: Subject<any> = new Subject();
     public timestamp = 0;
 
-    static fromJson(jsonData: any): GroupData {
+    static fromResponse(response?: IGroupData): GroupData {
         let groupData = new GroupData();
-        if (jsonData) {
-            Object.assign(groupData, jsonData, {timestamp: date2Timestamp(jsonData.date)});
+        if (response) {
+            Object.assign(groupData, response, {timestamp: date2Timestamp(response.date)});
         }
         return groupData;
     }
@@ -349,12 +349,14 @@ export class Group extends WsRegistrable {
     public pastEventCount = 0;
     public futureEventCount = 0;
 
-    static fromResponse(jsonData: GroupResponse): Group {
-        let group = new Group();
-        Object.assign(group, jsonData, {data: GroupData.fromJson(jsonData.data), characters: []});
-        group.config = GroupConfig.fromResponse(jsonData.config);
-        group.invited = jsonData.invites.filter(i => i.fromGroup);
-        group.invites = jsonData.invites.filter(i => !i.fromGroup);
+    static fromResponse(response: GroupResponse): Group {
+        const group = new Group();
+        group.id = response.id;
+        group.name = response.name;
+        group.data = GroupData.fromResponse(response.data);
+        group.config = GroupConfig.fromResponse(response.config);
+        group.invited = response.invites.filter(i => i.fromGroup);
+        group.invites = response.invites.filter(i => !i.fromGroup);
         return group;
     }
 

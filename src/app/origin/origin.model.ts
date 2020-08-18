@@ -47,8 +47,8 @@ export class Origin {
         this.information = response.information;
         this.skills = response.skillIds.map(skillId => skillsById[skillId]);
         this.availableSkills = response.availableSkillIds.map(skillId => skillsById[skillId]);
-        this.bonuses = DescribedFlag.flagsFromJson(response.bonuses);
-        this.restrictions = DescribedFlag.flagsFromJson(response.restrictions);
+        this.bonuses = DescribedFlag.fromResponses(response.bonuses);
+        this.restrictions = DescribedFlag.fromResponses(response.restrictions);
         this.flags = response.flags || [];
     }
 

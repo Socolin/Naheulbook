@@ -35,7 +35,7 @@ export class Loot extends WsRegistrable {
     static fromResponse(response: LootResponse, skillsById: SkillDictionary): Loot {
         let loot = new Loot();
         Object.assign(loot, response, {
-            monsters: Monster.monstersFromJson(response.monsters, skillsById),
+            monsters: Monster.fromResponses(response.monsters, skillsById),
             items: Item.itemsFromJson(response.items, skillsById)
         });
         loot.updateXp();
@@ -195,7 +195,7 @@ export class Loot extends WsRegistrable {
             }
             case 'addMonster': {
                 services.skill.getSkillsById().subscribe(skillsById => {
-                    let monster = Monster.fromJson(data, skillsById);
+                    let monster = Monster.fromResponse(data, skillsById);
                     this.addMonster(monster);
                 });
                 break;

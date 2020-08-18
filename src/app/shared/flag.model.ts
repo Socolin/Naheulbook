@@ -1,3 +1,5 @@
+import {DescribedFlagResponse} from '../api/responses';
+
 export class Flag {
     type: string;
     data?: any;
@@ -15,21 +17,19 @@ export class DescribedFlag {
     description: string;
     flags: Flag[] = [];
 
-    static fromJson(jsonData: any): DescribedFlag {
+    static fromResponse(response: DescribedFlagResponse): DescribedFlag {
         let describedFlag = new DescribedFlag();
-        Object.assign(describedFlag, jsonData);
-        if (!describedFlag.flags) {
-            describedFlag.flags = [];
-        }
+        describedFlag.description = response.description;
+        describedFlag.flags = response.flags || [];
         return describedFlag;
     }
 
-    static flagsFromJson(flagsJsonData: any) {
+    static fromResponses(responses: DescribedFlagResponse[]): DescribedFlag[] {
         let flags: DescribedFlag[] = [];
 
-        if (flagsJsonData) {
-            for (let flagJsonData of flagsJsonData) {
-                flags.push(DescribedFlag.fromJson(flagJsonData));
+        if (responses) {
+            for (let flagJsonData of responses) {
+                flags.push(DescribedFlag.fromResponse(flagJsonData));
             }
         }
 

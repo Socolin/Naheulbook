@@ -4,7 +4,7 @@ import {IconDescription} from '../shared/icon.model';
 import {SkillDictionary} from '../skill';
 import {Fighter} from '../group';
 import {IDurable, IItemData} from '../api/shared';
-import {ItemResponse} from '../api/responses';
+import {ItemPartialResponse, ItemResponse} from '../api/responses';
 
 export class ItemData implements IItemData {
     name: string;
@@ -40,6 +40,23 @@ export class Item {
     template: ItemTemplate;
     computedData: ItemComputedData = new ItemComputedData();
 
+    // Generated field
+    content?: Item[];
+    containerInfo?: IMetadata;
+
+    static fromResponse(response: ItemResponse, skillsById: SkillDictionary): Item {
+        let item = new Item();
+        Object.assign(item, response, {
+            template: ItemTemplate.fromResponse(response.template, skillsById),
+            modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers)
+        });
+        return item;
+    }
+
+    static itemsFromJson(responses: ItemResponse[], skillsById: SkillDictionary): Item[] {
+        return responses.map(response => Item.fromResponse(response, skillsById));
+    }
+
     get price(): number | undefined {
         if (!this.template.data.price) {
             return undefined;
@@ -66,23 +83,6 @@ export class Item {
             return false;
         }
         return true;
-    }
-
-    // Generated field
-    content?: Item[];
-    containerInfo?: IMetadata;
-
-    static fromResponse(response: ItemResponse, skillsById: SkillDictionary): Item {
-        let item = new Item();
-        Object.assign(item, response, {
-            template: ItemTemplate.fromResponse(response.template, skillsById),
-            modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers)
-        });
-        return item;
-    }
-
-    static itemsFromJson(responses: ItemResponse[], skillsById: SkillDictionary): Item[] {
-        return responses.map(response => Item.fromResponse(response, skillsById));
     }
 
     updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): DurationChange[] {
@@ -151,9 +151,9 @@ export class PartialItem {
     modifiers: ActiveStatsModifier[];
     containerId: number;
 
-    static fromJson(jsonData: any): PartialItem {
+    static fromResponse(response: ItemPartialResponse): PartialItem {
         let item = new PartialItem();
-        Object.assign(item, jsonData, {modifiers: ActiveStatsModifier.modifiersFromJson(jsonData.modifiers)});
+        Object.assign(item, response, {modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers)});
         return item;
     }
 }

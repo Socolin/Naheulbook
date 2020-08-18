@@ -13,6 +13,7 @@ import {ActiveStatsModifier, AutocompleteValue, MiscService} from '../shared';
 
 import {ItemTemplate} from '../item-template';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Effect} from '../effect';
 
 export interface NhbkActionEditorDialogData {
     action?: NhbkAction
@@ -62,20 +63,17 @@ export class NhbkActionEditorDialogComponent {
         this.selectedItemTemplate = itemTemplate;
     }
 
-    updateEffect(newEffect: any) {
+    updateEffect(newEffect: {effect: Effect, data: any}) {
         if (this.action.type !== NhbkActionType.addEffect) {
             throw `Invalid action type: ${this.action.type}`;
         }
 
-        let effect = newEffect.effect;
-        let data = newEffect.data;
-
-        if (!effect) {
+        if (!newEffect.effect) {
             return;
         }
 
-        this.action.data.effectId = effect.id;
-        this.action.data.effectData = data;
+        this.action.data.effectId = newEffect.effect.id;
+        this.action.data.effectData = newEffect.data;
     }
 
     updateAutocompleteItem(filter: string): Observable<AutocompleteValue[]> {

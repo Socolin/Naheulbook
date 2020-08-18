@@ -36,14 +36,14 @@ export class Job {
 
     constructor(response: JobResponse, skillsById: SkillDictionary) {
         this.data = {...response.data};
-        this.bonuses = DescribedFlag.flagsFromJson(response.bonuses);
+        this.bonuses = DescribedFlag.fromResponses(response.bonuses);
         this.id = response.id;
         this.playerDescription = response.playerDescription;
         this.playerSummary = response.playerSummary;
         this.isMagic = response.isMagic || false;
         this.name = response.name;
         this.requirements = response.requirements;
-        this.restrictions = DescribedFlag.flagsFromJson(response.restrictions);
+        this.restrictions = DescribedFlag.fromResponses(response.restrictions);
         this.skills = response.skillIds.map(skillId => skillsById[skillId]);
         this.availableSkills = response.availableSkillIds.map(skillId => skillsById[skillId]);
         this.specialities = Speciality.fromResponses(response.specialities);
