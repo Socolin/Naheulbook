@@ -133,6 +133,7 @@ export class CharacterItemDialogComponent implements OnInit {
             return true;
         }
         if (this.data.item.template.data.useUG
+            && !this.data.item.data.notIdentified
             && this.data.character?.group?.config.allowPlayersToSeeGemPriceWhenIdentified) {
             return true;
         }
