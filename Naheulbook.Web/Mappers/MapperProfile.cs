@@ -78,13 +78,13 @@ namespace Naheulbook.Web.Mappers
 
             CreateMap<GroupInvite, DeleteInviteResponse>();
             CreateMap<GroupInvite, CharacterGroupInviteResponse>()
+                .ForMember(m => m.Config, opt => opt.MapFrom(im => MapperHelpers.FromJsonNotNull<GroupConfig>(im.Group.Config)))
                 .ForMember(m => m.GroupId, opt => opt.MapFrom(i => i.Group.Id))
                 .ForMember(m => m.GroupName, opt => opt.MapFrom(i => i.Group.Name));
             CreateMap<GroupInvite, GroupInviteResponse>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(i => i.Character.Id))
                 .ForMember(m => m.Name, opt => opt.MapFrom(i => i.Character.Name))
-                .ForMember(m => m.GroupId, opt => opt.MapFrom(i => i.Group.Id))
-                .ForMember(m => m.GroupName, opt => opt.MapFrom(i => i.Group.Name))
+                .ForMember(m => m.Group, opt => opt.MapFrom(i => i.Group))
                 .ForMember(m => m.OriginName, opt => opt.MapFrom(i => i.Character.Origin.Name))
                 .ForMember(m => m.JobNames, opt => opt.MapFrom(i => i.Character.Jobs.Select(j => j.Job.Name)));
             CreateMap<GroupInvite, GroupGroupInviteResponse>()
@@ -94,7 +94,10 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.JobNames, opt => opt.MapFrom(i => i.Character.Jobs.Select(j => j.Job.Name)));
             CreateMap<Group, GroupResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
+                .ForMember(m => m.Config, opt => opt.MapFrom(im => MapperHelpers.FromJsonNotNull<GroupConfig>(im.Config)))
                 .ForMember(m => m.CharacterIds , opt => opt.MapFrom(g => g.Characters.Select(c => c.Id)));
+            CreateMap<Group, CharacterGroupResponse>()
+                .ForMember(m => m.Config, opt => opt.MapFrom(g => MapperHelpers.FromJsonNotNull<GroupConfig>(g.Config)));
             CreateMap<Group, NamedIdResponse>();
             CreateMap<Group, GroupSummaryResponse>()
                 .ForMember(m => m.CharacterCount, opt => opt.MapFrom(g => g.Characters.Count));

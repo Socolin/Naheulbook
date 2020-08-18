@@ -11,6 +11,7 @@ namespace Naheulbook.Data.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Data { get; set; }
+        public string? Config { get; set; }
 
         public int? CombatLootId { get; set; }
         public Loot? CombatLoot { get; set; }

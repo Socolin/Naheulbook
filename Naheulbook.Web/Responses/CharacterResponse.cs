@@ -48,7 +48,7 @@ namespace Naheulbook.Web.Responses
         public IList<Guid> JobIds { get; set; } = null!;
         public IList<Guid> SkillIds { get; set; } = null!;
 
-        public NamedIdResponse? Group { get; set; }
+        public CharacterGroupResponse? Group { get; set; }
 
         public IList<ActiveStatsModifier> Modifiers { get; set; } = null!;
         public IList<SpecialityResponse> Specialities { get; set; } = null!;

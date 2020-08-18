@@ -6,7 +6,6 @@ using Naheulbook.Core.Services;
 using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
-using Naheulbook.Data.Repositories;
 using NSubstitute;
 using NUnit.Framework;
 

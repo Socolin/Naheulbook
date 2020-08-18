@@ -215,7 +215,7 @@ namespace Naheulbook.Web.Notifications
 
         public INotificationPacket BuildCharacterAcceptGroupInvite(int characterId, GroupInvite groupInvite)
         {
-            return BuildCharacterChange(characterId, "joinGroup", _mapper.Map<NamedIdResponse>(groupInvite.Group));
+            return BuildCharacterChange(characterId, "joinGroup", _mapper.Map<CharacterGroupResponse>(groupInvite.Group));
         }
 
         public INotificationPacket BuildCharacterShowLoot(int characterId, Loot loot)
@@ -256,6 +256,11 @@ namespace Naheulbook.Web.Notifications
         public INotificationPacket BuildGroupDeleteLoot(int groupId, int lootId)
         {
             return BuildGroupChange(groupId, "deleteLoot", lootId);
+        }
+
+        public INotificationPacket BuildGroupChangeConfig(in int groupId, GroupConfig groupConfig)
+        {
+            return BuildGroupChange(groupId, "changeConfig", groupConfig);
         }
 
         public INotificationPacket BuildLootUpdateVisibility(int lootId, bool visibleForPlayer)

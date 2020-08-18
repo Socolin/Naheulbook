@@ -47,6 +47,7 @@ namespace Naheulbook.Core.Notifications
         void NotifyGroupCancelGroupInvite(int groupId, GroupInvite groupInvite);
         void NotifyGroupAcceptGroupInvite(int groupId, GroupInvite groupInvite);
         void NotifyGroupChangeGroupData(int groupId, GroupData groupData);
+        void NotifyGroupChangeConfig(int groupId, GroupConfig groupConfig);
         void NotifyGroupAddLoot(int groupId, Loot loot);
         void NotifyGroupDeleteLoot(int groupId, int lootId);
 
@@ -248,6 +249,11 @@ namespace Naheulbook.Core.Notifications
         public void NotifyGroupChangeGroupData(int groupId, GroupData groupData)
         {
             _packets.Add(_packetBuilder.BuildGroupChangeGroupData(groupId, groupData));
+        }
+
+        public void NotifyGroupChangeConfig(int groupId, GroupConfig groupConfig)
+        {
+            _packets.Add(_packetBuilder.BuildGroupChangeConfig(groupId, groupConfig));
         }
 
         public void NotifyGroupAddLoot(int groupId, Loot loot)

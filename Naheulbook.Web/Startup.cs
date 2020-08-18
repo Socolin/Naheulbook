@@ -108,9 +108,10 @@ namespace Naheulbook.Web
             services.AddSingleton<IEventService, EventService>();
             services.AddSingleton<IEffectService, EffectService>();
             services.AddSingleton<IGodService, GodService>();
+            services.AddSingleton<IGroupConfigUtil, GroupConfigUtil>();
+            services.AddSingleton<IGroupHistoryUtil, GroupHistoryUtil>();
             services.AddSingleton<IGroupService, GroupService>();
             services.AddSingleton<IGroupUtil, GroupUtil>();
-            services.AddSingleton<IGroupHistoryUtil, GroupHistoryUtil>();
             services.AddSingleton<IItemService, ItemService>();
             services.AddSingleton<IItemUtil, ItemUtil>();
             services.AddSingleton<IItemDataUtil, ItemDataUtil>();

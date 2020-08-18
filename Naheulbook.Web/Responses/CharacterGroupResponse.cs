@@ -2,10 +2,10 @@ using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Web.Responses
 {
-    public class CharacterGroupInviteResponse
+    public class CharacterGroupResponse
     {
-        public string GroupName { get; set; } = null!;
-        public int GroupId { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
         public GroupConfig Config { get; set; } = null!;
     }
 }

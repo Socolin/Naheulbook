@@ -18,6 +18,11 @@ Feature: Group
       "data": {},
       "invites": [],
       "characterIds": [],
+      "config": {
+        "allowPlayersToAddObject": true,
+        "allowPlayersToSeeGemPriceWhenIdentified": false,
+        "allowPlayersToSeeSkillGmDetails": false
+      }
     }
     """
 
@@ -59,6 +64,11 @@ Feature: Group
       "characterIds": [
         ${Character.[2].Id}
       ],
+      "config": {
+        "allowPlayersToAddObject": true,
+        "allowPlayersToSeeGemPriceWhenIdentified": false,
+        "allowPlayersToSeeSkillGmDetails": false
+      },
       "invites": [
         {
           "id": ${Character.[0].Id},
@@ -144,8 +154,15 @@ Feature: Group
       "jobs": [
         "${Job.Name}"
       ],
-      "groupId": ${Group.Id},
-      "groupName": "${Group.Name}",
+      "group": {
+        "id": ${Group.Id},
+        "name": "${Group.Name}",
+        "config": {
+          "allowPlayersToAddObject": true,
+          "allowPlayersToSeeGemPriceWhenIdentified": false,
+          "allowPlayersToSeeSkillGmDetails": false
+        }
+      },
       "fromGroup": true
     }
     """
@@ -313,6 +330,19 @@ Feature: Group
     {
         isGm: true,
         info: "some-log-info"
+    }
+    """
+    Then the response status code is 204
+
+  Scenario: Can change group configuration
+    Given a JWT for a user
+    Given a group
+    When performing a PATCH to the url "/api/v2/groups/${Group.Id}/config" with the following json content and the current jwt
+    """
+    {
+      "allowPlayersToSeeSkillGmDetails": true,
+      "allowPlayersToAddObject": true,
+      "allowPlayersToSeeGemPriceWhenIdentified": true
     }
     """
     Then the response status code is 204

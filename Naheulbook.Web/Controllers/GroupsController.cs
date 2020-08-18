@@ -82,6 +82,28 @@ namespace Naheulbook.Web.Controllers
             }
         }
 
+        [HttpPatch("{GroupId:int:min(1)}/config")]
+        public async Task<IActionResult> PatchGroupConfigAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int groupId,
+            PatchGroupConfigRequest request
+        )
+        {
+            try
+            {
+                await _groupService.EditGroupConfigAsync(executionContext, groupId, request);
+                return NoContent();
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+            }
+        }
+
         [HttpPost("{GroupId:int:min(1)}/startCombat")]
         public async Task<IActionResult> PostStartCombatAsync(
             [FromServices] NaheulbookExecutionContext executionContext,

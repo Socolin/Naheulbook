@@ -236,9 +236,13 @@ Feature: Character
         ],
         "invites": [
           { "__partial": {
-              "groupId": ${Group.Id},
-              "groupName": "${Group.Name}"
-            }
+            "groupId": ${Group.Id},
+            "groupName": "${Group.Name}",
+            "config": {
+              "allowPlayersToAddObject": true,
+              "allowPlayersToSeeGemPriceWhenIdentified": false,
+              "allowPlayersToSeeSkillGmDetails": false
+            }}
           }
         ],
         "items": [
@@ -295,8 +299,13 @@ Feature: Character
           }
         ],
         "group": {
-            "id": ${Group.Id},
-            "name": "${Group.Name}"
+          "id": ${Group.Id},
+          "name": "${Group.Name}",
+          "config": {
+            "allowPlayersToAddObject": true,
+            "allowPlayersToSeeGemPriceWhenIdentified": false,
+            "allowPlayersToSeeSkillGmDetails": false
+          }
         }
     }
     """

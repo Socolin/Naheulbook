@@ -27,6 +27,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         private GroupService _service;
         private IDurationUtil _durationUtil;
         private IGroupHistoryUtil _groupHistoryUtil;
+        private IGroupConfigUtil _groupConfigUtil;
 
         [SetUp]
         public void SetUp()
@@ -38,6 +39,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _groupUtil = Substitute.For<IGroupUtil>();
             _durationUtil = Substitute.For<IDurationUtil>();
             _groupHistoryUtil = Substitute.For<IGroupHistoryUtil>();
+            _groupConfigUtil = Substitute.For<IGroupConfigUtil>();
 
             _service = new GroupService(
                 _unitOfWorkFactory,
@@ -46,7 +48,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _mapper,
                 _durationUtil,
                 _groupUtil,
-                _groupHistoryUtil
+                _groupHistoryUtil,
+                _groupConfigUtil
             );
         }
 

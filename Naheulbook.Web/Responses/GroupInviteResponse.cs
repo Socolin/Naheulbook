@@ -12,8 +12,7 @@ namespace Naheulbook.Web.Responses
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public bool FromGroup { get; set; }
-        public int GroupId { get; set; }
-        public string GroupName { get; set; } = null!;
+        public CharacterGroupResponse Group { get; set; } = null!;
 
         [JsonProperty("origin")]
         public string OriginName { get; set; } = null!;
