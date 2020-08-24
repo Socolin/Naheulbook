@@ -14,6 +14,13 @@
         color: rgba(255, 255, 255, 1);
         text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
     }
+    .show-to-gm-layer {
+        grid-area: icon;
+        opacity: 0.85;
+        color: rgba(255, 255, 255, 1);
+        text-shadow: 2px 0 0 #282896, -2px 0 0 #282896, 0 2px 0 #282896, 0 -2px 0 #282896, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+
+    }
 
     .not-identified {
         opacity: 0.54;

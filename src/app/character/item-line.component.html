@@ -1,5 +1,6 @@
 <div class="info" mat-ripple (click)="openCharacterItemDialog(item)">
     <icon [icon]="item.data.icon"
+          [shownToGm]="item.data.shownToGm"
           [enchanted]="(!item.data.notIdentified || gmView) &&  item.template.data.enchantment !== undefined"
           [notIdentified]="item.data.notIdentified"></icon>
     <span class="name">

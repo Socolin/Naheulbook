@@ -21,4 +21,5 @@ export class IconComponent {
     @Input() size = '32px';
     @Input() enchanted?: boolean;
     @Input() notIdentified?: boolean;
+    @Input() shownToGm?: boolean;
 }
