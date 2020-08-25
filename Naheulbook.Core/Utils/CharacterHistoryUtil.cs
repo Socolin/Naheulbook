@@ -221,7 +221,7 @@ namespace Naheulbook.Core.Utils
                 CharacterId = characterId,
                 Action = GivenItemActionName,
                 Date = DateTime.Now,
-                ItemId = item.Id
+                Item = item
             };
         }
 
@@ -232,7 +232,7 @@ namespace Naheulbook.Core.Utils
                 CharacterId = characterId,
                 Action = LootItemActionName,
                 Date = DateTime.Now,
-                ItemId = item.Id
+                Item = item
             };
         }
 

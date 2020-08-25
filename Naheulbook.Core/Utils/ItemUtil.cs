@@ -110,8 +110,6 @@ namespace Naheulbook.Core.Utils
                 {
                     var splitItem = SplitItem(originalItem, quantity.Value);
                     uow.Items.Add(splitItem);
-                    await uow.SaveChangesAsync();
-
                     splitItem.Character = targetCharacter;
 
                     takenItem = splitItem;
@@ -129,7 +127,7 @@ namespace Naheulbook.Core.Utils
                         targetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem));
                         notificationSession.NotifyItemDataChanged(originalItem);
                     }
-                    notificationSession.NotifyCharacterAddItem(targetCharacter.Id, splitItem);
+                    notificationSession.NotifyCharacterAddItem(targetCharacter.Id, splitItem, true);
                 }
 
                 await uow.SaveChangesAsync();
