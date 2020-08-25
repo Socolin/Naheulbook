@@ -109,7 +109,7 @@ namespace Naheulbook.Core.Actions.Executor
             context.TargetCharacter.Modifiers.Add(characterModifier);
 
             context.TargetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogAddModifier(context.TargetCharacter, characterModifier));
-            notificationSession.NotifyCharacterAddModifier(context.TargetCharacter.Id, characterModifier);
+            notificationSession.NotifyCharacterAddModifier(context.TargetCharacter.Id, characterModifier, true);
         }
     }
 }

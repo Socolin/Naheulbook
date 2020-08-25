@@ -49,7 +49,7 @@ namespace Naheulbook.Core.Actions.Executor
             var item = _itemFactory.CreateItem(ItemOwnerType.Character, context.SourceCharacter.Id, itemTemplate, itemData);
             context.UnitOfWork.Items.Add(item);
 
-            notificationSession.NotifyCharacterAddItem(context.SourceCharacter.Id, item);
+            notificationSession.NotifyCharacterAddItem(context.SourceCharacter.Id, item, true);
         }
     }
 }

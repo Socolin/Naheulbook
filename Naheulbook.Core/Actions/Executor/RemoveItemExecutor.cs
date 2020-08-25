@@ -37,7 +37,6 @@ namespace Naheulbook.Core.Actions.Executor
                 notificationSession.NotifyItemDeleteItem(context.UsedItem);
             }
 
-
             return Task.CompletedTask;
         }
     }

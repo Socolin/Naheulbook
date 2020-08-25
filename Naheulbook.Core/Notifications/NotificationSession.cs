@@ -16,9 +16,9 @@ namespace Naheulbook.Core.Notifications
         void NotifyCharacterChangeExperience(Character character);
         void NotifyCharacterChangeSex(Character character);
         void NotifyCharacterChangeName(Character character);
-        void NotifyCharacterAddItem(int characterId, Item item);
+        void NotifyCharacterAddItem(int characterId, Item item, bool delayBuildPacket = false);
         void NotifyCharacterSetStatBonusAd(int characterId, string stat);
-        void NotifyCharacterAddModifier(int characterId, CharacterModifier characterModifier);
+        void NotifyCharacterAddModifier(int characterId, CharacterModifier characterModifier, bool delayBuildPacket = false);
         void NotifyCharacterRemoveModifier(int characterId, int characterModifierId);
         void NotifyCharacterUpdateModifier(int characterId, CharacterModifier characterModifier);
         void NotifyCharacterGroupInvite(int characterId, GroupInvite groupInvite);
@@ -111,9 +111,12 @@ namespace Naheulbook.Core.Notifications
             _packets.Add(_packetBuilder.BuildCharacterChangeName(character));
         }
 
-        public void NotifyCharacterAddItem(int characterId, Item item)
+        public void NotifyCharacterAddItem(int characterId, Item item, bool delayBuildPacket = false)
         {
-            _packets.Add(_packetBuilder.BuildCharacterAddItem(characterId, item));
+            if (delayBuildPacket)
+                _packets.Add(new DelayedNotificationPacket(() => _packetBuilder.BuildCharacterAddItem(characterId, item)));
+            else
+                _packets.Add(_packetBuilder.BuildCharacterAddItem(characterId, item));
         }
 
         public void NotifyCharacterUpdateModifier(int characterId, CharacterModifier modifier)
@@ -196,9 +199,12 @@ namespace Naheulbook.Core.Notifications
             _packets.Add(_packetBuilder.BuildCharacterSetStatBonusAd(characterId, stat));
         }
 
-        public void NotifyCharacterAddModifier(int characterId, CharacterModifier characterModifier)
+        public void NotifyCharacterAddModifier(int characterId, CharacterModifier characterModifier, bool delayBuildPacket = false)
         {
-            _packets.Add(_packetBuilder.BuildCharacterAddModifier(characterId, characterModifier));
+            if (delayBuildPacket)
+                _packets.Add(new DelayedNotificationPacket(() => _packetBuilder.BuildCharacterAddModifier(characterId, characterModifier)));
+            else
+                _packets.Add(_packetBuilder.BuildCharacterAddModifier(characterId, characterModifier));
         }
 
         public void NotifyCharacterRemoveModifier(int characterId, int characterModifierId)
