@@ -115,7 +115,7 @@ namespace Naheulbook.Core.Utils
                     splitItem.Character = targetCharacter;
 
                     takenItem = splitItem;
-                    remainingQuantity = originalItemData.Quantity.Value;
+                    remainingQuantity = _itemDataUtil.GetItemData(originalItem).Quantity!.Value;
 
                     if (trigger == MoveItemTrigger.TakeItemFromLoot)
                     {
@@ -179,7 +179,7 @@ namespace Naheulbook.Core.Utils
             var splitItem = _itemFactory.CloneItem(originalItem);
 
             _itemDataUtil.UpdateQuantity(splitItem, quantity);
-            _itemDataUtil.UpdateRelativeQuantity(splitItem, -quantity);
+            _itemDataUtil.UpdateRelativeQuantity(originalItem, -quantity);
 
             return splitItem;
         }
