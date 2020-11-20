@@ -6,7 +6,7 @@ namespace Naheulbook.Core.Models
         {
         }
 
-        public OptionalNaheulbookExecutionContext(NaheulbookExecutionContext executionContext)
+        public OptionalNaheulbookExecutionContext(NaheulbookExecutionContext? executionContext)
         {
             ExecutionExecutionContext = executionContext;
         }

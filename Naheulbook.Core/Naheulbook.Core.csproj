@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <LangVersion>8</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
@@ -13,9 +13,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AutoMapper" Version="10.0.0" />
-      <PackageReference Include="Magick.NET-Q8-x64" Version="7.21.1" />
-      <PackageReference Include="Serilog" Version="2.9.0" />
+      <PackageReference Include="AutoMapper" Version="10.1.1" />
+      <PackageReference Include="Magick.NET-Q8-x64" Version="7.22.2.1" />
+      <PackageReference Include="Serilog" Version="2.10.0" />
     </ItemGroup>
 
 </Project>

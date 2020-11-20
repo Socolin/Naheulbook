@@ -81,7 +81,7 @@ namespace Naheulbook.Core.Utils
             foreach (var (item, change) in items.Join(changes.OfType<ItemModifierDurationChange>(), i => i.Id, c => c.ItemId, (item, change) => (item, change)))
             {
                 var modifiers = _jsonUtil.DeserializeOrCreate<List<ActiveStatsModifier>>(item.Modifiers);
-                ApplyChangeOnItemModifier(modifiers, change, notificationSession);
+                ApplyChangeOnItemModifier(modifiers, change);
                 item.Modifiers = _jsonUtil.Serialize(modifiers);
                 notificationSession.NotifyItemUpdateModifier(item);
             }
@@ -137,7 +137,7 @@ namespace Naheulbook.Core.Utils
             }
         }
 
-        private void ApplyChangeOnItemModifier(IList<ActiveStatsModifier> modifiers, IModifierChange change, INotificationSession notificationSession)
+        private void ApplyChangeOnItemModifier(IList<ActiveStatsModifier> modifiers, IModifierChange change)
         {
             var newModifier = change.Modifier;
             var modifier = modifiers.First(m => m.Id == newModifier.Id);

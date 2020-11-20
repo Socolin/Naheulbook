@@ -120,7 +120,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _mapper.Map<ItemTemplate>(createItemTemplateRequest)
                 .Returns(newItemTemplateEntity);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(callInfo => newItemTemplateEntity.SourceUserId.Should().Be(42));
+                .Do(_ => newItemTemplateEntity.SourceUserId.Should().Be(42));
 
             await _service.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
 
@@ -158,7 +158,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
                 .Returns(fullyLoadedItemTemplate);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => fullyLoadedItemTemplate.SourceUserId.Should().Be(userId));
+                .Do(_ => fullyLoadedItemTemplate.SourceUserId.Should().Be(userId));
 
             await _service.EditItemTemplateAsync(naheulbookExecutionContext, itemTemplateId, itemTemplateRequest);
 
@@ -176,7 +176,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
                 .Returns(fullyLoadedItemTemplate);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => fullyLoadedItemTemplate.SourceUserId.Should().BeNull());
+                .Do(_ => fullyLoadedItemTemplate.SourceUserId.Should().BeNull());
 
             await _service.EditItemTemplateAsync(naheulbookExecutionContext, itemTemplateId, itemTemplateRequest);
 

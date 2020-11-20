@@ -56,7 +56,7 @@ namespace Naheulbook.Web
 
             var naheulbookDbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
                 .UseLoggerFactory(_loggerFactory)
-                .UseMySql(_configuration.GetConnectionString("DefaultConnection"));
+                .UseMySql(_configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(_configuration.GetConnectionString("DefaultConnection")));
             if (_environment.IsDevelopment())
             {
                 naheulbookDbContextOptionsBuilder.EnableSensitiveDataLogging();
@@ -86,8 +86,8 @@ namespace Naheulbook.Web
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(RequestToEntityProfile).Assembly, typeof(Startup).Assembly);
 
-            services.AddScoped(servicesProvider => servicesProvider.GetService<IHttpContextAccessor>().HttpContext.GetExecutionContext());
-            services.AddScoped(servicesProvider => servicesProvider.GetService<IHttpContextAccessor>().HttpContext.GetIfExistsExecutionContext());
+            services.AddScoped(servicesProvider => servicesProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!.GetExecutionContext());
+            services.AddScoped(servicesProvider => servicesProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!.GetIfExistsExecutionContext());
 
             services.AddSingleton<IUnitOfWorkFactory>(new UnitOfWorkFactory(naheulbookDbContextOptionsBuilder.Options));
 

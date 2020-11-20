@@ -49,7 +49,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("job_bonuses");
 
             builder.HasIndex(e => e.JobId)
-                .HasName("IX_job_bonuses_jobId");
+                .HasDatabaseName("IX_job_bonuses_jobId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -80,10 +80,10 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("job_requirements");
 
             builder.HasIndex(e => e.JobId)
-                .HasName("IX_job_requirements_jobId");
+                .HasDatabaseName("IX_job_requirements_jobId");
 
             builder.HasIndex(e => e.StatName)
-                .HasName("IX_job_requirement_stat");
+                .HasDatabaseName("IX_job_requirement_stat");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -123,7 +123,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("job_restrictions");
 
             builder.HasIndex(e => e.JobId)
-                .HasName("IX_job_restrictions_jobId");
+                .HasDatabaseName("IX_job_restrictions_jobId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -156,10 +156,10 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("job_skills");
 
             builder.HasIndex(e => e.SkillId)
-                .HasName("IX_job_skills_skillId");
+                .HasDatabaseName("IX_job_skills_skillId");
 
             builder.HasIndex(e => e.JobId)
-                .HasName("IX_job_skills_jobId");
+                .HasDatabaseName("IX_job_skills_jobId");
 
             builder.Property(e => e.JobId)
                 .HasColumnName("jobId");

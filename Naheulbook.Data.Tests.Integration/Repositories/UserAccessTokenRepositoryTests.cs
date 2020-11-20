@@ -39,16 +39,16 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var tokens = await _userAccessTokenRepository.GetUserAccessTokensForUser(TestDataUtil.GetLast<User>().Id);
 
             tokens.Should().HaveCount(1);
-            tokens.First().Should().BeEquivalentTo(TestDataUtil.GetLast<UserAccessToken>(), config => config.Excluding(x => x.User));
+            tokens.First().Should().BeEquivalentTo(TestDataUtil.GetLast<UserAccessToken>(), config => config.Excluding(x => x.User).Excluding(x => x.DateCreated));
         }
 
         private static UserAccessToken CreateUserAccessToken(User user)
         {
-            return new UserAccessToken
+            return new()
             {
                 Id = Guid.NewGuid(),
                 Key = "some-random-key",
-                DateCreated = DateTimeOffset.Now,
+                DateCreated = DateTimeOffset.Now.ToUniversalTime(),
                 UserId = user.Id,
                 Name = "some-name"
             };

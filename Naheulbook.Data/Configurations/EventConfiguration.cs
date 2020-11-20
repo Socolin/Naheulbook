@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("events");
 
             builder.HasIndex(e => e.GroupId)
-                .HasName("IX_events_groupId");
+                .HasDatabaseName("IX_events_groupId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");

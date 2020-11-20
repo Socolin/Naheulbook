@@ -1,3 +1,4 @@
+#pragma warning disable 8619
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;

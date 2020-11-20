@@ -56,7 +56,7 @@ namespace Naheulbook.Data.Configurations
                 .HasColumnName("id");
 
             builder.HasIndex(e => e.OriginId)
-                .HasName("IX_origin_bonuses_originId");
+                .HasDatabaseName("IX_origin_bonuses_originId");
 
             builder.Property(e => e.Description)
                 .IsRequired()
@@ -101,7 +101,7 @@ namespace Naheulbook.Data.Configurations
                 .HasMaxLength(255);
 
             builder.HasIndex(e => e.OriginId)
-                .HasName("IX_origin_information_originId");
+                .HasDatabaseName("IX_origin_information_originId");
 
             builder.HasOne(e => e.Origin)
                 .WithMany(o => o.Information)
@@ -138,10 +138,10 @@ namespace Naheulbook.Data.Configurations
                 .HasMaxLength(64);
 
             builder.HasIndex(e => e.OriginId)
-                .HasName("IX_origin_requirements_originId");
+                .HasDatabaseName("IX_origin_requirements_originId");
 
             builder.HasIndex(e => e.StatName)
-                .HasName("IX_origin_requirement_stat");
+                .HasDatabaseName("IX_origin_requirement_stat");
 
             builder.HasOne(e => e.Origin)
                 .WithMany(o => o.Requirements)
@@ -158,7 +158,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("origin_restrictions");
 
             builder.HasIndex(e => e.OriginId)
-                .HasName("IX_origin_restrictions_originId");
+                .HasDatabaseName("IX_origin_restrictions_originId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -191,7 +191,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("origin_skills");
 
             builder.HasIndex(e => e.SkillId)
-                .HasName("IX_origin_skills_skillId");
+                .HasDatabaseName("IX_origin_skills_skillId");
 
             builder.Property(e => e.OriginId)
                 .HasColumnName("originid");
@@ -225,7 +225,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(x => x.Id);
 
             builder.HasIndex(x => x.OriginId)
-                .HasName("IX_origin_random_name_urls_originId");
+                .HasDatabaseName("IX_origin_random_name_urls_originId");
 
             builder.Property(x => x.Sex)
                 .IsRequired()

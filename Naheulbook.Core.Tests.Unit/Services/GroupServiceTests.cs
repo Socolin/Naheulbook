@@ -386,7 +386,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetInvitesByCharacterIdAsync(characterId)
                 .Returns(groupInvites);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => character.GroupId.Should().Be(groupId));
+                .Do(_ => character.GroupId.Should().Be(groupId));
 
             await _service.AcceptInviteAsync(executionContext, groupId, characterId);
 

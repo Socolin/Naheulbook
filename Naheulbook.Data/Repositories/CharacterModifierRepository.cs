@@ -1,3 +1,4 @@
+#pragma warning disable 8619
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;

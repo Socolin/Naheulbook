@@ -47,8 +47,8 @@ namespace Naheulbook.Core.Actions.Executor
             var duration = effect.Duration;
             var lapCount = effect.LapCount;
 
-            var customDurationType = action.Data.EffectData.Value<string>("durationType");
-            if (customDurationType != null)
+            var customDurationType = action.Data.EffectData.Value<string?>("durationType");
+            if (!string.IsNullOrEmpty(customDurationType))
             {
                 timeDuration = null;
                 duration = null;

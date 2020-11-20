@@ -44,7 +44,7 @@ namespace Naheulbook.Shared.Utils
         {
             if (string.IsNullOrEmpty(json))
                 return new T();
-            return JsonConvert.DeserializeObject<T>(json) ?? new T();
+            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

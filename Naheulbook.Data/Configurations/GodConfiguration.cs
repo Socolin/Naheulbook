@@ -23,10 +23,10 @@ namespace Naheulbook.Data.Configurations
 
             builder.HasIndex(e => e.DisplayName)
                 .IsUnique()
-                .HasName("god_displayname_uindex");
+                .HasDatabaseName("god_displayname_uindex");
             builder.HasIndex(e => e.TechName)
                 .IsUnique()
-                .HasName("god_techname_uindex");
+                .HasDatabaseName("god_techname_uindex");
         }
     }
 }

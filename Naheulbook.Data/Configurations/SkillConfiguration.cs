@@ -64,7 +64,7 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => new {e.SkillId, e.StatName});
 
             builder.HasIndex(e => e.SkillId)
-                .HasName("IX_skill_effects_skillId");
+                .HasDatabaseName("IX_skill_effects_skillId");
 
             builder.HasIndex(e => e.StatName);
 

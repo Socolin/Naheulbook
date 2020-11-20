@@ -36,7 +36,7 @@ namespace Naheulbook.TestUtils
                 Name = $"some-token-name-{suffix}",
                 Key = RngUtil.GetRandomHexString(10),
                 UserId = user.Id,
-                DateCreated = DateTimeOffset.Now
+                DateCreated = DateTimeOffset.Now.ToUniversalTime()
             };
         }
     }

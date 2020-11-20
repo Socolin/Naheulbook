@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("specialities");
 
             builder.HasIndex(e => e.JobId)
-                .HasName("IX_specialities_jobId");
+                .HasDatabaseName("IX_specialities_jobId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -47,10 +47,10 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("speciality_modifiers");
 
             builder.HasIndex(e => e.SpecialityId)
-                .HasName("IX_speciality_modifiers_specialityId");
+                .HasDatabaseName("IX_speciality_modifiers_specialityId");
 
             builder.HasIndex(e => e.Stat)
-                .HasName("IX_speciality_modifier_stat");
+                .HasDatabaseName("IX_speciality_modifier_stat");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -81,7 +81,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("speciality_specials");
 
             builder.HasIndex(e => e.SpecialityId)
-                .HasName("IX_speciality_specials_specialityId");
+                .HasDatabaseName("IX_speciality_specials_specialityId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");

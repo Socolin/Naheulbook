@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("effects");
 
             builder.HasIndex(e => e.SubCategoryId)
-                .HasName("IX_effect_subCategoryId");
+                .HasDatabaseName("IX_effect_subCategoryId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -99,9 +99,9 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("effect_modifiers");
 
             builder.HasIndex(e => e.EffectId)
-                .HasName("IX_effect_modifiers_effectId");
+                .HasDatabaseName("IX_effect_modifiers_effectId");
             builder.HasIndex(e => e.StatName)
-                .HasName("IX_effect_modifier_stat");
+                .HasDatabaseName("IX_effect_modifier_stat");
 
             builder.Property(e => e.EffectId)
                 .HasColumnName("effectId");

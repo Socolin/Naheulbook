@@ -76,7 +76,7 @@ namespace Naheulbook.Core.Utils
 
             groupData.InCombat = true;
 
-            @group.Loots ??= new List<Loot>();
+            group.Loots ??= new List<Loot>();
             var loot = new Loot
             {
                 Name = "Combat",

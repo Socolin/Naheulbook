@@ -66,7 +66,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("item_template_subcategories");
 
             builder.HasIndex(e => e.SectionId)
-                .HasName("IX_item_category_type");
+                .HasDatabaseName("IX_item_category_type");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -140,16 +140,16 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("item_template_modifiers");
 
             builder.HasIndex(e => e.ItemTemplateId)
-                .HasName("IX_item_template_modifiers_itemTemplateId");
+                .HasDatabaseName("IX_item_template_modifiers_itemTemplateId");
 
             builder.HasIndex(e => e.RequiredJobId)
-                .HasName("IX_item_template_modifiers_requiredJobId");
+                .HasDatabaseName("IX_item_template_modifiers_requiredJobId");
 
             builder.HasIndex(e => e.RequiredOriginId)
-                .HasName("IX_item_template_modifiers_requiredOriginId");
+                .HasDatabaseName("IX_item_template_modifiers_requiredOriginId");
 
             builder.HasIndex(e => e.StatName)
-                .HasName("IX_item_effect_stat");
+                .HasDatabaseName("IX_item_effect_stat");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -253,10 +253,10 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => new {e.SkillId, e.ItemTemplateId});
 
             builder.HasIndex(e => e.ItemTemplateId)
-                .HasName("IX_item_template_skills_itemTemplateId");
+                .HasDatabaseName("IX_item_template_skills_itemTemplateId");
 
             builder.HasIndex(e => e.SkillId)
-                .HasName("IX_item_template_skills_skillId");
+                .HasDatabaseName("IX_item_template_skills_skillId");
 
             builder.Property(e => e.ItemTemplateId)
                 .HasColumnName("itemTemplateId");
@@ -285,10 +285,10 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("item_template_skill_modifiers");
 
             builder.HasIndex(e => e.ItemTemplateId)
-                .HasName("IX_item_template_skill_modifiers_itemTemplateId");
+                .HasDatabaseName("IX_item_template_skill_modifiers_itemTemplateId");
 
             builder.HasIndex(e => e.SkillId)
-                .HasName("IX_item_template_skill_modifiers_skillId");
+                .HasDatabaseName("IX_item_template_skill_modifiers_skillId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -325,7 +325,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("item_template_slots");
 
             builder.HasIndex(e => e.ItemTemplateId)
-                .HasName("IX_item_template_slots_itemTemplateId");
+                .HasDatabaseName("IX_item_template_slots_itemTemplateId");
 
             builder.Property(e => e.SlotId)
                 .HasColumnName("slot");
@@ -354,10 +354,10 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => new {e.SkillId, e.ItemTemplateId});
 
             builder.HasIndex(e => e.ItemTemplateId)
-                .HasName("IX_item_template_unskills_itemTemplateId");
+                .HasDatabaseName("IX_item_template_unskills_itemTemplateId");
 
             builder.HasIndex(e => e.SkillId)
-                .HasName("IX_item_template_unskills_skillId");
+                .HasDatabaseName("IX_item_template_unskills_skillId");
 
             builder.Property(e => e.ItemTemplateId)
                 .HasColumnName("itemTemplateId");

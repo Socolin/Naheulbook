@@ -107,7 +107,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => _itemDataUtil.Received(1).SetItemData(item, itemData));
+                .Do(_ => _itemDataUtil.Received(1).SetItemData(item, itemData));
 
             var actualItem = await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
 
@@ -135,7 +135,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _characterHistoryUtil.CreateLogChangeItemQuantity(characterId, item, currentQuantity, newQuantity)
                 .Returns(characterHistoryEntry);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => item.Character.HistoryEntries.Should().Contain(characterHistoryEntry));
+                .Do(_ => item.Character.HistoryEntries.Should().Contain(characterHistoryEntry));
 
             await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
 
@@ -191,7 +191,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => item.Modifiers.Should().Be(itemModifiersJson));
+                .Do(_ => item.Modifiers.Should().Be(itemModifiersJson));
 
             var actualItem = await _service.UpdateItemModifiersAsync(new NaheulbookExecutionContext(), itemId, itemModifiers);
 
@@ -245,7 +245,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => _itemUtil.Received(1).EquipItem(item, 24));
+                .Do(_ => _itemUtil.Received(1).EquipItem(item, 24));
 
             var actualItem = await _service.EquipItemAsync(new NaheulbookExecutionContext(), itemId, equipRequest);
 
@@ -301,7 +301,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => item.ContainerId.Should().Be(containerId));
+                .Do(_ => item.ContainerId.Should().Be(containerId));
 
             var actualItem = await _service.ChangeItemContainerAsync(new NaheulbookExecutionContext(), itemId, equipRequest);
 

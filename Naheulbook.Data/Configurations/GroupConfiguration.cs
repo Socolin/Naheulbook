@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Configurations
             builder.ToTable("groups");
 
             builder.HasIndex(e => e.MasterId)
-                .HasName("IX_groups_masterId");
+                .HasDatabaseName("IX_groups_masterId");
 
             builder.Property(e => e.Name)
                 .IsRequired()
@@ -51,9 +51,9 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => new {e.GroupId, e.CharacterId});
 
             builder.HasIndex(e => e.CharacterId)
-                .HasName("IX_group_invitations_characterId");
+                .HasDatabaseName("IX_group_invitations_characterId");
             builder.HasIndex(e => e.GroupId)
-                .HasName("IX_group_invitations_groupId");
+                .HasDatabaseName("IX_group_invitations_groupId");
 
             builder.Property(e => e.CharacterId)
                 .HasColumnName("characterId");

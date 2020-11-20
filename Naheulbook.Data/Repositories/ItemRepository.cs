@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Extensions;
 using Naheulbook.Data.Models;
+#pragma warning disable 8619
 
 namespace Naheulbook.Data.Repositories
 {

@@ -359,7 +359,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(info => character.StatBonusAd.Should().BeEquivalentTo("some-stat"));
+                .Do(_ => character.StatBonusAd.Should().BeEquivalentTo("some-stat"));
 
             await _service.SetCharacterAdBonusStatAsync(executionContext, characterId, new PutStatBonusAdRequest {Stat = "some-stat"});
 
@@ -703,7 +703,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().Jobs.GetAsync(jobId)
                 .Returns(job);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(callInfo =>
+                .Do(_ =>
                 {
                     character.Jobs.Should().HaveCount(1);
                     character.Jobs.First().Job.Should().BeSameAs(job);

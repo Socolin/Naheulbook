@@ -18,7 +18,6 @@ using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using StackExchange.Redis;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Steps

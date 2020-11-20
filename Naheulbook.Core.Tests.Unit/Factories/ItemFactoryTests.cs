@@ -57,7 +57,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
             _jsonUtil.SerializeNonNull(Arg.Any<ItemData>())
                 .Returns("some-json");
             _jsonUtil.When(x => x.Serialize(itemData))
-                .Do(x => itemData.Charge.Should().Be(2));
+                .Do(_ => itemData.Charge.Should().Be(2));
 
             var actualItem = _factory.CreateItem(ItemOwnerType.Character, 10, itemTemplate, itemData);
 
@@ -77,7 +77,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
             _jsonUtil.SerializeNonNull(Arg.Any<ItemData>())
                 .Returns("some-json");
             _jsonUtil.When(x => x.Serialize(itemData))
-                .Do(x => itemData.Icon.Should().BeSameAs(icon));
+                .Do(_ => itemData.Icon.Should().BeSameAs(icon));
 
             var actualItem = _factory.CreateItem(ItemOwnerType.Character, 10, itemTemplate, itemData);
 
@@ -97,7 +97,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
             _jsonUtil.SerializeNonNull(Arg.Any<ItemData>())
                 .Returns("some-json");
             _jsonUtil.When(x => x.Serialize(itemData))
-                .Do(x => itemData.Lifetime.Should().BeSameAs(lifetime));
+                .Do(_ => itemData.Lifetime.Should().BeSameAs(lifetime));
 
             var actualItem = _factory.CreateItem(ItemOwnerType.Character, 10, itemTemplate, itemData);
 

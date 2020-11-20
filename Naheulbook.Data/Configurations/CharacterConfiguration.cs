@@ -13,11 +13,11 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(x => x.Id);
 
             builder.HasIndex(e => e.GroupId)
-                .HasName("IX_characters_groupId");
+                .HasDatabaseName("IX_characters_groupId");
             builder.HasIndex(e => e.OriginId)
-                .HasName("IX_characters_originId");
+                .HasDatabaseName("IX_characters_originId");
             builder.HasIndex(e => e.OwnerId)
-                .HasName("IX_characters_userId");
+                .HasDatabaseName("IX_characters_userId");
 
             builder.Property(e => e.Id)
                 .HasColumnName("id");
@@ -121,10 +121,10 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => new {e.CharacterId, e.JobId});
 
             builder.HasIndex(e => e.JobId)
-                .HasName("IX_character_jobs_jobId");
+                .HasDatabaseName("IX_character_jobs_jobId");
 
             builder.HasIndex(e => e.CharacterId)
-                .HasName("IX_character_jobs_characterId");
+                .HasDatabaseName("IX_character_jobs_characterId");
 
             builder.Property(e => e.CharacterId)
                 .HasColumnName("characterId");
@@ -225,9 +225,9 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => e.Id);
 
             builder.HasIndex(e => e.StatName)
-                .HasName("IX_character_modifier_value_stat");
+                .HasDatabaseName("IX_character_modifier_value_stat");
             builder.HasIndex(e => e.CharacterModifierId)
-                .HasName("IX_character_modifier_values_characterModifierId");
+                .HasDatabaseName("IX_character_modifier_values_characterModifierId");
 
             builder.Property(e => e.StatName)
                 .HasColumnName("stat");
@@ -249,10 +249,10 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => new {e.SkillId, e.CharacterId});
 
             builder.HasIndex(e => e.CharacterId)
-                .HasName("IX_character_skills_characterId");
+                .HasDatabaseName("IX_character_skills_characterId");
 
             builder.HasIndex(e => e.SkillId)
-                .HasName("IX_character_skills_skillId");
+                .HasDatabaseName("IX_character_skills_skillId");
 
             builder.Property(e => e.CharacterId)
                 .HasColumnName("characterId");
@@ -281,9 +281,9 @@ namespace Naheulbook.Data.Configurations
             builder.HasKey(e => new {e.SpecialityId, e.CharacterId});
 
             builder.HasIndex(e => e.SpecialityId)
-                .HasName("IX_character_specialities_specialityId");
+                .HasDatabaseName("IX_character_specialities_specialityId");
             builder.HasIndex(e => e.CharacterId)
-                .HasName("IX_character_specialities_characterId");
+                .HasDatabaseName("IX_character_specialities_characterId");
 
             builder.Property(e => e.CharacterId)
                 .HasColumnName("characterId");

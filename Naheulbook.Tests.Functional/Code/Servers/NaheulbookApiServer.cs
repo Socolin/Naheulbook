@@ -75,6 +75,7 @@ namespace Naheulbook.Tests.Functional.Code.Servers
         public void Stop()
         {
             _server?.StopAsync().GetAwaiter().GetResult();
+            _server?.WaitForShutdownAsync().GetAwaiter().GetResult();
             _server?.Dispose();
             _server = null;
         }

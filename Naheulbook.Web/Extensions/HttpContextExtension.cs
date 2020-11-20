@@ -20,7 +20,7 @@ namespace Naheulbook.Web.Extensions
                 throw new HttpErrorException(StatusCodes.Status401Unauthorized, "Not authenticated");
             }
 
-            return (NaheulbookExecutionContext) context.Items[NaheulbookExecutionContextKey];
+            return (NaheulbookExecutionContext) context.Items[NaheulbookExecutionContextKey]!;
         }
 
         public static OptionalNaheulbookExecutionContext GetIfExistsExecutionContext(this HttpContext context)
@@ -28,7 +28,7 @@ namespace Naheulbook.Web.Extensions
             if (!context.Items.ContainsKey(NaheulbookExecutionContextKey))
                 return new OptionalNaheulbookExecutionContext();
 
-            return new OptionalNaheulbookExecutionContext((NaheulbookExecutionContext) context.Items[NaheulbookExecutionContextKey]);
+            return new OptionalNaheulbookExecutionContext((NaheulbookExecutionContext?) context.Items[NaheulbookExecutionContextKey]);
         }
     }
 }
