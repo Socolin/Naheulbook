@@ -1,16 +1,24 @@
 using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
+using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
+using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Servers;
 using Naheulbook.Tests.Functional.Code.TestServices;
 using Naheulbook.TestUtils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Services;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using StackExchange.Redis;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Steps
@@ -21,16 +29,20 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         private readonly ScenarioContext _scenarioContext;
         private readonly UserTestService _userTestService;
         private readonly TestDataUtil _testDataUtil;
+        private readonly NaheulbookApiServer _naheulbookApiServer;
 
         public UserSteps(
             ScenarioContext scenarioContext,
             UserTestService userTestService,
-            TestDataUtil testDataUtil
+            TestDataUtil testDataUtil,
+            NaheulbookHttpClient naheulbookHttpClient,
+            NaheulbookApiServer naheulbookApiServer
         )
         {
             _scenarioContext = scenarioContext;
             _userTestService = userTestService;
             _testDataUtil = testDataUtil;
+            _naheulbookApiServer = naheulbookApiServer;
         }
 
         [Given("a user identified by a password")]
@@ -106,6 +118,27 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         {
             _testDataUtil.Get<Character>().Owner.ShowInSearchUntil = DateTime.UtcNow.AddDays(1);
             _testDataUtil.SaveChanges();
+        }
+
+        [Given("the user is authenticated with a session")]
+        public async Task GivenTheUserIsAuthenticatedWithASession()
+        {
+            var cookies = new CookieContainer();
+            _scenarioContext.SetHttpCookiesContainer(cookies);
+            var handler = new HttpClientHandler {CookieContainer = cookies};
+            using var httpClient = new HttpClient(handler);
+
+            var httpRequestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(new Uri(_naheulbookApiServer.ListenUrls.First()), $"/api/v2/users/{_scenarioContext.GetUsername()}/jwt"),
+                Content = new StringContent(JsonConvert.SerializeObject(new GenerateJwtRequest
+                {
+                    Password = _scenarioContext.GetPassword()
+                }), Encoding.UTF8, "application/json")
+            };
+            var response = await httpClient.SendAsync(httpRequestMessage);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

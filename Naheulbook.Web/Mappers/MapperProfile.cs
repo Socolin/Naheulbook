@@ -263,6 +263,10 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.LinkedWithMicrosoft, opt => opt.MapFrom(u => u.MicrosoftId != null))
                 ;
             CreateMap<User, UserSearchResponse>();
+            CreateMap<UserAccessToken, UserAccessTokenResponse>();
+            CreateMap<UserAccessToken, UserAccessTokenResponseWithKey>()
+                .IncludeBase<UserAccessToken, UserAccessTokenResponse>()
+                ;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             _httpContext = Substitute.For<HttpContext>();
             _httpContext.Session.Returns(_session);
 
-            _usersController = new UsersController(_userService, _jwtService, Substitute.For<IMapper>())
+            _usersController = new UsersController(_userService, _jwtService, Substitute.For<IMapper>(), Substitute.For<IUserAccessTokenService>())
             {
                 ControllerContext = new ControllerContext
                 {

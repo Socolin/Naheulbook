@@ -1,0 +1,57 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.Models;
+using Naheulbook.Data.Repositories;
+using NUnit.Framework;
+
+namespace Naheulbook.Data.Tests.Integration.Repositories
+{
+    public class UserAccessTokenRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
+    {
+        private UserAccessTokenRepository _userAccessTokenRepository;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _userAccessTokenRepository = new UserAccessTokenRepository(RepositoryDbContext);
+        }
+
+        [Test]
+        public async Task CanCreateUserAccessToken()
+        {
+            var user = TestDataUtil
+                .AddUser().GetLast<User>();
+
+            _userAccessTokenRepository.Add(CreateUserAccessToken(user));
+            await RepositoryDbContext.SaveChangesAsync();
+        }
+
+        [Test]
+        public async Task CanListUserTokens()
+        {
+            TestDataUtil
+                .AddUser()
+                .AddUserAccessToken();
+
+            var tokens = await _userAccessTokenRepository.GetUserAccessTokensForUser(TestDataUtil.GetLast<User>().Id);
+
+            tokens.Should().HaveCount(1);
+            tokens.First().Should().BeEquivalentTo(TestDataUtil.GetLast<UserAccessToken>(), config => config.Excluding(x => x.User));
+        }
+
+        private static UserAccessToken CreateUserAccessToken(User user)
+        {
+            return new UserAccessToken
+            {
+                Id = Guid.NewGuid(),
+                Key = "some-random-key",
+                DateCreated = DateTimeOffset.Now,
+                UserId = user.Id,
+                Name = "some-name"
+            };
+        }
+    }
+}

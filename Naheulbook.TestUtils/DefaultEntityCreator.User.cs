@@ -1,3 +1,4 @@
+using System;
 using Naheulbook.Data.Models;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
@@ -21,6 +22,21 @@ namespace Naheulbook.TestUtils
                 GoogleId = "some-google-id",
                 TwitterId = "some-twitter-id",
                 MicrosoftId = "some-microsoft-id"
+            };
+        }
+
+        public UserAccessToken CreateUserAccessToken(User user, string suffix = null)
+        {
+            if (suffix == null)
+                suffix = RngUtil.GetRandomHexString(8);
+
+            return new UserAccessToken
+            {
+                Id = Guid.NewGuid(),
+                Name = $"some-token-name-{suffix}",
+                Key = RngUtil.GetRandomHexString(10),
+                UserId = user.Id,
+                DateCreated = DateTimeOffset.Now
             };
         }
     }

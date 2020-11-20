@@ -42,6 +42,10 @@ namespace Naheulbook.Web.Middlewares
 
             if (jwt != null)
             {
+                if (jwt.StartsWith("vttToken:"))
+                {
+
+                }
                 var token = _jwtService.DecodeJwt(jwt);
                 if (token == null)
                 {

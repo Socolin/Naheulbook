@@ -39,7 +39,10 @@ namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions
             }
             try
             {
-                return JToken.Parse(json);
+                return JsonConvert.DeserializeObject<JToken>(json, new JsonSerializerSettings()
+                {
+                    DateParseHandling = DateParseHandling.None
+                });
             }
             catch (JsonReaderException ex)
             {

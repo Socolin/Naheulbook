@@ -7,6 +7,7 @@ using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Responses;
@@ -21,12 +22,14 @@ namespace Naheulbook.Web.Controllers
         private readonly IUserService _userService;
         private readonly IJwtService _jwtService;
         private readonly IMapper _mapper;
+        private readonly IUserAccessTokenService _userAccessTokenService;
 
-        public UsersController(IUserService userService, IJwtService jwtService, IMapper mapper)
+        public UsersController(IUserService userService, IJwtService jwtService, IMapper mapper, IUserAccessTokenService userAccessTokenService)
         {
             _userService = userService;
             _jwtService = jwtService;
             _mapper = mapper;
+            _userAccessTokenService = userAccessTokenService;
         }
 
         [HttpPost]
@@ -111,6 +114,33 @@ namespace Naheulbook.Web.Controllers
                 Token = token,
                 UserInfo = _mapper.Map<UserInfoResponse>(userInfo)
             };
+        }
+
+        [HttpGet("me/accessTokens")]
+        public async Task<ActionResult<List<UserAccessTokenResponse>>> GetUserAccessTokens()
+        {
+            // FIXME: userSession if userId is not found, check in db if long duration session still valid
+            var userId = HttpContext.Session.GetCurrentUserId();
+            if (!userId.HasValue)
+                return StatusCode(StatusCodes.Status401Unauthorized);
+
+            var accessTokens = await _userAccessTokenService.GetUserAccessTokensAsync(userId.Value);
+            return _mapper.Map<List<UserAccessTokenResponse>>(accessTokens);
+        }
+
+        [HttpPost("me/accessTokens")]
+        public async Task<CreatedActionResult<UserAccessTokenResponseWithKey>> PostCreateUserAccessToken(
+            [FromBody] CreateAccessTokenRequest request
+        )
+        {
+            // FIXME: userSession if userId is not found, check in db if long duration session still valid
+            var userId = HttpContext.Session.GetCurrentUserId();
+            if (!userId.HasValue)
+                return StatusCode(StatusCodes.Status401Unauthorized);
+
+            var accessToken= await _userAccessTokenService.CreateUserAccessTokenAsync(userId.Value, request);
+
+            return _mapper.Map<UserAccessTokenResponseWithKey>(accessToken);
         }
 
         [HttpGet("me/logout")]

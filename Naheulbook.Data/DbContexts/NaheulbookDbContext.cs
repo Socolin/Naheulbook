@@ -33,6 +33,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<Job> Jobs { get; set; } = null!;
         public DbSet<Speciality> Specialities { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<UserAccessToken> UserAccessTokens { get; set; } = null!;
         public DbSet<Loot> Loots { get; set; } = null!;
         public DbSet<Event> Events { get; set; } = null!;
         public DbSet<OriginRandomNameUrl> OriginRandomNameUrls { get; set; } = null!;
@@ -122,6 +123,7 @@ namespace Naheulbook.Data.DbContexts
             modelBuilder.ApplyConfiguration(new StatConfiguration());
 
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserAccessTokenConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

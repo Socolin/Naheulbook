@@ -44,6 +44,7 @@ namespace Naheulbook.Data.UnitOfWorks
         ISlotRepository Slots { get; }
         IStatRepository Stats { get; }
         IUserRepository Users { get; }
+        IUserAccessTokenRepository UserAccessTokenRepository { get; }
 
         Task<int> SaveChangesAsync();
     }
@@ -94,6 +95,7 @@ namespace Naheulbook.Data.UnitOfWorks
         public ISlotRepository Slots => new SlotRepository(_naheulbookDbContext);
         public IStatRepository Stats => new StatRepository(_naheulbookDbContext);
         public IUserRepository Users => new UserRepository(_naheulbookDbContext);
+        public IUserAccessTokenRepository UserAccessTokenRepository => new UserAccessTokenRepository(_naheulbookDbContext);
 
         public Task<int> SaveChangesAsync()
         {

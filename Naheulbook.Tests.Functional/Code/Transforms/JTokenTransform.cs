@@ -30,7 +30,10 @@ namespace Naheulbook.Tests.Functional.Code.Transforms
                 var expandedJson = input.ExecuteReplacement(_scenarioContext, _testDataUtil);
                 try
                 {
-                    return JToken.Parse(expandedJson);
+                    return JsonConvert.DeserializeObject<JToken>(expandedJson, new JsonSerializerSettings()
+                    {
+                        DateParseHandling = DateParseHandling.None
+                    });
                 }
                 catch (JsonReaderException ex)
                 {

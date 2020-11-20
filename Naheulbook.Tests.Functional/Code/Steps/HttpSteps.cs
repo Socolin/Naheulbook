@@ -43,12 +43,46 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
+        [When(@"performing a (GET|DELETE) to the url ""(.*)"" with the current session")]
+        public async Task WhenPerformingAGetToTheUrlWithTheCurrentSession(string method, string url)
+        {
+            using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = _scenarioContext.GetHttpCookiesContainer()});
+            httpClient.BaseAddress = _naheulbookHttpClient.BaseAddress;
+
+            foreach (var (name, value) in _naheulbookHttpClient.DefaultRequestHeaders)
+                httpClient.DefaultRequestHeaders.Add(name, value);
+
+            var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url);
+            var response = await httpClient.SendAsync(httpRequestMessage);
+            var content = await response.Content.ReadAsStringAsync();
+
+            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
+            _scenarioContext.SetLastHttpResponseContent(content);
+        }
+
         [When(@"performing a POST to the url ""(.*)"" with the following json content")]
         public async Task WhenPerformingAPostToTheUrlWithContent(string url, string contentData)
         {
             var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
             var response = await _naheulbookHttpClient.PostAsync(url, requestContent);
             var content = await response.Content.ReadAsStringAsync();
+            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
+            _scenarioContext.SetLastHttpResponseContent(content);
+        }
+
+        [When(@"performing a POST to the url ""(.*)"" with the following json content and the current session")]
+        public async Task WhenPerformingAPostToTheUrlWithContentAndTheCurrentSession(string url, string contentData)
+        {
+            var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
+            using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = _scenarioContext.GetHttpCookiesContainer()});
+            httpClient.BaseAddress = _naheulbookHttpClient.BaseAddress;
+
+            foreach (var (name, value) in _naheulbookHttpClient.DefaultRequestHeaders)
+                httpClient.DefaultRequestHeaders.Add(name, value);
+
+            var response = await httpClient.PostAsync(url, requestContent);
+            var content = await response.Content.ReadAsStringAsync();
+
             _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
         }

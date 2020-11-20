@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Http;
 using Socolin.TestUtils.FakeSmtp;
 using TechTalk.SpecFlow;
 
@@ -12,6 +14,7 @@ namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions
         private const string ActivationCodeKey = "ActivationCode";
         private const string JwtKey = "Jwt";
         private const string MapImageOutputDirectoryKey = "MapImageOutputDirectory";
+        private const string HttpCookiesContainerKey = "HttpCookiesContainer";
 
         public static void SetLastReceivedMail(this ScenarioContext scenarioContext, FakeSmtpMail mail)
         {
@@ -81,6 +84,16 @@ namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions
         public static string GetMapImageOutputDirectory(this ScenarioContext scenarioContext)
         {
             return scenarioContext.Get<string>(MapImageOutputDirectoryKey);
+        }
+
+        public static void SetHttpCookiesContainer(this ScenarioContext scenarioContext, CookieContainer cookieContainer)
+        {
+            scenarioContext.Set(cookieContainer, HttpCookiesContainerKey);
+        }
+
+        public static CookieContainer GetHttpCookiesContainer(this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.Get<CookieContainer>(HttpCookiesContainerKey);
         }
     }
 }

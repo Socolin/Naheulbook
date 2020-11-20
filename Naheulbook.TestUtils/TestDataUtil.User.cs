@@ -9,5 +9,10 @@ namespace Naheulbook.TestUtils
         {
             return SaveEntity(_defaultEntityCreator.CreateUser(), customizer);
         }
+
+        public TestDataUtil AddUserAccessToken(Action<UserAccessToken> customizer = null)
+        {
+            return SaveEntity(_defaultEntityCreator.CreateUserAccessToken(GetLast<User>()), customizer);
+        }
     }
 }

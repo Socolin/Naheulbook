@@ -136,6 +136,7 @@ namespace Naheulbook.Web
             services.AddSingleton<ISocialMediaUserLinkService, SocialMediaUserLinkService>();
             services.AddSingleton<IStatService, StatService>();
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IUserAccessTokenService, UserAccessTokenService>();
 
             services.AddSingleton<IActiveStatsModifierUtil, ActiveStatsModifierUtil>();
             services.AddSingleton<IAuthorizationUtil, AuthorizationUtil>();
@@ -204,7 +205,7 @@ namespace Naheulbook.Web
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod());
+            app.UseCors(x => x.SetIsOriginAllowed((origin) => true).AllowAnyMethod().AllowCredentials().AllowAnyHeader());
 
             app.UseMiddleware<HttpExceptionMiddleware>();
 
