@@ -1,4 +1,5 @@
 export * from './character-level-up-request';
+export * from './create-access-token-request';
 export * from './create-character-request';
 export * from './create-custom-character-request';
 export * from './create-effect-sub-category-request';

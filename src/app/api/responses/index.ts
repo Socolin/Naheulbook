@@ -42,5 +42,6 @@ export * from './random-character-name-response';
 export * from './skill-response';
 export * from './speciality-response';
 export * from './stat-requirement-response';
+export * from './user-access-token-response';
 export * from './user-info-response';
 export * from './user-search-response';

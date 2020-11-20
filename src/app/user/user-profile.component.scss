@@ -33,3 +33,38 @@ mat-toolbar {
         color: inherit;
     }
 }
+
+.access-token.header {
+    font-weight: bold;
+}
+
+.access-token {
+    display: grid;
+    margin-bottom: 8px;
+    grid-template-columns: 200px 1fr 48px;
+    grid-template-areas: "date name action" "key key key";
+
+
+    .key {
+        grid-area: key;
+    }
+    .name {
+        grid-area: name;
+    }
+    .action {
+        grid-area: action;
+    }
+    .key {
+        grid-area: key;
+        mat-card {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 16px;
+            .token {
+                font-family: monospace;
+                word-break: break-all;
+            }
+        }
+    }
+}

@@ -9,7 +9,6 @@ import {MaterialWorkaroundModule} from '../material-workaround/material-workarou
 
 import {
     AutocompleteInputComponent,
-    CommonNavComponent,
     ConfirmGmModeDialogComponent,
     IconComponent,
     IconSelectorComponent,
@@ -25,6 +24,7 @@ import {
     ValueEditorComponent,
 } from './';
 import {ValueEditorSettingsDialogComponent} from './value-editor-settings-dialog.component';
+import {CommonNavComponent} from './common-nav.component';
 
 
 @NgModule({

@@ -21,7 +21,6 @@ export * from './plus-minus.pipe';
 export * from './text-formatter.pipe';
 
 export * from './autocomplete-input.component';
-export * from './common-nav.component';
 export * from './confirm-gm-mode-dialog.component';
 export * from './gm-mode.service';
 export * from './icon-selector.component';
