@@ -84,6 +84,9 @@ namespace Naheulbook.Web
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddHttpContextAccessor();
+            services.AddHealthChecks()
+                .AddMySql(_configuration.GetConnectionString("DefaultConnection"))
+                .AddRedis("localhost");
             services.AddAutoMapper(typeof(RequestToEntityProfile).Assembly, typeof(Startup).Assembly);
 
             services.AddScoped(servicesProvider => servicesProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!.GetExecutionContext());
@@ -223,6 +226,7 @@ namespace Naheulbook.Web
             app.UseMiddleware<JwtAuthenticationMiddleware>();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health");
                 endpoints.MapHub<ChangeNotifierHub>("/ws/listen");
                 endpoints.MapControllers();
             });
