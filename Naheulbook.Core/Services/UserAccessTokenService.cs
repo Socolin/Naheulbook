@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Naheulbook.Core.Exceptions;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
@@ -12,6 +13,8 @@ namespace Naheulbook.Core.Services
     {
         Task<IList<UserAccessToken>> GetUserAccessTokensAsync(int userId);
         Task<UserAccessToken> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request);
+        Task<UserAccessToken?> ValidateTokenAsync(string token);
+        Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId);
     }
 
     public class UserAccessTokenService : IUserAccessTokenService
@@ -48,6 +51,27 @@ namespace Naheulbook.Core.Services
                 uow.UserAccessTokenRepository.Add(token);
                 await uow.SaveChangesAsync();
                 return token;
+            }
+        }
+
+        public async Task<UserAccessToken?> ValidateTokenAsync(string accessKey)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var token = await uow.UserAccessTokenRepository.GetByKeyAsync(accessKey);
+                return token;
+            }
+        }
+
+        public async Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var token = await uow.UserAccessTokenRepository.GetByUserIdAndTokenIdAsync(userId, userAccessTokenId);
+                if (token == null)
+                    throw new UserAccessTokenNotFoundException(userId, userAccessTokenId);
+                uow.UserAccessTokenRepository.Remove(token);
+                await uow.SaveChangesAsync();
             }
         }
     }

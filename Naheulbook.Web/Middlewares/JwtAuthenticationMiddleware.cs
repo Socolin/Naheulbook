@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Services;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Services;
@@ -11,15 +12,18 @@ namespace Naheulbook.Web.Middlewares
 {
     public class JwtAuthenticationMiddleware
     {
+        private const string UserAccessTokenPrefix = "userAccessToken:";
         private readonly RequestDelegate _next;
         private readonly IJwtService _jwtService;
         private readonly ITimeService _timeService;
+        private readonly IUserAccessTokenService _userAccessTokenService;
 
-        public JwtAuthenticationMiddleware(RequestDelegate next, IJwtService jwtService, ITimeService timeService)
+        public JwtAuthenticationMiddleware(RequestDelegate next, IJwtService jwtService, ITimeService timeService, IUserAccessTokenService userAccessTokenService)
         {
             _next = next;
             _jwtService = jwtService;
             _timeService = timeService;
+            _userAccessTokenService = userAccessTokenService;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -42,28 +46,43 @@ namespace Naheulbook.Web.Middlewares
 
             if (jwt != null)
             {
-                if (jwt.StartsWith("vttToken:"))
+                // A bit hacky because signalr does not support other scheme for now.
+                if (jwt.StartsWith(UserAccessTokenPrefix))
                 {
+                    var token = await _userAccessTokenService.ValidateTokenAsync(jwt.Substring(UserAccessTokenPrefix.Length));
+                    if (token == null)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Invalid AccessToken"}));
+                        return;
+                    }
 
+                    context.SetExecutionContext(new NaheulbookExecutionContext
+                    {
+                        UserId = token.UserId
+                    });
                 }
-                var token = _jwtService.DecodeJwt(jwt);
-                if (token == null)
+                else
                 {
-                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Invalid JWT"}));
-                    return;
-                }
-                if (token.Exp < _timeService.UtcNow.ToUnixTimeSeconds())
-                {
-                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Expired JWT"}));
-                    return;
-                }
+                    var token = _jwtService.DecodeJwt(jwt);
+                    if (token == null)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Invalid JWT"}));
+                        return;
+                    }
+                    if (token.Exp < _timeService.UtcNow.ToUnixTimeSeconds())
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Expired JWT"}));
+                        return;
+                    }
 
-                context.SetExecutionContext(new NaheulbookExecutionContext
-                {
-                    UserId = token.Sub
-                });
+                    context.SetExecutionContext(new NaheulbookExecutionContext
+                    {
+                        UserId = token.Sub
+                    });
+                }
             }
 
             await _next(context);

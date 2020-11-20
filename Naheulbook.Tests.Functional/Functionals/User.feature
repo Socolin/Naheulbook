@@ -27,9 +27,9 @@ Feature: User
     """
     {
       "__partial": {
-        "id": {"__match": {"type": "string"}},
+        "id": {"__capture": {"name": "AccessTokenId", "type": "string"}},
         "name": "some-access-token-name",
-        "key": {"__match": {"type": "string"}},
+        "key": {"__capture": {"name": "UserAccessKey", "type": "string"}},
         "dateCreated": {"__match": {"type": "string"}}
       }
     }
@@ -41,9 +41,20 @@ Feature: User
     """
     [
       {
-        "id": {"__match": {"type": "string"}},
+        "id": "${AccessTokenId}",
         "name": "some-access-token-name",
         "dateCreated": {"__match": {"type": "string"}}
       }
     ]
     """
+
+    Given a group
+
+    When performing a GET to the url "/api/v2/groups/${Group.Id}" with "${UserAccessKey}" as access token
+    Then the response status code is 200
+
+    When performing a DELETE to the url "/api/v2/users/me/accessTokens/${AccessTokenId}" with the current session
+    Then the response status code is 204
+
+    When performing a GET to the url "/api/v2/groups/${Group.Id}" with "${UserAccessKey}" as access token
+    Then the response status code is 401

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -141,6 +142,27 @@ namespace Naheulbook.Web.Controllers
             var accessToken= await _userAccessTokenService.CreateUserAccessTokenAsync(userId.Value, request);
 
             return _mapper.Map<UserAccessTokenResponseWithKey>(accessToken);
+        }
+
+        [HttpDelete("me/accessTokens/{UserAccessTokenId}")]
+        public async Task<ActionResult<List<UserAccessTokenResponse>>> DeleteUserAccessToken(
+            [FromRoute] Guid userAccessTokenId
+        )
+        {
+            // FIXME: userSession if userId is not found, check in db if long duration session still valid
+            var userId = HttpContext.Session.GetCurrentUserId();
+            if (!userId.HasValue)
+                return StatusCode(StatusCodes.Status401Unauthorized);
+
+            try
+            {
+                await _userAccessTokenService.DeleteUserAccessTokensAsync(userId.Value, userAccessTokenId);
+                return NoContent();
+            }
+            catch (UserAccessTokenNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+            }
         }
 
         [HttpGet("me/logout")]

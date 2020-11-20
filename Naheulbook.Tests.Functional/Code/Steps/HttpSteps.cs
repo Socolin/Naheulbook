@@ -31,12 +31,17 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             _jsonComparer = jsonComparer;
         }
 
-        [When(@"performing a (GET|DELETE) to the url ""(.*)""( with the current jwt)?")]
+        [When(@"performing a (GET|DELETE) to the url ""(.*)""( with the current jwt| with "".+"" as access token)?")]
         public async Task WhenPerformingAGetToTheUrl(string method, string url, string useCurrentJwt)
         {
             var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url);
             if (!string.IsNullOrEmpty(useCurrentJwt))
-                httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt());
+            {
+                if (useCurrentJwt.StartsWith(" with the current jwt"))
+                    httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt());
+                else if (useCurrentJwt.EndsWith("as access token"))
+                    httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "userAccessToken:" + useCurrentJwt.Split('"')[1]);
+            }
             var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
             var content = await response.Content.ReadAsStringAsync();
             _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
