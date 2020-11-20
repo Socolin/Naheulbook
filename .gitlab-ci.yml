@@ -10,7 +10,7 @@ cache:
     - .nuget/
 
 .dotnet_template: &dotnet_build
-  image: mcr.microsoft.com/dotnet/core/sdk:5.0
+  image: mcr.microsoft.com/dotnet/sdk:5.0
 
 build:
   <<: *dotnet_build
