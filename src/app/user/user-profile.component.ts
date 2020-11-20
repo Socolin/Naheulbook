@@ -129,7 +129,9 @@ export class UserProfileComponent implements OnInit {
 
     copyKeyToClipboard(key: string) {
         if (this.clipboard.copy(key)) {
-            this.snackBar.open('Clé copié dans le presse papier');
+            this.snackBar.open('Clé copié dans le presse papier', undefined, {
+                duration: 5000
+            });
         }
     }
 }
