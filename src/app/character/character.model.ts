@@ -218,6 +218,26 @@ export class CharacterComputedData {
     }
 }
 
+export class PrimaryStat {
+    AD: number;
+    CHA: number;
+    COU: number;
+    FO: number;
+    INT: number;
+
+    [statName: string]: number;
+
+    static fromResponse(response: { AD: number; COU: number; CHA: number; FO: number; INT: number; }): PrimaryStat {
+        const primaryStats = new PrimaryStat();
+        primaryStats.AD = response.AD;
+        primaryStats.CHA = response.CHA;
+        primaryStats.COU = response.COU;
+        primaryStats.FO = response.FO;
+        primaryStats.INT = response.INT;
+        return primaryStats;
+    }
+}
+
 export class Character extends WsRegistrable {
     id: number;
     name: string;
@@ -232,7 +252,7 @@ export class Character extends WsRegistrable {
     fatePoint: number;
     items: Item[] = [];
     skills: Skill[] = [];
-    stats: {[statName: string]: number};
+    stats: PrimaryStat;
     modifiers: ActiveStatsModifier[] = [];
     specialities: Speciality[] = [];
     statBonusAD: string;
@@ -277,6 +297,7 @@ export class Character extends WsRegistrable {
         character.jobs = response.jobIds.map(jobId => jobs.find(j => j.id === jobId)!).filter(job => !!job);
         character.skills = response.skillIds.map(skillId => skillsById[skillId]).filter(skill => !!skill);
         character.items = response.items.map(itemResponse => Item.fromResponse(itemResponse, skillsById));
+        character.stats = PrimaryStat.fromResponse(response.stats);
 
         return character;
     }
