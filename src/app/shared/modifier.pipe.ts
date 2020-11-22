@@ -17,9 +17,6 @@ export function formatModifierValue(modifier) {
     else if (modifier.type === 'SET') {
         return '=' + modifier.value;
     }
-    else if (modifier.type === 'PERCENTAGE') {
-        return '' + modifier.value + '%';
-    }
 }
 
 @Pipe({

@@ -19,8 +19,6 @@ export class StatModifier {
             return value / mod.value;
         } else if (mod.type === 'MUL') {
             return value * mod.value;
-        } else if (mod.type === 'PERCENTAGE') {
-            return value * (mod.value / 100);
         }
         throw new Error('Invalid stat modifier')
     }
