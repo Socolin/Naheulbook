@@ -15,6 +15,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IMonsterService
     {
+        Task<Monster> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
         Task<Monster> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request);
         Task<List<Monster>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task<List<Monster>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count);
@@ -57,6 +58,20 @@ namespace Naheulbook.Core.Services
             _jsonUtil = jsonUtil;
             _timeService = timeService;
             _itemService = itemService;
+        }
+
+        public async Task<Monster> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var monster = await uow.Monsters.GetWithGroupAsync(monsterId);
+                if (monster == null)
+                    throw new MonsterNotFoundException(monsterId);
+
+                _authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
+
+                return monster;
+            }
         }
 
         public async Task<Monster> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request)

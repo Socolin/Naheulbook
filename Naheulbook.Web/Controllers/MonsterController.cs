@@ -29,6 +29,27 @@ namespace Naheulbook.Web.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("{MonsterId}")]
+        public async Task<ActionResult<MonsterResponse>> GetMonsterAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int monsterId
+        )
+        {
+            try
+            {
+                var monster = await _monsterService.GetMonsterAsync(executionContext, monsterId);
+                return _mapper.Map<MonsterResponse>(monster);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+            }
+            catch (MonsterNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+            }
+        }
+
         [HttpDelete("{MonsterId}")]
         public async Task<CreatedActionResult<ActiveStatsModifier>> DeleteMonsterAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
