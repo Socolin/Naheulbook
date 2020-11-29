@@ -48,6 +48,7 @@ namespace Naheulbook.Core.Notifications
         INotificationPacket BuildGroupAddLoot(int groupId, Loot loot);
         INotificationPacket BuildGroupDeleteLoot(int groupId, int lootId);
         INotificationPacket BuildGroupChangeConfig(in int groupId, GroupConfig groupConfig);
+        INotificationPacket BuildGroupAddMonster(int groupId, Monster monster);
 
         INotificationPacket BuildLootUpdateVisibility(int lootId, bool visibleForPlayer);
         INotificationPacket BuildLootAddMonster(int lootId, Monster monster);

@@ -101,6 +101,10 @@ namespace Naheulbook.Core.Services
 
                 monster.Items = await uow.Items.GetWithAllDataByIdsAsync(monster.Items.Select(x => x.Id));
 
+                var notificationSession = _notificationSessionFactory.CreateSession();
+                notificationSession.NotifyGroupAddMonster(group.Id, monster);
+                await notificationSession.CommitAsync();
+
                 return monster;
             }
         }

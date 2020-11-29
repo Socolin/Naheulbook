@@ -50,6 +50,7 @@ namespace Naheulbook.Core.Notifications
         void NotifyGroupChangeConfig(int groupId, GroupConfig groupConfig);
         void NotifyGroupAddLoot(int groupId, Loot loot);
         void NotifyGroupDeleteLoot(int groupId, int lootId);
+        void NotifyGroupAddMonster(int groupId, Monster monster);
 
         void NotifyLootUpdateVisibility(int lootId, bool visibleForPlayer);
         void NotifyLootAddMonster(int lootId, Monster monster);
@@ -270,6 +271,11 @@ namespace Naheulbook.Core.Notifications
         public void NotifyGroupDeleteLoot(int groupId, int lootId)
         {
             _packets.Add(_packetBuilder.BuildGroupDeleteLoot(groupId, lootId));
+        }
+
+        public void NotifyGroupAddMonster(int groupId, Monster monster)
+        {
+            _packets.Add(_packetBuilder.BuildGroupAddMonster(groupId, monster));
         }
 
         public void NotifyLootUpdateVisibility(int lootId, bool visibleForPlayer)
