@@ -57,6 +57,7 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.Monsters
                 .Where(g => g.GroupId == groupId && g.Dead != null)
+                .OrderByDescending(d => d.Dead)
                 .Skip(startIndex)
                 .Take(count)
                 .ToListAsync();
