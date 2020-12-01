@@ -237,6 +237,7 @@ namespace Naheulbook.Core.Services
                     monster.LootId = monster.Group.CombatLootId.Value;
 
                     var notificationSession = _notificationSessionFactory.CreateSession();
+                    notificationSession.NotifyGroupKillMonster(monster);
                     notificationSession.NotifyLootAddMonster(monster.LootId.Value, monster);
                     await notificationSession.CommitAsync();
                 }

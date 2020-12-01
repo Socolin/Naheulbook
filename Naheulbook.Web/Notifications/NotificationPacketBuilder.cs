@@ -268,6 +268,11 @@ namespace Naheulbook.Web.Notifications
             return BuildGroupChange(groupId, "addMonster", _mapper.Map<MonsterResponse>(monster));
         }
 
+        public INotificationPacket BuildGroupKillMonster(int groupId, int monsterId)
+        {
+            return BuildGroupChange(groupId, "killMonster", monsterId);
+        }
+
         public INotificationPacket BuildLootUpdateVisibility(int lootId, bool visibleForPlayer)
         {
             return BuildLootChange(lootId, "updateVisibility", visibleForPlayer);
