@@ -808,6 +808,14 @@ export class Group extends WsRegistrable {
                 this.onCancelInvite(data);
                 break;
             }
+            case 'addMonster': {
+                // FIXME: implements if needed at some point (this opcode is used for foundry)
+                break;
+            }
+            case 'killMonster': {
+                // FIXME: implements if needed at some point (this opcode is used for foundry)
+                break;
+            }
             default: {
                 console.warn('Opcode not handle: `' + opcode + '`');
                 break;
