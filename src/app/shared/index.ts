@@ -7,6 +7,8 @@ export * from './stat-modifier.model';
 export * from './stat-requirement.model';
 export * from './stat.model';
 
+export * from './token-colors';
+
 export * from './remove_diacritics';
 export * from './random';
 export * from './scroll';

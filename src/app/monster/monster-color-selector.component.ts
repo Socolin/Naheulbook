@@ -1,6 +1,7 @@
 import {EventEmitter, Component, Input, Output} from '@angular/core';
 
 import {Monster} from './monster.model';
+import {tokenColors} from '../shared';
 
 @Component({
     selector: 'monster-color-selector',
@@ -14,11 +15,7 @@ export class MonsterColorSelectorComponent {
     @Output() fontSize = '48px';
 
     public showSelector = false;
-    public colors: string[] = [
-        'ffcc00', 'ff6600', '990033', 'ff99ff',
-        '660066', '0066ff', '00802b', '666666',
-        '000000', 'dddddd'
-    ].map(color => '#' + color);
+    public colors: string[] = tokenColors.map(color => '#' + color);
     public numbers: number[];
 
     constructor() {
