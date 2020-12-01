@@ -6,6 +6,11 @@
         <mat-checkbox [(ngModel)]="config.allowPlayersToSeeSkillGmDetails">Voir les détails MJ sur les compétences</mat-checkbox>
         <mat-checkbox [(ngModel)]="config.allowPlayersToSeeGemPriceWhenIdentified">Voir le prix des gemmes identifiées</mat-checkbox>
     </div>
+    Lors de la création d'un monstre
+    <div class="configs">
+        <mat-checkbox [(ngModel)]="config.autoIncrementMonsterNumber">Incrémenter le numéro du monstre</mat-checkbox>
+        <mat-checkbox [(ngModel)]="config.autoIncrementMonsterColor">Changer la couleur du monstre</mat-checkbox>
+    </div>
 </mat-dialog-content>
 <mat-card-actions align="end">
     <button mat-button

@@ -9,7 +9,7 @@ import {Loot} from '../loot';
 import {NEvent} from '../event';
 import {date2Timestamp} from '../date/util';
 import {TargetJsonData} from './target.model';
-import {FighterDurationChanges} from '../shared';
+import {FighterDurationChanges, tokenColors} from '../shared';
 import {DeleteInviteResponse, GroupResponse, NpcResponse} from '../api/responses';
 import {IGroupConfig, IGroupData, INpcData} from '../api/shared';
 
@@ -244,12 +244,16 @@ export class GroupConfig implements IGroupConfig {
     public allowPlayersToSeeSkillGmDetails: boolean;
     public allowPlayersToAddObject: boolean;
     public allowPlayersToSeeGemPriceWhenIdentified: boolean;
+    public autoIncrementMonsterNumber: boolean;
+    public autoIncrementMonsterColor: boolean;
 
     static fromResponse(response: IGroupConfig): GroupConfig {
         const groupConfig = new GroupConfig();
         groupConfig.allowPlayersToAddObject = response.allowPlayersToAddObject;
         groupConfig.allowPlayersToSeeSkillGmDetails = response.allowPlayersToSeeSkillGmDetails;
         groupConfig.allowPlayersToSeeGemPriceWhenIdentified = response.allowPlayersToSeeGemPriceWhenIdentified;
+        groupConfig.autoIncrementMonsterNumber = response.autoIncrementMonsterNumber;
+        groupConfig.autoIncrementMonsterColor = response.autoIncrementMonsterColor;
         return groupConfig;
     }
 }
@@ -874,6 +878,86 @@ export class Group extends WsRegistrable {
 
     private updateConfig(config: GroupConfig) {
         this.config = config;
+    }
+
+    getColorAndNumberForNewMonster(previousMonster?: Monster): [string, number] {
+        if (!previousMonster && this.monsters.length) {
+            previousMonster = this.monsters[this.monsters.length - 1];
+        }
+        if (!previousMonster) {
+            if (this.config.autoIncrementMonsterNumber) {
+                return ['000000', 1];
+            }
+            return ['000000', 0];
+        }
+
+        if (this.config.autoIncrementMonsterNumber && this.config.autoIncrementMonsterColor) {
+            return this.getNextFreeMonsterColorAndNumber(previousMonster.data.color, previousMonster.data.number);
+        }
+        else if (this.config.autoIncrementMonsterNumber) {
+            const number = this.getNextFreeMonsterNumber(previousMonster.data.color, previousMonster.data.number);
+            return [previousMonster?.data?.color || '000000', number];
+        }
+        else if (this.config.autoIncrementMonsterNumber) {
+            return [this.getNextFreeMonsterColor(previousMonster.data.color), 0];
+        }
+        return [previousMonster?.data?.color || '000000', previousMonster?.data?.number || 0];
+    }
+
+
+    private getNextFreeMonsterNumber(color: string, fromNumber: number): number {
+        let monstersSameColor = this.monsters.filter(x => x.data.color === color);
+        for (let i = 1; i < 12; i++) {
+            let number = ((fromNumber + i) % 12)
+            if (number === 0) {
+                continue;
+            }
+            if (monstersSameColor.find(m => m.data.number === number)) {
+                continue
+            }
+            return number;
+        }
+        return 0;
+    }
+
+    private getNextFreeMonsterColorAndNumber(fromColor: string, fromNumber: number): [string, number] {
+        let currentColorIndex = tokenColors.indexOf(fromColor);
+        if (currentColorIndex === -1) {
+            currentColorIndex = 0;
+        }
+
+        for (let c = 0; c < tokenColors.length; c++) {
+            let color = tokenColors[(c + currentColorIndex) % tokenColors.length];
+            for (let i = 0; i < 12; i++) {
+                let number = ((fromNumber + i) % 12)
+                if (number === 0) {
+                    break;
+                }
+                if (this.monsters.find(x => x.data.color === color && x.data.number === number)) {
+                    continue;
+                }
+                return [color, number];
+            }
+            fromNumber = 1;
+        }
+
+        return [tokenColors[tokenColors.length - 1], 0];
+    }
+
+    private getNextFreeMonsterColor(fromColor: string): string {
+        let currentColorIndex = tokenColors.indexOf(fromColor);
+        if (currentColorIndex === -1) {
+            currentColorIndex = 0;
+        }
+        for (let c = 0; c < tokenColors.length; c++) {
+            let color = tokenColors[(c + currentColorIndex) % tokenColors.length];
+
+            if (this.monsters.find(x => x.data.color === color)) {
+                continue;
+            }
+            return color;
+        }
+        return '000000';
     }
 }
 

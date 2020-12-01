@@ -69,6 +69,11 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
                 items: items.map(i => ({itemTemplateId: i.template.id, itemData: i.data})),
                 data: monsterData
             } as CreateMonsterRequest;
+
+            const [color, number] = this.group.getColorAndNumberForNewMonster();
+            request.data.number = number;
+            request.data.color = color;
+
             this.monsterService.createMonster(this.group.id, request).subscribe(
                 monster => {
                     this.group.addMonster(monster);
