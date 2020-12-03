@@ -241,7 +241,9 @@ Feature: Character
             "config": {
               "allowPlayersToAddObject": true,
               "allowPlayersToSeeGemPriceWhenIdentified": false,
-              "allowPlayersToSeeSkillGmDetails": false
+              "allowPlayersToSeeSkillGmDetails": false,
+              "autoIncrementMonsterColor": true,
+              "autoIncrementMonsterNumber": true
             }}
           }
         ],
@@ -304,7 +306,9 @@ Feature: Character
           "config": {
             "allowPlayersToAddObject": true,
             "allowPlayersToSeeGemPriceWhenIdentified": false,
-            "allowPlayersToSeeSkillGmDetails": false
+            "allowPlayersToSeeSkillGmDetails": false,
+            "autoIncrementMonsterColor": true,
+            "autoIncrementMonsterNumber": true
           }
         }
     }

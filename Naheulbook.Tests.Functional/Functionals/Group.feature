@@ -21,7 +21,9 @@ Feature: Group
       "config": {
         "allowPlayersToAddObject": true,
         "allowPlayersToSeeGemPriceWhenIdentified": false,
-        "allowPlayersToSeeSkillGmDetails": false
+        "allowPlayersToSeeSkillGmDetails": false,
+        "autoIncrementMonsterColor": true,
+        "autoIncrementMonsterNumber": true
       }
     }
     """
@@ -67,7 +69,9 @@ Feature: Group
       "config": {
         "allowPlayersToAddObject": true,
         "allowPlayersToSeeGemPriceWhenIdentified": false,
-        "allowPlayersToSeeSkillGmDetails": false
+        "allowPlayersToSeeSkillGmDetails": false,
+        "autoIncrementMonsterColor": true,
+        "autoIncrementMonsterNumber": true
       },
       "invites": [
         {
@@ -160,7 +164,9 @@ Feature: Group
         "config": {
           "allowPlayersToAddObject": true,
           "allowPlayersToSeeGemPriceWhenIdentified": false,
-          "allowPlayersToSeeSkillGmDetails": false
+          "allowPlayersToSeeSkillGmDetails": false,
+          "autoIncrementMonsterColor": true,
+          "autoIncrementMonsterNumber": true
         }
       },
       "fromGroup": true
