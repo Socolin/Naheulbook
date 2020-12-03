@@ -49,7 +49,7 @@ namespace Naheulbook.Tests.Functional.Code.Init
 
 
             var dbContextOptions = new DbContextOptionsBuilder<DbContext>()
-                .UseMySql(DefaultTestConfigurations.NaheulbookTestConnectionString, ServerVersion.AutoDetect(DefaultTestConfigurations.NaheulbookTestConnectionString))
+                .UseMySql(DefaultTestConfigurations.NaheulbookTestConnectionString, ServerVersion.AutoDetect(DefaultTestConfigurations.NaheulbookTestConnectionString), builder => builder.EnableRetryOnFailure())
                 .Options;
 
             DropAllTables(dbContextOptions);
@@ -96,7 +96,7 @@ namespace Naheulbook.Tests.Functional.Code.Init
         public void InitializeIoc()
         {
             var dbContextOptions = new DbContextOptionsBuilder<NaheulbookDbContext>()
-                .UseMySql(DefaultTestConfigurations.NaheulbookTestConnectionString, ServerVersion.AutoDetect(DefaultTestConfigurations.NaheulbookTestConnectionString))
+                .UseMySql(DefaultTestConfigurations.NaheulbookTestConnectionString, ServerVersion.AutoDetect(DefaultTestConfigurations.NaheulbookTestConnectionString), builder => builder.EnableRetryOnFailure())
                 .Options;
             _objectContainer.RegisterInstanceAs(dbContextOptions);
         }

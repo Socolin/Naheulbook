@@ -29,7 +29,7 @@ namespace Naheulbook.Data.Tests.Integration
             const string connectionString = "Server=127.0.0.1;Database=naheulbook_integration;User=naheulbook;Password=naheulbook;SslMode=None";
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
                 .EnableSensitiveDataLogging()
-                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), builder => builder.EnableRetryOnFailure());
 
             if (logSqlQueries)
             {

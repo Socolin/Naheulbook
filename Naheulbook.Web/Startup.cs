@@ -56,7 +56,7 @@ namespace Naheulbook.Web
 
             var naheulbookDbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
                 .UseLoggerFactory(_loggerFactory)
-                .UseMySql(_configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(_configuration.GetConnectionString("DefaultConnection")));
+                .UseMySql(_configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(_configuration.GetConnectionString("DefaultConnection")), builder => builder.EnableRetryOnFailure());
             if (_environment.IsDevelopment())
             {
                 naheulbookDbContextOptionsBuilder.EnableSensitiveDataLogging();
