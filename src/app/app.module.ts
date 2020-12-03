@@ -12,7 +12,6 @@ import {HomeModule} from './home/home.module';
 import {UserModule} from './user/user.module';
 import {NhbkErrorHandler} from './nhbk-error-handler';
 
-import 'hammerjs';
 import {CustomHammerConfig} from './hammer-js-config';
 import {ThemeService} from './theme.service';
 import {ErrorReportService} from './error-report.service';

@@ -16,7 +16,7 @@
     </mat-menu>
     <mat-card-content>
         <div *ngIf="monsterTemplate.data.special">{{monsterTemplate.data.note}}</div>
-        <ng-template ngIf [ngIf]="!monsterTemplate.data.special">
+        <ng-container *ngIf="!monsterTemplate.data.special">
             <div class="section-title">
                 Caractéristiques
             </div>
@@ -56,21 +56,21 @@
                     <span class="value">{{monsterTemplate.data.xp}}</span>
                 </div>
             </div>
-            <ng-template ngIf [ngIf]="monsterTemplate.data.dmg">
+            <ng-container *ngIf="monsterTemplate.data.dmg">
                 <div class="section-title">
                     Dégât
                 </div>
                 <div class="section-content">{{monsterTemplate.data.dmg}}</div>
-            </ng-template>
-            <ng-template ngIf [ngIf]="monsterTemplate.data.note">
+            </ng-container>
+            <ng-container *ngIf="monsterTemplate.data.note">
                 <div class="section-title">
                     Note
                 </div>
                 <div class="section-content">{{monsterTemplate.data.note}}</div>
-            </ng-template>
-        </ng-template>
+            </ng-container>
+        </ng-container>
 
-        <ng-template ngIf [ngIf]="traisById && monsterTemplate.data.traits && monsterTemplate.data.traits.length">
+        <ng-template *ngIf="traisById && monsterTemplate.data.traits && monsterTemplate.data.traits.length">
             <div class="section-title">
                 Traits
             </div>

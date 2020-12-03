@@ -22,9 +22,9 @@
     </mat-form-field>
 </div>
 <div class="monster-templates">
-    <ng-template ngIf [ngIf]="selectedMonsterSubCategory">
+    <ng-container *ngIf="selectedMonsterSubCategory">
         <div *ngFor="let monster of monsterBySubCategory[selectedMonsterSubCategory.id]">
             <monster-template (edit)="editMonster($event)" [isAdmin]="isAdmin" [monsterTemplate]="monster"></monster-template>
         </div>
-    </ng-template>
+    </ng-container>
 </div>

@@ -3,11 +3,11 @@
     <div class="description">
         {{data.trait.description}}
     </div>
-    <ng-template ngIf [ngIf]="data.trait.levels">
+    <ng-container *ngIf="data.trait.levels">
         <ul *ngFor="let level of data.trait.levels">
             <li>{{level}}</li>
         </ul>
-    </ng-template>
+    </ng-container>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close
