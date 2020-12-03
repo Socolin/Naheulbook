@@ -19,6 +19,7 @@ import {
     StatModifierAdvancedDialogComponent,
     StatModifierEditorComponent,
 } from './';
+import {MarkdownModule} from '../markdown/markdown.module';
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import {
         SharedModule,
         DateModule,
         ReactiveFormsModule,
+        MarkdownModule,
     ],
     declarations: [
         ActiveEffectEditorComponent,

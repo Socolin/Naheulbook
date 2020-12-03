@@ -26,8 +26,7 @@
 
 <mat-card *ngIf="selectedSubCategory && (editable || selectedSubCategory.note)">
     <mat-card-subtitle>Note</mat-card-subtitle>
-    <mat-card-content>
-        {{selectedSubCategory.note}}
+    <mat-card-content [innerHTML]="selectedSubCategory.note | markdown">
     </mat-card-content>
 </mat-card>
 
@@ -63,9 +62,7 @@
             </mat-menu>
         </mat-card-header>
         <mat-card-content>
-            <p class="mat-body">
-                {{effect.description}}
-            </p>
+            <p class="mat-body" [innerHTML]="effect.description | markdown"></p>
             <div class="duration" *ngIf="effect.duration">
                 <mat-icon>timelapse</mat-icon>
                 {{effect.duration}}
