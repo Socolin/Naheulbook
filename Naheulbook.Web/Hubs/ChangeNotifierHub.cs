@@ -72,6 +72,14 @@ namespace Naheulbook.Web.Hubs
             {
                 throw new HubException("Access to this resources is forbidden", ex);
             }
+            catch (LootNotFoundException ex)
+            {
+                throw new HubException("Loot not found", ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HubException("Group not found", ex);
+            }
 
             await Groups.AddToGroupAsync(Context.ConnectionId, _hubGroupUtil.GetLootGroupName(lootId));
         }
@@ -86,6 +94,14 @@ namespace Naheulbook.Web.Hubs
             catch (ForbiddenAccessException ex)
             {
                 throw new HubException("Access to this resources is forbidden", ex);
+            }
+            catch (MonsterNotFoundException ex)
+            {
+                throw new HubException("Monster not found", ex);
+            }
+            catch (GroupNotFoundException ex)
+            {
+                throw new HubException("Group not found", ex);
             }
 
             await Groups.AddToGroupAsync(Context.ConnectionId, _hubGroupUtil.GetMonsterGroupName(monsterId));
