@@ -25,7 +25,7 @@ import {QuickCommandModule} from './quick-command/quick-command.module';
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
-        RouterModule.forRoot(routes),
+        RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
         NhbkMaterialModule,
         HttpClientModule,
         HomeModule,
