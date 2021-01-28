@@ -22,10 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Functionals/*.feature" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
         <ProjectReference Include="..\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" />
         <ProjectReference Include="..\Naheulbook.Web\Naheulbook.Web.csproj" />
