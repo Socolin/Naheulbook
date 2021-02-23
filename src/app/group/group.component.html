@@ -366,6 +366,7 @@
             </button>
             <button mat-button
                     color="primary"
+                    [disabled]="!selectedInviteCharacter"
                     (click)="inviteCharacter(selectedInviteCharacter)">
                 INVITER
             </button>

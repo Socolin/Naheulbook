@@ -86,7 +86,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     public inviteCharacterOverlayRef: OverlayRef;
     public searchNameInvite: string;
     public filteredInvitePlayers: CharacterSearchResponse[] = [];
-    public selectedInviteCharacter: Character;
+    public selectedInviteCharacter?: Character;
 
     private charactersSubscriptions: { [characterId: number]: { notification: Subscription } } = {};
     private addedCharacterSub: Subscription;
@@ -288,7 +288,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    inviteCharacter(character) {
+    inviteCharacter(character: {id: number}) {
         this.closeInviteCharacterModal();
         this.groupService.inviteCharacter(this.group.id, character.id).subscribe(
             res => {
