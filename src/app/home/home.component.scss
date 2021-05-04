@@ -10,4 +10,12 @@
 .summary {
     max-width: 700px;
     text-align: justify;
+
+    .discord-info {
+        display: flex;
+        align-items: center;
+        .channel {
+            font-family: monospace;
+        }
+    }
 }
