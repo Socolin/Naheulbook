@@ -32,6 +32,17 @@ export class ItemTemplateSection {
     static fromResponses(responses: ItemTemplateSectionResponse[]): ItemTemplateSection[] {
         return responses.map(response => ItemTemplateSection.fromResponse(response));
     }
+
+    public cloneFilterSubCategories(filter: (subCategory: ItemTemplateSubCategory) => boolean): ItemTemplateSection {
+        let itemSection = new ItemTemplateSection();
+        itemSection.id = this.id;
+        itemSection.name = this.name;
+        itemSection.note = this.note;
+        itemSection.specials = this.specials;
+        itemSection.icon = this.icon;
+        itemSection.subCategories = this.subCategories.filter(filter);
+        return itemSection;
+    }
 }
 
 export type ItemTemplateSubCategoryDictionary = { [subCategoryId: number]: ItemTemplateSubCategory };

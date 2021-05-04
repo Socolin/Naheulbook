@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {NhbkMaterialModule} from '../nhbk-material.module';
 import {ActionModule} from '../action/action.module';
@@ -30,6 +30,7 @@ import { ItemTemplateDataProtectionPipe } from './item-template-data-protection.
         CommonModule,
         FormsModule,
         NhbkMaterialModule,
+        ReactiveFormsModule,
         SharedModule,
         SkillModule,
         DateModule,

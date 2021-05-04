@@ -27,24 +27,27 @@
 </mat-card>
 <mat-card class="section-selector">
     <mat-form-field class="category">
-        <mat-select [ngModel]="selectedSection"
-                    (selectionChange)="selectSection($event.value)"
-                    placeholder="Section">
-            <mat-option *ngFor="let category of itemSections" [value]="category">
-                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + category.icon"
-                          class="ra-mat-button-icon-24"></mat-icon>
-                {{category.name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field *ngIf="selectedSection" class="sub-category">
-        <mat-select [ngModel]="selectedItemSubCategory"
-                    (selectionChange)="selectSubCategory($event.value)"
-                    placeholder="Sous-section">
-            <mat-option *ngFor="let subCategory of selectedSection.subCategories" [value]="subCategory">
-                {{subCategory.name}}
-            </mat-option>
-        </mat-select>
+        <input type="text"
+               matInput
+               [formControl]="categoryNameControl"
+               placeholder="Catégorie"
+               required
+               [matAutocomplete]="autoCompleteCategory">
+
+        <mat-autocomplete #autoCompleteCategory="matAutocomplete" [displayWith]="getSubCategoryName"
+                          (optionSelected)="selectSubCategory($event.option.value, false)">
+            <mat-optgroup *ngFor="let category of filteredItemCategories | async">
+                <div>
+                    <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + category.icon"
+                              class="ra-mat-button-icon-24"></mat-icon>
+                    {{category.name}}
+                </div>
+
+                <mat-option *ngFor="let subCategory of category.subCategories" [value]="subCategory">
+                    {{subCategory.name}}
+                </mat-option>
+            </mat-optgroup>
+        </mat-autocomplete>
     </mat-form-field>
 </mat-card>
 

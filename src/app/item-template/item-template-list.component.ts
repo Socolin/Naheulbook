@@ -1,4 +1,4 @@
-import {forkJoin, Subscription} from 'rxjs';
+import {forkJoin, Observable, Subscription} from 'rxjs';
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Overlay} from '@angular/cdk/overlay';
@@ -17,6 +17,8 @@ import {NhbkMatDialog} from '../material-workaround';
 import {Guid} from '../api/shared/util';
 import {EditItemTemplateDialogComponent, EditItemTemplateDialogData} from './edit-item-template-dialog.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
     selector: 'item-template-list',
@@ -58,9 +60,13 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     public tableView: boolean;
     public showCommunityItems: boolean;
 
+    public categoryNameControl = new FormControl();
+    public filteredItemCategories: Observable<ItemTemplateSection[]>;
+
     constructor(
         public readonly loginService: LoginService,
         private readonly dialog: NhbkMatDialog,
+        private readonly formBuilder: FormBuilder,
         private readonly itemTemplateService: ItemTemplateService,
         private readonly jobService: JobService,
         private readonly miscService: MiscService,
@@ -220,16 +226,17 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         });
     }
 
-    selectSubCategory(itemSubCategory: ItemTemplateSubCategory) {
+    selectSubCategory(itemSubCategory: ItemTemplateSubCategory, scrollToFirstItem = false) {
         if (!this.selectedSection) {
             return;
         }
+        this.selectSection(itemSubCategory.section);
         this.selectedItemSubCategory = itemSubCategory;
         this.updateNextAndPreviousSubCategory();
         this.updateVisibleItems();
 
         const firstItem = document.getElementById('first-item');
-        if (firstItem) {
+        if (scrollToFirstItem && firstItem) {
             firstItem.scrollIntoView();
         }
         this.updateUrl();
@@ -322,6 +329,10 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         });
     }
 
+    getSubCategoryName(subCategory?: ItemTemplateSubCategory) {
+        return subCategory?.name;
+    };
+
     private reloadCategory(category: ItemTemplateSection) {
         this.itemTemplateService.clearItemSectionCache(category.id);
         this.loadSection(category);
@@ -349,6 +360,11 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
                     this.selectSectionById(+params.get('categoryId')!);
                 }
             });
+            this.filteredItemCategories = this.categoryNameControl.valueChanges
+                .pipe(
+                    startWith(''),
+                    map(value => this.filterItemCategories(value))
+                )
         });
     }
 
@@ -371,6 +387,25 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
             }
             this.reloadSectionForItem(result);
         });
+    }
+
+    private filterItemCategories(value: string | ItemTemplateSubCategory): ItemTemplateSection[] {
+        if (value) {
+            let cleanedValue: string;
+            if (typeof value === 'string') {
+                cleanedValue = removeDiacritics(value.toLowerCase());
+            } else {
+                cleanedValue = removeDiacritics(value.name.toLowerCase());
+            }
+
+            return this.itemSections
+                .map(category => category.cloneFilterSubCategories(
+                    (s => removeDiacritics(s.name.toLowerCase()).indexOf(cleanedValue) !== -1))
+                )
+                .filter(group => group.subCategories.length > 0);
+
+        }
+        return this.itemSections;
     }
 }
 

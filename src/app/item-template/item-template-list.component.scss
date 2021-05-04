@@ -44,24 +44,9 @@
 
     .section-selector {
         padding-top: 20px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas: "category sub-category";
-        gap: 8px;
-
-        @include for-phone-only {
-            grid-template-columns: 1fr;
-            grid-template-areas: "category" "sub-category";
+        mat-form-field {
+            width: 100%;
         }
-
-        .category {
-            grid-area: category;
-        }
-
-        .sub-category {
-            grid-area: sub-category;
-        }
-
     }
 
     .items-table {
