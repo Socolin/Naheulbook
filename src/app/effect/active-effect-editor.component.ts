@@ -34,9 +34,6 @@ export class ActiveEffectEditorComponent implements DoCheck {
 
     updateEffectListAutocomplete(filter: string): Observable<AutocompleteValue[]> {
         this.effectFilterName = filter;
-        if (filter === '') {
-            return observableFrom([]);
-        }
         return this.effectService.searchEffect(filter).pipe(map(
             list => list.map(e => new AutocompleteValue(e, e.subCategory.name + ': ' + e.name))
         ));

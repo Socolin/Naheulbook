@@ -1,4 +1,4 @@
-import {forkJoin, Observable, ReplaySubject} from 'rxjs';
+import {forkJoin, from as observableFrom, Observable, ReplaySubject} from 'rxjs';
 
 import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
@@ -98,6 +98,9 @@ export class EffectService {
     }
 
     searchEffect(filter: string): Observable<Effect[]> {
+        if (filter === '') {
+            return observableFrom([]);
+        }
         return forkJoin([
             this.getEffectSubCategoriesById(),
             this.httpClient.get<EffectResponse[]>('/api/v2/effects/search?filter=' + encodeURIComponent(filter))
