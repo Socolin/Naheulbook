@@ -19,6 +19,7 @@ import {
 import { SelectMonsterTraitsDialogComponent } from './select-monster-traits-dialog.component';
 import { MonsterTraitDialogComponent } from './monster-trait-dialog.component';
 import { MonstersDialogComponent } from './monsters-dialog.component';
+import {MarkdownModule} from '../markdown/markdown.module';
 
 @NgModule({
     imports: [
@@ -27,7 +28,8 @@ import { MonstersDialogComponent } from './monsters-dialog.component';
         SharedModule,
         NhbkMaterialModule,
         ItemTemplateModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MarkdownModule
     ],
     declarations: [
         AddMonsterItemDialogComponent,

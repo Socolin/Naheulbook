@@ -186,7 +186,8 @@
         </div>
     </div>
     <div class="note" *ngIf="(expandedView || moreInfo) && fighter.isMonster && fighter.monster.data.note">
-        Note: {{fighter.monster.data.note}}
+        <span>Note:</span>
+        <span [innerHTML]="fighter.monster.data.note | markdown"></span>
     </div>
     <div *ngIf="!expandedView" class="expd" matRipple (click)="toggleMoreInfo()">
         <mat-icon *ngIf="!moreInfo">keyboard_arrow_down</mat-icon>
