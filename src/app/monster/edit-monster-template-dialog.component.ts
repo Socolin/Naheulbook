@@ -50,6 +50,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
             xp: new FormControl(),
             note: new FormControl(),
             sex: new FormControl(),
+            page: new FormControl()
         })
     });
 
