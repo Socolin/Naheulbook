@@ -36,7 +36,7 @@ namespace Naheulbook.Tests.Functional.Code.Init
                     })
                 .AddLogging(lb => lb
                     .AddFluentMigratorConsole()
-                    .Services.AddSingleton<ILoggerProvider>((services) => new FluentMigratorFileLoggerProvider("/tmp/fluentmigrator.log", services.GetService<IOptions<FluentMigratorLoggerOptions>>()))
+                    .Services.AddSingleton<ILoggerProvider>(services => new FluentMigratorFileLoggerProvider("/tmp/fluentmigrator.log", services.GetService<IOptions<FluentMigratorLoggerOptions>>()))
                 )
                 .AddFluentMigratorCore()
                 .ConfigureRunner(

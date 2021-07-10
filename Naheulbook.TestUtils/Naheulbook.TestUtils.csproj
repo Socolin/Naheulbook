@@ -12,5 +12,6 @@
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="10.1.1" />
       <PackageReference Include="FluentAssertions" Version="5.10.3" />
+      <PackageReference Include="JUnitTestLogger4GitHub" Version="1.1.1" />
     </ItemGroup>
 </Project>

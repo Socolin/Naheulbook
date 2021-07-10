@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Naheulbook.Data.DbContexts;
@@ -26,7 +27,12 @@ namespace Naheulbook.Data.Tests.Integration
 
         public static DbContextOptions<NaheulbookDbContext> GetDbContextOptions(bool logSqlQueries = false)
         {
-            const string connectionString = "Server=127.0.0.1;Database=naheulbook_integration;User=naheulbook;Password=naheulbook;SslMode=None";
+            var connectionString = $"Server={Environment.GetEnvironmentVariable("MYSQL_HOST") ?? "localhost"};" +
+                                   $"Port={Environment.GetEnvironmentVariable("MYSQL_PORT") ?? "3306"};" +
+                                   "Database=naheulbook_integration;" +
+                                   "User=naheulbook;" +
+                                   "Password=naheulbook;" +
+                                   "SslMode=None";
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
                 .EnableSensitiveDataLogging()
                 .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), builder => builder.EnableRetryOnFailure());
