@@ -41,7 +41,7 @@ namespace Naheulbook.Shared.Clients.MicrosoftGraph
 
             using (var client = new HttpClient())
             {
-                using (var response = await client.PostAsync(TokenApiRequestUri, new FormUrlEncodedContent(requestArgs)))
+                using (var response = await client.PostAsync(TokenApiRequestUri, new FormUrlEncodedContent(requestArgs!)))
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     if (!response.IsSuccessStatusCode)
