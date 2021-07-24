@@ -78,7 +78,7 @@
                         <div *ngFor="let characterId of group.characterIdWithShownItem">
                             <h3 class="mat-h3">{{group.charactersById[characterId].name}}</h3>
                             <app-item-list [items]="group.charactersById[characterId].computedData.shownItemsToGm"
-                                           [actions]="['identify','hide']"
+                                           [actions]="['identify','hide','rename']"
                                            (hideItems)="removeItemsFromShownList($event)"
                                            (selectItem)="openItemDialog($event)">
                             </app-item-list>
