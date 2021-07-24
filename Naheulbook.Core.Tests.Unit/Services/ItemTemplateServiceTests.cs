@@ -271,7 +271,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
                 .Returns(new List<ItemTemplate> {new ItemTemplate()});
 
-            await _service.SearchItemTemplateAsync("some-filter", 40, null);
+            await _service.SearchItemTemplateAsync("some-filter", 10, null);
 
             await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByCleanNameWithAllDataAsync(Arg.Any<string>(), 10, Arg.Any<int?>(), Arg.Any<bool>());
             await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByPartialCleanNameWithAllDataAsync(Arg.Any<string>(), 8, Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>());
