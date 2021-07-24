@@ -74,7 +74,7 @@ namespace Naheulbook.Web.Controllers
             [FromQuery] string filter
         )
         {
-            var itemTemplates= await _itemTemplateService.SearchItemTemplateAsync(filter, 10, executionContext.ExecutionExecutionContext?.UserId);
+            var itemTemplates= await _itemTemplateService.SearchItemTemplateAsync(filter, 40, executionContext.ExecutionExecutionContext?.UserId);
             return _mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
         }
 

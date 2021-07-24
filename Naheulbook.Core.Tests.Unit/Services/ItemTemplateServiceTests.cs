@@ -252,7 +252,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(cleanFilterWithoutSeparator, Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
                 .Returns(new List<ItemTemplate> {item3});
 
-            var actualItemTemplates = await _service.SearchItemTemplateAsync(filter, 10, null);
+            var actualItemTemplates = await _service.SearchItemTemplateAsync(filter, 40, null);
 
             actualItemTemplates.Should().BeEquivalentTo(item1, item2, item3);
         }
@@ -271,7 +271,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
                 .Returns(new List<ItemTemplate> {new ItemTemplate()});
 
-            await _service.SearchItemTemplateAsync("some-filter", 10, null);
+            await _service.SearchItemTemplateAsync("some-filter", 40, null);
 
             await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByCleanNameWithAllDataAsync(Arg.Any<string>(), 10, Arg.Any<int?>(), Arg.Any<bool>());
             await _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.Received(1).GetItemByPartialCleanNameWithAllDataAsync(Arg.Any<string>(), 8, Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>());
