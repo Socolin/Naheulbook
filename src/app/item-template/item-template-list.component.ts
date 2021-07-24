@@ -1,5 +1,5 @@
-import {forkJoin, Observable, Subscription} from 'rxjs';
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {forkJoin, Observable, of, Subject, Subscription} from 'rxjs';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Overlay} from '@angular/cdk/overlay';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -18,7 +18,7 @@ import {Guid} from '../api/shared/util';
 import {EditItemTemplateDialogComponent, EditItemTemplateDialogData} from './edit-item-template-dialog.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {map, startWith} from 'rxjs/operators';
+import {debounceTime, map, startWith, switchMap, tap} from 'rxjs/operators';
 
 @Component({
     selector: 'item-template-list',
@@ -48,6 +48,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     public previousSubCategory?: ItemTemplateSubCategory;
     public nextSubCategory?: ItemTemplateSubCategory;
     public items: ItemTemplate[] = [];
+    public searchItems?: ItemTemplate[];
     public selectedSection?: ItemTemplateSection;
     public originsName: { [originId: string]: string };
     public jobsName: { [jobId: string]: string };
@@ -55,13 +56,18 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
 
     public queryParamsSub: Subscription;
 
-    public filter: { name?: string, dice?: number };
     public visibleItems: ItemTemplate[] = [];
     public tableView: boolean;
     public showCommunityItems: boolean;
 
     public categoryNameControl = new FormControl();
     public filteredItemCategories: Observable<ItemTemplateSection[]>;
+
+    public searching: boolean;
+    public searchSubject: Subject<string> = new Subject<string>();
+
+    @ViewChild('searchInput', {static: true})
+    private searchInputElement: ElementRef<HTMLInputElement>;
 
     constructor(
         public readonly loginService: LoginService,
@@ -76,26 +82,34 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         private readonly router: Router,
         private readonly breakpointObserver: BreakpointObserver,
     ) {
-        this.resetFilter();
-    }
-
-    resetNameFilter() {
-        this.filter.name = undefined;
-        this.updateVisibleItems();
+        this.searchSubject
+            .pipe(
+                debounceTime(200),
+                tap(() => this.searching = true),
+                switchMap(filter => {
+                    if (!filter) {
+                        return of<ItemTemplate[] | undefined>(undefined);
+                    }
+                    return this.itemTemplateService.searchItem(filter)
+                })
+            )
+            .subscribe({
+                next: items => {
+                    if (items === undefined) {
+                        this.searchItems = undefined;
+                        this.updateVisibleItems();
+                    }
+                    this.searchItems = items;
+                    this.updateVisibleItems();
+                    this.searching = false;
+                }, error: () => {
+                    this.searching = false;
+                }
+            })
     }
 
     updateViewCommunityItems(checked: boolean) {
         this.showCommunityItems = checked;
-        this.updateVisibleItems();
-    }
-
-    resetDiceFilter() {
-        this.filter.dice = undefined;
-        this.updateVisibleItems();
-    }
-
-    resetFilter() {
-        this.filter = {name: undefined, dice: undefined};
         this.updateVisibleItems();
     }
 
@@ -113,18 +127,15 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         if (item.source === 'community' && !this.showCommunityItems) {
             return false;
         }
-        if (item.data.diceDrop && this.filter && this.filter.dice) {
-            return item.data.diceDrop === this.filter.dice;
-        }
-        if (this.filter && this.filter.name) {
-            let cleanFilter = removeDiacritics(this.filter.name).toLowerCase();
-            return removeDiacritics(item.name).toLowerCase().indexOf(cleanFilter) > -1;
-        }
         return true;
     }
 
     updateVisibleItems() {
-        this.visibleItems = this.items.filter(item => this.isVisible(item));
+        if (this.searchItems !== undefined) {
+            this.visibleItems = this.searchItems
+        } else {
+            this.visibleItems = this.items.filter(item => this.isVisible(item));
+        }
     }
 
     hasSpecial(token: string) {
@@ -184,22 +195,10 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         return undefined;
     }
 
-    selectItemTemplate(itemTemplate: ItemTemplate) {
-        let result = this.getSubCategoryFromId(itemTemplate.subCategoryId);
-        if (!result) {
-            return;
-        }
-        let [itemSection, itemSubCategory] = result;
-        this.selectSection(itemSection);
-        this.filter.name = itemTemplate.name;
-        this.selectedItemSubCategory = itemSubCategory;
-    }
-
     selectSectionById(sectionId: number) {
         if (this.selectedSection && this.selectedSection.id === sectionId) {
             return;
         }
-        this.resetFilter();
         let i = this.itemSections.findIndex(s => s.id === sectionId);
         if (i !== -1) {
             this.selectSection(this.itemSections[i]);
@@ -212,7 +211,6 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         } else {
             this.selectedSection = category;
             this.selectSubCategory(category.subCategories[0]);
-            this.resetFilter();
             this.loadSection(category);
         }
         return false;
@@ -233,6 +231,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
         this.selectSection(itemSubCategory.section);
         this.selectedItemSubCategory = itemSubCategory;
         this.updateNextAndPreviousSubCategory();
+        this.resetSearch();
         this.updateVisibleItems();
 
         const firstItem = document.getElementById('first-item');
@@ -240,6 +239,15 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
             firstItem.scrollIntoView();
         }
         this.updateUrl();
+    }
+
+    private resetSearch() {
+        this.searchItems = undefined;
+        this.searchInputElement.nativeElement.value = '';
+    }
+
+    updateAutocompleteItem(filter: string) {
+        this.searchSubject.next(filter);
     }
 
     private updateUrl() {

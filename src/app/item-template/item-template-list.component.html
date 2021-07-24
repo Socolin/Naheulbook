@@ -61,22 +61,23 @@
 
 <mat-card>
     <mat-card-content class="filters">
-        <autocomplete-search-item-template [clearOnSelect]=true (onSelect)="selectItemTemplate($event)" class="search">
-        </autocomplete-search-item-template>
-
-        <mat-form-field class="filter">
-            <input matInput placeholder="Filtre" [(ngModel)]="filter.name" (change)="updateVisibleItems()"/>
-            <button matSuffix mat-icon-button *ngIf="filter.name !== undefined" (click)="resetNameFilter()">
+        <mat-form-field class="search">
+            <input matInput #searchInput placeholder="Chercher un objet" (keyup)="updateAutocompleteItem(searchInput.value)"/>
+            <button matSuffix mat-icon-button *ngIf="searchInput.value !== ''" (click)="searchInput.value = ''; updateAutocompleteItem(searchInput.value)">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
+
+        <div class="search-loader">
+            <mat-spinner *ngIf="searching" diameter="24" color="accent"></mat-spinner>
+        </div>
 
         <mat-checkbox class="table-view" [(ngModel)]="tableView">Vue tableau</mat-checkbox>
         <mat-checkbox class="display-community" (change)="updateViewCommunityItems($event.checked)">Objets communautaires</mat-checkbox>
     </mat-card-content>
 </mat-card>
 
-<mat-card *ngIf="selectedItemSubCategory" class="panel panel-default">
+<mat-card *ngIf="selectedItemSubCategory && searchItems === undefined" class="panel panel-default">
     <mat-card-title>
         {{selectedItemSubCategory.name}}
     </mat-card-title>

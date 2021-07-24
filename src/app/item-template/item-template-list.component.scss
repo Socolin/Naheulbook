@@ -22,17 +22,15 @@
         display: grid;
         gap: 8px;
         align-items: center;
-        grid-template-columns: 1fr 1fr auto auto;
-        grid-template-areas: "search filter" "table-view display-community";
-        @include for-phone-only {
-            grid-template-columns: 1fr auto auto;
-            grid-template-areas: "search filter" "table-view display-community";
-        }
+        grid-template-columns: 1fr 32px 1fr 32px;
+        grid-template-areas:
+            "search search search search-loader"
+            "table-view table-view display-community display-community";
         .search {
             grid-area: search;
         }
-        .filter {
-            grid-area: filter;
+        .search-loader {
+            grid-area: search-loader;
         }
         .table-view {
             grid-area: table-view;
