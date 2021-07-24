@@ -101,19 +101,7 @@
 <!-- Prix/Charge/Durée -->
 <div class="icon-label" *ngIf="itemTemplate.data.price">
     <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-24"></mat-icon>
-    <div>
-        <ng-template [ngIf]="itemTemplate.data.price >= 1">
-            {{itemTemplate.data.price | number}} P.O.
-        </ng-template>
-
-        <ng-template [ngIf]="itemTemplate.data.price < 1 && itemTemplate.data.price >= 0.1">
-            {{itemTemplate.data.price * 10}} P.A.
-        </ng-template>
-
-        <ng-template [ngIf]="itemTemplate.data.price < 0.1">
-            {{itemTemplate.data.price * 100}} P.C.
-        </ng-template>
-    </div>
+    <div>{{itemTemplate.data.price | itemPrice}}</div>
 </div>
 
 <!-- Charge / Action -->

@@ -66,18 +66,7 @@
     <ng-container matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef>Prix</th>
         <td mat-cell *matCellDef="let itemTemplate" style="white-space: nowrap">
-            <ng-template [ngIf]="asItemTemplate(itemTemplate).data.price >= 1">
-                {{asItemTemplate(itemTemplate).data.price | number}} P.O.
-            </ng-template>
-
-            <ng-template
-                [ngIf]="asItemTemplate(itemTemplate).data.price < 1 && asItemTemplate(itemTemplate).data.price >= 0.1">
-                {{asItemTemplate(itemTemplate).data.price * 10}} P.A.
-            </ng-template>
-
-            <ng-template [ngIf]="asItemTemplate(itemTemplate).data.price < 0.1">
-                {{asItemTemplate(itemTemplate).data.price * 100}} P.C.
-            </ng-template>
+            {{asItemTemplate(itemTemplate).data.price | itemPrice}}
         </td>
     </ng-container>
 

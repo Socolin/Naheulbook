@@ -24,6 +24,7 @@ import {ItemTemplateDialogComponent} from './item-template-dialog.component';
 import {ItemTemplatesTableViewComponent} from './item-templates-table-view.component';
 import { ItemTemplateDetailsComponent } from './item-template-details.component';
 import { ItemTemplateDataProtectionPipe } from './item-template-data-protection.pipe';
+import { ItemPricePipe } from './item-price.pipe';
 
 @NgModule({
     imports: [
@@ -50,10 +51,12 @@ import { ItemTemplateDataProtectionPipe } from './item-template-data-protection.
         ItemTemplatesTableViewComponent,
         ItemTemplateDetailsComponent,
         ItemTemplateDataProtectionPipe,
+        ItemPricePipe,
     ],
     exports: [
         ItemTemplateListComponent,
         AutocompleteSearchItemTemplateComponent,
+        ItemPricePipe,
     ],
     providers: [
         ItemTemplateService,
