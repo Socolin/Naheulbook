@@ -45,6 +45,7 @@ import {
     SpecialitySelectorComponent,
     TakeLootDialogComponent,
 } from './';
+import { CombatTabComponent } from './combat-tab.component';
 
 @NgModule({
     imports: [
@@ -90,6 +91,7 @@ import {
         OriginPlayerDialogComponent,
         JobPlayerDialogComponent,
         LevelUpDialogComponent,
+        CombatTabComponent,
     ],
     exports: [
         CharacterColorSelectorComponent,

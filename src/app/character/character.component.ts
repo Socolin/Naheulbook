@@ -289,14 +289,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
         this.registerQuickActions();
     }
 
-    unEquipAllAndEquip(item: Item) {
-        for (const weaponItem of this.character.computedData.itemsBySlotsAll[1]) {
-            if (weaponItem.data.equiped) {
-                this.itemActionService.onAction('unequip', weaponItem);
-            }
-        }
-        this.itemActionService.onAction('equip', item)
-    }
 
     openLevelUpDialog() {
         const dialogRef = this.dialog.openFullScreen<LevelUpDialogComponent, LevelUpDialogData, LevelUpDialogResult>(
@@ -315,21 +307,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 this.character.onLevelUp(res[0], res[1]);
             });
         });
-    }
-
-    sharpenWeapon(item: Item): void {
-        let modifier = new ActiveStatsModifier();
-        modifier.durationType = 'combat';
-        modifier.combatCount = 3;
-        modifier.currentCombatCount = 3;
-        modifier.active = true;
-        modifier.name = 'Aiguisé';
-        modifier.values = [{
-            type: 'ADD',
-            stat: 'PI',
-            value: 1
-        }];
-        this.itemActionService.onAction('update_modifiers', item, [...item.modifiers, modifier]);
     }
 
     private unregisterQuickActions(): void {
