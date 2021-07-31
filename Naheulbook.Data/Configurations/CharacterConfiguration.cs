@@ -57,6 +57,10 @@ namespace Naheulbook.Data.Configurations
                 .IsRequired(false)
                 .HasColumnName("ea");
 
+            builder.Property(e => e.Notes)
+                .IsRequired(false)
+                .HasColumnName("notes");
+
             builder.Property(e => e.GmData)
                 .IsRequired(false)
                 .HasColumnName("gmdata");

@@ -29,6 +29,8 @@ namespace Naheulbook.Data.Models
         public short FatePoint { get; set; }
         public string? StatBonusAd { get; set; }
 
+        public string? Notes { get; set; }
+
         public int Level { get; set; }
         public int Experience { get; set; }
 

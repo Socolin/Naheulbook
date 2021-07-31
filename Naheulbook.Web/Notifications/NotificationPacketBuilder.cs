@@ -59,6 +59,11 @@ namespace Naheulbook.Web.Notifications
             return BuildCharacterChange(character.Id, "update", new {Stat = "name", Value = character.Name});
         }
 
+        public INotificationPacket BuildCharacterChangeNotes(Character character)
+        {
+            return BuildCharacterChange(character.Id, "update", new {Stat = "notes", Value = character.Notes});
+        }
+
         public INotificationPacket BuildCharacterAddItem(int characterId, Item item)
         {
             return BuildCharacterChange(characterId, "addItem", _mapper.Map<ItemResponse>(item));

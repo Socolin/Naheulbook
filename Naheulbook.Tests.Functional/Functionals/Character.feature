@@ -157,6 +157,7 @@ Feature: Character
         "experience": ${Character.Experience},
         "sex": "Homme",
         "statBonusAD": "PRD",
+        "notes": "some-notes",
         "fatePoint": ${Character.FatePoint},
         "ev": ${Character.Ev},
         "ea": ${Character.Ea},

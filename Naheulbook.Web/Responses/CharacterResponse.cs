@@ -37,6 +37,8 @@ namespace Naheulbook.Web.Responses
         public int? Ev { get; set; }
         public int? Ea { get; set; }
 
+        public string? Notes { get; set; }
+
         public int Level { get; set; }
         public int Experience { get; set; }
         public int FatePoint { get; set; }

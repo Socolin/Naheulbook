@@ -132,6 +132,12 @@ namespace Naheulbook.Core.Utils
                 character.Name = request.Name;
                 notificationSession.NotifyCharacterChangeName(character);
             }
+
+            if (request.Notes != null)
+            {
+                character.Notes = request.Notes;
+                notificationSession.NotifyCharacterChangeNotes(character);
+            }
         }
 
         public LevelUpResult LevelUpCharacter(Character character, Origin origin, List<Speciality> specialities, CharacterLevelUpRequest request)

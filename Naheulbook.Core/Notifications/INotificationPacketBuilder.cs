@@ -14,6 +14,7 @@ namespace Naheulbook.Core.Notifications
         INotificationPacket BuildCharacterChangeExperience(Character character);
         INotificationPacket BuildCharacterChangeSex(Character character);
         INotificationPacket BuildCharacterChangeName(Character character);
+        INotificationPacket BuildCharacterChangeNotes(Character character);
         INotificationPacket BuildCharacterAddItem(int characterId, Item item);
         INotificationPacket BuildCharacterSetStatBonusAd(int characterId, string stat);
         INotificationPacket BuildCharacterAddModifier(int characterId, CharacterModifier characterModifier);

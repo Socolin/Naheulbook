@@ -16,6 +16,7 @@ namespace Naheulbook.Core.Notifications
         void NotifyCharacterChangeExperience(Character character);
         void NotifyCharacterChangeSex(Character character);
         void NotifyCharacterChangeName(Character character);
+        void NotifyCharacterChangeNotes(Character character);
         void NotifyCharacterAddItem(int characterId, Item item, bool delayBuildPacket = false);
         void NotifyCharacterSetStatBonusAd(int characterId, string stat);
         void NotifyCharacterAddModifier(int characterId, CharacterModifier characterModifier, bool delayBuildPacket = false);
@@ -111,6 +112,11 @@ namespace Naheulbook.Core.Notifications
         public void NotifyCharacterChangeName(Character character)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeName(character));
+        }
+
+        public void NotifyCharacterChangeNotes(Character character)
+        {
+            _packets.Add(_packetBuilder.BuildCharacterChangeNotes(character));
         }
 
         public void NotifyCharacterAddItem(int characterId, Item item, bool delayBuildPacket = false)

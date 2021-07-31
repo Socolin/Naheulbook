@@ -28,6 +28,8 @@ namespace Naheulbook.TestUtils
 
                 Color = "DADADA",
 
+                Notes = "some-notes",
+
                 Level = 1,
                 Experience = 42,
                 FatePoint = 1,

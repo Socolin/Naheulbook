@@ -28,6 +28,8 @@ namespace Naheulbook.Core.Factories
                 Fo = characterRequest.Stats.Fo,
                 Int = characterRequest.Stats.Int,
 
+                Notes = characterRequest.Notes,
+
                 Level = 1,
                 Experience = 0,
 

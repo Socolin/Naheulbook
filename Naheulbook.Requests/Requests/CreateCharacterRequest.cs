@@ -12,6 +12,7 @@ namespace Naheulbook.Requests.Requests
     {
         public string Name { get; set; } = null!;
         public string Sex { get; set; } = null!;
+        public string? Notes { get; set; }
         public int Money { get; set; }
         public short FatePoint { get; set; }
         public bool IsNpc { get; set; }
