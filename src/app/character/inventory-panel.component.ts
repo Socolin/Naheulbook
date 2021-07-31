@@ -6,7 +6,7 @@ import {
     OnChanges,
     OnDestroy,
     OnInit,
-    SimpleChanges, TrackByFunction
+    SimpleChanges
 } from '@angular/core';
 
 import {Character} from './character.model';
@@ -36,7 +36,7 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inGroupTab: boolean;
 
     public sortType: ItemSortType = 'none';
-    public viewMode: 'all' | 'bag' | 'money' | 'equipment' = 'bag';
+    public viewMode: 'all' | 'bag' | 'money' = 'bag';
     public itemFilterName?: string;
 
     private subscription: Subscription = new Subscription();
@@ -53,7 +53,11 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     get moneyItems(): Item[] {
-        return this.character.computedData.currencyItems;
+        let moneyItems = this.character.computedData.currencyItems;
+        if (this.character.group?.config.allowPlayersToSeeGemPriceWhenIdentified) {
+            moneyItems = moneyItems.concat(this.character.computedData.gemItems);
+        }
+        return moneyItems;
     }
 
     constructor(
@@ -358,5 +362,10 @@ export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
         }];
         this.activeModifier(modifier);
         this.itemActionService.onAction('update_modifiers', item, [...item.modifiers, modifier]);
+    }
+
+    changeViewMode(viewMode: 'all' | 'bag' | 'money'): void {
+        this.viewMode = viewMode;
+        this.changeDetectorRef.detectChanges();
     }
 }

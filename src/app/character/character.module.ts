@@ -64,7 +64,7 @@ import {MarkdownModule} from '../markdown/markdown.module';
         ItemModule,
         WebsocketModule,
         ReactiveFormsModule,
-        MarkdownModule,
+        MarkdownModule
     ],
     declarations: [
         AddItemDialogComponent,

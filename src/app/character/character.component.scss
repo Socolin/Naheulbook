@@ -88,6 +88,23 @@ mat-card {
     mat-card {
         margin: 5px;
     }
+
+    .fortune {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-areas: "money action" "gem action";
+        align-items: center;
+        column-gap: 8px;
+        .money {
+            grid-area: money;
+        }
+        .gem {
+            grid-area: gem;
+        }
+        .action {
+            grid-area: action;
+        }
+    }
 }
 
 .stat-tab {

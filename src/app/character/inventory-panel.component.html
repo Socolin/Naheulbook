@@ -9,12 +9,40 @@
     <button mat-icon-button class="sort" [matMenuTriggerFor]="sortMenu" aria-label="Trier">
         <mat-icon>sort</mat-icon>
     </button>
-    <button mat-icon-button class="view" [matMenuTriggerFor]="viewModeMenu" aria-label="Filtrer les objets afficher">
-        <mat-icon *ngIf="viewMode === 'all'">list</mat-icon>
-        <mat-icon *ngIf="viewMode === 'bag'">account_tree</mat-icon>
-        <mat-icon *ngIf="viewMode === 'money'" fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
-    </button>
+
+    <mat-form-field class="view" appearance="standard">
+        <mat-label>Vue</mat-label>
+        <mat-select [(value)]="viewMode">
+            <mat-select-trigger>
+                <span class="selected-view-option" *ngIf="viewMode === 'all'">
+                    <mat-icon>list</mat-icon>
+                    <span>List</span>
+                </span>
+                <span class="selected-view-option" *ngIf="viewMode === 'bag'">
+                    <mat-icon>account_tree</mat-icon>
+                    <span>Sacs</span>
+                </span>
+                <span class="selected-view-option" *ngIf="viewMode === 'money'">
+                    <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
+                    <span>Fortune</span>
+                </span>
+            </mat-select-trigger>
+            <mat-option value="all">
+                <mat-icon>list</mat-icon>
+                <span>List</span>
+            </mat-option>
+            <mat-option value="bag">
+                <mat-icon>account_tree</mat-icon>
+                <span>Sacs</span>
+            </mat-option>
+            <mat-option value="money">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
+                <span>Fortune</span>
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
 </div>
+
 <mat-menu #sortMenu>
     <button mat-menu-item [disabled]="sortType == 'asc'" (click)="sortType = 'asc'" role="menuitemcheckbox">
         <mat-icon *ngIf="sortType == 'asc'">check</mat-icon>
@@ -30,23 +58,6 @@
         <mat-icon *ngIf="sortType == 'not_identified_first'">check</mat-icon>
         <mat-icon *ngIf="sortType != 'not_identified_first'"></mat-icon>
         Non identifier en premier
-    </button>
-</mat-menu>
-<mat-menu #viewModeMenu>
-    <button mat-menu-item [disabled]="viewMode == 'all'" (click)="viewMode = 'all'" role="menuitemcheckbox">
-        <mat-icon *ngIf="viewMode == 'all'">check</mat-icon>
-        <mat-icon *ngIf="viewMode != 'all'">list</mat-icon>
-        Liste
-    </button>
-    <button mat-menu-item [disabled]="viewMode == 'bag'" (click)="viewMode = 'bag'" role="menuitemcheckbox">
-        <mat-icon *ngIf="viewMode == 'bag'">check</mat-icon>
-        <mat-icon *ngIf="viewMode != 'bag'">account_tree</mat-icon>
-        Sacs
-    </button>
-    <button mat-menu-item [disabled]="viewMode == 'money'" (click)="viewMode = 'money'" role="menuitemcheckbox">
-        <mat-icon *ngIf="viewMode == 'money'">check</mat-icon>
-        <mat-icon *ngIf="viewMode != 'money'" fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
-        Fortune
     </button>
 </mat-menu>
 <div class="items" *ngIf="viewMode == 'all'">

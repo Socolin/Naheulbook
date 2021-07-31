@@ -5,10 +5,9 @@ import {Overlay} from '@angular/cdk/overlay';
 import {Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
-import {ActiveStatsModifier, NhbkDialogService, PromptDialogComponent} from '../shared';
+import {NhbkDialogService, PromptDialogComponent} from '../shared';
 import {Skill} from '../skill';
 import {Job} from '../job';
-import {Item} from '../item';
 
 import {WebSocketService} from '../websocket';
 
@@ -26,6 +25,7 @@ import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-
 import {EffectPanelComponent} from './effect-panel.component';
 import {filter, map} from 'rxjs/operators';
 import {CharacterGroupInviteResponse} from '../api/responses';
+import {InventoryPanelComponent} from './inventory-panel.component';
 
 @Component({
     selector: 'character',
@@ -42,6 +42,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
     @ViewChild('effectPanel', {static: true})
     private effectPanel: EffectPanelComponent;
+
+    @ViewChild('inventoryPanel', {static: true})
+    private inventoryPanel: InventoryPanelComponent;
 
     @ViewChild('notesEditor', {static: false})
     private notesEditor: ElementRef<HTMLTextAreaElement>;
@@ -341,8 +344,15 @@ export class CharacterComponent implements OnInit, OnDestroy {
     }
 
     saveNotes() {
-        console.log(this.notesEditor);
         this.changeStat('notes', this.notesEditor.nativeElement.value);
         this.editingNotes = false;
+    }
+
+    viewMoneyDetails() {
+        this.currentTab = 'inventory';
+        if (!this.inGroupTab) {
+            this.router.navigate(['../', this.character.id], {fragment: this.currentTab, relativeTo: this.route, replaceUrl: true});
+        }
+        this.inventoryPanel.changeViewMode('money');
     }
 }

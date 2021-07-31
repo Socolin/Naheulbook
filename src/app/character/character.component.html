@@ -97,8 +97,16 @@
                         </dd>
 
                         <dt>Fortune</dt>
-                        <dd>
-                            {{character.computedData.totalMoney | number}} Pieces d'or
+                        <dd class="fortune">
+                            <div class="money">
+                                {{character.computedData.totalMoney | itemPrice}} (Lingot & Pièces)
+                            </div>
+                            <div class="gem" *ngIf="character.computedData.totalGemValue > 0 && character.group?.config.allowPlayersToSeeGemPriceWhenIdentified">
+                                {{character.computedData.totalGemValue | itemPrice}} (Gemmes & Pierres précieuses)
+                            </div>
+                            <div class="action">
+                                <button mat-button color="primary" (click)="viewMoneyDetails()">Détails</button>
+                            </div>
                         </dd>
 
                         <dt *ngIf="inGroupTab">Debilibeuk</dt>
@@ -130,7 +138,7 @@
                     </mat-form-field>
                     <div *ngIf="!editingNotes" [innerHTML]="character.notes | markdown"></div>
                 </mat-card-content>
-                <mat-card-actions align="right">
+                <mat-card-actions align="end">
                     <button mat-button color="primary" *ngIf="!editingNotes" (click)="startEditNotes()">Éditer</button>
                     <button mat-button color="primary" *ngIf="editingNotes" (click)="cancelEditNotes()">Annuler</button>
                     <button mat-button color="primary" *ngIf="editingNotes" (click)="saveNotes()">Sauvegarder</button>

@@ -188,7 +188,9 @@ export class CharacterComputedData {
     itemsEquiped: Item[] = [];
     notIdentifiedItems: Item[] = [];
     currencyItems: Item[] = [];
+    gemItems: Item[] = [];
     totalMoney = 0;
+    totalGemValue = 0;
     itemSlots: ItemSlot[] = [];
     topLevelContainers: Item[] = [];
     xpToNextLevel: number;
@@ -394,8 +396,10 @@ export class Character extends WsRegistrable {
         let containers: Item[] = [];
         let topLevelContainers: Item[] = [];
         let currencyItems: Item[] = [];
+        let gemItems: Item[] = [];
         let shownItemsToGm: Item[] = [];
         let totalMoney = 0;
+        let totalGemValue = 0;
         let content: {[itemId: number]: Item[]} = {};
         let itemsById: {[itemId: number]: Item} = {};
 
@@ -406,6 +410,10 @@ export class Character extends WsRegistrable {
             if (item.template.data.isCurrency && item.template.data.price != null) {
                 totalMoney += item.template.data.price * (item.data.quantity || 1);
                 currencyItems.push(item);
+            }
+            if (!item.data.notIdentified && item.template.data.useUG && item.template.data.price != null) {
+                totalGemValue += item.template.data.price * (item.data.ug || 1);
+                gemItems.push(item);
             }
 
             itemsById[item.id] = item;
@@ -514,7 +522,9 @@ export class Character extends WsRegistrable {
         this.computedData.containers = containers;
         this.computedData.topLevelContainers = topLevelContainers;
         this.computedData.currencyItems = currencyItems;
+        this.computedData.gemItems = gemItems;
         this.computedData.totalMoney = totalMoney;
+        this.computedData.totalGemValue = totalGemValue;
         this.computedData.shownItemsToGm = shownItemsToGm;
     }
 
