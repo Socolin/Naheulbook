@@ -242,6 +242,10 @@
     </mat-card-content>
     <mat-menu #itemMenu="matMenu">
         <ng-template matMenuContent let-item="item">
+            <button mat-menu-item (click)="itemActionService.onAction('show_to_gm', item)" *ngIf="!item.data.shownToGm">
+                <mat-icon>visibility</mat-icon>
+                Montrer l'objet au MJ
+            </button>
             <button mat-menu-item
                     *ngIf="!item.data.equiped"
                     (click)="itemActionService.onAction('equip', item)">
@@ -263,7 +267,7 @@
                           class="ra-mat-button-icon-24"></mat-icon>
                 Déséquipé
             </button>
-            <button mat-menu-item (click)="sharpenWeapon(item)">
+            <button mat-menu-item (click)="sharpenWeapon(item)" *ngIf="isItemWeapon(item.template)">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-sword-smithing"
                           class="ra-mat-button-icon-24"></mat-icon>
                 Aiguiser (+1 PI / 3 combats)
@@ -271,4 +275,23 @@
         </ng-template>
     </mat-menu>
 </mat-card>
-<div #combatWeaponDetail></div>
+<mat-card class="equipment">
+    <mat-card-title>Équipement</mat-card-title>
+    <mat-card-content>
+        <div *ngFor="let slot of character.computedData.itemSlots">
+            {{slot.name}}:
+            <div class="items-list equiped-items">
+                <div *ngFor="let item of character.computedData.itemsBySlots[slot.id]; let i = index">
+                    <div class="items-list-element">
+                        <app-item-line [character]="character"
+                                       [itemMenu]="itemMenu"
+                                       [item]="item"
+                                       [hideEquippedMarker]="true"
+                                       [gmView]="inGroupTab">
+                        </app-item-line>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

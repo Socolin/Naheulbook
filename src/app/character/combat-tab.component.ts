@@ -3,6 +3,8 @@ import {Character} from './character.model';
 import {ItemActionService} from './item-action.service';
 import {Item} from '../item';
 import {ActiveStatsModifier} from '../shared';
+import {ItemSlot, ItemTemplate, ItemTemplateService} from '../item-template';
+import {toDictionary, toDictionaryByKey} from '../utils/utils';
 
 @Component({
     selector: 'app-combat-tab',
@@ -13,13 +15,18 @@ export class CombatTabComponent implements OnInit {
     @Input() character: Character;
     @Input() changeStat: (stat: string, value: any) => void;
     @Input() inGroupTab: boolean;
+    slotsByTechNames: { [slotTechName: string]: ItemSlot } = {};
 
     constructor(
         public readonly itemActionService: ItemActionService,
+        public readonly itemTemplateService: ItemTemplateService,
     ) {
     }
 
     ngOnInit(): void {
+        this.itemTemplateService.getSlots().subscribe((slots) => {
+            this.slotsByTechNames = toDictionaryByKey(slots, s => s.techName)
+        })
     }
 
     unEquipAllAndEquip(item: Item) {
@@ -44,5 +51,9 @@ export class CombatTabComponent implements OnInit {
             value: 1
         }];
         this.itemActionService.onAction('update_modifiers', item, [...item.modifiers, modifier]);
+    }
+
+    isItemWeapon(template: ItemTemplate): boolean {
+        return ItemTemplate.hasSlot(template, 'WEAPON');
     }
 }

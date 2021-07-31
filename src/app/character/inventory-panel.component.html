@@ -13,7 +13,6 @@
         <mat-icon *ngIf="viewMode === 'all'">list</mat-icon>
         <mat-icon *ngIf="viewMode === 'bag'">account_tree</mat-icon>
         <mat-icon *ngIf="viewMode === 'money'" fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
-        <mat-icon *ngIf="viewMode === 'equipment'" fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-32"></mat-icon>
     </button>
 </div>
 <mat-menu #sortMenu>
@@ -49,11 +48,6 @@
         <mat-icon *ngIf="viewMode != 'money'" fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
         Fortune
     </button>
-    <button mat-menu-item [disabled]="viewMode == 'equipment'" (click)="viewMode = 'equipment'" role="menuitemcheckbox">
-        <mat-icon *ngIf="viewMode == 'equipment'">check</mat-icon>
-        <mat-icon *ngIf="viewMode != 'equipment'" fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-32"></mat-icon>
-        Équipement
-    </button>
 </mat-menu>
 <div class="items" *ngIf="viewMode == 'all'">
     <div *ngFor="let item of filteredItems; trackBy: trackByItemId" class="item separator">
@@ -83,24 +77,6 @@
                        [item]="item"
                        [gmView]="inGroupTab">
         </app-item-line>
-    </div>
-</div>
-
-<div class="items" *ngIf="viewMode == 'equipment'">
-    <div *ngFor="let slot of character.computedData.itemSlots">
-        {{slot.name}}:
-        <div class="items-list equiped-items">
-            <div *ngFor="let item of character.computedData.itemsBySlots[slot.id]; let i = index">
-                <div class="items-list-element">
-                    <app-item-line [character]="character"
-                                   [itemMenu]="itemMenu"
-                                   [item]="item"
-                                   [hideEquippedMarker]="true"
-                                   [gmView]="inGroupTab">
-                    </app-item-line>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

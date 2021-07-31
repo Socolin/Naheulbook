@@ -37,9 +37,6 @@ export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;
     @Input() character: Character;
 
-    @ViewChild('combatWeaponDetail', {static: true})
-    private combatWeaponDetailElement: ElementRef;
-
     @ViewChild('mainTabGroup', {static: true})
     private mainTabGroup: MatTabGroup;
 

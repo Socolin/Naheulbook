@@ -8,3 +8,14 @@ export function toDictionary<T extends { id: number }>(array: T[]): { [id: numbe
         return dic;
     }, {});
 }
+
+export function toDictionaryByKey<T extends {}>(
+    array: T[],
+    keySelector: (element: T) => string,
+)
+    : { [key: string]: T } {
+    return array.reduce((dic: { [k: string]: T }, element) => {
+        dic[keySelector(element)] = element;
+        return dic;
+    }, {});
+}
