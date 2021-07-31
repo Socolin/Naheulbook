@@ -76,6 +76,11 @@ export class AddItemDialogComponent {
         } else {
             delete this.itemData.quantity;
         }
+        if (itemTemplate.data.useUG) {
+            this.itemData.ug = 1;
+        } else {
+            delete this.itemData.ug;
+        }
         this.searchStep.completed = true;
     }
 

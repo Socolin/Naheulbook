@@ -48,6 +48,11 @@
                            placeholder="Quantité"
                            [(ngModel)]="itemData.quantity"/>
                 </mat-form-field>
+                <mat-form-field *ngIf="selectedItemTemplate.data.useUG">
+                    <input matInput type="number"
+                           placeholder="Unité Goltor (Taille)"
+                           [(ngModel)]="itemData.ug"/>
+                </mat-form-field>
             </div>
 
             <div class="add-button">
