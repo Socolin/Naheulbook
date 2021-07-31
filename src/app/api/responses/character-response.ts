@@ -10,6 +10,7 @@ export interface CharacterResponse {
     id: number;
     name: string;
     sex: CharacterSex;
+    notes?: string;
     originId: Guid;
     isNpc: boolean;
     ev?: number;

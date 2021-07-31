@@ -43,6 +43,9 @@ export class CharacterComponent implements OnInit, OnDestroy {
     @ViewChild('effectPanel', {static: true})
     private effectPanel: EffectPanelComponent;
 
+    @ViewChild('notesEditor', {static: false})
+    private notesEditor: ElementRef<HTMLTextAreaElement>;
+
     public inGroupTab = false;
     public currentTab = 'infos';
     public tabs: any[] = [
@@ -55,6 +58,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
         {hash: 'other'},
         {hash: 'history'},
     ];
+    public editingNotes = false;
 
     private notificationSub?: Subscription;
     private subscription = new Subscription();
@@ -325,5 +329,20 @@ export class CharacterComponent implements OnInit, OnDestroy {
         })
 
         this.quickCommandService.registerActions('character', actions);
+    }
+
+    startEditNotes() {
+        this.editingNotes = true;
+        this.notesEditor.nativeElement.value = this.character.notes || '';
+    }
+
+    cancelEditNotes() {
+        this.editingNotes = false;
+    }
+
+    saveNotes() {
+        console.log(this.notesEditor);
+        this.changeStat('notes', this.notesEditor.nativeElement.value);
+        this.editingNotes = false;
     }
 }

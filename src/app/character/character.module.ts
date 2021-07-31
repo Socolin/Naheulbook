@@ -46,6 +46,7 @@ import {
     TakeLootDialogComponent,
 } from './';
 import { CombatTabComponent } from './combat-tab.component';
+import {MarkdownModule} from '../markdown/markdown.module';
 
 @NgModule({
     imports: [
@@ -63,6 +64,7 @@ import { CombatTabComponent } from './combat-tab.component';
         ItemModule,
         WebsocketModule,
         ReactiveFormsModule,
+        MarkdownModule,
     ],
     declarations: [
         AddItemDialogComponent,

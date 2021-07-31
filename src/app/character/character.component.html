@@ -115,6 +115,27 @@
                     </dl>
                 </mat-card-content>
             </mat-card>
+            <mat-card>
+                <mat-card-title>Notes</mat-card-title>
+                <mat-card-content>
+                    <p *ngIf="editingNotes">Vous pouvez utilisez du <a target="_blank" href="https://fr.wikipedia.org/wiki/Markdown">Markdown</a> pour formatter le texte</p>
+                    <mat-form-field [style.display]="editingNotes ? 'block' : 'none'">
+                        <textarea #notesEditor matInput
+                                  cdkTextareaAutosize
+                                  cdkAutosizeMinRows="1"
+                                  cdkAutosizeMaxRows="20"
+                                  autocomplete="off">
+
+                        </textarea>
+                    </mat-form-field>
+                    <div *ngIf="!editingNotes" [innerHTML]="character.notes | markdown"></div>
+                </mat-card-content>
+                <mat-card-actions align="right">
+                    <button mat-button color="primary" *ngIf="!editingNotes" (click)="startEditNotes()">Éditer</button>
+                    <button mat-button color="primary" *ngIf="editingNotes" (click)="cancelEditNotes()">Annuler</button>
+                    <button mat-button color="primary" *ngIf="editingNotes" (click)="saveNotes()">Sauvegarder</button>
+                </mat-card-actions>
+            </mat-card>
             <mat-card *ngIf="character.computedData.stats['AD'] > 12">
                 <mat-card-title>Adresse exceptionnelle</mat-card-title>
                 <mat-card-content>

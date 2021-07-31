@@ -247,6 +247,7 @@ export class Character extends WsRegistrable {
     jobs: Job[];
     level: number;
     sex: CharacterSex;
+    notes?: string;
     experience: number;
     active: number;
     fatePoint: number;
@@ -297,6 +298,7 @@ export class Character extends WsRegistrable {
         character.jobs = response.jobIds.map(jobId => jobs.find(j => j.id === jobId)!).filter(job => !!job);
         character.skills = response.skillIds.map(skillId => skillsById[skillId]).filter(skill => !!skill);
         character.items = response.items.map(itemResponse => Item.fromResponse(itemResponse, skillsById));
+        character.notes = response.notes;
         character.stats = PrimaryStat.fromResponse(response.stats);
 
         return character;
@@ -1167,10 +1169,20 @@ export class Character extends WsRegistrable {
 
     onChangeCharacterStat(change: any) {
         if (this[change.stat] !== change.value) {
-            this.notify('stat', change.stat.toUpperCase() + ': ' + this[change.stat] + ' -> ' + change.value);
+            if (this.shouldNotifyStatChange(change.stat)) {
+                this.notify('stat', change.stat.toUpperCase() + ': ' + this[change.stat] + ' -> ' + change.value);
+            }
             this[change.stat] = change.value;
             this.update();
         }
+    }
+
+    shouldNotifyStatChange(stat: string): boolean {
+        if (stat === 'notes') {
+            return false;
+        }
+
+        return true;
     }
 
     onSetStatBonusAD(bonusStat: any) {
