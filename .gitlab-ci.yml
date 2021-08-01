@@ -52,10 +52,8 @@ deploy_staging:
     - docker
   stage: deploy
   script:
-    - eval $(ssh-agent -s)
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - mkdir --mode=700 -p ~/.ssh
+    - cp $SSH_KNOWN_HOSTS ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - rsync -e "ssh -i $SSH_RSYNC_DBMIGRATOR_KEY" -a Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_migrator
     - rsync -e "ssh -i $SSH_RSYNC_WEB_KEY" -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod
@@ -74,10 +72,8 @@ deploy_prod:
     - docker
   stage: deploy
   script:
-    - eval $(ssh-agent -s)
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - mkdir --mode=700 -p ~/.ssh
+    - cp $SSH_KNOWN_HOSTS ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - rsync -e "ssh -i $SSH_RSYNC_DBMIGRATOR_KEY" -a Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/prod_migrator
     - rsync -e "ssh -i $SSH_RSYNC_WEB_KEY" -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/prod
