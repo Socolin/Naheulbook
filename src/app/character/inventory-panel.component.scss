@@ -27,10 +27,12 @@
 
         .filter {
             grid-area: filter;
+            min-width: 120px;
         }
 
         .view {
             grid-area: view;
+            min-width: 120px;
         }
 
         .sort {
