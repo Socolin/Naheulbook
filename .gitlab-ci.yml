@@ -57,14 +57,9 @@ deploy_staging:
     - chmod 700 ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - echo "$SSH_RSYNC_DBMIGRATOR_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - rsync -a Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_migrator
-    - ssh-add -D
-    - echo "$SSH_RSYNC_WEB_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - rsync -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod
-    - ssh-add -D
-    - echo "$SSH_DEPLOY_PREPROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - ssh naheulbook@naheulbook.fr deploy
+    - rsync -e "ssh -i $SSH_RSYNC_DBMIGRATOR_KEY" -a Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_migrator
+    - rsync -e "ssh -i $SSH_RSYNC_WEB_KEY" -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod
+    - ssh -i $SSH_DEPLOY_KEY naheulbook@naheulbook.fr deploy
   environment:
     name: staging
   except:
@@ -84,14 +79,9 @@ deploy_prod:
     - chmod 700 ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - echo "$SSH_RSYNC_DBMIGRATOR_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - rsync -a Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/prod_migrator
-    - ssh-add -D
-    - echo "$SSH_RSYNC_WEB_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - rsync -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/prod
-    - ssh-add -D
-    - echo "$SSH_DEPLOY_PROD_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - ssh naheulbook@naheulbook.fr deploy
+    - rsync -e "ssh -i $SSH_RSYNC_DBMIGRATOR_KEY" -a Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/prod_migrator
+    - rsync -e "ssh -i $SSH_RSYNC_WEB_KEY" -a Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/prod
+    - ssh -i $SSH_DEPLOY_KEY naheulbook@naheulbook.fr deploy
   environment:
     name: prod
   when: manual
