@@ -26,6 +26,7 @@ import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-
 class InfoDefinition {
     displayName: string;
     icon: string;
+    tab?: string;
     fontSet: string;
     panel: PanelNames;
 }
@@ -37,12 +38,26 @@ class InfoDefinition {
 export class UsefulDataComponent implements OnInit, OnDestroy {
     @Output() onAction = new EventEmitter<{ action: string, data: any }>();
     public basesInfoDefinitions: InfoDefinition[] = [
-        { displayName: 'Succès critique', icon: 'game-icon-spiky-eclipse', fontSet: 'game-icon', panel: 'criticalSuccess' },
-        { displayName: 'Échec critique', icon: 'game-icon-dripping-blade', fontSet: 'game-icon', panel: 'epicFails' },
         { displayName: 'Sorts entropique', icon: 'game-icon-bolt-spell-cast', fontSet: 'game-icon', panel: 'entropicSpells' },
         { displayName: 'Récupération', icon: 'game-icon-sliced-bread', fontSet: 'game-icon', panel: 'recovery' },
         { displayName: 'Déplacements', icon: 'game-icon-walk', fontSet: 'game-icon', panel: 'travel'},
     ];
+
+    public criticalSuccessInfoDefinitions: InfoDefinition[] = [
+        { displayName: 'Arme tranchante', icon: 'game-icon-broad-dagger', fontSet: 'game-icon', panel: 'criticalSuccess', tab: 'sharp' },
+        { displayName: 'Arme contondante', icon: 'game-icon-thor-hammer', fontSet: 'game-icon', panel: 'criticalSuccess', tab: 'blunt' },
+        { displayName: 'Parade', icon: 'game-icon-shield-reflect', fontSet: 'game-icon', panel: 'criticalSuccess', tab: 'parade' },
+        { displayName: 'Mains nues', icon: 'game-icon-punch', fontSet: 'game-icon', panel: 'criticalSuccess', tab: 'hand' },
+        { displayName: 'Projectiles', icon: 'game-icon-high-shot', fontSet: 'game-icon', panel: 'criticalSuccess', tab: 'projectile' },
+    ];
+
+    public epicFailsInfoDefinitions: InfoDefinition[] = [
+        { displayName: 'Attaque ou parade', icon: 'game-icon-broad-dagger', fontSet: 'game-icon', panel: 'epicFails', tab: 'combat' },
+        { displayName: 'Lancement du sort', icon: 'game-icon-thunder-struck', fontSet: 'game-icon', panel: 'epicFails', tab: 'magic' },
+        { displayName: 'Arme de jet', icon: 'game-icon-pierced-heart', fontSet: 'game-icon', panel: 'epicFails', tab: 'arrow' },
+        { displayName: 'Mains nues', icon: 'game-icon-fist', fontSet: 'game-icon', panel: 'epicFails', tab: 'hand' },
+    ];
+
     public databaseInfoDefinitions: InfoDefinition[] = [
         { displayName: 'Effets', icon: 'game-icon-pierced-body', fontSet: 'game-icon', panel: 'effects' },
         { displayName: 'Objets', icon: 'game-icon-beer-stein', fontSet: 'game-icon', panel: 'items' },
@@ -65,13 +80,13 @@ export class UsefulDataComponent implements OnInit, OnDestroy {
             case 'epicFails':
                 dialogRef = this.openDialog<EpicFailsCriticalSuccessDialogComponent, EpicFailsCriticalSuccessDialogData>(
                     EpicFailsCriticalSuccessDialogComponent,
-                    {mode: 'epicFails'}
+                    {mode: 'epicFails', selectedTab: arg}
                 );
                 break;
             case 'criticalSuccess':
                 dialogRef = this.openDialog<EpicFailsCriticalSuccessDialogComponent, EpicFailsCriticalSuccessDialogData>(
                     EpicFailsCriticalSuccessDialogComponent,
-                    {mode: 'criticalSuccess'}
+                    {mode: 'criticalSuccess', selectedTab: arg}
                 );
                 break;
             case 'effects':

@@ -8,6 +8,7 @@ import {UsefulDataDialogResult} from './useful-data-dialog-result';
 
 export interface EpicFailsCriticalSuccessDialogData {
     mode: 'epicFails' | 'criticalSuccess';
+    selectedTab?: string;
 }
 
 @Component({
@@ -187,6 +188,11 @@ export class EpicFailsCriticalSuccessDialogComponent implements OnInit {
         } else {
             this.criticalData = this.usefulDataService.getCriticalData();
             this.tabs = this.criticalSuccessTabs;
+        }
+
+        let selectedTabIndex = this.tabs.findIndex(x => x.dataSet === this.data.selectedTab);
+        if (selectedTabIndex !== -1) {
+            this.selectedIndex = selectedTabIndex;
         }
     }
 
