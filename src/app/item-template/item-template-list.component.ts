@@ -17,7 +17,7 @@ import {NhbkMatDialog} from '../material-workaround';
 import {Guid} from '../api/shared/util';
 import {EditItemTemplateDialogComponent, EditItemTemplateDialogData} from './edit-item-template-dialog.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl} from '@angular/forms';
 import {debounceTime, map, startWith, switchMap, tap} from 'rxjs/operators';
 
 @Component({
@@ -408,7 +408,8 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
 
             return this.itemSections
                 .map(category => category.cloneFilterSubCategories(
-                    (s => removeDiacritics(s.name.toLowerCase()).indexOf(cleanedValue) !== -1))
+                    (s => removeDiacritics(s.name.toLowerCase()).indexOf(cleanedValue) !== -1
+                        || removeDiacritics(s.section.name.toLowerCase()).indexOf(cleanedValue) !== -1))
                 )
                 .filter(group => group.subCategories.length > 0);
 
