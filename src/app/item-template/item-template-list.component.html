@@ -108,7 +108,6 @@
     <ng-container *ngFor="let item of  visibleItems; trackBy: trackById">
         <div class="item-element" [id]="'item-'+item.id" (click)="navigateToItem(item.id)">
             <item-template class="item-element"
-                           *ngIf="isVisible(item)"
                            [originsName]="originsName"
                            [jobsName]="jobsName"
                            [godsByTechName]="godsByTechName"
