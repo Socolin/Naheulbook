@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
+using Naheulbook.Core.Models.Backup;
 using Naheulbook.Core.Services;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
@@ -19,15 +20,18 @@ namespace Naheulbook.Web.Controllers
     public class CharactersController : ControllerBase
     {
         private readonly ICharacterService _characterService;
+        private readonly ICharacterBackupService _characterBackupService;
         private readonly IMapper _mapper;
 
         public CharactersController(
             ICharacterService characterService,
-            IMapper mapper
+            IMapper mapper,
+            ICharacterBackupService characterBackupService
         )
         {
             _characterService = characterService;
             _mapper = mapper;
+            _characterBackupService = characterBackupService;
         }
 
         [HttpGet]
@@ -230,6 +234,26 @@ namespace Naheulbook.Web.Controllers
             {
                 var loots = await _characterService.GetCharacterLootsAsync(executionContext, characterId);
                 return _mapper.Map<List<LootResponse>>(loots);
+            }
+            catch (ForbiddenAccessException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+            }
+        }
+
+        [HttpGet("{CharacterId:int:min(1)}/backup")]
+        public async Task<ActionResult<BackupCharacter>> GetBackupCharacterAsync(
+            [FromServices] NaheulbookExecutionContext executionContext,
+            [FromRoute] int characterId
+        )
+        {
+            try
+            {
+                return await _characterBackupService.GetBackupCharacterAsync(executionContext, characterId);
             }
             catch (ForbiddenAccessException ex)
             {

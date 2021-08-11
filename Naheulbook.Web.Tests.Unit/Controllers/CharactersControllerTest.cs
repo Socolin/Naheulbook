@@ -24,16 +24,19 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         private NaheulbookExecutionContext _executionContext;
 
         private CharactersController _controller;
+        private ICharacterBackupService _characterBackupService;
 
         [SetUp]
         public void SetUp()
         {
             _characterService = Substitute.For<ICharacterService>();
             _mapper = Substitute.For<IMapper>();
+            _characterBackupService = Substitute.For<ICharacterBackupService>();
 
             _controller = new CharactersController(
                 _characterService,
-                _mapper
+                _mapper,
+                _characterBackupService
             );
 
             _executionContext = new NaheulbookExecutionContext();

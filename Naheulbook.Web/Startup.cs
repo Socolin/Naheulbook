@@ -104,6 +104,7 @@ namespace Naheulbook.Web
             services.AddSingleton<ICalendarService, CalendarService>();
             services.AddSingleton<ICharacterRandomNameService, CharacterRandomNameService>();
             services.AddSingleton<ICharacterService, CharacterService>();
+            services.AddSingleton<ICharacterBackupService, CharacterBackupService>();
             services.AddSingleton<ICharacterUtil, CharacterUtil>();
             services.AddSingleton<ICharacterModifierUtil, CharacterModifierUtil>();
             services.AddSingleton<ICharacterHistoryUtil, CharacterHistoryUtil>();
