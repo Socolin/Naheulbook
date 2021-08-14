@@ -227,7 +227,7 @@
 
     <mat-tab label="Combat">
         <!-- Start of combat tab -->
-        <app-combat-tab [character]="character" [changeStat]="changeStat" [inGroupTab]="inGroupTab"></app-combat-tab>
+        <app-combat-tab [character]="character" (onChangeStat)="changeStat($event.stat, $event.value)" [inGroupTab]="inGroupTab"></app-combat-tab>
         <!-- End of combat tab -->
     </mat-tab>
     <mat-tab label="Stat">
