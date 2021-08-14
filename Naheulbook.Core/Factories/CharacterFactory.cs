@@ -36,6 +36,8 @@ namespace Naheulbook.Core.Factories
                 FatePoint = characterRequest.FatePoint,
 
                 OriginId = characterRequest.OriginId,
+
+                Modifiers = new List<CharacterModifier>(),
             };
 
             if (characterRequest.JobId.HasValue)
@@ -53,6 +55,23 @@ namespace Naheulbook.Core.Factories
                     SkillId = x
                 })
                 .ToList();
+
+            foreach (var modifiedStat in characterRequest.ModifiedStat.Values)
+            {
+                character.Modifiers.Add(new CharacterModifier
+                {
+                    Name = modifiedStat.Name,
+                    IsActive = true,
+                    Permanent = true,
+                    DurationType = "forever",
+                    Values = modifiedStat.Stats.Select(s => new CharacterModifierValue
+                    {
+                        StatName = s.Key,
+                        Value = (short) s.Value,
+                        Type = "ADD",
+                    }).ToList()
+                });
+            }
 
             if (characterRequest.SpecialityId.HasValue)
                 character.Specialities = new List<CharacterSpeciality>
