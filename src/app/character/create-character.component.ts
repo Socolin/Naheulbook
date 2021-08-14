@@ -333,10 +333,10 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     updateSuperBourrin() {
-        this.modifiedStat['SUPER_BOURRIN'] = {};
-        this.modifiedStat['SUPER_BOURRIN']['AT'] = -this.superBourrinValueAt;
-        this.modifiedStat['SUPER_BOURRIN']['PRD'] = -this.superBourrinValuePrd;
-        this.modifiedStat['SUPER_BOURRIN']['PI'] = (this.superBourrinValueAt + this.superBourrinValuePrd);
+        this.modifiedStat['SUPER_BOURRIN'] = {stats: {}};
+        this.modifiedStat['SUPER_BOURRIN'].stats['AT'] = -this.superBourrinValueAt;
+        this.modifiedStat['SUPER_BOURRIN'].stats['PRD'] = -this.superBourrinValuePrd;
+        this.modifiedStat['SUPER_BOURRIN'].stats['PI'] = (this.superBourrinValueAt + this.superBourrinValuePrd);
         this.modifiedStat['SUPER_BOURRIN'].name = 'Super-bourrin';
     }
 
@@ -380,16 +380,17 @@ export class CreateCharacterComponent implements OnInit {
 
     updateMove1PointStat() {
         if (this.isMove1PointStatValid()) {
+            this.modifiedStat['MOVE_1_POINT_STAT'] = {stats: {}};
             for (let i in this.move1PointStatValues) {
                 if (!this.move1PointStatValues.hasOwnProperty(i)) {
                     continue;
                 }
                 let value = this.move1PointStatValues[i];
                 if (value !== 0) {
-                    this.modifiedStat['MOVE_1_POINT_STAT'][i.toUpperCase()] = value;
+                    this.modifiedStat['MOVE_1_POINT_STAT'].stats[i.toUpperCase()] = value;
                     this.modifiedStat['MOVE_1_POINT_STAT'].name = 'Polyvalence ranger';
                 } else {
-                    delete this.modifiedStat['MOVE_1_POINT_STAT'][i.toUpperCase()];
+                    delete this.modifiedStat['MOVE_1_POINT_STAT'].stats[i.toUpperCase()];
                 }
             }
         }
@@ -435,9 +436,9 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     updateChangeAtPrd() {
-        this.modifiedStat['CHANGE_1_AT_PRD'] = {};
-        this.modifiedStat['CHANGE_1_AT_PRD']['AT'] = this.changeAtPrdValue;
-        this.modifiedStat['CHANGE_1_AT_PRD']['PRD'] = -this.changeAtPrdValue;
+        this.modifiedStat['CHANGE_1_AT_PRD'] = {stats: {}};
+        this.modifiedStat['CHANGE_1_AT_PRD'].stats['AT'] = this.changeAtPrdValue;
+        this.modifiedStat['CHANGE_1_AT_PRD'].stats['PRD'] = -this.changeAtPrdValue;
         this.modifiedStat['CHANGE_1_AT_PRD'].name = 'Guerrier Lvl 1';
 
     }
@@ -461,9 +462,9 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     updateRemoveAttOrPrdToIntOrCha() {
-        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'] = {};
-        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'][this.removeAttOrPrdToIntOrChaRemoveStat] = -1;
-        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'][this.removeAttOrPrdToIntOrChaAddStat] = 1;
+        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'] = {stats: {}};
+        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'].stats[this.removeAttOrPrdToIntOrChaRemoveStat] = -1;
+        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'].stats[this.removeAttOrPrdToIntOrChaAddStat] = 1;
         this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA'].name = 'Marchand Lvl 1';
     }
 
@@ -486,9 +487,9 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     updateRemoveAttOrPrdToIntOrAd() {
-        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'] = {};
-        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'][this.removeAttOrPrdToIntOrAdRemoveStat] = -1;
-        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'][this.removeAttOrPrdToIntOrAdAddStat] = 1;
+        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'] = {stats: {}};
+        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'].stats[this.removeAttOrPrdToIntOrAdRemoveStat] = -1;
+        this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'].stats[this.removeAttOrPrdToIntOrAdAddStat] = 1;
         this.modifiedStat['REMOVE_1_AT_OR_PRD_TO_INT_OR_AD'].name = 'Ingénieur Lvl 1';
     }
 

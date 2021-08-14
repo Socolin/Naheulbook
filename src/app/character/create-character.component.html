@@ -386,7 +386,7 @@
                 Peut choisir au niveau 1 d'échanger 1 point d'ATTAQUE avec 1 point de PARADE, ou inversement
             </p>
 
-            <mat-button-toggle-group *ngIf="step == 5" [(ngModel)]="changeAtPrdValue">
+            <mat-button-toggle-group *ngIf="step == 5" [(ngModel)]="changeAtPrdValue" (change)="updateChangeAtPrd()">
                 <mat-button-toggle [value]="1">+1 AT -1 PRD</mat-button-toggle>
                 <mat-button-toggle [value]="0">Aucune modification</mat-button-toggle>
                 <mat-button-toggle [value]="-1">-1 AT +1 PRD</mat-button-toggle>

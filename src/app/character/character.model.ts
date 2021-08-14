@@ -5,7 +5,6 @@ import {
     DurationChange,
     FlagData,
     formatModifierValue,
-    IMetadata,
     ItemStatModifier,
     StatModifier
 } from '../shared';
@@ -22,7 +21,9 @@ import {TargetJsonData} from '../group/target.model';
 
 import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 import {
-    CharacterFoGmResponse, CharacterGroupInviteResponse, CharacterGroupResponse,
+    CharacterFoGmResponse,
+    CharacterGroupInviteResponse,
+    CharacterGroupResponse,
     CharacterLevelUpResponse,
     CharacterResponse,
     ItemPartialResponse
