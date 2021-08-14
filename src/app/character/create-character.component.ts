@@ -135,8 +135,21 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     setStep(step: number) {
+        if (step === 0) {
+            this.couStatControl.enable();
+            this.intStatControl.enable();
+            this.chaStatControl.enable();
+            this.adStatControl.enable();
+            this.foStatControl.enable();
+        }
         if (step === 1) {
             this.saveStats();
+            this.couStatControl.disable();
+            this.intStatControl.disable();
+            this.chaStatControl.disable();
+            this.adStatControl.disable();
+            this.foStatControl.disable();
+
             this.selectedOrigin = undefined;
         }
         if (step === 2) {
