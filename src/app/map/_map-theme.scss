@@ -1,19 +1,19 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 
-$config: mat-typography-config();
+$config: mat.define-typography-config();
 
 @mixin map-theme($theme) {
     $background: map-get($theme, background);
 
     .map-marker-tooltip {
-        font-size: mat-font-size($config, body-1);
-        font-family: mat-font-family($config);
+        font-size: mat.font-size($config, body-1);
+        font-family: mat.font-family($config);
     }
 
     .map-link {
         .name {
             &:hover, &:focus {
-                background: mat-color($background, 'hover');
+                background: mat.get-color-from-palette($background, 'hover');
             }
         }
     }

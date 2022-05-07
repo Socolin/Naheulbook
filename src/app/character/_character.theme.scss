@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 
 @mixin character-theme($theme) {
     // Extract whichever individual palettes you need from the theme.
@@ -10,39 +10,39 @@
 
     .stat-details {
         .stat-detail-reason {
-            color: mat-color($foreground, secondary-text);
+            color: mat.get-color-from-palette($foreground, secondary-text);
         }
         .stat-element {
-            color: mat-color($foreground, hint-text);
+            color: mat.get-color-from-palette($foreground, hint-text);
         }
         .detail-row {
-            border-color: mat-color($foreground, hint-text);
+            border-color: mat.get-color-from-palette($foreground, hint-text);
         }
     }
 
     .stat-label {
-        color: mat-color($foreground, hint-text);
+        color: mat.get-color-from-palette($foreground, hint-text);
     }
 
     .item-line {
         mat-icon {
-            color: mat-color($foreground, text);
+            color: mat.get-color-from-palette($foreground, text);
         }
-        border-bottom-color: mat-color($foreground, hint-text);
+        border-bottom-color: mat.get-color-from-palette($foreground, hint-text);
     }
 
     .item-bag-line {
-        border-bottom-color: mat-color($foreground, hint-text);
+        border-bottom-color: mat.get-color-from-palette($foreground, hint-text);
     }
 
     .item-icon-container {
-        border-left-color: mat-color($foreground, hint-text);
+        border-left-color: mat.get-color-from-palette($foreground, hint-text);
     }
 
     .inventory-content {
         .items-list {
             .items-list-element {
-                border-bottom-color: mat-color($foreground, hint-text);
+                border-bottom-color: mat.get-color-from-palette($foreground, hint-text);
             }
         }
     }
@@ -52,7 +52,7 @@
 
             &.life-mana {
                 .life-danger {
-                    color: mat-color($warn);
+                    color: mat.get-color-from-palette($warn);
                 }
 
                 span {
@@ -76,29 +76,29 @@
     }
 
     .effect-list {
-        border-top-color: mat-color($foreground, hint-text);;
+        border-top-color: mat.get-color-from-palette($foreground, hint-text);;
     }
 
     .effect-element .info:hover {
-        background-color: mat-color($background, hover);
+        background-color: mat.get-color-from-palette($background, hover);
     }
 
     .loot-tab {
         .loot-list {
             .active {
-                background-color: mat-color($background, selected-button);
+                background-color: mat.get-color-from-palette($background, selected-button);
             }
 
             ul {
                 > li {
                     > icon {
-                        color: mat-color($foreground, text);
+                        color: mat.get-color-from-palette($foreground, text);
                     }
                 }
             }
             .loot-monsters {
                 .monster-item {
-                    border-left-color: mat-color($foreground, hint-text);
+                    border-left-color: mat.get-color-from-palette($foreground, hint-text);
                 }
             }
         }

@@ -43,6 +43,14 @@
             "scripts": []
           },
           "configurations": {
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
             "production": {
               "budgets": [
                 {
@@ -68,11 +76,15 @@
           }
         },
         "serve": {
+          "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "frontend:build"
           },
           "configurations": {
+            "development": {
+              "browserTarget": "frontend:build:development"
+            },
             "production": {
               "browserTarget": "frontend:build:production"
             }

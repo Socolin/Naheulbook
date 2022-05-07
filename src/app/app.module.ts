@@ -1,24 +1,24 @@
-import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
-import {BrowserModule, HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterModule} from '@angular/router';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
+import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 
-import {NhbkMaterialModule} from './nhbk-material.module';
-import {AppComponent} from './app.component';
-import {routes} from './app.routes';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { NhbkMaterialModule } from './nhbk-material.module';
+import { AppComponent } from './app.component';
+import { routes } from './app.routes';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
-import {HomeModule} from './home/home.module';
-import {UserModule} from './user/user.module';
-import {NhbkErrorHandler} from './nhbk-error-handler';
+import { HomeModule } from './home/home.module';
+import { UserModule } from './user/user.module';
+import { NhbkErrorHandler } from './nhbk-error-handler';
 
-import {CustomHammerConfig} from './hammer-js-config';
-import {ThemeService} from './theme.service';
-import {ErrorReportService} from './error-report.service';
-import {AuthenticationInterceptor} from './user/authentication.interceptor';
-import {NotificationsModule} from './notifications/notifications.module';
-import {LoginService} from './user';
-import {QuickCommandModule} from './quick-command/quick-command.module';
+import { CustomHammerConfig } from './hammer-js-config';
+import { ThemeService } from './theme.service';
+import { ErrorReportService } from './error-report.service';
+import { AuthenticationInterceptor } from './user/authentication.interceptor';
+import { NotificationsModule } from './notifications/notifications.module';
+import { LoginService } from './user';
+import { QuickCommandModule } from './quick-command/quick-command.module';
 
 @NgModule({
     imports: [
@@ -65,7 +65,7 @@ import {QuickCommandModule} from './quick-command/quick-command.module';
 export class AppModule {
 }
 
-export function onAppInit(loginService: LoginService): () => Promise<any> {
+export function onAppInit(loginService: LoginService): () => Promise<void> {
     return () => new Promise((resolve, reject) => {
         loginService.checkLogged().subscribe(
             () => resolve(),

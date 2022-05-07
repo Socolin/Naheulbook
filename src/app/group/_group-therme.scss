@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 
 @mixin group-theme($theme) {
     // Extract whichever individual palettes you need from the theme.
@@ -33,28 +33,28 @@
         background: linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
     }
     .fighter-container {
-        border-bottom-color: mat-color($foreground, hint-text);
+        border-bottom-color: mat.get-color-from-palette($foreground, hint-text);
     }
 
     .incompatible-item {
-        color: mat-color($warn);
+        color: mat.get-color-from-palette($warn);
     }
 
     .loot-list {
         .active {
-            background-color: mat-color($background, selected-button);
+            background-color: mat.get-color-from-palette($background, selected-button);
         }
 
         ul {
             > li {
                 > icon {
-                    color: mat-color($foreground, text);
+                    color: mat.get-color-from-palette($foreground, text);
                 }
             }
         }
         .loot-monsters {
             .monster-item {
-                border-left-color: mat-color($foreground, hint-text);
+                border-left-color: mat.get-color-from-palette($foreground, hint-text);
             }
         }
     }
