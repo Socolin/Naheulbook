@@ -1,11 +1,20 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild} from '@angular/core';
-import {NhbkMatDialog} from '../material-workaround';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { NhbkMatDialog } from '../material-workaround';
 import {
     ValueEditorModes,
     ValueEditorSettingsDialogComponent,
     ValueEditorSettingsDialogData,
     ValueEditorSettingsDialogResult
 } from './value-editor-settings-dialog.component';
+
+interface IRect {
+    bottom: number;
+    height: number;
+    left: number;
+    right: number;
+    top: number;
+    width: number;
+}
 
 @Component({
     selector: 'value-editor',
@@ -36,7 +45,7 @@ export class ValueEditorComponent implements OnChanges {
         this.loadConfig();
     }
 
-    computeEditorBoundingBox(element: Element, bbox: ClientRect): void {
+    computeEditorBoundingBox(element: Element, bbox: IRect): void {
         for (let i = 0; i < element.children.length; i++) {
             this.computeEditorBoundingBox(element.children[i], bbox);
         }
@@ -87,7 +96,7 @@ export class ValueEditorComponent implements OnChanges {
                 return;
             }
 
-            let bbox: ClientRect = {
+            let bbox: IRect = {
                 bottom: 0,
                 height: 0,
                 left: 0,
