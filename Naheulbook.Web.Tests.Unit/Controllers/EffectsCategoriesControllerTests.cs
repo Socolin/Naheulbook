@@ -53,14 +53,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PostCreateEffect_WhenCatchForbiddenAccessException_Return403()
+        public async Task PostCreateEffect_WhenCatchForbiddenAccessException_Return403()
         {
             _effectService.CreateEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateEffectRequest>())
                 .Returns(Task.FromException<Effect>(new ForbiddenAccessException()));
 
             Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectAsync(_executionContext, 12, new CreateEffectRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         [Test]
@@ -98,14 +98,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PostCreateCategory_WhenCatchForbiddenAccessException_Return403()
+        public async Task PostCreateCategory_WhenCatchForbiddenAccessException_Return403()
         {
             _effectService.CreateEffectSubCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectSubCategoryRequest>())
                 .Returns(Task.FromException<EffectSubCategory>(new ForbiddenAccessException()));
 
             Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectSubCategoryAsync(_executionContext, CreateEffectSubCategoryRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         private static CreateEffectSubCategoryRequest CreateEffectSubCategoryRequest()

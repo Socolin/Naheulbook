@@ -64,7 +64,7 @@ namespace Naheulbook.Data.Repositories
         public Task<List<User>> SearchUsersAsync(string filter)
         {
             return Context.Users
-                .Where(u => u.DisplayName != null && u.DisplayName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                .Where(u => u.DisplayName != null && u.DisplayName.ToLower().Contains(filter.ToLower()))
                 .Where(u => u.ShowInSearchUntil > DateTime.UtcNow)
                 .Take(10)
                 .ToListAsync();

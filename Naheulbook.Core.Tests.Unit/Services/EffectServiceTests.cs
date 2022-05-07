@@ -214,7 +214,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void EditEffect_WhenEffectDoesNotExists_Throw()
+        public async Task EditEffect_WhenEffectDoesNotExists_Throw()
         {
             var executionContext = new NaheulbookExecutionContext();
             var editEffectRequest = AutoFill<EditEffectRequest>.One();
@@ -224,7 +224,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _effectService.EditEffectAsync(executionContext, 42, editEffectRequest);
 
-            act.Should().Throw<EffectNotFoundException>();
+            await act.Should().ThrowAsync<EffectNotFoundException>();
         }
 
         private static EffectSubCategory CreateEffectSubCategory()

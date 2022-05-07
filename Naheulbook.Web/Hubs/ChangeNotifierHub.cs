@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Services;
@@ -32,7 +33,7 @@ namespace Naheulbook.Web.Hubs
 
         public async Task SubscribeCharacter(int characterId)
         {
-            var executionContext = Context.GetHttpContext().GetExecutionContext();
+            var executionContext = GetHttpContext().GetExecutionContext();
             try
             {
                 var isGroupMaster = await _characterService.EnsureUserCanAccessCharacterAndGetIfIsGroupMasterAsync(executionContext, characterId);
@@ -48,7 +49,7 @@ namespace Naheulbook.Web.Hubs
 
         public async Task SubscribeGroup(int groupId)
         {
-            var executionContext = Context.GetHttpContext().GetExecutionContext();
+            var executionContext = GetHttpContext().GetExecutionContext();
             try
             {
                 await _groupService.EnsureUserCanAccessGroupAsync(executionContext, groupId);
@@ -63,7 +64,7 @@ namespace Naheulbook.Web.Hubs
 
         public async Task SubscribeLoot(int lootId)
         {
-            var executionContext = Context.GetHttpContext().GetExecutionContext();
+            var executionContext = GetHttpContext().GetExecutionContext();
             try
             {
                 await _lootService.EnsureUserCanAccessLootAsync(executionContext, lootId);
@@ -86,7 +87,7 @@ namespace Naheulbook.Web.Hubs
 
         public async Task SubscribeMonster(int monsterId)
         {
-            var executionContext = Context.GetHttpContext().GetExecutionContext();
+            var executionContext = GetHttpContext().GetExecutionContext();
             try
             {
                 await _monsterService.EnsureUserCanAccessMonsterAsync(executionContext, monsterId);
@@ -126,6 +127,17 @@ namespace Naheulbook.Web.Hubs
         public async Task UnsubscribeMonster(int monsterId)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, _hubGroupUtil.GetMonsterGroupName(monsterId));
+        }
+
+        private HttpContext GetHttpContext()
+        {
+            var httpContext = Context.GetHttpContext();
+            if (httpContext == null)
+            {
+                throw new HubException("httpContext not available");
+            }
+
+            return httpContext;
         }
     }
 }

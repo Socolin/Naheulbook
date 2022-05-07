@@ -52,14 +52,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PostCreateSection_WhenCatchForbiddenAccessException_Return403()
+        public async Task PostCreateSection_WhenCatchForbiddenAccessException_Return403()
         {
             _itemTemplateSectionService.CreateItemTemplateSectionAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateSectionRequest>())
                 .Returns(Task.FromException<ItemTemplateSection>(new ForbiddenAccessException()));
 
             Func<Task<JsonResult>> act = () => _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, new CreateItemTemplateSectionRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
     }
 }

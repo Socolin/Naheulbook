@@ -110,7 +110,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void CreateCharacterAsync_WhenGroupIdIsGiven_CheckIsGroupOwner()
+        public async Task CreateCharacterAsync_WhenGroupIdIsGiven_CheckIsGroupOwner()
         {
             const int groupId = 8;
             var createCharacterRequest = new CreateCharacterRequest {Name = "some-name", GroupId = groupId};
@@ -127,11 +127,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateCharacterAsync(naheulbookExecutionContext, createCharacterRequest);
 
-            act.Should().Throw<ForbiddenAccessException>();
+            await act.Should().ThrowAsync<ForbiddenAccessException>();
         }
 
         [Test]
-        public void LoadCharacterDetailsAsync_ShouldCall_EnsureCharacterAccess()
+        public async Task LoadCharacterDetailsAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
             var character = new Character {Id = characterId};
@@ -144,7 +144,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.LoadCharacterDetailsAsync(executionContext, characterId);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
@@ -213,7 +213,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void AddItemToCharacterAsync_ShouldCall_EnsureCharacterAccess()
+        public async Task AddItemToCharacterAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
             var character = new Character {Id = characterId};
@@ -227,7 +227,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.AddItemToCharacterAsync(executionContext, characterId, request);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
@@ -250,7 +250,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void GetCharacterLootsAsync_ShouldCall_EnsureCharacterAccess()
+        public async Task GetCharacterLootsAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
             var character = new Character {Id = characterId};
@@ -263,7 +263,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetCharacterLootsAsync(executionContext, characterId);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
@@ -288,7 +288,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void GetCharacterHistoryEntryAsync_ShouldCall_EnsureCharacterAccess()
+        public async Task GetCharacterHistoryEntryAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
             var character = new Character {Id = characterId};
@@ -301,11 +301,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetCharacterHistoryEntryAsync(executionContext, characterId, 0);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
-        public void GetCharacterHistoryEntryAsync_ShouldThrowWhenCharacterDoesNotExists()
+        public async Task GetCharacterHistoryEntryAsync_ShouldThrowWhenCharacterDoesNotExists()
         {
             const int characterId = 4;
             var executionContext = new NaheulbookExecutionContext();
@@ -315,11 +315,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetCharacterHistoryEntryAsync(executionContext, characterId, 0);
 
-            act.Should().Throw<CharacterNotFoundException>();
+            await act.Should().ThrowAsync<CharacterNotFoundException>();
         }
 
         [Test]
-        public void UpdateCharacterStatAsync_ShouldCall_EnsureCharacterAccess()
+        public async Task UpdateCharacterStatAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
             var character = new Character {Id = characterId};
@@ -332,11 +332,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.UpdateCharacterAsync(executionContext, characterId, new PatchCharacterRequest());
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
-        public void UpdateCharacterStatAsync_ShouldThrowWhenCharacterDoesNotExists()
+        public async Task UpdateCharacterStatAsync_ShouldThrowWhenCharacterDoesNotExists()
         {
             const int characterId = 4;
             var executionContext = new NaheulbookExecutionContext();
@@ -346,7 +346,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.UpdateCharacterAsync(executionContext, characterId, new PatchCharacterRequest());
 
-            act.Should().Throw<CharacterNotFoundException>();
+            await act.Should().ThrowAsync<CharacterNotFoundException>();
         }
 
         [Test]
@@ -373,7 +373,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void SetCharacterAdBonusStatAsync_ShouldCall_EnsureCharacterAccess()
+        public async Task SetCharacterAdBonusStatAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
             var character = new Character {Id = characterId};
@@ -386,11 +386,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.SetCharacterAdBonusStatAsync(executionContext, characterId, new PutStatBonusAdRequest());
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
-        public void SetCharacterAdBonusStatAsync_ShouldThrowWhenCharacterDoesNotExists()
+        public async Task SetCharacterAdBonusStatAsync_ShouldThrowWhenCharacterDoesNotExists()
         {
             const int characterId = 4;
             var executionContext = new NaheulbookExecutionContext();
@@ -400,7 +400,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.SetCharacterAdBonusStatAsync(executionContext, characterId, new PutStatBonusAdRequest());
 
-            act.Should().Throw<CharacterNotFoundException>();
+            await act.Should().ThrowAsync<CharacterNotFoundException>();
         }
 
         [Test]
@@ -475,7 +475,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void AddModifiersAsync_ShouldCall_EnsureCharacterAccess()
+        public async Task AddModifiersAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
             var character = new Character {Id = characterId};
@@ -488,11 +488,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.AddModifiersAsync(executionContext, characterId, new AddCharacterModifierRequest());
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
-        public void AddModifiersAsync_ShouldThrowWhenCharacterDoesNotExists()
+        public async Task AddModifiersAsync_ShouldThrowWhenCharacterDoesNotExists()
         {
             const int characterId = 4;
             var executionContext = new NaheulbookExecutionContext();
@@ -502,7 +502,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.AddModifiersAsync(executionContext, characterId, new AddCharacterModifierRequest());
 
-            act.Should().Throw<CharacterNotFoundException>();
+            await act.Should().ThrowAsync<CharacterNotFoundException>();
         }
 
         [Test]
@@ -574,7 +574,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void DeleteModifiersAsync_ShouldCall_EnsureCharacterAccess()
+        public async Task DeleteModifiersAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
             const int characterModifierId = 2;
@@ -591,11 +591,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.DeleteModifiersAsync(executionContext, characterId, characterModifierId);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
-        public void DeleteModifiersAsync_ShouldThrowWhenCharacterDoesNotExists()
+        public async Task DeleteModifiersAsync_ShouldThrowWhenCharacterDoesNotExists()
         {
             const int characterId = 4;
             var executionContext = new NaheulbookExecutionContext();
@@ -605,7 +605,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.DeleteModifiersAsync(executionContext, characterId, 2);
 
-            act.Should().Throw<CharacterNotFoundException>();
+            await act.Should().ThrowAsync<CharacterNotFoundException>();
         }
 
 
@@ -654,7 +654,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void ToggleModifiersAsync_ShouldCall_EnsureCharacterAccess()
+        public async Task ToggleModifiersAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
             const int characterModifierId = 2;
@@ -671,11 +671,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.ToggleModifiersAsync(executionContext, characterId, characterModifierId);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
-        public void ToggleModifiersAsync_ShouldThrowWhenCharacterDoesNotExists()
+        public async Task ToggleModifiersAsync_ShouldThrowWhenCharacterDoesNotExists()
         {
             const int characterId = 4;
             var executionContext = new NaheulbookExecutionContext();
@@ -685,11 +685,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.ToggleModifiersAsync(executionContext, characterId, 2);
 
-            act.Should().Throw<CharacterNotFoundException>();
+            await act.Should().ThrowAsync<CharacterNotFoundException>();
         }
 
         [Test]
-        public void AddJobAsync_AddNewJobToCharacterJobsAndNotifyIt()
+        public async Task AddJobAsync_AddNewJobToCharacterJobsAndNotifyIt()
         {
             const int characterId = 5;
             var jobId = Guid.NewGuid();
@@ -709,7 +709,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                     character.Jobs.First().Job.Should().BeSameAs(job);
                 });
 
-            _service.AddJobAsync(executionContext, characterId, request);
+            await _service.AddJobAsync(executionContext, characterId, request);
 
             Received.InOrder(() =>
             {
@@ -720,7 +720,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void AddJobAsync_WhenCharacterNotFound_Throw()
+        public async Task AddJobAsync_WhenCharacterNotFound_Throw()
         {
             var jobId = Guid.NewGuid();
             const int characterId = 5;
@@ -732,11 +732,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
 
-            act.Should().Throw<CharacterNotFoundException>();
+            await act.Should().ThrowAsync<CharacterNotFoundException>();
         }
 
         [Test]
-        public void AddJobAsync_EnsureCanAccessCharacter()
+        public async Task AddJobAsync_EnsureCanAccessCharacter()
         {
             var jobId = Guid.NewGuid();
             const int characterId = 5;
@@ -752,11 +752,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
-        public void AddJobAsync_WhenCharacterAlreadyKnowTheJob_Throw()
+        public async Task AddJobAsync_WhenCharacterAlreadyKnowTheJob_Throw()
         {
             const int characterId = 5;
             var jobId = Guid.NewGuid();
@@ -769,11 +769,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
 
-            act.Should().Throw<CharacterAlreadyKnowThisJobException>();
+            await act.Should().ThrowAsync<CharacterAlreadyKnowThisJobException>();
         }
 
         [Test]
-        public void AddJobAsync_WhenJobNotFoundThrow()
+        public async Task AddJobAsync_WhenJobNotFoundThrow()
         {
             const int characterId = 5;
             var jobId = Guid.NewGuid();
@@ -788,7 +788,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
 
-            act.Should().Throw<JobNotFoundException>();
+            await act.Should().ThrowAsync<JobNotFoundException>();
         }
     }
 }

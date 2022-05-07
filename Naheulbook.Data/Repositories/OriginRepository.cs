@@ -10,7 +10,7 @@ namespace Naheulbook.Data.Repositories
     public interface IOriginRepository : IRepository<Origin>
     {
         Task<ICollection<Origin>> GetAllWithAllDataAsync();
-        Task<Origin> GetWithAllDataAsync(Guid originId);
+        Task<Origin?> GetWithAllDataAsync(Guid originId);
     }
 
     public class OriginRepository : Repository<Origin, NaheulbookDbContext>, IOriginRepository
@@ -30,7 +30,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Origin> GetWithAllDataAsync(Guid originId)
+        public Task<Origin?> GetWithAllDataAsync(Guid originId)
         {
             return Context.Origins
                 .Include(o => o.Requirements)

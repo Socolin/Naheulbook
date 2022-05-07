@@ -59,7 +59,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void GetItemTemplateAsync_WhenItemTemplateIsNotFound_Throw()
+        public async Task GetItemTemplateAsync_WhenItemTemplateIsNotFound_Throw()
         {
             var itemTemplateId = Guid.NewGuid();
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
@@ -67,7 +67,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetItemTemplateAsync(itemTemplateId);
 
-            act.Should().Throw<ItemTemplateNotFoundException>();
+            await act.Should().ThrowAsync<ItemTemplateNotFoundException>();
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task<ItemTemplate>> act = () => _service.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
             await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
@@ -184,7 +184,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void EditItemTemplateAsync_CheckPermissionBeforeEditingItem()
+        public async Task EditItemTemplateAsync_CheckPermissionBeforeEditingItem()
         {
             var itemTemplateId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext();
@@ -199,14 +199,14 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             using (new AssertionScope())
             {
-                act.Should().Throw<TestException>();
-                _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
+                await act.Should().ThrowAsync<TestException>();
+                await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
             }
         }
 
 
         [Test]
-        public void EditItemTemplateAsync_CheckPermissionBeforeChangingSourceOfAnItemToAdmin()
+        public async Task EditItemTemplateAsync_CheckPermissionBeforeChangingSourceOfAnItemToAdmin()
         {
             var itemTemplateId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext();
@@ -222,8 +222,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             using (new AssertionScope())
             {
-                act.Should().Throw<TestException>();
-                _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
+                await act.Should().ThrowAsync<TestException>();
+                await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
             }
         }
 
@@ -254,7 +254,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             var actualItemTemplates = await _service.SearchItemTemplateAsync(filter, 40, null);
 
-            actualItemTemplates.Should().BeEquivalentTo(item1, item2, item3);
+            actualItemTemplates.Should().BeEquivalentTo(new [] {item1, item2, item3});
         }
 
         [Test]

@@ -114,7 +114,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void CreateMonsterAsync_ShouldThrowWhenGroupNotFound()
+        public async Task CreateMonsterAsync_ShouldThrowWhenGroupNotFound()
         {
             const int groupId = 42;
             var request = CreateRequest();
@@ -125,11 +125,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateMonsterAsync(executionContext, groupId, request);
 
-            act.Should().Throw<GroupNotFoundException>();
+            await act.Should().ThrowAsync<GroupNotFoundException>();
         }
 
         [Test]
-        public void CreateMonsterAsync_EnsureUserIsOwnerOfGroup()
+        public async Task CreateMonsterAsync_EnsureUserIsOwnerOfGroup()
         {
             const int groupId = 42;
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
@@ -143,7 +143,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateMonsterAsync(naheulbookExecutionContext, groupId, new CreateMonsterRequest());
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
 
@@ -166,7 +166,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void GetMonstersForGroupAsync_ShouldThrowWhenGroupNotFound()
+        public async Task GetMonstersForGroupAsync_ShouldThrowWhenGroupNotFound()
         {
             const int groupId = 42;
             var executionContext = new NaheulbookExecutionContext();
@@ -176,11 +176,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetMonstersForGroupAsync(executionContext, groupId);
 
-            act.Should().Throw<GroupNotFoundException>();
+            await act.Should().ThrowAsync<GroupNotFoundException>();
         }
 
         [Test]
-        public void GetMonstersForGroupAsync_ShouldEnsureGroupAccess()
+        public async Task GetMonstersForGroupAsync_ShouldEnsureGroupAccess()
         {
             const int groupId = 42;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
@@ -194,7 +194,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetMonstersForGroupAsync(naheulbookExecutionContext, groupId);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         private static CreateMonsterRequest CreateRequest()

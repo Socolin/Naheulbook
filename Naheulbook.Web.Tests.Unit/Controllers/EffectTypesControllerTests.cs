@@ -52,14 +52,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PostCreateType_WhenCatchForbiddenAccessException_Return403()
+        public async Task PostCreateType_WhenCatchForbiddenAccessException_Return403()
         {
             _effectService.CreateEffectTypeAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectTypeRequest>())
                 .Returns(Task.FromException<EffectType>(new ForbiddenAccessException()));
 
             Func<Task<JsonResult>> act = () =>  _effectTypesController.PostCreateTypeAsync(_executionContext, new CreateEffectTypeRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
     }
 }

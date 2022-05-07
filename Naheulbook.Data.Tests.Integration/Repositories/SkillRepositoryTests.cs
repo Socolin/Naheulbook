@@ -33,7 +33,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                     .Excluding(s => s.Id)
                     .Excluding(s => s.JobSkills)
                     .Excluding(s => s.OriginSkills)
-                    .Excluding(info => info.SelectedMemberPath == "Skill")
+                    .Excluding(info => info.Path == "Skill")
                     .IgnoringCyclicReferences()
             );
         }

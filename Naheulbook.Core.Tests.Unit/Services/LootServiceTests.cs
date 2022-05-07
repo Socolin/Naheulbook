@@ -64,7 +64,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void CreateLootAsync_WhenGroupDoesNotExists_ShouldThrow()
+        public async Task CreateLootAsync_WhenGroupDoesNotExists_ShouldThrow()
         {
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
 
@@ -73,11 +73,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, 42, new CreateLootRequest());
 
-            act.Should().Throw<GroupNotFoundException>();
+            await act.Should().ThrowAsync<GroupNotFoundException>();
         }
 
         [Test]
-        public void CreateLootAsync_EnsureUserAccessToLoot()
+        public async Task CreateLootAsync_EnsureUserAccessToLoot()
         {
             const int groupId = 42;
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
@@ -91,7 +91,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, groupId, new CreateLootRequest());
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
@@ -113,7 +113,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void GetLootsForGroupAsync_ShouldThrowWhenGroupNotFound()
+        public async Task GetLootsForGroupAsync_ShouldThrowWhenGroupNotFound()
         {
             const int groupId = 42;
             var executionContext = new NaheulbookExecutionContext();
@@ -123,11 +123,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetLootsForGroupAsync(executionContext, groupId);
 
-            act.Should().Throw<GroupNotFoundException>();
+            await act.Should().ThrowAsync<GroupNotFoundException>();
         }
 
         [Test]
-        public void GetLootsForGroupAsync_ShouldEnsureGroupAccess()
+        public async Task GetLootsForGroupAsync_ShouldEnsureGroupAccess()
         {
             const int groupId = 42;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
@@ -141,7 +141,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetLootsForGroupAsync(naheulbookExecutionContext, groupId);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
     }
 }

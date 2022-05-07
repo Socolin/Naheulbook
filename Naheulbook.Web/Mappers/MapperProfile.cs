@@ -66,7 +66,8 @@ namespace Naheulbook.Web.Mappers
 
             CreateMap<Effect, EffectResponse>()
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(e => e.Modifiers.OrderBy(m => m.StatName)));
-            CreateMap<EffectType, EffectTypeResponse>();
+            CreateMap<EffectType, EffectTypeResponse>()
+                .ForMember(m => m.SubCategories, opt => opt.MapFrom(et => et.SubCategories.OrderBy(x => x.Id)));
             CreateMap<EffectSubCategory, EffectSubCategoryResponse>();
             CreateMap<EffectModifier, StatModifierResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(se => se.StatName))
@@ -162,6 +163,7 @@ namespace Naheulbook.Web.Mappers
             CreateMap<ItemTemplateSlot, IdResponse>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(i => i.SlotId));
             CreateMap<ItemTemplateSection, ItemTemplateSectionResponse>()
+                .ForMember(m => m.SubCategories, opt => opt.MapFrom(et => et.SubCategories.OrderBy(x => x.Id)))
                 .ForMember(m => m.Specials, opt => opt.MapFrom(i => MapperHelpers.FromCommaSeparatedList(i.Special)));
             CreateMap<ItemTemplateSubCategory, ItemTemplateSubCategoryResponse>();
             CreateMap<ItemType, ItemTypeResponse>();

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Naheulbook.Shared.TransientModels
@@ -18,6 +19,7 @@ namespace Naheulbook.Shared.TransientModels
 
         public string? Dmg { get; set; }
         public int Cou { get; set; }
+        public int? Int { get; set; }
         public bool ChercheNoise { get; set; }
         public int Resm { get; set; }
         public int Xp { get; set; }
@@ -26,5 +28,11 @@ namespace Naheulbook.Shared.TransientModels
         public int Number { get; set; }
         public string? Sex { get; set; }
         public int? Page { get; set; }
+        public List<MonsterAlternativeWeapon>? AlternativeWeapon { get; set; }
+    }
+
+    public class MonsterAlternativeWeapon
+    {
+
     }
 }

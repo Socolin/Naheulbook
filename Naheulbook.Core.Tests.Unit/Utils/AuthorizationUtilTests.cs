@@ -31,7 +31,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         }
 
         [Test]
-        public void EnsureAdminAccess_WhenUserIsNotAdmin_Throw()
+        public async Task EnsureAdminAccess_WhenUserIsNotAdmin_Throw()
         {
             var user = new User {Admin = false, Id = 1};
 
@@ -40,23 +40,23 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             Func<Task> act = () => _authorizationUtil.EnsureAdminAccessAsync(new NaheulbookExecutionContext {UserId = 1});
 
-            act.Should().Throw<ForbiddenAccessException>();
+            await act.Should().ThrowAsync<ForbiddenAccessException>();
         }
 
         [Test]
-        public void EnsureAdminAccess_WhenUserDoesNotExists_Throw()
+        public async Task EnsureAdminAccess_WhenUserDoesNotExists_Throw()
         {
             _unitOfWork.Users.GetAsync(1)
                 .Returns((User) null);
 
             Func<Task> act = () => _authorizationUtil.EnsureAdminAccessAsync(new NaheulbookExecutionContext {UserId = 1});
 
-            act.Should().Throw<ForbiddenAccessException>();
+            await act.Should().ThrowAsync<ForbiddenAccessException>();
         }
 
 
         [Test]
-        public void EnsureCanEditItemTemplateAsync_WhenUserDoesNotExists_Throw()
+        public async Task EnsureCanEditItemTemplateAsync_WhenUserDoesNotExists_Throw()
         {
             var itemTemplate = new ItemTemplate {Source = "official"};
             var executionContext = new NaheulbookExecutionContext {UserId = 1};
@@ -68,24 +68,24 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             Func<Task> act = () => _authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, itemTemplate);
 
-            act.Should().Throw<ForbiddenAccessException>();
+            await act.Should().ThrowAsync<ForbiddenAccessException>();
         }
 
         [Test]
-        public void EnsureCanEditItemTemplateAsync_WhenSourceIsOfficial_ShouldThrowWhenUserIsNotAdmin()
+        public async Task EnsureCanEditItemTemplateAsync_WhenSourceIsOfficial_ShouldThrowWhenUserIsNotAdmin()
         {
             _unitOfWork.Users.GetAsync(1)
                 .Returns((User) null);
 
             Func<Task> act = () => _authorizationUtil.EnsureAdminAccessAsync(new NaheulbookExecutionContext {UserId = 1});
 
-            act.Should().Throw<ForbiddenAccessException>();
+            await act.Should().ThrowAsync<ForbiddenAccessException>();
         }
 
         [Test]
         [TestCase("private")]
         [TestCase("community")]
-        public void EnsureCanEditItemTemplateAsync_WhenSourceIsPrivateOrCommunity_ShouldThrowWhenUserIsNotTheSame(string source)
+        public async Task EnsureCanEditItemTemplateAsync_WhenSourceIsPrivateOrCommunity_ShouldThrowWhenUserIsNotTheSame(string source)
         {
             var itemTemplate = new ItemTemplate {Source = source, SourceUserId = 2};
             var executionContext = new NaheulbookExecutionContext {UserId = 1};
@@ -97,19 +97,19 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             Func<Task> act = () => _authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, itemTemplate);
 
-            act.Should().Throw<ForbiddenAccessException>();
+            await act.Should().ThrowAsync<ForbiddenAccessException>();
         }
 
 
         [Test]
-        public void EnsureCanEditItemTemplateAsync_WhenSourceIsInvalid_ShouldThrow()
+        public async Task EnsureCanEditItemTemplateAsync_WhenSourceIsInvalid_ShouldThrow()
         {
             var itemTemplate = new ItemTemplate {Source = "invalid"};
             var executionContext = new NaheulbookExecutionContext();
 
             Func<Task> act = () => _authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, itemTemplate);
 
-            act.Should().Throw<ForbiddenAccessException>();
+            await act.Should().ThrowAsync<ForbiddenAccessException>();
         }
 
         [Test]

@@ -90,7 +90,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void PostCreateLootAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
+        public async Task PostCreateLootAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
             var createLootRequest = new CreateLootRequest();
@@ -100,7 +100,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void PostCreateMonsterAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
+        public async Task PostCreateMonsterAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
             var createMonsterRequest = new CreateMonsterRequest();
@@ -134,7 +134,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
@@ -158,14 +158,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetPostCreateInviteExceptionsAndExpectedStatusCode))]
-        public void PostCreateInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
+        public async Task PostCreateInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _groupService.CreateInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<CreateInviteRequest>())
                 .Returns(Task.FromException<GroupInvite>(exception));
 
             Func<Task> act = () => _controller.PostCreateInviteAsync(_executionContext, 8, new CreateInviteRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
@@ -188,26 +188,26 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetDeleteInviteExceptionsAndExpectedStatusCode))]
-        public void DeleteInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
+        public async Task DeleteInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _groupService.CancelOrRejectInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<int>())
                 .Returns(Task.FromException<GroupInvite>(exception));
 
             Func<Task> act = () => _controller.DeleteInviteAsync(_executionContext, 8, 12);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
         [TestCaseSource(nameof(GetAcceptInviteExceptionsAndExpectedStatusCode))]
-        public void PostAcceptInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
+        public async Task PostAcceptInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _groupService.AcceptInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<int>())
                 .Returns(Task.FromException<GroupInvite>(exception));
 
             Func<Task> act = () => _controller.PostAcceptInviteAsync(_executionContext, 8, 12);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
@@ -229,7 +229,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void GetGroupDetailsAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
+        public async Task GetGroupDetailsAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
 
@@ -238,7 +238,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _controller.GetGroupDetailsAsync(_executionContext, groupId);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
@@ -260,7 +260,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void GetEventListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
+        public async Task GetEventListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
 
@@ -269,7 +269,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _controller.GetEventListAsync(_executionContext, groupId);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
@@ -291,7 +291,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void GetLootListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
+        public async Task GetLootListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
 
@@ -300,12 +300,12 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _controller.GetLootListAsync(_executionContext, groupId);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void PatchGroupAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
+        public async Task PatchGroupAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
             var request = new PatchGroupRequest();
@@ -315,7 +315,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _controller.PatchGroupAsync(_executionContext, groupId, request);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         [Test]
@@ -337,7 +337,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
         [Test]
         [TestCaseSource(nameof(GetCommonGroupExceptionsAndExpectedStatusCode))]
-        public void GetMonsterListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
+        public async Task GetMonsterListAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             const int groupId = 8;
 
@@ -346,7 +346,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _controller.GetMonsterListAsync(_executionContext, groupId);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(expectedStatusCode);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
         }
 
         private static IEnumerable<TestCaseData> GetCommonGroupExceptionsAndExpectedStatusCode()

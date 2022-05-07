@@ -107,7 +107,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
-            itemTemplate.Slots.Should().BeEquivalentTo(
+            itemTemplate.Slots.Should().BeEquivalentTo(new [] {
                 new ItemTemplateSlot
                 {
                     SlotId = 2
@@ -116,7 +116,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                 {
                     SlotId = 3
                 }
-            );
+            });
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
-            itemTemplate.Requirements.Should().BeEquivalentTo(
+            itemTemplate.Requirements.Should().BeEquivalentTo(new [] {
                 new ItemTemplateRequirement
                 {
                     StatName = "some-stat-name-2",
@@ -177,7 +177,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                     MinValue = 4,
                     MaxValue = 12
                 }
-            );
+            });
         }
 
 
@@ -229,7 +229,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
-            itemTemplate.Modifiers.Should().BeEquivalentTo(
+            itemTemplate.Modifiers.Should().BeEquivalentTo(new [] {
                 new ItemTemplateModifier
                 {
                     StatName = "some-stat-name-2",
@@ -246,7 +246,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                     Value = 3,
                     Special = "some-special-3"
                 }
-            );
+            });
         }
 
         [Test]
@@ -282,14 +282,14 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
-            itemTemplate.Skills.Should().BeEquivalentTo(
+            itemTemplate.Skills.Should().BeEquivalentTo(new [] {
                 new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000004")},
                 new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000005")}
-            );
-            itemTemplate.UnSkills.Should().BeEquivalentTo(
+            });
+            itemTemplate.UnSkills.Should().BeEquivalentTo(new [] {
                 new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000006")},
                 new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000007")}
-            );
+            });
         }
 
 
@@ -316,10 +316,10 @@ namespace Naheulbook.Core.Tests.Unit.Utils
 
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
-            itemTemplate.SkillModifiers.Should().BeEquivalentTo(
+            itemTemplate.SkillModifiers.Should().BeEquivalentTo(new [] {
                 new ItemTemplateSkillModifier {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
                 new ItemTemplateSkillModifier {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4}
-            );
+            });
         }
 
         [Test]

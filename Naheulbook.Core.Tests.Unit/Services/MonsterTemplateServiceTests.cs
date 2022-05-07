@@ -63,7 +63,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void CreateMonsterTemplate_EnsureAdminAccess()
+        public async Task CreateMonsterTemplate_EnsureAdminAccess()
         {
             var request = new MonsterTemplateRequest();
             var executionContext = new NaheulbookExecutionContext();
@@ -73,11 +73,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateMonsterTemplateAsync(executionContext, request);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
-        public void CreateMonsterTemplate_WhenRequestedSubCategoryIdDoesNotExists_ThrowMonsterSubCategoryNotFoundException()
+        public async Task CreateMonsterTemplate_WhenRequestedSubCategoryIdDoesNotExists_ThrowMonsterSubCategoryNotFoundException()
         {
             var request = new MonsterTemplateRequest
             {
@@ -90,7 +90,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateMonsterTemplateAsync(executionContext, request);
 
-            act.Should().Throw<MonsterSubCategoryNotFoundException>();
+            await act.Should().ThrowAsync<MonsterSubCategoryNotFoundException>();
         }
 
         private static MonsterSubCategory CreateMonsterSubCategory(int subCategoryId)

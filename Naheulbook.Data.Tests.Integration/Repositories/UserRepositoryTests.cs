@@ -49,7 +49,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             var users = await _userRepository.SearchUsersAsync(testUser.DisplayName!);
 
-            users.Should().BeEquivalentTo(testUser);
+            users.Should().BeEquivalentTo(new [] {testUser});
         }
 
         [Test]

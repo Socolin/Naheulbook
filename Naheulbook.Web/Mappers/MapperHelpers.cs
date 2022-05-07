@@ -48,7 +48,7 @@ namespace Naheulbook.Web.Mappers
             if (string.IsNullOrEmpty(list))
                 return default;
 
-            return list!.Split(",").ToList();
+            return list.Split(",").ToList();
         }
 
         public static string? FromDateTimeToString(DateTime? date)

@@ -52,7 +52,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void GetItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
+        public async Task GetItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
         {
             var itemTemplateId = Guid.NewGuid();
             _itemTemplateService.GetItemTemplateAsync(Arg.Any<Guid>())
@@ -60,7 +60,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _itemTemplatesController.GetItemTemplateAsync(itemTemplateId);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
         [Test]
         public async Task PutItemTemplateAsync_CallServiceToEditItem_AndMapEditedItemIntoResponse()
@@ -81,7 +81,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PutItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
+        public async Task PutItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
         {
             var itemTemplateId = Guid.NewGuid();
             _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<Guid>(), Arg.Any<ItemTemplateRequest>())
@@ -89,18 +89,18 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
 
             Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, new ItemTemplateRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
         [Test]
-        public void PutItemTemplateAsync_Return403_WhenNotAllowed()
+        public async Task PutItemTemplateAsync_Return403_WhenNotAllowed()
         {
             _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<Guid>(), Arg.Any<ItemTemplateRequest>())
                 .Throws(new ForbiddenAccessException());
 
             Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, Guid.NewGuid(), new ItemTemplateRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         [Test]
@@ -122,14 +122,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PostCreateItemTemplate_WhenCatchForbiddenAccessException_Return403()
+        public async Task PostCreateItemTemplate_WhenCatchForbiddenAccessException_Return403()
         {
             _itemTemplateService.CreateItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<ItemTemplateRequest>())
                 .Returns(Task.FromException<ItemTemplate>(new ForbiddenAccessException()));
 
             Func<Task<JsonResult>> act = () => _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, new ItemTemplateRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
     }
 }

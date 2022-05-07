@@ -143,7 +143,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void UpdateItemDataAsync_EnsureCurrentUserCanAccessThisItem()
+        public async Task UpdateItemDataAsync_EnsureCurrentUserCanAccessThisItem()
         {
             const int itemId = 4;
             var executionContext = new NaheulbookExecutionContext();
@@ -156,8 +156,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.UpdateItemDataAsync(executionContext, itemId, new ItemData());
 
-            act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
+            await act.Should().ThrowAsync<TestException>();
+            await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -200,7 +200,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void UpdateItemModifiersAsync_EnsureCurrentUserCanAccessThisItem()
+        public async Task UpdateItemModifiersAsync_EnsureCurrentUserCanAccessThisItem()
         {
             const int itemId = 4;
             var executionContext = new NaheulbookExecutionContext();
@@ -213,8 +213,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.UpdateItemModifiersAsync(executionContext, itemId, new List<ActiveStatsModifier>());
 
-            act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
+            await act.Should().ThrowAsync<TestException>();
+            await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -254,7 +254,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void EquipItemAsync_EnsureCurrentUserCanAccessThisItem()
+        public async Task EquipItemAsync_EnsureCurrentUserCanAccessThisItem()
         {
             const int itemId = 4;
             var executionContext = new NaheulbookExecutionContext();
@@ -267,8 +267,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.EquipItemAsync(executionContext, itemId, new EquipItemRequest());
 
-            act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
+            await act.Should().ThrowAsync<TestException>();
+            await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -310,18 +310,18 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void ChangeItemContainerAsync_ShouldThrowIfItemIsNotFound()
+        public async Task ChangeItemContainerAsync_ShouldThrowIfItemIsNotFound()
         {
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(Arg.Any<int>())
                 .Returns((Item) null);
 
             Func<Task> act = () => _service.ChangeItemContainerAsync(new NaheulbookExecutionContext(), 4, new ChangeItemContainerRequest());
 
-            act.Should().Throw<ItemNotFoundException>();
+            await act.Should().ThrowAsync<ItemNotFoundException>();
         }
 
         [Test]
-        public void ChangeItemContainerAsync_EnsureCurrentUserCanAccessThisItem()
+        public async Task ChangeItemContainerAsync_EnsureCurrentUserCanAccessThisItem()
         {
             const int itemId = 4;
             var executionContext = new NaheulbookExecutionContext();
@@ -334,8 +334,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.ChangeItemContainerAsync(executionContext, itemId, new ChangeItemContainerRequest());
 
-            act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
+            await act.Should().ThrowAsync<TestException>();
+            await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -371,7 +371,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void CreateItemsAsync_ShouldThrowIfItemTemplateIsNotFound()
+        public async Task CreateItemsAsync_ShouldThrowIfItemTemplateIsNotFound()
         {
             var createItemRequests = new List<CreateItemRequest>
             {
@@ -383,7 +383,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateItemsAsync(createItemRequests);
 
-            act.Should().Throw<ItemTemplateNotFoundException>();
+            await act.Should().ThrowAsync<ItemTemplateNotFoundException>();
         }
 
         [Test]

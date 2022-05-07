@@ -52,7 +52,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void GetEventsForGroupAsync_ShouldThrowWhenGroupNotFound()
+        public async Task GetEventsForGroupAsync_ShouldThrowWhenGroupNotFound()
         {
             const int groupId = 42;
             var executionContext = new NaheulbookExecutionContext();
@@ -62,11 +62,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetEventsForGroupAsync(executionContext, groupId);
 
-            act.Should().Throw<GroupNotFoundException>();
+            await act.Should().ThrowAsync<GroupNotFoundException>();
         }
 
         [Test]
-        public void GetEventsForGroupAsync_ShouldEnsureGroupAccess()
+        public async Task GetEventsForGroupAsync_ShouldEnsureGroupAccess()
         {
             const int groupId = 42;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
@@ -80,7 +80,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetEventsForGroupAsync(naheulbookExecutionContext, groupId);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
     }
 }

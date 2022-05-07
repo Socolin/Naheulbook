@@ -29,8 +29,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 origins,
                 config => config
                     .Excluding(o => o.Id)
-                    .Excluding(info => info.SelectedMemberPath.EndsWith(".Stat"))
-                    .Excluding(info => info.SelectedMemberPath.EndsWith(".Skill"))
+                    .Excluding(info => info.Path.EndsWith(".Stat"))
+                    .Excluding(info => info.Path.EndsWith(".Skill"))
                     .IgnoringCyclicReferences()
             );
         }

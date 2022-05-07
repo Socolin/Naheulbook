@@ -53,25 +53,25 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void PutEditEffect_WhenCatchForbiddenAccessException_Return403()
+        public async Task PutEditEffect_WhenCatchForbiddenAccessException_Return403()
         {
             _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
                 .Returns(Task.FromException<Effect>(new ForbiddenAccessException()));
 
             Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }
 
         [Test]
-        public void PutEditEffect_WhenCatchEffectNotFoundException_Return404()
+        public async Task PutEditEffect_WhenCatchEffectNotFoundException_Return404()
         {
             _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
                 .Returns(Task.FromException<Effect>(new EffectNotFoundException()));
 
             Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
         [Test]
@@ -91,14 +91,14 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         }
 
         [Test]
-        public void GetEffect_WhenCatchEffectNotFoundException_Return404()
+        public async Task GetEffect_WhenCatchEffectNotFoundException_Return404()
         {
             _effectService.GetEffectAsync(Arg.Any<int>())
                 .Returns(Task.FromException<Effect>(new EffectNotFoundException()));
 
             Func<Task<ActionResult<EffectResponse>>> act = () => _effectsController.GetEffectAsync(42);
 
-            act.Should().Throw<HttpErrorException>().Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
     }
 }

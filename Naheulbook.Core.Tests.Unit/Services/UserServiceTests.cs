@@ -62,14 +62,14 @@ namespace Naheulbook.Core.Tests.Unit.Services
             });
         }
         [Test]
-        public void WhenCreatingUser_AndUserExists_ThenThrows()
+        public async Task WhenCreatingUser_AndUserExists_ThenThrows()
         {
             _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns(new User());
 
             Func<Task> act = () => _service.CreateUserAsync(SomeUsername, SomePassword);
 
-            act.Should().Throw<UserAlreadyExistsException>();
+            await act.Should().ThrowAsync<UserAlreadyExistsException>();
         }
 
 
@@ -97,7 +97,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void WhenValidatingUser_AndValidationCodeIsInvalid_Throw()
+        public async Task WhenValidatingUser_AndValidationCodeIsInvalid_Throw()
         {
             var user = CreateUser();
 
@@ -106,18 +106,18 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = async () => await _service.ValidateUserAsync(SomeUsername, "some-invalid-code");
 
-            act.Should().Throw<InvalidUserActivationCodeException>();
+            await act.Should().ThrowAsync<InvalidUserActivationCodeException>();
         }
 
         [Test]
-        public void WhenValidatingUser_AndUserNotFound_Throw()
+        public async Task WhenValidatingUser_AndUserNotFound_Throw()
         {
             _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns((User) null);
 
             Func<Task> act = async () => await _service.ValidateUserAsync(SomeUsername, SomeActivationCode);
 
-            act.Should().Throw<UserNotFoundException>();
+            await act.Should().ThrowAsync<UserNotFoundException>();
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void WhenCheckingPassword_AndPasswordIsInvalid_Throw()
+        public async Task WhenCheckingPassword_AndPasswordIsInvalid_Throw()
         {
             var user = new User {Username = SomeUsername, HashedPassword = "some-hashed-password"};
 
@@ -148,18 +148,18 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = async () => await _service.CheckPasswordAsync(SomeUsername, SomePassword);
 
-            act.Should().Throw<InvalidPasswordException>();
+            await act.Should().ThrowAsync<InvalidPasswordException>();
         }
 
         [Test]
-        public void WhenCheckingPassword_AndUserDoesNotExists_Throw()
+        public async Task WhenCheckingPassword_AndUserDoesNotExists_Throw()
         {
             _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns((User) null);
 
             Func<Task> act = async () => await _service.CheckPasswordAsync(SomeUsername, SomePassword);
 
-            act.Should().Throw<UserNotFoundException>();
+            await act.Should().ThrowAsync<UserNotFoundException>();
         }
 
         private static User CreateUser()

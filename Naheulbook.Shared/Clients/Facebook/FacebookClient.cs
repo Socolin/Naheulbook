@@ -29,8 +29,8 @@ namespace Naheulbook.Shared.Clients.Facebook
         {
             var requestUri = new StringBuilder();
             requestUri.AppendFormat("https://graph.facebook.com/v13.0/oauth/access_token");
-            requestUri.AppendFormat("?redirect_uri={0}", Uri.EscapeUriString(redirectUri));
-            requestUri.AppendFormat("&code={0}", Uri.EscapeUriString(code));
+            requestUri.AppendFormat("?redirect_uri={0}", Uri.EscapeDataString(redirectUri));
+            requestUri.AppendFormat("&code={0}", Uri.EscapeDataString(code));
             requestUri.AppendFormat("&client_id={0}", _configuration.AppId);
             requestUri.AppendFormat("&client_secret={0}", _configuration.AppSecret);
 
@@ -49,7 +49,7 @@ namespace Naheulbook.Shared.Clients.Facebook
 
         public async Task<FacebookProfileResponse> GetUserProfileAsync(string accessToken)
         {
-            var requestUri = $"https://graph.facebook.com/me?access_token={Uri.EscapeUriString(accessToken)}";
+            var requestUri = $"https://graph.facebook.com/me?access_token={Uri.EscapeDataString(accessToken)}";
 
             using (var client = new HttpClient())
             {

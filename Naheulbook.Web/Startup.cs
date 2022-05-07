@@ -1,10 +1,8 @@
 ﻿using System;
-using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -80,8 +78,7 @@ namespace Naheulbook.Web
                         NamingStrategy = new CamelCaseNamingStrategy()
                     };
                 })
-                .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<ValidateUserRequest>())
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<ValidateUserRequest>());
 
             services.AddHttpContextAccessor();
             services.AddHealthChecks()

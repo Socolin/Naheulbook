@@ -18,6 +18,7 @@ Feature: Monster
         "ea": 0,
         "esq": null,
         "ev": 0,
+        "int": null,
         "maxEa": 0,
         "maxEv": 0,
         "note": null,

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -106,7 +107,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             var jwt = response.Value<string>("token");
             _scenarioContext.SetJwt(jwt);
 
-            var payload = Jose.JWT.Decode<JObject>(jwt, Convert.FromBase64String(NaheulbookApiServer.JwtSigningKey));
+            var payload = Jose.JWT.Decode<Dictionary<string, dynamic>>(jwt, Convert.FromBase64String(NaheulbookApiServer.JwtSigningKey));
 
             payload.Should().ContainKey("sub");
             payload.Should().ContainKey("exp");

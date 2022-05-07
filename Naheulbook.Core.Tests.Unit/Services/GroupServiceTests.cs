@@ -88,7 +88,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
 
         [Test]
-        public void GetGroupDetailsAsync_ShouldThrowWhenGroupDoesNotExists()
+        public async Task GetGroupDetailsAsync_ShouldThrowWhenGroupDoesNotExists()
         {
             const int groupId = 4;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
@@ -98,12 +98,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetGroupDetailsAsync(naheulbookExecutionContext, groupId);
 
-            act.Should().Throw<GroupNotFoundException>();
+            await act.Should().ThrowAsync<GroupNotFoundException>();
         }
 
 
         [Test]
-        public void GetGroupDetailsAsync_ShouldEnsureIsGroupOwner()
+        public async Task GetGroupDetailsAsync_ShouldEnsureIsGroupOwner()
         {
             const int groupId = 4;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
@@ -117,7 +117,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.GetGroupDetailsAsync(naheulbookExecutionContext, groupId);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
@@ -142,18 +142,18 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void EditGroupPropertiesAsync_ShouldThrowWhenGroupDoesNotExists()
+        public async Task EditGroupPropertiesAsync_ShouldThrowWhenGroupDoesNotExists()
         {
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(Arg.Any<int>())
                 .Returns((Group) null);
 
             Func<Task> act = () => _service.EditGroupPropertiesAsync(new NaheulbookExecutionContext(), 4, new PatchGroupRequest());
 
-            act.Should().Throw<GroupNotFoundException>();
+            await act.Should().ThrowAsync<GroupNotFoundException>();
         }
 
         [Test]
-        public void EditGroupPropertiesAsync_ShouldEnsureIsGroupOwner()
+        public async Task EditGroupPropertiesAsync_ShouldEnsureIsGroupOwner()
         {
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
             var group = new Group();
@@ -166,7 +166,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.EditGroupPropertiesAsync(naheulbookExecutionContext, 4, new PatchGroupRequest());
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
@@ -217,7 +217,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void CreateInviteAsync_ShouldThrowWhenGroupNotFound()
+        public async Task CreateInviteAsync_ShouldThrowWhenGroupNotFound()
         {
             const int groupId = 42;
             var request = new CreateInviteRequest();
@@ -228,11 +228,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateInviteAsync(executionContext, groupId, request);
 
-            act.Should().Throw<GroupNotFoundException>();
+            await act.Should().ThrowAsync<GroupNotFoundException>();
         }
 
         [Test]
-        public void CreateInviteAsync_ShouldThrowWhenCharacterNotFound()
+        public async Task CreateInviteAsync_ShouldThrowWhenCharacterNotFound()
         {
             const int groupId = 42;
             const int characterId = 24;
@@ -246,11 +246,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateInviteAsync(executionContext, groupId, request);
 
-            act.Should().Throw<CharacterNotFoundException>();
+            await act.Should().ThrowAsync<CharacterNotFoundException>();
         }
 
         [Test]
-        public void CreateInviteAsync_WhenFromGroup_EnsureUserIsOwnerOfGroup()
+        public async Task CreateInviteAsync_WhenFromGroup_EnsureUserIsOwnerOfGroup()
         {
             const int groupId = 42;
             const int characterId = 24;
@@ -268,12 +268,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateInviteAsync(naheulbookExecutionContext, groupId, request);
 
-            act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
+            await act.Should().ThrowAsync<TestException>();
+            await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
-        public void CreateInviteAsync_WhenFromCharacter_EnsureUserIsOwnerOfCharacter()
+        public async Task CreateInviteAsync_WhenFromCharacter_EnsureUserIsOwnerOfCharacter()
         {
             const int groupId = 42;
             const int characterId = 24;
@@ -291,8 +291,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CreateInviteAsync(naheulbookExecutionContext, groupId, request);
 
-            act.Should().Throw<TestException>();
-            _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
+            await act.Should().ThrowAsync<TestException>();
+            await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
         }
 
         [Test]
@@ -339,7 +339,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void CancelOrRejectInviteAsync_ShouldThrowIfInviteDoesNotExists()
+        public async Task CancelOrRejectInviteAsync_ShouldThrowIfInviteDoesNotExists()
         {
             const int groupId = 42;
             const int characterId = 24;
@@ -349,11 +349,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CancelOrRejectInviteAsync(new NaheulbookExecutionContext(), groupId, characterId);
 
-            act.Should().Throw<InviteNotFoundException>();
+            await act.Should().ThrowAsync<InviteNotFoundException>();
         }
 
         [Test]
-        public void CancelOrRejectInviteAsync_ShouldEnsureUserCanDeleteGroupInvite()
+        public async Task CancelOrRejectInviteAsync_ShouldEnsureUserCanDeleteGroupInvite()
         {
             const int groupId = 42;
             const int characterId = 24;
@@ -367,7 +367,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.CancelOrRejectInviteAsync(executionContext, groupId, characterId);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
@@ -421,7 +421,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void AcceptInviteAsync_ShouldThrowIfInviteDoesNotExists()
+        public async Task AcceptInviteAsync_ShouldThrowIfInviteDoesNotExists()
         {
             const int groupId = 42;
             const int characterId = 24;
@@ -431,11 +431,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.AcceptInviteAsync(new NaheulbookExecutionContext(), groupId, characterId);
 
-            act.Should().Throw<InviteNotFoundException>();
+            await act.Should().ThrowAsync<InviteNotFoundException>();
         }
 
         [Test]
-        public void AcceptInviteAsync_ShouldThrowIfCharacterIsAlreadyInAGroup()
+        public async Task AcceptInviteAsync_ShouldThrowIfCharacterIsAlreadyInAGroup()
         {
             const int groupId = 42;
             const int characterId = 24;
@@ -447,11 +447,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.AcceptInviteAsync(new NaheulbookExecutionContext(), groupId, characterId);
 
-            act.Should().Throw<CharacterAlreadyInAGroupException>();
+            await act.Should().ThrowAsync<CharacterAlreadyInAGroupException>();
         }
 
         [Test]
-        public void AcceptInviteAsync_ShouldEnsureUserCanAcceptGroupInvite()
+        public async Task AcceptInviteAsync_ShouldEnsureUserCanAcceptGroupInvite()
         {
             const int groupId = 42;
             const int characterId = 24;
@@ -465,7 +465,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.AcceptInviteAsync(executionContext, groupId, characterId);
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
 
         [Test]
@@ -487,7 +487,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         }
 
         [Test]
-        public void AcceptInviteAsync_ShouldThrowIfGroupDoesNotExists()
+        public async Task AcceptInviteAsync_ShouldThrowIfGroupDoesNotExists()
         {
             const int groupId = 42;
 
@@ -496,11 +496,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.UpdateDurationsAsync(new NaheulbookExecutionContext(), groupId, new List<PostGroupUpdateDurationsRequest>());
 
-            act.Should().Throw<GroupNotFoundException>();
+            await act.Should().ThrowAsync<GroupNotFoundException>();
         }
 
         [Test]
-        public void UpdateDurationsAsync_ShouldEnsureUserIsGroupMaster()
+        public async Task UpdateDurationsAsync_ShouldEnsureUserIsGroupMaster()
         {
             const int groupId = 42;
             var group = new Group();
@@ -513,7 +513,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Func<Task> act = () => _service.UpdateDurationsAsync(executionContext, groupId, new List<PostGroupUpdateDurationsRequest>());
 
-            act.Should().Throw<TestException>();
+            await act.Should().ThrowAsync<TestException>();
         }
     }
 }

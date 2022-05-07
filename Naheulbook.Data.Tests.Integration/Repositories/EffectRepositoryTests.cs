@@ -59,8 +59,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 config => config
                     .Excluding(o => o.Id)
                     .Excluding(o => o.SubCategory)
-                    .Excluding(info => info.SelectedMemberPath.EndsWith(".Effect"))
-                    .Excluding(info => info.SelectedMemberPath.EndsWith(".Stat"))
+                    .Excluding(info => info.Path.EndsWith(".Effect"))
+                    .Excluding(info => info.Path.EndsWith(".Stat"))
                     .IgnoringCyclicReferences());
         }
 
@@ -88,8 +88,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 config => config
                     .Excluding(o => o.Id)
                     .Excluding(o => o.SubCategory)
-                    .Excluding(info => info.SelectedMemberPath.EndsWith(".Effect"))
-                    .Excluding(info => info.SelectedMemberPath.EndsWith(".Stat"))
+                    .Excluding(info => info.Path.EndsWith(".Effect"))
+                    .Excluding(info => info.Path.EndsWith(".Stat"))
                     .IgnoringCyclicReferences());
         }
     }
