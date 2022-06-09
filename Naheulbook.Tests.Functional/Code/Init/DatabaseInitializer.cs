@@ -25,8 +25,9 @@ namespace Naheulbook.Tests.Functional.Code.Init
         }
 
         [BeforeTestRun]
-        public static void BeforeTestRun()
+        public static void InitializeDatabase()
         {
+            using var _ = InitializersProfiler.Profile(nameof(InitializeDatabase));
             var serviceProvider = new ServiceCollection()
                 .Configure<FluentMigratorLoggerOptions>(
                     opt =>

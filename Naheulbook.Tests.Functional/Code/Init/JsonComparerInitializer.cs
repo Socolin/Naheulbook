@@ -18,7 +18,7 @@ namespace Naheulbook.Tests.Functional.Code.Init
         }
 
         [BeforeScenario]
-        public void InitializeIoc()
+        public void InitializeJsonComparer()
         {
             var jsonComparer = JsonComparer.GetDefault((name, value) =>
             {

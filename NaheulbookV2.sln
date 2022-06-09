@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naheulbook.TestUtils", "Nah
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naheulbook.DatabaseMigrator.Cli", "Naheulbook.DatabaseMigrator.Cli\Naheulbook.DatabaseMigrator.Cli.csproj", "{D758DCA1-E817-4226-993E-F2F9B7266387}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Socolin.TestUtils.Console", "Socolin.TestUtils.Console\Socolin.TestUtils.Console.csproj", "{E2BA2C85-8839-4030-BA0D-BB88CFDC7D2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{D758DCA1-E817-4226-993E-F2F9B7266387}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D758DCA1-E817-4226-993E-F2F9B7266387}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D758DCA1-E817-4226-993E-F2F9B7266387}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2BA2C85-8839-4030-BA0D-BB88CFDC7D2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2BA2C85-8839-4030-BA0D-BB88CFDC7D2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2BA2C85-8839-4030-BA0D-BB88CFDC7D2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2BA2C85-8839-4030-BA0D-BB88CFDC7D2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6D22B854-DD14-415E-9B87-9E574B68F328} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}
@@ -101,5 +107,6 @@ Global
 		{B0BD51E2-1A2A-4586-9625-70C5F416AB3D} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}
 		{C4BD6DD3-8BA3-4A79-B1EF-4835DFB0C175} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}
 		{82E8C338-DB01-4AED-AACE-F111DFCBCBAA} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}
+		{E2BA2C85-8839-4030-BA0D-BB88CFDC7D2E} = {B600DDBF-28EE-4461-B72F-F0D25A904B50}
 	EndGlobalSection
 EndGlobal

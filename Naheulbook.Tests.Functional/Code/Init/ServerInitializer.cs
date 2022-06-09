@@ -31,8 +31,10 @@ namespace Naheulbook.Tests.Functional.Code.Init
         private static string _mapImageOutputDirectory;
 
         [BeforeTestRun]
-        public static void BeforeTestRun()
+        public static void InitializeServices()
         {
+            using var _ = InitializersProfiler.Profile(nameof(InitializeServices));
+
             _fakeSmtpServer = new FakeSmtpServer();
             var mailConfig = _fakeSmtpServer.Start();
             _mapImageOutputDirectory = Path.Combine(Path.GetTempPath(), "map-" + Guid.NewGuid());

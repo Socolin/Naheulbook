@@ -3,7 +3,6 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <LangVersion>8</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,5 +25,6 @@
         <ProjectReference Include="..\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" />
         <ProjectReference Include="..\Naheulbook.Web\Naheulbook.Web.csproj" />
         <ProjectReference Include="..\Socolin.TestUtils.AutoFillTestObjects\Socolin.TestUtils.AutoFillTestObjects.csproj" />
+        <ProjectReference Include="..\Socolin.TestUtils.Console\Socolin.TestUtils.Console.csproj" />
     </ItemGroup>
 </Project>
