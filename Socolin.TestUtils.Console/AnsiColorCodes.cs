@@ -7,6 +7,8 @@ public class AnsiColorCodes
 
     public static string Color(Terminal8ColorCodes code)
     {
+        if (System.Console.IsOutputRedirected)
+            return string.Empty;
         return $"{EscapeCode}[" + (int)code + "m";
     }
 
@@ -17,11 +19,13 @@ public class AnsiColorCodes
 
     public static string Color256(Terminal256ColorCodes code)
     {
+        if (System.Console.IsOutputRedirected)
+            return string.Empty;
         return $"{EscapeCode}[38;5;{(int)code}m";
     }
 
     public static string Color256(string text, Terminal256ColorCodes code)
     {
-        return $"{EscapeCode}[38;5;{(int)code}m" + text + Reset;
+        return Color256(code) + text + Reset;
     }
 }
