@@ -39,8 +39,8 @@ Feature: Character backup
           "level": ${Character.Level},
           "items": [
             {
-              "data": "{\"key\": \"value\"}",
-              "modifiers": "[{\"id\": 0, \"active\": true, \"reusable\": false, \"permanent\": false, \"description\": \"some-description\"}]",
+              "data": "{\"key\":\"value\"}",
+              "modifiers": "[{\"id\":0,\"permanent\":false,\"active\":true,\"reusable\":false,\"description\":\"some-description\"}]",
               "itemTemplate": {
                 "id": "${ItemTemplate.Id}",
                 "name": "${ItemTemplate.Name}",

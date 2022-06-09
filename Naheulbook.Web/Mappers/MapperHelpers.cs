@@ -9,12 +9,13 @@ namespace Naheulbook.Web.Mappers
     {
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
         {
-            NullValueHandling = NullValueHandling.Ignore
+            NullValueHandling = NullValueHandling.Ignore,
+            Formatting = Formatting.None
         };
 
         public static string[] FromCommaSeparatedStringArray(string? str)
         {
-            return str?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
+            return str?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
         }
 
         public static T? FromJson<T>(string? json)
