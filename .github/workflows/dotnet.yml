@@ -58,6 +58,9 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal --logger junit -c Release
       env:
+        FORCE_COLOR: true
+        TERM: xterm
+        DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
         MYSQL_HOST: 127.0.0.1
         MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
     - name: Publish Unit Test Results
