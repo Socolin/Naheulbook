@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Socolin.TestUtils.JsonComparer;
+using Socolin.TestUtils.JsonComparer.Color;
 using Socolin.TestUtils.JsonComparer.NUnitExtensions;
 using TechTalk.SpecFlow;
 
@@ -23,12 +24,19 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         private readonly ScenarioContext _scenarioContext;
         private readonly NaheulbookHttpClient _naheulbookHttpClient;
         private readonly IJsonComparer _jsonComparer;
+        private readonly JsonComparerColorOptions _jsonComparerColorOptions;
 
-        public HttpSteps(ScenarioContext scenarioContext, NaheulbookHttpClient naheulbookHttpClient, IJsonComparer jsonComparer)
+        public HttpSteps(
+            ScenarioContext scenarioContext,
+            NaheulbookHttpClient naheulbookHttpClient,
+            IJsonComparer jsonComparer,
+            JsonComparerColorOptions jsonComparerColorOptions
+        )
         {
             _scenarioContext = scenarioContext;
             _naheulbookHttpClient = naheulbookHttpClient;
             _jsonComparer = jsonComparer;
+            _jsonComparerColorOptions = jsonComparerColorOptions;
         }
 
         [When(@"performing a (GET|DELETE) to the url ""(.*)""( with the current jwt| with "".+"" as access token)?")]
@@ -42,9 +50,10 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 else if (useCurrentJwt.EndsWith("as access token"))
                     httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "userAccessToken:" + useCurrentJwt.Split('"')[1]);
             }
+
             var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
             var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
+            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
@@ -61,7 +70,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             var response = await httpClient.SendAsync(httpRequestMessage);
             var content = await response.Content.ReadAsStringAsync();
 
-            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
+            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
@@ -71,7 +80,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
             var response = await _naheulbookHttpClient.PostAsync(url, requestContent);
             var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
+            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
@@ -88,7 +97,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             var response = await httpClient.PostAsync(url, requestContent);
             var content = await response.Content.ReadAsStringAsync();
 
-            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
+            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
@@ -105,7 +114,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             };
             var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
             var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
+            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
@@ -139,7 +148,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             };
             var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
             var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode((int) response.StatusCode);
+            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
             _scenarioContext.SetLastHttpResponseContent(content);
         }
 
@@ -161,7 +170,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         {
             var jsonContent = _scenarioContext.GetLastJsonHttpResponseContent();
 
-            Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(_jsonComparer).WithColoredOutput());
+            Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(_jsonComparer).WithColorOptions(_jsonComparerColorOptions));
         }
 
         [Then(@"the response should contains a json array containing the following element identified by (.+)")]
@@ -179,7 +188,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 throw new Exception($"Invalid expected JSON: {ex.Message} Line:\n '{expectedJson.Split('\n')[ex.LineNumber - 1]}'", ex);
             }
 
-            var identityValue = (JValue) expectedObject.Property(identityField).Value;
+            var identityValue = (JValue)expectedObject.Property(identityField).Value;
             var array = JArray.Parse(content);
 
             foreach (var element in array)
@@ -187,10 +196,10 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 if (element.Type != JTokenType.Object || !(element is JObject actualObject))
                     continue;
 
-                if (!identityValue.Equals((JValue) actualObject.Property(identityField).Value))
+                if (!identityValue.Equals((JValue)actualObject.Property(identityField).Value))
                     continue;
 
-                Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(_jsonComparer).WithColoredOutput());
+                Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(_jsonComparer).WithColorOptions(_jsonComparerColorOptions));
                 return;
             }
 

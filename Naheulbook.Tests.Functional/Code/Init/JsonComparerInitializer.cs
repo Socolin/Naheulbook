@@ -1,6 +1,8 @@
 using BoDi;
 using Newtonsoft.Json.Linq;
+using Socolin.ANSITerminalColor;
 using Socolin.TestUtils.JsonComparer;
+using Socolin.TestUtils.JsonComparer.Color;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Init
@@ -20,6 +22,17 @@ namespace Naheulbook.Tests.Functional.Code.Init
         [BeforeScenario]
         public void InitializeJsonComparer()
         {
+            var jsonColorOptions = new JsonComparerColorOptions
+            {
+                ColorizeDiff = true,
+                ColorizeJson = true,
+                Theme = new JsonComparerColorTheme
+                {
+                    DiffAddition = AnsiColor.Background(TerminalRgbColor.FromHex("21541A")),
+                    DiffDeletion = AnsiColor.Background(TerminalRgbColor.FromHex("542822")),
+                }
+            };
+            _objectContainer.RegisterInstanceAs(jsonColorOptions, typeof(JsonComparerColorOptions));
             var jsonComparer = JsonComparer.GetDefault((name, value) =>
             {
                 switch (value.Type)
@@ -40,7 +53,7 @@ namespace Naheulbook.Tests.Functional.Code.Init
                         _scenarioContext[name] = value;
                         break;
                 }
-            });
+            }, colorOptions: jsonColorOptions);
             _objectContainer.RegisterInstanceAs(jsonComparer, typeof(IJsonComparer));
         }
     }
