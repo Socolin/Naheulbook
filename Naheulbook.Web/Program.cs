@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Naheulbook.Web.Sentry;
 using Sentry;
 using Serilog;
@@ -34,20 +35,23 @@ namespace Naheulbook.Web
                     .WriteTo.Console(theme: AnsiConsoleTheme.Code)
                     .CreateLogger();
 
-                var server = new WebHostBuilder()
-                    .ConfigureKestrel((context, options) =>
+                var server = new HostBuilder()
+                    .ConfigureWebHost(builder =>
                     {
-                        options.Limits.MaxRequestBodySize = 60000000;
-                        if (!string.IsNullOrEmpty(context.Configuration["socket"]))
-                            options.ListenUnixSocket(context.Configuration["socket"]);
+                        builder.ConfigureKestrel((context, options) =>
+                            {
+                                options.Limits.MaxRequestBodySize = 60000000;
+                                if (!string.IsNullOrEmpty(context.Configuration["socket"]))
+                                    options.ListenUnixSocket(context.Configuration["socket"]);
+                            })
+                            .UseKestrel()
+                            .UseSentry(o => o.BeforeSend = DefaultSentryEventExceptionProcessor.BeforeSend)
+                            .UseConfiguration(configuration)
+                            .UseStartup<Startup>();
                     })
-                    .UseKestrel()
-                    .UseSentry(o => o.BeforeSend = DefaultSentryEventExceptionProcessor.BeforeSend)
                     .UseContentRoot(Directory.GetCurrentDirectory())
                     .UseEnvironment(environment)
-                    .UseStartup<Startup>()
                     .UseSerilog(logger)
-                    .UseConfiguration(configuration)
                     .Build();
 
                 server.Run();
