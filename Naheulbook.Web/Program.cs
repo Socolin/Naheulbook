@@ -41,8 +41,9 @@ namespace Naheulbook.Web
                         builder.ConfigureKestrel((context, options) =>
                             {
                                 options.Limits.MaxRequestBodySize = 60000000;
-                                if (!string.IsNullOrEmpty(context.Configuration["socket"]))
-                                    options.ListenUnixSocket(context.Configuration["socket"]);
+                                var unixSocketPath = context.Configuration.GetValue<string>("socket");
+                                if (!string.IsNullOrEmpty(unixSocketPath))
+                                    options.ListenUnixSocket(unixSocketPath);
                             })
                             .UseKestrel()
                             .UseSentry(o => o.BeforeSend = DefaultSentryEventExceptionProcessor.BeforeSend)

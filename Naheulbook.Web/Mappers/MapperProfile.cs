@@ -120,7 +120,7 @@ namespace Naheulbook.Web.Mappers
                     throw new NotSupportedException("Either MonsterId or CharacterId should be set");
                 });
             CreateMap<DurationChangeRequest, IDurationChange>()
-                .ConstructUsing((request, context) => {
+                .ConstructUsing((request, _) => {
                     switch (request.Type)
                     {
                         case ItemModifierDurationChange.TypeValue:

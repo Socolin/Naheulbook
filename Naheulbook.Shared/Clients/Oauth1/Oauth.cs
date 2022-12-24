@@ -124,7 +124,7 @@ namespace Naheulbook.Shared.Clients.Oauth1
                 httpClient.DefaultRequestHeaders.Add("Authorization", authorizationHeader);
 
                 // `!` is added because this issue https://github.com/dotnet/runtime/issues/54367
-                using (var response = await httpClient.PostAsync(RequestUrl, new FormUrlEncodedContent(Parameters!)))
+                using (var response = await httpClient.PostAsync(RequestUrl, new FormUrlEncodedContent(Parameters)))
                 using (var content = response.Content)
                 {
                     var result = await content.ReadAsStringAsync();

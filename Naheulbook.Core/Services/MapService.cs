@@ -148,7 +148,7 @@ namespace Naheulbook.Core.Services
                     Source = request.Source,
                     IsGm = request.IsGm,
                     MapId = mapId,
-                    UserId = request.Source == "official" ? (int?) null : executionContext.UserId
+                    UserId = request.Source == "official" ? null : executionContext.UserId
                 };
 
                 uow.MapLayers.Add(mapLayer);
@@ -191,7 +191,7 @@ namespace Naheulbook.Core.Services
                 mapLayer.Name = request.Name;
                 mapLayer.Source = request.Source;
                 mapLayer.IsGm = request.IsGm;
-                mapLayer.UserId = request.Source == "official" ? (int?) null : executionContext.UserId;
+                mapLayer.UserId = request.Source == "official" ? null : executionContext.UserId;
 
                 await uow.SaveChangesAsync();
                 await uow.MapLayers.LoadMarkersForResponseAsync(mapLayer);

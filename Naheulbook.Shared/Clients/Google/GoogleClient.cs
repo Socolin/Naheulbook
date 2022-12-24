@@ -41,7 +41,7 @@ namespace Naheulbook.Shared.Clients.Google
 
             using (var client = new HttpClient())
             {
-                using (var response = await client.PostAsync(TokenApiRequestUri, new FormUrlEncodedContent(requestArgs!)))
+                using (var response = await client.PostAsync(TokenApiRequestUri, new FormUrlEncodedContent(requestArgs)))
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     if (!response.IsSuccessStatusCode)
@@ -56,7 +56,7 @@ namespace Naheulbook.Shared.Clients.Google
         {
             using (var client = new HttpClient())
             {
-                var profileRequestUri = $"{AccessApiRequestUri}?access_token={Uri.EscapeUriString(accessToken)}";
+                var profileRequestUri = $"{AccessApiRequestUri}?access_token={Uri.EscapeDataString(accessToken)}";
                 using (var response = await client.GetAsync(profileRequestUri))
                 {
                     var content = await response.Content.ReadAsStringAsync();

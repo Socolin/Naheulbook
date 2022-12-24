@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Naheulbook.Core.Actions.Executor;
 using Naheulbook.Core.Clients;
 using Naheulbook.Core.Configurations;
@@ -74,8 +73,8 @@ namespace Naheulbook.Web
                     {
                         NamingStrategy = new CamelCaseNamingStrategy()
                     };
-                })
-                .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<ValidateUserRequest>());
+                });
+            services.AddValidatorsFromAssemblyContaining<ValidateUserRequest>();
 
             services.AddHttpContextAccessor();
             services.AddHealthChecks()
@@ -203,7 +202,7 @@ namespace Naheulbook.Web
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting();
-            app.UseCors(x => x.SetIsOriginAllowed((origin) => true).AllowAnyMethod().AllowCredentials().AllowAnyHeader());
+            app.UseCors(x => x.SetIsOriginAllowed(_ => true).AllowAnyMethod().AllowCredentials().AllowAnyHeader());
 
             app.UseMiddleware<HttpExceptionMiddleware>();
 

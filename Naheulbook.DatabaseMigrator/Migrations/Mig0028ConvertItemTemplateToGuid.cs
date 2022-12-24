@@ -11,7 +11,7 @@ namespace Naheulbook.DatabaseMigrator.Migrations
         {
             var convertedTableName = "item_templates";
             Alter.Table(convertedTableName).AddColumn("tmpBaseUuid").AsCustom("CHAR(36) CHARACTER SET ascii NOT NULL").SetExistingRowsTo(SystemMethods.NewGuid);
-            Execute.WithConnection((connection, transaction) =>
+            Execute.WithConnection((connection, _) =>
             {
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT @i:=uuid(); UPDATE `" + convertedTableName + "` SET tmpBaseUuid = (@i:=uuid());";

@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Services
                 rng.GetBytes(salt);
             }
 
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 2000);
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 2000, HashAlgorithmName.SHA256);
             var hash = pbkdf2.GetBytes(20);
 
             var hashBytes = new byte[36];
@@ -36,7 +36,7 @@ namespace Naheulbook.Core.Services
 
             Array.Copy(hashBytes, 0, salt, 0, 16);
 
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 2000);
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 2000, HashAlgorithmName.SHA256);
             var hash = pbkdf2.GetBytes(20);
 
             for (var i = 0; i < 20; i++)

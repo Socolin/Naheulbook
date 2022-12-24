@@ -7,7 +7,7 @@ using Naheulbook.Data.DbContexts;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Steps;
 using Naheulbook.TestUtils;
-using Newtonsoft.Json.Linq;
+using Naheulbook.Web.Responses;
 using NUnit.Framework;
 using Socolin.TestUtils.FakeSmtp;
 
@@ -85,9 +85,8 @@ namespace Naheulbook.Tests.Functional.Code.TestServices
 
         public async Task<string> GenerateJwtAsync(string username, string password)
         {
-            var response = await _naheulbookHttpClient.PostAndParseJsonResultAsync<JObject>($"/api/v2/users/{username}/jwt", new {password});
-            var jwt = response.Value<string>("token");
-            return jwt;
+            var response = await _naheulbookHttpClient.PostAndParseJsonResultAsync<UserJwtResponse>($"/api/v2/users/{username}/jwt", new {password});
+            return response.Token;
         }
     }
 }
