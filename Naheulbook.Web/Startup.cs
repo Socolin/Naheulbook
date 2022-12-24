@@ -37,13 +37,11 @@ namespace Naheulbook.Web
 {
     public class Startup
     {
-        private readonly ILoggerFactory _loggerFactory;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IWebHostEnvironment environment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
-            _loggerFactory = loggerFactory;
             _environment = environment;
             _configuration = configuration;
         }
@@ -53,7 +51,6 @@ namespace Naheulbook.Web
             RegisterConfigurations(services);
 
             var naheulbookDbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
-                .UseLoggerFactory(_loggerFactory)
                 .UseMySql(_configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(_configuration.GetConnectionString("DefaultConnection")), builder => builder.EnableRetryOnFailure());
             if (_environment.IsDevelopment())
             {
