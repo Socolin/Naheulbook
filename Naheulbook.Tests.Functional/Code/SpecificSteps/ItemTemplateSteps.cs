@@ -77,7 +77,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 _testDataUtil.AddItemTemplateSubCategory();
             _testDataUtil.AddItemTemplate(itemTemplate =>
             {
-                var itemTemplateData = JsonConvert.DeserializeObject<ItemTemplateData>(itemTemplate.Data) ?? new ItemTemplateData();
+                var itemTemplateData = JsonConvert.DeserializeObject<ItemTemplateData>(itemTemplate.Data?? "null") ?? new ItemTemplateData();
                 itemTemplateData.Charge = 1;
                 itemTemplateData.Actions = new List<NhbkAction>
                 {

@@ -59,8 +59,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var group = await _groupRepository.GetGroupsWithDetailsAsync(expectedGroup.Id);
 
             group.Should().BeEquivalentTo(expectedGroup, config => config.Excluding(g => g.Characters).Excluding(g => g.Master).Excluding(g => g.Invites));
-            group.Characters.Should().BeEquivalentTo(new [] {expectedCharacter}, config => config.Excluding(c => c.Group).Excluding(c => c.Owner).Excluding(c => c.Origin));
-            group.Invites.Should().BeEquivalentTo(new [] {expectedInvite1, expectedInvite2}, config => config.Excluding(i => i.Character).Excluding(i => i.Group));
+            group!.Characters.Should().BeEquivalentTo(new [] {expectedCharacter}, config => config.Excluding(c => c.Group).Excluding(c => c.Owner).Excluding(c => c.Origin));
+            group!.Invites.Should().BeEquivalentTo(new [] {expectedInvite1, expectedInvite2}, config => config.Excluding(i => i.Character).Excluding(i => i.Group));
         }
 
         [Test]

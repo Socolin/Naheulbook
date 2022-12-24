@@ -33,7 +33,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var item = await _itemRepository.GetWithAllDataAsync(TestDataUtil.Get<Item>().Id);
 
             item.Should().BeEquivalentTo(TestDataUtil.GetLast<Item>(), config => config.ExcludingChildren());
-            var itemTemplate = item.ItemTemplate;
+            var itemTemplate = item!.ItemTemplate;
             itemTemplate.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>(), config => config.ExcludingChildren());
             itemTemplate.Modifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Modifiers, config => config.ExcludingChildren());
             itemTemplate.Requirements.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Requirements, config => config.ExcludingChildren());
@@ -57,8 +57,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             var expectation = TestDataUtil.GetLast<Item>();
             item.Should().BeEquivalentTo(expectation, config => config.ExcludingChildren());
-            item.Character.Should().BeEquivalentTo(TestDataUtil.GetLast<Character>(), config => config.ExcludingChildren());
-            item.Character.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
+            item!.Character.Should().BeEquivalentTo(TestDataUtil.GetLast<Character>(), config => config.ExcludingChildren());
+            item!.Character!.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
         }
 
         [Test]
@@ -73,8 +73,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             var expectation = TestDataUtil.GetLast<Item>();
             item.Should().BeEquivalentTo(expectation, config => config.ExcludingChildren());
-            item.Loot.Should().BeEquivalentTo(TestDataUtil.GetLast<Loot>(), config => config.ExcludingChildren());
-            item.Loot.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
+            item!.Loot.Should().BeEquivalentTo(TestDataUtil.GetLast<Loot>(), config => config.ExcludingChildren());
+            item!.Loot!.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
         }
 
         [Test]
@@ -89,8 +89,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             var expectation = TestDataUtil.GetLast<Item>();
             item.Should().BeEquivalentTo(expectation, config => config.ExcludingChildren());
-            item.Monster.Should().BeEquivalentTo(TestDataUtil.GetLast<Monster>(), config => config.ExcludingChildren());
-            item.Monster.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
+            item!.Monster.Should().BeEquivalentTo(TestDataUtil.GetLast<Monster>(), config => config.ExcludingChildren());
+            item!.Monster!.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
         }
     }
 }

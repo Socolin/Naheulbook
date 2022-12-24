@@ -36,13 +36,13 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                     .Excluding(x => x.SkillModifiers)
                     .Excluding(x => x.Slots)
                 );
-            actual.Modifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Modifiers, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.RequiredJob).Excluding(x => x.RequiredOrigin).Excluding(x => x.Stat));
-            actual.Requirements.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Requirements, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Stat));
-            actual.Skills.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Skills, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
-            actual.UnSkills.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().UnSkills, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
-            actual.SkillModifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().SkillModifiers, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
-            actual.Slots.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Slots, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Slot));
-            actual.Slots.First().Slot.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Slots.First().Slot);
+            actual!.Modifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Modifiers, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.RequiredJob).Excluding(x => x.RequiredOrigin).Excluding(x => x.Stat));
+            actual!.Requirements.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Requirements, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Stat));
+            actual!.Skills.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Skills, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
+            actual!.UnSkills.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().UnSkills, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
+            actual!.SkillModifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().SkillModifiers, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
+            actual!.Slots.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Slots, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Slot));
+            actual!.Slots.First().Slot.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplate>().Slots.First().Slot);
         }
 
         [Test]

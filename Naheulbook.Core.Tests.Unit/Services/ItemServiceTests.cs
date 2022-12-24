@@ -135,7 +135,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _characterHistoryUtil.CreateLogChangeItemQuantity(characterId, item, currentQuantity, newQuantity)
                 .Returns(characterHistoryEntry);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
-                .Do(_ => item.Character.HistoryEntries.Should().Contain(characterHistoryEntry));
+                .Do(_ => item.Character!.HistoryEntries.Should().Contain(characterHistoryEntry));
 
             await _service.UpdateItemDataAsync(new NaheulbookExecutionContext(), itemId, itemData);
 

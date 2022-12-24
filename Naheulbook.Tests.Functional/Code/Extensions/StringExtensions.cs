@@ -26,7 +26,7 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
                             replacementValue = "null";
                             break;
                         case bool _:
-                            replacementValue = value.ToString().ToLowerInvariant();
+                            replacementValue = value.ToString()?.ToLowerInvariant();
                             break;
                         default:
                             replacementValue = value.ToString();
@@ -96,7 +96,7 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
                     }
                     else
                     {
-                        obj = obj.GetType().GetProperty(propertyName).GetValue(obj);
+                        obj = obj?.GetType().GetProperty(propertyName)?.GetValue(obj);
                     }
                 }
             }

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Naheulbook.Tests.Functional.Code.Constants;
 using Naheulbook.Web;
@@ -19,8 +21,8 @@ namespace Naheulbook.Tests.Functional.Code.Servers
         private readonly string _laPageAMelkorUrl;
         private readonly string _mapImageOutputDirectory;
         public const string JwtSigningKey = "jUPS+BG/+FxexuNitsuiIHWXOLTZb3yQSxyLpOfTo2/BB8MNUZcNP+13cvAlPP5O";
-        public IEnumerable<string> ListenUrls => _server.ServerFeatures.Get<IServerAddressesFeature>().Addresses;
-        private IWebHost _server;
+        public IEnumerable<string> ListenUrls => _server.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>().Addresses;
+        private IHost _server;
 
         public NaheulbookApiServer(
             FakeSmtpConfig mailConfig,
@@ -59,14 +61,18 @@ namespace Naheulbook.Tests.Functional.Code.Servers
                 .WriteTo.File(new CompactJsonFormatter(), "logs/naheulbook.api.json")
                 .CreateLogger();
 
-            _server = new WebHostBuilder()
-                .UseKestrel()
+            _server = new HostBuilder()
+                .ConfigureWebHost(builder =>
+                {
+                    builder
+                        .UseUrls("http://[::1]:0")
+                        .UseStartup<Startup>()
+                        .UseConfiguration(configuration)
+                        .UseKestrel();
+                })
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseUrls("http://[::1]:0")
                 .UseEnvironment(Environments.Development)
-                .UseStartup<Startup>()
                 .UseSerilog(logger)
-                .UseConfiguration(configuration)
                 .Build();
 
             _server.Start();

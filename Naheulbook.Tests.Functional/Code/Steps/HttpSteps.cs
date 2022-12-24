@@ -188,7 +188,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 throw new Exception($"Invalid expected JSON: {ex.Message} Line:\n '{expectedJson.Split('\n')[ex.LineNumber - 1]}'", ex);
             }
 
-            var identityValue = (JValue)expectedObject.Property(identityField).Value;
+            var identityValue = (JValue)expectedObject.Property(identityField)?.Value;
             var array = JArray.Parse(content);
 
             foreach (var element in array)
@@ -196,7 +196,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 if (element.Type != JTokenType.Object || !(element is JObject actualObject))
                     continue;
 
-                if (!identityValue.Equals((JValue)actualObject.Property(identityField).Value))
+                if (identityValue?.Equals((JValue)actualObject.Property(identityField)?.Value) == false)
                     continue;
 
                 Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(_jsonComparer).WithColorOptions(_jsonComparerColorOptions));

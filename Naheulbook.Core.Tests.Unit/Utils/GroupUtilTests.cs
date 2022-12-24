@@ -109,7 +109,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _util.ApplyChangesAndNotify(group, request, _notificationSession);
 
             group.Data.Should().BeEquivalentTo(UpdatedGroupDataJson);
-            groupData.Date.Day.Should().Be(8);
+            groupData.Date!.Day.Should().Be(8);
             group.HistoryEntries.Should().Contain(groupHistoryEntry);
         }
 

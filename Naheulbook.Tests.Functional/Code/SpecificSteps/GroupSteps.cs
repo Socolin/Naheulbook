@@ -81,7 +81,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         public void GivenThatTheGroupHaveADateSet(string day, int year, int hour, int minute)
         {
             var group = _testDataUtil.GetLast<Group>();
-            var groupData = JsonConvert.DeserializeObject<GroupData>(group.Data) ?? new GroupData();
+            var groupData = JsonConvert.DeserializeObject<GroupData>(group.Data ?? "null") ?? new GroupData();
             groupData.Date = new NhbkDate
             {
                 Day = StepArgumentUtil.ParseNth(day),
@@ -90,11 +90,12 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 Year = year
             };
 
-            group.Data = JsonConvert.SerializeObject(groupData, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            });
+            group.Data = JsonConvert.SerializeObject(groupData,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
             _testDataUtil.SaveChanges();
         }
 

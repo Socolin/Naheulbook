@@ -33,12 +33,12 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var character = await _characterRepository.GetWithAllDataAsync(expectedCharacter.Id);
 
             character.Should().BeEquivalentTo(expectedCharacter, config => config.ExcludingChildren());
-            character.Jobs.Select(x => x.JobId).Should().BeEquivalentTo(TestDataUtil.GetAll<Job>().Select(x => x.Id));
-            character.Specialities.Select(x => x.Speciality).Should().BeEquivalentTo(TestDataUtil.GetAll<Speciality>(), config => config.ExcludingChildren());
-            character.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
-            character.Modifiers.Should().BeEquivalentTo(expectedCharacter.Modifiers, config => config.ExcludingChildren());
-            character.Invites.Should().BeEquivalentTo(TestDataUtil.GetAll<GroupInvite>(), config => config.ExcludingChildren());
-            character.Invites.First().Group.Should().BeEquivalentTo(TestDataUtil.Get<Group>(), config => config.ExcludingChildren());
+            character!.Jobs.Select(x => x.JobId).Should().BeEquivalentTo(TestDataUtil.GetAll<Job>().Select(x => x.Id));
+            character!.Specialities.Select(x => x.Speciality).Should().BeEquivalentTo(TestDataUtil.GetAll<Speciality>(), config => config.ExcludingChildren());
+            character!.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
+            character!.Modifiers.Should().BeEquivalentTo(expectedCharacter.Modifiers, config => config.ExcludingChildren());
+            character!.Invites.Should().BeEquivalentTo(TestDataUtil.GetAll<GroupInvite>(), config => config.ExcludingChildren());
+            character!.Invites.First().Group.Should().BeEquivalentTo(TestDataUtil.Get<Group>(), config => config.ExcludingChildren());
         }
 
         [Test]
