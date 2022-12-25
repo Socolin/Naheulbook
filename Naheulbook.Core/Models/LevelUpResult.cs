@@ -5,9 +5,9 @@ namespace Naheulbook.Core.Models
 {
     public class LevelUpResult
     {
-        public IList<CharacterModifier> NewModifiers { get; set; } = new List<CharacterModifier>();
+        public IList<CharacterModifierEntity> NewModifiers { get; set; } = new List<CharacterModifierEntity>();
         public int NewLevel { get; set; }
-        public IList<CharacterSkill> NewSkills { get; set; } = new List<CharacterSkill>();
-        public IList<CharacterSpeciality> NewSpecialities { get; set; } = new List<CharacterSpeciality>();
+        public IList<CharacterSkillEntity> NewSkills { get; set; } = new List<CharacterSkillEntity>();
+        public IList<CharacterSpecialityEntity> NewSpecialities { get; set; } = new List<CharacterSpecialityEntity>();
     }
 }

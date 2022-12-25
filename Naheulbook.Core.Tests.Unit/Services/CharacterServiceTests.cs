@@ -66,8 +66,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int userId = 10;
             var createCharacterRequest = new CreateCharacterRequest {Name = "some-name"};
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = userId};
-            var createdCharacter = new Character();
-            var initialInventory = new List<Item>();
+            var createdCharacter = new CharacterEntity();
+            var initialInventory = new List<ItemEntity>();
 
             _characterFactory.CreateCharacter(createCharacterRequest)
                 .Returns(createdCharacter);
@@ -94,13 +94,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 8;
             var createCharacterRequest = new CreateCharacterRequest {Name = "some-name", GroupId = groupId};
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = userId};
-            var createdCharacter = new Character();
-            var group = new Group();
+            var createdCharacter = new CharacterEntity();
+            var group = new GroupEntity();
 
             _characterFactory.CreateCharacter(createCharacterRequest)
                 .Returns(createdCharacter);
             _itemUtil.CreateInitialPlayerInventoryAsync(createCharacterRequest.Money)
-                .Returns(new List<Item>());
+                .Returns(new List<ItemEntity>());
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
 
@@ -115,8 +115,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 8;
             var createCharacterRequest = new CreateCharacterRequest {Name = "some-name", GroupId = groupId};
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var createdCharacter = new Character();
-            var group = new Group();
+            var createdCharacter = new CharacterEntity();
+            var group = new GroupEntity();
 
             _characterFactory.CreateCharacter(createCharacterRequest)
                 .Returns(createdCharacter);
@@ -134,7 +134,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task LoadCharacterDetailsAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithAllDataAsync(characterId)
@@ -151,10 +151,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task AddItemToCharacterAsync_ShouldCall_ItemService()
         {
             const int characterId = 4;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
             var request = new CreateItemRequest();
-            var expectedItem = new Item();
+            var expectedItem = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
@@ -170,10 +170,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task AddItemToCharacterAsync_ShouldNotifyChanges()
         {
             const int characterId = 4;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
             var request = new CreateItemRequest();
-            var expectedItem = new Item();
+            var expectedItem = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
@@ -193,11 +193,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task AddItemToCharacterAsync_ShouldAddACharacterHistoryEntry()
         {
             const int characterId = 4;
-            var item = new Item();
-            var expectedCharacterHistoryEntry = new CharacterHistoryEntry();
+            var item = new ItemEntity();
+            var expectedCharacterHistoryEntry = new CharacterHistoryEntryEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
-                .Returns(new Character {Id = characterId});
+                .Returns(new CharacterEntity {Id = characterId});
             _itemService.AddItemToAsync(Arg.Any<ItemOwnerType>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
                 .Returns(item);
             _characterHistoryUtil.CreateLogAddItem(characterId, item)
@@ -216,7 +216,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task AddItemToCharacterAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
             var request = new CreateItemRequest();
 
@@ -235,9 +235,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             const int groupId = 6;
-            var character = new Character {Id = characterId, GroupId = groupId};
+            var character = new CharacterEntity {Id = characterId, GroupId = groupId};
             var executionContext = new NaheulbookExecutionContext();
-            var expectedLoots = new List<Loot>();
+            var expectedLoots = new List<LootEntity>();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
@@ -253,7 +253,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task GetCharacterLootsAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
@@ -273,7 +273,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             const int groupId = 6;
-            var character = new Character {Id = characterId, GroupId = groupId, Group = new Group {Id = groupId, MasterId = masterId}};
+            var character = new CharacterEntity {Id = characterId, GroupId = groupId, Group = new GroupEntity {Id = groupId, MasterId = masterId}};
             var executionContext = new NaheulbookExecutionContext();
             var expectedHistoryEntries = new List<IHistoryEntry>();
 
@@ -291,7 +291,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task GetCharacterHistoryEntryAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
@@ -311,7 +311,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
-                .Returns((Character) null);
+                .Returns((CharacterEntity) null);
 
             Func<Task> act = () => _service.GetCharacterHistoryEntryAsync(executionContext, characterId, 0);
 
@@ -322,7 +322,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task UpdateCharacterStatAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
@@ -342,7 +342,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
-                .Returns((Character) null);
+                .Returns((CharacterEntity) null);
 
             Func<Task> act = () => _service.UpdateCharacterAsync(executionContext, characterId, new PatchCharacterRequest());
 
@@ -354,7 +354,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             var executionContext = new NaheulbookExecutionContext();
-            var character = new Character();
+            var character = new CharacterEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
@@ -376,7 +376,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task SetCharacterAdBonusStatAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
@@ -396,7 +396,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
-                .Returns((Character) null);
+                .Returns((CharacterEntity) null);
 
             Func<Task> act = () => _service.SetCharacterAdBonusStatAsync(executionContext, characterId, new PutStatBonusAdRequest());
 
@@ -408,11 +408,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             var executionContext = new NaheulbookExecutionContext();
-            var character = new Character();
+            var character = new CharacterEntity();
             var request = new AddCharacterModifierRequest();
-            var characterModifier = new CharacterModifier();
+            var characterModifier = new CharacterModifierEntity();
 
-            _mapper.Map<CharacterModifier>(request)
+            _mapper.Map<CharacterModifierEntity>(request)
                 .Returns(characterModifier);
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
@@ -431,10 +431,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task AddModifiersAsync_ShouldNotifyChange()
         {
             const int characterId = 4;
-            var character = new Character();
-            var characterModifier = new CharacterModifier();
+            var character = new CharacterEntity();
+            var characterModifier = new CharacterModifierEntity();
 
-            _mapper.Map<CharacterModifier>(Arg.Any<AddCharacterModifierRequest>())
+            _mapper.Map<CharacterModifierEntity>(Arg.Any<AddCharacterModifierRequest>())
                 .Returns(characterModifier);
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
@@ -452,12 +452,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task AddModifiersAsync_ShouldLog()
         {
             const int characterId = 4;
-            var character = new Character();
-            var characterHistoryEntry = new CharacterHistoryEntry();
+            var character = new CharacterEntity();
+            var characterHistoryEntry = new CharacterHistoryEntryEntity();
             var request = new AddCharacterModifierRequest();
-            var characterModifier = new CharacterModifier();
+            var characterModifier = new CharacterModifierEntity();
 
-            _mapper.Map<CharacterModifier>(request)
+            _mapper.Map<CharacterModifierEntity>(request)
                 .Returns(characterModifier);
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
@@ -478,7 +478,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task AddModifiersAsync_ShouldCall_EnsureCharacterAccess()
         {
             const int characterId = 4;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
@@ -498,7 +498,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
-                .Returns((Character) null);
+                .Returns((CharacterEntity) null);
 
             Func<Task> act = () => _service.AddModifiersAsync(executionContext, characterId, new AddCharacterModifierRequest());
 
@@ -510,9 +510,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             const int characterModifierId = 2;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
-            var characterModifier = new CharacterModifier {Character = character, CharacterId = characterId};
+            var characterModifier = new CharacterModifierEntity {Character = character, CharacterId = characterId};
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
@@ -535,14 +535,14 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             const int characterModifierId = 2;
-            var characterHistoryEntry = new CharacterHistoryEntry();
+            var characterHistoryEntry = new CharacterHistoryEntryEntity();
 
             _characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId)
                 .Returns(characterHistoryEntry);
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
-                .Returns(new Character());
+                .Returns(new CharacterEntity());
             _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(Arg.Any<int>(), Arg.Any<int>())
-                .Returns(new CharacterModifier());
+                .Returns(new CharacterModifierEntity());
 
             await _service.DeleteModifiersAsync(new NaheulbookExecutionContext(), characterId, characterModifierId);
 
@@ -560,9 +560,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterModifierId = 2;
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
-                .Returns(new Character());
+                .Returns(new CharacterEntity());
             _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(Arg.Any<int>(), Arg.Any<int>())
-                .Returns(new CharacterModifier());
+                .Returns(new CharacterModifierEntity());
 
             await _service.DeleteModifiersAsync(new NaheulbookExecutionContext(), characterId, characterModifierId);
 
@@ -578,9 +578,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             const int characterModifierId = 2;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
-            var characterModifier = new CharacterModifier();
+            var characterModifier = new CharacterModifierEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
@@ -601,7 +601,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
-                .Returns((Character) null);
+                .Returns((CharacterEntity) null);
 
             Func<Task> act = () => _service.DeleteModifiersAsync(executionContext, characterId, 2);
 
@@ -614,9 +614,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             const int characterModifierId = 2;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
-            var characterModifier = new CharacterModifier {Character = character, CharacterId = characterId};
+            var characterModifier = new CharacterModifierEntity {Character = character, CharacterId = characterId};
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
@@ -637,10 +637,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             const int characterModifierId = 2;
-            var characterModifier = new CharacterModifier();
+            var characterModifier = new CharacterModifierEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
-                .Returns(new Character());
+                .Returns(new CharacterEntity());
             _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(Arg.Any<int>(), Arg.Any<int>())
                 .Returns(characterModifier);
 
@@ -658,9 +658,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int characterId = 4;
             const int characterModifierId = 2;
-            var character = new Character {Id = characterId};
+            var character = new CharacterEntity {Id = characterId};
             var executionContext = new NaheulbookExecutionContext();
-            var characterModifier = new CharacterModifier();
+            var characterModifier = new CharacterModifierEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
                 .Returns(character);
@@ -681,7 +681,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
-                .Returns((Character) null);
+                .Returns((CharacterEntity) null);
 
             Func<Task> act = () => _service.ToggleModifiersAsync(executionContext, characterId, 2);
 
@@ -695,8 +695,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var jobId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext();
             var request = new CharacterAddJobRequest {JobId = jobId};
-            var character = new Character {Jobs = new List<CharacterJob>(), Id = characterId};
-            var job = new Job {Id = jobId};
+            var character = new CharacterEntity {Jobs = new List<CharacterJobEntity>(), Id = characterId};
+            var job = new JobEntity {Id = jobId};
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
                 .Returns(character);
@@ -728,7 +728,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var request = new CharacterAddJobRequest {JobId = jobId};
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
-                .Returns((Character) null);
+                .Returns((CharacterEntity) null);
 
             Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
 
@@ -742,7 +742,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterId = 5;
             var executionContext = new NaheulbookExecutionContext();
             var request = new CharacterAddJobRequest {JobId = jobId};
-            var character = new Character {Jobs = new List<CharacterJob>(), Id = characterId};
+            var character = new CharacterEntity {Jobs = new List<CharacterJobEntity>(), Id = characterId};
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
                 .Returns(character);
@@ -762,7 +762,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var jobId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext();
             var request = new CharacterAddJobRequest {JobId = jobId};
-            var character = new Character {Jobs = new List<CharacterJob> {new CharacterJob {JobId = jobId}}, Id = characterId};
+            var character = new CharacterEntity {Jobs = new List<CharacterJobEntity> {new CharacterJobEntity {JobId = jobId}}, Id = characterId};
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
                 .Returns(character);
@@ -779,12 +779,12 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var jobId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext();
             var request = new CharacterAddJobRequest {JobId = jobId};
-            var character = new Character {Jobs = new List<CharacterJob>(), Id = characterId};
+            var character = new CharacterEntity {Jobs = new List<CharacterJobEntity>(), Id = characterId};
 
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
                 .Returns(character);
             _unitOfWorkFactory.GetUnitOfWork().Jobs.GetAsync(jobId)
-                .Returns((Job) null);
+                .Returns((JobEntity) null);
 
             Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
 

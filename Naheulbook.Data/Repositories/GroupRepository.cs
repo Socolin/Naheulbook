@@ -8,21 +8,21 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IGroupRepository : IRepository<Group>
+    public interface IGroupRepository : IRepository<GroupEntity>
     {
-        Task<List<Group>> GetGroupsOwnedByAsync(int userId);
-        Task<Group?> GetGroupsWithDetailsAsync(int groupId);
-        Task<Group?> GetGroupsWithCharactersAsync(int groupId);
+        Task<List<GroupEntity>> GetGroupsOwnedByAsync(int userId);
+        Task<GroupEntity?> GetGroupsWithDetailsAsync(int groupId);
+        Task<GroupEntity?> GetGroupsWithCharactersAsync(int groupId);
     }
 
-    public class GroupRepository : Repository<Group, NaheulbookDbContext>, IGroupRepository
+    public class GroupRepository : Repository<GroupEntity, NaheulbookDbContext>, IGroupRepository
     {
         public GroupRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public Task<List<Group>> GetGroupsOwnedByAsync(int userId)
+        public Task<List<GroupEntity>> GetGroupsOwnedByAsync(int userId)
         {
             return Context.Groups
                 .Include(g => g.Characters)
@@ -30,7 +30,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Group?> GetGroupsWithDetailsAsync(int groupId)
+        public Task<GroupEntity?> GetGroupsWithDetailsAsync(int groupId)
         {
             return Context.Groups
                 .Include(g => g.Characters)
@@ -45,7 +45,7 @@ namespace Naheulbook.Data.Repositories
                 .SingleOrDefaultAsync();
         }
 
-        public Task<Group?> GetGroupsWithCharactersAsync(int groupId)
+        public Task<GroupEntity?> GetGroupsWithCharactersAsync(int groupId)
         {
             return Context.Groups
                 .Include(g => g.Characters)

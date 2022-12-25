@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class NpcConfiguration : IEntityTypeConfiguration<Npc>
+    public class NpcConfiguration : IEntityTypeConfiguration<NpcEntity>
     {
-        public void Configure(EntityTypeBuilder<Npc> builder)
+        public void Configure(EntityTypeBuilder<NpcEntity> builder)
         {
             builder.ToTable("npcs");
 

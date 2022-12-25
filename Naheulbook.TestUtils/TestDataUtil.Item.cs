@@ -6,31 +6,31 @@ namespace Naheulbook.TestUtils
 {
     public partial class TestDataUtil
     {
-        public TestDataUtil AddSlot(Action<Slot> customizer = null)
+        public TestDataUtil AddSlot(Action<SlotEntity> customizer = null)
         {
             return SaveEntity(_defaultEntityCreator.CreateSlot(), customizer);
         }
 
-        public TestDataUtil AddItemTemplateSection(Action<ItemTemplateSection> customizer = null)
+        public TestDataUtil AddItemTemplateSection(Action<ItemTemplateSectionEntity> customizer = null)
         {
             return SaveEntity(_defaultEntityCreator.CreateItemTemplateSection(), customizer);
         }
 
-        public TestDataUtil AddItemTemplateSubCategory(Action<ItemTemplateSubCategory> customizer = null)
+        public TestDataUtil AddItemTemplateSubCategory(Action<ItemTemplateSubCategoryEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateItemTemplateSubCategory(GetLast<ItemTemplateSection>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateItemTemplateSubCategory(GetLast<ItemTemplateSectionEntity>()), customizer);
         }
 
-        public TestDataUtil AddItemTemplate(Action<ItemTemplate> customizer = null)
+        public TestDataUtil AddItemTemplate(Action<ItemTemplateEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateSubCategory>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateSubCategoryEntity>()), customizer);
         }
 
-        public TestDataUtil AddItemTemplateAndRequiredData(Action<ItemTemplate> customizer = null)
+        public TestDataUtil AddItemTemplateAndRequiredData(Action<ItemTemplateEntity> customizer = null)
         {
             AddItemTemplateSection();
             AddItemTemplateSubCategory();
-            return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateSubCategory>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateSubCategoryEntity>()), customizer);
         }
 
         public TestDataUtil AddItemTemplateWithAllData()
@@ -47,81 +47,81 @@ namespace Naheulbook.TestUtils
 
             return AddItemTemplate(itemTemplate =>
             {
-                itemTemplate.Requirements = new List<ItemTemplateRequirement>
+                itemTemplate.Requirements = new List<ItemTemplateRequirementEntity>
                 {
-                    new ItemTemplateRequirement
+                    new ItemTemplateRequirementEntity
                     {
-                        Stat = Get<Stat>(),
+                        Stat = Get<StatEntity>(),
                         MinValue = 2,
                         MaxValue = 12,
                     }
                 };
-                itemTemplate.Modifiers = new List<ItemTemplateModifier>
+                itemTemplate.Modifiers = new List<ItemTemplateModifierEntity>
                 {
-                    new ItemTemplateModifier
+                    new ItemTemplateModifierEntity
                     {
                         Special = null,
-                        RequiredJob = Get<Job>(),
-                        RequiredOrigin = Get<Origin>(),
-                        Stat = Get<Stat>(),
+                        RequiredJob = Get<JobEntity>(),
+                        RequiredOrigin = Get<OriginEntity>(),
+                        Stat = Get<StatEntity>(),
                         Value = 2,
                         Type = "ADD"
                     }
                 };
-                itemTemplate.Skills = new List<ItemTemplateSkill>
+                itemTemplate.Skills = new List<ItemTemplateSkillEntity>
                 {
-                    new ItemTemplateSkill
+                    new ItemTemplateSkillEntity
                     {
-                        Skill = Get<Skill>(0)
+                        Skill = Get<SkillEntity>(0)
                     }
                 };
-                itemTemplate.UnSkills = new List<ItemTemplateUnSkill>
+                itemTemplate.UnSkills = new List<ItemTemplateUnSkillEntity>
                 {
-                    new ItemTemplateUnSkill
+                    new ItemTemplateUnSkillEntity
                     {
-                        Skill = Get<Skill>(1)
+                        Skill = Get<SkillEntity>(1)
                     }
                 };
-                itemTemplate.Slots = new List<ItemTemplateSlot>
+                itemTemplate.Slots = new List<ItemTemplateSlotEntity>
                 {
-                    new ItemTemplateSlot
+                    new ItemTemplateSlotEntity
                     {
-                        Slot = Get<Slot>(0)
+                        Slot = Get<SlotEntity>(0)
                     }
                 };
-                itemTemplate.SkillModifiers = new List<ItemTemplateSkillModifier>
+                itemTemplate.SkillModifiers = new List<ItemTemplateSkillModifierEntity>
                 {
-                    new ItemTemplateSkillModifier
+                    new ItemTemplateSkillModifierEntity
                     {
-                        Skill = Get<Skill>(2),
+                        Skill = Get<SkillEntity>(2),
                         Value = 2
                     }
                 };
             });
         }
 
-        public TestDataUtil AddItem(Character character, Action<Item> customizer = null)
+        public TestDataUtil AddItem(CharacterEntity character, Action<ItemEntity> customizer = null)
         {
-            var item = _defaultEntityCreator.CreateItem(GetLast<ItemTemplate>(), character);
+            var item = _defaultEntityCreator.CreateItem(GetLast<ItemTemplateEntity>(), character);
 
             return SaveEntity(item, customizer);
         }
 
-        public TestDataUtil AddItem(Loot loot, Action<Item> customizer = null)
+        public TestDataUtil AddItem(LootEntity loot, Action<ItemEntity> customizer = null)
         {
-            var item = _defaultEntityCreator.CreateItem(GetLast<ItemTemplate>(), loot);
+            var item = _defaultEntityCreator.CreateItem(GetLast<ItemTemplateEntity>(), loot);
 
             return SaveEntity(item, customizer);
         }
 
-        public TestDataUtil AddItem(Monster monster, Action<Item> customizer = null)
+        public TestDataUtil AddItem(MonsterEntity monster, Action<ItemEntity> customizer = null)
         {
-            var item = _defaultEntityCreator.CreateItem(GetLast<ItemTemplate>(), monster);
+            var item = _defaultEntityCreator.CreateItem(GetLast<ItemTemplateEntity>(), monster);
 
             return SaveEntity(item, customizer);
         }
 
-        public TestDataUtil AddItemType(Action<ItemType> customizer = null)
+        public TestDataUtil AddItemType(Action<ItemTypeEntity> customizer = null)
         {
             return SaveEntity(_defaultEntityCreator.CreateItemType(), customizer);
         }

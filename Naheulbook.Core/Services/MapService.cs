@@ -16,18 +16,18 @@ namespace Naheulbook.Core.Services
 {
     public interface IMapService
     {
-        Task<Map> GetMapAsync(int mapId, int? userId);
-        Task<Map> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream);
-        Task<Map> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request);
-        Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request);
-        Task<MapLayer> EditMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request);
-        Task<MapMarker> CreateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapMarkerRequest request);
+        Task<MapEntity> GetMapAsync(int mapId, int? userId);
+        Task<MapEntity> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream);
+        Task<MapEntity> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request);
+        Task<MapLayerEntity> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request);
+        Task<MapLayerEntity> EditMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request);
+        Task<MapMarkerEntity> CreateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapMarkerRequest request);
         Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId);
-        Task<MapMarker> EditMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request);
+        Task<MapMarkerEntity> EditMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request);
         Task DeleteMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId);
-        Task<List<Map>> GetMapsAsync();
-        Task<MapMarkerLink> CreateMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerLinkRequest request);
-        Task<MapMarkerLink> EditMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, MapMarkerLinkRequest request);
+        Task<List<MapEntity>> GetMapsAsync();
+        Task<MapMarkerLinkEntity> CreateMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerLinkRequest request);
+        Task<MapMarkerLinkEntity> EditMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, MapMarkerLinkRequest request);
         Task DeleteMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId);
     }
 
@@ -51,7 +51,7 @@ namespace Naheulbook.Core.Services
             _mapImageUtil = mapImageUtil;
         }
 
-        public async Task<Map> GetMapAsync(int mapId, int? userId)
+        public async Task<MapEntity> GetMapAsync(int mapId, int? userId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -63,7 +63,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Map> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream)
+        public async Task<MapEntity> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
@@ -78,7 +78,7 @@ namespace Naheulbook.Core.Services
                         .Select(x => new MapData.MapAttribution {Name = x.Name, Url = x.Url})
                         .ToList()
                 };
-                var map = new Map
+                var map = new MapEntity
                 {
                     Name = request.Name,
                     Data = _jsonUtil.SerializeNonNull(mapData),
@@ -105,7 +105,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Map> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request)
+        public async Task<MapEntity> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
@@ -123,7 +123,7 @@ namespace Naheulbook.Core.Services
             return map;
         }
 
-        public async Task<MapLayer> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request)
+        public async Task<MapLayerEntity> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -142,7 +142,7 @@ namespace Naheulbook.Core.Services
                 if (map == null)
                     throw new MapNotFoundException(mapId);
 
-                var mapLayer = new MapLayer
+                var mapLayer = new MapLayerEntity
                 {
                     Name = request.Name,
                     Source = request.Source,
@@ -158,7 +158,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<MapLayer> EditMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request)
+        public async Task<MapLayerEntity> EditMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -200,7 +200,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<MapMarker> CreateMapMarkerAsync(
+        public async Task<MapMarkerEntity> CreateMapMarkerAsync(
             NaheulbookExecutionContext executionContext,
             int mapLayerId,
             MapMarkerRequest request
@@ -214,7 +214,7 @@ namespace Naheulbook.Core.Services
 
             await _authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapLayer);
 
-            var mapMarker = new MapMarker
+            var mapMarker = new MapMarkerEntity
             {
                 LayerId = mapLayerId,
                 Name = request.Name,
@@ -245,7 +245,7 @@ namespace Naheulbook.Core.Services
             await uow.SaveChangesAsync();
         }
 
-        public async Task<MapMarker> EditMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request)
+        public async Task<MapMarkerEntity> EditMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request)
         {
             using var uow = _unitOfWorkFactory.CreateUnitOfWork();
 
@@ -281,7 +281,7 @@ namespace Naheulbook.Core.Services
             await uow.SaveChangesAsync();
         }
 
-        public async Task<List<Map>> GetMapsAsync()
+        public async Task<List<MapEntity>> GetMapsAsync()
         {
             using var uow = _unitOfWorkFactory.CreateUnitOfWork();
 
@@ -290,7 +290,7 @@ namespace Naheulbook.Core.Services
             return maps;
         }
 
-        public async Task<MapMarkerLink> CreateMapMarkerLinkAsync(
+        public async Task<MapMarkerLinkEntity> CreateMapMarkerLinkAsync(
             NaheulbookExecutionContext executionContext,
             int mapMarkerId,
             MapMarkerLinkRequest request
@@ -317,7 +317,7 @@ namespace Naheulbook.Core.Services
                 await _authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, targetMapMarker.Layer);
             }
 
-            var mapMarkerLink = new MapMarkerLink
+            var mapMarkerLink = new MapMarkerLinkEntity
             {
                 Name = request.Name,
                 MapMarkerId = mapMarkerId,
@@ -333,7 +333,7 @@ namespace Naheulbook.Core.Services
             return mapMarkerLink;
         }
 
-        public async Task<MapMarkerLink> EditMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, MapMarkerLinkRequest request)
+        public async Task<MapMarkerLinkEntity> EditMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, MapMarkerLinkRequest request)
         {
             using var uow = _unitOfWorkFactory.CreateUnitOfWork();
 

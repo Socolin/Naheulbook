@@ -38,8 +38,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 42;
             var executionContext = new NaheulbookExecutionContext();
-            var group = new Group {Id = groupId};
-            var expectedEvents = new List<Event>();
+            var group = new GroupEntity {Id = groupId};
+            var expectedEvents = new List<EventEntity>();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -58,7 +58,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns((Group) null);
+                .Returns((GroupEntity) null);
 
             Func<Task> act = () => _service.GetEventsForGroupAsync(executionContext, groupId);
 
@@ -70,7 +70,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 42;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new Group {Id = groupId};
+            var group = new GroupEntity {Id = groupId};
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);

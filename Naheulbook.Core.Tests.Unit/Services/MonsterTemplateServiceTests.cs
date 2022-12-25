@@ -43,13 +43,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
             var monsterSubCategory = CreateMonsterSubCategory(subCategoryId);
             var request = CreateRequest(subCategoryId, itemTemplateId, locationId);
-            var itemTemplate = new ItemTemplate {Id = itemTemplateId};
+            var itemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
             var expectedMonsterTemplate = CreateMonsterTemplate(monsterSubCategory, itemTemplate);
 
             _unitOfWorkFactory.GetUnitOfWork().MonsterSubCategories.GetAsync(subCategoryId)
                 .Returns(monsterSubCategory);
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<Guid>>(x => x.SequenceEqual(new[] {itemTemplateId})))
-                .Returns(new List<ItemTemplate> {itemTemplate});
+                .Returns(new List<ItemTemplateEntity> {itemTemplate});
 
             var monsterTemplate = await _service.CreateMonsterTemplateAsync(executionContext, request);
 
@@ -86,16 +86,16 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().MonsterSubCategories.GetAsync(42)
-                .Returns((MonsterSubCategory) null);
+                .Returns((MonsterSubCategoryEntity) null);
 
             Func<Task> act = () => _service.CreateMonsterTemplateAsync(executionContext, request);
 
             await act.Should().ThrowAsync<MonsterSubCategoryNotFoundException>();
         }
 
-        private static MonsterSubCategory CreateMonsterSubCategory(int subCategoryId)
+        private static MonsterSubCategoryEntity CreateMonsterSubCategory(int subCategoryId)
         {
-            return new MonsterSubCategory
+            return new MonsterSubCategoryEntity
             {
                 Id = subCategoryId
             };
@@ -122,15 +122,15 @@ namespace Naheulbook.Core.Tests.Unit.Services
             };
         }
 
-        private static MonsterTemplate CreateMonsterTemplate(MonsterSubCategory monsterSubCategory, ItemTemplate itemTemplate)
+        private static MonsterTemplateEntity CreateMonsterTemplate(MonsterSubCategoryEntity monsterSubCategory, ItemTemplateEntity itemTemplate)
         {
-            return new MonsterTemplate()
+            return new MonsterTemplateEntity()
             {
                 SubCategory = monsterSubCategory,
                 Data = @"{""key"":""value""}",
-                Items = new List<MonsterTemplateInventoryElement>()
+                Items = new List<MonsterTemplateInventoryElementEntity>()
                 {
-                    new MonsterTemplateInventoryElement
+                    new MonsterTemplateInventoryElementEntity
                     {
                         Chance = 0.5f,
                         MinCount = 1,

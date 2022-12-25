@@ -6,12 +6,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public Job CreateJob(string suffix = null)
+        public JobEntity CreateJob(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Job
+            return new JobEntity
             {
                 Name = $"some-job-name-{suffix}",
                 Flags = @"[{""type"": ""value""}]",
@@ -23,12 +23,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Speciality CreateSpeciality(Job job, string suffix = null)
+        public SpecialityEntity CreateSpeciality(JobEntity job, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Speciality
+            return new SpecialityEntity
             {
                 Name = $"some-speciality-name-{suffix}",
                 Description = $"some-speciality-description-{suffix}",

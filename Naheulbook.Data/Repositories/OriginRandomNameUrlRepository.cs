@@ -7,18 +7,18 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IOriginRandomNameUrlRepository : IRepository<OriginRandomNameUrl>
+    public interface IOriginRandomNameUrlRepository : IRepository<OriginRandomNameUrlEntity>
     {
-        Task<OriginRandomNameUrl?> GetByOriginIdAndSexAsync(string sex, Guid originId);
+        Task<OriginRandomNameUrlEntity?> GetByOriginIdAndSexAsync(string sex, Guid originId);
     }
 
-    public class OriginRandomNameUrlRepository : Repository<OriginRandomNameUrl, NaheulbookDbContext>, IOriginRandomNameUrlRepository
+    public class OriginRandomNameUrlRepository : Repository<OriginRandomNameUrlEntity, NaheulbookDbContext>, IOriginRandomNameUrlRepository
     {
         public OriginRandomNameUrlRepository(NaheulbookDbContext context) : base(context)
         {
         }
 
-        public Task<OriginRandomNameUrl?> GetByOriginIdAndSexAsync(string sex, Guid originId)
+        public Task<OriginRandomNameUrlEntity?> GetByOriginIdAndSexAsync(string sex, Guid originId)
         {
             return Context.OriginRandomNameUrls
                 .SingleOrDefaultAsync(x => x.Sex == sex && x.OriginId == originId);

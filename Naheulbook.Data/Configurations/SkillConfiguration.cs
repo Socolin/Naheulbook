@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class SkillConfiguration : IEntityTypeConfiguration<Skill>
+    public class SkillConfiguration : IEntityTypeConfiguration<SkillEntity>
     {
-        public void Configure(EntityTypeBuilder<Skill> builder)
+        public void Configure(EntityTypeBuilder<SkillEntity> builder)
         {
             builder.ToTable("skills");
 

@@ -12,6 +12,6 @@ namespace Naheulbook.Data.Models
         public string? Flags { get; set; }
 
         public Guid JobId { get; set; }
-        public Job Job { get; set; } = null!;
+        public JobEntity Job { get; set; } = null!;
     }
 }

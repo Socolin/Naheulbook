@@ -10,10 +10,10 @@ namespace Naheulbook.Core.Utils
 {
     public interface IGroupUtil
     {
-        void ApplyChangesAndNotify(Group group, PatchGroupRequest request, INotificationSession notificationSession);
-        void StartCombat(Group group, INotificationSession notificationSession);
-        void EndCombat(Group group, INotificationSession notificationSession);
-        NhbkDate AddTimeAndNotify(Group @group, NhbkDateOffset request, INotificationSession notificationSession);
+        void ApplyChangesAndNotify(GroupEntity group, PatchGroupRequest request, INotificationSession notificationSession);
+        void StartCombat(GroupEntity group, INotificationSession notificationSession);
+        void EndCombat(GroupEntity group, INotificationSession notificationSession);
+        NhbkDate AddTimeAndNotify(GroupEntity @group, NhbkDateOffset request, INotificationSession notificationSession);
     }
 
     public class GroupUtil : IGroupUtil
@@ -30,7 +30,7 @@ namespace Naheulbook.Core.Utils
             _groupHistoryUtil = groupHistoryUtil;
         }
 
-        public void ApplyChangesAndNotify(Group group, PatchGroupRequest request, INotificationSession notificationSession)
+        public void ApplyChangesAndNotify(GroupEntity group, PatchGroupRequest request, INotificationSession notificationSession)
         {
             var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
 
@@ -68,7 +68,7 @@ namespace Naheulbook.Core.Utils
             group.Data = _jsonUtil.Serialize(groupData);
         }
 
-        public void StartCombat(Group group, INotificationSession notificationSession)
+        public void StartCombat(GroupEntity group, INotificationSession notificationSession)
         {
             var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
             if (groupData.InCombat == true)
@@ -76,8 +76,8 @@ namespace Naheulbook.Core.Utils
 
             groupData.InCombat = true;
 
-            group.Loots ??= new List<Loot>();
-            var loot = new Loot
+            group.Loots ??= new List<LootEntity>();
+            var loot = new LootEntity
             {
                 Name = "Combat",
                 GroupId = group.Id
@@ -91,7 +91,7 @@ namespace Naheulbook.Core.Utils
             group.Data = _jsonUtil.Serialize(groupData);
         }
 
-        public void EndCombat(Group group, INotificationSession notificationSession)
+        public void EndCombat(GroupEntity group, INotificationSession notificationSession)
         {
             var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
             if (groupData.InCombat != true)
@@ -106,7 +106,7 @@ namespace Naheulbook.Core.Utils
             group.Data = _jsonUtil.Serialize(groupData);
         }
 
-        public NhbkDate AddTimeAndNotify(Group group, NhbkDateOffset timeOffset, INotificationSession notificationSession)
+        public NhbkDate AddTimeAndNotify(GroupEntity group, NhbkDateOffset timeOffset, INotificationSession notificationSession)
         {
             var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
             if (groupData.Date == null)

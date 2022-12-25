@@ -6,19 +6,19 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IJobRepository : IRepository<Job>
+    public interface IJobRepository : IRepository<JobEntity>
     {
-        Task<ICollection<Job>> GetAllWithAllDataAsync();
+        Task<ICollection<JobEntity>> GetAllWithAllDataAsync();
     }
 
-    public class JobRepository : Repository<Job, NaheulbookDbContext>, IJobRepository
+    public class JobRepository : Repository<JobEntity, NaheulbookDbContext>, IJobRepository
     {
         public JobRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public async Task<ICollection<Job>> GetAllWithAllDataAsync()
+        public async Task<ICollection<JobEntity>> GetAllWithAllDataAsync()
         {
             return await Context.Jobs
                 .Include(j => j.Bonuses)

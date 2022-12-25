@@ -38,7 +38,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             var editEffectRequest = new EditEffectRequest();
             var expectedEffectResponse = new EffectResponse();
-            var effect = new Effect {Id = 42};
+            var effect = new EffectEntity {Id = 42};
 
             _effectService.EditEffectAsync(_executionContext, 42, editEffectRequest)
                 .Returns(effect);
@@ -56,7 +56,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PutEditEffect_WhenCatchForbiddenAccessException_Return403()
         {
             _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
-                .Returns(Task.FromException<Effect>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<EffectEntity>(new ForbiddenAccessException()));
 
             Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
@@ -67,7 +67,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PutEditEffect_WhenCatchEffectNotFoundException_Return404()
         {
             _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
-                .Returns(Task.FromException<Effect>(new EffectNotFoundException()));
+                .Returns(Task.FromException<EffectEntity>(new EffectNotFoundException()));
 
             Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
@@ -78,7 +78,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetEffect_CallEffectService()
         {
             var expectedEffectResponse = new EffectResponse();
-            var effect = new Effect {Id = 42};
+            var effect = new EffectEntity {Id = 42};
 
             _effectService.GetEffectAsync(42)
                 .Returns(effect);
@@ -94,7 +94,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetEffect_WhenCatchEffectNotFoundException_Return404()
         {
             _effectService.GetEffectAsync(Arg.Any<int>())
-                .Returns(Task.FromException<Effect>(new EffectNotFoundException()));
+                .Returns(Task.FromException<EffectEntity>(new EffectNotFoundException()));
 
             Func<Task<ActionResult<EffectResponse>>> act = () => _effectsController.GetEffectAsync(42);
 

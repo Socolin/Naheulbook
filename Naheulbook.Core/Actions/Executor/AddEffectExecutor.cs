@@ -77,7 +77,7 @@ namespace Naheulbook.Core.Actions.Executor
 
 
 
-            var characterModifier = new CharacterModifier
+            var characterModifier = new CharacterModifierEntity
             {
                 Name = effect.Name,
                 Permanent = false,
@@ -93,7 +93,7 @@ namespace Naheulbook.Core.Actions.Executor
                 CurrentTimeDuration = timeDuration,
                 LapCount = lapCount,
                 CurrentLapCount = lapCount,
-                Values = effect.Modifiers.Select(v => new CharacterModifierValue
+                Values = effect.Modifiers.Select(v => new CharacterModifierValueEntity
                 {
                     Type = v.Type,
                     StatName = v.StatName,
@@ -103,7 +103,7 @@ namespace Naheulbook.Core.Actions.Executor
 
             if (context.TargetCharacter.Modifiers == null)
             {
-                context.TargetCharacter.Modifiers = new List<CharacterModifier>();
+                context.TargetCharacter.Modifiers = new List<CharacterModifierEntity>();
             }
 
             context.TargetCharacter.Modifiers.Add(characterModifier);

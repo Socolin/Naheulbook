@@ -30,7 +30,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task CanListAllSkills()
         {
-            var expectedSkills = new List<Skill>();
+            var expectedSkills = new List<SkillEntity>();
 
             _skillRepository.GetAllWithEffectsAsync()
                 .Returns(expectedSkills);

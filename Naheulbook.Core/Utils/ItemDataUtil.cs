@@ -7,17 +7,17 @@ namespace Naheulbook.Core.Utils
 {
     public interface IItemDataUtil
     {
-        IReadOnlyItemData GetItemData(Item item);
-        void SetItemData(Item item, IReadOnlyItemData itemData);
+        IReadOnlyItemData GetItemData(ItemEntity item);
+        void SetItemData(ItemEntity item, IReadOnlyItemData itemData);
 
-        bool IsItemEquipped(Item item);
-        void UpdateEquipItem(Item item, int? level);
-        void UpdateQuantity(Item item, int newQuantity);
-        void UpdateRelativeQuantity(Item item, int quantityChange);
-        void UpdateChargeCount(Item item, int newChargeCount);
-        void UpdateRelativeChargeCount(Item item, int change);
-        void ResetReadCount(Item item);
-        void UnEquipItem(Item item);
+        bool IsItemEquipped(ItemEntity item);
+        void UpdateEquipItem(ItemEntity item, int? level);
+        void UpdateQuantity(ItemEntity item, int newQuantity);
+        void UpdateRelativeQuantity(ItemEntity item, int quantityChange);
+        void UpdateChargeCount(ItemEntity item, int newChargeCount);
+        void UpdateRelativeChargeCount(ItemEntity item, int change);
+        void ResetReadCount(ItemEntity item);
+        void UnEquipItem(ItemEntity item);
     }
 
     /// <summary>
@@ -41,22 +41,22 @@ namespace Naheulbook.Core.Utils
             _jsonUtil = jsonUtil;
         }
 
-        public IReadOnlyItemData GetItemData(Item item)
+        public IReadOnlyItemData GetItemData(ItemEntity item)
         {
             return _jsonUtil.DeserializeOrCreate<ItemData>(item.Data);
         }
 
-        public void SetItemData(Item item, IReadOnlyItemData itemData)
+        public void SetItemData(ItemEntity item, IReadOnlyItemData itemData)
         {
             item.Data = _jsonUtil.SerializeNonNull(itemData);
         }
 
-        public bool IsItemEquipped(Item item)
+        public bool IsItemEquipped(ItemEntity item)
         {
             return GetItemData(item).Equipped.HasValue;
         }
 
-        public void UpdateEquipItem(Item item, int? level)
+        public void UpdateEquipItem(ItemEntity item, int? level)
         {
             UpdateData(item, (itemData) =>
             {
@@ -82,37 +82,37 @@ namespace Naheulbook.Core.Utils
             });
         }
 
-        public void UpdateQuantity(Item item, int newQuantity)
+        public void UpdateQuantity(ItemEntity item, int newQuantity)
         {
             UpdateData(item, itemData => itemData.Quantity = newQuantity);
         }
 
-        public void UpdateRelativeQuantity(Item item, int quantityChange)
+        public void UpdateRelativeQuantity(ItemEntity item, int quantityChange)
         {
             UpdateData(item, itemData => itemData.Quantity += quantityChange);
         }
 
-        public void UpdateChargeCount(Item item, int newChargeCount)
+        public void UpdateChargeCount(ItemEntity item, int newChargeCount)
         {
             UpdateData(item, itemData => itemData.Charge = newChargeCount);
         }
 
-        public void UpdateRelativeChargeCount(Item item, int change)
+        public void UpdateRelativeChargeCount(ItemEntity item, int change)
         {
             UpdateData(item, itemData => itemData.Charge += change);
         }
 
-        public void ResetReadCount(Item item)
+        public void ResetReadCount(ItemEntity item)
         {
             UpdateData(item, (itemData) => itemData.ReadCount = null);
         }
 
-        public void UnEquipItem(Item item)
+        public void UnEquipItem(ItemEntity item)
         {
             UpdateData(item, (itemData => itemData.Equipped = null));
         }
 
-        private void UpdateData(Item item, Action<ItemData> action)
+        private void UpdateData(ItemEntity item, Action<ItemData> action)
         {
             var itemData = _jsonUtil.DeserializeOrCreate<ItemData>(item.Data);
             action(itemData);

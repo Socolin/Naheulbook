@@ -111,7 +111,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
             _jsonUtil.DeserializeOrCreate<PartialItemTemplateData>(Arg.Any<string>())
                 .Returns(new PartialItemTemplateData());
 
-            var actualItem = _factory.CreateItem(ItemOwnerType.Character, characterId, new ItemTemplate(), new ItemData());
+            var actualItem = _factory.CreateItem(ItemOwnerType.Character, characterId, new ItemTemplateEntity(), new ItemData());
 
             actualItem.CharacterId.Should().Be(characterId);
         }
@@ -124,7 +124,7 @@ namespace Naheulbook.Core.Tests.Unit.Factories
             _jsonUtil.DeserializeOrCreate<PartialItemTemplateData>(Arg.Any<string>())
                 .Returns(new PartialItemTemplateData());
 
-            var actualItem = _factory.CreateItem(ItemOwnerType.Loot, lootId, new ItemTemplate(), new ItemData());
+            var actualItem = _factory.CreateItem(ItemOwnerType.Loot, lootId, new ItemTemplateEntity(), new ItemData());
 
             actualItem.LootId.Should().Be(lootId);
         }
@@ -137,14 +137,14 @@ namespace Naheulbook.Core.Tests.Unit.Factories
             _jsonUtil.DeserializeOrCreate<PartialItemTemplateData>(Arg.Any<string>())
                 .Returns(new PartialItemTemplateData());
 
-            var actualItem = _factory.CreateItem(ItemOwnerType.Monster, monsterId, new ItemTemplate(), new ItemData());
+            var actualItem = _factory.CreateItem(ItemOwnerType.Monster, monsterId, new ItemTemplateEntity(), new ItemData());
 
             actualItem.MonsterId.Should().Be(monsterId);
         }
 
-        private ItemTemplate CreateItemTemplate()
+        private ItemTemplateEntity CreateItemTemplate()
         {
-            return new ItemTemplate
+            return new ItemTemplateEntity
             {
                 Id = Guid.NewGuid(),
                 Data = "some-item-template-data"

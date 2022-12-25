@@ -25,7 +25,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var actualJobs = await _jobRepository.GetAllWithAllDataAsync();
 
             actualJobs.Should().BeEquivalentTo(
-                TestDataUtil.GetAll<Job>(),
+                TestDataUtil.GetAll<JobEntity>(),
                 config => config
                     .Excluding(o => o.Id)
                     .Excluding(o => o.Bonuses)

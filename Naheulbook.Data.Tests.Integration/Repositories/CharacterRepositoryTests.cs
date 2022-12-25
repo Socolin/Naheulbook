@@ -25,20 +25,20 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         public async Task GetWithAllDataAsync_ShouldLoadExpectedCharacter_WithAllExpectedData()
         {
             TestDataUtil.AddUser();
-            var user = TestDataUtil.GetLast<User>();
+            var user = TestDataUtil.GetLast<UserEntity>();
             TestDataUtil.AddCharacterWithAllData(user.Id);
-            var expectedCharacter = TestDataUtil.GetLast<Character>();
-            TestDataUtil.AddGroupInvite(expectedCharacter, TestDataUtil.GetLast<Group>(), true);
+            var expectedCharacter = TestDataUtil.GetLast<CharacterEntity>();
+            TestDataUtil.AddGroupInvite(expectedCharacter, TestDataUtil.GetLast<GroupEntity>(), true);
 
             var character = await _characterRepository.GetWithAllDataAsync(expectedCharacter.Id);
 
             character.Should().BeEquivalentTo(expectedCharacter, config => config.ExcludingChildren());
-            character!.Jobs.Select(x => x.JobId).Should().BeEquivalentTo(TestDataUtil.GetAll<Job>().Select(x => x.Id));
-            character!.Specialities.Select(x => x.Speciality).Should().BeEquivalentTo(TestDataUtil.GetAll<Speciality>(), config => config.ExcludingChildren());
-            character!.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<Group>(), config => config.ExcludingChildren());
+            character!.Jobs.Select(x => x.JobId).Should().BeEquivalentTo(TestDataUtil.GetAll<JobEntity>().Select(x => x.Id));
+            character!.Specialities.Select(x => x.Speciality).Should().BeEquivalentTo(TestDataUtil.GetAll<SpecialityEntity>(), config => config.ExcludingChildren());
+            character!.Group.Should().BeEquivalentTo(TestDataUtil.GetLast<GroupEntity>(), config => config.ExcludingChildren());
             character!.Modifiers.Should().BeEquivalentTo(expectedCharacter.Modifiers, config => config.ExcludingChildren());
-            character!.Invites.Should().BeEquivalentTo(TestDataUtil.GetAll<GroupInvite>(), config => config.ExcludingChildren());
-            character!.Invites.First().Group.Should().BeEquivalentTo(TestDataUtil.Get<Group>(), config => config.ExcludingChildren());
+            character!.Invites.Should().BeEquivalentTo(TestDataUtil.GetAll<GroupInviteEntity>(), config => config.ExcludingChildren());
+            character!.Invites.First().Group.Should().BeEquivalentTo(TestDataUtil.Get<GroupEntity>(), config => config.ExcludingChildren());
         }
 
         [Test]
@@ -46,27 +46,27 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil
                 .AddUser();
-            var user = TestDataUtil.GetLast<User>();
+            var user = TestDataUtil.GetLast<UserEntity>();
 
             TestDataUtil
                 .AddJob()
                 .AddOrigin();
 
-            TestDataUtil.AddCharacter(user.Id, c => c.Jobs = new List<CharacterJob>
+            TestDataUtil.AddCharacter(user.Id, c => c.Jobs = new List<CharacterJobEntity>
             {
-                new CharacterJob
+                new CharacterJobEntity
                 {
-                    JobId = TestDataUtil.GetLast<Job>().Id
+                    JobId = TestDataUtil.GetLast<JobEntity>().Id
                 }
             });
-            var expectedCharacter = TestDataUtil.GetLast<Character>();
+            var expectedCharacter = TestDataUtil.GetLast<CharacterEntity>();
 
             var characters = await _characterRepository.GetForSummaryByOwnerIdAsync(user.Id);
 
             var character = characters.First();
             character.Should().BeEquivalentTo(expectedCharacter, config => config.Excluding(x => x.Owner).Excluding(x => x.Jobs).Excluding(x => x.Origin));
-            character.Jobs.First().Job.Should().BeEquivalentTo(TestDataUtil.GetLast<Job>());
-            character.Origin.Should().BeEquivalentTo(TestDataUtil.GetLast<Origin>(), config => config.Excluding(x => x.Bonuses).Excluding(x => x.Information).Excluding(x => x.Requirements).Excluding(x => x.Skills).Excluding(x => x.Restrictions));
+            character.Jobs.First().Job.Should().BeEquivalentTo(TestDataUtil.GetLast<JobEntity>());
+            character.Origin.Should().BeEquivalentTo(TestDataUtil.GetLast<OriginEntity>(), config => config.Excluding(x => x.Bonuses).Excluding(x => x.Information).Excluding(x => x.Requirements).Excluding(x => x.Skills).Excluding(x => x.Restrictions));
         }
 
         [Test]
@@ -77,10 +77,10 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddOrigin();
 
             TestDataUtil.AddUser();
-            var notOwnerUser = TestDataUtil.GetLast<User>();
+            var notOwnerUser = TestDataUtil.GetLast<UserEntity>();
 
             TestDataUtil.AddUser()
-                .AddCharacter(TestDataUtil.GetLast<User>().Id);
+                .AddCharacter(TestDataUtil.GetLast<UserEntity>().Id);
 
             var characters = await _characterRepository.GetForSummaryByOwnerIdAsync(notOwnerUser.Id);
             characters.Should().BeEmpty();
@@ -95,11 +95,11 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(100))
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(300));
 
-            var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(TestDataUtil.Get<Character>(0).Id, null,0, false);
+            var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(TestDataUtil.Get<CharacterEntity>(0).Id, null,0, false);
 
             historyEntries.Select(h => h.Action).Should().BeEquivalentTo(
-                TestDataUtil.Get<CharacterHistoryEntry>(1).Action,
-                TestDataUtil.Get<CharacterHistoryEntry>(0).Action
+                TestDataUtil.Get<CharacterHistoryEntryEntity>(1).Action,
+                TestDataUtil.Get<CharacterHistoryEntryEntity>(0).Action
             );
         }
 
@@ -109,18 +109,18 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil
                 .AddUser()
                 .AddGroup()
-                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
+                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<GroupEntity>())
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(100))
                 .AddGroupHistoryEntry(h => h.Date = new DateTime(200))
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(300));
 
-            var character = TestDataUtil.Get<Character>(0);
+            var character = TestDataUtil.Get<CharacterEntity>(0);
             var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(character.Id, character.GroupId,0, false);
 
             historyEntries.Select(h => h.Action).Should().BeEquivalentTo(
-                TestDataUtil.Get<CharacterHistoryEntry>(1).Action,
-                TestDataUtil.Get<GroupHistoryEntry>(0).Action,
-                TestDataUtil.Get<CharacterHistoryEntry>(0).Action
+                TestDataUtil.Get<CharacterHistoryEntryEntity>(1).Action,
+                TestDataUtil.Get<GroupHistoryEntryEntity>(0).Action,
+                TestDataUtil.Get<CharacterHistoryEntryEntity>(0).Action
             );
         }
 
@@ -132,7 +132,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddCharacterWithRequiredDependencies()
                 .AddCharacterHistoryEntry();
 
-            var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(TestDataUtil.Get<Character>(0).Id, null,0, false);
+            var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(TestDataUtil.Get<CharacterEntity>(0).Id, null,0, false);
 
             historyEntries.Should().BeEmpty();
         }
@@ -143,7 +143,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil
                 .AddUser()
                 .AddGroup()
-                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
+                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<GroupEntity>())
                 .AddCharacterHistoryEntry(h =>
                 {
                     h.Date = new DateTime(100);
@@ -155,7 +155,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                     h.Gm = true;
                 });
 
-            var character = TestDataUtil.Get<Character>();
+            var character = TestDataUtil.Get<CharacterEntity>();
             var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, 0, false);
 
             historyEntries.Should().BeEmpty();
@@ -167,7 +167,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil
                 .AddUser()
                 .AddGroup()
-                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
+                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<GroupEntity>())
                 .AddCharacterHistoryEntry(h =>
                 {
                     h.Date = new DateTime(100);
@@ -181,7 +181,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(400))
                 .AddGroupHistoryEntry(h => h.Date = new DateTime(300));
 
-            var character = TestDataUtil.Get<Character>();
+            var character = TestDataUtil.Get<CharacterEntity>();
             var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, 0, true);
 
             historyEntries.Should().HaveCount(4);
@@ -193,16 +193,16 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil
                 .AddUser()
                 .AddGroup()
-                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
+                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<GroupEntity>())
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(100))
                 .AddGroupHistoryEntry(h => h.Date = new DateTime(200));
 
-            var character = TestDataUtil.Get<Character>();
+            var character = TestDataUtil.Get<CharacterEntity>();
             var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, 0, false);
 
             historyEntries.Select(c => c.Action).Should().BeEquivalentTo(
-                TestDataUtil.GetLast<GroupHistoryEntry>().Action,
-                TestDataUtil.GetLast<CharacterHistoryEntry>().Action
+                TestDataUtil.GetLast<GroupHistoryEntryEntity>().Action,
+                TestDataUtil.GetLast<CharacterHistoryEntryEntity>().Action
             );
         }
 
@@ -212,7 +212,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil
                 .AddUser()
                 .AddGroup()
-                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
+                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<GroupEntity>())
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(100))
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(400))
                 .AddGroupHistoryEntry(h => h.Date = new DateTime(200))
@@ -220,12 +220,12 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddGroupHistoryEntry(h => h.Date = new DateTime(50))
                 ;
 
-            var character = TestDataUtil.Get<Character>();
+            var character = TestDataUtil.Get<CharacterEntity>();
             var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, 0, false);
 
             historyEntries.Select(c => c.Action).Should().Contain(
-                TestDataUtil.Get<GroupHistoryEntry>(1).Action,
-                TestDataUtil.Get<GroupHistoryEntry>(0).Action
+                TestDataUtil.Get<GroupHistoryEntryEntity>(1).Action,
+                TestDataUtil.Get<GroupHistoryEntryEntity>(0).Action
             );
         }
 
@@ -238,15 +238,15 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddGroup()
                 .AddGroupHistoryEntry(h => h.Date = new DateTime(200))
                 .AddGroup()
-                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<Group>())
+                .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<GroupEntity>())
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(100))
                 .AddCharacterHistoryEntry(h => h.Date = new DateTime(400));
 
-            var character = TestDataUtil.Get<Character>();
+            var character = TestDataUtil.Get<CharacterEntity>();
 
             var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, 0, false);
 
-            historyEntries.OfType<GroupHistoryEntry>().Should().BeEmpty();
+            historyEntries.OfType<GroupHistoryEntryEntity>().Should().BeEmpty();
         }
 
         [Test]
@@ -260,7 +260,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 TestDataUtil.AddCharacterHistoryEntry(h => h.Date = new DateTime(i1 * 100));
             }
 
-            var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(TestDataUtil.Get<Character>(0).Id, null,0, false);
+            var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(TestDataUtil.Get<CharacterEntity>(0).Id, null,0, false);
 
             historyEntries.Should().HaveCount(40);
         }
@@ -276,10 +276,10 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 TestDataUtil.AddCharacterHistoryEntry(h => h.Date = new DateTime(i1 * 100));
             }
 
-            var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(TestDataUtil.Get<Character>(0).Id, null,1, false);
+            var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(TestDataUtil.Get<CharacterEntity>(0).Id, null,1, false);
 
             historyEntries.Should().HaveCount(1);
-            historyEntries.First().Action.Should().Be(TestDataUtil.Get<CharacterHistoryEntry>(0).Action);
+            historyEntries.First().Action.Should().Be(TestDataUtil.Get<CharacterHistoryEntryEntity>(0).Action);
         }
     }
 }

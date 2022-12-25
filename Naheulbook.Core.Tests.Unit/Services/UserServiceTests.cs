@@ -53,7 +53,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var userRepository = _unitOfWorkFactory.GetUnitOfWork().Users;
             Received.InOrder(() =>
             {
-                userRepository.Add(Arg.Is<User>(u =>
+                userRepository.Add(Arg.Is<UserEntity>(u =>
                     u.Username == SomeUsername
                     && u.HashedPassword == SomeEncryptedPassword
                     && !string.IsNullOrEmpty(u.ActivationCode))
@@ -65,7 +65,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task WhenCreatingUser_AndUserExists_ThenThrows()
         {
             _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
-                .Returns(new User());
+                .Returns(new UserEntity());
 
             Func<Task> act = () => _service.CreateUserAsync(SomeUsername, SomePassword);
 
@@ -113,7 +113,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task WhenValidatingUser_AndUserNotFound_Throw()
         {
             _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
-                .Returns((User) null);
+                .Returns((UserEntity) null);
 
             Func<Task> act = async () => await _service.ValidateUserAsync(SomeUsername, SomeActivationCode);
 
@@ -124,7 +124,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task WhenCheckingPassword_CallPasswordEncryptionService()
         {
             const string someHashedPassword = "some-hashed-password";
-            var user = new User {Username = SomeUsername, HashedPassword = someHashedPassword};
+            var user = new UserEntity {Username = SomeUsername, HashedPassword = someHashedPassword};
 
             _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns(user);
@@ -139,7 +139,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task WhenCheckingPassword_AndPasswordIsInvalid_Throw()
         {
-            var user = new User {Username = SomeUsername, HashedPassword = "some-hashed-password"};
+            var user = new UserEntity {Username = SomeUsername, HashedPassword = "some-hashed-password"};
 
             _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
                 .Returns(user);
@@ -155,16 +155,16 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task WhenCheckingPassword_AndUserDoesNotExists_Throw()
         {
             _unitOfWorkFactory.GetUnitOfWork().Users.GetByUsernameAsync(SomeUsername)
-                .Returns((User) null);
+                .Returns((UserEntity) null);
 
             Func<Task> act = async () => await _service.CheckPasswordAsync(SomeUsername, SomePassword);
 
             await act.Should().ThrowAsync<UserNotFoundException>();
         }
 
-        private static User CreateUser()
+        private static UserEntity CreateUser()
         {
-            return new User()
+            return new UserEntity()
             {
                 Username = SomeUsername,
                 ActivationCode = SomeActivationCode

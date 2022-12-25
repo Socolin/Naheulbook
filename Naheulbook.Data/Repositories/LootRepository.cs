@@ -8,21 +8,21 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface ILootRepository : IRepository<Loot>
+    public interface ILootRepository : IRepository<LootEntity>
     {
-        Task<List<Loot>> GetByGroupIdAsync(int groupId);
-        Task<List<Loot>> GetLootsVisibleByCharactersOfGroupAsync(int groupId);
-        Task<Loot> GetWithAllDataAsync(int lootId);
+        Task<List<LootEntity>> GetByGroupIdAsync(int groupId);
+        Task<List<LootEntity>> GetLootsVisibleByCharactersOfGroupAsync(int groupId);
+        Task<LootEntity> GetWithAllDataAsync(int lootId);
     }
 
-    public class LootRepository : Repository<Loot, NaheulbookDbContext>, ILootRepository
+    public class LootRepository : Repository<LootEntity, NaheulbookDbContext>, ILootRepository
     {
         public LootRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public Task<List<Loot>> GetByGroupIdAsync(int groupId)
+        public Task<List<LootEntity>> GetByGroupIdAsync(int groupId)
         {
             return Context.Loots
                 .IncludeItemDetails(l => l.Items)
@@ -31,7 +31,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<List<Loot>> GetLootsVisibleByCharactersOfGroupAsync(int groupId)
+        public Task<List<LootEntity>> GetLootsVisibleByCharactersOfGroupAsync(int groupId)
         {
             return Context.Loots
                 .IncludeItemDetails(l => l.Items)
@@ -41,7 +41,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Loot> GetWithAllDataAsync(int lootId)
+        public Task<LootEntity> GetWithAllDataAsync(int lootId)
         {
             return Context.Loots
                 .IncludeItemDetails(l => l.Items)

@@ -6,12 +6,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public God CreateGod(string suffix = null)
+        public GodEntity CreateGod(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new God
+            return new GodEntity
             {
                 TechName = $"some-tech-name-{suffix}",
                 DisplayName = $"some-display-name-{suffix}",
@@ -19,12 +19,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Calendar CreateCalendar(string suffix = null)
+        public CalendarEntity CreateCalendar(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Calendar
+            return new CalendarEntity
             {
                 Name = $"some-name-{suffix}",
                 Note = "some-note",

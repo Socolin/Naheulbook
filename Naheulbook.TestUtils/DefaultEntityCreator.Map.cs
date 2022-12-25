@@ -10,12 +10,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public Map CreateMap(string suffix = null)
+        public MapEntity CreateMap(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Map
+            return new MapEntity
             {
                 Name = $"some-map-name-{suffix}",
                 ImageData = JsonConvert.SerializeObject(new MapImageData

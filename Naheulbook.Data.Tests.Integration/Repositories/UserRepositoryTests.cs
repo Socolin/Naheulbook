@@ -23,7 +23,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         public async Task CanGetUserByUsername()
         {
             TestDataUtil.AddUser(u => u.Admin = true);
-            var expectedUser = TestDataUtil.GetLast<User>();
+            var expectedUser = TestDataUtil.GetLast<UserEntity>();
 
             var actualUser = await _userRepository.GetByUsernameAsync(expectedUser.Username!);
 
@@ -34,18 +34,18 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         public async Task CanGetUserByFacebookId()
         {
             TestDataUtil.AddUser();
-            var expectedUser = TestDataUtil.GetLast<User>();
+            var expectedUser = TestDataUtil.GetLast<UserEntity>();
 
             var actualUser = await _userRepository.GetByFacebookIdAsync(expectedUser.FbId!);
 
-            actualUser.Should().BeEquivalentTo(TestDataUtil.GetLast<User>());
+            actualUser.Should().BeEquivalentTo(TestDataUtil.GetLast<UserEntity>());
         }
 
         [Test]
         public async Task SearchUser_ShouldReturnsMatchingUsers()
         {
             TestDataUtil.AddUser(u => u.ShowInSearchUntil = RoundDate(DateTime.Now.AddDays(1)));
-            var testUser = TestDataUtil.GetLast<User>();
+            var testUser = TestDataUtil.GetLast<UserEntity>();
 
             var users = await _userRepository.SearchUsersAsync(testUser.DisplayName!);
 
@@ -57,7 +57,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         {
             TestDataUtil.AddUser(u => u.ShowInSearchUntil = DateTime.Now.AddDays(-1));
 
-            var testUser = TestDataUtil.GetLast<User>();
+            var testUser = TestDataUtil.GetLast<UserEntity>();
 
             var users = await _userRepository.SearchUsersAsync(testUser.DisplayName!);
 

@@ -127,7 +127,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task WhenPostToGenerateUserJwt_CheckPassword_AndGenerateAJwtUsingUserId()
         {
             var generateJwtRequest = new GenerateJwtRequest {Password = SomePassword};
-            var user = new User();
+            var user = new UserEntity();
 
             _userService.CheckPasswordAsync(SomeUsername, SomePassword)
                 .Returns(user);
@@ -143,7 +143,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task WhenPostToGenerateUserJwt_SaveCurrentUserIdToSession()
         {
             var generateJwtRequest = new GenerateJwtRequest {Password = SomePassword};
-            var user = new User
+            var user = new UserEntity
             {
                 Id = 1
             };
@@ -164,7 +164,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var generateJwtRequest = new GenerateJwtRequest {Password = SomePassword};
 
             _userService.CheckPasswordAsync(SomeUsername, SomePassword)
-                .Returns(Task.FromException<User>(new InvalidPasswordException()));
+                .Returns(Task.FromException<UserEntity>(new InvalidPasswordException()));
 
             var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
 
@@ -177,7 +177,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var generateJwtRequest = new GenerateJwtRequest {Password = SomePassword};
 
             _userService.CheckPasswordAsync(SomeUsername, SomePassword)
-                .Returns(Task.FromException<User>(new UserNotFoundException()));
+                .Returns(Task.FromException<UserEntity>(new UserNotFoundException()));
 
             var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
 

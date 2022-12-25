@@ -11,6 +11,6 @@ namespace Naheulbook.Data.Models
         public int Value { get; set; }
 
         public Guid SkillId { get; set; }
-        public Skill Skill { get; set; } = null!;
+        public SkillEntity Skill { get; set; } = null!;
     }
 }

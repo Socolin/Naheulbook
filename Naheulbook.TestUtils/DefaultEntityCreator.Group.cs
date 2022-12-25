@@ -5,12 +5,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public Group CreateGroup(int masterId, string suffix = null)
+        public GroupEntity CreateGroup(int masterId, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Group
+            return new GroupEntity
             {
                 Name = $"some-name-{suffix}",
                 Data = "{}",
@@ -18,12 +18,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Loot CreateLoot(Group group, string suffix = null)
+        public LootEntity CreateLoot(GroupEntity group, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Loot
+            return new LootEntity
             {
                 Name = $"some-name-{suffix}",
                 Group = group,
@@ -32,12 +32,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Event CreateEvent(Group group, string suffix = null)
+        public EventEntity CreateEvent(GroupEntity group, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Event
+            return new EventEntity
             {
                 Name = $"some-event-name-{suffix}",
                 Description = $"some-event-description-{suffix}",
@@ -46,12 +46,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public GroupHistoryEntry CreateGroupHistory(Group group, string suffix = null)
+        public GroupHistoryEntryEntity CreateGroupHistory(GroupEntity group, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new GroupHistoryEntry
+            return new GroupHistoryEntryEntity
             {
                 Data = "{}",
                 Gm = true,

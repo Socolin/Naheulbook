@@ -28,7 +28,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public async Task CanGetJobs()
         {
-            var jobs = new List<Job>();
+            var jobs = new List<JobEntity>();
             var expectedResponse = new List<JobResponse>();
 
             _jobService.GetJobsAsync()

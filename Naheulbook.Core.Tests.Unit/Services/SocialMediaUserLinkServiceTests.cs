@@ -25,7 +25,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task GetOrCreateUserFromFacebookAsync_ShouldReturnAlreadyExistingUser()
         {
             const string facebookId = "some-facebook-id";
-            var expectedUser = new User();
+            var expectedUser = new UserEntity();
 
             _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByFacebookIdAsync(facebookId)
                 .Returns(expectedUser);
@@ -42,7 +42,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const string facebookId = "some-facebook-id";
 
             _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByFacebookIdAsync(facebookId)
-                .Returns((User) null);
+                .Returns((UserEntity) null);
 
             var actual = await _service.GetOrCreateUserFromFacebookAsync("some-name", facebookId);
 
@@ -52,7 +52,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 userRepository.Add(actual);
                 _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
-            actual.Should().BeEquivalentTo(new User
+            actual.Should().BeEquivalentTo(new UserEntity
             {
                 FbId = facebookId,
                 Admin = false,
@@ -64,7 +64,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task GetOrCreateUserFromGoogleAsync_ShouldReturnAlreadyExistingUser()
         {
             const string googleId = "some-google-id";
-            var expectedUser = new User();
+            var expectedUser = new UserEntity();
 
             _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByGoogleIdAsync(googleId)
                 .Returns(expectedUser);
@@ -81,7 +81,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const string googleId = "some-google-id";
 
             _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByGoogleIdAsync(googleId)
-                .Returns((User) null);
+                .Returns((UserEntity) null);
 
             var actual = await _service.GetOrCreateUserFromGoogleAsync("some-name", googleId);
 
@@ -91,7 +91,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 userRepository.Add(actual);
                 _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
-            actual.Should().BeEquivalentTo(new User
+            actual.Should().BeEquivalentTo(new UserEntity
             {
                 GoogleId = googleId,
                 Admin = false,
@@ -103,7 +103,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task GetOrCreateUserFromTwitterAsync_ShouldReturnAlreadyExistingUser()
         {
             const string twitterId = "some-twitter-id";
-            var expectedUser = new User();
+            var expectedUser = new UserEntity();
 
             _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByTwitterIdAsync(twitterId)
                 .Returns(expectedUser);
@@ -120,7 +120,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const string twitterId = "some-twitter-id";
 
             _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByTwitterIdAsync(twitterId)
-                .Returns((User) null);
+                .Returns((UserEntity) null);
 
             var actual = await _service.GetOrCreateUserFromTwitterAsync("some-name", twitterId);
 
@@ -130,7 +130,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 userRepository.Add(actual);
                 _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
-            actual.Should().BeEquivalentTo(new User
+            actual.Should().BeEquivalentTo(new UserEntity
             {
                 TwitterId = twitterId,
                 Admin = false,
@@ -142,7 +142,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task GetOrCreateUserFromMicrosoftAsync_ShouldReturnAlreadyExistingUser()
         {
             const string microsoftId = "some-microsoft-id";
-            var expectedUser = new User();
+            var expectedUser = new UserEntity();
 
             _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByMicrosoftIdAsync(microsoftId)
                 .Returns(expectedUser);
@@ -159,7 +159,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const string microsoftId = "some-microsoft-id";
 
             _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByMicrosoftIdAsync(microsoftId)
-                .Returns((User) null);
+                .Returns((UserEntity) null);
 
             var actual = await _service.GetOrCreateUserFromMicrosoftAsync("some-name", microsoftId);
 
@@ -169,7 +169,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 userRepository.Add(actual);
                 _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
-            actual.Should().BeEquivalentTo(new User
+            actual.Should().BeEquivalentTo(new UserEntity
             {
                 MicrosoftId = microsoftId,
                 Admin = false,

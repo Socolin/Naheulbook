@@ -6,19 +6,19 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IMonsterTypeRepository : IRepository<MonsterType>
+    public interface IMonsterTypeRepository : IRepository<MonsterTypeEntity>
     {
-        Task<List<MonsterType>> GetAllWithCategoriesAsync();
+        Task<List<MonsterTypeEntity>> GetAllWithCategoriesAsync();
     }
 
-    public class MonsterTypeRepository : Repository<MonsterType, NaheulbookDbContext>, IMonsterTypeRepository
+    public class MonsterTypeRepository : Repository<MonsterTypeEntity, NaheulbookDbContext>, IMonsterTypeRepository
     {
         public MonsterTypeRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public Task<List<MonsterType>> GetAllWithCategoriesAsync()
+        public Task<List<MonsterTypeEntity>> GetAllWithCategoriesAsync()
         {
             return Context.MonsterTypes
                 .Include(x => x.SubCategories)

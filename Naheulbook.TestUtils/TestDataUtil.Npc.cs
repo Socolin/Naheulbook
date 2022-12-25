@@ -5,9 +5,9 @@ namespace Naheulbook.TestUtils
 {
     public partial class TestDataUtil
     {
-        public TestDataUtil AddNpc(Action<Npc> customizer = null)
+        public TestDataUtil AddNpc(Action<NpcEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateNpc(GetLast<Group>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateNpc(GetLast<GroupEntity>()), customizer);
         }
     }
 }

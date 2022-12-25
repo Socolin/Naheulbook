@@ -6,21 +6,21 @@ namespace Naheulbook.TestUtils
 {
     public partial class TestDataUtil
     {
-        public TestDataUtil AddJob(Action<Job> customizer = null)
+        public TestDataUtil AddJob(Action<JobEntity> customizer = null)
         {
             return SaveEntity(_defaultEntityCreator.CreateJob(), customizer);
         }
 
-        public TestDataUtil AddJobWithAllData(Action<Job> customizer = null)
+        public TestDataUtil AddJobWithAllData(Action<JobEntity> customizer = null)
         {
             var suffix = RngUtil.GetRandomHexString(8);
 
             var job = _defaultEntityCreator.CreateJob(suffix);
 
-            var stat = AddStat().GetLast<Stat>();
+            var stat = AddStat().GetLast<StatEntity>();
 
-            var skill1 = AddSkill().GetLast<Skill>();
-            var skill2 = AddSkill().GetLast<Skill>();
+            var skill1 = AddSkill().GetLast<SkillEntity>();
+            var skill2 = AddSkill().GetLast<SkillEntity>();
 
             job.Bonuses = new List<JobBonus>
             {
@@ -29,18 +29,18 @@ namespace Naheulbook.TestUtils
                     Description = $"some-job-bonus-description-{suffix}"
                 }
             };
-            job.Requirements = new List<JobRequirement>
+            job.Requirements = new List<JobRequirementEntity>
             {
-                new JobRequirement
+                new JobRequirementEntity
                 {
                     Stat = stat,
                     MinValue = 2,
                     MaxValue = 4,
                 }
             };
-            job.Restrictions = new List<JobRestriction>
+            job.Restrictions = new List<JobRestrictionEntity>
             {
-                new JobRestriction
+                new JobRestrictionEntity
                 {
                     Text = $"some-job-restriction-{suffix}",
                     Flags = "[]"
@@ -67,30 +67,30 @@ namespace Naheulbook.TestUtils
             return this;
         }
 
-        public TestDataUtil AddSpeciality(Action<Speciality> customizer = null)
+        public TestDataUtil AddSpeciality(Action<SpecialityEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateSpeciality(GetLast<Job>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateSpeciality(GetLast<JobEntity>()), customizer);
         }
 
-        public TestDataUtil AddSpecialityWithAllData(Action<Speciality> customizer = null)
+        public TestDataUtil AddSpecialityWithAllData(Action<SpecialityEntity> customizer = null)
         {
             var suffix = RngUtil.GetRandomHexString(8);
 
-            var job = GetLast<Job>();
+            var job = GetLast<JobEntity>();
             var speciality = _defaultEntityCreator.CreateSpeciality(job, suffix);
 
-            speciality.Modifiers = new List<SpecialityModifier>
+            speciality.Modifiers = new List<SpecialityModifierEntity>
             {
-                new SpecialityModifier
+                new SpecialityModifierEntity
                 {
-                    Stat = GetLast<Stat>().Name,
+                    Stat = GetLast<StatEntity>().Name,
                     Value = 2
                 }
             };
 
-            speciality.Specials = new List<SpecialitySpecial>
+            speciality.Specials = new List<SpecialitySpecialEntity>
             {
-                new SpecialitySpecial
+                new SpecialitySpecialEntity
                 {
                     Description = $"some-speciality-special-description-{suffix}",
                     Flags = @"[{""data"": ""some-data"", ""type"": ""ONE_SPECIALITY""}]",

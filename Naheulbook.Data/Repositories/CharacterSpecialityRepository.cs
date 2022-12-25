@@ -8,19 +8,19 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface ICharacterSpecialityRepository : IRepository<CharacterSpeciality>
+    public interface ICharacterSpecialityRepository : IRepository<CharacterSpecialityEntity>
     {
-        Task<List<Speciality>> GetWithModiferWithSpecialByIdsAsync(List<Guid> specialityIds);
+        Task<List<SpecialityEntity>> GetWithModiferWithSpecialByIdsAsync(List<Guid> specialityIds);
     }
 
-    public class CharacterSpecialityRepository : Repository<CharacterSpeciality, NaheulbookDbContext>, ICharacterSpecialityRepository
+    public class CharacterSpecialityRepository : Repository<CharacterSpecialityEntity, NaheulbookDbContext>, ICharacterSpecialityRepository
     {
         public CharacterSpecialityRepository(NaheulbookDbContext naheulbookDbContext)
             : base(naheulbookDbContext)
         {
         }
 
-        public Task<List<Speciality>> GetWithModiferWithSpecialByIdsAsync(List<Guid> specialityIds)
+        public Task<List<SpecialityEntity>> GetWithModiferWithSpecialByIdsAsync(List<Guid> specialityIds)
         {
             return Context.Specialities
                 .Include(s => s.Modifiers)

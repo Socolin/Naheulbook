@@ -40,7 +40,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("an item template sub-category")]
         public void GivenAnItemTemplateSubCategory()
         {
-            if (!_testDataUtil.Contains<ItemTemplateSection>())
+            if (!_testDataUtil.Contains<ItemTemplateSectionEntity>())
                 _testDataUtil.AddItemTemplateSection();
             _testDataUtil.AddItemTemplateSubCategory();
         }
@@ -48,9 +48,9 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("item templates required for initial inventory")]
         public void GivenItemTemplatesRequiredForInitialInventory()
         {
-            if (!_testDataUtil.Contains<ItemTemplateSection>())
+            if (!_testDataUtil.Contains<ItemTemplateSectionEntity>())
                 _testDataUtil.AddItemTemplateSection();
-            if (!_testDataUtil.Contains<ItemTemplateSubCategory>())
+            if (!_testDataUtil.Contains<ItemTemplateSubCategoryEntity>())
                 _testDataUtil.AddItemTemplateSubCategory();
             _testDataUtil.AddItemTemplate(i => i.TechName = "MONEY");
             _testDataUtil.AddItemTemplate(i => i.TechName = "BIG_PURSE");
@@ -61,9 +61,9 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("an item template")]
         public void GivenAnItemTemplate()
         {
-            if (!_testDataUtil.Contains<ItemTemplateSection>())
+            if (!_testDataUtil.Contains<ItemTemplateSectionEntity>())
                 _testDataUtil.AddItemTemplateSection();
-            if (!_testDataUtil.Contains<ItemTemplateSubCategory>())
+            if (!_testDataUtil.Contains<ItemTemplateSubCategoryEntity>())
                 _testDataUtil.AddItemTemplateSubCategory();
             _testDataUtil.AddItemTemplate();
         }
@@ -71,9 +71,9 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("an item template with a charge")]
         public void GivenAnItemTemplateWithACharge()
         {
-            if (!_testDataUtil.Contains<ItemTemplateSection>())
+            if (!_testDataUtil.Contains<ItemTemplateSectionEntity>())
                 _testDataUtil.AddItemTemplateSection();
-            if (!_testDataUtil.Contains<ItemTemplateSubCategory>())
+            if (!_testDataUtil.Contains<ItemTemplateSubCategoryEntity>())
                 _testDataUtil.AddItemTemplateSubCategory();
             _testDataUtil.AddItemTemplate(itemTemplate =>
             {
@@ -83,7 +83,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 {
                     new NhbkAction{Type = "addItem",Data = new NhbkActionData
                     {
-                        TemplateId = _testDataUtil.GetLast<ItemTemplate>().Id,
+                        TemplateId = _testDataUtil.GetLast<ItemTemplateEntity>().Id,
                     }},
                     new NhbkAction{Type = "addEv",Data = new NhbkActionData
                     {
@@ -118,53 +118,53 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
 
             _testDataUtil.AddItemTemplate(itemTemplate =>
             {
-                itemTemplate.Requirements = new List<ItemTemplateRequirement>
+                itemTemplate.Requirements = new List<ItemTemplateRequirementEntity>
                 {
-                    new ItemTemplateRequirement
+                    new ItemTemplateRequirementEntity
                     {
-                        Stat = _testDataUtil.GetLast<Stat>(),
+                        Stat = _testDataUtil.GetLast<StatEntity>(),
                         MinValue = 2,
                         MaxValue = 12,
                     }
                 };
-                itemTemplate.Modifiers = new List<ItemTemplateModifier>
+                itemTemplate.Modifiers = new List<ItemTemplateModifierEntity>
                 {
-                    new ItemTemplateModifier
+                    new ItemTemplateModifierEntity
                     {
                         Special = null,
-                        RequiredJob = _testDataUtil.GetLast<Job>(),
-                        RequiredOrigin = _testDataUtil.GetLast<Origin>(),
-                        Stat = _testDataUtil.GetLast<Stat>(),
+                        RequiredJob = _testDataUtil.GetLast<JobEntity>(),
+                        RequiredOrigin = _testDataUtil.GetLast<OriginEntity>(),
+                        Stat = _testDataUtil.GetLast<StatEntity>(),
                         Value = -2,
                         Type = "ADD",
                     }
                 };
-                itemTemplate.Skills = new List<ItemTemplateSkill>
+                itemTemplate.Skills = new List<ItemTemplateSkillEntity>
                 {
-                    new ItemTemplateSkill
+                    new ItemTemplateSkillEntity
                     {
-                        Skill = _testDataUtil.GetFromEnd<Skill>(0)
+                        Skill = _testDataUtil.GetFromEnd<SkillEntity>(0)
                     }
                 };
-                itemTemplate.UnSkills = new List<ItemTemplateUnSkill>
+                itemTemplate.UnSkills = new List<ItemTemplateUnSkillEntity>
                 {
-                    new ItemTemplateUnSkill
+                    new ItemTemplateUnSkillEntity
                     {
-                        Skill = _testDataUtil.GetFromEnd<Skill>(1)
+                        Skill = _testDataUtil.GetFromEnd<SkillEntity>(1)
                     }
                 };
-                itemTemplate.Slots = new List<ItemTemplateSlot>
+                itemTemplate.Slots = new List<ItemTemplateSlotEntity>
                 {
-                    new ItemTemplateSlot
+                    new ItemTemplateSlotEntity
                     {
-                        Slot = _testDataUtil.GetLast<Slot>()
+                        Slot = _testDataUtil.GetLast<SlotEntity>()
                     }
                 };
-                itemTemplate.SkillModifiers = new List<ItemTemplateSkillModifier>
+                itemTemplate.SkillModifiers = new List<ItemTemplateSkillModifierEntity>
                 {
-                    new ItemTemplateSkillModifier
+                    new ItemTemplateSkillModifierEntity
                     {
-                        Skill = _testDataUtil.GetFromEnd<Skill>(2),
+                        Skill = _testDataUtil.GetFromEnd<SkillEntity>(2),
                         Value = 2
                     }
                 };

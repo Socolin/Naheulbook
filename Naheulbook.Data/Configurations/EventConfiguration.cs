@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class EventConfiguration : IEntityTypeConfiguration<Event>
+    public class EventConfiguration : IEntityTypeConfiguration<EventEntity>
     {
-        public void Configure(EntityTypeBuilder<Event> builder)
+        public void Configure(EntityTypeBuilder<EventEntity> builder)
         {
             builder.ToTable("events");
 

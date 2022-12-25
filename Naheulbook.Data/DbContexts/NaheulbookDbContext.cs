@@ -8,35 +8,35 @@ namespace Naheulbook.Data.DbContexts
     [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
     public class NaheulbookDbContext : DbContext
     {
-        public DbSet<Character> Characters { get; set; } = null!;
-        public DbSet<CharacterModifier> CharacterModifiers { get; set; } = null!;
-        public DbSet<CharacterHistoryEntry> CharacterHistory { get; set; } = null!;
-        public DbSet<Effect> Effects { get; set; } = null!;
+        public DbSet<CharacterEntity> Characters { get; set; } = null!;
+        public DbSet<CharacterModifierEntity> CharacterModifiers { get; set; } = null!;
+        public DbSet<CharacterHistoryEntryEntity> CharacterHistory { get; set; } = null!;
+        public DbSet<EffectEntity> Effects { get; set; } = null!;
         public DbSet<EffectType> EffectTypes { get; set; } = null!;
-        public DbSet<Group> Groups { get; set; } = null!;
-        public DbSet<GroupHistoryEntry> GroupHistory { get; set; } = null!;
-        public DbSet<GroupInvite> GroupInvites { get; set; } = null!;
-        public DbSet<ItemTemplateSection> ItemTemplateSections { get; set; } = null!;
-        public DbSet<Item> Items { get; set; } = null!;
-        public DbSet<ItemTemplate> ItemTemplates { get; set; } = null!;
-        public DbSet<ItemTemplateSubCategory> ItemTemplateSubCategories { get; set; } = null!;
-        public DbSet<Skill> Skills { get; set; } = null!;
-        public DbSet<Map> Maps { get; set; } = null!;
-        public DbSet<MapLayer> MapLayers { get; set; } = null!;
-        public DbSet<MapMarker> MapMarkers { get; set; } = null!;
-        public DbSet<MapMarkerLink> MapMarkerLinks { get; set; } = null!;
-        public DbSet<Monster> Monsters { get; set; } = null!;
-        public DbSet<MonsterType> MonsterTypes { get; set; } = null!;
-        public DbSet<MonsterTemplate> MonsterTemplates { get; set; } = null!;
-        public DbSet<Npc> Npcs { get; set; } = null!;
-        public DbSet<Origin> Origins { get; set; } = null!;
-        public DbSet<Job> Jobs { get; set; } = null!;
-        public DbSet<Speciality> Specialities { get; set; } = null!;
-        public DbSet<User> Users { get; set; } = null!;
-        public DbSet<UserAccessToken> UserAccessTokens { get; set; } = null!;
-        public DbSet<Loot> Loots { get; set; } = null!;
-        public DbSet<Event> Events { get; set; } = null!;
-        public DbSet<OriginRandomNameUrl> OriginRandomNameUrls { get; set; } = null!;
+        public DbSet<GroupEntity> Groups { get; set; } = null!;
+        public DbSet<GroupHistoryEntryEntity> GroupHistory { get; set; } = null!;
+        public DbSet<GroupInviteEntity> GroupInvites { get; set; } = null!;
+        public DbSet<ItemTemplateSectionEntity> ItemTemplateSections { get; set; } = null!;
+        public DbSet<ItemEntity> Items { get; set; } = null!;
+        public DbSet<ItemTemplateEntity> ItemTemplates { get; set; } = null!;
+        public DbSet<ItemTemplateSubCategoryEntity> ItemTemplateSubCategories { get; set; } = null!;
+        public DbSet<SkillEntity> Skills { get; set; } = null!;
+        public DbSet<MapEntity> Maps { get; set; } = null!;
+        public DbSet<MapLayerEntity> MapLayers { get; set; } = null!;
+        public DbSet<MapMarkerEntity> MapMarkers { get; set; } = null!;
+        public DbSet<MapMarkerLinkEntity> MapMarkerLinks { get; set; } = null!;
+        public DbSet<MonsterEntity> Monsters { get; set; } = null!;
+        public DbSet<MonsterTypeEntity> MonsterTypes { get; set; } = null!;
+        public DbSet<MonsterTemplateEntity> MonsterTemplates { get; set; } = null!;
+        public DbSet<NpcEntity> Npcs { get; set; } = null!;
+        public DbSet<OriginEntity> Origins { get; set; } = null!;
+        public DbSet<JobEntity> Jobs { get; set; } = null!;
+        public DbSet<SpecialityEntity> Specialities { get; set; } = null!;
+        public DbSet<UserEntity> Users { get; set; } = null!;
+        public DbSet<UserAccessTokenEntity> UserAccessTokens { get; set; } = null!;
+        public DbSet<LootEntity> Loots { get; set; } = null!;
+        public DbSet<EventEntity> Events { get; set; } = null!;
+        public DbSet<OriginRandomNameUrlEntity> OriginRandomNameUrls { get; set; } = null!;
 
         public NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options)
             : base(options)

@@ -8,7 +8,7 @@ namespace Naheulbook.Core.Utils
 {
     public interface IGroupConfigUtil
     {
-        void ApplyChangesAndNotify(Group group, PatchGroupConfigRequest request, INotificationSession notificationSession);
+        void ApplyChangesAndNotify(GroupEntity group, PatchGroupConfigRequest request, INotificationSession notificationSession);
     }
 
     public class GroupConfigUtil : IGroupConfigUtil
@@ -20,7 +20,7 @@ namespace Naheulbook.Core.Utils
             _jsonUtil = jsonUtil;
         }
 
-        public void ApplyChangesAndNotify(Group group, PatchGroupConfigRequest request, INotificationSession notificationSession)
+        public void ApplyChangesAndNotify(GroupEntity group, PatchGroupConfigRequest request, INotificationSession notificationSession)
         {
             var config = _jsonUtil.DeserializeOrCreate<GroupConfig>(group.Config);
 

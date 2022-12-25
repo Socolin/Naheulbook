@@ -11,9 +11,9 @@ namespace Naheulbook.Core.Services
 {
     public interface IItemTemplateSectionService
     {
-        Task<IList<ItemTemplateSection>> GetAllSectionsAsync();
-        Task<ItemTemplateSection> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request);
-        Task<List<ItemTemplate>> GetItemTemplatesBySectionAsync(int sectionId, int? currentUserId);
+        Task<IList<ItemTemplateSectionEntity>> GetAllSectionsAsync();
+        Task<ItemTemplateSectionEntity> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request);
+        Task<List<ItemTemplateEntity>> GetItemTemplatesBySectionAsync(int sectionId, int? currentUserId);
     }
 
     public class ItemTemplateSectionService : IItemTemplateSectionService
@@ -33,7 +33,7 @@ namespace Naheulbook.Core.Services
             _itemTemplateUtil = itemTemplateUtil;
         }
 
-        public async Task<IList<ItemTemplateSection>> GetAllSectionsAsync()
+        public async Task<IList<ItemTemplateSectionEntity>> GetAllSectionsAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -41,17 +41,17 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<ItemTemplateSection> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request)
+        public async Task<ItemTemplateSectionEntity> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-            var itemTemplateSection = new ItemTemplateSection
+            var itemTemplateSection = new ItemTemplateSectionEntity
             {
                 Name = request.Name,
                 Special = string.Join(",", request.Specials),
                 Note = request.Note,
                 Icon = request.Icon,
-                SubCategories = new List<ItemTemplateSubCategory>()
+                SubCategories = new List<ItemTemplateSubCategoryEntity>()
             };
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
@@ -63,7 +63,7 @@ namespace Naheulbook.Core.Services
             return itemTemplateSection;
         }
 
-        public async Task<List<ItemTemplate>> GetItemTemplatesBySectionAsync(int sectionId, int? currentUserId)
+        public async Task<List<ItemTemplateEntity>> GetItemTemplatesBySectionAsync(int sectionId, int? currentUserId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

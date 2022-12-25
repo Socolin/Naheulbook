@@ -11,8 +11,8 @@ namespace Naheulbook.Core.Services
 {
     public interface IEventService
     {
-        Task<List<Event>> GetEventsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
-        Task<Event> CreateEventAsync(NaheulbookExecutionContext executionContext, int groupId, CreateEventRequest request);
+        Task<List<EventEntity>> GetEventsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task<EventEntity> CreateEventAsync(NaheulbookExecutionContext executionContext, int groupId, CreateEventRequest request);
         Task DeleteEventAsync(NaheulbookExecutionContext executionContext, int groupId, int eventId);
     }
 
@@ -30,7 +30,7 @@ namespace Naheulbook.Core.Services
             _authorizationUtil = authorizationUtil;
         }
 
-        public async Task<List<Event>> GetEventsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
+        public async Task<List<EventEntity>> GetEventsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -44,7 +44,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Event> CreateEventAsync(NaheulbookExecutionContext executionContext, int groupId, CreateEventRequest request)
+        public async Task<EventEntity> CreateEventAsync(NaheulbookExecutionContext executionContext, int groupId, CreateEventRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -54,7 +54,7 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-                var groupEvent = new Event
+                var groupEvent = new EventEntity
                 {
                     Name = request.Name,
                     Description = request.Description,

@@ -10,18 +10,18 @@ namespace Naheulbook.Core.Utils
     public interface IAuthorizationUtil
     {
         Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext);
-        Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplate itemTemplate);
-        void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, Group? group);
-        bool IsGroupOwner(NaheulbookExecutionContext executionContext, Group group);
-        void EnsureCharacterAccess(NaheulbookExecutionContext executionContext, Character character);
-        void EnsureIsCharacterOwner(NaheulbookExecutionContext executionContext, Character character);
-        void EnsureIsGroupOwnerOrMember(NaheulbookExecutionContext executionContext, Group group);
-        void EnsureItemAccess(NaheulbookExecutionContext executionContext, Item item);
-        void EnsureCanTakeItem(NaheulbookExecutionContext executionContext, Item item);
-        void EnsureCanDeleteGroupInvite(NaheulbookExecutionContext executionContext, GroupInvite groupInvite);
-        void EnsureCanAcceptGroupInvite(NaheulbookExecutionContext executionContext, GroupInvite groupInvite);
-        void EnsureCanEditUser(NaheulbookExecutionContext executionContext, User user);
-        Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayer mapLayer);
+        Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateEntity itemTemplate);
+        void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, GroupEntity? group);
+        bool IsGroupOwner(NaheulbookExecutionContext executionContext, GroupEntity group);
+        void EnsureCharacterAccess(NaheulbookExecutionContext executionContext, CharacterEntity character);
+        void EnsureIsCharacterOwner(NaheulbookExecutionContext executionContext, CharacterEntity character);
+        void EnsureIsGroupOwnerOrMember(NaheulbookExecutionContext executionContext, GroupEntity group);
+        void EnsureItemAccess(NaheulbookExecutionContext executionContext, ItemEntity item);
+        void EnsureCanTakeItem(NaheulbookExecutionContext executionContext, ItemEntity item);
+        void EnsureCanDeleteGroupInvite(NaheulbookExecutionContext executionContext, GroupInviteEntity groupInvite);
+        void EnsureCanAcceptGroupInvite(NaheulbookExecutionContext executionContext, GroupInviteEntity groupInvite);
+        void EnsureCanEditUser(NaheulbookExecutionContext executionContext, UserEntity user);
+        Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayerEntity mapLayer);
     }
 
     public class AuthorizationUtil : IAuthorizationUtil
@@ -43,7 +43,7 @@ namespace Naheulbook.Core.Utils
             }
         }
 
-        public async Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplate itemTemplate)
+        public async Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateEntity itemTemplate)
         {
             switch (itemTemplate.Source)
             {
@@ -60,7 +60,7 @@ namespace Naheulbook.Core.Utils
             }
         }
 
-        public void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, Group? group)
+        public void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, GroupEntity? group)
         {
             if (group == null)
                 throw new ForbiddenAccessException();
@@ -68,12 +68,12 @@ namespace Naheulbook.Core.Utils
                 throw new ForbiddenAccessException();
         }
 
-        public bool IsGroupOwner(NaheulbookExecutionContext executionContext, Group group)
+        public bool IsGroupOwner(NaheulbookExecutionContext executionContext, GroupEntity group)
         {
             return group.MasterId != executionContext.UserId;
         }
 
-        public void EnsureCharacterAccess(NaheulbookExecutionContext executionContext, Character character)
+        public void EnsureCharacterAccess(NaheulbookExecutionContext executionContext, CharacterEntity character)
         {
             if (character.OwnerId != executionContext.UserId
                 && character.GroupId != null
@@ -81,13 +81,13 @@ namespace Naheulbook.Core.Utils
                 throw new ForbiddenAccessException();
         }
 
-        public void EnsureIsCharacterOwner(NaheulbookExecutionContext executionContext, Character character)
+        public void EnsureIsCharacterOwner(NaheulbookExecutionContext executionContext, CharacterEntity character)
         {
             if (character.OwnerId != executionContext.UserId)
                 throw new ForbiddenAccessException();
         }
 
-        public void EnsureIsGroupOwnerOrMember(NaheulbookExecutionContext executionContext, Group group)
+        public void EnsureIsGroupOwnerOrMember(NaheulbookExecutionContext executionContext, GroupEntity group)
         {
             if (group.MasterId == executionContext.UserId)
                 return;
@@ -98,7 +98,7 @@ namespace Naheulbook.Core.Utils
             throw new ForbiddenAccessException();
         }
 
-        public void EnsureItemAccess(NaheulbookExecutionContext executionContext, Item item)
+        public void EnsureItemAccess(NaheulbookExecutionContext executionContext, ItemEntity item)
         {
             if (item.CharacterId != null)
             {
@@ -118,7 +118,7 @@ namespace Naheulbook.Core.Utils
             throw new ForbiddenAccessException();
         }
 
-        public void EnsureCanTakeItem(NaheulbookExecutionContext executionContext, Item item)
+        public void EnsureCanTakeItem(NaheulbookExecutionContext executionContext, ItemEntity item)
         {
             if (item.MonsterId.HasValue && item.Monster!.Group.MasterId == executionContext.UserId)
                 return;
@@ -135,7 +135,7 @@ namespace Naheulbook.Core.Utils
             throw new ForbiddenAccessException();
         }
 
-        public void EnsureCanDeleteGroupInvite(NaheulbookExecutionContext executionContext, GroupInvite groupInvite)
+        public void EnsureCanDeleteGroupInvite(NaheulbookExecutionContext executionContext, GroupInviteEntity groupInvite)
         {
             if (executionContext.UserId == groupInvite.Group.MasterId)
                 return;
@@ -146,7 +146,7 @@ namespace Naheulbook.Core.Utils
             throw new ForbiddenAccessException();
         }
 
-        public void EnsureCanAcceptGroupInvite(NaheulbookExecutionContext executionContext, GroupInvite groupInvite)
+        public void EnsureCanAcceptGroupInvite(NaheulbookExecutionContext executionContext, GroupInviteEntity groupInvite)
         {
             if (!groupInvite.FromGroup && executionContext.UserId == groupInvite.Group.MasterId)
                 return;
@@ -157,7 +157,7 @@ namespace Naheulbook.Core.Utils
             throw new ForbiddenAccessException();
         }
 
-        public void EnsureCanEditUser(NaheulbookExecutionContext executionContext, User user)
+        public void EnsureCanEditUser(NaheulbookExecutionContext executionContext, UserEntity user)
         {
             if (executionContext.UserId == user.Id)
                 return;
@@ -165,7 +165,7 @@ namespace Naheulbook.Core.Utils
             throw new ForbiddenAccessException();
         }
 
-        public async Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayer mapLayer)
+        public async Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayerEntity mapLayer)
         {
             using var uow = _unitOfWorkFactory.CreateUnitOfWork();
 

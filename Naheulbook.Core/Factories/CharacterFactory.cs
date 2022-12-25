@@ -7,15 +7,15 @@ namespace Naheulbook.Core.Factories
 {
     public interface ICharacterFactory
     {
-        Character CreateCharacter(CreateCharacterRequest characterRequest);
-        Character CreateCustomCharacter(CreateCustomCharacterRequest request);
+        CharacterEntity CreateCharacter(CreateCharacterRequest characterRequest);
+        CharacterEntity CreateCustomCharacter(CreateCustomCharacterRequest request);
     }
 
     public class CharacterFactory : ICharacterFactory
     {
-        public Character CreateCharacter(CreateCharacterRequest characterRequest)
+        public CharacterEntity CreateCharacter(CreateCharacterRequest characterRequest)
         {
-            var character = new Character
+            var character = new CharacterEntity
             {
                 Name = characterRequest.Name,
                 Sex = characterRequest.Sex,
@@ -37,20 +37,20 @@ namespace Naheulbook.Core.Factories
 
                 OriginId = characterRequest.OriginId,
 
-                Modifiers = new List<CharacterModifier>(),
+                Modifiers = new List<CharacterModifierEntity>(),
             };
 
             if (characterRequest.JobId.HasValue)
-                character.Jobs = new List<CharacterJob>
+                character.Jobs = new List<CharacterJobEntity>
                 {
-                    new CharacterJob
+                    new CharacterJobEntity
                     {
                         JobId = characterRequest.JobId.Value
                     }
                 };
 
             character.Skills = characterRequest.SkillIds
-                .Select(x => new CharacterSkill
+                .Select(x => new CharacterSkillEntity
                 {
                     SkillId = x
                 })
@@ -58,13 +58,13 @@ namespace Naheulbook.Core.Factories
 
             foreach (var modifiedStat in characterRequest.ModifiedStat.Values)
             {
-                character.Modifiers.Add(new CharacterModifier
+                character.Modifiers.Add(new CharacterModifierEntity
                 {
                     Name = modifiedStat.Name,
                     IsActive = true,
                     Permanent = true,
                     DurationType = "forever",
-                    Values = modifiedStat.Stats.Select(s => new CharacterModifierValue
+                    Values = modifiedStat.Stats.Select(s => new CharacterModifierValueEntity
                     {
                         StatName = s.Key,
                         Value = (short) s.Value,
@@ -74,9 +74,9 @@ namespace Naheulbook.Core.Factories
             }
 
             if (characterRequest.SpecialityId.HasValue)
-                character.Specialities = new List<CharacterSpeciality>
+                character.Specialities = new List<CharacterSpecialityEntity>
                 {
-                    new CharacterSpeciality
+                    new CharacterSpecialityEntity
                     {
                         SpecialityId = characterRequest.SpecialityId.Value
                     }
@@ -85,9 +85,9 @@ namespace Naheulbook.Core.Factories
             return character;
         }
 
-        public Character CreateCustomCharacter(CreateCustomCharacterRequest characterRequest)
+        public CharacterEntity CreateCustomCharacter(CreateCustomCharacterRequest characterRequest)
         {
-            var character = new Character
+            var character = new CharacterEntity
             {
                 Name = characterRequest.Name,
                 Sex = characterRequest.Sex,
@@ -113,16 +113,16 @@ namespace Naheulbook.Core.Factories
                 OriginId = characterRequest.OriginId,
             };
 
-            character.Jobs = characterRequest.JobIds.Select(jobId => new CharacterJob
+            character.Jobs = characterRequest.JobIds.Select(jobId => new CharacterJobEntity
             {
                 JobId = jobId
             }).ToList();
 
-            character.Skills = characterRequest.SkillIds.Select(x => new CharacterSkill
+            character.Skills = characterRequest.SkillIds.Select(x => new CharacterSkillEntity
             {
                 SkillId = x
             }).ToList();
-            character.Specialities = characterRequest.SpecialityIds.SelectMany(x => x.Value).Select(specialityId => new CharacterSpeciality
+            character.Specialities = characterRequest.SpecialityIds.SelectMany(x => x.Value).Select(specialityId => new CharacterSpecialityEntity
             {
                 SpecialityId = specialityId
             }).ToList();

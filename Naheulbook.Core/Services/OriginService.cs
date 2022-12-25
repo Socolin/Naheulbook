@@ -7,7 +7,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IOriginService
     {
-        Task<ICollection<Origin>> GetOriginsAsync();
+        Task<ICollection<OriginEntity>> GetOriginsAsync();
     }
 
     public class OriginService : IOriginService
@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public async Task<ICollection<Origin>> GetOriginsAsync()
+        public async Task<ICollection<OriginEntity>> GetOriginsAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

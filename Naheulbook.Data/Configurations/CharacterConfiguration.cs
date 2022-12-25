@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class CharacterConfiguration : IEntityTypeConfiguration<Character>
+    public class CharacterConfiguration : IEntityTypeConfiguration<CharacterEntity>
     {
-        public void Configure(EntityTypeBuilder<Character> builder)
+        public void Configure(EntityTypeBuilder<CharacterEntity> builder)
         {
             builder.ToTable("characters");
 
@@ -116,9 +116,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class CharacterJobConfiguration : IEntityTypeConfiguration<CharacterJob>
+    public class CharacterJobConfiguration : IEntityTypeConfiguration<CharacterJobEntity>
     {
-        public void Configure(EntityTypeBuilder<CharacterJob> builder)
+        public void Configure(EntityTypeBuilder<CharacterJobEntity> builder)
         {
             builder.ToTable("character_jobs");
 
@@ -151,9 +151,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class CharacterModifierConfiguration : IEntityTypeConfiguration<CharacterModifier>
+    public class CharacterModifierConfiguration : IEntityTypeConfiguration<CharacterModifierEntity>
     {
-        public void Configure(EntityTypeBuilder<CharacterModifier> builder)
+        public void Configure(EntityTypeBuilder<CharacterModifierEntity> builder)
         {
             builder.ToTable("character_modifiers");
 
@@ -220,9 +220,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class CharacterModifierValueConfiguration : IEntityTypeConfiguration<CharacterModifierValue>
+    public class CharacterModifierValueConfiguration : IEntityTypeConfiguration<CharacterModifierValueEntity>
     {
-        public void Configure(EntityTypeBuilder<CharacterModifierValue> builder)
+        public void Configure(EntityTypeBuilder<CharacterModifierValueEntity> builder)
         {
             builder.ToTable("character_modifier_values");
 
@@ -244,9 +244,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class CharacterSkillConfiguration : IEntityTypeConfiguration<CharacterSkill>
+    public class CharacterSkillConfiguration : IEntityTypeConfiguration<CharacterSkillEntity>
     {
-        public void Configure(EntityTypeBuilder<CharacterSkill> builder)
+        public void Configure(EntityTypeBuilder<CharacterSkillEntity> builder)
         {
             builder.ToTable("character_skills");
 
@@ -276,9 +276,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class CharacterSpecialityConfiguration : IEntityTypeConfiguration<CharacterSpeciality>
+    public class CharacterSpecialityConfiguration : IEntityTypeConfiguration<CharacterSpecialityEntity>
     {
-        public void Configure(EntityTypeBuilder<CharacterSpeciality> builder)
+        public void Configure(EntityTypeBuilder<CharacterSpecialityEntity> builder)
         {
             builder.ToTable("character_specialities");
 
@@ -306,9 +306,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class CharacterHistoryEntryConfiguration : IEntityTypeConfiguration<CharacterHistoryEntry>
+    public class CharacterHistoryEntryConfiguration : IEntityTypeConfiguration<CharacterHistoryEntryEntity>
     {
-        public void Configure(EntityTypeBuilder<CharacterHistoryEntry> builder)
+        public void Configure(EntityTypeBuilder<CharacterHistoryEntryEntity> builder)
         {
             builder.ToTable("character_history_entries");
 

@@ -36,7 +36,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateItemTemplateSubCategoryAsync_CallItemSubCategoryService()
         {
             var createItemTemplateSubCategoryRequest = new CreateItemTemplateSubCategoryRequest();
-            var itemTemplateSubCategory = new ItemTemplateSubCategory();
+            var itemTemplateSubCategory = new ItemTemplateSubCategoryEntity();
             var itemTemplateSubCategoryResponse = new ItemTemplateSubCategoryResponse();
 
             _itemTemplateSubCategoryService.CreateItemTemplateSubCategoryAsync(_executionContext, createItemTemplateSubCategoryRequest)
@@ -54,7 +54,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateItemTemplateSubCategoryAsync_WhenCatchForbiddenAccessException_Return403()
         {
             _itemTemplateSubCategoryService.CreateItemTemplateSubCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateSubCategoryRequest>())
-                .Returns(Task.FromException<ItemTemplateSubCategory>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<ItemTemplateSubCategoryEntity>(new ForbiddenAccessException()));
 
             Func<Task> act = () => _itemTemplateSubCategoriesController.PostCreateItemTemplateSubCategoryAsync(_executionContext, new CreateItemTemplateSubCategoryRequest());
 

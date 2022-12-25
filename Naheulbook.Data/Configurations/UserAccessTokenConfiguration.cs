@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class UserAccessTokenConfiguration : IEntityTypeConfiguration<UserAccessToken>
+    public class UserAccessTokenConfiguration : IEntityTypeConfiguration<UserAccessTokenEntity>
     {
-        public void Configure(EntityTypeBuilder<UserAccessToken> builder)
+        public void Configure(EntityTypeBuilder<UserAccessTokenEntity> builder)
         {
             builder.ToTable("user_access_token");
 

@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class MonsterSubCategoryConfiguration : IEntityTypeConfiguration<MonsterSubCategory>
+    public class MonsterSubCategoryConfiguration : IEntityTypeConfiguration<MonsterSubCategoryEntity>
     {
-        public void Configure(EntityTypeBuilder<MonsterSubCategory> builder)
+        public void Configure(EntityTypeBuilder<MonsterSubCategoryEntity> builder)
         {
             builder.ToTable("monster_subcategories");
 
@@ -26,9 +26,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class MonsterTemplateConfiguration : IEntityTypeConfiguration<MonsterTemplate>
+    public class MonsterTemplateConfiguration : IEntityTypeConfiguration<MonsterTemplateEntity>
     {
-        public void Configure(EntityTypeBuilder<MonsterTemplate> builder)
+        public void Configure(EntityTypeBuilder<MonsterTemplateEntity> builder)
         {
             builder.ToTable("monster_templates");
 
@@ -51,9 +51,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class MonsterTemplateInventoryElementConfiguration : IEntityTypeConfiguration<MonsterTemplateInventoryElement>
+    public class MonsterTemplateInventoryElementConfiguration : IEntityTypeConfiguration<MonsterTemplateInventoryElementEntity>
     {
-        public void Configure(EntityTypeBuilder<MonsterTemplateInventoryElement> builder)
+        public void Configure(EntityTypeBuilder<MonsterTemplateInventoryElementEntity> builder)
         {
             builder.ToTable("monster_template_inventory_elements");
 
@@ -84,9 +84,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class MonsterTypeConfiguration : IEntityTypeConfiguration<MonsterType>
+    public class MonsterTypeConfiguration : IEntityTypeConfiguration<MonsterTypeEntity>
     {
-        public void Configure(EntityTypeBuilder<MonsterType> builder)
+        public void Configure(EntityTypeBuilder<MonsterTypeEntity> builder)
         {
             builder.ToTable("monster_types");
 
@@ -99,9 +99,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class MonsterTraitConfiguration : IEntityTypeConfiguration<MonsterTrait>
+    public class MonsterTraitConfiguration : IEntityTypeConfiguration<MonsterTraitEntity>
     {
-        public void Configure(EntityTypeBuilder<MonsterTrait> builder)
+        public void Configure(EntityTypeBuilder<MonsterTraitEntity> builder)
         {
             builder.ToTable("monster_traits");
 

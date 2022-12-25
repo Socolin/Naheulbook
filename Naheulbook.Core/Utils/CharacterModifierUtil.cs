@@ -5,7 +5,7 @@ namespace Naheulbook.Core.Utils
 {
     public interface ICharacterModifierUtil
     {
-        void ToggleModifier(Character character, CharacterModifier modifier);
+        void ToggleModifier(CharacterEntity character, CharacterModifierEntity modifier);
     }
 
     public class CharacterModifierUtil : ICharacterModifierUtil
@@ -17,7 +17,7 @@ namespace Naheulbook.Core.Utils
             _characterHistoryUtil = characterHistoryUtil;
         }
 
-        public void ToggleModifier(Character character, CharacterModifier modifier)
+        public void ToggleModifier(CharacterEntity character, CharacterModifierEntity modifier)
         {
             if (!modifier.Reusable)
                 throw new CharacterModifierNotReusableException(modifier.Id);

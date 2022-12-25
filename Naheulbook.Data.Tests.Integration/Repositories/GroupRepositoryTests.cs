@@ -25,12 +25,12 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddUser()
                 .AddGroup()
                 .AddOrigin()
-                .AddCharacter(c => c.GroupId = TestDataUtil.GetLast<Group>().Id);
+                .AddCharacter(c => c.GroupId = TestDataUtil.GetLast<GroupEntity>().Id);
 
-            var groups = await _groupRepository.GetGroupsOwnedByAsync(TestDataUtil.GetLast<User>().Id);
+            var groups = await _groupRepository.GetGroupsOwnedByAsync(TestDataUtil.GetLast<UserEntity>().Id);
 
-            groups.Should().BeEquivalentTo(TestDataUtil.GetAll<Group>(), config => config.Excluding(g => g.Characters).Excluding(g => g.Master));
-            groups.First().Characters.Should().BeEquivalentTo(TestDataUtil.GetAll<Character>(), config => config.Excluding(c => c.Group).Excluding(c => c.Owner).Excluding(c => c.Origin));
+            groups.Should().BeEquivalentTo(TestDataUtil.GetAll<GroupEntity>(), config => config.Excluding(g => g.Characters).Excluding(g => g.Master));
+            groups.First().Characters.Should().BeEquivalentTo(TestDataUtil.GetAll<CharacterEntity>(), config => config.Excluding(c => c.Group).Excluding(c => c.Owner).Excluding(c => c.Origin));
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddGroup()
                 .AddUser();
 
-            var notOwnerUser = TestDataUtil.GetLast<User>();
+            var notOwnerUser = TestDataUtil.GetLast<UserEntity>();
 
             var groups = await _groupRepository.GetGroupsOwnedByAsync(notOwnerUser.Id);
 
@@ -51,10 +51,10 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [Test]
         public async Task GetGroupsWithDetailsAsync_ShouldLoadGroupWithAllRequiredData()
         {
-            var expectedGroup = TestDataUtil.AddUser().AddGroup().GetLast<Group>();
-            var expectedCharacter = TestDataUtil.AddOrigin().AddCharacter(c => c.GroupId = TestDataUtil.GetLast<Group>().Id).GetLast<Character>();
-            var expectedInvite1 = TestDataUtil.AddCharacter().AddGroupInvite(TestDataUtil.GetLast<Character>(), TestDataUtil.GetLast<Group>(), true).GetLast<GroupInvite>();
-            var expectedInvite2 = TestDataUtil.AddCharacter().AddGroupInvite(TestDataUtil.GetLast<Character>(), TestDataUtil.GetLast<Group>(), false).GetLast<GroupInvite>();
+            var expectedGroup = TestDataUtil.AddUser().AddGroup().GetLast<GroupEntity>();
+            var expectedCharacter = TestDataUtil.AddOrigin().AddCharacter(c => c.GroupId = TestDataUtil.GetLast<GroupEntity>().Id).GetLast<CharacterEntity>();
+            var expectedInvite1 = TestDataUtil.AddCharacter().AddGroupInvite(TestDataUtil.GetLast<CharacterEntity>(), TestDataUtil.GetLast<GroupEntity>(), true).GetLast<GroupInviteEntity>();
+            var expectedInvite2 = TestDataUtil.AddCharacter().AddGroupInvite(TestDataUtil.GetLast<CharacterEntity>(), TestDataUtil.GetLast<GroupEntity>(), false).GetLast<GroupInviteEntity>();
 
             var group = await _groupRepository.GetGroupsWithDetailsAsync(expectedGroup.Id);
 

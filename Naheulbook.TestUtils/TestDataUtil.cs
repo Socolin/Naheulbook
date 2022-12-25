@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace Naheulbook.TestUtils
             return last;
         }
 
-        public T GetLastIfExists<T>()
+        public T? GetLastIfExists<T>()
         {
             return _allEntities.OfType<T>().LastOrDefault();
         }
@@ -62,7 +63,7 @@ namespace Naheulbook.TestUtils
             _dbContext.SaveChanges();
         }
 
-        private TestDataUtil SaveEntity<T>(T entity, Action<T> customizer)
+        private TestDataUtil SaveEntity<T>(T entity, Action<T>? customizer)
             where T : class
         {
             customizer?.Invoke(entity);
@@ -147,6 +148,7 @@ namespace Naheulbook.TestUtils
                     "SET FOREIGN_KEY_CHECKS=1;";
                 cleanupSqlCommand.ExecuteNonQuery();
             }
+
             dbConnection.Close();
 
             return this;
@@ -157,14 +159,14 @@ namespace Naheulbook.TestUtils
             _dbContext.Dispose();
         }
 
-        public object GetByTypeName(string typeName)
+        public object? GetByTypeName(string typeName)
         {
-            return _allEntities.FirstOrDefault(x => x.GetType().Name == typeName);
+            return _allEntities.FirstOrDefault(x => x.GetType().Name == typeName) ?? _allEntities.FirstOrDefault(x => x.GetType().Name == typeName + "Entity");
         }
 
         public IList<object> GetAllByTypeName(string typeName)
         {
-            return _allEntities.Where(x => x.GetType().Name == typeName).ToList();
+            return _allEntities.Where(x => x.GetType().Name == typeName || x.GetType().Name == typeName + "Entity").ToList();
         }
     }
 }

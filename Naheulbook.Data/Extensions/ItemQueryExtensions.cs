@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Extensions
     {
         public static IQueryable<TEntity> IncludeItemDetails<TEntity>(
             this IQueryable<TEntity> queryable,
-            Expression<Func<TEntity, IEnumerable<Item>>> navigationPropertyPath
+            Expression<Func<TEntity, IEnumerable<ItemEntity>>> navigationPropertyPath
         ) where TEntity : class
         {
             return queryable.Include(navigationPropertyPath)
@@ -41,7 +41,7 @@ namespace Naheulbook.Data.Extensions
         public static IQueryable<TEntity> IncludeChildWithItemDetails<TEntity, TChild>(
             this IQueryable<TEntity> queryable,
             Expression<Func<TEntity, IEnumerable<TChild>>> parentNavigationPropertyPath,
-            Expression<Func<TChild, IEnumerable<Item>>> navigationPropertyPath
+            Expression<Func<TChild, IEnumerable<ItemEntity>>> navigationPropertyPath
         )
             where TEntity : class
             where TChild : class

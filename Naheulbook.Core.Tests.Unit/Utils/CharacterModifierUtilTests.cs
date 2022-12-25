@@ -27,13 +27,13 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [TestCase(false, true)]
         public void ToggleModifier_ShouldToggleActiveProperty(bool initialValue, bool expectedValue)
         {
-            var characterModifier = new CharacterModifier
+            var characterModifier = new CharacterModifierEntity
             {
                 IsActive = initialValue,
                 Reusable = true
             };
 
-            _util.ToggleModifier(new Character(), characterModifier);
+            _util.ToggleModifier(new CharacterEntity(), characterModifier);
 
             characterModifier.IsActive.Should().Be(expectedValue);
         }
@@ -41,7 +41,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ToggleModifier_ShouldResetCurrentValuesWhenModifierIsActivated()
         {
-            var characterModifier = new CharacterModifier
+            var characterModifier = new CharacterModifierEntity
             {
                 IsActive = false,
                 Reusable = true,
@@ -50,7 +50,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                 TimeDuration = 8,
             };
 
-            _util.ToggleModifier(new Character(), characterModifier);
+            _util.ToggleModifier(new CharacterEntity(), characterModifier);
 
             using (new AssertionScope())
             {
@@ -65,9 +65,9 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         {
             const int characterId = 8;
             const int characterModifierId = 12;
-            var character = new Character {Id = characterId};
-            var characterHistoryEntry = new CharacterHistoryEntry();
-            var characterModifier = new CharacterModifier
+            var character = new CharacterEntity {Id = characterId};
+            var characterHistoryEntry = new CharacterHistoryEntryEntity();
+            var characterModifier = new CharacterModifierEntity
             {
                 Id = characterModifierId,
                 IsActive = false,
@@ -87,9 +87,9 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         {
             const int characterId = 8;
             const int characterModifierId = 12;
-            var character = new Character {Id = characterId};
-            var characterHistoryEntry = new CharacterHistoryEntry();
-            var characterModifier = new CharacterModifier
+            var character = new CharacterEntity {Id = characterId};
+            var characterHistoryEntry = new CharacterHistoryEntryEntity();
+            var characterModifier = new CharacterModifierEntity
             {
                 Id = characterModifierId,
                 IsActive = true,
@@ -107,7 +107,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ToggleModifier_ShouldThrowIfModifierIsNotReusable()
         {
-            Action act = () => _util.ToggleModifier(new Character(), new CharacterModifier {Reusable = false});
+            Action act = () => _util.ToggleModifier(new CharacterEntity(), new CharacterModifierEntity {Reusable = false});
 
             act.Should().Throw<CharacterModifierNotReusableException>();
         }

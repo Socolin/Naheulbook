@@ -113,14 +113,14 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             item.Data.Should().Be(SomeUpdatedJsonData);
         }
 
-        private Item GivenAnItem(ItemData itemData)
+        private ItemEntity GivenAnItem(ItemData itemData)
         {
             _jsonUtil.DeserializeOrCreate<ItemData>(SomeItemDataJson)
                 .Returns(itemData);
             _jsonUtil.SerializeNonNull(itemData)
                 .Returns(SomeUpdatedJsonData);
 
-            return new Item
+            return new ItemEntity
             {
                 Data = SomeItemDataJson
             };

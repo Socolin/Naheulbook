@@ -10,18 +10,18 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface ICharacterRepository : IRepository<Character>
+    public interface ICharacterRepository : IRepository<CharacterEntity>
     {
-        Task<Character?> GetWithAllDataAsync(int id);
-        Task<Character?> GetWithGroupAsync(int id);
-        Task<List<Character>> GetForSummaryByOwnerIdAsync(int ownerId);
+        Task<CharacterEntity?> GetWithAllDataAsync(int id);
+        Task<CharacterEntity?> GetWithGroupAsync(int id);
+        Task<List<CharacterEntity>> GetForSummaryByOwnerIdAsync(int ownerId);
         Task<List<IHistoryEntry>> GetHistoryByCharacterIdAsync(int characterId, int? groupId, int page, bool isGm);
-        Task<List<Character>> SearchCharacterWithNoGroupByNameWithOriginWithOwner(string filter, int maxCount);
-        Task<Character?> GetWithOriginWithJobsAsync(int requestCharacterId);
-        Task<List<Character>> GetWithItemsWithModifiersByGroupAndByIdAsync(int groupId, IEnumerable<int> characterIds);
+        Task<List<CharacterEntity>> SearchCharacterWithNoGroupByNameWithOriginWithOwner(string filter, int maxCount);
+        Task<CharacterEntity?> GetWithOriginWithJobsAsync(int requestCharacterId);
+        Task<List<CharacterEntity>> GetWithItemsWithModifiersByGroupAndByIdAsync(int groupId, IEnumerable<int> characterIds);
     }
 
-    public class CharacterRepository : Repository<Character, NaheulbookDbContext>, ICharacterRepository
+    public class CharacterRepository : Repository<CharacterEntity, NaheulbookDbContext>, ICharacterRepository
     {
         private const int HistoryPageSize = 40;
 
@@ -30,7 +30,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public async Task<Character?> GetWithAllDataAsync(int id)
+        public async Task<CharacterEntity?> GetWithAllDataAsync(int id)
         {
             var character = await Context.Characters
                 .Include(c => c.Modifiers)
@@ -57,14 +57,14 @@ namespace Naheulbook.Data.Repositories
             return character;
         }
 
-        public Task<Character?> GetWithGroupAsync(int id)
+        public Task<CharacterEntity?> GetWithGroupAsync(int id)
         {
             return Context.Characters
                 .Include(c => c.Group)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task<List<Character>> GetForSummaryByOwnerIdAsync(int ownerId)
+        public Task<List<CharacterEntity>> GetForSummaryByOwnerIdAsync(int ownerId)
         {
             return Context.Characters
                 .Where(x => x.OwnerId == ownerId)
@@ -106,7 +106,7 @@ namespace Naheulbook.Data.Repositories
             return history;
         }
 
-        public Task<List<Character>> SearchCharacterWithNoGroupByNameWithOriginWithOwner(string filter, int maxCount)
+        public Task<List<CharacterEntity>> SearchCharacterWithNoGroupByNameWithOriginWithOwner(string filter, int maxCount)
         {
             return Context.Characters
                 .Include(x => x.Owner)
@@ -117,7 +117,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Character?> GetWithOriginWithJobsAsync(int characterId)
+        public Task<CharacterEntity?> GetWithOriginWithJobsAsync(int characterId)
         {
             return Context.Characters
                 .Include(x => x.Jobs)
@@ -126,7 +126,7 @@ namespace Naheulbook.Data.Repositories
                 .FirstOrDefaultAsync(x => x.Id == characterId);
         }
 
-        public Task<List<Character>> GetWithItemsWithModifiersByGroupAndByIdAsync(int groupId, IEnumerable<int> characterIds)
+        public Task<List<CharacterEntity>> GetWithItemsWithModifiersByGroupAndByIdAsync(int groupId, IEnumerable<int> characterIds)
         {
             return Context.Characters
                 .Include(x => x.Modifiers)

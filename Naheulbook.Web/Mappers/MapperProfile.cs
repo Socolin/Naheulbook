@@ -15,33 +15,33 @@ namespace Naheulbook.Web.Mappers
     {
         public MapperProfile()
         {
-            CreateMap<Calendar, CalendarResponse>();
+            CreateMap<CalendarEntity, CalendarResponse>();
 
-            CreateMap<Character, NamedIdResponse>();
-            CreateMap<Character, CreateCharacterResponse>();
-            CreateMap<Character, ListActiveCharacterResponse>();
-            CreateMap<Character, CharacterSearchResponse>()
+            CreateMap<CharacterEntity, NamedIdResponse>();
+            CreateMap<CharacterEntity, CreateCharacterResponse>();
+            CreateMap<CharacterEntity, ListActiveCharacterResponse>();
+            CreateMap<CharacterEntity, CharacterSearchResponse>()
                 .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name))
                 .ForMember(x => x.OwnerName, opt => opt.MapFrom(c => c.Owner.DisplayName));
-            CreateMap<Character, CharacterSummaryResponse>()
+            CreateMap<CharacterEntity, CharacterSummaryResponse>()
                 .ForMember(x => x.JobNames, opt => opt.MapFrom(c => c.Jobs.Select(x => x.Job.Name)))
                 .ForMember(x => x.OriginName, opt => opt.MapFrom(c => c.Origin.Name));
-            CreateMap<Character, CharacterFoGmResponse>()
-                .IncludeBase<Character, CharacterResponse>()
+            CreateMap<CharacterEntity, CharacterFoGmResponse>()
+                .IncludeBase<CharacterEntity, CharacterResponse>()
                 .ForMember(x => x.GmData, opt => opt.MapFrom(c => MapperHelpers.FromJson<CharacterGmData>(c.GmData) ?? new CharacterGmData()))
                 .ForMember(x => x.Target, opt => opt.MapFrom(c => c.TargetedCharacterId.HasValue ? new TargetResponse {Id = c.TargetedCharacterId.Value, IsMonster = false} : (c.TargetedMonsterId.HasValue ? new TargetResponse {Id = c.TargetedMonsterId.Value, IsMonster = true} : null)));
-            CreateMap<Character, CharacterResponse>()
+            CreateMap<CharacterEntity, CharacterResponse>()
                 .ForMember(x => x.Stats, opt => opt.MapFrom(c => new CharacterResponse.BasicStats {Ad = c.Ad, Cou = c.Cou, Cha = c.Cha, Fo = c.Fo, Int = c.Int}))
                 .ForMember(x => x.SkillIds, opt => opt.MapFrom(c => c.Skills.Select(x => x.SkillId)))
                 .ForMember(x => x.JobIds, opt => opt.MapFrom(c => c.Jobs.Select(x => x.JobId)))
                 .ForMember(x => x.Specialities, opt => opt.MapFrom(c => c.Specialities.Select(x => x.Speciality)));
-            CreateMap<CharacterModifier, ActiveStatsModifier>()
+            CreateMap<CharacterModifierEntity, ActiveStatsModifier>()
                 .ForMember(x => x.Active, opt => opt.MapFrom(x => x.IsActive))
                 .ForMember(x => x.Values, opt => opt.MapFrom(x => x.Values.OrderBy(v => v.Id)));
-            CreateMap<CharacterModifierValue, StatModifier>()
+            CreateMap<CharacterModifierValueEntity, StatModifier>()
                 .ForMember(x => x.Stat, opt => opt.MapFrom(c => c.StatName))
                 .ForMember(x => x.Special, opt => opt.Ignore());
-            CreateMap<AddCharacterModifierRequest, CharacterModifier>()
+            CreateMap<AddCharacterModifierRequest, CharacterModifierEntity>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.Character, opt => opt.Ignore())
                 .ForMember(x => x.CharacterId, opt => opt.Ignore())
@@ -51,7 +51,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.CurrentTimeDuration, opt => opt.MapFrom(x => x.TimeDuration))
                 .ForMember(x => x.CurrentLapCount, opt => opt.MapFrom(x => x.LapCount))
                 .ForMember(x => x.LapCountDecrement, opt => opt.MapFrom(x => MapperHelpers.ToJson(x.LapCountDecrement)));
-            CreateMap<StatModifier, CharacterModifierValue>()
+            CreateMap<StatModifier, CharacterModifierValueEntity>()
                 .ForMember(x => x.StatName, opt => opt.MapFrom(c => c.Stat))
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.CharacterModifierId, opt => opt.Ignore());
@@ -59,12 +59,12 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(x => x.NewSkillIds, opt => opt.MapFrom(x => x.NewSkills.Select(s => s.SkillId)))
                 .ForMember(x => x.NewSpecialities, opt => opt.MapFrom(x => x.NewSpecialities.Select(s => s.Speciality)));
 
-            CreateMap<CharacterHistoryEntry, CharacterHistoryEntryResponse>()
+            CreateMap<CharacterHistoryEntryEntity, CharacterHistoryEntryResponse>()
                 .ForMember(m => m.Modifier, opt => opt.MapFrom(im => im.CharacterModifier))
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
                 .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
 
-            CreateMap<Effect, EffectResponse>()
+            CreateMap<EffectEntity, EffectResponse>()
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(e => e.Modifiers.OrderBy(m => m.StatName)));
             CreateMap<EffectType, EffectTypeResponse>()
                 .ForMember(m => m.SubCategories, opt => opt.MapFrom(et => et.SubCategories.OrderBy(x => x.Id)));
@@ -73,42 +73,42 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Stat, opt => opt.MapFrom(se => se.StatName))
                 .ForMember(m => m.Special, opt => opt.Ignore());
 
-            CreateMap<Event, EventResponse>();
+            CreateMap<EventEntity, EventResponse>();
 
-            CreateMap<God, GodResponse>();
+            CreateMap<GodEntity, GodResponse>();
 
-            CreateMap<GroupInvite, DeleteInviteResponse>();
-            CreateMap<GroupInvite, CharacterGroupInviteResponse>()
+            CreateMap<GroupInviteEntity, DeleteInviteResponse>();
+            CreateMap<GroupInviteEntity, CharacterGroupInviteResponse>()
                 .ForMember(m => m.Config, opt => opt.MapFrom(im => MapperHelpers.FromJsonNotNull<GroupConfig>(im.Group.Config)))
                 .ForMember(m => m.GroupId, opt => opt.MapFrom(i => i.Group.Id))
                 .ForMember(m => m.GroupName, opt => opt.MapFrom(i => i.Group.Name));
-            CreateMap<GroupInvite, GroupInviteResponse>()
+            CreateMap<GroupInviteEntity, GroupInviteResponse>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(i => i.Character.Id))
                 .ForMember(m => m.Name, opt => opt.MapFrom(i => i.Character.Name))
                 .ForMember(m => m.Group, opt => opt.MapFrom(i => i.Group))
                 .ForMember(m => m.OriginName, opt => opt.MapFrom(i => i.Character.Origin.Name))
                 .ForMember(m => m.JobNames, opt => opt.MapFrom(i => i.Character.Jobs.Select(j => j.Job.Name)));
-            CreateMap<GroupInvite, GroupGroupInviteResponse>()
+            CreateMap<GroupInviteEntity, GroupGroupInviteResponse>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(i => i.Character.Id))
                 .ForMember(m => m.Name, opt => opt.MapFrom(i => i.Character.Name))
                 .ForMember(m => m.OriginName, opt => opt.MapFrom(i => i.Character.Origin.Name))
                 .ForMember(m => m.JobNames, opt => opt.MapFrom(i => i.Character.Jobs.Select(j => j.Job.Name)));
-            CreateMap<Group, GroupResponse>()
+            CreateMap<GroupEntity, GroupResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
                 .ForMember(m => m.Config, opt => opt.MapFrom(im => MapperHelpers.FromJsonNotNull<GroupConfig>(im.Config)))
                 .ForMember(m => m.CharacterIds , opt => opt.MapFrom(g => g.Characters.Select(c => c.Id)));
-            CreateMap<Group, CharacterGroupResponse>()
+            CreateMap<GroupEntity, CharacterGroupResponse>()
                 .ForMember(m => m.Config, opt => opt.MapFrom(g => MapperHelpers.FromJsonNotNull<GroupConfig>(g.Config)));
-            CreateMap<Group, NamedIdResponse>();
-            CreateMap<Group, GroupSummaryResponse>()
+            CreateMap<GroupEntity, NamedIdResponse>();
+            CreateMap<GroupEntity, GroupSummaryResponse>()
                 .ForMember(m => m.CharacterCount, opt => opt.MapFrom(g => g.Characters.Count));
-            CreateMap<GroupHistoryEntry, GroupHistoryEntryResponse>()
+            CreateMap<GroupHistoryEntryEntity, GroupHistoryEntryResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
                 .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
 
             CreateMap<IHistoryEntry, IHistoryEntryResponse>()
-                .Include<GroupHistoryEntry, GroupHistoryEntryResponse>()
-                .Include<CharacterHistoryEntry, CharacterHistoryEntryResponse>();
+                .Include<GroupHistoryEntryEntity, GroupHistoryEntryResponse>()
+                .Include<CharacterHistoryEntryEntity, CharacterHistoryEntryResponse>();
 
             CreateMap<PostGroupUpdateDurationsRequest, FighterDurationChanges>()
                 .ConstructUsing((request, context) =>
@@ -138,38 +138,38 @@ namespace Naheulbook.Web.Mappers
                     }
                 });
 
-            CreateMap<Item, ItemPartialResponse>()
+            CreateMap<ItemEntity, ItemPartialResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data) ?? new JObject()))
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(x => MapperHelpers.FromJson<List<ActiveStatsModifier>>(x.Modifiers)));
-            CreateMap<Item, ItemResponse>()
+            CreateMap<ItemEntity, ItemResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(x => MapperHelpers.FromJson<JObject>(x.Data) ?? new JObject()))
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(x => MapperHelpers.FromJson<List<ActiveStatsModifier>>(x.Modifiers)));
 
-            CreateMap<ItemTemplate, ItemTemplateResponse>()
+            CreateMap<ItemTemplateEntity, ItemTemplateResponse>()
                 .ForMember(m => m.SkillIds, opt => opt.MapFrom(i => i.Skills.Select(s => s.SkillId)))
                 .ForMember(m => m.UnSkillIds, opt => opt.MapFrom(i => i.UnSkills.Select(s => s.SkillId)))
                 .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data) ?? new JObject()))
                 .ForMember(m => m.Slots, opt => opt.MapFrom(i => i.Slots.Select(x => x.Slot)));
-            CreateMap<ItemTemplateModifier, ItemTemplateModifierResponse>()
+            CreateMap<ItemTemplateModifierEntity, ItemTemplateModifierResponse>()
                 .ForMember(m => m.JobId, opt => opt.MapFrom(im => im.RequiredJobId))
                 .ForMember(m => m.OriginId, opt => opt.MapFrom(im => im.RequiredOriginId))
                 .ForMember(m => m.Special, opt => opt.MapFrom(im => MapperHelpers.FromCommaSeparatedList(im.Special)))
                 .ForMember(m => m.Stat, opt => opt.MapFrom(im => im.StatName));
-            CreateMap<ItemTemplateRequirement, ItemTemplateRequirementResponse>()
+            CreateMap<ItemTemplateRequirementEntity, ItemTemplateRequirementResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(ir => ir.StatName))
                 .ForMember(m => m.Min, opt => opt.MapFrom(ir => ir.MinValue))
                 .ForMember(m => m.Max, opt => opt.MapFrom(ir => ir.MaxValue));
-            CreateMap<ItemTemplateSkillModifier, ItemTemplateSkillModifierResponse>();
-            CreateMap<ItemTemplateSlot, IdResponse>()
+            CreateMap<ItemTemplateSkillModifierEntity, ItemTemplateSkillModifierResponse>();
+            CreateMap<ItemTemplateSlotEntity, IdResponse>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(i => i.SlotId));
-            CreateMap<ItemTemplateSection, ItemTemplateSectionResponse>()
+            CreateMap<ItemTemplateSectionEntity, ItemTemplateSectionResponse>()
                 .ForMember(m => m.SubCategories, opt => opt.MapFrom(et => et.SubCategories.OrderBy(x => x.Id)))
                 .ForMember(m => m.Specials, opt => opt.MapFrom(i => MapperHelpers.FromCommaSeparatedList(i.Special)));
-            CreateMap<ItemTemplateSubCategory, ItemTemplateSubCategoryResponse>();
-            CreateMap<ItemType, ItemTypeResponse>();
-            CreateMap<Slot, ItemSlotResponse>();
+            CreateMap<ItemTemplateSubCategoryEntity, ItemTemplateSubCategoryResponse>();
+            CreateMap<ItemTypeEntity, ItemTypeResponse>();
+            CreateMap<SlotEntity, ItemSlotResponse>();
 
-            CreateMap<Job, JobResponse>()
+            CreateMap<JobEntity, JobResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(j => MapperHelpers.FromJsonNotNull<JobData>(j.Data)))
                 .ForMember(m => m.Requirements, opt => opt.MapFrom(j => j.Requirements.OrderBy(r => r.Id)))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)))
@@ -177,97 +177,97 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.SkillIds, opt => opt.MapFrom(j => j.Skills.Where(s => s.Default).OrderBy(s => s.SkillId).Select(s => s.SkillId)));
             CreateMap<JobBonus, DescribedFlagResponse>()
                 .ForMember(m => m.Flags, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<FlagResponse>>(b.Flags)));
-            CreateMap<JobRequirement, StatRequirementResponse>()
+            CreateMap<JobRequirementEntity, StatRequirementResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(r => r.StatName))
                 .ForMember(m => m.Min, opt => opt.MapFrom(r => r.MinValue))
                 .ForMember(m => m.Max, opt => opt.MapFrom(r => r.MaxValue));
-            CreateMap<JobRestriction, DescribedFlagResponse>()
+            CreateMap<JobRestrictionEntity, DescribedFlagResponse>()
                 .ForMember(m => m.Description, opt => opt.MapFrom(r => r.Text))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)));
 
-            CreateMap<Loot, LootResponse>();
+            CreateMap<LootEntity, LootResponse>();
 
-            CreateMap<Origin, OriginResponse>()
+            CreateMap<OriginEntity, OriginResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(o => MapperHelpers.FromJsonNotNull<OriginData>(o.Data)))
                 .ForMember(m => m.Requirements, opt => opt.MapFrom(o => o.Requirements.OrderBy(r => r.Id)))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(o => MapperHelpers.FromJson<List<FlagResponse>>(o.Flags)))
                 .ForMember(m => m.AvailableSkillIds, opt => opt.MapFrom(o => o.Skills.Where(s => !s.Default).OrderBy(s => s.SkillId).Select(s => s.SkillId)))
                 .ForMember(m => m.SkillIds, opt => opt.MapFrom(o => o.Skills.Where(s => s.Default).OrderBy(s => s.SkillId).Select(s => s.SkillId)));
-            CreateMap<OriginInfo, OriginInformationResponse>();
-            CreateMap<OriginRequirement, OriginRequirementResponse>()
+            CreateMap<OriginInfoEntity, OriginInformationResponse>();
+            CreateMap<OriginRequirementEntity, OriginRequirementResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(r => r.StatName))
                 .ForMember(m => m.Min, opt => opt.MapFrom(r => r.MinValue))
                 .ForMember(m => m.Max, opt => opt.MapFrom(r => r.MaxValue));
             CreateMap<OriginBonus, DescribedFlagResponse>()
                 .ForMember(m => m.Flags, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<FlagResponse>>(b.Flags)));
-            CreateMap<OriginRestrict, DescribedFlagResponse>()
+            CreateMap<OriginRestrictEntity, DescribedFlagResponse>()
                 .ForMember(m => m.Description, opt => opt.MapFrom(r => r.Text))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(r => MapperHelpers.FromJson<List<FlagResponse>>(r.Flags)));
 
-            CreateMap<Map, MapResponse>()
+            CreateMap<MapEntity, MapResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(r => MapperHelpers.FromJson<MapData>(r.Data)))
                 .ForMember(m => m.ImageData, opt => opt.MapFrom(r => MapperHelpers.FromJson<MapImageData>(r.ImageData)));
-            CreateMap<Map, MapSummaryResponse>()
+            CreateMap<MapEntity, MapSummaryResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(r => MapperHelpers.FromJson<MapData>(r.Data)));
-            CreateMap<MapLayer, MapLayerResponse>();
-            CreateMap<MapMarker, MapMarkerResponse>()
+            CreateMap<MapLayerEntity, MapLayerResponse>();
+            CreateMap<MapMarkerEntity, MapMarkerResponse>()
                 .ForMember(m => m.MarkerInfo, opt => opt.MapFrom(r => MapperHelpers.FromJsonNotNull<JObject>(r.MarkerInfo)))
                 .ForMember(m => m.Links, opt => opt.MapFrom(r => r.Links));
-            CreateMap<MapMarkerLink, MapMarkerLinkResponse>()
+            CreateMap<MapMarkerLinkEntity, MapMarkerLinkResponse>()
                 .ForMember(m => m.TargetMapName, opt => opt.MapFrom(r => r.TargetMap.Name))
                 .ForMember(m => m.TargetMapIsGm, opt => opt.MapFrom(r => MapperHelpers.FromJsonNotNull<MapData>(r.TargetMap.Data).IsGm));
 
-            CreateMap<Monster, MonsterResponse>()
+            CreateMap<MonsterEntity, MonsterResponse>()
                 .ForMember(m => m.Dead, opt => opt.MapFrom(b => MapperHelpers.FromDateTimeToString(b.Dead)))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)))
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<ActiveStatsModifier>>(b.Modifiers)));
 
-            CreateMap<MonsterTemplate, MonsterTemplateResponse>()
+            CreateMap<MonsterTemplateEntity, MonsterTemplateResponse>()
                 .ForMember(x => x.Inventory, opt => opt.MapFrom(m => m.Items))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)));
-            CreateMap<MonsterTemplateInventoryElement, MonsterTemplateResponse.MonsterTemplateInventoryElementResponse>();
-            CreateMap<MonsterType, MonsterTypeResponse>()
+            CreateMap<MonsterTemplateInventoryElementEntity, MonsterTemplateResponse.MonsterTemplateInventoryElementResponse>();
+            CreateMap<MonsterTypeEntity, MonsterTypeResponse>()
                 .ForMember(m => m.SubCategories, opt => opt.MapFrom(c => c.SubCategories.OrderBy(ca => ca.Id)));
-            CreateMap<MonsterSubCategory, MonsterSubCategoryResponse>();
-            CreateMap<MonsterTrait, MonsterTraitResponse>()
+            CreateMap<MonsterSubCategoryEntity, MonsterSubCategoryResponse>();
+            CreateMap<MonsterTraitEntity, MonsterTraitResponse>()
                 .ForMember(m => m.Levels, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<string>>(b.Levels)));
 
-            CreateMap<Npc, NpcResponse>()
+            CreateMap<NpcEntity, NpcResponse>()
                 .ForMember(m => m.Data, opt => opt.MapFrom(r => MapperHelpers.FromJson<NpcData>(r.Data)));
 
             CreateMap<SkillEffect, SkillEffectResponse>()
                 .ForMember(m => m.Type, opt => opt.MapFrom(x => "ADD"))
                 .ForMember(m => m.Stat, opt => opt.MapFrom(s => s.StatName));
-            CreateMap<Skill, SkillResponse>()
+            CreateMap<SkillEntity, SkillResponse>()
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)))
                 .ForMember(m => m.Effects, opt => opt.MapFrom(s => s.SkillEffects))
                 .ForMember(m => m.Stat, opt => opt.MapFrom(s => MapperHelpers.FromCommaSeparatedStringArray(s.Stat)));
 
-            CreateMap<Speciality, SpecialityResponse>()
+            CreateMap<SpecialityEntity, SpecialityResponse>()
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(s => s.Modifiers.OrderBy(m => m.Id)))
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)))
                 .ForMember(m => m.Specials, opt => opt.MapFrom(s => s.Specials.OrderBy(p => p.Id)));
-            CreateMap<SpecialitySpecial, SpecialitySpecialResponse>()
+            CreateMap<SpecialitySpecialEntity, SpecialitySpecialResponse>()
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)));
-            CreateMap<SpecialityModifier, StatModifierResponse>()
+            CreateMap<SpecialityModifierEntity, StatModifierResponse>()
                 .ForMember(m => m.Type, opt => opt.MapFrom(x => "ADD"))
                 .ForMember(m => m.Special, opt => opt.Ignore());
 
             CreateMap<string?, LapCountDecrement?>().ConvertUsing(c => MapperHelpers.FromJson<LapCountDecrement>(c));
 
-            CreateMap<Stat, StatResponse>();
+            CreateMap<StatEntity, StatResponse>();
 
-            CreateMap<User, UserInfoResponse>()
+            CreateMap<UserEntity, UserInfoResponse>()
                 .ForMember(m => m.ShowInSearch, opt => opt.MapFrom(u => u.ShowInSearchUntil > DateTime.UtcNow))
                 .ForMember(m => m.LinkedWithFb, opt => opt.MapFrom(u => u.FbId != null))
                 .ForMember(m => m.LinkedWithTwitter, opt => opt.MapFrom(u => u.TwitterId != null))
                 .ForMember(m => m.LinkedWithGoogle, opt => opt.MapFrom(u => u.TwitterId != null))
                 .ForMember(m => m.LinkedWithMicrosoft, opt => opt.MapFrom(u => u.MicrosoftId != null))
                 ;
-            CreateMap<User, UserSearchResponse>();
-            CreateMap<UserAccessToken, UserAccessTokenResponse>();
-            CreateMap<UserAccessToken, UserAccessTokenResponseWithKey>()
-                .IncludeBase<UserAccessToken, UserAccessTokenResponse>()
+            CreateMap<UserEntity, UserSearchResponse>();
+            CreateMap<UserAccessTokenEntity, UserAccessTokenResponse>();
+            CreateMap<UserAccessTokenEntity, UserAccessTokenResponseWithKey>()
+                .IncludeBase<UserAccessTokenEntity, UserAccessTokenResponse>()
                 ;
         }
     }

@@ -6,23 +6,23 @@ namespace Naheulbook.TestUtils
 {
     public partial class TestDataUtil
     {
-        public TestDataUtil AddOrigin(Action<Origin> customizer = null)
+        public TestDataUtil AddOrigin(Action<OriginEntity> customizer = null)
         {
             return SaveEntity(_defaultEntityCreator.CreateOrigin(), customizer);
         }
 
-        public TestDataUtil AddOriginWithAllData(Action<Origin> customizer = null)
+        public TestDataUtil AddOriginWithAllData(Action<OriginEntity> customizer = null)
         {
             var suffix = RngUtil.GetRandomHexString(8);
 
             var origin = _defaultEntityCreator.CreateOrigin(suffix);
 
-            var stat = AddStat().GetLast<Stat>();
+            var stat = AddStat().GetLast<StatEntity>();
 
-            var skill1 = AddSkill().GetLast<Skill>();
-            var skill2 = AddSkill().GetLast<Skill>();
+            var skill1 = AddSkill().GetLast<SkillEntity>();
+            var skill2 = AddSkill().GetLast<SkillEntity>();
 
-            origin.Information.Add(new OriginInfo
+            origin.Information.Add(new OriginInfoEntity
             {
                 Description = $"some-origin-info-description-{suffix}",
                 Title = $"some-origin-info-title-{suffix}"
@@ -35,33 +35,33 @@ namespace Naheulbook.TestUtils
                     Description = $"some-description-{suffix}"
                 }
             };
-            origin.Requirements = new List<OriginRequirement>
+            origin.Requirements = new List<OriginRequirementEntity>
             {
-                new OriginRequirement
+                new OriginRequirementEntity
                 {
                     MaxValue = 5,
                     MinValue = 2,
                     Stat = stat
                 }
             };
-            origin.Skills = new List<OriginSkill>
+            origin.Skills = new List<OriginSkillEntity>
             {
-                new OriginSkill
+                new OriginSkillEntity
                 {
                     Skill = skill1,
                     SkillId = skill1.Id,
                     Default = true
                 },
-                new OriginSkill
+                new OriginSkillEntity
                 {
                     Skill = skill2,
                     SkillId = skill2.Id,
                     Default = false
                 }
             };
-            origin.Restrictions = new List<OriginRestrict>
+            origin.Restrictions = new List<OriginRestrictEntity>
             {
-                new OriginRestrict
+                new OriginRestrictEntity
                 {
                     Text = "some-restriction-text",
                     Flags = @"[{""data"": null, ""type"": ""value""}]"
@@ -73,9 +73,9 @@ namespace Naheulbook.TestUtils
             return this;
         }
 
-        public TestDataUtil AddOriginRandomNameUrl(Action<OriginRandomNameUrl> customizer = null)
+        public TestDataUtil AddOriginRandomNameUrl(Action<OriginRandomNameUrlEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateOriginRandomNameUrl(GetLast<Origin>(), "some-sex"), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateOriginRandomNameUrl(GetLast<OriginEntity>(), "some-sex"), customizer);
         }
     }
 }

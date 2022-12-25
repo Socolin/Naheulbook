@@ -7,7 +7,7 @@ namespace Naheulbook.Core.Services
 {
     public interface ICalendarService
     {
-        Task<List<Calendar>> GetCalendarAsync();
+        Task<List<CalendarEntity>> GetCalendarAsync();
     }
 
     public class CalendarService : ICalendarService
@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public async Task<List<Calendar>> GetCalendarAsync()
+        public async Task<List<CalendarEntity>> GetCalendarAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

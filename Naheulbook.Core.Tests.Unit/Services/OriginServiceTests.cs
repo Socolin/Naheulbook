@@ -30,7 +30,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task CanGetOrigins()
         {
-            var expectedOrigins = new List<Origin>();
+            var expectedOrigins = new List<OriginEntity>();
 
             _originRepository.GetAllWithAllDataAsync()
                 .Returns(expectedOrigins);

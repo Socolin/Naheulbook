@@ -18,17 +18,17 @@ namespace Naheulbook.Core.Services
 {
     public interface IItemService
     {
-        Task<Item> AddItemToAsync(ItemOwnerType ownerType, int ownerId, CreateItemRequest request);
-        Task<Item> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId);
-        Task<Item> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData);
-        Task<Item> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers);
-        Task<Item> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request);
-        Task<Item> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request);
+        Task<ItemEntity> AddItemToAsync(ItemOwnerType ownerType, int ownerId, CreateItemRequest request);
+        Task<ItemEntity> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId);
+        Task<ItemEntity> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData);
+        Task<ItemEntity> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers);
+        Task<ItemEntity> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request);
+        Task<ItemEntity> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request);
         Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId);
-        Task<(Item takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
+        Task<(ItemEntity takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
         Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, GiveItemRequest request);
-        Task<IList<Item>> CreateItemsAsync(IList<CreateItemRequest>? requestItems);
-        Task<Item> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request);
+        Task<IList<ItemEntity>> CreateItemsAsync(IList<CreateItemRequest>? requestItems);
+        Task<ItemEntity> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request);
     }
 
     public class ItemService : IItemService
@@ -72,7 +72,7 @@ namespace Naheulbook.Core.Services
             _itemDataUtil = itemDataUtil;
         }
 
-        public async Task<Item> AddItemToAsync(
+        public async Task<ItemEntity> AddItemToAsync(
             ItemOwnerType ownerType,
             int ownerId,
             CreateItemRequest request
@@ -93,7 +93,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Item> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId)
+        public async Task<ItemEntity> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -117,7 +117,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Item> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData)
+        public async Task<ItemEntity> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -150,7 +150,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Item> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers)
+        public async Task<ItemEntity> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -172,7 +172,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Item> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request)
+        public async Task<ItemEntity> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -194,7 +194,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Item> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request)
+        public async Task<ItemEntity> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -245,7 +245,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<(Item takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request)
+        public async Task<(ItemEntity takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -288,21 +288,21 @@ namespace Naheulbook.Core.Services
             return remainingQuantity;
         }
 
-        public async Task<IList<Item>> CreateItemsAsync(IList<CreateItemRequest>? requestItems)
+        public async Task<IList<ItemEntity>> CreateItemsAsync(IList<CreateItemRequest>? requestItems)
         {
             if (requestItems == null)
-                return new List<Item>();
+                return new List<ItemEntity>();
             if (requestItems.Count == 0)
-                return new List<Item>();
+                return new List<ItemEntity>();
 
-            Dictionary<Guid, ItemTemplate> itemTemplatesById;
+            Dictionary<Guid, ItemTemplateEntity> itemTemplatesById;
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(requestItems.Select(x => x.ItemTemplateId));
                 itemTemplatesById = itemTemplates.ToDictionary(itemTemplate => itemTemplate.Id, itemTemplate => itemTemplate);
             }
 
-            var items = new List<Item>();
+            var items = new List<ItemEntity>();
             foreach (var requestItem in requestItems)
             {
                 if (!itemTemplatesById.TryGetValue(requestItem.ItemTemplateId, out var itemTemplate))
@@ -314,7 +314,7 @@ namespace Naheulbook.Core.Services
             return items;
         }
 
-        public async Task<Item> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request)
+        public async Task<ItemEntity> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

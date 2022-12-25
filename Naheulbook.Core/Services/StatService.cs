@@ -7,7 +7,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IStatService
     {
-        Task<List<Stat>> GetAllStatsAsync();
+        Task<List<StatEntity>> GetAllStatsAsync();
     }
 
     public class StatService : IStatService
@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public async Task<List<Stat>> GetAllStatsAsync()
+        public async Task<List<StatEntity>> GetAllStatsAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

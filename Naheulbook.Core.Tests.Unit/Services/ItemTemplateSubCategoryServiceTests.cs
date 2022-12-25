@@ -63,9 +63,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
             });
         }
 
-        private ItemTemplateSubCategory CreateItemTemplateSubCategoryAsync()
+        private ItemTemplateSubCategoryEntity CreateItemTemplateSubCategoryAsync()
         {
-            return new ItemTemplateSubCategory
+            return new ItemTemplateSubCategoryEntity
             {
                 Name = "some-name",
                 TechName= "some-tech-name",

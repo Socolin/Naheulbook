@@ -33,7 +33,7 @@ namespace Naheulbook.Web.Tests.Unit.Services
         [Test]
         public void CanGenerateATokenUsingConfiguration()
         {
-            var user = new User {Id = 42};
+            var user = new UserEntity {Id = 42};
             var now = new DateTimeOffset(new DateTime(2018, 8, 4, 4, 42, 12, DateTimeKind.Utc));
 
             _timeService.UtcNow

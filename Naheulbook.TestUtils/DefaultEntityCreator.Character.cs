@@ -8,12 +8,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public Character CreateCharacter(int ownerId, Origin origin, string suffix = null)
+        public CharacterEntity CreateCharacter(int ownerId, OriginEntity origin, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Character
+            return new CharacterEntity
             {
                 Name = $"some-character-name-{suffix}",
                 Sex = "Homme",
@@ -44,12 +44,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public CharacterModifier CreateCharacterModifier(IList<CharacterModifierValue> values, string suffix = null)
+        public CharacterModifierEntity CreateCharacterModifier(IList<CharacterModifierValueEntity> values, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new CharacterModifier
+            return new CharacterModifierEntity
             {
                 Name = $"some-character-name-{suffix}",
                 Description = "some-description",
@@ -61,9 +61,9 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public CharacterModifierValue CreateCharacterModifierValue(Stat stat, short value)
+        public CharacterModifierValueEntity CreateCharacterModifierValue(StatEntity stat, short value)
         {
-            return new CharacterModifierValue
+            return new CharacterModifierValueEntity
             {
                 StatName = stat.Name,
                 Value = value,
@@ -71,12 +71,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public CharacterHistoryEntry CreateCharacterHistoryEntry(Character character, string suffix = null)
+        public CharacterHistoryEntryEntity CreateCharacterHistoryEntry(CharacterEntity character, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 Data = "{}",
                 Gm = false,

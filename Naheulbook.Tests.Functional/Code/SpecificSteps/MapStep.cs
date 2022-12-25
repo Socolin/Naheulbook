@@ -26,28 +26,28 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given(@"(a|\d+) maps? with all data")]
         public void GivenXMapWithAllData(string amount)
         {
-            var targetMap = _testDataUtil.AddMap().GetLast<Map>();
+            var targetMap = _testDataUtil.AddMap().GetLast<MapEntity>();
             for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
                 _testDataUtil.AddMap(x =>
                 {
                     x.Layers = new[]
                     {
-                        new MapLayer
+                        new MapLayerEntity
                         {
                             Name = "some-layer-name",
                             Source = "official",
                             IsGm = true,
-                            Markers = new List<MapMarker>
+                            Markers = new List<MapMarkerEntity>
                             {
-                                new MapMarker
+                                new MapMarkerEntity
                                 {
                                     Name = "some-marker-name",
                                     Description = "some-marker-description",
                                     MarkerInfo = "{}",
                                     Type = "point",
-                                    Links = new List<MapMarkerLink>
+                                    Links = new List<MapMarkerLinkEntity>
                                     {
-                                        new MapMarkerLink
+                                        new MapMarkerLinkEntity
                                         {
                                             Name = "some-link-name",
                                             TargetMapId = targetMap.Id
@@ -68,20 +68,20 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 {
                     x.Layers = new[]
                     {
-                        new MapLayer
+                        new MapLayerEntity
                         {
                             Name = "some-layer-name",
                             Source = "official",
                             IsGm = true,
-                            Markers = new List<MapMarker>
+                            Markers = new List<MapMarkerEntity>
                             {
-                                new MapMarker
+                                new MapMarkerEntity
                                 {
                                     Name = "some-marker-name",
                                     Description = "some-marker-description",
                                     MarkerInfo = "{}",
                                     Type = "point",
-                                    Links = new List<MapMarkerLink>()
+                                    Links = new List<MapMarkerLinkEntity>()
                                 }
                             }
                         }
@@ -97,7 +97,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 {
                     x.Layers = new[]
                     {
-                        new MapLayer
+                        new MapLayerEntity
                         {
                             Name = "some-layer-name",
                             Source = "official"

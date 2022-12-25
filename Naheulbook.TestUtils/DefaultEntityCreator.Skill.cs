@@ -7,12 +7,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public Skill CreateSkill(string suffix = null)
+        public SkillEntity CreateSkill(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Skill
+            return new SkillEntity
             {
                 Name = $"some-skill-name-{suffix}",
                 Description = $"some-skill-description-{suffix}",

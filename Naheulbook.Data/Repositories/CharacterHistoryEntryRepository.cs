@@ -3,11 +3,11 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface ICharacterHistoryEntryRepository : IRepository<CharacterHistoryEntry>
+    public interface ICharacterHistoryEntryRepository : IRepository<CharacterHistoryEntryEntity>
     {
     }
 
-    public class CharacterHistoryEntryRepository : Repository<CharacterHistoryEntry, NaheulbookDbContext>, ICharacterHistoryEntryRepository
+    public class CharacterHistoryEntryRepository : Repository<CharacterHistoryEntryEntity, NaheulbookDbContext>, ICharacterHistoryEntryRepository
     {
         public CharacterHistoryEntryRepository(NaheulbookDbContext context)
             : base(context)

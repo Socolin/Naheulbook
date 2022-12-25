@@ -15,7 +15,7 @@ namespace Naheulbook.TestUtils
             return SaveEntity(_defaultEntityCreator.CreateEffectSubCategory(GetLast<EffectType>()), customizer);
         }
 
-        public TestDataUtil AddEffect(Action<Effect> customizer = null)
+        public TestDataUtil AddEffect(Action<EffectEntity> customizer = null)
         {
             return SaveEntity(_defaultEntityCreator.CreateEffect(GetLast<EffectSubCategory>()), customizer);
         }

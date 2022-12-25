@@ -37,7 +37,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateSection_CallItemSectionService()
         {
             var createItemTemplateSectionRequest = new CreateItemTemplateSectionRequest();
-            var itemTemplateSection = new ItemTemplateSection();
+            var itemTemplateSection = new ItemTemplateSectionEntity();
             var itemTemplateSectionResponse = new ItemTemplateSectionResponse();
 
             _itemTemplateSectionService.CreateItemTemplateSectionAsync(_executionContext, createItemTemplateSectionRequest)
@@ -55,7 +55,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateSection_WhenCatchForbiddenAccessException_Return403()
         {
             _itemTemplateSectionService.CreateItemTemplateSectionAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateSectionRequest>())
-                .Returns(Task.FromException<ItemTemplateSection>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<ItemTemplateSectionEntity>(new ForbiddenAccessException()));
 
             Func<Task<JsonResult>> act = () => _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, new CreateItemTemplateSectionRequest());
 

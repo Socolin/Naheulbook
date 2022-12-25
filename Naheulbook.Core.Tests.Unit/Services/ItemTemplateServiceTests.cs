@@ -48,7 +48,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task GetItemTemplateAsync_LoadItemTemplateFromDbWithFullData_AndReturnsIt()
         {
             var itemTemplateId = Guid.NewGuid();
-            var expectedItemTemplate = new ItemTemplate();
+            var expectedItemTemplate = new ItemTemplateEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
                 .Returns(expectedItemTemplate);
@@ -63,7 +63,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var itemTemplateId = Guid.NewGuid();
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
-                .Returns((ItemTemplate) null);
+                .Returns((ItemTemplateEntity) null);
 
             Func<Task> act = () => _service.GetItemTemplateAsync(itemTemplateId);
 
@@ -74,11 +74,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task CreateItemTemplate_AddANewItemTemplateInDatabase_AndReturnFullyLoadedOne()
         {
             var itemTemplateId = Guid.NewGuid();
-            var newItemTemplateEntity = new ItemTemplate {Id = itemTemplateId};
-            var fullyLoadedItemTemplate = new ItemTemplate {Id = itemTemplateId};
+            var newItemTemplateEntity = new ItemTemplateEntity {Id = itemTemplateId};
+            var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
             var createItemTemplateRequest = new ItemTemplateRequest();
 
-            _mapper.Map<ItemTemplate>(createItemTemplateRequest)
+            _mapper.Map<ItemTemplateEntity>(createItemTemplateRequest)
                 .Returns(newItemTemplateEntity);
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
                 .Returns(fullyLoadedItemTemplate);
@@ -103,7 +103,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _authorizationUtil.EnsureAdminAccessAsync(executionContext)
                 .Throws(new TestException());
 
-            Func<Task<ItemTemplate>> act = () => _service.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
+            Func<Task<ItemTemplateEntity>> act = () => _service.CreateItemTemplateAsync(executionContext, createItemTemplateRequest);
 
             await act.Should().ThrowAsync<TestException>();
             await _unitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
@@ -115,9 +115,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var itemTemplateId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext {UserId = 42};
             var createItemTemplateRequest = new ItemTemplateRequest {Source = "non-official"};
-            var newItemTemplateEntity = new ItemTemplate {Id = itemTemplateId};
+            var newItemTemplateEntity = new ItemTemplateEntity {Id = itemTemplateId};
 
-            _mapper.Map<ItemTemplate>(createItemTemplateRequest)
+            _mapper.Map<ItemTemplateEntity>(createItemTemplateRequest)
                 .Returns(newItemTemplateEntity);
             _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
                 .Do(_ => newItemTemplateEntity.SourceUserId.Should().Be(42));
@@ -132,7 +132,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var itemTemplateId = Guid.NewGuid();
             var itemTemplateRequest = new ItemTemplateRequest();
-            var fullyLoadedItemTemplate = new ItemTemplate {Id = itemTemplateId};
+            var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
                 .Returns(fullyLoadedItemTemplate);
@@ -152,7 +152,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int userId = 17;
             var itemTemplateId = Guid.NewGuid();
             var itemTemplateRequest = new ItemTemplateRequest {Source = "private"};
-            var fullyLoadedItemTemplate = new ItemTemplate {Id = itemTemplateId};
+            var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = userId};
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
@@ -170,7 +170,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var itemTemplateId = Guid.NewGuid();
             var itemTemplateRequest = new ItemTemplateRequest {Source = "official"};
-            var fullyLoadedItemTemplate = new ItemTemplate {Id = itemTemplateId};
+            var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
@@ -188,14 +188,14 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var itemTemplateId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext();
-            var fullyLoadedItemTemplate = new ItemTemplate {Id = itemTemplateId};
+            var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
                 .Returns(fullyLoadedItemTemplate);
             _authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, fullyLoadedItemTemplate)
                 .Returns(Task.FromException(new TestException()));
 
-            Func<Task<ItemTemplate>> act = () => _service.EditItemTemplateAsync(executionContext, itemTemplateId, new ItemTemplateRequest());
+            Func<Task<ItemTemplateEntity>> act = () => _service.EditItemTemplateAsync(executionContext, itemTemplateId, new ItemTemplateRequest());
 
             using (new AssertionScope())
             {
@@ -211,14 +211,14 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var itemTemplateId = Guid.NewGuid();
             var executionContext = new NaheulbookExecutionContext();
             var request = new ItemTemplateRequest {Source = "official"};
-            var fullyLoadedItemTemplate = new ItemTemplate {Id = itemTemplateId, Source = "private"};
+            var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId, Source = "private"};
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
                 .Returns(fullyLoadedItemTemplate);
             _authorizationUtil.EnsureAdminAccessAsync(executionContext)
                 .Returns(Task.FromException(new TestException()));
 
-            Func<Task<ItemTemplate>> act = () => _service.EditItemTemplateAsync(executionContext, itemTemplateId, request);
+            Func<Task<ItemTemplateEntity>> act = () => _service.EditItemTemplateAsync(executionContext, itemTemplateId, request);
 
             using (new AssertionScope())
             {
@@ -237,20 +237,20 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var itemTemplateId2 = Guid.NewGuid();
             var itemTemplateId3 = Guid.NewGuid();
 
-            var item1 = new ItemTemplate {Id = itemTemplateId1};
-            var item2 = new ItemTemplate {Id = itemTemplateId2};
-            var item3 = new ItemTemplate {Id = itemTemplateId3};
+            var item1 = new ItemTemplateEntity {Id = itemTemplateId1};
+            var item2 = new ItemTemplateEntity {Id = itemTemplateId2};
+            var item3 = new ItemTemplateEntity {Id = itemTemplateId3};
 
             _stringCleanupUtil.RemoveAccents(filter)
                 .Returns(cleanFilter);
             _stringCleanupUtil.RemoveSeparators(cleanFilter)
                 .Returns(cleanFilterWithoutSeparator);
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByCleanNameWithAllDataAsync(cleanFilter, Arg.Any<int>(), Arg.Any<int?>(), Arg.Any<bool>())
-                .Returns(new List<ItemTemplate> {item1});
+                .Returns(new List<ItemTemplateEntity> {item1});
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithAllDataAsync(cleanFilter, Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
-                .Returns(new List<ItemTemplate> {item2});
+                .Returns(new List<ItemTemplateEntity> {item2});
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(cleanFilterWithoutSeparator, Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
-                .Returns(new List<ItemTemplate> {item3});
+                .Returns(new List<ItemTemplateEntity> {item3});
 
             var actualItemTemplates = await _service.SearchItemTemplateAsync(filter, 40, null);
 
@@ -265,11 +265,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
             _stringCleanupUtil.RemoveSeparators(Arg.Any<string>())
                 .Returns("some-clean-name-with-no-separator");
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByCleanNameWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<int?>(), Arg.Any<bool>())
-                .Returns(new List<ItemTemplate> {new ItemTemplate(), new ItemTemplate()});
+                .Returns(new List<ItemTemplateEntity> {new ItemTemplateEntity(), new ItemTemplateEntity()});
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
-                .Returns(new List<ItemTemplate> {new ItemTemplate(), new ItemTemplate(), new ItemTemplate()});
+                .Returns(new List<ItemTemplateEntity> {new ItemTemplateEntity(), new ItemTemplateEntity(), new ItemTemplateEntity()});
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
-                .Returns(new List<ItemTemplate> {new ItemTemplate()});
+                .Returns(new List<ItemTemplateEntity> {new ItemTemplateEntity()});
 
             await _service.SearchItemTemplateAsync("some-filter", 10, null);
 

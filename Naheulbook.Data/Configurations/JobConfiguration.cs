@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class JobConfiguration : IEntityTypeConfiguration<Job>
+    public class JobConfiguration : IEntityTypeConfiguration<JobEntity>
     {
-        public void Configure(EntityTypeBuilder<Job> builder)
+        public void Configure(EntityTypeBuilder<JobEntity> builder)
         {
             builder.ToTable("jobs");
 
@@ -73,9 +73,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class JobRequirementConfiguration : IEntityTypeConfiguration<JobRequirement>
+    public class JobRequirementConfiguration : IEntityTypeConfiguration<JobRequirementEntity>
     {
-        public void Configure(EntityTypeBuilder<JobRequirement> builder)
+        public void Configure(EntityTypeBuilder<JobRequirementEntity> builder)
         {
             builder.ToTable("job_requirements");
 
@@ -116,9 +116,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class JobRestrictionConfiguration : IEntityTypeConfiguration<JobRestriction>
+    public class JobRestrictionConfiguration : IEntityTypeConfiguration<JobRestrictionEntity>
     {
-        public void Configure(EntityTypeBuilder<JobRestriction> builder)
+        public void Configure(EntityTypeBuilder<JobRestrictionEntity> builder)
         {
             builder.ToTable("job_restrictions");
 

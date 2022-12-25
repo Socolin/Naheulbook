@@ -8,16 +8,16 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IEffectRepository : IRepository<Effect>
+    public interface IEffectRepository : IRepository<EffectEntity>
     {
         Task<ICollection<EffectType>> GetCategoriesAsync();
-        Task<ICollection<Effect>> GetBySubCategoryWithModifiersAsync(long subCategoryId);
-        Task<Effect?> GetWithModifiersAsync(int effectId);
-        Task<List<Effect>> SearchByNameAsync(string partialName, int maxResult);
-        Task<Effect?> GetWithEffectWithModifiersAsync(int effectId);
+        Task<ICollection<EffectEntity>> GetBySubCategoryWithModifiersAsync(long subCategoryId);
+        Task<EffectEntity?> GetWithModifiersAsync(int effectId);
+        Task<List<EffectEntity>> SearchByNameAsync(string partialName, int maxResult);
+        Task<EffectEntity?> GetWithEffectWithModifiersAsync(int effectId);
     }
 
-    public class EffectRepository : Repository<Effect, NaheulbookDbContext>, IEffectRepository
+    public class EffectRepository : Repository<EffectEntity, NaheulbookDbContext>, IEffectRepository
     {
         public EffectRepository(NaheulbookDbContext naheulbookDbContext)
             : base(naheulbookDbContext)
@@ -31,7 +31,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<ICollection<Effect>> GetBySubCategoryWithModifiersAsync(long subCategoryId)
+        public async Task<ICollection<EffectEntity>> GetBySubCategoryWithModifiersAsync(long subCategoryId)
         {
             return await Context.Effects
                 .Where(e => e.SubCategoryId == subCategoryId)
@@ -39,14 +39,14 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Effect?> GetWithModifiersAsync(int effectId)
+        public Task<EffectEntity?> GetWithModifiersAsync(int effectId)
         {
             return Context.Effects
                 .Include(e => e.Modifiers)
                 .FirstAsync(e => e.Id == effectId);
         }
 
-        public Task<List<Effect>> SearchByNameAsync(string partialName, int maxResult)
+        public Task<List<EffectEntity>> SearchByNameAsync(string partialName, int maxResult)
         {
             return Context.Effects
                 .Include(e => e.Modifiers)
@@ -55,7 +55,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Effect?> GetWithEffectWithModifiersAsync(int effectId)
+        public Task<EffectEntity?> GetWithEffectWithModifiersAsync(int effectId)
         {
             return Context.Effects
                 .Include(e => e.SubCategory)

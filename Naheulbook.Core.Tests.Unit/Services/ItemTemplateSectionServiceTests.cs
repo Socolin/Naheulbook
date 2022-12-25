@@ -71,8 +71,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int sectionId = 8;
             const int userId = 12;
-            var allSectionItemTemplates = new List<ItemTemplate> {new ItemTemplate(), new ItemTemplate()};
-            var filteredItemTemplate = new List<ItemTemplate> {new ItemTemplate()};
+            var allSectionItemTemplates = new List<ItemTemplateEntity> {new ItemTemplateEntity(), new ItemTemplateEntity()};
+            var filteredItemTemplate = new List<ItemTemplateEntity> {new ItemTemplateEntity()};
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId)
                 .Returns(allSectionItemTemplates);
@@ -84,15 +84,15 @@ namespace Naheulbook.Core.Tests.Unit.Services
             actualItemTemplates.Should().BeEquivalentTo(filteredItemTemplate);
         }
 
-        private ItemTemplateSection CreateItemTemplateSection()
+        private ItemTemplateSectionEntity CreateItemTemplateSection()
         {
-            return new ItemTemplateSection
+            return new ItemTemplateSectionEntity
             {
                 Name = "some-name",
                 Special = "some-specials0,some-specials1,some-specials2",
                 Note = "some-note",
                 Icon = "some-icon",
-                SubCategories = new List<ItemTemplateSubCategory>()
+                SubCategories = new List<ItemTemplateSubCategoryEntity>()
             };
         }
     }

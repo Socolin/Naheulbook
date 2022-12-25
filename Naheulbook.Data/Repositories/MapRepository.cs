@@ -6,19 +6,19 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IMapRepository : IRepository<Map>
+    public interface IMapRepository : IRepository<MapEntity>
     {
-        Task<Map?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId);
+        Task<MapEntity?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId);
     }
 
-    public class MapRepository : Repository<Map, NaheulbookDbContext>, IMapRepository
+    public class MapRepository : Repository<MapEntity, NaheulbookDbContext>, IMapRepository
     {
         public MapRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public async Task<Map?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId)
+        public async Task<MapEntity?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId)
         {
             var map = await Context.Maps
                 .Where(m => m.Id == mapId)

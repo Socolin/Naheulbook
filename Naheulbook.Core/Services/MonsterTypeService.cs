@@ -10,9 +10,9 @@ namespace Naheulbook.Core.Services
 {
     public interface IMonsterTypeService
     {
-        Task<List<MonsterType>> GetMonsterTypesWithCategoriesAsync();
-        Task<MonsterType> CreateMonsterTypeAsync(NaheulbookExecutionContext executionContext, CreateMonsterTypeRequest request);
-        Task<MonsterSubCategory> CreateMonsterSubCategoryAsync(NaheulbookExecutionContext executionContext, int monsterTypeId, CreateMonsterSubCategoryRequest request);
+        Task<List<MonsterTypeEntity>> GetMonsterTypesWithCategoriesAsync();
+        Task<MonsterTypeEntity> CreateMonsterTypeAsync(NaheulbookExecutionContext executionContext, CreateMonsterTypeRequest request);
+        Task<MonsterSubCategoryEntity> CreateMonsterSubCategoryAsync(NaheulbookExecutionContext executionContext, int monsterTypeId, CreateMonsterSubCategoryRequest request);
     }
 
     public class MonsterTypeService : IMonsterTypeService
@@ -29,7 +29,7 @@ namespace Naheulbook.Core.Services
             _authorizationUtil = authorizationUtil;
         }
 
-        public async Task<List<MonsterType>> GetMonsterTypesWithCategoriesAsync()
+        public async Task<List<MonsterTypeEntity>> GetMonsterTypesWithCategoriesAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -37,7 +37,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<MonsterType> CreateMonsterTypeAsync(
+        public async Task<MonsterTypeEntity> CreateMonsterTypeAsync(
             NaheulbookExecutionContext executionContext,
             CreateMonsterTypeRequest request
         )
@@ -46,10 +46,10 @@ namespace Naheulbook.Core.Services
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var monsterType = new MonsterType
+                var monsterType = new MonsterTypeEntity
                 {
                     Name = request.Name,
-                    SubCategories = new List<MonsterSubCategory>()
+                    SubCategories = new List<MonsterSubCategoryEntity>()
                 };
 
                 uow.MonsterTypes.Add(monsterType);
@@ -59,7 +59,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<MonsterSubCategory> CreateMonsterSubCategoryAsync(
+        public async Task<MonsterSubCategoryEntity> CreateMonsterSubCategoryAsync(
             NaheulbookExecutionContext executionContext,
             int monsterTypeId,
             CreateMonsterSubCategoryRequest request
@@ -69,7 +69,7 @@ namespace Naheulbook.Core.Services
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var monsterSubCategory = new MonsterSubCategory
+                var monsterSubCategory = new MonsterSubCategoryEntity
                 {
                     Name = request.Name,
                     TypeId = monsterTypeId

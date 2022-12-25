@@ -5,12 +5,12 @@ namespace Naheulbook.Core.Actions
 {
     public class ActionContext
     {
-        public Item UsedItem { get; }
-        public Character SourceCharacter { get; }
-        public Character TargetCharacter { get; }
+        public ItemEntity UsedItem { get; }
+        public CharacterEntity SourceCharacter { get; }
+        public CharacterEntity TargetCharacter { get; }
         public IUnitOfWork UnitOfWork { get; }
 
-        public ActionContext(Item usedItem, Character sourceCharacter, Character targetCharacter, IUnitOfWork unitOfWork)
+        public ActionContext(ItemEntity usedItem, CharacterEntity sourceCharacter, CharacterEntity targetCharacter, IUnitOfWork unitOfWork)
         {
             UsedItem = usedItem;
             SourceCharacter = sourceCharacter;

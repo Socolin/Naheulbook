@@ -67,12 +67,12 @@ namespace Naheulbook.Tests.Functional.Code.Steps
             var hasUtil = new PasswordHashingService();
             _testDataUtil.AddUser(u => u.HashedPassword = hasUtil.HashPassword("some-password"));
 
-            _scenarioContext.SetUsername(_testDataUtil.GetLast<User>().Username);
+            _scenarioContext.SetUsername(_testDataUtil.GetLast<UserEntity>().Username);
             _scenarioContext.SetPassword("some-password");
-            _scenarioContext.SetUserId(_testDataUtil.GetLast<User>().Id);
+            _scenarioContext.SetUserId(_testDataUtil.GetLast<UserEntity>().Id);
 
             var jwtService = new JwtService(new AuthenticationConfiguration {JwtSigningKey = NaheulbookApiServer.JwtSigningKey, JwtExpirationDelayInMinutes = 10}, new TimeService());
-            var jwt = jwtService.GenerateJwtToken(_testDataUtil.GetLast<User>().Id);
+            var jwt = jwtService.GenerateJwtToken(_testDataUtil.GetLast<UserEntity>().Id);
 
             _scenarioContext.SetJwt(jwt);
         }
@@ -87,12 +87,12 @@ namespace Naheulbook.Tests.Functional.Code.Steps
                 u.Admin = true;
             });
 
-            _scenarioContext.SetUsername(_testDataUtil.GetLast<User>().Username);
+            _scenarioContext.SetUsername(_testDataUtil.GetLast<UserEntity>().Username);
             _scenarioContext.SetPassword("some-password");
-            _scenarioContext.SetUserId(_testDataUtil.GetLast<User>().Id);
+            _scenarioContext.SetUserId(_testDataUtil.GetLast<UserEntity>().Id);
 
             var jwtService = new JwtService(new AuthenticationConfiguration {JwtSigningKey = NaheulbookApiServer.JwtSigningKey, JwtExpirationDelayInMinutes = 10}, new TimeService());
-            var jwt = jwtService.GenerateJwtToken(_testDataUtil.GetLast<User>().Id);
+            var jwt = jwtService.GenerateJwtToken(_testDataUtil.GetLast<UserEntity>().Id);
 
             _scenarioContext.SetJwt(jwt);
         }
@@ -116,7 +116,7 @@ namespace Naheulbook.Tests.Functional.Code.Steps
         [Given("that the owner of the character allow to appear in searches")]
         public void GivenThatTheOwnerOfTheCharacterAllowToAppearInSearches()
         {
-            _testDataUtil.Get<Character>().Owner.ShowInSearchUntil = DateTime.UtcNow.AddDays(1);
+            _testDataUtil.Get<CharacterEntity>().Owner.ShowInSearchUntil = DateTime.UtcNow.AddDays(1);
             _testDataUtil.SaveChanges();
         }
 

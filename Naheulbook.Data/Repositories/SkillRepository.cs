@@ -6,19 +6,19 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface ISkillRepository : IRepository<Skill>
+    public interface ISkillRepository : IRepository<SkillEntity>
     {
-        Task<ICollection<Skill>> GetAllWithEffectsAsync();
+        Task<ICollection<SkillEntity>> GetAllWithEffectsAsync();
     }
 
-    public class SkillRepository : Repository<Skill, NaheulbookDbContext>, ISkillRepository
+    public class SkillRepository : Repository<SkillEntity, NaheulbookDbContext>, ISkillRepository
     {
         public SkillRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public async Task<ICollection<Skill>> GetAllWithEffectsAsync()
+        public async Task<ICollection<SkillEntity>> GetAllWithEffectsAsync()
         {
             return await Context.Skills
                 .Include(s => s.SkillEffects)

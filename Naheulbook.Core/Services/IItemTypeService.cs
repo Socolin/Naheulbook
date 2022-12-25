@@ -7,7 +7,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IItemTypeService
     {
-        Task<List<ItemType>> GetAllItemTypesAsync();
+        Task<List<ItemTypeEntity>> GetAllItemTypesAsync();
     }
 
     public class ItemTypeService : IItemTypeService
@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public async Task<List<ItemType>> GetAllItemTypesAsync()
+        public async Task<List<ItemTypeEntity>> GetAllItemTypesAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

@@ -72,10 +72,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterId = 10;
             var itemTemplateId = Guid.NewGuid();
             var itemData = new ItemData();
-            var itemTemplate = new ItemTemplate();
+            var itemTemplate = new ItemTemplateEntity();
             var request = new CreateItemRequest {ItemData = itemData, ItemTemplateId = itemTemplateId};
-            var createdItem = new Item {Id = itemId};
-            var fullyLoadedItem = new Item();
+            var createdItem = new ItemEntity {Id = itemId};
+            var fullyLoadedItem = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetAsync(itemTemplateId)
                 .Returns(itemTemplate);
@@ -126,7 +126,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterId = 8;
             var itemData = new ItemData {Quantity = newQuantity};
             var item = GivenAnItem(new ItemData {Quantity = currentQuantity}, characterId);
-            var characterHistoryEntry = new CharacterHistoryEntry();
+            var characterHistoryEntry = new CharacterHistoryEntryEntity();
 
             _jsonUtil.Serialize(itemData)
                 .Returns("some-new-item-data-json");
@@ -147,7 +147,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int itemId = 4;
             var executionContext = new NaheulbookExecutionContext();
-            var item = new Item();
+            var item = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
@@ -164,7 +164,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task UpdateItemDataAsync_ShouldCallChangeNotifier()
         {
             const int itemId = 4;
-            var item = new Item();
+            var item = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
@@ -184,7 +184,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int itemId = 4;
             var itemModifiers = new List<ActiveStatsModifier>();
             var itemModifiersJson = "some-json";
-            var item = new Item();
+            var item = new ItemEntity();
 
             _jsonUtil.Serialize(itemModifiers)
                 .Returns(itemModifiersJson);
@@ -204,7 +204,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int itemId = 4;
             var executionContext = new NaheulbookExecutionContext();
-            var item = new Item();
+            var item = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
@@ -221,7 +221,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task UpdateItemModifiersAsync_ShouldCallChangeNotifier()
         {
             const int itemId = 4;
-            var item = new Item();
+            var item = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
@@ -240,7 +240,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int itemId = 4;
             var equipRequest = new EquipItemRequest {Level = 24};
-            var item = new Item();
+            var item = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
@@ -258,7 +258,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int itemId = 4;
             var executionContext = new NaheulbookExecutionContext();
-            var item = new Item();
+            var item = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
@@ -275,7 +275,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task EquipItemAsync_ShouldCallChangeNotifier()
         {
             const int itemId = 4;
-            var item = new Item();
+            var item = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
@@ -296,7 +296,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int itemId = 4;
             const int containerId = 8;
             var equipRequest = new ChangeItemContainerRequest {ContainerId = containerId};
-            var item = new Item();
+            var item = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
@@ -313,7 +313,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task ChangeItemContainerAsync_ShouldThrowIfItemIsNotFound()
         {
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(Arg.Any<int>())
-                .Returns((Item) null);
+                .Returns((ItemEntity) null);
 
             Func<Task> act = () => _service.ChangeItemContainerAsync(new NaheulbookExecutionContext(), 4, new ChangeItemContainerRequest());
 
@@ -325,7 +325,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int itemId = 4;
             var executionContext = new NaheulbookExecutionContext();
-            var item = new Item();
+            var item = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
@@ -342,7 +342,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task ChangeItemContainerAsync_ShouldCallChangeNotifier()
         {
             const int itemId = 4;
-            var item = new Item();
+            var item = new ItemEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Items.GetWithOwnerAsync(itemId)
                 .Returns(item);
@@ -379,7 +379,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             };
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Any<IEnumerable<Guid>>())
-                .Returns(new List<ItemTemplate>());
+                .Returns(new List<ItemTemplateEntity>());
 
             Func<Task> act = () => _service.CreateItemsAsync(createItemRequests);
 
@@ -394,10 +394,10 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             var itemData1 = new ItemData();
             var itemData2 = new ItemData();
-            var itemTemplate1 = new ItemTemplate {Id = itemTemplateId1};
-            var itemTemplate2 = new ItemTemplate {Id = itemTemplateId2};
-            var item1 = new Item();
-            var item2 = new Item();
+            var itemTemplate1 = new ItemTemplateEntity {Id = itemTemplateId1};
+            var itemTemplate2 = new ItemTemplateEntity {Id = itemTemplateId2};
+            var item1 = new ItemEntity();
+            var item2 = new ItemEntity();
 
             var createItemRequests = new List<CreateItemRequest>
             {
@@ -406,7 +406,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             };
 
             _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<Guid>>(ids => ids.SequenceEqual(new[] {itemTemplateId1, itemTemplateId2})))
-                .Returns(new List<ItemTemplate> {itemTemplate1, itemTemplate2});
+                .Returns(new List<ItemTemplateEntity> {itemTemplate1, itemTemplate2});
             _itemFactory.CreateItem(itemTemplate1, itemData1)
                 .Returns(item1);
             _itemFactory.CreateItem(itemTemplate2, itemData2)
@@ -418,14 +418,14 @@ namespace Naheulbook.Core.Tests.Unit.Services
             result.ElementAt(1).Should().BeSameAs(item2);
         }
 
-        private Item GivenAnItem(ItemData itemData = null, int? characterId = null)
+        private ItemEntity GivenAnItem(ItemData itemData = null, int? characterId = null)
         {
-            var item = new Item
+            var item = new ItemEntity
             {
                 CharacterId = characterId,
                 Character = !characterId.HasValue
                     ? null
-                    : new Character
+                    : new CharacterEntity
                     {
                         Id = characterId.Value
                     }

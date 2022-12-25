@@ -8,7 +8,7 @@ namespace Naheulbook.Core.Utils
 {
     public interface IOriginUtil
     {
-        bool HasFlag(Origin origin, string chaLvl2Lvl3);
+        bool HasFlag(OriginEntity origin, string chaLvl2Lvl3);
     }
 
     public class OriginUtil : IOriginUtil
@@ -20,7 +20,7 @@ namespace Naheulbook.Core.Utils
             _jsonUtil = jsonUtil;
         }
 
-        public bool HasFlag(Origin origin, string flagName)
+        public bool HasFlag(OriginEntity origin, string flagName)
         {
             var originFlags = _jsonUtil.Deserialize<IList<NhbkFlag>>(origin.Flags) ?? new List<NhbkFlag>();
             if (originFlags.Any(f => f.Type == flagName))

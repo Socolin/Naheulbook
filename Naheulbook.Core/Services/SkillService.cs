@@ -7,7 +7,7 @@ namespace Naheulbook.Core.Services
 {
     public interface ISkillService
     {
-        Task<ICollection<Skill>> GetSkillsAsync();
+        Task<ICollection<SkillEntity>> GetSkillsAsync();
     }
 
     public class SkillService : ISkillService
@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public async Task<ICollection<Skill>> GetSkillsAsync()
+        public async Task<ICollection<SkillEntity>> GetSkillsAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

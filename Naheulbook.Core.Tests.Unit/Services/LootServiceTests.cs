@@ -46,7 +46,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 42;
             var createLootRequest = new CreateLootRequest {Name = "some-name"};
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new Group {Id = groupId};
+            var group = new GroupEntity {Id = groupId};
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -69,7 +69,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(42)
-                .Returns((Group) null);
+                .Returns((GroupEntity) null);
 
             Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, 42, new CreateLootRequest());
 
@@ -81,7 +81,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 42;
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
-            var group = new Group {Id = groupId};
+            var group = new GroupEntity {Id = groupId};
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -99,8 +99,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 42;
             var executionContext = new NaheulbookExecutionContext();
-            var group = new Group {Id = groupId};
-            var expectedLoots = new List<Loot>();
+            var group = new GroupEntity {Id = groupId};
+            var expectedLoots = new List<LootEntity>();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -119,7 +119,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns((Group) null);
+                .Returns((GroupEntity) null);
 
             Func<Task> act = () => _service.GetLootsForGroupAsync(executionContext, groupId);
 
@@ -131,7 +131,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 42;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new Group {Id = groupId};
+            var group = new GroupEntity {Id = groupId};
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);

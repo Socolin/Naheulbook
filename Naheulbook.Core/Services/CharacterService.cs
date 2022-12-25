@@ -15,20 +15,20 @@ namespace Naheulbook.Core.Services
 {
     public interface ICharacterService
     {
-        Task<List<Character>> GetCharacterListAsync(NaheulbookExecutionContext executionContext);
-        Task<Character> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request);
-        Task<Character> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request);
-        Task<Character> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId);
-        Task<Item> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request);
-        Task<List<Loot>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId);
+        Task<List<CharacterEntity>> GetCharacterListAsync(NaheulbookExecutionContext executionContext);
+        Task<CharacterEntity> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request);
+        Task<CharacterEntity> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request);
+        Task<CharacterEntity> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId);
+        Task<ItemEntity> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request);
+        Task<List<LootEntity>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId);
         Task<List<IHistoryEntry>> GetCharacterHistoryEntryAsync(NaheulbookExecutionContext executionContext, int characterId, int page);
         Task<bool> EnsureUserCanAccessCharacterAndGetIfIsGroupMasterAsync(NaheulbookExecutionContext executionContext, int characterId);
         Task UpdateCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterRequest request);
         Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request);
-        Task<CharacterModifier> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request);
+        Task<CharacterModifierEntity> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request);
         Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
-        Task<CharacterModifier> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
-        Task<List<Character>> SearchCharactersAsync(string filter);
+        Task<CharacterModifierEntity> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
+        Task<List<CharacterEntity>> SearchCharactersAsync(string filter);
         Task<LevelUpResult> LevelUpCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterLevelUpRequest request);
         Task AddJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterAddJobRequest request);
         Task RemoveJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterRemoveJobRequest request);
@@ -73,7 +73,7 @@ namespace Naheulbook.Core.Services
             _itemUtil = itemUtil;
         }
 
-        public async Task<List<Character>> GetCharacterListAsync(NaheulbookExecutionContext executionContext)
+        public async Task<List<CharacterEntity>> GetCharacterListAsync(NaheulbookExecutionContext executionContext)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -81,7 +81,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Character> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request)
+        public async Task<CharacterEntity> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -107,7 +107,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Character> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request)
+        public async Task<CharacterEntity> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request)
         {
             using var uow = _unitOfWorkFactory.CreateUnitOfWork();
 
@@ -130,7 +130,7 @@ namespace Naheulbook.Core.Services
             return character;
         }
 
-        public async Task<Character> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId)
+        public async Task<CharacterEntity> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -144,7 +144,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Item> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request)
+        public async Task<ItemEntity> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -170,7 +170,7 @@ namespace Naheulbook.Core.Services
             return item;
         }
 
-        public async Task<List<Loot>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId)
+        public async Task<List<LootEntity>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -181,7 +181,7 @@ namespace Naheulbook.Core.Services
                 _authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
                 if (!character.GroupId.HasValue)
-                    return new List<Loot>();
+                    return new List<LootEntity>();
 
                 return await uow.Loots.GetLootsVisibleByCharactersOfGroupAsync(character.GroupId.Value);
             }
@@ -258,7 +258,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<CharacterModifier> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request)
+        public async Task<CharacterModifierEntity> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -268,7 +268,7 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-                var characterModifier = _mapper.Map<CharacterModifier>(request);
+                var characterModifier = _mapper.Map<CharacterModifierEntity>(request);
                 characterModifier.Character = character;
 
                 uow.CharacterModifiers.Add(characterModifier);
@@ -311,7 +311,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<CharacterModifier> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId)
+        public async Task<CharacterModifierEntity> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -337,10 +337,10 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<Character>> SearchCharactersAsync(string filter)
+        public async Task<List<CharacterEntity>> SearchCharactersAsync(string filter)
         {
             if (string.IsNullOrEmpty(filter))
-                return new List<Character>();
+                return new List<CharacterEntity>();
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -401,7 +401,7 @@ namespace Naheulbook.Core.Services
                 if (job == null)
                     throw new JobNotFoundException(request.JobId);
 
-                character.Jobs.Add(new CharacterJob
+                character.Jobs.Add(new CharacterJobEntity
                 {
                     Job = job
                 });

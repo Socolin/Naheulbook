@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class MapConfiguration : IEntityTypeConfiguration<Map>
+    public class MapConfiguration : IEntityTypeConfiguration<MapEntity>
     {
-        public void Configure(EntityTypeBuilder<Map> builder)
+        public void Configure(EntityTypeBuilder<MapEntity> builder)
         {
             builder.ToTable("maps");
 
@@ -28,9 +28,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class MapLayerConfiguration : IEntityTypeConfiguration<MapLayer>
+    public class MapLayerConfiguration : IEntityTypeConfiguration<MapLayerEntity>
     {
-        public void Configure(EntityTypeBuilder<MapLayer> builder)
+        public void Configure(EntityTypeBuilder<MapLayerEntity> builder)
         {
             builder.ToTable("map_layers");
 
@@ -60,9 +60,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class MapMarkerConfiguration : IEntityTypeConfiguration<MapMarker>
+    public class MapMarkerConfiguration : IEntityTypeConfiguration<MapMarkerEntity>
     {
-        public void Configure(EntityTypeBuilder<MapMarker> builder)
+        public void Configure(EntityTypeBuilder<MapMarkerEntity> builder)
         {
             builder.ToTable("map_markers");
 
@@ -96,9 +96,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class MapMarkerLinkConfiguration : IEntityTypeConfiguration<MapMarkerLink>
+    public class MapMarkerLinkConfiguration : IEntityTypeConfiguration<MapMarkerLinkEntity>
     {
-        public void Configure(EntityTypeBuilder<MapMarkerLink> builder)
+        public void Configure(EntityTypeBuilder<MapMarkerLinkEntity> builder)
         {
             builder.ToTable("map_marker_links");
 

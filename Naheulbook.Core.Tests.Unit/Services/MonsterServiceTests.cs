@@ -57,7 +57,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 42;
             var request = CreateRequest();
             var executionContext = new NaheulbookExecutionContext();
-            var group = new Group {Id = groupId};
+            var group = new GroupEntity {Id = groupId};
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -75,7 +75,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
 
-            actualMonster.Should().BeEquivalentTo(new Monster
+            actualMonster.Should().BeEquivalentTo(new MonsterEntity
             {
                 Name = "some-monster-name",
                 Data = "some-json-data",
@@ -92,9 +92,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var request = CreateRequest();
             request.Items = new List<CreateItemRequest> {new CreateItemRequest()};
             var executionContext = new NaheulbookExecutionContext();
-            var group = new Group {Id = groupId};
-            var items = new List<Item> {new Item {Id = itemId}};
-            var fullyLoadedItems = new List<Item>();
+            var group = new GroupEntity {Id = groupId};
+            var items = new List<ItemEntity> {new ItemEntity {Id = itemId}};
+            var fullyLoadedItems = new List<ItemEntity>();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -121,7 +121,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns((Group) null);
+                .Returns((GroupEntity) null);
 
             Func<Task> act = () => _service.CreateMonsterAsync(executionContext, groupId, request);
 
@@ -133,7 +133,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 42;
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
-            var group = new Group {Id = groupId};
+            var group = new GroupEntity {Id = groupId};
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -152,8 +152,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 42;
             var executionContext = new NaheulbookExecutionContext();
-            var group = new Group {Id = groupId};
-            var expectedMonsters = new List<Monster>();
+            var group = new GroupEntity {Id = groupId};
+            var expectedMonsters = new List<MonsterEntity>();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -172,7 +172,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns((Group) null);
+                .Returns((GroupEntity) null);
 
             Func<Task> act = () => _service.GetMonstersForGroupAsync(executionContext, groupId);
 
@@ -184,7 +184,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 42;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new Group {Id = groupId};
+            var group = new GroupEntity {Id = groupId};
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);

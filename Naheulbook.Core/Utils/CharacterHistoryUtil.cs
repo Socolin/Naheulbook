@@ -6,27 +6,27 @@ namespace Naheulbook.Core.Utils
 {
     public interface ICharacterHistoryUtil
     {
-        CharacterHistoryEntry CreateLogChangeEv(Character character, int? oldValue, int? newValue);
-        CharacterHistoryEntry CreateLogChangeEa(Character character, int? oldValue, int? newValue);
-        CharacterHistoryEntry CreateLogChangeFatePoint(Character character, short oldValue, short? newValue);
-        CharacterHistoryEntry CreateLogChangeExperience(Character character, int oldValue, int? newValue);
-        CharacterHistoryEntry CreateLogChangeSex(Character character, string oldValue, string newValue);
-        CharacterHistoryEntry CreateLogChangeName(Character character, string oldValue, string newValue);
-        CharacterHistoryEntry CreateLogAddItem(int characterId, Item item);
-        CharacterHistoryEntry CreateLogEquipItem(int characterId, int itemId);
-        CharacterHistoryEntry CreateLogUnEquipItem(int characterId, int itemId);
-        CharacterHistoryEntry CreateLogAddModifier(Character character, CharacterModifier characterModifier);
-        CharacterHistoryEntry CreateLogRemoveModifier(int characterId, int characterModifierId);
-        CharacterHistoryEntry CreateLogActiveModifier(int characterId, int characterModifierId);
-        CharacterHistoryEntry CreateLogDisableModifier(int characterId, int characterModifierId);
-        CharacterHistoryEntry CreateLogGiveItem(int characterId, Item item);
-        CharacterHistoryEntry CreateLogGivenItem(int characterId, Item item);
-        CharacterHistoryEntry CreateLogLootItem(int characterId, Item item);
-        CharacterHistoryEntry CreateLogChangeItemQuantity(int characterId, Item item, int? oldValue, int? newValue);
-        CharacterHistoryEntry CreateLogUseItemCharge(int characterId, Item item, int? oldValue, int? newValue);
-        CharacterHistoryEntry CreateLogReadBook(int characterId, Item item);
-        CharacterHistoryEntry CreateLogIdentifyItem(int characterId, Item item);
-        CharacterHistoryEntry CreateLogLevelUp(int characterId, int characterLevel);
+        CharacterHistoryEntryEntity CreateLogChangeEv(CharacterEntity character, int? oldValue, int? newValue);
+        CharacterHistoryEntryEntity CreateLogChangeEa(CharacterEntity character, int? oldValue, int? newValue);
+        CharacterHistoryEntryEntity CreateLogChangeFatePoint(CharacterEntity character, short oldValue, short? newValue);
+        CharacterHistoryEntryEntity CreateLogChangeExperience(CharacterEntity character, int oldValue, int? newValue);
+        CharacterHistoryEntryEntity CreateLogChangeSex(CharacterEntity character, string oldValue, string newValue);
+        CharacterHistoryEntryEntity CreateLogChangeName(CharacterEntity character, string oldValue, string newValue);
+        CharacterHistoryEntryEntity CreateLogAddItem(int characterId, ItemEntity item);
+        CharacterHistoryEntryEntity CreateLogEquipItem(int characterId, int itemId);
+        CharacterHistoryEntryEntity CreateLogUnEquipItem(int characterId, int itemId);
+        CharacterHistoryEntryEntity CreateLogAddModifier(CharacterEntity character, CharacterModifierEntity characterModifier);
+        CharacterHistoryEntryEntity CreateLogRemoveModifier(int characterId, int characterModifierId);
+        CharacterHistoryEntryEntity CreateLogActiveModifier(int characterId, int characterModifierId);
+        CharacterHistoryEntryEntity CreateLogDisableModifier(int characterId, int characterModifierId);
+        CharacterHistoryEntryEntity CreateLogGiveItem(int characterId, ItemEntity item);
+        CharacterHistoryEntryEntity CreateLogGivenItem(int characterId, ItemEntity item);
+        CharacterHistoryEntryEntity CreateLogLootItem(int characterId, ItemEntity item);
+        CharacterHistoryEntryEntity CreateLogChangeItemQuantity(int characterId, ItemEntity item, int? oldValue, int? newValue);
+        CharacterHistoryEntryEntity CreateLogUseItemCharge(int characterId, ItemEntity item, int? oldValue, int? newValue);
+        CharacterHistoryEntryEntity CreateLogReadBook(int characterId, ItemEntity item);
+        CharacterHistoryEntryEntity CreateLogIdentifyItem(int characterId, ItemEntity item);
+        CharacterHistoryEntryEntity CreateLogLevelUp(int characterId, int characterLevel);
     }
 
     public class CharacterHistoryUtil : ICharacterHistoryUtil
@@ -60,9 +60,9 @@ namespace Naheulbook.Core.Utils
             _jsonUtil = jsonUtil;
         }
 
-        public CharacterHistoryEntry CreateLogChangeEv(Character character, int? oldValue, int? newValue)
+        public CharacterHistoryEntryEntity CreateLogChangeEv(CharacterEntity character, int? oldValue, int? newValue)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 Character = character,
                 Action = ChangeEvActionName,
@@ -71,9 +71,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogChangeEa(Character character, int? oldValue, int? newValue)
+        public CharacterHistoryEntryEntity CreateLogChangeEa(CharacterEntity character, int? oldValue, int? newValue)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 Character = character,
                 Action = ChangeEaActionName,
@@ -82,9 +82,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogChangeFatePoint(Character character, short oldValue, short? newValue)
+        public CharacterHistoryEntryEntity CreateLogChangeFatePoint(CharacterEntity character, short oldValue, short? newValue)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 Character = character,
                 Action = ChangeFatePointActionName,
@@ -93,9 +93,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogChangeExperience(Character character, int oldValue, int? newValue)
+        public CharacterHistoryEntryEntity CreateLogChangeExperience(CharacterEntity character, int oldValue, int? newValue)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 Character = character,
                 Action = ChangeExperienceActionName,
@@ -104,9 +104,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogChangeSex(Character character, string oldValue, string newValue)
+        public CharacterHistoryEntryEntity CreateLogChangeSex(CharacterEntity character, string oldValue, string newValue)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 Character = character,
                 Action = ChangeSexActionName,
@@ -115,9 +115,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogChangeName(Character character, string oldValue, string newValue)
+        public CharacterHistoryEntryEntity CreateLogChangeName(CharacterEntity character, string oldValue, string newValue)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 Character = character,
                 Action = ChangeNameActionName,
@@ -126,9 +126,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogAddItem(int characterId, Item item)
+        public CharacterHistoryEntryEntity CreateLogAddItem(int characterId, ItemEntity item)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = AddItemActionName,
@@ -137,9 +137,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogEquipItem(int characterId, int itemId)
+        public CharacterHistoryEntryEntity CreateLogEquipItem(int characterId, int itemId)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = EquipActionName,
@@ -148,9 +148,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogUnEquipItem(int characterId, int itemId)
+        public CharacterHistoryEntryEntity CreateLogUnEquipItem(int characterId, int itemId)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = UnEquipActionName,
@@ -159,9 +159,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogAddModifier(Character character, CharacterModifier characterModifier)
+        public CharacterHistoryEntryEntity CreateLogAddModifier(CharacterEntity character, CharacterModifierEntity characterModifier)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = character.Id,
                 Action = ApplyModifierActionName,
@@ -170,9 +170,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogRemoveModifier(int characterId, int characterModifierId)
+        public CharacterHistoryEntryEntity CreateLogRemoveModifier(int characterId, int characterModifierId)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = RemoveModifierActionName,
@@ -181,9 +181,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogActiveModifier(int characterId, int characterModifierId)
+        public CharacterHistoryEntryEntity CreateLogActiveModifier(int characterId, int characterModifierId)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = ActiveModifierActionName,
@@ -192,9 +192,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogDisableModifier(int characterId, int characterModifierId)
+        public CharacterHistoryEntryEntity CreateLogDisableModifier(int characterId, int characterModifierId)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = DisableModifierActionName,
@@ -203,9 +203,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogGiveItem(int characterId, Item item)
+        public CharacterHistoryEntryEntity CreateLogGiveItem(int characterId, ItemEntity item)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = GiveItemActionName,
@@ -214,9 +214,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogGivenItem(int characterId, Item item)
+        public CharacterHistoryEntryEntity CreateLogGivenItem(int characterId, ItemEntity item)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = GivenItemActionName,
@@ -225,9 +225,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogLootItem(int characterId, Item item)
+        public CharacterHistoryEntryEntity CreateLogLootItem(int characterId, ItemEntity item)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = LootItemActionName,
@@ -236,9 +236,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogChangeItemQuantity(int characterId, Item item, int? oldValue, int? newValue)
+        public CharacterHistoryEntryEntity CreateLogChangeItemQuantity(int characterId, ItemEntity item, int? oldValue, int? newValue)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = ChangeQuantityActionName,
@@ -248,9 +248,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogUseItemCharge(int characterId, Item item, int? oldValue, int? newValue)
+        public CharacterHistoryEntryEntity CreateLogUseItemCharge(int characterId, ItemEntity item, int? oldValue, int? newValue)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = UseChargeActionName,
@@ -260,9 +260,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogReadBook(int characterId, Item item)
+        public CharacterHistoryEntryEntity CreateLogReadBook(int characterId, ItemEntity item)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = ReadBookActionName,
@@ -271,9 +271,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogIdentifyItem(int characterId, Item item)
+        public CharacterHistoryEntryEntity CreateLogIdentifyItem(int characterId, ItemEntity item)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = IdentifyActionName,
@@ -282,9 +282,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public CharacterHistoryEntry CreateLogLevelUp(int characterId, int level)
+        public CharacterHistoryEntryEntity CreateLogLevelUp(int characterId, int level)
         {
-            return new CharacterHistoryEntry
+            return new CharacterHistoryEntryEntity
             {
                 CharacterId = characterId,
                 Action = LevelUpActionName,

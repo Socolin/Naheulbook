@@ -10,12 +10,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public ItemTemplate CreateItemTemplate(ItemTemplateSubCategory subCategory, string suffix = null)
+        public ItemTemplateEntity CreateItemTemplate(ItemTemplateSubCategoryEntity subCategory, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new ItemTemplate
+            return new ItemTemplateEntity
             {
                 SubCategory = subCategory,
                 Data = @"{""key"": ""value""}",
@@ -26,12 +26,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public ItemTemplateSection CreateItemTemplateSection(string suffix = null)
+        public ItemTemplateSectionEntity CreateItemTemplateSection(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new ItemTemplateSection
+            return new ItemTemplateSectionEntity
             {
                 Name = $"some-item-name-{suffix}",
                 Note = $"some-note-{suffix}",
@@ -40,12 +40,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public ItemTemplateSubCategory CreateItemTemplateSubCategory(ItemTemplateSection section, string suffix = null)
+        public ItemTemplateSubCategoryEntity CreateItemTemplateSubCategory(ItemTemplateSectionEntity section, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new ItemTemplateSubCategory
+            return new ItemTemplateSubCategoryEntity
             {
                 Section = section,
                 Note = $"some-note-{suffix}",
@@ -55,12 +55,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Slot CreateSlot(string suffix = null)
+        public SlotEntity CreateSlot(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Slot
+            return new SlotEntity
             {
                 Count = 1,
                 Name = $"some-name-{suffix}",
@@ -68,9 +68,9 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Item CreateItem(ItemTemplate itemTemplate, Character character)
+        public ItemEntity CreateItem(ItemTemplateEntity itemTemplate, CharacterEntity character)
         {
-            return new Item
+            return new ItemEntity
             {
                 Data = @"{""key"":""value""}",
                 Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
@@ -91,9 +91,9 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Item CreateItem(ItemTemplate itemTemplate, Monster monster)
+        public ItemEntity CreateItem(ItemTemplateEntity itemTemplate, MonsterEntity monster)
         {
-            return new Item
+            return new ItemEntity
             {
                 Data = @"{""key"":""value""}",
                 Modifiers = @"[{""key"":""value""}]",
@@ -103,9 +103,9 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Item CreateItem(ItemTemplate itemTemplate, Loot loot)
+        public ItemEntity CreateItem(ItemTemplateEntity itemTemplate, LootEntity loot)
         {
-            return new Item
+            return new ItemEntity
             {
                 Data = @"{""key"":""value""}",
                 Modifiers = @"[{""key"":""value""}]",
@@ -115,12 +115,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public ItemType CreateItemType(string suffix = null)
+        public ItemTypeEntity CreateItemType(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new ItemType
+            return new ItemTypeEntity
             {
                 DisplayName = $"some-display-name-{suffix}",
                 TechName = $"some-tech-name-{suffix}"

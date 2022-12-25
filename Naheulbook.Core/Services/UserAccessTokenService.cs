@@ -11,9 +11,9 @@ namespace Naheulbook.Core.Services
 {
     public interface IUserAccessTokenService
     {
-        Task<IList<UserAccessToken>> GetUserAccessTokensAsync(int userId);
-        Task<UserAccessToken> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request);
-        Task<UserAccessToken?> ValidateTokenAsync(string token);
+        Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId);
+        Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request);
+        Task<UserAccessTokenEntity?> ValidateTokenAsync(string token);
         Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId);
     }
 
@@ -28,7 +28,7 @@ namespace Naheulbook.Core.Services
             _timeService = timeService;
         }
 
-        public async Task<IList<UserAccessToken>> GetUserAccessTokensAsync(int userId)
+        public async Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -36,11 +36,11 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<UserAccessToken> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request)
+        public async Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var token = new UserAccessToken
+                var token = new UserAccessTokenEntity
                 {
                     Id = Guid.NewGuid(),
                     Key = RngHelper.GetRandomHexString(64),
@@ -54,7 +54,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<UserAccessToken?> ValidateTokenAsync(string accessKey)
+        public async Task<UserAccessTokenEntity?> ValidateTokenAsync(string accessKey)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

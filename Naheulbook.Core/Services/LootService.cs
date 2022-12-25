@@ -12,13 +12,13 @@ namespace Naheulbook.Core.Services
 {
     public interface ILootService
     {
-        Task<Loot> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request);
-        Task<List<Loot>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task<LootEntity> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request);
+        Task<List<LootEntity>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId);
         Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request);
         Task DeleteLootAsync(NaheulbookExecutionContext executionContext, int lootId);
-        Task<Item> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request);
-        Task<Item> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request);
+        Task<ItemEntity> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request);
+        Task<ItemEntity> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request);
     }
 
     public class LootService : ILootService
@@ -41,7 +41,7 @@ namespace Naheulbook.Core.Services
             _itemService = itemService;
         }
 
-        public async Task<Loot> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request)
+        public async Task<LootEntity> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -51,7 +51,7 @@ namespace Naheulbook.Core.Services
 
                 _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-                var loot = new Loot
+                var loot = new LootEntity
                 {
                     Group = group,
                     Name = request.Name,
@@ -65,7 +65,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<Loot>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
+        public async Task<List<LootEntity>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -160,7 +160,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Item> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request)
+        public async Task<ItemEntity> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -184,7 +184,7 @@ namespace Naheulbook.Core.Services
             return item;
         }
 
-        public async Task<Item> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request)
+        public async Task<ItemEntity> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

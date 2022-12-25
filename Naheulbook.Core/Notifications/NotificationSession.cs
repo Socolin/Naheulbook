@@ -10,58 +10,58 @@ namespace Naheulbook.Core.Notifications
 {
     public interface INotificationSession
     {
-        void NotifyCharacterChangeEv(Character character);
-        void NotifyCharacterChangeEa(Character character);
-        void NotifyCharacterChangeFatePoint(Character character);
-        void NotifyCharacterChangeExperience(Character character);
-        void NotifyCharacterChangeSex(Character character);
-        void NotifyCharacterChangeName(Character character);
-        void NotifyCharacterChangeNotes(Character character);
-        void NotifyCharacterAddItem(int characterId, Item item, bool delayBuildPacket = false);
+        void NotifyCharacterChangeEv(CharacterEntity character);
+        void NotifyCharacterChangeEa(CharacterEntity character);
+        void NotifyCharacterChangeFatePoint(CharacterEntity character);
+        void NotifyCharacterChangeExperience(CharacterEntity character);
+        void NotifyCharacterChangeSex(CharacterEntity character);
+        void NotifyCharacterChangeName(CharacterEntity character);
+        void NotifyCharacterChangeNotes(CharacterEntity character);
+        void NotifyCharacterAddItem(int characterId, ItemEntity item, bool delayBuildPacket = false);
         void NotifyCharacterSetStatBonusAd(int characterId, string stat);
-        void NotifyCharacterAddModifier(int characterId, CharacterModifier characterModifier, bool delayBuildPacket = false);
+        void NotifyCharacterAddModifier(int characterId, CharacterModifierEntity characterModifier, bool delayBuildPacket = false);
         void NotifyCharacterRemoveModifier(int characterId, int characterModifierId);
-        void NotifyCharacterUpdateModifier(int characterId, CharacterModifier characterModifier);
-        void NotifyCharacterGroupInvite(int characterId, GroupInvite groupInvite);
-        void NotifyCharacterCancelGroupInvite(int characterId, GroupInvite groupInvite);
-        void NotifyCharacterAcceptGroupInvite(int characterId, GroupInvite groupInvite);
-        void NotifyCharacterShowLoot(int characterId, Loot loot);
+        void NotifyCharacterUpdateModifier(int characterId, CharacterModifierEntity characterModifier);
+        void NotifyCharacterGroupInvite(int characterId, GroupInviteEntity groupInvite);
+        void NotifyCharacterCancelGroupInvite(int characterId, GroupInviteEntity groupInvite);
+        void NotifyCharacterAcceptGroupInvite(int characterId, GroupInviteEntity groupInvite);
+        void NotifyCharacterShowLoot(int characterId, LootEntity loot);
         void NotifyCharacterHideLoot(int characterId, int lootId);
         void NotifyCharacterLevelUp(int characterId, LevelUpResult levelUpResult);
         void NotifyCharacterAddJob(int characterId, Guid jobId);
         void NotifyCharacterRemoveJob(int characterId, Guid jobId);
 
-        void NotifyCharacterGmChangeColor(Character character);
-        void NotifyCharacterGmChangeTarget(Character character, TargetRequest requestTarget);
-        void NotifyCharacterGmChangeData(Character character, CharacterGmData gmData);
-        void NotifyCharacterGmChangeActive(Character character);
+        void NotifyCharacterGmChangeColor(CharacterEntity character);
+        void NotifyCharacterGmChangeTarget(CharacterEntity character, TargetRequest requestTarget);
+        void NotifyCharacterGmChangeData(CharacterEntity character, CharacterGmData gmData);
+        void NotifyCharacterGmChangeActive(CharacterEntity character);
 
-        void NotifyItemDataChanged(Item item);
-        void NotifyItemModifiersChanged(Item item);
-        void NotifyEquipItem(Item item);
-        void NotifyItemChangeContainer(Item item);
-        void NotifyItemUpdateModifier(Item item);
-        void NotifyItemDeleteItem(Item item);
-        void NotifyItemTakeItem(Item item, Character character, int? remainingQuantity);
+        void NotifyItemDataChanged(ItemEntity item);
+        void NotifyItemModifiersChanged(ItemEntity item);
+        void NotifyEquipItem(ItemEntity item);
+        void NotifyItemChangeContainer(ItemEntity item);
+        void NotifyItemUpdateModifier(ItemEntity item);
+        void NotifyItemDeleteItem(ItemEntity item);
+        void NotifyItemTakeItem(ItemEntity item, CharacterEntity character, int? remainingQuantity);
 
-        void NotifyGroupCharacterInvite(int groupId, GroupInvite groupInvite);
-        void NotifyGroupCancelGroupInvite(int groupId, GroupInvite groupInvite);
-        void NotifyGroupAcceptGroupInvite(int groupId, GroupInvite groupInvite);
+        void NotifyGroupCharacterInvite(int groupId, GroupInviteEntity groupInvite);
+        void NotifyGroupCancelGroupInvite(int groupId, GroupInviteEntity groupInvite);
+        void NotifyGroupAcceptGroupInvite(int groupId, GroupInviteEntity groupInvite);
         void NotifyGroupChangeGroupData(int groupId, GroupData groupData);
         void NotifyGroupChangeConfig(int groupId, GroupConfig groupConfig);
-        void NotifyGroupAddLoot(int groupId, Loot loot);
+        void NotifyGroupAddLoot(int groupId, LootEntity loot);
         void NotifyGroupDeleteLoot(int groupId, int lootId);
-        void NotifyGroupAddMonster(int groupId, Monster monster);
-        void NotifyGroupKillMonster(Monster monster);
+        void NotifyGroupAddMonster(int groupId, MonsterEntity monster);
+        void NotifyGroupKillMonster(MonsterEntity monster);
 
         void NotifyLootUpdateVisibility(int lootId, bool visibleForPlayer);
-        void NotifyLootAddMonster(int lootId, Monster monster);
-        void NotifyLootAddItem(int lootId, Item item);
+        void NotifyLootAddMonster(int lootId, MonsterEntity monster);
+        void NotifyLootAddItem(int lootId, ItemEntity item);
 
         void NotifyMonsterAddModifier(int monsterId, ActiveStatsModifier modifier);
         void NotifyMonsterUpdateModifier(int monsterId, ActiveStatsModifier modifier);
         void NotifyMonsterRemoveModifier(int monsterId, int modifierId);
-        void NotifyMonsterAddItem(int monsterId, Item item);
+        void NotifyMonsterAddItem(int monsterId, ItemEntity item);
         void NotifyMonsterUpdateData(int monsterId, MonsterData monsterData);
         void NotifyMonsterChangeTarget(int monsterId, TargetRequest request);
         void NotifyMonsterChangeName(int monsterId, string name);
@@ -84,42 +84,42 @@ namespace Naheulbook.Core.Notifications
             _notificationSender = notificationSender;
         }
 
-        public void NotifyCharacterChangeEv(Character character)
+        public void NotifyCharacterChangeEv(CharacterEntity character)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeEv(character));
         }
 
-        public void NotifyCharacterChangeEa(Character character)
+        public void NotifyCharacterChangeEa(CharacterEntity character)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeEa(character));
         }
 
-        public void NotifyCharacterChangeFatePoint(Character character)
+        public void NotifyCharacterChangeFatePoint(CharacterEntity character)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeFatePoint(character));
         }
 
-        public void NotifyCharacterChangeExperience(Character character)
+        public void NotifyCharacterChangeExperience(CharacterEntity character)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeExperience(character));
         }
 
-        public void NotifyCharacterChangeSex(Character character)
+        public void NotifyCharacterChangeSex(CharacterEntity character)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeSex(character));
         }
 
-        public void NotifyCharacterChangeName(Character character)
+        public void NotifyCharacterChangeName(CharacterEntity character)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeName(character));
         }
 
-        public void NotifyCharacterChangeNotes(Character character)
+        public void NotifyCharacterChangeNotes(CharacterEntity character)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeNotes(character));
         }
 
-        public void NotifyCharacterAddItem(int characterId, Item item, bool delayBuildPacket = false)
+        public void NotifyCharacterAddItem(int characterId, ItemEntity item, bool delayBuildPacket = false)
         {
             if (delayBuildPacket)
                 _packets.Add(new DelayedNotificationPacket(() => _packetBuilder.BuildCharacterAddItem(characterId, item)));
@@ -127,7 +127,7 @@ namespace Naheulbook.Core.Notifications
                 _packets.Add(_packetBuilder.BuildCharacterAddItem(characterId, item));
         }
 
-        public void NotifyCharacterUpdateModifier(int characterId, CharacterModifier modifier)
+        public void NotifyCharacterUpdateModifier(int characterId, CharacterModifierEntity modifier)
         {
             _packets.Add(_packetBuilder.BuildCharacterUpdateModifier(characterId, modifier));
         }
@@ -147,57 +147,57 @@ namespace Naheulbook.Core.Notifications
             _packets.Add(_packetBuilder.BuildCharacterRemoveJob(characterId, jobId));
         }
 
-        public void NotifyCharacterGmChangeColor(Character character)
+        public void NotifyCharacterGmChangeColor(CharacterEntity character)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeColor(character));
         }
 
-        public void NotifyCharacterGmChangeTarget(Character character, TargetRequest targetInfo)
+        public void NotifyCharacterGmChangeTarget(CharacterEntity character, TargetRequest targetInfo)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeTarget(character, targetInfo));
         }
 
-        public void NotifyCharacterGmChangeData(Character character, CharacterGmData gmData)
+        public void NotifyCharacterGmChangeData(CharacterEntity character, CharacterGmData gmData)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeData(character, gmData));
         }
 
-        public void NotifyCharacterGmChangeActive(Character character)
+        public void NotifyCharacterGmChangeActive(CharacterEntity character)
         {
             _packets.Add(_packetBuilder.BuildCharacterChangeActive(character));
         }
 
-        public void NotifyItemDataChanged(Item item)
+        public void NotifyItemDataChanged(ItemEntity item)
         {
             _packets.Add(_packetBuilder.BuildItemDataChanged(item));
         }
 
-        public void NotifyItemModifiersChanged(Item item)
+        public void NotifyItemModifiersChanged(ItemEntity item)
         {
             _packets.Add(_packetBuilder.BuildItemModifiersChanged(item));
         }
 
-        public void NotifyEquipItem(Item item)
+        public void NotifyEquipItem(ItemEntity item)
         {
             _packets.Add(_packetBuilder.BuildEquipItem(item));
         }
 
-        public void NotifyItemChangeContainer(Item item)
+        public void NotifyItemChangeContainer(ItemEntity item)
         {
             _packets.Add(_packetBuilder.BuildItemChangeContainer(item));
         }
 
-        public void NotifyItemUpdateModifier(Item item)
+        public void NotifyItemUpdateModifier(ItemEntity item)
         {
             _packets.Add(_packetBuilder.BuildItemUpdateModifier(item));
         }
 
-        public void NotifyItemDeleteItem(Item item)
+        public void NotifyItemDeleteItem(ItemEntity item)
         {
             _packets.Add(_packetBuilder.BuildItemDeleteItem(item));
         }
 
-        public void NotifyItemTakeItem(Item item, Character character, int? remainingQuantity)
+        public void NotifyItemTakeItem(ItemEntity item, CharacterEntity character, int? remainingQuantity)
         {
             _packets.Add(_packetBuilder.BuildItemTakeItem(item, character, remainingQuantity));
         }
@@ -207,7 +207,7 @@ namespace Naheulbook.Core.Notifications
             _packets.Add(_packetBuilder.BuildCharacterSetStatBonusAd(characterId, stat));
         }
 
-        public void NotifyCharacterAddModifier(int characterId, CharacterModifier characterModifier, bool delayBuildPacket = false)
+        public void NotifyCharacterAddModifier(int characterId, CharacterModifierEntity characterModifier, bool delayBuildPacket = false)
         {
             if (delayBuildPacket)
                 _packets.Add(new DelayedNotificationPacket(() => _packetBuilder.BuildCharacterAddModifier(characterId, characterModifier)));
@@ -220,22 +220,22 @@ namespace Naheulbook.Core.Notifications
             _packets.Add(_packetBuilder.BuildCharacterRemoveModifier(characterId, characterModifierId));
         }
 
-        public void NotifyCharacterGroupInvite(int characterId, GroupInvite groupInvite)
+        public void NotifyCharacterGroupInvite(int characterId, GroupInviteEntity groupInvite)
         {
             _packets.Add(_packetBuilder.BuildCharacterGroupInvite(characterId, groupInvite));
         }
 
-        public void NotifyCharacterCancelGroupInvite(int characterId, GroupInvite groupInvite)
+        public void NotifyCharacterCancelGroupInvite(int characterId, GroupInviteEntity groupInvite)
         {
             _packets.Add(_packetBuilder.BuildCharacterCancelGroupInvite(characterId, groupInvite));
         }
 
-        public void NotifyCharacterAcceptGroupInvite(int characterId, GroupInvite groupInvite)
+        public void NotifyCharacterAcceptGroupInvite(int characterId, GroupInviteEntity groupInvite)
         {
             _packets.Add(_packetBuilder.BuildCharacterAcceptGroupInvite(characterId, groupInvite));
         }
 
-        public void NotifyCharacterShowLoot(int characterId, Loot loot)
+        public void NotifyCharacterShowLoot(int characterId, LootEntity loot)
         {
             _packets.Add(_packetBuilder.BuildCharacterShowLoot(characterId, loot));
         }
@@ -245,17 +245,17 @@ namespace Naheulbook.Core.Notifications
             _packets.Add(_packetBuilder.BuildCharacterHideLoot(characterId, lootId));
         }
 
-        public void NotifyGroupCharacterInvite(int groupId, GroupInvite groupInvite)
+        public void NotifyGroupCharacterInvite(int groupId, GroupInviteEntity groupInvite)
         {
             _packets.Add(_packetBuilder.BuildGroupCharacterInvite(groupId, groupInvite));
         }
 
-        public void NotifyGroupCancelGroupInvite(int groupId, GroupInvite groupInvite)
+        public void NotifyGroupCancelGroupInvite(int groupId, GroupInviteEntity groupInvite)
         {
             _packets.Add(_packetBuilder.BuildGroupCancelGroupInvite(groupId, groupInvite));
         }
 
-        public void NotifyGroupAcceptGroupInvite(int groupId, GroupInvite groupInvite)
+        public void NotifyGroupAcceptGroupInvite(int groupId, GroupInviteEntity groupInvite)
         {
             _packets.Add(_packetBuilder.BuildGroupAcceptGroupInvite(groupId, groupInvite));
         }
@@ -270,7 +270,7 @@ namespace Naheulbook.Core.Notifications
             _packets.Add(_packetBuilder.BuildGroupChangeConfig(groupId, groupConfig));
         }
 
-        public void NotifyGroupAddLoot(int groupId, Loot loot)
+        public void NotifyGroupAddLoot(int groupId, LootEntity loot)
         {
             _packets.Add(_packetBuilder.BuildGroupAddLoot(groupId, loot));
         }
@@ -280,12 +280,12 @@ namespace Naheulbook.Core.Notifications
             _packets.Add(_packetBuilder.BuildGroupDeleteLoot(groupId, lootId));
         }
 
-        public void NotifyGroupAddMonster(int groupId, Monster monster)
+        public void NotifyGroupAddMonster(int groupId, MonsterEntity monster)
         {
             _packets.Add(_packetBuilder.BuildGroupAddMonster(groupId, monster));
         }
 
-        public void NotifyGroupKillMonster(Monster monster)
+        public void NotifyGroupKillMonster(MonsterEntity monster)
         {
             _packets.Add(_packetBuilder.BuildGroupKillMonster(monster.GroupId, monster.Id));
         }
@@ -295,12 +295,12 @@ namespace Naheulbook.Core.Notifications
             _packets.Add(_packetBuilder.BuildLootUpdateVisibility(lootId, visibleForPlayer));
         }
 
-        public void NotifyLootAddMonster(int lootId, Monster monster)
+        public void NotifyLootAddMonster(int lootId, MonsterEntity monster)
         {
             _packets.Add(_packetBuilder.BuildLootAddMonster(lootId, monster));
         }
 
-        public void NotifyLootAddItem(int lootId, Item item)
+        public void NotifyLootAddItem(int lootId, ItemEntity item)
         {
             _packets.Add(_packetBuilder.BuildLootAddItem(lootId, item));
         }
@@ -320,7 +320,7 @@ namespace Naheulbook.Core.Notifications
             _packets.Add(_packetBuilder.BuildMonsterRemoveModifier(monsterId, modifierId));
         }
 
-        public void NotifyMonsterAddItem(int monsterId, Item item)
+        public void NotifyMonsterAddItem(int monsterId, ItemEntity item)
         {
             _packets.Add(_packetBuilder.BuildMonsterAddItem(monsterId, item));
         }

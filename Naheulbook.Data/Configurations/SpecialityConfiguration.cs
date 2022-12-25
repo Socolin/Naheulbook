@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class SpecialityConfiguration : IEntityTypeConfiguration<Speciality>
+    public class SpecialityConfiguration : IEntityTypeConfiguration<SpecialityEntity>
     {
-        public void Configure(EntityTypeBuilder<Speciality> builder)
+        public void Configure(EntityTypeBuilder<SpecialityEntity> builder)
         {
             builder.ToTable("specialities");
 
@@ -40,9 +40,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class SpecialityModifierConfiguration : IEntityTypeConfiguration<SpecialityModifier>
+    public class SpecialityModifierConfiguration : IEntityTypeConfiguration<SpecialityModifierEntity>
     {
-        public void Configure(EntityTypeBuilder<SpecialityModifier> builder)
+        public void Configure(EntityTypeBuilder<SpecialityModifierEntity> builder)
         {
             builder.ToTable("speciality_modifiers");
 
@@ -74,9 +74,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class SpecialitySpecialConfiguration : IEntityTypeConfiguration<SpecialitySpecial>
+    public class SpecialitySpecialConfiguration : IEntityTypeConfiguration<SpecialitySpecialEntity>
     {
-        public void Configure(EntityTypeBuilder<SpecialitySpecial> builder)
+        public void Configure(EntityTypeBuilder<SpecialitySpecialEntity> builder)
         {
             builder.ToTable("speciality_specials");
 

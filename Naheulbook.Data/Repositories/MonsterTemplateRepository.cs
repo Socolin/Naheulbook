@@ -9,29 +9,29 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IMonsterTemplateRepository : IRepository<MonsterTemplate>
+    public interface IMonsterTemplateRepository : IRepository<MonsterTemplateEntity>
     {
-        Task<List<MonsterTemplate>> GetAllWithItemsFullDataAsync();
-        Task<List<MonsterTemplate>> SearchByNameAndSubCategoryAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId, int maxResult);
-        Task<MonsterTemplate?> GetByIdWithItemsAsync(int monsterTemplateId);
-        Task<MonsterTemplate?> GetByIdWithItemsFullDataAsync(int monsterTemplateId);
+        Task<List<MonsterTemplateEntity>> GetAllWithItemsFullDataAsync();
+        Task<List<MonsterTemplateEntity>> SearchByNameAndSubCategoryAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId, int maxResult);
+        Task<MonsterTemplateEntity?> GetByIdWithItemsAsync(int monsterTemplateId);
+        Task<MonsterTemplateEntity?> GetByIdWithItemsFullDataAsync(int monsterTemplateId);
     }
 
-    public class MonsterTemplateRepository : Repository<MonsterTemplate, NaheulbookDbContext>, IMonsterTemplateRepository
+    public class MonsterTemplateRepository : Repository<MonsterTemplateEntity, NaheulbookDbContext>, IMonsterTemplateRepository
     {
         public MonsterTemplateRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public Task<List<MonsterTemplate>> GetAllWithItemsFullDataAsync()
+        public Task<List<MonsterTemplateEntity>> GetAllWithItemsFullDataAsync()
         {
             return Context.MonsterTemplates
                 .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)
                 .ToListAsync();
         }
 
-        public Task<List<MonsterTemplate>> SearchByNameAndSubCategoryAsync(string partialName, int? monsterTypeId, int? monsterSubCategoryId, int maxResult)
+        public Task<List<MonsterTemplateEntity>> SearchByNameAndSubCategoryAsync(string partialName, int? monsterTypeId, int? monsterSubCategoryId, int maxResult)
         {
             var query = Context.MonsterTemplates
                 .Include(m => m.Items)
@@ -52,14 +52,14 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<MonsterTemplate?> GetByIdWithItemsAsync(int monsterTemplateId)
+        public Task<MonsterTemplateEntity?> GetByIdWithItemsAsync(int monsterTemplateId)
         {
             return Context.MonsterTemplates
                 .Include(x => x.Items)
                 .SingleOrDefaultAsync(x => x.Id == monsterTemplateId);
         }
 
-        public Task<MonsterTemplate?> GetByIdWithItemsFullDataAsync(int monsterTemplateId)
+        public Task<MonsterTemplateEntity?> GetByIdWithItemsFullDataAsync(int monsterTemplateId)
         {
             return Context.MonsterTemplates
                 .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)

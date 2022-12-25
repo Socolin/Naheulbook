@@ -7,19 +7,19 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IOriginRepository : IRepository<Origin>
+    public interface IOriginRepository : IRepository<OriginEntity>
     {
-        Task<ICollection<Origin>> GetAllWithAllDataAsync();
-        Task<Origin?> GetWithAllDataAsync(Guid originId);
+        Task<ICollection<OriginEntity>> GetAllWithAllDataAsync();
+        Task<OriginEntity?> GetWithAllDataAsync(Guid originId);
     }
 
-    public class OriginRepository : Repository<Origin, NaheulbookDbContext>, IOriginRepository
+    public class OriginRepository : Repository<OriginEntity, NaheulbookDbContext>, IOriginRepository
     {
         public OriginRepository(NaheulbookDbContext context) : base(context)
         {
         }
 
-        public async Task<ICollection<Origin>> GetAllWithAllDataAsync()
+        public async Task<ICollection<OriginEntity>> GetAllWithAllDataAsync()
         {
             return await Context.Origins
                 .Include(o => o.Requirements)
@@ -30,7 +30,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Origin?> GetWithAllDataAsync(Guid originId)
+        public Task<OriginEntity?> GetWithAllDataAsync(Guid originId)
         {
             return Context.Origins
                 .Include(o => o.Requirements)

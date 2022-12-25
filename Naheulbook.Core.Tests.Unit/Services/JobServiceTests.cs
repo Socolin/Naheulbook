@@ -30,7 +30,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task CanGetJobs()
         {
-            var expectedJobs = new List<Job>();
+            var expectedJobs = new List<JobEntity>();
 
             _jobRepository.GetAllWithAllDataAsync()
                 .Returns(expectedJobs);

@@ -35,7 +35,7 @@ namespace Naheulbook.Core.Actions.Executor
                 throw new InvalidActionDataException(action.Type);
 
             var modifier = action.Data.Modifier;
-            var characterModifier = new CharacterModifier
+            var characterModifier = new CharacterModifierEntity
             {
                 Name = modifier.Name,
                 Permanent = false,
@@ -51,7 +51,7 @@ namespace Naheulbook.Core.Actions.Executor
                 CurrentTimeDuration = modifier.TimeDuration,
                 LapCount = modifier.LapCount,
                 CurrentLapCount = modifier.LapCount,
-                Values = modifier.Values.Select(v => new CharacterModifierValue
+                Values = modifier.Values.Select(v => new CharacterModifierValueEntity
                 {
                     Type = v.Type,
                     StatName = v.Stat,
@@ -61,7 +61,7 @@ namespace Naheulbook.Core.Actions.Executor
 
             if (context.TargetCharacter.Modifiers == null)
             {
-                context.TargetCharacter.Modifiers = new List<CharacterModifier>();
+                context.TargetCharacter.Modifiers = new List<CharacterModifierEntity>();
             }
 
             context.TargetCharacter.Modifiers.Add(characterModifier);

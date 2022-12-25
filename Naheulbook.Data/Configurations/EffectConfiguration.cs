@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class EffectConfiguration : IEntityTypeConfiguration<Effect>
+    public class EffectConfiguration : IEntityTypeConfiguration<EffectEntity>
     {
-        public void Configure(EntityTypeBuilder<Effect> builder)
+        public void Configure(EntityTypeBuilder<EffectEntity> builder)
         {
             builder.ToTable("effects");
 

@@ -26,17 +26,17 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given(@"(a|\d+) characters?")]
         public void GivenACharacter(string amount)
         {
-            if (!_testDataUtil.Contains<Origin>())
+            if (!_testDataUtil.Contains<OriginEntity>())
                 _testDataUtil.AddOrigin();
-            if (_testDataUtil.Contains<Job>())
+            if (_testDataUtil.Contains<JobEntity>())
             {
                 for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
                 {
                     _testDataUtil.AddCharacter(_scenarioContext.GetUserId(), c =>
                     {
-                        c.Jobs = new List<CharacterJob>
+                        c.Jobs = new List<CharacterJobEntity>
                         {
-                            new CharacterJob {JobId = _testDataUtil.GetLast<Job>().Id}
+                            new CharacterJobEntity {JobId = _testDataUtil.GetLast<JobEntity>().Id}
                         };
                     });
                 }
@@ -86,10 +86,10 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given(@"an item based on that item template in the character inventory")]
         public void GivenAnItemBasedOnThatItemTemplateInTheCharacterInventory()
         {
-            _testDataUtil.AddItem(_testDataUtil.GetLast<Character>());
-            _testDataUtil.GetLast<Character>().Items = new List<Item>
+            _testDataUtil.AddItem(_testDataUtil.GetLast<CharacterEntity>());
+            _testDataUtil.GetLast<CharacterEntity>().Items = new List<ItemEntity>
             {
-                _testDataUtil.GetLast<Item>()
+                _testDataUtil.GetLast<ItemEntity>()
             };
             _testDataUtil.SaveChanges();
         }
@@ -97,14 +97,14 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given(@"an item based on that item template in the character inventory with (\d+) charges?")]
         public void GivenAnItemBasedOnThatItemTemplateInTheCharacterInventoryWithXCharge(int chargeCount)
         {
-            _testDataUtil.AddItem(_testDataUtil.GetLast<Character>(), item =>
+            _testDataUtil.AddItem(_testDataUtil.GetLast<CharacterEntity>(), item =>
             {
                 item.Data = JsonConvert.SerializeObject(new {charge = chargeCount});
             });
 
-            _testDataUtil.GetLast<Character>().Items = new List<Item>
+            _testDataUtil.GetLast<CharacterEntity>().Items = new List<ItemEntity>
             {
-                _testDataUtil.GetLast<Item>()
+                _testDataUtil.GetLast<ItemEntity>()
             };
             _testDataUtil.SaveChanges();
         }
@@ -112,34 +112,34 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given(@"an item in the loot")]
         public void GivenAnItemInTheLoot()
         {
-            if (!_testDataUtil.Contains<ItemTemplate>())
+            if (!_testDataUtil.Contains<ItemTemplateEntity>())
                 _testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
-            _testDataUtil.AddItem(_testDataUtil.GetLast<Loot>());
+            _testDataUtil.AddItem(_testDataUtil.GetLast<LootEntity>());
             _testDataUtil.SaveChanges();
         }
 
         [Given(@"an item in the character inventory")]
         public void GivenAnItemInTheCharacterInventory()
         {
-            if (!_testDataUtil.Contains<ItemTemplate>())
+            if (!_testDataUtil.Contains<ItemTemplateEntity>())
                 _testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
-            _testDataUtil.AddItem(_testDataUtil.GetLast<Character>());
+            _testDataUtil.AddItem(_testDataUtil.GetLast<CharacterEntity>());
             _testDataUtil.SaveChanges();
         }
 
         [Given("that the (.+) character is a member of the group")]
         public void GivenThatXTheCharacterIsAMemberOfTheGroup(string indexString)
         {
-            var character = _testDataUtil.Get<Character>(StepArgumentUtil.ParseIndex(indexString));
-            character.GroupId = _testDataUtil.GetLast<Group>().Id;
+            var character = _testDataUtil.Get<CharacterEntity>(StepArgumentUtil.ParseIndex(indexString));
+            character.GroupId = _testDataUtil.GetLast<GroupEntity>().Id;
             _testDataUtil.SaveChanges();
         }
 
         [Given("that the character is a member of the group")]
         public void GivenThatTheCharacterIsAMemberOfTheGroup()
         {
-            var character = _testDataUtil.GetLast<Character>();
-            character.GroupId = _testDataUtil.GetLast<Group>().Id;
+            var character = _testDataUtil.GetLast<CharacterEntity>();
+            character.GroupId = _testDataUtil.GetLast<GroupEntity>().Id;
             _testDataUtil.SaveChanges();
         }
 

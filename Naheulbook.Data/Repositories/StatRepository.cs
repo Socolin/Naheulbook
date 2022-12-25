@@ -3,11 +3,11 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IStatRepository : IRepository<Stat>
+    public interface IStatRepository : IRepository<StatEntity>
     {
     }
 
-    public class StatRepository : Repository<Stat, NaheulbookDbContext>, IStatRepository
+    public class StatRepository : Repository<StatEntity, NaheulbookDbContext>, IStatRepository
     {
         public StatRepository(NaheulbookDbContext context)
             : base(context)

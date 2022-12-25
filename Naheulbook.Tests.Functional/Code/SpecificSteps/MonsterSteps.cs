@@ -39,9 +39,9 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("a monster template")]
         public void GivenAMonsterTemplate()
         {
-            if (!_testDataUtil.Contains<MonsterType>())
+            if (!_testDataUtil.Contains<MonsterTypeEntity>())
                 _testDataUtil.AddMonsterType();
-            if (!_testDataUtil.Contains<MonsterSubCategory>())
+            if (!_testDataUtil.Contains<MonsterSubCategoryEntity>())
                 _testDataUtil.AddMonsterSubCategory();
             _testDataUtil.AddMonsterTemplate();
         }
@@ -49,20 +49,20 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("a monster template with inventory")]
         public void GivenAMonsterTemplateWithLocationAndInventory()
         {
-            if (!_testDataUtil.Contains<MonsterType>())
+            if (!_testDataUtil.Contains<MonsterTypeEntity>())
                 _testDataUtil.AddMonsterType();
-            if (!_testDataUtil.Contains<MonsterSubCategory>())
+            if (!_testDataUtil.Contains<MonsterSubCategoryEntity>())
                 _testDataUtil.AddMonsterSubCategory();
 
             _testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
             _testDataUtil.AddMonsterTemplate(m =>
             {
-                m.Items = new List<MonsterTemplateInventoryElement>
+                m.Items = new List<MonsterTemplateInventoryElementEntity>
                 {
-                    new MonsterTemplateInventoryElement
+                    new MonsterTemplateInventoryElementEntity
                     {
                         Chance = 0.5f,
-                        ItemTemplate = _testDataUtil.GetLast<ItemTemplate>(),
+                        ItemTemplate = _testDataUtil.GetLast<ItemTemplateEntity>(),
                         MinCount = 1,
                         MaxCount = 3
                     }
@@ -103,7 +103,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         public void GivenAMonsterWithAnItemInItsInventory()
         {
             _testDataUtil.AddMonster();
-            _testDataUtil.AddItem(_testDataUtil.GetLast<Monster>());
+            _testDataUtil.AddItem(_testDataUtil.GetLast<MonsterEntity>());
         }
     }
 }

@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class CalendarConfiguration : IEntityTypeConfiguration<Calendar>
+    public class CalendarConfiguration : IEntityTypeConfiguration<CalendarEntity>
     {
-        public void Configure(EntityTypeBuilder<Calendar> builder)
+        public void Configure(EntityTypeBuilder<CalendarEntity> builder)
         {
             builder.ToTable("calendars");
 

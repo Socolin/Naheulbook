@@ -38,7 +38,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PutEditItemDataAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _itemService.UpdateItemDataAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<ItemData>())
-                .Returns(Task.FromException<Item>(exception));
+                .Returns(Task.FromException<ItemEntity>(exception));
 
             Func<Task> act = () => _controller.PutEditItemDataAsync(_executionContext, 2, new ItemData());
 
@@ -50,7 +50,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PutEditItemModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _itemService.UpdateItemModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<List<ActiveStatsModifier>>())
-                .Returns(Task.FromException<Item>(exception));
+                .Returns(Task.FromException<ItemEntity>(exception));
 
             Func<Task> act = () => _controller.PutEditItemModifiersAsync(_executionContext, 2, new List<ActiveStatsModifier>());
 
@@ -62,7 +62,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostEquipItemAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _itemService.EquipItemAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EquipItemRequest>())
-                .Returns(Task.FromException<Item>(exception));
+                .Returns(Task.FromException<ItemEntity>(exception));
 
             Func<Task> act = () => _controller.PostEquipItemAsync(_executionContext, 2, new EquipItemRequest());
 
@@ -74,7 +74,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PutChangeItemContainerAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _itemService.ChangeItemContainerAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<ChangeItemContainerRequest>())
-                .Returns(Task.FromException<Item>(exception));
+                .Returns(Task.FromException<ItemEntity>(exception));
 
             Func<Task> act = () => _controller.PutChangeItemContainerAsync(_executionContext, 2, new ChangeItemContainerRequest());
 

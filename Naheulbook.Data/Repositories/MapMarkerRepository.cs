@@ -6,27 +6,27 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IMapMarkerRepository : IRepository<MapMarker>
+    public interface IMapMarkerRepository : IRepository<MapMarkerEntity>
     {
-        Task<MapMarker?> GetWithLayerAsync(int mapMarkerId);
-        Task LoadLinksAsync(MapMarker mapMarker);
+        Task<MapMarkerEntity?> GetWithLayerAsync(int mapMarkerId);
+        Task LoadLinksAsync(MapMarkerEntity mapMarker);
     }
 
-    public class MapMarkerRepository : Repository<MapMarker, NaheulbookDbContext>, IMapMarkerRepository
+    public class MapMarkerRepository : Repository<MapMarkerEntity, NaheulbookDbContext>, IMapMarkerRepository
     {
         public MapMarkerRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public Task<MapMarker?> GetWithLayerAsync(int mapMarkerId)
+        public Task<MapMarkerEntity?> GetWithLayerAsync(int mapMarkerId)
         {
             return Context.MapMarkers
                 .Include(e => e.Layer)
                 .SingleOrDefaultAsync(e => e.Id == mapMarkerId);
         }
 
-        public Task LoadLinksAsync(MapMarker mapMarker)
+        public Task LoadLinksAsync(MapMarkerEntity mapMarker)
         {
             return Context.Entry(mapMarker)
                 .Collection(x => x.Links)

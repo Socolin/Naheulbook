@@ -10,8 +10,8 @@ namespace Naheulbook.Core.Utils
 {
     public interface ICharacterUtil
     {
-        void ApplyCharactersChange(NaheulbookExecutionContext executionContext, PatchCharacterRequest request, Character character, INotificationSession notificationSession);
-        LevelUpResult LevelUpCharacter(Character character, Origin origin, List<Speciality> specialities, CharacterLevelUpRequest request);
+        void ApplyCharactersChange(NaheulbookExecutionContext executionContext, PatchCharacterRequest request, CharacterEntity character, INotificationSession notificationSession);
+        LevelUpResult LevelUpCharacter(CharacterEntity character, OriginEntity origin, List<SpecialityEntity> specialities, CharacterLevelUpRequest request);
     }
 
     public class CharacterUtil : ICharacterUtil
@@ -34,7 +34,7 @@ namespace Naheulbook.Core.Utils
             _originUtil = originUtil;
         }
 
-        public void ApplyCharactersChange(NaheulbookExecutionContext executionContext, PatchCharacterRequest request, Character character, INotificationSession notificationSession)
+        public void ApplyCharactersChange(NaheulbookExecutionContext executionContext, PatchCharacterRequest request, CharacterEntity character, INotificationSession notificationSession)
         {
             if (request.Debilibeuk.HasValue)
             {
@@ -140,7 +140,7 @@ namespace Naheulbook.Core.Utils
             }
         }
 
-        public LevelUpResult LevelUpCharacter(Character character, Origin origin, List<Speciality> specialities, CharacterLevelUpRequest request)
+        public LevelUpResult LevelUpCharacter(CharacterEntity character, OriginEntity origin, List<SpecialityEntity> specialities, CharacterLevelUpRequest request)
         {
             var levelUpResult = new LevelUpResult();
 
@@ -161,18 +161,18 @@ namespace Naheulbook.Core.Utils
             return levelUpResult;
         }
 
-        private CharacterModifier CreateChaLevelUpCharacterModifier(Character character)
+        private CharacterModifierEntity CreateChaLevelUpCharacterModifier(CharacterEntity character)
         {
-            return new CharacterModifier
+            return new CharacterModifierEntity
             {
                 IsActive = true,
                 CharacterId = character.Id,
                 Permanent = true,
                 DurationType = "forever",
                 Name = "LevelUp charisme: " + character.Level,
-                Values = new List<CharacterModifierValue>
+                Values = new List<CharacterModifierValueEntity>
                 {
-                    new CharacterModifierValue
+                    new CharacterModifierValueEntity
                     {
                         StatName = "CHA",
                         Value = 1,
@@ -182,9 +182,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        private static CharacterSpeciality CreateCharacterSpeciality(Character character, Speciality speciality)
+        private static CharacterSpecialityEntity CreateCharacterSpeciality(CharacterEntity character, SpecialityEntity speciality)
         {
-            return new CharacterSpeciality
+            return new CharacterSpecialityEntity
             {
                 SpecialityId = speciality.Id,
                 Speciality = speciality,
@@ -192,33 +192,33 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        private CharacterSkill CreateCharacterSkill(Character character, Guid skillId)
+        private CharacterSkillEntity CreateCharacterSkill(CharacterEntity character, Guid skillId)
         {
-            return new CharacterSkill
+            return new CharacterSkillEntity
             {
                 CharacterId = character.Id,
                 SkillId = skillId
             };
         }
 
-        private static CharacterModifier CreateLevelUpCharacterModifier(Character character, CharacterLevelUpRequest request)
+        private static CharacterModifierEntity CreateLevelUpCharacterModifier(CharacterEntity character, CharacterLevelUpRequest request)
         {
-            var levelUpCharacterModifier = new CharacterModifier
+            var levelUpCharacterModifier = new CharacterModifierEntity
             {
                 IsActive = true,
                 Name = "LevelUp: " + request.TargetLevelUp,
-                Values = new List<CharacterModifierValue>(),
+                Values = new List<CharacterModifierValueEntity>(),
                 Permanent = true,
                 DurationType = "forever",
                 CharacterId = character.Id
             };
-            levelUpCharacterModifier.Values.Add(new CharacterModifierValue
+            levelUpCharacterModifier.Values.Add(new CharacterModifierValueEntity
             {
                 StatName = request.EvOrEa,
                 Value = request.EvOrEaValue,
                 Type = "ADD"
             });
-            levelUpCharacterModifier.Values.Add(new CharacterModifierValue
+            levelUpCharacterModifier.Values.Add(new CharacterModifierValueEntity
             {
                 StatName = request.StatToUp,
                 Value = 1,

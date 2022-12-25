@@ -48,15 +48,15 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("that the loot is visible for players")]
         public void GivenThatTheLootIsVisibleForPlayers()
         {
-            _testDataUtil.GetLast<Loot>().IsVisibleForPlayer = true;
+            _testDataUtil.GetLast<LootEntity>().IsVisibleForPlayer = true;
             _testDataUtil.SaveChanges();
         }
 
         [Given("an invite from the group to the (.+) character")]
         public void GivenAnInviteFromTheGroupToTheXCharacter(string indexString)
         {
-            var character = _testDataUtil.Get<Character>(StepArgumentUtil.ParseIndex(indexString));
-            var group = _testDataUtil.GetLast<Group>();
+            var character = _testDataUtil.Get<CharacterEntity>(StepArgumentUtil.ParseIndex(indexString));
+            var group = _testDataUtil.GetLast<GroupEntity>();
 
             _testDataUtil.AddGroupInvite(character, group, true);
         }
@@ -64,8 +64,8 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("a request from (.+) character to join the group")]
         public void GivenARequestFromXCharacterToJoinTheGroup(string indexString)
         {
-            var character = _testDataUtil.Get<Character>(StepArgumentUtil.ParseIndex(indexString));
-            var group = _testDataUtil.GetLast<Group>();
+            var character = _testDataUtil.Get<CharacterEntity>(StepArgumentUtil.ParseIndex(indexString));
+            var group = _testDataUtil.GetLast<GroupEntity>();
 
             _testDataUtil.AddGroupInvite(character, group, false);
         }
@@ -73,14 +73,14 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given("that the loot is the current group combat loot")]
         public void GivenThatTheLootIsTheCurrentGroupCombatLoot()
         {
-            _testDataUtil.GetLast<Group>().CombatLootId = _testDataUtil.GetLast<Loot>().Id;
+            _testDataUtil.GetLast<GroupEntity>().CombatLootId = _testDataUtil.GetLast<LootEntity>().Id;
             _testDataUtil.SaveChanges();
         }
 
         [Given(@"that the group have a date set to the (.+) day of the year (\d+) at (\d+):(\d+)")]
         public void GivenThatTheGroupHaveADateSet(string day, int year, int hour, int minute)
         {
-            var group = _testDataUtil.GetLast<Group>();
+            var group = _testDataUtil.GetLast<GroupEntity>();
             var groupData = JsonConvert.DeserializeObject<GroupData>(group.Data ?? "null") ?? new GroupData();
             groupData.Date = new NhbkDate
             {

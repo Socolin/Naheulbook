@@ -7,12 +7,12 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IGroupHistoryEntryRepository : IRepository<GroupHistoryEntry>
+    public interface IGroupHistoryEntryRepository : IRepository<GroupHistoryEntryEntity>
     {
-        Task<List<GroupHistoryEntry>> GetByGroupIdAndPageAsync(int groupId, int page);
+        Task<List<GroupHistoryEntryEntity>> GetByGroupIdAndPageAsync(int groupId, int page);
     }
 
-    public class GroupHistoryEntryRepository : Repository<GroupHistoryEntry, NaheulbookDbContext>, IGroupHistoryEntryRepository
+    public class GroupHistoryEntryRepository : Repository<GroupHistoryEntryEntity, NaheulbookDbContext>, IGroupHistoryEntryRepository
     {
         private const int PageSize = 40;
 
@@ -21,7 +21,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public Task<List<GroupHistoryEntry>> GetByGroupIdAndPageAsync(int groupId, int page)
+        public Task<List<GroupHistoryEntryEntity>> GetByGroupIdAndPageAsync(int groupId, int page)
         {
             return Context.GroupHistory
                 .Where(h => h.GroupId == groupId)

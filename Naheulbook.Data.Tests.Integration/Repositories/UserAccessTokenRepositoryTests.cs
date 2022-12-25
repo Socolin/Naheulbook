@@ -23,7 +23,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         public async Task CanCreateUserAccessToken()
         {
             var user = TestDataUtil
-                .AddUser().GetLast<User>();
+                .AddUser().GetLast<UserEntity>();
 
             _userAccessTokenRepository.Add(CreateUserAccessToken(user));
             await RepositoryDbContext.SaveChangesAsync();
@@ -36,13 +36,13 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddUser()
                 .AddUserAccessToken();
 
-            var tokens = await _userAccessTokenRepository.GetUserAccessTokensForUser(TestDataUtil.GetLast<User>().Id);
+            var tokens = await _userAccessTokenRepository.GetUserAccessTokensForUser(TestDataUtil.GetLast<UserEntity>().Id);
 
             tokens.Should().HaveCount(1);
-            tokens.First().Should().BeEquivalentTo(TestDataUtil.GetLast<UserAccessToken>(), config => config.Excluding(x => x.User).Excluding(x => x.DateCreated));
+            tokens.First().Should().BeEquivalentTo(TestDataUtil.GetLast<UserAccessTokenEntity>(), config => config.Excluding(x => x.User).Excluding(x => x.DateCreated));
         }
 
-        private static UserAccessToken CreateUserAccessToken(User user)
+        private static UserAccessTokenEntity CreateUserAccessToken(UserEntity user)
         {
             return new()
             {

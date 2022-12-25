@@ -7,38 +7,38 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public MonsterSubCategory CreateMonsterSubCategory(MonsterType monsterType, string suffix = null)
+        public MonsterSubCategoryEntity CreateMonsterSubCategory(MonsterTypeEntity monsterType, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new MonsterSubCategory
+            return new MonsterSubCategoryEntity
             {
-                MonsterTemplates = new List<MonsterTemplate>(),
+                MonsterTemplates = new List<MonsterTemplateEntity>(),
                 Name = $"some-name-{suffix}",
                 Type = monsterType,
                 TypeId = monsterType.Id
             };
         }
 
-        public MonsterType CreateMonsterType(string suffix = null)
+        public MonsterTypeEntity CreateMonsterType(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new MonsterType()
+            return new MonsterTypeEntity()
             {
                 Name = $"some-monster-type-name-{suffix}",
-                SubCategories = new List<MonsterSubCategory>()
+                SubCategories = new List<MonsterSubCategoryEntity>()
             };
         }
 
-        public MonsterTrait CreateMonsterTrait(string suffix = null)
+        public MonsterTraitEntity CreateMonsterTrait(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new MonsterTrait
+            return new MonsterTraitEntity
             {
                 Name = $"some-monster-trait-name-{suffix}",
                 Description = $"some-monster-trait-description-{suffix}",
@@ -46,12 +46,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public MonsterTemplate CreateMonsterTemplate(MonsterSubCategory subCategory, string suffix = null)
+        public MonsterTemplateEntity CreateMonsterTemplate(MonsterSubCategoryEntity subCategory, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new MonsterTemplate
+            return new MonsterTemplateEntity
             {
                 Name = $"some-monster-template-name-{suffix}",
                 SubCategory = subCategory,
@@ -59,12 +59,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Monster CreateMonster(Group group, string suffix = null)
+        public MonsterEntity CreateMonster(GroupEntity group, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Monster
+            return new MonsterEntity
             {
                 Name = $"some-monster-name-{suffix}",
                 Group = group,

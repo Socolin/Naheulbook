@@ -7,13 +7,13 @@ namespace Naheulbook.Core.Services
 {
     public interface ISocialMediaUserLinkService
     {
-        Task<User> GetOrCreateUserFromFacebookAsync(string name, string facebookId);
+        Task<UserEntity> GetOrCreateUserFromFacebookAsync(string name, string facebookId);
         Task AssociateUserToFacebookIdAsync(int userId, string facebookId);
-        Task<User> GetOrCreateUserFromGoogleAsync(string name, string googleId);
+        Task<UserEntity> GetOrCreateUserFromGoogleAsync(string name, string googleId);
         Task AssociateUserToGoogleIdAsync(int userId, string googleId);
-        Task<User> GetOrCreateUserFromTwitterAsync(string name, string twitterId);
+        Task<UserEntity> GetOrCreateUserFromTwitterAsync(string name, string twitterId);
         Task AssociateUserToTwitterIdAsync(int userId, string twitterId);
-        Task<User> GetOrCreateUserFromMicrosoftAsync(string name, string microsoftId);
+        Task<UserEntity> GetOrCreateUserFromMicrosoftAsync(string name, string microsoftId);
         Task AssociateUserToMicrosoftIdAsync(int userId, string microsoftId);
     }
 
@@ -26,14 +26,14 @@ namespace Naheulbook.Core.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public async Task<User> GetOrCreateUserFromFacebookAsync(string name, string facebookId)
+        public async Task<UserEntity> GetOrCreateUserFromFacebookAsync(string name, string facebookId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var user = await uow.Users.GetByFacebookIdAsync(facebookId);
                 if (user == null)
                 {
-                    user = new User
+                    user = new UserEntity
                     {
                         FbId = facebookId,
                         Admin = false,
@@ -59,14 +59,14 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<User> GetOrCreateUserFromGoogleAsync(string name, string googleId)
+        public async Task<UserEntity> GetOrCreateUserFromGoogleAsync(string name, string googleId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var user = await uow.Users.GetByGoogleIdAsync(googleId);
                 if (user == null)
                 {
-                    user = new User
+                    user = new UserEntity
                     {
                         GoogleId = googleId,
                         Admin = false,
@@ -92,14 +92,14 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<User> GetOrCreateUserFromTwitterAsync(string name, string twitterId)
+        public async Task<UserEntity> GetOrCreateUserFromTwitterAsync(string name, string twitterId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var user = await uow.Users.GetByTwitterIdAsync(twitterId);
                 if (user == null)
                 {
-                    user = new User
+                    user = new UserEntity
                     {
                         TwitterId = twitterId,
                         Admin = false,
@@ -125,14 +125,14 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<User> GetOrCreateUserFromMicrosoftAsync(string name, string microsoftId)
+        public async Task<UserEntity> GetOrCreateUserFromMicrosoftAsync(string name, string microsoftId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var user = await uow.Users.GetByMicrosoftIdAsync(microsoftId);
                 if (user == null)
                 {
-                    user = new User
+                    user = new UserEntity
                     {
                         MicrosoftId = microsoftId,
                         Admin = false,

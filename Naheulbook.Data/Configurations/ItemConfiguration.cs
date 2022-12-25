@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class ItemConfiguration : IEntityTypeConfiguration<Item>
+    public class ItemConfiguration : IEntityTypeConfiguration<ItemEntity>
     {
-        public void Configure(EntityTypeBuilder<Item> builder)
+        public void Configure(EntityTypeBuilder<ItemEntity> builder)
         {
             builder.ToTable("items");
 

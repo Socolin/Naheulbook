@@ -39,7 +39,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void EquipItem_ShouldUpdateItemData()
         {
-            var item = new Item();
+            var item = new ItemEntity();
 
             _util.EquipItem(item, 8);
 
@@ -55,12 +55,12 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         {
             const int characterId = 8;
             const int itemId = 12;
-            var item = new Item {Id = itemId, CharacterId = characterId, Character = new Character()};
+            var item = new ItemEntity {Id = itemId, CharacterId = characterId, Character = new CharacterEntity()};
 
             _characterHistoryUtil.CreateLogEquipItem(characterId, itemId)
-                .Returns(new CharacterHistoryEntry {Action = "equip"});
+                .Returns(new CharacterHistoryEntryEntity {Action = "equip"});
             _characterHistoryUtil.CreateLogUnEquipItem(characterId, itemId)
-                .Returns(new CharacterHistoryEntry {Action = "unEquip"});
+                .Returns(new CharacterHistoryEntryEntity {Action = "unEquip"});
             _itemDataUtil.IsItemEquipped(item)
                 .Returns(wasEquipped, isNowEquipped);
 

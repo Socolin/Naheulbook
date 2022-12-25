@@ -7,7 +7,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IJobService
     {
-        Task<ICollection<Job>> GetJobsAsync();
+        Task<ICollection<JobEntity>> GetJobsAsync();
     }
 
     public class JobService : IJobService
@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public async Task<ICollection<Job>> GetJobsAsync()
+        public async Task<ICollection<JobEntity>> GetJobsAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

@@ -11,8 +11,8 @@ namespace Naheulbook.Core.Services
 {
     public interface IItemTemplateSubCategoryService
     {
-        Task<ItemTemplateSubCategory> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request);
-        Task<List<ItemTemplate>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems);
+        Task<ItemTemplateSubCategoryEntity> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request);
+        Task<List<ItemTemplateEntity>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems);
     }
 
     public class ItemTemplateSubCategoryService : IItemTemplateSubCategoryService
@@ -29,11 +29,11 @@ namespace Naheulbook.Core.Services
             _authorizationUtil = authorizationUtil;
         }
 
-        public async Task<ItemTemplateSubCategory> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request)
+        public async Task<ItemTemplateSubCategoryEntity> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-            var itemTemplateSubCategory = new ItemTemplateSubCategory()
+            var itemTemplateSubCategory = new ItemTemplateSubCategoryEntity()
             {
                 SectionId = request.SectionId,
                 Name = request.Name,
@@ -51,7 +51,7 @@ namespace Naheulbook.Core.Services
             return itemTemplateSubCategory;
         }
 
-        public async Task<List<ItemTemplate>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems)
+        public async Task<List<ItemTemplateEntity>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

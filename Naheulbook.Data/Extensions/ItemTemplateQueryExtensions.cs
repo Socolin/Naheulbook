@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Extensions
     {
         public static IQueryable<TEntity> IncludeItemTemplateDetails<TEntity>(
             this IQueryable<TEntity> queryable,
-            Expression<Func<TEntity, ItemTemplate>> navigationPropertyPath
+            Expression<Func<TEntity, ItemTemplateEntity>> navigationPropertyPath
         ) where TEntity : class
         {
             return queryable
@@ -30,8 +30,8 @@ namespace Naheulbook.Data.Extensions
                 .ThenInclude(i => i.Slot);
         }
 
-        public static IQueryable<ItemTemplate> IncludeItemTemplateDetails(
-            this IQueryable<ItemTemplate> queryable
+        public static IQueryable<ItemTemplateEntity> IncludeItemTemplateDetails(
+            this IQueryable<ItemTemplateEntity> queryable
         )
         {
             return queryable
@@ -44,15 +44,15 @@ namespace Naheulbook.Data.Extensions
                 .Include(i => i.SkillModifiers);
         }
 
-        public static IQueryable<ItemTemplate> FilterCommunityAndPrivateItemTemplates(
-            this IQueryable<ItemTemplate> queryable,
+        public static IQueryable<ItemTemplateEntity> FilterCommunityAndPrivateItemTemplates(
+            this IQueryable<ItemTemplateEntity> queryable,
             int? currentUserId,
             bool includeCommunityItems
         )
         {
-            return queryable.Where(x => x.Source == ItemTemplate.OfficialSourceValue
-                                        || (x.Source == ItemTemplate.CommunitySourceValue && includeCommunityItems)
-                                        || (x.Source == ItemTemplate.PrivateSourceValue && x.SourceUserId == currentUserId)
+            return queryable.Where(x => x.Source == ItemTemplateEntity.OfficialSourceValue
+                                        || (x.Source == ItemTemplateEntity.CommunitySourceValue && includeCommunityItems)
+                                        || (x.Source == ItemTemplateEntity.PrivateSourceValue && x.SourceUserId == currentUserId)
             );
         }
 
@@ -60,7 +60,7 @@ namespace Naheulbook.Data.Extensions
         public static IQueryable<TEntity> IncludeChildWithItemTemplateDetails<TEntity, TChild>(
             this IQueryable<TEntity> queryable,
             Expression<Func<TEntity, IEnumerable<TChild>>> parentNavigationPropertyPath,
-            Expression<Func<TChild, ItemTemplate>> navigationPropertyPath
+            Expression<Func<TChild, ItemTemplateEntity>> navigationPropertyPath
         )
             where TEntity : class
             where TChild : class

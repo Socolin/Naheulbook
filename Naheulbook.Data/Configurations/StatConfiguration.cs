@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class StatConfiguration : IEntityTypeConfiguration<Stat>
+    public class StatConfiguration : IEntityTypeConfiguration<StatEntity>
     {
-        public void Configure(EntityTypeBuilder<Stat> builder)
+        public void Configure(EntityTypeBuilder<StatEntity> builder)
         {
             builder.HasKey(e => e.Name);
 

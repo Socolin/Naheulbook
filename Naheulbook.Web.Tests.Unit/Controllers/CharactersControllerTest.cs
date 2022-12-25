@@ -45,7 +45,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public async Task GetCharactersListAsync_ShouldLoadListOfCharacterFromService_ThenMapItIntoSummary()
         {
-            var characters = new List<Character>();
+            var characters = new List<CharacterEntity>();
             var charactersResponse = new List<CharacterSummaryResponse>();
 
             _characterService.GetCharacterListAsync(_executionContext)
@@ -63,7 +63,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             const int characterId = 2;
             const int groupMasterId = 3;
-            var character = new Character {Group = new Group {MasterId = groupMasterId}};
+            var character = new CharacterEntity {Group = new GroupEntity {MasterId = groupMasterId}};
             var characterResponse = new CharacterResponse();
 
             _characterService.LoadCharacterDetailsAsync(_executionContext, characterId)
@@ -80,7 +80,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetCharacterDetailsAsync_ShouldLoadCharacterFromService_ThenMapItIntoCharacterResponse_WhenNoGroup()
         {
             const int characterId = 2;
-            var character = new Character();
+            var character = new CharacterEntity();
             var characterResponse = new CharacterResponse();
 
             _characterService.LoadCharacterDetailsAsync(_executionContext, characterId)
@@ -99,7 +99,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             const int characterId = 2;
             const int groupMasterId = 3;
             _executionContext.UserId = groupMasterId;
-            var character = new Character {Group = new Group {MasterId = groupMasterId}};
+            var character = new CharacterEntity {Group = new GroupEntity {MasterId = groupMasterId}};
             var characterResponse = new CharacterFoGmResponse();
 
             _characterService.LoadCharacterDetailsAsync(_executionContext, characterId)
@@ -117,7 +117,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             const int characterId = 2;
             _characterService.LoadCharacterDetailsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
-                .Returns(Task.FromException<Character>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<CharacterEntity>(new ForbiddenAccessException()));
 
             Func<Task> act = () => _controller.GetCharacterDetailsAsync(_executionContext, characterId);
 
@@ -129,7 +129,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             const int characterId = 2;
             _characterService.LoadCharacterDetailsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
-                .Returns(Task.FromException<Character>(new CharacterNotFoundException(characterId)));
+                .Returns(Task.FromException<CharacterEntity>(new CharacterNotFoundException(characterId)));
 
             Func<Task> act = () => _controller.GetCharacterDetailsAsync(_executionContext, characterId);
 
@@ -140,7 +140,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateCharacterAsync_ShouldCreateCharacterWithCharacterService_ThenReturnCharacterResponse()
         {
             var createCharacterRequest = new CreateCharacterRequest();
-            var createdCharacter = new Character();
+            var createdCharacter = new CharacterEntity();
             var characterResponse = new CreateCharacterResponse();
 
             _characterService.CreateCharacterAsync(_executionContext, createCharacterRequest)
@@ -158,7 +158,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostAddItemToCharacterInventory_ShouldLoadCharacterFromService_ThenMapItIntoResponse()
         {
             const int characterId = 2;
-            var item = new Item();
+            var item = new ItemEntity();
             var itemResponse = new ItemResponse();
             var request = new CreateItemRequest();
 
@@ -180,7 +180,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var request = new CreateItemRequest();
 
             _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
-                .Returns(Task.FromException<Item>(exception));
+                .Returns(Task.FromException<ItemEntity>(exception));
 
             Func<Task> act = () => _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request);
 
@@ -195,7 +195,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var request = new CreateItemRequest();
 
             _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
-                .Returns(Task.FromException<Item>(new ItemTemplateNotFoundException(itemTemplateId)));
+                .Returns(Task.FromException<ItemEntity>(new ItemTemplateNotFoundException(itemTemplateId)));
 
             Func<Task> act = () => _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request);
 
@@ -206,7 +206,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetCharacterLoots_ShouldLoadCharacterLootsFromService_ThenMapItIntoResponse()
         {
             const int characterId = 2;
-            var loots = new List<Loot>();
+            var loots = new List<LootEntity>();
             var lootsResponse = new List<LootResponse>();
 
             _characterService.GetCharacterLootsAsync(_executionContext, characterId)
@@ -224,7 +224,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetCharacterLoots_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.GetCharacterLootsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
-                .Returns(Task.FromException<List<Loot>>(exception));
+                .Returns(Task.FromException<List<LootEntity>>(exception));
 
             Func<Task> act = () => _controller.GetCharacterLootsAsync(_executionContext, 2);
 
@@ -236,7 +236,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostAddModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.AddModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<AddCharacterModifierRequest>())
-                .Returns(Task.FromException<CharacterModifier>(exception));
+                .Returns(Task.FromException<CharacterModifierEntity>(exception));
 
             Func<Task> act = () => _controller.PostAddModifiersAsync(_executionContext, 2, new AddCharacterModifierRequest());
 
@@ -248,7 +248,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task DeleteModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.DeleteModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
-                .Returns(Task.FromException<CharacterModifier>(exception));
+                .Returns(Task.FromException<CharacterModifierEntity>(exception));
 
             Func<Task> act = () => _controller.DeleteModifiersAsync(_executionContext, 2, 4);
 
@@ -260,7 +260,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostToggleModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.ToggleModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
-                .Returns(Task.FromException<CharacterModifier>(exception));
+                .Returns(Task.FromException<CharacterModifierEntity>(exception));
 
             Func<Task> act = () => _controller.PostToggleModifiersAsync(_executionContext, 2, 4);
 
@@ -302,7 +302,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PatchCharacterAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.UpdateCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PatchCharacterRequest>())
-                .Returns(Task.FromException<List<Loot>>(exception));
+                .Returns(Task.FromException<List<LootEntity>>(exception));
 
             Func<Task> act = () => _controller.PatchCharacterAsync(_executionContext, 2, new PatchCharacterRequest());
 
@@ -314,7 +314,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PutStatBonusAdAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _characterService.SetCharacterAdBonusStatAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PutStatBonusAdRequest>())
-                .Returns(Task.FromException<List<Loot>>(exception));
+                .Returns(Task.FromException<List<LootEntity>>(exception));
 
             Func<Task> act = () => _controller.PutStatBonusAdAsync(_executionContext, 2, new PutStatBonusAdRequest());
 

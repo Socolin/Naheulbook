@@ -7,19 +7,19 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IEventRepository : IRepository<Event>
+    public interface IEventRepository : IRepository<EventEntity>
     {
-        Task<List<Event>> GetByGroupIdAsync(int groupId);
+        Task<List<EventEntity>> GetByGroupIdAsync(int groupId);
     }
 
-    public class EventRepository : Repository<Event, NaheulbookDbContext>, IEventRepository
+    public class EventRepository : Repository<EventEntity, NaheulbookDbContext>, IEventRepository
     {
         public EventRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public Task<List<Event>> GetByGroupIdAsync(int groupId)
+        public Task<List<EventEntity>> GetByGroupIdAsync(int groupId)
         {
             return Context.Events
                 .Where(g => g.GroupId == groupId)

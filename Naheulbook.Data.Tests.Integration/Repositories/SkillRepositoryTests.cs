@@ -23,7 +23,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var skills = TestDataUtil
                 .AddSkill()
                 .AddSkill()
-                .GetAll<Skill>();
+                .GetAll<SkillEntity>();
 
             var actualSkills = await _skillRepository.GetAllWithEffectsAsync();
 

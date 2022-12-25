@@ -9,34 +9,34 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IUserAccessTokenRepository : IRepository<UserAccessToken>
+    public interface IUserAccessTokenRepository : IRepository<UserAccessTokenEntity>
     {
-        Task<List<UserAccessToken>> GetUserAccessTokensForUser(int userId);
-        Task<UserAccessToken?> GetByKeyAsync(string accessKey);
-        Task<UserAccessToken?> GetByUserIdAndTokenIdAsync(int userId, Guid userAccessTokenId);
+        Task<List<UserAccessTokenEntity>> GetUserAccessTokensForUser(int userId);
+        Task<UserAccessTokenEntity?> GetByKeyAsync(string accessKey);
+        Task<UserAccessTokenEntity?> GetByUserIdAndTokenIdAsync(int userId, Guid userAccessTokenId);
     }
 
-    public class UserAccessTokenRepository : Repository<UserAccessToken, NaheulbookDbContext>, IUserAccessTokenRepository
+    public class UserAccessTokenRepository : Repository<UserAccessTokenEntity, NaheulbookDbContext>, IUserAccessTokenRepository
     {
         public UserAccessTokenRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public Task<List<UserAccessToken>> GetUserAccessTokensForUser(int userId)
+        public Task<List<UserAccessTokenEntity>> GetUserAccessTokensForUser(int userId)
         {
             return Context.UserAccessTokens
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
         }
 
-        public Task<UserAccessToken?> GetByKeyAsync(string accessKey)
+        public Task<UserAccessTokenEntity?> GetByKeyAsync(string accessKey)
         {
             return Context.UserAccessTokens
                 .FirstOrDefaultAsync(x => x.Key == accessKey);
         }
 
-        public Task<UserAccessToken?> GetByUserIdAndTokenIdAsync(int userId, Guid userAccessTokenId)
+        public Task<UserAccessTokenEntity?> GetByUserIdAndTokenIdAsync(int userId, Guid userAccessTokenId)
         {
             return Context.UserAccessTokens
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == userAccessTokenId);

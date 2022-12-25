@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class OriginConfiguration : IEntityTypeConfiguration<Origin>
+    public class OriginConfiguration : IEntityTypeConfiguration<OriginEntity>
     {
-        public void Configure(EntityTypeBuilder<Origin> builder)
+        public void Configure(EntityTypeBuilder<OriginEntity> builder)
         {
             builder.ToTable("origins");
 
@@ -77,9 +77,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class OriginInfoConfiguration : IEntityTypeConfiguration<OriginInfo>
+    public class OriginInfoConfiguration : IEntityTypeConfiguration<OriginInfoEntity>
     {
-        public void Configure(EntityTypeBuilder<OriginInfo> builder)
+        public void Configure(EntityTypeBuilder<OriginInfoEntity> builder)
         {
             builder.ToTable("origin_information");
 
@@ -111,9 +111,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class OriginRequirementConfiguration : IEntityTypeConfiguration<OriginRequirement>
+    public class OriginRequirementConfiguration : IEntityTypeConfiguration<OriginRequirementEntity>
     {
-        public void Configure(EntityTypeBuilder<OriginRequirement> builder)
+        public void Configure(EntityTypeBuilder<OriginRequirementEntity> builder)
         {
             builder.ToTable("origin_requirements");
 
@@ -151,9 +151,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class OriginRestrictConfiguration : IEntityTypeConfiguration<OriginRestrict>
+    public class OriginRestrictConfiguration : IEntityTypeConfiguration<OriginRestrictEntity>
     {
-        public void Configure(EntityTypeBuilder<OriginRestrict> builder)
+        public void Configure(EntityTypeBuilder<OriginRestrictEntity> builder)
         {
             builder.ToTable("origin_restrictions");
 
@@ -182,9 +182,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class OriginSkillConfiguration : IEntityTypeConfiguration<OriginSkill>
+    public class OriginSkillConfiguration : IEntityTypeConfiguration<OriginSkillEntity>
     {
-        public void Configure(EntityTypeBuilder<OriginSkill> builder)
+        public void Configure(EntityTypeBuilder<OriginSkillEntity> builder)
         {
             builder.HasKey(e => new {e.OriginId, e.SkillId});
 
@@ -216,9 +216,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class OriginRandomNameUrlConfiguration : IEntityTypeConfiguration<OriginRandomNameUrl>
+    public class OriginRandomNameUrlConfiguration : IEntityTypeConfiguration<OriginRandomNameUrlEntity>
     {
-        public void Configure(EntityTypeBuilder<OriginRandomNameUrl> builder)
+        public void Configure(EntityTypeBuilder<OriginRandomNameUrlEntity> builder)
         {
             builder.ToTable("origin_random_name_urls");
 

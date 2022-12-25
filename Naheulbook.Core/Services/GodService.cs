@@ -7,7 +7,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IGodService
     {
-        Task<List<God>> GetAllGodsAsync();
+        Task<List<GodEntity>> GetAllGodsAsync();
     }
 
     public class GodService : IGodService
@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public async Task<List<God>> GetAllGodsAsync()
+        public async Task<List<GodEntity>> GetAllGodsAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

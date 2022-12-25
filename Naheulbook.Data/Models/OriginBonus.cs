@@ -12,6 +12,6 @@ namespace Naheulbook.Data.Models
         public string? Flags { get; set; }
 
         public Guid OriginId { get; set; }
-        public Origin Origin { get; set; } = null!;
+        public OriginEntity Origin { get; set; } = null!;
     }
 }

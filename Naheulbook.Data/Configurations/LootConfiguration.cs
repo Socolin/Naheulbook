@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class LootConfiguration : IEntityTypeConfiguration<Loot>
+    public class LootConfiguration : IEntityTypeConfiguration<LootEntity>
     {
-        public void Configure(EntityTypeBuilder<Loot> builder)
+        public void Configure(EntityTypeBuilder<LootEntity> builder)
         {
             builder.ToTable("loots");
 

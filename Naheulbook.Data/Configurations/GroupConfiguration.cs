@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class GroupConfiguration : IEntityTypeConfiguration<Group>
+    public class GroupConfiguration : IEntityTypeConfiguration<GroupEntity>
     {
-        public void Configure(EntityTypeBuilder<Group> builder)
+        public void Configure(EntityTypeBuilder<GroupEntity> builder)
         {
             builder.ToTable("groups");
 
@@ -42,9 +42,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class GroupInviteConfiguration : IEntityTypeConfiguration<GroupInvite>
+    public class GroupInviteConfiguration : IEntityTypeConfiguration<GroupInviteEntity>
     {
-        public void Configure(EntityTypeBuilder<GroupInvite> builder)
+        public void Configure(EntityTypeBuilder<GroupInviteEntity> builder)
         {
             builder.ToTable("group_invitations");
 
@@ -76,9 +76,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class GroupHistoryEntryConfiguration : IEntityTypeConfiguration<GroupHistoryEntry>
+    public class GroupHistoryEntryConfiguration : IEntityTypeConfiguration<GroupHistoryEntryEntity>
     {
-        public void Configure(EntityTypeBuilder<GroupHistoryEntry> builder)
+        public void Configure(EntityTypeBuilder<GroupHistoryEntryEntity> builder)
         {
             builder.ToTable("group_history_entries");
 

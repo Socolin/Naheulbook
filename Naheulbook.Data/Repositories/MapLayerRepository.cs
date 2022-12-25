@@ -5,19 +5,19 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IMapLayerRepository : IRepository<MapLayer>
+    public interface IMapLayerRepository : IRepository<MapLayerEntity>
     {
-        Task LoadMarkersForResponseAsync(MapLayer mapLayer);
+        Task LoadMarkersForResponseAsync(MapLayerEntity mapLayer);
     }
 
-    public class MapLayerRepository : Repository<MapLayer, NaheulbookDbContext>, IMapLayerRepository
+    public class MapLayerRepository : Repository<MapLayerEntity, NaheulbookDbContext>, IMapLayerRepository
     {
         public MapLayerRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public Task LoadMarkersForResponseAsync(MapLayer mapLayer)
+        public Task LoadMarkersForResponseAsync(MapLayerEntity mapLayer)
         {
             return Context.Entry(mapLayer)
                 .Collection(x => x.Markers)

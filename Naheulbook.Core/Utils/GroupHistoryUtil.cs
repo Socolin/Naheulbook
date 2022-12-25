@@ -7,13 +7,13 @@ namespace Naheulbook.Core.Utils
 {
     public interface IGroupHistoryUtil
     {
-        GroupHistoryEntry CreateLogStartCombat(Group group);
-        GroupHistoryEntry CreateLogEndCombat(Group group);
-        GroupHistoryEntry CreateLogChangeMankdebol(Group group, int? oldValue, int newValue);
-        GroupHistoryEntry CreateLogChangeDebilibeuk(Group group, int? oldValue, int newValue);
-        GroupHistoryEntry CreateLogChangeDate(Group group, NhbkDate? oldValue, NhbkDate newValue);
-        GroupHistoryEntry CreateLogAddTime(Group group, NhbkDate date, NhbkDateOffset timeOffset);
-        GroupHistoryEntry CreateLogEventRp(Group @group, bool isGm, string info);
+        GroupHistoryEntryEntity CreateLogStartCombat(GroupEntity group);
+        GroupHistoryEntryEntity CreateLogEndCombat(GroupEntity group);
+        GroupHistoryEntryEntity CreateLogChangeMankdebol(GroupEntity group, int? oldValue, int newValue);
+        GroupHistoryEntryEntity CreateLogChangeDebilibeuk(GroupEntity group, int? oldValue, int newValue);
+        GroupHistoryEntryEntity CreateLogChangeDate(GroupEntity group, NhbkDate? oldValue, NhbkDate newValue);
+        GroupHistoryEntryEntity CreateLogAddTime(GroupEntity group, NhbkDate date, NhbkDateOffset timeOffset);
+        GroupHistoryEntryEntity CreateLogEventRp(GroupEntity @group, bool isGm, string info);
     }
 
     public class GroupHistoryUtil : IGroupHistoryUtil
@@ -33,9 +33,9 @@ namespace Naheulbook.Core.Utils
             _jsonUtil = jsonUtil;
         }
 
-        public GroupHistoryEntry CreateLogStartCombat(Group group)
+        public GroupHistoryEntryEntity CreateLogStartCombat(GroupEntity group)
         {
-            return new GroupHistoryEntry
+            return new GroupHistoryEntryEntity
             {
                 Group = group,
                 Action = StartCombatActionName,
@@ -44,9 +44,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public GroupHistoryEntry CreateLogEndCombat(Group group)
+        public GroupHistoryEntryEntity CreateLogEndCombat(GroupEntity group)
         {
-            return new GroupHistoryEntry
+            return new GroupHistoryEntryEntity
             {
                 Group = group,
                 Action = EndCombatActionName,
@@ -55,9 +55,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public GroupHistoryEntry CreateLogChangeMankdebol(Group group, int? oldValue, int newValue)
+        public GroupHistoryEntryEntity CreateLogChangeMankdebol(GroupEntity group, int? oldValue, int newValue)
         {
-            return new GroupHistoryEntry
+            return new GroupHistoryEntryEntity
             {
                 Group = group,
                 Action = UpdateMankdebolActionName,
@@ -67,9 +67,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public GroupHistoryEntry CreateLogChangeDebilibeuk(Group group, int? oldValue, int newValue)
+        public GroupHistoryEntryEntity CreateLogChangeDebilibeuk(GroupEntity group, int? oldValue, int newValue)
         {
-            return new GroupHistoryEntry
+            return new GroupHistoryEntryEntity
             {
                 Group = group,
                 Action = UpdateDebilibeukActionName,
@@ -79,9 +79,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public GroupHistoryEntry CreateLogChangeDate(Group group, NhbkDate? oldValue, NhbkDate newValue)
+        public GroupHistoryEntryEntity CreateLogChangeDate(GroupEntity group, NhbkDate? oldValue, NhbkDate newValue)
         {
-            return new GroupHistoryEntry
+            return new GroupHistoryEntryEntity
             {
                 Group = group,
                 Action = UpdateDateActionName,
@@ -91,9 +91,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public GroupHistoryEntry CreateLogAddTime(Group group, NhbkDate date, NhbkDateOffset timeOffset)
+        public GroupHistoryEntryEntity CreateLogAddTime(GroupEntity group, NhbkDate date, NhbkDateOffset timeOffset)
         {
-            return new GroupHistoryEntry
+            return new GroupHistoryEntryEntity
             {
                 Group = group,
                 Action = AddTimeActionName,
@@ -103,9 +103,9 @@ namespace Naheulbook.Core.Utils
             };
         }
 
-        public GroupHistoryEntry CreateLogEventRp(Group @group, bool isGm, string info)
+        public GroupHistoryEntryEntity CreateLogEventRp(GroupEntity @group, bool isGm, string info)
         {
-            return new GroupHistoryEntry
+            return new GroupHistoryEntryEntity
             {
                 Group = group,
                 Action = EventRpActionName,

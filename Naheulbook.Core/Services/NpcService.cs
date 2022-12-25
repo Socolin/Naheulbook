@@ -12,9 +12,9 @@ namespace Naheulbook.Core.Services
 {
     public interface INpcService
     {
-        Task<List<Npc>> LoadNpcsAsync(NaheulbookExecutionContext executionContext, int groupId);
-        Task<Npc> CreateNpcAsync(NaheulbookExecutionContext executionContext, int groupId, NpcRequest request);
-        Task<Npc> EditNpcAsync(NaheulbookExecutionContext executionContext, int npcId, NpcRequest request);
+        Task<List<NpcEntity>> LoadNpcsAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task<NpcEntity> CreateNpcAsync(NaheulbookExecutionContext executionContext, int groupId, NpcRequest request);
+        Task<NpcEntity> EditNpcAsync(NaheulbookExecutionContext executionContext, int npcId, NpcRequest request);
     }
 
     public class NpcService : INpcService
@@ -34,7 +34,7 @@ namespace Naheulbook.Core.Services
             _jsonUtil = jsonUtil;
         }
 
-        public async Task<List<Npc>> LoadNpcsAsync(NaheulbookExecutionContext executionContext, int groupId)
+        public async Task<List<NpcEntity>> LoadNpcsAsync(NaheulbookExecutionContext executionContext, int groupId)
         {
             using var uow = _unitOfWorkFactory.CreateUnitOfWork();
 
@@ -47,7 +47,7 @@ namespace Naheulbook.Core.Services
             return await uow.Npcs.GetByGroupIdAsync(groupId);
         }
 
-        public async Task<Npc> CreateNpcAsync(NaheulbookExecutionContext executionContext, int groupId, NpcRequest request)
+        public async Task<NpcEntity> CreateNpcAsync(NaheulbookExecutionContext executionContext, int groupId, NpcRequest request)
         {
             using var uow = _unitOfWorkFactory.CreateUnitOfWork();
 
@@ -57,7 +57,7 @@ namespace Naheulbook.Core.Services
 
             _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-            var npc = new Npc
+            var npc = new NpcEntity
             {
                 GroupId = groupId,
                 Name = request.Name,
@@ -71,7 +71,7 @@ namespace Naheulbook.Core.Services
             return npc;
         }
 
-        public async Task<Npc> EditNpcAsync(NaheulbookExecutionContext executionContext, int npcId, NpcRequest request)
+        public async Task<NpcEntity> EditNpcAsync(NaheulbookExecutionContext executionContext, int npcId, NpcRequest request)
         {
             using var uow = _unitOfWorkFactory.CreateUnitOfWork();
 

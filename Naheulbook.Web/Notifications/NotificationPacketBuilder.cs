@@ -29,42 +29,42 @@ namespace Naheulbook.Web.Notifications
             _hubGroupUtil = hubGroupUtil;
         }
 
-        public INotificationPacket BuildCharacterChangeEv(Character character)
+        public INotificationPacket BuildCharacterChangeEv(CharacterEntity character)
         {
             return BuildCharacterChange(character.Id, "update", new {Stat = "ev", Value = character.Ev});
         }
 
-        public INotificationPacket BuildCharacterChangeEa(Character character)
+        public INotificationPacket BuildCharacterChangeEa(CharacterEntity character)
         {
             return BuildCharacterChange(character.Id, "update", new {Stat = "ea", Value = character.Ea});
         }
 
-        public INotificationPacket BuildCharacterChangeFatePoint(Character character)
+        public INotificationPacket BuildCharacterChangeFatePoint(CharacterEntity character)
         {
             return BuildCharacterChange(character.Id, "update", new {Stat = "fatePoint", Value = character.FatePoint});
         }
 
-        public INotificationPacket BuildCharacterChangeExperience(Character character)
+        public INotificationPacket BuildCharacterChangeExperience(CharacterEntity character)
         {
             return BuildCharacterChange(character.Id, "update", new {Stat = "experience", Value = character.Experience});
         }
 
-        public INotificationPacket BuildCharacterChangeSex(Character character)
+        public INotificationPacket BuildCharacterChangeSex(CharacterEntity character)
         {
             return BuildCharacterChange(character.Id, "update", new {Stat = "sex", Value = character.Sex});
         }
 
-        public INotificationPacket BuildCharacterChangeName(Character character)
+        public INotificationPacket BuildCharacterChangeName(CharacterEntity character)
         {
             return BuildCharacterChange(character.Id, "update", new {Stat = "name", Value = character.Name});
         }
 
-        public INotificationPacket BuildCharacterChangeNotes(Character character)
+        public INotificationPacket BuildCharacterChangeNotes(CharacterEntity character)
         {
             return BuildCharacterChange(character.Id, "update", new {Stat = "notes", Value = character.Notes});
         }
 
-        public INotificationPacket BuildCharacterAddItem(int characterId, Item item)
+        public INotificationPacket BuildCharacterAddItem(int characterId, ItemEntity item)
         {
             return BuildCharacterChange(characterId, "addItem", _mapper.Map<ItemResponse>(item));
         }
@@ -84,27 +84,27 @@ namespace Naheulbook.Web.Notifications
             return BuildCharacterChange(characterId, "removeJob", new CharacterRemoveJobResponse {JobId = jobId});
         }
 
-        public INotificationPacket BuildCharacterChangeColor(Character character)
+        public INotificationPacket BuildCharacterChangeColor(CharacterEntity character)
         {
             return BuildCharacterGmChange(character.Id, "changeColor", character.Color);
         }
 
-        public INotificationPacket BuildCharacterChangeTarget(Character character, TargetRequest targetInfo)
+        public INotificationPacket BuildCharacterChangeTarget(CharacterEntity character, TargetRequest targetInfo)
         {
             return BuildCharacterGmChange(character.Id, "changeTarget", targetInfo);
         }
 
-        public INotificationPacket BuildCharacterChangeData(Character character, CharacterGmData gmData)
+        public INotificationPacket BuildCharacterChangeData(CharacterEntity character, CharacterGmData gmData)
         {
             return BuildCharacterGmChange(character.Id, "updateGmData", gmData);
         }
 
-        public INotificationPacket BuildCharacterChangeActive(Character character)
+        public INotificationPacket BuildCharacterChangeActive(CharacterEntity character)
         {
             return BuildCharacterGmChange(character.Id, "active", character.IsActive);
         }
 
-        public INotificationPacket BuildItemDataChanged(Item item)
+        public INotificationPacket BuildItemDataChanged(ItemEntity item)
         {
             if (item.CharacterId != null)
                 return BuildCharacterChange(item.CharacterId.Value, "updateItem", _mapper.Map<ItemPartialResponse>(item));
@@ -116,7 +116,7 @@ namespace Naheulbook.Web.Notifications
             throw new NotSupportedException();
         }
 
-        public INotificationPacket BuildItemModifiersChanged(Item item)
+        public INotificationPacket BuildItemModifiersChanged(ItemEntity item)
         {
             if (item.CharacterId != null)
                 return BuildCharacterChange(item.CharacterId.Value, "updateItemModifiers", _mapper.Map<ItemPartialResponse>(item));
@@ -128,7 +128,7 @@ namespace Naheulbook.Web.Notifications
             throw new NotSupportedException();
         }
 
-        public INotificationPacket BuildEquipItem(Item item)
+        public INotificationPacket BuildEquipItem(ItemEntity item)
         {
             if (item.CharacterId != null)
                 return BuildCharacterChange(item.CharacterId.Value, "equipItem", _mapper.Map<ItemPartialResponse>(item));
@@ -140,7 +140,7 @@ namespace Naheulbook.Web.Notifications
             throw new NotSupportedException();
         }
 
-        public INotificationPacket BuildItemChangeContainer(Item item)
+        public INotificationPacket BuildItemChangeContainer(ItemEntity item)
         {
             if (item.CharacterId != null)
                 return BuildCharacterChange(item.CharacterId.Value, "changeContainer", _mapper.Map<ItemPartialResponse>(item));
@@ -152,7 +152,7 @@ namespace Naheulbook.Web.Notifications
             throw new NotSupportedException();
         }
 
-        public INotificationPacket BuildItemUpdateModifier(Item item)
+        public INotificationPacket BuildItemUpdateModifier(ItemEntity item)
         {
             if (item.CharacterId != null)
                 return BuildCharacterChange(item.CharacterId.Value, "updateItemModifiers", _mapper.Map<ItemPartialResponse>(item));
@@ -164,7 +164,7 @@ namespace Naheulbook.Web.Notifications
             throw new NotSupportedException();
         }
 
-        public INotificationPacket BuildItemDeleteItem(Item item)
+        public INotificationPacket BuildItemDeleteItem(ItemEntity item)
         {
             if (item.CharacterId != null)
                 return BuildCharacterChange(item.CharacterId.Value, "deleteItem", item.Id);
@@ -176,7 +176,7 @@ namespace Naheulbook.Web.Notifications
             throw new NotSupportedException();
         }
 
-        public INotificationPacket BuildItemTakeItem(Item item, Character character, int? remainingQuantity)
+        public INotificationPacket BuildItemTakeItem(ItemEntity item, CharacterEntity character, int? remainingQuantity)
         {
             if (item.CharacterId != null)
                 return BuildCharacterChange(item.CharacterId.Value, "tookItem", new {Character = _mapper.Map<NamedIdResponse>(character), remainingQuantity, OriginalItem = _mapper.Map<ItemPartialResponse>(item)});
@@ -193,7 +193,7 @@ namespace Naheulbook.Web.Notifications
             return BuildCharacterChange(characterId, "statBonusAd", stat);
         }
 
-        public INotificationPacket BuildCharacterAddModifier(int characterId, CharacterModifier characterModifier)
+        public INotificationPacket BuildCharacterAddModifier(int characterId, CharacterModifierEntity characterModifier)
         {
             return BuildCharacterChange(characterId, "addModifier", _mapper.Map<ActiveStatsModifier>(characterModifier));
         }
@@ -203,27 +203,27 @@ namespace Naheulbook.Web.Notifications
             return BuildCharacterChange(characterId, "removeModifier", characterModifierId);
         }
 
-        public INotificationPacket BuildCharacterUpdateModifier(int characterId, CharacterModifier characterModifier)
+        public INotificationPacket BuildCharacterUpdateModifier(int characterId, CharacterModifierEntity characterModifier)
         {
             return BuildCharacterChange(characterId, "updateModifier", _mapper.Map<ActiveStatsModifier>(characterModifier));
         }
 
-        public INotificationPacket BuildCharacterGroupInvite(int characterId, GroupInvite groupInvite)
+        public INotificationPacket BuildCharacterGroupInvite(int characterId, GroupInviteEntity groupInvite)
         {
             return BuildCharacterChange(characterId, "groupInvite", _mapper.Map<CharacterGroupInviteResponse>(groupInvite));
         }
 
-        public INotificationPacket BuildCharacterCancelGroupInvite(int characterId, GroupInvite groupInvite)
+        public INotificationPacket BuildCharacterCancelGroupInvite(int characterId, GroupInviteEntity groupInvite)
         {
             return BuildCharacterChange(characterId, "cancelInvite", _mapper.Map<DeleteInviteResponse>(groupInvite));
         }
 
-        public INotificationPacket BuildCharacterAcceptGroupInvite(int characterId, GroupInvite groupInvite)
+        public INotificationPacket BuildCharacterAcceptGroupInvite(int characterId, GroupInviteEntity groupInvite)
         {
             return BuildCharacterChange(characterId, "joinGroup", _mapper.Map<CharacterGroupResponse>(groupInvite.Group));
         }
 
-        public INotificationPacket BuildCharacterShowLoot(int characterId, Loot loot)
+        public INotificationPacket BuildCharacterShowLoot(int characterId, LootEntity loot)
         {
             return BuildCharacterChange(characterId, "showLoot", _mapper.Map<LootResponse>(loot));
         }
@@ -233,17 +233,17 @@ namespace Naheulbook.Web.Notifications
             return BuildCharacterChange(characterId, "hideLoot", lootId);
         }
 
-        public INotificationPacket BuildGroupCharacterInvite(int groupId, GroupInvite groupInvite)
+        public INotificationPacket BuildGroupCharacterInvite(int groupId, GroupInviteEntity groupInvite)
         {
             return BuildGroupChange(groupId, "groupInvite", _mapper.Map<GroupGroupInviteResponse>(groupInvite));
         }
 
-        public INotificationPacket BuildGroupCancelGroupInvite(int groupId, GroupInvite groupInvite)
+        public INotificationPacket BuildGroupCancelGroupInvite(int groupId, GroupInviteEntity groupInvite)
         {
             return BuildGroupChange(groupId, "cancelInvite", _mapper.Map<DeleteInviteResponse>(groupInvite));
         }
 
-        public INotificationPacket BuildGroupAcceptGroupInvite(int groupId, GroupInvite groupInvite)
+        public INotificationPacket BuildGroupAcceptGroupInvite(int groupId, GroupInviteEntity groupInvite)
         {
             return BuildGroupChange(groupId, "joinCharacter", groupInvite.CharacterId);
         }
@@ -253,7 +253,7 @@ namespace Naheulbook.Web.Notifications
             return BuildGroupChange(groupId, "changeData", groupData);
         }
 
-        public INotificationPacket BuildGroupAddLoot(int groupId, Loot loot)
+        public INotificationPacket BuildGroupAddLoot(int groupId, LootEntity loot)
         {
             return BuildGroupChange(groupId, "addLoot", _mapper.Map<LootResponse>(loot));
         }
@@ -268,7 +268,7 @@ namespace Naheulbook.Web.Notifications
             return BuildGroupChange(groupId, "changeConfig", groupConfig);
         }
 
-        public INotificationPacket BuildGroupAddMonster(int groupId, Monster monster)
+        public INotificationPacket BuildGroupAddMonster(int groupId, MonsterEntity monster)
         {
             return BuildGroupChange(groupId, "addMonster", _mapper.Map<MonsterResponse>(monster));
         }
@@ -283,12 +283,12 @@ namespace Naheulbook.Web.Notifications
             return BuildLootChange(lootId, "updateVisibility", visibleForPlayer);
         }
 
-        public INotificationPacket BuildLootAddMonster(int lootId, Monster monster)
+        public INotificationPacket BuildLootAddMonster(int lootId, MonsterEntity monster)
         {
             return BuildLootChange(lootId, "addMonster", _mapper.Map<MonsterResponse>(monster));
         }
 
-        public INotificationPacket BuildLootAddItem(int lootId, Item item)
+        public INotificationPacket BuildLootAddItem(int lootId, ItemEntity item)
         {
             return BuildLootChange(lootId, "addItem", _mapper.Map<ItemResponse>(item));
         }
@@ -308,7 +308,7 @@ namespace Naheulbook.Web.Notifications
             return BuildMonsterChange(monsterId, "removeModifier", modifierId);
         }
 
-        public INotificationPacket BuildMonsterAddItem(int monsterId, Item item)
+        public INotificationPacket BuildMonsterAddItem(int monsterId, ItemEntity item)
         {
             return BuildMonsterChange(monsterId, "addItem", _mapper.Map<ItemResponse>(item));
         }

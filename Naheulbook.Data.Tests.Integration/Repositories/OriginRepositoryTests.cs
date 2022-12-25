@@ -21,7 +21,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         public async Task GetAllWithAllData()
         {
             TestDataUtil.AddOriginWithAllData();
-            var origins = TestDataUtil.GetAll<Origin>();
+            var origins = TestDataUtil.GetAll<OriginEntity>();
 
             var actualOrigins = await _originRepository.GetAllWithAllDataAsync();
 

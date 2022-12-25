@@ -38,7 +38,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetItemTemplateAsync_RetrieveItemInfroFromItemService_AndMapItIntoResponse()
         {
             var itemTemplateId = Guid.NewGuid();
-            var itemTemplate = new ItemTemplate();
+            var itemTemplate = new ItemTemplateEntity();
             var itemTemplateResponse = new ItemTemplateResponse();
 
             _itemTemplateService.GetItemTemplateAsync(itemTemplateId)
@@ -66,7 +66,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PutItemTemplateAsync_CallServiceToEditItem_AndMapEditedItemIntoResponse()
         {
             var itemTemplateId = Guid.NewGuid();
-            var itemTemplate = new ItemTemplate();
+            var itemTemplate = new ItemTemplateEntity();
             var itemTemplateRequest = new ItemTemplateRequest();
             var itemTemplateResponse = new ItemTemplateResponse();
 
@@ -107,7 +107,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateItemTemplate_CallItemService()
         {
             var itemTemplateRequest = new ItemTemplateRequest();
-            var itemTemplate = new ItemTemplate();
+            var itemTemplate = new ItemTemplateEntity();
             var itemTemplateResponse = new ItemTemplateResponse();
 
             _itemTemplateService.CreateItemTemplateAsync(_executionContext, itemTemplateRequest)
@@ -125,7 +125,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateItemTemplate_WhenCatchForbiddenAccessException_Return403()
         {
             _itemTemplateService.CreateItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<ItemTemplateRequest>())
-                .Returns(Task.FromException<ItemTemplate>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<ItemTemplateEntity>(new ForbiddenAccessException()));
 
             Func<Task<JsonResult>> act = () => _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, new ItemTemplateRequest());
 

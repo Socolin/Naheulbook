@@ -9,30 +9,30 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IItemRepository : IRepository<Item>
+    public interface IItemRepository : IRepository<ItemEntity>
     {
-        Task<Item?> GetWithAllDataAsync(int itemId);
-        Task<List<Item>> GetWithAllDataByIdsAsync(IEnumerable<int> itemIds);
-        Task<Item?> GetWithOwnerAsync(int itemId);
-        Task<Item?> GetWithOwnerWitGroupCharactersAsync(int itemId);
-        Task<Item?> GetWithAllDataWithCharacterAsync(int itemId);
+        Task<ItemEntity?> GetWithAllDataAsync(int itemId);
+        Task<List<ItemEntity>> GetWithAllDataByIdsAsync(IEnumerable<int> itemIds);
+        Task<ItemEntity?> GetWithOwnerAsync(int itemId);
+        Task<ItemEntity?> GetWithOwnerWitGroupCharactersAsync(int itemId);
+        Task<ItemEntity?> GetWithAllDataWithCharacterAsync(int itemId);
     }
 
-    public class ItemRepository : Repository<Item, NaheulbookDbContext>, IItemRepository
+    public class ItemRepository : Repository<ItemEntity, NaheulbookDbContext>, IItemRepository
     {
         public ItemRepository(NaheulbookDbContext context)
             : base(context)
         {
         }
 
-        public Task<Item?> GetWithAllDataAsync(int itemId)
+        public Task<ItemEntity?> GetWithAllDataAsync(int itemId)
         {
             return Context.Items
                 .IncludeItemTemplateDetails(i => i.ItemTemplate)
                 .SingleAsync(x => x.Id == itemId);
         }
 
-        public Task<List<Item>> GetWithAllDataByIdsAsync(IEnumerable<int> itemIds)
+        public Task<List<ItemEntity>> GetWithAllDataByIdsAsync(IEnumerable<int> itemIds)
         {
             return Context.Items
                 .IncludeItemTemplateDetails(i => i.ItemTemplate)
@@ -40,7 +40,7 @@ namespace Naheulbook.Data.Repositories
                 .ToListAsync();
         }
 
-        public Task<Item?> GetWithOwnerAsync(int itemId)
+        public Task<ItemEntity?> GetWithOwnerAsync(int itemId)
         {
             return Context.Items
                 .Include(i => i.Character!)
@@ -52,7 +52,7 @@ namespace Naheulbook.Data.Repositories
                 .FirstOrDefaultAsync(i => i.Id == itemId);
         }
 
-        public Task<Item?> GetWithOwnerWitGroupCharactersAsync(int itemId)
+        public Task<ItemEntity?> GetWithOwnerWitGroupCharactersAsync(int itemId)
         {
             return Context.Items
                 .Include(i => i.Character!)
@@ -67,7 +67,7 @@ namespace Naheulbook.Data.Repositories
                 .FirstOrDefaultAsync(i => i.Id == itemId);
         }
 
-        public Task<Item?> GetWithAllDataWithCharacterAsync(int itemId)
+        public Task<ItemEntity?> GetWithAllDataWithCharacterAsync(int itemId)
         {
             return Context.Items
                 .IncludeItemTemplateDetails(i => i.ItemTemplate)

@@ -5,14 +5,14 @@ namespace Naheulbook.TestUtils
 {
     public partial class TestDataUtil
     {
-        public TestDataUtil AddUser(Action<User> customizer = null)
+        public TestDataUtil AddUser(Action<UserEntity> customizer = null)
         {
             return SaveEntity(_defaultEntityCreator.CreateUser(), customizer);
         }
 
-        public TestDataUtil AddUserAccessToken(Action<UserAccessToken> customizer = null)
+        public TestDataUtil AddUserAccessToken(Action<UserAccessTokenEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateUserAccessToken(GetLast<User>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateUserAccessToken(GetLast<UserEntity>()), customizer);
         }
     }
 }

@@ -16,10 +16,10 @@ namespace Naheulbook.Core.Services
     {
         Task CreateUserAsync(string username, string password);
         Task ValidateUserAsync(string username, string activationCode);
-        Task<User> CheckPasswordAsync(string username, string password);
-        Task<User> GetUserInfoAsync(int userId);
+        Task<UserEntity> CheckPasswordAsync(string username, string password);
+        Task<UserEntity> GetUserInfoAsync(int userId);
         Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request);
-        Task<List<User>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter);
+        Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter);
     }
 
     public class UserService : IUserService
@@ -59,7 +59,7 @@ namespace Naheulbook.Core.Services
                 }
 
                 activationCode = string.Join("", bytes.Select(b => b.ToString("x2")));
-                var user = new User()
+                var user = new UserEntity()
                 {
                     Username = username,
                     HashedPassword = _passwordHashingService.HashPassword(password),
@@ -87,7 +87,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<User> CheckPasswordAsync(string username, string password)
+        public async Task<UserEntity> CheckPasswordAsync(string username, string password)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -103,7 +103,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<User> GetUserInfoAsync(int userId)
+        public async Task<UserEntity> GetUserInfoAsync(int userId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -139,7 +139,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<User>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter)
+        public async Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

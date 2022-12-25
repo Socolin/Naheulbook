@@ -62,7 +62,7 @@ namespace Naheulbook.Core.Utils
             await notificationSession.CommitAsync();
         }
 
-        private void UpdateMonsterDuration(Monster monster, IList<IDurationChange> changes, INotificationSession notificationSession)
+        private void UpdateMonsterDuration(MonsterEntity monster, IList<IDurationChange> changes, INotificationSession notificationSession)
         {
             var modifiers = _jsonUtil.DeserializeOrCreate<List<ActiveStatsModifier>>(monster.Modifiers);
 
@@ -76,7 +76,7 @@ namespace Naheulbook.Core.Utils
             monster.Modifiers = _jsonUtil.Serialize(modifiers);
         }
 
-        private void UpdateItemsDuration(ICollection<Item> items, IEnumerable<IITemDurationChange> changes, INotificationSession notificationSession)
+        private void UpdateItemsDuration(ICollection<ItemEntity> items, IEnumerable<IITemDurationChange> changes, INotificationSession notificationSession)
         {
             foreach (var (item, change) in items.Join(changes.OfType<ItemModifierDurationChange>(), i => i.Id, c => c.ItemId, (item, change) => (item, change)))
             {
@@ -87,7 +87,7 @@ namespace Naheulbook.Core.Utils
             }
         }
 
-        private void UpdateCharacterDuration(Character character, IList<IDurationChange> changes, INotificationSession notificationSession)
+        private void UpdateCharacterDuration(CharacterEntity character, IList<IDurationChange> changes, INotificationSession notificationSession)
         {
             foreach (var change in changes.OfType<ModifierDurationChange>())
             {
@@ -97,7 +97,7 @@ namespace Naheulbook.Core.Utils
             UpdateItemsDuration(character.Items, changes.OfType<IITemDurationChange>(), notificationSession);
         }
 
-        private void ApplyChangeOnCharacterModifier(Character character, ICollection<CharacterModifier> modifiers, ModifierDurationChange change, INotificationSession notificationSession)
+        private void ApplyChangeOnCharacterModifier(CharacterEntity character, ICollection<CharacterModifierEntity> modifiers, ModifierDurationChange change, INotificationSession notificationSession)
         {
             var newModifier = change.Modifier;
             var modifier = modifiers.First(m => m.Id == newModifier.Id);
@@ -117,7 +117,7 @@ namespace Naheulbook.Core.Utils
             }
         }
 
-        private void ApplyChangeOnMonsterModifier(Monster monster, IList<ActiveStatsModifier> modifiers, IModifierChange change, INotificationSession notificationSession)
+        private void ApplyChangeOnMonsterModifier(MonsterEntity monster, IList<ActiveStatsModifier> modifiers, IModifierChange change, INotificationSession notificationSession)
         {
             var newModifier = change.Modifier;
             var modifier = modifiers.First(m => m.Id == newModifier.Id);

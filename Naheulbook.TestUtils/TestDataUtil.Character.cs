@@ -6,95 +6,95 @@ namespace Naheulbook.TestUtils
 {
     public partial class TestDataUtil
     {
-        public TestDataUtil AddCharacter(int ownerId, Action<Character> customizer = null)
+        public TestDataUtil AddCharacter(int ownerId, Action<CharacterEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateCharacter(ownerId, GetLast<Origin>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateCharacter(ownerId, GetLast<OriginEntity>()), customizer);
         }
 
-        public TestDataUtil AddCharacter(Action<Character> customizer = null)
+        public TestDataUtil AddCharacter(Action<CharacterEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateCharacter(GetLast<User>().Id, GetLast<Origin>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateCharacter(GetLast<UserEntity>().Id, GetLast<OriginEntity>()), customizer);
         }
 
-        public TestDataUtil AddCharacterWithRequiredDependencies(Action<Character> customizer = null)
+        public TestDataUtil AddCharacterWithRequiredDependencies(Action<CharacterEntity> customizer = null)
         {
             AddUser();
             AddOrigin();
-            return SaveEntity(_defaultEntityCreator.CreateCharacter(GetLast<User>().Id, GetLast<Origin>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateCharacter(GetLast<UserEntity>().Id, GetLast<OriginEntity>()), customizer);
         }
 
-        public TestDataUtil AddCharacterWithAllData(int ownerId, Action<Character> customizer = null)
+        public TestDataUtil AddCharacterWithAllData(int ownerId, Action<CharacterEntity> customizer = null)
         {
             AddStat().AddStat().AddStat().AddStat();
             AddSkill().AddSkill();
             AddOrigin();
-            AddJob().GetLast<Job>();
-            AddJob().GetLast<Job>();
+            AddJob().GetLast<JobEntity>();
+            AddJob().GetLast<JobEntity>();
 
-            if (!Contains<Group>())
+            if (!Contains<GroupEntity>())
                 AddGroup(ownerId);
 
             AddSpeciality();
 
-            var character = _defaultEntityCreator.CreateCharacter(ownerId, GetLast<Origin>());
+            var character = _defaultEntityCreator.CreateCharacter(ownerId, GetLast<OriginEntity>());
 
-            character.Jobs = new List<CharacterJob>
+            character.Jobs = new List<CharacterJobEntity>
             {
-                new CharacterJob {Job = GetFromEnd<Job>(0)},
-                new CharacterJob {Job = GetFromEnd<Job>(1)},
+                new CharacterJobEntity {Job = GetFromEnd<JobEntity>(0)},
+                new CharacterJobEntity {Job = GetFromEnd<JobEntity>(1)},
             };
 
-            var characterModifier1 = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValue>
+            var characterModifier1 = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>
             {
-                _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<Stat>(0), 1),
-                _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<Stat>(1), 2),
+                _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(0), 1),
+                _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(1), 2),
             });
             characterModifier1.DurationType = "combat";
             characterModifier1.CombatCount = 2;
             characterModifier1.CurrentCombatCount = 1;
-            var characterModifier2 = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValue>
+            var characterModifier2 = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>
             {
-                _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<Stat>(2), 4),
-                _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<Stat>(3), 6),
+                _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(2), 4),
+                _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(3), 6),
             });
-            var characterModifier3 = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValue>());
+            var characterModifier3 = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>());
             characterModifier3.DurationType = "lap";
             characterModifier3.LapCount = 4;
             characterModifier3.CurrentLapCount = 2;
             characterModifier3.LapCountDecrement = @"{""when"":""BEFORE"", ""fighterId"": 1, ""fighterIsMonster"": true}";
 
-            character.Modifiers = new List<CharacterModifier>
+            character.Modifiers = new List<CharacterModifierEntity>
             {
                 characterModifier1,
                 characterModifier2,
                 characterModifier3,
             };
 
-            character.Specialities = new List<CharacterSpeciality>
+            character.Specialities = new List<CharacterSpecialityEntity>
             {
-                new CharacterSpeciality {Speciality = GetLast<Speciality>()}
+                new CharacterSpecialityEntity {Speciality = GetLast<SpecialityEntity>()}
             };
 
-            character.Skills = new List<CharacterSkill>
+            character.Skills = new List<CharacterSkillEntity>
             {
-                new CharacterSkill {Skill = GetFromEnd<Skill>(0)},
-                new CharacterSkill {Skill = GetFromEnd<Skill>(1)}
+                new CharacterSkillEntity {Skill = GetFromEnd<SkillEntity>(0)},
+                new CharacterSkillEntity {Skill = GetFromEnd<SkillEntity>(1)}
             };
 
-            character.Group = GetLast<Group>();
+            character.Group = GetLast<GroupEntity>();
 
             return SaveEntity(character, customizer);
         }
 
-        public TestDataUtil AddCharacterHistoryEntry(Action<CharacterHistoryEntry> customizer = null)
+        public TestDataUtil AddCharacterHistoryEntry(Action<CharacterHistoryEntryEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateCharacterHistoryEntry(GetLast<Character>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateCharacterHistoryEntry(GetLast<CharacterEntity>()), customizer);
         }
 
-        public TestDataUtil AddCharacterModifier(Action<CharacterModifier> customizer = null)
+        public TestDataUtil AddCharacterModifier(Action<CharacterModifierEntity> customizer = null)
         {
-            var characterModifier = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValue>());
-            characterModifier.Character = GetLast<Character>();
+            var characterModifier = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>());
+            characterModifier.Character = GetLast<CharacterEntity>();
             return SaveEntity(characterModifier, customizer);
         }
     }

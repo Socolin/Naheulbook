@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class MonsterConfiguration : IEntityTypeConfiguration<Monster>
+    public class MonsterConfiguration : IEntityTypeConfiguration<MonsterEntity>
     {
-        public void Configure(EntityTypeBuilder<Monster> builder)
+        public void Configure(EntityTypeBuilder<MonsterEntity> builder)
         {
             builder.ToTable("monsters");
 

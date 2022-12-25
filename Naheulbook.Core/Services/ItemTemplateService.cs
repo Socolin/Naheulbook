@@ -14,12 +14,12 @@ namespace Naheulbook.Core.Services
 {
     public interface IItemTemplateService
     {
-        Task<ItemTemplate> GetItemTemplateAsync(Guid itemTemplateId);
-        Task<ItemTemplate> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request);
-        Task<ItemTemplate> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request);
-        Task<List<ItemTemplate>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId);
+        Task<ItemTemplateEntity> GetItemTemplateAsync(Guid itemTemplateId);
+        Task<ItemTemplateEntity> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request);
+        Task<ItemTemplateEntity> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request);
+        Task<List<ItemTemplateEntity>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId);
 
-        Task<ICollection<Slot>> GetItemSlotsAsync();
+        Task<ICollection<SlotEntity>> GetItemSlotsAsync();
     }
 
     public class ItemTemplateService : IItemTemplateService
@@ -45,7 +45,7 @@ namespace Naheulbook.Core.Services
             _stringCleanupUtil = stringCleanupUtil;
         }
 
-        public async Task<ItemTemplate> GetItemTemplateAsync(Guid itemTemplateId)
+        public async Task<ItemTemplateEntity> GetItemTemplateAsync(Guid itemTemplateId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -56,12 +56,12 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<ItemTemplate> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request)
+        public async Task<ItemTemplateEntity> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request)
         {
             if (request.Source == "official")
                 await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-            var itemTemplate = _mapper.Map<ItemTemplate>(request);
+            var itemTemplate = _mapper.Map<ItemTemplateEntity>(request);
 
             if (request.Source != "official")
                 itemTemplate.SourceUserId = executionContext.UserId;
@@ -76,7 +76,7 @@ namespace Naheulbook.Core.Services
             return itemTemplate;
         }
 
-        public async Task<ItemTemplate> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request)
+        public async Task<ItemTemplateEntity> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -104,9 +104,9 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<ItemTemplate>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId)
+        public async Task<List<ItemTemplateEntity>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId)
         {
-            var matchingItemTemplates = new List<ItemTemplate>();
+            var matchingItemTemplates = new List<ItemTemplateEntity>();
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 var cleanFilter = _stringCleanupUtil.RemoveAccents(filter).ToUpperInvariant();
@@ -125,7 +125,7 @@ namespace Naheulbook.Core.Services
             return matchingItemTemplates;
         }
 
-        public async Task<ICollection<Slot>> GetItemSlotsAsync()
+        public async Task<ICollection<SlotEntity>> GetItemSlotsAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

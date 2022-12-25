@@ -12,14 +12,14 @@ namespace Naheulbook.Core.Services
 {
     public interface IEffectService
     {
-        Task<Effect> GetEffectAsync(int effectId);
+        Task<EffectEntity> GetEffectAsync(int effectId);
         Task<ICollection<EffectType>> GetEffectSubCategoriesAsync();
-        Task<ICollection<Effect>> GetEffectsBySubCategoryAsync(long subCategoryId);
+        Task<ICollection<EffectEntity>> GetEffectsBySubCategoryAsync(long subCategoryId);
         Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
         Task<EffectSubCategory> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request);
-        Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request);
-        Task<Effect> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request);
-        Task<List<Effect>> SearchEffectsAsync(string filter);
+        Task<EffectEntity> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request);
+        Task<EffectEntity> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request);
+        Task<List<EffectEntity>> SearchEffectsAsync(string filter);
     }
 
     public class EffectService : IEffectService
@@ -33,7 +33,7 @@ namespace Naheulbook.Core.Services
             _authorizationUtil = authorizationUtil;
         }
 
-        public async Task<Effect> GetEffectAsync(int effectId)
+        public async Task<EffectEntity> GetEffectAsync(int effectId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -53,7 +53,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<ICollection<Effect>> GetEffectsBySubCategoryAsync(long subCategoryId)
+        public async Task<ICollection<EffectEntity>> GetEffectsBySubCategoryAsync(long subCategoryId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -90,7 +90,7 @@ namespace Naheulbook.Core.Services
                 DiceSize = request.DiceSize,
                 DiceCount = request.DiceCount,
                 Note = request.Note,
-                Effects = new List<Effect>()
+                Effects = new List<EffectEntity>()
             };
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
@@ -102,11 +102,11 @@ namespace Naheulbook.Core.Services
             return effectSubCategory;
         }
 
-        public async Task<Effect> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request)
+        public async Task<EffectEntity> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-            var effect = new Effect
+            var effect = new EffectEntity
             {
                 Name = request.Name,
                 SubCategoryId = subCategoryId,
@@ -132,7 +132,7 @@ namespace Naheulbook.Core.Services
             return effect;
         }
 
-        public async Task<Effect> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request)
+        public async Task<EffectEntity> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
@@ -162,10 +162,10 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<Effect>> SearchEffectsAsync(string filter)
+        public async Task<List<EffectEntity>> SearchEffectsAsync(string filter)
         {
             if (string.IsNullOrEmpty(filter))
-                return new List<Effect>();
+                return new List<EffectEntity>();
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
                 return await uow.Effects.SearchByNameAsync(filter, 10);

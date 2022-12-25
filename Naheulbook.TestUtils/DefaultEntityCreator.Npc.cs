@@ -4,12 +4,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public Npc CreateNpc(Group group, string suffix = null)
+        public NpcEntity CreateNpc(GroupEntity group, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Npc()
+            return new NpcEntity()
             {
                 Data = "{}",
                 GroupId = group.Id,

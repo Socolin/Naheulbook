@@ -7,12 +7,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public Origin CreateOrigin(string suffix = null)
+        public OriginEntity CreateOrigin(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Origin
+            return new OriginEntity
             {
                 Name = $"some-origin-name-{suffix}",
                 Flags = @"[{""type"": ""value""}]",
@@ -23,16 +23,16 @@ namespace Naheulbook.TestUtils
                 Data = @"{""baseEv"": 20, ""maxLoad"": 10, ""maxArmorPr"": 2, ""diceEvLevelUp"": 4, ""speedModifier"": -20}",
                 Size = $"some-size-{suffix}",
                 Bonuses = new List<OriginBonus>(),
-                Information = new List<OriginInfo>(),
-                Requirements = new List<OriginRequirement>(),
-                Restrictions = new List<OriginRestrict>(),
-                Skills = new List<OriginSkill>()
+                Information = new List<OriginInfoEntity>(),
+                Requirements = new List<OriginRequirementEntity>(),
+                Restrictions = new List<OriginRestrictEntity>(),
+                Skills = new List<OriginSkillEntity>()
             };
         }
 
-        public OriginRandomNameUrl CreateOriginRandomNameUrl(Origin origin, string sex)
+        public OriginRandomNameUrlEntity CreateOriginRandomNameUrl(OriginEntity origin, string sex)
         {
-            return new OriginRandomNameUrl
+            return new OriginRandomNameUrlEntity
             {
                 Origin = origin,
                 Sex = sex,

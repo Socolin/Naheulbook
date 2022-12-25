@@ -13,10 +13,10 @@ namespace Naheulbook.Core.Services
 {
     public interface IMonsterTemplateService
     {
-        Task<MonsterTemplate> CreateMonsterTemplateAsync(NaheulbookExecutionContext executionContext, MonsterTemplateRequest request);
-        Task<MonsterTemplate> EditMonsterTemplateAsync(NaheulbookExecutionContext executionContext, int monsterTemplateId, MonsterTemplateRequest request);
-        Task<List<MonsterTemplate>> GetAllMonstersAsync();
-        Task<List<MonsterTemplate>> SearchMonsterAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId);
+        Task<MonsterTemplateEntity> CreateMonsterTemplateAsync(NaheulbookExecutionContext executionContext, MonsterTemplateRequest request);
+        Task<MonsterTemplateEntity> EditMonsterTemplateAsync(NaheulbookExecutionContext executionContext, int monsterTemplateId, MonsterTemplateRequest request);
+        Task<List<MonsterTemplateEntity>> GetAllMonstersAsync();
+        Task<List<MonsterTemplateEntity>> SearchMonsterAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId);
     }
 
     public class MonsterTemplateService : IMonsterTemplateService
@@ -30,7 +30,7 @@ namespace Naheulbook.Core.Services
             _authorizationUtil = authorizationUtil;
         }
 
-        public async Task<MonsterTemplate> CreateMonsterTemplateAsync(NaheulbookExecutionContext executionContext, MonsterTemplateRequest request)
+        public async Task<MonsterTemplateEntity> CreateMonsterTemplateAsync(NaheulbookExecutionContext executionContext, MonsterTemplateRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
@@ -41,12 +41,12 @@ namespace Naheulbook.Core.Services
                     throw new MonsterSubCategoryNotFoundException(request.SubCategoryId);
                 var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(request.Inventory.Select(x => x.ItemTemplateId));
 
-                var monsterTemplate = new MonsterTemplate
+                var monsterTemplate = new MonsterTemplateEntity
                 {
                     Data = JsonConvert.SerializeObject(request.Data),
                     Name = request.Name,
                     SubCategory = subCategory,
-                    Items = request.Inventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateInventoryElement
+                    Items = request.Inventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateInventoryElementEntity
                     {
                         Chance = i.Chance,
                         ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplateId),
@@ -63,7 +63,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<MonsterTemplate> EditMonsterTemplateAsync(NaheulbookExecutionContext executionContext, int monsterTemplateId, MonsterTemplateRequest request)
+        public async Task<MonsterTemplateEntity> EditMonsterTemplateAsync(NaheulbookExecutionContext executionContext, int monsterTemplateId, MonsterTemplateRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
@@ -86,7 +86,7 @@ namespace Naheulbook.Core.Services
                 monsterTemplate.SubCategory = subCategory;
 
                 monsterTemplate.Items = monsterTemplate.Items.Where(i => request.Inventory.Any(e => e.Id == i.Id)).ToList();
-                var newItems = request.Inventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateInventoryElement
+                var newItems = request.Inventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateInventoryElementEntity
                 {
                     Chance = i.Chance,
                     ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplateId),
@@ -105,7 +105,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<MonsterTemplate>> GetAllMonstersAsync()
+        public async Task<List<MonsterTemplateEntity>> GetAllMonstersAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -113,7 +113,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<MonsterTemplate>> SearchMonsterAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId)
+        public async Task<List<MonsterTemplateEntity>> SearchMonsterAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

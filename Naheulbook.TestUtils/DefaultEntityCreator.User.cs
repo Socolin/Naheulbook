@@ -7,12 +7,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public User CreateUser(string suffix = null)
+        public UserEntity CreateUser(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new User
+            return new UserEntity
             {
                 Username = $"some-username-{suffix}",
                 DisplayName = $"some-display-name-{suffix}",
@@ -25,12 +25,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public UserAccessToken CreateUserAccessToken(User user, string suffix = null)
+        public UserAccessTokenEntity CreateUserAccessToken(UserEntity user, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new UserAccessToken
+            return new UserAccessTokenEntity
             {
                 Id = Guid.NewGuid(),
                 Name = $"some-token-name-{suffix}",

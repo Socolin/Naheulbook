@@ -38,9 +38,9 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ApplyChangesAndNotifyAsync_WhenMankdebolIsSet_UpdateValue_LogInGroupHistory()
         {
-            var group = new Group {Data = GroupDataJson};
+            var group = new GroupEntity {Data = GroupDataJson};
             var groupData = new GroupData();
-            var groupHistoryEntry = new GroupHistoryEntry();
+            var groupHistoryEntry = new GroupHistoryEntryEntity();
             var request = new PatchGroupRequest
             {
                 Mankdebol = 4
@@ -63,9 +63,9 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ApplyChangesAndNotifyAsync_WhenDebilibeukIsSet_UpdateValue_LogInGroupHistory()
         {
-            var group = new Group {Data = GroupDataJson, Id = GroupId};
+            var group = new GroupEntity {Data = GroupDataJson, Id = GroupId};
             var groupData = new GroupData();
-            var groupHistoryEntry = new GroupHistoryEntry();
+            var groupHistoryEntry = new GroupHistoryEntryEntity();
             var request = new PatchGroupRequest
             {
                 Debilibeuk = 4
@@ -88,9 +88,9 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ApplyChangesAndNotifyAsync_WhenDateIsSet_UpdateValue_LogInGroupHistory()
         {
-            var group = new Group {Data = GroupDataJson, Id = GroupId};
+            var group = new GroupEntity {Data = GroupDataJson, Id = GroupId};
             var groupData = new GroupData();
-            var groupHistoryEntry = new GroupHistoryEntry();
+            var groupHistoryEntry = new GroupHistoryEntryEntity();
             var request = new PatchGroupRequest
             {
                 Date = new NhbkDateRequest()
@@ -117,7 +117,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         public void ApplyChangesAndNotifyAsync_ShouldNotifyGroupDataChange()
         {
             var groupData = new GroupData();
-            var group = new Group {Data = GroupDataJson, Id = GroupId};
+            var group = new GroupEntity {Data = GroupDataJson, Id = GroupId};
 
             _jsonUtil.Deserialize<GroupData>(GroupDataJson)
                 .Returns(groupData);

@@ -6,12 +6,12 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public Stat CreateStat(string suffix = null)
+        public StatEntity CreateStat(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Stat
+            return new StatEntity
             {
                 Name = $"some-stat-name-{suffix}",
                 Description = $"some-stat-description-{suffix}",

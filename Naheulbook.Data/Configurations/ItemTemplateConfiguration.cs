@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class ItemTemplateConfiguration : IEntityTypeConfiguration<ItemTemplate>
+    public class ItemTemplateConfiguration : IEntityTypeConfiguration<ItemTemplateEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemTemplate> builder)
+        public void Configure(EntityTypeBuilder<ItemTemplateEntity> builder)
         {
             builder.ToTable("item_templates");
 
@@ -59,9 +59,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class ItemTemplateSubCategoryConfiguration : IEntityTypeConfiguration<ItemTemplateSubCategory>
+    public class ItemTemplateSubCategoryConfiguration : IEntityTypeConfiguration<ItemTemplateSubCategoryEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemTemplateSubCategory> builder)
+        public void Configure(EntityTypeBuilder<ItemTemplateSubCategoryEntity> builder)
         {
             builder.ToTable("item_template_subcategories");
 
@@ -103,9 +103,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class ItemTemplateSectionConfiguration : IEntityTypeConfiguration<ItemTemplateSection>
+    public class ItemTemplateSectionConfiguration : IEntityTypeConfiguration<ItemTemplateSectionEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemTemplateSection> builder)
+        public void Configure(EntityTypeBuilder<ItemTemplateSectionEntity> builder)
         {
             builder.ToTable("item_template_sections");
 
@@ -133,9 +133,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class ItemTemplateModifierConfiguration : IEntityTypeConfiguration<ItemTemplateModifier>
+    public class ItemTemplateModifierConfiguration : IEntityTypeConfiguration<ItemTemplateModifierEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemTemplateModifier> builder)
+        public void Configure(EntityTypeBuilder<ItemTemplateModifierEntity> builder)
         {
             builder.ToTable("item_template_modifiers");
 
@@ -203,9 +203,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class ItemTemplateRequirementConfiguration : IEntityTypeConfiguration<ItemTemplateRequirement>
+    public class ItemTemplateRequirementConfiguration : IEntityTypeConfiguration<ItemTemplateRequirementEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemTemplateRequirement> builder)
+        public void Configure(EntityTypeBuilder<ItemTemplateRequirementEntity> builder)
         {
             builder.ToTable("item_template_requirements");
 
@@ -244,9 +244,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class ItemTemplateSkillConfiguration : IEntityTypeConfiguration<ItemTemplateSkill>
+    public class ItemTemplateSkillConfiguration : IEntityTypeConfiguration<ItemTemplateSkillEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemTemplateSkill> builder)
+        public void Configure(EntityTypeBuilder<ItemTemplateSkillEntity> builder)
         {
             builder.ToTable("item_template_skills");
 
@@ -278,9 +278,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class ItemTemplateSkillModifiersConfiguration : IEntityTypeConfiguration<ItemTemplateSkillModifier>
+    public class ItemTemplateSkillModifiersConfiguration : IEntityTypeConfiguration<ItemTemplateSkillModifierEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemTemplateSkillModifier> builder)
+        public void Configure(EntityTypeBuilder<ItemTemplateSkillModifierEntity> builder)
         {
             builder.ToTable("item_template_skill_modifiers");
 
@@ -316,9 +316,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class ItemTemplateSlotConfiguration : IEntityTypeConfiguration<ItemTemplateSlot>
+    public class ItemTemplateSlotConfiguration : IEntityTypeConfiguration<ItemTemplateSlotEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemTemplateSlot> builder)
+        public void Configure(EntityTypeBuilder<ItemTemplateSlotEntity> builder)
         {
             builder.HasKey(e => new {Slot = e.SlotId, Item = e.ItemTemplateId});
 
@@ -345,9 +345,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class ItemTemplateUnSkillConfiguration : IEntityTypeConfiguration<ItemTemplateUnSkill>
+    public class ItemTemplateUnSkillConfiguration : IEntityTypeConfiguration<ItemTemplateUnSkillEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemTemplateUnSkill> builder)
+        public void Configure(EntityTypeBuilder<ItemTemplateUnSkillEntity> builder)
         {
             builder.ToTable("item_template_unskills");
 
@@ -379,9 +379,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class ItemTypeConfiguration : IEntityTypeConfiguration<ItemType>
+    public class ItemTypeConfiguration : IEntityTypeConfiguration<ItemTypeEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemType> builder)
+        public void Configure(EntityTypeBuilder<ItemTypeEntity> builder)
         {
             builder.ToTable("item_types");
 
@@ -400,9 +400,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class SlotConfiguration : IEntityTypeConfiguration<Slot>
+    public class SlotConfiguration : IEntityTypeConfiguration<SlotEntity>
     {
-        public void Configure(EntityTypeBuilder<Slot> builder)
+        public void Configure(EntityTypeBuilder<SlotEntity> builder)
         {
             builder.ToTable("slots");
 

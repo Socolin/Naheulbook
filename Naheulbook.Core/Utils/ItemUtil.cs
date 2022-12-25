@@ -13,10 +13,10 @@ namespace Naheulbook.Core.Utils
 {
     public interface IItemUtil
     {
-        void EquipItem(Item item, int? level);
-        Task<(Item takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger);
-        Task<IList<Item>> CreateInitialPlayerInventoryAsync(int money);
-        bool DecrementQuantityOrDeleteItem(Item contextUsedItem);
+        void EquipItem(ItemEntity item, int? level);
+        Task<(ItemEntity takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger);
+        Task<IList<ItemEntity>> CreateInitialPlayerInventoryAsync(int money);
+        bool DecrementQuantityOrDeleteItem(ItemEntity contextUsedItem);
     }
 
     public class ItemUtil : IItemUtil
@@ -45,7 +45,7 @@ namespace Naheulbook.Core.Utils
             _itemFactory = itemFactory;
         }
 
-        public void EquipItem(Item item, int? level)
+        public void EquipItem(ItemEntity item, int? level)
         {
             var previouslyEquipped = _itemDataUtil.IsItemEquipped(item);
             _itemDataUtil.UpdateEquipItem(item, level);
@@ -54,7 +54,7 @@ namespace Naheulbook.Core.Utils
             if (previouslyEquipped != newlyEquipped && item.CharacterId != null)
             {
                 if (item.Character!.HistoryEntries == null)
-                    item.Character!.HistoryEntries = new List<CharacterHistoryEntry>();
+                    item.Character!.HistoryEntries = new List<CharacterHistoryEntryEntity>();
                 if (previouslyEquipped)
                     item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogUnEquipItem(item.CharacterId.Value, item.Id));
                 else
@@ -62,11 +62,11 @@ namespace Naheulbook.Core.Utils
             }
         }
 
-        public async Task<(Item takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger)
+        public async Task<(ItemEntity takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger)
         {
             var notificationSession = _notificationSessionFactory.CreateSession();
 
-            Item takenItem;
+            ItemEntity takenItem;
             var remainingQuantity = 0;
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
@@ -138,10 +138,10 @@ namespace Naheulbook.Core.Utils
             return (takenItem, remainingQuantity);
         }
 
-        public async Task<IList<Item>> CreateInitialPlayerInventoryAsync(int money)
+        public async Task<IList<ItemEntity>> CreateInitialPlayerInventoryAsync(int money)
         {
-            ItemTemplate purseItemTemplate;
-            ItemTemplate goldCoinItemTemplate;
+            ItemTemplateEntity purseItemTemplate;
+            ItemTemplateEntity goldCoinItemTemplate;
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -153,10 +153,10 @@ namespace Naheulbook.Core.Utils
             var moneyItem = _itemFactory.CreateItem(goldCoinItemTemplate, new ItemData {Quantity = money});
             moneyItem.Container = purseItem;
 
-            return new List<Item> {moneyItem, purseItem};
+            return new List<ItemEntity> {moneyItem, purseItem};
         }
 
-        public bool DecrementQuantityOrDeleteItem(Item item)
+        public bool DecrementQuantityOrDeleteItem(ItemEntity item)
         {
             var itemData = _itemDataUtil.GetItemData(item);
             if (itemData.Quantity <= 1)
@@ -172,7 +172,7 @@ namespace Naheulbook.Core.Utils
             return false;
         }
 
-        private Item SplitItem(Item originalItem, int quantity)
+        private ItemEntity SplitItem(ItemEntity originalItem, int quantity)
         {
             var splitItem = _itemFactory.CloneItem(originalItem);
 

@@ -46,7 +46,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 {
                     new EffectModifier
                     {
-                        Stat = TestDataUtil.GetLast<Stat>(),
+                        Stat = TestDataUtil.GetLast<StatEntity>(),
                         Type = "ADD",
                         Value = 4
                     }
@@ -55,7 +55,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var actualEffects = await _effectRepository.GetBySubCategoryWithModifiersAsync(TestDataUtil.Get<EffectSubCategory>().Id);
 
             actualEffects.Should().BeEquivalentTo(
-                TestDataUtil.GetAll<Effect>(),
+                TestDataUtil.GetAll<EffectEntity>(),
                 config => config
                     .Excluding(o => o.Id)
                     .Excluding(o => o.SubCategory)
@@ -75,16 +75,16 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 {
                     new EffectModifier
                     {
-                        Stat = TestDataUtil.GetLast<Stat>(),
+                        Stat = TestDataUtil.GetLast<StatEntity>(),
                         Type = "ADD",
                         Value = 4
                     }
                 });
 
-            var actualEffect = await _effectRepository.GetWithModifiersAsync(TestDataUtil.Get<Effect>().Id);
+            var actualEffect = await _effectRepository.GetWithModifiersAsync(TestDataUtil.Get<EffectEntity>().Id);
 
             actualEffect.Should().BeEquivalentTo(
-                TestDataUtil.Get<Effect>(),
+                TestDataUtil.Get<EffectEntity>(),
                 config => config
                     .Excluding(o => o.Id)
                     .Excluding(o => o.SubCategory)

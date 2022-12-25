@@ -15,19 +15,19 @@ namespace Naheulbook.Core.Services
 {
     public interface IGroupService
     {
-        Task<Group> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request);
-        Task<List<Group>> GetGroupListAsync(NaheulbookExecutionContext executionContext);
-        Task<Group> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task<GroupEntity> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request);
+        Task<List<GroupEntity>> GetGroupListAsync(NaheulbookExecutionContext executionContext);
+        Task<GroupEntity> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task EditGroupPropertiesAsync(NaheulbookExecutionContext executionContext, int groupId, PatchGroupRequest request);
-        Task<List<GroupHistoryEntry>> GetGroupHistoryEntriesAsync(NaheulbookExecutionContext executionContext, int groupId, int page);
+        Task<List<GroupHistoryEntryEntity>> GetGroupHistoryEntriesAsync(NaheulbookExecutionContext executionContext, int groupId, int page);
         Task EnsureUserCanAccessGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
-        Task<GroupInvite> CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request);
-        Task<GroupInvite> CancelOrRejectInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId);
+        Task<GroupInviteEntity> CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request);
+        Task<GroupInviteEntity> CancelOrRejectInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId);
         Task AcceptInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId);
         Task StartCombatAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task EndCombatAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task UpdateDurationsAsync(NaheulbookExecutionContext executionContext, int groupId, IList<PostGroupUpdateDurationsRequest> request);
-        Task<IEnumerable<Character>> ListActiveCharactersAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task<IEnumerable<CharacterEntity>> ListActiveCharactersAsync(NaheulbookExecutionContext executionContext, int groupId);
         Task<NhbkDate> AddTimeAsync(NaheulbookExecutionContext executionContext, int groupId, NhbkDateOffset request);
         Task AddHistoryEntryAsync(NaheulbookExecutionContext executionContext, int groupId, PostCreateGroupHistoryEntryRequest request);
         Task EditGroupConfigAsync(NaheulbookExecutionContext executionContext, int groupId, PatchGroupConfigRequest request);
@@ -65,11 +65,11 @@ namespace Naheulbook.Core.Services
             _groupConfigUtil = groupConfigUtil;
         }
 
-        public async Task<Group> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request)
+        public async Task<GroupEntity> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
-                var group = new Group
+                var group = new GroupEntity
                 {
                     Name = request.Name,
                     MasterId = executionContext.UserId
@@ -82,7 +82,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<Group>> GetGroupListAsync(NaheulbookExecutionContext executionContext)
+        public async Task<List<GroupEntity>> GetGroupListAsync(NaheulbookExecutionContext executionContext)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -90,7 +90,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Group> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId)
+        public async Task<GroupEntity> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -124,7 +124,7 @@ namespace Naheulbook.Core.Services
             await notificationSession.CommitAsync();
         }
 
-        public async Task<List<GroupHistoryEntry>> GetGroupHistoryEntriesAsync(NaheulbookExecutionContext executionContext, int groupId, int page)
+        public async Task<List<GroupHistoryEntryEntity>> GetGroupHistoryEntriesAsync(NaheulbookExecutionContext executionContext, int groupId, int page)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -150,7 +150,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<GroupInvite> CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request)
+        public async Task<GroupInviteEntity> CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -170,7 +170,7 @@ namespace Naheulbook.Core.Services
                 else
                     _authorizationUtil.EnsureIsCharacterOwner(executionContext, character);
 
-                var groupInvite = new GroupInvite
+                var groupInvite = new GroupInviteEntity
                 {
                     Character = character,
                     Group = group,
@@ -190,7 +190,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<GroupInvite> CancelOrRejectInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId)
+        public async Task<GroupInviteEntity> CancelOrRejectInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -295,7 +295,7 @@ namespace Naheulbook.Core.Services
             await _durationUtil.UpdateDurationAsync(groupId, _mapper.Map<IList<FighterDurationChanges>>(request));
         }
 
-        public async Task<IEnumerable<Character>> ListActiveCharactersAsync(NaheulbookExecutionContext executionContext, int groupId)
+        public async Task<IEnumerable<CharacterEntity>> ListActiveCharactersAsync(NaheulbookExecutionContext executionContext, int groupId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

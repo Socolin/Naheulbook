@@ -3,11 +3,11 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface ICalendarRepository : IRepository<Calendar>
+    public interface ICalendarRepository : IRepository<CalendarEntity>
     {
     }
 
-    public class CalendarRepository : Repository<Calendar, NaheulbookDbContext>, ICalendarRepository
+    public class CalendarRepository : Repository<CalendarEntity, NaheulbookDbContext>, ICalendarRepository
     {
         public CalendarRepository(NaheulbookDbContext context)
             : base(context)

@@ -3,11 +3,11 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface ISlotRepository : IRepository<Slot>
+    public interface ISlotRepository : IRepository<SlotEntity>
     {
     }
 
-    public class SlotRepository : Repository<Slot, NaheulbookDbContext>, ISlotRepository
+    public class SlotRepository : Repository<SlotEntity, NaheulbookDbContext>, ISlotRepository
     {
         public SlotRepository(NaheulbookDbContext context)
             : base(context)

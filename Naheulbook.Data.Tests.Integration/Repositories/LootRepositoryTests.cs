@@ -11,27 +11,27 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
     public class LootRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     {
         private LootRepository _lootRepository;
-        private Character _character;
-        private Group _group;
+        private CharacterEntity _character;
+        private GroupEntity _group;
 
         [SetUp]
         public void SetUp()
         {
             _lootRepository = new LootRepository(RepositoryDbContext);
 
-            _character = TestDataUtil.AddOrigin().AddUser().AddCharacter().GetLast<Character>();
-            _group = TestDataUtil.AddUser().AddGroup(g => g.Characters = new[] {_character}).GetLast<Group>();
+            _character = TestDataUtil.AddOrigin().AddUser().AddCharacter().GetLast<CharacterEntity>();
+            _group = TestDataUtil.AddUser().AddGroup(g => g.Characters = new[] {_character}).GetLast<GroupEntity>();
         }
 
         [Test]
         public async Task GetLootsVisibleByCharactersOfGroupAsync_FullyLoadLootAndItems()
         {
-            var expectedLoot = TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = true).GetLast<Loot>();
-            var expectedLootItemTemplate = TestDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate().GetLast<ItemTemplate>();
-            var expectedLootItem = TestDataUtil.AddItem(expectedLoot).GetLast<Item>();
-            var expectedMonster = TestDataUtil.AddMonster(c => c.Loot = expectedLoot).GetLast<Monster>();
-            var expectedMonsterItemTemplate = TestDataUtil.AddItemTemplate().GetLast<ItemTemplate>();
-            var expectedMonsterItem = TestDataUtil.AddItem(expectedMonster).GetLast<Item>();
+            var expectedLoot = TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = true).GetLast<LootEntity>();
+            var expectedLootItemTemplate = TestDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate().GetLast<ItemTemplateEntity>();
+            var expectedLootItem = TestDataUtil.AddItem(expectedLoot).GetLast<ItemEntity>();
+            var expectedMonster = TestDataUtil.AddMonster(c => c.Loot = expectedLoot).GetLast<MonsterEntity>();
+            var expectedMonsterItemTemplate = TestDataUtil.AddItemTemplate().GetLast<ItemTemplateEntity>();
+            var expectedMonsterItem = TestDataUtil.AddItem(expectedMonster).GetLast<ItemEntity>();
 
             var loots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(_group.Id);
 
@@ -47,7 +47,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [Test]
         public async Task GetLootsVisibleByCharactersOfGroupAsync_ShouldNotReturnNonVisibleLoots()
         {
-            TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = false).GetLast<Loot>();
+            TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = false).GetLast<LootEntity>();
 
             var loots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(_group.Id);
 
@@ -57,7 +57,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [Test]
         public async Task GetLootsVisibleByCharactersOfGroupAsync_ShouldNotReturnLootNotAssociateToUserGroup()
         {
-            TestDataUtil.AddGroup().AddLoot(l => l.IsVisibleForPlayer = false).GetLast<Loot>();
+            TestDataUtil.AddGroup().AddLoot(l => l.IsVisibleForPlayer = false).GetLast<LootEntity>();
 
             var loots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(_group.Id);
 
@@ -67,12 +67,12 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [Test]
         public async Task GetByGroupIdAsync_FullyLoadLootAndItems()
         {
-            var expectedLoot = TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = true).GetLast<Loot>();
-            var expectedLootItemTemplate = TestDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate().GetLast<ItemTemplate>();
-            var expectedLootItem = TestDataUtil.AddItem(expectedLoot).GetLast<Item>();
-            var expectedMonster = TestDataUtil.AddMonster(c => c.Loot = expectedLoot).GetLast<Monster>();
-            var expectedMonsterItemTemplate = TestDataUtil.AddItemTemplate().GetLast<ItemTemplate>();
-            var expectedMonsterItem = TestDataUtil.AddItem(expectedMonster).GetLast<Item>();
+            var expectedLoot = TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = true).GetLast<LootEntity>();
+            var expectedLootItemTemplate = TestDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate().GetLast<ItemTemplateEntity>();
+            var expectedLootItem = TestDataUtil.AddItem(expectedLoot).GetLast<ItemEntity>();
+            var expectedMonster = TestDataUtil.AddMonster(c => c.Loot = expectedLoot).GetLast<MonsterEntity>();
+            var expectedMonsterItemTemplate = TestDataUtil.AddItemTemplate().GetLast<ItemTemplateEntity>();
+            var expectedMonsterItem = TestDataUtil.AddItem(expectedMonster).GetLast<ItemEntity>();
 
             var loots = await _lootRepository.GetByGroupIdAsync(_group.Id);
 
@@ -88,7 +88,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [Test]
         public async Task GetByGroupIdAsync_ShouldNotReturnLootNotAssociateToUserGroup()
         {
-            TestDataUtil.AddGroup().AddLoot(l => l.IsVisibleForPlayer = false).GetLast<Loot>();
+            TestDataUtil.AddGroup().AddLoot(l => l.IsVisibleForPlayer = false).GetLast<LootEntity>();
 
             var loots = await _lootRepository.GetByGroupIdAsync(_group.Id);
 

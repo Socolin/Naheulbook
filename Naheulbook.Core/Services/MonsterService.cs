@@ -15,17 +15,17 @@ namespace Naheulbook.Core.Services
 {
     public interface IMonsterService
     {
-        Task<Monster> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
-        Task<Monster> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request);
-        Task<List<Monster>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
-        Task<List<Monster>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count);
+        Task<MonsterEntity> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
+        Task<MonsterEntity> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request);
+        Task<List<MonsterEntity>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
+        Task<List<MonsterEntity>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count);
         Task EnsureUserCanAccessMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
         Task<ActiveStatsModifier> AddModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, ActiveStatsModifier statsModifier);
         Task RemoveModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, int modifierId);
         Task DeleteMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
         Task KillMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
-        Task<Item> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request);
-        Task<Item> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request);
+        Task<ItemEntity> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request);
+        Task<ItemEntity> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request);
         Task UpdateMonsterDataAsync(NaheulbookExecutionContext executionContext, int monsterId, MonsterData monsterData);
         Task UpdateMonsterTargetAsync(NaheulbookExecutionContext executionContext, int monsterId, TargetRequest request);
         Task UpdateMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, PatchMonsterRequest request);
@@ -60,7 +60,7 @@ namespace Naheulbook.Core.Services
             _itemService = itemService;
         }
 
-        public async Task<Monster> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId)
+        public async Task<MonsterEntity> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -74,7 +74,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Monster> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request)
+        public async Task<MonsterEntity> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -86,7 +86,7 @@ namespace Naheulbook.Core.Services
 
                 _activeStatsModifierUtil.InitializeModifierIds(request.Modifiers);
 
-                var monster = new Monster
+                var monster = new MonsterEntity
                 {
                     Group = group,
                     Name = request.Name,
@@ -109,7 +109,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<Monster>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
+        public async Task<List<MonsterEntity>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -123,7 +123,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<List<Monster>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count)
+        public async Task<List<MonsterEntity>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -246,7 +246,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<Item> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request)
+        public async Task<ItemEntity> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -270,7 +270,7 @@ namespace Naheulbook.Core.Services
             return item;
         }
 
-        public async Task<Item> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request)
+        public async Task<ItemEntity> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request)
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {

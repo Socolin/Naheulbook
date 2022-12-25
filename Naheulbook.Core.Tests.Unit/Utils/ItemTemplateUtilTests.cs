@@ -32,7 +32,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ApplyChangesFromRequest_ChangeBasicInfo()
         {
-            var itemTemplate = new ItemTemplate
+            var itemTemplate = new ItemTemplateEntity
             {
                 Name = "some-name",
                 Data = @"{""key"": ""value""}",
@@ -62,7 +62,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ApplyChangesFromRequest_UpdateCleanName()
         {
-            var itemTemplate = new ItemTemplate {Name = "some-name"};
+            var itemTemplate = new ItemTemplateEntity {Name = "some-name"};
             var request = new ItemTemplateRequest {Name = "some-new-name"};
 
             _stringCleanupUtil.RemoveAccents("some-new-name")
@@ -79,16 +79,16 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             var slot1 = CreateSlot(1);
             var slot2 = CreateSlot(1);
 
-            var itemTemplate = new ItemTemplate
+            var itemTemplate = new ItemTemplateEntity
             {
-                Slots = new List<ItemTemplateSlot>
+                Slots = new List<ItemTemplateSlotEntity>
                 {
-                    new ItemTemplateSlot
+                    new ItemTemplateSlotEntity
                     {
                         SlotId = 1,
                         Slot = slot1
                     },
-                    new ItemTemplateSlot
+                    new ItemTemplateSlotEntity
                     {
                         SlotId = 2,
                         Slot = slot2
@@ -108,11 +108,11 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
             itemTemplate.Slots.Should().BeEquivalentTo(new [] {
-                new ItemTemplateSlot
+                new ItemTemplateSlotEntity
                 {
                     SlotId = 2
                 },
-                new ItemTemplateSlot
+                new ItemTemplateSlotEntity
                 {
                     SlotId = 3
                 }
@@ -122,18 +122,18 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ApplyChangesFromRequest_UpdateRequirements()
         {
-            var itemTemplate = new ItemTemplate
+            var itemTemplate = new ItemTemplateEntity
             {
-                Requirements = new List<ItemTemplateRequirement>
+                Requirements = new List<ItemTemplateRequirementEntity>
                 {
-                    new ItemTemplateRequirement
+                    new ItemTemplateRequirementEntity
                     {
                         Id = 1,
                         StatName = "some-stat-name-1",
                         MinValue = 2,
                         MaxValue = 3
                     },
-                    new ItemTemplateRequirement
+                    new ItemTemplateRequirementEntity
                     {
                         Id = 2,
                         StatName = "some-stat-name-2",
@@ -165,13 +165,13 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
             itemTemplate.Requirements.Should().BeEquivalentTo(new [] {
-                new ItemTemplateRequirement
+                new ItemTemplateRequirementEntity
                 {
                     StatName = "some-stat-name-2",
                     MinValue = 3,
                     MaxValue = 8
                 },
-                new ItemTemplateRequirement
+                new ItemTemplateRequirementEntity
                 {
                     StatName = "some-stat-name-3",
                     MinValue = 4,
@@ -184,18 +184,18 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ApplyChangesFromRequest_UpdateModiifers()
         {
-            var itemTemplate = new ItemTemplate
+            var itemTemplate = new ItemTemplateEntity
             {
-                Modifiers = new List<ItemTemplateModifier>
+                Modifiers = new List<ItemTemplateModifierEntity>
                 {
-                    new ItemTemplateModifier
+                    new ItemTemplateModifierEntity
                     {
                         Id = 1,
                         StatName = "some-stat-name-1",
                         Value = 2,
                         Special = "some-special-1"
                     },
-                    new ItemTemplateModifier
+                    new ItemTemplateModifierEntity
                     {
                         Id = 2,
                         StatName = "some-stat-name-2",
@@ -230,7 +230,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
             itemTemplate.Modifiers.Should().BeEquivalentTo(new [] {
-                new ItemTemplateModifier
+                new ItemTemplateModifierEntity
                 {
                     StatName = "some-stat-name-2",
                     RequiredJobId = new Guid("00000000-0000-0000-0000-000000000011"),
@@ -238,7 +238,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
                     Value = 3,
                     Special = ""
                 },
-                new ItemTemplateModifier
+                new ItemTemplateModifierEntity
                 {
                     StatName = "some-stat-name-3",
                     RequiredOriginId = new Guid("00000000-0000-0000-0000-000000000001"),
@@ -252,17 +252,17 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ApplyChangesFromRequest_UpdateSkills()
         {
-            var itemTemplate = new ItemTemplate
+            var itemTemplate = new ItemTemplateEntity
             {
-                Skills = new List<ItemTemplateSkill>
+                Skills = new List<ItemTemplateSkillEntity>
                 {
-                    new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000001")},
-                    new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000002")}
+                    new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000001")},
+                    new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000002")}
                 },
-                UnSkills = new List<ItemTemplateUnSkill>
+                UnSkills = new List<ItemTemplateUnSkillEntity>
                 {
-                    new ItemTemplateUnSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000003")},
-                    new ItemTemplateUnSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000004")}
+                    new ItemTemplateUnSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000003")},
+                    new ItemTemplateUnSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004")}
                 }
             };
 
@@ -283,12 +283,12 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
             itemTemplate.Skills.Should().BeEquivalentTo(new [] {
-                new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000004")},
-                new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000005")}
+                new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004")},
+                new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000005")}
             });
             itemTemplate.UnSkills.Should().BeEquivalentTo(new [] {
-                new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000006")},
-                new ItemTemplateSkill {SkillId = new Guid("00000000-0000-0000-0000-000000000007")}
+                new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000006")},
+                new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000007")}
             });
         }
 
@@ -296,12 +296,12 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         [Test]
         public void ApplyChangesFromRequest_UpdateSkillModifiers()
         {
-            var itemTemplate = new ItemTemplate
+            var itemTemplate = new ItemTemplateEntity
             {
-                SkillModifiers = new List<ItemTemplateSkillModifier>
+                SkillModifiers = new List<ItemTemplateSkillModifierEntity>
                 {
-                    new ItemTemplateSkillModifier {SkillId = new Guid("00000000-0000-0000-0000-000000000001"), Value = 1},
-                    new ItemTemplateSkillModifier {SkillId = new Guid("00000000-0000-0000-0000-000000000002"), Value = 2}
+                    new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000001"), Value = 1},
+                    new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000002"), Value = 2}
                 }
             };
 
@@ -317,8 +317,8 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             _util.ApplyChangesFromRequest(itemTemplate, request);
 
             itemTemplate.SkillModifiers.Should().BeEquivalentTo(new [] {
-                new ItemTemplateSkillModifier {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
-                new ItemTemplateSkillModifier {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4}
+                new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
+                new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4}
             });
         }
 
@@ -326,7 +326,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         public void FilterItemTemplatesBySource_ShouldKeepItemTemplateWithSourceOfficial()
         {
             var itemTemplate = CreateItemTemplateSource("official");
-            var iteTemplates = new List<ItemTemplate>
+            var iteTemplates = new List<ItemTemplateEntity>
             {
                 itemTemplate
             };
@@ -340,7 +340,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         public void FilterItemTemplatesBySource_ShouldKeepItemTemplateWithSourceCommunity_WhenIncludeCommunityItem()
         {
             var itemTemplate = CreateItemTemplateSource("community");
-            var iteTemplates = new List<ItemTemplate>
+            var iteTemplates = new List<ItemTemplateEntity>
             {
                 itemTemplate
             };
@@ -354,7 +354,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         public void FilterItemTemplatesBySource_ShouldFilterOutItemTemplateWithSourceCommunity_WhenDoNotIncludeSource()
         {
             var itemTemplate = CreateItemTemplateSource("community");
-            var iteTemplates = new List<ItemTemplate>
+            var iteTemplates = new List<ItemTemplateEntity>
             {
                 itemTemplate
             };
@@ -368,7 +368,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         public void FilterItemTemplatesBySource_ShouldFilterOutPrivateItemTemplateThatDoesNotBelongToTheCurrentUser()
         {
             var itemTemplate = CreateItemTemplateSource("private", 42);
-            var iteTemplates = new List<ItemTemplate>
+            var iteTemplates = new List<ItemTemplateEntity>
             {
                 itemTemplate
             };
@@ -382,7 +382,7 @@ namespace Naheulbook.Core.Tests.Unit.Utils
         public void FilterItemTemplatesBySource_ShouldKeepPrivateItemTemplate_ThatBelongToCurrentUser()
         {
             var itemTemplate = CreateItemTemplateSource("private", 42);
-            var iteTemplates = new List<ItemTemplate>
+            var iteTemplates = new List<ItemTemplateEntity>
             {
                 itemTemplate
             };
@@ -392,18 +392,18 @@ namespace Naheulbook.Core.Tests.Unit.Utils
             actualItemTemplates.Should().Contain(itemTemplate);
         }
 
-        private ItemTemplate CreateItemTemplateSource(string source, int? sourceUserId = null)
+        private ItemTemplateEntity CreateItemTemplateSource(string source, int? sourceUserId = null)
         {
-            return new ItemTemplate
+            return new ItemTemplateEntity
             {
                 Source = source,
                 SourceUserId = sourceUserId
             };
         }
 
-        private static Slot CreateSlot(int idx)
+        private static SlotEntity CreateSlot(int idx)
         {
-            return new Slot()
+            return new SlotEntity()
             {
                 Name = $"some-slot-name-{idx}"
             };

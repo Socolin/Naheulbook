@@ -9,59 +9,59 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IUserRepository : IRepository<UserEntity>
     {
-        Task<User?> GetByUsernameAsync(string username);
-        Task<User?> GetByFacebookIdAsync(string facebookId);
-        Task<User?> GetByGoogleIdAsync(string googleId);
-        Task<User?> GetByTwitterIdAsync(string twitterId);
-        Task<User?> GetByMicrosoftIdAsync(string microsoftId);
-        Task<List<User>> SearchUsersAsync(string filter);
+        Task<UserEntity?> GetByUsernameAsync(string username);
+        Task<UserEntity?> GetByFacebookIdAsync(string facebookId);
+        Task<UserEntity?> GetByGoogleIdAsync(string googleId);
+        Task<UserEntity?> GetByTwitterIdAsync(string twitterId);
+        Task<UserEntity?> GetByMicrosoftIdAsync(string microsoftId);
+        Task<List<UserEntity>> SearchUsersAsync(string filter);
     }
 
-    public class UserRepository : Repository<User, NaheulbookDbContext>, IUserRepository
+    public class UserRepository : Repository<UserEntity, NaheulbookDbContext>, IUserRepository
     {
         public UserRepository(NaheulbookDbContext naheulbookDbContext)
             : base(naheulbookDbContext)
         {
         }
 
-        public Task<User?> GetByUsernameAsync(string username)
+        public Task<UserEntity?> GetByUsernameAsync(string username)
         {
             return Context.Users
                 .Where(u => u.Username == username)
                 .FirstOrDefaultAsync();
         }
 
-        public Task<User?> GetByFacebookIdAsync(string facebookId)
+        public Task<UserEntity?> GetByFacebookIdAsync(string facebookId)
         {
             return Context.Users
                 .Where(u => u.FbId == facebookId)
                 .SingleOrDefaultAsync();
         }
 
-        public Task<User?> GetByGoogleIdAsync(string googleId)
+        public Task<UserEntity?> GetByGoogleIdAsync(string googleId)
         {
             return Context.Users
                 .Where(u => u.GoogleId == googleId)
                 .SingleOrDefaultAsync();
         }
 
-        public Task<User?> GetByTwitterIdAsync(string twitterId)
+        public Task<UserEntity?> GetByTwitterIdAsync(string twitterId)
         {
             return Context.Users
                 .Where(u => u.TwitterId == twitterId)
                 .SingleOrDefaultAsync();
         }
 
-        public Task<User?> GetByMicrosoftIdAsync(string microsoftId)
+        public Task<UserEntity?> GetByMicrosoftIdAsync(string microsoftId)
         {
             return Context.Users
                 .Where(u => u.MicrosoftId == microsoftId)
                 .SingleOrDefaultAsync();
         }
 
-        public Task<List<User>> SearchUsersAsync(string filter)
+        public Task<List<UserEntity>> SearchUsersAsync(string filter)
         {
             return Context.Users
                 .Where(u => u.DisplayName != null && u.DisplayName.ToLower().Contains(filter.ToLower()))

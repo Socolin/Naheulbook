@@ -28,7 +28,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public async Task CanGetSkills()
         {
-            var skills = new List<Skill>();
+            var skills = new List<SkillEntity>();
             var expectedResponse = new List<SkillResponse>();
 
             _skillService.GetSkillsAsync()

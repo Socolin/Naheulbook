@@ -55,7 +55,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateGroupAsync_ShouldCreateGroupWithGroupService_ThenReturnGroupResponse()
         {
             var createGroupRequest = new CreateGroupRequest();
-            var createdGroup = new Group();
+            var createdGroup = new GroupEntity();
             var groupResponse = new GroupResponse();
 
             _groupService.CreateGroupAsync(_executionContext, createGroupRequest)
@@ -74,7 +74,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             const int groupId = 8;
             var createLootRequest = new CreateLootRequest();
-            var createdLoot = new Loot();
+            var createdLoot = new LootEntity();
             var lootResponse = new LootResponse();
 
             _lootService.CreateLootAsync(_executionContext, groupId, createLootRequest)
@@ -96,7 +96,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var createLootRequest = new CreateLootRequest();
 
             _lootService.CreateLootAsync(_executionContext, groupId, createLootRequest)
-                .Returns(Task.FromException<Loot>(exception));
+                .Returns(Task.FromException<LootEntity>(exception));
 
             Func<Task> act = () => _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
 
@@ -108,7 +108,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             const int groupId = 8;
             var createMonsterRequest = new CreateMonsterRequest();
-            var createdMonster = new Monster();
+            var createdMonster = new MonsterEntity();
             var monsterResponse = new MonsterResponse();
 
             _monsterService.CreateMonsterAsync(_executionContext, groupId, createMonsterRequest)
@@ -130,7 +130,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var createMonsterRequest = new CreateMonsterRequest();
 
             _monsterService.CreateMonsterAsync(_executionContext, groupId, createMonsterRequest)
-                .Returns(Task.FromException<Monster>(exception));
+                .Returns(Task.FromException<MonsterEntity>(exception));
 
             Func<Task> act = () => _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
 
@@ -142,7 +142,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             const int groupId = 8;
             var createInviteRequest = new CreateInviteRequest();
-            var createdInvite = new GroupInvite();
+            var createdInvite = new GroupInviteEntity();
             var groupInviteResponse = new GroupInviteResponse();
 
             _groupService.CreateInviteAsync(_executionContext, groupId, createInviteRequest)
@@ -161,7 +161,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _groupService.CreateInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<CreateInviteRequest>())
-                .Returns(Task.FromException<GroupInvite>(exception));
+                .Returns(Task.FromException<GroupInviteEntity>(exception));
 
             Func<Task> act = () => _controller.PostCreateInviteAsync(_executionContext, 8, new CreateInviteRequest());
 
@@ -173,7 +173,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         {
             const int characterId = 12;
             const int groupId = 8;
-            var groupInvite = new GroupInvite();
+            var groupInvite = new GroupInviteEntity();
             var response = new DeleteInviteResponse();
 
             _groupService.CancelOrRejectInviteAsync(_executionContext, groupId, characterId)
@@ -191,7 +191,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task DeleteInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _groupService.CancelOrRejectInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<int>())
-                .Returns(Task.FromException<GroupInvite>(exception));
+                .Returns(Task.FromException<GroupInviteEntity>(exception));
 
             Func<Task> act = () => _controller.DeleteInviteAsync(_executionContext, 8, 12);
 
@@ -203,7 +203,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostAcceptInviteAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
         {
             _groupService.AcceptInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<int>())
-                .Returns(Task.FromException<GroupInvite>(exception));
+                .Returns(Task.FromException<GroupInviteEntity>(exception));
 
             Func<Task> act = () => _controller.PostAcceptInviteAsync(_executionContext, 8, 12);
 
@@ -214,7 +214,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetGroupDetailsAsync_ShouldCreateLoot_ThenReturnLootResponse()
         {
             const int groupId = 8;
-            var group = new Group();
+            var group = new GroupEntity();
             var groupResponse = new GroupResponse();
 
             _groupService.GetGroupDetailsAsync(_executionContext, groupId)
@@ -234,7 +234,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             const int groupId = 8;
 
             _groupService.GetGroupDetailsAsync(_executionContext, groupId)
-                .Returns(Task.FromException<Group>(exception));
+                .Returns(Task.FromException<GroupEntity>(exception));
 
             Func<Task> act = () => _controller.GetGroupDetailsAsync(_executionContext, groupId);
 
@@ -245,7 +245,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetEventListAsync_LoadEventThenMapTheResponse()
         {
             const int groupId = 8;
-            var events = new List<Event>();
+            var events = new List<EventEntity>();
             var eventsResponse = new List<EventResponse>();
 
             _eventService.GetEventsForGroupAsync(_executionContext, groupId)
@@ -265,7 +265,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             const int groupId = 8;
 
             _eventService.GetEventsForGroupAsync(_executionContext, groupId)
-                .Returns(Task.FromException<List<Event>>(exception));
+                .Returns(Task.FromException<List<EventEntity>>(exception));
 
             Func<Task> act = () => _controller.GetEventListAsync(_executionContext, groupId);
 
@@ -276,7 +276,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetEventListAsync_LoadLootThenMapTheResponse()
         {
             const int groupId = 8;
-            var loots = new List<Loot>();
+            var loots = new List<LootEntity>();
             var lootsResponse = new List<LootResponse>();
 
             _lootService.GetLootsForGroupAsync(_executionContext, groupId)
@@ -296,7 +296,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             const int groupId = 8;
 
             _lootService.GetLootsForGroupAsync(_executionContext, groupId)
-                .Returns(Task.FromException<List<Loot>>(exception));
+                .Returns(Task.FromException<List<LootEntity>>(exception));
 
             Func<Task> act = () => _controller.GetLootListAsync(_executionContext, groupId);
 
@@ -311,7 +311,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             var request = new PatchGroupRequest();
 
             _groupService.EditGroupPropertiesAsync(_executionContext, groupId, request)
-                .Returns(Task.FromException<List<Loot>>(exception));
+                .Returns(Task.FromException<List<LootEntity>>(exception));
 
             Func<Task> act = () => _controller.PatchGroupAsync(_executionContext, groupId, request);
 
@@ -322,7 +322,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task GetMonsterListAsync_LoadMonsterThenMapTheResponse()
         {
             const int groupId = 8;
-            var monsters = new List<Monster>();
+            var monsters = new List<MonsterEntity>();
             var monstersResponse = new List<MonsterResponse>();
 
             _monsterService.GetMonstersForGroupAsync(_executionContext, groupId)
@@ -342,7 +342,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
             const int groupId = 8;
 
             _monsterService.GetMonstersForGroupAsync(_executionContext, groupId)
-                .Returns(Task.FromException<List<Monster>>(exception));
+                .Returns(Task.FromException<List<MonsterEntity>>(exception));
 
             Func<Task> act = () => _controller.GetMonsterListAsync(_executionContext, groupId);
 

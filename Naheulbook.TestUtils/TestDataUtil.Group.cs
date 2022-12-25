@@ -5,30 +5,30 @@ namespace Naheulbook.TestUtils
 {
     public partial class TestDataUtil
     {
-        public TestDataUtil AddGroup(int masterId, Action<Group> customizer = null)
+        public TestDataUtil AddGroup(int masterId, Action<GroupEntity> customizer = null)
         {
             return SaveEntity(_defaultEntityCreator.CreateGroup(masterId), customizer);
         }
 
-        public TestDataUtil AddGroup(Action<Group> customizer = null)
+        public TestDataUtil AddGroup(Action<GroupEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<User>().Id), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<UserEntity>().Id), customizer);
         }
 
-        public TestDataUtil AddGroupWithRequiredData(Action<Group> customizer = null)
+        public TestDataUtil AddGroupWithRequiredData(Action<GroupEntity> customizer = null)
         {
             AddUser();
-            return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<User>().Id), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<UserEntity>().Id), customizer);
         }
 
-        public TestDataUtil AddLoot(Action<Loot> customizer = null)
+        public TestDataUtil AddLoot(Action<LootEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateLoot(GetLast<Group>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateLoot(GetLast<GroupEntity>()), customizer);
         }
 
-        public TestDataUtil AddGroupInvite(Character character, Group group, bool fromGroup)
+        public TestDataUtil AddGroupInvite(CharacterEntity character, GroupEntity group, bool fromGroup)
         {
-            var groupInvite = new GroupInvite
+            var groupInvite = new GroupInviteEntity
             {
                 FromGroup = fromGroup,
                 Character = character,
@@ -39,14 +39,14 @@ namespace Naheulbook.TestUtils
             return SaveEntity(groupInvite, null);
         }
 
-        public TestDataUtil AddEvent(Action<Event> customizer = null)
+        public TestDataUtil AddEvent(Action<EventEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateEvent(GetLast<Group>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateEvent(GetLast<GroupEntity>()), customizer);
         }
 
-        public TestDataUtil AddGroupHistoryEntry(Action<GroupHistoryEntry> customizer = null)
+        public TestDataUtil AddGroupHistoryEntry(Action<GroupHistoryEntryEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateGroupHistory(GetLast<Group>()), customizer);
+            return SaveEntity(_defaultEntityCreator.CreateGroupHistory(GetLast<GroupEntity>()), customizer);
         }
     }
 }

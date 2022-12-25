@@ -33,12 +33,12 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public Effect CreateEffect(EffectSubCategory subCategory, string suffix = null)
+        public EffectEntity CreateEffect(EffectSubCategory subCategory, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new Effect
+            return new EffectEntity
             {
                 SubCategory = subCategory,
                 Description = $"some-description-{suffix}",

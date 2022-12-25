@@ -76,7 +76,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 4;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new Group();
+            var group = new GroupEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetGroupsWithDetailsAsync(groupId)
                 .Returns(group);
@@ -94,7 +94,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetGroupsWithDetailsAsync(groupId)
-                .Returns((Group) null);
+                .Returns((GroupEntity) null);
 
             Func<Task> act = () => _service.GetGroupDetailsAsync(naheulbookExecutionContext, groupId);
 
@@ -107,7 +107,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 4;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new Group();
+            var group = new GroupEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetGroupsWithDetailsAsync(groupId)
                 .Returns(group);
@@ -126,7 +126,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 4;
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
             var request = new PatchGroupRequest();
-            var group = new Group();
+            var group = new GroupEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -145,7 +145,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task EditGroupPropertiesAsync_ShouldThrowWhenGroupDoesNotExists()
         {
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(Arg.Any<int>())
-                .Returns((Group) null);
+                .Returns((GroupEntity) null);
 
             Func<Task> act = () => _service.EditGroupPropertiesAsync(new NaheulbookExecutionContext(), 4, new PatchGroupRequest());
 
@@ -156,7 +156,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task EditGroupPropertiesAsync_ShouldEnsureIsGroupOwner()
         {
             var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new Group();
+            var group = new GroupEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(Arg.Any<int>())
                 .Returns(group);
@@ -175,8 +175,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 42;
             const int characterId = 24;
             var request = new CreateInviteRequest {CharacterId = characterId, FromGroup = true};
-            var group = new Group();
-            var character = new Character();
+            var group = new GroupEntity();
+            var character = new CharacterEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -187,7 +187,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             Received.InOrder(() =>
             {
-                _unitOfWorkFactory.GetUnitOfWork().GroupInvites.Add(Arg.Is<GroupInvite>(gi => gi.FromGroup && gi.Group == group && gi.Character == character));
+                _unitOfWorkFactory.GetUnitOfWork().GroupInvites.Add(Arg.Is<GroupInviteEntity>(gi => gi.FromGroup && gi.Group == group && gi.Character == character));
                 _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
             });
         }
@@ -198,8 +198,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 42;
             const int characterId = 24;
             var request = new CreateInviteRequest {CharacterId = characterId, FromGroup = true};
-            var group = new Group();
-            var character = new Character();
+            var group = new GroupEntity();
+            var character = new CharacterEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -224,7 +224,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns((Group) null);
+                .Returns((GroupEntity) null);
 
             Func<Task> act = () => _service.CreateInviteAsync(executionContext, groupId, request);
 
@@ -240,9 +240,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns(new Group());
+                .Returns(new GroupEntity());
             _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
-                .Returns((Character) null);
+                .Returns((CharacterEntity) null);
 
             Func<Task> act = () => _service.CreateInviteAsync(executionContext, groupId, request);
 
@@ -256,8 +256,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterId = 24;
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
             var request = new CreateInviteRequest {CharacterId = characterId, FromGroup = true};
-            var group = new Group {Id = groupId};
-            var character = new Character {Id = characterId};
+            var group = new GroupEntity {Id = groupId};
+            var character = new CharacterEntity {Id = characterId};
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -279,8 +279,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterId = 24;
             var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
             var request = new CreateInviteRequest {CharacterId = characterId, FromGroup = false};
-            var group = new Group {Id = groupId};
-            var character = new Character {Id = characterId};
+            var group = new GroupEntity {Id = groupId};
+            var character = new CharacterEntity {Id = characterId};
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
                 .Returns(group);
@@ -302,7 +302,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 42;
             const int characterId = 24;
             var executionContext = new NaheulbookExecutionContext();
-            var groupInvite = new GroupInvite();
+            var groupInvite = new GroupInviteEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
                 .Returns(groupInvite);
@@ -323,7 +323,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 42;
             const int characterId = 24;
             var executionContext = new NaheulbookExecutionContext();
-            var groupInvite = new GroupInvite();
+            var groupInvite = new GroupInviteEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
                 .Returns(groupInvite);
@@ -345,7 +345,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterId = 24;
 
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
-                .Returns((GroupInvite) null);
+                .Returns((GroupInviteEntity) null);
 
             Func<Task> act = () => _service.CancelOrRejectInviteAsync(new NaheulbookExecutionContext(), groupId, characterId);
 
@@ -358,7 +358,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 42;
             const int characterId = 24;
             var executionContext = new NaheulbookExecutionContext();
-            var groupInvite = new GroupInvite();
+            var groupInvite = new GroupInviteEntity();
 
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
                 .Returns(groupInvite);
@@ -375,11 +375,11 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 42;
             const int characterId = 24;
-            var character = new Character();
+            var character = new CharacterEntity();
             var executionContext = new NaheulbookExecutionContext();
-            var groupInvite = new GroupInvite {GroupId = groupId, Character = character};
-            var otherGroupInvite = new GroupInvite {GroupId = groupId, Character = character};
-            var groupInvites = new List<GroupInvite> {groupInvite, otherGroupInvite};
+            var groupInvite = new GroupInviteEntity {GroupId = groupId, Character = character};
+            var otherGroupInvite = new GroupInviteEntity {GroupId = groupId, Character = character};
+            var groupInvites = new List<GroupInviteEntity> {groupInvite, otherGroupInvite};
 
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
                 .Returns(groupInvite);
@@ -403,9 +403,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
 
             const int groupId = 42;
             const int characterId = 24;
-            var character = new Character();
+            var character = new CharacterEntity();
             var executionContext = new NaheulbookExecutionContext();
-            var groupInvite = new GroupInvite {GroupId = groupId, Character = character};
+            var groupInvite = new GroupInviteEntity {GroupId = groupId, Character = character};
 
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
                 .Returns(groupInvite);
@@ -427,7 +427,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int characterId = 24;
 
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
-                .Returns((GroupInvite) null);
+                .Returns((GroupInviteEntity) null);
 
             Func<Task> act = () => _service.AcceptInviteAsync(new NaheulbookExecutionContext(), groupId, characterId);
 
@@ -439,8 +439,8 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             const int groupId = 42;
             const int characterId = 24;
-            var character = new Character {GroupId = 8};
-            var groupInvite = new GroupInvite {GroupId = groupId, Character = character};
+            var character = new CharacterEntity {GroupId = 8};
+            var groupInvite = new GroupInviteEntity {GroupId = groupId, Character = character};
 
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
                 .Returns(groupInvite);
@@ -456,7 +456,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 42;
             const int characterId = 24;
             var executionContext = new NaheulbookExecutionContext();
-            var groupInvite = new GroupInvite {Character = new Character()};
+            var groupInvite = new GroupInviteEntity {Character = new CharacterEntity()};
 
             _unitOfWorkFactory.GetUnitOfWork().GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId)
                 .Returns(groupInvite);
@@ -472,7 +472,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task UpdateDurationsAsync_ShouldCallGroupUtilUpdateDurationAsync()
         {
             const int groupId = 42;
-            var group = new Group();
+            var group = new GroupEntity();
             var fighters = new List<FighterDurationChanges>();
             var request = new List<PostGroupUpdateDurationsRequest>();
 
@@ -492,7 +492,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             const int groupId = 42;
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns((Group) null);
+                .Returns((GroupEntity) null);
 
             Func<Task> act = () => _service.UpdateDurationsAsync(new NaheulbookExecutionContext(), groupId, new List<PostGroupUpdateDurationsRequest>());
 
@@ -503,7 +503,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task UpdateDurationsAsync_ShouldEnsureUserIsGroupMaster()
         {
             const int groupId = 42;
-            var group = new Group();
+            var group = new GroupEntity();
             var executionContext = new NaheulbookExecutionContext();
 
             _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(Arg.Any<int>())

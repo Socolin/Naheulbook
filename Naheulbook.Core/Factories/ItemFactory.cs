@@ -9,9 +9,9 @@ namespace Naheulbook.Core.Factories
 {
     public interface IItemFactory
     {
-        Item CreateItem(ItemOwnerType ownerType, int ownerId, ItemTemplate itemTemplate, ItemData itemData);
-        Item CreateItem(ItemTemplate itemTemplate, ItemData itemData);
-        Item CloneItem(Item originalItem);
+        ItemEntity CreateItem(ItemOwnerType ownerType, int ownerId, ItemTemplateEntity itemTemplate, ItemData itemData);
+        ItemEntity CreateItem(ItemTemplateEntity itemTemplate, ItemData itemData);
+        ItemEntity CloneItem(ItemEntity originalItem);
     }
 
     public class ItemFactory : IItemFactory
@@ -25,7 +25,7 @@ namespace Naheulbook.Core.Factories
             _itemDataUtil = itemDataUtil;
         }
 
-        public Item CreateItem(ItemOwnerType ownerType, int ownerId, ItemTemplate itemTemplate, ItemData itemData)
+        public ItemEntity CreateItem(ItemOwnerType ownerType, int ownerId, ItemTemplateEntity itemTemplate, ItemData itemData)
         {
             var item = CreateItem(itemTemplate, itemData);
 
@@ -47,7 +47,7 @@ namespace Naheulbook.Core.Factories
             return item;
         }
 
-        public Item CreateItem(ItemTemplate itemTemplate, ItemData itemData)
+        public ItemEntity CreateItem(ItemTemplateEntity itemTemplate, ItemData itemData)
         {
             var itemTemplateData = _jsonUtil.DeserializeOrCreate<PartialItemTemplateData>(itemTemplate.Data);
 
@@ -66,7 +66,7 @@ namespace Naheulbook.Core.Factories
                     itemData.Name = itemTemplate.Name;
             }
 
-            var item = new Item
+            var item = new ItemEntity
             {
                 Data = _jsonUtil.SerializeNonNull(itemData),
                 ItemTemplateId = itemTemplate.Id
@@ -74,10 +74,10 @@ namespace Naheulbook.Core.Factories
             return item;
         }
 
-        public Item CloneItem(Item originalItem)
+        public ItemEntity CloneItem(ItemEntity originalItem)
         {
             var originItemData = _itemDataUtil.GetItemData(originalItem);
-            var clonedItem = new Item
+            var clonedItem = new ItemEntity
             {
                 Modifiers = originalItem.Modifiers,
                 ItemTemplateId = originalItem.ItemTemplateId,

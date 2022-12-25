@@ -10,9 +10,9 @@ namespace Naheulbook.Data.Models
         public bool Default { get; set; }
 
         public Guid JobId { get; set; }
-        public Job Job { get; set; } = null!;
+        public JobEntity Job { get; set; } = null!;
 
         public Guid SkillId { get; set; }
-        public Skill Skill { get; set; } = null!;
+        public SkillEntity Skill { get; set; } = null!;
     }
 }

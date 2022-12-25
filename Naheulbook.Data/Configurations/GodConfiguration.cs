@@ -4,9 +4,9 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Configurations
 {
-    public class GodConfiguration : IEntityTypeConfiguration<God>
+    public class GodConfiguration : IEntityTypeConfiguration<GodEntity>
     {
-        public void Configure(EntityTypeBuilder<God> builder)
+        public void Configure(EntityTypeBuilder<GodEntity> builder)
         {
             builder.ToTable("gods");
 

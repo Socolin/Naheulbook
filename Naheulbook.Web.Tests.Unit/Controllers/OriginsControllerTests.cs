@@ -32,7 +32,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         [Test]
         public async Task CanGetOrigins()
         {
-            var origins = new List<Origin>();
+            var origins = new List<OriginEntity>();
             var expectedResponse = new List<OriginResponse>();
 
             _originService.GetOriginsAsync()

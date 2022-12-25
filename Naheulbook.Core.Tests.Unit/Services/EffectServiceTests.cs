@@ -45,7 +45,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task GetEffect_LoadEffectFromDatabase()
         {
-            var expectedEffect = new Effect();
+            var expectedEffect = new EffectEntity();
 
             _effectRepository.GetWithModifiersAsync(42)
                 .Returns(expectedEffect);
@@ -71,7 +71,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task CanGetEffectsBySubCategory()
         {
-            var expectedEffects = new List<Effect>();
+            var expectedEffects = new List<EffectEntity>();
 
             _effectRepository.GetBySubCategoryWithModifiersAsync(42)
                 .Returns(expectedEffects);
@@ -113,7 +113,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task CreateEffectSubCategory_AddANewEffectSubCategoryInDatabase()
         {
             var expectedEffectSubCategory = CreateEffectSubCategory();
-            expectedEffectSubCategory.Effects = new List<Effect>();
+            expectedEffectSubCategory.Effects = new List<EffectEntity>();
             var createEffectSubCategoryRequest = AutoFill<CreateEffectSubCategoryRequest>.One();
 
             var effectSubCategory = await _effectService.CreateEffectSubCategoryAsync(new NaheulbookExecutionContext(), createEffectSubCategoryRequest);
@@ -178,7 +178,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         {
             var expectedEffect = CreateEffect(42, subCategoryId: 1, offset: 1);
             var executionContext = new NaheulbookExecutionContext();
-            var previousEffect = AutoFill<Effect>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt, new AutoFillSettings {MaxDepth = 1}, (i) => new {Category = i.SubCategory});
+            var previousEffect = AutoFill<EffectEntity>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt, new AutoFillSettings {MaxDepth = 1}, (i) => new {Category = i.SubCategory});
             var editEffectRequest = AutoFill<EditEffectRequest>.One();
 
             previousEffect.Id = 42;
@@ -197,7 +197,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         public async Task EditEffect_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
         {
             var executionContext = new NaheulbookExecutionContext();
-            var previousEffect = AutoFill<Effect>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt);
+            var previousEffect = AutoFill<EffectEntity>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt);
             var editEffectRequest = AutoFill<EditEffectRequest>.One();
             previousEffect.Id = 42;
 
@@ -220,7 +220,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
             var editEffectRequest = AutoFill<EditEffectRequest>.One();
 
             _effectRepository.GetWithModifiersAsync(Arg.Any<int>())
-                .Returns((Effect) null);
+                .Returns((EffectEntity) null);
 
             Func<Task> act = () => _effectService.EditEffectAsync(executionContext, 42, editEffectRequest);
 
@@ -236,13 +236,13 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 DiceCount = 1,
                 DiceSize = 2,
                 TypeId = 3,
-                Effects = new List<Effect>()
+                Effects = new List<EffectEntity>()
             };
         }
 
-        private static Effect CreateEffect(int id = 0, int offset = 0, int subCategoryId = 0)
+        private static EffectEntity CreateEffect(int id = 0, int offset = 0, int subCategoryId = 0)
         {
-            return new Effect
+            return new EffectEntity
             {
                 Id = id,
                 Name = "some-name",

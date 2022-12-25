@@ -7,7 +7,7 @@ namespace Naheulbook.Core.Services
 {
     public interface IMonsterTraitService
     {
-        Task<List<MonsterTrait>> GetMonsterTraitsAsync();
+        Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync();
     }
 
     public class MonsterTraitService : IMonsterTraitService
@@ -19,7 +19,7 @@ namespace Naheulbook.Core.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public async Task<List<MonsterTrait>> GetMonsterTraitsAsync()
+        public async Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
