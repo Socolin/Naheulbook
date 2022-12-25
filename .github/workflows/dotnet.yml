@@ -27,7 +27,9 @@ jobs:
         ports:
           - 6379:6379
       mysql:
-        image: mariadb:latest
+        # Bug with latest version, rollback to oldest until it's fixed
+        # https://stackoverflow.com/questions/74060289/mysqlconnection-open-system-invalidcastexception-object-cannot-be-cast-from-d
+        image: mariadb:10.9
         env:
           MYSQL_ROOT_PASSWORD: naheulbook
         ports:
