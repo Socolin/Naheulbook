@@ -4,15 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Naheulbook.TestUtils;
+using Socolin.ANSITerminalColor;
 using TechTalk.SpecFlow;
 
 namespace Naheulbook.Tests.Functional.Code.Extensions
 {
     public static class StringExtensions
     {
+        private static readonly AnsiColor KeyColor = AnsiColor.Foreground(Terminal256ColorCodes.AquaC14);
+        private static readonly AnsiColor ErrorColor = AnsiColor.Foreground(Terminal256ColorCodes.RedC9);
+
         public static string ExecuteReplacement(this string str, ScenarioContext context, TestDataUtil testDataUtil)
         {
             var replacementTokens = ListReplacementTokens(str);
+            var missingKeys = new List<string>();
 
             foreach (var replacementToken in replacementTokens)
             {
@@ -35,10 +40,26 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
 
                     str = str.Replace($"${{{replacementToken}}}", replacementValue);
                 }
+                catch (ReplacementKeyNotfoundException ex)
+                {
+                    missingKeys.Add(ex.Key);
+                }
                 catch (Exception ex)
                 {
                     throw new Exception($"An exception occured while replacing '{replacementToken}': {ex.Message}", ex);
                 }
+            }
+
+
+            if (missingKeys.Count > 0)
+            {
+                var strWithError = str;
+                foreach (var key in missingKeys)
+                {
+                    strWithError = strWithError.Replace($"${{{key}}}", ErrorColor.Colorize($"${{{key}}}"));
+                }
+
+                throw new Exception($"Failed to find key '{string.Join(",", missingKeys.Distinct().Select(x => KeyColor.Colorize(x)))}' in ScenarioContext or TestData when replacing:\n{strWithError}\n");
             }
 
             return str;
@@ -58,7 +79,7 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
                     rootValue = testDataUtil.GetByTypeName(replacements.First());
 
                 if (rootValue == null)
-                    throw new Exception($"Failed to find key {replacementToken} in ScenarioContext or TestData when replacing '{str}'");
+                    throw new ReplacementKeyNotfoundException(replacementToken);
 
                 var propertiesNames = replacements.Skip(1).ToList();
                 return GetProperty(rootValue, propertiesNames);
@@ -71,7 +92,7 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
             if (value != null)
                 return value;
 
-            throw new Exception($"Failed to find key {replacementToken} in ScenarioContext or TestData when replacing '{str}'");
+            throw new ReplacementKeyNotfoundException(replacementToken);
         }
 
 
@@ -96,7 +117,10 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
                     }
                     else
                     {
-                        obj = obj?.GetType().GetProperty(propertyName)?.GetValue(obj);
+                        var propertyInfo = obj?.GetType().GetProperty(propertyName);
+                        if (propertyInfo == null)
+                            throw new Exception($"Failed to find property `{string.Join(".", propertiesNames)}` in object.");
+                        obj = propertyInfo?.GetValue(obj);
                     }
                 }
             }
@@ -139,6 +163,16 @@ namespace Naheulbook.Tests.Functional.Code.Extensions
             }
 
             return tokens;
+        }
+
+        private class ReplacementKeyNotfoundException : Exception
+        {
+            public string Key { get; }
+
+            public ReplacementKeyNotfoundException(string key)
+            {
+                Key = key;
+            }
         }
     }
 }
