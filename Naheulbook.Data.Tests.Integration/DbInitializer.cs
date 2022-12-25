@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -9,10 +10,18 @@ namespace Naheulbook.Data.Tests.Integration
         [OneTimeSetUp]
         public void PrepareTests()
         {
-            var dbContext = DbUtils.CreateNaheulbookDbContext();
-            dbContext.Database.EnsureDeleted();
-            dbContext.Database.EnsureCreated();
-            dbContext.Database.Migrate();
+            try
+            {
+                var dbContext = DbUtils.CreateNaheulbookDbContext();
+                dbContext.Database.EnsureDeleted();
+                dbContext.Database.EnsureCreated();
+                dbContext.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
     }
 }

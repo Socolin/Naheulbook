@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BoDi;
@@ -27,38 +28,46 @@ namespace Naheulbook.Tests.Functional.Code.Init
         [BeforeTestRun]
         public static void InitializeDatabase()
         {
-            using var _ = InitializersProfiler.Profile(nameof(InitializeDatabase));
-            var serviceProvider = new ServiceCollection()
-                .Configure<FluentMigratorLoggerOptions>(
-                    opt =>
-                    {
-                        opt.ShowElapsedTime = true;
-                        opt.ShowSql = true;
-                    })
-                .AddLogging(lb => lb
-                    .AddFluentMigratorConsole()
-                    .Services.AddSingleton<ILoggerProvider>(services => new FluentMigratorFileLoggerProvider("/tmp/fluentmigrator.log", services.GetService<IOptions<FluentMigratorLoggerOptions>>()))
-                )
-                .AddFluentMigratorCore()
-                .ConfigureRunner(
-                    builder => builder
-                        .AddMySql5()
-                        .WithGlobalConnectionString(DefaultTestConfigurations.NaheulbookTestConnectionString)
-                        .ScanIn(typeof(Mig0001Init).Assembly).For.EmbeddedResources()
-                        .WithMigrationsIn(typeof(Mig0001Init).Assembly))
-                .BuildServiceProvider();
-
-
-            var dbContextOptions = new DbContextOptionsBuilder<DbContext>()
-                .UseMySql(DefaultTestConfigurations.NaheulbookTestConnectionString, ServerVersion.AutoDetect(DefaultTestConfigurations.NaheulbookTestConnectionString), builder => builder.EnableRetryOnFailure())
-                .Options;
-
-            DropAllTables(dbContextOptions);
-
-            using (var scope = serviceProvider.CreateScope())
+            try
             {
-                var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-                runner.MigrateUp();
+                using var _ = InitializersProfiler.Profile(nameof(InitializeDatabase));
+                var serviceProvider = new ServiceCollection()
+                    .Configure<FluentMigratorLoggerOptions>(
+                        opt =>
+                        {
+                            opt.ShowElapsedTime = true;
+                            opt.ShowSql = true;
+                        })
+                    .AddLogging(lb => lb
+                        .AddFluentMigratorConsole()
+                        .Services.AddSingleton<ILoggerProvider>(services => new FluentMigratorFileLoggerProvider("/tmp/fluentmigrator.log", services.GetService<IOptions<FluentMigratorLoggerOptions>>()))
+                    )
+                    .AddFluentMigratorCore()
+                    .ConfigureRunner(
+                        builder => builder
+                            .AddMySql5()
+                            .WithGlobalConnectionString(DefaultTestConfigurations.NaheulbookTestConnectionString)
+                            .ScanIn(typeof(Mig0001Init).Assembly).For.EmbeddedResources()
+                            .WithMigrationsIn(typeof(Mig0001Init).Assembly))
+                    .BuildServiceProvider();
+
+
+                var dbContextOptions = new DbContextOptionsBuilder<DbContext>()
+                    .UseMySql(DefaultTestConfigurations.NaheulbookTestConnectionString, ServerVersion.AutoDetect(DefaultTestConfigurations.NaheulbookTestConnectionString), builder => builder.EnableRetryOnFailure())
+                    .Options;
+
+                DropAllTables(dbContextOptions);
+
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+                    runner.MigrateUp();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
             }
         }
 
