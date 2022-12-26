@@ -12,7 +12,14 @@ namespace Naheulbook.TestUtils
 
         public TestDataUtil AddGroup(Action<GroupEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateGroup(GetLast<UserEntity>().Id), customizer);
+            return AddGroup(out _, customizer);
+        }
+
+        public TestDataUtil AddGroup(out GroupEntity group, Action<GroupEntity> customizer = null)
+        {
+            var userEntity = GetLast<UserEntity>();
+            group = _defaultEntityCreator.CreateGroup(userEntity.Id);
+            return SaveEntity(group, customizer);
         }
 
         public TestDataUtil AddGroupWithRequiredData(Action<GroupEntity> customizer = null)
@@ -37,6 +44,22 @@ namespace Naheulbook.TestUtils
                 GroupId = group.Id
             };
             return SaveEntity(groupInvite, null);
+        }
+
+        public TestDataUtil AddGroupInvite(bool fromGroup, Action<GroupInviteEntity> customizer = null)
+        {
+            return AddGroupInvite(out var _, fromGroup, customizer);
+        }
+
+        public TestDataUtil AddGroupInvite(out GroupInviteEntity groupInvite, bool fromGroup, Action<GroupInviteEntity> customizer = null)
+        {
+            groupInvite = new GroupInviteEntity
+            {
+                FromGroup = fromGroup,
+                CharacterId = GetLast<CharacterEntity>().Id,
+                GroupId = GetLast<GroupEntity>().Id,
+            };
+            return SaveEntity(groupInvite, customizer);
         }
 
         public TestDataUtil AddEvent(Action<EventEntity> customizer = null)

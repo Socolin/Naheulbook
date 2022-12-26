@@ -18,19 +18,27 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             _groupRepository = new GroupRepository(RepositoryDbContext);
         }
 
+        #region GetGroupsOwnedByAsync
+
         [Test]
-        public async Task zGetGroupsOwnedByAsync_ItShouldLoadGroupsWithCharacterList()
+        public async Task GetGroupsOwnedByAsync_ItShouldLoadGroupsWithCharacterList()
         {
             TestDataUtil
-                .AddUser()
-                .AddGroup()
                 .AddOrigin()
-                .AddCharacter(c => c.GroupId = TestDataUtil.GetLast<GroupEntity>().Id);
+                .AddUser(out var user)
+                .AddGroup(out var group1)
+                .AddCharacter(out var character1)
+                .AddCharacter(out var character2)
+                .AddGroup(out var group2)
+                .AddCharacter(out var character3)
+                .AddCharacter(out var character4)
+                ;
 
-            var groups = await _groupRepository.GetGroupsOwnedByAsync(TestDataUtil.GetLast<UserEntity>().Id);
+            var groups = await _groupRepository.GetGroupsOwnedByAsync(user.Id);
 
-            groups.Should().BeEquivalentTo(TestDataUtil.GetAll<GroupEntity>(), config => config.Excluding(g => g.Characters).Excluding(g => g.Master));
-            groups.First().Characters.Should().BeEquivalentTo(TestDataUtil.GetAll<CharacterEntity>(), config => config.Excluding(c => c.Group).Excluding(c => c.Owner).Excluding(c => c.Origin));
+            AssertEntitiesAreLoaded(groups, new[] {group1, group2});
+            AssertEntitiesAreLoaded(groups.Single(x => x.Id == group1.Id).Characters, new[] {character1, character2});
+            AssertEntitiesAreLoaded(groups.Single(x => x.Id == group2.Id).Characters, new[] {character3, character4});
         }
 
         [Test]
@@ -48,28 +56,45 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             groups.Should().BeEmpty();
         }
 
+        #endregion
+
+        #region GetGroupsWithDetailsAsync
+
         [Test]
         public async Task GetGroupsWithDetailsAsync_ShouldLoadGroupWithAllRequiredData()
         {
-            var expectedGroup = TestDataUtil.AddUser().AddGroup().GetLast<GroupEntity>();
-            var expectedCharacter = TestDataUtil.AddOrigin().AddCharacter(c => c.GroupId = TestDataUtil.GetLast<GroupEntity>().Id).GetLast<CharacterEntity>();
-            var expectedInvite1 = TestDataUtil.AddCharacter().AddGroupInvite(TestDataUtil.GetLast<CharacterEntity>(), TestDataUtil.GetLast<GroupEntity>(), true).GetLast<GroupInviteEntity>();
-            var expectedInvite2 = TestDataUtil.AddCharacter().AddGroupInvite(TestDataUtil.GetLast<CharacterEntity>(), TestDataUtil.GetLast<GroupEntity>(), false).GetLast<GroupInviteEntity>();
+            TestDataUtil
+                .AddUser()
+                .AddGroup(out var group)
+                .AddOrigin()
+                .AddCharacter(out var character, c => c.GroupId = group.Id)
+                .AddCharacter(c => c.GroupId = null)
+                .AddGroupInvite(out var groupInvite1, true)
+                .AddCharacter(c => c.GroupId = null)
+                .AddGroupInvite(out var groupInvite2, false)
+                ;
 
-            var group = await _groupRepository.GetGroupsWithDetailsAsync(expectedGroup.Id);
+            var actualGroup = await _groupRepository.GetGroupsWithDetailsAsync(group.Id);
 
-            group.Should().BeEquivalentTo(expectedGroup, config => config.Excluding(g => g.Characters).Excluding(g => g.Master).Excluding(g => g.Invites));
-            group!.Characters.Should().BeEquivalentTo(new [] {expectedCharacter}, config => config.Excluding(c => c.Group).Excluding(c => c.Owner).Excluding(c => c.Origin));
-            group!.Invites.Should().BeEquivalentTo(new [] {expectedInvite1, expectedInvite2}, config => config.Excluding(i => i.Character).Excluding(i => i.Group));
+            AssertEntityIsLoaded(actualGroup, group);
+            AssertEntitiesAreLoaded(actualGroup.Characters, new[] {character});
+            AssertEntitiesAreLoaded(actualGroup.Invites, new[] {groupInvite1, groupInvite2});
         }
 
         [Test]
         public async Task GetGroupsWithDetailsAsync_ShouldReturnsNullIfGroupDoesNotExists()
         {
-            var group = await _groupRepository.GetGroupsWithDetailsAsync(1000);
+            TestDataUtil
+                .AddUser()
+                .AddGroup(out var group);
 
-            group.Should().BeNull();
+            var actualGroup = await _groupRepository.GetGroupsWithDetailsAsync(-1);
+            var expectedGroup = await _groupRepository.GetGroupsWithDetailsAsync(group.Id);
+
+            actualGroup.Should().BeNull();
+            expectedGroup.Should().NotBeNull();
         }
 
+        #endregion
     }
 }

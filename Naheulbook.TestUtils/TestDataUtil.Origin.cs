@@ -8,7 +8,13 @@ namespace Naheulbook.TestUtils
     {
         public TestDataUtil AddOrigin(Action<OriginEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateOrigin(), customizer);
+            return AddOrigin(out _, customizer);
+        }
+
+        public TestDataUtil AddOrigin(out OriginEntity origin, Action<OriginEntity> customizer = null)
+        {
+            origin = _defaultEntityCreator.CreateOrigin();
+            return SaveEntity(origin, customizer);
         }
 
         public TestDataUtil AddOriginWithAllData(Action<OriginEntity> customizer = null)

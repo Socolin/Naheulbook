@@ -13,14 +13,25 @@ namespace Naheulbook.TestUtils
 
         public TestDataUtil AddCharacter(Action<CharacterEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateCharacter(GetLast<UserEntity>().Id, GetLast<OriginEntity>()), customizer);
+            return AddCharacter(out _, customizer);
+        }
+
+        public TestDataUtil AddCharacter(out CharacterEntity character, Action<CharacterEntity> customizer = null)
+        {
+            var user = GetLast<UserEntity>();
+            var originEntity = GetLast<OriginEntity>();
+            character = _defaultEntityCreator.CreateCharacter(user.Id, originEntity);
+            var group = GetLastIfExists<GroupEntity>();
+            if (group != null)
+                character.GroupId = group.Id;
+            return SaveEntity(character, customizer);
         }
 
         public TestDataUtil AddCharacterWithRequiredDependencies(Action<CharacterEntity> customizer = null)
         {
-            AddUser();
-            AddOrigin();
-            return SaveEntity(_defaultEntityCreator.CreateCharacter(GetLast<UserEntity>().Id, GetLast<OriginEntity>()), customizer);
+            AddUser(out var user);
+            AddOrigin(out var origin);
+            return SaveEntity(_defaultEntityCreator.CreateCharacter(user.Id, origin), customizer);
         }
 
         public TestDataUtil AddCharacterWithAllData(int ownerId, Action<CharacterEntity> customizer = null)

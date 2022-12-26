@@ -1,7 +1,12 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using FluentAssertions;
+using FluentAssertions.Equivalency;
 using Microsoft.EntityFrameworkCore;
+using Naheulbook.Data.Models;
 using Naheulbook.TestUtils;
 using NUnit.Framework;
 
@@ -29,6 +34,68 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             await using var dbContext = DbUtils.GetTestDbContext<TDbContext>();
             await dbContext.SaveChangesAsync();
+        }
+
+        protected void AssertEntityIsLoaded<T>([NotNull] T? actualEntity, T expectedEntity)
+            where T : class
+        {
+            actualEntity.Should().BeEquivalentTo(expectedEntity, GetEquivalentOptionsForEntity);
+            if (actualEntity == null) throw new NullReferenceException("actualEntity is null");
+        }
+
+        protected void AssertEntitiesAreLoaded<T>(IEnumerable<T> actualEntities, IEnumerable<T> expectedEntities)
+            where T : class
+        {
+            actualEntities.Should().BeEquivalentTo(expectedEntities, GetEquivalentOptionsForEntity);
+        }
+
+        private EquivalencyAssertionOptions<T> GetEquivalentOptionsForEntity<T>(EquivalencyAssertionOptions<T> options)
+            where T : class
+        {
+            EquivalencyAssertionOptions<T> equivalencyAssertionOptions;
+            switch (options)
+            {
+                case EquivalencyAssertionOptions<GroupEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.CombatLoot)
+                        .Excluding(x => x.Master)
+                        .Excluding(x => x.Loots)
+                        .Excluding(x => x.Monsters)
+                        .Excluding(x => x.Characters)
+                        .Excluding(x => x.Invites)
+                        .Excluding(x => x.Events)
+                        .Excluding(x => x.HistoryEntries)
+                        .Excluding(x => x.Npcs)
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
+                case EquivalencyAssertionOptions<CharacterEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.Owner)
+                        .Excluding(x => x.Origin)
+                        .Excluding(x => x.Group)
+                        .Excluding(x => x.TargetedCharacter)
+                        .Excluding(x => x.TargetedMonster)
+                        .Excluding(x => x.Jobs)
+                        .Excluding(x => x.Modifiers)
+                        .Excluding(x => x.Skills)
+                        .Excluding(x => x.Specialities)
+                        .Excluding(x => x.Items)
+                        .Excluding(x => x.Invites)
+                        .Excluding(x => x.HistoryEntries)
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
+                case EquivalencyAssertionOptions<GroupInviteEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.Character)
+                        .Excluding(x => x.Group)
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
+                default:
+                    throw new NotSupportedException($"{typeof(T).Name} is not supported. Add missing `case`");
+            }
+
+            return equivalencyAssertionOptions
+                .RespectingRuntimeTypes();
         }
     }
 }
