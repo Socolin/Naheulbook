@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -8,13 +9,14 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 {
     public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
     {
-        protected TDbContext RepositoryDbContext;
-        protected TestDataUtil TestDataUtil;
+        protected TDbContext RepositoryDbContext => _repositoryDbContext ?? throw new NullReferenceException($"{nameof(_repositoryDbContext)} was not initialized");
+        private TDbContext? _repositoryDbContext;
+        protected TestDataUtil TestDataUtil = null!;
 
         [SetUp]
         public void BaseSetUp()
         {
-            RepositoryDbContext = DbUtils.GetTestDbContext<TDbContext>(true);
+            _repositoryDbContext = DbUtils.GetTestDbContext<TDbContext>(true);
             TestDataUtil = new TestDataUtil(DbUtils.GetDbContextOptions(), new DefaultEntityCreator());
             TestDataUtil.Cleanup();
         }
@@ -22,13 +24,11 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [TearDown]
         public async Task BaseTearDown()
         {
-            RepositoryDbContext?.Dispose();
-            using (var dbContext = DbUtils.GetTestDbContext<TDbContext>())
-            {
-                dbContext.RemoveRange(_allEntities);
-                await dbContext.SaveChangesAsync();
-            }
+            if (_repositoryDbContext != null)
+                await _repositoryDbContext.DisposeAsync();
 
+            await using var dbContext = DbUtils.GetTestDbContext<TDbContext>();
+            await dbContext.SaveChangesAsync();
         }
     }
 }
