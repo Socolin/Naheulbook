@@ -10,7 +10,7 @@ namespace Naheulbook.Data.Repositories
 {
     public interface IEffectRepository : IRepository<EffectEntity>
     {
-        Task<ICollection<EffectType>> GetCategoriesAsync();
+        Task<ICollection<EffectTypeEntity>> GetCategoriesAsync();
         Task<ICollection<EffectEntity>> GetBySubCategoryWithModifiersAsync(long subCategoryId);
         Task<EffectEntity?> GetWithModifiersAsync(int effectId);
         Task<List<EffectEntity>> SearchByNameAsync(string partialName, int maxResult);
@@ -24,7 +24,7 @@ namespace Naheulbook.Data.Repositories
         {
         }
 
-        public async Task<ICollection<EffectType>> GetCategoriesAsync()
+        public async Task<ICollection<EffectTypeEntity>> GetCategoriesAsync()
         {
             return await Context.EffectTypes
                 .Include(e => e.SubCategories)

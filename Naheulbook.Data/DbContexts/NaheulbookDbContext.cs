@@ -12,7 +12,7 @@ namespace Naheulbook.Data.DbContexts
         public DbSet<CharacterModifierEntity> CharacterModifiers { get; set; } = null!;
         public DbSet<CharacterHistoryEntryEntity> CharacterHistory { get; set; } = null!;
         public DbSet<EffectEntity> Effects { get; set; } = null!;
-        public DbSet<EffectType> EffectTypes { get; set; } = null!;
+        public DbSet<EffectTypeEntity> EffectTypes { get; set; } = null!;
         public DbSet<GroupEntity> Groups { get; set; } = null!;
         public DbSet<GroupHistoryEntryEntity> GroupHistory { get; set; } = null!;
         public DbSet<GroupInviteEntity> GroupInvites { get; set; } = null!;

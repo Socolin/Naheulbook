@@ -1,4 +1,5 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -10,9 +11,11 @@ namespace Naheulbook.Data.Models
         public int MaxCount { get; set; }
 
         public Guid ItemTemplateId { get; set; }
-        public ItemTemplateEntity ItemTemplate { get; set; } = null!;
+        private ItemTemplateEntity? _itemTemplate;
+        public ItemTemplateEntity ItemTemplate { get => _itemTemplate.ThrowIfNotLoaded(); set => _itemTemplate = value; }
 
         public int MonsterTemplateId { get; set; }
-        public MonsterTemplateEntity MonsterTemplate { get; set; } = null!;
+        private MonsterTemplateEntity? _monsterTemplate;
+        public MonsterTemplateEntity MonsterTemplate { get => _monsterTemplate.ThrowIfNotLoaded(); set => _monsterTemplate = value; }
     }
 }

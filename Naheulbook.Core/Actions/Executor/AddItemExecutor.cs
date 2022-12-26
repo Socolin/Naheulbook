@@ -36,7 +36,7 @@ namespace Naheulbook.Core.Actions.Executor
             if (!action.Data.TemplateId.HasValue)
                 throw new InvalidActionDataException(action.Type);
 
-            var itemTemplate = await context.UnitOfWork.ItemTemplates.GetAsync(action.Data.TemplateId.Value);
+            var itemTemplate = await context.UnitOfWork.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(action.Data.TemplateId.Value);
             if (itemTemplate == null)
                 throw new ItemTemplateNotFoundException(action.Data.TemplateId.Value);
 

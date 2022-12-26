@@ -66,10 +66,10 @@ namespace Naheulbook.Web.Mappers
 
             CreateMap<EffectEntity, EffectResponse>()
                 .ForMember(m => m.Modifiers, opt => opt.MapFrom(e => e.Modifiers.OrderBy(m => m.StatName)));
-            CreateMap<EffectType, EffectTypeResponse>()
+            CreateMap<EffectTypeEntity, EffectTypeResponse>()
                 .ForMember(m => m.SubCategories, opt => opt.MapFrom(et => et.SubCategories.OrderBy(x => x.Id)));
-            CreateMap<EffectSubCategory, EffectSubCategoryResponse>();
-            CreateMap<EffectModifier, StatModifierResponse>()
+            CreateMap<EffectSubCategoryEntity, EffectSubCategoryResponse>();
+            CreateMap<EffectModifierEntity, StatModifierResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(se => se.StatName))
                 .ForMember(m => m.Special, opt => opt.Ignore());
 
@@ -217,6 +217,9 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.TargetMapName, opt => opt.MapFrom(r => r.TargetMap.Name))
                 .ForMember(m => m.TargetMapIsGm, opt => opt.MapFrom(r => MapperHelpers.FromJsonNotNull<MapData>(r.TargetMap.Data).IsGm));
 
+            CreateMap<MonsterEntity, DeadMonsterResponse>()
+                .ForMember(m => m.Dead, opt => opt.MapFrom(b => MapperHelpers.FromDateTimeToString(b.Dead)))
+                .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)));
             CreateMap<MonsterEntity, MonsterResponse>()
                 .ForMember(m => m.Dead, opt => opt.MapFrom(b => MapperHelpers.FromDateTimeToString(b.Dead)))
                 .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)))

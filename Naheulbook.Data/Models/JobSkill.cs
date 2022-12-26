@@ -1,7 +1,5 @@
 using System;
-
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -10,9 +8,11 @@ namespace Naheulbook.Data.Models
         public bool Default { get; set; }
 
         public Guid JobId { get; set; }
-        public JobEntity Job { get; set; } = null!;
+        private JobEntity? _job;
+        public JobEntity Job { get => _job.ThrowIfNotLoaded(); set => _job = value; }
 
         public Guid SkillId { get; set; }
-        public SkillEntity Skill { get; set; } = null!;
+        private SkillEntity? _skill;
+        public SkillEntity Skill { get => _skill.ThrowIfNotLoaded(); set => _skill = value; }
     }
 }

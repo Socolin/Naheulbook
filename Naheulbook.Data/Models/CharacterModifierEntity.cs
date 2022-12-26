@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -26,8 +27,10 @@ namespace Naheulbook.Data.Models
 
         // TODO: Rework Characterhistory so this dont have to be nullable
         public int? CharacterId { get; set; }
-        public CharacterEntity? Character { get; set; }
+        private CharacterEntity? _character;
+        public CharacterEntity? Character { get => _character.ThrowIfNotLoadedAndNotNull(CharacterId); set => _character = value; }
 
-        public ICollection<CharacterModifierValueEntity> Values { get; set; } = null!;
+        private ICollection<CharacterModifierValueEntity>? _values;
+        public ICollection<CharacterModifierValueEntity> Values { get => _values.ThrowIfNotLoaded(); set => _values = value; }
     }
 }

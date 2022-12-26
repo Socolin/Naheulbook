@@ -1,4 +1,5 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -9,9 +10,11 @@ namespace Naheulbook.Data.Models
         public short Value { get; set; }
 
         public Guid ItemTemplateId { get; set; }
-        public ItemTemplateEntity ItemTemplate { get; set; } = null!;
+        private ItemTemplateEntity? _itemTemplate;
+        public ItemTemplateEntity ItemTemplate { get => _itemTemplate.ThrowIfNotLoaded(); set => _itemTemplate = value; }
 
         public Guid SkillId { get; set; }
-        public SkillEntity Skill { get; set; } = null!;
+        private SkillEntity? _skill;
+        public SkillEntity Skill { get => _skill.ThrowIfNotLoaded(); set => _skill = value; }
     }
 }

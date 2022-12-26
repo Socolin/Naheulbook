@@ -1,4 +1,5 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -12,15 +13,19 @@ namespace Naheulbook.Data.Models
         public string? Info { get; set; }
 
         public int? EffectId { get; set; }
-        public EffectEntity? Effect { get; set; }
+        private EffectEntity? _effect;
+        public EffectEntity? Effect { get => _effect.ThrowIfNotLoadedAndNotNull(EffectId); set => _effect = value; }
 
         public int? CharacterModifierId { get; set; }
-        public CharacterModifierEntity? CharacterModifier { get; set; }
+        private CharacterModifierEntity? _characterModifier;
+        public CharacterModifierEntity? CharacterModifier { get => _characterModifier.ThrowIfNotLoadedAndNotNull(CharacterModifierId); set => _characterModifier = value; }
 
         public int? ItemId { get; set; }
-        public ItemEntity? Item { get; set; }
+        private ItemEntity? _item;
+        public ItemEntity? Item { get => _item.ThrowIfNotLoadedAndNotNull(ItemId); set => _item = value; }
 
         public int CharacterId { get; set; }
-        public CharacterEntity Character { get; set; } = null!;
+        private CharacterEntity? _character;
+        public CharacterEntity Character { get => _character.ThrowIfNotLoaded(); set => _character = value; }
     }
 }

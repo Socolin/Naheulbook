@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -13,17 +14,22 @@ namespace Naheulbook.Data.Models
         public string? Modifiers { get; set; }
 
         public int GroupId { get; set; }
-        public GroupEntity Group { get; set; } = null!;
+        private GroupEntity? _group;
+        public GroupEntity Group { get => _group.ThrowIfNotLoaded(); set => _group = value; }
 
         public int? LootId { get; set; }
-        public LootEntity? Loot { get; set; }
+        private LootEntity? _loot;
+        public LootEntity? Loot { get => _loot.ThrowIfNotLoadedAndNotNull(LootId); set => _loot = value; }
 
         public int? TargetedCharacterId { get; set; }
-        public CharacterEntity? TargetedCharacter { get; set; }
+        private CharacterEntity? _targetedCharacter;
+        public CharacterEntity? TargetedCharacter { get => _targetedCharacter.ThrowIfNotLoadedAndNotNull(TargetedCharacterId); set => _targetedCharacter = value; }
 
         public int? TargetedMonsterId { get; set; }
-        public MonsterEntity? TargetedMonster { get; set; }
+        private MonsterEntity? _targetedMonster;
+        public MonsterEntity? TargetedMonster { get => _targetedMonster.ThrowIfNotLoadedAndNotNull(TargetedMonsterId); set => _targetedMonster = value; }
 
-        public ICollection<ItemEntity> Items { get; set; } = null!;
+        private ICollection<ItemEntity>? _items;
+        public ICollection<ItemEntity> Items { get => _items.ThrowIfNotLoaded(); set => _items = value; }
     }
 }

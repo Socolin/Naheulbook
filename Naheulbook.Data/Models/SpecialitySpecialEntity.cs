@@ -1,4 +1,5 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -10,6 +11,7 @@ namespace Naheulbook.Data.Models
         public string? Flags { get; set; }
 
         public Guid SpecialityId { get; set; }
-        public SpecialityEntity Speciality { get; set; } = null!;
+        private SpecialityEntity? _speciality;
+        public SpecialityEntity Speciality { get => _speciality.ThrowIfNotLoaded(); set => _speciality = value; }
     }
 }

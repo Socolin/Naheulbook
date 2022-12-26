@@ -1,13 +1,16 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
     public class CharacterSpecialityEntity
     {
         public int CharacterId { get; set; }
-        public CharacterEntity Character { get; set; } = null!;
+        private CharacterEntity? _character;
+        public CharacterEntity Character { get => _character.ThrowIfNotLoaded(); set => _character = value; }
 
         public Guid SpecialityId { get; set; }
-        public SpecialityEntity Speciality { get; set; } = null!;
+        private SpecialityEntity? _speciality;
+        public SpecialityEntity Speciality { get => _speciality.ThrowIfNotLoaded(); set => _speciality = value; }
     }
 }

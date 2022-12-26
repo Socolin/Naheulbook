@@ -1,18 +1,18 @@
 using System.Collections.Generic;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
-    public class EffectType
+    public class EffectTypeEntity
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public ICollection<EffectSubCategory> SubCategories { get; set; } = null!;
+
+        private ICollection<EffectSubCategoryEntity>? _subCategories;
+        public ICollection<EffectSubCategoryEntity> SubCategories { get => _subCategories.ThrowIfNotLoaded(); set => _subCategories = value; }
     }
 
-    public class EffectSubCategory
+    public class EffectSubCategoryEntity
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
@@ -21,9 +21,11 @@ namespace Naheulbook.Data.Models
         public string? Note { get; set; }
 
         public int TypeId { get; set; }
-        public EffectType Type { get; set; } = null!;
+        private EffectTypeEntity? _type;
+        public EffectTypeEntity Type { get => _type.ThrowIfNotLoaded(); set => _type = value; }
 
-        public ICollection<EffectEntity> Effects { get; set; } = null!;
+        private ICollection<EffectEntity>? _effects;
+        public ICollection<EffectEntity> Effects { get => _effects.ThrowIfNotLoaded(); set => _effects = value; }
     }
 
     public class EffectEntity
@@ -39,20 +41,25 @@ namespace Naheulbook.Data.Models
         public short? Dice { get; set; }
 
         public int SubCategoryId { get; set; }
-        public EffectSubCategory SubCategory { get; set; } = null!;
+        private EffectSubCategoryEntity? _subCategory;
+        public EffectSubCategoryEntity SubCategory { get => _subCategory.ThrowIfNotLoaded(); set => _subCategory = value; }
 
-        public ICollection<EffectModifier> Modifiers { get; set; } = null!;
+        private ICollection<EffectModifierEntity>? _modifiers;
+        public ICollection<EffectModifierEntity> Modifiers { get => _modifiers.ThrowIfNotLoaded(); set => _modifiers = value; }
     }
 
 
-    public class EffectModifier
+    public class EffectModifierEntity
     {
-        public int EffectId { get; set; }
-        public string StatName { get; set; } = null!;
         public short Value { get; set; }
         public string Type { get; set; } = null!;
 
-        public EffectEntity Effect { get; set; } = null!;
-        public StatEntity Stat { get; set; } = null!;
+        public int EffectId { get; set; }
+        private EffectEntity? _effect;
+        public EffectEntity Effect { get => _effect.ThrowIfNotLoaded(); set => _effect = value; }
+
+        public string StatName { get; set; } = null!;
+        private StatEntity? _stat;
+        public StatEntity Stat { get => _stat.ThrowIfNotLoaded(); set => _stat = value; }
     }
 }

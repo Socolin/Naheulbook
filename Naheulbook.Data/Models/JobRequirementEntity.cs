@@ -1,4 +1,5 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -10,9 +11,11 @@ namespace Naheulbook.Data.Models
         public long? MaxValue { get; set; }
 
         public string StatName { get; set; } = null!;
-        public StatEntity Stat { get; set; } = null!;
+        private StatEntity? _stat;
+        public StatEntity Stat { get => _stat.ThrowIfNotLoaded(); set => _stat = value; }
 
         public Guid JobId { get; set; }
-        public JobEntity Job { get; set; } = null!;
+        private JobEntity? _job;
+        public JobEntity Job { get => _job.ThrowIfNotLoaded(); set => _job = value; }
     }
 }

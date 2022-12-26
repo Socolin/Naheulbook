@@ -83,7 +83,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateCategory_CallEffectService()
         {
             var request = CreateEffectSubCategoryRequest();
-            var effectSubCategory = new EffectSubCategory();
+            var effectSubCategory = new EffectSubCategoryEntity();
             var expectedEffectSubCategoryResponse = new EffectSubCategoryResponse();
 
             _effectService.CreateEffectSubCategoryAsync(_executionContext, request)
@@ -101,7 +101,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateCategory_WhenCatchForbiddenAccessException_Return403()
         {
             _effectService.CreateEffectSubCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectSubCategoryRequest>())
-                .Returns(Task.FromException<EffectSubCategory>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<EffectSubCategoryEntity>(new ForbiddenAccessException()));
 
             Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectSubCategoryAsync(_executionContext, CreateEffectSubCategoryRequest());
 

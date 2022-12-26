@@ -69,7 +69,7 @@ namespace Naheulbook.Core.Factories
                         StatName = s.Key,
                         Value = (short) s.Value,
                         Type = "ADD",
-                    }).ToList()
+                    }).ToList(),
                 });
             }
 

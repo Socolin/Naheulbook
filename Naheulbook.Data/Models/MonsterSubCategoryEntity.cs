@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -8,8 +9,10 @@ namespace Naheulbook.Data.Models
         public string Name { get; set; } = null!;
 
         public int TypeId { get; set; }
-        public MonsterTypeEntity Type { get; set; } = null!;
+        private MonsterTypeEntity? _type;
+        public MonsterTypeEntity Type { get => _type.ThrowIfNotLoaded(); set => _type = value; }
 
-        public ICollection<MonsterTemplateEntity> MonsterTemplates { get; set; } = null!;
+        private ICollection<MonsterTemplateEntity>? _monsterTemplates;
+        public ICollection<MonsterTemplateEntity> MonsterTemplates { get => _monsterTemplates.ThrowIfNotLoaded(); set => _monsterTemplates = value; }
     }
 }

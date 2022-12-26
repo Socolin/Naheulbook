@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -11,9 +12,13 @@ namespace Naheulbook.Data.Models
         public DateTime? Created { get; set; }
 
         public int GroupId { get; set; }
-        public GroupEntity Group { get; set; } = null!;
+        private GroupEntity? _group;
+        public GroupEntity Group { get => _group.ThrowIfNotLoaded(); set => _group = value; }
 
-        public ICollection<MonsterEntity> Monsters { get; set; } = null!;
-        public ICollection<ItemEntity> Items { get; set; } = null!;
+        private ICollection<MonsterEntity>? _monsters;
+        public ICollection<MonsterEntity> Monsters { get => _monsters.ThrowIfNotLoaded(); set => _monsters = value; }
+
+        private ICollection<ItemEntity>? _items;
+        public ICollection<ItemEntity> Items { get => _items.ThrowIfNotLoaded(); set => _items = value; }
     }
 }

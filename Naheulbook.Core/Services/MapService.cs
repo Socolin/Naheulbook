@@ -76,13 +76,14 @@ namespace Naheulbook.Core.Services
                     UnitName = request.Data.UnitName,
                     Attribution = request.Data.Attribution
                         .Select(x => new MapData.MapAttribution {Name = x.Name, Url = x.Url})
-                        .ToList()
+                        .ToList(),
                 };
                 var map = new MapEntity
                 {
                     Name = request.Name,
                     Data = _jsonUtil.SerializeNonNull(mapData),
-                    ImageData = "{}"
+                    ImageData = "{}",
+                    Layers = new List<MapLayerEntity>()
                 };
 
                 uow.Maps.Add(map);
@@ -220,7 +221,8 @@ namespace Naheulbook.Core.Services
                 Name = request.Name,
                 Description = request.Description,
                 Type = request.Type,
-                MarkerInfo = _jsonUtil.SerializeNonNull(request.MarkerInfo)
+                MarkerInfo = _jsonUtil.SerializeNonNull(request.MarkerInfo),
+                Links = new List<MapMarkerLinkEntity>()
             };
 
             uow.MapMarkers.Add(mapMarker);

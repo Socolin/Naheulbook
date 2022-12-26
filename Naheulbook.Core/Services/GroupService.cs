@@ -72,7 +72,14 @@ namespace Naheulbook.Core.Services
                 var group = new GroupEntity
                 {
                     Name = request.Name,
-                    MasterId = executionContext.UserId
+                    MasterId = executionContext.UserId,
+                    Loots = new List<LootEntity>(),
+                    Monsters = new List<MonsterEntity>(),
+                    Characters = new List<CharacterEntity>(),
+                    Invites = new List<GroupInviteEntity>(),
+                    Events = new List<EventEntity>(),
+                    HistoryEntries = new List<GroupHistoryEntryEntity>(),
+                    Npcs = new List<NpcEntity>(),
                 };
 
                 uow.Groups.Add(group);

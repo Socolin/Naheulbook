@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -11,8 +12,10 @@ namespace Naheulbook.Data.Models
         public string TechName { get; set; } = null!;
 
         public int SectionId { get; set; }
-        public ItemTemplateSectionEntity Section { get; set; } = null!;
+        private ItemTemplateSectionEntity? _section;
+        public ItemTemplateSectionEntity Section { get => _section.ThrowIfNotLoaded(); set => _section = value; }
 
-        public ICollection<ItemTemplateEntity> ItemTemplates { get; set; } = null!;
+        private ICollection<ItemTemplateEntity>? _itemTemplates;
+        public ICollection<ItemTemplateEntity> ItemTemplates { get => _itemTemplates.ThrowIfNotLoaded(); set => _itemTemplates = value; }
     }
 }

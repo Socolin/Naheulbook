@@ -29,7 +29,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var actualEffectCategories = await _effectRepository.GetCategoriesAsync();
 
             actualEffectCategories.Should().BeEquivalentTo(
-                TestDataUtil.GetAll<EffectType>(),
+                TestDataUtil.GetAll<EffectTypeEntity>(),
                 config => config
                     .Excluding(o => o.Id)
                     .IgnoringCyclicReferences());
@@ -42,9 +42,9 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddEffectType()
                 .AddEffectSubCategory()
                 .AddStat()
-                .AddEffect((effect) => effect.Modifiers = new List<EffectModifier>
+                .AddEffect((effect) => effect.Modifiers = new List<EffectModifierEntity>
                 {
-                    new EffectModifier
+                    new EffectModifierEntity
                     {
                         Stat = TestDataUtil.GetLast<StatEntity>(),
                         Type = "ADD",
@@ -52,7 +52,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                     }
                 });
 
-            var actualEffects = await _effectRepository.GetBySubCategoryWithModifiersAsync(TestDataUtil.Get<EffectSubCategory>().Id);
+            var actualEffects = await _effectRepository.GetBySubCategoryWithModifiersAsync(TestDataUtil.Get<EffectSubCategoryEntity>().Id);
 
             actualEffects.Should().BeEquivalentTo(
                 TestDataUtil.GetAll<EffectEntity>(),
@@ -71,9 +71,9 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddEffectType()
                 .AddEffectSubCategory()
                 .AddStat()
-                .AddEffect((effect) => effect.Modifiers = new List<EffectModifier>
+                .AddEffect((effect) => effect.Modifiers = new List<EffectModifierEntity>
                 {
-                    new EffectModifier
+                    new EffectModifierEntity
                     {
                         Stat = TestDataUtil.GetLast<StatEntity>(),
                         Type = "ADD",

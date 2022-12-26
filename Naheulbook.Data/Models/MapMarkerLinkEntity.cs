@@ -1,3 +1,5 @@
+using Naheulbook.Data.Extensions;
+
 namespace Naheulbook.Data.Models
 {
     public class MapMarkerLinkEntity
@@ -6,12 +8,15 @@ namespace Naheulbook.Data.Models
         public string? Name { get; set; }
 
         public int MapMarkerId { get; set; }
-        public MapMarkerEntity MapMarker { get; set; } = null!;
+        private MapMarkerEntity? _mapMarker;
+        public MapMarkerEntity MapMarker { get => _mapMarker.ThrowIfNotLoaded(); set => _mapMarker = value; }
 
         public int TargetMapId { get; set; }
-        public MapEntity TargetMap { get; set; } = null!;
+        private MapEntity? _targetMap;
+        public MapEntity TargetMap { get => _targetMap.ThrowIfNotLoaded(); set => _targetMap = value; }
 
         public int? TargetMapMarkerId { get; set; }
-        public MapMarkerEntity? TargetMapMarker { get; set; } = null!;
+        private MapMarkerEntity? _targetMapMarker;
+        public MapMarkerEntity? TargetMapMarker { get => _targetMapMarker.ThrowIfNotLoadedAndNotNull(TargetMapMarkerId); set => _targetMapMarker = value; }
     }
 }

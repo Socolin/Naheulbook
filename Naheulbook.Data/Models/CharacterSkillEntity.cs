@@ -1,13 +1,16 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
     public class CharacterSkillEntity
     {
         public int CharacterId { get; set; }
-        public CharacterEntity Character { get; set; } = null!;
+        private CharacterEntity? _character;
+        public CharacterEntity Character { get => _character.ThrowIfNotLoaded(); set => _character = value; }
 
         public Guid SkillId { get; set; }
-        public SkillEntity Skill { get; set; } = null!;
+        private SkillEntity? _skill;
+        public SkillEntity Skill { get => _skill.ThrowIfNotLoaded(); set => _skill = value; }
     }
 }

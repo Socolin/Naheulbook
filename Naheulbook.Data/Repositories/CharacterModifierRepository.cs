@@ -21,6 +21,7 @@ namespace Naheulbook.Data.Repositories
         public Task<CharacterModifierEntity?> GetByIdAndCharacterIdAsync(int characterId, int characterModifierId)
         {
             return Context.CharacterModifiers
+                .Include(x => x.Values)
                 .SingleOrDefaultAsync(m => m.CharacterId == characterId && m.Id == characterModifierId);
         }
     }

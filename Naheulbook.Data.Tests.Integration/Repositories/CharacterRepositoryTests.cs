@@ -54,7 +54,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             TestDataUtil.AddCharacter(user.Id, c => c.Jobs = new List<CharacterJobEntity>
             {
-                new CharacterJobEntity
+                new()
                 {
                     JobId = TestDataUtil.GetLast<JobEntity>().Id
                 }
@@ -64,9 +64,9 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             var characters = await _characterRepository.GetForSummaryByOwnerIdAsync(user.Id);
 
             var character = characters.First();
-            character.Should().BeEquivalentTo(expectedCharacter, config => config.Excluding(x => x.Owner).Excluding(x => x.Jobs).Excluding(x => x.Origin));
+            character.Should().BeEquivalentTo(expectedCharacter, config => config.Excluding(x => x.Owner).Excluding(x => x.Jobs).Excluding(x => x.Origin).Excluding(x => x.Modifiers).Excluding(x => x.Skills).Excluding(x => x.Specialities).Excluding(x => x.Items).Excluding(x => x.Invites).Excluding(x => x.HistoryEntries));
             character.Jobs.First().Job.Should().BeEquivalentTo(TestDataUtil.GetLast<JobEntity>());
-            character.Origin.Should().BeEquivalentTo(TestDataUtil.GetLast<OriginEntity>(), config => config.Excluding(x => x.Bonuses).Excluding(x => x.Information).Excluding(x => x.Requirements).Excluding(x => x.Skills).Excluding(x => x.Restrictions));
+            character.Origin.Should().BeEquivalentTo(TestDataUtil.GetLast<OriginEntity>(), config => config.Excluding(x => x.Bonuses).Excluding(x => x.Information).Excluding(x => x.Requirements).Excluding(x => x.Skills).Excluding(x => x.Restrictions).Excluding(x => x.Bonuses));
         }
 
         [Test]

@@ -24,7 +24,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given(@"(an|\d+) effects? sub-categor(?:y|ies)")]
         public void GivenAnEffectSubCategory(string amount)
         {
-            if (!_testDataUtil.Contains<EffectType>())
+            if (!_testDataUtil.Contains<EffectTypeEntity>())
                 _testDataUtil.AddEffectType();
             for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
                 _testDataUtil.AddEffectSubCategory();
@@ -33,9 +33,9 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
         [Given(@"(an|\d+) effects?")]
         public void GivenAnEffect(string amount)
         {
-            if (!_testDataUtil.Contains<EffectType>())
+            if (!_testDataUtil.Contains<EffectTypeEntity>())
                 _testDataUtil.AddEffectType();
-            if (!_testDataUtil.Contains<EffectSubCategory>())
+            if (!_testDataUtil.Contains<EffectSubCategoryEntity>())
                 _testDataUtil.AddEffectSubCategory();
 
             for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)

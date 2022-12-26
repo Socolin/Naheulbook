@@ -284,7 +284,7 @@ namespace Naheulbook.Web.Controllers
         }
 
         [HttpGet("{GroupId:int:min(1)}/deadMonsters")]
-        public async Task<ActionResult<List<MonsterResponse>>> GetDeadMonsterListAsync(
+        public async Task<ActionResult<List<DeadMonsterResponse>>> GetDeadMonsterListAsync(
             [FromServices] NaheulbookExecutionContext executionContext,
             [FromRoute] int groupId,
             [FromQuery] int startIndex,
@@ -294,7 +294,7 @@ namespace Naheulbook.Web.Controllers
             try
             {
                 var monsters = await _monsterService.GetDeadMonstersForGroupAsync(executionContext, groupId, startIndex, count);
-                return _mapper.Map<List<MonsterResponse>>(monsters);
+                return _mapper.Map<List<DeadMonsterResponse>>(monsters);
             }
             catch (ForbiddenAccessException ex)
             {

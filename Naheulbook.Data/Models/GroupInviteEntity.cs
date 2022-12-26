@@ -1,3 +1,5 @@
+using Naheulbook.Data.Extensions;
+
 namespace Naheulbook.Data.Models
 {
     public class GroupInviteEntity
@@ -5,9 +7,11 @@ namespace Naheulbook.Data.Models
         public bool FromGroup { get; set; }
 
         public int GroupId { get; set; }
-        public GroupEntity Group { get; set; } = null!;
+        private GroupEntity? _group;
+        public GroupEntity Group { get => _group.ThrowIfNotLoaded(); set => _group = value; }
 
         public int CharacterId { get; set; }
-        public CharacterEntity Character { get; set; } = null!;
+        private CharacterEntity? _character;
+        public CharacterEntity Character { get => _character.ThrowIfNotLoaded(); set => _character = value; }
     }
 }

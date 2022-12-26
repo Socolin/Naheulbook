@@ -58,6 +58,7 @@ namespace Naheulbook.Data.Repositories
         public Task<List<ItemTemplateEntity>> GetByIdsAsync(IEnumerable<Guid> ids)
         {
             return Context.ItemTemplates
+                .IncludeItemTemplateDetails()
                 .Where(x => ids.Contains(x.Id))
                 .ToListAsync();
         }

@@ -55,7 +55,9 @@ namespace Naheulbook.Core.Services
                 {
                     Group = group,
                     Name = request.Name,
-                    IsVisibleForPlayer = false
+                    IsVisibleForPlayer = false,
+                    Items = new List<ItemEntity>(),
+                    Monsters = new List<MonsterEntity>()
                 };
 
                 uow.Loots.Add(loot);

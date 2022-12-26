@@ -1,4 +1,5 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -10,6 +11,7 @@ namespace Naheulbook.Data.Models
         public DateTimeOffset DateCreated { get; set; }
 
         public int UserId { get; set; }
-        public UserEntity User { get; set; } = null!;
+        private UserEntity? _user;
+        public UserEntity User { get => _user.ThrowIfNotLoaded(); set => _user = value; }
     }
 }

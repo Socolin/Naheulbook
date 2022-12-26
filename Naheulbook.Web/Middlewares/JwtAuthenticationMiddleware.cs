@@ -59,7 +59,7 @@ namespace Naheulbook.Web.Middlewares
 
                     context.SetExecutionContext(new NaheulbookExecutionContext
                     {
-                        UserId = token.UserId
+                        UserId = token.UserId,
                     });
                 }
                 else
@@ -80,7 +80,7 @@ namespace Naheulbook.Web.Middlewares
 
                     context.SetExecutionContext(new NaheulbookExecutionContext
                     {
-                        UserId = token.Sub
+                        UserId = token.Sub,
                     });
                 }
             }

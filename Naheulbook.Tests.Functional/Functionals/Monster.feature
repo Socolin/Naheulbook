@@ -167,9 +167,7 @@ Feature: Monster
         "id": ${Monster.Id},
         "dead": "2042-08-06T12:23:24",
         "name": "${Monster.Name}",
-        "data": ${Monster.Data},
-        "modifiers": [],
-        "items": []
+        "data": ${Monster.Data}
       }
     ]
     """

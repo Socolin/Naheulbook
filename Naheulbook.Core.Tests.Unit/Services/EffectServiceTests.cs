@@ -6,10 +6,10 @@ using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Core.Utils;
+using Naheulbook.Data.Extensions.UnitOfWorks;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
-using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
 using NSubstitute;
 using NUnit.Framework;
@@ -58,7 +58,7 @@ namespace Naheulbook.Core.Tests.Unit.Services
         [Test]
         public async Task GetEffectSubCategories()
         {
-            var expectedEffectSubCategories = new List<EffectType>();
+            var expectedEffectSubCategories = new List<EffectTypeEntity>();
 
             _effectRepository.GetCategoriesAsync()
                 .Returns(expectedEffectSubCategories);
@@ -227,9 +227,9 @@ namespace Naheulbook.Core.Tests.Unit.Services
             await act.Should().ThrowAsync<EffectNotFoundException>();
         }
 
-        private static EffectSubCategory CreateEffectSubCategory()
+        private static EffectSubCategoryEntity CreateEffectSubCategory()
         {
-            return new EffectSubCategory
+            return new EffectSubCategoryEntity
             {
                 Name = "some-name",
                 Note = "some-note",
@@ -253,21 +253,21 @@ namespace Naheulbook.Core.Tests.Unit.Services
                 Dice = (short?) (2 + offset),
                 LapCount = 3 + offset,
                 TimeDuration = 4 + offset,
-                Modifiers = new List<EffectModifier>
+                Modifiers = new List<EffectModifierEntity>
                 {
-                    new EffectModifier
+                    new EffectModifierEntity
                     {
                         StatName = "some-stat",
                         Type = "some-type",
                         Value = (short) (5 + offset)
                     },
-                    new EffectModifier
+                    new EffectModifierEntity
                     {
                         StatName = "some-stat",
                         Type = "some-type",
                         Value = (short) (6 + offset)
                     },
-                    new EffectModifier
+                    new EffectModifierEntity
                     {
                         StatName = "some-stat",
                         Type = "some-type",

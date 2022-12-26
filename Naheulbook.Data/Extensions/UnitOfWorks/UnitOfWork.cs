@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Repositories;
 
-namespace Naheulbook.Data.UnitOfWorks
+namespace Naheulbook.Data.Extensions.UnitOfWorks
 {
     public interface IUnitOfWork : IDisposable
     {

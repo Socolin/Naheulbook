@@ -53,9 +53,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class EffectSubCategoryConfiguration : IEntityTypeConfiguration<EffectSubCategory>
+    public class EffectSubCategoryConfiguration : IEntityTypeConfiguration<EffectSubCategoryEntity>
     {
-        public void Configure(EntityTypeBuilder<EffectSubCategory> builder)
+        public void Configure(EntityTypeBuilder<EffectSubCategoryEntity> builder)
         {
             builder.ToTable("effect_subcategories");
 
@@ -90,9 +90,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class EffectModifierConfiguration : IEntityTypeConfiguration<EffectModifier>
+    public class EffectModifierConfiguration : IEntityTypeConfiguration<EffectModifierEntity>
     {
-        public void Configure(EntityTypeBuilder<EffectModifier> builder)
+        public void Configure(EntityTypeBuilder<EffectModifierEntity> builder)
         {
             builder.HasKey(e => new {e.EffectId, e.StatName});
 
@@ -133,9 +133,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class EffectTypeConfiguration : IEntityTypeConfiguration<EffectType>
+    public class EffectTypeConfiguration : IEntityTypeConfiguration<EffectTypeEntity>
     {
-        public void Configure(EntityTypeBuilder<EffectType> builder)
+        public void Configure(EntityTypeBuilder<EffectTypeEntity> builder)
         {
             builder.ToTable("effect_types");
 

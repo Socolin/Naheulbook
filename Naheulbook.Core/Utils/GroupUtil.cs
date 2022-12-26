@@ -76,13 +76,15 @@ namespace Naheulbook.Core.Utils
 
             groupData.InCombat = true;
 
-            group.Loots ??= new List<LootEntity>();
             var loot = new LootEntity
             {
                 Name = "Combat",
-                GroupId = group.Id
+                GroupId = group.Id,
+                Items = new List<ItemEntity>(),
+                Monsters = new List<MonsterEntity>(),
             };
             group.CombatLoot = loot;
+            group.CombatLootId = loot.Id;
 
             group.AddHistoryEntry(_groupHistoryUtil.CreateLogStartCombat(group));
 

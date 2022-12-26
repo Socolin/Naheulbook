@@ -1,13 +1,16 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
     public class ItemTemplateSlotEntity
     {
         public Guid ItemTemplateId { get; set; }
-        public ItemTemplateEntity ItemTemplate { get; set; } = null!;
+        private ItemTemplateEntity? _itemTemplate;
+        public ItemTemplateEntity ItemTemplate { get => _itemTemplate.ThrowIfNotLoaded(); set => _itemTemplate = value; }
 
         public int SlotId { get; set; }
-        public SlotEntity Slot { get; set; } = null!;
+        private SlotEntity? _slot;
+        public SlotEntity Slot { get => _slot.ThrowIfNotLoaded(); set => _slot = value; }
     }
 }

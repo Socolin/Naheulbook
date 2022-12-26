@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Services;
+using Naheulbook.Data.Extensions.UnitOfWorks;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
-using Naheulbook.Data.UnitOfWorks;
 using NSubstitute;
 using NUnit.Framework;
 

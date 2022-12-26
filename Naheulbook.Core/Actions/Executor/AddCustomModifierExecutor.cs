@@ -59,11 +59,6 @@ namespace Naheulbook.Core.Actions.Executor
                 }).ToList()
             };
 
-            if (context.TargetCharacter.Modifiers == null)
-            {
-                context.TargetCharacter.Modifiers = new List<CharacterModifierEntity>();
-            }
-
             context.TargetCharacter.Modifiers.Add(characterModifier);
 
             context.TargetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogAddModifier(context.TargetCharacter, characterModifier));

@@ -1,4 +1,5 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -8,20 +9,26 @@ namespace Naheulbook.Data.Models
 
         public string Data { get; set; } = null!;
         public string? Modifiers { get; set; }
+
         public int? ContainerId { get; set; }
-        public ItemEntity? Container { get; set; }
+        private ItemEntity? _container;
+        public ItemEntity? Container { get => _container.ThrowIfNotLoadedAndNotNull(ContainerId); set => _container = value; }
 
         public Guid ItemTemplateId { get; set; }
-        public ItemTemplateEntity ItemTemplate { get; set; } = null!;
+        private ItemTemplateEntity? _itemTemplate;
+        public ItemTemplateEntity ItemTemplate { get => _itemTemplate.ThrowIfNotLoaded(); set => _itemTemplate = value; }
 
         public int? CharacterId { get; set; }
-        public CharacterEntity? Character { get; set; }
+        private CharacterEntity? _character;
+        public CharacterEntity? Character { get => _character.ThrowIfNotLoadedAndNotNull(CharacterId); set => _character = value; }
 
         public int? LootId { get; set; }
-        public LootEntity? Loot { get; set; }
+        private LootEntity? _loot;
+        public LootEntity? Loot { get => _loot.ThrowIfNotLoadedAndNotNull(LootId); set => _loot = value; }
 
         public int? MonsterId { get; set; }
-        public MonsterEntity? Monster { get; set; }
+        private MonsterEntity? _monster;
+        public MonsterEntity? Monster { get => _monster.ThrowIfNotLoadedAndNotNull(MonsterId); set => _monster = value; }
 
         public string? LifetimeType { get; set; }
     }

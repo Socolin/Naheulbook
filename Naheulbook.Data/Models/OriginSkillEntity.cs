@@ -1,4 +1,5 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -7,9 +8,11 @@ namespace Naheulbook.Data.Models
         public bool Default { get; set; }
 
         public Guid OriginId { get; set; }
-        public OriginEntity Origin { get; set; } = null!;
+        private OriginEntity? _origin;
+        public OriginEntity Origin { get => _origin.ThrowIfNotLoaded(); set => _origin = value; }
 
         public Guid SkillId { get; set; }
-        public SkillEntity Skill { get; set; } = null!;
+        private SkillEntity? _skill;
+        public SkillEntity Skill { get => _skill.ThrowIfNotLoaded(); set => _skill = value; }
     }
 }

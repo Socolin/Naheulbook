@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -11,8 +12,10 @@ namespace Naheulbook.Data.Models
         public string MarkerInfo { get; set; } = null!;
 
         public int LayerId { get; set; }
-        public MapLayerEntity Layer { get; set; } = null!;
+        private MapLayerEntity? _layer;
+        public MapLayerEntity Layer { get => _layer.ThrowIfNotLoaded(); set => _layer = value; }
 
-        public ICollection<MapMarkerLinkEntity> Links { get; set; } = null!;
+        private ICollection<MapMarkerLinkEntity>? _links;
+        public ICollection<MapMarkerLinkEntity> Links { get => _links.ThrowIfNotLoaded(); set => _links = value; }
     }
 }

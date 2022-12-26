@@ -13,10 +13,10 @@ namespace Naheulbook.Core.Services
     public interface IEffectService
     {
         Task<EffectEntity> GetEffectAsync(int effectId);
-        Task<ICollection<EffectType>> GetEffectSubCategoriesAsync();
+        Task<ICollection<EffectTypeEntity>> GetEffectSubCategoriesAsync();
         Task<ICollection<EffectEntity>> GetEffectsBySubCategoryAsync(long subCategoryId);
-        Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
-        Task<EffectSubCategory> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request);
+        Task<EffectTypeEntity> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
+        Task<EffectSubCategoryEntity> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request);
         Task<EffectEntity> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request);
         Task<EffectEntity> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request);
         Task<List<EffectEntity>> SearchEffectsAsync(string filter);
@@ -45,7 +45,7 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<ICollection<EffectType>> GetEffectSubCategoriesAsync()
+        public async Task<ICollection<EffectTypeEntity>> GetEffectSubCategoriesAsync()
         {
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
             {
@@ -61,13 +61,14 @@ namespace Naheulbook.Core.Services
             }
         }
 
-        public async Task<EffectType> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request)
+        public async Task<EffectTypeEntity> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-            var effectType = new EffectType
+            var effectType = new EffectTypeEntity
             {
-                Name = request.Name
+                Name = request.Name,
+                SubCategories = new List<EffectSubCategoryEntity>()
             };
 
             using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
@@ -79,11 +80,11 @@ namespace Naheulbook.Core.Services
             return effectType;
         }
 
-        public async Task<EffectSubCategory> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request)
+        public async Task<EffectSubCategoryEntity> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request)
         {
             await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-            var effectSubCategory = new EffectSubCategory
+            var effectSubCategory = new EffectSubCategoryEntity
             {
                 Name = request.Name,
                 TypeId = request.TypeId,
@@ -117,7 +118,7 @@ namespace Naheulbook.Core.Services
                 Duration = request.Duration,
                 LapCount = request.LapCount,
                 DurationType = request.DurationType,
-                Modifiers = request.Modifiers.Select(s => new EffectModifier
+                Modifiers = request.Modifiers.Select(s => new EffectModifierEntity
                 {
                     StatName = s.Stat, Type = s.Type, Value = s.Value
                 }).ToList()
@@ -151,7 +152,7 @@ namespace Naheulbook.Core.Services
                 effect.Duration = request.Duration;
                 effect.LapCount = request.LapCount;
                 effect.DurationType = request.DurationType;
-                effect.Modifiers = request.Modifiers.Select(s => new EffectModifier
+                effect.Modifiers = request.Modifiers.Select(s => new EffectModifierEntity
                 {
                     StatName = s.Stat, Type = s.Type, Value = s.Value
                 }).ToList();

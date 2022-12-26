@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
-using Naheulbook.Data.UnitOfWorks;
+using Naheulbook.Data.Extensions.UnitOfWorks;
 
 namespace Naheulbook.Data.Factories
 {

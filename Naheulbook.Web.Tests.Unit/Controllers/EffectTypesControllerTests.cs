@@ -37,7 +37,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateType_CallEffectService()
         {
             var createEffectTypeRequest = new CreateEffectTypeRequest();
-            var effectType = new EffectType();
+            var effectType = new EffectTypeEntity();
             var effectTypeResponse = new EffectTypeResponse();
 
             _effectService.CreateEffectTypeAsync(_executionContext, createEffectTypeRequest)
@@ -55,7 +55,7 @@ namespace Naheulbook.Web.Tests.Unit.Controllers
         public async Task PostCreateType_WhenCatchForbiddenAccessException_Return403()
         {
             _effectService.CreateEffectTypeAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectTypeRequest>())
-                .Returns(Task.FromException<EffectType>(new ForbiddenAccessException()));
+                .Returns(Task.FromException<EffectTypeEntity>(new ForbiddenAccessException()));
 
             Func<Task<JsonResult>> act = () =>  _effectTypesController.PostCreateTypeAsync(_executionContext, new CreateEffectTypeRequest());
 

@@ -1,4 +1,5 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -12,6 +13,7 @@ namespace Naheulbook.Data.Models
         public string? Info { get; set; }
 
         public int GroupId { get; set; }
-        public GroupEntity Group { get; set; } = null!;
+        private GroupEntity? _group;
+        public GroupEntity Group { get => _group.ThrowIfNotLoaded(); set => _group = value; }
     }
 }

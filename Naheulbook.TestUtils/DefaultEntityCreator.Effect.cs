@@ -7,23 +7,23 @@ namespace Naheulbook.TestUtils
 {
     public partial class DefaultEntityCreator
     {
-        public EffectType CreateEffectType(string suffix = null)
+        public EffectTypeEntity CreateEffectType(string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new EffectType
+            return new EffectTypeEntity
             {
                 Name = $"some-effect-type-name-{suffix}"
             };
         }
 
-        public EffectSubCategory CreateEffectSubCategory(EffectType effectType, string suffix = null)
+        public EffectSubCategoryEntity CreateEffectSubCategory(EffectTypeEntity effectType, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
 
-            return new EffectSubCategory
+            return new EffectSubCategoryEntity
             {
                 Name = $"some-effect-sub-category-name-{suffix}",
                 Note = $"some-effect-name-{suffix}",
@@ -33,7 +33,7 @@ namespace Naheulbook.TestUtils
             };
         }
 
-        public EffectEntity CreateEffect(EffectSubCategory subCategory, string suffix = null)
+        public EffectEntity CreateEffect(EffectSubCategoryEntity subCategory, string suffix = null)
         {
             if (suffix == null)
                 suffix = RngUtil.GetRandomHexString(8);
@@ -46,21 +46,21 @@ namespace Naheulbook.TestUtils
                 Name = $"some-effect-name-{suffix}",
                 DurationType = "combat",
                 CombatCount = 2,
-                Modifiers = new List<EffectModifier>
+                Modifiers = new List<EffectModifierEntity>
                 {
-                    new EffectModifier
+                    new EffectModifierEntity
                     {
                         StatName = "CHA",
                         Value = 1,
                         Type = "ADD"
                     },
-                    new EffectModifier
+                    new EffectModifierEntity
                     {
                         StatName = "FO",
                         Value = 4,
                         Type = "ADD"
                     },
-                    new EffectModifier
+                    new EffectModifierEntity
                     {
                         StatName = "INT",
                         Value = -2,

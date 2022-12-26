@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -14,10 +15,19 @@ namespace Naheulbook.Data.Models
         public string Data { get; set; } = null!;
         public bool? IsMagic { get; set; }
 
-        public ICollection<JobBonus> Bonuses { get; set; } = null!;
-        public ICollection<JobRequirementEntity> Requirements { get; set; } = null!;
-        public ICollection<JobRestrictionEntity> Restrictions { get; set; } = null!;
-        public ICollection<JobSkill> Skills { get; set; } = null!;
-        public ICollection<SpecialityEntity> Specialities { get; set; } = null!;
+        private ICollection<JobBonus>? _bonuses;
+        public ICollection<JobBonus> Bonuses { get => _bonuses.ThrowIfNotLoaded(); set => _bonuses = value; }
+
+        private ICollection<JobRequirementEntity>? _requirements;
+        public ICollection<JobRequirementEntity> Requirements { get => _requirements.ThrowIfNotLoaded(); set => _requirements = value; }
+
+        private ICollection<JobRestrictionEntity>? _restrictions;
+        public ICollection<JobRestrictionEntity> Restrictions { get => _restrictions.ThrowIfNotLoaded(); set => _restrictions = value; }
+
+        private ICollection<JobSkill> _skills = null!;
+        public ICollection<JobSkill> Skills { get => _skills.ThrowIfNotLoaded(); set => _skills = value; }
+
+        private ICollection<SpecialityEntity>? _specialities;
+        public ICollection<SpecialityEntity> Specialities { get => _specialities.ThrowIfNotLoaded(); set => _specialities = value; }
     }
 }

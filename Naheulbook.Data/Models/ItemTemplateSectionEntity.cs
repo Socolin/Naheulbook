@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -11,7 +11,7 @@ namespace Naheulbook.Data.Models
         public string Icon { get; set; } = null!;
         public string Special { get; set; } = null!;
 
-        [NotMapped]
-        public ICollection<ItemTemplateSubCategoryEntity> SubCategories { get; set; } = null!;
+        private ICollection<ItemTemplateSubCategoryEntity>? _subCategories;
+        public ICollection<ItemTemplateSubCategoryEntity> SubCategories { get => _subCategories.ThrowIfNotLoaded(); set => _subCategories = value; }
     }
 }

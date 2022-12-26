@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -25,7 +26,10 @@ namespace Naheulbook.Data.Models
 
         public DateTime? ShowInSearchUntil { get; set; }
 
-        public ICollection<GroupEntity> Groups { get; set; } = null!;
-        public ICollection<CharacterEntity> Characters { get; set; } = null!;
+        private ICollection<GroupEntity>? _groups;
+        public ICollection<GroupEntity> Groups { get => _groups.ThrowIfNotLoaded(); set => _groups = value; }
+
+        private ICollection<CharacterEntity>? _characters;
+        public ICollection<CharacterEntity> Characters { get => _characters.ThrowIfNotLoaded(); set => _characters = value; }
     }
 }

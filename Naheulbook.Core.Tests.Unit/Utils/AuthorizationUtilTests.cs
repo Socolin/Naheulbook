@@ -4,10 +4,10 @@ using FluentAssertions;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Utils;
+using Naheulbook.Data.Extensions.UnitOfWorks;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
-using Naheulbook.Data.UnitOfWorks;
 using NSubstitute;
 using NUnit.Framework;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -17,9 +18,13 @@ namespace Naheulbook.Data.Models
         public short? Test { get; set; }
         public string? Flags { get; set; }
 
-        public ICollection<SkillEffect> SkillEffects { get; set; } = null!;
+        private ICollection<SkillEffect>? _skillEffects;
+        public ICollection<SkillEffect> SkillEffects { get => _skillEffects.ThrowIfNotLoaded(); set => _skillEffects = value; }
 
-        public ICollection<OriginSkillEntity> OriginSkills { get; set; } = null!;
-        public ICollection<JobSkill> JobSkills { get; set; } = null!;
+        private ICollection<OriginSkillEntity>? _originSkills;
+        public ICollection<OriginSkillEntity> OriginSkills { get => _originSkills.ThrowIfNotLoaded(); set => _originSkills = value; }
+
+        private ICollection<JobSkill>? _jobSkills;
+        public ICollection<JobSkill> JobSkills { get => _jobSkills.ThrowIfNotLoaded(); set => _jobSkills = value; }
     }
 }

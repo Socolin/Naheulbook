@@ -1,3 +1,5 @@
+using Naheulbook.Data.Extensions;
+
 namespace Naheulbook.Data.Models
 {
     public class EventEntity
@@ -8,6 +10,7 @@ namespace Naheulbook.Data.Models
         public long Timestamp { get; set; }
 
         public int GroupId { get; set; }
-        public GroupEntity Group { get; set; } = null!;
+        private GroupEntity? _group;
+        public GroupEntity Group { get => _group.ThrowIfNotLoaded(); set => _group = value; }
     }
 }

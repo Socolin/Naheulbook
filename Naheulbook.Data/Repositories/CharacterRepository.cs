@@ -130,6 +130,7 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.Characters
                 .Include(x => x.Modifiers)
+                .ThenInclude(x => x.Values)
                 .Include(x => x.Items)
                 .Where(x => characterIds.Contains(x.Id) && x.GroupId == groupId)
                 .ToListAsync();

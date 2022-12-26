@@ -51,14 +51,12 @@ namespace Naheulbook.Core.Utils
             _itemDataUtil.UpdateEquipItem(item, level);
             var newlyEquipped = _itemDataUtil.IsItemEquipped(item);
 
-            if (previouslyEquipped != newlyEquipped && item.CharacterId != null)
+            if (previouslyEquipped != newlyEquipped && item.Character != null)
             {
-                if (item.Character!.HistoryEntries == null)
-                    item.Character!.HistoryEntries = new List<CharacterHistoryEntryEntity>();
                 if (previouslyEquipped)
-                    item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogUnEquipItem(item.CharacterId.Value, item.Id));
+                    item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogUnEquipItem(item.Character.Id, item.Id));
                 else
-                    item.Character!.HistoryEntries.Add(_characterHistoryUtil.CreateLogEquipItem(item.CharacterId.Value, item.Id));
+                    item.Character.AddHistoryEntry(_characterHistoryUtil.CreateLogEquipItem(item.Character.Id, item.Id));
             }
         }
 

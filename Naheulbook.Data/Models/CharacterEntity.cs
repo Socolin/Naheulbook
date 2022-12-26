@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -32,31 +33,50 @@ namespace Naheulbook.Data.Models
         public int Experience { get; set; }
 
         public int OwnerId { get; set; }
-        public UserEntity Owner { get; set; } = null!;
+
+        private UserEntity? _owner;
+        public UserEntity Owner { get => _owner.ThrowIfNotLoaded(); set => _owner = value; }
 
         public Guid OriginId { get; set; }
-        public OriginEntity Origin { get; set; } = null!;
+        private OriginEntity? _origin;
+        public OriginEntity Origin { get => _origin.ThrowIfNotLoaded(); set => _origin = value; }
 
         public int? GroupId { get; set; }
-        public GroupEntity? Group { get; set; }
+        private GroupEntity? _group;
+        public GroupEntity? Group { get => _group.ThrowIfNotLoadedAndNotNull(GroupId); set => _group = value; }
 
         public int? TargetedCharacterId { get; set; }
-        public CharacterEntity? TargetedCharacter { get; set; }
+        private CharacterEntity? _targetedCharacter;
+        public CharacterEntity? TargetedCharacter { get => _targetedCharacter.ThrowIfNotLoadedAndNotNull(TargetedCharacterId); set => _targetedCharacter = value; }
 
         public int? TargetedMonsterId { get; set; }
-        public MonsterEntity? TargetedMonster { get; set; }
+        private MonsterEntity? _targetedMonster;
+        public MonsterEntity? TargetedMonster { get => _targetedMonster.ThrowIfNotLoadedAndNotNull(TargetedMonsterId); set => _targetedMonster = value; }
 
-        public ICollection<CharacterJobEntity> Jobs { get; set; } = null!;
-        public ICollection<CharacterModifierEntity> Modifiers { get; set; } = null!;
-        public ICollection<CharacterSkillEntity> Skills { get; set; } = null!;
-        public ICollection<CharacterSpecialityEntity> Specialities { get; set; } = null!;
-        public ICollection<ItemEntity> Items { get; set; } = null!;
-        public ICollection<GroupInviteEntity> Invites { get; set; } = null!;
-        public ICollection<CharacterHistoryEntryEntity> HistoryEntries { get; set; } = null!;
+        private ICollection<CharacterJobEntity>? _jobs;
+        public ICollection<CharacterJobEntity> Jobs { get => _jobs.ThrowIfNotLoaded(); set => _jobs = value; }
+
+        private ICollection<CharacterModifierEntity>? _modifiers;
+        public ICollection<CharacterModifierEntity> Modifiers { get => _modifiers.ThrowIfNotLoaded(); set => _modifiers = value; }
+
+        private ICollection<CharacterSkillEntity>? _skills;
+        public ICollection<CharacterSkillEntity> Skills { get => _skills.ThrowIfNotLoaded(); set => _skills = value; }
+
+        private ICollection<CharacterSpecialityEntity>? _specialities;
+        public ICollection<CharacterSpecialityEntity> Specialities { get => _specialities.ThrowIfNotLoaded(); set => _specialities = value; }
+
+        private ICollection<ItemEntity>? _items;
+        public ICollection<ItemEntity> Items { get => _items.ThrowIfNotLoaded(); set => _items = value; }
+
+        private ICollection<GroupInviteEntity>? _invites;
+        public ICollection<GroupInviteEntity> Invites { get => _invites.ThrowIfNotLoaded(); set => _invites = value; }
+
+        private ICollection<CharacterHistoryEntryEntity>? _historyEntries;
+        public ICollection<CharacterHistoryEntryEntity> HistoryEntries { get => _historyEntries.ThrowIfNotLoaded(); set => _historyEntries = value; }
 
         public void AddHistoryEntry(CharacterHistoryEntryEntity entry)
         {
-            if (HistoryEntries == null)
+            if (_historyEntries == null)
                 HistoryEntries = new List<CharacterHistoryEntryEntity>();
             HistoryEntries.Add(entry);
         }

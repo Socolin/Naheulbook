@@ -210,7 +210,7 @@ namespace Naheulbook.Core.Utils
                 Values = new List<CharacterModifierValueEntity>(),
                 Permanent = true,
                 DurationType = "forever",
-                CharacterId = character.Id
+                CharacterId = character.Id,
             };
             levelUpCharacterModifier.Values.Add(new CharacterModifierValueEntity
             {

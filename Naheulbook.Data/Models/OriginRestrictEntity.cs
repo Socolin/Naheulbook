@@ -1,4 +1,5 @@
 using System;
+using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models
 {
@@ -9,7 +10,8 @@ namespace Naheulbook.Data.Models
         public string? Flags { get; set; }
 
         public Guid OriginId { get; set; }
-        public OriginEntity Origin { get; set; } = null!;
+        private OriginEntity? _origin;
+        public OriginEntity Origin { get => _origin.ThrowIfNotLoaded(); set => _origin = value; }
     }
 }
 
