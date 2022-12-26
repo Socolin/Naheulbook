@@ -108,5 +108,20 @@ namespace Naheulbook.TestUtils
             characterModifier.Character = GetLast<CharacterEntity>();
             return SaveEntity(characterModifier, customizer);
         }
+
+        public TestDataUtil AddCharacterJob(Action<CharacterJobEntity> customizer = null)
+        {
+            return AddCharacterJob(out var _, customizer);
+        }
+
+        public TestDataUtil AddCharacterJob(out CharacterJobEntity characterJob, Action<CharacterJobEntity> customizer = null)
+        {
+            characterJob = new CharacterJobEntity
+            {
+                JobId = GetLast<JobEntity>().Id,
+                CharacterId = GetLast<CharacterEntity>().Id,
+            };
+            return SaveEntity(characterJob, customizer);
+        }
     }
 }

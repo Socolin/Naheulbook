@@ -55,17 +55,10 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             EquivalencyAssertionOptions<T> equivalencyAssertionOptions;
             switch (options)
             {
-                case EquivalencyAssertionOptions<GroupEntity> entityOptions:
+                case EquivalencyAssertionOptions<CharacterJobEntity> entityOptions:
                     equivalencyAssertionOptions = entityOptions
-                        .Excluding(x => x.CombatLoot)
-                        .Excluding(x => x.Master)
-                        .Excluding(x => x.Loots)
-                        .Excluding(x => x.Monsters)
-                        .Excluding(x => x.Characters)
-                        .Excluding(x => x.Invites)
-                        .Excluding(x => x.Events)
-                        .Excluding(x => x.HistoryEntries)
-                        .Excluding(x => x.Npcs)
+                        .Excluding(x => x.Character)
+                        .Excluding(x => x.Job)
                         .As<EquivalencyAssertionOptions<T>>();
                     break;
                 case EquivalencyAssertionOptions<CharacterEntity> entityOptions:
@@ -84,10 +77,42 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                         .Excluding(x => x.HistoryEntries)
                         .As<EquivalencyAssertionOptions<T>>();
                     break;
+                case EquivalencyAssertionOptions<GroupEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.CombatLoot)
+                        .Excluding(x => x.Master)
+                        .Excluding(x => x.Loots)
+                        .Excluding(x => x.Monsters)
+                        .Excluding(x => x.Characters)
+                        .Excluding(x => x.Invites)
+                        .Excluding(x => x.Events)
+                        .Excluding(x => x.HistoryEntries)
+                        .Excluding(x => x.Npcs)
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
                 case EquivalencyAssertionOptions<GroupInviteEntity> entityOptions:
                     equivalencyAssertionOptions = entityOptions
                         .Excluding(x => x.Character)
                         .Excluding(x => x.Group)
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
+                case EquivalencyAssertionOptions<JobEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.Bonuses)
+                        .Excluding(x => x.Information)
+                        .Excluding(x => x.Requirements)
+                        .Excluding(x => x.Restrictions)
+                        .Excluding(x => x.Skills)
+                        .Excluding(x => x.Specialities)
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
+                case EquivalencyAssertionOptions<OriginEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.Bonuses)
+                        .Excluding(x => x.Information)
+                        .Excluding(x => x.Requirements)
+                        .Excluding(x => x.Restrictions)
+                        .Excluding(x => x.Skills)
                         .As<EquivalencyAssertionOptions<T>>();
                     break;
                 default:

@@ -64,21 +64,34 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         public async Task GetGroupsWithDetailsAsync_ShouldLoadGroupWithAllRequiredData()
         {
             TestDataUtil
+                .AddJob(out var job)
+                .AddOrigin(out var origin)
                 .AddUser()
                 .AddGroup(out var group)
-                .AddOrigin()
-                .AddCharacter(out var character, c => c.GroupId = group.Id)
-                .AddCharacter(c => c.GroupId = null)
+                .AddCharacter(out var characterInGroup, c => c.GroupId = group.Id)
+                .AddCharacter(out var invitedCharacter1, c => c.GroupId = null)
+                .AddCharacterJob(out var characterJob1)
                 .AddGroupInvite(out var groupInvite1, true)
-                .AddCharacter(c => c.GroupId = null)
+                .AddCharacter(out var invitedCharacter2, c => c.GroupId = null)
+                .AddCharacterJob(out var characterJob2)
                 .AddGroupInvite(out var groupInvite2, false)
                 ;
 
             var actualGroup = await _groupRepository.GetGroupsWithDetailsAsync(group.Id);
 
             AssertEntityIsLoaded(actualGroup, group);
-            AssertEntitiesAreLoaded(actualGroup.Characters, new[] {character});
+            AssertEntitiesAreLoaded(actualGroup.Characters, new[] {characterInGroup});
             AssertEntitiesAreLoaded(actualGroup.Invites, new[] {groupInvite1, groupInvite2});
+            var actualInvitedCharacter1 = actualGroup.Invites.Single(x => x.CharacterId == invitedCharacter1.Id).Character;
+            AssertEntityIsLoaded(actualInvitedCharacter1, invitedCharacter1);
+            AssertEntityIsLoaded(actualInvitedCharacter1.Origin, origin);
+            AssertEntitiesAreLoaded(actualInvitedCharacter1.Jobs, new [] {characterJob1});
+            AssertEntityIsLoaded(actualInvitedCharacter1.Jobs.Single().Job, job);
+            var actualInvitedCharacter2 = actualGroup.Invites.Single(x => x.CharacterId == invitedCharacter2.Id).Character;
+            AssertEntityIsLoaded(actualInvitedCharacter2, invitedCharacter2);
+            AssertEntityIsLoaded(actualInvitedCharacter2.Origin, origin);
+            AssertEntitiesAreLoaded(actualInvitedCharacter2.Jobs, new [] {characterJob2});
+            AssertEntityIsLoaded(actualInvitedCharacter2.Jobs.Single().Job, job);
         }
 
         [Test]
@@ -94,6 +107,12 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             actualGroup.Should().BeNull();
             expectedGroup.Should().NotBeNull();
         }
+
+        #endregion
+
+        #region GetGroupsWithCharactersAsync
+
+        // FIXME
 
         #endregion
     }

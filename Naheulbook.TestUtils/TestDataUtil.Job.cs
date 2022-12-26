@@ -8,7 +8,13 @@ namespace Naheulbook.TestUtils
     {
         public TestDataUtil AddJob(Action<JobEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateJob(), customizer);
+            return AddJob(out _, customizer);
+        }
+
+        public TestDataUtil AddJob(out JobEntity job, Action<JobEntity> customizer = null)
+        {
+            job = _defaultEntityCreator.CreateJob();
+            return SaveEntity(job, customizer);
         }
 
         public TestDataUtil AddJobWithAllData(Action<JobEntity> customizer = null)

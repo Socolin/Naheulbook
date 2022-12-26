@@ -40,7 +40,15 @@ namespace Naheulbook.TestUtils
                 StatBonusAd = "PRD",
 
                 OriginId = origin.Id,
-                OwnerId = ownerId
+                OwnerId = ownerId,
+
+                Jobs = new List<CharacterJobEntity>(),
+                Modifiers = new List<CharacterModifierEntity>(),
+                Skills = new List<CharacterSkillEntity>(),
+                Specialities = new List<CharacterSpecialityEntity>(),
+                Items = new List<ItemEntity>(),
+                Invites = new List<GroupInviteEntity>(),
+                HistoryEntries = new List<CharacterHistoryEntryEntity>(),
             };
         }
 
