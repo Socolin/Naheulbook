@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
+      <ProjectReference Include="..\..\src\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
     </ItemGroup>
 
 </Project>

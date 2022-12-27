@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Naheulbook.Data\Naheulbook.Data.csproj" />
-        <ProjectReference Include="..\Naheulbook.Shared\Naheulbook.Shared.csproj" />
+        <ProjectReference Include="..\..\src\Naheulbook.Data\Naheulbook.Data.csproj" />
+        <ProjectReference Include="..\..\src\Naheulbook.Shared\Naheulbook.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
