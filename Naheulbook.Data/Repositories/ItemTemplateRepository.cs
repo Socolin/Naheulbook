@@ -35,7 +35,7 @@ namespace Naheulbook.Data.Repositories
             return Context.ItemTemplates
                 .IncludeItemTemplateDetails()
                 .Where(x => x.Id == id)
-                .SingleAsync();
+                .SingleOrDefaultAsync();
         }
 
         public Task<List<ItemTemplateEntity>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId)

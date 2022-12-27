@@ -1,8 +1,8 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Data.DbContexts;
-using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
 using NUnit.Framework;
 
@@ -18,31 +18,97 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             _itemTemplateRepository = new ItemTemplateRepository(RepositoryDbContext);
         }
 
+        #region GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync
+
         [Test]
         public async Task GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync_LoadEntityWithRelatedEntities()
         {
-            TestDataUtil.AddItemTemplateWithAllData();
+            TestDataUtil
+                .AddStat()
+                .AddSkill(out var learntSkill)
+                .AddSkill(out var cancelledSkill)
+                .AddSkill(out var modifiedSkill)
+                .AddItemTemplateSection()
+                .AddItemTemplateSubCategory()
+                .AddSlot(out var itemSlot)
+                .AddItemTemplate(out var itemTemplate)
+                .AddItemTemplateRequirement(out var itemTemplateRequirement)
+                .AddItemTemplateModifier(out var itemTemplateModifier)
+                .AddItemTemplateSkill(out var itemTemplateSkill, learntSkill)
+                .AddItemTemplateUnSkill(out var itemTemplateUnSkill, cancelledSkill)
+                .AddItemTemplateSkillModifier(out var itemTemplateSkillModifier, modifiedSkill)
+                .AddItemTemplateSlot(out var itemTemplateSlot);
 
-            var itemTemplateId = TestDataUtil.Get<ItemTemplateEntity>().Id;
+            var actual = await _itemTemplateRepository.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplate.Id);
 
-            var actual = await _itemTemplateRepository.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
+            AssertEntityIsLoaded(actual, itemTemplate);
+            AssertEntitiesAreLoaded(actual.Requirements, new[] {itemTemplateRequirement});
+            AssertEntitiesAreLoaded(actual.Modifiers, new[] {itemTemplateModifier});
+            AssertEntitiesAreLoaded(actual.Skills, new[] {itemTemplateSkill});
+            AssertEntitiesAreLoaded(actual.UnSkills, new[] {itemTemplateUnSkill});
+            AssertEntitiesAreLoaded(actual.SkillModifiers, new[] {itemTemplateSkillModifier});
+            AssertEntitiesAreLoaded(actual.Slots, new[] {itemTemplateSlot});
+            AssertEntityIsLoaded(actual.Slots.Single().Slot, itemSlot);
+        }
 
-            actual.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplateEntity>(), config =>
-                config.Excluding(x => x.SubCategory)
-                    .Excluding(x => x.Requirements)
-                    .Excluding(x => x.Modifiers)
-                    .Excluding(x => x.Skills)
-                    .Excluding(x => x.UnSkills)
-                    .Excluding(x => x.SkillModifiers)
-                    .Excluding(x => x.Slots)
-                );
-            actual!.Modifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplateEntity>().Modifiers, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.RequiredJob).Excluding(x => x.RequiredOrigin).Excluding(x => x.Stat));
-            actual!.Requirements.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplateEntity>().Requirements, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Stat));
-            actual!.Skills.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplateEntity>().Skills, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
-            actual!.UnSkills.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplateEntity>().UnSkills, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
-            actual!.SkillModifiers.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplateEntity>().SkillModifiers, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Skill));
-            actual!.Slots.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplateEntity>().Slots, config => config.Excluding(x => x.ItemTemplate).Excluding(x => x.Slot));
-            actual!.Slots.First().Slot.Should().BeEquivalentTo(TestDataUtil.Get<ItemTemplateEntity>().Slots.First().Slot);
+        [Test]
+        public async Task GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync_ReturnsNullWhenNotfound()
+        {
+            TestDataUtil
+                .AddStat()
+                .AddItemTemplateSection()
+                .AddItemTemplateSubCategory()
+                .AddItemTemplate(out var itemTemplate);
+
+            var actualItemTemplate = await _itemTemplateRepository.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid.NewGuid());
+            var existingItemTemplate = await _itemTemplateRepository.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplate.Id);
+
+            actualItemTemplate.Should().BeNull();
+            existingItemTemplate.Should().NotBeNull();
+        }
+
+        #endregion
+
+        #region GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync
+
+        #endregion
+
+        #region GetWithAllDataByCategoryIdAsync
+
+        #endregion
+
+        #region GetByIdsAsync
+
+        [Test]
+        public async Task GetByIdsAsync_LoadRelatedEntities()
+        {
+            TestDataUtil
+                .AddStat()
+                .AddSkill(out var learntSkill)
+                .AddSkill(out var cancelledSkill)
+                .AddSkill(out var modifiedSkill)
+                .AddItemTemplateSection()
+                .AddItemTemplateSubCategory()
+                .AddSlot(out var itemSlot)
+                .AddItemTemplate(out var itemTemplate)
+                .AddItemTemplateRequirement(out var itemTemplateRequirement)
+                .AddItemTemplateModifier(out var itemTemplateModifier)
+                .AddItemTemplateSkill(out var itemTemplateSkill, learntSkill)
+                .AddItemTemplateUnSkill(out var itemTemplateUnSkill, cancelledSkill)
+                .AddItemTemplateSkillModifier(out var itemTemplateSkillModifier, modifiedSkill)
+                .AddItemTemplateSlot(out var itemTemplateSlot);
+
+            var actualEntities = await _itemTemplateRepository.GetByIdsAsync(new[] {itemTemplate.Id});
+
+            var actualItemTemplate = actualEntities.Single();
+            AssertEntityIsLoaded(actualItemTemplate, itemTemplate);
+            AssertEntitiesAreLoaded(actualItemTemplate.Requirements, new[] {itemTemplateRequirement});
+            AssertEntitiesAreLoaded(actualItemTemplate.Modifiers, new[] {itemTemplateModifier});
+            AssertEntitiesAreLoaded(actualItemTemplate.Skills, new[] {itemTemplateSkill});
+            AssertEntitiesAreLoaded(actualItemTemplate.UnSkills, new[] {itemTemplateUnSkill});
+            AssertEntitiesAreLoaded(actualItemTemplate.SkillModifiers, new[] {itemTemplateSkillModifier});
+            AssertEntitiesAreLoaded(actualItemTemplate.Slots, new[] {itemTemplateSlot});
+            AssertEntityIsLoaded(actualItemTemplate.Slots.Single().Slot, itemSlot);
         }
 
         [Test]
@@ -51,15 +117,35 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             TestDataUtil
                 .AddItemTemplateSection()
                 .AddItemTemplateSubCategory()
-                .AddItemTemplate()
-                .AddItemTemplate()
+                .AddItemTemplate(out var itemTemplate1)
+                .AddItemTemplate(out var itemTemplate2)
                 .AddItemTemplate();
 
-            var itemTemplateIds = TestDataUtil.GetAll<ItemTemplateEntity>().Select(x => x.Id);
+            var actualEntities = await _itemTemplateRepository.GetByIdsAsync(new[] {itemTemplate1.Id, itemTemplate2.Id});
 
-            var actual = await _itemTemplateRepository.GetByIdsAsync(itemTemplateIds);
-
-            actual.Should().BeEquivalentTo(TestDataUtil.GetAll<ItemTemplateEntity>(), config => config.Excluding(x => x.SubCategory));
+            AssertEntitiesAreLoaded(actualEntities, new[] {itemTemplate1, itemTemplate2});
         }
+
+        #endregion
+
+        #region GetItemByCleanNameWithAllDataAsync
+
+        #endregion
+
+        #region GetItemByPartialCleanNameWithAllDataAsync
+
+        #endregion
+
+        #region GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync
+
+        #endregion
+
+        #region GetPurseItemTemplateBasedOnMoneyAsync
+
+        #endregion
+
+        #region GetGoldCoinItemTemplate
+
+        #endregion
     }
 }

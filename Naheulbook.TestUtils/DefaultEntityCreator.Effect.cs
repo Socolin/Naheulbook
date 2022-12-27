@@ -45,28 +45,7 @@ namespace Naheulbook.TestUtils
                 Dice = 4,
                 Name = $"some-effect-name-{suffix}",
                 DurationType = "combat",
-                CombatCount = 2,
-                Modifiers = new List<EffectModifierEntity>
-                {
-                    new EffectModifierEntity
-                    {
-                        StatName = "CHA",
-                        Value = 1,
-                        Type = "ADD"
-                    },
-                    new EffectModifierEntity
-                    {
-                        StatName = "FO",
-                        Value = 4,
-                        Type = "ADD"
-                    },
-                    new EffectModifierEntity
-                    {
-                        StatName = "INT",
-                        Value = -2,
-                        Type = "ADD"
-                    },
-                }
+                CombatCount = 2
             };
         }
     }

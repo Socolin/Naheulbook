@@ -68,23 +68,46 @@ namespace Naheulbook.TestUtils
             };
         }
 
+        public ItemEntity CreateItem(ItemTemplateEntity itemTemplate)
+        {
+            return new ItemEntity
+            {
+                Data = """{"key":"value"}""",
+                Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
+                    {
+                        new ActiveStatsModifier
+                        {
+                            Active = true,
+                            Description = "some-description",
+                        },
+                    },
+                    new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    }),
+                ItemTemplateId = itemTemplate.Id,
+            };
+        }
+
         public ItemEntity CreateItem(ItemTemplateEntity itemTemplate, CharacterEntity character)
         {
             return new ItemEntity
             {
                 Data = @"{""key"":""value""}",
                 Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
-                {
-                    new ActiveStatsModifier
                     {
-                        Active = true,
-                        Description = "some-description"
-                    }
-                }, new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                }),
+                        new ActiveStatsModifier
+                        {
+                            Active = true,
+                            Description = "some-description"
+                        }
+                    },
+                    new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    }),
                 ItemTemplateId = itemTemplate.Id,
                 CharacterId = character.Id,
                 Character = character

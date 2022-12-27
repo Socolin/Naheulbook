@@ -30,7 +30,7 @@ namespace Naheulbook.Data.Repositories
         {
             return Context.Users
                 .Where(u => u.Username == username)
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync();
         }
 
         public Task<UserEntity?> GetByFacebookIdAsync(string facebookId)

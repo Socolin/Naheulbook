@@ -21,7 +21,7 @@ namespace Naheulbook.TestUtils
                 FbId = "some-fb-id",
                 GoogleId = "some-google-id",
                 TwitterId = "some-twitter-id",
-                MicrosoftId = "some-microsoft-id"
+                MicrosoftId = "some-microsoft-id",
             };
         }
 

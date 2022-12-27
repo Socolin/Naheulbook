@@ -7,7 +7,13 @@ namespace Naheulbook.TestUtils
     {
         public TestDataUtil AddStat(Action<StatEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateStat(), customizer);
+            return AddStat(out _, customizer);
+        }
+
+        public TestDataUtil AddStat(out StatEntity stat, Action<StatEntity> customizer = null)
+        {
+            stat = _defaultEntityCreator.CreateStat();
+            return SaveEntity(stat, customizer);
         }
     }
 }

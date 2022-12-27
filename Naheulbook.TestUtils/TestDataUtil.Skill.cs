@@ -7,7 +7,13 @@ namespace Naheulbook.TestUtils
     {
         public TestDataUtil AddSkill(Action<SkillEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateSkill(), customizer);
+            return AddSkill(out _, customizer);
+        }
+
+        public TestDataUtil AddSkill(out SkillEntity skill, Action<SkillEntity> customizer = null)
+        {
+            skill = _defaultEntityCreator.CreateSkill();
+            return SaveEntity(skill, customizer);
         }
     }
 }

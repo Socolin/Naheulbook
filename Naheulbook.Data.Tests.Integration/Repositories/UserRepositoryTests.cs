@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 using Naheulbook.Data.DbContexts;
-using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
 using NUnit.Framework;
 
@@ -19,50 +18,70 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
             _userRepository = new UserRepository(RepositoryDbContext);
         }
 
+        #region GetByUsernameAsync
+
         [Test]
         public async Task CanGetUserByUsername()
         {
-            TestDataUtil.AddUser(u => u.Admin = true);
-            var expectedUser = TestDataUtil.GetLast<UserEntity>();
+            TestDataUtil.AddUser(out var user, u => u.Admin = true);
 
-            var actualUser = await _userRepository.GetByUsernameAsync(expectedUser.Username!);
+            var actualUser = await _userRepository.GetByUsernameAsync(user.Username!);
 
-            actualUser.Should().BeEquivalentTo(expectedUser);
+            AssertEntityIsLoaded(actualUser, user);
         }
+
+        #endregion
+
+        #region GetByFacebookIdAsync
 
         [Test]
         public async Task CanGetUserByFacebookId()
         {
-            TestDataUtil.AddUser();
-            var expectedUser = TestDataUtil.GetLast<UserEntity>();
+            TestDataUtil.AddUser(out var user);
 
-            var actualUser = await _userRepository.GetByFacebookIdAsync(expectedUser.FbId!);
+            var actualUser = await _userRepository.GetByFacebookIdAsync(user.FbId!);
 
-            actualUser.Should().BeEquivalentTo(TestDataUtil.GetLast<UserEntity>());
+            AssertEntityIsLoaded(actualUser, user);
         }
+
+        #endregion
+
+        #region GetByGoogleIdAsync
+
+        #endregion
+
+        #region GetByTwitterIdAsync
+
+        #endregion
+
+        #region GetByMicrosoftIdAsync
+
+        #endregion
+
+        #region SearchUsersAsync
 
         [Test]
         public async Task SearchUser_ShouldReturnsMatchingUsers()
         {
-            TestDataUtil.AddUser(u => u.ShowInSearchUntil = RoundDate(DateTime.Now.AddDays(1)));
-            var testUser = TestDataUtil.GetLast<UserEntity>();
+            TestDataUtil.AddUser(out var user, u => u.ShowInSearchUntil = RoundDate(DateTime.Now.AddDays(1)));
 
-            var users = await _userRepository.SearchUsersAsync(testUser.DisplayName!);
+            var actualEntities = await _userRepository.SearchUsersAsync(user.DisplayName!);
 
-            users.Should().BeEquivalentTo(new [] {testUser});
+            AssertEntitiesAreLoaded(actualEntities, new[] {user});
         }
 
         [Test]
         public async Task SearchUser_ShouldNotDisplayUser_WhenShowInSearchUntilIsOlderThanNow()
         {
-            TestDataUtil.AddUser(u => u.ShowInSearchUntil = DateTime.Now.AddDays(-1));
+            TestDataUtil.AddUser(out var user, u => u.ShowInSearchUntil = DateTime.Now.AddDays(-1));
 
-            var testUser = TestDataUtil.GetLast<UserEntity>();
-
-            var users = await _userRepository.SearchUsersAsync(testUser.DisplayName!);
+            var users = await _userRepository.SearchUsersAsync(user.DisplayName!);
 
             users.Should().BeEmpty();
         }
+
+        #endregion
+
 
         private static DateTime? RoundDate(DateTime date)
         {

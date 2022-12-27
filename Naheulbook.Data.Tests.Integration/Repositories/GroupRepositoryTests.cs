@@ -10,12 +10,12 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 {
     public class GroupRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     {
-        private GroupRepository _groupRepository;
+        private GroupRepository _repository;
 
         [SetUp]
         public void SetUp()
         {
-            _groupRepository = new GroupRepository(RepositoryDbContext);
+            _repository = new GroupRepository(RepositoryDbContext);
         }
 
         #region GetGroupsOwnedByAsync
@@ -34,7 +34,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddCharacter(out var character4)
                 ;
 
-            var groups = await _groupRepository.GetGroupsOwnedByAsync(user.Id);
+            var groups = await _repository.GetGroupsOwnedByAsync(user.Id);
 
             AssertEntitiesAreLoaded(groups, new[] {group1, group2});
             AssertEntitiesAreLoaded(groups.Single(x => x.Id == group1.Id).Characters, new[] {character1, character2});
@@ -51,7 +51,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
 
             var notOwnerUser = TestDataUtil.GetLast<UserEntity>();
 
-            var groups = await _groupRepository.GetGroupsOwnedByAsync(notOwnerUser.Id);
+            var groups = await _repository.GetGroupsOwnedByAsync(notOwnerUser.Id);
 
             groups.Should().BeEmpty();
         }
@@ -77,7 +77,7 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddGroupInvite(out var groupInvite2, false)
                 ;
 
-            var actualGroup = await _groupRepository.GetGroupsWithDetailsAsync(group.Id);
+            var actualGroup = await _repository.GetGroupsWithDetailsAsync(group.Id);
 
             AssertEntityIsLoaded(actualGroup, group);
             AssertEntitiesAreLoaded(actualGroup.Characters, new[] {characterInGroup});
@@ -101,8 +101,8 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                 .AddUser()
                 .AddGroup(out var group);
 
-            var actualGroup = await _groupRepository.GetGroupsWithDetailsAsync(-1);
-            var expectedGroup = await _groupRepository.GetGroupsWithDetailsAsync(group.Id);
+            var actualGroup = await _repository.GetGroupsWithDetailsAsync(-1);
+            var expectedGroup = await _repository.GetGroupsWithDetailsAsync(group.Id);
 
             actualGroup.Should().BeNull();
             expectedGroup.Should().NotBeNull();

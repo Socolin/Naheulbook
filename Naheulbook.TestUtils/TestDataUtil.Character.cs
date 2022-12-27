@@ -99,7 +99,13 @@ namespace Naheulbook.TestUtils
 
         public TestDataUtil AddCharacterHistoryEntry(Action<CharacterHistoryEntryEntity> customizer = null)
         {
-            return SaveEntity(_defaultEntityCreator.CreateCharacterHistoryEntry(GetLast<CharacterEntity>()), customizer);
+            return AddCharacterHistoryEntry(out _, customizer);
+        }
+
+        public TestDataUtil AddCharacterHistoryEntry(out CharacterHistoryEntryEntity characterHistoryEntry, Action<CharacterHistoryEntryEntity> customizer = null)
+        {
+            characterHistoryEntry = _defaultEntityCreator.CreateCharacterHistoryEntry(GetLast<CharacterEntity>());
+            return SaveEntity(characterHistoryEntry, customizer);
         }
 
         public TestDataUtil AddCharacterModifier(Action<CharacterModifierEntity> customizer = null)
