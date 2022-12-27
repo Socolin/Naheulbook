@@ -55,7 +55,7 @@ public class ItemUtilTests
     {
         const int characterId = 8;
         const int itemId = 12;
-        var item = new ItemEntity {Id = itemId, CharacterId = characterId, Character = new CharacterEntity()};
+        var item = new ItemEntity {Id = itemId, CharacterId = characterId, Character = new CharacterEntity {Id = characterId}};
 
         _characterHistoryUtil.CreateLogEquipItem(characterId, itemId)
             .Returns(new CharacterHistoryEntryEntity {Action = "equip"});
@@ -66,6 +66,9 @@ public class ItemUtilTests
 
         _util.EquipItem(item, 8);
 
-        item.Character.HistoryEntries.Last().Action.Should().BeEquivalentTo(expectedAction);
+        if (expectedAction != null)
+            item.Character.HistoryEntries.Last().Action.Should().BeEquivalentTo(expectedAction);
+        else
+            item.Character.HistoryEntries.Should().BeNullOrEmpty();
     }
 }
